@@ -12,12 +12,12 @@
 name: CiCd
 
 on: 
-  workflow_dispatch:
   push:
     branches:
     - master
     paths:
     - 'VERSION'
+  workflow_dispatch:
 
 jobs:
   generate:
