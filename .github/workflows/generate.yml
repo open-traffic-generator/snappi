@@ -17,6 +17,8 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
+        python -m pip install --upgrade jsonpath-ng
+        python -m pip install --upgrade pyyaml
 
     - name: Generate classes
       run: |
