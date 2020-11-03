@@ -1,15 +1,4 @@
-# When a change to the VERSION file in the master branch is pushed this 
-# workflow does the following:
-#   - checkout all files
-#   - get the latest version number
-#   - setup python 3.x env
-#   - install python dependencies
-#   - build python distributions
-#   - create a tag and release
-#   - upload assets to the release
-#   - upload assets to pypi
-
-name: CiCd
+name: Deploy
 
 on: 
   push:
@@ -17,42 +6,9 @@ on:
     - master
     paths:
     - 'VERSION'
-  workflow_dispatch:
 
 jobs:
-  generate:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v2
-
-    - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: '3.x'
-
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-
-    - name: Generate classes
-      run: |
-        python generate.py
-
-  test:
-    needs: generate
-    runs-on: ubuntu-latest
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v2
-
-    - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: '3.x'
-
   deploy:
-    needs: test
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
