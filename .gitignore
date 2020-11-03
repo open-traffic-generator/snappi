@@ -1,0 +1,8 @@
+*.pyc
+.pycache
+models
+snappi
+build
+dist
+.pytest_cache
+*.egg-info
