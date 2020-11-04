@@ -24,7 +24,7 @@ jobs:
 
     - name: Generate classes
       run: |
-        python generate.py
+        python ./src/generate.py
 
   test:
     needs: generate
