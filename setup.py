@@ -5,10 +5,16 @@ To build `python setup.py sdist --formats=gztar bdist_wheel --universal`
 import os
 import shutil
 from setuptools import setup, find_namespace_packages
+import pytest
+import sys
+sys.path.append('./')
+from src.snappigenerator import SnappiGenerator
 
+SnappiGenerator().generate()
+pytest.main(['-s', 'tests'])
 
 pkg_name = 'snappi'
-base_dir = os.path.abspath(os.path.dirname(__file__))
+base_dir = os.path.dirname(os.path.abspath(__file__))
 with open(os.path.join(base_dir, 'README.md')) as fid:
     long_description = fid.read()
 with open(os.path.join(base_dir, 'VERSION')) as fid:
@@ -20,7 +26,7 @@ shutil.copytree(os.path.join(base_dir, 'src'), os.path.join(base_dir, pkg_name))
 shutil.copytree(os.path.join(base_dir, 'tests'), 
     os.path.join(base_dir, pkg_name, 'tests'))
 os.mkdir(os.path.join(base_dir, pkg_name, 'docs'))
-shutil.copy(os.path.join(base_dir, 'src', 'models', 'openapi.yaml'),
+shutil.copy(os.path.join(base_dir, 'models', 'openapi.yaml'),
     os.path.join(base_dir, pkg_name, 'docs'))
 
 setup(

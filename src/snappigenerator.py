@@ -21,53 +21,31 @@ class SnappiGenerator(object):
             clone_and_build = True
         self.__python = os.path.normpath(sys.executable)
         self.__python_dir = os.path.dirname(self.__python)
-        self._src_dir = './src'
-        self._model_dir = './models'
+        self._cwd = os.path.dirname(os.path.abspath(__file__))
+        self._model_dir = os.path.join(
+            os.path.dirname(os.path.abspath(__file__)), '..', 'models')
         self._dependencies = dependencies
         self._clone_and_build = clone_and_build
-        # self._clean()
+        self._clean()
         self._install_dependencies()
         self._clone_models_and_build()
 
     def _clean(self):
         process_args = [
-            self.__python,
-            '-m',
-            'pip',
-            'uninstall',
-            '--yes',
-            'snappi'
+            self.__python, '-m', 'pip', 'uninstall', '--yes', 'snappi'
         ]
         subprocess.Popen(process_args, shell=False).wait()
 
     def _install_dependencies(self):
         if self._dependencies is False:
             return
-        packages = [
-            'pyyaml', 
-            'jsonpath-ng'
-        ]
+        packages = ['pyyaml', 'jsonpath-ng']
         for package in packages:
             print('installing dependency %s...' % package)
             process_args = [
-                self.__python,
-                '-m',
-                'pip',
-                'install',
-                '-U',
-                package
+                self.__python, '-m', 'pip', 'install', '-U', package
             ]
             subprocess.Popen(process_args, shell=False).wait()
-
-    def test(self):
-        process_args = [
-            self.__python,
-            '-m',
-            'pytest',
-            '-s',
-            'tests'
-        ]
-        subprocess.Popen(process_args, shell=False).wait()
 
     def _handleError(self, func, path, exc_info):
         if not os.access(path, os.W_OK):
@@ -89,10 +67,7 @@ class SnappiGenerator(object):
         ]
         process = subprocess.Popen(process_args, shell=False)
         process.wait()
-        process_args = [
-            'python',
-            'bundler.py'
-        ]
+        process_args = ['python', 'bundler.py']
         subprocess.Popen(process_args, cwd=self._model_dir, shell=False).wait()
 
     def generate(self):
@@ -100,7 +75,7 @@ class SnappiGenerator(object):
         import os
         import fnmatch
         # Get a list of all files in directory
-        for rootDir, subdirs, filenames in os.walk('./'):
+        for rootDir, subdirs, filenames in os.walk(self._cwd):
             # Find the files that matches the given pattern
             for filename in fnmatch.filter(filenames, '*.py'):
                 try:
@@ -109,19 +84,19 @@ class SnappiGenerator(object):
                 except OSError:
                     print('Error deleting file %s' % filename)
         with open(os.path.join(self._model_dir, 'openapi.yaml')) as fid:
-            self._openapi =  safe_load(fid)
+            self._openapi = safe_load(fid)
         # self._write_component_schemas()
         self._write_paths()
         self._write_init()
         return self
 
     def _write_init(self):
-        filename = '__init__.py'
+        filename = os.path.join(self._cwd, '__init__.py')
         with open(filename, 'w') as self._fid:
             self._write(0, 'from .api import Api')
 
     def _write_paths(self):
-        api_filename = 'api.py'
+        api_filename = os.path.join(self._cwd, 'api.py')
         with open(api_filename, 'a') as self._fid:
             self._write()
             self._write()
@@ -131,7 +106,8 @@ class SnappiGenerator(object):
         for method in self._get_api_methods():
             pieces = method['operationId'].split('.')
             self._method_name = method['operationId'].replace('.', '_').lower()
-            print('generating %s in file %s...' % (self._method_name, api_filename))
+            print('generating %s in file %s...' %
+                  (self._method_name, api_filename))
             with open(api_filename, 'a') as self._fid:
                 self._write()
                 self._write(1, 'def %s(self, content):' % self._method_name)
@@ -150,7 +126,8 @@ class SnappiGenerator(object):
                 self._write()
                 self._write(1, '@property')
                 self._write(1, 'def %s(self):' % property_name)
-                self._write(2, "from .%s import %s" % (class_name.lower(), class_name))
+                self._write(
+                    2, "from .%s import %s" % (class_name.lower(), class_name))
                 self._write(2, "return %s()" % (class_name))
             self._write_component_schema(top_level_schema['$ref'])
 
@@ -159,7 +136,7 @@ class SnappiGenerator(object):
         ref_name = ref.split('/')[-1]
         property_name = ref_name.lower().replace('.', '_')
         class_name = ref_name.replace('.', '')
-        class_filename = '%s.py' % class_name.lower()
+        class_filename = os.path.join(self._cwd, '%s.py' % class_name.lower())
         refs = []
         if os.path.exists(class_filename) is False:
             print('generating %s in file %s...' % (class_name, class_filename))
@@ -169,7 +146,7 @@ class SnappiGenerator(object):
                 self._write()
                 self._write(0, 'class %s(SnappiObject):' % class_name)
                 snappi_types = self._get_snappi_types(yobject)
-                if len(snappi_types) > 0: 
+                if len(snappi_types) > 0:
                     self._write(1, '_TYPES = {')
                     for name, value in snappi_types:
                         self._write(2, "'%s': '%s'," % (name, value))
@@ -182,7 +159,8 @@ class SnappiGenerator(object):
                     set_items = []
                     set = 'def set(self'
                     for name in yobject['properties']:
-                        ref, write_list_class = self._write_component_property(property_name, name, yobject['properties'][name])
+                        ref, write_list_class = self._write_component_property(
+                            property_name, name, yobject['properties'][name])
                         if ref is not None:
                             refs.append((ref, write_list_class))
                         else:
@@ -204,7 +182,8 @@ class SnappiGenerator(object):
         ref_name = ref.split('/')[-1]
         property_name = ref_name.lower().replace('.', '_')
         class_name = ref_name.replace('.', '')
-        class_filename = '%slist.py' % class_name.lower()
+        class_filename = os.path.join(self._cwd,
+                                      '%slist.py' % class_name.lower())
         refs = []
         if os.path.exists(class_filename) is False:
             print('generating %s in file %s...' % (class_name, class_filename))
@@ -216,10 +195,15 @@ class SnappiGenerator(object):
                 self._write(1, 'def __init__(self):')
                 self._write(2, 'super().__init__()')
                 self._write()
-                property_param_string = self._get_property_param_string(yobject)
-                self._write(1, 'def append(self%s):' % property_param_string[0])
-                self._write(2, 'from .%s import %s' % (class_name.lower(), class_name))
-                self._write(2, 'self._items.append(%s().set(%s))' % (class_name, property_param_string[1]))
+                property_param_string = self._get_property_param_string(
+                    yobject)
+                self._write(1,
+                            'def append(self%s):' % property_param_string[0])
+                self._write(
+                    2, 'from .%s import %s' % (class_name.lower(), class_name))
+                self._write(
+                    2, 'self._items.append(%s().set(%s))' %
+                    (class_name, property_param_string[1]))
                 self._write(2, 'return self')
 
     def _get_property_param_string(self, yobject):
@@ -236,7 +220,7 @@ class SnappiGenerator(object):
                     default = property['default']
                 property_param_string += '=%s' % default
         return (property_param_string, property_string)
-        
+
     def _write_component_property(self, parent_property_name, name, property):
         ref = parse("$..'$ref'").find(property)
         write_list_class = False
@@ -252,7 +236,7 @@ class SnappiGenerator(object):
         self._write(2, '"""')
         if 'type' in property and len(ref) == 0:
             self._write(2, "return self._properties['%s']" % (name))
-            self._write()   
+            self._write()
             self._write(1, '@%s.setter' % name)
             self._write(1, 'def %s(self, value):' % name)
             self._write(2, '"""%s.%s setter' % (parent_property_name, name))
@@ -262,22 +246,33 @@ class SnappiGenerator(object):
             self._write()
             self._write(2, 'value: %s' % self._get_type_restriction(property))
             self._write(2, '"""')
-            self._write(2, "self._properties['%s'] = value" % (name))   
+            self._write(2, "self._properties['%s'] = value" % (name))
         elif len(ref) > 0:
             object_name = ref[0].value.split('/')[-1]
             class_name = object_name.replace('.', '')
             file_name = class_name.lower()
             restriction = self._get_type_restriction(property)
             if restriction.startswith('list['):
-                self._write(2, "from .%slist import %sList" % (class_name.lower(), class_name))
-                self._write(2, "if '%s' not in self._properties or self._properties['%s'] is None:" % (name, name))
-                self._write(3, "self._properties['%s'] = %sList()" % (name, class_name))
+                self._write(
+                    2, "from .%slist import %sList" %
+                    (class_name.lower(), class_name))
+                self._write(
+                    2,
+                    "if '%s' not in self._properties or self._properties['%s'] is None:"
+                    % (name, name))
+                self._write(
+                    3,
+                    "self._properties['%s'] = %sList()" % (name, class_name))
                 self._write(2, "return self._properties['%s']" % (name))
                 write_list_class = True
             else:
                 self._write(2, "from .%s import %s" % (file_name, class_name))
-                self._write(2, "if '%s' not in self._properties or self._properties['%s'] is None:" % (name, name))
-                self._write(3, "self._properties['%s'] = %s()" % (name, class_name))
+                self._write(
+                    2,
+                    "if '%s' not in self._properties or self._properties['%s'] is None:"
+                    % (name, name))
+                self._write(
+                    3, "self._properties['%s'] = %s()" % (name, class_name))
                 self._write(2, "return self._properties['%s']" % (name))
         if len(ref) > 0:
             return (ref[0].value, write_list_class)
@@ -327,13 +322,16 @@ class SnappiGenerator(object):
             return 0
         if property_type == 'boolean':
             return False
-        raise Exception('Missing handler for property type `%s`' % property_type)
+        raise Exception('Missing handler for property type `%s`' %
+                        property_type)
 
     def _get_api_methods(self):
         methods = []
         for key, yobject in self._openapi['paths'].items():
             for rest_method in yobject:
-                if rest_method.lower() in ['get', 'post', 'put', 'patch', 'delete']:
+                if rest_method.lower() in [
+                        'get', 'post', 'put', 'patch', 'delete'
+                ]:
                     methods.append(yobject[rest_method])
         return methods
 
@@ -348,38 +346,55 @@ class SnappiGenerator(object):
             else:
                 path += self._classname.lower()
             self._classfilename = path
-            print('generating %s in file %s...' % (self._classname, self._classfilename))
+            print('generating %s in file %s...' %
+                  (self._classname, self._classfilename))
 
-            with open(self._classfilename + '.py', 'a', newline='\n') as self._fid:
+            with open(self._classfilename + '.py', 'a',
+                      newline='\n') as self._fid:
                 self._write()
                 self._write()
                 self._write(0, 'class %s(object):' % self._classname)
-                
+
                 # create a list of any choice tuples
                 choice_tuples = []
-                if 'properties' in yobject and 'choice' in yobject['properties']:
-                    if 'required' in yobject and 'choice' not in yobject['required']:
-                        choice_tuples.append(('None', choice_enum, choice_enum))
+                if 'properties' in yobject and 'choice' in yobject[
+                        'properties']:
+                    if 'required' in yobject and 'choice' not in yobject[
+                            'required']:
+                        choice_tuples.append(
+                            ('None', choice_enum, choice_enum))
                     for choice_enum in yobject['properties']['choice']['enum']:
                         if choice_enum not in yobject['properties']:
-                            choice_tuples.append((choice_enum, choice_enum, None))
+                            choice_tuples.append(
+                                (choice_enum, choice_enum, None))
                         else:
                             choice = yobject['properties'][choice_enum]
                             if '$ref' in choice:
-                                choice_classname = self._get_classname_from_ref(choice['$ref'])
-                                choice_tuples.append((choice_classname, choice_enum, choice['$ref']))
+                                choice_classname = self._get_classname_from_ref(
+                                    choice['$ref'])
+                                choice_tuples.append(
+                                    (choice_classname, choice_enum,
+                                     choice['$ref']))
                             elif choice['type'] == 'string':
-                                choice_tuples.append(('str', choice_enum, None))
+                                choice_tuples.append(
+                                    ('str', choice_enum, None))
                             elif choice['type'] in ['number', 'integer']:
-                                choice_tuples.append(('float', choice_enum, None))
-                                choice_tuples.append(('int', choice_enum, None))
+                                choice_tuples.append(
+                                    ('float', choice_enum, None))
+                                choice_tuples.append(
+                                    ('int', choice_enum, None))
                             elif choice['type'] == 'array':
-                                choice_tuples.append(('list', choice_enum, None))
+                                choice_tuples.append(
+                                    ('list', choice_enum, None))
                             elif choice['type'] == 'boolean':
-                                choice_tuples.append(('boolean', choice_enum, None))
+                                choice_tuples.append(
+                                    ('boolean', choice_enum, None))
 
                 # class documentation
-                self._write(1, '"""Generated from OpenAPI schema object #/components/schemas/%s' % key)
+                self._write(
+                    1,
+                    '"""Generated from OpenAPI schema object #/components/schemas/%s'
+                    % key)
                 self._write()
                 if 'description' not in yobject:
                     yobject['description'] = 'TBD'
@@ -395,10 +410,14 @@ class SnappiGenerator(object):
                     self._write(1, "Args")
                     self._write(1, "----")
                     for name, property in yobject['properties'].items():
-                        if len([item for item in choice_tuples if item[1] == name]) > 0:
+                        if len([
+                                item
+                                for item in choice_tuples if item[1] == name
+                        ]) > 0:
                             continue
                         if name == 'choice':
-                            type = 'Union[%s]' % ', '.join([item[0] for item in choice_tuples])
+                            type = 'Union[%s]' % ', '.join(
+                                [item[0] for item in choice_tuples])
                         elif name == 'additionalProperties':
                             name = 'additional_properties'
                             type = '**additional_properties'
@@ -406,10 +425,14 @@ class SnappiGenerator(object):
                             type = self._get_type_restriction(property)
                         if 'description' not in property:
                             property['description'] = 'TBD'
-                        description = re.sub('\n', '. ', property['description'])
-                        description = re.sub('\s+', ' ', property['description'])
+                        description = re.sub('\n', '. ',
+                                             property['description'])
+                        description = re.sub('\s+', ' ',
+                                             property['description'])
                         lines = re.split('\.', description)
-                        self._write(1, "- %s (%s): %s" % (name, type, lines[0].strip()))
+                        self._write(
+                            1,
+                            "- %s (%s): %s" % (name, type, lines[0].strip()))
                         for line in lines[1:]:
                             line = line.strip()
                             if len(line) > 0:
@@ -422,32 +445,39 @@ class SnappiGenerator(object):
                     for constant, value in yobject['x-constants'].items():
                         self._write(1, "%s = '%s'" % (constant.upper(), value))
                     self._write(1)
-                
+
                 # choice map
                 if len(choice_tuples) > 0:
                     self._write(1, '_CHOICE_MAP = {')
                     for choice_tuple in choice_tuples:
-                        self._write(2, "'%s': '%s'," % (choice_tuple[0], choice_tuple[1]))
+                        self._write(
+                            2,
+                            "'%s': '%s'," % (choice_tuple[0], choice_tuple[1]))
                     self._write(1, '}')
 
                 # init args
                 args = ''
                 if 'properties' in yobject:
                     for name, property in yobject['properties'].items():
-                        if len([item for item in choice_tuples if item[1] == name]) == 0:
+                        if len([
+                                item for item in choice_tuples
+                                if item[1] == name
+                        ]) == 0:
                             arg_type = 'None'
-                            if 'type' in property and property['type'] == 'array':
+                            if 'type' in property and property[
+                                    'type'] == 'array':
                                 arg_type = '[]'
                             elif 'default' in property:
                                 if property['type'] == 'string':
                                     arg_type = "'%s'" % property['default']
                                 else:
-                                    arg_type ='%s' % property['default']
-                            args += '%s%s=%s' % (', ', name, arg_type) 
+                                    arg_type = '%s' % property['default']
+                            args += '%s%s=%s' % (', ', name, arg_type)
                 self._write(1, 'def __init__(self%s):' % args)
                 if len(args) == 0:
                     self._write(2, 'pass')
-                self._write_data_properties(yobject, self._classname, choice_tuples)
+                self._write_data_properties(yobject, self._classname,
+                                            choice_tuples)
         return self
 
     def _write_data_properties(self, schema, classname, choice_tuples):
@@ -462,10 +492,20 @@ class SnappiGenerator(object):
             choices = []
             for choice_tuple in choice_tuples:
                 choices.append(choice_tuple[0])
-            self._write(2, 'if isinstance(choice, (%s)) is False:' % (', '.join(choices)))
-            self._write(3, "raise TypeError('choice must be of type: %s')" % (', '.join(choices)))
-            self._write(2, "self.__setattr__('choice', %s._CHOICE_MAP[type(choice).__name__])" % classname)
-            self._write(2, "self.__setattr__(%s._CHOICE_MAP[type(choice).__name__], choice)" % classname)
+            self._write(
+                2,
+                'if isinstance(choice, (%s)) is False:' % (', '.join(choices)))
+            self._write(
+                3, "raise TypeError('choice must be of type: %s')" %
+                (', '.join(choices)))
+            self._write(
+                2,
+                "self.__setattr__('choice', %s._CHOICE_MAP[type(choice).__name__])"
+                % classname)
+            self._write(
+                2,
+                "self.__setattr__(%s._CHOICE_MAP[type(choice).__name__], choice)"
+                % classname)
 
         if 'properties' in schema:
             for name, property in schema['properties'].items():
@@ -475,25 +515,37 @@ class SnappiGenerator(object):
                         self._write(2, import_line)
                         import_lines.append(import_line)
             for name, property in schema['properties'].items():
-                if len([item for item in choice_tuples if item[1] == name]) == 0 and name != 'choice':
-                    restriction = self._get_isinstance_restriction(schema, name, property)
-                    self._write(2, 'if isinstance(%s, %s) is True:' % (name, restriction))
+                if len([item for item in choice_tuples if item[1] == name
+                        ]) == 0 and name != 'choice':
+                    restriction = self._get_isinstance_restriction(
+                        schema, name, property)
+                    self._write(
+                        2,
+                        'if isinstance(%s, %s) is True:' % (name, restriction))
                     if restriction == '(list, type(None))':
-                        self._write(3, 'self.%s = [] if %s is None else list(%s)' % (name, name, name))
+                        self._write(
+                            3, 'self.%s = [] if %s is None else list(%s)' %
+                            (name, name, name))
                     else:
                         if 'pattern' in property:
                             self._write(3, 'import re')
-                            self._write(3, "assert(bool(re.match(r'%s', %s)) is True)" % (property['pattern'], name))
+                            self._write(
+                                3,
+                                "assert(bool(re.match(r'%s', %s)) is True)" %
+                                (property['pattern'], name))
                         self._write(3, 'self.%s = %s' % (name, name))
                     self._write(2, 'else:')
-                    self._write(3, "raise TypeError('%s must be an instance of %s')" % (name, restriction))
+                    self._write(
+                        3, "raise TypeError('%s must be an instance of %s')" %
+                        (name, restriction))
 
     def _get_isinstance_restriction(self, schema, name, property):
         type_none = ', type(None)'
         if 'required' in schema and name in schema['required']:
             type_none = ''
         if '$ref' in property:
-            return '(%s%s)' % (self._get_classname_from_ref(property['$ref']), type_none)
+            return '(%s%s)' % (self._get_classname_from_ref(
+                property['$ref']), type_none)
         elif name == 'additionalProperties':
             return '**additional_properties'
         elif property['type'] in ['number', 'integer']:
@@ -522,7 +574,7 @@ class SnappiGenerator(object):
             return 'int'
         elif property['type'] == 'string':
             if 'enum' in property:
-                return 'Union[%s]' % ', '.join(property['enum'])                
+                return 'Union[%s]' % ', '.join(property['enum'])
             else:
                 return 'str'
         elif property['type'] == 'array':
@@ -536,11 +588,13 @@ class SnappiGenerator(object):
         return parse(json_path).find(self._openapi)[0].value
 
     def _get_import_from_ref(self, ref):
-        filename = '_'.join(ref.lower().split('#/components/schemas/')[-1].split('.')[0:-1])
+        filename = '_'.join(
+            ref.lower().split('#/components/schemas/')[-1].split('.')[0:-1])
         classname = self._get_classname_from_ref(ref)
         if len(filename) == 0:
             filename = classname.lower()
-        return 'from abstract_open_traffic_generator.%s import %s' % (filename, classname)
+        return 'from abstract_open_traffic_generator.%s import %s' % (
+            filename, classname)
 
     def _get_classname_from_ref(self, ref):
         final_piece = ref.split('/')[-1]
@@ -570,22 +624,22 @@ class SnappiGenerator(object):
 
     def _process_yaml_object(self, base_dir, yobject):
         for key, value in yobject.items():
-            if key in ['openapi', 'info', 'servers'] and key not in self._content.keys():
+            if key in ['openapi', 'info', 'servers'
+                       ] and key not in self._content.keys():
                 self._content[key] = value
             elif key in ['paths']:
                 if key not in self._content.keys():
                     self._content[key] = {}
                 for sub_key in value.keys():
-                    self._content[key][sub_key] = value[sub_key] 
+                    self._content[key][sub_key] = value[sub_key]
             elif key == 'components':
                 if key not in self._content.keys():
-                    self._content[key] = {
-                        'schemas': {}
-                    }
+                    self._content[key] = {'schemas': {}}
                 if 'schemas' in value:
                     schemas = value['schemas']
                     for schema_key in schemas.keys():
-                        self._content['components']['schemas'][schema_key] = schemas[schema_key]
+                        self._content['components']['schemas'][
+                            schema_key] = schemas[schema_key]
         self._resolve_refs(base_dir, yobject)
 
     def _resolve_refs(self, base_dir, yobject):
@@ -607,7 +661,7 @@ class SnappiGenerator(object):
                     self._resolve_refs(base_dir, value)
         elif isinstance(yobject, list):
             for item in yobject:
-                self._resolve_refs(base_dir, item) 
+                self._resolve_refs(base_dir, item)
 
     def _get_inline_ref(self, base_dir, filename, inline_key):
         filename = os.path.join(base_dir, filename)
@@ -615,9 +669,9 @@ class SnappiGenerator(object):
         base_dir = os.path.dirname(filename)
         with open(filename) as fid:
             yobject = yaml.safe_load(fid)
-        return parse('$%s' % inline_key.replace('/', '.'), ).find(yobject)[0].value
-                        
+        return parse('$%s' %
+                     inline_key.replace('/', '.'), ).find(yobject)[0].value
+
 
 if __name__ == '__main__':
-    SnappiGenerator(dependencies=False, clone_and_build=True)
-
+    SnappiGenerator(dependencies=False, clone_and_build=True).generate()

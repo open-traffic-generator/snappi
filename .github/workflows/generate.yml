@@ -7,6 +7,7 @@ on: [push, pull_request, workflow_dispatch]
 jobs:
   generate:
     runs-on: ubuntu-latest
+    
     steps:
     - name: Checkout
       uses: actions/checkout@v2
@@ -22,18 +23,8 @@ jobs:
         python -m pip install --upgrade jsonpath-ng
         python -m pip install --upgrade pyyaml
 
-    - name: Generate classes
+    - name: Generate package
       run: |
-        python ./src/generate.py
+        python setup.py sdist --formats=gztar bdist_wheel --universal
 
-  test:
-    needs: generate
-    runs-on: ubuntu-latest
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v2
 
-    - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: '3.x'
