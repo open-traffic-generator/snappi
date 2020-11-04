@@ -22,6 +22,7 @@ class Builder(object):
         self.__python = os.path.normpath(sys.executable)
         self.__python_dir = os.path.dirname(self.__python)
         self._src_dir = './src'
+        self._model_dir = './models'
         self._dependencies = dependencies
         self._clone_and_build = clone_and_build
         # self._clean()
@@ -80,7 +81,7 @@ class Builder(object):
         if self._clone_and_build is False:
             return
         print('cloning models...')
-        shutil.rmtree('./models', onerror=self._handleError)
+        shutil.rmtree(self._model_dir, onerror=self._handleError)
         process_args = [
             'git',
             'clone',
@@ -92,22 +93,22 @@ class Builder(object):
             'python',
             'bundler.py'
         ]
-        subprocess.Popen(process_args, cwd='./models', shell=False).wait()
+        subprocess.Popen(process_args, cwd=self._model_dir, shell=False).wait()
 
     def generate(self):
         from yaml import safe_load
         import os
         import fnmatch
         # Get a list of all files in directory
-        for rootDir, subdirs, filenames in os.walk(self._src_dir):
-            # Find the files that matches the given patterm
+        for rootDir, subdirs, filenames in os.walk('./'):
+            # Find the files that matches the given pattern
             for filename in fnmatch.filter(filenames, '*.py'):
                 try:
-                    if filename not in ['snappicommon.py']:
+                    if filename not in ['snappicommon.py', 'generate.py']:
                         os.remove(os.path.join(rootDir, filename))
                 except OSError:
                     print('Error deleting file %s' % filename)
-        with open('./models/openapi.yaml') as fid:
+        with open(os.path.join(self._model_dir, 'openapi.yaml')) as fid:
             self._openapi =  safe_load(fid)
         # self._write_component_schemas()
         self._write_paths()
@@ -115,12 +116,12 @@ class Builder(object):
         return self
 
     def _write_init(self):
-        filename = self._src_dir + '/__init__.py'
+        filename = '__init__.py'
         with open(filename, 'w') as self._fid:
             self._write(0, 'from .api import Api')
 
     def _write_paths(self):
-        api_filename = self._src_dir + '/api.py'
+        api_filename = 'api.py'
         with open(api_filename, 'a') as self._fid:
             self._write()
             self._write()
@@ -158,7 +159,7 @@ class Builder(object):
         ref_name = ref.split('/')[-1]
         property_name = ref_name.lower().replace('.', '_')
         class_name = ref_name.replace('.', '')
-        class_filename = self._src_dir + '/%s.py' % class_name.lower()
+        class_filename = '%s.py' % class_name.lower()
         refs = []
         if os.path.exists(class_filename) is False:
             print('generating %s in file %s...' % (class_name, class_filename))
@@ -203,7 +204,7 @@ class Builder(object):
         ref_name = ref.split('/')[-1]
         property_name = ref_name.lower().replace('.', '_')
         class_name = ref_name.replace('.', '')
-        class_filename = self._src_dir + '/%slist.py' % class_name.lower()
+        class_filename = '%slist.py' % class_name.lower()
         refs = []
         if os.path.exists(class_filename) is False:
             print('generating %s in file %s...' % (class_name, class_filename))
@@ -618,6 +619,6 @@ class Builder(object):
                         
 
 if __name__ == '__main__':
-    builder = Builder(dependencies=False, clone_and_build=False)
+    builder = Builder(dependencies=False, clone_and_build=True)
     builder.generate().test()
 
