@@ -1,3 +1,5 @@
+# Generate snappi classes from the open-traffic-generator models
+# 
 name: Generate
 
 on: [push, pull_request, workflow_dispatch]

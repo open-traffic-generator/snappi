@@ -6,3 +6,6 @@ build
 dist
 .pytest_cache
 *.egg-info
+# /src
+# !/src/snappicommon.py
+# !/src/generate.py

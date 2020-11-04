@@ -1,4 +1,5 @@
-from json import JSONEncoder, JSONDecoder
+import importlib
+from json import JSONEncoder
 
 def _default_encoder(self, obj):
     return getattr(obj.__class__, "encode", _default_encoder.default)(obj)
@@ -19,8 +20,41 @@ class SnappiObject(object):
                 output[key] = value
         return output
 
-    def decode(self, s):
-        pass
+def decode(snappi_class, obj):
+    """Deserialize a json object depth first into the snappi object hierarchy
+    Returns: obj(snappicommon.SnappiObject)
+    """
+    snappi_object = snappi_class()
+    snappi_names = dir(snappi_object)
+    for property_name, property_value in obj.items():
+        if property_name in snappi_names:
+            if isinstance(property_value, dict):
+                child_list_class, child_object_class = get_child_class(snappi_object, property_name)
+                property_value = decode(child_object_class, property_value) 
+            elif isinstance(property_value, list):
+                child_list_class, child_object_class = get_child_class(snappi_object, property_name, True)
+                snappi_list = child_list_class()
+                for item in property_value:
+                    item = decode(child_object_class, item)
+                    snappi_list._items.append(item)
+                property_value = snappi_list
+            snappi_object._properties[property_name] = property_value
+    return snappi_object
+
+def get_child_class(snappi_object, property_name, is_property_list=False):
+    list_class = None
+    package_name = __name__.split('.')[0]
+    child_class_path_name = snappi_object._TYPES[property_name].split('.')
+    child_class_path = '.'.join(child_class_path_name[0:-1])
+    child_class_name = child_class_path_name[-1]
+    module = importlib.import_module(child_class_path, package=package_name)
+    object_class = getattr(module, child_class_name)
+    if is_property_list is True:
+        list_class = object_class
+        module = importlib.import_module(child_class_path[0:-4], package=package_name)
+        object_class = getattr(module, child_class_name[0:-4])
+    return (list_class, object_class)
+            
 
 class SnappiList(object):
     """Container class for SnappiObject
@@ -69,21 +103,3 @@ class SnappiList(object):
     def encode(self):
         return [item.encode() for item in self._items]
 
-# class DeviceList(SnappiList):
-#     def __init__(self):
-#         super().__init__()
-    
-#     def append(self, name=None, device_count=1):
-#         from snappi.device import Device
-#         self._items.append(Device().set(name, device_count))
-#         return self
-
-
-if __name__ == '__main__':
-    import sys
-    sys.path.append('./snappi')
-    import snappi
-
-    dl = DeviceList()
-    dl.append(name='a').append(name='b')
-    print(dl.keys())

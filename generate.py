@@ -167,6 +167,13 @@ class Builder(object):
                 self._write()
                 self._write()
                 self._write(0, 'class %s(SnappiObject):' % class_name)
+                snappi_types = self._get_snappi_types(yobject)
+                if len(snappi_types) > 0: 
+                    self._write(1, '_TYPES = {')
+                    for name, value in snappi_types:
+                        self._write(2, "'%s': '%s'," % (name, value))
+                    self._write(1, '}')
+                    self._write()
                 self._write(1, 'def __init__(self):')
                 self._write(2, 'super().__init__()')
                 self._write(2, 'self.set()')
@@ -289,6 +296,21 @@ class Builder(object):
                 doc_string.append('%s  ' % line)
         return doc_string
 
+    def _get_snappi_types(self, yobject):
+        types = []
+        if 'properties' in yobject:
+            for name in yobject['properties']:
+                yproperty = yobject['properties'][name]
+                ref = parse("$..'$ref'").find(yproperty)
+                if len(ref) > 0:
+                    object_name = ref[0].value.split('/')[-1]
+                    class_name = object_name.replace('.', '')
+                    file_name = class_name.lower()
+                    if 'type' in yproperty and yproperty['type'] == 'array':
+                        class_name += 'List'
+                        file_name += 'list'
+                    types.append((name, '.%s.%s' % (file_name, class_name)))
+        return types
 
     def _get_default_value(self, property):
         if 'default' in property:
