@@ -7,5 +7,5 @@ dist
 .pytest_cache
 *.egg-info
 src
-!src/snappi*.py
-!src/generate.py
+!src/snappicommon.py
+!src/snappigenerator.py
