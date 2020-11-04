@@ -1,6 +1,10 @@
 # Generate snappi classes from the open-traffic-generator models
+# Run pytests
+# Create distributions
+# Test distribution installation
+# If the version number has changed, create release, upload to pypi
 # 
-name: Generate
+name: Build
 
 on: [push, pull_request, workflow_dispatch]
 
@@ -32,4 +36,45 @@ jobs:
       run: |
         python setup.py sdist --formats=gztar bdist_wheel --universal
 
+    - name: Test whl distribution installation
+      run: |
+        pip install dist/*.whl
+
+    - name: Check version number change
+      id: file_changes
+      uses: trilom/file-changes-action@v1.2.3
+
+    - name: Get version number
+      id: get_version
+      run: echo "::set-output name=version::$(cat VERSION)"
+
+    - name: Create Release
+      if: contains('${{steps.file_changes.outputs.files_modified}}', 'VERSION')
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
+      with:
+        tag_name: v${{ steps.get_version.outputs.version }}
+        release_name: Release ${{ steps.get_version.outputs.version }}
+        draft: false
+        prerelease: false
+
+    - name: Upload Assets To Release
+      if: contains('${{steps.file_changes.outputs.files_modified}}', 'VERSION')
+      uses: svenstaro/upload-release-action@v2
+      with:
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        file: dist/*
+        tag: v${{ steps.get_version.outputs.version }}
+        overwrite: true
+        file_glob: true   
+        
+    - name: Upload Assets to Pypi
+      if: contains('${{steps.file_changes.outputs.files_modified}}', 'VERSION')
+      env:
+        TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
+        TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
+      run: |
+        twine upload dist/*
 
