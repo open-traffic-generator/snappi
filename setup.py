@@ -20,7 +20,7 @@ shutil.copytree(os.path.join(base_dir, 'src'), os.path.join(base_dir, pkg_name))
 shutil.copytree(os.path.join(base_dir, 'tests'), 
     os.path.join(base_dir, pkg_name, 'tests'))
 os.mkdir(os.path.join(base_dir, pkg_name, 'docs'))
-shutil.copy(os.path.join(base_dir, 'models', 'openapi.yaml'),
+shutil.copy(os.path.join(base_dir, 'src', 'models', 'openapi.yaml'),
     os.path.join(base_dir, pkg_name, 'docs'))
 
 setup(
