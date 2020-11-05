@@ -43,14 +43,14 @@ jobs:
     - name: Check version number change
       id: file_changes
       uses: trilom/file-changes-action@v1.2.3
+      if: false == contains(${{steps.file_changes.outputs.files_modified}}, 'VERSION')
+      run: exit 0
 
     - name: Get version number
       id: get_version
       run: echo "::set-output name=version::$(cat VERSION)"
 
     - name: Create Release
-      if: contains('${{steps.file_changes.outputs.files_modified}}', 'VERSION')
-      id: create_release
       uses: actions/create-release@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
@@ -61,7 +61,6 @@ jobs:
         prerelease: false
 
     - name: Upload Assets To Release
-      if: contains('${{steps.file_changes.outputs.files_modified}}', 'VERSION')
       uses: svenstaro/upload-release-action@v2
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
@@ -71,7 +70,6 @@ jobs:
         file_glob: true   
         
     - name: Upload Assets to Pypi
-      if: contains('${{steps.file_changes.outputs.files_modified}}', 'VERSION')
       env:
         TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
         TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
