@@ -32,21 +32,23 @@ jobs:
         python -m pip install --upgrade twine
         python -m pip install --upgrade requests
 
-    - name: Generate package
+    - name: Generate python sdist and wheel distributions
       run: |
         python setup.py sdist --formats=gztar bdist_wheel --universal
 
-    - name: Test whl distribution installation
+    - name: Test wheel distribution installation
       run: |
         pip install dist/*.whl
 
-    - name: Check version number change
+    - name: Get all changes
       id: file_changes
       uses: trilom/file-changes-action@v1.2.3
+    
+    - name: Check if the file VERSION has changed
       if: false == contains(${{steps.file_changes.outputs.files_modified}}, 'VERSION')
       run: exit 0
 
-    - name: Get version number
+    - name: Get VERSION number
       id: get_version
       run: echo "::set-output name=version::$(cat VERSION)"
 
