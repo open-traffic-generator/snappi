@@ -43,15 +43,14 @@ jobs:
     - name: Get all changes
       id: file_changes
       uses: trilom/file-changes-action@v1.2.3
-    
 
     - name: Get VERSION number
       id: get_version
-      if: contains(${{steps.file_changes.outputs.files_modified}}, 'VERSION')
+      if: true == contains(${{steps.file_changes.outputs.files_modified}}, 'VERSION')
       run: echo "::set-output name=version::$(cat VERSION)"
 
     - name: Create Release
-      if: contains(${{steps.file_changes.outputs.files_modified}}, 'VERSION')
+      if: true == contains(${{steps.file_changes.outputs.files_modified}}, 'VERSION')
       uses: actions/create-release@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
@@ -62,7 +61,7 @@ jobs:
         prerelease: false
 
     - name: Upload Assets To Release
-      if: contains(${{steps.file_changes.outputs.files_modified}}, 'VERSION')
+      if: true == contains(${{steps.file_changes.outputs.files_modified}}, 'VERSION')
       uses: svenstaro/upload-release-action@v2
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
@@ -75,7 +74,7 @@ jobs:
       env:
         TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
         TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
-      if: contains(${{steps.file_changes.outputs.files_modified}}, 'VERSION')
+      if: true == contains(${{steps.file_changes.outputs.files_modified}}, 'VERSION')
       run: |
         twine upload dist/*
 
