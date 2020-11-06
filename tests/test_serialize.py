@@ -6,6 +6,9 @@ import json
 
 
 def test_serialize_deserialize():
+    """Demonstrate that there are no errors during serialization/deserialization
+    of Snappi objects
+    """ 
     api = src.api.Api()
     control_state = api.control_state.set(choice='config_state')
     config = control_state.config_state.set(state='set').config
@@ -16,10 +19,12 @@ def test_serialize_deserialize():
     flow.tx_rx.set(choice='port')
     flow.tx_rx.port.set(tx_port_name=config.ports[0].name,
                         rx_port_name=config.ports[1].name)
+    flow.packet.append(choice='ethernet').append(choice='ipv4')
     serialization = json.dumps(control_state, indent=2)
+    print(serialization)
     snappi_object = src.snappicommon.decode(api.control_state.__class__,
                                             json.loads(serialization))
-    print(snappi_object)
+    assert(json.dumps(snappi_object, indent=2) == serialization)
 
 
 if __name__ == '__main__':
