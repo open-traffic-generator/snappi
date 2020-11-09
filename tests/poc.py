@@ -1,20 +1,4 @@
-# ***snappi***
-Create test case scripts once using the `snappi` client and run them using a 
-traffic generator that conforms to the Open Traffic Generator standard.
-
-## *Install the client*
-```
-pip install snappi
-```
-
-## *Start scripting*
-```python
-"""A simple test that demonstrates the following:
-- A port that transmits an ethernet/vlan/ipv4/tcp flow 
-for a specified duration and a port that receives the packets.
-- While the flow is transmitting the script prints out tx and rx statistics.
-- Once all the packets have been transmitted the script will end. 
-"""
+import snappi
 import pandas
 
 api = snappi.Api()
@@ -48,4 +32,3 @@ while True:
     print(df)
     if df.frames_tx.sum() >= config.flows[0].duration.fixed_packets:
         break
-```
