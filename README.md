@@ -1,6 +1,6 @@
 # ***snappi***
 Create test case scripts once using the `snappi` client and run them using a 
-traffic generator that conforms to the Open Traffic Generator standard.
+traffic generator that conforms to the [Open Traffic Generator API](https://github.com/open-traffic-generator/models/releases).
 
 ## *Install the client*
 ```
