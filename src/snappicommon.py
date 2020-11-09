@@ -58,6 +58,17 @@ def get_child_class(snappi_object, property_name, is_property_list=False):
 
 class SnappiList(object):
     """Container class for SnappiObject
+
+    Inheriting classes contain 0..n instances of an OpenAPI components/schemas 
+    object.
+    - flow = config.flows.append(name='test')
+
+    The __getitem__ method allows getting an instance using ordinal or name.
+    - config.flows[0]
+    - config.flows['test']
+
+    The __iter__ method allows for iterating across the encapsulated contents
+    - for flow in config.flows:
     """
     def __init__(self):
         self._index = -1
