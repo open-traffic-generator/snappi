@@ -22,7 +22,7 @@ api.set_state(api.control_state)
 control_state.flow_transmit_state.state = snappi.FLOWTRANSMITSTATE_START
 api.set_state(control_state)
 
-request = result.PortRequest(column_names=[
+request = api.result_portrequest.column_names = [
     snappi.PORTREQUEST_NAME, snappi.PORTREQUST_LOCATION,
     snappi.PORTREQUEST_FRAMES_TX, snappi.PORTREQUEST_FRAMES_RX
 ])
