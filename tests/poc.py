@@ -23,12 +23,8 @@ api.set_state(api.control_state)
 api.control_state.flow_transmit_state.state = snappi.FLOWTRANSMITSTATE_START
 api.set_state(api.control_state)
 
-request = api.result_portrequest.column_names = [
-    snappi.RESULTPORTREQUEST_NAME, snappi.RESULTPORTREQUEST_LOCATION,
-    snappi.RESULTPORTREQUEST_FRAMES_TX, snappi.RESULTPORTREQUEST_FRAMES_RX
-])
 while True:
-    results = api.get_port_results(request)
+    results = api.get_port_results(api.result_portrequest)
     df = pandas.DataFrame.from_dict(results)
     print(df)
     if df.frames_tx.sum() >= config.flows[0].duration.fixed_packets:
