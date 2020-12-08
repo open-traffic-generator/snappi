@@ -3,31 +3,20 @@
 To build `python setup.py sdist --formats=gztar bdist_wheel --universal`
 """
 import os
-import shutil
-from setuptools import setup, find_namespace_packages
+from setuptools import setup, find_packages
+from snappi.snappigenerator import SnappiGenerator
 import pytest
-import sys
-sys.path.append('./')
-from src.snappigenerator import SnappiGenerator
-
-SnappiGenerator().generate()
-pytest.main(['-s', 'tests'])
 
 pkg_name = 'snappi'
+
+SnappiGenerator()
+pytest.main(['-s', './%s/tests' % pkg_name])
+
 base_dir = os.path.dirname(os.path.abspath(__file__))
 with open(os.path.join(base_dir, 'README.md')) as fid:
     long_description = fid.read()
 with open(os.path.join(base_dir, 'VERSION')) as fid:
     version_number = fid.read()
-
-shutil.rmtree(os.path.join(base_dir, pkg_name), ignore_errors=True)
-
-shutil.copytree(os.path.join(base_dir, 'src'), os.path.join(base_dir, pkg_name))
-shutil.copytree(os.path.join(base_dir, 'tests'), 
-    os.path.join(base_dir, pkg_name, 'tests'))
-os.mkdir(os.path.join(base_dir, pkg_name, 'docs'))
-shutil.copy(os.path.join(base_dir, 'models', 'openapi.yaml'),
-    os.path.join(base_dir, pkg_name, 'docs'))
 
 setup(
     name=pkg_name,
@@ -48,9 +37,8 @@ setup(
         'Programming Language :: Python :: 3'
     ],
     keywords='snappi testing open traffic generator automation',
-    packages=[pkg_name],
     include_package_data=True,
+    packages=find_packages(),
     python_requires='>=2.7, <4',
     tests_require=['pytest']
 )
-

@@ -1,11 +1,12 @@
 *.pyc
 .pycache
-models
-snappi
 build
 dist
 .pytest_cache
-*.egg-info
-src
-!src/snappicommon.py
-!src/snappigenerator.py
+snappi.egg-info
+docs/openapi.yaml
+snappi/*
+!snappi/snappicommon.py
+!snappi/snappigenerator.py
+!snappi/tests
+# !snappi/tests/test_serialize.py
