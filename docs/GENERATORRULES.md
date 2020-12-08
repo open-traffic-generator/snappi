@@ -72,12 +72,36 @@ The generator should do the following:
     ```
 
 
-## composite type
+## ` choice property`
+Given a property named choice... 
 ```
-type: array
-items:
-  $ref: '/components/schemas/Flow.Header'
+components:
+  schemas:
+    Flow.Header:
+      type: object
+      properties:
+        choice:
+          type: string
+          enum: [ethernet, vlan, ipv4]
+        ethernet:
+          $ref: '/components/schemas/Flow.Ethernet'
+        vlan:
+          $ref: '/components/schemas/Flow.Vlan'
+        ipv4:
+          $ref: '/components/schemas/Flow.Ipv4'
 ```
+The generator should do the following:
+- For every choice property generate a property on the container class 
+that returns a $ref SnappiList object.
+    ```python
+    class FlowHeader(SnappiObject):
+        @property
+        def ethernet(self):
+            from .flowethernet import FlowEthernet
+            if 'ethernet' not in self._properties or self._properties['ethernet'] is None:
+                self._properties['ethernet'] = FlowEthernet()
+            return self._properties['ethernet']
+    ```
 
 
 
