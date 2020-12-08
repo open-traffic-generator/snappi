@@ -218,7 +218,7 @@ class SnappiGenerator(object):
                 property_param_string = self._get_property_param_string(
                     yobject)
                 self._write(1,
-                            'def append(self%s):' % property_param_string[0])
+                            'def %s(self%s):' % (property_name, property_param_string[0]))
                 self._write(
                     2, 'from .%s import %s' % (class_name.lower(), class_name))
                 self._write(
