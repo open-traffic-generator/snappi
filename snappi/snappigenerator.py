@@ -1,102 +1,122 @@
-"""Build Process
+"""Snappi Generator
+
+Generates a python package based on the Open Traffic Generator openapi.yaml file.
+
+Rules:
+0) Api class is generated from the /paths. All /paths will be represented as
+a method in the Api class.
+    e.g., 
+    paths:
+        /config:
+            get:
+                operationId: get_config
+            patch:
+
+    class Api:
+        def get_config():
+        def patch_config():
+
+    a) If no operationId is present the method + path will become the method name.
+    The / separator character will be replaced with an _ and the method name
+    will be in lower case.
+
+    b) Any requestBody and responseBody classes will be represented as properties
+    
+1) All classes generated from model components/schemas with type: object will 
+inherit SnappiObject.
+    a) Class names are camel case with any ._- characters removed.
+    b) All class names must be unique.
+    c) All classes are placed in their own lower case class name file.
+
+2) All properties generated from model components/schemas with type: array with
+an items: $ref will inherit SnappiList.
+    a) All choice properties of the $ref object MUST be generated as a factory method.
+
+
+
 """
 import sys
-import json
+import yaml
 import os
 import stat
 import subprocess
-import shutil
 import re
-import datetime
+import requests
 from jsonpath_ng import jsonpath, parse
 
 
 class SnappiGenerator(object):
-    """Builds the snappi python package based on the open-traffic-generator 
-    models repository.
+    """Builds the snappi python package based on a released version of the
+    open-traffic-generator openapi.yaml file.
     """
-    def __init__(self, dependencies=True, clone_and_build=True):
-        if 'GITHUB_ACTION' in os.environ:
-            dependencies = True
-            clone_and_build = True
+    def __init__(self, dependencies=True):
+        self._dependencies = ['requests', 'pyyaml', 'jsonpath-ng']
+        if 'GITHUB_ACTION' not in os.environ and dependencies is False:
+            dependencies = []
         self.__python = os.path.normpath(sys.executable)
         self.__python_dir = os.path.dirname(self.__python)
-        self._cwd = os.path.dirname(os.path.abspath(__file__))
-        self._model_dir = os.path.join(
-            os.path.dirname(os.path.abspath(__file__)), '..', 'models')
+        self._src_dir = os.path.dirname(os.path.abspath(__file__))
+        self._docs_dir = os.path.join(self._src_dir, '..', 'docs')
         self._dependencies = dependencies
-        self._clone_and_build = clone_and_build
         self._clean()
         self._install_dependencies()
-        self._clone_models_and_build()
+        self._get_openapi_file()
+        self._generate()
 
     def _clean(self):
+        """Clean the environment prior to file generation
+        - Remove any locally installed version of snappi
+        - Remove generated files
+        - Leave infrastructure files that are prefixed with the word snappi
+        """
         process_args = [
             self.__python, '-m', 'pip', 'uninstall', '--yes', 'snappi'
         ]
         subprocess.Popen(process_args, shell=False).wait()
-
-    def _install_dependencies(self):
-        if self._dependencies is False:
-            return
-        packages = ['pyyaml', 'jsonpath-ng']
-        for package in packages:
-            print('installing dependency %s...' % package)
-            process_args = [
-                self.__python, '-m', 'pip', 'install', '-U', package
-            ]
-            subprocess.Popen(process_args, shell=False).wait()
-
-    def _handleError(self, func, path, exc_info):
-        if not os.access(path, os.W_OK):
-            try:
-                os.chmod(path, stat.S_IWUSR)
-                func(path)
-            except Exception as e:
-                print(e)
-
-    def _clone_models_and_build(self):
-        if self._clone_and_build is False:
-            return
-        print('cloning models...')
-        shutil.rmtree(self._model_dir, onerror=self._handleError)
-        process_args = [
-            'git',
-            'clone',
-            'https://github.com/open-traffic-generator/models.git',
-        ]
-        process = subprocess.Popen(process_args, shell=False)
-        process.wait()
-        process_args = ['python', 'bundler.py']
-        subprocess.Popen(process_args, cwd=self._model_dir, shell=False).wait()
-
-    def generate(self):
-        from yaml import safe_load
         import os
         import fnmatch
-        # Get a list of all files in directory
-        for rootDir, subdirs, filenames in os.walk(self._cwd):
-            # Find the files that matches the given pattern
+        for rootDir, subdirs, filenames in os.walk(self._src_dir):
+            if rootDir.endswith('tests'):
+                continue
             for filename in fnmatch.filter(filenames, '*.py'):
                 try:
                     if filename.startswith('snappi') is False:
                         os.remove(os.path.join(rootDir, filename))
                 except OSError:
                     print('Error deleting file %s' % filename)
-        with open(os.path.join(self._model_dir, 'openapi.yaml')) as fid:
-            self._openapi = safe_load(fid)
-        # self._write_component_schemas()
+
+    def _install_dependencies(self):
+        """Install any dependencies this project requires
+        """
+        for package in self._dependencies:
+            print('installing dependency %s...' % package)
+            process_args = [
+                self.__python, '-m', 'pip', 'install', '--upgrade', package
+            ]
+            subprocess.Popen(process_args, shell=False).wait()
+
+    def _get_openapi_file(self):
+        OPENAPI_URL = (
+            'https://github.com/open-traffic-generator/models/releases/latest/download'
+            '/openapi.yaml'
+        )
+        response = requests.request('GET', OPENAPI_URL, allow_redirects=True)
+        if response.status_code != 200:
+            raise Exception('Unable to retrieve the Open Traffic Generator openapi.yaml file [%s]' % response.content)
+        self._openapi = yaml.safe_load(response.content)
+
+    def _generate(self):
         self._write_paths()
         self._write_init()
         return self
 
     def _write_init(self):
-        filename = os.path.join(self._cwd, '__init__.py')
+        filename = os.path.join(self._src_dir, '__init__.py')
         with open(filename, 'w') as self._fid:
             self._write(0, 'from .api import Api')
 
     def _write_paths(self):
-        api_filename = os.path.join(self._cwd, 'api.py')
+        api_filename = os.path.join(self._src_dir, 'api.py')
         with open(api_filename, 'a') as self._fid:
             self._write()
             self._write()
@@ -124,8 +144,9 @@ class SnappiGenerator(object):
                 property_name = object_name.lower().replace('.', '_')
                 class_name = object_name.replace('.', '')
                 self._write()
-                self._write(1, '@property')
                 self._write(1, 'def %s(self):' % property_name)
+                self._write(2, '"""%s' % 'Return instance of auto-generated top level class %s' % class_name)
+                self._write(2, '"""')
                 self._write(
                     2, "from .%s import %s" % (class_name.lower(), class_name))
                 self._write(2, "return %s()" % (class_name))
@@ -136,7 +157,7 @@ class SnappiGenerator(object):
         ref_name = ref.split('/')[-1]
         property_name = ref_name.lower().replace('.', '_')
         class_name = ref_name.replace('.', '')
-        class_filename = os.path.join(self._cwd, '%s.py' % class_name.lower())
+        class_filename = os.path.join(self._src_dir, '%s.py' % class_name.lower())
         refs = []
         if os.path.exists(class_filename) is False:
             print('generating %s in file %s...' % (class_name, class_filename))
@@ -182,7 +203,7 @@ class SnappiGenerator(object):
         ref_name = ref.split('/')[-1]
         property_name = ref_name.lower().replace('.', '_')
         class_name = ref_name.replace('.', '')
-        class_filename = os.path.join(self._cwd,
+        class_filename = os.path.join(self._src_dir,
                                       '%slist.py' % class_name.lower())
         refs = []
         if os.path.exists(class_filename) is False:
@@ -674,4 +695,4 @@ class SnappiGenerator(object):
 
 
 if __name__ == '__main__':
-    SnappiGenerator(dependencies=False, clone_and_build=True).generate()
+    SnappiGenerator(dependencies=False)

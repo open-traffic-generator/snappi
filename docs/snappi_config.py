@@ -33,7 +33,14 @@ ip = pkt[flow.packet.IPV4]
 eth.src = '00:00:01:00:00:01'
 eth.dst = ['00:00:02:00:00:01', '00:00:02:00:00:01']
 ip.src.increment(start='1.1.1.1', step='0.0.0.1', count=10)
+ip.src.increment(start='1.1.1.1', step=1, count=10)
 ip.dst.decrement(start='1.1.2.200', step='0.0.0.1', count=10)
+# x-type int, model min/max 0-65535, implementation may or may not support full max
+# for best ux - implementation should preprocess config prior to setting anything 
+# and throw error - do a dry run 
+tcp.src_port.increment(start='1.1.1.1') 
+tcp.src_port.increment(start='1')
+tcp.src_port.increment(start=1)
 
 # use constants
 ip.priority.dscp.phb = ip.priority.dscp.PHB_CS1
@@ -59,9 +66,18 @@ api.set_config(config)
 flow_state = api.flow_state(flow_state=api.flow_state.START)
 api.set_flow_state(flow_state)
 
+# get all flows, returns a list of rows, each row is a flow 
+query = api.flow_query(flow_names=[], metric_names=[], metric_match=[{'state': 'stopped'}])
+flow_metrics = api.get_flow_metrics(query)
+for flow_metric in flow_metrics:
+    print(flow_metric.name, flow_metric.state, flow_metric.tx_port, flow_metric.rx_port, flow_metric.frames_tx)
+
+
 # get results to determine when transmit has stopped
+# extension to the SNAPPI package without overhead to the models
+# in the same namespace
 while len(config.flows) != len([
-        m for m in (re.match('^stopped$', result.state)
+        m for m in (result.state == api.flow_metric.STOPPED)
                     for result in api.get_port_results(api.result_portrequest()))
 ]):
     continue
