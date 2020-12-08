@@ -52,12 +52,11 @@ class SnappiGenerator(object):
     def __init__(self, dependencies=True):
         self._dependencies = ['requests', 'pyyaml', 'jsonpath-ng']
         if 'GITHUB_ACTION' not in os.environ and dependencies is False:
-            dependencies = []
+            self._dependencies = []
         self.__python = os.path.normpath(sys.executable)
         self.__python_dir = os.path.dirname(self.__python)
         self._src_dir = os.path.dirname(os.path.abspath(__file__))
         self._docs_dir = os.path.join(self._src_dir, '..', 'docs')
-        self._dependencies = dependencies
         self._clean()
         self._install_dependencies()
         self._get_openapi_file()
