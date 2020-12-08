@@ -1,7 +1,7 @@
 import pytest
 
 
-def test_serialize_deserialize(api):
+def test_serdes(api):
     """Demonstrate that there are no errors during serialization/deserialization
     of Snappi objects
     """
