@@ -35,6 +35,9 @@ components:
 ```
 The generator should do the following:
 - Generate a class that inherits from SnappiObject.
+- Class name is camel case with any ._- characters removed.
+- Class name must be unique.
+- Class must be placed in its own file named as lower case class name file.
     ```python
     class Config(SnappiObject):
     ```
