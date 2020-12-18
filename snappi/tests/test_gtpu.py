@@ -44,8 +44,9 @@
 # Packets have the following headers: Ethernet, IP, UDP, GTPv1, IP
 # Frame size is 128
 
-import snappi
+import pytest
 import pyaml
+import json
 import collections
 
 # these test parameters would normally come from a test infrastructure file
@@ -76,50 +77,64 @@ servers:
     teid: 1025
     ue_ip: 1.1.101.1
 """)
-test_params = collections.namedtuple('TestParams', d.keys())(*d.values())
+d = json.dumps(d)
+test_params = json.loads(
+    d,
+    object_hook=lambda d: collections.namedtuple('X', d.keys())(*d.values()))
+
+
+def test_gtpu(api):
+    global test_params
+    config = api.config()
+
+    for user, server in zip(test_params.users, test_params.servers):
+        tx_port = config.ports.port(name='User Port %s' % user.location, location=user.location)
+        rx_port = config.ports.port(name='Server Port %s' % server.location,
+                                    location=server.location)
+        create_flow(config, 'Uplink', user, server, tx_port, rx_port,
+                    test_params.globals.gnb_mac_addr,
+                    test_params.globals.n3_mac_addr,
+                    test_params.globals.gnb_ip_addr,
+                    test_params.globals.upf_ip_addr, user.ue_ip,
+                    test_params.globals.inner_ip_src_dst,
+                    test_params.globals.gtp_tunnels)
+        create_flow(config, 'Downlink', server, user, tx_port, rx_port,
+                    test_params.globals.n3_mac_addr,
+                    test_params.globals.gnb_mac_addr,
+                    test_params.globals.upf_ip_addr,
+                    test_params.globals.gnb_ip_addr,
+                    test_params.globals.inner_ip_src_dst, server.ue_ip,
+                    test_params.globals.gtp_tunnels)
+
+    api.set_config(config)
 
 
 def create_flow(config, flow_prefix, src_param, dst_param, tx_port, rx_port,
                 src_mac, dst_mac, outer_ip_src, outer_ip_dst, inner_ip_src,
                 inner_ip_dst, gtp_tunnels):
-    flow = config.flows.flow(name='%s %s -> %s' %
-                             (flow_prefix, tx_port.name, rx_port.name))
+    flow_name = '%s %s -> %s' % (flow_prefix, tx_port.name, rx_port.name)
+    flow = config.flows.flow(name=flow_name)
     flow.tx_rx.port.tx_name = tx_port.name
     flow.tx_rx.port.rx_name = rx_port.name
 
-    eth, outer_ip, _, gtp, inner_ip = flow.packet.ethernet().ipv4().udp().gtpv1().ipv4()
+    eth, outer_ip, udp, gtp, inner_ip = flow.packet \
+        .ethernet().ipv4().udp().gtpv1().ipv4()
 
-    eth.src.fixed = src_mac
-    eth.dst.fixed = dst_mac
-    outer_ip.src.fixed = outer_ip_src
-    outer_ip.dst.fixed = outer_ip_dst
+    eth.src.value = src_mac
+    eth.dst.value = dst_mac
+    outer_ip.src.value = outer_ip_src
+    outer_ip.dst.value = outer_ip_dst
     gtp.teid.start = src_param.teid
     gtp.teid.step = 1
     gtp.teid.count = gtp_tunnels
-    inner_ip.src.fixed = inner_ip_src
-    inner_ip.dst.fixed = inner_ip_dst
+    inner_ip.src.value = inner_ip_src
+    inner_ip.dst.value = inner_ip_dst
     gtp.teid.result_group = 'gtp_teid'
 
-    flow_uplink.size.fixed = 128
-    flow_uplink.rate.gbps = 1
-    flow_uplink.duration.fixed_packets.packets = 100000
+    flow.size.fixed = 128
+    flow.rate.gbps = 1
+    flow.duration.fixed_packets.packets = 100000
 
 
-api = snappi.Api()
-config = api.config
-
-for user, server in zip(test_params.users, test_params.servers):
-    tx_port = config.ports.port(name='User Port %s' % user, location=user)
-    rx_port = config.ports.port(name='Server Port %s' % server,
-                                location=server)
-    create_flow(config, 'Uplink', user, server, tx_port, rx_port,
-                test_params.gnb_mac_addr, test_params.n3_mac_addr,
-                test_params.gnb_ip_addr, test_params.upf_ip_addr, user.ue_ip,
-                test_params.inner_ip_src_dst, test_params.gtp_tunnels)
-    create_flow(config, 'Downlink', server, user, tx_port, rx_port,
-                test_params.n3_mac_addr, test_params.gnb_mac_addr,
-                test_params.upf_ip_addr, test_params.gnb_ip_addr,
-                test_params.inner_ip_src_dst, server.ue_ip,
-                test_params.gtp_tunnels)
-
-api.set_config(api.config)
+if __name__ == '__main__':
+    pytest.main(['-vv', '-s', __file__])

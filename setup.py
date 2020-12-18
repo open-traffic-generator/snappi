@@ -5,12 +5,10 @@ To build `python setup.py sdist --formats=gztar bdist_wheel --universal`
 import os
 from setuptools import setup, find_packages
 from snappi.snappigenerator import SnappiGenerator
-import pytest
 
 pkg_name = 'snappi'
 
 SnappiGenerator()
-pytest.main(['-s', './%s/tests' % pkg_name])
 
 base_dir = os.path.dirname(os.path.abspath(__file__))
 with open(os.path.join(base_dir, 'README.md')) as fid:
