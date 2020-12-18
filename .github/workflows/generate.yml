@@ -43,7 +43,7 @@ jobs:
 
     - name: Get all changes
       id: file_changes
-      uses: trilom/file-changes-action@v1.2.3
+      uses: trilom/file-changes-action@v1.2.4
 
     - name: Output changed files
       id: changed_files
