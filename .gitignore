@@ -5,6 +5,7 @@ dist
 .pytest_cache
 snappi.egg-info
 docs/openapi.yaml
+*.yaml
 snappi/*
 !snappi/snappicommon.py
 !snappi/snappigenerator.py

@@ -74,7 +74,7 @@ The generator should do the following:
 
 ## ` choice property`
 Given a property named choice... 
-```
+```yaml
 components:
   schemas:
     Flow.Header:

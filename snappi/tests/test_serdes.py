@@ -1,36 +1,30 @@
 import pytest
 
 
-def test_serdes(api):
-    """Demonstrate that there are no errors during serialization/deserialization
-    of Snappi objects
+@pytest.mark.parametrize('encoding', ['yaml', 'json', 'dict'])
+def test_serdes(api, b2b_config, encoding):
+    """Demonstrate serialization and deserialization of Snappi objects
     """
-    control_state = api.control_state()
-    control_state.set(choice='config_state')
-    config = control_state.config_state.set(state='set').config
-    config.options.port_options.set(location_preemption=True)
-    config.ports.port(name='Tx Port', location='10.36.74.26;02;13')
-    config.ports.port(name='Rx Port', location='10.36.74.26;02;14')
-    flow = config.flows.flow(name='Tx -> Rx Flow')
-    flow.tx_rx.set(choice='port')
-    flow.tx_rx.port.set(tx_port_name=config.ports[0].name,
-                        rx_port_name=config.ports[1].name)
-    flow.packet.flow_header(choice='ethernet').flow_header(choice='ipv4')
+    # serialize the configuration locally
+    serialization1 = b2b_config.serialize(encoding)
 
-    # serialize as JSON and print to stdout
-    serialization = control_state.encode(encoding='json')
-    print(serialization)
+    # use a mock web server to push the config
+    api.set_config(b2b_config)
 
-    # serialize as YAML and print to stdout
-    serialization = control_state.encode(encoding='yaml')
-    print(serialization)
+    # use a mock web server to pull the config
+    config = api.get_config(None)
 
-    # deserialize YAML to SnappiObject
-    control_state = api.control_state().decode(serialization)
+    # TBD
+    # the following step should be removed when the code generation of
+    # responses is complete
+    config = api.config().deserialize(config)
 
-    # verify SnappiObject encoded as YAML is the same as initial YAML
-    assert(control_state.encode(encoding='yaml') == serialization)
+    # serialize the pulled config
+    serialization2 = config.serialize(encoding)
+
+    # verify the original config is the same as the roundtripped configuration
+    assert (serialization1 == serialization2)
 
 
 if __name__ == '__main__':
-    pytest.main(['-s', __file__])
+    pytest.main(['-vv', '-s', __file__])
