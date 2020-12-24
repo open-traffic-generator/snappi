@@ -27,10 +27,13 @@ class SnappiGenerator(object):
     open-traffic-generator openapi.yaml file.
     """
     def __init__(self, dependencies=True, openapi_filename=None):
+        self._generated_methods = []
+        self._generated_classes = []
         self._dependencies = ['requests', 'pyyaml', 'jsonpath-ng']
+        self._openapi_filename = None
         if 'GITHUB_ACTION' not in os.environ and dependencies is False:
             self._dependencies = []
-        self._openapi_filename = openapi_filename
+            self._openapi_filename = openapi_filename
         self.__python = os.path.normpath(sys.executable)
         self.__python_dir = os.path.dirname(self.__python)
         self._src_dir = os.path.dirname(os.path.abspath(__file__))
@@ -116,39 +119,52 @@ class SnappiGenerator(object):
         for path in self._get_api_paths():
             operation = path['operation']
             method_name = operation['operationId'].replace('.', '_').lower()
+            if method_name in self._generated_methods:
+                continue
+            self._generated_methods.append(method_name)
             print('generating %s in file %s...' % (method_name, api_filename))
+            content = parse('$..requestBody..schema').find(operation)
+            if len(content) == 0:
+                content = ''
+                payload = ''
+            else:
+                content = ', content'
+                payload = ', payload=content'
             with open(api_filename, 'a') as self._fid:
                 self._write()
-                self._write(1, 'def %s(self, content=None):' % method_name)
+                self._write(1, 'def %s(self%s):' % (method_name, content))
                 self._write(2, '"""%s' % 'TBD')
                 self._write(2, '"""')
                 self._write(
-                    2, "return self.send_recv('%s', '%s', payload=content)" %
-                    (path['method'], path['url']))
+                    2, "return self.send_recv('%s', '%s'%s)" %
+                    (path['method'], path['url'], payload))
 
         # write top level objects for requests
         for yobject in self._openapi['paths'].values():
-            with open(api_filename, 'a') as self._fid:
-                find = []
-                for section in ['requestBody', 'responses']:
-                    find += parse('$..%s..schema' % section).find(yobject)
-                if len(find) == 0:
+            finds = parse('$..schema').find(yobject)
+            for find in finds:
+                top_level_schema = find.value
+                if '$ref' not in top_level_schema:
                     continue
-                top_level_schema = find[0].value
+                if top_level_schema in self._generated_methods:
+                    continue
+                self._generated_methods.append(top_level_schema)
+                print('Api method %s...' % top_level_schema['$ref'])
                 object_name = top_level_schema['$ref'].split('/')[-1]
                 property_name = object_name.lower().replace('.', '_')
                 class_name = object_name.replace('.', '')
-                self._write()
-                self._write(1, 'def %s(self):' % property_name)
-                self._write(
-                    2, '"""%s' %
-                    'Return instance of auto-generated top level class %s' %
-                    class_name)
-                self._write(2, '"""')
-                self._write(
-                    2, "from .%s import %s" % (class_name.lower(), class_name))
-                self._write(2, "return %s()" % (class_name))
-            self._write_snappi_object(top_level_schema['$ref'])
+                with open(api_filename, 'a') as self._fid:
+                    self._write()
+                    self._write(1, 'def %s(self):' % property_name)
+                    self._write(
+                        2, '"""%s' %
+                        'Return instance of auto-generated top level class %s' %
+                        class_name)
+                    self._write(2, '"""')
+                    self._write(
+                        2, "from .%s import %s" % (class_name.lower(), class_name))
+                    self._write(2, "return %s()" % (class_name))
+                    self._write_snappi_object(top_level_schema['$ref'])
 
     def _write_snappi_object(self, ref):
         schema_object = self._get_object_from_ref(ref)
@@ -183,7 +199,9 @@ class SnappiGenerator(object):
                 for init_param in self._get_simple_type_names(schema_object):
                     self._write(2, 'self.%s = %s' % (init_param, init_param))
 
-                # process properties
+                # process properties - TBD use this one level up to process 
+                # schema, in requestBody, Response and also 
+                # type: array, items: $ref (ie metrics)
                 refs = self._process_properties(class_name, schema_object)
 
             # descend into child properties
@@ -263,7 +281,7 @@ class SnappiGenerator(object):
         class_filename = os.path.join(self._src_dir,
                                       '%slist.py' % class_name.lower())
         if os.path.exists(class_filename) is False:
-            print('generating %s in file %s...' % (class_name, class_filename))
+            print('generating %sList in file %s...' % (class_name, class_filename))
             with open(class_filename, 'a') as self._fid:
                 self._write(0, 'from .snappicommon import SnappiList')
                 self._write()
@@ -455,7 +473,7 @@ class SnappiGenerator(object):
                     paths.append({
                         'url': url,
                         'method': method,
-                        'operation': yobject[method]
+                        'operation': yobject[method],
                     })
         return paths
 
@@ -802,5 +820,5 @@ class SnappiGenerator(object):
 
 if __name__ == '__main__':
     openapi_filename = None
-    # openapi_filename = os.path.normpath('../../models/openapi.yaml')
+    openapi_filename = os.path.normpath('../../models/openapi.yaml')
     SnappiGenerator(dependencies=False, openapi_filename=openapi_filename)

@@ -7,6 +7,7 @@ import sys
 if sys.version_info[0] == 3:
     unicode = str
 
+
 class SnappiRestTransport(object):
     def __init__(self):
         self.base_url = 'http://127.0.0.1:80'
@@ -199,7 +200,7 @@ class SnappiList(object):
     def clear(self):
         self._items.clear()
         self._index = -1
-        
+
     def _encode(self):
         return [item._encode() for item in self._items]
 
