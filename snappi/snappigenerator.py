@@ -133,7 +133,9 @@ class SnappiGenerator(object):
             with open(api_filename, 'a') as self._fid:
                 self._write()
                 self._write(1, 'def %s(self%s):' % (method_name, content))
-                self._write(2, '"""%s' % 'TBD')
+                self._write(2, '"""%s %s' % (path['method'].upper(), path['url']))
+                self._write(0)
+                self._write(2, '%s' % self._get_description(operation))
                 self._write(2, '"""')
                 self._write(
                     2, "return self.send_recv('%s', '%s'%s)" %
@@ -425,12 +427,13 @@ class SnappiGenerator(object):
         # remove tabs, multiple spaces
         description = re.sub('\n', '. ', yobject['description'])
         description = re.sub('\s+', ' ', description)
-        doc_string = []
-        for line in re.split('\. ', description):
-            line = re.sub('\.$', '', line)
-            if len(line) > 0:
-                doc_string.append('%s  ' % line)
-        return doc_string
+        return description
+        # doc_string = []
+        # for line in re.split('\. ', description):
+        #     line = re.sub('\.$', '', line)
+        #     if len(line) > 0:
+        #         doc_string.append('%s  ' % line)
+        # return doc_string
 
     def _get_snappi_types(self, yobject):
         types = []
