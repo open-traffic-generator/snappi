@@ -12,7 +12,7 @@ def test_serdes(api, b2b_config, encoding):
     api.set_config(b2b_config)
 
     # use a mock web server to pull the config
-    config = api.get_config(None)
+    config = api.get_config()
 
     # TBD
     # the following step should be removed when the code generation of
