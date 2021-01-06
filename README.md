@@ -1,13 +1,13 @@
-# ***snappi***
+# snappi
 Create test case scripts once using the `snappi` client and run them using a 
 traffic generator that conforms to the [Open Traffic Generator API](https://github.com/open-traffic-generator/models/releases).
 
-## *Install the client*
+## Install the client
 ```
 pip install snappi
 ```
 
-## *Start scripting*
+## Start scripting
 ```python
 """A simple test that demonstrates the following:
 - A port that transmits an ethernet/vlan/ipv4/tcp flow 
@@ -31,7 +31,7 @@ flow.rate.pps = 1000
 flow.duration.fixed_packets.packets = 10000
 api.set_config(config)
 
-tx_state = api.transmitstate(state='start')
+tx_state = api.transmit_state(state='start')
 api.set_transmit(tx_state)
 
 while True:
