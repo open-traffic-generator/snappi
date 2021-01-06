@@ -13,7 +13,7 @@ class SnappiRestTransport(object):
         self.base_url = 'http://127.0.0.1:80'
         self._session = requests.Session()
 
-    def send_recv(self, method, relative_url, payload=None):
+    def send_recv(self, method, relative_url, payload=None, return_object=None):
         url = '%s%s' % (self.base_url, relative_url)
         data = None
         if payload is not None:
@@ -26,7 +26,7 @@ class SnappiRestTransport(object):
         if response.ok is not True:
             raise Exception(response.status_code)
         elif response.headers['content-type'] == 'application/json':
-            return yaml.safe_load(response.text)
+            return return_object.deserialize(yaml.safe_load(response.text))
         else:
             return None
 
@@ -83,7 +83,7 @@ class SnappiObject(object):
         Args
         ----
         - encoded_snappi_object (Union[str, dict]): The object to deserialize.
-            The supported encodings of obj are json, yaml and python dict. 
+            The supported encodings of str are json and yaml. 
 
         Returns
         -------
@@ -133,6 +133,10 @@ class SnappiObject(object):
 
 
 class SnappiList(object):
+    JSON = 'json'
+    YAML = 'yaml'
+    DICT = 'dict'
+
     """Container class for SnappiObject
 
     Inheriting classes contain 0..n instances of an OpenAPI components/schemas 
@@ -201,8 +205,46 @@ class SnappiList(object):
         self._items.clear()
         self._index = -1
 
+    def serialize(self, encoding=JSON):
+        if encoding == SnappiObject.JSON:
+            return json.dumps(self._encode(), indent=2)
+        elif encoding == SnappiObject.YAML:
+            return yaml.safe_dump(self._encode())
+        elif encoding == SnappiObject.DICT:
+            return self._encode()
+        else:
+            raise NotImplementedError('Encoding %s not supported' % encoding)
+
     def _encode(self):
         return [item._encode() for item in self._items]
+
+    def deserialize(self, encoded_snappi_list):
+        """Deserialize a python list into the current snappi list.
+
+        If the input `encoded_snappi_list` does not match the current 
+        snappi list an exception will be raised. 
+        
+        Args
+        ----
+        - encoded_snappi_list (Union[str, list]): The object to deserialize.
+            The supported encodings of str are json and yaml. 
+
+        Returns
+        -------
+        - obj(snappicommon.SnappiList): A snappi list object
+        """
+        if isinstance(encoded_snappi_list, (str, unicode)):
+            encoded_snappi_list = yaml.safe_load(encoded_snappi_list)
+        self._decode(encoded_snappi_list)
+        return self
+    
+    def _decode(self, encoded_snappi_list):
+        item_class_path = self.__class__.__module__.replace('list', '')
+        item_class_name = self.__class__.__name__.replace('List', '')
+        module = importlib.import_module(item_class_path)
+        object_class = getattr(module, item_class_name)
+        for item in encoded_snappi_list:
+            self._add(object_class()._decode(item))
 
     def __str__(self):
         return yaml.safe_dump(self._encode())

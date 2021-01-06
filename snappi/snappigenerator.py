@@ -94,7 +94,7 @@ class SnappiGenerator(object):
         self._openapi = yaml.safe_load(openapi_content)
 
     def _generate(self):
-        self._write_paths()
+        self._write_api_class()
         self._write_init()
         return self
 
@@ -103,7 +103,7 @@ class SnappiGenerator(object):
         with open(filename, 'w') as self._fid:
             self._write(0, 'from .api import Api')
 
-    def _write_paths(self):
+    def _write_api_class(self):
         api_filename = os.path.join(self._src_dir, 'api.py')
         with open(api_filename, 'a') as self._fid:
             self._write(0, 'from .snappicommon import SnappiRestTransport')
@@ -130,6 +130,12 @@ class SnappiGenerator(object):
             else:
                 content = ', content'
                 payload = ', payload=content'
+            response = parse('$..responses..schema').find(operation)
+            response_object = ''
+            if len(response) > 0:
+                object_name, property_name, class_name = self._get_object_property_class_names(response[0].value)
+                if property_name is not None:
+                    response_object = ', return_object=self.%s()' % property_name
             with open(api_filename, 'a') as self._fid:
                 self._write()
                 self._write(1, 'def %s(self%s):' % (method_name, content))
@@ -137,9 +143,7 @@ class SnappiGenerator(object):
                 self._write(0)
                 self._write(2, '%s' % self._get_description(operation))
                 self._write(2, '"""')
-                self._write(
-                    2, "return self.send_recv('%s', '%s'%s)" %
-                    (path['method'], path['url'], payload))
+                self._write(2, "return self.send_recv('%s', '%s'%s%s)" % (path['method'], path['url'], payload, response_object))
 
         # write top level objects for requests
         for yobject in self._openapi['paths'].values():
@@ -155,6 +159,12 @@ class SnappiGenerator(object):
                 object_name = top_level_schema['$ref'].split('/')[-1]
                 property_name = object_name.lower().replace('.', '_')
                 class_name = object_name.replace('.', '')
+                schema_object = self._get_object_from_ref(top_level_schema['$ref'])
+                if schema_object['type'] == 'array':
+                    class_name = self._write_snappi_list(schema_object['items']['$ref'], property_name)
+                    self._write_snappi_object(schema_object['items']['$ref'])
+                else:
+                    self._write_snappi_object(top_level_schema['$ref'])
                 with open(api_filename, 'a') as self._fid:
                     self._write()
                     self._write(1, 'def %s(self):' % property_name)
@@ -166,7 +176,17 @@ class SnappiGenerator(object):
                     self._write(
                         2, "from .%s import %s" % (class_name.lower(), class_name))
                     self._write(2, "return %s()" % (class_name))
-                    self._write_snappi_object(top_level_schema['$ref'])
+
+    def _get_object_property_class_names(self, schema):
+        object_name = None
+        property_name = None
+        class_name = None
+        if '$ref' in schema:
+            ref_name = schema['$ref']
+            object_name = ref_name.split('/')[-1]
+            property_name = object_name.lower().replace('.', '_')
+            class_name = object_name.replace('.', '')
+        return (object_name, property_name, class_name)
 
     def _write_snappi_object(self, ref):
         schema_object = self._get_object_from_ref(ref)
@@ -235,6 +255,7 @@ class SnappiGenerator(object):
     def _process_properties(self, class_name=None, schema_object=None):
         """Process all properties of a /component/schema object
         Write a factory method for all choice
+        If there are no properties then the schema_object is a primitive or array type
         """
         refs = []
         if 'properties' in schema_object:
@@ -295,7 +316,7 @@ class SnappiGenerator(object):
                 # write factory method for the schema object in the list
                 self._write_factory_method(None, class_name.lower(), ref, True)
                 # write choice factory methods if any
-                if 'choice' in yobject['properties']:
+                if 'properties' in yobject and 'choice' in yobject['properties']:
                     for property in yobject['properties']:
                         if property not in yobject['properties']['choice'][
                                 'enum']:
@@ -305,6 +326,7 @@ class SnappiGenerator(object):
                         ref = yobject['properties'][property]['$ref']
                         self._write_factory_method(class_name, property, ref,
                                                    True)
+        return '%sList' % class_name
 
     def _write_factory_method(self,
                               container_class_name,
@@ -373,8 +395,7 @@ class SnappiGenerator(object):
         self._write(1, 'def %s(self):' % name)
         self._write(2, '"""%s getter' % (name))
         self._write()
-        for line in self._get_description(property):
-            self._write(2, line)
+        self._write(2, self._get_description(property))
         self._write()
         self._write(2, 'Returns: %s' % self._get_type_restriction(property))
         self._write(2, '"""')
@@ -385,8 +406,7 @@ class SnappiGenerator(object):
             self._write(1, 'def %s(self, value):' % name)
             self._write(2, '"""%s setter' % (name))
             self._write()
-            for line in self._get_description(property):
-                self._write(2, line)
+            self._write(2, self._get_description(property))
             self._write()
             self._write(2, 'value: %s' % self._get_type_restriction(property))
             self._write(2, '"""')
@@ -823,5 +843,5 @@ class SnappiGenerator(object):
 
 if __name__ == '__main__':
     openapi_filename = None
-    openapi_filename = os.path.normpath('../../models/openapi.yaml')
+    # openapi_filename = os.path.normpath('../../models/openapi.yaml')
     SnappiGenerator(dependencies=False, openapi_filename=openapi_filename)

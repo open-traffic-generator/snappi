@@ -2,8 +2,8 @@ import pytest
 
 
 @pytest.mark.parametrize('encoding', ['yaml', 'json', 'dict'])
-def test_serdes(api, b2b_config, encoding):
-    """Demonstrate serialization and deserialization of Snappi objects
+def test_snappi_object_serialization(api, b2b_config, encoding):
+    """Test serialization and deserialization of Snappi objects
     """
     # serialize the configuration locally
     serialization1 = b2b_config.serialize(encoding)
@@ -13,11 +13,6 @@ def test_serdes(api, b2b_config, encoding):
 
     # use a mock web server to pull the config
     config = api.get_config()
-
-    # TBD
-    # the following step should be removed when the code generation of
-    # responses is complete
-    config = api.config().deserialize(config)
 
     # serialize the pulled config
     serialization2 = config.serialize(encoding)

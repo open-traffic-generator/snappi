@@ -86,6 +86,19 @@ def get_config():
                     status=200)
 
 
+@app.route('/results/port', methods=['POST'])
+def get_port_metrics():
+    import snappi
+    api = snappi.api.Api()
+    port_metrics_request = api.port_metrics_request()
+    port_metrics_request.deserialize(request.data.decode('utf-8'))
+    port_metrics = api.port_metrics()
+    port_metrics.portmetric().portmetric()
+    return Response(port_metrics.serialize(),
+                    mimetype='application/json',
+                    status=200)
+
+
 @app.after_request
 def after_request(resp):
     print(request.method, request.url, ' -> ', resp.status)
