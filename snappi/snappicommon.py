@@ -31,13 +31,13 @@ class SnappiRestTransport(object):
             return None
 
 
-class SnappiObject(object):
+class SnappiSerialization(object):
     JSON = 'json'
     YAML = 'yaml'
     DICT = 'dict'
 
     def __init__(self):
-        self._properties = {}
+        pass
 
     def serialize(self, encoding=JSON):
         """Serialize the current snappi object according to a specified encoding.
@@ -45,7 +45,7 @@ class SnappiObject(object):
         Args
         ----
         - encoding (str[json, yaml, dict]): The object will be recursively
-            encoded according to the specified encoding.
+            serialized according to the specified encoding.
             The supported encodings are json, yaml and python dict. 
 
         Returns
@@ -54,14 +54,50 @@ class SnappiObject(object):
             encoding. The json and yaml encodings will return a str object and
             the dict encoding will return a python dict object.
         """
-        if encoding == SnappiObject.JSON:
+        if encoding == SnappiSerialization.JSON:
             return json.dumps(self._encode(), indent=2)
-        elif encoding == SnappiObject.YAML:
+        elif encoding == SnappiSerialization.YAML:
             return yaml.safe_dump(self._encode())
-        elif encoding == SnappiObject.DICT:
+        elif encoding == SnappiSerialization.DICT:
             return self._encode()
         else:
             raise NotImplementedError('Encoding %s not supported' % encoding)
+
+    def _encode(self):
+        raise NotImplementedError()
+
+    def deserialize(self, serialized_object):
+        """Deserialize a python object into the current snappi object.
+
+        If the input `serialized_object` does not match the current 
+        snappi object an exception will be raised. 
+        
+        Args
+        ----
+        - serialized_object (Union[str, dict]): The object to deserialize.
+            If the serialized_object is of type str then the internal encoding 
+            of the serialized_object must be json or yaml. 
+
+        Returns
+        -------
+        - obj(snappicommon.SnappiObject): This snappi object with all the 
+            serialized_object deserialized within.
+        """
+        if isinstance(serialized_object, (str, unicode)):
+            serialized_object = yaml.safe_load(serialized_object)
+        self._decode(serialized_object)
+        return self
+        
+    def _decode(self, dict_object):
+        raise NotImplementedError()
+
+
+class SnappiObject(SnappiSerialization):
+    """Base class for any /components/schemas object
+    """
+    def __init__(self):
+        super(SnappiObject, self).__init__()
+        self._properties = {}
 
     def _encode(self):
         """Helper method for serialization
@@ -73,26 +109,6 @@ class SnappiObject(object):
             else:
                 output[key] = value
         return output
-
-    def deserialize(self, encoded_snappi_object):
-        """Deserialize a python object into the current snappi object.
-
-        If the input `encoded_snappi_object` does not match the current 
-        snappi object an exception will be raised. 
-        
-        Args
-        ----
-        - encoded_snappi_object (Union[str, dict]): The object to deserialize.
-            The supported encodings of str are json and yaml. 
-
-        Returns
-        -------
-        - obj(snappicommon.SnappiObject): A snappi object
-        """
-        if isinstance(encoded_snappi_object, (str, unicode)):
-            encoded_snappi_object = yaml.safe_load(encoded_snappi_object)
-        self._decode(encoded_snappi_object)
-        return self
 
     def _decode(self, obj):
         snappi_names = dir(self)
@@ -132,11 +148,7 @@ class SnappiObject(object):
         return self.serialize(self.YAML)
 
 
-class SnappiList(object):
-    JSON = 'json'
-    YAML = 'yaml'
-    DICT = 'dict'
-
+class SnappiList(SnappiSerialization):
     """Container class for SnappiObject
 
     Inheriting classes contain 0..n instances of an OpenAPI components/schemas 
@@ -151,6 +163,7 @@ class SnappiList(object):
     - for flow in config.flows:
     """
     def __init__(self):
+        super(SnappiList, self).__init__()
         self._index = -1
         self._items = []
 
@@ -205,39 +218,9 @@ class SnappiList(object):
         self._items.clear()
         self._index = -1
 
-    def serialize(self, encoding=JSON):
-        if encoding == SnappiObject.JSON:
-            return json.dumps(self._encode(), indent=2)
-        elif encoding == SnappiObject.YAML:
-            return yaml.safe_dump(self._encode())
-        elif encoding == SnappiObject.DICT:
-            return self._encode()
-        else:
-            raise NotImplementedError('Encoding %s not supported' % encoding)
-
     def _encode(self):
         return [item._encode() for item in self._items]
 
-    def deserialize(self, encoded_snappi_list):
-        """Deserialize a python list into the current snappi list.
-
-        If the input `encoded_snappi_list` does not match the current 
-        snappi list an exception will be raised. 
-        
-        Args
-        ----
-        - encoded_snappi_list (Union[str, list]): The object to deserialize.
-            The supported encodings of str are json and yaml. 
-
-        Returns
-        -------
-        - obj(snappicommon.SnappiList): A snappi list object
-        """
-        if isinstance(encoded_snappi_list, (str, unicode)):
-            encoded_snappi_list = yaml.safe_load(encoded_snappi_list)
-        self._decode(encoded_snappi_list)
-        return self
-    
     def _decode(self, encoded_snappi_list):
         item_class_path = self.__class__.__module__.replace('list', '')
         item_class_name = self.__class__.__name__.replace('List', '')
