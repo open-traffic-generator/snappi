@@ -320,7 +320,7 @@ class SnappiGenerator(object):
                 self._write(2, 'super(%sList, self).__init__()' % class_name)
                 self._write()
                 # write factory method for the schema object in the list
-                self._write_factory_method(None, class_name.lower(), ref, True)
+                self._write_factory_method(None, ref_name.lower().split('.')[-1], ref, True)
                 # write choice factory methods if any
                 if 'properties' in yobject and 'choice' in yobject['properties']:
                     for property in yobject['properties']:
