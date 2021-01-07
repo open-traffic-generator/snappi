@@ -24,7 +24,7 @@ class SnappiRestTransport(object):
                                          verify=False,
                                          allow_redirects=True)
         if response.ok is not True:
-            raise Exception(response.status_code)
+            raise Exception(response.status_code, yaml.safe_load(response.text))
         elif response.headers['content-type'] == 'application/json':
             return return_object.deserialize(yaml.safe_load(response.text))
         else:

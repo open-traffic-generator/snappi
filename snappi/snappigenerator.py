@@ -103,6 +103,12 @@ class SnappiGenerator(object):
         with open(filename, 'w') as self._fid:
             self._write(0, 'from .api import Api')
 
+    def _find(self, path, schema_object):
+        finds = parse(path).find(schema_object)
+        for find in finds:
+            yield find.value
+            parse(path).find(find.value)
+
     def _write_api_class(self):
         api_filename = os.path.join(self._src_dir, 'api.py')
         with open(api_filename, 'a') as self._fid:
@@ -122,7 +128,7 @@ class SnappiGenerator(object):
             if method_name in self._generated_methods:
                 continue
             self._generated_methods.append(method_name)
-            print('generating %s in file %s...' % (method_name, api_filename))
+            print('generating method %s in file %s...' % (method_name, api_filename))
             content = parse('$..requestBody..schema').find(operation)
             if len(content) == 0:
                 content = ''
@@ -147,24 +153,20 @@ class SnappiGenerator(object):
 
         # write top level objects for requests
         for yobject in self._openapi['paths'].values():
-            finds = parse('$..schema').find(yobject)
-            for find in finds:
-                top_level_schema = find.value
-                if '$ref' not in top_level_schema:
+            for ref in self._find("$..'$ref'", yobject):
+                if ref in self._generated_methods:
                     continue
-                if top_level_schema in self._generated_methods:
+                self._generated_methods.append(ref)
+                object_name, property_name, class_name = self._get_object_property_class_names(ref)
+                schema_object = self._get_object_from_ref(ref)
+                if 'type' not in schema_object:
                     continue
-                self._generated_methods.append(top_level_schema)
-                print('Api method %s...' % top_level_schema['$ref'])
-                object_name = top_level_schema['$ref'].split('/')[-1]
-                property_name = object_name.lower().replace('.', '_')
-                class_name = object_name.replace('.', '')
-                schema_object = self._get_object_from_ref(top_level_schema['$ref'])
+                print('generating method %s in file %s...' % (property_name, api_filename))
                 if schema_object['type'] == 'array':
                     class_name = self._write_snappi_list(schema_object['items']['$ref'], property_name)
                     self._write_snappi_object(schema_object['items']['$ref'])
                 else:
-                    self._write_snappi_object(top_level_schema['$ref'])
+                    self._write_snappi_object(ref)
                 with open(api_filename, 'a') as self._fid:
                     self._write()
                     self._write(1, 'def %s(self):' % property_name)
@@ -177,12 +179,16 @@ class SnappiGenerator(object):
                         2, "from .%s import %s" % (class_name.lower(), class_name))
                     self._write(2, "return %s()" % (class_name))
 
-    def _get_object_property_class_names(self, schema):
+    def _get_object_property_class_names(self, ref):
         object_name = None
         property_name = None
         class_name = None
-        if '$ref' in schema:
-            ref_name = schema['$ref']
+        ref_name = None
+        if isinstance(ref, dict) is True and '$ref' in ref:
+            ref_name = ref['$ref']
+        elif isinstance(ref, str) is True:
+            ref_name = ref
+        if ref_name is not None:
             object_name = ref_name.split('/')[-1]
             property_name = object_name.lower().replace('.', '_')
             class_name = object_name.replace('.', '')
@@ -196,7 +202,7 @@ class SnappiGenerator(object):
                                       '%s.py' % class_name.lower())
         refs = []
         if os.path.exists(class_filename) is False:
-            print('generating %s in file %s...' % (class_name, class_filename))
+            print('generating class %s in file %s...' % (class_name, class_filename))
             with open(class_filename, 'a') as self._fid:
                 self._write(0, 'from .snappicommon import SnappiObject')
                 self._write()
@@ -304,7 +310,7 @@ class SnappiGenerator(object):
         class_filename = os.path.join(self._src_dir,
                                       '%slist.py' % class_name.lower())
         if os.path.exists(class_filename) is False:
-            print('generating %sList in file %s...' % (class_name, class_filename))
+            print('generating class %sList in file %s...' % (class_name, class_filename))
             with open(class_filename, 'a') as self._fid:
                 self._write(0, 'from .snappicommon import SnappiList')
                 self._write()

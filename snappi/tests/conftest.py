@@ -1,4 +1,5 @@
 import pytest
+import json
 
 
 @pytest.fixture(scope='session')
@@ -13,14 +14,15 @@ def api():
     yield Api()
 
 
-@pytest.fixture()
+@pytest.fixture(scope='function')
 def b2b_config(api):
     """Demonstrates creating a back to back configuration of tx and rx 
     ports, devices and a single flow using those ports as endpoints for
     transmit and receive.
     """
     config = api.config()
-
+    config.options.port_options.location_preemption = True
+    
     tx_port, rx_port = config.ports \
         .port(name='Tx Port', location='10.36.74.26;02;13') \
         .port(name='Rx Port', location='10.36.74.26;02;14')
@@ -74,8 +76,14 @@ def set_config():
     import snappi
     config = snappi.api.Api().config()
     config.deserialize(request.data.decode('utf-8'))
-    CONFIG = config
-    return Response(status=200)
+    test = config.options.port_options.location_preemption
+    if test is not None and isinstance(test, bool) is False:
+        return Response(status=590,
+                        response=json.dumps({'detail': 'invalid data type'}),
+                        headers={'Content-Type': 'application/json'})
+    else:
+        CONFIG = config
+        return Response(status=200)
 
 
 @app.route('/config', methods=['GET'])
