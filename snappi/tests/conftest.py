@@ -34,6 +34,9 @@ def b2b_config(api):
     tx_device.ipv4.address.value = '1.1.1.1'
     tx_device.ipv4.gateway.value = '1.1.2.1'
     tx_device.ipv4.prefix.value = 16
+    vlan1, vlan2 = tx_device.ipv4.ethernet.vlans.vlan().vlan()
+    vlan1.id.value = 1
+    vlan2.id.value = 2
     tx_device.ipv4.ethernet.mac.value = '00:00:01:00:00:01'
 
     flow = config.flows.flow(name='Tx -> Rx Flow')
@@ -101,11 +104,22 @@ def get_port_metrics():
     port_metrics_request = api.port_metrics_request()
     port_metrics_request.deserialize(request.data.decode('utf-8'))
     port_metrics = api.port_metrics()
-    port_metrics.portmetric().portmetric()
+    port_metrics.metric().metric()
     return Response(port_metrics.serialize(),
                     mimetype='application/json',
                     status=200)
 
+@app.route('/results/flow', methods=['POST'])
+def get_flow_metrics():
+    import snappi
+    api = snappi.api.Api()
+    flow_metrics_request = api.flow_metrics_request()
+    flow_metrics_request.deserialize(request.data.decode('utf-8'))
+    flow_metrics = api.flow_metrics()
+    flow_metrics.metric().metric()
+    return Response(flow_metrics.serialize(),
+                    mimetype='application/json',
+                    status=200)
 
 @app.after_request
 def after_request(resp):

@@ -226,6 +226,7 @@ class SnappiList(SnappiSerialization):
         item_class_name = self.__class__.__name__.replace('List', '')
         module = importlib.import_module(item_class_path)
         object_class = getattr(module, item_class_name)
+        self._items.clear()
         for item in encoded_snappi_list:
             self._add(object_class()._decode(item))
 

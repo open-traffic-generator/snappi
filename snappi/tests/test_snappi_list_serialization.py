@@ -4,11 +4,12 @@ import pytest
 def test_snappi_list_serialization(api):
     """Test serialization and deserialization of Snappi list objects
     """
-    port_metrics1 = api.port_metrics().portmetric().portmetric()
-    serialization = port_metrics1.serialize()
-    port_metrics2 = api.port_metrics()
-    port_metrics2.deserialize(serialization)
-    print(port_metrics2)
+    config = api.config()
+    config.ports.port(name='A').port(name='B').port(name='C')
+    serialization1 = config.ports.serialize()
+    config.ports.deserialize(serialization1)
+    serialization2 = config.ports.serialize()
+    assert(serialization1 == serialization2)
     
 
 if __name__ == '__main__':
