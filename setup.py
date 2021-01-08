@@ -27,7 +27,7 @@ setup(
     author_email='andy.balogh@keysight.com',
     license='MIT',
     classifiers=[
-        'Development Status :: 1 - Planning',
+        'Development Status :: 3 - Alpha',
         'Intended Audience :: Developers',
         'Topic :: Software Development :: Testing :: Traffic Generation',
         'License :: OSI Approved :: MIT License',
