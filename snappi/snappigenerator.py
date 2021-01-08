@@ -217,6 +217,21 @@ class SnappiGenerator(object):
                         self._write(2, "'%s': '%s'," % (name, value))
                     self._write(1, '}')
                     self._write()
+                
+                # write constants
+                # search for all simple properties with enum or 
+                # x-constant and add them here
+                # if 'x-constants' in schema_object:
+                #     for constant in schema_object['x-constants']:
+                #         self._write(1, '%s = \'%s\'' % (constant.upper(), constant))
+                for enum in parse('$..enum | x-constants').find(schema_object):
+                    for name in enum.value:
+                        value = name
+                        if isinstance(enum.value, dict):
+                            value = enum.value[name]
+                        self._write(1, '%s = \'%s\'' % (name.upper(), value))
+                    if len(enum.value) > 0:
+                        self._write()
 
                 # write def __init__(self)
                 init_param_string = ''

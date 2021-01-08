@@ -25,7 +25,6 @@ def test_e2e_port_flow_config():
 
     eth.src.value = '00:00:01:00:00:01'
     eth.dst.value_list = ['00:00:02:00:00:01', '00:00:02:00:00:01']
-    eth.dst.result_group = 'eth dst mac'
 
     ip.src.increment.start = '1.1.1.1'
     ip.src.increment.step = '0.0.0.1'
@@ -35,11 +34,9 @@ def test_e2e_port_flow_config():
     ip.dst.decrement.step = '0.0.0.1'
     ip.dst.decrement.count = 10
 
-    ip.priority.dscp.phb.value_list = [8, 16, 32]
-    ip.priority.dscp.ecn.value = 1
-    tcp.src_port.increment.start = '10'
-    tcp.dst_port.increment.start = 1
-
+    ip.priority.dscp.ecn.value = ip.priority.dscp.ECN_CAPABLE_TRANSPORT_1
+    ip.priority.dscp.ecn.result_group = 'ip.priority.dscp.ecn'
+    
     # set and get the configuration
     api.set_config(config)
     print(api.get_config())
