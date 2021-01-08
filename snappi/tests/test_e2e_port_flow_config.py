@@ -2,7 +2,7 @@ import pytest
 
 
 def test_e2e_port_flow_config():
-    """Get port metrics
+    """Demonstrate a full end to end configuration
     """
     import snappi
 
