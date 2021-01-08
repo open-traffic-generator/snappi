@@ -6,10 +6,10 @@ Open Traffic Generator openapi.yaml file.
 Generation rules for this file are in GENERATORRULES.md
 
 TBD: 
-- response class generation
-- Api return response instance
-- constants
-- slicing
+- response class generation - DONE
+- Api return response instance - DONE
+- constants - DONE
+- packet slicing using constants
 - docstrings
 - type checking
 """

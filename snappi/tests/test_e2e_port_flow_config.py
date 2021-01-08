@@ -2,7 +2,7 @@ import pytest
 
 
 def test_e2e_port_flow_config():
-    """Demonstrate a full end to end configuration
+    """Demonstrate an end to end configuration
     """
     import snappi
 
@@ -21,8 +21,9 @@ def test_e2e_port_flow_config():
     flow.rate.pps = 1000
     flow.duration.fixed_packets.packets = 10000
 
-    eth, vlan, ip, tcp = flow.packet.ethernet().vlan().ipv4().tcp()
+    _, _, ip, _ = flow.packet.ethernet().vlan().ipv4().tcp()
 
+    eth = flow.packet[0]
     eth.src.value = '00:00:01:00:00:01'
     eth.dst.value_list = ['00:00:02:00:00:01', '00:00:02:00:00:01']
 
@@ -36,7 +37,7 @@ def test_e2e_port_flow_config():
 
     ip.priority.dscp.ecn.value = ip.priority.dscp.ECN_CAPABLE_TRANSPORT_1
     ip.priority.dscp.ecn.result_group = 'ip.priority.dscp.ecn'
-    
+
     # set and get the configuration
     api.set_config(config)
     print(api.get_config())
