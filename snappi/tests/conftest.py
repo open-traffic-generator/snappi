@@ -93,6 +93,12 @@ def get_config():
                     status=200)
 
 
+@app.route('/control/transmit', methods=['POST'])
+def set_transmit_state():
+    global CONFIG
+    return Response(status=200)
+
+
 @app.route('/results/port', methods=['POST'])
 def get_port_metrics():
     import snappi
