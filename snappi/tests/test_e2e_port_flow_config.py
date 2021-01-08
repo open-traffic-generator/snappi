@@ -40,7 +40,9 @@ def test_e2e_port_flow_config():
     tcp.src_port.increment.start = '10'
     tcp.dst_port.increment.start = 1
 
-    print(config)
+    # set and get the configuration
+    api.set_config(config)
+    print(api.get_config())
 
 
 if __name__ == '__main__':

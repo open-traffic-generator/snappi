@@ -6,10 +6,6 @@ import json
 def api():
     """Demonstrates creating a top level Api instance.
     """
-    import threading
-    web_server_thread = threading.Thread(target=web_server)
-    web_server_thread.setDaemon(True)
-    web_server_thread.start()
     from ..api import Api
     yield Api()
 
@@ -129,3 +125,8 @@ def after_request(resp):
 
 def web_server():
     app.run(port=80, debug=True, use_reloader=False)
+
+import threading
+web_server_thread = threading.Thread(target=web_server)
+web_server_thread.setDaemon(True)
+web_server_thread.start()
