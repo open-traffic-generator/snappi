@@ -7,7 +7,7 @@ def test_e2e_port_flow_config():
     import snappi
 
     api = snappi.api.Api()
-
+    
     config = api.config()
 
     tx_port, rx_port = config.ports \
@@ -36,7 +36,7 @@ def test_e2e_port_flow_config():
     ip.dst.decrement.count = 10
 
     ip.priority.dscp.ecn.value = ip.priority.dscp.ECN_CAPABLE_TRANSPORT_1
-    ip.priority.dscp.ecn.result_group = 'ip.priority.dscp.ecn'
+    ip.priority.dscp.ecn.metric_group = 'ip.priority.dscp.ecn'
 
     # set and get the configuration
     api.set_config(config)
