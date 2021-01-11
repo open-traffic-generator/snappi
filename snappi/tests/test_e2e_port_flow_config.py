@@ -1,18 +1,13 @@
 import pytest
 
 
-def test_e2e_port_flow_config():
-    """Demonstrate an end to end configuration
+def test_e2e_port_flow_config(api):
+    """Demonstrates an end to end configuration
     """
-    import snappi
-
-    api = snappi.api.Api()
-    
     config = api.config()
 
-    tx_port, rx_port = config.ports \
-        .port(name='Tx Port', location='10.36.74.26;02;13') \
-        .port(name='Rx Port', location='10.36.74.26;02;14')
+    tx_port = config.ports.port(name='Tx Port', location='10.36.74.26;02;13')
+    rx_port = config.ports.port(name='Rx Port', location='10.36.74.26;02;14')
 
     flow = config.flows.flow(name='Tx -> Rx Flow')
     flow.tx_rx.port.tx_name = tx_port.name
@@ -25,12 +20,16 @@ def test_e2e_port_flow_config():
 
     eth = flow.packet[0]
     eth.src.value = '00:00:01:00:00:01'
-    eth.dst.value_list = ['00:00:02:00:00:01', '00:00:02:00:00:01']
+    eth.dst.values = ['00:00:02:00:00:01', '00:00:02:00:00:01']
 
+    # ip.src.Value('1.1.1.1')
+    ip.src.value = '1.1.1.1'
+    # ip.src.Values(['1.1.1.1'])
+    # ip.src.Increment(start='', step='', count=1)
     ip.src.increment.start = '1.1.1.1'
     ip.src.increment.step = '0.0.0.1'
     ip.src.increment.count = 10
-
+    print(ip)
     ip.dst.decrement.start = '1.1.2.200'
     ip.dst.decrement.step = '0.0.0.1'
     ip.dst.decrement.count = 10
