@@ -202,11 +202,10 @@ class SnappiGenerator(object):
                                       '%s.py' % class_name.lower())
         refs = []
         if os.path.exists(class_filename) is False:
+            self._imports = []
             print('generating class %s in file %s...' % (class_name, class_filename))
             with open(class_filename, 'a') as self._fid:
-                self._write(0, 'from .snappicommon import SnappiObject')
-                self._write()
-                self._write()
+                self._imports.append('from .snappicommon import SnappiObject')
                 self._write(0, 'class %s(SnappiObject):' % class_name)
 
                 # write _TYPES definition
@@ -221,9 +220,6 @@ class SnappiGenerator(object):
                 # write constants
                 # search for all simple properties with enum or 
                 # x-constant and add them here
-                # if 'x-constants' in schema_object:
-                #     for constant in schema_object['x-constants']:
-                #         self._write(1, '%s = \'%s\'' % (constant.upper(), constant))
                 for enum in parse('$..enum | x-constants').find(schema_object):
                     for name in enum.value:
                         value = name
@@ -244,14 +240,25 @@ class SnappiGenerator(object):
 
                 # process properties - TBD use this one level up to process 
                 # schema, in requestBody, Response and also 
-                # type: array, items: $ref (ie metrics)
                 refs = self._process_properties(class_name, schema_object)
+
+            # write the entire class
+            self._write_class(class_filename)
 
             # descend into child properties
             for ref in refs:
                 self._write_snappi_object(ref[0])
                 if ref[1] is True:
                     self._write_snappi_list(ref[0], ref[2])
+
+    def _write_class(self, class_filename):
+        with open(class_filename, 'r') as fp:
+            class_content = fp.read()
+        with open(class_filename, "w") as fp:
+            self._imports = list(set(self._imports))
+            self._imports.append('\n' * 2)
+            fp.write('\n'.join(self._imports))
+            fp.write(class_content)
 
     def _get_simple_type_names(self, schema_object):
         simple_type_names = []
@@ -325,11 +332,10 @@ class SnappiGenerator(object):
         class_filename = os.path.join(self._src_dir,
                                       '%slist.py' % class_name.lower())
         if os.path.exists(class_filename) is False:
+            self._imports = []
             print('generating class %sList in file %s...' % (class_name, class_filename))
             with open(class_filename, 'a') as self._fid:
-                self._write(0, 'from .snappicommon import SnappiList')
-                self._write()
-                self._write()
+                self._imports.append('from .snappicommon import SnappiList')
                 self._write(0, 'class %sList(SnappiList):' % class_name)
                 self._write(1, 'def __init__(self):')
                 self._write(2, 'super(%sList, self).__init__()' % class_name)
@@ -347,6 +353,7 @@ class SnappiGenerator(object):
                         ref = yobject['properties'][property]['$ref']
                         self._write_factory_method(class_name, property, ref,
                                                    True)
+            self._write_class(class_filename)
         return '%sList' % class_name
 
     def _write_factory_method(self,
@@ -355,39 +362,40 @@ class SnappiGenerator(object):
                               ref,
                               snappi_list=False):
         yobject = self._get_object_from_ref(ref)
-        ref_name = ref.split('/')[-1]
-        class_name = ref_name.replace('.', '')
+        object_name, property_name, class_name = self._get_object_property_class_names(ref)
+        module_name = object_name.replace('.', '').lower()
         param_string, properties = self._get_property_param_string(yobject)
         self._write()
         if snappi_list is True:
             self._write(1, 'def %s(self%s):' % (method_name, param_string))
+            self._imports.append('from .%s import %s' % (class_name.lower(), class_name))
             if container_class_name is not None:
-                self._write(
-                    2, 'from .%s import %s' %
-                    (container_class_name.lower(), container_class_name))
+                self._write(2, "# type: () -> %sList" % (container_class_name))
+            else:
+                self._write(2, "# type: () -> %s" % (class_name))
+            self._write(2, '"""Factory method to create an instance of the snappi.%s.%s class' % (module_name, class_name))
+            self._write()
+            self._write(2, '%s' % self._get_description(yobject))
+            self._write(2, '"""')
+            if container_class_name is not None:
                 self._write(2, 'item = %s()' % (container_class_name))
                 self._write(2, 'item.%s' % (method_name))
             else:
-                self._write(
-                    2, 'from .%s import %s' % (class_name.lower(), class_name))
-                self._write(
-                    2, 'item = %s(%s)' % (class_name, ', '.join(properties)))
+                self._write(2, 'item = %s(%s)' % (class_name, ', '.join(properties)))
             self._write(2, 'self._add(item)')
             self._write(2, 'return self')
         else:
             self._write(1, '@property')
             self._write(1, 'def %s(self):' % (method_name))
-            self._write(
-                2, "from .%s import %s" % (class_name.lower(), class_name))
-            self._write(
-                2,
-                "if '%s' not in self._properties or self._properties['%s'] is None:"
-                % (method_name, method_name))
-            self._write(
-                3, "self._properties['%s'] = %s()" % (method_name, class_name))
+            self._write(2, "# type: () -> %s" % (class_name))
+            self._write(2, '"""Factory method to create an instance of the %s class' % (class_name))
+            self._write()
+            self._write(2, '%s' % self._get_description(yobject))
+            self._write(2, '"""')
+            self._imports.append("from .%s import %s" % (class_name.lower(), class_name))
+            self._write(2, "if '%s' not in self._properties or self._properties['%s'] is None:" % (method_name, method_name))
+            self._write(3, "self._properties['%s'] = %s()" % (method_name, class_name))
             self._write(2, 'self.choice = \'%s\'' % (method_name))
-            # for property_name in properties:
-            #     self._write(2, 'self._properties[\'%s\'].%s = %s' % (method_name, property_name, property_name))
             self._write(2, "return self._properties['%s']" % (method_name))
 
     def _get_property_param_string(self, yobject):
@@ -411,14 +419,26 @@ class SnappiGenerator(object):
 
     def _write_snappi_property(self, schema_object, name, property):
         ref = parse("$..'$ref'").find(property)
+        restriction = self._get_type_restriction(property)
+        if len(ref) > 0:
+            object_name = ref[0].value.split('/')[-1]
+            class_name = object_name.replace('.', '')
+            file_name = class_name.lower()
+            if restriction.startswith('list['):
+                type_name = '%sList' % class_name
+            else:
+                type_name = class_name
+        else:
+            type_name = restriction
         self._write()
         self._write(1, '@property')
         self._write(1, 'def %s(self):' % name)
+        self._write(2, "# type: () -> %s" % (type_name))
         self._write(2, '"""%s getter' % (name))
         self._write()
         self._write(2, self._get_description(property))
         self._write()
-        self._write(2, 'Returns: %s' % self._get_type_restriction(property))
+        self._write(2, 'Returns: %s' % restriction)
         self._write(2, '"""')
         if len(parse("$..'type'").find(property)) > 0 and len(ref) == 0:
             self._write(2, "return self._properties['%s']" % (name))
@@ -429,21 +449,15 @@ class SnappiGenerator(object):
             self._write()
             self._write(2, self._get_description(property))
             self._write()
-            self._write(2, 'value: %s' % self._get_type_restriction(property))
+            self._write(2, 'value: %s' % restriction)
             self._write(2, '"""')
             if name in self._get_choice_names(
                     schema_object) and name != 'choice':
                 self._write(2, "self._properties['choice'] = '%s'" % (name))
             self._write(2, "self._properties['%s'] = value" % (name))
         elif len(ref) > 0:
-            object_name = ref[0].value.split('/')[-1]
-            class_name = object_name.replace('.', '')
-            file_name = class_name.lower()
-            restriction = self._get_type_restriction(property)
             if restriction.startswith('list['):
-                self._write(
-                    2, "from .%slist import %sList" %
-                    (class_name.lower(), class_name))
+                self._imports.append("from .%slist import %sList" % (class_name.lower(), class_name))
                 self._write(
                     2,
                     "if '%s' not in self._properties or self._properties['%s'] is None:"
@@ -453,7 +467,7 @@ class SnappiGenerator(object):
                     "self._properties['%s'] = %sList()" % (name, class_name))
                 self._write(2, "return self._properties['%s']" % (name))
             else:
-                self._write(2, "from .%s import %s" % (file_name, class_name))
+                self._imports.append("from .%s import %s" % (file_name, class_name))
                 self._write(
                     2,
                     "if '%s' not in self._properties or self._properties['%s'] is None:"
