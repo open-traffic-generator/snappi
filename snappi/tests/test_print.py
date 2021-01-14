@@ -1,7 +1,7 @@
 import pytest
 
 
-def test_serdes(api, b2b_config):
+def test_print(api, b2b_config):
     """Demonstrate output of Snappi objects
     """
     print(b2b_config.ports)
