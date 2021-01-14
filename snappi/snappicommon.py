@@ -251,5 +251,11 @@ class SnappiList(SnappiSerialization):
         for item in encoded_snappi_list:
             self._add(object_class()._decode(item))
 
+    def __copy__(self):
+        raise NotImplementedError('Shallow copy of SnappiList objects is not supported')
+
+    def __deepcopy__(self, memo):
+        raise NotImplementedError('Deep copy of SnappiList objects is not supported')
+
     def __str__(self):
         return yaml.safe_dump(self._encode())
