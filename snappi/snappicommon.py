@@ -147,6 +147,21 @@ class SnappiObject(SnappiSerialization):
     def __str__(self):
         return self.serialize(self.YAML)
 
+    def __deepcopy__(self, memo):
+        """Creates a deep copy of the current object
+        """
+        return self.__class__().deserialize(self.serialize())
+
+    def __copy__(self):
+        """Creates a deep copy of the current object
+        """
+        return self.__deepcopy__(None)
+
+    def clone(self):
+        """Creates a deep copy of the current object
+        """
+        return self.__deepcopy__(None)
+
 
 class SnappiList(SnappiSerialization):
     """Container class for SnappiObject
@@ -213,6 +228,12 @@ class SnappiList(SnappiSerialization):
     def _add(self, item):
         self._items.append(item)
         self._index = len(self._items) - 1
+
+    def append(self, item):
+        """Append an item to the end of the SnappiList
+        TBD: type check, raise error on mismatch
+        """
+        self._add(item)
 
     def clear(self):
         self._items.clear()
