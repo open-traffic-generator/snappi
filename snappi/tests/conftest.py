@@ -7,7 +7,7 @@ def api():
     """
     from .snappiserver import SnappiServer
     pytest.snappiserver = SnappiServer().start()
-    from ..api import Api
+    from ..snappi import Api
     yield Api()
 
 
@@ -36,7 +36,7 @@ def b2b_config(api):
     vlan2.id.value = 2
     tx_device.ipv4.ethernet.mac.value = '00:00:01:00:00:01'
 
-    flow = config.flows.flow(name='Tx -> Rx Flow')
+    flow = config.flows.flow(name='Tx -> Rx Flow')[0]
     flow.tx_rx.port.tx_name = tx_port.name
     flow.tx_rx.port.rx_name = rx_port.name
     flow.size.fixed = 128

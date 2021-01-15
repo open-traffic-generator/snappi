@@ -8,30 +8,30 @@ def test_snappi_lists(api):
     config = api.config()
 
     flows = config.flows.flow(name='1')
-    assert(flows.__class__ == snappi.flowlist.FlowList)
+    assert(flows.__class__ == snappi.FlowList)
     flow = flows[0]
-    assert(flow.__class__ == snappi.flow.Flow)
+    assert(flow.__class__ == snappi.Flow)
     eth, vlan, vlan1 = flow.packet.ethernet().vlan().vlan()
     vlan.id.value = 1
 
     flow = config.flows.flow(name='2')[-1]
-    assert(flow.__class__ == snappi.flow.Flow)
+    assert(flow.__class__ == snappi.Flow)
     eth, vlan, ipv4, tcp = flow.packet.ethernet().vlan().ipv4().tcp()
-    assert(eth.__class__ == snappi.flowethernet.FlowEthernet)
-    assert(vlan.__class__ == snappi.flowvlan.FlowVlan)
-    assert(ipv4.__class__ == snappi.flowipv4.FlowIpv4)
-    assert(tcp.__class__ == snappi.flowtcp.FlowTcp)
+    assert(eth.__class__ == snappi.FlowEthernet)
+    assert(vlan.__class__ == snappi.FlowVlan)
+    assert(ipv4.__class__ == snappi.FlowIpv4)
+    assert(tcp.__class__ == snappi.FlowTcp)
     vlan.id.value = 2
 
     flow = config.flows.flow(name='3')[-1]
     pkt = flow.packet.ethernet().vlan()
-    assert(pkt.__class__ == snappi.flowheaderlist.FlowHeaderList)
+    assert(pkt.__class__ == snappi.FlowHeaderList)
     vlan = pkt[-1]
     vlan.id.value = 3
 
     flow = config.flows.flow(name='4')[-1]
     vlan = flow.packet.ethernet().vlan()[-1]
-    assert(vlan.__class__ == snappi.flowvlan.FlowVlan)
+    assert(vlan.__class__ == snappi.FlowVlan)
     vlan.id.value = 4
 
     print(config)
