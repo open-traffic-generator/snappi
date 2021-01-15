@@ -36,7 +36,7 @@ class SnappiGenerator(object):
             self._openapi_filename = openapi_filename
         self.__python = os.path.normpath(sys.executable)
         self.__python_dir = os.path.dirname(self.__python)
-        self._src_dir = os.path.dirname(os.path.abspath(__file__))
+        self._src_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'snappi')
         self._docs_dir = os.path.join(self._src_dir, '..', 'docs')
         self._clean()
         self._install_dependencies()
@@ -101,7 +101,8 @@ class SnappiGenerator(object):
     def _write_init(self):
         filename = os.path.join(self._src_dir, '__init__.py')
         with open(filename, 'w') as self._fid:
-            self._write(0, 'from .api import Api')
+            for class_name in self._generated_classes:
+                self._write(0, 'from .snappi import %s' % class_name)
 
     def _find(self, path, schema_object):
         finds = parse(path).find(schema_object)
@@ -110,8 +111,13 @@ class SnappiGenerator(object):
             parse(path).find(find.value)
 
     def _write_api_class(self):
-        api_filename = os.path.join(self._src_dir, 'api.py')
-        with open(api_filename, 'a') as self._fid:
+        self._top_level_schema_refs = []
+        self._api_filename = os.path.join(self._src_dir, 'snappi.py')
+        self._generated_classes.append('Api')
+        with open(self._api_filename, 'w') as self._fid:
+            self._write(0, 'from typing import Union')
+            self._write(0, 'from .snappicommon import SnappiObject')
+            self._write(0, 'from .snappicommon import SnappiList')
             self._write(0, 'from .snappicommon import SnappiRestTransport')
             self._write()
             self._write()
@@ -128,7 +134,7 @@ class SnappiGenerator(object):
             if method_name in self._generated_methods:
                 continue
             self._generated_methods.append(method_name)
-            print('generating method %s in file %s...' % (method_name, api_filename))
+            print('generating method %s' % (method_name))
             content = parse('$..requestBody..schema').find(operation)
             if len(content) == 0:
                 content = ''
@@ -142,7 +148,7 @@ class SnappiGenerator(object):
                 object_name, property_name, class_name = self._get_object_property_class_names(response[0].value)
                 if property_name is not None:
                     response_object = ', return_object=self.%s()' % property_name
-            with open(api_filename, 'a') as self._fid:
+            with open(self._api_filename, 'a') as self._fid:
                 self._write()
                 self._write(1, 'def %s(self%s):' % (method_name, content))
                 self._write(2, '"""%s %s' % (path['method'].upper(), path['url']))
@@ -161,23 +167,27 @@ class SnappiGenerator(object):
                 schema_object = self._get_object_from_ref(ref)
                 if 'type' not in schema_object:
                     continue
-                print('generating method %s in file %s...' % (property_name, api_filename))
+                print('generating class factory method %s' % (property_name))
                 if schema_object['type'] == 'array':
-                    class_name = self._write_snappi_list(schema_object['items']['$ref'], property_name)
-                    self._write_snappi_object(schema_object['items']['$ref'])
-                else:
-                    self._write_snappi_object(ref)
-                with open(api_filename, 'a') as self._fid:
+                    ref = schema_object['items']['$ref']
+                    _, _, class_name = self._get_object_property_class_names(ref)
+                    class_name = '%sList' % class_name
+                    self._top_level_schema_refs.append((ref, property_name))
+                self._top_level_schema_refs.append((ref, None))
+                with open(self._api_filename, 'a') as self._fid:
                     self._write()
                     self._write(1, 'def %s(self):' % property_name)
-                    self._write(
-                        2, '"""%s' %
-                        'Return instance of auto-generated top level class %s' %
-                        class_name)
+                    self._write(2, '"""Factory method that creates an instance of the %s class' % class_name)
+                    self._write()
+                    self._write(2, 'Return: obj(%s)' % class_name)
                     self._write(2, '"""')
-                    self._write(
-                        2, "from .%s import %s" % (class_name.lower(), class_name))
                     self._write(2, "return %s()" % (class_name))
+
+        for ref, property_name in self._top_level_schema_refs:
+            if property_name is None:
+                self._write_snappi_object(ref)
+            else:
+                self._write_snappi_list(ref, property_name)
 
     def _get_object_property_class_names(self, ref):
         object_name = None
@@ -198,67 +208,56 @@ class SnappiGenerator(object):
         schema_object = self._get_object_from_ref(ref)
         ref_name = ref.split('/')[-1]
         class_name = ref_name.replace('.', '')
-        class_filename = os.path.join(self._src_dir,
-                                      '%s.py' % class_name.lower())
+        if class_name in self._generated_classes:
+            return
+        self._generated_classes.append(class_name)
+
+        print('generating class %s' % (class_name))
         refs = []
-        if os.path.exists(class_filename) is False:
-            self._imports = []
-            print('generating class %s in file %s...' % (class_name, class_filename))
-            with open(class_filename, 'a') as self._fid:
-                self._imports.append('from .snappicommon import SnappiObject')
-                self._write(0, 'class %s(SnappiObject):' % class_name)
+        with open(self._api_filename, 'a') as self._fid:
+            self._write()
+            self._write()
+            self._write(0, 'class %s(SnappiObject):' % class_name)
 
-                # write _TYPES definition
-                snappi_types = self._get_snappi_types(schema_object)
-                if len(snappi_types) > 0:
-                    self._write(1, '_TYPES = {')
-                    for name, value in snappi_types:
-                        self._write(2, "'%s': '%s'," % (name, value))
-                    self._write(1, '}')
+            # write _TYPES definition
+            snappi_types = self._get_snappi_types(schema_object)
+            if len(snappi_types) > 0:
+                self._write(1, '_TYPES = {')
+                for name, value in snappi_types:
+                    self._write(2, "'%s': '%s'," % (name, value))
+                self._write(1, '}')
+                self._write()
+            
+            # write constants
+            # search for all simple properties with enum or 
+            # x-constant and add them here
+            for enum in parse('$..enum | x-constants').find(schema_object):
+                for name in enum.value:
+                    value = name
+                    if isinstance(enum.value, dict):
+                        value = enum.value[name]
+                    self._write(1, '%s = \'%s\'' % (name.upper(), value))
+                if len(enum.value) > 0:
                     self._write()
-                
-                # write constants
-                # search for all simple properties with enum or 
-                # x-constant and add them here
-                for enum in parse('$..enum | x-constants').find(schema_object):
-                    for name in enum.value:
-                        value = name
-                        if isinstance(enum.value, dict):
-                            value = enum.value[name]
-                        self._write(1, '%s = \'%s\'' % (name.upper(), value))
-                    if len(enum.value) > 0:
-                        self._write()
 
-                # write def __init__(self)
-                init_param_string = ''
-                for init_param in self._get_simple_type_names(schema_object):
-                    init_param_string += ', %s=None' % (init_param)
-                self._write(1, 'def __init__(self%s):' % init_param_string)
-                self._write(2, 'super(%s, self).__init__()' % class_name)
-                for init_param in self._get_simple_type_names(schema_object):
-                    self._write(2, 'self.%s = %s' % (init_param, init_param))
+            # write def __init__(self)
+            init_param_string = ''
+            for init_param in self._get_simple_type_names(schema_object):
+                init_param_string += ', %s=None' % (init_param)
+            self._write(1, 'def __init__(self%s):' % init_param_string)
+            self._write(2, 'super(%s, self).__init__()' % class_name)
+            for init_param in self._get_simple_type_names(schema_object):
+                self._write(2, 'self.%s = %s' % (init_param, init_param))
 
-                # process properties - TBD use this one level up to process 
-                # schema, in requestBody, Response and also 
-                refs = self._process_properties(class_name, schema_object)
+            # process properties - TBD use this one level up to process 
+            # schema, in requestBody, Response and also 
+            refs = self._process_properties(class_name, schema_object)
 
-            # write the entire class
-            self._write_class(class_filename)
-
-            # descend into child properties
-            for ref in refs:
-                self._write_snappi_object(ref[0])
-                if ref[1] is True:
-                    self._write_snappi_list(ref[0], ref[2])
-
-    def _write_class(self, class_filename):
-        with open(class_filename, 'r') as fp:
-            class_content = fp.read()
-        with open(class_filename, "w") as fp:
-            self._imports = list(set(self._imports))
-            self._imports.append('\n' * 2)
-            fp.write('\n'.join(self._imports))
-            fp.write(class_content)
+        # descend into child properties
+        for ref in refs:
+            self._write_snappi_object(ref[0])
+            if ref[1] is True:
+                self._write_snappi_list(ref[0], ref[2])
 
     def _get_simple_type_names(self, schema_object):
         simple_type_names = []
@@ -312,9 +311,11 @@ class SnappiGenerator(object):
         """This is class writer for schema object properties that have the
         following definition:
         ```
-        type: array
-        items:
-            $ref: '#/components/schema/...
+        properties:
+          ports:
+            type: array
+            items:
+              $ref: '#/components/schema/...'
         ```
 
         If the schema object has a property named choice, that property needs 
@@ -328,33 +329,52 @@ class SnappiGenerator(object):
         """
         yobject = self._get_object_from_ref(ref)
         ref_name = ref.split('/')[-1]
-        class_name = ref_name.replace('.', '')
-        class_filename = os.path.join(self._src_dir,
-                                      '%slist.py' % class_name.lower())
-        if os.path.exists(class_filename) is False:
-            self._imports = []
-            print('generating class %sList in file %s...' % (class_name, class_filename))
-            with open(class_filename, 'a') as self._fid:
-                self._imports.append('from .snappicommon import SnappiList')
-                self._write(0, 'class %sList(SnappiList):' % class_name)
-                self._write(1, 'def __init__(self):')
-                self._write(2, 'super(%sList, self).__init__()' % class_name)
-                self._write()
-                # write factory method for the schema object in the list
-                self._write_factory_method(None, ref_name.lower().split('.')[-1], ref, True)
-                # write choice factory methods if any
-                if 'properties' in yobject and 'choice' in yobject['properties']:
-                    for property in yobject['properties']:
-                        if property not in yobject['properties']['choice'][
-                                'enum']:
-                            continue
-                        if '$ref' not in yobject['properties'][property]:
-                            continue
-                        ref = yobject['properties'][property]['$ref']
-                        self._write_factory_method(class_name, property, ref,
-                                                   True)
-            self._write_class(class_filename)
-        return '%sList' % class_name
+        contained_class_name = ref_name.replace('.', '')
+        class_name = '%sList' % contained_class_name
+        if class_name in self._generated_classes:
+            return
+        self._generated_classes.append(class_name)
+
+        self._imports = []
+        print('generating class %s' % (class_name))
+        with open(self._api_filename, 'a') as self._fid:
+            self._write()
+            self._write()
+            self._write(0, 'class %s(SnappiList):' % class_name)
+            self._write(1, 'def __init__(self):')
+            self._write(2, 'super(%s, self).__init__()' % class_name)
+            self._write_snappilist_special_methods(contained_class_name)
+            # write factory method for the schema object in the list
+            self._write_factory_method(None, ref_name.lower().split('.')[-1], ref, True)
+            # write choice factory methods if any
+            if 'properties' in yobject and 'choice' in yobject['properties']:
+                for property in yobject['properties']:
+                    if property not in yobject['properties']['choice'][
+                            'enum']:
+                        continue
+                    if '$ref' not in yobject['properties'][property]:
+                        continue
+                    ref = yobject['properties'][property]['$ref']
+                    self._write_factory_method(contained_class_name, property, ref, True)
+        return class_name
+
+    def _write_snappilist_special_methods(self, contained_class_name):
+        self._write()
+        self._write(1, 'def __getitem__(self, key):')
+        self._write(2, '# type: (int) -> %s' % contained_class_name)
+        self._write(2, 'return self._getitem(key)')
+        self._write()
+        self._write(1, 'def __iter__(self):')
+        self._write(2, '# type: () -> %sList' % contained_class_name)
+        self._write(2, 'return self._iter()')
+        self._write()
+        self._write(1, 'def __next__(self):')
+        self._write(2, '# type: () -> %s' % contained_class_name)
+        self._write(2, 'return self._next()')
+        self._write()
+        self._write(1, 'def next(self):')
+        self._write(2, '# type: () -> %s' % contained_class_name)
+        self._write(2, 'return self._next()')
 
     def _write_factory_method(self,
                               container_class_name,
@@ -363,7 +383,6 @@ class SnappiGenerator(object):
                               snappi_list=False):
         yobject = self._get_object_from_ref(ref)
         object_name, property_name, class_name = self._get_object_property_class_names(ref)
-        module_name = object_name.replace('.', '').lower()
         param_string, properties = self._get_property_param_string(yobject)
         self._write()
         if snappi_list is True:
@@ -373,7 +392,7 @@ class SnappiGenerator(object):
                 self._write(2, "# type: () -> %sList" % (container_class_name))
             else:
                 self._write(2, "# type: () -> %s" % (class_name))
-            self._write(2, '"""Factory method to create an instance of the snappi.%s.%s class' % (module_name, class_name))
+            self._write(2, '"""Factory method that creates an instance of %s class' % (class_name))
             self._write()
             self._write(2, '%s' % self._get_description(yobject))
             self._write(2, '"""')
@@ -392,7 +411,6 @@ class SnappiGenerator(object):
             self._write()
             self._write(2, '%s' % self._get_description(yobject))
             self._write(2, '"""')
-            self._imports.append("from .%s import %s" % (class_name.lower(), class_name))
             self._write(2, "if '%s' not in self._properties or self._properties['%s'] is None:" % (method_name, method_name))
             self._write(3, "self._properties['%s'] = %s()" % (method_name, class_name))
             self._write(2, 'self.choice = \'%s\'' % (method_name))
@@ -423,7 +441,6 @@ class SnappiGenerator(object):
         if len(ref) > 0:
             object_name = ref[0].value.split('/')[-1]
             class_name = object_name.replace('.', '')
-            file_name = class_name.lower()
             if restriction.startswith('list['):
                 type_name = '%sList' % class_name
             else:
@@ -457,7 +474,6 @@ class SnappiGenerator(object):
             self._write(2, "self._properties['%s'] = value" % (name))
         elif len(ref) > 0:
             if restriction.startswith('list['):
-                self._imports.append("from .%slist import %sList" % (class_name.lower(), class_name))
                 self._write(
                     2,
                     "if '%s' not in self._properties or self._properties['%s'] is None:"
@@ -467,7 +483,6 @@ class SnappiGenerator(object):
                     "self._properties['%s'] = %sList()" % (name, class_name))
                 self._write(2, "return self._properties['%s']" % (name))
             else:
-                self._imports.append("from .%s import %s" % (file_name, class_name))
                 self._write(
                     2,
                     "if '%s' not in self._properties or self._properties['%s'] is None:"
@@ -499,11 +514,9 @@ class SnappiGenerator(object):
                 if len(ref) > 0:
                     object_name = ref[0].value.split('/')[-1]
                     class_name = object_name.replace('.', '')
-                    file_name = class_name.lower()
                     if 'type' in yproperty and yproperty['type'] == 'array':
                         class_name += 'List'
-                        file_name += 'list'
-                    types.append((name, '.%s.%s' % (file_name, class_name)))
+                    types.append((name, class_name))
         return types
 
     def _get_default_value(self, property):

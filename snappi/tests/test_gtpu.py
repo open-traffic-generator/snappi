@@ -88,9 +88,11 @@ def test_gtpu(api):
     config = api.config()
 
     for user, server in zip(test_params.users, test_params.servers):
-        tx_port = config.ports.port(name='User Port %s' % user.location, location=user.location)
-        rx_port = config.ports.port(name='Server Port %s' % server.location,
-                                    location=server.location)
+        config.ports \
+            .port(name='User Port %s' % user.location, location=user.location) \
+            .port(name='Server Port %s' % server.location, location=server.location)
+        tx_port = config.ports[-2]
+        rx_port = config.ports[-1]
         create_flow(config, 'Uplink', user, server, tx_port, rx_port,
                     test_params.globals.gnb_mac_addr,
                     test_params.globals.n3_mac_addr,
@@ -113,12 +115,12 @@ def create_flow(config, flow_prefix, src_param, dst_param, tx_port, rx_port,
                 src_mac, dst_mac, outer_ip_src, outer_ip_dst, inner_ip_src,
                 inner_ip_dst, gtp_tunnels):
     flow_name = '%s %s -> %s' % (flow_prefix, tx_port.name, rx_port.name)
-    flow = config.flows.flow(name=flow_name)
+    flow = config.flows.flow(name=flow_name)[-1]
     flow.tx_rx.port.tx_name = tx_port.name
     flow.tx_rx.port.rx_name = rx_port.name
 
-    eth, outer_ip, udp, gtp, inner_ip = flow.packet \
-        .ethernet().ipv4().udp().gtpv1().ipv4()
+    flow.packet.ethernet().ipv4().udp().gtpv1().ipv4()
+    eth, outer_ip, udp, gtp, inner_ip = flow.packet
 
     eth.src.value = src_mac
     eth.dst.value = dst_mac

@@ -36,5 +36,5 @@ setup(name=pkg_name,
       include_package_data=True,
       packages=find_packages(),
       python_requires='>=2.7, <4',
-      install_requires=['requests', 'pyyaml', 'jsonpath-ng'],
+      install_requires=['requests', 'pyyaml', 'jsonpath-ng', 'typing'],
       tests_require=['pytest'])

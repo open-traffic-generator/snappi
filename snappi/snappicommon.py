@@ -130,18 +130,12 @@ class SnappiObject(SnappiSerialization):
 
     def _get_child_class(self, property_name, is_property_list=False):
         list_class = None
-        package_name = __name__.split('.')[0]
-        child_class_path_name = self._TYPES[property_name].split('.')
-        child_class_path = '.'.join(child_class_path_name[0:-1])
-        child_class_name = child_class_path_name[-1]
-        module = importlib.import_module(child_class_path,
-                                         package=package_name)
-        object_class = getattr(module, child_class_name)
+        class_name = self._TYPES[property_name]
+        module = importlib.import_module(self.__module__)
+        object_class = getattr(module, class_name)
         if is_property_list is True:
             list_class = object_class
-            module = importlib.import_module(child_class_path[0:-4],
-                                             package=package_name)
-            object_class = getattr(module, child_class_name[0:-4])
+            object_class = getattr(module, class_name[0:-4])
         return (list_class, object_class)
 
     def __str__(self):
@@ -168,7 +162,7 @@ class SnappiList(SnappiSerialization):
 
     Inheriting classes contain 0..n instances of an OpenAPI components/schemas 
     object.
-    - flow = config.flows.append(name='test')
+    - flow = config.flows.flow(name='test')
 
     The __getitem__ method allows getting an instance using ordinal or name.
     - config.flows[0]
@@ -182,19 +176,10 @@ class SnappiList(SnappiSerialization):
         self._index = -1
         self._items = []
 
-    def __getattr__(self, name):
-        if len(self._items) == 0:
-            raise IndexError('List is empty')
-        elif hasattr(self._items[self._index], name):
-            return getattr(self._items[self._index], name, None)
-        else:
-            raise AttributeError('%s.%s is not a valid attribute' %
-                                 (type(self).__name__, name))
-
     def __len__(self):
         return len(self._items)
 
-    def __getitem__(self, key):
+    def _getitem(self, key):
         found = None
         if isinstance(key, int):
             found = self._items[key]
@@ -208,22 +193,16 @@ class SnappiList(SnappiSerialization):
             return found._properties[found._properties['choice']]
         return found
 
-    def __iter__(self):
+    def _iter(self):
         self._index = -1
         return self
 
-    def next(self):
-        return self.__next__()
-
-    def __next__(self):
+    def _next(self):
         if self._index + 1 >= len(self._items):
             raise StopIteration
         else:
             self._index += 1
-        return self[self._index]
-
-    def _keys(self):
-        return [item.name for item in self._items]
+        return self._getitem(self._index)
 
     def _add(self, item):
         self._items.append(item)
@@ -243,11 +222,10 @@ class SnappiList(SnappiSerialization):
         return [item._encode() for item in self._items]
 
     def _decode(self, encoded_snappi_list):
-        item_class_path = self.__class__.__module__.replace('list', '')
         item_class_name = self.__class__.__name__.replace('List', '')
-        module = importlib.import_module(item_class_path)
+        module = importlib.import_module(self.__module__)
         object_class = getattr(module, item_class_name)
-        self._items.clear()
+        self.clear()
         for item in encoded_snappi_list:
             self._add(object_class()._decode(item))
 
