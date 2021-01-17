@@ -22,7 +22,7 @@ config = api.config()
 tx_port, rx_port = config.ports \
     .port(name='Tx Port', location='10.36.74.26;02;13')
     .port(name='Rx Port', location='10.36.74.26;02;14')
-flow = config.flows.flow(name='Tx -> Rx Flow')
+flow = config.flows.flow(name='Tx -> Rx Flow')[-1]
 flow.tx_rx.port.tx_name = tx_port.name
 flow.tx_rx.port.tx_name = rx_port.name
 flow.packet.ethernet().vlan().ipv4().tcp()
@@ -35,9 +35,8 @@ tx_state = api.transmit_state(state='start')
 api.set_transmit(tx_state)
 
 while True:
-    results = api.get_port_results(api.result_portrequest)
-    df = pandas.DataFrame.from_dict(results)
-    print(df)
-    if df.frames_tx.sum() >= flow.duration.fixed_packets.packets:
+    metrics = api.get_port_metrics(api.port_metrics_request())
+    tx_frames = sum([metric.frames_tx for metric in metrics])
+    if tx_frames >= flow.duration.fixed_packets.packets:
         break
 ```
