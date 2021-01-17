@@ -33,7 +33,7 @@ def b2b_config(api):
     tx_device.ipv4.prefix.value = 16
     vlan1, vlan2 = tx_device.ipv4.ethernet.vlans.vlan().vlan()
     vlan1.id.value = 1
-    vlan2.id.value = 2
+    vlan2.id.values = [2, 3, 4]
     tx_device.ipv4.ethernet.mac.value = '00:00:01:00:00:01'
 
     flow = config.flows.flow(name='Tx -> Rx Flow')[0]

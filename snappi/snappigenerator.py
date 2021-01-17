@@ -92,6 +92,7 @@ class SnappiGenerator(object):
             with open(self._openapi_filename, 'rb') as fp:
                 openapi_content = fp.read()
         self._openapi = yaml.safe_load(openapi_content)
+        print('generating using model version %s' % self._openapi['info']['version'])
 
     def _generate(self):
         self._write_api_class()

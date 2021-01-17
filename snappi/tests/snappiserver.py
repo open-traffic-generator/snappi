@@ -38,11 +38,13 @@ def set_transmit_state():
 
 @app.route('/results/port', methods=['POST'])
 def get_port_metrics():
+    global CONFIG
     api = Api()
     port_metrics_request = api.port_metrics_request()
     port_metrics_request.deserialize(request.data.decode('utf-8'))
     port_metrics = api.port_metrics()
-    port_metrics.metric().metric()
+    for port in CONFIG.ports:
+        port_metrics.metric(name=port.name, frames_tx=10000, frames_rx=10000)
     return Response(port_metrics.serialize(),
                     mimetype='application/json',
                     status=200)
@@ -50,11 +52,13 @@ def get_port_metrics():
 
 @app.route('/results/flow', methods=['POST'])
 def get_flow_metrics():
+    global CONFIG
     api = Api()
     flow_metrics_request = api.flow_metrics_request()
     flow_metrics_request.deserialize(request.data.decode('utf-8'))
     flow_metrics = api.flow_metrics()
-    flow_metrics.metric().metric()
+    for flow in CONFIG.flows:
+        flow_metrics.metric(name=flow.name, frames_tx=10000, frames_rx=10000)
     return Response(flow_metrics.serialize(),
                     mimetype='application/json',
                     status=200)
