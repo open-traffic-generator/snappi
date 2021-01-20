@@ -31,10 +31,14 @@ class SnappiRestTransport(object):
             return None
 
 
-class SnappiSerialization(object):
+class SnappiBase(object):
+    """Base class for all Snappi classes
+    """
     JSON = 'json'
     YAML = 'yaml'
     DICT = 'dict'
+
+    __slots__ = ()
 
     def __init__(self):
         pass
@@ -54,11 +58,11 @@ class SnappiSerialization(object):
             encoding. The json and yaml encodings will return a str object and
             the dict encoding will return a python dict object.
         """
-        if encoding == SnappiSerialization.JSON:
+        if encoding == SnappiBase.JSON:
             return json.dumps(self._encode(), indent=2)
-        elif encoding == SnappiSerialization.YAML:
+        elif encoding == SnappiBase.YAML:
             return yaml.safe_dump(self._encode())
-        elif encoding == SnappiSerialization.DICT:
+        elif encoding == SnappiBase.DICT:
             return self._encode()
         else:
             raise NotImplementedError('Encoding %s not supported' % encoding)
@@ -92,9 +96,11 @@ class SnappiSerialization(object):
         raise NotImplementedError()
 
 
-class SnappiObject(SnappiSerialization):
+class SnappiObject(SnappiBase):
     """Base class for any /components/schemas object
     """
+    __slots__ = ('_properties')
+
     def __init__(self):
         super(SnappiObject, self).__init__()
         self._properties = {}
@@ -157,7 +163,7 @@ class SnappiObject(SnappiSerialization):
         return self.__deepcopy__(None)
 
 
-class SnappiList(SnappiSerialization):
+class SnappiList(SnappiBase):
     """Container class for SnappiObject
 
     Inheriting classes contain 0..n instances of an OpenAPI components/schemas 
@@ -171,6 +177,8 @@ class SnappiList(SnappiSerialization):
     The __iter__ method allows for iterating across the encapsulated contents
     - for flow in config.flows:
     """
+    __slots__ = ('_index', '_items')
+
     def __init__(self):
         super(SnappiList, self).__init__()
         self._index = -1

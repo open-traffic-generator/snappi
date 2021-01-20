@@ -9,6 +9,7 @@ TBD:
 - response class generation - DONE
 - Api return response instance - DONE
 - constants - DONE
+- parent, choice in child choice classes
 - packet slicing using constants
 - docstrings
 - type checking
@@ -78,21 +79,22 @@ class SnappiGenerator(object):
     def _get_openapi_file(self):
         if self._openapi_filename is None:
             OPENAPI_URL = (
-                'https://github.com/open-traffic-generator/models/releases/latest/download'
-                '/openapi.yaml')
+                'https://github.com/open-traffic-generator/models/releases'
+                '/latest/download/openapi.yaml')
             response = requests.request('GET',
                                         OPENAPI_URL,
                                         allow_redirects=True)
             if response.status_code != 200:
                 raise Exception(
-                    'Unable to retrieve the Open Traffic Generator openapi.yaml file [%s]'
-                    % response.content)
+                    'Unable to retrieve the Open Traffic Generator openapi.yaml'
+                    ' file [%s]' % response.content)
             openapi_content = response.content
         else:
             with open(self._openapi_filename, 'rb') as fp:
                 openapi_content = fp.read()
         self._openapi = yaml.safe_load(openapi_content)
-        print('generating using model version %s' % self._openapi['info']['version'])
+        self._openapi_version = self._openapi['info']['version']
+        print('generating using model version %s' % self._openapi_version)
 
     def _generate(self):
         self._write_api_class()
@@ -219,6 +221,8 @@ class SnappiGenerator(object):
             self._write()
             self._write()
             self._write(0, 'class %s(SnappiObject):' % class_name)
+            self._write(1, "__slots__ = ()")
+            self._write()
 
             # write _TYPES definition
             snappi_types = self._get_snappi_types(schema_object)
@@ -342,11 +346,13 @@ class SnappiGenerator(object):
             self._write()
             self._write()
             self._write(0, 'class %s(SnappiList):' % class_name)
+            self._write(1, "__slots__ = ()")
+            self._write()
             self._write(1, 'def __init__(self):')
             self._write(2, 'super(%s, self).__init__()' % class_name)
             self._write_snappilist_special_methods(contained_class_name)
             # write factory method for the schema object in the list
-            self._write_factory_method(None, ref_name.lower().split('.')[-1], ref, True)
+            self._write_factory_method(contained_class_name, ref_name.lower().split('.')[-1], ref, True, False)
             # write choice factory methods if any
             if 'properties' in yobject and 'choice' in yobject['properties']:
                 for property in yobject['properties']:
@@ -356,7 +362,7 @@ class SnappiGenerator(object):
                     if '$ref' not in yobject['properties'][property]:
                         continue
                     ref = yobject['properties'][property]['$ref']
-                    self._write_factory_method(contained_class_name, property, ref, True)
+                    self._write_factory_method(contained_class_name, property, ref, True, True)
         return class_name
 
     def _write_snappilist_special_methods(self, contained_class_name):
@@ -378,27 +384,28 @@ class SnappiGenerator(object):
         self._write(2, 'return self._next()')
 
     def _write_factory_method(self,
-                              container_class_name,
+                              contained_class_name,
                               method_name,
                               ref,
-                              snappi_list=False):
+                              snappi_list=False, 
+                              choice_method=False):
         yobject = self._get_object_from_ref(ref)
         object_name, property_name, class_name = self._get_object_property_class_names(ref)
         param_string, properties = self._get_property_param_string(yobject)
         self._write()
         if snappi_list is True:
-            self._write(1, 'def %s(self%s):' % (method_name, param_string))
             self._imports.append('from .%s import %s' % (class_name.lower(), class_name))
-            if container_class_name is not None:
-                self._write(2, "# type: () -> %sList" % (container_class_name))
+            self._write(1, 'def %s(self%s):' % (method_name, param_string))
+            if contained_class_name is not None:
+                self._write(2, "# type: () -> %sList" % (contained_class_name))
             else:
                 self._write(2, "# type: () -> %s" % (class_name))
             self._write(2, '"""Factory method that creates an instance of %s class' % (class_name))
             self._write()
             self._write(2, '%s' % self._get_description(yobject))
             self._write(2, '"""')
-            if container_class_name is not None:
-                self._write(2, 'item = %s()' % (container_class_name))
+            if choice_method is True:
+                self._write(2, 'item = %s()' % (contained_class_name))
                 self._write(2, 'item.%s' % (method_name))
             else:
                 self._write(2, 'item = %s(%s)' % (class_name, ', '.join(properties)))

@@ -126,12 +126,12 @@ def create_flow(config, flow_prefix, src_param, dst_param, tx_port, rx_port,
     eth.dst.value = dst_mac
     outer_ip.src.value = outer_ip_src
     outer_ip.dst.value = outer_ip_dst
-    gtp.teid.start = src_param.teid
-    gtp.teid.step = 1
-    gtp.teid.count = gtp_tunnels
+    gtp.teid.increment.start = src_param.teid
+    gtp.teid.increment.step = 1
+    gtp.teid.increment.count = gtp_tunnels
     inner_ip.src.value = inner_ip_src
     inner_ip.dst.value = inner_ip_dst
-    gtp.teid.result_group = 'gtp_teid'
+    gtp.teid.metric_group = 'gtp_teid'
 
     flow.size.fixed = 128
     flow.rate.gbps = 1
