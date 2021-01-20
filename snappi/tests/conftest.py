@@ -46,8 +46,8 @@ def b2b_config(api):
     eth, vlan, ip, tcp = flow.packet.ethernet().vlan().ipv4().tcp()
 
     eth.src.value = '00:00:01:00:00:01'
-    eth.dst.value_list = ['00:00:02:00:00:01', '00:00:02:00:00:01']
-    eth.dst.result_group = 'eth dst mac'
+    eth.dst.values = ['00:00:02:00:00:01', '00:00:02:00:00:01']
+    eth.dst.metric_group = 'eth dst mac'
 
     ip.src.increment.start = '1.1.1.1'
     ip.src.increment.step = '0.0.0.1'
@@ -57,8 +57,9 @@ def b2b_config(api):
     ip.dst.decrement.step = '0.0.0.1'
     ip.dst.decrement.count = 10
 
-    ip.priority.dscp.phb.value_list = [8, 16, 32]
+    ip.priority.dscp.phb.values = [8, 16, 32]
     ip.priority.dscp.ecn.value = 1
+
     tcp.src_port.increment.start = '10'
     tcp.dst_port.increment.start = 1
 
