@@ -1,13 +1,16 @@
-# snappi
+# ![snappi](logo/logo_color.png)
+
 Create test case scripts once using the `snappi` client and run them using a 
 traffic generator that conforms to the [Open Traffic Generator API](https://github.com/open-traffic-generator/models/releases).
 
 ## Install the client
+
 ```
 pip install snappi
 ```
 
 ## Start scripting
+
 ```python
 """A simple test that demonstrates the following:
 - A port that transmits an ethernet/vlan/ipv4/tcp flow 
