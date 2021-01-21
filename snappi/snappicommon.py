@@ -168,11 +168,13 @@ class SnappiList(SnappiBase):
 
     Inheriting classes contain 0..n instances of an OpenAPI components/schemas 
     object.
-    - flow = config.flows.flow(name='test')
+    - config.flows.flow(name='1').flow(name='2').flow(name='3')
 
-    The __getitem__ method allows getting an instance using ordinal or name.
+    The __getitem__ method allows getting an instance using ordinal.
     - config.flows[0]
-    - config.flows['test']
+    - config.flows[1:]
+    - config.flows[0:1]
+    - f1, f2, f3 = config.flows
 
     The __iter__ method allows for iterating across the encapsulated contents
     - for flow in config.flows:
