@@ -191,6 +191,12 @@ class SnappiList(SnappiBase):
         found = None
         if isinstance(key, int):
             found = self._items[key]
+        elif isinstance(key, slice) is True:
+            start, stop, step = key.indices(len(self))
+            sliced = self.__class__()
+            for i in range(start, stop, step):
+                sliced._items.append(self._items[i])
+            return sliced
         elif isinstance(key, str):
             for item in self._items:
                 if item.name == key:
