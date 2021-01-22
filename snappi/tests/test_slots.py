@@ -1,4 +1,5 @@
 import pytest
+import snappi
 
 
 def test_slots(api):
@@ -9,7 +10,6 @@ def test_slots(api):
     special variable will not be present unless it is specifically included
     in the __slots__.
     """
-    import snappi
     base = snappi.snappicommon.SnappiBase()
     assert('__dict__' not in dir(base))
     obj = snappi.snappicommon.SnappiObject()
