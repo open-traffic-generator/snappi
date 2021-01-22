@@ -98,13 +98,37 @@ class SnappiBase(object):
 
 class SnappiObject(SnappiBase):
     """Base class for any /components/schemas object
-    """
-    __slots__ = ('_properties')
 
-    def __init__(self):
+    Every SnappiObject is reuseable within the schema so it can 
+    exist in multiple locations within the hierarchy.
+    That means it can exist in multiple locations as a 
+    leaf, parent/choice or parent.
+    """
+    __slots__ = ('_properties', '_parent', '_choice')
+
+    def __init__(self, parent=None, choice=None):
         super(SnappiObject, self).__init__()
+        self._parent = parent
+        self._choice = choice
         self._properties = {}
 
+    @property
+    def parent(self):
+        return self._parent
+        
+    def _get_property(self, name, default_value=None):
+        if name not in self._properties or self._properties[name] is None:
+            if isinstance(default_value, type) is True:
+                self._properties[name] = default_value()
+            else:
+                self._properties[name] = default_value
+        return self._properties[name]
+
+    def _set_property(self, name, value):
+        self._properties[name] = value
+        if self._parent is not None and self._choice is not None and value is not None:
+            self._parent._set_property('choice', self._choice)
+            
     def _encode(self):
         """Helper method for serialization
         """
@@ -122,7 +146,10 @@ class SnappiObject(SnappiBase):
             if property_name in snappi_names:
                 if isinstance(property_value, dict):
                     child = self._get_child_class(property_name)
-                    property_value = child[1]()._decode(property_value)
+                    if '_choice' in dir(child[1]) and '_parent' in dir(child[1]):
+                        property_value = child[1](self, property_name)._decode(property_value)
+                    else:
+                        property_value = child[1]()._decode(property_value)
                 elif isinstance(property_value,
                                 list) and property_name in self._TYPES:
                     child = self._get_child_class(property_name, True)
