@@ -51,6 +51,8 @@ translates any invocation of `snappi API` to corresponding `traffic generator's 
     python -m pip install snappi[cli]
     # send 100 TCP packets on a given port (-p) via a given controller (-c)
     python -m snappi send -c https://localhost -p localhost:5555 -h tcp -n 100
+    # or use json config to send packets
+    python -m snappi send -j cfg.json
     ```
 
 
