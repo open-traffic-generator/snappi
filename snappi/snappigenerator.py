@@ -301,8 +301,9 @@ class SnappiGenerator(object):
         """
         refs = []
         if 'properties' in schema_object:
+            choice_names = self._get_choice_names(schema_object)
             excluded_property_names = []
-            for choice_name in self._get_choice_names(schema_object):
+            for choice_name in choice_names:
                 if '$ref' not in schema_object['properties'][choice_name]:
                     continue
                 ref = schema_object['properties'][choice_name]['$ref']
@@ -312,7 +313,8 @@ class SnappiGenerator(object):
                 if property_name in excluded_property_names:
                     continue
                 property = schema_object['properties'][property_name]
-                self._write_snappi_property(schema_object, property_name, property, choice_child)
+                write_set_choice = property_name in choice_names and property_name != 'choice'
+                self._write_snappi_property(schema_object, property_name, property, write_set_choice)
             for property_name, property in schema_object['properties'].items():
                 ref = parse("$..'$ref'").find(property)
                 if len(ref) > 0:
@@ -422,8 +424,8 @@ class SnappiGenerator(object):
             self._write(2, '"""')
             if choice_method is True:
                 self._write(2, 'item = %s()' % (contained_class_name))
-                self._write(2, "item.choice = '%s'" % (method_name))
                 self._write(2, "item.%s" % (method_name))
+                self._write(2, "item.choice = '%s'" % (method_name))
             else:
                 params = []
                 for property in properties:
@@ -493,7 +495,10 @@ class SnappiGenerator(object):
             self._write()
             self._write(2, 'value: %s' % restriction)
             self._write(2, '"""')
-            self._write(2, "self._set_property('%s', value)" % (name))
+            if write_set_choice is True:
+                self._write(2, "self._set_property('%s', value, '%s')" % (name, name))
+            else:
+                self._write(2, "self._set_property('%s', value)" % (name))
         elif len(ref) > 0:
             if restriction.startswith('list['):
                 self._write(2, "return self._get_property('%s', %sList)" % (name, class_name))
