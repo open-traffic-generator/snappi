@@ -8,8 +8,6 @@ def test_device_factory_methods(api):
     """
     config = api.config()
 
-    config = api.config()
-
     param = ('name', 'container name', 11)
     device = config.devices.device(name=param[0],
                                    container_name=param[1],
