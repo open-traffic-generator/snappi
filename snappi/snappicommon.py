@@ -124,9 +124,11 @@ class SnappiObject(SnappiBase):
                 self._properties[name] = default_value
         return self._properties[name]
 
-    def _set_property(self, name, value):
+    def _set_property(self, name, value, choice=None):
         self._properties[name] = value
-        if self._parent is not None and self._choice is not None and value is not None:
+        if choice is not None:
+            self._properties['choice'] = choice
+        elif self._parent is not None and self._choice is not None and value is not None:
             self._parent._set_property('choice', self._choice)
             
     def _encode(self):
