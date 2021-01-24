@@ -33,12 +33,14 @@ def test_choice(api):
     assert (flow.packet[2].parent.choice == 'vlan')
     assert (flow.packet[3].parent.choice == 'ipv4')
 
-    eth = flow.packet[0] 
+    eth = flow.packet[0]
     assert (eth.__class__ == snappi.FlowEthernet)
+    eth_type = eth.ether_type
+    assert (eth_type.__class__ == snappi.FlowPattern)
     eth.src.value = '00:00:01:00:00:01'
-    assert(eth.src.choice == 'value')
+    assert (eth.src.choice == 'value')
     eth.src.values = ['00:00:01:00:00:01', '00:00:01:00:00:0a']
-    assert(eth.src.choice == 'values')
+    assert (eth.src.choice == 'values')
 
     print(config)
 
