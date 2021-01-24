@@ -118,7 +118,7 @@ class SnappiGenerator(object):
         self._api_filename = os.path.join(self._src_dir, 'snappi.py')
         self._generated_classes.append('Api')
         with open(self._api_filename, 'w') as self._fid:
-            self._write(0, 'from typing import Union')
+            self._write(0, 'from typing import Union, Literal')
             self._write(0, 'from .snappicommon import SnappiObject')
             self._write(0, 'from .snappicommon import SnappiList')
             self._write(0, 'from .snappicommon import SnappiRestTransport')
@@ -361,7 +361,12 @@ class SnappiGenerator(object):
             self._write()
             self._write(1, 'def __init__(self):')
             self._write(2, 'super(%s, self).__init__()' % class_name)
-            self._write_snappilist_special_methods(contained_class_name)
+            
+            # TBD: pass in information to properly construct the __getitem__
+            # hint. type: () -> Union[FlowHeader, FlowEthernet, FlowVlan...]
+            # might need to be moved the end of this method
+            self._write_snappilist_special_methods(contained_class_name, yobject)
+
             # write factory method for the schema object in the list
             self._write_factory_method(contained_class_name, ref_name.lower().split('.')[-1], ref, True, False)
             # write choice factory methods if the only properties are choice properties
@@ -383,10 +388,19 @@ class SnappiGenerator(object):
                     self._write_factory_method(contained_class_name, property, ref, True, True)
         return class_name
 
-    def _write_snappilist_special_methods(self, contained_class_name):
+    def _write_snappilist_special_methods(self, contained_class_name, schema_object):
+        get_item_class_names = [contained_class_name]
+        if 'properties' in schema_object and 'choice' in schema_object['properties']:
+            for property in schema_object['properties']:
+                if property in schema_object['properties']['choice']['enum']:
+                    if '$ref' in schema_object['properties'][property]:
+                        ref = schema_object['properties'][property]['$ref']
+                        _, _, choice_class_name = self._get_object_property_class_names(ref)
+                        get_item_class_names.append(choice_class_name)
+        get_item_class_names = set(get_item_class_names)
         self._write()
         self._write(1, 'def __getitem__(self, key):')
-        self._write(2, '# type: (int) -> %s' % contained_class_name)
+        self._write(2, '# type: () -> Union[%s]' % (', '.join(get_item_class_names)))
         self._write(2, 'return self._getitem(key)')
         self._write()
         self._write(1, 'def __iter__(self):')
