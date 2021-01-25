@@ -1,7 +1,7 @@
 from flask import Flask, request, Response
 import threading
 import json
-from snappi import Api
+import snappi
 
 app = Flask(__name__)
 CONFIG = None
@@ -10,7 +10,7 @@ CONFIG = None
 @app.route('/config', methods=['POST'])
 def set_config():
     global CONFIG
-    config = Api().config()
+    config = snappi.api().config()
     config.deserialize(request.data.decode('utf-8'))
     test = config.options.port_options.location_preemption
     if test is not None and isinstance(test, bool) is False:
@@ -39,7 +39,7 @@ def set_transmit_state():
 @app.route('/results/port', methods=['POST'])
 def get_port_metrics():
     global CONFIG
-    api = Api()
+    api = snappi.api()
     port_metrics_request = api.port_metrics_request()
     port_metrics_request.deserialize(request.data.decode('utf-8'))
     port_metrics = api.port_metrics()
@@ -53,7 +53,7 @@ def get_port_metrics():
 @app.route('/results/flow', methods=['POST'])
 def get_flow_metrics():
     global CONFIG
-    api = Api()
+    api = snappi.api()
     flow_metrics_request = api.flow_metrics_request()
     flow_metrics_request.deserialize(request.data.decode('utf-8'))
     flow_metrics = api.flow_metrics()
