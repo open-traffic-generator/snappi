@@ -43,8 +43,8 @@ setuptools.setup(
         'jsonpath-ng',
         'typing'
     ],
-    extras_require=[
-        'snappi_ixnetwork'
-    ],
+    extras_require={
+        'ixnetwork': ['snappi_ixnetwork']
+    },
     tests_require=['pytest']
 )
