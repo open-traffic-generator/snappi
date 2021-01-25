@@ -234,7 +234,8 @@ class SnappiList(SnappiBase):
                     found = item
         if found is None:
             raise IndexError()
-        if 'choice' in found._properties:
+        if 'choice' in found._properties and \
+        found._properties.get("choice") is not None:
             return found._properties[found._properties['choice']]
         return found
 
