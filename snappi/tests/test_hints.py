@@ -5,7 +5,7 @@ import snappi
 def test_hints():
     """Demonstrate hinting of Snappi objects
     """
-    api = snappi.Api()
+    api = snappi.api()
     config = api.config()
     p1, p2, p3 = config.ports.port(name='P1').port(name='P2').port(name='P3') 
     p1 = config.ports[0]

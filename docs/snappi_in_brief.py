@@ -21,7 +21,7 @@ paths:
     post:
       operationId: set_config -> Api class set_config method
 """
-api = snappi.Api()
+api = snappi.api()
 
 
 """Api class component schema object factory methods
