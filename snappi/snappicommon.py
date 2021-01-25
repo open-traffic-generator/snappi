@@ -10,7 +10,7 @@ if sys.version_info[0] == 3:
 
 class SnappiHttpTransport(object):
     def __init__(self, host=None):
-        self.host = host if host else 'http://127.0.0.1:80'
+        self.host = host if host else 'https://localhost'
         self._session = requests.Session()
 
     def send_recv(self, method, relative_url, payload=None, return_object=None):
