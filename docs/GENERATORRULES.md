@@ -13,7 +13,7 @@ paths:
       operationId: get_config
 ```
 The generator should do the following:
-- Generate a single snappi.api.Api class that encapsulates all operations.
+- Generate a single snappi.Api class that encapsulates all operations.
 - If the `operationId` is not specified the method and path will become the operationId.
 - The / separator character in the path will be replaced with an _ and the method name
 will be in lower case.

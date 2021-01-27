@@ -20,7 +20,7 @@ for a specified duration and a port that receives the packets.
 """
 import snappi
 
-api = snappi.Api()
+api = snappi.api()
 config = api.config()
 tx_port, rx_port = config.ports \
     .port(name='Tx Port', location='10.36.74.26;02;13')

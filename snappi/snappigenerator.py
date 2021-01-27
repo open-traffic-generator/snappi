@@ -22,7 +22,6 @@ import re
 import requests
 from jsonpath_ng import parse
 
-
 class SnappiGenerator(object):
     """Builds the snappi python package based on a released version of the
     open-traffic-generator openapi.yaml file.
@@ -30,6 +29,7 @@ class SnappiGenerator(object):
     def __init__(self, dependencies=True, openapi_filename=None):
         self._generated_methods = []
         self._generated_classes = []
+        self._generated_top_level_factories = []
         self._dependencies = ['requests', 'pyyaml', 'jsonpath-ng']
         self._openapi_filename = None
         if 'GITHUB_ACTION' not in os.environ and dependencies is False:
@@ -97,7 +97,21 @@ class SnappiGenerator(object):
         print('generating using model version %s' % self._openapi_version)
 
     def _generate(self):
-        self._write_api_class()
+        self._api_filename = os.path.join(self._src_dir, 'snappi.py')
+        # cleanup existing file
+        with open(self._api_filename, 'w') as self._fid:
+            self._write(0, 'import importlib')
+            self._write(0, 'from typing import Union, Literal')
+            self._write(0, 'from .snappicommon import SnappiObject')
+            self._write(0, 'from .snappicommon import SnappiList')
+            self._write(0, 'from .snappicommon import SnappiHttpTransport')
+
+        methods, factories = self._get_methods_and_factories()
+
+        self._write_api_class(methods, factories)
+        self._write_http_api_class(methods)
+        self._write_http_server(methods)
+        self._write_api_factory()
         self._write_init()
         return self
 
@@ -106,6 +120,8 @@ class SnappiGenerator(object):
         with open(filename, 'w') as self._fid:
             for class_name in self._generated_classes:
                 self._write(0, 'from .snappi import %s' % class_name)
+            for factory_name in self._generated_top_level_factories:
+                self._write(0, 'from .snappi import %s' % factory_name)
 
     def _find(self, path, schema_object):
         finds = parse(path).find(schema_object)
@@ -113,84 +129,195 @@ class SnappiGenerator(object):
             yield find.value
             parse(path).find(find.value)
 
-    def _write_api_class(self):
-        self._top_level_schema_refs = []
-        self._api_filename = os.path.join(self._src_dir, 'snappi.py')
-        self._generated_classes.append('Api')
-        with open(self._api_filename, 'w') as self._fid:
-            self._write(0, 'from typing import Union, Literal')
-            self._write(0, 'from .snappicommon import SnappiObject')
-            self._write(0, 'from .snappicommon import SnappiList')
-            self._write(0, 'from .snappicommon import SnappiRestTransport')
-            self._write()
-            self._write()
-            self._write(0, 'class Api(SnappiRestTransport):')
-            self._write(1, '"""%s' % 'Snappi Abstract API')
-            self._write(1, '"""')
-            self._write(1, 'def __init__(self):')
-            self._write(2, 'super(Api, self).__init__()')
+    def _get_methods_and_factories(self):
+        """
+        Parse methods and top level objects from yaml file to be later used in
+        code generation.
+        """
+        methods = []
+        factories = []
 
-        # write methods
+        self._top_level_schema_refs = []
+
+        # parse methods
         for path in self._get_api_paths():
             operation = path['operation']
             method_name = operation['operationId'].replace('.', '_').lower()
             if method_name in self._generated_methods:
                 continue
             self._generated_methods.append(method_name)
-            print('generating method %s' % (method_name))
-            content = parse('$..requestBody..schema').find(operation)
-            if len(content) == 0:
-                content = ''
-                payload = ''
-            else:
-                content = ', content'
-                payload = ', payload=content'
+            print('found method %s' % method_name)
+            args = parse('$..requestBody..schema').find(operation)
             response = parse('$..responses..schema').find(operation)
             response_object = ''
+            response_type = None
             if len(response) > 0:
-                object_name, property_name, class_name = self._get_object_property_class_names(response[0].value)
-                if property_name is not None:
-                    response_object = ', return_object=self.%s()' % property_name
-            with open(self._api_filename, 'a') as self._fid:
-                self._write()
-                self._write(1, 'def %s(self%s):' % (method_name, content))
-                self._write(2, '"""%s %s' % (path['method'].upper(), path['url']))
-                self._write(0)
-                self._write(2, '%s' % self._get_description(operation))
-                self._write(2, '"""')
-                self._write(2, "return self.send_recv('%s', '%s'%s%s)" % (path['method'], path['url'], payload, response_object))
+                _, response_type, _ = self._get_object_property_class_names(
+                    response[0].value
+                )
 
-        # write top level objects for requests
+            methods.append({
+                'name': method_name,
+                'args': ['self'] if len(args) == 0 else ['self', 'payload'],
+                'http_method': path['method'],
+                'url': path['url'],
+                'description': self._get_description(operation),
+                'response_type': response_type
+            })
+
+        # parse top level objects (arguments for API requests)
         for yobject in self._openapi['paths'].values():
             for ref in self._find("$..'$ref'", yobject):
                 if ref in self._generated_methods:
                     continue
                 self._generated_methods.append(ref)
-                object_name, property_name, class_name = self._get_object_property_class_names(ref)
+                ret = self._get_object_property_class_names(ref)
+                object_name, property_name, class_name = ret
                 schema_object = self._get_object_from_ref(ref)
                 if 'type' not in schema_object:
                     continue
-                print('generating class factory method %s' % (property_name))
+                print('found top level factory method %s' % property_name)
                 if schema_object['type'] == 'array':
                     ref = schema_object['items']['$ref']
                     _, _, class_name = self._get_object_property_class_names(ref)
                     class_name = '%sList' % class_name
                     self._top_level_schema_refs.append((ref, property_name))
                 self._top_level_schema_refs.append((ref, None))
-                with open(self._api_filename, 'a') as self._fid:
-                    self._write()
-                    self._write(1, 'def %s(self):' % property_name)
-                    self._write(2, '"""Factory method that creates an instance of the %s class' % class_name)
-                    self._write()
-                    self._write(2, 'Return: obj(%s)' % class_name)
-                    self._write(2, '"""')
-                    self._write(2, "return %s()" % (class_name))
+
+                factories.append({
+                    'name': property_name,
+                    'class_name': class_name
+                })
 
         for ref, property_name in self._top_level_schema_refs:
             if property_name is None:
                 self._write_snappi_object(ref)
             else:
                 self._write_snappi_list(ref, property_name)
+
+        return methods, factories
+
+    def _write_http_api_class(self, methods):
+        self._generated_classes.append('HttpApi')
+        with open(self._api_filename, 'a') as self._fid:
+            self._write()
+            self._write()
+            self._write(0, 'class HttpApi(Api):')
+            self._write(1, '"""%s' % 'Snappi HTTP API')
+            self._write(1, '"""')
+            self._write(1, 'def __init__(self, host=None):')
+            self._write(2, 'super(HttpApi, self).__init__(host=host)')
+            self._write(
+                2, 'self._transport = SnappiHttpTransport(host=self.host)'
+            )
+
+            for method in methods:
+                print('generating method %s' % method['name'])
+                self._write()
+                self._write(
+                    1,
+                    'def %s(%s):' % (method['name'], ', '.join(method['args']))
+                )
+                self._write(
+                    2,
+                    '"""%s %s' % (method['http_method'].upper(), method['url'])
+                )
+                self._write(0)
+                self._write(2, '%s' % method['description'])
+                self._write(0)
+                self._write(2, 'Return: %s' % method['response_type'])
+                self._write(2, '"""')
+
+                self._write(2, 'return self._transport.send_recv(')
+                self._write(3, '"%s",' % method['http_method'])
+                self._write(3, '"%s",' % method['url'])
+                self._write(
+                    3, 'payload=%s,' % (
+                        method['args'][1] if len(method['args']) > 1 else 'None'
+                    )
+                )
+                self._write(
+                    3, 'return_object=%s,' % (
+                        'self.' + method['response_type'] + '()' if method[
+                            'response_type'
+                        ] else 'None'
+                    )
+                )
+                self._write(2, ')')
+
+    def _write_http_server(self, methods):
+        pass
+
+    def _write_api_class(self, methods, factories):
+        self._generated_classes.append('Api')
+        with open(self._api_filename, 'a') as self._fid:
+            self._write()
+            self._write()
+            self._write(0, 'class Api(object):')
+            self._write(1, '"""%s' % 'Snappi Abstract API')
+            self._write(1, '"""')
+            self._write()
+            self._write(1, 'def __init__(self, host=None):')
+            self._write(2, 'self.host = host if host else "https://localhost"')
+
+            for method in methods:
+                print('generating method %s' % method['name'])
+                self._write()
+                self._write(
+                    1,
+                    'def %s(%s):' % (method['name'], ', '.join(method['args']))
+                )
+                self._write(
+                    2,
+                    '"""%s %s' % (method['http_method'].upper(), method['url'])
+                )
+                self._write(0)
+                self._write(2, '%s' % method['description'])
+                self._write(0)
+                self._write(2, 'Return: %s' % method['response_type'])
+                self._write(2, '"""')
+                self._write(
+                    2, 'raise NotImplementedError("%s")' % method['name']
+                )
+
+            for factory in factories:
+                print(
+                    'generating top level factory method %s' % factory['name']
+                )
+                self._write()
+                self._write(1, 'def %s(self):' % factory['name'])
+                self._write(
+                    2, '"""Factory method that creates an instance of %s' % (
+                        factory['class_name']
+                    )
+                )
+                self._write()
+                self._write(2, 'Return: %s' % factory['class_name'])
+                self._write(2, '"""')
+                self._write(2, "return %s()" % factory['class_name'])
+
+    def _write_api_factory(self):
+        self._generated_top_level_factories.append('api')
+        with open(self._api_filename, 'a') as self._fid:
+            self._write()
+            self._write()
+            self._write(0, 'def api(host=None, ext=None):')
+            self._write(1, 'if ext is None:')
+            self._write(2, 'return HttpApi(host=host)')
+            self._write(0)
+            self._write(1, 'try:')
+            self._write(
+                2, 'lib = importlib.import_module("snappi_%s" % ext)'
+            )
+            self._write(
+                2, 'return lib.Api(host=host)'
+            )
+            self._write(1, 'except Exception as err:')
+            self._write(
+                2,
+                'msg = "Snappi extension %s is not installed or invalid: %s"'
+            )
+            self._write(2, 'raise Exception(msg % (ext, err))')
 
     def _get_object_property_class_names(self, ref):
         object_name = None

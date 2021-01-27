@@ -14,7 +14,7 @@ snappiserver.SnappiServer().start()
 # TBD: import all classes in __init__.py
 import snappi
 
-api = snappi.Api()  # type: snappi.Api
+api = snappi.api()  # type: snappi.Api
 
 config = api.config()
 
