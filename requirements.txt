@@ -1,0 +1,9 @@
+pip
+jsonpath-ng
+pyyaml
+pytest
+setuptools
+wheel
+twine
+requests
+flask
