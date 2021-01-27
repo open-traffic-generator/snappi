@@ -101,7 +101,17 @@ class SnappiGenerator(object):
         # cleanup existing file
         with open(self._api_filename, 'w') as self._fid:
             self._write(0, 'import importlib')
-            self._write(0, 'from typing import Union, Literal')
+
+            self._write(0, 'try:')
+            self._write(1, 'from typing import Union')
+            self._write(0, 'except ImportError:')
+            self._write(1, 'pass')
+
+            self._write(0, 'try:')
+            self._write(1, 'from typing import Literal')
+            self._write(0, 'except ImportError:')
+            self._write(1, 'pass')
+
             self._write(0, 'from .snappicommon import SnappiObject')
             self._write(0, 'from .snappicommon import SnappiList')
             self._write(0, 'from .snappicommon import SnappiHttpTransport')
