@@ -312,7 +312,7 @@ class SnappiGenerator(object):
             self._write(
                 2, 'return lib.Api(host=host)'
             )
-            self._write(1, 'except Exception as err:')
+            self._write(1, 'except ImportError as err:')
             self._write(
                 2,
                 'msg = "Snappi extension %s is not installed or invalid: %s"'
