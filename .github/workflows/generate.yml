@@ -23,15 +23,7 @@ jobs:
 
     - name: Install dependencies
       run: |
-        python -m pip install --upgrade pip
-        python -m pip install --upgrade jsonpath-ng
-        python -m pip install --upgrade pyyaml
-        python -m pip install --upgrade pytest
-        python -m pip install --upgrade setuptools
-        python -m pip install --upgrade wheel
-        python -m pip install --upgrade twine
-        python -m pip install --upgrade requests
-        python -m pip install --upgrade flask
+        python -m pip install --upgrade -r requirements.txt
 
     - name: Generate python sdist and wheel distributions
       run: |
