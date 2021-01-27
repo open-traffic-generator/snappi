@@ -8,27 +8,30 @@ if sys.version_info[0] == 3:
     unicode = str
 
 
-class SnappiRestTransport(object):
-    def __init__(self):
-        self.base_url = 'http://127.0.0.1:80'
+class SnappiHttpTransport(object):
+    def __init__(self, host=None):
+        self.host = host if host else 'https://localhost'
         self._session = requests.Session()
 
     def send_recv(self, method, relative_url, payload=None, return_object=None):
-        url = '%s%s' % (self.base_url, relative_url)
+        url = '%s%s' % (self.host, relative_url)
         data = None
         if payload is not None:
             data = payload.serialize()
-        response = self._session.request(method=method,
-                                         url=url,
-                                         data=data,
-                                         verify=False,
-                                         allow_redirects=True)
-        if response.ok is not True:
-            raise Exception(response.status_code, yaml.safe_load(response.text))
-        elif response.headers['content-type'] == 'application/json':
-            return return_object.deserialize(yaml.safe_load(response.text))
+        response = self._session.request(
+            method=method,
+            url=url,
+            data=data,
+            verify=False,
+            allow_redirects=True
+        )
+        if response.ok:
+            if response.headers['content-type'] == 'application/json':
+                return return_object.deserialize(yaml.safe_load(response.text))
+            else:
+                return None
         else:
-            return None
+            raise Exception(response.status_code, yaml.safe_load(response.text))
 
 
 class SnappiBase(object):

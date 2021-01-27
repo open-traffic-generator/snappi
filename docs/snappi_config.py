@@ -4,7 +4,7 @@ import re
 
 
 # create the top level api object
-api = snappi.Api()
+api = snappi.api()
 
 # create a top level config object
 config = api.config()
