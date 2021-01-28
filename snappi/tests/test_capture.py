@@ -2,7 +2,6 @@ import pytest
 import snappi
 
 
-# @pytest.mark.skip(reason='proof of concept')
 def test_capture(api):
     """Test capture functionality
 
