@@ -8,7 +8,7 @@ any traffic generator conforming to [Open Traffic Generator API](https://github.
 ```sh
 python -m pip install --upgrade snappi
 # or install along with ixnetwork extension
-python -m pip install --upgrade snappi[ixnetwork]
+python -m pip install --upgrade "snappi[ixnetwork]"
 ```
 
 ## Start scripting
