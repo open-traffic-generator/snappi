@@ -50,7 +50,8 @@ ts = api.transmit_state()
 ts.state = ts.START
 api.set_transmit_state(ts)
 # wait for flow metrics to be as expected
-metrics = lambda: api.get_flow_metrics(api.flow_metrics_request())
-while not all([m.frames_tx == 10000 == m.frames_rx for m in metrics()]):
-    continue
+while True:
+    metrics = api.get_flow_metrics(api.flow_metrics_request())
+    if all([m.frames_tx == 10000 == m.frames_rx for m in metrics]):
+        break
 ```

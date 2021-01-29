@@ -23,7 +23,8 @@ class SnappiHttpTransport(object):
             url=url,
             data=data,
             verify=False,
-            allow_redirects=True
+            allow_redirects=True,
+            headers={'Content-Type': 'application/json'}
         )
         if response.ok:
             if response.headers['content-type'] == 'application/json':
