@@ -27,7 +27,7 @@ class SnappiHttpTransport(object):
             headers={'Content-Type': 'application/json'}
         )
         if response.ok:
-            if response.headers['content-type'] == 'application/json':
+            if 'application/json' in response.headers['content-type']:
                 return return_object.deserialize(yaml.safe_load(response.text))
             else:
                 return None
