@@ -2,6 +2,7 @@ import importlib
 import json
 import yaml
 import requests
+import io
 import sys
 
 if sys.version_info[0] == 3:
@@ -24,13 +25,26 @@ class SnappiHttpTransport(object):
             data=data,
             verify=False,
             allow_redirects=True,
+            # TODO: add a timeout here
             headers={'Content-Type': 'application/json'}
         )
         if response.ok:
             if 'application/json' in response.headers['content-type']:
-                return return_object.deserialize(yaml.safe_load(response.text))
+                # TODO: we might want to check for utf-8 charset and decode
+                # accordingly, but current impl works for now
+                response_dict = yaml.safe_load(response.text)
+                if return_object is None:
+                    # if response type is not provided, return dictionary
+                    # instead of python object
+                    return response_dict
+                else:
+                    return return_object.deserialize(response_dict)
+            elif 'application/octet-stream' in response.headers['content-type']:
+                return io.BytesIO(response.content)
             else:
-                return None
+                # TODO: for now, return bare response object for unknown
+                # content types
+                return response
         else:
             raise Exception(response.status_code, yaml.safe_load(response.text))
 
@@ -178,7 +192,7 @@ class SnappiObject(SnappiBase):
         return (list_class, object_class)
 
     def __str__(self):
-        return self.serialize(self.YAML)
+        return self.serialize(encoding=self.YAML)
 
     def __deepcopy__(self, memo):
         """Creates a deep copy of the current object
