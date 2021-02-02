@@ -279,7 +279,7 @@ class SnappiList(SnappiBase):
         self._add(item)
 
     def clear(self):
-        self._items.clear()
+        del self._items[:]
         self._index = -1
 
     def _encode(self):
