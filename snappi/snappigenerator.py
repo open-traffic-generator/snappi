@@ -397,7 +397,7 @@ class SnappiGenerator(object):
             self._write(2, 'self._parent = parent')
             self._write(2, 'self._choice = choice')
             for init_param in self._get_simple_type_names(schema_object):
-                self._write(2, 'self.%s = %s' % (init_param, init_param))
+                self._write(2, "self._set_property('%s', %s)" % (init_param, init_param))
             # if len(parse('$..choice').find(schema_object)) > 0:
             #     self._write(2, 'self.choice = None')
 

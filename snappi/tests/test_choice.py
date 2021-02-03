@@ -11,19 +11,7 @@ def test_choice(api):
     child property is set.
     """
     config = api.config()
-
-    device = config.devices.device(name='d1').device(name='d2')[0]
-    assert (len(config.devices) == 2)
-    assert (device.name == 'd1')
-    device.ipv4.name = 'i'
-    assert (device.choice == 'ipv4')
-    device.ethernet.name = 'e'
-    assert (device.choice == 'ethernet')
-    device.bgpv4.name = 'b'
-    assert (device.choice == 'bgpv4')
-    device.ipv4.name
-    assert (device.choice == 'bgpv4')
-
+    config.devices.device(name='d1').device(name='d2')
     flow = config.flows.flow(name='f')[-1]
     flow.tx_rx.device.tx_names = [config.devices[0].name]
     flow.tx_rx.device.rx_names = [config.devices[1].name]
