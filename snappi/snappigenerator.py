@@ -403,6 +403,11 @@ class SnappiGenerator(object):
                     self._write(2, "'%s': '%s'," % (name, value))
                 self._write(1, '}')
                 self._write()
+            else:
+                # TODO: provide empty types as workaround because deserializer
+                # in snappicommon.py currently expects it
+                self._write(1, '_TYPES = {}')
+                self._write()
             
             # write constants
             # search for all simple properties with enum or 
@@ -1087,6 +1092,6 @@ class SnappiGenerator(object):
 
 
 if __name__ == '__main__':
-    openapi_filename = None
+    openapi_filename = 'openapi.yaml'
     # openapi_filename = os.path.normpath('../../models/openapi.yaml')
     SnappiGenerator(dependencies=False, openapi_filename=openapi_filename)
