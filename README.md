@@ -5,8 +5,6 @@
 [![Build](https://github.com/open-traffic-generator/snappi/workflows/Build/badge.svg)](https://github.com/open-traffic-generator/snappi/actions)
 [![pypi](https://img.shields.io/pypi/v/snappi.svg)](https://pypi.org/project/snappi)
 [![python](https://img.shields.io/pypi/pyversions/snappi.svg)](https://pypi.python.org/pypi/snappi)
-[![Total alerts](https://img.shields.io/lgtm/alerts/g/open-traffic-generator/ixnetwork.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/open-traffic-generator/ixnetwork/alerts/)
-[![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/open-traffic-generator/ixnetwork.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/open-traffic-generator/ixnetwork/context:python)
 
 Test scripts written using `snappi` (a python library) can be executed against  
 any traffic generator conforming to [Open Traffic Generator API](https://github.com/open-traffic-generator/models/releases).
