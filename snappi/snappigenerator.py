@@ -146,7 +146,7 @@ class SnappiGenerator(object):
         """
         methods = []
         factories = []
-
+        refs = []
         self._top_level_schema_refs = []
 
         # parse methods
@@ -157,18 +157,48 @@ class SnappiGenerator(object):
                 continue
             self._generated_methods.append(method_name)
             print('found method %s' % method_name)
-            args = parse('$..requestBody..schema').find(operation)
+
+            request = parse('$..requestBody..schema').find(operation)
+            for req in request:
+                _, _, _, ref = self._get_object_property_class_names(req.value)
+                if ref:
+                    refs.append(ref)
+
             response = parse('$..responses..schema').find(operation)
             response_object = ''
             response_type = None
-            if len(response) > 0:
-                _, response_type, _ = self._get_object_property_class_names(
+            if len(response) == 0:
+                # since some responses currently directly $ref to a schema
+                # stored someplace else, we need to go one level deeper to
+                # get actual response type (currently extracting only for 200)
+                response = parse('$..responses.."200"').find(operation)
+                response_name, _, _, _ = self._get_object_property_class_names(
                     response[0].value
                 )
+                response = parse('$.."$ref"').find(
+                    self._openapi['components']['responses'][response_name]
+                )
+                if len(response) > 0:
+                    _, response_type, _, ref = self._get_object_property_class_names(
+                        response[0].value
+                    )
+                    if ref:
+                        refs.append(ref)
+            else:
+                _, response_type, _, ref = self._get_object_property_class_names(
+                    response[0].value
+                )
+                if ref:
+                    refs.append(ref)
+
+            if response_type is None:
+                # TODO: response type is usually None for schema which does not
+                # contain any ref (e.g. response of POST /results/capture)
+                pass
 
             methods.append({
                 'name': method_name,
-                'args': ['self'] if len(args) == 0 else ['self', 'payload'],
+                'args': ['self'] if len(request) == 0 else ['self', 'payload'],
                 'http_method': path['method'],
                 'url': path['url'],
                 'description': self._get_description(operation),
@@ -176,28 +206,27 @@ class SnappiGenerator(object):
             })
 
         # parse top level objects (arguments for API requests)
-        for yobject in self._openapi['paths'].values():
-            for ref in self._find("$..'$ref'", yobject):
-                if ref in self._generated_methods:
-                    continue
-                self._generated_methods.append(ref)
-                ret = self._get_object_property_class_names(ref)
-                object_name, property_name, class_name = ret
-                schema_object = self._get_object_from_ref(ref)
-                if 'type' not in schema_object:
-                    continue
-                print('found top level factory method %s' % property_name)
-                if schema_object['type'] == 'array':
-                    ref = schema_object['items']['$ref']
-                    _, _, class_name = self._get_object_property_class_names(ref)
-                    class_name = '%sList' % class_name
-                    self._top_level_schema_refs.append((ref, property_name))
-                self._top_level_schema_refs.append((ref, None))
+        for ref in refs:
+            if ref in self._generated_methods:
+                continue
+            self._generated_methods.append(ref)
+            ret = self._get_object_property_class_names(ref)
+            object_name, property_name, class_name, _ = ret
+            schema_object = self._get_object_from_ref(ref)
+            if 'type' not in schema_object:
+                continue
+            print('found top level factory method %s' % property_name)
+            if schema_object['type'] == 'array':
+                ref = schema_object['items']['$ref']
+                _, _, class_name, _ = self._get_object_property_class_names(ref)
+                class_name = '%sList' % class_name
+                self._top_level_schema_refs.append((ref, property_name))
+            self._top_level_schema_refs.append((ref, None))
 
-                factories.append({
-                    'name': property_name,
-                    'class_name': class_name
-                })
+            factories.append({
+                'name': property_name,
+                'class_name': class_name
+            })
 
         for ref, property_name in self._top_level_schema_refs:
             if property_name is None:
@@ -342,7 +371,7 @@ class SnappiGenerator(object):
             object_name = ref_name.split('/')[-1]
             property_name = object_name.lower().replace('.', '_')
             class_name = object_name.replace('.', '')
-        return (object_name, property_name, class_name)
+        return (object_name, property_name, class_name, ref_name)
 
     def _write_snappi_object(self, ref, choice_method_name=None):
         schema_object = self._get_object_from_ref(ref)
@@ -365,6 +394,8 @@ class SnappiGenerator(object):
             self._write()
 
             # write _TYPES definition
+            # TODO: this func won't detect whether $ref for a given property is
+            # a list because it relies on 'type' attribute to do so
             snappi_types = self._get_snappi_types(schema_object)
             if len(snappi_types) > 0:
                 self._write(1, '_TYPES = {')
@@ -532,7 +563,7 @@ class SnappiGenerator(object):
                 if property in schema_object['properties']['choice']['enum']:
                     if '$ref' in schema_object['properties'][property]:
                         ref = schema_object['properties'][property]['$ref']
-                        _, _, choice_class_name = self._get_object_property_class_names(ref)
+                        _, _, choice_class_name, _ = self._get_object_property_class_names(ref)
                         get_item_class_names.append(choice_class_name)
         get_item_class_names = set(get_item_class_names)
         self._write()
@@ -559,7 +590,7 @@ class SnappiGenerator(object):
                               snappi_list=False, 
                               choice_method=False):
         yobject = self._get_object_from_ref(ref)
-        object_name, property_name, class_name = self._get_object_property_class_names(ref)
+        object_name, property_name, class_name, _ = self._get_object_property_class_names(ref)
         param_string, properties = self._get_property_param_string(yobject)
         self._write()
         if snappi_list is True:
@@ -964,9 +995,10 @@ class SnappiGenerator(object):
             return 'boolean'
 
     def _get_object_from_ref(self, ref):
-        pieces = ref.split('/')
-        json_path = '$.%s."%s"' % ('.'.join(pieces[1:-1]), pieces[-1])
-        return parse(json_path).find(self._openapi)[0].value
+        leaf = self._openapi
+        for attr in ref.split('/')[1:]:
+            leaf = leaf[attr]
+        return leaf
 
     def _get_import_from_ref(self, ref):
         filename = '_'.join(

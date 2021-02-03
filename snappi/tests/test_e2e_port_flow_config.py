@@ -54,15 +54,17 @@ def test_e2e_port_flow_config(api):
     api.set_transmit_state(transmit_state)
 
     # get port metrics
-    port_metrics_request = api.port_metrics_request()
-    port_metrics = api.get_port_metrics(port_metrics_request)
-    for metric in port_metrics:
+    req = api.metrics_request()
+    req.choice = req.PORT
+    res = api.get_metrics(req)
+    for metric in res.port_metrics:
         print(metric)
 
     # get flow metrics
-    flow_metrics_request = api.flow_metrics_request()
-    flow_metrics = api.get_flow_metrics(flow_metrics_request)
-    for metric in flow_metrics:
+    req = api.metrics_request()
+    req.choice = req.FLOW
+    res = api.get_metrics(req)
+    for metric in res.flow_metrics:
         print(metric)
 
 
