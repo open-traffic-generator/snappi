@@ -1092,6 +1092,6 @@ class SnappiGenerator(object):
 
 
 if __name__ == '__main__':
-    openapi_filename = 'openapi.yaml'
+    openapi_filename = None
     # openapi_filename = os.path.normpath('../../models/openapi.yaml')
     SnappiGenerator(dependencies=False, openapi_filename=openapi_filename)
