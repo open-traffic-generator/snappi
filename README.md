@@ -1,7 +1,18 @@
 # ![snappi](snappi-logo.png)
 
+[![license](https://img.shields.io/badge/license-MIT-green.svg)](https://en.wikipedia.org/wiki/MIT_License)
+[![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/open-traffic-generator/snappi)
+[![Build](https://github.com/open-traffic-generator/snappi/workflows/Build/badge.svg)](https://github.com/open-traffic-generator/snappi/actions)
+[![pypi](https://img.shields.io/pypi/v/snappi.svg)](https://pypi.org/project/snappi)
+[![python](https://img.shields.io/pypi/pyversions/snappi.svg)](https://pypi.python.org/pypi/snappi)
+[![Total alerts](https://img.shields.io/lgtm/alerts/g/open-traffic-generator/ixnetwork.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/open-traffic-generator/ixnetwork/alerts/)
+[![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/open-traffic-generator/ixnetwork.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/open-traffic-generator/ixnetwork/context:python)
+
 Test scripts written using `snappi` (a python library) can be executed against  
 any traffic generator conforming to [Open Traffic Generator API](https://github.com/open-traffic-generator/models/releases).
+
+The snappi repo is under active development and is subject to updates.  All efforts will be made to keep the updates backwards compatible.
 
 ## Install on a client
 
