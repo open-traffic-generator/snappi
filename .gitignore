@@ -11,3 +11,4 @@ snappi/*
 !snappi/snappigenerator.py
 !snappi/tests
 # !snappi/tests/test_serialize.py
+scratch

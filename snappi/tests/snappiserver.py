@@ -36,33 +36,28 @@ def set_transmit_state():
     return Response(status=200)
 
 
-@app.route('/results/port', methods=['POST'])
-def get_port_metrics():
+@app.route('/results/metrics', methods=['POST'])
+def get_metrics():
     global CONFIG
     api = snappi.api()
-    port_metrics_request = api.port_metrics_request()
-    port_metrics_request.deserialize(request.data.decode('utf-8'))
-    port_metrics = api.port_metrics()
-    for port in CONFIG.ports:
-        port_metrics.metric(name=port.name, frames_tx=10000, frames_rx=10000)
-    return Response(port_metrics.serialize(),
+
+    metrics_request = api.metrics_request()
+    metrics_request.deserialize(request.data.decode('utf-8'))
+    metrics_response = api.metrics_response()
+    if metrics_request.choice == 'port':
+        for port in CONFIG.ports:
+            metrics_response.port_metrics.metric(
+                name=port.name, frames_tx=10000, frames_rx=10000
+            )
+    elif metrics_request.choice == 'flow':
+        for flow in CONFIG.flows:
+            metrics_response.flow_metrics.metric(
+                name=flow.name, frames_tx=10000, frames_rx=10000
+            )
+
+    return Response(metrics_response.serialize(),
                     mimetype='application/json',
                     status=200)
-
-
-@app.route('/results/flow', methods=['POST'])
-def get_flow_metrics():
-    global CONFIG
-    api = snappi.api()
-    flow_metrics_request = api.flow_metrics_request()
-    flow_metrics_request.deserialize(request.data.decode('utf-8'))
-    flow_metrics = api.flow_metrics()
-    for flow in CONFIG.flows:
-        flow_metrics.metric(name=flow.name, frames_tx=10000, frames_rx=10000)
-    return Response(flow_metrics.serialize(),
-                    mimetype='application/json',
-                    status=200)
-
 
 @app.after_request
 def after_request(resp):
