@@ -31,7 +31,11 @@ jobs:
 
     - name: Test wheel distribution installation
       run: |
-        pip install dist/*.whl
+        python -m pip install --upgrade dist/*.whl[test]
+
+    - name: Run unit tests
+      run: |
+        python -m pytest -sv snappi/tests
 
     - name: Get all changes
       id: file_changes

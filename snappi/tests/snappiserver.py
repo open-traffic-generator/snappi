@@ -1,6 +1,7 @@
 from flask import Flask, request, Response
 import threading
 import json
+import time
 import snappi
 
 app = Flask(__name__)
@@ -25,7 +26,7 @@ def set_config():
 @app.route('/config', methods=['GET'])
 def get_config():
     global CONFIG
-    return Response(CONFIG.serialize(),
+    return Response(CONFIG.serialize() if CONFIG is not None else '{}',
                     mimetype='application/json',
                     status=200)
 
@@ -77,4 +78,15 @@ class SnappiServer(object):
         self._web_server_thread = threading.Thread(target=web_server)
         self._web_server_thread.setDaemon(True)
         self._web_server_thread.start()
+        self._wait_until_ready()
         return self
+
+    def _wait_until_ready(self):
+        api = snappi.api(host='http://127.0.0.1:80')
+        while True:
+            try:
+                api.get_config()
+                break
+            except Exception as err:
+                pass
+            time.sleep(0.1)
