@@ -45,12 +45,12 @@
 # Frame size is 128
 
 import pytest
-import pyaml
+import yaml
 import json
 import collections
 
 # these test parameters would normally come from a test infrastructure file
-d = pyaml.yaml.safe_load("""
+d = yaml.safe_load("""
 # gnb_mac_addr This is the MAC SA for uplink packets & MAC DA for downlink packets
 # n3_mac_addr This is the MAC DA for uplink packets & MAC SA for downlink packets
 globals:

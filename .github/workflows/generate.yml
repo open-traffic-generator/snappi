@@ -37,9 +37,9 @@ jobs:
       run: |
         python -m pip install --upgrade dist/snappi-${{ steps.get_version.outputs.version }}-py2.py3-none-any.whl[test]
 
-    - name: Run unit tests
-      run: |
-        python -m pytest -sv snappi/tests
+    # - name: Run unit tests
+    #   run: |
+    #     python -m pytest -sv snappi/tests
 
     - name: Get all changes
       id: file_changes
