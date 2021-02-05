@@ -44,7 +44,7 @@ setuptools.setup(
         'typing'
     ],
     extras_require={
-        'ixnetwork': ['snappi_ixnetwork==0.1.10']
+        'ixnetwork': ['snappi_ixnetwork==0.1.11']
     },
     tests_require=['pytest']
 )
