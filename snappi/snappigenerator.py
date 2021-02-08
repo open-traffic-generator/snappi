@@ -425,8 +425,16 @@ class SnappiGenerator(object):
             init_param_string = ''
             # if choice_method_name is not None:
             init_param_string = ", parent=None, choice=None"  # everything will have a parent choice
-            for init_param in self._get_simple_type_names(schema_object):
-                init_param_string += ', %s=None' % (init_param)
+            simple_type_names = self._get_simple_type_names(schema_object)
+            for init_param in simple_type_names:
+                val = simple_type_names[init_param].get('default')
+                if isinstance(val, int):
+                    param = ', %s=%s' % (init_param, val)
+                elif isinstance(val, str):
+                    param = ', %s="%s"' % (init_param, val)
+                else:
+                    param = ', %s=None' % (init_param)
+                init_param_string += param
             self._write(1, 'def __init__(self%s):' % init_param_string)
             self._write(2, 'super(%s, self).__init__()' % class_name)
             # if choice_method_name is not None:
@@ -448,7 +456,7 @@ class SnappiGenerator(object):
                 self._write_snappi_list(ref[0], ref[2])
 
     def _get_simple_type_names(self, schema_object):
-        simple_type_names = []
+        simple_type_names = dict()
         if 'properties' in schema_object:
             choice_names = self._get_choice_names(schema_object)
             for name in schema_object['properties']:
@@ -457,7 +465,8 @@ class SnappiGenerator(object):
                 ref = parse("$..'$ref'").find(
                     schema_object['properties'][name])
                 if len(ref) == 0:
-                    simple_type_names.append(name)
+                    simple_type_names[name] = {'default': schema_object['properties'][name]['default']} \
+                    if 'default' in schema_object['properties'][name] else {}
         return simple_type_names
 
     def _get_choice_names(self, schema_object):
@@ -644,7 +653,8 @@ class SnappiGenerator(object):
                     if 'default' in property:
                         default = property['default']
                     if 'enum' in property:
-                        property_param_string += "='%s'" % default
+                        val = "=%s" % default if default == 'None' else "='%s'" % default
+                        property_param_string += val
                     else:
                         property_param_string += '=%s' % default
         return (property_param_string, properties)
