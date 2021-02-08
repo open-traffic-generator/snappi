@@ -40,7 +40,7 @@ class SnappiGenerator(object):
         self._src_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'snappi')
         self._docs_dir = os.path.join(self._src_dir, '..', 'docs')
         self._clean()
-        self._install_dependencies()
+        # self._install_dependencies()
         self._get_openapi_file()
         self._generate()
 
@@ -644,7 +644,8 @@ class SnappiGenerator(object):
                     if 'default' in property:
                         default = property['default']
                     if 'enum' in property:
-                        property_param_string += "='%s'" % default
+                        val = "=%s" % default if default == 'None' else "='%s'" % default
+                        property_param_string += val
                     else:
                         property_param_string += '=%s' % default
         return (property_param_string, properties)
