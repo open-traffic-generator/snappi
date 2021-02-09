@@ -644,7 +644,8 @@ class SnappiGenerator(object):
                     if 'default' in property:
                         default = property['default']
                     if 'enum' in property:
-                        property_param_string += "='%s'" % default
+                        val = "=%s" % default if default == 'None' else "='%s'" % default
+                        property_param_string += val
                     else:
                         property_param_string += '=%s' % default
         return (property_param_string, properties)
