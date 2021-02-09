@@ -40,7 +40,7 @@ class SnappiGenerator(object):
         self._src_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'snappi')
         self._docs_dir = os.path.join(self._src_dir, '..', 'docs')
         self._clean()
-        # self._install_dependencies()
+        self._install_dependencies()
         self._get_openapi_file()
         self._generate()
 
