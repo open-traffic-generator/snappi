@@ -60,7 +60,7 @@ jobs:
         draft: false
         prerelease: false
 
-    - name: Upload Assets To Release
+    - name: Upload Python Package To Release
       if: true == contains(steps.file_changes.outputs.files_modified, 'VERSION')
       uses: svenstaro/upload-release-action@v2
       with:
@@ -69,7 +69,17 @@ jobs:
         tag: v${{ steps.get_version.outputs.version }}
         overwrite: true
         file_glob: true   
-        
+
+    - name: Upload Models Release File To Release
+      if: true == contains(steps.file_changes.outputs.files_modified, 'VERSION')
+      uses: svenstaro/upload-release-action@v2
+      with:
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        file: models-release
+        tag: v${{ steps.get_version.outputs.version }}
+        overwrite: true
+        file_glob: true 
+
     - name: Upload Assets to Pypi
       if: true == contains(steps.file_changes.outputs.files_modified, 'VERSION')
       env:
