@@ -12,3 +12,4 @@ snappi/*
 !snappi/tests
 # !snappi/tests/test_serialize.py
 scratch
+models-release

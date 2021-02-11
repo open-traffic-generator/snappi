@@ -22,6 +22,8 @@ import re
 import requests
 from jsonpath_ng import parse
 
+MODELS_RELEASE = 'v0.1.18'
+
 class SnappiGenerator(object):
     """Builds the snappi python package based on a released version of the
     open-traffic-generator openapi.yaml file.
@@ -80,7 +82,8 @@ class SnappiGenerator(object):
         if self._openapi_filename is None:
             OPENAPI_URL = (
                 'https://github.com/open-traffic-generator/models/releases'
-                '/latest/download/openapi.yaml')
+                '/download/%s/openapi.yaml'
+            ) % MODELS_RELEASE
             response = requests.request('GET',
                                         OPENAPI_URL,
                                         allow_redirects=True)
@@ -89,6 +92,10 @@ class SnappiGenerator(object):
                     'Unable to retrieve the Open Traffic Generator openapi.yaml'
                     ' file [%s]' % response.content)
             openapi_content = response.content
+
+            project_dir = os.path.dirname(os.path.dirname(__file__))
+            with open(os.path.join(project_dir, 'models-release'), 'w') as out:
+                out.write(MODELS_RELEASE)
         else:
             with open(self._openapi_filename, 'rb') as fp:
                 openapi_content = fp.read()
