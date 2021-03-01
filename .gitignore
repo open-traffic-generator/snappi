@@ -10,6 +10,7 @@ snappi/*
 !snappi/snappicommon.py
 !snappi/snappigenerator.py
 !snappi/tests
+!snappi/__main__.py
 # !snappi/tests/test_serialize.py
 scratch
 models-release
