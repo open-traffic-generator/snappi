@@ -6,7 +6,7 @@
 # 
 name: Build
 
-on: [push, pull_request, workflow_dispatch]
+on: [push, workflow_dispatch]
 
 jobs:
   generate:
