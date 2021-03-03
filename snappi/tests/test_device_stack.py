@@ -9,16 +9,16 @@ def test_device_stack(api):
     d = config.devices.device(name='d', container_name=p1.name)[-1]
     e = d.ethernet
     e.name = 'e'
-    e.mac.value = '00:01:00:00:00:01'
+    e.mac = '00:01:00:00:00:01'
     i4 = e.ipv4
     i4.name = 'i4'
-    i4.address.value = '1.1.1.1'
+    i4.address = '1.1.1.1'
     b4 = i4.bgpv4
     b4.name = 'b4'
-    b4.bgpv4_route_ranges.bgpv4routerange()
+    b4.bgpv4_routes.bgpv4route()
     i6 = e.ipv6
     i6.name = 'i6'
-    i6.address.value = '2001::1'
+    i6.address = '2001::1'
     b6 = i6.bgpv6
     b6.name = 'b6'
 

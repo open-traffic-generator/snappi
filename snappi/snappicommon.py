@@ -188,7 +188,7 @@ class SnappiObject(SnappiBase):
         object_class = getattr(module, class_name)
         if is_property_list is True:
             list_class = object_class
-            object_class = getattr(module, class_name[0:-4])
+            object_class = getattr(module, class_name[0:-3])
         return (list_class, object_class)
 
     def __str__(self):
@@ -252,8 +252,7 @@ class SnappiList(SnappiBase):
                     found = item
         if found is None:
             raise IndexError()
-        if 'choice' in found._properties and \
-        found._properties.get("choice") is not None:
+        if 'choice' in found._properties and found._properties.get("choice") is not None:
             return found._properties[found._properties['choice']]
         return found
 
@@ -286,7 +285,7 @@ class SnappiList(SnappiBase):
         return [item._encode() for item in self._items]
 
     def _decode(self, encoded_snappi_list):
-        item_class_name = self.__class__.__name__.replace('List', '')
+        item_class_name = self.__class__.__name__.replace('Seq', '')
         module = importlib.import_module(self.__module__)
         object_class = getattr(module, item_class_name)
         self.clear()

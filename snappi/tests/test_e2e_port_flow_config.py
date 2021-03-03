@@ -17,7 +17,8 @@ def test_e2e_port_flow_config(api):
     flow.rate.pps = 1000
     flow.duration.fixed_packets.packets = 10000
 
-    _, _, ip, _ = flow.packet.ethernet().vlan().ipv4().tcp()
+    flow.packet.ethernet().vlan().ipv4().tcp()
+    ip = flow.packet[2]
 
     eth = flow.packet[0]
     eth.src.value = '00:00:01:00:00:01'
@@ -41,7 +42,7 @@ def test_e2e_port_flow_config(api):
     ip.dst.decrement.step = '0.0.0.1'
     ip.dst.decrement.count = 10
 
-    ip.priority.dscp.ecn.value = ip.priority.dscp.ECN_CAPABLE_TRANSPORT_1
+    ip.priority.dscp.ecn.value = ip.priority.dscp.ecn.CAPABLE_TRANSPORT_1
     ip.priority.dscp.ecn.metric_group = 'ip.priority.dscp.ecn'
 
     # set and get the configuration
