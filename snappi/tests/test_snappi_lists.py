@@ -8,7 +8,7 @@ def test_snappi_lists(api):
     config = api.config()
 
     flows = config.flows.flow(name='1')
-    assert(flows.__class__ == snappi.FlowList)
+    assert(flows.__class__ == snappi.FlowSeq)
     flow = flows[0]
     assert(flow.__class__ == snappi.Flow)
     eth, vlan, vlan1 = flow.packet.ethernet().vlan().vlan()
@@ -25,7 +25,7 @@ def test_snappi_lists(api):
 
     flow = config.flows.flow(name='3')[-1]
     pkt = flow.packet.ethernet().vlan()
-    assert(pkt.__class__ == snappi.FlowHeaderList)
+    assert(pkt.__class__ == snappi.FlowHeaderSeq)
     vlan = pkt[-1]
     vlan.id.value = 3
 

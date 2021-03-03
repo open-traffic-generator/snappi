@@ -22,7 +22,8 @@ import re
 import requests
 from jsonpath_ng import parse
 
-MODELS_RELEASE = 'v0.2.2'
+MODELS_RELEASE = 'v0.3.1'
+
 
 class SnappiGenerator(object):
     """Builds the snappi python package based on a released version of the
@@ -172,7 +173,6 @@ class SnappiGenerator(object):
                     refs.append(ref)
 
             response = parse('$..responses..schema').find(operation)
-            response_object = ''
             response_type = None
             if len(response) == 0:
                 # since some responses currently directly $ref to a schema
@@ -226,7 +226,7 @@ class SnappiGenerator(object):
             if schema_object['type'] == 'array':
                 ref = schema_object['items']['$ref']
                 _, _, class_name, _ = self._get_object_property_class_names(ref)
-                class_name = '%sList' % class_name
+                class_name = '%sSeq' % class_name
                 self._top_level_schema_refs.append((ref, property_name))
             self._top_level_schema_refs.append((ref, None))
 
@@ -526,7 +526,7 @@ class SnappiGenerator(object):
         yobject = self._get_object_from_ref(ref)
         ref_name = ref.split('/')[-1]
         contained_class_name = ref_name.replace('.', '')
-        class_name = '%sList' % contained_class_name
+        class_name = '%sSeq' % contained_class_name
         if class_name in self._generated_classes:
             return
         self._generated_classes.append(class_name)
@@ -584,7 +584,7 @@ class SnappiGenerator(object):
         self._write(2, 'return self._getitem(key)')
         self._write()
         self._write(1, 'def __iter__(self):')
-        self._write(2, '# type: () -> %sList' % contained_class_name)
+        self._write(2, '# type: () -> %sSeq' % contained_class_name)
         self._write(2, 'return self._iter()')
         self._write()
         self._write(1, 'def __next__(self):')
@@ -609,7 +609,7 @@ class SnappiGenerator(object):
             self._imports.append('from .%s import %s' % (class_name.lower(), class_name))
             self._write(1, 'def %s(self%s):' % (method_name, param_string))
             if contained_class_name is not None:
-                self._write(2, "# type: () -> %sList" % (contained_class_name))
+                self._write(2, "# type: () -> %sSeq" % (contained_class_name))
             else:
                 self._write(2, "# type: () -> %s" % (class_name))
             self._write(2, '"""Factory method that creates an instance of %s class' % (class_name))
@@ -650,7 +650,7 @@ class SnappiGenerator(object):
                     properties.append(name)
                     if 'default' in property:
                         default = property['default']
-                    if 'enum' in property:
+                    if 'enum' in property or 'format' in property:
                         val = "=%s" % default if default == 'None' else "='%s'" % default
                         property_param_string += val
                     else:
@@ -664,7 +664,7 @@ class SnappiGenerator(object):
             object_name = ref[0].value.split('/')[-1]
             class_name = object_name.replace('.', '')
             if restriction.startswith('list['):
-                type_name = '%sList' % class_name
+                type_name = '%sSeq' % class_name
             else:
                 type_name = class_name
         else:
@@ -696,7 +696,7 @@ class SnappiGenerator(object):
                 self._write(2, "self._set_property('%s', value)" % (name))
         elif len(ref) > 0:
             if restriction.startswith('list['):
-                self._write(2, "return self._get_property('%s', %sList)" % (name, class_name))
+                self._write(2, "return self._get_property('%s', %sSeq)" % (name, class_name))
             else:
                 self._write(2, "return self._get_property('%s', %s)" % (name, class_name))
 
@@ -724,7 +724,7 @@ class SnappiGenerator(object):
                     object_name = ref[0].value.split('/')[-1]
                     class_name = object_name.replace('.', '')
                     if 'type' in yproperty and yproperty['type'] == 'array':
-                        class_name += 'List'
+                        class_name += 'Seq'
                     types.append((name, class_name))
         return types
 
@@ -784,7 +784,7 @@ class SnappiGenerator(object):
                     if 'required' in yobject and 'choice' not in yobject[
                             'required']:
                         choice_tuples.append(
-                            ('None', choice_enum, choice_enum))
+                            ('None', None, None))
                     for choice_enum in yobject['properties']['choice']['enum']:
                         if choice_enum not in yobject['properties']:
                             choice_tuples.append(
@@ -1101,5 +1101,5 @@ class SnappiGenerator(object):
 
 if __name__ == '__main__':
     openapi_filename = None
-    # openapi_filename = os.path.normpath('../../models/openapi.yaml')
+    openapi_filename = os.path.normpath('../../models/openapi.yaml')
     SnappiGenerator(dependencies=False, openapi_filename=openapi_filename)

@@ -25,17 +25,17 @@ def b2b_config(api):
         .port(name='Rx Port', location='10.36.74.26;02;14')
 
     tx_device, rx_device = config.devices \
-        .device(name='Tx Devices', container_name=tx_port.name, device_count=1) \
-        .device(name='Rx Devices', container_name=tx_port.name, device_count=1)
+        .device(name='Tx Devices', container_name=tx_port.name) \
+        .device(name='Rx Devices', container_name=tx_port.name)
     tx_device.ethernet.name = 'Tx Eth'
-    tx_device.ethernet.mac.value = '00:00:01:00:00:01'
+    tx_device.ethernet.mac = '00:00:01:00:00:01'
     tx_device.ethernet.ipv4.name = 'Tx Ipv4'
-    tx_device.ethernet.ipv4.address.value = '1.1.1.1'
-    tx_device.ethernet.ipv4.gateway.value = '1.1.2.1'
-    tx_device.ethernet.ipv4.prefix.value = 16
+    tx_device.ethernet.ipv4.address = '1.1.1.1'
+    tx_device.ethernet.ipv4.gateway = '1.1.2.1'
+    tx_device.ethernet.ipv4.prefix = 16
     vlan1, vlan2 = tx_device.ethernet.vlans.vlan().vlan()
-    vlan1.id.value = 1
-    vlan2.id.values = [2, 3, 4]
+    vlan1.id = 1
+    vlan2.id = 2
 
     flow = config.flows.flow(name='Tx -> Rx Flow')[0]
     flow.tx_rx.port.tx_name = tx_port.name
