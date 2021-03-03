@@ -85,8 +85,6 @@ def test_bgp_sr_te_policy(api):
         v4rr.as_path.as_set_mode = v4rr.as_path.INCLUDE_AS_SEQ
         v4rr.as_path.as_path_segments.bgpaspathsegment(as_numbers=[1, 2, 3, 4, 5, 6])
 
-    api.set_config(config)
-
 
 if __name__ == '__main__':
     pytest.main(['-s', __file__])
