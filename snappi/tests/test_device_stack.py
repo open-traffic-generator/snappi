@@ -21,7 +21,7 @@ def test_device_stack(api):
     i6.address = '2001::1'
     b6 = i6.bgpv6
     b6.name = 'b6'
-
+    api.set_config(config)
     print(config)
 
 
