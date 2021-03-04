@@ -154,7 +154,7 @@ class SnappiObject(SnappiBase):
         """
         output = {}
         for key, value in self._properties.items():
-            if isinstance(value, (SnappiObject, SnappiList)):
+            if isinstance(value, (SnappiObject, SnappiIter)):
                 output[key] = value._encode()
             else:
                 output[key] = value
@@ -188,7 +188,7 @@ class SnappiObject(SnappiBase):
         object_class = getattr(module, class_name)
         if is_property_list is True:
             list_class = object_class
-            object_class = getattr(module, class_name[0:-3])
+            object_class = getattr(module, class_name[0:-4])
         return (list_class, object_class)
 
     def __str__(self):
@@ -210,7 +210,7 @@ class SnappiObject(SnappiBase):
         return self.__deepcopy__(None)
 
 
-class SnappiList(SnappiBase):
+class SnappiIter(SnappiBase):
     """Container class for SnappiObject
 
     Inheriting classes contain 0..n instances of an OpenAPI components/schemas 
@@ -229,7 +229,7 @@ class SnappiList(SnappiBase):
     __slots__ = ('_index', '_items')
 
     def __init__(self):
-        super(SnappiList, self).__init__()
+        super(SnappiIter, self).__init__()
         self._index = -1
         self._items = []
 
@@ -272,7 +272,7 @@ class SnappiList(SnappiBase):
         self._index = len(self._items) - 1
 
     def append(self, item):
-        """Append an item to the end of the SnappiList
+        """Append an item to the end of the SnappiIter
         TBD: type check, raise error on mismatch
         """
         self._add(item)
@@ -285,7 +285,7 @@ class SnappiList(SnappiBase):
         return [item._encode() for item in self._items]
 
     def _decode(self, encoded_snappi_list):
-        item_class_name = self.__class__.__name__.replace('Seq', '')
+        item_class_name = self.__class__.__name__.replace('Iter', '')
         module = importlib.import_module(self.__module__)
         object_class = getattr(module, item_class_name)
         self.clear()
@@ -293,10 +293,10 @@ class SnappiList(SnappiBase):
             self._add(object_class()._decode(item))
 
     def __copy__(self):
-        raise NotImplementedError('Shallow copy of SnappiList objects is not supported')
+        raise NotImplementedError('Shallow copy of SnappiIter objects is not supported')
 
     def __deepcopy__(self, memo):
-        raise NotImplementedError('Deep copy of SnappiList objects is not supported')
+        raise NotImplementedError('Deep copy of SnappiIter objects is not supported')
 
     def __str__(self):
         return yaml.safe_dump(self._encode())

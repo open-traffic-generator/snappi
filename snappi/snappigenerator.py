@@ -121,7 +121,7 @@ class SnappiGenerator(object):
             self._write(1, 'pass')
 
             self._write(0, 'from .snappicommon import SnappiObject')
-            self._write(0, 'from .snappicommon import SnappiList')
+            self._write(0, 'from .snappicommon import SnappiIter')
             self._write(0, 'from .snappicommon import SnappiHttpTransport')
 
         methods, factories = self._get_methods_and_factories()
@@ -226,7 +226,7 @@ class SnappiGenerator(object):
             if schema_object['type'] == 'array':
                 ref = schema_object['items']['$ref']
                 _, _, class_name, _ = self._get_object_property_class_names(ref)
-                class_name = '%sSeq' % class_name
+                class_name = '%sIter' % class_name
                 self._top_level_schema_refs.append((ref, property_name))
             self._top_level_schema_refs.append((ref, None))
 
@@ -526,7 +526,7 @@ class SnappiGenerator(object):
         yobject = self._get_object_from_ref(ref)
         ref_name = ref.split('/')[-1]
         contained_class_name = ref_name.replace('.', '')
-        class_name = '%sSeq' % contained_class_name
+        class_name = '%sIter' % contained_class_name
         if class_name in self._generated_classes:
             return
         self._generated_classes.append(class_name)
@@ -536,7 +536,7 @@ class SnappiGenerator(object):
         with open(self._api_filename, 'a') as self._fid:
             self._write()
             self._write()
-            self._write(0, 'class %s(SnappiList):' % class_name)
+            self._write(0, 'class %s(SnappiIter):' % class_name)
             self._write(1, "__slots__ = ()")
             self._write()
             self._write(1, 'def __init__(self):')
@@ -584,7 +584,7 @@ class SnappiGenerator(object):
         self._write(2, 'return self._getitem(key)')
         self._write()
         self._write(1, 'def __iter__(self):')
-        self._write(2, '# type: () -> %sSeq' % contained_class_name)
+        self._write(2, '# type: () -> %sIter' % contained_class_name)
         self._write(2, 'return self._iter()')
         self._write()
         self._write(1, 'def __next__(self):')
@@ -609,7 +609,7 @@ class SnappiGenerator(object):
             self._imports.append('from .%s import %s' % (class_name.lower(), class_name))
             self._write(1, 'def %s(self%s):' % (method_name, param_string))
             if contained_class_name is not None:
-                self._write(2, "# type: () -> %sSeq" % (contained_class_name))
+                self._write(2, "# type: () -> %sIter" % (contained_class_name))
             else:
                 self._write(2, "# type: () -> %s" % (class_name))
             self._write(2, '"""Factory method that creates an instance of %s class' % (class_name))
@@ -664,7 +664,7 @@ class SnappiGenerator(object):
             object_name = ref[0].value.split('/')[-1]
             class_name = object_name.replace('.', '')
             if restriction.startswith('list['):
-                type_name = '%sSeq' % class_name
+                type_name = '%sIter' % class_name
             else:
                 type_name = class_name
         else:
@@ -696,7 +696,7 @@ class SnappiGenerator(object):
                 self._write(2, "self._set_property('%s', value)" % (name))
         elif len(ref) > 0:
             if restriction.startswith('list['):
-                self._write(2, "return self._get_property('%s', %sSeq)" % (name, class_name))
+                self._write(2, "return self._get_property('%s', %sIter)" % (name, class_name))
             else:
                 self._write(2, "return self._get_property('%s', %s)" % (name, class_name))
 
@@ -724,7 +724,7 @@ class SnappiGenerator(object):
                     object_name = ref[0].value.split('/')[-1]
                     class_name = object_name.replace('.', '')
                     if 'type' in yproperty and yproperty['type'] == 'array':
-                        class_name += 'Seq'
+                        class_name += 'Iter'
                     types.append((name, class_name))
         return types
 
