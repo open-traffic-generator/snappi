@@ -50,10 +50,6 @@ jobs:
     - name: Get git tag
       run: echo "HEAD_TAG=$(git tag --points-at HEAD)" >> $GITHUB_ENV
 
-    - name: Read VERSION file
-      id: get_version
-      run: echo "::set-output name=version::$(cat VERSION)"
-
     - name: Create Release
       if: env.HEAD_TAG != ''
       uses: actions/create-release@v1
