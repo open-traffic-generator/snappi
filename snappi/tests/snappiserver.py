@@ -78,7 +78,7 @@ class SnappiServer(object):
         self._web_server_thread = threading.Thread(target=web_server)
         self._web_server_thread.setDaemon(True)
         self._web_server_thread.start()
-        # self._wait_until_ready()
+        self._wait_until_ready()
         return self
 
     def _wait_until_ready(self):
@@ -87,6 +87,6 @@ class SnappiServer(object):
             try:
                 api.get_config()
                 break
-            except Exception as err:
-                print(err)
-            time.sleep(0.1)
+            except Exception:
+                pass
+            time.sleep(.1)
