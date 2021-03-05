@@ -40,7 +40,7 @@ jobs:
 
     - name: Run sanity unit tests
       run: |
-        sudo python -m pytest -v
+        sudo pytest -v
 
     # to create a release it just needs a tag
     # the tag name MUST be in the following format:
