@@ -42,16 +42,16 @@ jobs:
       run: |
         sudo ${{ env.pythonLocation }}/python -m pytest -v
 
-    # to create a release it just needs a tag
-    # the tag name MUST be in the following format:
-    #   v<major>.<minor>.<build>
-    # git tag -a <tag name> -m "message"
-    # git push origin --tags
-    - name: Get git tag
-      run: echo "HEAD_TAG=$(git tag --points-at HEAD)" >> $GITHUB_ENV
+    - name: Get all changes
+      id: file_changes
+      uses: trilom/file-changes-action@v1.2.4
+
+    - name: Output changed files
+      id: changed_files
+      run: echo ${{steps.file_changes.outputs.files_modified}}
 
     - name: Create Release
-      if: env.HEAD_TAG != ''
+      if: true == contains(steps.file_changes.outputs.files_modified, 'VERSION')
       uses: actions/create-release@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
@@ -62,7 +62,7 @@ jobs:
         prerelease: false
 
     - name: Upload Python Package To Release
-      if: env.HEAD_TAG != ''
+      if: true == contains(steps.file_changes.outputs.files_modified, 'VERSION')
       uses: svenstaro/upload-release-action@v2
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
@@ -72,7 +72,7 @@ jobs:
         file_glob: true   
 
     - name: Upload Models Release File To Release
-      if: env.HEAD_TAG != ''
+      if: true == contains(steps.file_changes.outputs.files_modified, 'VERSION')
       uses: svenstaro/upload-release-action@v2
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
@@ -82,10 +82,9 @@ jobs:
         file_glob: true 
 
     - name: Upload Assets to Pypi
-      if: env.HEAD_TAG != ''
+      if: true == contains(steps.file_changes.outputs.files_modified, 'VERSION')
       env:
         TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
         TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
       run: |
         twine upload dist/*
-
