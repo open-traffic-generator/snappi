@@ -87,6 +87,6 @@ class SnappiServer(object):
             try:
                 api.get_config()
                 break
-            except Exception as err:
+            except Exception:
                 pass
-            time.sleep(0.1)
+            time.sleep(.1)

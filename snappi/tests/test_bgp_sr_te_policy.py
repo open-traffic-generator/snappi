@@ -87,4 +87,4 @@ def test_bgp_sr_te_policy(api):
 
 
 if __name__ == '__main__':
-    pytest.main(['-s', __file__])
+    pytest.main(['-sv', __file__])
