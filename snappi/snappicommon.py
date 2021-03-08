@@ -204,6 +204,9 @@ class SnappiObject(SnappiBase):
         """
         return self.__deepcopy__(None)
 
+    def __eq__(self, other):
+        return self.__str__() == other.__str__()
+
     def clone(self):
         """Creates a deep copy of the current object
         """
@@ -300,3 +303,6 @@ class SnappiIter(SnappiBase):
 
     def __str__(self):
         return yaml.safe_dump(self._encode())
+
+    def __eq__(self, other):
+        return self.__str__() == other.__str__()
