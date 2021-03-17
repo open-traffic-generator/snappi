@@ -57,7 +57,6 @@ class SnappiGenerator(object):
             self.__python, '-m', 'pip', 'uninstall', '--yes', 'snappi'
         ]
         subprocess.Popen(process_args, shell=False).wait()
-        import os
         import fnmatch
         for rootDir, subdirs, filenames in os.walk(self._src_dir):
             if rootDir.endswith('tests'):
@@ -1040,12 +1039,11 @@ class SnappiGenerator(object):
         print('bundling complete')
 
     def _read_file(self, base_dir, filename):
-        from yaml import safe_load
         filename = os.path.join(base_dir, filename)
         filename = os.path.abspath(os.path.normpath(filename))
         base_dir = os.path.dirname(filename)
         with open(filename) as fid:
-            yobject = safe_load(fid)
+            yobject = yaml.safe_load(fid)
         self._process_yaml_object(base_dir, yobject)
 
     def _process_yaml_object(self, base_dir, yobject):
@@ -1092,7 +1090,6 @@ class SnappiGenerator(object):
     def _get_inline_ref(self, base_dir, filename, inline_key):
         filename = os.path.join(base_dir, filename)
         filename = os.path.abspath(os.path.normpath(filename))
-        base_dir = os.path.dirname(filename)
         with open(filename) as fid:
             yobject = yaml.safe_load(fid)
         return parse('$%s' %
