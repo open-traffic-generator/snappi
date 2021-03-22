@@ -29,12 +29,15 @@ class SnappiGenerator(object):
     """Builds the snappi python package based on a released version of the
     open-traffic-generator openapi.yaml file.
     """
-    def __init__(self, dependencies=True, openapi_filename=None):
+    def __init__(self, dependencies=True, openapi_filename=None, install_plugins_only=False):
         self._generated_methods = []
         self._generated_classes = []
         self._generated_top_level_factories = []
         self._dependencies = ['requests', 'pyyaml', 'jsonpath-ng']
         self._openapi_filename = None
+        self._plugin_names = []
+        self._plugins = []
+        self._plugin_settings = {}
         if 'GITHUB_ACTION' not in os.environ and dependencies is False:
             self._dependencies = []
             self._openapi_filename = openapi_filename
@@ -42,10 +45,14 @@ class SnappiGenerator(object):
         self.__python_dir = os.path.dirname(self.__python)
         self._src_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'snappi')
         self._docs_dir = os.path.join(self._src_dir, '..', 'docs')
-        self._clean()
+        self._plugins_dir = os.path.join(self._src_dir, 'plugins')
         self._install_dependencies()
         self._get_openapi_file()
-        self._generate()
+        self._set_plugin_settings()
+        self.install_plugins_only = install_plugins_only
+        if install_plugins_only is False:
+            self._clean()
+            self._generate()
 
     def _clean(self):
         """Clean the environment prior to file generation
@@ -123,12 +130,15 @@ class SnappiGenerator(object):
             self._write(0, 'from .snappicommon import SnappiIter')
             self._write(0, 'from .snappicommon import SnappiHttpTransport')
 
+            self._write_snappi_imports()
+
         methods, factories = self._get_methods_and_factories()
 
         self._write_api_class(methods, factories)
         self._write_http_api_class(methods)
         self._write_http_server(methods)
         self._write_api_factory()
+        self._write_install_def()
         self._write_init()
         return self
 
@@ -155,7 +165,6 @@ class SnappiGenerator(object):
         factories = []
         refs = []
         self._top_level_schema_refs = []
-
         # parse methods
         for path in self._get_api_paths():
             operation = path['operation']
@@ -233,7 +242,6 @@ class SnappiGenerator(object):
                 'name': property_name,
                 'class_name': class_name
             })
-
         for ref, property_name in self._top_level_schema_refs:
             if property_name is None:
                 self._write_snappi_object(ref)
@@ -241,7 +249,6 @@ class SnappiGenerator(object):
                 self._write_snappi_list(ref, property_name)
 
         return methods, factories
-
     def _write_http_api_class(self, methods):
         self._generated_classes.append('HttpApi')
         with open(self._api_filename, 'a') as self._fid:
@@ -382,6 +389,9 @@ class SnappiGenerator(object):
     def _write_snappi_object(self, ref, choice_method_name=None):
         schema_object = self._get_object_from_ref(ref)
         ref_name = ref.split('/')[-1]
+        if ref_name in self._plugin_names and self.install_plugins_only is False:
+            return
+        ref_name = ref.split('/')[-1].replace('Plugin', '')
         class_name = ref_name.replace('.', '')
         if class_name in self._generated_classes:
             return
@@ -485,8 +495,11 @@ class SnappiGenerator(object):
             for choice_name in choice_names:
                 if '$ref' not in schema_object['properties'][choice_name]:
                     continue
+                plugin = False
                 ref = schema_object['properties'][choice_name]['$ref']
-                self._write_factory_method(None, choice_name, ref)
+                if 'Plugin' in ref:
+                    plugin = True
+                self._write_factory_method(None, choice_name, ref, False, False, plugin)
                 excluded_property_names.append(choice_name)
             for property_name in schema_object['properties']:
                 if property_name in excluded_property_names:
@@ -522,8 +535,11 @@ class SnappiGenerator(object):
                 generate a factory method named after the choice
                 in the method set the choice property
         """
-        yobject = self._get_object_from_ref(ref)
         ref_name = ref.split('/')[-1]
+        if ref_name in self._plugin_names and self.install_plugins_only is False:
+            return
+        ref_name = ref_name.replace('Plugin', '')
+        yobject = self._get_object_from_ref(ref)
         contained_class_name = ref_name.replace('.', '')
         class_name = '%sIter' % contained_class_name
         if class_name in self._generated_classes:
@@ -599,9 +615,11 @@ class SnappiGenerator(object):
                               method_name,
                               ref,
                               snappi_list=False, 
-                              choice_method=False):
+                              choice_method=False,
+                              plugin=False):
         yobject = self._get_object_from_ref(ref)
         object_name, property_name, class_name, _ = self._get_object_property_class_names(ref)
+        class_name = class_name.replace('Plugin', '')
         param_string, properties = self._get_property_param_string(yobject)
         self._write()
         if snappi_list is True:
@@ -627,14 +645,20 @@ class SnappiGenerator(object):
             self._write(2, 'self._add(item)')
             self._write(2, 'return self')
         else:
-            self._write(1, '@property')
-            self._write(1, 'def %s(self):' % (method_name))
-            self._write(2, "# type: () -> %s" % (class_name))
-            self._write(2, '"""Factory property that returns an instance of the %s class' % (class_name))
+            indent = 0
+            if plugin is True:
+                ref_name = ref.split('/')[-1]
+                var = self._get_plugin_by_ref(ref_name)['variable']
+                indent = 1
+                self._write(indent, 'if %s is True:' % (var))
+            self._write(indent + 1, '@property')
+            self._write(indent + 1, 'def %s(self):' % (method_name))
+            self._write(indent + 2, "# type: () -> %s" % (class_name))
+            self._write(indent + 2, '"""Factory property that returns an instance of the %s class' % (class_name))
             self._write()
-            self._write(2, '%s' % self._get_description(yobject))
-            self._write(2, '"""')
-            self._write(2, "return self._get_property('%s', %s(self, '%s'))" % (method_name, class_name, method_name))
+            self._write(indent + 2, '%s' % self._get_description(yobject))
+            self._write(indent + 2, '"""')
+            self._write(indent + 2, "return self._get_property('%s', %s(self, '%s'))" % (method_name, class_name, method_name))
 
     def _get_property_param_string(self, yobject):
         property_param_string = ''
@@ -661,7 +685,7 @@ class SnappiGenerator(object):
         restriction = self._get_type_restriction(property)
         if len(ref) > 0:
             object_name = ref[0].value.split('/')[-1]
-            class_name = object_name.replace('.', '')
+            class_name = object_name.replace('.', '').replace('Plugin', '')
             if restriction.startswith('list['):
                 type_name = '%sIter' % class_name
             else:
@@ -1095,8 +1119,102 @@ class SnappiGenerator(object):
         return parse('$%s' %
                      inline_key.replace('/', '.'), ).find(yobject)[0].value
 
+    def _get_plugin_names(self):
+        for plugin in self._openapi['components']['schemas'].keys():
+            if 'Plugin.' in plugin:
+                # module_name = plugin.split('.')[:2][-1]
+                self._plugin_names.append(plugin)
+        return self._plugin_names
+    
+    def _get_plugin_ref(self, plugin):
+        plugin = 'plugin.%s' % plugin.lower()
+        refs = [
+            '#/components/schemas/%s' % p
+            for p in self._plugin_names if plugin in p.lower()
+        ]
+        return refs
+    
+    def _get_plugins(self):
+        return list(set(["".join(p.split('.')[1:2]) for p in self._plugin_names]))
+    
+    def _set_plugin_settings(self):
+        self._get_plugin_names()
+        plugin_modules = self._get_plugins()
+        for n in plugin_modules:
+            pdt = {
+                'module_name': n.lower(),
+                'variable': '_%s_' % n.upper(),
+                'refs': self._get_plugin_ref(n)
+            }
+            self._plugin_settings[n.lower()] = pdt
+        return
+    
+    def _get_plugin_by_ref(self, ref_name):
+        ret = None
+        for m in self._plugin_settings:
+            for ref in self._plugin_settings[m]['refs']:
+                if ref_name in ref:
+                    ret = self._plugin_settings[m]
+                    break
+        return ret
+
+    def _write_snappi_imports(self):
+        for m in self._plugin_settings:
+            self._write(0, 'try:')
+            self._write(1, '%s = True' % self._plugin_settings[m]['variable'])
+            self._write(1, 'from snappi.plugins.%s import *' % self._plugin_settings[m]['module_name'])
+            self._write(0, 'except ImportError:')
+            self._write(1, '%s = False' % self._plugin_settings[m]['variable'])
+
+    def _write_install_def(self):
+        with open(self._api_filename, 'a') as self._fid:
+            self._write()
+            self._write(0, 'def install_plugins(plugin):')
+            self._write(1, 'from .snappigenerator import SnappiGenerator')
+            self._write(1, 'if isinstance(plugin, str):')
+            self._write(2, 'plugin = [plugin]')
+            self._write(1, 'gen = SnappiGenerator(')
+            self._write(2, 'dependencies=False, openapi_filename=None, install_plugins_only=True')
+            self._write(1, ')')
+            self._write(1, 'for p in plugin:')
+            self._write(2, 'gen._install_plugin(p)')
+
+    def _install_plugin(self, plugin):
+        plugin = plugin.lower()
+        if plugin not in self._plugin_settings:
+            print('invalid plugin')
+            return
+        if os.path.isdir(self._plugins_dir) is False:
+            os.mkdir(self._plugins_dir)
+        self._api_filename = os.path.join(self._plugins_dir, '__init__.py')
+        with open(self._api_filename, 'w') as self._fid:
+            self._write(0, "__all__ = ['*']")
+        self._api_filename = os.path.join(self._plugins_dir, '%s.py' % plugin)
+        refs = self._plugin_settings[plugin]['refs']
+        with open(self._api_filename, 'w') as self._fid:
+            self._write(0, 'import importlib')
+            self._write(0, 'try:')
+            self._write(1, 'from typing import Union')
+            self._write(0, 'except ImportError:')
+            self._write(1, 'pass')
+
+            self._write(0, 'try:')
+            self._write(1, 'from typing import Literal')
+            self._write(0, 'except ImportError:')
+            self._write(1, 'pass')
+
+            self._write(0, 'from snappi.snappicommon import SnappiObject')
+            self._write(0, 'from snappi.snappicommon import SnappiIter')
+        for r in refs:
+            yobject = self._get_object_from_ref(r)
+            if yobject.get('type') == 'object':
+                self._write_snappi_object(r)
+            elif yobject.get('type') == 'list':
+                pass
+
+
 
 if __name__ == '__main__':
     openapi_filename = None
-    # openapi_filename = os.path.normpath('../../models/openapi.yaml')
-    SnappiGenerator(dependencies=False, openapi_filename=openapi_filename)
+    openapi_filename = os.path.normpath('../../models/openapi.yaml')
+    SnappiGenerator(dependencies=False, openapi_filename=openapi_filename, install_plugins_only=False)
