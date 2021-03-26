@@ -11,11 +11,19 @@ def test_choice(api):
     child property is set.
     """
     config = api.config()
+    p1, p2 = config.ports.port(name='p1').port(name='p2')
     config.devices.device(name='d1').device(name='d2')
     flow = config.flows.flow(name='f')[-1]
+
+    flow.tx_rx.port.tx_name = p1.name
+    flow.tx_rx.port.rx_name = p2.name
+    assert (flow.tx_rx.choice == 'port')
+
     flow.tx_rx.device.maps.map(
         tx_name=config.devices[0].name, rx_name=config.devices[1].name
     )
+    assert (flow.tx_rx.choice == 'device')
+
     flow.packet.ethernet().vlan().vlan().ipv4()
     assert (flow.packet[0].parent.choice == 'ethernet')
     assert (flow.packet[1].parent.choice == 'vlan')
