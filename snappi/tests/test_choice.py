@@ -13,8 +13,9 @@ def test_choice(api):
     config = api.config()
     config.devices.device(name='d1').device(name='d2')
     flow = config.flows.flow(name='f')[-1]
-    flow.tx_rx.device.tx_names = [config.devices[0].name]
-    flow.tx_rx.device.rx_names = [config.devices[1].name]
+    flow.tx_rx.device.maps.map(
+        tx_name=config.devices[0].name, rx_name=config.devices[1].name
+    )
     flow.packet.ethernet().vlan().vlan().ipv4()
     assert (flow.packet[0].parent.choice == 'ethernet')
     assert (flow.packet[1].parent.choice == 'vlan')

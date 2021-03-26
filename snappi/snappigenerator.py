@@ -22,7 +22,7 @@ import re
 import requests
 from jsonpath_ng import parse
 
-MODELS_RELEASE = 'v0.3.1'
+MODELS_RELEASE = 'v0.3.2'
 
 
 class SnappiGenerator(object):
