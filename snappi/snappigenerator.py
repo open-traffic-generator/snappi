@@ -536,11 +536,13 @@ class SnappiGenerator(object):
             self._write()
             self._write()
             self._write(0, 'class %s(SnappiIter):' % class_name)
-            self._write(1, "__slots__ = ()")
+            self._write(1, "__slots__ = ('_parent', '_choice')")
             self._write()
-            self._write(1, 'def __init__(self):')
+            self._write(1, 'def __init__(self, parent=None, choice=None):')
             self._write(2, 'super(%s, self).__init__()' % class_name)
-            
+            self._write(2, 'self._parent = parent')
+            self._write(2, 'self._choice = choice')
+
             # TBD: pass in information to properly construct the __getitem__
             # hint. type: () -> Union[FlowHeader, FlowEthernet, FlowVlan...]
             # might need to be moved the end of this method
@@ -607,20 +609,25 @@ class SnappiGenerator(object):
         if snappi_list is True:
             self._imports.append('from .%s import %s' % (class_name.lower(), class_name))
             self._write(1, 'def %s(self%s):' % (method_name, param_string))
+            return_class_name = class_name
             if contained_class_name is not None:
-                self._write(2, "# type: () -> %sIter" % (contained_class_name))
-            else:
-                self._write(2, "# type: () -> %s" % (class_name))
+                return_class_name = '{}Iter'.format(contained_class_name)
+            self._write(2, "# type: () -> %s" % (return_class_name))
             self._write(2, '"""Factory method that creates an instance of %s class' % (class_name))
             self._write()
             self._write(2, '%s' % self._get_description(yobject))
+            self._write()
+            self._write(2, 'Returns: %s' % (return_class_name))
             self._write(2, '"""')
             if choice_method is True:
                 self._write(2, 'item = %s()' % (contained_class_name))
                 self._write(2, "item.%s" % (method_name))
                 self._write(2, "item.choice = '%s'" % (method_name))
             else:
-                params = []
+                params = [
+                    'parent=self._parent',
+                    'choice=self._choice'
+                ]
                 for property in properties:
                     params.append('%s=%s' % (property, property))
                 self._write(2, 'item = %s(%s)' % (class_name, ', '.join(params)))
@@ -633,8 +640,10 @@ class SnappiGenerator(object):
             self._write(2, '"""Factory property that returns an instance of the %s class' % (class_name))
             self._write()
             self._write(2, '%s' % self._get_description(yobject))
+            self._write()
+            self._write(2, 'Returns: %s' % (class_name))
             self._write(2, '"""')
-            self._write(2, "return self._get_property('%s', %s(self, '%s'))" % (method_name, class_name, method_name))
+            self._write(2, "return self._get_property('%s', %s, self, '%s')" % (method_name, class_name, method_name))
 
     def _get_property_param_string(self, yobject):
         property_param_string = ''
@@ -676,7 +685,7 @@ class SnappiGenerator(object):
         self._write()
         self._write(2, self._get_description(property))
         self._write()
-        self._write(2, 'Returns: %s' % restriction)
+        self._write(2, 'Returns: %s' % type_name)
         self._write(2, '"""')
         if len(parse("$..'type'").find(property)) > 0 and len(ref) == 0:
             self._write(2, "return self._get_property('%s')" % (name))
@@ -695,7 +704,7 @@ class SnappiGenerator(object):
                 self._write(2, "self._set_property('%s', value)" % (name))
         elif len(ref) > 0:
             if restriction.startswith('list['):
-                self._write(2, "return self._get_property('%s', %sIter)" % (name, class_name))
+                self._write(2, "return self._get_property('%s', %sIter, self._parent, self._choice)" % (name, class_name))
             else:
                 self._write(2, "return self._get_property('%s', %s)" % (name, class_name))
 

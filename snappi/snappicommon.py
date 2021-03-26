@@ -134,10 +134,10 @@ class SnappiObject(SnappiBase):
     def parent(self):
         return self._parent
         
-    def _get_property(self, name, default_value=None):
+    def _get_property(self, name, default_value=None, parent=None, choice=None):
         if name not in self._properties or self._properties[name] is None:
             if isinstance(default_value, type) is True:
-                self._properties[name] = default_value()
+                self._properties[name] = default_value(parent=parent, choice=choice)
             else:
                 self._properties[name] = default_value
         return self._properties[name]
