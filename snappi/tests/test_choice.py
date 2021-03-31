@@ -19,9 +19,10 @@ def test_choice(api):
     flow.tx_rx.port.rx_name = p2.name
     assert (flow.tx_rx.choice == 'port')
 
-    flow.tx_rx.device.maps.map(
-        tx_name=config.devices[0].name, rx_name=config.devices[1].name
-    )
+    flow.tx_rx.device.tx_names = [config.devices[0].name]
+    flow.tx_rx.device.rx_names = [config.devices[1].name]
+    flow.tx_rx.device.mode = flow.tx_rx.device.ONE_TO_ONE
+
     assert (flow.tx_rx.choice == 'device')
 
     flow.packet.ethernet().vlan().vlan().ipv4()
