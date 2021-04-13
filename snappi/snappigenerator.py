@@ -114,17 +114,10 @@ class SnappiGenerator(object):
         # cleanup existing file
         with open(self._api_filename, 'w') as self._fid:
             self._write(0, 'import importlib')
-
             self._write(0, 'try:')
-            self._write(1, 'from typing import Union, Dict')
+            self._write(1, 'from typing import Union, Dict, Literal, List')
             self._write(0, 'except ImportError:')
             self._write(1, 'pass')
-
-            self._write(0, 'try:')
-            self._write(1, 'from typing import Literal')
-            self._write(0, 'except ImportError:')
-            self._write(1, 'pass')
-
             self._write(0, 'from .snappicommon import SnappiObject')
             self._write(0, 'from .snappicommon import SnappiIter')
             self._write(0, 'from .snappicommon import SnappiHttpTransport')
@@ -1024,13 +1017,12 @@ class SnappiGenerator(object):
                 else:
                     return 'str'
             elif property['type'] == 'array':
-                return 'list[%s]' % self._get_type_restriction(property['items'])
+                return 'List[%s]' % self._get_type_restriction(property['items'])
             elif property['type'] == 'boolean':
                 return 'bool'
         except Exception as e:
             print('Error ', property, e)
             raise e
-
 
     def _get_object_from_ref(self, ref):
         leaf = self._openapi
