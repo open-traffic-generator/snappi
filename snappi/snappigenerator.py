@@ -114,17 +114,10 @@ class SnappiGenerator(object):
         # cleanup existing file
         with open(self._api_filename, 'w') as self._fid:
             self._write(0, 'import importlib')
-
             self._write(0, 'try:')
-            self._write(1, 'from typing import Union, Dict')
+            self._write(1, 'from typing import Union, Dict, Literal, List')
             self._write(0, 'except ImportError:')
             self._write(1, 'pass')
-
-            self._write(0, 'try:')
-            self._write(1, 'from typing import Literal')
-            self._write(0, 'except ImportError:')
-            self._write(1, 'pass')
-
             self._write(0, 'from .snappicommon import SnappiObject')
             self._write(0, 'from .snappicommon import SnappiIter')
             self._write(0, 'from .snappicommon import SnappiHttpTransport')
@@ -505,7 +498,7 @@ class SnappiGenerator(object):
                 if len(ref) > 0:
                     restriction = self._get_type_restriction(property)
                     choice_name = property_name if property_name in excluded_property_names else None
-                    refs.append((ref[0].value, restriction.startswith('list['), property_name, choice_name))
+                    refs.append((ref[0].value, restriction.startswith('List['), property_name, choice_name))
         return refs
 
     def _write_snappi_list(self, ref, property_name):
@@ -681,7 +674,7 @@ class SnappiGenerator(object):
         if len(ref) > 0:
             object_name = ref[0].value.split('/')[-1]
             class_name = object_name.replace('.', '')
-            if restriction.startswith('list['):
+            if restriction.startswith('List['):
                 type_name = '%sIter' % class_name
             else:
                 type_name = class_name
@@ -713,7 +706,7 @@ class SnappiGenerator(object):
             else:
                 self._write(2, "self._set_property('%s', value)" % (name))
         elif len(ref) > 0:
-            if restriction.startswith('list['):
+            if restriction.startswith('List['):
                 self._write(2, "return self._get_property('%s', %sIter, self._parent, self._choice)" % (name, class_name))
             else:
                 self._write(2, "return self._get_property('%s', %s)" % (name, class_name))
@@ -1024,13 +1017,12 @@ class SnappiGenerator(object):
                 else:
                     return 'str'
             elif property['type'] == 'array':
-                return 'list[%s]' % self._get_type_restriction(property['items'])
+                return 'List[%s]' % self._get_type_restriction(property['items'])
             elif property['type'] == 'boolean':
                 return 'bool'
         except Exception as e:
             print('Error ', property, e)
             raise e
-
 
     def _get_object_from_ref(self, ref):
         leaf = self._openapi
