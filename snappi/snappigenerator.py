@@ -29,7 +29,7 @@ class SnappiGenerator(object):
     """Builds the snappi python package based on a released version of the
     open-traffic-generator openapi.yaml file.
     """
-    def __init__(self, dependencies=True, openapi_filename=None):
+    def __init__(self, dependencies=True, openapi_filename=None, output_dir=None):
         self._generated_methods = []
         self._generated_classes = []
         self._generated_top_level_factories = []
@@ -41,6 +41,12 @@ class SnappiGenerator(object):
         self.__python = os.path.normpath(sys.executable)
         self.__python_dir = os.path.dirname(self.__python)
         self._src_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'snappi')
+        self._output_dir = self._src_dir
+        self._output_file = 'snappi'
+        if output_dir != None:
+            self._output_dir = output_dir
+            split = os.path.split(output_dir)
+            self._output_file = split[len(split) - 1]
         self._docs_dir = os.path.join(self._src_dir, '..', 'docs')
         self._clean()
         self._install_dependencies()
@@ -104,13 +110,13 @@ class SnappiGenerator(object):
         print('generating using model version %s' % self._openapi_version)
 
     def _generate(self):
-        self._api_filename = os.path.join(self._src_dir, 'snappi.py')
+        self._api_filename = os.path.join(self._output_dir, self._output_file + '.py')
         # cleanup existing file
         with open(self._api_filename, 'w') as self._fid:
             self._write(0, 'import importlib')
 
             self._write(0, 'try:')
-            self._write(1, 'from typing import Union')
+            self._write(1, 'from typing import Union, Dict')
             self._write(0, 'except ImportError:')
             self._write(1, 'pass')
 
@@ -133,12 +139,12 @@ class SnappiGenerator(object):
         return self
 
     def _write_init(self):
-        filename = os.path.join(self._src_dir, '__init__.py')
+        filename = os.path.join(self._output_dir, '__init__.py')
         with open(filename, 'w') as self._fid:
             for class_name in self._generated_classes:
-                self._write(0, 'from .snappi import %s' % class_name)
+                self._write(0, 'from .%s import %s' % (self._output_file, class_name))
             for factory_name in self._generated_top_level_factories:
-                self._write(0, 'from .snappi import %s' % factory_name)
+                self._write(0, 'from .%s import %s' % (self._output_file, factory_name))
 
     def _find(self, path, schema_object):
         finds = parse(path).find(schema_object)
@@ -407,12 +413,12 @@ class SnappiGenerator(object):
                 self._write(1, '_TYPES = {')
                 for name, value in snappi_types:
                     self._write(2, "'%s': '%s'," % (name, value))
-                self._write(1, '}')
+                self._write(1, '} # type: Dict[str, str]')
                 self._write()
             else:
                 # TODO: provide empty types as workaround because deserializer
                 # in snappicommon.py currently expects it
-                self._write(1, '_TYPES = {}')
+                self._write(1, '_TYPES = {} # type: Dict[str, str]')
                 self._write()
             
             # write constants
@@ -423,7 +429,7 @@ class SnappiGenerator(object):
                     value = name
                     if isinstance(enum.value, dict):
                         value = enum.value[name]
-                    self._write(1, '%s = \'%s\'' % (name.upper(), value))
+                    self._write(1, '%s = \'%s\' # type: str' % (name.upper(), value))
                 if len(enum.value) > 0:
                     self._write()
 
@@ -581,7 +587,7 @@ class SnappiGenerator(object):
         get_item_class_names = set(get_item_class_names)
         self._write()
         self._write(1, 'def __getitem__(self, key):')
-        self._write(2, '# type: () -> Union[%s]' % (', '.join(get_item_class_names)))
+        self._write(2, '# type: (str) -> Union[%s]' % (', '.join(get_item_class_names)))
         self._write(2, 'return self._getitem(key)')
         self._write()
         self._write(1, 'def __iter__(self):')
@@ -604,7 +610,7 @@ class SnappiGenerator(object):
                               choice_method=False):
         yobject = self._get_object_from_ref(ref)
         object_name, property_name, class_name, _ = self._get_object_property_class_names(ref)
-        param_string, properties = self._get_property_param_string(yobject)
+        param_string, properties, type_string = self._get_property_param_string(yobject)
         self._write()
         if snappi_list is True:
             self._imports.append('from .%s import %s' % (class_name.lower(), class_name))
@@ -612,7 +618,7 @@ class SnappiGenerator(object):
             return_class_name = class_name
             if contained_class_name is not None:
                 return_class_name = '{}Iter'.format(contained_class_name)
-            self._write(2, "# type: () -> %s" % (return_class_name))
+            self._write(2, "# type: (%s) -> %s" % (type_string, return_class_name))
             self._write(2, '"""Factory method that creates an instance of %s class' % (class_name))
             self._write()
             self._write(2, '%s' % self._get_description(yobject))
@@ -647,13 +653,15 @@ class SnappiGenerator(object):
 
     def _get_property_param_string(self, yobject):
         property_param_string = ''
+        property_type_string = []
         properties = []
         if 'properties' in yobject:
             for name, property in yobject['properties'].items():
                 if name == 'choice':
                     continue
                 default = 'None'
-                if 'obj' not in self._get_type_restriction(property):
+                type_string = self._get_type_restriction(property)
+                if 'obj' not in type_string:
                     property_param_string += ', %s' % name
                     properties.append(name)
                     if 'default' in property:
@@ -663,7 +671,9 @@ class SnappiGenerator(object):
                         property_param_string += val
                     else:
                         property_param_string += '=%s' % default
-        return (property_param_string, properties)
+                    property_type_string.append(type_string)
+        types = ','.join(property_type_string)
+        return (property_param_string, properties, types)
 
     def _write_snappi_property(self, schema_object, name, property, write_set_choice=False):
         ref = parse("$..'$ref'").find(property)
@@ -748,7 +758,7 @@ class SnappiGenerator(object):
             return 0
         if property_type == 'number':
             return 0
-        if property_type == 'boolean':
+        if property_type == 'bool':
             return False
         raise Exception('Missing handler for property type `%s`' %
                         property_type)
@@ -818,7 +828,7 @@ class SnappiGenerator(object):
                                     ('list', choice_enum, None))
                             elif choice['type'] == 'boolean':
                                 choice_tuples.append(
-                                    ('boolean', choice_enum, None))
+                                    ('bool', choice_enum, None))
 
                 # class documentation
                 self._write(
@@ -988,32 +998,39 @@ class SnappiGenerator(object):
             return '(bool%s)' % type_none
 
     def _get_type_restriction(self, property):
-        if '$ref' in property:
-            ref_obj = self._get_object_from_ref(property['$ref'])
-            description = ''
-            if 'description' in ref_obj:
-                description = ref_obj['description']
-            if 'description' in property:
-                description += property['description']
-            property['description'] = description
-            class_name = property['$ref'].split('/')[-1].replace('.', '')
-            return 'obj(snappi.%s)' % class_name
-        elif 'oneOf' in property:
-            return 'Union[%s]' % ','.join(
-                [item['type'] for item in property['oneOf']])
-        elif property['type'] == 'number':
-            return 'float'
-        elif property['type'] == 'integer':
-            return 'int'
-        elif property['type'] == 'string':
-            if 'enum' in property:
-                return 'Union[%s]' % ', '.join(property['enum'])
-            else:
-                return 'str'
-        elif property['type'] == 'array':
-            return 'list[%s]' % self._get_type_restriction(property['items'])
-        elif property['type'] == 'boolean':
-            return 'boolean'
+        try:
+            if '$ref' in property:
+                ref_obj = self._get_object_from_ref(property['$ref'])
+                description = ''
+                if 'description' in ref_obj:
+                    description = ref_obj['description']
+                if 'description' in property:
+                    description += property['description']
+                property['description'] = description
+                class_name = property['$ref'].split('/')[-1].replace('.', '')
+                return 'obj(snappi.%s)' % class_name
+            elif 'oneOf' in property:
+                return 'Union[%s]' % ','.join(
+                    [item['type'] for item in property['oneOf']])
+            elif property['type'] == 'number':
+                return 'float'
+            elif property['type'] == 'integer':
+                return 'int'
+            elif property['type'] == 'string':
+                if 'enum' in property:
+                    values = property['enum']
+                    values = ['Literal["{}"]'.format(s) for s in values]
+                    return 'Union[%s]' % ', '.join(values)
+                else:
+                    return 'str'
+            elif property['type'] == 'array':
+                return 'list[%s]' % self._get_type_restriction(property['items'])
+            elif property['type'] == 'boolean':
+                return 'bool'
+        except Exception as e:
+            print('Error ', property, e)
+            raise e
+
 
     def _get_object_from_ref(self, ref):
         leaf = self._openapi
@@ -1107,5 +1124,6 @@ class SnappiGenerator(object):
 
 if __name__ == '__main__':
     openapi_filename = None
+    output_dir = None
     # openapi_filename = os.path.normpath('../../models/openapi.yaml')
-    SnappiGenerator(dependencies=False, openapi_filename=openapi_filename)
+    SnappiGenerator(dependencies=False, openapi_filename=openapi_filename, output_dir=output_dir)
