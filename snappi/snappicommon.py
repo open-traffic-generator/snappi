@@ -19,7 +19,7 @@ class SnappiHttpTransport(object):
         data = None
         if payload is not None:
             if isinstance(payload, (str, unicode)):
-                data = yaml.safe_load(payload)
+                data = payload
             elif isinstance(payload, SnappiBase):
                 data = payload.serialize()
             else:
