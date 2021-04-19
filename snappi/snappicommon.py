@@ -18,7 +18,13 @@ class SnappiHttpTransport(object):
         url = '%s%s' % (self.host, relative_url)
         data = None
         if payload is not None:
-            data = payload.serialize()
+            if isinstance(payload, (str, unicode)):
+                data = yaml.safe_load(payload)
+            elif isinstance(payload, SnappiBase):
+                data = payload.serialize()
+            else:
+                raise Exception('Type of payload provided is unknown')
+
         response = self._session.request(
             method=method,
             url=url,
