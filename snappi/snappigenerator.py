@@ -414,6 +414,23 @@ class SnappiGenerator(object):
                 self._write(1, '_TYPES = {} # type: Dict[str, str]')
                 self._write()
             
+            required, defaults = self._get_required_and_defaults(schema_object)
+            self._write(1, '_CHECK_REQUIRED = True')
+            if len(required) > 0:
+                self._write(1, '_REQUIRED = {} # type: tuple[str,]'.format(required))
+                self._write()
+            else:
+                self._write(1, '_REQUIRED= () # type: tuple[str]')
+                self._write()
+            if len(defaults) > 0:
+                self._write(1, '_DEFAULTS = {')
+                for name, value in defaults:
+                    self._write(2, "'%s': '%s'," % (name, value))
+                self._write(1, '} # type: Dict[str, str]')
+                self._write()
+            else:
+                self._write(1, '_DEFAULTS= {} # type: Dict[str, str]')
+                self._write()
             # write constants
             # search for all simple properties with enum or 
             # x-constant and add them here
@@ -738,6 +755,18 @@ class SnappiGenerator(object):
                         class_name += 'Iter'
                     types.append((name, class_name))
         return types
+    
+    def _get_required_and_defaults(self, yobject):
+        required = []
+        defaults = []
+        if 'required' in yobject:
+            required = yobject['required']
+        if 'properties' in yobject:
+            for name in yobject['properties']:
+                yproperty = yobject['properties'][name]
+                if 'default' in yproperty and name != 'choice':
+                    defaults.append((name, yproperty['default']))
+        return (tuple(required), defaults)
 
     def _get_default_value(self, property):
         if 'default' in property:
