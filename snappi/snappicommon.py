@@ -142,11 +142,16 @@ class SnappiObject(SnappiBase):
         
     def _get_property(self, name, default_value=None, parent=None, choice=None):
         if name not in self._properties or self._properties[name] is None:
+            set_defaults = False
             if isinstance(default_value, type) is True:
-                default_value._CHECK_REQUIRED = False
+                # default_value._CHECK_REQUIRED = False
                 self._properties[name] = default_value(parent=parent, choice=choice)
+                set_defaults = True
             else:
                 self._properties[name] = default_value
+            if set_defaults and isinstance(self._properties[name], SnappiObject):
+                for d in default_value._DEFAULTS:
+                    setattr(self._properties[name], d, default_value._DEFAULTS[d])
         return self._properties[name]
 
     def _set_property(self, name, value, choice=None):
