@@ -425,7 +425,10 @@ class SnappiGenerator(object):
             if len(defaults) > 0:
                 self._write(1, '_DEFAULTS = {')
                 for name, value in defaults:
-                    self._write(2, "'%s': '%s'," % (name, value))
+                    if isinstance(value, (bool, int, float)):
+                        self._write(2, "'%s': %s," % (name, value))
+                    else:
+                        self._write(2, "'%s': '%s'," % (name, value))
                 self._write(1, '} # type: Dict[str, str]')
                 self._write()
             else:

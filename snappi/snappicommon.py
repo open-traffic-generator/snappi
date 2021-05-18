@@ -150,9 +150,9 @@ class SnappiObject(SnappiBase):
         return self._properties[name]
 
     def _set_property(self, name, value, choice=None):
-        if name in self._REQUIRED and value == None and self._CHECK_REQUIRED is True:
-            msg = "please pass the mandatory args {} ".format(self._REQUIRED)
-            raise Exception(msg + "%s is a mandatory property, needs to initialize" % name)
+        # if name in self._REQUIRED and value == None and self._CHECK_REQUIRED is True:
+        #     msg = "please pass the mandatory args {} ".format(self._REQUIRED)
+        #     raise Exception(msg + "%s is a mandatory property, needs to initialize" % name)
         if name in self._DEFAULTS and value == None:
             self._properties[name] = self._DEFAULTS[name]
         else:
