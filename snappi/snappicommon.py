@@ -148,7 +148,7 @@ class SnappiObject(SnappiBase):
                 self._properties[name] = default_value(parent=parent, choice=choice)
             else:
                 if default_value is None and name in self._DEFAULTS:
-                    setattr(self, name, self._DEFAULTS[name])
+                    self._properties[name] = self._DEFAULTS[name]
                 else:
                     self._properties[name] = default_value
         return self._properties[name]

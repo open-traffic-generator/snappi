@@ -1,17 +1,37 @@
 def test_defaults(api):
     defaults = {
-        'flows': [{'name': None, 'size': {'choice': 'fixed', 'fixed': 64}}],
-        'lags': [{'name': None,
-           'ports': [{'port_name': None,
-                      'protocol': {'choice': 'lacp',
-                                   'lacp': {'actor_activity': 'active',
-                                            'actor_key': 0,
-                                            'actor_port_number': 0,
-                                            'actor_port_priority': 1,
-                                            'actor_system_id': '00:00:00:00:00:00',
-                                            'actor_system_priority': 0,
-                                            'lacpdu_periodic_time_interval': 0,    
-                                            'lacpdu_timeout': 0}}}]}],
+        'flows': [
+            {
+                'name': None,
+                'size': {
+                    'choice': 'fixed',
+                    'fixed': 64
+                }
+            }
+        ],
+        'lags': [
+            {
+                'name': None,
+                'ports': [
+                    {
+                        'port_name': None,
+                        'protocol': {
+                            'choice': 'lacp',
+                            'lacp': {
+                                'actor_activity': 'active',
+                                'actor_key': 0,
+                                'actor_port_number': 0,
+                                'actor_port_priority': 1,
+                                'actor_system_id': '00:00:00:00:00:00',
+                                'actor_system_priority': 0,
+                                'lacpdu_periodic_time_interval': 0,    
+                                'lacpdu_timeout': 0
+                            }
+                        }
+                    }
+                ]
+            }
+        ],
         'layer1': [
             {
                 'auto_negotiate': True,
@@ -37,3 +57,64 @@ def test_defaults(api):
     f = config.flows.flow()[-1]
     f.size.fixed
     assert config.serialize(config.DICT) == defaults
+
+
+def test_defaults_by_deserialize(api):
+    defaults = {
+        'flows': [
+            {
+                'name': None,
+                'size': {
+                    'choice': 'fixed',
+                    'fixed': 64
+                }
+            }
+        ],
+        'lags': [
+            {
+                'name': None,
+                'ports': [
+                    {
+                        'port_name': None,
+                        'protocol': {
+                            'choice': 'lacp',
+                            'lacp': {
+                                'actor_activity': 'active',
+                                'actor_key': 0,
+                                'actor_port_number': None, # made None
+                                'actor_port_priority': None, # made None
+                                'actor_system_id': None, # made None
+                                'actor_system_priority': 0,
+                                'lacpdu_periodic_time_interval': 0,    
+                                'lacpdu_timeout': 0
+                            }
+                        }
+                    }
+                ]
+            }
+        ],
+        'layer1': [
+            {
+                'auto_negotiate': True,
+                'ieee_media_defaults': True,
+                'media': None,
+                'mtu': None, # mtu made None
+                'name': None,
+                'port_names': None,
+                'promiscuous': False,
+                'speed': 'speed_10_gbps',
+                'flow_control': { # no data in flow control
+                }
+            }
+        ]
+    }
+    config = api.config()
+    config.deserialize(defaults)
+
+    assert config.layer1[0].mtu == 1500
+    assert config.layer1[0].flow_control.directed_address == '0180C2000001'
+    assert config.lags[0].ports[0].protocol.choice == 'lacp'
+    assert config.lags[0].ports[0].protocol.lacp.actor_port_number == 0
+    assert config.lags[0].ports[0].protocol.lacp.actor_port_priority == 1
+
+    assert config.lags[0].ports[0].protocol.lacp.actor_system_id == '00:00:00:00:00:00'
