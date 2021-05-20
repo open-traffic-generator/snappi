@@ -22,7 +22,7 @@ import re
 import requests
 from jsonpath_ng import parse
 
-MODELS_RELEASE = 'v0.3.8'
+MODELS_RELEASE = 'v0.3.10'
 
 
 class SnappiGenerator(object):
@@ -761,7 +761,7 @@ class SnappiGenerator(object):
         if 'properties' in yobject:
             for name in yobject['properties']:
                 yproperty = yobject['properties'][name]
-                if 'default' in yproperty and name != 'choice':
+                if 'default' in yproperty:
                     defaults.append((name, yproperty['default']))
         return (tuple(required), defaults)
 

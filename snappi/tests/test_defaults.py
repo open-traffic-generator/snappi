@@ -6,6 +6,10 @@ def test_defaults(api):
                 'size': {
                     'choice': 'fixed',
                     'fixed': 64
+                },
+                'rate': {
+                    'choice': 'pps',
+                    'pps': 1000
                 }
             }
         ],
@@ -40,7 +44,7 @@ def test_defaults(api):
                 'mtu': 1500,
                 'name': None,
                 'port_names': None,
-                'promiscuous': False,
+                'promiscuous': True,
                 'speed': 'speed_10_gbps',
                 'flow_control': {
                     'directed_address': '0180C2000001'
@@ -53,9 +57,10 @@ def test_defaults(api):
     layer1.flow_control
     l = config.lags.lag()[-1]
     p = l.ports.port()[-1]
-    p.protocol.lacp
+    p.protocol
     f = config.flows.flow()[-1]
     f.size.fixed
+    f.rate
     assert config.serialize(config.DICT) == defaults
 
 
