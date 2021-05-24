@@ -416,6 +416,13 @@ class SnappiGenerator(object):
             
             required, defaults = self._get_required_and_defaults(schema_object)
 
+            if len(required) > 0:
+                self._write(1, '_REQUIRED = {} # type: tuple(str)'.format(required))
+                self._write()
+            else:
+                self._write(1, '_DEFAULTS= () # type: tuple(str)')
+                self._write()
+
             if len(defaults) > 0:
                 self._write(1, '_DEFAULTS = {')
                 for name, value in defaults:

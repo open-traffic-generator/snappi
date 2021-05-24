@@ -174,6 +174,7 @@ class SnappiObject(SnappiBase):
         """Helper method for serialization
         """
         output = {}
+        self.validate_required()
         for key, value in self._properties.items():
             if isinstance(value, (SnappiObject, SnappiIter)):
                 output[key] = value._encode()
@@ -200,6 +201,7 @@ class SnappiObject(SnappiBase):
                         snappi_list._items.append(item)
                     property_value = snappi_list
                 self._properties[property_name] = property_value
+        self.validate_required()
         return self
 
     def _get_child_class(self, property_name, is_property_list=False):
@@ -232,6 +234,19 @@ class SnappiObject(SnappiBase):
         """Creates a deep copy of the current object
         """
         return self.__deepcopy__(None)
+    
+    def validate_required(self):
+        """Validates the required properties are set
+        """
+        if getattr(self, "_REQUIRED", None) is None:
+            return
+        for p in self._REQUIRED:
+            if p in self._properties and self._properties[p] is not None:
+                continue
+            msg = "{} is/are the mandatory properties, {} is not set {}".format(
+                self._REQUIRED, p, self.__class__
+            )
+            raise ValueError(msg)
 
 
 class SnappiIter(SnappiBase):
