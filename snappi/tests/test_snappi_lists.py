@@ -10,11 +10,13 @@ def test_snappi_lists(api):
     flows = config.flows.flow(name='1')
     assert(flows.__class__ == snappi.FlowIter)
     flow = flows[0]
+    flow.tx_rx.port.tx_name = 'p1'
     assert(flow.__class__ == snappi.Flow)
     eth, vlan, vlan1 = flow.packet.ethernet().vlan().vlan()
     vlan.id.value = 1
 
     flow = config.flows.flow(name='2')[-1]
+    flow.tx_rx.port.tx_name = 'p1'
     assert(flow.__class__ == snappi.Flow)
     eth, vlan, ipv4, tcp = flow.packet.ethernet().vlan().ipv4().tcp()
     assert(eth.__class__ == snappi.FlowEthernet)
@@ -24,12 +26,14 @@ def test_snappi_lists(api):
     vlan.id.value = 2
 
     flow = config.flows.flow(name='3')[-1]
+    flow.tx_rx.port.tx_name = 'p1'
     pkt = flow.packet.ethernet().vlan()
     assert(pkt.__class__ == snappi.FlowHeaderIter)
     vlan = pkt[-1]
     vlan.id.value = 3
 
     flow = config.flows.flow(name='4')[-1]
+    flow.tx_rx.port.tx_name = 'p1'
     vlan = flow.packet.ethernet().vlan()[-1]
     assert(vlan.__class__ == snappi.FlowVlan)
     vlan.id.value = 4

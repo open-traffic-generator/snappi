@@ -9,6 +9,7 @@ def test_create_meshed_flow(api):
     for i in range(1, 33):
         config.ports.port(name='Port %s' % i, location='localhost/%s' % i)
         device = config.devices.device(name='Device %s' % i)[-1]
+        device.container_name = 'port'
         device.ethernet.name = 'Eth %s' % i
         device.ethernet.ipv4.name = 'Ipv4 %s' % i
 

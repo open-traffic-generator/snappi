@@ -15,7 +15,7 @@ def test_snappi_object_equality(api, b2b_config):
     assert (b2b_config == config)
     assert (b2b_config.ports == config.ports)
 
-    config.ports.port()
+    config.ports.port(name='p1')
     assert (b2b_config != config)
     assert (b2b_config.ports != config.ports)
 

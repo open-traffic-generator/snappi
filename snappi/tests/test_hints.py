@@ -11,7 +11,7 @@ def test_hints():
     p1 = config.ports[0]
     p2 = config.ports[1]
     p1, p2, p3 = config.ports 
-    config.ports.port().port()
+    config.ports.port(name='p4').port(name='p5')
     for port in config.ports:
         print(port)
     print(p1, p2)
