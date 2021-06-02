@@ -420,7 +420,7 @@ class SnappiGenerator(object):
                 self._write(1, '_REQUIRED = {} # type: tuple(str)'.format(required))
                 self._write()
             else:
-                self._write(1, '_DEFAULTS= () # type: tuple(str)')
+                self._write(1, '_REQUIRED= () # type: tuple(str)')
                 self._write()
 
             if len(defaults) > 0:
