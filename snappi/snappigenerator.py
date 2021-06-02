@@ -453,9 +453,6 @@ class SnappiGenerator(object):
             # search for all simple properties with enum or 
             # x-constant and add them here
 
-            # enum = parse('$..enum | x-constants | format').find(schema_object)
-            # if enum != []:
-            #     import pdb; pdb.set_trace()
             for enum in parse('$..enum | x-constants').find(schema_object):
                 for name in enum.value:
                     value = name
