@@ -15,7 +15,7 @@ def test_defaults(api):
                     'fixed': 64
                 },
                 'rate': {
-                    'choice': 'pps',
+                    'choice': 'pps', # default choice is pps
                     'pps': 1000
                 }
             }
@@ -27,7 +27,7 @@ def test_defaults(api):
                     {
                         'port_name': 'lagport',
                         'protocol': {
-                            'choice': 'lacp',
+                            'choice': 'lacp', # default choice is lacp
                             'lacp': {
                                 'actor_activity': 'active',
                                 'actor_key': 0,
@@ -53,7 +53,7 @@ def test_defaults(api):
                 'media': None,
                 'mtu': 1500,
                 'name': "abc",
-                'port_names': "test",
+                'port_names': ["test"],
                 'promiscuous': True,
                 'speed': 'speed_10_gbps',
                 'flow_control': {
@@ -65,7 +65,7 @@ def test_defaults(api):
     config = api.config()
     layer1 = config.layer1.layer1()[-1]
     layer1.name = "abc"
-    layer1.port_names = "test"
+    layer1.port_names = ["test"]
     layer1.flow_control
     l = config.lags.lag()[-1]
     l.name = "abc"
@@ -100,7 +100,7 @@ def test_defaults_by_deserialize(api):
                 },
                 'rate': {
                     'choice': 'pps',
-                    'pps': 1000
+                    'pps': None # defaults to a value
                 }
             }
         ],
@@ -115,7 +115,7 @@ def test_defaults_by_deserialize(api):
                             'lacp': {
                                 'actor_activity': 'active',
                                 'actor_key': 0,
-                                'actor_port_number': 0,
+                                'actor_port_number': None, # default is 0
                                 'actor_port_priority': 1,
                                 'actor_system_id': '00:00:00:00:00:00',
                                 'actor_system_priority': 0,
@@ -137,7 +137,7 @@ def test_defaults_by_deserialize(api):
                 'media': None,
                 'mtu': 1500,
                 'name': "abc",
-                'port_names': "test",
+                'port_names': ["test"],
                 'promiscuous': True,
                 'speed': 'speed_10_gbps',
                 'flow_control': {

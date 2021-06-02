@@ -62,7 +62,7 @@ def b2b_config(api):
     ip.priority.dscp.phb.values = [8, 16, 32]
     ip.priority.dscp.ecn.value = 1
 
-    tcp.src_port.increment.start = '10'
+    tcp.src_port.increment.start = 10
     tcp.dst_port.increment.start = 1
 
     return config

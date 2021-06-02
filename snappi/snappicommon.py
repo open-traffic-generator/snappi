@@ -1,9 +1,11 @@
 import importlib
 import json
+from typing import Pattern
 import yaml
 import requests
 import io
 import sys
+import re
 
 if sys.version_info[0] == 3:
     unicode = str
@@ -120,7 +122,73 @@ class SnappiBase(object):
         raise NotImplementedError()
 
 
-class SnappiObject(SnappiBase):
+class SnappiValidator(object):
+
+    __slots__ = ()
+
+    def __init__(self) -> None:
+        pass
+
+    def validate_mac(self, mac):
+        if mac == None:
+            return False
+        for sep in [':', '-', '.', ' ']:
+            if sep in mac:
+                mac = mac.replace(sep, '')
+                break
+        pattern = re.compile(r'^[\d+a-f]{12}$', re.I)
+        if re.match(pattern, mac):
+            return True
+        return False
+
+    def validate_ipv4(self, ip):
+        if ip == None:
+            return False
+        ip = ":".join(["{0:02x}".format(int(x)) for x in ip.split('.') if x != ''])
+        pattern = re.compile(r'[\d+a-f]{2}:' *3 + r'[\d+a-f]{2}$', re.I)
+        if re.match(pattern, ip):
+            return True
+        return False
+
+    def validate_ipv6(self, ip):
+        if ip == None:
+            return False
+        p1 = re.compile(r'^:[\d+a-f].+', re.I)
+        p2 = re.compile(r'.+[\d+a-f]:$', re.I)
+        if re.match(p1, ip) or re.match(p2, ip):
+            return False
+        if ip.count('::') == 0:
+            p3 = re.compile(r'[\d+a-f]{1,4}:' *7 + r'[\d+a-f]{1,4}$', re.I)
+            if re.match(p3, ip):
+                return True
+            else:
+                return False
+        if ip.count(':') > 7 or ip.count('::') > 1 or ip.count(':::') > 0:
+            return False
+        return True
+
+    def validate_hex(self, hex):
+        if re.match(r'^0?x?[\da-f]+$', hex, re.I):
+            return True
+        return False
+
+    def validate_integer(self, integer):
+        if re.match(r'^\d+$', str(integer)):
+            return True
+        return False
+
+    def validate_float(self, value):
+        if re.match(r'^\d*.\d+$', str(value)):
+            return True
+        return False
+
+    def validate_double(self, value):
+        if re.match(r'^\d*.\d+$', str(value)):
+            return True
+        return False
+
+
+class SnappiObject(SnappiBase, SnappiValidator):
     """Base class for any /components/schemas object
 
     Every SnappiObject is reuseable within the schema so it can 
@@ -174,7 +242,7 @@ class SnappiObject(SnappiBase):
         """Helper method for serialization
         """
         output = {}
-        self.validate_required()
+        self.validate()
         for key, value in self._properties.items():
             if isinstance(value, (SnappiObject, SnappiIter)):
                 output[key] = value._encode()
@@ -184,6 +252,7 @@ class SnappiObject(SnappiBase):
 
     def _decode(self, obj):
         snappi_names = dir(self)
+        dtypes = [list, str, int, float, bool]
         for property_name, property_value in obj.items():
             if property_name in snappi_names:
                 if isinstance(property_value, dict):
@@ -192,21 +261,25 @@ class SnappiObject(SnappiBase):
                         property_value = child[1](self, property_name)._decode(property_value)
                     else:
                         property_value = child[1]()._decode(property_value)
-                elif isinstance(property_value,
-                                list) and property_name in self._TYPES:
+                elif isinstance(property_value, list) and \
+                    property_name in self._TYPES and \
+                        self._TYPES[property_name]['type'] not in dtypes:
                     child = self._get_child_class(property_name, True)
                     snappi_list = child[0]()
                     for item in property_value:
                         item = child[1]()._decode(item)
                         snappi_list._items.append(item)
                     property_value = snappi_list
+                elif property_name in self._DEFAULTS and property_value is None:
+                    if isinstance(self._DEFAULTS[property_name], tuple(dtypes)):
+                        property_value = self._DEFAULTS[property_name]
                 self._properties[property_name] = property_value
-        self.validate_required()
+        self.validate()
         return self
 
     def _get_child_class(self, property_name, is_property_list=False):
         list_class = None
-        class_name = self._TYPES[property_name]
+        class_name = self._TYPES[property_name]['type']
         module = importlib.import_module(self.__module__)
         object_class = getattr(module, class_name)
         if is_property_list is True:
@@ -235,7 +308,7 @@ class SnappiObject(SnappiBase):
         """
         return self.__deepcopy__(None)
     
-    def validate_required(self):
+    def _validate_required(self):
         """Validates the required properties are set
         """
         if getattr(self, "_REQUIRED", None) is None:
@@ -247,6 +320,54 @@ class SnappiObject(SnappiBase):
                 self._REQUIRED, p, self.__class__
             )
             raise ValueError(msg)
+
+    def _validate_types(self):
+        common_data_types = [list, str, int, float, bool]
+        for property, value in self._properties.items():
+            if property not in self._TYPES:
+                continue
+            details = self._TYPES[property]
+            if value is None and property not in self._DEFAULTS and \
+                property not in self._REQUIRED:
+                continue
+            if 'enum' in details and value not in details['enum']:
+                msg = 'property {} shall be one of these' \
+                    ' {} values, but got {} at {}'
+                raise TypeError(msg.format(
+                    property, details['enum'], value, self.__class__
+                ))
+            if details['type'] in common_data_types and \
+                'format' not in details:
+                if not isinstance(value, details['type']):
+                    msg = 'property {} shall be of type {},' \
+                        ' but got {} at {}'
+                    raise TypeError(msg.format(
+                        property, details['type'], type(value), self.__class__
+                    ))
+            if details['type'] not in common_data_types:
+                class_name = details['type']
+                module = importlib.import_module(self.__module__)
+                object_class = getattr(module, class_name)
+                if not isinstance(value, object_class):
+                    msg = 'property {} shall be of type {},' \
+                        ' but got {} at {}'
+                    raise TypeError(msg.format(
+                        property, class_name, type(value),
+                        self.__class__
+                    ))
+            if 'format' in details:
+                validate_obj = getattr(self, 'validate_%s' % details['format'], None)
+                if validate_obj is None:
+                    continue
+                if validate_obj(value) is False:
+                    msg = 'Invalid {} format, expected {} at {}'.format(
+                        value, details['format'], self.__class__
+                    )
+                    raise TypeError(msg)
+        
+    def validate(self):
+        self._validate_required()
+        self._validate_types()
 
 
 class SnappiIter(SnappiBase):
