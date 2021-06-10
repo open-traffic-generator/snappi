@@ -141,30 +141,15 @@ class SnappiObject(SnappiBase):
         return self._parent
         
     def _get_property(self, name, default_value=None, parent=None, choice=None):
-        if name in self._properties and self._properties[name] is not None:
-            return self._properties[name]
-        if isinstance(default_value, type) is True:
-            if 'choice' in dir(self):
-                self._properties['choice'] = name
-            self._properties[name] = default_value(parent=parent, choice=choice)
-
-            if '_DEFAULTS' in dir(self._properties[name]) and\
-                'choice' in self._properties[name]._DEFAULTS:
-                getattr(self._properties[name], self._properties[name]._DEFAULTS['choice'])
-        else:
-            if default_value is None and name in self._DEFAULTS:
-                if 'choice' in dir(self):
-                    self._properties['choice'] = name
-                self._properties[name] = self._DEFAULTS[name]
+        if name not in self._properties or self._properties[name] is None:
+            if isinstance(default_value, type) is True:
+                self._properties[name] = default_value(parent=parent, choice=choice)
             else:
                 self._properties[name] = default_value
         return self._properties[name]
 
     def _set_property(self, name, value, choice=None):
-        if name in self._DEFAULTS and value is None:
-            self._properties[name] = self._DEFAULTS[name]
-        else:
-            self._properties[name] = value
+        self._properties[name] = value
         if choice is not None:
             self._properties['choice'] = choice
         elif self._parent is not None and self._choice is not None and value is not None:
