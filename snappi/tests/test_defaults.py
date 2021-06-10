@@ -10,7 +10,46 @@ def test_defaults(api):
                 'rate': {
                     'choice': 'pps',
                     'pps': 1000
-                }
+                },
+                'packet': [
+                    {
+                        'choice': 'ethernet',
+                        'ethernet': {
+                            'dst': {
+                                'choice': 'value',
+                                'value': '00:00:00:00:00:00',
+                                'metric_group': None
+                            },
+                            'src': {
+                                'choice': 'values',
+                                'values': ['00:00:00:00:00:00'],
+                                'metric_group': None,
+                                'value': '00:00:00:00:00:00'
+                            },
+                            'ether_type': {
+                                'auto': 'auto',
+                                'choice': 'auto',
+                                'metric_group': None
+                            }
+                        },
+                    },
+                    {
+                        'choice': 'ipv4',
+                        'ipv4': {
+                            'src': {
+                                'choice': 'increment',
+                                'metric_group': None,
+                                'increment': {
+                                    'count': 1,
+                                    'start': '0.0.0.0',
+                                    'step': '0.0.0.1'
+                                },
+                                'value': '0.0.0.0' # side effect
+                            }
+                        }
+
+                    }
+                ]
             }
         ],
         'lags': [
@@ -61,6 +100,11 @@ def test_defaults(api):
     f = config.flows.flow()[-1]
     f.size.fixed
     f.rate
+    eth, ipv4 = f.packet.ethernet().ipv4()
+    eth.dst
+    eth.src.values
+    eth.ether_type
+    ipv4.src.increment
     assert config.serialize(config.DICT) == defaults
 
 
@@ -72,7 +116,7 @@ def test_defaults_by_deserialize(api):
                 'size': {
                     'choice': 'fixed',
                     'fixed': 64
-                }
+                },
             }
         ],
         'lags': [

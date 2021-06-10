@@ -22,7 +22,7 @@ import re
 import requests
 from jsonpath_ng import parse
 
-MODELS_RELEASE = 'v0.3.10'
+MODELS_RELEASE = 'v0.4.0'
 
 
 class SnappiGenerator(object):
@@ -419,14 +419,14 @@ class SnappiGenerator(object):
             if len(defaults) > 0:
                 self._write(1, '_DEFAULTS = {')
                 for name, value in defaults:
-                    if isinstance(value, (bool, int, float)):
+                    if isinstance(value, (list, bool, int, float, tuple)):
                         self._write(2, "'%s': %s," % (name, value))
                     else:
                         self._write(2, "'%s': '%s'," % (name, value))
-                self._write(1, '} # type: Dict[str, str]')
+                self._write(1, '} # type: Dict[str, Union(type)]')
                 self._write()
             else:
-                self._write(1, '_DEFAULTS= {} # type: Dict[str, str]')
+                self._write(1, '_DEFAULTS= {} # type: Dict[str, Union(type)]')
                 self._write()
             # write constants
             # search for all simple properties with enum or 

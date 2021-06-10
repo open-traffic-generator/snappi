@@ -150,6 +150,10 @@ class SnappiObject(SnappiBase):
 
             if '_DEFAULTS' in dir(self._properties[name]) and\
                 'choice' in self._properties[name]._DEFAULTS:
+                # this node is used to set the if the choice has default.
+                # but seeing a side effect, if user sets other than default,
+                # in serialization we would see the default choice as well.
+                # currently there is not impact but it might deceive the perception
                 getattr(self._properties[name], self._properties[name]._DEFAULTS['choice'])
         else:
             if default_value is None and name in self._DEFAULTS:
