@@ -140,7 +140,7 @@ class SnappiValidator(object):
         pass
 
     def validate_mac(self, mac):
-        if mac == None:
+        if mac is None:
             return False
         if isinstance(mac, list):
             all_macs = self._MAC_REGEX.findall(
@@ -152,7 +152,7 @@ class SnappiValidator(object):
         return False
 
     def validate_ipv4(self, ip):
-        if ip == None:
+        if ip is None:
             return False
         try:
             if isinstance(ip, list):
@@ -173,7 +173,7 @@ class SnappiValidator(object):
         return False
 
     def _validate_ipv6(self, ip):
-        if ip == None:
+        if ip is None:
             return False
         if self._IPV6_REP1.match(ip) or self._IPV6_REP2.match(ip):
             return False
