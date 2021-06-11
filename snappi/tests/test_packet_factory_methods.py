@@ -11,6 +11,7 @@ def test_packet_factory_methods(api):
     config = api.config()
 
     flow = config.flows.flow(name='f')[-1]
+    flow.tx_rx.port.tx_name = 'p1'
     eth, vlan1, vlan2, ip, _ = flow.packet.ethernet().vlan().vlan().ipv4().tcp()
     tcp = flow.packet[-1]
     assert(len(flow.packet) == 5)

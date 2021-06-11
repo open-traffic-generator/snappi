@@ -94,15 +94,15 @@ def test_gtpu(api):
         tx_port = config.ports[-2]
         rx_port = config.ports[-1]
         create_flow(config, 'Uplink', user, server, tx_port, rx_port,
-                    test_params.globals.gnb_mac_addr,
-                    test_params.globals.n3_mac_addr,
+                    test_params.globals.gnb_mac_addr.replace(' ', ':'),
+                    test_params.globals.n3_mac_addr.replace(' ', ':'),
                     test_params.globals.gnb_ip_addr,
                     test_params.globals.upf_ip_addr, user.ue_ip,
                     test_params.globals.inner_ip_src_dst,
                     test_params.globals.gtp_tunnels)
         create_flow(config, 'Downlink', server, user, tx_port, rx_port,
-                    test_params.globals.n3_mac_addr,
-                    test_params.globals.gnb_mac_addr,
+                    test_params.globals.n3_mac_addr.replace(' ', ':'),
+                    test_params.globals.gnb_mac_addr.replace(' ', ':'),
                     test_params.globals.upf_ip_addr,
                     test_params.globals.gnb_ip_addr,
                     test_params.globals.inner_ip_src_dst, server.ue_ip,
