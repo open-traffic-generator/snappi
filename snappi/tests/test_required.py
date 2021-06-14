@@ -37,7 +37,7 @@ def validate_deserialize(node, input, expected, ignore_assert=False):
     try:
         getattr(node, 'deserialize')(input)
         assert ignore_assert
-    except ValueError as e:
+    except Exception as e:
         assert any([exp in e.args[0] for exp in expected])
 
 

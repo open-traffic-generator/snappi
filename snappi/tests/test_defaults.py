@@ -6,7 +6,6 @@ def test_defaults(api):
                     'choice': 'port',
                     'port': {
                         'tx_name': 'ptest',
-                        'rx_name': None
                     }
                 },
                 'name': "f1",
@@ -25,18 +24,15 @@ def test_defaults(api):
                             'dst': {
                                 'choice': 'value',
                                 'value': '00:00:00:00:00:00',
-                                'metric_group': None
                             },
                             'src': {
                                 'choice': 'values',
                                 'values': ['00:00:00:00:00:00'],
-                                'metric_group': None,
                                 'value': '00:00:00:00:00:00'
                             },
                             'ether_type': {
                                 'auto': 'auto',
                                 'choice': 'auto',
-                                'metric_group': None
                             }
                         },
                     },
@@ -45,7 +41,6 @@ def test_defaults(api):
                         'ipv4': {
                             'src': {
                                 'choice': 'increment',
-                                'metric_group': None,
                                 'increment': {
                                     'count': 1,
                                     'start': '0.0.0.0',
@@ -89,7 +84,6 @@ def test_defaults(api):
             {
                 'auto_negotiate': True,
                 'ieee_media_defaults': True,
-                'media': None,
                 'mtu': 1500,
                 'name': "abc",
                 'port_names': ["test"],

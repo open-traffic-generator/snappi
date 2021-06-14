@@ -134,7 +134,7 @@ def create_flow(config, flow_prefix, src_param, dst_param, tx_port, rx_port,
     gtp.teid.metric_group = 'gtp_teid'
 
     flow.size.fixed = 128
-    flow.rate.gbps = 1
+    flow.rate.gbps = 1.0
     flow.duration.fixed_packets.packets = 100000
 
 

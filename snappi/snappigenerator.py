@@ -766,25 +766,28 @@ class SnappiGenerator(object):
         #     if len(line) > 0:
         #         doc_string.append('%s  ' % line)
         # return doc_string
-    def _get_data_types(self):
+    def _get_data_types(self, yproperty):
         data_type_map = {
             'integer': 'int', 'string': 'str',
             'boolean': 'bool', 'array': 'list',
-            'number': 'int'
+            'number': 'float', 'float': 'float',
+            'double': 'float'
         }
-        return data_type_map
+        if yproperty['type']  in data_type_map:
+            return data_type_map[yproperty['type']]
+        else:
+            return yproperty['type']
 
     def _get_snappi_types(self, yobject):
         types = []
-        dtypes = self._get_data_types()
+        # dtypes = 
         if 'properties' in yobject:
             for name in yobject['properties']:
                 yproperty = yobject['properties'][name]
                 ref = parse("$..'$ref'").find(yproperty)
                 pt = {}
                 if 'type' in yproperty:
-                    typ = yproperty['type']
-                    pt.update({'type': dtypes[typ] if typ in dtypes else typ})
+                    pt.update({'type': self._get_data_types(yproperty)})
                     pt.update({'enum': yproperty['enum']}) if 'enum' in yproperty else None
                     pt.update({
                         'format': "\'%s\'" % yproperty['format']
@@ -809,7 +812,10 @@ class SnappiGenerator(object):
             for name in yobject['properties']:
                 yproperty = yobject['properties'][name]
                 if 'default' in yproperty:
-                    defaults.append((name, yproperty['default']))
+                    default = yproperty['default']
+                    if 'type' in yproperty and yproperty['type'] == 'number':
+                        default = float(default)
+                    defaults.append((name, default))
         return (tuple(required), defaults)
 
     def _get_default_value(self, property):
