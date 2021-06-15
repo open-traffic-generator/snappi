@@ -780,7 +780,6 @@ class SnappiGenerator(object):
 
     def _get_snappi_types(self, yobject):
         types = []
-        # dtypes = 
         if 'properties' in yobject:
             for name in yobject['properties']:
                 yproperty = yobject['properties'][name]

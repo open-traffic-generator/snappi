@@ -125,11 +125,11 @@ class SnappiBase(object):
 class SnappiValidator(object):
 
     _MAC_REGEX = re.compile(
-        r'([\da-fA-F]{2}[:]){5}[\da-fA-F]{2}$')
+        r'^([\da-fA-F]{2}[:]){5}[\da-fA-F]{2}$')
     _IPV6_REP1 = re.compile(r'^:[\da-fA-F].+')
     _IPV6_REP2 = re.compile(r'.+[\da-fA-F]:$')
     _IPV6_REP3 = re.compile(
-        r'[\da-fA-F]{1,4}:' *7 + r'[\da-fA-F]{1,4}$')
+        r'^[\da-fA-F]{1,4}:' *7 + r'[\da-fA-F]{1,4}$')
     _HEX_REGEX = re.compile(r'^0?x?[\da-fA-F]+$')
 
     __slots__ = ()
@@ -229,17 +229,20 @@ class SnappiObject(SnappiBase, SnappiValidator):
     @property
     def parent(self):
         return self._parent
+    
+    def _set_choice(self, name):
+        if 'choice' in dir(self) and '_TYPES' in dir(self) \
+            and 'choice' in self._TYPES and name in self._TYPES['choice']['enum']:
+            for enum in self._TYPES['choice']['enum']:
+                if enum in self._properties and name != enum:
+                    self._properties.pop(enum)
+            self._properties['choice'] = name
         
     def _get_property(self, name, default_value=None, parent=None, choice=None):
         if name in self._properties and self._properties[name] is not None:
             return self._properties[name]
         if isinstance(default_value, type) is True:
-            if 'choice' in dir(self) and '_TYPES' in dir(self) \
-                and 'choice' in self._TYPES and name in self._TYPES['choice']['enum']:
-                for enum in self._TYPES['choice']['enum']:
-                    if enum in self._properties and name != enum:
-                        self._properties.pop(enum)
-                self._properties['choice'] = name
+            self._set_choice(name)
             self._properties[name] = default_value(parent=parent, choice=choice)
 
             if '_DEFAULTS' in dir(self._properties[name]) and\
@@ -247,13 +250,7 @@ class SnappiObject(SnappiBase, SnappiValidator):
                 getattr(self._properties[name], self._properties[name]._DEFAULTS['choice'])
         else:
             if default_value is None and name in self._DEFAULTS:
-                if 'choice' in dir(self) and '_TYPES' in dir(self) \
-                    and 'choice' in self._TYPES \
-                        and name in self._TYPES['choice']['enum']:
-                    for enum in self._TYPES['choice']['enum']:
-                        if enum in self._properties and name != enum:
-                            self._properties.pop(enum)
-                    self._properties['choice'] = name
+                self._set_choice(name)
                 self._properties[name] = self._DEFAULTS[name]
             else:
                 self._properties[name] = default_value
@@ -379,6 +376,7 @@ class SnappiObject(SnappiBase, SnappiValidator):
                 ))
         if details['type'] not in common_data_types:
             class_name = details['type']
+            # TODO Need to revisit importlib
             module = importlib.import_module(self.__module__)
             object_class = getattr(module, class_name)
             if not isinstance(property_value, object_class):
