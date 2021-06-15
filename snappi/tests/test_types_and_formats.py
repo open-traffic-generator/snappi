@@ -5,6 +5,7 @@ def test_types_and_formats():
     config = snappi.Api().config()
     f = config.flows.flow()[-1]
     eth = f.packet.ethernet()[-1]
+
     # mac validation
     eth.src.value = "11:22:33:aa:bb:cc:22"
     try:
@@ -12,6 +13,7 @@ def test_types_and_formats():
         assert False
     except TypeError:
         assert True
+
     # ip validation
     ip = f.packet.ipv4()[-1]
     ip.src.value = '1111'
@@ -60,11 +62,20 @@ def test_types_and_formats():
         assert True
     
     eth = f.packet.ethernet()[-1]
-    # mac validation
+    # mac validation with list
     eth.src.values = ['a:b', ':0:0:0:0:0:0:1:']
     try:
         eth.src.serialize(eth.DICT)
         assert False
     except TypeError:
         assert True
+
+    # reset existing choice
+    f.size.fixed = 74
+    assert f.size.serialize(f.DICT) == {'choice': 'fixed', 'fixed': 74}
+    f.size.increment
+    assert f.size.serialize(f.DICT) == {
+        'choice': 'increment',
+        'increment': {'start': 64, 'end': 1518, 'step': 1}
+    }
     
