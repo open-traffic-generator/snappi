@@ -20,7 +20,7 @@ def test_lag(api):
         lp.ethernet.name = 'lpe {}'.format(port.name)
         lp.ethernet.mac = '00:00:01:00:00:01'
         lacp = lp.protocol.lacp
-        lacp.actor_system_id = '00000A000001'
+        lacp.actor_system_id = '00:00:0A:00:00:01'
         lacp.actor_key = 1
         lacp.actor_port_number = 10
 

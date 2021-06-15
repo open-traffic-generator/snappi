@@ -33,9 +33,10 @@ def b2b_config(api):
     tx_device.ethernet.ipv4.address = '1.1.1.1'
     tx_device.ethernet.ipv4.gateway = '1.1.2.1'
     tx_device.ethernet.ipv4.prefix = 16
-    vlan1, vlan2 = tx_device.ethernet.vlans.vlan().vlan()
+    vlan1, vlan2 = tx_device.ethernet.vlans.vlan(name='v1').vlan(name='v2')
     vlan1.id = 1
     vlan2.id = 2
+    rx_device.ethernet.name = 'Rx Eth'
 
     flow = config.flows.flow(name='Tx -> Rx Flow')[0]
     flow.tx_rx.port.tx_name = tx_port.name
@@ -61,7 +62,7 @@ def b2b_config(api):
     ip.priority.dscp.phb.values = [8, 16, 32]
     ip.priority.dscp.ecn.value = 1
 
-    tcp.src_port.increment.start = '10'
+    tcp.src_port.increment.start = 10
     tcp.dst_port.increment.start = 1
 
     return config

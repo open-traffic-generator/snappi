@@ -15,7 +15,7 @@ def test_device_stack(api):
     i4.address = '1.1.1.1'
     b4 = i4.bgpv4
     b4.name = 'b4'
-    b4.bgpv4_routes.bgpv4route()
+    b4.bgpv4_routes.bgpv4route(name='br')
     i6 = e.ipv6
     i6.name = 'i6'
     i6.address = '2001::1'

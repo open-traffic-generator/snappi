@@ -12,7 +12,9 @@ def test_choice(api):
     """
     config = api.config()
     p1, p2 = config.ports.port(name='p1').port(name='p2')
-    config.devices.device(name='d1').device(name='d2')
+    d1, d2 = config.devices.device(name='d1').device(name='d2')
+    d1.container_name, d2.container_name = 'p1', 'p2'
+    d1.ethernet.name, d2.ethernet.name = 'eth1', 'eth2'
     flow = config.flows.flow(name='f')[-1]
 
     flow.tx_rx.port.tx_name = p1.name
