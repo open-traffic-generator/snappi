@@ -28,7 +28,6 @@ def test_defaults(api):
                             'src': {
                                 'choice': 'values',
                                 'values': ['00:00:00:00:00:00'],
-                                'value': '00:00:00:00:00:00'
                             },
                             'ether_type': {
                                 'auto': 'auto',
@@ -46,7 +45,6 @@ def test_defaults(api):
                                     'start': '0.0.0.0',
                                     'step': '0.0.0.1'
                                 },
-                                'value': '0.0.0.0' # side effect
                             }
                         }
 

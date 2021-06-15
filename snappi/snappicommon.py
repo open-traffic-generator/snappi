@@ -234,20 +234,25 @@ class SnappiObject(SnappiBase, SnappiValidator):
         if name in self._properties and self._properties[name] is not None:
             return self._properties[name]
         if isinstance(default_value, type) is True:
-            if 'choice' in dir(self):
+            if 'choice' in dir(self) and '_TYPES' in dir(self) \
+                and 'choice' in self._TYPES and name in self._TYPES['choice']['enum']:
+                for enum in self._TYPES['choice']['enum']:
+                    if enum in self._properties and name != enum:
+                        self._properties.pop(enum)
                 self._properties['choice'] = name
             self._properties[name] = default_value(parent=parent, choice=choice)
 
             if '_DEFAULTS' in dir(self._properties[name]) and\
                 'choice' in self._properties[name]._DEFAULTS:
-                # this node is used to set if the choice has default.
-                # but seeing a side effect, if user sets other than default,
-                # in serialization we would see the default choice as well.
-                # currently there is not impact but it might deceive the perception
                 getattr(self._properties[name], self._properties[name]._DEFAULTS['choice'])
         else:
             if default_value is None and name in self._DEFAULTS:
-                if 'choice' in dir(self):
+                if 'choice' in dir(self) and '_TYPES' in dir(self) \
+                    and 'choice' in self._TYPES \
+                        and name in self._TYPES['choice']['enum']:
+                    for enum in self._TYPES['choice']['enum']:
+                        if enum in self._properties and name != enum:
+                            self._properties.pop(enum)
                     self._properties['choice'] = name
                 self._properties[name] = self._DEFAULTS[name]
             else:
