@@ -202,12 +202,20 @@ class SnappiValidator(object):
     def validate_float(self, value):
         if not isinstance(value, list):
             value = [value]
-        return all([isinstance(i, float) for i in value])
+        return all([
+            isinstance(
+                0.0 if i in [0] else i, float
+            ) for i in value
+        ])
 
     def validate_double(self, value):
         if not isinstance(value, list):
             value = [value]
-        return all([isinstance(i, float) for i in value])
+        return all([
+            isinstance(
+                0.0 if i in [0] else i, float
+            ) for i in value
+        ])
 
 
 class SnappiObject(SnappiBase, SnappiValidator):
@@ -368,7 +376,13 @@ class SnappiObject(SnappiBase, SnappiValidator):
             ))
         if details['type'] in common_data_types and \
             'format' not in details:
-            if not isinstance(property_value, details['type']):
+            p_value = property_value
+            if p_value == 0 and details['type'] == float:
+                # this is a temporary fix and will
+                # change the implementation once the type
+                # checking of list item is addressed.
+                p_value = 0.0
+            if not isinstance(p_value, details['type']):
                 msg = 'property {} shall be of type {},' \
                     ' but got {} at {}'
                 raise TypeError(msg.format(
@@ -397,6 +411,19 @@ class SnappiObject(SnappiBase, SnappiValidator):
                     property_value, details['format'], self.__class__
                 )
                 raise TypeError(msg)
+    
+    def validate(self):
+        self._validate_required()
+        for key, value in self._properties.items():
+            self._validate_types(key, value)
+    
+    def getproperty(self, name):
+        """ 
+        getattr for snappi object
+        """
+        if self._properties.get(name) is not None:
+            return self._properties[name]
+        return None
 
 
 class SnappiIter(SnappiBase):
