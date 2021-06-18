@@ -417,12 +417,14 @@ class SnappiObject(SnappiBase, SnappiValidator):
         for key, value in self._properties.items():
             self._validate_types(key, value)
     
-    def getproperty(self, name):
+    def getproperty(self, name, get_default=False):
         """ 
         getattr for snappi object
         """
         if self._properties.get(name) is not None:
             return self._properties[name]
+        elif get_default:
+            return getattr(self, name)
         return None
 
 
