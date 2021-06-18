@@ -424,7 +424,9 @@ class SnappiObject(SnappiBase, SnappiValidator):
         if self._properties.get(name) is not None:
             return self._properties[name]
         elif get_default:
-            return getattr(self, name)
+            # TODO need to find a way to avoid getattr
+            getattr(self, name)
+            return self._properties.pop(name)
         return None
 
 
