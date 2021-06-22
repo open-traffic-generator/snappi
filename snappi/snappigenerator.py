@@ -701,8 +701,15 @@ class SnappiGenerator(object):
                     properties.append(name)
                     if 'default' in property:
                         default = property['default']
-                    if 'enum' in property or 'format' in property:
+                    if 'enum' in property:
                         val = "=%s" % default if default == 'None' else "='%s'" % default
+                        property_param_string += val
+                    elif 'format' in property:
+                        data_types = ['integer', 'float', 'double']
+                        if default == 'None' or property['format'] in data_types:
+                            val = "=%s" % default
+                        else:
+                            val = "='%s'" % default
                         property_param_string += val
                     else:
                         property_param_string += '=%s' % default

@@ -425,7 +425,14 @@ class SnappiObject(SnappiBase, SnappiValidator):
             return self._properties[name]
         elif get_default:
             # TODO need to find a way to avoid getattr
+            choice = self._properties.get('choice')\
+                    if 'choice' in dir(self) else None
             getattr(self, name)
+            if 'choice' in dir(self):
+                if choice is None and 'choice' in self._properties:
+                    self._properties.pop('choice')
+                else:
+                    self._properties['choice'] = choice
             return self._properties.pop(name)
         return None
 
