@@ -13,14 +13,24 @@ def test_device_stack(api):
     i4 = e.ipv4
     i4.name = 'i4'
     i4.address = '1.1.1.1'
+    i4.gateway = '1.1.1.2'
     b4 = i4.bgpv4
     b4.name = 'b4'
     b4.bgpv4_routes.bgpv4route(name='br')
+    b4.local_address = '1.1.1.1'
+    b4.dut_address = '1.1.1.2'
+    b4.as_type = 'ibgp'
+    b4.as_number = 10
     i6 = e.ipv6
     i6.name = 'i6'
     i6.address = '2001::1'
+    i6.gateway = '2001::2'
     b6 = i6.bgpv6
     b6.name = 'b6'
+    b6.local_address = '2001::1'
+    b6.dut_address = '2001::2'
+    b6.as_type = 'ibgp'
+    b6.as_number = 10
     api.set_config(config)
     print(config)
 

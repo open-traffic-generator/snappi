@@ -20,7 +20,7 @@ def test_required_serialize(api):
     f = config.flows.flow()[-1]
     validate_serialize(f, f._REQUIRED)
     s = f.size
-    validate_serialize(s, s._REQUIRED)
+    validate_serialize(s, s._REQUIRED, True)
     r = f.rate
     validate_serialize(r, '', True)
 

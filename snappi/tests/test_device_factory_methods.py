@@ -18,6 +18,7 @@ def test_device_factory_methods(api):
     eth = device.ethernet
     eth.name = name
     assert (eth.name == name)
+    eth.mac = '00:00:00:00:00:00'
 
     print(config)
 

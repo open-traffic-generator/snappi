@@ -31,8 +31,8 @@ def test_types_and_formats():
         assert True
  
     #float validation
-    f.duration.fixed_seconds.seconds = 10
-    f.duration.fixed_seconds.delay.microseconds = 20
+    f.duration.fixed_seconds.seconds = '10'
+    f.duration.fixed_seconds.delay.microseconds = '20'
     try:
         f.duration.fixed_seconds.delay.serialize(f.DICT)
         assert False
@@ -54,6 +54,7 @@ def test_types_and_formats():
     d = config.devices.device()[-1]
     eth = d.ethernet
     eth.name = 'eth'
+    eth.mac = '00:00:00:00:00:00'
     eth.mtu = '1500'
     try:
         eth.serialize(eth.DICT)

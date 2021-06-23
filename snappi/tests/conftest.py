@@ -37,6 +37,7 @@ def b2b_config(api):
     vlan1.id = 1
     vlan2.id = 2
     rx_device.ethernet.name = 'Rx Eth'
+    rx_device.ethernet.mac = '00:00:01:00:00:02'
 
     flow = config.flows.flow(name='Tx -> Rx Flow')[0]
     flow.tx_rx.port.tx_name = tx_port.name

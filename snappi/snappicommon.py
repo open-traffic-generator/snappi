@@ -203,19 +203,42 @@ class SnappiValidator(object):
         if not isinstance(value, list):
             value = [value]
         return all([
-            isinstance(
-                0.0 if i in [0] else i, float
-            ) for i in value
+            isinstance(i, (float, int)) for i in value
         ])
 
-    def validate_double(self, value):
+    def validate_string(self, value):
         if not isinstance(value, list):
             value = [value]
         return all([
-            isinstance(
-                0.0 if i in [0] else i, float
-            ) for i in value
+            isinstance(i, str) for i in value
         ])
+    
+    def validate_bool(self, value):
+        if not isinstance(value, list):
+            value = [value]
+        return all([
+            isinstance(i, bool) for i in value
+        ])
+
+    def validate_list(self, value):
+        # TODO pending item validation
+        return isinstance(value, list)
+    
+    def types_validation(self, value, type_, err_msg):
+        type_map = {
+            int: 'integer', str: 'string',
+            float: 'float', bool: 'bool',
+            list: 'list', 'int64': 'integer',
+            'int32': 'integer', 'double': 'float'
+        }
+        if type_ in type_map:
+            type_ = type_map[type_]
+        v_obj = getattr(self, 'validate_{}'.format(type_))
+        if v_obj is None:
+            msg = '{} is not a valid or unsupported format'.format(type_)
+            raise TypeError(msg)
+        if v_obj(value) is False:
+            raise TypeError(err_msg)
 
 
 class SnappiObject(SnappiBase, SnappiValidator):
@@ -375,19 +398,12 @@ class SnappiObject(SnappiBase, SnappiValidator):
                 property_name, details['enum'], property_value, self.__class__
             ))
         if details['type'] in common_data_types and \
-            'format' not in details:
-            p_value = property_value
-            if p_value == 0 and details['type'] == float:
-                # this is a temporary fix and will
-                # change the implementation once the type
-                # checking of list item is addressed.
-                p_value = 0.0
-            if not isinstance(p_value, details['type']):
-                msg = 'property {} shall be of type {},' \
-                    ' but got {} at {}'
-                raise TypeError(msg.format(
+                'format' not in details:
+            msg = 'property {} shall be of type {}, but got {} at {}'.format(
                     property_name, details['type'], type(property_value), self.__class__
-                ))
+                )
+            self.types_validation(property_value, details['type'], msg)
+
         if details['type'] not in common_data_types:
             class_name = details['type']
             # TODO Need to revisit importlib
@@ -401,17 +417,11 @@ class SnappiObject(SnappiBase, SnappiValidator):
                     self.__class__
                 ))
         if 'format' in details:
-            validate_obj = getattr(self, 'validate_%s' % details['format'], None)
-            if validate_obj is None:
-                raise TypeError('{} is not a valid or unsupported format'.format(
-                    details['format']
-                ))
-            if validate_obj(property_value) is False:
-                msg = 'Invalid {} format, expected {} at {}'.format(
-                    property_value, details['format'], self.__class__
-                )
-                raise TypeError(msg)
-    
+            msg = 'Invalid {} format, expected {} at {}'.format(
+                property_value, details['format'], self.__class__
+            )
+            self.types_validation(property_value, details['format'], msg)
+
     def validate(self):
         self._validate_required()
         for key, value in self._properties.items():

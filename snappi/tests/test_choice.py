@@ -15,6 +15,7 @@ def test_choice(api):
     d1, d2 = config.devices.device(name='d1').device(name='d2')
     d1.container_name, d2.container_name = 'p1', 'p2'
     d1.ethernet.name, d2.ethernet.name = 'eth1', 'eth2'
+    d1.ethernet.mac, d2.ethernet.mac = '00:00:00:00:00:aa', '00:00:00:00:00:bb'
     flow = config.flows.flow(name='f')[-1]
 
     flow.tx_rx.port.tx_name = p1.name
