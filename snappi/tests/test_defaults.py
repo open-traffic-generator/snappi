@@ -87,8 +87,21 @@ def test_defaults(api):
                 'port_names': ["test"],
                 'promiscuous': True,
                 'speed': 'speed_10_gbps',
+                'media': 'copper',
                 'flow_control': {
-                    'directed_address': '0180C2000001'
+                    'choice': 'ieee_802_1qbb',
+                    'directed_address': '0180C2000001',
+                    'ieee_802_1qbb': {
+                        'pfc_class_0': 0,
+                        'pfc_class_1': 1,
+                        'pfc_class_2': 2,
+                        'pfc_class_3': 3,
+                        'pfc_class_4': 4,
+                        'pfc_class_5': 5,
+                        'pfc_class_6': 6,
+                        'pfc_class_7': 7,
+                        'pfc_delay': 0
+                    }
                 }
             }
         ]
@@ -104,6 +117,7 @@ def test_defaults(api):
     p.port_name = "lagport"
     p.protocol
     p.ethernet.name = "test"
+    p.ethernet.mac = "00:00:00:00:00:00"
     f = config.flows.flow()[-1]
     f.name = "f1"
     f.size.fixed
