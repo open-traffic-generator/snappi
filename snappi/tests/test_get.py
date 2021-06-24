@@ -1,16 +1,16 @@
 import snappi
 
 
-def test_getproperty():
+def test_get():
     config = snappi.Api().config()
     f = config.flows.flow()[-1]
-    s = f.getproperty('size')
+    s = f.get('size')
     assert s == None
-    s = f.getproperty('size', False)
+    s = f.get('size', False)
     assert s == None
-    fixed = f.getproperty('size', True).getproperty('fixed', True)
+    fixed = f.get('size', True).get('fixed', True)
     assert fixed == 64
     assert f._properties.get('size') == None
-    r = f.getproperty('rate', True)
+    r = f.get('rate', True)
     assert r != None
     assert f._properties.get('rate') == None
