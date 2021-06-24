@@ -427,7 +427,7 @@ class SnappiObject(SnappiBase, SnappiValidator):
         for key, value in self._properties.items():
             self._validate_types(key, value)
     
-    def getproperty(self, name, get_default=False):
+    def get(self, name, get_default=False):
         """ 
         getattr for snappi object
         """
