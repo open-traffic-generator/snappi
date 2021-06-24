@@ -427,13 +427,13 @@ class SnappiObject(SnappiBase, SnappiValidator):
         for key, value in self._properties.items():
             self._validate_types(key, value)
     
-    def get(self, name, get_default=False):
+    def get(self, name, with_defaults=False):
         """ 
         getattr for snappi object
         """
         if self._properties.get(name) is not None:
             return self._properties[name]
-        elif get_default:
+        elif with_defaults:
             # TODO need to find a way to avoid getattr
             choice = self._properties.get('choice')\
                     if 'choice' in dir(self) else None
