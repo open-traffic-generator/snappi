@@ -53,7 +53,7 @@ os.mkdir(doc_dir)
 shutil.move("openapi.yaml", doc_dir)
 
 with open('models-release', 'w') as out:
-    out.write(models_version)   
+    out.write("v" + models_version)   
 
 setuptools.setup(
     name=pkg_name,
@@ -84,7 +84,7 @@ setuptools.setup(
     ],
     extras_require={
         'ixnetwork': ['snappi_ixnetwork==0.4.0'],
-        'convergence': ['snappi_convergence==0.0.12'],
+        'convergence': ['snappi_convergence==0.0.13'],
         'testing': ['pytest', 'flask']
     }
 )
