@@ -34,7 +34,7 @@ jobs:
           python do.py install
       - name: Run tests
         run: |
-          python do.py test
+          sudo python do.py test
       - name: Get package version
         id: get_version
         run: |
