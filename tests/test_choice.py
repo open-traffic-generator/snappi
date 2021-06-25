@@ -37,6 +37,7 @@ def test_choice(api):
     eth = flow.packet[0]
     assert (eth.__class__ == snappi.FlowEthernet)
     eth_type = eth.ether_type
+    eth_type.value = 255
     assert (eth_type.__class__ == snappi.PatternFlowEthernetEtherType)
     eth.src.value = '00:00:01:00:00:01'
     assert (eth.src.choice == 'value')

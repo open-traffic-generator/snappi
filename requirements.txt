@@ -1,9 +1,4 @@
-pip
-jsonpath-ng
-pyyaml
-pytest
-setuptools
-wheel
-twine
+flake8
+pytype
 requests
-flask
+openapiart==0.0.35
