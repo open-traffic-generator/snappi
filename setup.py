@@ -8,7 +8,7 @@ import requests
 import shutil
 
 pkg_name = "snappi"
-version = "0.4.10"
+version = "0.4.11"
 models_version = "0.4.4"
 
 # read long description from readme.md
