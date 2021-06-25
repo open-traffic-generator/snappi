@@ -82,7 +82,7 @@ class SnappiServer(object):
         return self
 
     def _wait_until_ready(self):
-        api = snappi.api(host='http://127.0.0.1:80')
+        api = snappi.api(location='http://127.0.0.1:80')
         while True:
             try:
                 api.get_config()

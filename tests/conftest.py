@@ -8,7 +8,7 @@ def api():
     from .snappiserver import SnappiServer
     pytest.snappiserver = SnappiServer().start()
     import snappi
-    yield snappi.api(host='http://127.0.0.1:80')
+    yield snappi.api(location='http://127.0.0.1:80')
 
 
 @pytest.fixture(scope='function')

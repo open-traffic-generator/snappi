@@ -1,24 +1,63 @@
-"""Build distributions
-
-To build `python setup.py sdist --formats=gztar bdist_wheel --universal`
+"""
+To build distribution: python setup.py sdist bdist_wheel --universal
 """
 import os
 import setuptools
-from snappi.snappigenerator import SnappiGenerator
+import openapiart
+import requests
+import shutil
 
-pkg_name = 'snappi'
+pkg_name = "snappi"
+version = "0.4.10"
+models_version = "0.4.4"
 
-SnappiGenerator()
+# read long description from readme.md
+base_dir = os.path.abspath(os.path.dirname(__file__))
+with open(os.path.join(base_dir, "readme.md")) as fd:
+    long_description = fd.read()
 
-base_dir = os.path.dirname(os.path.abspath(__file__))
-with open(os.path.join(base_dir, 'README.md')) as fid:
-    long_description = fid.read()
-with open(os.path.join(base_dir, 'VERSION')) as fid:
-    version_number = fid.read()
+# download openapi.yaml
+openapi_url = (
+    'https://github.com/open-traffic-generator/models/releases/download/v%s'
+    '/openapi.yaml'
+) % models_version
+response = requests.request('GET', openapi_url, allow_redirects=True)
+assert response.status_code == 200
+with open(os.path.join('openapi.yaml'), 'wb') as fp:
+    fp.write(response.content)
+
+openapiart.OpenApiArt(
+    api_files=["openapi.yaml"],
+    python_module_name=pkg_name,
+    protobuf_file_name=pkg_name,
+    protobuf_package_name=pkg_name,
+    output_dir="artifacts",
+    extension_prefix=pkg_name
+)
+
+if os.path.exists(pkg_name):
+    shutil.rmtree(pkg_name, ignore_errors=True)
+
+# remove unwanted files
+shutil.copytree(os.path.join("artifacts", pkg_name), pkg_name)
+shutil.rmtree("artifacts", ignore_errors=True)
+for name in os.listdir(pkg_name):
+    path = os.path.join(pkg_name, name)
+    if "pb2" in path:
+        os.remove(path)
+    else:
+        print(path + ' will be published')
+
+doc_dir = os.path.join(pkg_name, "docs")
+os.mkdir(doc_dir)
+shutil.move("openapi.yaml", doc_dir)
+
+with open('models-release', 'w') as out:
+    out.write("v" + models_version)   
 
 setuptools.setup(
     name=pkg_name,
-    version=version_number,
+    version=version,
     description='The Snappi Open Traffic Generator Python Package',
     long_description=long_description,
     long_description_content_type='text/markdown',
@@ -35,7 +74,7 @@ setuptools.setup(
     ],
     keywords='snappi testing open traffic generator automation',
     include_package_data=True,
-    packages=setuptools.find_packages(),
+    packages=[pkg_name],
     python_requires='>=2.7, <4',
     install_requires=[
         'requests',
@@ -45,7 +84,7 @@ setuptools.setup(
     ],
     extras_require={
         'ixnetwork': ['snappi_ixnetwork==0.4.0'],
-        'convergence': ['snappi_convergence==0.0.2']
-    },
-    tests_require=['pytest']
+        'convergence': ['snappi_convergence==0.0.14'],
+        'testing': ['pytest', 'flask']
+    }
 )
