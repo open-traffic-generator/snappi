@@ -10,9 +10,9 @@ def test_slots(api):
     special variable will not be present unless it is specifically included
     in the __slots__.
     """
-    base = snappi.snappicommon.SnappiBase()
+    base = snappi.snappi.OpenApiBase()
     assert('__dict__' not in dir(base))
-    obj = snappi.snappicommon.SnappiObject()
+    obj = snappi.snappi.OpenApiObject()
     assert('__dict__' not in dir(obj))
     config = api.config()
     assert('__dict__' not in dir(config))
