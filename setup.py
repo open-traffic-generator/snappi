@@ -9,7 +9,7 @@ import shutil
 
 pkg_name = "snappi"
 version = "0.4.10"
-models_version = "0.4.3"
+models_version = "0.4.4"
 
 # read long description from readme.md
 base_dir = os.path.abspath(os.path.dirname(__file__))
@@ -52,6 +52,9 @@ doc_dir = os.path.join(pkg_name, "docs")
 os.mkdir(doc_dir)
 shutil.move("openapi.yaml", doc_dir)
 
+with open('models-release', 'w') as out:
+    out.write(models_version)   
+
 setuptools.setup(
     name=pkg_name,
     version=version,
@@ -81,7 +84,7 @@ setuptools.setup(
     ],
     extras_require={
         'ixnetwork': ['snappi_ixnetwork==0.4.0'],
-        'convergence': ['snappi_convergence==0.0.11'],
+        'convergence': ['snappi_convergence==0.0.12'],
         'testing': ['pytest', 'flask']
     }
 )
