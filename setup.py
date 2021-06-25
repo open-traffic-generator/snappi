@@ -11,9 +11,9 @@ pkg_name = "snappi"
 version = "0.4.10"
 models_version = "0.4.3"
 
-# read long description from README.md
+# read long description from readme.md
 base_dir = os.path.abspath(os.path.dirname(__file__))
-with open(os.path.join(base_dir, "README.md")) as fd:
+with open(os.path.join(base_dir, "readme.md")) as fd:
     long_description = fd.read()
 
 # download openapi.yaml
