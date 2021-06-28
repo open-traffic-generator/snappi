@@ -8,7 +8,7 @@ import requests
 import shutil
 
 pkg_name = "snappi"
-version = "0.4.12"
+version = "0.4.13"
 models_version = "0.4.4"
 
 # read long description from readme.md
@@ -84,7 +84,7 @@ setuptools.setup(
     ],
     extras_require={
         'ixnetwork': ['snappi_ixnetwork==0.4.4'],
-        'convergence': ['snappi_convergence==0.0.14'],
+        'convergence': ['snappi_convergence==0.0.15'],
         'testing': ['pytest', 'flask']
     }
 )
