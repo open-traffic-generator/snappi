@@ -84,7 +84,7 @@ setuptools.setup(
     ],
     extras_require={
         'ixnetwork': ['snappi_ixnetwork==0.4.8'],
-        'convergence': ['snappi_convergence==0.0.21'],
+        'convergence': ['snappi_convergence==0.0.22'],
         'testing': ['pytest', 'flask']
     }
 )
