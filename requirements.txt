@@ -1,4 +1,4 @@
 flake8
 pytype
 requests
-openapiart==0.0.41
+openapiart==0.0.42
