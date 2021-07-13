@@ -90,7 +90,7 @@ def test_defaults(api):
                 'media': 'copper',
                 'flow_control': {
                     'choice': 'ieee_802_1qbb',
-                    'directed_address': '0180C2000001',
+                    'directed_address': '01:80:C2:00:00:01',
                     'ieee_802_1qbb': {
                         'pfc_class_0': 0,
                         'pfc_class_1': 1,
@@ -190,7 +190,7 @@ def test_defaults_by_deserialize(api):
                 'promiscuous': True,
                 'speed': 'speed_10_gbps',
                 'flow_control': {
-                    'directed_address': '0180C2000001'
+                    'directed_address': '01:80:C2:00:00:01'
                 }
             }
         ]
@@ -199,7 +199,7 @@ def test_defaults_by_deserialize(api):
     config.deserialize(defaults)
 
     assert config.layer1[0].mtu == 1500
-    assert config.layer1[0].flow_control.directed_address == '0180C2000001'
+    assert config.layer1[0].flow_control.directed_address == '01:80:C2:00:00:01'
     assert config.lags[0].ports[0].protocol.choice == 'lacp'
     assert config.lags[0].ports[0].protocol.lacp.actor_port_number == 0
     assert config.lags[0].ports[0].protocol.lacp.actor_port_priority == 1
