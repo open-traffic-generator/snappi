@@ -8,8 +8,8 @@ import requests
 import shutil
 
 pkg_name = "snappi"
-version = "0.4.22"
-models_version = "0.4.9"
+version = "0.4.23"
+models_version = "0.4.10"
 
 # read long description from readme.md
 base_dir = os.path.abspath(os.path.dirname(__file__))
@@ -83,8 +83,8 @@ setuptools.setup(
         'typing'
     ],
     extras_require={
-        'ixnetwork': ['snappi_ixnetwork==0.4.9'],
-        'convergence': ['snappi_convergence==0.0.24'],
+        'ixnetwork': ['snappi_ixnetwork==0.4.10'],
+        'convergence': ['snappi_convergence==0.0.25'],
         'testing': ['pytest', 'flask']
     }
 )
