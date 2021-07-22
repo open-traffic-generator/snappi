@@ -87,7 +87,6 @@ def test_defaults(api):
                 'port_names': ["test"],
                 'promiscuous': True,
                 'speed': 'speed_10_gbps',
-                'media': 'copper',
                 'flow_control': {
                     'choice': 'ieee_802_1qbb',
                     'directed_address': '01:80:C2:00:00:01',
@@ -183,7 +182,6 @@ def test_defaults_by_deserialize(api):
             {
                 'auto_negotiate': True,
                 'ieee_media_defaults': True,
-                'media': None,
                 'mtu': 1500,
                 'name': "abc",
                 'port_names': ["test"],
