@@ -29,8 +29,9 @@ with open(os.path.join('openapi.yaml'), 'wb') as fp:
 openapiart.OpenApiArt(
     api_files=["openapi.yaml"],
     python_module_name=pkg_name,
-    protobuf_file_name=pkg_name,
-    protobuf_package_name=pkg_name,
+    protobuf_package_name=pkg_name + "pb",
+    go_sdk_package_dir="github.com/open-traffic-generator/snappi/go",
+    go_sdk_package_name=pkg_name,
     output_dir="artifacts",
     extension_prefix=pkg_name
 )
