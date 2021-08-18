@@ -48,7 +48,7 @@ jobs:
         run: |
           git config user.name "Github Actions Bot"
           git config user.email "actions@github.com"
-          git add --force go/\*
+          git add --force snappigo/\*
           if git status --porcelain | grep .
             then
               git commit -m "Update auto generated go pkg" 
