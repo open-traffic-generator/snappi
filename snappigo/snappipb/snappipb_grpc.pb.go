@@ -19,14 +19,14 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type OpenapiClient interface {
-	SetTransmitState(ctx context.Context, in *SetTransmitStateRequest, opts ...grpc.CallOption) (*SetTransmitStateResponse, error)
-	GetMetrics(ctx context.Context, in *GetMetricsRequest, opts ...grpc.CallOption) (*GetMetricsResponse, error)
-	SetCaptureState(ctx context.Context, in *SetCaptureStateRequest, opts ...grpc.CallOption) (*SetCaptureStateResponse, error)
-	SetLinkState(ctx context.Context, in *SetLinkStateRequest, opts ...grpc.CallOption) (*SetLinkStateResponse, error)
 	SetConfig(ctx context.Context, in *SetConfigRequest, opts ...grpc.CallOption) (*SetConfigResponse, error)
 	UpdateConfig(ctx context.Context, in *UpdateConfigRequest, opts ...grpc.CallOption) (*UpdateConfigResponse, error)
 	GetConfig(ctx context.Context, in *empty.Empty, opts ...grpc.CallOption) (*GetConfigResponse, error)
+	SetTransmitState(ctx context.Context, in *SetTransmitStateRequest, opts ...grpc.CallOption) (*SetTransmitStateResponse, error)
+	SetLinkState(ctx context.Context, in *SetLinkStateRequest, opts ...grpc.CallOption) (*SetLinkStateResponse, error)
+	SetCaptureState(ctx context.Context, in *SetCaptureStateRequest, opts ...grpc.CallOption) (*SetCaptureStateResponse, error)
 	SetRouteState(ctx context.Context, in *SetRouteStateRequest, opts ...grpc.CallOption) (*SetRouteStateResponse, error)
+	GetMetrics(ctx context.Context, in *GetMetricsRequest, opts ...grpc.CallOption) (*GetMetricsResponse, error)
 	GetStateMetrics(ctx context.Context, in *empty.Empty, opts ...grpc.CallOption) (*GetStateMetricsResponse, error)
 	GetCapture(ctx context.Context, in *GetCaptureRequest, opts ...grpc.CallOption) (Openapi_GetCaptureClient, error)
 }
@@ -37,42 +37,6 @@ type openapiClient struct {
 
 func NewOpenapiClient(cc grpc.ClientConnInterface) OpenapiClient {
 	return &openapiClient{cc}
-}
-
-func (c *openapiClient) SetTransmitState(ctx context.Context, in *SetTransmitStateRequest, opts ...grpc.CallOption) (*SetTransmitStateResponse, error) {
-	out := new(SetTransmitStateResponse)
-	err := c.cc.Invoke(ctx, "/snappipb.Openapi/SetTransmitState", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *openapiClient) GetMetrics(ctx context.Context, in *GetMetricsRequest, opts ...grpc.CallOption) (*GetMetricsResponse, error) {
-	out := new(GetMetricsResponse)
-	err := c.cc.Invoke(ctx, "/snappipb.Openapi/GetMetrics", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *openapiClient) SetCaptureState(ctx context.Context, in *SetCaptureStateRequest, opts ...grpc.CallOption) (*SetCaptureStateResponse, error) {
-	out := new(SetCaptureStateResponse)
-	err := c.cc.Invoke(ctx, "/snappipb.Openapi/SetCaptureState", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *openapiClient) SetLinkState(ctx context.Context, in *SetLinkStateRequest, opts ...grpc.CallOption) (*SetLinkStateResponse, error) {
-	out := new(SetLinkStateResponse)
-	err := c.cc.Invoke(ctx, "/snappipb.Openapi/SetLinkState", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
 }
 
 func (c *openapiClient) SetConfig(ctx context.Context, in *SetConfigRequest, opts ...grpc.CallOption) (*SetConfigResponse, error) {
@@ -102,9 +66,45 @@ func (c *openapiClient) GetConfig(ctx context.Context, in *empty.Empty, opts ...
 	return out, nil
 }
 
+func (c *openapiClient) SetTransmitState(ctx context.Context, in *SetTransmitStateRequest, opts ...grpc.CallOption) (*SetTransmitStateResponse, error) {
+	out := new(SetTransmitStateResponse)
+	err := c.cc.Invoke(ctx, "/snappipb.Openapi/SetTransmitState", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *openapiClient) SetLinkState(ctx context.Context, in *SetLinkStateRequest, opts ...grpc.CallOption) (*SetLinkStateResponse, error) {
+	out := new(SetLinkStateResponse)
+	err := c.cc.Invoke(ctx, "/snappipb.Openapi/SetLinkState", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *openapiClient) SetCaptureState(ctx context.Context, in *SetCaptureStateRequest, opts ...grpc.CallOption) (*SetCaptureStateResponse, error) {
+	out := new(SetCaptureStateResponse)
+	err := c.cc.Invoke(ctx, "/snappipb.Openapi/SetCaptureState", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *openapiClient) SetRouteState(ctx context.Context, in *SetRouteStateRequest, opts ...grpc.CallOption) (*SetRouteStateResponse, error) {
 	out := new(SetRouteStateResponse)
 	err := c.cc.Invoke(ctx, "/snappipb.Openapi/SetRouteState", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *openapiClient) GetMetrics(ctx context.Context, in *GetMetricsRequest, opts ...grpc.CallOption) (*GetMetricsResponse, error) {
+	out := new(GetMetricsResponse)
+	err := c.cc.Invoke(ctx, "/snappipb.Openapi/GetMetrics", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -156,14 +156,14 @@ func (x *openapiGetCaptureClient) Recv() (*GetCaptureResponse, error) {
 // All implementations must embed UnimplementedOpenapiServer
 // for forward compatibility
 type OpenapiServer interface {
-	SetTransmitState(context.Context, *SetTransmitStateRequest) (*SetTransmitStateResponse, error)
-	GetMetrics(context.Context, *GetMetricsRequest) (*GetMetricsResponse, error)
-	SetCaptureState(context.Context, *SetCaptureStateRequest) (*SetCaptureStateResponse, error)
-	SetLinkState(context.Context, *SetLinkStateRequest) (*SetLinkStateResponse, error)
 	SetConfig(context.Context, *SetConfigRequest) (*SetConfigResponse, error)
 	UpdateConfig(context.Context, *UpdateConfigRequest) (*UpdateConfigResponse, error)
 	GetConfig(context.Context, *empty.Empty) (*GetConfigResponse, error)
+	SetTransmitState(context.Context, *SetTransmitStateRequest) (*SetTransmitStateResponse, error)
+	SetLinkState(context.Context, *SetLinkStateRequest) (*SetLinkStateResponse, error)
+	SetCaptureState(context.Context, *SetCaptureStateRequest) (*SetCaptureStateResponse, error)
 	SetRouteState(context.Context, *SetRouteStateRequest) (*SetRouteStateResponse, error)
+	GetMetrics(context.Context, *GetMetricsRequest) (*GetMetricsResponse, error)
 	GetStateMetrics(context.Context, *empty.Empty) (*GetStateMetricsResponse, error)
 	GetCapture(*GetCaptureRequest, Openapi_GetCaptureServer) error
 	mustEmbedUnimplementedOpenapiServer()
@@ -173,18 +173,6 @@ type OpenapiServer interface {
 type UnimplementedOpenapiServer struct {
 }
 
-func (UnimplementedOpenapiServer) SetTransmitState(context.Context, *SetTransmitStateRequest) (*SetTransmitStateResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SetTransmitState not implemented")
-}
-func (UnimplementedOpenapiServer) GetMetrics(context.Context, *GetMetricsRequest) (*GetMetricsResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetMetrics not implemented")
-}
-func (UnimplementedOpenapiServer) SetCaptureState(context.Context, *SetCaptureStateRequest) (*SetCaptureStateResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SetCaptureState not implemented")
-}
-func (UnimplementedOpenapiServer) SetLinkState(context.Context, *SetLinkStateRequest) (*SetLinkStateResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SetLinkState not implemented")
-}
 func (UnimplementedOpenapiServer) SetConfig(context.Context, *SetConfigRequest) (*SetConfigResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SetConfig not implemented")
 }
@@ -194,8 +182,20 @@ func (UnimplementedOpenapiServer) UpdateConfig(context.Context, *UpdateConfigReq
 func (UnimplementedOpenapiServer) GetConfig(context.Context, *empty.Empty) (*GetConfigResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetConfig not implemented")
 }
+func (UnimplementedOpenapiServer) SetTransmitState(context.Context, *SetTransmitStateRequest) (*SetTransmitStateResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SetTransmitState not implemented")
+}
+func (UnimplementedOpenapiServer) SetLinkState(context.Context, *SetLinkStateRequest) (*SetLinkStateResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SetLinkState not implemented")
+}
+func (UnimplementedOpenapiServer) SetCaptureState(context.Context, *SetCaptureStateRequest) (*SetCaptureStateResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SetCaptureState not implemented")
+}
 func (UnimplementedOpenapiServer) SetRouteState(context.Context, *SetRouteStateRequest) (*SetRouteStateResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SetRouteState not implemented")
+}
+func (UnimplementedOpenapiServer) GetMetrics(context.Context, *GetMetricsRequest) (*GetMetricsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetMetrics not implemented")
 }
 func (UnimplementedOpenapiServer) GetStateMetrics(context.Context, *empty.Empty) (*GetStateMetricsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetStateMetrics not implemented")
@@ -214,78 +214,6 @@ type UnsafeOpenapiServer interface {
 
 func RegisterOpenapiServer(s grpc.ServiceRegistrar, srv OpenapiServer) {
 	s.RegisterService(&Openapi_ServiceDesc, srv)
-}
-
-func _Openapi_SetTransmitState_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(SetTransmitStateRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(OpenapiServer).SetTransmitState(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/snappipb.Openapi/SetTransmitState",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(OpenapiServer).SetTransmitState(ctx, req.(*SetTransmitStateRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Openapi_GetMetrics_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetMetricsRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(OpenapiServer).GetMetrics(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/snappipb.Openapi/GetMetrics",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(OpenapiServer).GetMetrics(ctx, req.(*GetMetricsRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Openapi_SetCaptureState_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(SetCaptureStateRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(OpenapiServer).SetCaptureState(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/snappipb.Openapi/SetCaptureState",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(OpenapiServer).SetCaptureState(ctx, req.(*SetCaptureStateRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Openapi_SetLinkState_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(SetLinkStateRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(OpenapiServer).SetLinkState(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/snappipb.Openapi/SetLinkState",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(OpenapiServer).SetLinkState(ctx, req.(*SetLinkStateRequest))
-	}
-	return interceptor(ctx, in, info, handler)
 }
 
 func _Openapi_SetConfig_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -342,6 +270,60 @@ func _Openapi_GetConfig_Handler(srv interface{}, ctx context.Context, dec func(i
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Openapi_SetTransmitState_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SetTransmitStateRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(OpenapiServer).SetTransmitState(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/snappipb.Openapi/SetTransmitState",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(OpenapiServer).SetTransmitState(ctx, req.(*SetTransmitStateRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Openapi_SetLinkState_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SetLinkStateRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(OpenapiServer).SetLinkState(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/snappipb.Openapi/SetLinkState",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(OpenapiServer).SetLinkState(ctx, req.(*SetLinkStateRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Openapi_SetCaptureState_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SetCaptureStateRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(OpenapiServer).SetCaptureState(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/snappipb.Openapi/SetCaptureState",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(OpenapiServer).SetCaptureState(ctx, req.(*SetCaptureStateRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Openapi_SetRouteState_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(SetRouteStateRequest)
 	if err := dec(in); err != nil {
@@ -356,6 +338,24 @@ func _Openapi_SetRouteState_Handler(srv interface{}, ctx context.Context, dec fu
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(OpenapiServer).SetRouteState(ctx, req.(*SetRouteStateRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Openapi_GetMetrics_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetMetricsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(OpenapiServer).GetMetrics(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/snappipb.Openapi/GetMetrics",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(OpenapiServer).GetMetrics(ctx, req.(*GetMetricsRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -407,22 +407,6 @@ var Openapi_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*OpenapiServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "SetTransmitState",
-			Handler:    _Openapi_SetTransmitState_Handler,
-		},
-		{
-			MethodName: "GetMetrics",
-			Handler:    _Openapi_GetMetrics_Handler,
-		},
-		{
-			MethodName: "SetCaptureState",
-			Handler:    _Openapi_SetCaptureState_Handler,
-		},
-		{
-			MethodName: "SetLinkState",
-			Handler:    _Openapi_SetLinkState_Handler,
-		},
-		{
 			MethodName: "SetConfig",
 			Handler:    _Openapi_SetConfig_Handler,
 		},
@@ -435,8 +419,24 @@ var Openapi_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Openapi_GetConfig_Handler,
 		},
 		{
+			MethodName: "SetTransmitState",
+			Handler:    _Openapi_SetTransmitState_Handler,
+		},
+		{
+			MethodName: "SetLinkState",
+			Handler:    _Openapi_SetLinkState_Handler,
+		},
+		{
+			MethodName: "SetCaptureState",
+			Handler:    _Openapi_SetCaptureState_Handler,
+		},
+		{
 			MethodName: "SetRouteState",
 			Handler:    _Openapi_SetRouteState_Handler,
+		},
+		{
+			MethodName: "GetMetrics",
+			Handler:    _Openapi_GetMetrics_Handler,
 		},
 		{
 			MethodName: "GetStateMetrics",
