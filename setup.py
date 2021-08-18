@@ -8,6 +8,7 @@ import requests
 import shutil
 
 pkg_name = "snappi"
+go_pkg_name = "snappigo"
 version = "0.4.28"
 models_version = "0.4.13"
 
@@ -30,8 +31,8 @@ openapiart.OpenApiArt(
     api_files=["openapi.yaml"],
     python_module_name=pkg_name,
     protobuf_package_name=pkg_name + "pb",
-    go_sdk_package_dir="github.com/open-traffic-generator/snappi/go",
-    go_sdk_package_name=pkg_name,
+    go_sdk_package_dir="github.com/open-traffic-generator/snappi/%s" % go_pkg_name,
+    go_sdk_package_name=go_pkg_name,
     output_dir="artifacts",
     extension_prefix=pkg_name
 )
