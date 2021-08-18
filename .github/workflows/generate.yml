@@ -8,7 +8,7 @@ jobs:
     strategy:
       max-parallel: 1
       matrix:
-        python-version: [3.6]
+        python-version: [2.7, 3.6]
 
     steps:
       - name: Checkout source
@@ -45,6 +45,7 @@ jobs:
           python do.py setup
           python do.py install
       - name: Commit go pkg
+        if: ${{ matrix.python-version == 3.6 }}
         run: |
           git config user.name "Github Actions Bot"
           git config user.email "actions@github.com"
