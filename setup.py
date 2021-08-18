@@ -34,7 +34,8 @@ openapiart.OpenApiArt(
     go_sdk_package_dir="github.com/open-traffic-generator/snappi/%s" % go_pkg_name,
     go_sdk_package_name=go_pkg_name,
     output_dir="artifacts",
-    extension_prefix=pkg_name
+    extension_prefix=pkg_name,
+    license="MIT"
 )
 
 if os.path.exists(pkg_name):
