@@ -4,6 +4,93 @@ import re
 import sys
 import shutil
 import subprocess
+import platform
+
+
+os.environ["GOPATH"] = os.path.join(
+    os.path.dirname(os.path.abspath(__file__)), ".local"
+)
+os.environ["PATH"] = os.environ["PATH"] + ":{0}/go/bin:{0}/bin".format(os.environ["GOPATH"])
+
+
+def arch():
+    return getattr(platform.uname(), "machine", platform.uname()[-1]).lower()
+
+
+def on_arm():
+    return arch() in ["arm64", "aarch64"]
+
+
+def on_x86():
+    return arch() == "x86_64"
+
+
+def on_linux():
+    print("The platform is {}".format(sys.platform))
+    return "linux" in sys.platform
+
+
+def get_go():
+    version = "1.17"
+    targz = None
+
+    if on_arm():
+        targz = "go" + version + ".linux-arm64.tar.gz"
+    elif on_x86():
+        targz = "go" + version + ".linux-amd64.tar.gz"
+    else:
+        print("host architecture not supported")
+        return
+
+    if not os.path.exists(os.environ["GOPATH"]):
+        os.mkdir(os.environ["GOPATH"])
+
+    print("Installing Go ...")
+    cmd = "go version 2> /dev/null || curl -kL https://dl.google.com/go/" + targz
+    cmd += " | tar -C " + os.environ["GOPATH"] + " -xzf -"
+    run([cmd])
+
+
+def get_go_deps():
+    print("Getting Go libraries for grpc / protobuf ...")
+    cmd = "GO111MODULE=on go get -v"
+    run(
+        [
+            cmd + " google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.1.0",
+            cmd + " google.golang.org/protobuf/cmd/protoc-gen-go@v1.25.0",
+            cmd + " golang.org/x/tools/cmd/goimports"
+        ]
+    )
+
+
+def get_protoc():
+    version = "3.17.3"
+    zipfile = None
+
+    if on_arm():
+        zipfile = "protoc-" + version + "-linux-aarch_64.zip"
+    elif on_x86():
+        zipfile = "protoc-" + version + "-linux-x86_64.zip"
+    else:
+        print("host architecture not supported")
+        return
+
+    print("Installing protoc ...")
+    cmd = "protoc --version 2> /dev/null || ( curl -kL -o ./protoc.zip "
+    cmd += "https://github.com/protocolbuffers/protobuf/releases/download/v"
+    cmd += version + "/" + zipfile
+    cmd += ' && unzip ./protoc.zip -d ' + os.environ["GOPATH"]
+    cmd += ' && rm -rf ./protoc.zip )'
+    run([cmd])
+
+
+def setup_ext():
+    if on_linux():
+        get_go()
+        get_protoc()
+        get_go_deps()
+    else:
+        print("Skipping go and protoc installation on non-linux platform ...")
 
 
 def setup():
