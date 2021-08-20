@@ -14,6 +14,7 @@ os.environ["PATH"] = os.environ["PATH"] + ":{0}/go/bin:{0}/bin".format(os.enviro
 
 
 def on_arm():
+    print("{}".format(platform.uname()))
     arch = platform.uname().machine.lower()
     return arch == "arm64" or arch == "aarch64"
 
