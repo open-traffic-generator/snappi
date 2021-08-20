@@ -13,15 +13,16 @@ os.environ["GOPATH"] = os.path.join(
 os.environ["PATH"] = os.environ["PATH"] + ":{0}/go/bin:{0}/bin".format(os.environ["GOPATH"])
 
 
+def arch():
+    return getattr(platform.uname(), "machine", platform.uname()[-1]).lower()
+
+
 def on_arm():
-    print("{}".format(platform.uname()))
-    arch = platform.uname().machine.lower()
-    return arch == "arm64" or arch == "aarch64"
+    return arch() in ["arm64", "aarch64"]
 
 
 def on_x86():
-    arch = platform.uname().machine.lower()
-    return arch == "x86_64"
+    return arch() == "x86_64"
 
 
 def on_linux():
