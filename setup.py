@@ -8,8 +8,8 @@ import requests
 import shutil
 
 pkg_name = "snappi"
-version = "0.4.28"
-models_version = "0.4.13"
+version = "0.4.29"
+models_version = "0.4.14"
 
 # read long description from readme.md
 base_dir = os.path.abspath(os.path.dirname(__file__))
