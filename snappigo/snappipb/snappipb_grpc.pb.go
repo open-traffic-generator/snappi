@@ -4,10 +4,10 @@ package snappipb
 
 import (
 	context "context"
-	empty "github.com/golang/protobuf/ptypes/empty"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
+	emptypb "google.golang.org/protobuf/types/known/emptypb"
 )
 
 // This is a compile-time assertion to ensure that this generated file
@@ -21,13 +21,13 @@ const _ = grpc.SupportPackageIsVersion7
 type OpenapiClient interface {
 	SetConfig(ctx context.Context, in *SetConfigRequest, opts ...grpc.CallOption) (*SetConfigResponse, error)
 	UpdateConfig(ctx context.Context, in *UpdateConfigRequest, opts ...grpc.CallOption) (*UpdateConfigResponse, error)
-	GetConfig(ctx context.Context, in *empty.Empty, opts ...grpc.CallOption) (*GetConfigResponse, error)
+	GetConfig(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*GetConfigResponse, error)
 	SetTransmitState(ctx context.Context, in *SetTransmitStateRequest, opts ...grpc.CallOption) (*SetTransmitStateResponse, error)
 	SetLinkState(ctx context.Context, in *SetLinkStateRequest, opts ...grpc.CallOption) (*SetLinkStateResponse, error)
 	SetCaptureState(ctx context.Context, in *SetCaptureStateRequest, opts ...grpc.CallOption) (*SetCaptureStateResponse, error)
 	SetRouteState(ctx context.Context, in *SetRouteStateRequest, opts ...grpc.CallOption) (*SetRouteStateResponse, error)
 	GetMetrics(ctx context.Context, in *GetMetricsRequest, opts ...grpc.CallOption) (*GetMetricsResponse, error)
-	GetStateMetrics(ctx context.Context, in *empty.Empty, opts ...grpc.CallOption) (*GetStateMetricsResponse, error)
+	GetStateMetrics(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*GetStateMetricsResponse, error)
 	GetCapture(ctx context.Context, in *GetCaptureRequest, opts ...grpc.CallOption) (Openapi_GetCaptureClient, error)
 }
 
@@ -57,7 +57,7 @@ func (c *openapiClient) UpdateConfig(ctx context.Context, in *UpdateConfigReques
 	return out, nil
 }
 
-func (c *openapiClient) GetConfig(ctx context.Context, in *empty.Empty, opts ...grpc.CallOption) (*GetConfigResponse, error) {
+func (c *openapiClient) GetConfig(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*GetConfigResponse, error) {
 	out := new(GetConfigResponse)
 	err := c.cc.Invoke(ctx, "/snappipb.Openapi/GetConfig", in, out, opts...)
 	if err != nil {
@@ -111,7 +111,7 @@ func (c *openapiClient) GetMetrics(ctx context.Context, in *GetMetricsRequest, o
 	return out, nil
 }
 
-func (c *openapiClient) GetStateMetrics(ctx context.Context, in *empty.Empty, opts ...grpc.CallOption) (*GetStateMetricsResponse, error) {
+func (c *openapiClient) GetStateMetrics(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*GetStateMetricsResponse, error) {
 	out := new(GetStateMetricsResponse)
 	err := c.cc.Invoke(ctx, "/snappipb.Openapi/GetStateMetrics", in, out, opts...)
 	if err != nil {
@@ -158,13 +158,13 @@ func (x *openapiGetCaptureClient) Recv() (*GetCaptureResponse, error) {
 type OpenapiServer interface {
 	SetConfig(context.Context, *SetConfigRequest) (*SetConfigResponse, error)
 	UpdateConfig(context.Context, *UpdateConfigRequest) (*UpdateConfigResponse, error)
-	GetConfig(context.Context, *empty.Empty) (*GetConfigResponse, error)
+	GetConfig(context.Context, *emptypb.Empty) (*GetConfigResponse, error)
 	SetTransmitState(context.Context, *SetTransmitStateRequest) (*SetTransmitStateResponse, error)
 	SetLinkState(context.Context, *SetLinkStateRequest) (*SetLinkStateResponse, error)
 	SetCaptureState(context.Context, *SetCaptureStateRequest) (*SetCaptureStateResponse, error)
 	SetRouteState(context.Context, *SetRouteStateRequest) (*SetRouteStateResponse, error)
 	GetMetrics(context.Context, *GetMetricsRequest) (*GetMetricsResponse, error)
-	GetStateMetrics(context.Context, *empty.Empty) (*GetStateMetricsResponse, error)
+	GetStateMetrics(context.Context, *emptypb.Empty) (*GetStateMetricsResponse, error)
 	GetCapture(*GetCaptureRequest, Openapi_GetCaptureServer) error
 	mustEmbedUnimplementedOpenapiServer()
 }
@@ -179,7 +179,7 @@ func (UnimplementedOpenapiServer) SetConfig(context.Context, *SetConfigRequest) 
 func (UnimplementedOpenapiServer) UpdateConfig(context.Context, *UpdateConfigRequest) (*UpdateConfigResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateConfig not implemented")
 }
-func (UnimplementedOpenapiServer) GetConfig(context.Context, *empty.Empty) (*GetConfigResponse, error) {
+func (UnimplementedOpenapiServer) GetConfig(context.Context, *emptypb.Empty) (*GetConfigResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetConfig not implemented")
 }
 func (UnimplementedOpenapiServer) SetTransmitState(context.Context, *SetTransmitStateRequest) (*SetTransmitStateResponse, error) {
@@ -197,7 +197,7 @@ func (UnimplementedOpenapiServer) SetRouteState(context.Context, *SetRouteStateR
 func (UnimplementedOpenapiServer) GetMetrics(context.Context, *GetMetricsRequest) (*GetMetricsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetMetrics not implemented")
 }
-func (UnimplementedOpenapiServer) GetStateMetrics(context.Context, *empty.Empty) (*GetStateMetricsResponse, error) {
+func (UnimplementedOpenapiServer) GetStateMetrics(context.Context, *emptypb.Empty) (*GetStateMetricsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetStateMetrics not implemented")
 }
 func (UnimplementedOpenapiServer) GetCapture(*GetCaptureRequest, Openapi_GetCaptureServer) error {
@@ -253,7 +253,7 @@ func _Openapi_UpdateConfig_Handler(srv interface{}, ctx context.Context, dec fun
 }
 
 func _Openapi_GetConfig_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(empty.Empty)
+	in := new(emptypb.Empty)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -265,7 +265,7 @@ func _Openapi_GetConfig_Handler(srv interface{}, ctx context.Context, dec func(i
 		FullMethod: "/snappipb.Openapi/GetConfig",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(OpenapiServer).GetConfig(ctx, req.(*empty.Empty))
+		return srv.(OpenapiServer).GetConfig(ctx, req.(*emptypb.Empty))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -361,7 +361,7 @@ func _Openapi_GetMetrics_Handler(srv interface{}, ctx context.Context, dec func(
 }
 
 func _Openapi_GetStateMetrics_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(empty.Empty)
+	in := new(emptypb.Empty)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -373,7 +373,7 @@ func _Openapi_GetStateMetrics_Handler(srv interface{}, ctx context.Context, dec 
 		FullMethod: "/snappipb.Openapi/GetStateMetrics",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(OpenapiServer).GetStateMetrics(ctx, req.(*empty.Empty))
+		return srv.(OpenapiServer).GetStateMetrics(ctx, req.(*emptypb.Empty))
 	}
 	return interceptor(ctx, in, info, handler)
 }
