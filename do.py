@@ -24,6 +24,7 @@ def on_x86():
 
 
 def on_linux():
+    print("The platform is {}".format(sys.platform))
     return sys.platform == "linux"
 
 
