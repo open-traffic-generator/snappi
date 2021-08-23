@@ -146,7 +146,7 @@ def test():
     os.chdir("gosnappi")
     try:
         run([
-            "go mod tidy",
+            # "go mod tidy",
             "go test ./... -v -coverprofile coverage.txt | tee coverage.out"
         ])
     except Exception as e:
