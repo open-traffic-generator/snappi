@@ -1919,7 +1919,11 @@ func (obj *device) SetContainerName(value string) Device {
 // Ethernet returns a DeviceEthernet
 //  The ethernet stack.
 func (obj *device) Ethernet() DeviceEthernet {
+	if obj.obj.Ethernet == nil {
+		obj.obj.Ethernet = &snappipb.DeviceEthernet{}
+	}
 	return &deviceEthernet{obj: obj.obj.Ethernet}
+
 }
 
 // Name returns a string
@@ -1994,7 +1998,11 @@ type Flow interface {
 // TxRx returns a FlowTxRx
 //  The transmit and receive endpoints.
 func (obj *flow) TxRx() FlowTxRx {
+	if obj.obj.TxRx == nil {
+		obj.obj.TxRx = &snappipb.FlowTxRx{}
+	}
 	return &flowTxRx{obj: obj.obj.TxRx}
+
 }
 
 // Packet returns a []FlowHeader
@@ -2666,13 +2674,21 @@ func (obj *lagPort) SetPortName(value string) LagPort {
 // Protocol returns a LagProtocol
 //  description is TBD
 func (obj *lagPort) Protocol() LagProtocol {
+	if obj.obj.Protocol == nil {
+		obj.obj.Protocol = &snappipb.LagProtocol{}
+	}
 	return &lagProtocol{obj: obj.obj.Protocol}
+
 }
 
 // Ethernet returns a DeviceEthernetBase
 //  description is TBD
 func (obj *lagPort) Ethernet() DeviceEthernetBase {
+	if obj.obj.Ethernet == nil {
+		obj.obj.Ethernet = &snappipb.DeviceEthernetBase{}
+	}
 	return &deviceEthernetBase{obj: obj.obj.Ethernet}
+
 }
 
 type layer1AutoNegotiation struct {
