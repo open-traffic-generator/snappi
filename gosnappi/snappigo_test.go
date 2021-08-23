@@ -1,9 +1,9 @@
-package snappigo_test
+package gosnappi_test
 
 import (
 	"testing"
 
-	snappigo "github.com/open-traffic-generator/snappi/snappigo"
+	snappigo "github.com/open-traffic-generator/snappi/gosnappi"
 	assert "github.com/stretchr/testify/assert"
 )
 

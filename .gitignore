@@ -15,3 +15,8 @@ scratch/
 artifacts/
 snappi/
 models-release
+cov-report/
+.coverage
+gosnappi/coverage.out
+gosnappi/coverage.txt
+.local

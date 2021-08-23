@@ -8,7 +8,7 @@ import requests
 import shutil
 
 pkg_name = "snappi"
-go_pkg_name = "snappigo"
+go_pkg_name = "gosnappi"
 version = "0.4.30"
 models_version = "0.4.15"
 

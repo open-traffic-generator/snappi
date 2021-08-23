@@ -126,9 +126,45 @@ def lint():
 def test():
     run(
         [
-            py() + " -m pytest -sv",
+            py() + " -m pip install pytest-cov",
+            py() + " -m pytest -sv --cov=snappi --cov-report term --cov-report html:cov_report",
         ]
     )
+    import re
+
+    coverage_threshold = 69
+    with open("./cov_report/index.html") as fp:
+        out = fp.read()
+        result = re.findall(r"data-ratio.*?[>](\d+)\b", out)[0]
+        if int(result) < coverage_threshold:
+            raise Exception("Coverage thresold[{0}] is NOT achieved[{1}]".format(coverage_threshold, result))
+        else:
+            print("Coverage thresold[{0}] is achieved[{1}]".format(coverage_threshold, result))
+
+    go_coverage_threshold = 0.4
+    # TODO: not able to run the test from main directory
+    os.chdir("gosnappi")
+    try:
+        run([
+            "go mod tidy",
+            "go test ./... -v -coverprofile coverage.txt | tee coverage.out"
+        ])
+    except Exception as e:
+        print("Exception occurred while running go tests \n {}".format(e))
+    finally:
+        os.chdir("..")
+
+    with open("gosnappi/coverage.out") as fp:
+        out = fp.read()
+        result = re.findall(r"coverage:.*\s(\d+)", out)[0]
+        if int(result) < go_coverage_threshold:
+            raise Exception(
+                "Go tests achieved {1}% which is less than Coverage thresold {0}%,".format(
+                    go_coverage_threshold, result))
+        else:
+            print(
+                "Go tests achieved {1}% ,Coverage thresold {0}%".format(
+                    go_coverage_threshold, result))
 
 
 def dist():
@@ -268,10 +304,11 @@ def run(commands):
     try:
         for cmd in commands:
             print(cmd)
-            subprocess.check_call(
-                cmd.encode("utf-8", errors="ignore"), shell=True
-            )
-    except Exception:
+            if sys.platform != "win32":
+                cmd = cmd.encode("utf-8", errors="ignore")
+            subprocess.check_call(cmd, shell=True)
+    except Exception as e:
+        print(e)
         sys.exit(1)
 
 

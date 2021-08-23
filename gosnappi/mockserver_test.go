@@ -1,4 +1,4 @@
-package snappigo_test
+package gosnappi_test
 
 import (
 	context "context"
@@ -7,7 +7,7 @@ import (
 	net "net"
 	"reflect"
 
-	snappipb "github.com/open-traffic-generator/snappi/snappigo/snappipb"
+	snappipb "github.com/open-traffic-generator/snappi/gosnappi/snappipb"
 	grpc "google.golang.org/grpc"
 	"google.golang.org/protobuf/types/known/emptypb"
 )
