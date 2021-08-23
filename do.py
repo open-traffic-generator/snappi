@@ -132,7 +132,7 @@ def test():
     )
     import re
 
-    coverage_threshold = 69
+    coverage_threshold = 62
     with open("./cov_report/index.html") as fp:
         out = fp.read()
         result = re.findall(r"data-ratio.*?[>](\d+)\b", out)[0]
@@ -141,7 +141,7 @@ def test():
         else:
             print("Coverage thresold[{0}] is achieved[{1}]".format(coverage_threshold, result))
 
-    go_coverage_threshold = 0.4
+    go_coverage_threshold = 0.2
     # TODO: not able to run the test from main directory
     os.chdir("gosnappi")
     try:
