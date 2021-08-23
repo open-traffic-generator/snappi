@@ -9,9 +9,10 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/ghodss/yaml"
 	snappipb "github.com/open-traffic-generator/snappi/snappigo/snappipb"
 	"google.golang.org/grpc"
-	"gopkg.in/yaml.v3"
+	"google.golang.org/protobuf/types/known/emptypb"
 )
 
 type grpcTransport struct {
@@ -96,7 +97,7 @@ type Api interface {
 func (api *api) NewGrpcTransport() GrpcTransport {
 	api.grpc = &grpcTransport{
 		location:       "127.0.0.1:5050",
-		requestTimeout: time.Duration(10),
+		requestTimeout: 10 * time.Second,
 	}
 	api.http = nil
 	return api.grpc
@@ -158,14 +159,16 @@ type SnappigoApi interface {
 	NewRouteState() RouteState
 	NewMetricsRequest() MetricsRequest
 	NewCaptureRequest() CaptureRequest
-	SetConfig(config Config) error
-	SetTransmitState(transmitState TransmitState) error
-	SetLinkState(linkState LinkState) error
-	SetCaptureState(captureState CaptureState) error
-	UpdateFlows(flowsUpdate FlowsUpdate) error
-	SetRouteState(routeState RouteState) error
-	GetMetrics(metricsRequest MetricsRequest) error
-	GetCapture(captureRequest CaptureRequest) error
+	SetConfig(config Config) (SetConfigResponse_StatusCode200, error)
+	GetConfig() (GetConfigResponse_StatusCode200, error)
+	SetTransmitState(transmitState TransmitState) (SetTransmitStateResponse_StatusCode200, error)
+	SetLinkState(linkState LinkState) (SetLinkStateResponse_StatusCode200, error)
+	SetCaptureState(captureState CaptureState) (SetCaptureStateResponse_StatusCode200, error)
+	UpdateFlows(flowsUpdate FlowsUpdate) (UpdateFlowsResponse_StatusCode200, error)
+	SetRouteState(routeState RouteState) (SetRouteStateResponse_StatusCode200, error)
+	GetMetrics(metricsRequest MetricsRequest) (GetMetricsResponse_StatusCode200, error)
+	GetStateMetrics() (GetStateMetricsResponse_StatusCode200, error)
+	GetCapture(captureRequest CaptureRequest) (GetCaptureResponse_StatusCode200, error)
 }
 
 func (api *snappigoApi) NewConfig() Config {
@@ -200,148 +203,254 @@ func (api *snappigoApi) NewCaptureRequest() CaptureRequest {
 	return &captureRequest{obj: &snappipb.CaptureRequest{}}
 }
 
-func (api *snappigoApi) SetConfig(config Config) error {
+func (api *snappigoApi) SetConfig(config Config) (SetConfigResponse_StatusCode200, error) {
 	if err := api.grpcConnect(); err != nil {
-		return err
+		return nil, err
 	}
 	request := snappipb.SetConfigRequest{Config: config.msg()}
 	ctx, cancelFunc := context.WithTimeout(context.Background(), api.grpc.requestTimeout)
 	defer cancelFunc()
-	client, err := api.grpcClient.SetConfig(ctx, &request)
+	resp, err := api.grpcClient.SetConfig(ctx, &request)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	resp, _ := client.Recv()
-	if resp.GetStatusCode_200() == nil {
-		return fmt.Errorf("fail")
+	if resp.GetStatusCode_200() != nil {
+		return &setConfigResponseStatusCode200{obj: resp.GetStatusCode_200()}, nil
 	}
-	return nil
+	if resp.GetStatusCode_400() != nil {
+		data, _ := yaml.Marshal(resp.GetStatusCode_400())
+		return nil, fmt.Errorf(string(data))
+	}
+	if resp.GetStatusCode_500() != nil {
+		data, _ := yaml.Marshal(resp.GetStatusCode_400())
+		return nil, fmt.Errorf(string(data))
+	}
+	return nil, fmt.Errorf("Response not implemented")
 }
 
-func (api *snappigoApi) SetTransmitState(transmitState TransmitState) error {
+func (api *snappigoApi) GetConfig() (GetConfigResponse_StatusCode200, error) {
 	if err := api.grpcConnect(); err != nil {
-		return err
+		return nil, err
+	}
+	request := emptypb.Empty{}
+	ctx, cancelFunc := context.WithTimeout(context.Background(), api.grpc.requestTimeout)
+	defer cancelFunc()
+	resp, err := api.grpcClient.GetConfig(ctx, &request)
+	if err != nil {
+		return nil, err
+	}
+	if resp.GetStatusCode_200() != nil {
+		return &getConfigResponseStatusCode200{obj: resp.GetStatusCode_200()}, nil
+	}
+	if resp.GetStatusCode_400() != nil {
+		data, _ := yaml.Marshal(resp.GetStatusCode_400())
+		return nil, fmt.Errorf(string(data))
+	}
+	if resp.GetStatusCode_500() != nil {
+		data, _ := yaml.Marshal(resp.GetStatusCode_400())
+		return nil, fmt.Errorf(string(data))
+	}
+	return nil, fmt.Errorf("Response not implemented")
+}
+
+func (api *snappigoApi) SetTransmitState(transmitState TransmitState) (SetTransmitStateResponse_StatusCode200, error) {
+	if err := api.grpcConnect(); err != nil {
+		return nil, err
 	}
 	request := snappipb.SetTransmitStateRequest{TransmitState: transmitState.msg()}
 	ctx, cancelFunc := context.WithTimeout(context.Background(), api.grpc.requestTimeout)
 	defer cancelFunc()
-	client, err := api.grpcClient.SetTransmitState(ctx, &request)
+	resp, err := api.grpcClient.SetTransmitState(ctx, &request)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	resp, _ := client.Recv()
-	if resp.GetStatusCode_200() == nil {
-		return fmt.Errorf("fail")
+	if resp.GetStatusCode_200() != nil {
+		return &setTransmitStateResponseStatusCode200{obj: resp.GetStatusCode_200()}, nil
 	}
-	return nil
+	if resp.GetStatusCode_400() != nil {
+		data, _ := yaml.Marshal(resp.GetStatusCode_400())
+		return nil, fmt.Errorf(string(data))
+	}
+	if resp.GetStatusCode_500() != nil {
+		data, _ := yaml.Marshal(resp.GetStatusCode_400())
+		return nil, fmt.Errorf(string(data))
+	}
+	return nil, fmt.Errorf("Response not implemented")
 }
 
-func (api *snappigoApi) SetLinkState(linkState LinkState) error {
+func (api *snappigoApi) SetLinkState(linkState LinkState) (SetLinkStateResponse_StatusCode200, error) {
 	if err := api.grpcConnect(); err != nil {
-		return err
+		return nil, err
 	}
 	request := snappipb.SetLinkStateRequest{LinkState: linkState.msg()}
 	ctx, cancelFunc := context.WithTimeout(context.Background(), api.grpc.requestTimeout)
 	defer cancelFunc()
-	client, err := api.grpcClient.SetLinkState(ctx, &request)
+	resp, err := api.grpcClient.SetLinkState(ctx, &request)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	resp, _ := client.Recv()
-	if resp.GetStatusCode_200() == nil {
-		return fmt.Errorf("fail")
+	if resp.GetStatusCode_200() != nil {
+		return &setLinkStateResponseStatusCode200{obj: resp.GetStatusCode_200()}, nil
 	}
-	return nil
+	if resp.GetStatusCode_400() != nil {
+		data, _ := yaml.Marshal(resp.GetStatusCode_400())
+		return nil, fmt.Errorf(string(data))
+	}
+	if resp.GetStatusCode_500() != nil {
+		data, _ := yaml.Marshal(resp.GetStatusCode_400())
+		return nil, fmt.Errorf(string(data))
+	}
+	return nil, fmt.Errorf("Response not implemented")
 }
 
-func (api *snappigoApi) SetCaptureState(captureState CaptureState) error {
+func (api *snappigoApi) SetCaptureState(captureState CaptureState) (SetCaptureStateResponse_StatusCode200, error) {
 	if err := api.grpcConnect(); err != nil {
-		return err
+		return nil, err
 	}
 	request := snappipb.SetCaptureStateRequest{CaptureState: captureState.msg()}
 	ctx, cancelFunc := context.WithTimeout(context.Background(), api.grpc.requestTimeout)
 	defer cancelFunc()
-	client, err := api.grpcClient.SetCaptureState(ctx, &request)
+	resp, err := api.grpcClient.SetCaptureState(ctx, &request)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	resp, _ := client.Recv()
-	if resp.GetStatusCode_200() == nil {
-		return fmt.Errorf("fail")
+	if resp.GetStatusCode_200() != nil {
+		return &setCaptureStateResponseStatusCode200{obj: resp.GetStatusCode_200()}, nil
 	}
-	return nil
+	if resp.GetStatusCode_400() != nil {
+		data, _ := yaml.Marshal(resp.GetStatusCode_400())
+		return nil, fmt.Errorf(string(data))
+	}
+	if resp.GetStatusCode_500() != nil {
+		data, _ := yaml.Marshal(resp.GetStatusCode_400())
+		return nil, fmt.Errorf(string(data))
+	}
+	return nil, fmt.Errorf("Response not implemented")
 }
 
-func (api *snappigoApi) UpdateFlows(flowsUpdate FlowsUpdate) error {
+func (api *snappigoApi) UpdateFlows(flowsUpdate FlowsUpdate) (UpdateFlowsResponse_StatusCode200, error) {
 	if err := api.grpcConnect(); err != nil {
-		return err
+		return nil, err
 	}
 	request := snappipb.UpdateFlowsRequest{FlowsUpdate: flowsUpdate.msg()}
 	ctx, cancelFunc := context.WithTimeout(context.Background(), api.grpc.requestTimeout)
 	defer cancelFunc()
-	client, err := api.grpcClient.UpdateFlows(ctx, &request)
+	resp, err := api.grpcClient.UpdateFlows(ctx, &request)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	resp, _ := client.Recv()
-	if resp.GetStatusCode_200() == nil {
-		return fmt.Errorf("fail")
+	if resp.GetStatusCode_200() != nil {
+		return &updateFlowsResponseStatusCode200{obj: resp.GetStatusCode_200()}, nil
 	}
-	return nil
+	if resp.GetStatusCode_400() != nil {
+		data, _ := yaml.Marshal(resp.GetStatusCode_400())
+		return nil, fmt.Errorf(string(data))
+	}
+	if resp.GetStatusCode_500() != nil {
+		data, _ := yaml.Marshal(resp.GetStatusCode_400())
+		return nil, fmt.Errorf(string(data))
+	}
+	return nil, fmt.Errorf("Response not implemented")
 }
 
-func (api *snappigoApi) SetRouteState(routeState RouteState) error {
+func (api *snappigoApi) SetRouteState(routeState RouteState) (SetRouteStateResponse_StatusCode200, error) {
 	if err := api.grpcConnect(); err != nil {
-		return err
+		return nil, err
 	}
 	request := snappipb.SetRouteStateRequest{RouteState: routeState.msg()}
 	ctx, cancelFunc := context.WithTimeout(context.Background(), api.grpc.requestTimeout)
 	defer cancelFunc()
-	client, err := api.grpcClient.SetRouteState(ctx, &request)
+	resp, err := api.grpcClient.SetRouteState(ctx, &request)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	resp, _ := client.Recv()
-	if resp.GetStatusCode_200() == nil {
-		return fmt.Errorf("fail")
+	if resp.GetStatusCode_200() != nil {
+		return &setRouteStateResponseStatusCode200{obj: resp.GetStatusCode_200()}, nil
 	}
-	return nil
+	if resp.GetStatusCode_400() != nil {
+		data, _ := yaml.Marshal(resp.GetStatusCode_400())
+		return nil, fmt.Errorf(string(data))
+	}
+	if resp.GetStatusCode_500() != nil {
+		data, _ := yaml.Marshal(resp.GetStatusCode_400())
+		return nil, fmt.Errorf(string(data))
+	}
+	return nil, fmt.Errorf("Response not implemented")
 }
 
-func (api *snappigoApi) GetMetrics(metricsRequest MetricsRequest) error {
+func (api *snappigoApi) GetMetrics(metricsRequest MetricsRequest) (GetMetricsResponse_StatusCode200, error) {
 	if err := api.grpcConnect(); err != nil {
-		return err
+		return nil, err
 	}
 	request := snappipb.GetMetricsRequest{MetricsRequest: metricsRequest.msg()}
 	ctx, cancelFunc := context.WithTimeout(context.Background(), api.grpc.requestTimeout)
 	defer cancelFunc()
-	client, err := api.grpcClient.GetMetrics(ctx, &request)
+	resp, err := api.grpcClient.GetMetrics(ctx, &request)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	resp, _ := client.Recv()
-	if resp.GetStatusCode_200() == nil {
-		return fmt.Errorf("fail")
+	if resp.GetStatusCode_200() != nil {
+		return &getMetricsResponseStatusCode200{obj: resp.GetStatusCode_200()}, nil
 	}
-	return nil
+	if resp.GetStatusCode_400() != nil {
+		data, _ := yaml.Marshal(resp.GetStatusCode_400())
+		return nil, fmt.Errorf(string(data))
+	}
+	if resp.GetStatusCode_500() != nil {
+		data, _ := yaml.Marshal(resp.GetStatusCode_400())
+		return nil, fmt.Errorf(string(data))
+	}
+	return nil, fmt.Errorf("Response not implemented")
 }
 
-func (api *snappigoApi) GetCapture(captureRequest CaptureRequest) error {
+func (api *snappigoApi) GetStateMetrics() (GetStateMetricsResponse_StatusCode200, error) {
 	if err := api.grpcConnect(); err != nil {
-		return err
+		return nil, err
+	}
+	request := emptypb.Empty{}
+	ctx, cancelFunc := context.WithTimeout(context.Background(), api.grpc.requestTimeout)
+	defer cancelFunc()
+	resp, err := api.grpcClient.GetStateMetrics(ctx, &request)
+	if err != nil {
+		return nil, err
+	}
+	if resp.GetStatusCode_200() != nil {
+		return &getStateMetricsResponseStatusCode200{obj: resp.GetStatusCode_200()}, nil
+	}
+	if resp.GetStatusCode_400() != nil {
+		data, _ := yaml.Marshal(resp.GetStatusCode_400())
+		return nil, fmt.Errorf(string(data))
+	}
+	if resp.GetStatusCode_500() != nil {
+		data, _ := yaml.Marshal(resp.GetStatusCode_400())
+		return nil, fmt.Errorf(string(data))
+	}
+	return nil, fmt.Errorf("Response not implemented")
+}
+
+func (api *snappigoApi) GetCapture(captureRequest CaptureRequest) (GetCaptureResponse_StatusCode200, error) {
+	if err := api.grpcConnect(); err != nil {
+		return nil, err
 	}
 	request := snappipb.GetCaptureRequest{CaptureRequest: captureRequest.msg()}
 	ctx, cancelFunc := context.WithTimeout(context.Background(), api.grpc.requestTimeout)
 	defer cancelFunc()
-	client, err := api.grpcClient.GetCapture(ctx, &request)
+	resp, err := api.grpcClient.GetCapture(ctx, &request)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	resp, _ := client.Recv()
-	if resp.GetStatusCode_200() == nil {
-		return fmt.Errorf("fail")
+	if resp.GetStatusCode_200() != nil {
+		return &getCaptureResponseStatusCode200{obj: resp.GetStatusCode_200()}, nil
 	}
-	return nil
+	if resp.GetStatusCode_400() != nil {
+		data, _ := yaml.Marshal(resp.GetStatusCode_400())
+		return nil, fmt.Errorf(string(data))
+	}
+	if resp.GetStatusCode_500() != nil {
+		data, _ := yaml.Marshal(resp.GetStatusCode_400())
+		return nil, fmt.Errorf(string(data))
+	}
+	return nil, fmt.Errorf("Response not implemented")
 }
 
 type config struct {
@@ -352,184 +461,250 @@ func (obj *config) msg() *snappipb.Config {
 	return obj.obj
 }
 
-func (obj *config) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *config) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *config) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *config) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *config) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *config) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type Config interface {
 	msg() *snappipb.Config
-	Yaml() string
-	Json() string
-	Ports() []Port
-	NewPorts() Port
-	Lags() []Lag
-	NewLags() Lag
-	Layer1() []Layer1
-	NewLayer1() Layer1
-	Captures() []Capture
-	NewCaptures() Capture
-	Devices() []Device
-	NewDevices() Device
-	Flows() []Flow
-	NewFlows() Flow
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
+	Ports() ConfigPortIter
+	Lags() ConfigLagIter
+	Layer1() ConfigLayer1Iter
+	Captures() ConfigCaptureIter
+	Devices() ConfigDeviceIter
+	Flows() ConfigFlowIter
 	Events() Event
 	Options() ConfigOptions
 }
 
 // Ports returns a []Port
 //  The ports that will be configured on the traffic generator.
-func (obj *config) Ports() []Port {
+func (obj *config) Ports() ConfigPortIter {
 	if obj.obj.Ports == nil {
-		obj.obj.Ports = make([]*snappipb.Port, 0)
+		obj.obj.Ports = []*snappipb.Port{}
 	}
-	values := make([]Port, 0)
-	for _, item := range obj.obj.Ports {
-		values = append(values, &port{obj: item})
-	}
-	return values
+	return &configPortIter{obj: obj}
 
 }
 
-// NewPorts creates and returns a new Port object
-//  The ports that will be configured on the traffic generator.
-func (obj *config) NewPorts() Port {
-	if obj.obj.Ports == nil {
-		obj.obj.Ports = make([]*snappipb.Port, 0)
+type configPortIter struct {
+	obj *config
+}
+
+type ConfigPortIter interface {
+	Add() Port
+	Items() []Port
+}
+
+func (obj *configPortIter) Add() Port {
+	newObj := &snappipb.Port{}
+	obj.obj.obj.Ports = append(obj.obj.obj.Ports, newObj)
+	return &port{obj: newObj}
+}
+
+func (obj *configPortIter) Items() []Port {
+	slice := []Port{}
+	for _, item := range obj.obj.obj.Ports {
+		slice = append(slice, &port{obj: item})
 	}
-	slice := append(obj.obj.Ports, &snappipb.Port{})
-	obj.obj.Ports = slice
-	return &port{obj: slice[len(slice)-1]}
+	return slice
 }
 
 // Lags returns a []Lag
 //  The lags that will be configured on the traffic generator.
-func (obj *config) Lags() []Lag {
+func (obj *config) Lags() ConfigLagIter {
 	if obj.obj.Lags == nil {
-		obj.obj.Lags = make([]*snappipb.Lag, 0)
+		obj.obj.Lags = []*snappipb.Lag{}
 	}
-	values := make([]Lag, 0)
-	for _, item := range obj.obj.Lags {
-		values = append(values, &lag{obj: item})
-	}
-	return values
+	return &configLagIter{obj: obj}
 
 }
 
-// NewLags creates and returns a new Lag object
-//  The lags that will be configured on the traffic generator.
-func (obj *config) NewLags() Lag {
-	if obj.obj.Lags == nil {
-		obj.obj.Lags = make([]*snappipb.Lag, 0)
+type configLagIter struct {
+	obj *config
+}
+
+type ConfigLagIter interface {
+	Add() Lag
+	Items() []Lag
+}
+
+func (obj *configLagIter) Add() Lag {
+	newObj := &snappipb.Lag{}
+	obj.obj.obj.Lags = append(obj.obj.obj.Lags, newObj)
+	return &lag{obj: newObj}
+}
+
+func (obj *configLagIter) Items() []Lag {
+	slice := []Lag{}
+	for _, item := range obj.obj.obj.Lags {
+		slice = append(slice, &lag{obj: item})
 	}
-	slice := append(obj.obj.Lags, &snappipb.Lag{})
-	obj.obj.Lags = slice
-	return &lag{obj: slice[len(slice)-1]}
+	return slice
 }
 
 // Layer1 returns a []Layer1
 //  The layer1 settings that will be configured on the traffic generator.
-func (obj *config) Layer1() []Layer1 {
+func (obj *config) Layer1() ConfigLayer1Iter {
 	if obj.obj.Layer1 == nil {
-		obj.obj.Layer1 = make([]*snappipb.Layer1, 0)
+		obj.obj.Layer1 = []*snappipb.Layer1{}
 	}
-	values := make([]Layer1, 0)
-	for _, item := range obj.obj.Layer1 {
-		values = append(values, &layer1{obj: item})
-	}
-	return values
+	return &configLayer1Iter{obj: obj}
 
 }
 
-// NewLayer1 creates and returns a new Layer1 object
-//  The layer1 settings that will be configured on the traffic generator.
-func (obj *config) NewLayer1() Layer1 {
-	if obj.obj.Layer1 == nil {
-		obj.obj.Layer1 = make([]*snappipb.Layer1, 0)
+type configLayer1Iter struct {
+	obj *config
+}
+
+type ConfigLayer1Iter interface {
+	Add() Layer1
+	Items() []Layer1
+}
+
+func (obj *configLayer1Iter) Add() Layer1 {
+	newObj := &snappipb.Layer1{}
+	obj.obj.obj.Layer1 = append(obj.obj.obj.Layer1, newObj)
+	return &layer1{obj: newObj}
+}
+
+func (obj *configLayer1Iter) Items() []Layer1 {
+	slice := []Layer1{}
+	for _, item := range obj.obj.obj.Layer1 {
+		slice = append(slice, &layer1{obj: item})
 	}
-	slice := append(obj.obj.Layer1, &snappipb.Layer1{})
-	obj.obj.Layer1 = slice
-	return &layer1{obj: slice[len(slice)-1]}
+	return slice
 }
 
 // Captures returns a []Capture
 //  The capture settings that will be configured on the traffic generator.
-func (obj *config) Captures() []Capture {
+func (obj *config) Captures() ConfigCaptureIter {
 	if obj.obj.Captures == nil {
-		obj.obj.Captures = make([]*snappipb.Capture, 0)
+		obj.obj.Captures = []*snappipb.Capture{}
 	}
-	values := make([]Capture, 0)
-	for _, item := range obj.obj.Captures {
-		values = append(values, &capture{obj: item})
-	}
-	return values
+	return &configCaptureIter{obj: obj}
 
 }
 
-// NewCaptures creates and returns a new Capture object
-//  The capture settings that will be configured on the traffic generator.
-func (obj *config) NewCaptures() Capture {
-	if obj.obj.Captures == nil {
-		obj.obj.Captures = make([]*snappipb.Capture, 0)
+type configCaptureIter struct {
+	obj *config
+}
+
+type ConfigCaptureIter interface {
+	Add() Capture
+	Items() []Capture
+}
+
+func (obj *configCaptureIter) Add() Capture {
+	newObj := &snappipb.Capture{}
+	obj.obj.obj.Captures = append(obj.obj.obj.Captures, newObj)
+	return &capture{obj: newObj}
+}
+
+func (obj *configCaptureIter) Items() []Capture {
+	slice := []Capture{}
+	for _, item := range obj.obj.obj.Captures {
+		slice = append(slice, &capture{obj: item})
 	}
-	slice := append(obj.obj.Captures, &snappipb.Capture{})
-	obj.obj.Captures = slice
-	return &capture{obj: slice[len(slice)-1]}
+	return slice
 }
 
 // Devices returns a []Device
 //  The emulated device settings that will be configured on the traffic generator.
-func (obj *config) Devices() []Device {
+func (obj *config) Devices() ConfigDeviceIter {
 	if obj.obj.Devices == nil {
-		obj.obj.Devices = make([]*snappipb.Device, 0)
+		obj.obj.Devices = []*snappipb.Device{}
 	}
-	values := make([]Device, 0)
-	for _, item := range obj.obj.Devices {
-		values = append(values, &device{obj: item})
-	}
-	return values
+	return &configDeviceIter{obj: obj}
 
 }
 
-// NewDevices creates and returns a new Device object
-//  The emulated device settings that will be configured on the traffic generator.
-func (obj *config) NewDevices() Device {
-	if obj.obj.Devices == nil {
-		obj.obj.Devices = make([]*snappipb.Device, 0)
+type configDeviceIter struct {
+	obj *config
+}
+
+type ConfigDeviceIter interface {
+	Add() Device
+	Items() []Device
+}
+
+func (obj *configDeviceIter) Add() Device {
+	newObj := &snappipb.Device{}
+	obj.obj.obj.Devices = append(obj.obj.obj.Devices, newObj)
+	return &device{obj: newObj}
+}
+
+func (obj *configDeviceIter) Items() []Device {
+	slice := []Device{}
+	for _, item := range obj.obj.obj.Devices {
+		slice = append(slice, &device{obj: item})
 	}
-	slice := append(obj.obj.Devices, &snappipb.Device{})
-	obj.obj.Devices = slice
-	return &device{obj: slice[len(slice)-1]}
+	return slice
 }
 
 // Flows returns a []Flow
 //  The flows that will be configured on the traffic generator.
-func (obj *config) Flows() []Flow {
+func (obj *config) Flows() ConfigFlowIter {
 	if obj.obj.Flows == nil {
-		obj.obj.Flows = make([]*snappipb.Flow, 0)
+		obj.obj.Flows = []*snappipb.Flow{}
 	}
-	values := make([]Flow, 0)
-	for _, item := range obj.obj.Flows {
-		values = append(values, &flow{obj: item})
-	}
-	return values
+	return &configFlowIter{obj: obj}
 
 }
 
-// NewFlows creates and returns a new Flow object
-//  The flows that will be configured on the traffic generator.
-func (obj *config) NewFlows() Flow {
-	if obj.obj.Flows == nil {
-		obj.obj.Flows = make([]*snappipb.Flow, 0)
+type configFlowIter struct {
+	obj *config
+}
+
+type ConfigFlowIter interface {
+	Add() Flow
+	Items() []Flow
+}
+
+func (obj *configFlowIter) Add() Flow {
+	newObj := &snappipb.Flow{}
+	obj.obj.obj.Flows = append(obj.obj.obj.Flows, newObj)
+	return &flow{obj: newObj}
+}
+
+func (obj *configFlowIter) Items() []Flow {
+	slice := []Flow{}
+	for _, item := range obj.obj.obj.Flows {
+		slice = append(slice, &flow{obj: item})
 	}
-	slice := append(obj.obj.Flows, &snappipb.Flow{})
-	obj.obj.Flows = slice
-	return &flow{obj: slice[len(slice)-1]}
+	return slice
 }
 
 // Events returns a Event
@@ -560,20 +735,44 @@ func (obj *transmitState) msg() *snappipb.TransmitState {
 	return obj.obj
 }
 
-func (obj *transmitState) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *transmitState) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *transmitState) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *transmitState) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *transmitState) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *transmitState) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type TransmitState interface {
 	msg() *snappipb.TransmitState
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	FlowNames() []string
 	SetFlowNames(value []string) TransmitState
 }
@@ -615,20 +814,44 @@ func (obj *linkState) msg() *snappipb.LinkState {
 	return obj.obj
 }
 
-func (obj *linkState) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *linkState) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *linkState) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *linkState) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *linkState) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *linkState) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type LinkState interface {
 	msg() *snappipb.LinkState
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	PortNames() []string
 	SetPortNames(value []string) LinkState
 }
@@ -670,20 +893,44 @@ func (obj *captureState) msg() *snappipb.CaptureState {
 	return obj.obj
 }
 
-func (obj *captureState) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *captureState) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *captureState) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *captureState) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *captureState) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *captureState) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type CaptureState interface {
 	msg() *snappipb.CaptureState
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	PortNames() []string
 	SetPortNames(value []string) CaptureState
 }
@@ -725,47 +972,78 @@ func (obj *flowsUpdate) msg() *snappipb.FlowsUpdate {
 	return obj.obj
 }
 
-func (obj *flowsUpdate) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *flowsUpdate) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *flowsUpdate) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *flowsUpdate) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *flowsUpdate) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *flowsUpdate) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type FlowsUpdate interface {
 	msg() *snappipb.FlowsUpdate
-	Yaml() string
-	Json() string
-	Flows() []Flow
-	NewFlows() Flow
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
+	Flows() FlowsUpdateFlowIter
 }
 
 // Flows returns a []Flow
 //  The list of configured flows for which given properties will be updated. An empty or null list will cause the update to be applied to all configured flows.
-func (obj *flowsUpdate) Flows() []Flow {
+func (obj *flowsUpdate) Flows() FlowsUpdateFlowIter {
 	if obj.obj.Flows == nil {
-		obj.obj.Flows = make([]*snappipb.Flow, 0)
+		obj.obj.Flows = []*snappipb.Flow{}
 	}
-	values := make([]Flow, 0)
-	for _, item := range obj.obj.Flows {
-		values = append(values, &flow{obj: item})
-	}
-	return values
+	return &flowsUpdateFlowIter{obj: obj}
 
 }
 
-// NewFlows creates and returns a new Flow object
-//  The list of configured flows for which given properties will be updated. An empty or null list will cause the update to be applied to all configured flows.
-func (obj *flowsUpdate) NewFlows() Flow {
-	if obj.obj.Flows == nil {
-		obj.obj.Flows = make([]*snappipb.Flow, 0)
+type flowsUpdateFlowIter struct {
+	obj *flowsUpdate
+}
+
+type FlowsUpdateFlowIter interface {
+	Add() Flow
+	Items() []Flow
+}
+
+func (obj *flowsUpdateFlowIter) Add() Flow {
+	newObj := &snappipb.Flow{}
+	obj.obj.obj.Flows = append(obj.obj.obj.Flows, newObj)
+	return &flow{obj: newObj}
+}
+
+func (obj *flowsUpdateFlowIter) Items() []Flow {
+	slice := []Flow{}
+	for _, item := range obj.obj.obj.Flows {
+		slice = append(slice, &flow{obj: item})
 	}
-	slice := append(obj.obj.Flows, &snappipb.Flow{})
-	obj.obj.Flows = slice
-	return &flow{obj: slice[len(slice)-1]}
+	return slice
 }
 
 type routeState struct {
@@ -776,20 +1054,44 @@ func (obj *routeState) msg() *snappipb.RouteState {
 	return obj.obj
 }
 
-func (obj *routeState) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *routeState) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *routeState) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *routeState) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *routeState) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *routeState) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type RouteState interface {
 	msg() *snappipb.RouteState
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Names() []string
 	SetNames(value []string) RouteState
 }
@@ -835,20 +1137,44 @@ func (obj *metricsRequest) msg() *snappipb.MetricsRequest {
 	return obj.obj
 }
 
-func (obj *metricsRequest) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *metricsRequest) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *metricsRequest) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *metricsRequest) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *metricsRequest) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *metricsRequest) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type MetricsRequest interface {
 	msg() *snappipb.MetricsRequest
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Port() PortMetricsRequest
 	Flow() FlowMetricsRequest
 	Bgpv4() Bgpv4MetricsRequest
@@ -903,20 +1229,44 @@ func (obj *captureRequest) msg() *snappipb.CaptureRequest {
 	return obj.obj
 }
 
-func (obj *captureRequest) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *captureRequest) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *captureRequest) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *captureRequest) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *captureRequest) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *captureRequest) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type CaptureRequest interface {
 	msg() *snappipb.CaptureRequest
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	PortName() string
 	SetPortName(value string) CaptureRequest
 }
@@ -958,20 +1308,44 @@ func (obj *port) msg() *snappipb.Port {
 	return obj.obj
 }
 
-func (obj *port) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *port) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *port) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *port) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *port) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *port) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type Port interface {
 	msg() *snappipb.Port
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Location() string
 	SetLocation(value string) Port
 	Name() string
@@ -1028,49 +1402,80 @@ func (obj *lag) msg() *snappipb.Lag {
 	return obj.obj
 }
 
-func (obj *lag) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *lag) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *lag) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *lag) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *lag) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *lag) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type Lag interface {
 	msg() *snappipb.Lag
-	Yaml() string
-	Json() string
-	Ports() []LagPort
-	NewPorts() LagPort
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
+	Ports() LagLagPortIter
 	Name() string
 	SetName(value string) Lag
 }
 
 // Ports returns a []LagPort
 //  description is TBD
-func (obj *lag) Ports() []LagPort {
+func (obj *lag) Ports() LagLagPortIter {
 	if obj.obj.Ports == nil {
-		obj.obj.Ports = make([]*snappipb.LagPort, 0)
+		obj.obj.Ports = []*snappipb.LagPort{}
 	}
-	values := make([]LagPort, 0)
-	for _, item := range obj.obj.Ports {
-		values = append(values, &lagPort{obj: item})
-	}
-	return values
+	return &lagLagPortIter{obj: obj}
 
 }
 
-// NewPorts creates and returns a new LagPort object
-//  description is TBD
-func (obj *lag) NewPorts() LagPort {
-	if obj.obj.Ports == nil {
-		obj.obj.Ports = make([]*snappipb.LagPort, 0)
+type lagLagPortIter struct {
+	obj *lag
+}
+
+type LagLagPortIter interface {
+	Add() LagPort
+	Items() []LagPort
+}
+
+func (obj *lagLagPortIter) Add() LagPort {
+	newObj := &snappipb.LagPort{}
+	obj.obj.obj.Ports = append(obj.obj.obj.Ports, newObj)
+	return &lagPort{obj: newObj}
+}
+
+func (obj *lagLagPortIter) Items() []LagPort {
+	slice := []LagPort{}
+	for _, item := range obj.obj.obj.Ports {
+		slice = append(slice, &lagPort{obj: item})
 	}
-	slice := append(obj.obj.Ports, &snappipb.LagPort{})
-	obj.obj.Ports = slice
-	return &lagPort{obj: slice[len(slice)-1]}
+	return slice
 }
 
 // Name returns a string
@@ -1094,20 +1499,44 @@ func (obj *layer1) msg() *snappipb.Layer1 {
 	return obj.obj
 }
 
-func (obj *layer1) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *layer1) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *layer1) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *layer1) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *layer1) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *layer1) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type Layer1 interface {
 	msg() *snappipb.Layer1
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	PortNames() []string
 	SetPortNames(value []string) Layer1
 	Promiscuous() bool
@@ -1250,24 +1679,47 @@ func (obj *capture) msg() *snappipb.Capture {
 	return obj.obj
 }
 
-func (obj *capture) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *capture) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *capture) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *capture) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *capture) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *capture) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type Capture interface {
 	msg() *snappipb.Capture
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	PortNames() []string
 	SetPortNames(value []string) Capture
-	Filters() []CaptureFilter
-	NewFilters() CaptureFilter
+	Filters() CaptureCaptureFilterIter
 	Overwrite() bool
 	SetOverwrite(value bool) Capture
 	PacketSize() int32
@@ -1308,28 +1760,35 @@ func (obj *capture) SetPortNames(value []string) Capture {
 // Filters returns a []CaptureFilter
 //  A list of filters to apply to the capturing ports. If no filters are specified then all packets will be captured. A capture can have multiple filters. The number of filters supported is determined by the implementation which can be retrieved using the capabilities API.
 //  When multiple filters are specified the capture implementation  must && (and) all the filters.
-func (obj *capture) Filters() []CaptureFilter {
+func (obj *capture) Filters() CaptureCaptureFilterIter {
 	if obj.obj.Filters == nil {
-		obj.obj.Filters = make([]*snappipb.CaptureFilter, 0)
+		obj.obj.Filters = []*snappipb.CaptureFilter{}
 	}
-	values := make([]CaptureFilter, 0)
-	for _, item := range obj.obj.Filters {
-		values = append(values, &captureFilter{obj: item})
-	}
-	return values
+	return &captureCaptureFilterIter{obj: obj}
 
 }
 
-// NewFilters creates and returns a new CaptureFilter object
-//  A list of filters to apply to the capturing ports. If no filters are specified then all packets will be captured. A capture can have multiple filters. The number of filters supported is determined by the implementation which can be retrieved using the capabilities API.
-//  When multiple filters are specified the capture implementation  must && (and) all the filters.
-func (obj *capture) NewFilters() CaptureFilter {
-	if obj.obj.Filters == nil {
-		obj.obj.Filters = make([]*snappipb.CaptureFilter, 0)
+type captureCaptureFilterIter struct {
+	obj *capture
+}
+
+type CaptureCaptureFilterIter interface {
+	Add() CaptureFilter
+	Items() []CaptureFilter
+}
+
+func (obj *captureCaptureFilterIter) Add() CaptureFilter {
+	newObj := &snappipb.CaptureFilter{}
+	obj.obj.obj.Filters = append(obj.obj.obj.Filters, newObj)
+	return &captureFilter{obj: newObj}
+}
+
+func (obj *captureCaptureFilterIter) Items() []CaptureFilter {
+	slice := []CaptureFilter{}
+	for _, item := range obj.obj.obj.Filters {
+		slice = append(slice, &captureFilter{obj: item})
 	}
-	slice := append(obj.obj.Filters, &snappipb.CaptureFilter{})
-	obj.obj.Filters = slice
-	return &captureFilter{obj: slice[len(slice)-1]}
+	return slice
 }
 
 // Overwrite returns a bool
@@ -1379,20 +1838,44 @@ func (obj *device) msg() *snappipb.Device {
 	return obj.obj
 }
 
-func (obj *device) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *device) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *device) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *device) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *device) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *device) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type Device interface {
 	msg() *snappipb.Device
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	ContainerName() string
 	SetContainerName(value string) Device
 	Ethernet() DeviceEthernet
@@ -1460,23 +1943,46 @@ func (obj *flow) msg() *snappipb.Flow {
 	return obj.obj
 }
 
-func (obj *flow) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *flow) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *flow) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *flow) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *flow) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *flow) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type Flow interface {
 	msg() *snappipb.Flow
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	TxRx() FlowTxRx
-	Packet() []FlowHeader
-	NewPacket() FlowHeader
+	Packet() FlowFlowHeaderIter
 	Size() FlowSize
 	Rate() FlowRate
 	Duration() FlowDuration
@@ -1504,38 +2010,35 @@ func (obj *flow) TxRx() FlowTxRx {
 //  The default value for the Flow.Header choice property is ethernet
 //  which will result in an implementation by default providing at least
 //  one ethernet packet header.
-func (obj *flow) Packet() []FlowHeader {
+func (obj *flow) Packet() FlowFlowHeaderIter {
 	if obj.obj.Packet == nil {
-		obj.obj.Packet = make([]*snappipb.FlowHeader, 0)
+		obj.obj.Packet = []*snappipb.FlowHeader{}
 	}
-	values := make([]FlowHeader, 0)
-	for _, item := range obj.obj.Packet {
-		values = append(values, &flowHeader{obj: item})
-	}
-	return values
+	return &flowFlowHeaderIter{obj: obj}
 
 }
 
-// NewPacket creates and returns a new FlowHeader object
-//  The header is a list of traffic protocol headers.
-//
-//  The order of traffic protocol headers assigned to the list is the
-//  order they will appear on the wire.
-//
-//  In the case of an empty list the keyword/value of minItems: 1
-//  indicates that an implementation MUST provide at least one
-//  Flow.Header object.
-//
-//  The default value for the Flow.Header choice property is ethernet
-//  which will result in an implementation by default providing at least
-//  one ethernet packet header.
-func (obj *flow) NewPacket() FlowHeader {
-	if obj.obj.Packet == nil {
-		obj.obj.Packet = make([]*snappipb.FlowHeader, 0)
+type flowFlowHeaderIter struct {
+	obj *flow
+}
+
+type FlowFlowHeaderIter interface {
+	Add() FlowHeader
+	Items() []FlowHeader
+}
+
+func (obj *flowFlowHeaderIter) Add() FlowHeader {
+	newObj := &snappipb.FlowHeader{}
+	obj.obj.obj.Packet = append(obj.obj.obj.Packet, newObj)
+	return &flowHeader{obj: newObj}
+}
+
+func (obj *flowFlowHeaderIter) Items() []FlowHeader {
+	slice := []FlowHeader{}
+	for _, item := range obj.obj.obj.Packet {
+		slice = append(slice, &flowHeader{obj: item})
 	}
-	slice := append(obj.obj.Packet, &snappipb.FlowHeader{})
-	obj.obj.Packet = slice
-	return &flowHeader{obj: slice[len(slice)-1]}
+	return slice
 }
 
 // Size returns a FlowSize
@@ -1599,20 +2102,44 @@ func (obj *event) msg() *snappipb.Event {
 	return obj.obj
 }
 
-func (obj *event) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *event) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *event) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *event) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *event) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *event) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type Event interface {
 	msg() *snappipb.Event
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Enable() bool
 	SetEnable(value bool) Event
 	Link() EventLink
@@ -1675,20 +2202,44 @@ func (obj *configOptions) msg() *snappipb.ConfigOptions {
 	return obj.obj
 }
 
-func (obj *configOptions) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *configOptions) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *configOptions) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *configOptions) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *configOptions) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *configOptions) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type ConfigOptions interface {
 	msg() *snappipb.ConfigOptions
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	PortOptions() PortOptions
 }
 
@@ -1710,20 +2261,44 @@ func (obj *portMetricsRequest) msg() *snappipb.PortMetricsRequest {
 	return obj.obj
 }
 
-func (obj *portMetricsRequest) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *portMetricsRequest) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *portMetricsRequest) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *portMetricsRequest) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *portMetricsRequest) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *portMetricsRequest) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PortMetricsRequest interface {
 	msg() *snappipb.PortMetricsRequest
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	PortNames() []string
 	SetPortNames(value []string) PortMetricsRequest
 }
@@ -1765,20 +2340,44 @@ func (obj *flowMetricsRequest) msg() *snappipb.FlowMetricsRequest {
 	return obj.obj
 }
 
-func (obj *flowMetricsRequest) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *flowMetricsRequest) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *flowMetricsRequest) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *flowMetricsRequest) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *flowMetricsRequest) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *flowMetricsRequest) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type FlowMetricsRequest interface {
 	msg() *snappipb.FlowMetricsRequest
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	FlowNames() []string
 	SetFlowNames(value []string) FlowMetricsRequest
 	MetricGroups() FlowMetricGroupRequest
@@ -1833,20 +2432,44 @@ func (obj *bgpv4MetricsRequest) msg() *snappipb.Bgpv4MetricsRequest {
 	return obj.obj
 }
 
-func (obj *bgpv4MetricsRequest) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *bgpv4MetricsRequest) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *bgpv4MetricsRequest) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *bgpv4MetricsRequest) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *bgpv4MetricsRequest) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *bgpv4MetricsRequest) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type Bgpv4MetricsRequest interface {
 	msg() *snappipb.Bgpv4MetricsRequest
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	DeviceNames() []string
 	SetDeviceNames(value []string) Bgpv4MetricsRequest
 }
@@ -1888,20 +2511,44 @@ func (obj *bgpv6MetricsRequest) msg() *snappipb.Bgpv6MetricsRequest {
 	return obj.obj
 }
 
-func (obj *bgpv6MetricsRequest) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *bgpv6MetricsRequest) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *bgpv6MetricsRequest) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *bgpv6MetricsRequest) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *bgpv6MetricsRequest) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *bgpv6MetricsRequest) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type Bgpv6MetricsRequest interface {
 	msg() *snappipb.Bgpv6MetricsRequest
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	DeviceNames() []string
 	SetDeviceNames(value []string) Bgpv6MetricsRequest
 }
@@ -1943,20 +2590,44 @@ func (obj *lagPort) msg() *snappipb.LagPort {
 	return obj.obj
 }
 
-func (obj *lagPort) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *lagPort) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *lagPort) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *lagPort) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *lagPort) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *lagPort) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type LagPort interface {
 	msg() *snappipb.LagPort
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	PortName() string
 	SetPortName(value string) LagPort
 	Protocol() LagProtocol
@@ -2012,20 +2683,44 @@ func (obj *layer1AutoNegotiation) msg() *snappipb.Layer1AutoNegotiation {
 	return obj.obj
 }
 
-func (obj *layer1AutoNegotiation) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *layer1AutoNegotiation) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *layer1AutoNegotiation) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *layer1AutoNegotiation) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *layer1AutoNegotiation) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *layer1AutoNegotiation) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type Layer1AutoNegotiation interface {
 	msg() *snappipb.Layer1AutoNegotiation
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Advertise1000Mbps() bool
 	SetAdvertise1000Mbps(value bool) Layer1AutoNegotiation
 	Advertise100FdMbps() bool
@@ -2042,78 +2737,78 @@ type Layer1AutoNegotiation interface {
 	SetRsFec(value bool) Layer1AutoNegotiation
 }
 
-// Advertise1000Mbps returns a bool
+// Advertise_1000Mbps returns a bool
 //  If auto_negotiate is true and the interface supports this option
 //  then this speed will be advertised.
 func (obj *layer1AutoNegotiation) Advertise1000Mbps() bool {
-	return *obj.obj.Advertise1000Mbps
+	return *obj.obj.Advertise_1000Mbps
 }
 
-// SetAdvertise1000Mbps sets the bool value in the None object
+// SetAdvertise_1000Mbps sets the bool value in the None object
 //  If auto_negotiate is true and the interface supports this option
 //  then this speed will be advertised.
 func (obj *layer1AutoNegotiation) SetAdvertise1000Mbps(value bool) Layer1AutoNegotiation {
-	obj.obj.Advertise1000Mbps = &value
+	obj.obj.Advertise_1000Mbps = &value
 	return obj
 }
 
-// Advertise100FdMbps returns a bool
+// Advertise_100FdMbps returns a bool
 //  If auto_negotiate is true and the interface supports this option
 //  then this speed will be advertised.
 func (obj *layer1AutoNegotiation) Advertise100FdMbps() bool {
-	return *obj.obj.Advertise100FdMbps
+	return *obj.obj.Advertise_100FdMbps
 }
 
-// SetAdvertise100FdMbps sets the bool value in the None object
+// SetAdvertise_100FdMbps sets the bool value in the None object
 //  If auto_negotiate is true and the interface supports this option
 //  then this speed will be advertised.
 func (obj *layer1AutoNegotiation) SetAdvertise100FdMbps(value bool) Layer1AutoNegotiation {
-	obj.obj.Advertise100FdMbps = &value
+	obj.obj.Advertise_100FdMbps = &value
 	return obj
 }
 
-// Advertise100HdMbps returns a bool
+// Advertise_100HdMbps returns a bool
 //  If auto_negotiate is true and the interface supports this option
 //  then this speed will be advertised.
 func (obj *layer1AutoNegotiation) Advertise100HdMbps() bool {
-	return *obj.obj.Advertise100HdMbps
+	return *obj.obj.Advertise_100HdMbps
 }
 
-// SetAdvertise100HdMbps sets the bool value in the None object
+// SetAdvertise_100HdMbps sets the bool value in the None object
 //  If auto_negotiate is true and the interface supports this option
 //  then this speed will be advertised.
 func (obj *layer1AutoNegotiation) SetAdvertise100HdMbps(value bool) Layer1AutoNegotiation {
-	obj.obj.Advertise100HdMbps = &value
+	obj.obj.Advertise_100HdMbps = &value
 	return obj
 }
 
-// Advertise10FdMbps returns a bool
+// Advertise_10FdMbps returns a bool
 //  If auto_negotiate is true and the interface supports this option
 //  then this speed will be advertised.
 func (obj *layer1AutoNegotiation) Advertise10FdMbps() bool {
-	return *obj.obj.Advertise10FdMbps
+	return *obj.obj.Advertise_10FdMbps
 }
 
-// SetAdvertise10FdMbps sets the bool value in the None object
+// SetAdvertise_10FdMbps sets the bool value in the None object
 //  If auto_negotiate is true and the interface supports this option
 //  then this speed will be advertised.
 func (obj *layer1AutoNegotiation) SetAdvertise10FdMbps(value bool) Layer1AutoNegotiation {
-	obj.obj.Advertise10FdMbps = &value
+	obj.obj.Advertise_10FdMbps = &value
 	return obj
 }
 
-// Advertise10HdMbps returns a bool
+// Advertise_10HdMbps returns a bool
 //  If auto_negotiate is true and the interface supports this option
 //  then this speed will be advertised.
 func (obj *layer1AutoNegotiation) Advertise10HdMbps() bool {
-	return *obj.obj.Advertise10HdMbps
+	return *obj.obj.Advertise_10HdMbps
 }
 
-// SetAdvertise10HdMbps sets the bool value in the None object
+// SetAdvertise_10HdMbps sets the bool value in the None object
 //  If auto_negotiate is true and the interface supports this option
 //  then this speed will be advertised.
 func (obj *layer1AutoNegotiation) SetAdvertise10HdMbps(value bool) Layer1AutoNegotiation {
-	obj.obj.Advertise10HdMbps = &value
+	obj.obj.Advertise_10HdMbps = &value
 	return obj
 }
 
@@ -2151,24 +2846,48 @@ func (obj *layer1FlowControl) msg() *snappipb.Layer1FlowControl {
 	return obj.obj
 }
 
-func (obj *layer1FlowControl) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *layer1FlowControl) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *layer1FlowControl) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *layer1FlowControl) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *layer1FlowControl) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *layer1FlowControl) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type Layer1FlowControl interface {
 	msg() *snappipb.Layer1FlowControl
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	DirectedAddress() string
 	SetDirectedAddress(value string) Layer1FlowControl
-	Ieee8021qbb() Layer1Ieee8021qbb
-	Ieee8023x() Layer1Ieee8023x
+	Ieee8021Qbb() Layer1Ieee8021Qbb
+	Ieee8023X() Layer1Ieee8023X
 }
 
 // DirectedAddress returns a string
@@ -2186,23 +2905,23 @@ func (obj *layer1FlowControl) SetDirectedAddress(value string) Layer1FlowControl
 	return obj
 }
 
-// Ieee8021qbb returns a Layer1Ieee8021qbb
+// Ieee_802_1Qbb returns a Layer1Ieee8021Qbb
 //  description is TBD
-func (obj *layer1FlowControl) Ieee8021qbb() Layer1Ieee8021qbb {
-	if obj.obj.Ieee8021qbb == nil {
-		obj.obj.Ieee8021qbb = &snappipb.Layer1Ieee8021qbb{}
+func (obj *layer1FlowControl) Ieee8021Qbb() Layer1Ieee8021Qbb {
+	if obj.obj.Ieee_802_1Qbb == nil {
+		obj.obj.Ieee_802_1Qbb = &snappipb.Layer1Ieee8021Qbb{}
 	}
-	return &layer1Ieee8021qbb{obj: obj.obj.Ieee8021qbb}
+	return &layer1Ieee8021Qbb{obj: obj.obj.Ieee_802_1Qbb}
 
 }
 
-// Ieee8023x returns a Layer1Ieee8023x
+// Ieee_802_3X returns a Layer1Ieee8023X
 //  description is TBD
-func (obj *layer1FlowControl) Ieee8023x() Layer1Ieee8023x {
-	if obj.obj.Ieee8023x == nil {
-		obj.obj.Ieee8023x = &snappipb.Layer1Ieee8023x{}
+func (obj *layer1FlowControl) Ieee8023X() Layer1Ieee8023X {
+	if obj.obj.Ieee_802_3X == nil {
+		obj.obj.Ieee_802_3X = &snappipb.Layer1Ieee8023X{}
 	}
-	return &layer1Ieee8023x{obj: obj.obj.Ieee8023x}
+	return &layer1Ieee8023X{obj: obj.obj.Ieee_802_3X}
 
 }
 
@@ -2214,20 +2933,44 @@ func (obj *captureFilter) msg() *snappipb.CaptureFilter {
 	return obj.obj
 }
 
-func (obj *captureFilter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *captureFilter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *captureFilter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *captureFilter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *captureFilter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *captureFilter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type CaptureFilter interface {
 	msg() *snappipb.CaptureFilter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Custom() CaptureCustom
 	Ethernet() CaptureEthernet
 	Vlan() CaptureVlan
@@ -2293,28 +3036,51 @@ func (obj *deviceEthernet) msg() *snappipb.DeviceEthernet {
 	return obj.obj
 }
 
-func (obj *deviceEthernet) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *deviceEthernet) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *deviceEthernet) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *deviceEthernet) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *deviceEthernet) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *deviceEthernet) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type DeviceEthernet interface {
 	msg() *snappipb.DeviceEthernet
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Ipv4() DeviceIpv4
 	Ipv6() DeviceIpv6
 	Mac() string
 	SetMac(value string) DeviceEthernet
 	Mtu() int32
 	SetMtu(value int32) DeviceEthernet
-	Vlans() []DeviceVlan
-	NewVlans() DeviceVlan
+	Vlans() DeviceEthernetDeviceVlanIter
 	Name() string
 	SetName(value string) DeviceEthernet
 }
@@ -2367,27 +3133,35 @@ func (obj *deviceEthernet) SetMtu(value int32) DeviceEthernet {
 
 // Vlans returns a []DeviceVlan
 //  List of VLANs
-func (obj *deviceEthernet) Vlans() []DeviceVlan {
+func (obj *deviceEthernet) Vlans() DeviceEthernetDeviceVlanIter {
 	if obj.obj.Vlans == nil {
-		obj.obj.Vlans = make([]*snappipb.DeviceVlan, 0)
+		obj.obj.Vlans = []*snappipb.DeviceVlan{}
 	}
-	values := make([]DeviceVlan, 0)
-	for _, item := range obj.obj.Vlans {
-		values = append(values, &deviceVlan{obj: item})
-	}
-	return values
+	return &deviceEthernetDeviceVlanIter{obj: obj}
 
 }
 
-// NewVlans creates and returns a new DeviceVlan object
-//  List of VLANs
-func (obj *deviceEthernet) NewVlans() DeviceVlan {
-	if obj.obj.Vlans == nil {
-		obj.obj.Vlans = make([]*snappipb.DeviceVlan, 0)
+type deviceEthernetDeviceVlanIter struct {
+	obj *deviceEthernet
+}
+
+type DeviceEthernetDeviceVlanIter interface {
+	Add() DeviceVlan
+	Items() []DeviceVlan
+}
+
+func (obj *deviceEthernetDeviceVlanIter) Add() DeviceVlan {
+	newObj := &snappipb.DeviceVlan{}
+	obj.obj.obj.Vlans = append(obj.obj.obj.Vlans, newObj)
+	return &deviceVlan{obj: newObj}
+}
+
+func (obj *deviceEthernetDeviceVlanIter) Items() []DeviceVlan {
+	slice := []DeviceVlan{}
+	for _, item := range obj.obj.obj.Vlans {
+		slice = append(slice, &deviceVlan{obj: item})
 	}
-	slice := append(obj.obj.Vlans, &snappipb.DeviceVlan{})
-	obj.obj.Vlans = slice
-	return &deviceVlan{obj: slice[len(slice)-1]}
+	return slice
 }
 
 // Name returns a string
@@ -2411,20 +3185,44 @@ func (obj *flowTxRx) msg() *snappipb.FlowTxRx {
 	return obj.obj
 }
 
-func (obj *flowTxRx) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *flowTxRx) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *flowTxRx) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *flowTxRx) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *flowTxRx) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *flowTxRx) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type FlowTxRx interface {
 	msg() *snappipb.FlowTxRx
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Port() FlowPort
 	Device() FlowDevice
 }
@@ -2457,20 +3255,44 @@ func (obj *flowHeader) msg() *snappipb.FlowHeader {
 	return obj.obj
 }
 
-func (obj *flowHeader) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *flowHeader) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *flowHeader) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *flowHeader) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *flowHeader) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *flowHeader) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type FlowHeader interface {
 	msg() *snappipb.FlowHeader
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Custom() FlowCustom
 	Ethernet() FlowEthernet
 	Vlan() FlowVlan
@@ -2679,20 +3501,44 @@ func (obj *flowSize) msg() *snappipb.FlowSize {
 	return obj.obj
 }
 
-func (obj *flowSize) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *flowSize) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *flowSize) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *flowSize) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *flowSize) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *flowSize) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type FlowSize interface {
 	msg() *snappipb.FlowSize
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Fixed() int32
 	SetFixed(value int32) FlowSize
 	Increment() FlowSizeIncrement
@@ -2740,20 +3586,44 @@ func (obj *flowRate) msg() *snappipb.FlowRate {
 	return obj.obj
 }
 
-func (obj *flowRate) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *flowRate) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *flowRate) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *flowRate) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *flowRate) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *flowRate) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type FlowRate interface {
 	msg() *snappipb.FlowRate
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Pps() int32
 	SetPps(value int32) FlowRate
 	Bps() int32
@@ -2854,20 +3724,44 @@ func (obj *flowDuration) msg() *snappipb.FlowDuration {
 	return obj.obj
 }
 
-func (obj *flowDuration) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *flowDuration) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *flowDuration) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *flowDuration) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *flowDuration) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *flowDuration) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type FlowDuration interface {
 	msg() *snappipb.FlowDuration
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	FixedPackets() FlowFixedPackets
 	FixedSeconds() FlowFixedSeconds
 	Burst() FlowBurst
@@ -2922,20 +3816,44 @@ func (obj *flowMetrics) msg() *snappipb.FlowMetrics {
 	return obj.obj
 }
 
-func (obj *flowMetrics) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *flowMetrics) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *flowMetrics) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *flowMetrics) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *flowMetrics) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *flowMetrics) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type FlowMetrics interface {
 	msg() *snappipb.FlowMetrics
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Enable() bool
 	SetEnable(value bool) FlowMetrics
 	Loss() bool
@@ -3006,20 +3924,44 @@ func (obj *eventLink) msg() *snappipb.EventLink {
 	return obj.obj
 }
 
-func (obj *eventLink) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *eventLink) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *eventLink) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *eventLink) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *eventLink) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *eventLink) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type EventLink interface {
 	msg() *snappipb.EventLink
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Enable() bool
 	SetEnable(value bool) EventLink
 }
@@ -3045,20 +3987,44 @@ func (obj *eventRxRateThreshold) msg() *snappipb.EventRxRateThreshold {
 	return obj.obj
 }
 
-func (obj *eventRxRateThreshold) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *eventRxRateThreshold) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *eventRxRateThreshold) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *eventRxRateThreshold) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *eventRxRateThreshold) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *eventRxRateThreshold) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type EventRxRateThreshold interface {
 	msg() *snappipb.EventRxRateThreshold
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Enable() bool
 	SetEnable(value bool) EventRxRateThreshold
 	Threshold() float32
@@ -3105,20 +4071,44 @@ func (obj *eventRouteAdvertiseWithdraw) msg() *snappipb.EventRouteAdvertiseWithd
 	return obj.obj
 }
 
-func (obj *eventRouteAdvertiseWithdraw) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *eventRouteAdvertiseWithdraw) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *eventRouteAdvertiseWithdraw) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *eventRouteAdvertiseWithdraw) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *eventRouteAdvertiseWithdraw) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *eventRouteAdvertiseWithdraw) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type EventRouteAdvertiseWithdraw interface {
 	msg() *snappipb.EventRouteAdvertiseWithdraw
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Enable() bool
 	SetEnable(value bool) EventRouteAdvertiseWithdraw
 }
@@ -3146,20 +4136,44 @@ func (obj *portOptions) msg() *snappipb.PortOptions {
 	return obj.obj
 }
 
-func (obj *portOptions) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *portOptions) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *portOptions) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *portOptions) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *portOptions) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *portOptions) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PortOptions interface {
 	msg() *snappipb.PortOptions
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	LocationPreemption() bool
 	SetLocationPreemption(value bool) PortOptions
 }
@@ -3185,20 +4199,44 @@ func (obj *flowMetricGroupRequest) msg() *snappipb.FlowMetricGroupRequest {
 	return obj.obj
 }
 
-func (obj *flowMetricGroupRequest) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *flowMetricGroupRequest) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *flowMetricGroupRequest) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *flowMetricGroupRequest) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *flowMetricGroupRequest) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *flowMetricGroupRequest) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type FlowMetricGroupRequest interface {
 	msg() *snappipb.FlowMetricGroupRequest
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Ingress() []string
 	SetIngress(value []string) FlowMetricGroupRequest
 	Egress() []string
@@ -3275,20 +4313,44 @@ func (obj *lagProtocol) msg() *snappipb.LagProtocol {
 	return obj.obj
 }
 
-func (obj *lagProtocol) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *lagProtocol) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *lagProtocol) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *lagProtocol) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *lagProtocol) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *lagProtocol) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type LagProtocol interface {
 	msg() *snappipb.LagProtocol
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Lacp() LagLacp
 	Static() LagStatic
 }
@@ -3321,26 +4383,49 @@ func (obj *deviceEthernetBase) msg() *snappipb.DeviceEthernetBase {
 	return obj.obj
 }
 
-func (obj *deviceEthernetBase) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *deviceEthernetBase) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *deviceEthernetBase) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *deviceEthernetBase) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *deviceEthernetBase) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *deviceEthernetBase) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type DeviceEthernetBase interface {
 	msg() *snappipb.DeviceEthernetBase
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Mac() string
 	SetMac(value string) DeviceEthernetBase
 	Mtu() int32
 	SetMtu(value int32) DeviceEthernetBase
-	Vlans() []DeviceVlan
-	NewVlans() DeviceVlan
+	Vlans() DeviceEthernetBaseDeviceVlanIter
 	Name() string
 	SetName(value string) DeviceEthernetBase
 }
@@ -3373,27 +4458,35 @@ func (obj *deviceEthernetBase) SetMtu(value int32) DeviceEthernetBase {
 
 // Vlans returns a []DeviceVlan
 //  List of VLANs
-func (obj *deviceEthernetBase) Vlans() []DeviceVlan {
+func (obj *deviceEthernetBase) Vlans() DeviceEthernetBaseDeviceVlanIter {
 	if obj.obj.Vlans == nil {
-		obj.obj.Vlans = make([]*snappipb.DeviceVlan, 0)
+		obj.obj.Vlans = []*snappipb.DeviceVlan{}
 	}
-	values := make([]DeviceVlan, 0)
-	for _, item := range obj.obj.Vlans {
-		values = append(values, &deviceVlan{obj: item})
-	}
-	return values
+	return &deviceEthernetBaseDeviceVlanIter{obj: obj}
 
 }
 
-// NewVlans creates and returns a new DeviceVlan object
-//  List of VLANs
-func (obj *deviceEthernetBase) NewVlans() DeviceVlan {
-	if obj.obj.Vlans == nil {
-		obj.obj.Vlans = make([]*snappipb.DeviceVlan, 0)
+type deviceEthernetBaseDeviceVlanIter struct {
+	obj *deviceEthernetBase
+}
+
+type DeviceEthernetBaseDeviceVlanIter interface {
+	Add() DeviceVlan
+	Items() []DeviceVlan
+}
+
+func (obj *deviceEthernetBaseDeviceVlanIter) Add() DeviceVlan {
+	newObj := &snappipb.DeviceVlan{}
+	obj.obj.obj.Vlans = append(obj.obj.obj.Vlans, newObj)
+	return &deviceVlan{obj: newObj}
+}
+
+func (obj *deviceEthernetBaseDeviceVlanIter) Items() []DeviceVlan {
+	slice := []DeviceVlan{}
+	for _, item := range obj.obj.obj.Vlans {
+		slice = append(slice, &deviceVlan{obj: item})
 	}
-	slice := append(obj.obj.Vlans, &snappipb.DeviceVlan{})
-	obj.obj.Vlans = slice
-	return &deviceVlan{obj: slice[len(slice)-1]}
+	return slice
 }
 
 // Name returns a string
@@ -3409,53 +4502,77 @@ func (obj *deviceEthernetBase) SetName(value string) DeviceEthernetBase {
 	return obj
 }
 
-type layer1Ieee8021qbb struct {
-	obj *snappipb.Layer1Ieee8021qbb
+type layer1Ieee8021Qbb struct {
+	obj *snappipb.Layer1Ieee8021Qbb
 }
 
-func (obj *layer1Ieee8021qbb) msg() *snappipb.Layer1Ieee8021qbb {
+func (obj *layer1Ieee8021Qbb) msg() *snappipb.Layer1Ieee8021Qbb {
 	return obj.obj
 }
 
-func (obj *layer1Ieee8021qbb) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *layer1Ieee8021Qbb) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *layer1Ieee8021qbb) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *layer1Ieee8021Qbb) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *layer1Ieee8021Qbb) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-type Layer1Ieee8021qbb interface {
-	msg() *snappipb.Layer1Ieee8021qbb
-	Yaml() string
-	Json() string
+func (obj *layer1Ieee8021Qbb) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
+}
+
+type Layer1Ieee8021Qbb interface {
+	msg() *snappipb.Layer1Ieee8021Qbb
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	PfcDelay() int32
-	SetPfcDelay(value int32) Layer1Ieee8021qbb
+	SetPfcDelay(value int32) Layer1Ieee8021Qbb
 	PfcClass0() int32
-	SetPfcClass0(value int32) Layer1Ieee8021qbb
+	SetPfcClass0(value int32) Layer1Ieee8021Qbb
 	PfcClass1() int32
-	SetPfcClass1(value int32) Layer1Ieee8021qbb
+	SetPfcClass1(value int32) Layer1Ieee8021Qbb
 	PfcClass2() int32
-	SetPfcClass2(value int32) Layer1Ieee8021qbb
+	SetPfcClass2(value int32) Layer1Ieee8021Qbb
 	PfcClass3() int32
-	SetPfcClass3(value int32) Layer1Ieee8021qbb
+	SetPfcClass3(value int32) Layer1Ieee8021Qbb
 	PfcClass4() int32
-	SetPfcClass4(value int32) Layer1Ieee8021qbb
+	SetPfcClass4(value int32) Layer1Ieee8021Qbb
 	PfcClass5() int32
-	SetPfcClass5(value int32) Layer1Ieee8021qbb
+	SetPfcClass5(value int32) Layer1Ieee8021Qbb
 	PfcClass6() int32
-	SetPfcClass6(value int32) Layer1Ieee8021qbb
+	SetPfcClass6(value int32) Layer1Ieee8021Qbb
 	PfcClass7() int32
-	SetPfcClass7(value int32) Layer1Ieee8021qbb
+	SetPfcClass7(value int32) Layer1Ieee8021Qbb
 }
 
 // PfcDelay returns a int32
 //  The upper limit on the transmit time of a queue after receiving a
 //  message to pause a specified priority.
 //  A value of 0 or null indicates that pfc delay will not be enabled.
-func (obj *layer1Ieee8021qbb) PfcDelay() int32 {
+func (obj *layer1Ieee8021Qbb) PfcDelay() int32 {
 	return *obj.obj.PfcDelay
 }
 
@@ -3463,153 +4580,177 @@ func (obj *layer1Ieee8021qbb) PfcDelay() int32 {
 //  The upper limit on the transmit time of a queue after receiving a
 //  message to pause a specified priority.
 //  A value of 0 or null indicates that pfc delay will not be enabled.
-func (obj *layer1Ieee8021qbb) SetPfcDelay(value int32) Layer1Ieee8021qbb {
+func (obj *layer1Ieee8021Qbb) SetPfcDelay(value int32) Layer1Ieee8021Qbb {
 	obj.obj.PfcDelay = &value
 	return obj
 }
 
-// PfcClass0 returns a int32
+// PfcClass_0 returns a int32
 //  The valid values are null, 0 - 7.
 //  A null value indicates there is no setting for this pfc class.
-func (obj *layer1Ieee8021qbb) PfcClass0() int32 {
-	return *obj.obj.PfcClass0
+func (obj *layer1Ieee8021Qbb) PfcClass0() int32 {
+	return *obj.obj.PfcClass_0
 }
 
-// SetPfcClass0 sets the int32 value in the None object
+// SetPfcClass_0 sets the int32 value in the None object
 //  The valid values are null, 0 - 7.
 //  A null value indicates there is no setting for this pfc class.
-func (obj *layer1Ieee8021qbb) SetPfcClass0(value int32) Layer1Ieee8021qbb {
-	obj.obj.PfcClass0 = &value
+func (obj *layer1Ieee8021Qbb) SetPfcClass0(value int32) Layer1Ieee8021Qbb {
+	obj.obj.PfcClass_0 = &value
 	return obj
 }
 
-// PfcClass1 returns a int32
+// PfcClass_1 returns a int32
 //  The valid values are null, 0 - 7.
 //  A null value indicates there is no setting for this pfc class.
-func (obj *layer1Ieee8021qbb) PfcClass1() int32 {
-	return *obj.obj.PfcClass1
+func (obj *layer1Ieee8021Qbb) PfcClass1() int32 {
+	return *obj.obj.PfcClass_1
 }
 
-// SetPfcClass1 sets the int32 value in the None object
+// SetPfcClass_1 sets the int32 value in the None object
 //  The valid values are null, 0 - 7.
 //  A null value indicates there is no setting for this pfc class.
-func (obj *layer1Ieee8021qbb) SetPfcClass1(value int32) Layer1Ieee8021qbb {
-	obj.obj.PfcClass1 = &value
+func (obj *layer1Ieee8021Qbb) SetPfcClass1(value int32) Layer1Ieee8021Qbb {
+	obj.obj.PfcClass_1 = &value
 	return obj
 }
 
-// PfcClass2 returns a int32
+// PfcClass_2 returns a int32
 //  The valid values are null, 0 - 7.
 //  A null value indicates there is no setting for this pfc class.
-func (obj *layer1Ieee8021qbb) PfcClass2() int32 {
-	return *obj.obj.PfcClass2
+func (obj *layer1Ieee8021Qbb) PfcClass2() int32 {
+	return *obj.obj.PfcClass_2
 }
 
-// SetPfcClass2 sets the int32 value in the None object
+// SetPfcClass_2 sets the int32 value in the None object
 //  The valid values are null, 0 - 7.
 //  A null value indicates there is no setting for this pfc class.
-func (obj *layer1Ieee8021qbb) SetPfcClass2(value int32) Layer1Ieee8021qbb {
-	obj.obj.PfcClass2 = &value
+func (obj *layer1Ieee8021Qbb) SetPfcClass2(value int32) Layer1Ieee8021Qbb {
+	obj.obj.PfcClass_2 = &value
 	return obj
 }
 
-// PfcClass3 returns a int32
+// PfcClass_3 returns a int32
 //  The valid values are null, 0 - 7.
 //  A null value indicates there is no setting for this pfc class.
-func (obj *layer1Ieee8021qbb) PfcClass3() int32 {
-	return *obj.obj.PfcClass3
+func (obj *layer1Ieee8021Qbb) PfcClass3() int32 {
+	return *obj.obj.PfcClass_3
 }
 
-// SetPfcClass3 sets the int32 value in the None object
+// SetPfcClass_3 sets the int32 value in the None object
 //  The valid values are null, 0 - 7.
 //  A null value indicates there is no setting for this pfc class.
-func (obj *layer1Ieee8021qbb) SetPfcClass3(value int32) Layer1Ieee8021qbb {
-	obj.obj.PfcClass3 = &value
+func (obj *layer1Ieee8021Qbb) SetPfcClass3(value int32) Layer1Ieee8021Qbb {
+	obj.obj.PfcClass_3 = &value
 	return obj
 }
 
-// PfcClass4 returns a int32
+// PfcClass_4 returns a int32
 //  The valid values are null, 0 - 7.
 //  A null value indicates there is no setting for this pfc class.
-func (obj *layer1Ieee8021qbb) PfcClass4() int32 {
-	return *obj.obj.PfcClass4
+func (obj *layer1Ieee8021Qbb) PfcClass4() int32 {
+	return *obj.obj.PfcClass_4
 }
 
-// SetPfcClass4 sets the int32 value in the None object
+// SetPfcClass_4 sets the int32 value in the None object
 //  The valid values are null, 0 - 7.
 //  A null value indicates there is no setting for this pfc class.
-func (obj *layer1Ieee8021qbb) SetPfcClass4(value int32) Layer1Ieee8021qbb {
-	obj.obj.PfcClass4 = &value
+func (obj *layer1Ieee8021Qbb) SetPfcClass4(value int32) Layer1Ieee8021Qbb {
+	obj.obj.PfcClass_4 = &value
 	return obj
 }
 
-// PfcClass5 returns a int32
+// PfcClass_5 returns a int32
 //  The valid values are null, 0 - 7.
 //  A null value indicates there is no setting for this pfc class.
-func (obj *layer1Ieee8021qbb) PfcClass5() int32 {
-	return *obj.obj.PfcClass5
+func (obj *layer1Ieee8021Qbb) PfcClass5() int32 {
+	return *obj.obj.PfcClass_5
 }
 
-// SetPfcClass5 sets the int32 value in the None object
+// SetPfcClass_5 sets the int32 value in the None object
 //  The valid values are null, 0 - 7.
 //  A null value indicates there is no setting for this pfc class.
-func (obj *layer1Ieee8021qbb) SetPfcClass5(value int32) Layer1Ieee8021qbb {
-	obj.obj.PfcClass5 = &value
+func (obj *layer1Ieee8021Qbb) SetPfcClass5(value int32) Layer1Ieee8021Qbb {
+	obj.obj.PfcClass_5 = &value
 	return obj
 }
 
-// PfcClass6 returns a int32
+// PfcClass_6 returns a int32
 //  The valid values are null, 0 - 7.
 //  A null value indicates there is no setting for this pfc class.
-func (obj *layer1Ieee8021qbb) PfcClass6() int32 {
-	return *obj.obj.PfcClass6
+func (obj *layer1Ieee8021Qbb) PfcClass6() int32 {
+	return *obj.obj.PfcClass_6
 }
 
-// SetPfcClass6 sets the int32 value in the None object
+// SetPfcClass_6 sets the int32 value in the None object
 //  The valid values are null, 0 - 7.
 //  A null value indicates there is no setting for this pfc class.
-func (obj *layer1Ieee8021qbb) SetPfcClass6(value int32) Layer1Ieee8021qbb {
-	obj.obj.PfcClass6 = &value
+func (obj *layer1Ieee8021Qbb) SetPfcClass6(value int32) Layer1Ieee8021Qbb {
+	obj.obj.PfcClass_6 = &value
 	return obj
 }
 
-// PfcClass7 returns a int32
+// PfcClass_7 returns a int32
 //  The valid values are null, 0 - 7.
 //  A null value indicates there is no setting for this pfc class.
-func (obj *layer1Ieee8021qbb) PfcClass7() int32 {
-	return *obj.obj.PfcClass7
+func (obj *layer1Ieee8021Qbb) PfcClass7() int32 {
+	return *obj.obj.PfcClass_7
 }
 
-// SetPfcClass7 sets the int32 value in the None object
+// SetPfcClass_7 sets the int32 value in the None object
 //  The valid values are null, 0 - 7.
 //  A null value indicates there is no setting for this pfc class.
-func (obj *layer1Ieee8021qbb) SetPfcClass7(value int32) Layer1Ieee8021qbb {
-	obj.obj.PfcClass7 = &value
+func (obj *layer1Ieee8021Qbb) SetPfcClass7(value int32) Layer1Ieee8021Qbb {
+	obj.obj.PfcClass_7 = &value
 	return obj
 }
 
-type layer1Ieee8023x struct {
-	obj *snappipb.Layer1Ieee8023x
+type layer1Ieee8023X struct {
+	obj *snappipb.Layer1Ieee8023X
 }
 
-func (obj *layer1Ieee8023x) msg() *snappipb.Layer1Ieee8023x {
+func (obj *layer1Ieee8023X) msg() *snappipb.Layer1Ieee8023X {
 	return obj.obj
 }
 
-func (obj *layer1Ieee8023x) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *layer1Ieee8023X) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *layer1Ieee8023x) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *layer1Ieee8023X) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *layer1Ieee8023X) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-type Layer1Ieee8023x interface {
-	msg() *snappipb.Layer1Ieee8023x
-	Yaml() string
-	Json() string
+func (obj *layer1Ieee8023X) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
+}
+
+type Layer1Ieee8023X interface {
+	msg() *snappipb.Layer1Ieee8023X
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 }
 
 type captureCustom struct {
@@ -3620,20 +4761,44 @@ func (obj *captureCustom) msg() *snappipb.CaptureCustom {
 	return obj.obj
 }
 
-func (obj *captureCustom) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *captureCustom) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *captureCustom) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *captureCustom) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *captureCustom) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *captureCustom) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type CaptureCustom interface {
 	msg() *snappipb.CaptureCustom
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Offset() int32
 	SetOffset(value int32) CaptureCustom
 	BitLength() int32
@@ -3719,20 +4884,44 @@ func (obj *captureEthernet) msg() *snappipb.CaptureEthernet {
 	return obj.obj
 }
 
-func (obj *captureEthernet) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *captureEthernet) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *captureEthernet) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *captureEthernet) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *captureEthernet) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *captureEthernet) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type CaptureEthernet interface {
 	msg() *snappipb.CaptureEthernet
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Src() CaptureField
 	Dst() CaptureField
 	EtherType() CaptureField
@@ -3787,20 +4976,44 @@ func (obj *captureVlan) msg() *snappipb.CaptureVlan {
 	return obj.obj
 }
 
-func (obj *captureVlan) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *captureVlan) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *captureVlan) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *captureVlan) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *captureVlan) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *captureVlan) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type CaptureVlan interface {
 	msg() *snappipb.CaptureVlan
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Priority() CaptureField
 	Cfi() CaptureField
 	Id() CaptureField
@@ -3855,20 +5068,44 @@ func (obj *captureIpv4) msg() *snappipb.CaptureIpv4 {
 	return obj.obj
 }
 
-func (obj *captureIpv4) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *captureIpv4) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *captureIpv4) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *captureIpv4) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *captureIpv4) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *captureIpv4) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type CaptureIpv4 interface {
 	msg() *snappipb.CaptureIpv4
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Version() CaptureField
 	HeaderLength() CaptureField
 	Priority() CaptureField
@@ -4033,20 +5270,44 @@ func (obj *captureIpv6) msg() *snappipb.CaptureIpv6 {
 	return obj.obj
 }
 
-func (obj *captureIpv6) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *captureIpv6) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *captureIpv6) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *captureIpv6) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *captureIpv6) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *captureIpv6) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type CaptureIpv6 interface {
 	msg() *snappipb.CaptureIpv6
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Version() CaptureField
 	TrafficClass() CaptureField
 	FlowLabel() CaptureField
@@ -4145,20 +5406,44 @@ func (obj *deviceIpv4) msg() *snappipb.DeviceIpv4 {
 	return obj.obj
 }
 
-func (obj *deviceIpv4) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *deviceIpv4) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *deviceIpv4) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *deviceIpv4) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *deviceIpv4) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *deviceIpv4) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type DeviceIpv4 interface {
 	msg() *snappipb.DeviceIpv4
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Gateway() string
 	SetGateway(value string) DeviceIpv4
 	Address() string
@@ -4240,20 +5525,44 @@ func (obj *deviceIpv6) msg() *snappipb.DeviceIpv6 {
 	return obj.obj
 }
 
-func (obj *deviceIpv6) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *deviceIpv6) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *deviceIpv6) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *deviceIpv6) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *deviceIpv6) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *deviceIpv6) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type DeviceIpv6 interface {
 	msg() *snappipb.DeviceIpv6
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Gateway() string
 	SetGateway(value string) DeviceIpv6
 	Address() string
@@ -4335,20 +5644,44 @@ func (obj *deviceVlan) msg() *snappipb.DeviceVlan {
 	return obj.obj
 }
 
-func (obj *deviceVlan) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *deviceVlan) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *deviceVlan) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *deviceVlan) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *deviceVlan) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *deviceVlan) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type DeviceVlan interface {
 	msg() *snappipb.DeviceVlan
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Priority() int32
 	SetPriority(value int32) DeviceVlan
 	Id() int32
@@ -4404,20 +5737,44 @@ func (obj *flowPort) msg() *snappipb.FlowPort {
 	return obj.obj
 }
 
-func (obj *flowPort) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *flowPort) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *flowPort) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *flowPort) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *flowPort) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *flowPort) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type FlowPort interface {
 	msg() *snappipb.FlowPort
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	TxName() string
 	SetTxName(value string) FlowPort
 	RxName() string
@@ -4498,20 +5855,44 @@ func (obj *flowDevice) msg() *snappipb.FlowDevice {
 	return obj.obj
 }
 
-func (obj *flowDevice) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *flowDevice) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *flowDevice) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *flowDevice) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *flowDevice) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *flowDevice) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type FlowDevice interface {
 	msg() *snappipb.FlowDevice
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	TxNames() []string
 	SetTxNames(value []string) FlowDevice
 	RxNames() []string
@@ -4616,20 +5997,44 @@ func (obj *flowCustom) msg() *snappipb.FlowCustom {
 	return obj.obj
 }
 
-func (obj *flowCustom) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *flowCustom) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *flowCustom) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *flowCustom) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *flowCustom) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *flowCustom) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type FlowCustom interface {
 	msg() *snappipb.FlowCustom
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Bytes() string
 	SetBytes(value string) FlowCustom
 }
@@ -4655,20 +6060,44 @@ func (obj *flowEthernet) msg() *snappipb.FlowEthernet {
 	return obj.obj
 }
 
-func (obj *flowEthernet) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *flowEthernet) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *flowEthernet) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *flowEthernet) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *flowEthernet) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *flowEthernet) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type FlowEthernet interface {
 	msg() *snappipb.FlowEthernet
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Dst() PatternFlowEthernetDst
 	Src() PatternFlowEthernetSrc
 	EtherType() PatternFlowEthernetEtherType
@@ -4723,20 +6152,44 @@ func (obj *flowVlan) msg() *snappipb.FlowVlan {
 	return obj.obj
 }
 
-func (obj *flowVlan) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *flowVlan) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *flowVlan) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *flowVlan) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *flowVlan) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *flowVlan) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type FlowVlan interface {
 	msg() *snappipb.FlowVlan
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Priority() PatternFlowVlanPriority
 	Cfi() PatternFlowVlanCfi
 	Id() PatternFlowVlanId
@@ -4791,20 +6244,44 @@ func (obj *flowVxlan) msg() *snappipb.FlowVxlan {
 	return obj.obj
 }
 
-func (obj *flowVxlan) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *flowVxlan) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *flowVxlan) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *flowVxlan) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *flowVxlan) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *flowVxlan) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type FlowVxlan interface {
 	msg() *snappipb.FlowVxlan
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Flags() PatternFlowVxlanFlags
 	Reserved0() PatternFlowVxlanReserved0
 	Vni() PatternFlowVxlanVni
@@ -4859,20 +6336,44 @@ func (obj *flowIpv4) msg() *snappipb.FlowIpv4 {
 	return obj.obj
 }
 
-func (obj *flowIpv4) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *flowIpv4) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *flowIpv4) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *flowIpv4) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *flowIpv4) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *flowIpv4) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type FlowIpv4 interface {
 	msg() *snappipb.FlowIpv4
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Version() PatternFlowIpv4Version
 	HeaderLength() PatternFlowIpv4HeaderLength
 	Priority() FlowIpv4Priority
@@ -5037,20 +6538,44 @@ func (obj *flowIpv6) msg() *snappipb.FlowIpv6 {
 	return obj.obj
 }
 
-func (obj *flowIpv6) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *flowIpv6) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *flowIpv6) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *flowIpv6) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *flowIpv6) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *flowIpv6) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type FlowIpv6 interface {
 	msg() *snappipb.FlowIpv6
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Version() PatternFlowIpv6Version
 	TrafficClass() PatternFlowIpv6TrafficClass
 	FlowLabel() PatternFlowIpv6FlowLabel
@@ -5149,20 +6674,44 @@ func (obj *flowPfcPause) msg() *snappipb.FlowPfcPause {
 	return obj.obj
 }
 
-func (obj *flowPfcPause) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *flowPfcPause) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *flowPfcPause) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *flowPfcPause) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *flowPfcPause) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *flowPfcPause) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type FlowPfcPause interface {
 	msg() *snappipb.FlowPfcPause
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Dst() PatternFlowPfcPauseDst
 	Src() PatternFlowPfcPauseSrc
 	EtherType() PatternFlowPfcPauseEtherType
@@ -5228,83 +6777,83 @@ func (obj *flowPfcPause) ClassEnableVector() PatternFlowPfcPauseClassEnableVecto
 
 }
 
-// PauseClass0 returns a PatternFlowPfcPausePauseClass0
+// PauseClass_0 returns a PatternFlowPfcPausePauseClass0
 //  description is TBD
 func (obj *flowPfcPause) PauseClass0() PatternFlowPfcPausePauseClass0 {
-	if obj.obj.PauseClass0 == nil {
-		obj.obj.PauseClass0 = &snappipb.PatternFlowPfcPausePauseClass0{}
+	if obj.obj.PauseClass_0 == nil {
+		obj.obj.PauseClass_0 = &snappipb.PatternFlowPfcPausePauseClass0{}
 	}
-	return &patternFlowPfcPausePauseClass0{obj: obj.obj.PauseClass0}
+	return &patternFlowPfcPausePauseClass0{obj: obj.obj.PauseClass_0}
 
 }
 
-// PauseClass1 returns a PatternFlowPfcPausePauseClass1
+// PauseClass_1 returns a PatternFlowPfcPausePauseClass1
 //  description is TBD
 func (obj *flowPfcPause) PauseClass1() PatternFlowPfcPausePauseClass1 {
-	if obj.obj.PauseClass1 == nil {
-		obj.obj.PauseClass1 = &snappipb.PatternFlowPfcPausePauseClass1{}
+	if obj.obj.PauseClass_1 == nil {
+		obj.obj.PauseClass_1 = &snappipb.PatternFlowPfcPausePauseClass1{}
 	}
-	return &patternFlowPfcPausePauseClass1{obj: obj.obj.PauseClass1}
+	return &patternFlowPfcPausePauseClass1{obj: obj.obj.PauseClass_1}
 
 }
 
-// PauseClass2 returns a PatternFlowPfcPausePauseClass2
+// PauseClass_2 returns a PatternFlowPfcPausePauseClass2
 //  description is TBD
 func (obj *flowPfcPause) PauseClass2() PatternFlowPfcPausePauseClass2 {
-	if obj.obj.PauseClass2 == nil {
-		obj.obj.PauseClass2 = &snappipb.PatternFlowPfcPausePauseClass2{}
+	if obj.obj.PauseClass_2 == nil {
+		obj.obj.PauseClass_2 = &snappipb.PatternFlowPfcPausePauseClass2{}
 	}
-	return &patternFlowPfcPausePauseClass2{obj: obj.obj.PauseClass2}
+	return &patternFlowPfcPausePauseClass2{obj: obj.obj.PauseClass_2}
 
 }
 
-// PauseClass3 returns a PatternFlowPfcPausePauseClass3
+// PauseClass_3 returns a PatternFlowPfcPausePauseClass3
 //  description is TBD
 func (obj *flowPfcPause) PauseClass3() PatternFlowPfcPausePauseClass3 {
-	if obj.obj.PauseClass3 == nil {
-		obj.obj.PauseClass3 = &snappipb.PatternFlowPfcPausePauseClass3{}
+	if obj.obj.PauseClass_3 == nil {
+		obj.obj.PauseClass_3 = &snappipb.PatternFlowPfcPausePauseClass3{}
 	}
-	return &patternFlowPfcPausePauseClass3{obj: obj.obj.PauseClass3}
+	return &patternFlowPfcPausePauseClass3{obj: obj.obj.PauseClass_3}
 
 }
 
-// PauseClass4 returns a PatternFlowPfcPausePauseClass4
+// PauseClass_4 returns a PatternFlowPfcPausePauseClass4
 //  description is TBD
 func (obj *flowPfcPause) PauseClass4() PatternFlowPfcPausePauseClass4 {
-	if obj.obj.PauseClass4 == nil {
-		obj.obj.PauseClass4 = &snappipb.PatternFlowPfcPausePauseClass4{}
+	if obj.obj.PauseClass_4 == nil {
+		obj.obj.PauseClass_4 = &snappipb.PatternFlowPfcPausePauseClass4{}
 	}
-	return &patternFlowPfcPausePauseClass4{obj: obj.obj.PauseClass4}
+	return &patternFlowPfcPausePauseClass4{obj: obj.obj.PauseClass_4}
 
 }
 
-// PauseClass5 returns a PatternFlowPfcPausePauseClass5
+// PauseClass_5 returns a PatternFlowPfcPausePauseClass5
 //  description is TBD
 func (obj *flowPfcPause) PauseClass5() PatternFlowPfcPausePauseClass5 {
-	if obj.obj.PauseClass5 == nil {
-		obj.obj.PauseClass5 = &snappipb.PatternFlowPfcPausePauseClass5{}
+	if obj.obj.PauseClass_5 == nil {
+		obj.obj.PauseClass_5 = &snappipb.PatternFlowPfcPausePauseClass5{}
 	}
-	return &patternFlowPfcPausePauseClass5{obj: obj.obj.PauseClass5}
+	return &patternFlowPfcPausePauseClass5{obj: obj.obj.PauseClass_5}
 
 }
 
-// PauseClass6 returns a PatternFlowPfcPausePauseClass6
+// PauseClass_6 returns a PatternFlowPfcPausePauseClass6
 //  description is TBD
 func (obj *flowPfcPause) PauseClass6() PatternFlowPfcPausePauseClass6 {
-	if obj.obj.PauseClass6 == nil {
-		obj.obj.PauseClass6 = &snappipb.PatternFlowPfcPausePauseClass6{}
+	if obj.obj.PauseClass_6 == nil {
+		obj.obj.PauseClass_6 = &snappipb.PatternFlowPfcPausePauseClass6{}
 	}
-	return &patternFlowPfcPausePauseClass6{obj: obj.obj.PauseClass6}
+	return &patternFlowPfcPausePauseClass6{obj: obj.obj.PauseClass_6}
 
 }
 
-// PauseClass7 returns a PatternFlowPfcPausePauseClass7
+// PauseClass_7 returns a PatternFlowPfcPausePauseClass7
 //  description is TBD
 func (obj *flowPfcPause) PauseClass7() PatternFlowPfcPausePauseClass7 {
-	if obj.obj.PauseClass7 == nil {
-		obj.obj.PauseClass7 = &snappipb.PatternFlowPfcPausePauseClass7{}
+	if obj.obj.PauseClass_7 == nil {
+		obj.obj.PauseClass_7 = &snappipb.PatternFlowPfcPausePauseClass7{}
 	}
-	return &patternFlowPfcPausePauseClass7{obj: obj.obj.PauseClass7}
+	return &patternFlowPfcPausePauseClass7{obj: obj.obj.PauseClass_7}
 
 }
 
@@ -5316,20 +6865,44 @@ func (obj *flowEthernetPause) msg() *snappipb.FlowEthernetPause {
 	return obj.obj
 }
 
-func (obj *flowEthernetPause) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *flowEthernetPause) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *flowEthernetPause) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *flowEthernetPause) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *flowEthernetPause) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *flowEthernetPause) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type FlowEthernetPause interface {
 	msg() *snappipb.FlowEthernetPause
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Dst() PatternFlowEthernetPauseDst
 	Src() PatternFlowEthernetPauseSrc
 	EtherType() PatternFlowEthernetPauseEtherType
@@ -5395,20 +6968,44 @@ func (obj *flowTcp) msg() *snappipb.FlowTcp {
 	return obj.obj
 }
 
-func (obj *flowTcp) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *flowTcp) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *flowTcp) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *flowTcp) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *flowTcp) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *flowTcp) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type FlowTcp interface {
 	msg() *snappipb.FlowTcp
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	SrcPort() PatternFlowTcpSrcPort
 	DstPort() PatternFlowTcpDstPort
 	SeqNum() PatternFlowTcpSeqNum
@@ -5584,20 +7181,44 @@ func (obj *flowUdp) msg() *snappipb.FlowUdp {
 	return obj.obj
 }
 
-func (obj *flowUdp) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *flowUdp) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *flowUdp) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *flowUdp) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *flowUdp) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *flowUdp) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type FlowUdp interface {
 	msg() *snappipb.FlowUdp
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	SrcPort() PatternFlowUdpSrcPort
 	DstPort() PatternFlowUdpDstPort
 	Length() PatternFlowUdpLength
@@ -5652,20 +7273,44 @@ func (obj *flowGre) msg() *snappipb.FlowGre {
 	return obj.obj
 }
 
-func (obj *flowGre) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *flowGre) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *flowGre) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *flowGre) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *flowGre) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *flowGre) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type FlowGre interface {
 	msg() *snappipb.FlowGre
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	ChecksumPresent() PatternFlowGreChecksumPresent
 	Reserved0() PatternFlowGreReserved0
 	Version() PatternFlowGreVersion
@@ -5742,20 +7387,44 @@ func (obj *flowGtpv1) msg() *snappipb.FlowGtpv1 {
 	return obj.obj
 }
 
-func (obj *flowGtpv1) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *flowGtpv1) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *flowGtpv1) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *flowGtpv1) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *flowGtpv1) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *flowGtpv1) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type FlowGtpv1 interface {
 	msg() *snappipb.FlowGtpv1
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Version() PatternFlowGtpv1Version
 	ProtocolType() PatternFlowGtpv1ProtocolType
 	Reserved() PatternFlowGtpv1Reserved
@@ -5768,8 +7437,7 @@ type FlowGtpv1 interface {
 	SquenceNumber() PatternFlowGtpv1SquenceNumber
 	NPduNumber() PatternFlowGtpv1NPduNumber
 	NextExtensionHeaderType() PatternFlowGtpv1NextExtensionHeaderType
-	ExtensionHeaders() []FlowGtpExtension
-	NewExtensionHeaders() FlowGtpExtension
+	ExtensionHeaders() FlowGtpv1FlowGtpExtensionIter
 }
 
 // Version returns a PatternFlowGtpv1Version
@@ -5894,27 +7562,35 @@ func (obj *flowGtpv1) NextExtensionHeaderType() PatternFlowGtpv1NextExtensionHea
 
 // ExtensionHeaders returns a []FlowGtpExtension
 //  A list of optional extension headers.
-func (obj *flowGtpv1) ExtensionHeaders() []FlowGtpExtension {
+func (obj *flowGtpv1) ExtensionHeaders() FlowGtpv1FlowGtpExtensionIter {
 	if obj.obj.ExtensionHeaders == nil {
-		obj.obj.ExtensionHeaders = make([]*snappipb.FlowGtpExtension, 0)
+		obj.obj.ExtensionHeaders = []*snappipb.FlowGtpExtension{}
 	}
-	values := make([]FlowGtpExtension, 0)
-	for _, item := range obj.obj.ExtensionHeaders {
-		values = append(values, &flowGtpExtension{obj: item})
-	}
-	return values
+	return &flowGtpv1FlowGtpExtensionIter{obj: obj}
 
 }
 
-// NewExtensionHeaders creates and returns a new FlowGtpExtension object
-//  A list of optional extension headers.
-func (obj *flowGtpv1) NewExtensionHeaders() FlowGtpExtension {
-	if obj.obj.ExtensionHeaders == nil {
-		obj.obj.ExtensionHeaders = make([]*snappipb.FlowGtpExtension, 0)
+type flowGtpv1FlowGtpExtensionIter struct {
+	obj *flowGtpv1
+}
+
+type FlowGtpv1FlowGtpExtensionIter interface {
+	Add() FlowGtpExtension
+	Items() []FlowGtpExtension
+}
+
+func (obj *flowGtpv1FlowGtpExtensionIter) Add() FlowGtpExtension {
+	newObj := &snappipb.FlowGtpExtension{}
+	obj.obj.obj.ExtensionHeaders = append(obj.obj.obj.ExtensionHeaders, newObj)
+	return &flowGtpExtension{obj: newObj}
+}
+
+func (obj *flowGtpv1FlowGtpExtensionIter) Items() []FlowGtpExtension {
+	slice := []FlowGtpExtension{}
+	for _, item := range obj.obj.obj.ExtensionHeaders {
+		slice = append(slice, &flowGtpExtension{obj: item})
 	}
-	slice := append(obj.obj.ExtensionHeaders, &snappipb.FlowGtpExtension{})
-	obj.obj.ExtensionHeaders = slice
-	return &flowGtpExtension{obj: slice[len(slice)-1]}
+	return slice
 }
 
 type flowGtpv2 struct {
@@ -5925,20 +7601,44 @@ func (obj *flowGtpv2) msg() *snappipb.FlowGtpv2 {
 	return obj.obj
 }
 
-func (obj *flowGtpv2) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *flowGtpv2) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *flowGtpv2) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *flowGtpv2) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *flowGtpv2) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *flowGtpv2) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type FlowGtpv2 interface {
 	msg() *snappipb.FlowGtpv2
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Version() PatternFlowGtpv2Version
 	PiggybackingFlag() PatternFlowGtpv2PiggybackingFlag
 	TeidFlag() PatternFlowGtpv2TeidFlag
@@ -6048,20 +7748,44 @@ func (obj *flowArp) msg() *snappipb.FlowArp {
 	return obj.obj
 }
 
-func (obj *flowArp) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *flowArp) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *flowArp) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *flowArp) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *flowArp) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *flowArp) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type FlowArp interface {
 	msg() *snappipb.FlowArp
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	HardwareType() PatternFlowArpHardwareType
 	ProtocolType() PatternFlowArpProtocolType
 	HardwareLength() PatternFlowArpHardwareLength
@@ -6171,20 +7895,44 @@ func (obj *flowIcmp) msg() *snappipb.FlowIcmp {
 	return obj.obj
 }
 
-func (obj *flowIcmp) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *flowIcmp) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *flowIcmp) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *flowIcmp) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *flowIcmp) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *flowIcmp) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type FlowIcmp interface {
 	msg() *snappipb.FlowIcmp
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Echo() FlowIcmpEcho
 }
 
@@ -6206,20 +7954,44 @@ func (obj *flowIcmpv6) msg() *snappipb.FlowIcmpv6 {
 	return obj.obj
 }
 
-func (obj *flowIcmpv6) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *flowIcmpv6) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *flowIcmpv6) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *flowIcmpv6) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *flowIcmpv6) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *flowIcmpv6) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type FlowIcmpv6 interface {
 	msg() *snappipb.FlowIcmpv6
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Echo() FlowIcmpv6Echo
 }
 
@@ -6241,20 +8013,44 @@ func (obj *flowPpp) msg() *snappipb.FlowPpp {
 	return obj.obj
 }
 
-func (obj *flowPpp) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *flowPpp) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *flowPpp) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *flowPpp) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *flowPpp) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *flowPpp) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type FlowPpp interface {
 	msg() *snappipb.FlowPpp
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Address() PatternFlowPppAddress
 	Control() PatternFlowPppControl
 	ProtocolType() PatternFlowPppProtocolType
@@ -6298,20 +8094,44 @@ func (obj *flowIgmpv1) msg() *snappipb.FlowIgmpv1 {
 	return obj.obj
 }
 
-func (obj *flowIgmpv1) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *flowIgmpv1) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *flowIgmpv1) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *flowIgmpv1) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *flowIgmpv1) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *flowIgmpv1) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type FlowIgmpv1 interface {
 	msg() *snappipb.FlowIgmpv1
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Version() PatternFlowIgmpv1Version
 	Type() PatternFlowIgmpv1Type
 	Unused() PatternFlowIgmpv1Unused
@@ -6377,20 +8197,44 @@ func (obj *flowSizeIncrement) msg() *snappipb.FlowSizeIncrement {
 	return obj.obj
 }
 
-func (obj *flowSizeIncrement) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *flowSizeIncrement) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *flowSizeIncrement) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *flowSizeIncrement) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *flowSizeIncrement) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *flowSizeIncrement) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type FlowSizeIncrement interface {
 	msg() *snappipb.FlowSizeIncrement
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) FlowSizeIncrement
 	End() int32
@@ -6446,20 +8290,44 @@ func (obj *flowSizeRandom) msg() *snappipb.FlowSizeRandom {
 	return obj.obj
 }
 
-func (obj *flowSizeRandom) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *flowSizeRandom) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *flowSizeRandom) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *flowSizeRandom) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *flowSizeRandom) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *flowSizeRandom) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type FlowSizeRandom interface {
 	msg() *snappipb.FlowSizeRandom
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Min() int32
 	SetMin(value int32) FlowSizeRandom
 	Max() int32
@@ -6500,20 +8368,44 @@ func (obj *flowFixedPackets) msg() *snappipb.FlowFixedPackets {
 	return obj.obj
 }
 
-func (obj *flowFixedPackets) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *flowFixedPackets) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *flowFixedPackets) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *flowFixedPackets) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *flowFixedPackets) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *flowFixedPackets) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type FlowFixedPackets interface {
 	msg() *snappipb.FlowFixedPackets
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Packets() int32
 	SetPackets(value int32) FlowFixedPackets
 	Gap() int32
@@ -6565,20 +8457,44 @@ func (obj *flowFixedSeconds) msg() *snappipb.FlowFixedSeconds {
 	return obj.obj
 }
 
-func (obj *flowFixedSeconds) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *flowFixedSeconds) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *flowFixedSeconds) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *flowFixedSeconds) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *flowFixedSeconds) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *flowFixedSeconds) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type FlowFixedSeconds interface {
 	msg() *snappipb.FlowFixedSeconds
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Seconds() float32
 	SetSeconds(value float32) FlowFixedSeconds
 	Gap() int32
@@ -6630,20 +8546,44 @@ func (obj *flowBurst) msg() *snappipb.FlowBurst {
 	return obj.obj
 }
 
-func (obj *flowBurst) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *flowBurst) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *flowBurst) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *flowBurst) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *flowBurst) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *flowBurst) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type FlowBurst interface {
 	msg() *snappipb.FlowBurst
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Bursts() int32
 	SetBursts(value int32) FlowBurst
 	Packets() int32
@@ -6712,20 +8652,44 @@ func (obj *flowContinuous) msg() *snappipb.FlowContinuous {
 	return obj.obj
 }
 
-func (obj *flowContinuous) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *flowContinuous) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *flowContinuous) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *flowContinuous) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *flowContinuous) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *flowContinuous) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type FlowContinuous interface {
 	msg() *snappipb.FlowContinuous
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Gap() int32
 	SetGap(value int32) FlowContinuous
 	Delay() FlowDelay
@@ -6762,20 +8726,44 @@ func (obj *flowLatencyMetrics) msg() *snappipb.FlowLatencyMetrics {
 	return obj.obj
 }
 
-func (obj *flowLatencyMetrics) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *flowLatencyMetrics) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *flowLatencyMetrics) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *flowLatencyMetrics) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *flowLatencyMetrics) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *flowLatencyMetrics) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type FlowLatencyMetrics interface {
 	msg() *snappipb.FlowLatencyMetrics
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Enable() bool
 	SetEnable(value bool) FlowLatencyMetrics
 }
@@ -6807,20 +8795,44 @@ func (obj *lagLacp) msg() *snappipb.LagLacp {
 	return obj.obj
 }
 
-func (obj *lagLacp) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *lagLacp) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *lagLacp) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *lagLacp) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *lagLacp) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *lagLacp) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type LagLacp interface {
 	msg() *snappipb.LagLacp
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	ActorKey() int32
 	SetActorKey(value int32) LagLacp
 	ActorPortNumber() int32
@@ -6936,20 +8948,44 @@ func (obj *lagStatic) msg() *snappipb.LagStatic {
 	return obj.obj
 }
 
-func (obj *lagStatic) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *lagStatic) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *lagStatic) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *lagStatic) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *lagStatic) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *lagStatic) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type LagStatic interface {
 	msg() *snappipb.LagStatic
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	LagId() int32
 	SetLagId(value int32) LagStatic
 }
@@ -6975,20 +9011,44 @@ func (obj *captureField) msg() *snappipb.CaptureField {
 	return obj.obj
 }
 
-func (obj *captureField) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *captureField) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *captureField) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *captureField) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *captureField) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *captureField) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type CaptureField interface {
 	msg() *snappipb.CaptureField
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() string
 	SetValue(value string) CaptureField
 	Mask() string
@@ -7044,20 +9104,44 @@ func (obj *deviceBgpv4) msg() *snappipb.DeviceBgpv4 {
 	return obj.obj
 }
 
-func (obj *deviceBgpv4) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *deviceBgpv4) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *deviceBgpv4) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *deviceBgpv4) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *deviceBgpv4) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *deviceBgpv4) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type DeviceBgpv4 interface {
 	msg() *snappipb.DeviceBgpv4
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	LocalAddress() string
 	SetLocalAddress(value string) DeviceBgpv4
 	DutAddress() string
@@ -7068,12 +9152,9 @@ type DeviceBgpv4 interface {
 	SetAsNumber(value int32) DeviceBgpv4
 	Advanced() DeviceBgpAdvanced
 	Capability() DeviceBgpCapability
-	SrTePolicies() []DeviceBgpSrTePolicy
-	NewSrTePolicies() DeviceBgpSrTePolicy
-	Bgpv4Routes() []DeviceBgpv4Route
-	NewBgpv4Routes() DeviceBgpv4Route
-	Bgpv6Routes() []DeviceBgpv6Route
-	NewBgpv6Routes() DeviceBgpv6Route
+	SrTePolicies() DeviceBgpv4DeviceBgpSrTePolicyIter
+	Bgpv4Routes() DeviceBgpv4DeviceBgpv4RouteIter
+	Bgpv6Routes() DeviceBgpv4DeviceBgpv6RouteIter
 	Name() string
 	SetName(value string) DeviceBgpv4
 	Active() bool
@@ -7154,77 +9235,101 @@ func (obj *deviceBgpv4) Capability() DeviceBgpCapability {
 
 // SrTePolicies returns a []DeviceBgpSrTePolicy
 //  Segment routing/traffic engineering policies
-func (obj *deviceBgpv4) SrTePolicies() []DeviceBgpSrTePolicy {
+func (obj *deviceBgpv4) SrTePolicies() DeviceBgpv4DeviceBgpSrTePolicyIter {
 	if obj.obj.SrTePolicies == nil {
-		obj.obj.SrTePolicies = make([]*snappipb.DeviceBgpSrTePolicy, 0)
+		obj.obj.SrTePolicies = []*snappipb.DeviceBgpSrTePolicy{}
 	}
-	values := make([]DeviceBgpSrTePolicy, 0)
-	for _, item := range obj.obj.SrTePolicies {
-		values = append(values, &deviceBgpSrTePolicy{obj: item})
-	}
-	return values
+	return &deviceBgpv4DeviceBgpSrTePolicyIter{obj: obj}
 
 }
 
-// NewSrTePolicies creates and returns a new DeviceBgpSrTePolicy object
-//  Segment routing/traffic engineering policies
-func (obj *deviceBgpv4) NewSrTePolicies() DeviceBgpSrTePolicy {
-	if obj.obj.SrTePolicies == nil {
-		obj.obj.SrTePolicies = make([]*snappipb.DeviceBgpSrTePolicy, 0)
+type deviceBgpv4DeviceBgpSrTePolicyIter struct {
+	obj *deviceBgpv4
+}
+
+type DeviceBgpv4DeviceBgpSrTePolicyIter interface {
+	Add() DeviceBgpSrTePolicy
+	Items() []DeviceBgpSrTePolicy
+}
+
+func (obj *deviceBgpv4DeviceBgpSrTePolicyIter) Add() DeviceBgpSrTePolicy {
+	newObj := &snappipb.DeviceBgpSrTePolicy{}
+	obj.obj.obj.SrTePolicies = append(obj.obj.obj.SrTePolicies, newObj)
+	return &deviceBgpSrTePolicy{obj: newObj}
+}
+
+func (obj *deviceBgpv4DeviceBgpSrTePolicyIter) Items() []DeviceBgpSrTePolicy {
+	slice := []DeviceBgpSrTePolicy{}
+	for _, item := range obj.obj.obj.SrTePolicies {
+		slice = append(slice, &deviceBgpSrTePolicy{obj: item})
 	}
-	slice := append(obj.obj.SrTePolicies, &snappipb.DeviceBgpSrTePolicy{})
-	obj.obj.SrTePolicies = slice
-	return &deviceBgpSrTePolicy{obj: slice[len(slice)-1]}
+	return slice
 }
 
 // Bgpv4Routes returns a []DeviceBgpv4Route
 //  Emulated BGPv4 routes
-func (obj *deviceBgpv4) Bgpv4Routes() []DeviceBgpv4Route {
+func (obj *deviceBgpv4) Bgpv4Routes() DeviceBgpv4DeviceBgpv4RouteIter {
 	if obj.obj.Bgpv4Routes == nil {
-		obj.obj.Bgpv4Routes = make([]*snappipb.DeviceBgpv4Route, 0)
+		obj.obj.Bgpv4Routes = []*snappipb.DeviceBgpv4Route{}
 	}
-	values := make([]DeviceBgpv4Route, 0)
-	for _, item := range obj.obj.Bgpv4Routes {
-		values = append(values, &deviceBgpv4Route{obj: item})
-	}
-	return values
+	return &deviceBgpv4DeviceBgpv4RouteIter{obj: obj}
 
 }
 
-// NewBgpv4Routes creates and returns a new DeviceBgpv4Route object
-//  Emulated BGPv4 routes
-func (obj *deviceBgpv4) NewBgpv4Routes() DeviceBgpv4Route {
-	if obj.obj.Bgpv4Routes == nil {
-		obj.obj.Bgpv4Routes = make([]*snappipb.DeviceBgpv4Route, 0)
+type deviceBgpv4DeviceBgpv4RouteIter struct {
+	obj *deviceBgpv4
+}
+
+type DeviceBgpv4DeviceBgpv4RouteIter interface {
+	Add() DeviceBgpv4Route
+	Items() []DeviceBgpv4Route
+}
+
+func (obj *deviceBgpv4DeviceBgpv4RouteIter) Add() DeviceBgpv4Route {
+	newObj := &snappipb.DeviceBgpv4Route{}
+	obj.obj.obj.Bgpv4Routes = append(obj.obj.obj.Bgpv4Routes, newObj)
+	return &deviceBgpv4Route{obj: newObj}
+}
+
+func (obj *deviceBgpv4DeviceBgpv4RouteIter) Items() []DeviceBgpv4Route {
+	slice := []DeviceBgpv4Route{}
+	for _, item := range obj.obj.obj.Bgpv4Routes {
+		slice = append(slice, &deviceBgpv4Route{obj: item})
 	}
-	slice := append(obj.obj.Bgpv4Routes, &snappipb.DeviceBgpv4Route{})
-	obj.obj.Bgpv4Routes = slice
-	return &deviceBgpv4Route{obj: slice[len(slice)-1]}
+	return slice
 }
 
 // Bgpv6Routes returns a []DeviceBgpv6Route
 //  Emulated BGPv6 routes
-func (obj *deviceBgpv4) Bgpv6Routes() []DeviceBgpv6Route {
+func (obj *deviceBgpv4) Bgpv6Routes() DeviceBgpv4DeviceBgpv6RouteIter {
 	if obj.obj.Bgpv6Routes == nil {
-		obj.obj.Bgpv6Routes = make([]*snappipb.DeviceBgpv6Route, 0)
+		obj.obj.Bgpv6Routes = []*snappipb.DeviceBgpv6Route{}
 	}
-	values := make([]DeviceBgpv6Route, 0)
-	for _, item := range obj.obj.Bgpv6Routes {
-		values = append(values, &deviceBgpv6Route{obj: item})
-	}
-	return values
+	return &deviceBgpv4DeviceBgpv6RouteIter{obj: obj}
 
 }
 
-// NewBgpv6Routes creates and returns a new DeviceBgpv6Route object
-//  Emulated BGPv6 routes
-func (obj *deviceBgpv4) NewBgpv6Routes() DeviceBgpv6Route {
-	if obj.obj.Bgpv6Routes == nil {
-		obj.obj.Bgpv6Routes = make([]*snappipb.DeviceBgpv6Route, 0)
+type deviceBgpv4DeviceBgpv6RouteIter struct {
+	obj *deviceBgpv4
+}
+
+type DeviceBgpv4DeviceBgpv6RouteIter interface {
+	Add() DeviceBgpv6Route
+	Items() []DeviceBgpv6Route
+}
+
+func (obj *deviceBgpv4DeviceBgpv6RouteIter) Add() DeviceBgpv6Route {
+	newObj := &snappipb.DeviceBgpv6Route{}
+	obj.obj.obj.Bgpv6Routes = append(obj.obj.obj.Bgpv6Routes, newObj)
+	return &deviceBgpv6Route{obj: newObj}
+}
+
+func (obj *deviceBgpv4DeviceBgpv6RouteIter) Items() []DeviceBgpv6Route {
+	slice := []DeviceBgpv6Route{}
+	for _, item := range obj.obj.obj.Bgpv6Routes {
+		slice = append(slice, &deviceBgpv6Route{obj: item})
 	}
-	slice := append(obj.obj.Bgpv6Routes, &snappipb.DeviceBgpv6Route{})
-	obj.obj.Bgpv6Routes = slice
-	return &deviceBgpv6Route{obj: slice[len(slice)-1]}
+	return slice
 }
 
 // Name returns a string
@@ -7261,20 +9366,44 @@ func (obj *deviceBgpv6) msg() *snappipb.DeviceBgpv6 {
 	return obj.obj
 }
 
-func (obj *deviceBgpv6) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *deviceBgpv6) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *deviceBgpv6) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *deviceBgpv6) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *deviceBgpv6) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *deviceBgpv6) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type DeviceBgpv6 interface {
 	msg() *snappipb.DeviceBgpv6
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	LocalAddress() string
 	SetLocalAddress(value string) DeviceBgpv6
 	DutAddress() string
@@ -7286,12 +9415,9 @@ type DeviceBgpv6 interface {
 	SetAsNumber(value int32) DeviceBgpv6
 	Advanced() DeviceBgpAdvanced
 	Capability() DeviceBgpCapability
-	SrTePolicies() []DeviceBgpSrTePolicy
-	NewSrTePolicies() DeviceBgpSrTePolicy
-	Bgpv4Routes() []DeviceBgpv4Route
-	NewBgpv4Routes() DeviceBgpv4Route
-	Bgpv6Routes() []DeviceBgpv6Route
-	NewBgpv6Routes() DeviceBgpv6Route
+	SrTePolicies() DeviceBgpv6DeviceBgpSrTePolicyIter
+	Bgpv4Routes() DeviceBgpv6DeviceBgpv4RouteIter
+	Bgpv6Routes() DeviceBgpv6DeviceBgpv6RouteIter
 	Name() string
 	SetName(value string) DeviceBgpv6
 	Active() bool
@@ -7382,77 +9508,101 @@ func (obj *deviceBgpv6) Capability() DeviceBgpCapability {
 
 // SrTePolicies returns a []DeviceBgpSrTePolicy
 //  Segment routing/traffic engineering policies
-func (obj *deviceBgpv6) SrTePolicies() []DeviceBgpSrTePolicy {
+func (obj *deviceBgpv6) SrTePolicies() DeviceBgpv6DeviceBgpSrTePolicyIter {
 	if obj.obj.SrTePolicies == nil {
-		obj.obj.SrTePolicies = make([]*snappipb.DeviceBgpSrTePolicy, 0)
+		obj.obj.SrTePolicies = []*snappipb.DeviceBgpSrTePolicy{}
 	}
-	values := make([]DeviceBgpSrTePolicy, 0)
-	for _, item := range obj.obj.SrTePolicies {
-		values = append(values, &deviceBgpSrTePolicy{obj: item})
-	}
-	return values
+	return &deviceBgpv6DeviceBgpSrTePolicyIter{obj: obj}
 
 }
 
-// NewSrTePolicies creates and returns a new DeviceBgpSrTePolicy object
-//  Segment routing/traffic engineering policies
-func (obj *deviceBgpv6) NewSrTePolicies() DeviceBgpSrTePolicy {
-	if obj.obj.SrTePolicies == nil {
-		obj.obj.SrTePolicies = make([]*snappipb.DeviceBgpSrTePolicy, 0)
+type deviceBgpv6DeviceBgpSrTePolicyIter struct {
+	obj *deviceBgpv6
+}
+
+type DeviceBgpv6DeviceBgpSrTePolicyIter interface {
+	Add() DeviceBgpSrTePolicy
+	Items() []DeviceBgpSrTePolicy
+}
+
+func (obj *deviceBgpv6DeviceBgpSrTePolicyIter) Add() DeviceBgpSrTePolicy {
+	newObj := &snappipb.DeviceBgpSrTePolicy{}
+	obj.obj.obj.SrTePolicies = append(obj.obj.obj.SrTePolicies, newObj)
+	return &deviceBgpSrTePolicy{obj: newObj}
+}
+
+func (obj *deviceBgpv6DeviceBgpSrTePolicyIter) Items() []DeviceBgpSrTePolicy {
+	slice := []DeviceBgpSrTePolicy{}
+	for _, item := range obj.obj.obj.SrTePolicies {
+		slice = append(slice, &deviceBgpSrTePolicy{obj: item})
 	}
-	slice := append(obj.obj.SrTePolicies, &snappipb.DeviceBgpSrTePolicy{})
-	obj.obj.SrTePolicies = slice
-	return &deviceBgpSrTePolicy{obj: slice[len(slice)-1]}
+	return slice
 }
 
 // Bgpv4Routes returns a []DeviceBgpv4Route
 //  Emulated BGPv4 routes
-func (obj *deviceBgpv6) Bgpv4Routes() []DeviceBgpv4Route {
+func (obj *deviceBgpv6) Bgpv4Routes() DeviceBgpv6DeviceBgpv4RouteIter {
 	if obj.obj.Bgpv4Routes == nil {
-		obj.obj.Bgpv4Routes = make([]*snappipb.DeviceBgpv4Route, 0)
+		obj.obj.Bgpv4Routes = []*snappipb.DeviceBgpv4Route{}
 	}
-	values := make([]DeviceBgpv4Route, 0)
-	for _, item := range obj.obj.Bgpv4Routes {
-		values = append(values, &deviceBgpv4Route{obj: item})
-	}
-	return values
+	return &deviceBgpv6DeviceBgpv4RouteIter{obj: obj}
 
 }
 
-// NewBgpv4Routes creates and returns a new DeviceBgpv4Route object
-//  Emulated BGPv4 routes
-func (obj *deviceBgpv6) NewBgpv4Routes() DeviceBgpv4Route {
-	if obj.obj.Bgpv4Routes == nil {
-		obj.obj.Bgpv4Routes = make([]*snappipb.DeviceBgpv4Route, 0)
+type deviceBgpv6DeviceBgpv4RouteIter struct {
+	obj *deviceBgpv6
+}
+
+type DeviceBgpv6DeviceBgpv4RouteIter interface {
+	Add() DeviceBgpv4Route
+	Items() []DeviceBgpv4Route
+}
+
+func (obj *deviceBgpv6DeviceBgpv4RouteIter) Add() DeviceBgpv4Route {
+	newObj := &snappipb.DeviceBgpv4Route{}
+	obj.obj.obj.Bgpv4Routes = append(obj.obj.obj.Bgpv4Routes, newObj)
+	return &deviceBgpv4Route{obj: newObj}
+}
+
+func (obj *deviceBgpv6DeviceBgpv4RouteIter) Items() []DeviceBgpv4Route {
+	slice := []DeviceBgpv4Route{}
+	for _, item := range obj.obj.obj.Bgpv4Routes {
+		slice = append(slice, &deviceBgpv4Route{obj: item})
 	}
-	slice := append(obj.obj.Bgpv4Routes, &snappipb.DeviceBgpv4Route{})
-	obj.obj.Bgpv4Routes = slice
-	return &deviceBgpv4Route{obj: slice[len(slice)-1]}
+	return slice
 }
 
 // Bgpv6Routes returns a []DeviceBgpv6Route
 //  Emulated BGPv6 routes
-func (obj *deviceBgpv6) Bgpv6Routes() []DeviceBgpv6Route {
+func (obj *deviceBgpv6) Bgpv6Routes() DeviceBgpv6DeviceBgpv6RouteIter {
 	if obj.obj.Bgpv6Routes == nil {
-		obj.obj.Bgpv6Routes = make([]*snappipb.DeviceBgpv6Route, 0)
+		obj.obj.Bgpv6Routes = []*snappipb.DeviceBgpv6Route{}
 	}
-	values := make([]DeviceBgpv6Route, 0)
-	for _, item := range obj.obj.Bgpv6Routes {
-		values = append(values, &deviceBgpv6Route{obj: item})
-	}
-	return values
+	return &deviceBgpv6DeviceBgpv6RouteIter{obj: obj}
 
 }
 
-// NewBgpv6Routes creates and returns a new DeviceBgpv6Route object
-//  Emulated BGPv6 routes
-func (obj *deviceBgpv6) NewBgpv6Routes() DeviceBgpv6Route {
-	if obj.obj.Bgpv6Routes == nil {
-		obj.obj.Bgpv6Routes = make([]*snappipb.DeviceBgpv6Route, 0)
+type deviceBgpv6DeviceBgpv6RouteIter struct {
+	obj *deviceBgpv6
+}
+
+type DeviceBgpv6DeviceBgpv6RouteIter interface {
+	Add() DeviceBgpv6Route
+	Items() []DeviceBgpv6Route
+}
+
+func (obj *deviceBgpv6DeviceBgpv6RouteIter) Add() DeviceBgpv6Route {
+	newObj := &snappipb.DeviceBgpv6Route{}
+	obj.obj.obj.Bgpv6Routes = append(obj.obj.obj.Bgpv6Routes, newObj)
+	return &deviceBgpv6Route{obj: newObj}
+}
+
+func (obj *deviceBgpv6DeviceBgpv6RouteIter) Items() []DeviceBgpv6Route {
+	slice := []DeviceBgpv6Route{}
+	for _, item := range obj.obj.obj.Bgpv6Routes {
+		slice = append(slice, &deviceBgpv6Route{obj: item})
 	}
-	slice := append(obj.obj.Bgpv6Routes, &snappipb.DeviceBgpv6Route{})
-	obj.obj.Bgpv6Routes = slice
-	return &deviceBgpv6Route{obj: slice[len(slice)-1]}
+	return slice
 }
 
 // Name returns a string
@@ -7489,20 +9639,44 @@ func (obj *patternFlowEthernetDst) msg() *snappipb.PatternFlowEthernetDst {
 	return obj.obj
 }
 
-func (obj *patternFlowEthernetDst) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowEthernetDst) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowEthernetDst) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowEthernetDst) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowEthernetDst) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowEthernetDst) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowEthernetDst interface {
 	msg() *snappipb.PatternFlowEthernetDst
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() string
 	SetValue(value string) PatternFlowEthernetDst
 	Values() []string
@@ -7580,20 +9754,44 @@ func (obj *patternFlowEthernetSrc) msg() *snappipb.PatternFlowEthernetSrc {
 	return obj.obj
 }
 
-func (obj *patternFlowEthernetSrc) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowEthernetSrc) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowEthernetSrc) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowEthernetSrc) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowEthernetSrc) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowEthernetSrc) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowEthernetSrc interface {
 	msg() *snappipb.PatternFlowEthernetSrc
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() string
 	SetValue(value string) PatternFlowEthernetSrc
 	Values() []string
@@ -7671,20 +9869,44 @@ func (obj *patternFlowEthernetEtherType) msg() *snappipb.PatternFlowEthernetEthe
 	return obj.obj
 }
 
-func (obj *patternFlowEthernetEtherType) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowEthernetEtherType) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowEthernetEtherType) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowEthernetEtherType) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowEthernetEtherType) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowEthernetEtherType) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowEthernetEtherType interface {
 	msg() *snappipb.PatternFlowEthernetEtherType
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowEthernetEtherType
 	Values() []int32
@@ -7762,20 +9984,44 @@ func (obj *patternFlowEthernetPfcQueue) msg() *snappipb.PatternFlowEthernetPfcQu
 	return obj.obj
 }
 
-func (obj *patternFlowEthernetPfcQueue) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowEthernetPfcQueue) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowEthernetPfcQueue) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowEthernetPfcQueue) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowEthernetPfcQueue) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowEthernetPfcQueue) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowEthernetPfcQueue interface {
 	msg() *snappipb.PatternFlowEthernetPfcQueue
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowEthernetPfcQueue
 	Values() []int32
@@ -7853,20 +10099,44 @@ func (obj *patternFlowVlanPriority) msg() *snappipb.PatternFlowVlanPriority {
 	return obj.obj
 }
 
-func (obj *patternFlowVlanPriority) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowVlanPriority) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowVlanPriority) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowVlanPriority) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowVlanPriority) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowVlanPriority) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowVlanPriority interface {
 	msg() *snappipb.PatternFlowVlanPriority
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowVlanPriority
 	Values() []int32
@@ -7944,20 +10214,44 @@ func (obj *patternFlowVlanCfi) msg() *snappipb.PatternFlowVlanCfi {
 	return obj.obj
 }
 
-func (obj *patternFlowVlanCfi) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowVlanCfi) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowVlanCfi) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowVlanCfi) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowVlanCfi) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowVlanCfi) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowVlanCfi interface {
 	msg() *snappipb.PatternFlowVlanCfi
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowVlanCfi
 	Values() []int32
@@ -8035,20 +10329,44 @@ func (obj *patternFlowVlanId) msg() *snappipb.PatternFlowVlanId {
 	return obj.obj
 }
 
-func (obj *patternFlowVlanId) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowVlanId) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowVlanId) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowVlanId) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowVlanId) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowVlanId) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowVlanId interface {
 	msg() *snappipb.PatternFlowVlanId
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowVlanId
 	Values() []int32
@@ -8126,20 +10444,44 @@ func (obj *patternFlowVlanTpid) msg() *snappipb.PatternFlowVlanTpid {
 	return obj.obj
 }
 
-func (obj *patternFlowVlanTpid) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowVlanTpid) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowVlanTpid) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowVlanTpid) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowVlanTpid) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowVlanTpid) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowVlanTpid interface {
 	msg() *snappipb.PatternFlowVlanTpid
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowVlanTpid
 	Values() []int32
@@ -8217,20 +10559,44 @@ func (obj *patternFlowVxlanFlags) msg() *snappipb.PatternFlowVxlanFlags {
 	return obj.obj
 }
 
-func (obj *patternFlowVxlanFlags) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowVxlanFlags) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowVxlanFlags) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowVxlanFlags) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowVxlanFlags) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowVxlanFlags) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowVxlanFlags interface {
 	msg() *snappipb.PatternFlowVxlanFlags
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowVxlanFlags
 	Values() []int32
@@ -8308,20 +10674,44 @@ func (obj *patternFlowVxlanReserved0) msg() *snappipb.PatternFlowVxlanReserved0 
 	return obj.obj
 }
 
-func (obj *patternFlowVxlanReserved0) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowVxlanReserved0) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowVxlanReserved0) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowVxlanReserved0) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowVxlanReserved0) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowVxlanReserved0) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowVxlanReserved0 interface {
 	msg() *snappipb.PatternFlowVxlanReserved0
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowVxlanReserved0
 	Values() []int32
@@ -8399,20 +10789,44 @@ func (obj *patternFlowVxlanVni) msg() *snappipb.PatternFlowVxlanVni {
 	return obj.obj
 }
 
-func (obj *patternFlowVxlanVni) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowVxlanVni) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowVxlanVni) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowVxlanVni) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowVxlanVni) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowVxlanVni) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowVxlanVni interface {
 	msg() *snappipb.PatternFlowVxlanVni
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowVxlanVni
 	Values() []int32
@@ -8490,20 +10904,44 @@ func (obj *patternFlowVxlanReserved1) msg() *snappipb.PatternFlowVxlanReserved1 
 	return obj.obj
 }
 
-func (obj *patternFlowVxlanReserved1) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowVxlanReserved1) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowVxlanReserved1) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowVxlanReserved1) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowVxlanReserved1) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowVxlanReserved1) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowVxlanReserved1 interface {
 	msg() *snappipb.PatternFlowVxlanReserved1
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowVxlanReserved1
 	Values() []int32
@@ -8581,20 +11019,44 @@ func (obj *patternFlowIpv4Version) msg() *snappipb.PatternFlowIpv4Version {
 	return obj.obj
 }
 
-func (obj *patternFlowIpv4Version) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowIpv4Version) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowIpv4Version) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowIpv4Version) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowIpv4Version) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowIpv4Version) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowIpv4Version interface {
 	msg() *snappipb.PatternFlowIpv4Version
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowIpv4Version
 	Values() []int32
@@ -8672,20 +11134,44 @@ func (obj *patternFlowIpv4HeaderLength) msg() *snappipb.PatternFlowIpv4HeaderLen
 	return obj.obj
 }
 
-func (obj *patternFlowIpv4HeaderLength) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowIpv4HeaderLength) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowIpv4HeaderLength) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowIpv4HeaderLength) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowIpv4HeaderLength) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowIpv4HeaderLength) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowIpv4HeaderLength interface {
 	msg() *snappipb.PatternFlowIpv4HeaderLength
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowIpv4HeaderLength
 	Values() []int32
@@ -8763,20 +11249,44 @@ func (obj *flowIpv4Priority) msg() *snappipb.FlowIpv4Priority {
 	return obj.obj
 }
 
-func (obj *flowIpv4Priority) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *flowIpv4Priority) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *flowIpv4Priority) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *flowIpv4Priority) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *flowIpv4Priority) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *flowIpv4Priority) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type FlowIpv4Priority interface {
 	msg() *snappipb.FlowIpv4Priority
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Raw() PatternFlowIpv4PriorityRaw
 	Tos() FlowIpv4Tos
 	Dscp() FlowIpv4Dscp
@@ -8820,20 +11330,44 @@ func (obj *patternFlowIpv4TotalLength) msg() *snappipb.PatternFlowIpv4TotalLengt
 	return obj.obj
 }
 
-func (obj *patternFlowIpv4TotalLength) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowIpv4TotalLength) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowIpv4TotalLength) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowIpv4TotalLength) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowIpv4TotalLength) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowIpv4TotalLength) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowIpv4TotalLength interface {
 	msg() *snappipb.PatternFlowIpv4TotalLength
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowIpv4TotalLength
 	Values() []int32
@@ -8911,20 +11445,44 @@ func (obj *patternFlowIpv4Identification) msg() *snappipb.PatternFlowIpv4Identif
 	return obj.obj
 }
 
-func (obj *patternFlowIpv4Identification) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowIpv4Identification) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowIpv4Identification) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowIpv4Identification) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowIpv4Identification) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowIpv4Identification) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowIpv4Identification interface {
 	msg() *snappipb.PatternFlowIpv4Identification
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowIpv4Identification
 	Values() []int32
@@ -9002,20 +11560,44 @@ func (obj *patternFlowIpv4Reserved) msg() *snappipb.PatternFlowIpv4Reserved {
 	return obj.obj
 }
 
-func (obj *patternFlowIpv4Reserved) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowIpv4Reserved) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowIpv4Reserved) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowIpv4Reserved) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowIpv4Reserved) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowIpv4Reserved) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowIpv4Reserved interface {
 	msg() *snappipb.PatternFlowIpv4Reserved
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowIpv4Reserved
 	Values() []int32
@@ -9093,20 +11675,44 @@ func (obj *patternFlowIpv4DontFragment) msg() *snappipb.PatternFlowIpv4DontFragm
 	return obj.obj
 }
 
-func (obj *patternFlowIpv4DontFragment) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowIpv4DontFragment) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowIpv4DontFragment) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowIpv4DontFragment) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowIpv4DontFragment) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowIpv4DontFragment) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowIpv4DontFragment interface {
 	msg() *snappipb.PatternFlowIpv4DontFragment
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowIpv4DontFragment
 	Values() []int32
@@ -9184,20 +11790,44 @@ func (obj *patternFlowIpv4MoreFragments) msg() *snappipb.PatternFlowIpv4MoreFrag
 	return obj.obj
 }
 
-func (obj *patternFlowIpv4MoreFragments) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowIpv4MoreFragments) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowIpv4MoreFragments) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowIpv4MoreFragments) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowIpv4MoreFragments) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowIpv4MoreFragments) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowIpv4MoreFragments interface {
 	msg() *snappipb.PatternFlowIpv4MoreFragments
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowIpv4MoreFragments
 	Values() []int32
@@ -9275,20 +11905,44 @@ func (obj *patternFlowIpv4FragmentOffset) msg() *snappipb.PatternFlowIpv4Fragmen
 	return obj.obj
 }
 
-func (obj *patternFlowIpv4FragmentOffset) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowIpv4FragmentOffset) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowIpv4FragmentOffset) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowIpv4FragmentOffset) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowIpv4FragmentOffset) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowIpv4FragmentOffset) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowIpv4FragmentOffset interface {
 	msg() *snappipb.PatternFlowIpv4FragmentOffset
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowIpv4FragmentOffset
 	Values() []int32
@@ -9366,20 +12020,44 @@ func (obj *patternFlowIpv4TimeToLive) msg() *snappipb.PatternFlowIpv4TimeToLive 
 	return obj.obj
 }
 
-func (obj *patternFlowIpv4TimeToLive) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowIpv4TimeToLive) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowIpv4TimeToLive) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowIpv4TimeToLive) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowIpv4TimeToLive) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowIpv4TimeToLive) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowIpv4TimeToLive interface {
 	msg() *snappipb.PatternFlowIpv4TimeToLive
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowIpv4TimeToLive
 	Values() []int32
@@ -9457,20 +12135,44 @@ func (obj *patternFlowIpv4Protocol) msg() *snappipb.PatternFlowIpv4Protocol {
 	return obj.obj
 }
 
-func (obj *patternFlowIpv4Protocol) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowIpv4Protocol) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowIpv4Protocol) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowIpv4Protocol) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowIpv4Protocol) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowIpv4Protocol) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowIpv4Protocol interface {
 	msg() *snappipb.PatternFlowIpv4Protocol
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowIpv4Protocol
 	Values() []int32
@@ -9548,20 +12250,44 @@ func (obj *patternFlowIpv4HeaderChecksum) msg() *snappipb.PatternFlowIpv4HeaderC
 	return obj.obj
 }
 
-func (obj *patternFlowIpv4HeaderChecksum) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowIpv4HeaderChecksum) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowIpv4HeaderChecksum) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowIpv4HeaderChecksum) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowIpv4HeaderChecksum) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowIpv4HeaderChecksum) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowIpv4HeaderChecksum interface {
 	msg() *snappipb.PatternFlowIpv4HeaderChecksum
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Custom() int32
 	SetCustom(value int32) PatternFlowIpv4HeaderChecksum
 }
@@ -9587,20 +12313,44 @@ func (obj *patternFlowIpv4Src) msg() *snappipb.PatternFlowIpv4Src {
 	return obj.obj
 }
 
-func (obj *patternFlowIpv4Src) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowIpv4Src) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowIpv4Src) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowIpv4Src) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowIpv4Src) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowIpv4Src) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowIpv4Src interface {
 	msg() *snappipb.PatternFlowIpv4Src
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() string
 	SetValue(value string) PatternFlowIpv4Src
 	Values() []string
@@ -9678,20 +12428,44 @@ func (obj *patternFlowIpv4Dst) msg() *snappipb.PatternFlowIpv4Dst {
 	return obj.obj
 }
 
-func (obj *patternFlowIpv4Dst) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowIpv4Dst) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowIpv4Dst) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowIpv4Dst) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowIpv4Dst) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowIpv4Dst) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowIpv4Dst interface {
 	msg() *snappipb.PatternFlowIpv4Dst
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() string
 	SetValue(value string) PatternFlowIpv4Dst
 	Values() []string
@@ -9769,20 +12543,44 @@ func (obj *patternFlowIpv6Version) msg() *snappipb.PatternFlowIpv6Version {
 	return obj.obj
 }
 
-func (obj *patternFlowIpv6Version) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowIpv6Version) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowIpv6Version) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowIpv6Version) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowIpv6Version) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowIpv6Version) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowIpv6Version interface {
 	msg() *snappipb.PatternFlowIpv6Version
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowIpv6Version
 	Values() []int32
@@ -9860,20 +12658,44 @@ func (obj *patternFlowIpv6TrafficClass) msg() *snappipb.PatternFlowIpv6TrafficCl
 	return obj.obj
 }
 
-func (obj *patternFlowIpv6TrafficClass) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowIpv6TrafficClass) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowIpv6TrafficClass) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowIpv6TrafficClass) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowIpv6TrafficClass) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowIpv6TrafficClass) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowIpv6TrafficClass interface {
 	msg() *snappipb.PatternFlowIpv6TrafficClass
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowIpv6TrafficClass
 	Values() []int32
@@ -9951,20 +12773,44 @@ func (obj *patternFlowIpv6FlowLabel) msg() *snappipb.PatternFlowIpv6FlowLabel {
 	return obj.obj
 }
 
-func (obj *patternFlowIpv6FlowLabel) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowIpv6FlowLabel) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowIpv6FlowLabel) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowIpv6FlowLabel) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowIpv6FlowLabel) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowIpv6FlowLabel) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowIpv6FlowLabel interface {
 	msg() *snappipb.PatternFlowIpv6FlowLabel
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowIpv6FlowLabel
 	Values() []int32
@@ -10042,20 +12888,44 @@ func (obj *patternFlowIpv6PayloadLength) msg() *snappipb.PatternFlowIpv6PayloadL
 	return obj.obj
 }
 
-func (obj *patternFlowIpv6PayloadLength) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowIpv6PayloadLength) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowIpv6PayloadLength) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowIpv6PayloadLength) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowIpv6PayloadLength) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowIpv6PayloadLength) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowIpv6PayloadLength interface {
 	msg() *snappipb.PatternFlowIpv6PayloadLength
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowIpv6PayloadLength
 	Values() []int32
@@ -10133,20 +13003,44 @@ func (obj *patternFlowIpv6NextHeader) msg() *snappipb.PatternFlowIpv6NextHeader 
 	return obj.obj
 }
 
-func (obj *patternFlowIpv6NextHeader) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowIpv6NextHeader) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowIpv6NextHeader) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowIpv6NextHeader) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowIpv6NextHeader) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowIpv6NextHeader) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowIpv6NextHeader interface {
 	msg() *snappipb.PatternFlowIpv6NextHeader
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowIpv6NextHeader
 	Values() []int32
@@ -10224,20 +13118,44 @@ func (obj *patternFlowIpv6HopLimit) msg() *snappipb.PatternFlowIpv6HopLimit {
 	return obj.obj
 }
 
-func (obj *patternFlowIpv6HopLimit) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowIpv6HopLimit) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowIpv6HopLimit) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowIpv6HopLimit) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowIpv6HopLimit) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowIpv6HopLimit) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowIpv6HopLimit interface {
 	msg() *snappipb.PatternFlowIpv6HopLimit
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowIpv6HopLimit
 	Values() []int32
@@ -10315,20 +13233,44 @@ func (obj *patternFlowIpv6Src) msg() *snappipb.PatternFlowIpv6Src {
 	return obj.obj
 }
 
-func (obj *patternFlowIpv6Src) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowIpv6Src) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowIpv6Src) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowIpv6Src) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowIpv6Src) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowIpv6Src) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowIpv6Src interface {
 	msg() *snappipb.PatternFlowIpv6Src
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() string
 	SetValue(value string) PatternFlowIpv6Src
 	Values() []string
@@ -10406,20 +13348,44 @@ func (obj *patternFlowIpv6Dst) msg() *snappipb.PatternFlowIpv6Dst {
 	return obj.obj
 }
 
-func (obj *patternFlowIpv6Dst) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowIpv6Dst) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowIpv6Dst) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowIpv6Dst) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowIpv6Dst) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowIpv6Dst) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowIpv6Dst interface {
 	msg() *snappipb.PatternFlowIpv6Dst
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() string
 	SetValue(value string) PatternFlowIpv6Dst
 	Values() []string
@@ -10497,20 +13463,44 @@ func (obj *patternFlowPfcPauseDst) msg() *snappipb.PatternFlowPfcPauseDst {
 	return obj.obj
 }
 
-func (obj *patternFlowPfcPauseDst) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowPfcPauseDst) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowPfcPauseDst) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowPfcPauseDst) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowPfcPauseDst) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowPfcPauseDst) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowPfcPauseDst interface {
 	msg() *snappipb.PatternFlowPfcPauseDst
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() string
 	SetValue(value string) PatternFlowPfcPauseDst
 	Values() []string
@@ -10588,20 +13578,44 @@ func (obj *patternFlowPfcPauseSrc) msg() *snappipb.PatternFlowPfcPauseSrc {
 	return obj.obj
 }
 
-func (obj *patternFlowPfcPauseSrc) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowPfcPauseSrc) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowPfcPauseSrc) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowPfcPauseSrc) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowPfcPauseSrc) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowPfcPauseSrc) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowPfcPauseSrc interface {
 	msg() *snappipb.PatternFlowPfcPauseSrc
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() string
 	SetValue(value string) PatternFlowPfcPauseSrc
 	Values() []string
@@ -10679,20 +13693,44 @@ func (obj *patternFlowPfcPauseEtherType) msg() *snappipb.PatternFlowPfcPauseEthe
 	return obj.obj
 }
 
-func (obj *patternFlowPfcPauseEtherType) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowPfcPauseEtherType) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowPfcPauseEtherType) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowPfcPauseEtherType) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowPfcPauseEtherType) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowPfcPauseEtherType) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowPfcPauseEtherType interface {
 	msg() *snappipb.PatternFlowPfcPauseEtherType
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowPfcPauseEtherType
 	Values() []int32
@@ -10770,20 +13808,44 @@ func (obj *patternFlowPfcPauseControlOpCode) msg() *snappipb.PatternFlowPfcPause
 	return obj.obj
 }
 
-func (obj *patternFlowPfcPauseControlOpCode) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowPfcPauseControlOpCode) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowPfcPauseControlOpCode) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowPfcPauseControlOpCode) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowPfcPauseControlOpCode) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowPfcPauseControlOpCode) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowPfcPauseControlOpCode interface {
 	msg() *snappipb.PatternFlowPfcPauseControlOpCode
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowPfcPauseControlOpCode
 	Values() []int32
@@ -10861,20 +13923,44 @@ func (obj *patternFlowPfcPauseClassEnableVector) msg() *snappipb.PatternFlowPfcP
 	return obj.obj
 }
 
-func (obj *patternFlowPfcPauseClassEnableVector) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowPfcPauseClassEnableVector) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowPfcPauseClassEnableVector) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowPfcPauseClassEnableVector) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowPfcPauseClassEnableVector) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowPfcPauseClassEnableVector) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowPfcPauseClassEnableVector interface {
 	msg() *snappipb.PatternFlowPfcPauseClassEnableVector
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowPfcPauseClassEnableVector
 	Values() []int32
@@ -10952,20 +14038,44 @@ func (obj *patternFlowPfcPausePauseClass0) msg() *snappipb.PatternFlowPfcPausePa
 	return obj.obj
 }
 
-func (obj *patternFlowPfcPausePauseClass0) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowPfcPausePauseClass0) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowPfcPausePauseClass0) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowPfcPausePauseClass0) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowPfcPausePauseClass0) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowPfcPausePauseClass0) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowPfcPausePauseClass0 interface {
 	msg() *snappipb.PatternFlowPfcPausePauseClass0
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowPfcPausePauseClass0
 	Values() []int32
@@ -11043,20 +14153,44 @@ func (obj *patternFlowPfcPausePauseClass1) msg() *snappipb.PatternFlowPfcPausePa
 	return obj.obj
 }
 
-func (obj *patternFlowPfcPausePauseClass1) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowPfcPausePauseClass1) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowPfcPausePauseClass1) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowPfcPausePauseClass1) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowPfcPausePauseClass1) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowPfcPausePauseClass1) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowPfcPausePauseClass1 interface {
 	msg() *snappipb.PatternFlowPfcPausePauseClass1
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowPfcPausePauseClass1
 	Values() []int32
@@ -11134,20 +14268,44 @@ func (obj *patternFlowPfcPausePauseClass2) msg() *snappipb.PatternFlowPfcPausePa
 	return obj.obj
 }
 
-func (obj *patternFlowPfcPausePauseClass2) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowPfcPausePauseClass2) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowPfcPausePauseClass2) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowPfcPausePauseClass2) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowPfcPausePauseClass2) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowPfcPausePauseClass2) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowPfcPausePauseClass2 interface {
 	msg() *snappipb.PatternFlowPfcPausePauseClass2
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowPfcPausePauseClass2
 	Values() []int32
@@ -11225,20 +14383,44 @@ func (obj *patternFlowPfcPausePauseClass3) msg() *snappipb.PatternFlowPfcPausePa
 	return obj.obj
 }
 
-func (obj *patternFlowPfcPausePauseClass3) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowPfcPausePauseClass3) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowPfcPausePauseClass3) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowPfcPausePauseClass3) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowPfcPausePauseClass3) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowPfcPausePauseClass3) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowPfcPausePauseClass3 interface {
 	msg() *snappipb.PatternFlowPfcPausePauseClass3
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowPfcPausePauseClass3
 	Values() []int32
@@ -11316,20 +14498,44 @@ func (obj *patternFlowPfcPausePauseClass4) msg() *snappipb.PatternFlowPfcPausePa
 	return obj.obj
 }
 
-func (obj *patternFlowPfcPausePauseClass4) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowPfcPausePauseClass4) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowPfcPausePauseClass4) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowPfcPausePauseClass4) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowPfcPausePauseClass4) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowPfcPausePauseClass4) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowPfcPausePauseClass4 interface {
 	msg() *snappipb.PatternFlowPfcPausePauseClass4
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowPfcPausePauseClass4
 	Values() []int32
@@ -11407,20 +14613,44 @@ func (obj *patternFlowPfcPausePauseClass5) msg() *snappipb.PatternFlowPfcPausePa
 	return obj.obj
 }
 
-func (obj *patternFlowPfcPausePauseClass5) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowPfcPausePauseClass5) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowPfcPausePauseClass5) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowPfcPausePauseClass5) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowPfcPausePauseClass5) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowPfcPausePauseClass5) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowPfcPausePauseClass5 interface {
 	msg() *snappipb.PatternFlowPfcPausePauseClass5
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowPfcPausePauseClass5
 	Values() []int32
@@ -11498,20 +14728,44 @@ func (obj *patternFlowPfcPausePauseClass6) msg() *snappipb.PatternFlowPfcPausePa
 	return obj.obj
 }
 
-func (obj *patternFlowPfcPausePauseClass6) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowPfcPausePauseClass6) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowPfcPausePauseClass6) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowPfcPausePauseClass6) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowPfcPausePauseClass6) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowPfcPausePauseClass6) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowPfcPausePauseClass6 interface {
 	msg() *snappipb.PatternFlowPfcPausePauseClass6
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowPfcPausePauseClass6
 	Values() []int32
@@ -11589,20 +14843,44 @@ func (obj *patternFlowPfcPausePauseClass7) msg() *snappipb.PatternFlowPfcPausePa
 	return obj.obj
 }
 
-func (obj *patternFlowPfcPausePauseClass7) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowPfcPausePauseClass7) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowPfcPausePauseClass7) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowPfcPausePauseClass7) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowPfcPausePauseClass7) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowPfcPausePauseClass7) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowPfcPausePauseClass7 interface {
 	msg() *snappipb.PatternFlowPfcPausePauseClass7
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowPfcPausePauseClass7
 	Values() []int32
@@ -11680,20 +14958,44 @@ func (obj *patternFlowEthernetPauseDst) msg() *snappipb.PatternFlowEthernetPause
 	return obj.obj
 }
 
-func (obj *patternFlowEthernetPauseDst) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowEthernetPauseDst) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowEthernetPauseDst) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowEthernetPauseDst) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowEthernetPauseDst) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowEthernetPauseDst) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowEthernetPauseDst interface {
 	msg() *snappipb.PatternFlowEthernetPauseDst
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() string
 	SetValue(value string) PatternFlowEthernetPauseDst
 	Values() []string
@@ -11771,20 +15073,44 @@ func (obj *patternFlowEthernetPauseSrc) msg() *snappipb.PatternFlowEthernetPause
 	return obj.obj
 }
 
-func (obj *patternFlowEthernetPauseSrc) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowEthernetPauseSrc) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowEthernetPauseSrc) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowEthernetPauseSrc) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowEthernetPauseSrc) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowEthernetPauseSrc) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowEthernetPauseSrc interface {
 	msg() *snappipb.PatternFlowEthernetPauseSrc
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() string
 	SetValue(value string) PatternFlowEthernetPauseSrc
 	Values() []string
@@ -11862,20 +15188,44 @@ func (obj *patternFlowEthernetPauseEtherType) msg() *snappipb.PatternFlowEtherne
 	return obj.obj
 }
 
-func (obj *patternFlowEthernetPauseEtherType) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowEthernetPauseEtherType) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowEthernetPauseEtherType) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowEthernetPauseEtherType) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowEthernetPauseEtherType) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowEthernetPauseEtherType) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowEthernetPauseEtherType interface {
 	msg() *snappipb.PatternFlowEthernetPauseEtherType
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowEthernetPauseEtherType
 	Values() []int32
@@ -11953,20 +15303,44 @@ func (obj *patternFlowEthernetPauseControlOpCode) msg() *snappipb.PatternFlowEth
 	return obj.obj
 }
 
-func (obj *patternFlowEthernetPauseControlOpCode) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowEthernetPauseControlOpCode) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowEthernetPauseControlOpCode) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowEthernetPauseControlOpCode) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowEthernetPauseControlOpCode) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowEthernetPauseControlOpCode) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowEthernetPauseControlOpCode interface {
 	msg() *snappipb.PatternFlowEthernetPauseControlOpCode
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowEthernetPauseControlOpCode
 	Values() []int32
@@ -12044,20 +15418,44 @@ func (obj *patternFlowEthernetPauseTime) msg() *snappipb.PatternFlowEthernetPaus
 	return obj.obj
 }
 
-func (obj *patternFlowEthernetPauseTime) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowEthernetPauseTime) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowEthernetPauseTime) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowEthernetPauseTime) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowEthernetPauseTime) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowEthernetPauseTime) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowEthernetPauseTime interface {
 	msg() *snappipb.PatternFlowEthernetPauseTime
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowEthernetPauseTime
 	Values() []int32
@@ -12135,20 +15533,44 @@ func (obj *patternFlowTcpSrcPort) msg() *snappipb.PatternFlowTcpSrcPort {
 	return obj.obj
 }
 
-func (obj *patternFlowTcpSrcPort) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowTcpSrcPort) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowTcpSrcPort) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowTcpSrcPort) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowTcpSrcPort) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowTcpSrcPort) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowTcpSrcPort interface {
 	msg() *snappipb.PatternFlowTcpSrcPort
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowTcpSrcPort
 	Values() []int32
@@ -12226,20 +15648,44 @@ func (obj *patternFlowTcpDstPort) msg() *snappipb.PatternFlowTcpDstPort {
 	return obj.obj
 }
 
-func (obj *patternFlowTcpDstPort) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowTcpDstPort) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowTcpDstPort) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowTcpDstPort) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowTcpDstPort) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowTcpDstPort) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowTcpDstPort interface {
 	msg() *snappipb.PatternFlowTcpDstPort
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowTcpDstPort
 	Values() []int32
@@ -12317,20 +15763,44 @@ func (obj *patternFlowTcpSeqNum) msg() *snappipb.PatternFlowTcpSeqNum {
 	return obj.obj
 }
 
-func (obj *patternFlowTcpSeqNum) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowTcpSeqNum) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowTcpSeqNum) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowTcpSeqNum) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowTcpSeqNum) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowTcpSeqNum) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowTcpSeqNum interface {
 	msg() *snappipb.PatternFlowTcpSeqNum
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowTcpSeqNum
 	Values() []int32
@@ -12408,20 +15878,44 @@ func (obj *patternFlowTcpAckNum) msg() *snappipb.PatternFlowTcpAckNum {
 	return obj.obj
 }
 
-func (obj *patternFlowTcpAckNum) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowTcpAckNum) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowTcpAckNum) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowTcpAckNum) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowTcpAckNum) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowTcpAckNum) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowTcpAckNum interface {
 	msg() *snappipb.PatternFlowTcpAckNum
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowTcpAckNum
 	Values() []int32
@@ -12499,20 +15993,44 @@ func (obj *patternFlowTcpDataOffset) msg() *snappipb.PatternFlowTcpDataOffset {
 	return obj.obj
 }
 
-func (obj *patternFlowTcpDataOffset) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowTcpDataOffset) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowTcpDataOffset) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowTcpDataOffset) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowTcpDataOffset) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowTcpDataOffset) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowTcpDataOffset interface {
 	msg() *snappipb.PatternFlowTcpDataOffset
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowTcpDataOffset
 	Values() []int32
@@ -12590,20 +16108,44 @@ func (obj *patternFlowTcpEcnNs) msg() *snappipb.PatternFlowTcpEcnNs {
 	return obj.obj
 }
 
-func (obj *patternFlowTcpEcnNs) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowTcpEcnNs) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowTcpEcnNs) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowTcpEcnNs) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowTcpEcnNs) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowTcpEcnNs) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowTcpEcnNs interface {
 	msg() *snappipb.PatternFlowTcpEcnNs
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowTcpEcnNs
 	Values() []int32
@@ -12681,20 +16223,44 @@ func (obj *patternFlowTcpEcnCwr) msg() *snappipb.PatternFlowTcpEcnCwr {
 	return obj.obj
 }
 
-func (obj *patternFlowTcpEcnCwr) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowTcpEcnCwr) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowTcpEcnCwr) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowTcpEcnCwr) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowTcpEcnCwr) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowTcpEcnCwr) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowTcpEcnCwr interface {
 	msg() *snappipb.PatternFlowTcpEcnCwr
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowTcpEcnCwr
 	Values() []int32
@@ -12772,20 +16338,44 @@ func (obj *patternFlowTcpEcnEcho) msg() *snappipb.PatternFlowTcpEcnEcho {
 	return obj.obj
 }
 
-func (obj *patternFlowTcpEcnEcho) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowTcpEcnEcho) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowTcpEcnEcho) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowTcpEcnEcho) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowTcpEcnEcho) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowTcpEcnEcho) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowTcpEcnEcho interface {
 	msg() *snappipb.PatternFlowTcpEcnEcho
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowTcpEcnEcho
 	Values() []int32
@@ -12863,20 +16453,44 @@ func (obj *patternFlowTcpCtlUrg) msg() *snappipb.PatternFlowTcpCtlUrg {
 	return obj.obj
 }
 
-func (obj *patternFlowTcpCtlUrg) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowTcpCtlUrg) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowTcpCtlUrg) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowTcpCtlUrg) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowTcpCtlUrg) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowTcpCtlUrg) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowTcpCtlUrg interface {
 	msg() *snappipb.PatternFlowTcpCtlUrg
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowTcpCtlUrg
 	Values() []int32
@@ -12954,20 +16568,44 @@ func (obj *patternFlowTcpCtlAck) msg() *snappipb.PatternFlowTcpCtlAck {
 	return obj.obj
 }
 
-func (obj *patternFlowTcpCtlAck) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowTcpCtlAck) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowTcpCtlAck) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowTcpCtlAck) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowTcpCtlAck) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowTcpCtlAck) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowTcpCtlAck interface {
 	msg() *snappipb.PatternFlowTcpCtlAck
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowTcpCtlAck
 	Values() []int32
@@ -13045,20 +16683,44 @@ func (obj *patternFlowTcpCtlPsh) msg() *snappipb.PatternFlowTcpCtlPsh {
 	return obj.obj
 }
 
-func (obj *patternFlowTcpCtlPsh) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowTcpCtlPsh) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowTcpCtlPsh) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowTcpCtlPsh) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowTcpCtlPsh) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowTcpCtlPsh) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowTcpCtlPsh interface {
 	msg() *snappipb.PatternFlowTcpCtlPsh
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowTcpCtlPsh
 	Values() []int32
@@ -13136,20 +16798,44 @@ func (obj *patternFlowTcpCtlRst) msg() *snappipb.PatternFlowTcpCtlRst {
 	return obj.obj
 }
 
-func (obj *patternFlowTcpCtlRst) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowTcpCtlRst) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowTcpCtlRst) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowTcpCtlRst) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowTcpCtlRst) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowTcpCtlRst) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowTcpCtlRst interface {
 	msg() *snappipb.PatternFlowTcpCtlRst
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowTcpCtlRst
 	Values() []int32
@@ -13227,20 +16913,44 @@ func (obj *patternFlowTcpCtlSyn) msg() *snappipb.PatternFlowTcpCtlSyn {
 	return obj.obj
 }
 
-func (obj *patternFlowTcpCtlSyn) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowTcpCtlSyn) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowTcpCtlSyn) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowTcpCtlSyn) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowTcpCtlSyn) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowTcpCtlSyn) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowTcpCtlSyn interface {
 	msg() *snappipb.PatternFlowTcpCtlSyn
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowTcpCtlSyn
 	Values() []int32
@@ -13318,20 +17028,44 @@ func (obj *patternFlowTcpCtlFin) msg() *snappipb.PatternFlowTcpCtlFin {
 	return obj.obj
 }
 
-func (obj *patternFlowTcpCtlFin) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowTcpCtlFin) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowTcpCtlFin) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowTcpCtlFin) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowTcpCtlFin) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowTcpCtlFin) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowTcpCtlFin interface {
 	msg() *snappipb.PatternFlowTcpCtlFin
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowTcpCtlFin
 	Values() []int32
@@ -13409,20 +17143,44 @@ func (obj *patternFlowTcpWindow) msg() *snappipb.PatternFlowTcpWindow {
 	return obj.obj
 }
 
-func (obj *patternFlowTcpWindow) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowTcpWindow) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowTcpWindow) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowTcpWindow) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowTcpWindow) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowTcpWindow) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowTcpWindow interface {
 	msg() *snappipb.PatternFlowTcpWindow
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowTcpWindow
 	Values() []int32
@@ -13500,20 +17258,44 @@ func (obj *patternFlowUdpSrcPort) msg() *snappipb.PatternFlowUdpSrcPort {
 	return obj.obj
 }
 
-func (obj *patternFlowUdpSrcPort) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowUdpSrcPort) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowUdpSrcPort) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowUdpSrcPort) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowUdpSrcPort) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowUdpSrcPort) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowUdpSrcPort interface {
 	msg() *snappipb.PatternFlowUdpSrcPort
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowUdpSrcPort
 	Values() []int32
@@ -13591,20 +17373,44 @@ func (obj *patternFlowUdpDstPort) msg() *snappipb.PatternFlowUdpDstPort {
 	return obj.obj
 }
 
-func (obj *patternFlowUdpDstPort) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowUdpDstPort) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowUdpDstPort) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowUdpDstPort) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowUdpDstPort) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowUdpDstPort) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowUdpDstPort interface {
 	msg() *snappipb.PatternFlowUdpDstPort
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowUdpDstPort
 	Values() []int32
@@ -13682,20 +17488,44 @@ func (obj *patternFlowUdpLength) msg() *snappipb.PatternFlowUdpLength {
 	return obj.obj
 }
 
-func (obj *patternFlowUdpLength) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowUdpLength) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowUdpLength) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowUdpLength) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowUdpLength) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowUdpLength) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowUdpLength interface {
 	msg() *snappipb.PatternFlowUdpLength
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowUdpLength
 	Values() []int32
@@ -13773,20 +17603,44 @@ func (obj *patternFlowUdpChecksum) msg() *snappipb.PatternFlowUdpChecksum {
 	return obj.obj
 }
 
-func (obj *patternFlowUdpChecksum) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowUdpChecksum) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowUdpChecksum) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowUdpChecksum) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowUdpChecksum) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowUdpChecksum) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowUdpChecksum interface {
 	msg() *snappipb.PatternFlowUdpChecksum
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Custom() int32
 	SetCustom(value int32) PatternFlowUdpChecksum
 }
@@ -13812,20 +17666,44 @@ func (obj *patternFlowGreChecksumPresent) msg() *snappipb.PatternFlowGreChecksum
 	return obj.obj
 }
 
-func (obj *patternFlowGreChecksumPresent) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowGreChecksumPresent) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowGreChecksumPresent) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowGreChecksumPresent) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowGreChecksumPresent) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowGreChecksumPresent) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowGreChecksumPresent interface {
 	msg() *snappipb.PatternFlowGreChecksumPresent
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowGreChecksumPresent
 	Values() []int32
@@ -13903,20 +17781,44 @@ func (obj *patternFlowGreReserved0) msg() *snappipb.PatternFlowGreReserved0 {
 	return obj.obj
 }
 
-func (obj *patternFlowGreReserved0) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowGreReserved0) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowGreReserved0) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowGreReserved0) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowGreReserved0) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowGreReserved0) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowGreReserved0 interface {
 	msg() *snappipb.PatternFlowGreReserved0
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowGreReserved0
 	Values() []int32
@@ -13994,20 +17896,44 @@ func (obj *patternFlowGreVersion) msg() *snappipb.PatternFlowGreVersion {
 	return obj.obj
 }
 
-func (obj *patternFlowGreVersion) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowGreVersion) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowGreVersion) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowGreVersion) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowGreVersion) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowGreVersion) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowGreVersion interface {
 	msg() *snappipb.PatternFlowGreVersion
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowGreVersion
 	Values() []int32
@@ -14085,20 +18011,44 @@ func (obj *patternFlowGreProtocol) msg() *snappipb.PatternFlowGreProtocol {
 	return obj.obj
 }
 
-func (obj *patternFlowGreProtocol) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowGreProtocol) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowGreProtocol) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowGreProtocol) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowGreProtocol) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowGreProtocol) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowGreProtocol interface {
 	msg() *snappipb.PatternFlowGreProtocol
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowGreProtocol
 	Values() []int32
@@ -14176,20 +18126,44 @@ func (obj *patternFlowGreChecksum) msg() *snappipb.PatternFlowGreChecksum {
 	return obj.obj
 }
 
-func (obj *patternFlowGreChecksum) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowGreChecksum) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowGreChecksum) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowGreChecksum) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowGreChecksum) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowGreChecksum) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowGreChecksum interface {
 	msg() *snappipb.PatternFlowGreChecksum
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Custom() int32
 	SetCustom(value int32) PatternFlowGreChecksum
 }
@@ -14215,20 +18189,44 @@ func (obj *patternFlowGreReserved1) msg() *snappipb.PatternFlowGreReserved1 {
 	return obj.obj
 }
 
-func (obj *patternFlowGreReserved1) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowGreReserved1) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowGreReserved1) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowGreReserved1) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowGreReserved1) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowGreReserved1) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowGreReserved1 interface {
 	msg() *snappipb.PatternFlowGreReserved1
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowGreReserved1
 	Values() []int32
@@ -14306,20 +18304,44 @@ func (obj *patternFlowGtpv1Version) msg() *snappipb.PatternFlowGtpv1Version {
 	return obj.obj
 }
 
-func (obj *patternFlowGtpv1Version) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowGtpv1Version) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowGtpv1Version) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowGtpv1Version) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowGtpv1Version) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowGtpv1Version) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowGtpv1Version interface {
 	msg() *snappipb.PatternFlowGtpv1Version
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowGtpv1Version
 	Values() []int32
@@ -14397,20 +18419,44 @@ func (obj *patternFlowGtpv1ProtocolType) msg() *snappipb.PatternFlowGtpv1Protoco
 	return obj.obj
 }
 
-func (obj *patternFlowGtpv1ProtocolType) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowGtpv1ProtocolType) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowGtpv1ProtocolType) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowGtpv1ProtocolType) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowGtpv1ProtocolType) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowGtpv1ProtocolType) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowGtpv1ProtocolType interface {
 	msg() *snappipb.PatternFlowGtpv1ProtocolType
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowGtpv1ProtocolType
 	Values() []int32
@@ -14488,20 +18534,44 @@ func (obj *patternFlowGtpv1Reserved) msg() *snappipb.PatternFlowGtpv1Reserved {
 	return obj.obj
 }
 
-func (obj *patternFlowGtpv1Reserved) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowGtpv1Reserved) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowGtpv1Reserved) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowGtpv1Reserved) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowGtpv1Reserved) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowGtpv1Reserved) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowGtpv1Reserved interface {
 	msg() *snappipb.PatternFlowGtpv1Reserved
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowGtpv1Reserved
 	Values() []int32
@@ -14579,20 +18649,44 @@ func (obj *patternFlowGtpv1EFlag) msg() *snappipb.PatternFlowGtpv1EFlag {
 	return obj.obj
 }
 
-func (obj *patternFlowGtpv1EFlag) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowGtpv1EFlag) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowGtpv1EFlag) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowGtpv1EFlag) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowGtpv1EFlag) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowGtpv1EFlag) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowGtpv1EFlag interface {
 	msg() *snappipb.PatternFlowGtpv1EFlag
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowGtpv1EFlag
 	Values() []int32
@@ -14670,20 +18764,44 @@ func (obj *patternFlowGtpv1SFlag) msg() *snappipb.PatternFlowGtpv1SFlag {
 	return obj.obj
 }
 
-func (obj *patternFlowGtpv1SFlag) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowGtpv1SFlag) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowGtpv1SFlag) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowGtpv1SFlag) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowGtpv1SFlag) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowGtpv1SFlag) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowGtpv1SFlag interface {
 	msg() *snappipb.PatternFlowGtpv1SFlag
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowGtpv1SFlag
 	Values() []int32
@@ -14761,20 +18879,44 @@ func (obj *patternFlowGtpv1PnFlag) msg() *snappipb.PatternFlowGtpv1PnFlag {
 	return obj.obj
 }
 
-func (obj *patternFlowGtpv1PnFlag) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowGtpv1PnFlag) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowGtpv1PnFlag) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowGtpv1PnFlag) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowGtpv1PnFlag) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowGtpv1PnFlag) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowGtpv1PnFlag interface {
 	msg() *snappipb.PatternFlowGtpv1PnFlag
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowGtpv1PnFlag
 	Values() []int32
@@ -14852,20 +18994,44 @@ func (obj *patternFlowGtpv1MessageType) msg() *snappipb.PatternFlowGtpv1MessageT
 	return obj.obj
 }
 
-func (obj *patternFlowGtpv1MessageType) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowGtpv1MessageType) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowGtpv1MessageType) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowGtpv1MessageType) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowGtpv1MessageType) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowGtpv1MessageType) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowGtpv1MessageType interface {
 	msg() *snappipb.PatternFlowGtpv1MessageType
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowGtpv1MessageType
 	Values() []int32
@@ -14943,20 +19109,44 @@ func (obj *patternFlowGtpv1MessageLength) msg() *snappipb.PatternFlowGtpv1Messag
 	return obj.obj
 }
 
-func (obj *patternFlowGtpv1MessageLength) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowGtpv1MessageLength) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowGtpv1MessageLength) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowGtpv1MessageLength) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowGtpv1MessageLength) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowGtpv1MessageLength) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowGtpv1MessageLength interface {
 	msg() *snappipb.PatternFlowGtpv1MessageLength
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowGtpv1MessageLength
 	Values() []int32
@@ -15034,20 +19224,44 @@ func (obj *patternFlowGtpv1Teid) msg() *snappipb.PatternFlowGtpv1Teid {
 	return obj.obj
 }
 
-func (obj *patternFlowGtpv1Teid) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowGtpv1Teid) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowGtpv1Teid) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowGtpv1Teid) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowGtpv1Teid) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowGtpv1Teid) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowGtpv1Teid interface {
 	msg() *snappipb.PatternFlowGtpv1Teid
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowGtpv1Teid
 	Values() []int32
@@ -15125,20 +19339,44 @@ func (obj *patternFlowGtpv1SquenceNumber) msg() *snappipb.PatternFlowGtpv1Squenc
 	return obj.obj
 }
 
-func (obj *patternFlowGtpv1SquenceNumber) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowGtpv1SquenceNumber) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowGtpv1SquenceNumber) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowGtpv1SquenceNumber) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowGtpv1SquenceNumber) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowGtpv1SquenceNumber) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowGtpv1SquenceNumber interface {
 	msg() *snappipb.PatternFlowGtpv1SquenceNumber
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowGtpv1SquenceNumber
 	Values() []int32
@@ -15216,20 +19454,44 @@ func (obj *patternFlowGtpv1NPduNumber) msg() *snappipb.PatternFlowGtpv1NPduNumbe
 	return obj.obj
 }
 
-func (obj *patternFlowGtpv1NPduNumber) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowGtpv1NPduNumber) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowGtpv1NPduNumber) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowGtpv1NPduNumber) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowGtpv1NPduNumber) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowGtpv1NPduNumber) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowGtpv1NPduNumber interface {
 	msg() *snappipb.PatternFlowGtpv1NPduNumber
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowGtpv1NPduNumber
 	Values() []int32
@@ -15307,20 +19569,44 @@ func (obj *patternFlowGtpv1NextExtensionHeaderType) msg() *snappipb.PatternFlowG
 	return obj.obj
 }
 
-func (obj *patternFlowGtpv1NextExtensionHeaderType) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowGtpv1NextExtensionHeaderType) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowGtpv1NextExtensionHeaderType) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowGtpv1NextExtensionHeaderType) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowGtpv1NextExtensionHeaderType) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowGtpv1NextExtensionHeaderType) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowGtpv1NextExtensionHeaderType interface {
 	msg() *snappipb.PatternFlowGtpv1NextExtensionHeaderType
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowGtpv1NextExtensionHeaderType
 	Values() []int32
@@ -15398,20 +19684,44 @@ func (obj *flowGtpExtension) msg() *snappipb.FlowGtpExtension {
 	return obj.obj
 }
 
-func (obj *flowGtpExtension) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *flowGtpExtension) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *flowGtpExtension) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *flowGtpExtension) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *flowGtpExtension) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *flowGtpExtension) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type FlowGtpExtension interface {
 	msg() *snappipb.FlowGtpExtension
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	ExtensionLength() PatternFlowGtpExtensionExtensionLength
 	Contents() PatternFlowGtpExtensionContents
 	NextExtensionHeader() PatternFlowGtpExtensionNextExtensionHeader
@@ -15455,20 +19765,44 @@ func (obj *patternFlowGtpv2Version) msg() *snappipb.PatternFlowGtpv2Version {
 	return obj.obj
 }
 
-func (obj *patternFlowGtpv2Version) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowGtpv2Version) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowGtpv2Version) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowGtpv2Version) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowGtpv2Version) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowGtpv2Version) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowGtpv2Version interface {
 	msg() *snappipb.PatternFlowGtpv2Version
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowGtpv2Version
 	Values() []int32
@@ -15546,20 +19880,44 @@ func (obj *patternFlowGtpv2PiggybackingFlag) msg() *snappipb.PatternFlowGtpv2Pig
 	return obj.obj
 }
 
-func (obj *patternFlowGtpv2PiggybackingFlag) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowGtpv2PiggybackingFlag) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowGtpv2PiggybackingFlag) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowGtpv2PiggybackingFlag) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowGtpv2PiggybackingFlag) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowGtpv2PiggybackingFlag) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowGtpv2PiggybackingFlag interface {
 	msg() *snappipb.PatternFlowGtpv2PiggybackingFlag
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowGtpv2PiggybackingFlag
 	Values() []int32
@@ -15637,20 +19995,44 @@ func (obj *patternFlowGtpv2TeidFlag) msg() *snappipb.PatternFlowGtpv2TeidFlag {
 	return obj.obj
 }
 
-func (obj *patternFlowGtpv2TeidFlag) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowGtpv2TeidFlag) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowGtpv2TeidFlag) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowGtpv2TeidFlag) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowGtpv2TeidFlag) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowGtpv2TeidFlag) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowGtpv2TeidFlag interface {
 	msg() *snappipb.PatternFlowGtpv2TeidFlag
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowGtpv2TeidFlag
 	Values() []int32
@@ -15728,20 +20110,44 @@ func (obj *patternFlowGtpv2Spare1) msg() *snappipb.PatternFlowGtpv2Spare1 {
 	return obj.obj
 }
 
-func (obj *patternFlowGtpv2Spare1) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowGtpv2Spare1) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowGtpv2Spare1) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowGtpv2Spare1) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowGtpv2Spare1) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowGtpv2Spare1) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowGtpv2Spare1 interface {
 	msg() *snappipb.PatternFlowGtpv2Spare1
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowGtpv2Spare1
 	Values() []int32
@@ -15819,20 +20225,44 @@ func (obj *patternFlowGtpv2MessageType) msg() *snappipb.PatternFlowGtpv2MessageT
 	return obj.obj
 }
 
-func (obj *patternFlowGtpv2MessageType) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowGtpv2MessageType) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowGtpv2MessageType) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowGtpv2MessageType) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowGtpv2MessageType) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowGtpv2MessageType) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowGtpv2MessageType interface {
 	msg() *snappipb.PatternFlowGtpv2MessageType
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowGtpv2MessageType
 	Values() []int32
@@ -15910,20 +20340,44 @@ func (obj *patternFlowGtpv2MessageLength) msg() *snappipb.PatternFlowGtpv2Messag
 	return obj.obj
 }
 
-func (obj *patternFlowGtpv2MessageLength) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowGtpv2MessageLength) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowGtpv2MessageLength) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowGtpv2MessageLength) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowGtpv2MessageLength) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowGtpv2MessageLength) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowGtpv2MessageLength interface {
 	msg() *snappipb.PatternFlowGtpv2MessageLength
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowGtpv2MessageLength
 	Values() []int32
@@ -16001,20 +20455,44 @@ func (obj *patternFlowGtpv2Teid) msg() *snappipb.PatternFlowGtpv2Teid {
 	return obj.obj
 }
 
-func (obj *patternFlowGtpv2Teid) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowGtpv2Teid) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowGtpv2Teid) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowGtpv2Teid) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowGtpv2Teid) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowGtpv2Teid) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowGtpv2Teid interface {
 	msg() *snappipb.PatternFlowGtpv2Teid
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowGtpv2Teid
 	Values() []int32
@@ -16092,20 +20570,44 @@ func (obj *patternFlowGtpv2SequenceNumber) msg() *snappipb.PatternFlowGtpv2Seque
 	return obj.obj
 }
 
-func (obj *patternFlowGtpv2SequenceNumber) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowGtpv2SequenceNumber) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowGtpv2SequenceNumber) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowGtpv2SequenceNumber) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowGtpv2SequenceNumber) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowGtpv2SequenceNumber) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowGtpv2SequenceNumber interface {
 	msg() *snappipb.PatternFlowGtpv2SequenceNumber
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowGtpv2SequenceNumber
 	Values() []int32
@@ -16183,20 +20685,44 @@ func (obj *patternFlowGtpv2Spare2) msg() *snappipb.PatternFlowGtpv2Spare2 {
 	return obj.obj
 }
 
-func (obj *patternFlowGtpv2Spare2) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowGtpv2Spare2) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowGtpv2Spare2) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowGtpv2Spare2) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowGtpv2Spare2) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowGtpv2Spare2) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowGtpv2Spare2 interface {
 	msg() *snappipb.PatternFlowGtpv2Spare2
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowGtpv2Spare2
 	Values() []int32
@@ -16274,20 +20800,44 @@ func (obj *patternFlowArpHardwareType) msg() *snappipb.PatternFlowArpHardwareTyp
 	return obj.obj
 }
 
-func (obj *patternFlowArpHardwareType) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowArpHardwareType) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowArpHardwareType) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowArpHardwareType) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowArpHardwareType) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowArpHardwareType) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowArpHardwareType interface {
 	msg() *snappipb.PatternFlowArpHardwareType
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowArpHardwareType
 	Values() []int32
@@ -16365,20 +20915,44 @@ func (obj *patternFlowArpProtocolType) msg() *snappipb.PatternFlowArpProtocolTyp
 	return obj.obj
 }
 
-func (obj *patternFlowArpProtocolType) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowArpProtocolType) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowArpProtocolType) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowArpProtocolType) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowArpProtocolType) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowArpProtocolType) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowArpProtocolType interface {
 	msg() *snappipb.PatternFlowArpProtocolType
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowArpProtocolType
 	Values() []int32
@@ -16456,20 +21030,44 @@ func (obj *patternFlowArpHardwareLength) msg() *snappipb.PatternFlowArpHardwareL
 	return obj.obj
 }
 
-func (obj *patternFlowArpHardwareLength) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowArpHardwareLength) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowArpHardwareLength) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowArpHardwareLength) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowArpHardwareLength) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowArpHardwareLength) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowArpHardwareLength interface {
 	msg() *snappipb.PatternFlowArpHardwareLength
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowArpHardwareLength
 	Values() []int32
@@ -16547,20 +21145,44 @@ func (obj *patternFlowArpProtocolLength) msg() *snappipb.PatternFlowArpProtocolL
 	return obj.obj
 }
 
-func (obj *patternFlowArpProtocolLength) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowArpProtocolLength) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowArpProtocolLength) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowArpProtocolLength) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowArpProtocolLength) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowArpProtocolLength) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowArpProtocolLength interface {
 	msg() *snappipb.PatternFlowArpProtocolLength
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowArpProtocolLength
 	Values() []int32
@@ -16638,20 +21260,44 @@ func (obj *patternFlowArpOperation) msg() *snappipb.PatternFlowArpOperation {
 	return obj.obj
 }
 
-func (obj *patternFlowArpOperation) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowArpOperation) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowArpOperation) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowArpOperation) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowArpOperation) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowArpOperation) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowArpOperation interface {
 	msg() *snappipb.PatternFlowArpOperation
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowArpOperation
 	Values() []int32
@@ -16729,20 +21375,44 @@ func (obj *patternFlowArpSenderHardwareAddr) msg() *snappipb.PatternFlowArpSende
 	return obj.obj
 }
 
-func (obj *patternFlowArpSenderHardwareAddr) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowArpSenderHardwareAddr) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowArpSenderHardwareAddr) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowArpSenderHardwareAddr) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowArpSenderHardwareAddr) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowArpSenderHardwareAddr) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowArpSenderHardwareAddr interface {
 	msg() *snappipb.PatternFlowArpSenderHardwareAddr
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() string
 	SetValue(value string) PatternFlowArpSenderHardwareAddr
 	Values() []string
@@ -16820,20 +21490,44 @@ func (obj *patternFlowArpSenderProtocolAddr) msg() *snappipb.PatternFlowArpSende
 	return obj.obj
 }
 
-func (obj *patternFlowArpSenderProtocolAddr) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowArpSenderProtocolAddr) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowArpSenderProtocolAddr) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowArpSenderProtocolAddr) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowArpSenderProtocolAddr) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowArpSenderProtocolAddr) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowArpSenderProtocolAddr interface {
 	msg() *snappipb.PatternFlowArpSenderProtocolAddr
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() string
 	SetValue(value string) PatternFlowArpSenderProtocolAddr
 	Values() []string
@@ -16911,20 +21605,44 @@ func (obj *patternFlowArpTargetHardwareAddr) msg() *snappipb.PatternFlowArpTarge
 	return obj.obj
 }
 
-func (obj *patternFlowArpTargetHardwareAddr) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowArpTargetHardwareAddr) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowArpTargetHardwareAddr) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowArpTargetHardwareAddr) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowArpTargetHardwareAddr) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowArpTargetHardwareAddr) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowArpTargetHardwareAddr interface {
 	msg() *snappipb.PatternFlowArpTargetHardwareAddr
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() string
 	SetValue(value string) PatternFlowArpTargetHardwareAddr
 	Values() []string
@@ -17002,20 +21720,44 @@ func (obj *patternFlowArpTargetProtocolAddr) msg() *snappipb.PatternFlowArpTarge
 	return obj.obj
 }
 
-func (obj *patternFlowArpTargetProtocolAddr) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowArpTargetProtocolAddr) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowArpTargetProtocolAddr) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowArpTargetProtocolAddr) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowArpTargetProtocolAddr) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowArpTargetProtocolAddr) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowArpTargetProtocolAddr interface {
 	msg() *snappipb.PatternFlowArpTargetProtocolAddr
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() string
 	SetValue(value string) PatternFlowArpTargetProtocolAddr
 	Values() []string
@@ -17093,20 +21835,44 @@ func (obj *flowIcmpEcho) msg() *snappipb.FlowIcmpEcho {
 	return obj.obj
 }
 
-func (obj *flowIcmpEcho) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *flowIcmpEcho) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *flowIcmpEcho) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *flowIcmpEcho) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *flowIcmpEcho) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *flowIcmpEcho) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type FlowIcmpEcho interface {
 	msg() *snappipb.FlowIcmpEcho
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Type() PatternFlowIcmpEchoType
 	Code() PatternFlowIcmpEchoCode
 	Checksum() PatternFlowIcmpEchoChecksum
@@ -17172,20 +21938,44 @@ func (obj *flowIcmpv6Echo) msg() *snappipb.FlowIcmpv6Echo {
 	return obj.obj
 }
 
-func (obj *flowIcmpv6Echo) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *flowIcmpv6Echo) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *flowIcmpv6Echo) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *flowIcmpv6Echo) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *flowIcmpv6Echo) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *flowIcmpv6Echo) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type FlowIcmpv6Echo interface {
 	msg() *snappipb.FlowIcmpv6Echo
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Type() PatternFlowIcmpv6EchoType
 	Code() PatternFlowIcmpv6EchoCode
 	Identifier() PatternFlowIcmpv6EchoIdentifier
@@ -17251,20 +22041,44 @@ func (obj *patternFlowPppAddress) msg() *snappipb.PatternFlowPppAddress {
 	return obj.obj
 }
 
-func (obj *patternFlowPppAddress) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowPppAddress) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowPppAddress) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowPppAddress) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowPppAddress) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowPppAddress) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowPppAddress interface {
 	msg() *snappipb.PatternFlowPppAddress
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowPppAddress
 	Values() []int32
@@ -17342,20 +22156,44 @@ func (obj *patternFlowPppControl) msg() *snappipb.PatternFlowPppControl {
 	return obj.obj
 }
 
-func (obj *patternFlowPppControl) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowPppControl) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowPppControl) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowPppControl) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowPppControl) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowPppControl) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowPppControl interface {
 	msg() *snappipb.PatternFlowPppControl
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowPppControl
 	Values() []int32
@@ -17433,20 +22271,44 @@ func (obj *patternFlowPppProtocolType) msg() *snappipb.PatternFlowPppProtocolTyp
 	return obj.obj
 }
 
-func (obj *patternFlowPppProtocolType) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowPppProtocolType) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowPppProtocolType) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowPppProtocolType) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowPppProtocolType) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowPppProtocolType) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowPppProtocolType interface {
 	msg() *snappipb.PatternFlowPppProtocolType
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowPppProtocolType
 	Values() []int32
@@ -17524,20 +22386,44 @@ func (obj *patternFlowIgmpv1Version) msg() *snappipb.PatternFlowIgmpv1Version {
 	return obj.obj
 }
 
-func (obj *patternFlowIgmpv1Version) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowIgmpv1Version) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowIgmpv1Version) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowIgmpv1Version) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowIgmpv1Version) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowIgmpv1Version) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowIgmpv1Version interface {
 	msg() *snappipb.PatternFlowIgmpv1Version
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowIgmpv1Version
 	Values() []int32
@@ -17615,20 +22501,44 @@ func (obj *patternFlowIgmpv1Type) msg() *snappipb.PatternFlowIgmpv1Type {
 	return obj.obj
 }
 
-func (obj *patternFlowIgmpv1Type) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowIgmpv1Type) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowIgmpv1Type) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowIgmpv1Type) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowIgmpv1Type) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowIgmpv1Type) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowIgmpv1Type interface {
 	msg() *snappipb.PatternFlowIgmpv1Type
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowIgmpv1Type
 	Values() []int32
@@ -17706,20 +22616,44 @@ func (obj *patternFlowIgmpv1Unused) msg() *snappipb.PatternFlowIgmpv1Unused {
 	return obj.obj
 }
 
-func (obj *patternFlowIgmpv1Unused) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowIgmpv1Unused) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowIgmpv1Unused) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowIgmpv1Unused) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowIgmpv1Unused) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowIgmpv1Unused) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowIgmpv1Unused interface {
 	msg() *snappipb.PatternFlowIgmpv1Unused
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowIgmpv1Unused
 	Values() []int32
@@ -17797,20 +22731,44 @@ func (obj *patternFlowIgmpv1Checksum) msg() *snappipb.PatternFlowIgmpv1Checksum 
 	return obj.obj
 }
 
-func (obj *patternFlowIgmpv1Checksum) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowIgmpv1Checksum) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowIgmpv1Checksum) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowIgmpv1Checksum) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowIgmpv1Checksum) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowIgmpv1Checksum) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowIgmpv1Checksum interface {
 	msg() *snappipb.PatternFlowIgmpv1Checksum
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Custom() int32
 	SetCustom(value int32) PatternFlowIgmpv1Checksum
 }
@@ -17836,20 +22794,44 @@ func (obj *patternFlowIgmpv1GroupAddress) msg() *snappipb.PatternFlowIgmpv1Group
 	return obj.obj
 }
 
-func (obj *patternFlowIgmpv1GroupAddress) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowIgmpv1GroupAddress) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowIgmpv1GroupAddress) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowIgmpv1GroupAddress) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowIgmpv1GroupAddress) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowIgmpv1GroupAddress) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowIgmpv1GroupAddress interface {
 	msg() *snappipb.PatternFlowIgmpv1GroupAddress
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() string
 	SetValue(value string) PatternFlowIgmpv1GroupAddress
 	Values() []string
@@ -17927,20 +22909,44 @@ func (obj *flowDelay) msg() *snappipb.FlowDelay {
 	return obj.obj
 }
 
-func (obj *flowDelay) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *flowDelay) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *flowDelay) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *flowDelay) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *flowDelay) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *flowDelay) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type FlowDelay interface {
 	msg() *snappipb.FlowDelay
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Bytes() float32
 	SetBytes(value float32) FlowDelay
 	Nanoseconds() float32
@@ -18002,20 +23008,44 @@ func (obj *flowDurationInterBurstGap) msg() *snappipb.FlowDurationInterBurstGap 
 	return obj.obj
 }
 
-func (obj *flowDurationInterBurstGap) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *flowDurationInterBurstGap) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *flowDurationInterBurstGap) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *flowDurationInterBurstGap) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *flowDurationInterBurstGap) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *flowDurationInterBurstGap) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type FlowDurationInterBurstGap interface {
 	msg() *snappipb.FlowDurationInterBurstGap
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Bytes() float64
 	SetBytes(value float64) FlowDurationInterBurstGap
 	Nanoseconds() float64
@@ -18077,20 +23107,44 @@ func (obj *deviceBgpAdvanced) msg() *snappipb.DeviceBgpAdvanced {
 	return obj.obj
 }
 
-func (obj *deviceBgpAdvanced) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *deviceBgpAdvanced) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *deviceBgpAdvanced) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *deviceBgpAdvanced) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *deviceBgpAdvanced) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *deviceBgpAdvanced) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type DeviceBgpAdvanced interface {
 	msg() *snappipb.DeviceBgpAdvanced
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	HoldTimeInterval() int32
 	SetHoldTimeInterval(value int32) DeviceBgpAdvanced
 	KeepAliveInterval() int32
@@ -18176,20 +23230,44 @@ func (obj *deviceBgpCapability) msg() *snappipb.DeviceBgpCapability {
 	return obj.obj
 }
 
-func (obj *deviceBgpCapability) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *deviceBgpCapability) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *deviceBgpCapability) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *deviceBgpCapability) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *deviceBgpCapability) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *deviceBgpCapability) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type DeviceBgpCapability interface {
 	msg() *snappipb.DeviceBgpCapability
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Vpls() bool
 	SetVpls(value bool) DeviceBgpCapability
 	RouteRefresh() bool
@@ -18575,20 +23653,44 @@ func (obj *deviceBgpSrTePolicy) msg() *snappipb.DeviceBgpSrTePolicy {
 	return obj.obj
 }
 
-func (obj *deviceBgpSrTePolicy) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *deviceBgpSrTePolicy) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *deviceBgpSrTePolicy) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *deviceBgpSrTePolicy) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *deviceBgpSrTePolicy) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *deviceBgpSrTePolicy) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type DeviceBgpSrTePolicy interface {
 	msg() *snappipb.DeviceBgpSrTePolicy
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Distinguisher() int32
 	SetDistinguisher(value int32) DeviceBgpSrTePolicy
 	Color() int32
@@ -18600,10 +23702,8 @@ type DeviceBgpSrTePolicy interface {
 	NextHop() DeviceBgpSrTePolicyNextHop
 	AddPath() DeviceBgpAddPath
 	AsPath() DeviceBgpAsPath
-	TunnelTlvs() []DeviceBgpTunnelTlv
-	NewTunnelTlvs() DeviceBgpTunnelTlv
-	Communities() []DeviceBgpCommunity
-	NewCommunities() DeviceBgpCommunity
+	TunnelTlvs() DeviceBgpSrTePolicyDeviceBgpTunnelTlvIter
+	Communities() DeviceBgpSrTePolicyDeviceBgpCommunityIter
 }
 
 // Distinguisher returns a int32
@@ -18690,52 +23790,68 @@ func (obj *deviceBgpSrTePolicy) AsPath() DeviceBgpAsPath {
 
 // TunnelTlvs returns a []DeviceBgpTunnelTlv
 //  Optional tunnel TLV settings
-func (obj *deviceBgpSrTePolicy) TunnelTlvs() []DeviceBgpTunnelTlv {
+func (obj *deviceBgpSrTePolicy) TunnelTlvs() DeviceBgpSrTePolicyDeviceBgpTunnelTlvIter {
 	if obj.obj.TunnelTlvs == nil {
-		obj.obj.TunnelTlvs = make([]*snappipb.DeviceBgpTunnelTlv, 0)
+		obj.obj.TunnelTlvs = []*snappipb.DeviceBgpTunnelTlv{}
 	}
-	values := make([]DeviceBgpTunnelTlv, 0)
-	for _, item := range obj.obj.TunnelTlvs {
-		values = append(values, &deviceBgpTunnelTlv{obj: item})
-	}
-	return values
+	return &deviceBgpSrTePolicyDeviceBgpTunnelTlvIter{obj: obj}
 
 }
 
-// NewTunnelTlvs creates and returns a new DeviceBgpTunnelTlv object
-//  Optional tunnel TLV settings
-func (obj *deviceBgpSrTePolicy) NewTunnelTlvs() DeviceBgpTunnelTlv {
-	if obj.obj.TunnelTlvs == nil {
-		obj.obj.TunnelTlvs = make([]*snappipb.DeviceBgpTunnelTlv, 0)
+type deviceBgpSrTePolicyDeviceBgpTunnelTlvIter struct {
+	obj *deviceBgpSrTePolicy
+}
+
+type DeviceBgpSrTePolicyDeviceBgpTunnelTlvIter interface {
+	Add() DeviceBgpTunnelTlv
+	Items() []DeviceBgpTunnelTlv
+}
+
+func (obj *deviceBgpSrTePolicyDeviceBgpTunnelTlvIter) Add() DeviceBgpTunnelTlv {
+	newObj := &snappipb.DeviceBgpTunnelTlv{}
+	obj.obj.obj.TunnelTlvs = append(obj.obj.obj.TunnelTlvs, newObj)
+	return &deviceBgpTunnelTlv{obj: newObj}
+}
+
+func (obj *deviceBgpSrTePolicyDeviceBgpTunnelTlvIter) Items() []DeviceBgpTunnelTlv {
+	slice := []DeviceBgpTunnelTlv{}
+	for _, item := range obj.obj.obj.TunnelTlvs {
+		slice = append(slice, &deviceBgpTunnelTlv{obj: item})
 	}
-	slice := append(obj.obj.TunnelTlvs, &snappipb.DeviceBgpTunnelTlv{})
-	obj.obj.TunnelTlvs = slice
-	return &deviceBgpTunnelTlv{obj: slice[len(slice)-1]}
+	return slice
 }
 
 // Communities returns a []DeviceBgpCommunity
 //  Optional community settings
-func (obj *deviceBgpSrTePolicy) Communities() []DeviceBgpCommunity {
+func (obj *deviceBgpSrTePolicy) Communities() DeviceBgpSrTePolicyDeviceBgpCommunityIter {
 	if obj.obj.Communities == nil {
-		obj.obj.Communities = make([]*snappipb.DeviceBgpCommunity, 0)
+		obj.obj.Communities = []*snappipb.DeviceBgpCommunity{}
 	}
-	values := make([]DeviceBgpCommunity, 0)
-	for _, item := range obj.obj.Communities {
-		values = append(values, &deviceBgpCommunity{obj: item})
-	}
-	return values
+	return &deviceBgpSrTePolicyDeviceBgpCommunityIter{obj: obj}
 
 }
 
-// NewCommunities creates and returns a new DeviceBgpCommunity object
-//  Optional community settings
-func (obj *deviceBgpSrTePolicy) NewCommunities() DeviceBgpCommunity {
-	if obj.obj.Communities == nil {
-		obj.obj.Communities = make([]*snappipb.DeviceBgpCommunity, 0)
+type deviceBgpSrTePolicyDeviceBgpCommunityIter struct {
+	obj *deviceBgpSrTePolicy
+}
+
+type DeviceBgpSrTePolicyDeviceBgpCommunityIter interface {
+	Add() DeviceBgpCommunity
+	Items() []DeviceBgpCommunity
+}
+
+func (obj *deviceBgpSrTePolicyDeviceBgpCommunityIter) Add() DeviceBgpCommunity {
+	newObj := &snappipb.DeviceBgpCommunity{}
+	obj.obj.obj.Communities = append(obj.obj.obj.Communities, newObj)
+	return &deviceBgpCommunity{obj: newObj}
+}
+
+func (obj *deviceBgpSrTePolicyDeviceBgpCommunityIter) Items() []DeviceBgpCommunity {
+	slice := []DeviceBgpCommunity{}
+	for _, item := range obj.obj.obj.Communities {
+		slice = append(slice, &deviceBgpCommunity{obj: item})
 	}
-	slice := append(obj.obj.Communities, &snappipb.DeviceBgpCommunity{})
-	obj.obj.Communities = slice
-	return &deviceBgpCommunity{obj: slice[len(slice)-1]}
+	return slice
 }
 
 type deviceBgpv4Route struct {
@@ -18746,27 +23862,49 @@ func (obj *deviceBgpv4Route) msg() *snappipb.DeviceBgpv4Route {
 	return obj.obj
 }
 
-func (obj *deviceBgpv4Route) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *deviceBgpv4Route) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *deviceBgpv4Route) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *deviceBgpv4Route) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *deviceBgpv4Route) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *deviceBgpv4Route) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type DeviceBgpv4Route interface {
 	msg() *snappipb.DeviceBgpv4Route
-	Yaml() string
-	Json() string
-	Addresses() []DeviceBgpv4RouteAddress
-	NewAddresses() DeviceBgpv4RouteAddress
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
+	Addresses() DeviceBgpv4RouteDeviceBgpv4RouteAddressIter
 	NextHopAddress() string
 	SetNextHopAddress(value string) DeviceBgpv4Route
 	Advanced() DeviceBgpRouteAdvanced
-	Communities() []DeviceBgpCommunity
-	NewCommunities() DeviceBgpCommunity
+	Communities() DeviceBgpv4RouteDeviceBgpCommunityIter
 	AsPath() DeviceBgpAsPath
 	AddPath() DeviceBgpAddPath
 	Name() string
@@ -18775,27 +23913,35 @@ type DeviceBgpv4Route interface {
 
 // Addresses returns a []DeviceBgpv4RouteAddress
 //  A list of symmetrical or asymmetrical route addresses
-func (obj *deviceBgpv4Route) Addresses() []DeviceBgpv4RouteAddress {
+func (obj *deviceBgpv4Route) Addresses() DeviceBgpv4RouteDeviceBgpv4RouteAddressIter {
 	if obj.obj.Addresses == nil {
-		obj.obj.Addresses = make([]*snappipb.DeviceBgpv4RouteAddress, 0)
+		obj.obj.Addresses = []*snappipb.DeviceBgpv4RouteAddress{}
 	}
-	values := make([]DeviceBgpv4RouteAddress, 0)
-	for _, item := range obj.obj.Addresses {
-		values = append(values, &deviceBgpv4RouteAddress{obj: item})
-	}
-	return values
+	return &deviceBgpv4RouteDeviceBgpv4RouteAddressIter{obj: obj}
 
 }
 
-// NewAddresses creates and returns a new DeviceBgpv4RouteAddress object
-//  A list of symmetrical or asymmetrical route addresses
-func (obj *deviceBgpv4Route) NewAddresses() DeviceBgpv4RouteAddress {
-	if obj.obj.Addresses == nil {
-		obj.obj.Addresses = make([]*snappipb.DeviceBgpv4RouteAddress, 0)
+type deviceBgpv4RouteDeviceBgpv4RouteAddressIter struct {
+	obj *deviceBgpv4Route
+}
+
+type DeviceBgpv4RouteDeviceBgpv4RouteAddressIter interface {
+	Add() DeviceBgpv4RouteAddress
+	Items() []DeviceBgpv4RouteAddress
+}
+
+func (obj *deviceBgpv4RouteDeviceBgpv4RouteAddressIter) Add() DeviceBgpv4RouteAddress {
+	newObj := &snappipb.DeviceBgpv4RouteAddress{}
+	obj.obj.obj.Addresses = append(obj.obj.obj.Addresses, newObj)
+	return &deviceBgpv4RouteAddress{obj: newObj}
+}
+
+func (obj *deviceBgpv4RouteDeviceBgpv4RouteAddressIter) Items() []DeviceBgpv4RouteAddress {
+	slice := []DeviceBgpv4RouteAddress{}
+	for _, item := range obj.obj.obj.Addresses {
+		slice = append(slice, &deviceBgpv4RouteAddress{obj: item})
 	}
-	slice := append(obj.obj.Addresses, &snappipb.DeviceBgpv4RouteAddress{})
-	obj.obj.Addresses = slice
-	return &deviceBgpv4RouteAddress{obj: slice[len(slice)-1]}
+	return slice
 }
 
 // NextHopAddress returns a string
@@ -18823,27 +23969,35 @@ func (obj *deviceBgpv4Route) Advanced() DeviceBgpRouteAdvanced {
 
 // Communities returns a []DeviceBgpCommunity
 //  Optional community settings.
-func (obj *deviceBgpv4Route) Communities() []DeviceBgpCommunity {
+func (obj *deviceBgpv4Route) Communities() DeviceBgpv4RouteDeviceBgpCommunityIter {
 	if obj.obj.Communities == nil {
-		obj.obj.Communities = make([]*snappipb.DeviceBgpCommunity, 0)
+		obj.obj.Communities = []*snappipb.DeviceBgpCommunity{}
 	}
-	values := make([]DeviceBgpCommunity, 0)
-	for _, item := range obj.obj.Communities {
-		values = append(values, &deviceBgpCommunity{obj: item})
-	}
-	return values
+	return &deviceBgpv4RouteDeviceBgpCommunityIter{obj: obj}
 
 }
 
-// NewCommunities creates and returns a new DeviceBgpCommunity object
-//  Optional community settings.
-func (obj *deviceBgpv4Route) NewCommunities() DeviceBgpCommunity {
-	if obj.obj.Communities == nil {
-		obj.obj.Communities = make([]*snappipb.DeviceBgpCommunity, 0)
+type deviceBgpv4RouteDeviceBgpCommunityIter struct {
+	obj *deviceBgpv4Route
+}
+
+type DeviceBgpv4RouteDeviceBgpCommunityIter interface {
+	Add() DeviceBgpCommunity
+	Items() []DeviceBgpCommunity
+}
+
+func (obj *deviceBgpv4RouteDeviceBgpCommunityIter) Add() DeviceBgpCommunity {
+	newObj := &snappipb.DeviceBgpCommunity{}
+	obj.obj.obj.Communities = append(obj.obj.obj.Communities, newObj)
+	return &deviceBgpCommunity{obj: newObj}
+}
+
+func (obj *deviceBgpv4RouteDeviceBgpCommunityIter) Items() []DeviceBgpCommunity {
+	slice := []DeviceBgpCommunity{}
+	for _, item := range obj.obj.obj.Communities {
+		slice = append(slice, &deviceBgpCommunity{obj: item})
 	}
-	slice := append(obj.obj.Communities, &snappipb.DeviceBgpCommunity{})
-	obj.obj.Communities = slice
-	return &deviceBgpCommunity{obj: slice[len(slice)-1]}
+	return slice
 }
 
 // AsPath returns a DeviceBgpAsPath
@@ -18887,27 +24041,49 @@ func (obj *deviceBgpv6Route) msg() *snappipb.DeviceBgpv6Route {
 	return obj.obj
 }
 
-func (obj *deviceBgpv6Route) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *deviceBgpv6Route) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *deviceBgpv6Route) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *deviceBgpv6Route) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *deviceBgpv6Route) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *deviceBgpv6Route) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type DeviceBgpv6Route interface {
 	msg() *snappipb.DeviceBgpv6Route
-	Yaml() string
-	Json() string
-	Addresses() []DeviceBgpv6RouteAddress
-	NewAddresses() DeviceBgpv6RouteAddress
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
+	Addresses() DeviceBgpv6RouteDeviceBgpv6RouteAddressIter
 	NextHopAddress() string
 	SetNextHopAddress(value string) DeviceBgpv6Route
 	Advanced() DeviceBgpRouteAdvanced
-	Communities() []DeviceBgpCommunity
-	NewCommunities() DeviceBgpCommunity
+	Communities() DeviceBgpv6RouteDeviceBgpCommunityIter
 	AsPath() DeviceBgpAsPath
 	AddPath() DeviceBgpAddPath
 	Name() string
@@ -18916,27 +24092,35 @@ type DeviceBgpv6Route interface {
 
 // Addresses returns a []DeviceBgpv6RouteAddress
 //  A list of symmetrical or asymmetrical route addresses
-func (obj *deviceBgpv6Route) Addresses() []DeviceBgpv6RouteAddress {
+func (obj *deviceBgpv6Route) Addresses() DeviceBgpv6RouteDeviceBgpv6RouteAddressIter {
 	if obj.obj.Addresses == nil {
-		obj.obj.Addresses = make([]*snappipb.DeviceBgpv6RouteAddress, 0)
+		obj.obj.Addresses = []*snappipb.DeviceBgpv6RouteAddress{}
 	}
-	values := make([]DeviceBgpv6RouteAddress, 0)
-	for _, item := range obj.obj.Addresses {
-		values = append(values, &deviceBgpv6RouteAddress{obj: item})
-	}
-	return values
+	return &deviceBgpv6RouteDeviceBgpv6RouteAddressIter{obj: obj}
 
 }
 
-// NewAddresses creates and returns a new DeviceBgpv6RouteAddress object
-//  A list of symmetrical or asymmetrical route addresses
-func (obj *deviceBgpv6Route) NewAddresses() DeviceBgpv6RouteAddress {
-	if obj.obj.Addresses == nil {
-		obj.obj.Addresses = make([]*snappipb.DeviceBgpv6RouteAddress, 0)
+type deviceBgpv6RouteDeviceBgpv6RouteAddressIter struct {
+	obj *deviceBgpv6Route
+}
+
+type DeviceBgpv6RouteDeviceBgpv6RouteAddressIter interface {
+	Add() DeviceBgpv6RouteAddress
+	Items() []DeviceBgpv6RouteAddress
+}
+
+func (obj *deviceBgpv6RouteDeviceBgpv6RouteAddressIter) Add() DeviceBgpv6RouteAddress {
+	newObj := &snappipb.DeviceBgpv6RouteAddress{}
+	obj.obj.obj.Addresses = append(obj.obj.obj.Addresses, newObj)
+	return &deviceBgpv6RouteAddress{obj: newObj}
+}
+
+func (obj *deviceBgpv6RouteDeviceBgpv6RouteAddressIter) Items() []DeviceBgpv6RouteAddress {
+	slice := []DeviceBgpv6RouteAddress{}
+	for _, item := range obj.obj.obj.Addresses {
+		slice = append(slice, &deviceBgpv6RouteAddress{obj: item})
 	}
-	slice := append(obj.obj.Addresses, &snappipb.DeviceBgpv6RouteAddress{})
-	obj.obj.Addresses = slice
-	return &deviceBgpv6RouteAddress{obj: slice[len(slice)-1]}
+	return slice
 }
 
 // NextHopAddress returns a string
@@ -18964,27 +24148,35 @@ func (obj *deviceBgpv6Route) Advanced() DeviceBgpRouteAdvanced {
 
 // Communities returns a []DeviceBgpCommunity
 //  Optional community settings.
-func (obj *deviceBgpv6Route) Communities() []DeviceBgpCommunity {
+func (obj *deviceBgpv6Route) Communities() DeviceBgpv6RouteDeviceBgpCommunityIter {
 	if obj.obj.Communities == nil {
-		obj.obj.Communities = make([]*snappipb.DeviceBgpCommunity, 0)
+		obj.obj.Communities = []*snappipb.DeviceBgpCommunity{}
 	}
-	values := make([]DeviceBgpCommunity, 0)
-	for _, item := range obj.obj.Communities {
-		values = append(values, &deviceBgpCommunity{obj: item})
-	}
-	return values
+	return &deviceBgpv6RouteDeviceBgpCommunityIter{obj: obj}
 
 }
 
-// NewCommunities creates and returns a new DeviceBgpCommunity object
-//  Optional community settings.
-func (obj *deviceBgpv6Route) NewCommunities() DeviceBgpCommunity {
-	if obj.obj.Communities == nil {
-		obj.obj.Communities = make([]*snappipb.DeviceBgpCommunity, 0)
+type deviceBgpv6RouteDeviceBgpCommunityIter struct {
+	obj *deviceBgpv6Route
+}
+
+type DeviceBgpv6RouteDeviceBgpCommunityIter interface {
+	Add() DeviceBgpCommunity
+	Items() []DeviceBgpCommunity
+}
+
+func (obj *deviceBgpv6RouteDeviceBgpCommunityIter) Add() DeviceBgpCommunity {
+	newObj := &snappipb.DeviceBgpCommunity{}
+	obj.obj.obj.Communities = append(obj.obj.obj.Communities, newObj)
+	return &deviceBgpCommunity{obj: newObj}
+}
+
+func (obj *deviceBgpv6RouteDeviceBgpCommunityIter) Items() []DeviceBgpCommunity {
+	slice := []DeviceBgpCommunity{}
+	for _, item := range obj.obj.obj.Communities {
+		slice = append(slice, &deviceBgpCommunity{obj: item})
 	}
-	slice := append(obj.obj.Communities, &snappipb.DeviceBgpCommunity{})
-	obj.obj.Communities = slice
-	return &deviceBgpCommunity{obj: slice[len(slice)-1]}
+	return slice
 }
 
 // AsPath returns a DeviceBgpAsPath
@@ -19028,20 +24220,44 @@ func (obj *deviceBgpv6SegmentRouting) msg() *snappipb.DeviceBgpv6SegmentRouting 
 	return obj.obj
 }
 
-func (obj *deviceBgpv6SegmentRouting) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *deviceBgpv6SegmentRouting) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *deviceBgpv6SegmentRouting) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *deviceBgpv6SegmentRouting) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *deviceBgpv6SegmentRouting) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *deviceBgpv6SegmentRouting) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type DeviceBgpv6SegmentRouting interface {
 	msg() *snappipb.DeviceBgpv6SegmentRouting
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	IngressSupportsVpn() bool
 	SetIngressSupportsVpn(value bool) DeviceBgpv6SegmentRouting
 	ReducedEncapsulation() bool
@@ -19172,20 +24388,44 @@ func (obj *patternFlowEthernetDstCounter) msg() *snappipb.PatternFlowEthernetDst
 	return obj.obj
 }
 
-func (obj *patternFlowEthernetDstCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowEthernetDstCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowEthernetDstCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowEthernetDstCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowEthernetDstCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowEthernetDstCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowEthernetDstCounter interface {
 	msg() *snappipb.PatternFlowEthernetDstCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() string
 	SetStart(value string) PatternFlowEthernetDstCounter
 	Step() string
@@ -19241,20 +24481,44 @@ func (obj *patternFlowEthernetSrcCounter) msg() *snappipb.PatternFlowEthernetSrc
 	return obj.obj
 }
 
-func (obj *patternFlowEthernetSrcCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowEthernetSrcCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowEthernetSrcCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowEthernetSrcCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowEthernetSrcCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowEthernetSrcCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowEthernetSrcCounter interface {
 	msg() *snappipb.PatternFlowEthernetSrcCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() string
 	SetStart(value string) PatternFlowEthernetSrcCounter
 	Step() string
@@ -19310,20 +24574,44 @@ func (obj *patternFlowEthernetEtherTypeCounter) msg() *snappipb.PatternFlowEther
 	return obj.obj
 }
 
-func (obj *patternFlowEthernetEtherTypeCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowEthernetEtherTypeCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowEthernetEtherTypeCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowEthernetEtherTypeCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowEthernetEtherTypeCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowEthernetEtherTypeCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowEthernetEtherTypeCounter interface {
 	msg() *snappipb.PatternFlowEthernetEtherTypeCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowEthernetEtherTypeCounter
 	Step() int32
@@ -19379,20 +24667,44 @@ func (obj *patternFlowEthernetPfcQueueCounter) msg() *snappipb.PatternFlowEthern
 	return obj.obj
 }
 
-func (obj *patternFlowEthernetPfcQueueCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowEthernetPfcQueueCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowEthernetPfcQueueCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowEthernetPfcQueueCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowEthernetPfcQueueCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowEthernetPfcQueueCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowEthernetPfcQueueCounter interface {
 	msg() *snappipb.PatternFlowEthernetPfcQueueCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowEthernetPfcQueueCounter
 	Step() int32
@@ -19448,20 +24760,44 @@ func (obj *patternFlowVlanPriorityCounter) msg() *snappipb.PatternFlowVlanPriori
 	return obj.obj
 }
 
-func (obj *patternFlowVlanPriorityCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowVlanPriorityCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowVlanPriorityCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowVlanPriorityCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowVlanPriorityCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowVlanPriorityCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowVlanPriorityCounter interface {
 	msg() *snappipb.PatternFlowVlanPriorityCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowVlanPriorityCounter
 	Step() int32
@@ -19517,20 +24853,44 @@ func (obj *patternFlowVlanCfiCounter) msg() *snappipb.PatternFlowVlanCfiCounter 
 	return obj.obj
 }
 
-func (obj *patternFlowVlanCfiCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowVlanCfiCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowVlanCfiCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowVlanCfiCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowVlanCfiCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowVlanCfiCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowVlanCfiCounter interface {
 	msg() *snappipb.PatternFlowVlanCfiCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowVlanCfiCounter
 	Step() int32
@@ -19586,20 +24946,44 @@ func (obj *patternFlowVlanIdCounter) msg() *snappipb.PatternFlowVlanIdCounter {
 	return obj.obj
 }
 
-func (obj *patternFlowVlanIdCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowVlanIdCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowVlanIdCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowVlanIdCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowVlanIdCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowVlanIdCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowVlanIdCounter interface {
 	msg() *snappipb.PatternFlowVlanIdCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowVlanIdCounter
 	Step() int32
@@ -19655,20 +25039,44 @@ func (obj *patternFlowVlanTpidCounter) msg() *snappipb.PatternFlowVlanTpidCounte
 	return obj.obj
 }
 
-func (obj *patternFlowVlanTpidCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowVlanTpidCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowVlanTpidCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowVlanTpidCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowVlanTpidCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowVlanTpidCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowVlanTpidCounter interface {
 	msg() *snappipb.PatternFlowVlanTpidCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowVlanTpidCounter
 	Step() int32
@@ -19724,20 +25132,44 @@ func (obj *patternFlowVxlanFlagsCounter) msg() *snappipb.PatternFlowVxlanFlagsCo
 	return obj.obj
 }
 
-func (obj *patternFlowVxlanFlagsCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowVxlanFlagsCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowVxlanFlagsCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowVxlanFlagsCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowVxlanFlagsCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowVxlanFlagsCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowVxlanFlagsCounter interface {
 	msg() *snappipb.PatternFlowVxlanFlagsCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowVxlanFlagsCounter
 	Step() int32
@@ -19793,20 +25225,44 @@ func (obj *patternFlowVxlanReserved0Counter) msg() *snappipb.PatternFlowVxlanRes
 	return obj.obj
 }
 
-func (obj *patternFlowVxlanReserved0Counter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowVxlanReserved0Counter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowVxlanReserved0Counter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowVxlanReserved0Counter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowVxlanReserved0Counter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowVxlanReserved0Counter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowVxlanReserved0Counter interface {
 	msg() *snappipb.PatternFlowVxlanReserved0Counter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowVxlanReserved0Counter
 	Step() int32
@@ -19862,20 +25318,44 @@ func (obj *patternFlowVxlanVniCounter) msg() *snappipb.PatternFlowVxlanVniCounte
 	return obj.obj
 }
 
-func (obj *patternFlowVxlanVniCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowVxlanVniCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowVxlanVniCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowVxlanVniCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowVxlanVniCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowVxlanVniCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowVxlanVniCounter interface {
 	msg() *snappipb.PatternFlowVxlanVniCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowVxlanVniCounter
 	Step() int32
@@ -19931,20 +25411,44 @@ func (obj *patternFlowVxlanReserved1Counter) msg() *snappipb.PatternFlowVxlanRes
 	return obj.obj
 }
 
-func (obj *patternFlowVxlanReserved1Counter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowVxlanReserved1Counter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowVxlanReserved1Counter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowVxlanReserved1Counter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowVxlanReserved1Counter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowVxlanReserved1Counter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowVxlanReserved1Counter interface {
 	msg() *snappipb.PatternFlowVxlanReserved1Counter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowVxlanReserved1Counter
 	Step() int32
@@ -20000,20 +25504,44 @@ func (obj *patternFlowIpv4VersionCounter) msg() *snappipb.PatternFlowIpv4Version
 	return obj.obj
 }
 
-func (obj *patternFlowIpv4VersionCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowIpv4VersionCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowIpv4VersionCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowIpv4VersionCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowIpv4VersionCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowIpv4VersionCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowIpv4VersionCounter interface {
 	msg() *snappipb.PatternFlowIpv4VersionCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowIpv4VersionCounter
 	Step() int32
@@ -20069,20 +25597,44 @@ func (obj *patternFlowIpv4HeaderLengthCounter) msg() *snappipb.PatternFlowIpv4He
 	return obj.obj
 }
 
-func (obj *patternFlowIpv4HeaderLengthCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowIpv4HeaderLengthCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowIpv4HeaderLengthCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowIpv4HeaderLengthCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowIpv4HeaderLengthCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowIpv4HeaderLengthCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowIpv4HeaderLengthCounter interface {
 	msg() *snappipb.PatternFlowIpv4HeaderLengthCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowIpv4HeaderLengthCounter
 	Step() int32
@@ -20138,20 +25690,44 @@ func (obj *patternFlowIpv4PriorityRaw) msg() *snappipb.PatternFlowIpv4PriorityRa
 	return obj.obj
 }
 
-func (obj *patternFlowIpv4PriorityRaw) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowIpv4PriorityRaw) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowIpv4PriorityRaw) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowIpv4PriorityRaw) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowIpv4PriorityRaw) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowIpv4PriorityRaw) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowIpv4PriorityRaw interface {
 	msg() *snappipb.PatternFlowIpv4PriorityRaw
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowIpv4PriorityRaw
 	Values() []int32
@@ -20229,20 +25805,44 @@ func (obj *flowIpv4Tos) msg() *snappipb.FlowIpv4Tos {
 	return obj.obj
 }
 
-func (obj *flowIpv4Tos) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *flowIpv4Tos) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *flowIpv4Tos) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *flowIpv4Tos) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *flowIpv4Tos) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *flowIpv4Tos) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type FlowIpv4Tos interface {
 	msg() *snappipb.FlowIpv4Tos
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Precedence() PatternFlowIpv4TosPrecedence
 	Delay() PatternFlowIpv4TosDelay
 	Throughput() PatternFlowIpv4TosThroughput
@@ -20319,20 +25919,44 @@ func (obj *flowIpv4Dscp) msg() *snappipb.FlowIpv4Dscp {
 	return obj.obj
 }
 
-func (obj *flowIpv4Dscp) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *flowIpv4Dscp) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *flowIpv4Dscp) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *flowIpv4Dscp) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *flowIpv4Dscp) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *flowIpv4Dscp) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type FlowIpv4Dscp interface {
 	msg() *snappipb.FlowIpv4Dscp
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Phb() PatternFlowIpv4DscpPhb
 	Ecn() PatternFlowIpv4DscpEcn
 }
@@ -20365,20 +25989,44 @@ func (obj *patternFlowIpv4TotalLengthCounter) msg() *snappipb.PatternFlowIpv4Tot
 	return obj.obj
 }
 
-func (obj *patternFlowIpv4TotalLengthCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowIpv4TotalLengthCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowIpv4TotalLengthCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowIpv4TotalLengthCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowIpv4TotalLengthCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowIpv4TotalLengthCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowIpv4TotalLengthCounter interface {
 	msg() *snappipb.PatternFlowIpv4TotalLengthCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowIpv4TotalLengthCounter
 	Step() int32
@@ -20434,20 +26082,44 @@ func (obj *patternFlowIpv4IdentificationCounter) msg() *snappipb.PatternFlowIpv4
 	return obj.obj
 }
 
-func (obj *patternFlowIpv4IdentificationCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowIpv4IdentificationCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowIpv4IdentificationCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowIpv4IdentificationCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowIpv4IdentificationCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowIpv4IdentificationCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowIpv4IdentificationCounter interface {
 	msg() *snappipb.PatternFlowIpv4IdentificationCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowIpv4IdentificationCounter
 	Step() int32
@@ -20503,20 +26175,44 @@ func (obj *patternFlowIpv4ReservedCounter) msg() *snappipb.PatternFlowIpv4Reserv
 	return obj.obj
 }
 
-func (obj *patternFlowIpv4ReservedCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowIpv4ReservedCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowIpv4ReservedCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowIpv4ReservedCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowIpv4ReservedCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowIpv4ReservedCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowIpv4ReservedCounter interface {
 	msg() *snappipb.PatternFlowIpv4ReservedCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowIpv4ReservedCounter
 	Step() int32
@@ -20572,20 +26268,44 @@ func (obj *patternFlowIpv4DontFragmentCounter) msg() *snappipb.PatternFlowIpv4Do
 	return obj.obj
 }
 
-func (obj *patternFlowIpv4DontFragmentCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowIpv4DontFragmentCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowIpv4DontFragmentCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowIpv4DontFragmentCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowIpv4DontFragmentCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowIpv4DontFragmentCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowIpv4DontFragmentCounter interface {
 	msg() *snappipb.PatternFlowIpv4DontFragmentCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowIpv4DontFragmentCounter
 	Step() int32
@@ -20641,20 +26361,44 @@ func (obj *patternFlowIpv4MoreFragmentsCounter) msg() *snappipb.PatternFlowIpv4M
 	return obj.obj
 }
 
-func (obj *patternFlowIpv4MoreFragmentsCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowIpv4MoreFragmentsCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowIpv4MoreFragmentsCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowIpv4MoreFragmentsCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowIpv4MoreFragmentsCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowIpv4MoreFragmentsCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowIpv4MoreFragmentsCounter interface {
 	msg() *snappipb.PatternFlowIpv4MoreFragmentsCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowIpv4MoreFragmentsCounter
 	Step() int32
@@ -20710,20 +26454,44 @@ func (obj *patternFlowIpv4FragmentOffsetCounter) msg() *snappipb.PatternFlowIpv4
 	return obj.obj
 }
 
-func (obj *patternFlowIpv4FragmentOffsetCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowIpv4FragmentOffsetCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowIpv4FragmentOffsetCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowIpv4FragmentOffsetCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowIpv4FragmentOffsetCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowIpv4FragmentOffsetCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowIpv4FragmentOffsetCounter interface {
 	msg() *snappipb.PatternFlowIpv4FragmentOffsetCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowIpv4FragmentOffsetCounter
 	Step() int32
@@ -20779,20 +26547,44 @@ func (obj *patternFlowIpv4TimeToLiveCounter) msg() *snappipb.PatternFlowIpv4Time
 	return obj.obj
 }
 
-func (obj *patternFlowIpv4TimeToLiveCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowIpv4TimeToLiveCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowIpv4TimeToLiveCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowIpv4TimeToLiveCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowIpv4TimeToLiveCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowIpv4TimeToLiveCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowIpv4TimeToLiveCounter interface {
 	msg() *snappipb.PatternFlowIpv4TimeToLiveCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowIpv4TimeToLiveCounter
 	Step() int32
@@ -20848,20 +26640,44 @@ func (obj *patternFlowIpv4ProtocolCounter) msg() *snappipb.PatternFlowIpv4Protoc
 	return obj.obj
 }
 
-func (obj *patternFlowIpv4ProtocolCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowIpv4ProtocolCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowIpv4ProtocolCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowIpv4ProtocolCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowIpv4ProtocolCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowIpv4ProtocolCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowIpv4ProtocolCounter interface {
 	msg() *snappipb.PatternFlowIpv4ProtocolCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowIpv4ProtocolCounter
 	Step() int32
@@ -20917,20 +26733,44 @@ func (obj *patternFlowIpv4SrcCounter) msg() *snappipb.PatternFlowIpv4SrcCounter 
 	return obj.obj
 }
 
-func (obj *patternFlowIpv4SrcCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowIpv4SrcCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowIpv4SrcCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowIpv4SrcCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowIpv4SrcCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowIpv4SrcCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowIpv4SrcCounter interface {
 	msg() *snappipb.PatternFlowIpv4SrcCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() string
 	SetStart(value string) PatternFlowIpv4SrcCounter
 	Step() string
@@ -20986,20 +26826,44 @@ func (obj *patternFlowIpv4DstCounter) msg() *snappipb.PatternFlowIpv4DstCounter 
 	return obj.obj
 }
 
-func (obj *patternFlowIpv4DstCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowIpv4DstCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowIpv4DstCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowIpv4DstCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowIpv4DstCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowIpv4DstCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowIpv4DstCounter interface {
 	msg() *snappipb.PatternFlowIpv4DstCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() string
 	SetStart(value string) PatternFlowIpv4DstCounter
 	Step() string
@@ -21055,20 +26919,44 @@ func (obj *patternFlowIpv6VersionCounter) msg() *snappipb.PatternFlowIpv6Version
 	return obj.obj
 }
 
-func (obj *patternFlowIpv6VersionCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowIpv6VersionCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowIpv6VersionCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowIpv6VersionCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowIpv6VersionCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowIpv6VersionCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowIpv6VersionCounter interface {
 	msg() *snappipb.PatternFlowIpv6VersionCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowIpv6VersionCounter
 	Step() int32
@@ -21124,20 +27012,44 @@ func (obj *patternFlowIpv6TrafficClassCounter) msg() *snappipb.PatternFlowIpv6Tr
 	return obj.obj
 }
 
-func (obj *patternFlowIpv6TrafficClassCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowIpv6TrafficClassCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowIpv6TrafficClassCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowIpv6TrafficClassCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowIpv6TrafficClassCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowIpv6TrafficClassCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowIpv6TrafficClassCounter interface {
 	msg() *snappipb.PatternFlowIpv6TrafficClassCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowIpv6TrafficClassCounter
 	Step() int32
@@ -21193,20 +27105,44 @@ func (obj *patternFlowIpv6FlowLabelCounter) msg() *snappipb.PatternFlowIpv6FlowL
 	return obj.obj
 }
 
-func (obj *patternFlowIpv6FlowLabelCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowIpv6FlowLabelCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowIpv6FlowLabelCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowIpv6FlowLabelCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowIpv6FlowLabelCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowIpv6FlowLabelCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowIpv6FlowLabelCounter interface {
 	msg() *snappipb.PatternFlowIpv6FlowLabelCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowIpv6FlowLabelCounter
 	Step() int32
@@ -21262,20 +27198,44 @@ func (obj *patternFlowIpv6PayloadLengthCounter) msg() *snappipb.PatternFlowIpv6P
 	return obj.obj
 }
 
-func (obj *patternFlowIpv6PayloadLengthCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowIpv6PayloadLengthCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowIpv6PayloadLengthCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowIpv6PayloadLengthCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowIpv6PayloadLengthCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowIpv6PayloadLengthCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowIpv6PayloadLengthCounter interface {
 	msg() *snappipb.PatternFlowIpv6PayloadLengthCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowIpv6PayloadLengthCounter
 	Step() int32
@@ -21331,20 +27291,44 @@ func (obj *patternFlowIpv6NextHeaderCounter) msg() *snappipb.PatternFlowIpv6Next
 	return obj.obj
 }
 
-func (obj *patternFlowIpv6NextHeaderCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowIpv6NextHeaderCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowIpv6NextHeaderCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowIpv6NextHeaderCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowIpv6NextHeaderCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowIpv6NextHeaderCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowIpv6NextHeaderCounter interface {
 	msg() *snappipb.PatternFlowIpv6NextHeaderCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowIpv6NextHeaderCounter
 	Step() int32
@@ -21400,20 +27384,44 @@ func (obj *patternFlowIpv6HopLimitCounter) msg() *snappipb.PatternFlowIpv6HopLim
 	return obj.obj
 }
 
-func (obj *patternFlowIpv6HopLimitCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowIpv6HopLimitCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowIpv6HopLimitCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowIpv6HopLimitCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowIpv6HopLimitCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowIpv6HopLimitCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowIpv6HopLimitCounter interface {
 	msg() *snappipb.PatternFlowIpv6HopLimitCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowIpv6HopLimitCounter
 	Step() int32
@@ -21469,20 +27477,44 @@ func (obj *patternFlowIpv6SrcCounter) msg() *snappipb.PatternFlowIpv6SrcCounter 
 	return obj.obj
 }
 
-func (obj *patternFlowIpv6SrcCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowIpv6SrcCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowIpv6SrcCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowIpv6SrcCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowIpv6SrcCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowIpv6SrcCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowIpv6SrcCounter interface {
 	msg() *snappipb.PatternFlowIpv6SrcCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() string
 	SetStart(value string) PatternFlowIpv6SrcCounter
 	Step() string
@@ -21538,20 +27570,44 @@ func (obj *patternFlowIpv6DstCounter) msg() *snappipb.PatternFlowIpv6DstCounter 
 	return obj.obj
 }
 
-func (obj *patternFlowIpv6DstCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowIpv6DstCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowIpv6DstCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowIpv6DstCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowIpv6DstCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowIpv6DstCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowIpv6DstCounter interface {
 	msg() *snappipb.PatternFlowIpv6DstCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() string
 	SetStart(value string) PatternFlowIpv6DstCounter
 	Step() string
@@ -21607,20 +27663,44 @@ func (obj *patternFlowPfcPauseDstCounter) msg() *snappipb.PatternFlowPfcPauseDst
 	return obj.obj
 }
 
-func (obj *patternFlowPfcPauseDstCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowPfcPauseDstCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowPfcPauseDstCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowPfcPauseDstCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowPfcPauseDstCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowPfcPauseDstCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowPfcPauseDstCounter interface {
 	msg() *snappipb.PatternFlowPfcPauseDstCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() string
 	SetStart(value string) PatternFlowPfcPauseDstCounter
 	Step() string
@@ -21676,20 +27756,44 @@ func (obj *patternFlowPfcPauseSrcCounter) msg() *snappipb.PatternFlowPfcPauseSrc
 	return obj.obj
 }
 
-func (obj *patternFlowPfcPauseSrcCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowPfcPauseSrcCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowPfcPauseSrcCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowPfcPauseSrcCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowPfcPauseSrcCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowPfcPauseSrcCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowPfcPauseSrcCounter interface {
 	msg() *snappipb.PatternFlowPfcPauseSrcCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() string
 	SetStart(value string) PatternFlowPfcPauseSrcCounter
 	Step() string
@@ -21745,20 +27849,44 @@ func (obj *patternFlowPfcPauseEtherTypeCounter) msg() *snappipb.PatternFlowPfcPa
 	return obj.obj
 }
 
-func (obj *patternFlowPfcPauseEtherTypeCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowPfcPauseEtherTypeCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowPfcPauseEtherTypeCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowPfcPauseEtherTypeCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowPfcPauseEtherTypeCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowPfcPauseEtherTypeCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowPfcPauseEtherTypeCounter interface {
 	msg() *snappipb.PatternFlowPfcPauseEtherTypeCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowPfcPauseEtherTypeCounter
 	Step() int32
@@ -21814,20 +27942,44 @@ func (obj *patternFlowPfcPauseControlOpCodeCounter) msg() *snappipb.PatternFlowP
 	return obj.obj
 }
 
-func (obj *patternFlowPfcPauseControlOpCodeCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowPfcPauseControlOpCodeCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowPfcPauseControlOpCodeCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowPfcPauseControlOpCodeCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowPfcPauseControlOpCodeCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowPfcPauseControlOpCodeCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowPfcPauseControlOpCodeCounter interface {
 	msg() *snappipb.PatternFlowPfcPauseControlOpCodeCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowPfcPauseControlOpCodeCounter
 	Step() int32
@@ -21883,20 +28035,44 @@ func (obj *patternFlowPfcPauseClassEnableVectorCounter) msg() *snappipb.PatternF
 	return obj.obj
 }
 
-func (obj *patternFlowPfcPauseClassEnableVectorCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowPfcPauseClassEnableVectorCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowPfcPauseClassEnableVectorCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowPfcPauseClassEnableVectorCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowPfcPauseClassEnableVectorCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowPfcPauseClassEnableVectorCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowPfcPauseClassEnableVectorCounter interface {
 	msg() *snappipb.PatternFlowPfcPauseClassEnableVectorCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowPfcPauseClassEnableVectorCounter
 	Step() int32
@@ -21952,20 +28128,44 @@ func (obj *patternFlowPfcPausePauseClass0Counter) msg() *snappipb.PatternFlowPfc
 	return obj.obj
 }
 
-func (obj *patternFlowPfcPausePauseClass0Counter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowPfcPausePauseClass0Counter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowPfcPausePauseClass0Counter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowPfcPausePauseClass0Counter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowPfcPausePauseClass0Counter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowPfcPausePauseClass0Counter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowPfcPausePauseClass0Counter interface {
 	msg() *snappipb.PatternFlowPfcPausePauseClass0Counter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowPfcPausePauseClass0Counter
 	Step() int32
@@ -22021,20 +28221,44 @@ func (obj *patternFlowPfcPausePauseClass1Counter) msg() *snappipb.PatternFlowPfc
 	return obj.obj
 }
 
-func (obj *patternFlowPfcPausePauseClass1Counter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowPfcPausePauseClass1Counter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowPfcPausePauseClass1Counter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowPfcPausePauseClass1Counter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowPfcPausePauseClass1Counter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowPfcPausePauseClass1Counter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowPfcPausePauseClass1Counter interface {
 	msg() *snappipb.PatternFlowPfcPausePauseClass1Counter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowPfcPausePauseClass1Counter
 	Step() int32
@@ -22090,20 +28314,44 @@ func (obj *patternFlowPfcPausePauseClass2Counter) msg() *snappipb.PatternFlowPfc
 	return obj.obj
 }
 
-func (obj *patternFlowPfcPausePauseClass2Counter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowPfcPausePauseClass2Counter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowPfcPausePauseClass2Counter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowPfcPausePauseClass2Counter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowPfcPausePauseClass2Counter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowPfcPausePauseClass2Counter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowPfcPausePauseClass2Counter interface {
 	msg() *snappipb.PatternFlowPfcPausePauseClass2Counter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowPfcPausePauseClass2Counter
 	Step() int32
@@ -22159,20 +28407,44 @@ func (obj *patternFlowPfcPausePauseClass3Counter) msg() *snappipb.PatternFlowPfc
 	return obj.obj
 }
 
-func (obj *patternFlowPfcPausePauseClass3Counter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowPfcPausePauseClass3Counter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowPfcPausePauseClass3Counter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowPfcPausePauseClass3Counter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowPfcPausePauseClass3Counter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowPfcPausePauseClass3Counter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowPfcPausePauseClass3Counter interface {
 	msg() *snappipb.PatternFlowPfcPausePauseClass3Counter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowPfcPausePauseClass3Counter
 	Step() int32
@@ -22228,20 +28500,44 @@ func (obj *patternFlowPfcPausePauseClass4Counter) msg() *snappipb.PatternFlowPfc
 	return obj.obj
 }
 
-func (obj *patternFlowPfcPausePauseClass4Counter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowPfcPausePauseClass4Counter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowPfcPausePauseClass4Counter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowPfcPausePauseClass4Counter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowPfcPausePauseClass4Counter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowPfcPausePauseClass4Counter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowPfcPausePauseClass4Counter interface {
 	msg() *snappipb.PatternFlowPfcPausePauseClass4Counter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowPfcPausePauseClass4Counter
 	Step() int32
@@ -22297,20 +28593,44 @@ func (obj *patternFlowPfcPausePauseClass5Counter) msg() *snappipb.PatternFlowPfc
 	return obj.obj
 }
 
-func (obj *patternFlowPfcPausePauseClass5Counter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowPfcPausePauseClass5Counter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowPfcPausePauseClass5Counter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowPfcPausePauseClass5Counter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowPfcPausePauseClass5Counter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowPfcPausePauseClass5Counter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowPfcPausePauseClass5Counter interface {
 	msg() *snappipb.PatternFlowPfcPausePauseClass5Counter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowPfcPausePauseClass5Counter
 	Step() int32
@@ -22366,20 +28686,44 @@ func (obj *patternFlowPfcPausePauseClass6Counter) msg() *snappipb.PatternFlowPfc
 	return obj.obj
 }
 
-func (obj *patternFlowPfcPausePauseClass6Counter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowPfcPausePauseClass6Counter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowPfcPausePauseClass6Counter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowPfcPausePauseClass6Counter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowPfcPausePauseClass6Counter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowPfcPausePauseClass6Counter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowPfcPausePauseClass6Counter interface {
 	msg() *snappipb.PatternFlowPfcPausePauseClass6Counter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowPfcPausePauseClass6Counter
 	Step() int32
@@ -22435,20 +28779,44 @@ func (obj *patternFlowPfcPausePauseClass7Counter) msg() *snappipb.PatternFlowPfc
 	return obj.obj
 }
 
-func (obj *patternFlowPfcPausePauseClass7Counter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowPfcPausePauseClass7Counter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowPfcPausePauseClass7Counter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowPfcPausePauseClass7Counter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowPfcPausePauseClass7Counter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowPfcPausePauseClass7Counter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowPfcPausePauseClass7Counter interface {
 	msg() *snappipb.PatternFlowPfcPausePauseClass7Counter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowPfcPausePauseClass7Counter
 	Step() int32
@@ -22504,20 +28872,44 @@ func (obj *patternFlowEthernetPauseDstCounter) msg() *snappipb.PatternFlowEthern
 	return obj.obj
 }
 
-func (obj *patternFlowEthernetPauseDstCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowEthernetPauseDstCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowEthernetPauseDstCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowEthernetPauseDstCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowEthernetPauseDstCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowEthernetPauseDstCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowEthernetPauseDstCounter interface {
 	msg() *snappipb.PatternFlowEthernetPauseDstCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() string
 	SetStart(value string) PatternFlowEthernetPauseDstCounter
 	Step() string
@@ -22573,20 +28965,44 @@ func (obj *patternFlowEthernetPauseSrcCounter) msg() *snappipb.PatternFlowEthern
 	return obj.obj
 }
 
-func (obj *patternFlowEthernetPauseSrcCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowEthernetPauseSrcCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowEthernetPauseSrcCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowEthernetPauseSrcCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowEthernetPauseSrcCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowEthernetPauseSrcCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowEthernetPauseSrcCounter interface {
 	msg() *snappipb.PatternFlowEthernetPauseSrcCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() string
 	SetStart(value string) PatternFlowEthernetPauseSrcCounter
 	Step() string
@@ -22642,20 +29058,44 @@ func (obj *patternFlowEthernetPauseEtherTypeCounter) msg() *snappipb.PatternFlow
 	return obj.obj
 }
 
-func (obj *patternFlowEthernetPauseEtherTypeCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowEthernetPauseEtherTypeCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowEthernetPauseEtherTypeCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowEthernetPauseEtherTypeCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowEthernetPauseEtherTypeCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowEthernetPauseEtherTypeCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowEthernetPauseEtherTypeCounter interface {
 	msg() *snappipb.PatternFlowEthernetPauseEtherTypeCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowEthernetPauseEtherTypeCounter
 	Step() int32
@@ -22711,20 +29151,44 @@ func (obj *patternFlowEthernetPauseControlOpCodeCounter) msg() *snappipb.Pattern
 	return obj.obj
 }
 
-func (obj *patternFlowEthernetPauseControlOpCodeCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowEthernetPauseControlOpCodeCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowEthernetPauseControlOpCodeCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowEthernetPauseControlOpCodeCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowEthernetPauseControlOpCodeCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowEthernetPauseControlOpCodeCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowEthernetPauseControlOpCodeCounter interface {
 	msg() *snappipb.PatternFlowEthernetPauseControlOpCodeCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowEthernetPauseControlOpCodeCounter
 	Step() int32
@@ -22780,20 +29244,44 @@ func (obj *patternFlowEthernetPauseTimeCounter) msg() *snappipb.PatternFlowEther
 	return obj.obj
 }
 
-func (obj *patternFlowEthernetPauseTimeCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowEthernetPauseTimeCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowEthernetPauseTimeCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowEthernetPauseTimeCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowEthernetPauseTimeCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowEthernetPauseTimeCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowEthernetPauseTimeCounter interface {
 	msg() *snappipb.PatternFlowEthernetPauseTimeCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowEthernetPauseTimeCounter
 	Step() int32
@@ -22849,20 +29337,44 @@ func (obj *patternFlowTcpSrcPortCounter) msg() *snappipb.PatternFlowTcpSrcPortCo
 	return obj.obj
 }
 
-func (obj *patternFlowTcpSrcPortCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowTcpSrcPortCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowTcpSrcPortCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowTcpSrcPortCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowTcpSrcPortCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowTcpSrcPortCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowTcpSrcPortCounter interface {
 	msg() *snappipb.PatternFlowTcpSrcPortCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowTcpSrcPortCounter
 	Step() int32
@@ -22918,20 +29430,44 @@ func (obj *patternFlowTcpDstPortCounter) msg() *snappipb.PatternFlowTcpDstPortCo
 	return obj.obj
 }
 
-func (obj *patternFlowTcpDstPortCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowTcpDstPortCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowTcpDstPortCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowTcpDstPortCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowTcpDstPortCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowTcpDstPortCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowTcpDstPortCounter interface {
 	msg() *snappipb.PatternFlowTcpDstPortCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowTcpDstPortCounter
 	Step() int32
@@ -22987,20 +29523,44 @@ func (obj *patternFlowTcpSeqNumCounter) msg() *snappipb.PatternFlowTcpSeqNumCoun
 	return obj.obj
 }
 
-func (obj *patternFlowTcpSeqNumCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowTcpSeqNumCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowTcpSeqNumCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowTcpSeqNumCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowTcpSeqNumCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowTcpSeqNumCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowTcpSeqNumCounter interface {
 	msg() *snappipb.PatternFlowTcpSeqNumCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowTcpSeqNumCounter
 	Step() int32
@@ -23056,20 +29616,44 @@ func (obj *patternFlowTcpAckNumCounter) msg() *snappipb.PatternFlowTcpAckNumCoun
 	return obj.obj
 }
 
-func (obj *patternFlowTcpAckNumCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowTcpAckNumCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowTcpAckNumCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowTcpAckNumCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowTcpAckNumCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowTcpAckNumCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowTcpAckNumCounter interface {
 	msg() *snappipb.PatternFlowTcpAckNumCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowTcpAckNumCounter
 	Step() int32
@@ -23125,20 +29709,44 @@ func (obj *patternFlowTcpDataOffsetCounter) msg() *snappipb.PatternFlowTcpDataOf
 	return obj.obj
 }
 
-func (obj *patternFlowTcpDataOffsetCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowTcpDataOffsetCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowTcpDataOffsetCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowTcpDataOffsetCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowTcpDataOffsetCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowTcpDataOffsetCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowTcpDataOffsetCounter interface {
 	msg() *snappipb.PatternFlowTcpDataOffsetCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowTcpDataOffsetCounter
 	Step() int32
@@ -23194,20 +29802,44 @@ func (obj *patternFlowTcpEcnNsCounter) msg() *snappipb.PatternFlowTcpEcnNsCounte
 	return obj.obj
 }
 
-func (obj *patternFlowTcpEcnNsCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowTcpEcnNsCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowTcpEcnNsCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowTcpEcnNsCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowTcpEcnNsCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowTcpEcnNsCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowTcpEcnNsCounter interface {
 	msg() *snappipb.PatternFlowTcpEcnNsCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowTcpEcnNsCounter
 	Step() int32
@@ -23263,20 +29895,44 @@ func (obj *patternFlowTcpEcnCwrCounter) msg() *snappipb.PatternFlowTcpEcnCwrCoun
 	return obj.obj
 }
 
-func (obj *patternFlowTcpEcnCwrCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowTcpEcnCwrCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowTcpEcnCwrCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowTcpEcnCwrCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowTcpEcnCwrCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowTcpEcnCwrCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowTcpEcnCwrCounter interface {
 	msg() *snappipb.PatternFlowTcpEcnCwrCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowTcpEcnCwrCounter
 	Step() int32
@@ -23332,20 +29988,44 @@ func (obj *patternFlowTcpEcnEchoCounter) msg() *snappipb.PatternFlowTcpEcnEchoCo
 	return obj.obj
 }
 
-func (obj *patternFlowTcpEcnEchoCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowTcpEcnEchoCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowTcpEcnEchoCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowTcpEcnEchoCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowTcpEcnEchoCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowTcpEcnEchoCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowTcpEcnEchoCounter interface {
 	msg() *snappipb.PatternFlowTcpEcnEchoCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowTcpEcnEchoCounter
 	Step() int32
@@ -23401,20 +30081,44 @@ func (obj *patternFlowTcpCtlUrgCounter) msg() *snappipb.PatternFlowTcpCtlUrgCoun
 	return obj.obj
 }
 
-func (obj *patternFlowTcpCtlUrgCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowTcpCtlUrgCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowTcpCtlUrgCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowTcpCtlUrgCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowTcpCtlUrgCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowTcpCtlUrgCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowTcpCtlUrgCounter interface {
 	msg() *snappipb.PatternFlowTcpCtlUrgCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowTcpCtlUrgCounter
 	Step() int32
@@ -23470,20 +30174,44 @@ func (obj *patternFlowTcpCtlAckCounter) msg() *snappipb.PatternFlowTcpCtlAckCoun
 	return obj.obj
 }
 
-func (obj *patternFlowTcpCtlAckCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowTcpCtlAckCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowTcpCtlAckCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowTcpCtlAckCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowTcpCtlAckCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowTcpCtlAckCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowTcpCtlAckCounter interface {
 	msg() *snappipb.PatternFlowTcpCtlAckCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowTcpCtlAckCounter
 	Step() int32
@@ -23539,20 +30267,44 @@ func (obj *patternFlowTcpCtlPshCounter) msg() *snappipb.PatternFlowTcpCtlPshCoun
 	return obj.obj
 }
 
-func (obj *patternFlowTcpCtlPshCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowTcpCtlPshCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowTcpCtlPshCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowTcpCtlPshCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowTcpCtlPshCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowTcpCtlPshCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowTcpCtlPshCounter interface {
 	msg() *snappipb.PatternFlowTcpCtlPshCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowTcpCtlPshCounter
 	Step() int32
@@ -23608,20 +30360,44 @@ func (obj *patternFlowTcpCtlRstCounter) msg() *snappipb.PatternFlowTcpCtlRstCoun
 	return obj.obj
 }
 
-func (obj *patternFlowTcpCtlRstCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowTcpCtlRstCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowTcpCtlRstCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowTcpCtlRstCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowTcpCtlRstCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowTcpCtlRstCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowTcpCtlRstCounter interface {
 	msg() *snappipb.PatternFlowTcpCtlRstCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowTcpCtlRstCounter
 	Step() int32
@@ -23677,20 +30453,44 @@ func (obj *patternFlowTcpCtlSynCounter) msg() *snappipb.PatternFlowTcpCtlSynCoun
 	return obj.obj
 }
 
-func (obj *patternFlowTcpCtlSynCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowTcpCtlSynCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowTcpCtlSynCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowTcpCtlSynCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowTcpCtlSynCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowTcpCtlSynCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowTcpCtlSynCounter interface {
 	msg() *snappipb.PatternFlowTcpCtlSynCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowTcpCtlSynCounter
 	Step() int32
@@ -23746,20 +30546,44 @@ func (obj *patternFlowTcpCtlFinCounter) msg() *snappipb.PatternFlowTcpCtlFinCoun
 	return obj.obj
 }
 
-func (obj *patternFlowTcpCtlFinCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowTcpCtlFinCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowTcpCtlFinCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowTcpCtlFinCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowTcpCtlFinCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowTcpCtlFinCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowTcpCtlFinCounter interface {
 	msg() *snappipb.PatternFlowTcpCtlFinCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowTcpCtlFinCounter
 	Step() int32
@@ -23815,20 +30639,44 @@ func (obj *patternFlowTcpWindowCounter) msg() *snappipb.PatternFlowTcpWindowCoun
 	return obj.obj
 }
 
-func (obj *patternFlowTcpWindowCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowTcpWindowCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowTcpWindowCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowTcpWindowCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowTcpWindowCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowTcpWindowCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowTcpWindowCounter interface {
 	msg() *snappipb.PatternFlowTcpWindowCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowTcpWindowCounter
 	Step() int32
@@ -23884,20 +30732,44 @@ func (obj *patternFlowUdpSrcPortCounter) msg() *snappipb.PatternFlowUdpSrcPortCo
 	return obj.obj
 }
 
-func (obj *patternFlowUdpSrcPortCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowUdpSrcPortCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowUdpSrcPortCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowUdpSrcPortCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowUdpSrcPortCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowUdpSrcPortCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowUdpSrcPortCounter interface {
 	msg() *snappipb.PatternFlowUdpSrcPortCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowUdpSrcPortCounter
 	Step() int32
@@ -23953,20 +30825,44 @@ func (obj *patternFlowUdpDstPortCounter) msg() *snappipb.PatternFlowUdpDstPortCo
 	return obj.obj
 }
 
-func (obj *patternFlowUdpDstPortCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowUdpDstPortCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowUdpDstPortCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowUdpDstPortCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowUdpDstPortCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowUdpDstPortCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowUdpDstPortCounter interface {
 	msg() *snappipb.PatternFlowUdpDstPortCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowUdpDstPortCounter
 	Step() int32
@@ -24022,20 +30918,44 @@ func (obj *patternFlowUdpLengthCounter) msg() *snappipb.PatternFlowUdpLengthCoun
 	return obj.obj
 }
 
-func (obj *patternFlowUdpLengthCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowUdpLengthCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowUdpLengthCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowUdpLengthCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowUdpLengthCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowUdpLengthCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowUdpLengthCounter interface {
 	msg() *snappipb.PatternFlowUdpLengthCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowUdpLengthCounter
 	Step() int32
@@ -24091,20 +31011,44 @@ func (obj *patternFlowGreChecksumPresentCounter) msg() *snappipb.PatternFlowGreC
 	return obj.obj
 }
 
-func (obj *patternFlowGreChecksumPresentCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowGreChecksumPresentCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowGreChecksumPresentCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowGreChecksumPresentCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowGreChecksumPresentCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowGreChecksumPresentCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowGreChecksumPresentCounter interface {
 	msg() *snappipb.PatternFlowGreChecksumPresentCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowGreChecksumPresentCounter
 	Step() int32
@@ -24160,20 +31104,44 @@ func (obj *patternFlowGreReserved0Counter) msg() *snappipb.PatternFlowGreReserve
 	return obj.obj
 }
 
-func (obj *patternFlowGreReserved0Counter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowGreReserved0Counter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowGreReserved0Counter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowGreReserved0Counter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowGreReserved0Counter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowGreReserved0Counter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowGreReserved0Counter interface {
 	msg() *snappipb.PatternFlowGreReserved0Counter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowGreReserved0Counter
 	Step() int32
@@ -24229,20 +31197,44 @@ func (obj *patternFlowGreVersionCounter) msg() *snappipb.PatternFlowGreVersionCo
 	return obj.obj
 }
 
-func (obj *patternFlowGreVersionCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowGreVersionCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowGreVersionCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowGreVersionCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowGreVersionCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowGreVersionCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowGreVersionCounter interface {
 	msg() *snappipb.PatternFlowGreVersionCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowGreVersionCounter
 	Step() int32
@@ -24298,20 +31290,44 @@ func (obj *patternFlowGreProtocolCounter) msg() *snappipb.PatternFlowGreProtocol
 	return obj.obj
 }
 
-func (obj *patternFlowGreProtocolCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowGreProtocolCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowGreProtocolCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowGreProtocolCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowGreProtocolCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowGreProtocolCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowGreProtocolCounter interface {
 	msg() *snappipb.PatternFlowGreProtocolCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowGreProtocolCounter
 	Step() int32
@@ -24367,20 +31383,44 @@ func (obj *patternFlowGreReserved1Counter) msg() *snappipb.PatternFlowGreReserve
 	return obj.obj
 }
 
-func (obj *patternFlowGreReserved1Counter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowGreReserved1Counter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowGreReserved1Counter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowGreReserved1Counter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowGreReserved1Counter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowGreReserved1Counter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowGreReserved1Counter interface {
 	msg() *snappipb.PatternFlowGreReserved1Counter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowGreReserved1Counter
 	Step() int32
@@ -24436,20 +31476,44 @@ func (obj *patternFlowGtpv1VersionCounter) msg() *snappipb.PatternFlowGtpv1Versi
 	return obj.obj
 }
 
-func (obj *patternFlowGtpv1VersionCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowGtpv1VersionCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowGtpv1VersionCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowGtpv1VersionCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowGtpv1VersionCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowGtpv1VersionCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowGtpv1VersionCounter interface {
 	msg() *snappipb.PatternFlowGtpv1VersionCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowGtpv1VersionCounter
 	Step() int32
@@ -24505,20 +31569,44 @@ func (obj *patternFlowGtpv1ProtocolTypeCounter) msg() *snappipb.PatternFlowGtpv1
 	return obj.obj
 }
 
-func (obj *patternFlowGtpv1ProtocolTypeCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowGtpv1ProtocolTypeCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowGtpv1ProtocolTypeCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowGtpv1ProtocolTypeCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowGtpv1ProtocolTypeCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowGtpv1ProtocolTypeCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowGtpv1ProtocolTypeCounter interface {
 	msg() *snappipb.PatternFlowGtpv1ProtocolTypeCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowGtpv1ProtocolTypeCounter
 	Step() int32
@@ -24574,20 +31662,44 @@ func (obj *patternFlowGtpv1ReservedCounter) msg() *snappipb.PatternFlowGtpv1Rese
 	return obj.obj
 }
 
-func (obj *patternFlowGtpv1ReservedCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowGtpv1ReservedCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowGtpv1ReservedCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowGtpv1ReservedCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowGtpv1ReservedCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowGtpv1ReservedCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowGtpv1ReservedCounter interface {
 	msg() *snappipb.PatternFlowGtpv1ReservedCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowGtpv1ReservedCounter
 	Step() int32
@@ -24643,20 +31755,44 @@ func (obj *patternFlowGtpv1EFlagCounter) msg() *snappipb.PatternFlowGtpv1EFlagCo
 	return obj.obj
 }
 
-func (obj *patternFlowGtpv1EFlagCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowGtpv1EFlagCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowGtpv1EFlagCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowGtpv1EFlagCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowGtpv1EFlagCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowGtpv1EFlagCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowGtpv1EFlagCounter interface {
 	msg() *snappipb.PatternFlowGtpv1EFlagCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowGtpv1EFlagCounter
 	Step() int32
@@ -24712,20 +31848,44 @@ func (obj *patternFlowGtpv1SFlagCounter) msg() *snappipb.PatternFlowGtpv1SFlagCo
 	return obj.obj
 }
 
-func (obj *patternFlowGtpv1SFlagCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowGtpv1SFlagCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowGtpv1SFlagCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowGtpv1SFlagCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowGtpv1SFlagCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowGtpv1SFlagCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowGtpv1SFlagCounter interface {
 	msg() *snappipb.PatternFlowGtpv1SFlagCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowGtpv1SFlagCounter
 	Step() int32
@@ -24781,20 +31941,44 @@ func (obj *patternFlowGtpv1PnFlagCounter) msg() *snappipb.PatternFlowGtpv1PnFlag
 	return obj.obj
 }
 
-func (obj *patternFlowGtpv1PnFlagCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowGtpv1PnFlagCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowGtpv1PnFlagCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowGtpv1PnFlagCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowGtpv1PnFlagCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowGtpv1PnFlagCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowGtpv1PnFlagCounter interface {
 	msg() *snappipb.PatternFlowGtpv1PnFlagCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowGtpv1PnFlagCounter
 	Step() int32
@@ -24850,20 +32034,44 @@ func (obj *patternFlowGtpv1MessageTypeCounter) msg() *snappipb.PatternFlowGtpv1M
 	return obj.obj
 }
 
-func (obj *patternFlowGtpv1MessageTypeCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowGtpv1MessageTypeCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowGtpv1MessageTypeCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowGtpv1MessageTypeCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowGtpv1MessageTypeCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowGtpv1MessageTypeCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowGtpv1MessageTypeCounter interface {
 	msg() *snappipb.PatternFlowGtpv1MessageTypeCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowGtpv1MessageTypeCounter
 	Step() int32
@@ -24919,20 +32127,44 @@ func (obj *patternFlowGtpv1MessageLengthCounter) msg() *snappipb.PatternFlowGtpv
 	return obj.obj
 }
 
-func (obj *patternFlowGtpv1MessageLengthCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowGtpv1MessageLengthCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowGtpv1MessageLengthCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowGtpv1MessageLengthCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowGtpv1MessageLengthCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowGtpv1MessageLengthCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowGtpv1MessageLengthCounter interface {
 	msg() *snappipb.PatternFlowGtpv1MessageLengthCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowGtpv1MessageLengthCounter
 	Step() int32
@@ -24988,20 +32220,44 @@ func (obj *patternFlowGtpv1TeidCounter) msg() *snappipb.PatternFlowGtpv1TeidCoun
 	return obj.obj
 }
 
-func (obj *patternFlowGtpv1TeidCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowGtpv1TeidCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowGtpv1TeidCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowGtpv1TeidCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowGtpv1TeidCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowGtpv1TeidCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowGtpv1TeidCounter interface {
 	msg() *snappipb.PatternFlowGtpv1TeidCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowGtpv1TeidCounter
 	Step() int32
@@ -25057,20 +32313,44 @@ func (obj *patternFlowGtpv1SquenceNumberCounter) msg() *snappipb.PatternFlowGtpv
 	return obj.obj
 }
 
-func (obj *patternFlowGtpv1SquenceNumberCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowGtpv1SquenceNumberCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowGtpv1SquenceNumberCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowGtpv1SquenceNumberCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowGtpv1SquenceNumberCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowGtpv1SquenceNumberCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowGtpv1SquenceNumberCounter interface {
 	msg() *snappipb.PatternFlowGtpv1SquenceNumberCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowGtpv1SquenceNumberCounter
 	Step() int32
@@ -25126,20 +32406,44 @@ func (obj *patternFlowGtpv1NPduNumberCounter) msg() *snappipb.PatternFlowGtpv1NP
 	return obj.obj
 }
 
-func (obj *patternFlowGtpv1NPduNumberCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowGtpv1NPduNumberCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowGtpv1NPduNumberCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowGtpv1NPduNumberCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowGtpv1NPduNumberCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowGtpv1NPduNumberCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowGtpv1NPduNumberCounter interface {
 	msg() *snappipb.PatternFlowGtpv1NPduNumberCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowGtpv1NPduNumberCounter
 	Step() int32
@@ -25195,20 +32499,44 @@ func (obj *patternFlowGtpv1NextExtensionHeaderTypeCounter) msg() *snappipb.Patte
 	return obj.obj
 }
 
-func (obj *patternFlowGtpv1NextExtensionHeaderTypeCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowGtpv1NextExtensionHeaderTypeCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowGtpv1NextExtensionHeaderTypeCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowGtpv1NextExtensionHeaderTypeCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowGtpv1NextExtensionHeaderTypeCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowGtpv1NextExtensionHeaderTypeCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowGtpv1NextExtensionHeaderTypeCounter interface {
 	msg() *snappipb.PatternFlowGtpv1NextExtensionHeaderTypeCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowGtpv1NextExtensionHeaderTypeCounter
 	Step() int32
@@ -25264,20 +32592,44 @@ func (obj *patternFlowGtpExtensionExtensionLength) msg() *snappipb.PatternFlowGt
 	return obj.obj
 }
 
-func (obj *patternFlowGtpExtensionExtensionLength) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowGtpExtensionExtensionLength) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowGtpExtensionExtensionLength) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowGtpExtensionExtensionLength) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowGtpExtensionExtensionLength) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowGtpExtensionExtensionLength) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowGtpExtensionExtensionLength interface {
 	msg() *snappipb.PatternFlowGtpExtensionExtensionLength
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowGtpExtensionExtensionLength
 	Values() []int32
@@ -25355,20 +32707,44 @@ func (obj *patternFlowGtpExtensionContents) msg() *snappipb.PatternFlowGtpExtens
 	return obj.obj
 }
 
-func (obj *patternFlowGtpExtensionContents) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowGtpExtensionContents) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowGtpExtensionContents) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowGtpExtensionContents) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowGtpExtensionContents) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowGtpExtensionContents) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowGtpExtensionContents interface {
 	msg() *snappipb.PatternFlowGtpExtensionContents
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowGtpExtensionContents
 	Values() []int32
@@ -25446,20 +32822,44 @@ func (obj *patternFlowGtpExtensionNextExtensionHeader) msg() *snappipb.PatternFl
 	return obj.obj
 }
 
-func (obj *patternFlowGtpExtensionNextExtensionHeader) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowGtpExtensionNextExtensionHeader) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowGtpExtensionNextExtensionHeader) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowGtpExtensionNextExtensionHeader) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowGtpExtensionNextExtensionHeader) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowGtpExtensionNextExtensionHeader) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowGtpExtensionNextExtensionHeader interface {
 	msg() *snappipb.PatternFlowGtpExtensionNextExtensionHeader
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowGtpExtensionNextExtensionHeader
 	Values() []int32
@@ -25537,20 +32937,44 @@ func (obj *patternFlowGtpv2VersionCounter) msg() *snappipb.PatternFlowGtpv2Versi
 	return obj.obj
 }
 
-func (obj *patternFlowGtpv2VersionCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowGtpv2VersionCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowGtpv2VersionCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowGtpv2VersionCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowGtpv2VersionCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowGtpv2VersionCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowGtpv2VersionCounter interface {
 	msg() *snappipb.PatternFlowGtpv2VersionCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowGtpv2VersionCounter
 	Step() int32
@@ -25606,20 +33030,44 @@ func (obj *patternFlowGtpv2PiggybackingFlagCounter) msg() *snappipb.PatternFlowG
 	return obj.obj
 }
 
-func (obj *patternFlowGtpv2PiggybackingFlagCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowGtpv2PiggybackingFlagCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowGtpv2PiggybackingFlagCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowGtpv2PiggybackingFlagCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowGtpv2PiggybackingFlagCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowGtpv2PiggybackingFlagCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowGtpv2PiggybackingFlagCounter interface {
 	msg() *snappipb.PatternFlowGtpv2PiggybackingFlagCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowGtpv2PiggybackingFlagCounter
 	Step() int32
@@ -25675,20 +33123,44 @@ func (obj *patternFlowGtpv2TeidFlagCounter) msg() *snappipb.PatternFlowGtpv2Teid
 	return obj.obj
 }
 
-func (obj *patternFlowGtpv2TeidFlagCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowGtpv2TeidFlagCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowGtpv2TeidFlagCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowGtpv2TeidFlagCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowGtpv2TeidFlagCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowGtpv2TeidFlagCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowGtpv2TeidFlagCounter interface {
 	msg() *snappipb.PatternFlowGtpv2TeidFlagCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowGtpv2TeidFlagCounter
 	Step() int32
@@ -25744,20 +33216,44 @@ func (obj *patternFlowGtpv2Spare1Counter) msg() *snappipb.PatternFlowGtpv2Spare1
 	return obj.obj
 }
 
-func (obj *patternFlowGtpv2Spare1Counter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowGtpv2Spare1Counter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowGtpv2Spare1Counter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowGtpv2Spare1Counter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowGtpv2Spare1Counter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowGtpv2Spare1Counter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowGtpv2Spare1Counter interface {
 	msg() *snappipb.PatternFlowGtpv2Spare1Counter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowGtpv2Spare1Counter
 	Step() int32
@@ -25813,20 +33309,44 @@ func (obj *patternFlowGtpv2MessageTypeCounter) msg() *snappipb.PatternFlowGtpv2M
 	return obj.obj
 }
 
-func (obj *patternFlowGtpv2MessageTypeCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowGtpv2MessageTypeCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowGtpv2MessageTypeCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowGtpv2MessageTypeCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowGtpv2MessageTypeCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowGtpv2MessageTypeCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowGtpv2MessageTypeCounter interface {
 	msg() *snappipb.PatternFlowGtpv2MessageTypeCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowGtpv2MessageTypeCounter
 	Step() int32
@@ -25882,20 +33402,44 @@ func (obj *patternFlowGtpv2MessageLengthCounter) msg() *snappipb.PatternFlowGtpv
 	return obj.obj
 }
 
-func (obj *patternFlowGtpv2MessageLengthCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowGtpv2MessageLengthCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowGtpv2MessageLengthCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowGtpv2MessageLengthCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowGtpv2MessageLengthCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowGtpv2MessageLengthCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowGtpv2MessageLengthCounter interface {
 	msg() *snappipb.PatternFlowGtpv2MessageLengthCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowGtpv2MessageLengthCounter
 	Step() int32
@@ -25951,20 +33495,44 @@ func (obj *patternFlowGtpv2TeidCounter) msg() *snappipb.PatternFlowGtpv2TeidCoun
 	return obj.obj
 }
 
-func (obj *patternFlowGtpv2TeidCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowGtpv2TeidCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowGtpv2TeidCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowGtpv2TeidCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowGtpv2TeidCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowGtpv2TeidCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowGtpv2TeidCounter interface {
 	msg() *snappipb.PatternFlowGtpv2TeidCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowGtpv2TeidCounter
 	Step() int32
@@ -26020,20 +33588,44 @@ func (obj *patternFlowGtpv2SequenceNumberCounter) msg() *snappipb.PatternFlowGtp
 	return obj.obj
 }
 
-func (obj *patternFlowGtpv2SequenceNumberCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowGtpv2SequenceNumberCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowGtpv2SequenceNumberCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowGtpv2SequenceNumberCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowGtpv2SequenceNumberCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowGtpv2SequenceNumberCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowGtpv2SequenceNumberCounter interface {
 	msg() *snappipb.PatternFlowGtpv2SequenceNumberCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowGtpv2SequenceNumberCounter
 	Step() int32
@@ -26089,20 +33681,44 @@ func (obj *patternFlowGtpv2Spare2Counter) msg() *snappipb.PatternFlowGtpv2Spare2
 	return obj.obj
 }
 
-func (obj *patternFlowGtpv2Spare2Counter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowGtpv2Spare2Counter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowGtpv2Spare2Counter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowGtpv2Spare2Counter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowGtpv2Spare2Counter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowGtpv2Spare2Counter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowGtpv2Spare2Counter interface {
 	msg() *snappipb.PatternFlowGtpv2Spare2Counter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowGtpv2Spare2Counter
 	Step() int32
@@ -26158,20 +33774,44 @@ func (obj *patternFlowArpHardwareTypeCounter) msg() *snappipb.PatternFlowArpHard
 	return obj.obj
 }
 
-func (obj *patternFlowArpHardwareTypeCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowArpHardwareTypeCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowArpHardwareTypeCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowArpHardwareTypeCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowArpHardwareTypeCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowArpHardwareTypeCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowArpHardwareTypeCounter interface {
 	msg() *snappipb.PatternFlowArpHardwareTypeCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowArpHardwareTypeCounter
 	Step() int32
@@ -26227,20 +33867,44 @@ func (obj *patternFlowArpProtocolTypeCounter) msg() *snappipb.PatternFlowArpProt
 	return obj.obj
 }
 
-func (obj *patternFlowArpProtocolTypeCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowArpProtocolTypeCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowArpProtocolTypeCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowArpProtocolTypeCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowArpProtocolTypeCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowArpProtocolTypeCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowArpProtocolTypeCounter interface {
 	msg() *snappipb.PatternFlowArpProtocolTypeCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowArpProtocolTypeCounter
 	Step() int32
@@ -26296,20 +33960,44 @@ func (obj *patternFlowArpHardwareLengthCounter) msg() *snappipb.PatternFlowArpHa
 	return obj.obj
 }
 
-func (obj *patternFlowArpHardwareLengthCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowArpHardwareLengthCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowArpHardwareLengthCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowArpHardwareLengthCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowArpHardwareLengthCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowArpHardwareLengthCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowArpHardwareLengthCounter interface {
 	msg() *snappipb.PatternFlowArpHardwareLengthCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowArpHardwareLengthCounter
 	Step() int32
@@ -26365,20 +34053,44 @@ func (obj *patternFlowArpProtocolLengthCounter) msg() *snappipb.PatternFlowArpPr
 	return obj.obj
 }
 
-func (obj *patternFlowArpProtocolLengthCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowArpProtocolLengthCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowArpProtocolLengthCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowArpProtocolLengthCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowArpProtocolLengthCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowArpProtocolLengthCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowArpProtocolLengthCounter interface {
 	msg() *snappipb.PatternFlowArpProtocolLengthCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowArpProtocolLengthCounter
 	Step() int32
@@ -26434,20 +34146,44 @@ func (obj *patternFlowArpOperationCounter) msg() *snappipb.PatternFlowArpOperati
 	return obj.obj
 }
 
-func (obj *patternFlowArpOperationCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowArpOperationCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowArpOperationCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowArpOperationCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowArpOperationCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowArpOperationCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowArpOperationCounter interface {
 	msg() *snappipb.PatternFlowArpOperationCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowArpOperationCounter
 	Step() int32
@@ -26503,20 +34239,44 @@ func (obj *patternFlowArpSenderHardwareAddrCounter) msg() *snappipb.PatternFlowA
 	return obj.obj
 }
 
-func (obj *patternFlowArpSenderHardwareAddrCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowArpSenderHardwareAddrCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowArpSenderHardwareAddrCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowArpSenderHardwareAddrCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowArpSenderHardwareAddrCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowArpSenderHardwareAddrCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowArpSenderHardwareAddrCounter interface {
 	msg() *snappipb.PatternFlowArpSenderHardwareAddrCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() string
 	SetStart(value string) PatternFlowArpSenderHardwareAddrCounter
 	Step() string
@@ -26572,20 +34332,44 @@ func (obj *patternFlowArpSenderProtocolAddrCounter) msg() *snappipb.PatternFlowA
 	return obj.obj
 }
 
-func (obj *patternFlowArpSenderProtocolAddrCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowArpSenderProtocolAddrCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowArpSenderProtocolAddrCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowArpSenderProtocolAddrCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowArpSenderProtocolAddrCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowArpSenderProtocolAddrCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowArpSenderProtocolAddrCounter interface {
 	msg() *snappipb.PatternFlowArpSenderProtocolAddrCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() string
 	SetStart(value string) PatternFlowArpSenderProtocolAddrCounter
 	Step() string
@@ -26641,20 +34425,44 @@ func (obj *patternFlowArpTargetHardwareAddrCounter) msg() *snappipb.PatternFlowA
 	return obj.obj
 }
 
-func (obj *patternFlowArpTargetHardwareAddrCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowArpTargetHardwareAddrCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowArpTargetHardwareAddrCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowArpTargetHardwareAddrCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowArpTargetHardwareAddrCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowArpTargetHardwareAddrCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowArpTargetHardwareAddrCounter interface {
 	msg() *snappipb.PatternFlowArpTargetHardwareAddrCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() string
 	SetStart(value string) PatternFlowArpTargetHardwareAddrCounter
 	Step() string
@@ -26710,20 +34518,44 @@ func (obj *patternFlowArpTargetProtocolAddrCounter) msg() *snappipb.PatternFlowA
 	return obj.obj
 }
 
-func (obj *patternFlowArpTargetProtocolAddrCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowArpTargetProtocolAddrCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowArpTargetProtocolAddrCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowArpTargetProtocolAddrCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowArpTargetProtocolAddrCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowArpTargetProtocolAddrCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowArpTargetProtocolAddrCounter interface {
 	msg() *snappipb.PatternFlowArpTargetProtocolAddrCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() string
 	SetStart(value string) PatternFlowArpTargetProtocolAddrCounter
 	Step() string
@@ -26779,20 +34611,44 @@ func (obj *patternFlowIcmpEchoType) msg() *snappipb.PatternFlowIcmpEchoType {
 	return obj.obj
 }
 
-func (obj *patternFlowIcmpEchoType) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowIcmpEchoType) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowIcmpEchoType) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowIcmpEchoType) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowIcmpEchoType) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowIcmpEchoType) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowIcmpEchoType interface {
 	msg() *snappipb.PatternFlowIcmpEchoType
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowIcmpEchoType
 	Values() []int32
@@ -26870,20 +34726,44 @@ func (obj *patternFlowIcmpEchoCode) msg() *snappipb.PatternFlowIcmpEchoCode {
 	return obj.obj
 }
 
-func (obj *patternFlowIcmpEchoCode) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowIcmpEchoCode) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowIcmpEchoCode) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowIcmpEchoCode) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowIcmpEchoCode) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowIcmpEchoCode) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowIcmpEchoCode interface {
 	msg() *snappipb.PatternFlowIcmpEchoCode
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowIcmpEchoCode
 	Values() []int32
@@ -26961,20 +34841,44 @@ func (obj *patternFlowIcmpEchoChecksum) msg() *snappipb.PatternFlowIcmpEchoCheck
 	return obj.obj
 }
 
-func (obj *patternFlowIcmpEchoChecksum) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowIcmpEchoChecksum) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowIcmpEchoChecksum) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowIcmpEchoChecksum) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowIcmpEchoChecksum) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowIcmpEchoChecksum) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowIcmpEchoChecksum interface {
 	msg() *snappipb.PatternFlowIcmpEchoChecksum
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Custom() int32
 	SetCustom(value int32) PatternFlowIcmpEchoChecksum
 }
@@ -27000,20 +34904,44 @@ func (obj *patternFlowIcmpEchoIdentifier) msg() *snappipb.PatternFlowIcmpEchoIde
 	return obj.obj
 }
 
-func (obj *patternFlowIcmpEchoIdentifier) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowIcmpEchoIdentifier) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowIcmpEchoIdentifier) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowIcmpEchoIdentifier) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowIcmpEchoIdentifier) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowIcmpEchoIdentifier) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowIcmpEchoIdentifier interface {
 	msg() *snappipb.PatternFlowIcmpEchoIdentifier
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowIcmpEchoIdentifier
 	Values() []int32
@@ -27091,20 +35019,44 @@ func (obj *patternFlowIcmpEchoSequenceNumber) msg() *snappipb.PatternFlowIcmpEch
 	return obj.obj
 }
 
-func (obj *patternFlowIcmpEchoSequenceNumber) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowIcmpEchoSequenceNumber) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowIcmpEchoSequenceNumber) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowIcmpEchoSequenceNumber) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowIcmpEchoSequenceNumber) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowIcmpEchoSequenceNumber) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowIcmpEchoSequenceNumber interface {
 	msg() *snappipb.PatternFlowIcmpEchoSequenceNumber
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowIcmpEchoSequenceNumber
 	Values() []int32
@@ -27182,20 +35134,44 @@ func (obj *patternFlowIcmpv6EchoType) msg() *snappipb.PatternFlowIcmpv6EchoType 
 	return obj.obj
 }
 
-func (obj *patternFlowIcmpv6EchoType) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowIcmpv6EchoType) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowIcmpv6EchoType) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowIcmpv6EchoType) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowIcmpv6EchoType) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowIcmpv6EchoType) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowIcmpv6EchoType interface {
 	msg() *snappipb.PatternFlowIcmpv6EchoType
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowIcmpv6EchoType
 	Values() []int32
@@ -27273,20 +35249,44 @@ func (obj *patternFlowIcmpv6EchoCode) msg() *snappipb.PatternFlowIcmpv6EchoCode 
 	return obj.obj
 }
 
-func (obj *patternFlowIcmpv6EchoCode) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowIcmpv6EchoCode) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowIcmpv6EchoCode) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowIcmpv6EchoCode) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowIcmpv6EchoCode) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowIcmpv6EchoCode) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowIcmpv6EchoCode interface {
 	msg() *snappipb.PatternFlowIcmpv6EchoCode
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowIcmpv6EchoCode
 	Values() []int32
@@ -27364,20 +35364,44 @@ func (obj *patternFlowIcmpv6EchoIdentifier) msg() *snappipb.PatternFlowIcmpv6Ech
 	return obj.obj
 }
 
-func (obj *patternFlowIcmpv6EchoIdentifier) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowIcmpv6EchoIdentifier) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowIcmpv6EchoIdentifier) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowIcmpv6EchoIdentifier) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowIcmpv6EchoIdentifier) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowIcmpv6EchoIdentifier) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowIcmpv6EchoIdentifier interface {
 	msg() *snappipb.PatternFlowIcmpv6EchoIdentifier
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowIcmpv6EchoIdentifier
 	Values() []int32
@@ -27455,20 +35479,44 @@ func (obj *patternFlowIcmpv6EchoSequenceNumber) msg() *snappipb.PatternFlowIcmpv
 	return obj.obj
 }
 
-func (obj *patternFlowIcmpv6EchoSequenceNumber) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowIcmpv6EchoSequenceNumber) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowIcmpv6EchoSequenceNumber) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowIcmpv6EchoSequenceNumber) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowIcmpv6EchoSequenceNumber) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowIcmpv6EchoSequenceNumber) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowIcmpv6EchoSequenceNumber interface {
 	msg() *snappipb.PatternFlowIcmpv6EchoSequenceNumber
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowIcmpv6EchoSequenceNumber
 	Values() []int32
@@ -27546,20 +35594,44 @@ func (obj *patternFlowIcmpv6EchoChecksum) msg() *snappipb.PatternFlowIcmpv6EchoC
 	return obj.obj
 }
 
-func (obj *patternFlowIcmpv6EchoChecksum) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowIcmpv6EchoChecksum) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowIcmpv6EchoChecksum) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowIcmpv6EchoChecksum) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowIcmpv6EchoChecksum) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowIcmpv6EchoChecksum) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowIcmpv6EchoChecksum interface {
 	msg() *snappipb.PatternFlowIcmpv6EchoChecksum
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Custom() int32
 	SetCustom(value int32) PatternFlowIcmpv6EchoChecksum
 }
@@ -27585,20 +35657,44 @@ func (obj *patternFlowPppAddressCounter) msg() *snappipb.PatternFlowPppAddressCo
 	return obj.obj
 }
 
-func (obj *patternFlowPppAddressCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowPppAddressCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowPppAddressCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowPppAddressCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowPppAddressCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowPppAddressCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowPppAddressCounter interface {
 	msg() *snappipb.PatternFlowPppAddressCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowPppAddressCounter
 	Step() int32
@@ -27654,20 +35750,44 @@ func (obj *patternFlowPppControlCounter) msg() *snappipb.PatternFlowPppControlCo
 	return obj.obj
 }
 
-func (obj *patternFlowPppControlCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowPppControlCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowPppControlCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowPppControlCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowPppControlCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowPppControlCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowPppControlCounter interface {
 	msg() *snappipb.PatternFlowPppControlCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowPppControlCounter
 	Step() int32
@@ -27723,20 +35843,44 @@ func (obj *patternFlowPppProtocolTypeCounter) msg() *snappipb.PatternFlowPppProt
 	return obj.obj
 }
 
-func (obj *patternFlowPppProtocolTypeCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowPppProtocolTypeCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowPppProtocolTypeCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowPppProtocolTypeCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowPppProtocolTypeCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowPppProtocolTypeCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowPppProtocolTypeCounter interface {
 	msg() *snappipb.PatternFlowPppProtocolTypeCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowPppProtocolTypeCounter
 	Step() int32
@@ -27792,20 +35936,44 @@ func (obj *patternFlowIgmpv1VersionCounter) msg() *snappipb.PatternFlowIgmpv1Ver
 	return obj.obj
 }
 
-func (obj *patternFlowIgmpv1VersionCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowIgmpv1VersionCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowIgmpv1VersionCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowIgmpv1VersionCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowIgmpv1VersionCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowIgmpv1VersionCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowIgmpv1VersionCounter interface {
 	msg() *snappipb.PatternFlowIgmpv1VersionCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowIgmpv1VersionCounter
 	Step() int32
@@ -27861,20 +36029,44 @@ func (obj *patternFlowIgmpv1TypeCounter) msg() *snappipb.PatternFlowIgmpv1TypeCo
 	return obj.obj
 }
 
-func (obj *patternFlowIgmpv1TypeCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowIgmpv1TypeCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowIgmpv1TypeCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowIgmpv1TypeCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowIgmpv1TypeCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowIgmpv1TypeCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowIgmpv1TypeCounter interface {
 	msg() *snappipb.PatternFlowIgmpv1TypeCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowIgmpv1TypeCounter
 	Step() int32
@@ -27930,20 +36122,44 @@ func (obj *patternFlowIgmpv1UnusedCounter) msg() *snappipb.PatternFlowIgmpv1Unus
 	return obj.obj
 }
 
-func (obj *patternFlowIgmpv1UnusedCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowIgmpv1UnusedCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowIgmpv1UnusedCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowIgmpv1UnusedCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowIgmpv1UnusedCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowIgmpv1UnusedCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowIgmpv1UnusedCounter interface {
 	msg() *snappipb.PatternFlowIgmpv1UnusedCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowIgmpv1UnusedCounter
 	Step() int32
@@ -27999,20 +36215,44 @@ func (obj *patternFlowIgmpv1GroupAddressCounter) msg() *snappipb.PatternFlowIgmp
 	return obj.obj
 }
 
-func (obj *patternFlowIgmpv1GroupAddressCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowIgmpv1GroupAddressCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowIgmpv1GroupAddressCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowIgmpv1GroupAddressCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowIgmpv1GroupAddressCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowIgmpv1GroupAddressCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowIgmpv1GroupAddressCounter interface {
 	msg() *snappipb.PatternFlowIgmpv1GroupAddressCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() string
 	SetStart(value string) PatternFlowIgmpv1GroupAddressCounter
 	Step() string
@@ -28068,20 +36308,44 @@ func (obj *deviceBgpSrTePolicyNextHop) msg() *snappipb.DeviceBgpSrTePolicyNextHo
 	return obj.obj
 }
 
-func (obj *deviceBgpSrTePolicyNextHop) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *deviceBgpSrTePolicyNextHop) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *deviceBgpSrTePolicyNextHop) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *deviceBgpSrTePolicyNextHop) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *deviceBgpSrTePolicyNextHop) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *deviceBgpSrTePolicyNextHop) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type DeviceBgpSrTePolicyNextHop interface {
 	msg() *snappipb.DeviceBgpSrTePolicyNextHop
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Ipv4Address() string
 	SetIpv4Address(value string) DeviceBgpSrTePolicyNextHop
 	Ipv6Address() string
@@ -28122,20 +36386,44 @@ func (obj *deviceBgpAddPath) msg() *snappipb.DeviceBgpAddPath {
 	return obj.obj
 }
 
-func (obj *deviceBgpAddPath) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *deviceBgpAddPath) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *deviceBgpAddPath) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *deviceBgpAddPath) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *deviceBgpAddPath) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *deviceBgpAddPath) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type DeviceBgpAddPath interface {
 	msg() *snappipb.DeviceBgpAddPath
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	PathId() int32
 	SetPathId(value int32) DeviceBgpAddPath
 }
@@ -28161,24 +36449,47 @@ func (obj *deviceBgpAsPath) msg() *snappipb.DeviceBgpAsPath {
 	return obj.obj
 }
 
-func (obj *deviceBgpAsPath) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *deviceBgpAsPath) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *deviceBgpAsPath) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *deviceBgpAsPath) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *deviceBgpAsPath) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *deviceBgpAsPath) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type DeviceBgpAsPath interface {
 	msg() *snappipb.DeviceBgpAsPath
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	OverridePeerAsSetMode() bool
 	SetOverridePeerAsSetMode(value bool) DeviceBgpAsPath
-	AsPathSegments() []DeviceBgpAsPathSegment
-	NewAsPathSegments() DeviceBgpAsPathSegment
+	AsPathSegments() DeviceBgpAsPathDeviceBgpAsPathSegmentIter
 }
 
 // OverridePeerAsSetMode returns a bool
@@ -28196,27 +36507,35 @@ func (obj *deviceBgpAsPath) SetOverridePeerAsSetMode(value bool) DeviceBgpAsPath
 
 // AsPathSegments returns a []DeviceBgpAsPathSegment
 //  The AS path segments (non random) per route range
-func (obj *deviceBgpAsPath) AsPathSegments() []DeviceBgpAsPathSegment {
+func (obj *deviceBgpAsPath) AsPathSegments() DeviceBgpAsPathDeviceBgpAsPathSegmentIter {
 	if obj.obj.AsPathSegments == nil {
-		obj.obj.AsPathSegments = make([]*snappipb.DeviceBgpAsPathSegment, 0)
+		obj.obj.AsPathSegments = []*snappipb.DeviceBgpAsPathSegment{}
 	}
-	values := make([]DeviceBgpAsPathSegment, 0)
-	for _, item := range obj.obj.AsPathSegments {
-		values = append(values, &deviceBgpAsPathSegment{obj: item})
-	}
-	return values
+	return &deviceBgpAsPathDeviceBgpAsPathSegmentIter{obj: obj}
 
 }
 
-// NewAsPathSegments creates and returns a new DeviceBgpAsPathSegment object
-//  The AS path segments (non random) per route range
-func (obj *deviceBgpAsPath) NewAsPathSegments() DeviceBgpAsPathSegment {
-	if obj.obj.AsPathSegments == nil {
-		obj.obj.AsPathSegments = make([]*snappipb.DeviceBgpAsPathSegment, 0)
+type deviceBgpAsPathDeviceBgpAsPathSegmentIter struct {
+	obj *deviceBgpAsPath
+}
+
+type DeviceBgpAsPathDeviceBgpAsPathSegmentIter interface {
+	Add() DeviceBgpAsPathSegment
+	Items() []DeviceBgpAsPathSegment
+}
+
+func (obj *deviceBgpAsPathDeviceBgpAsPathSegmentIter) Add() DeviceBgpAsPathSegment {
+	newObj := &snappipb.DeviceBgpAsPathSegment{}
+	obj.obj.obj.AsPathSegments = append(obj.obj.obj.AsPathSegments, newObj)
+	return &deviceBgpAsPathSegment{obj: newObj}
+}
+
+func (obj *deviceBgpAsPathDeviceBgpAsPathSegmentIter) Items() []DeviceBgpAsPathSegment {
+	slice := []DeviceBgpAsPathSegment{}
+	for _, item := range obj.obj.obj.AsPathSegments {
+		slice = append(slice, &deviceBgpAsPathSegment{obj: item})
 	}
-	slice := append(obj.obj.AsPathSegments, &snappipb.DeviceBgpAsPathSegment{})
-	obj.obj.AsPathSegments = slice
-	return &deviceBgpAsPathSegment{obj: slice[len(slice)-1]}
+	return slice
 }
 
 type deviceBgpTunnelTlv struct {
@@ -28227,22 +36546,45 @@ func (obj *deviceBgpTunnelTlv) msg() *snappipb.DeviceBgpTunnelTlv {
 	return obj.obj
 }
 
-func (obj *deviceBgpTunnelTlv) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *deviceBgpTunnelTlv) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *deviceBgpTunnelTlv) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *deviceBgpTunnelTlv) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *deviceBgpTunnelTlv) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *deviceBgpTunnelTlv) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type DeviceBgpTunnelTlv interface {
 	msg() *snappipb.DeviceBgpTunnelTlv
-	Yaml() string
-	Json() string
-	SegmentLists() []DeviceBgpSegmentList
-	NewSegmentLists() DeviceBgpSegmentList
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
+	SegmentLists() DeviceBgpTunnelTlvDeviceBgpSegmentListIter
 	RemoteEndpointSubTlv() DeviceBgpRemoteEndpointSubTlv
 	PreferenceSubTlv() DeviceBgpPreferenceSubTlv
 	BindingSubTlv() DeviceBgpBindingSubTlv
@@ -28253,27 +36595,35 @@ type DeviceBgpTunnelTlv interface {
 
 // SegmentLists returns a []DeviceBgpSegmentList
 //  description is TBD
-func (obj *deviceBgpTunnelTlv) SegmentLists() []DeviceBgpSegmentList {
+func (obj *deviceBgpTunnelTlv) SegmentLists() DeviceBgpTunnelTlvDeviceBgpSegmentListIter {
 	if obj.obj.SegmentLists == nil {
-		obj.obj.SegmentLists = make([]*snappipb.DeviceBgpSegmentList, 0)
+		obj.obj.SegmentLists = []*snappipb.DeviceBgpSegmentList{}
 	}
-	values := make([]DeviceBgpSegmentList, 0)
-	for _, item := range obj.obj.SegmentLists {
-		values = append(values, &deviceBgpSegmentList{obj: item})
-	}
-	return values
+	return &deviceBgpTunnelTlvDeviceBgpSegmentListIter{obj: obj}
 
 }
 
-// NewSegmentLists creates and returns a new DeviceBgpSegmentList object
-//  description is TBD
-func (obj *deviceBgpTunnelTlv) NewSegmentLists() DeviceBgpSegmentList {
-	if obj.obj.SegmentLists == nil {
-		obj.obj.SegmentLists = make([]*snappipb.DeviceBgpSegmentList, 0)
+type deviceBgpTunnelTlvDeviceBgpSegmentListIter struct {
+	obj *deviceBgpTunnelTlv
+}
+
+type DeviceBgpTunnelTlvDeviceBgpSegmentListIter interface {
+	Add() DeviceBgpSegmentList
+	Items() []DeviceBgpSegmentList
+}
+
+func (obj *deviceBgpTunnelTlvDeviceBgpSegmentListIter) Add() DeviceBgpSegmentList {
+	newObj := &snappipb.DeviceBgpSegmentList{}
+	obj.obj.obj.SegmentLists = append(obj.obj.obj.SegmentLists, newObj)
+	return &deviceBgpSegmentList{obj: newObj}
+}
+
+func (obj *deviceBgpTunnelTlvDeviceBgpSegmentListIter) Items() []DeviceBgpSegmentList {
+	slice := []DeviceBgpSegmentList{}
+	for _, item := range obj.obj.obj.SegmentLists {
+		slice = append(slice, &deviceBgpSegmentList{obj: item})
 	}
-	slice := append(obj.obj.SegmentLists, &snappipb.DeviceBgpSegmentList{})
-	obj.obj.SegmentLists = slice
-	return &deviceBgpSegmentList{obj: slice[len(slice)-1]}
+	return slice
 }
 
 // RemoteEndpointSubTlv returns a DeviceBgpRemoteEndpointSubTlv
@@ -28337,20 +36687,44 @@ func (obj *deviceBgpCommunity) msg() *snappipb.DeviceBgpCommunity {
 	return obj.obj
 }
 
-func (obj *deviceBgpCommunity) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *deviceBgpCommunity) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *deviceBgpCommunity) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *deviceBgpCommunity) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *deviceBgpCommunity) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *deviceBgpCommunity) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type DeviceBgpCommunity interface {
 	msg() *snappipb.DeviceBgpCommunity
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	AsNumber() int32
 	SetAsNumber(value int32) DeviceBgpCommunity
 	AsCustom() int32
@@ -28391,20 +36765,44 @@ func (obj *deviceBgpv4RouteAddress) msg() *snappipb.DeviceBgpv4RouteAddress {
 	return obj.obj
 }
 
-func (obj *deviceBgpv4RouteAddress) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *deviceBgpv4RouteAddress) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *deviceBgpv4RouteAddress) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *deviceBgpv4RouteAddress) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *deviceBgpv4RouteAddress) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *deviceBgpv4RouteAddress) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type DeviceBgpv4RouteAddress interface {
 	msg() *snappipb.DeviceBgpv4RouteAddress
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Address() string
 	SetAddress(value string) DeviceBgpv4RouteAddress
 	Prefix() int32
@@ -28475,20 +36873,44 @@ func (obj *deviceBgpRouteAdvanced) msg() *snappipb.DeviceBgpRouteAdvanced {
 	return obj.obj
 }
 
-func (obj *deviceBgpRouteAdvanced) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *deviceBgpRouteAdvanced) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *deviceBgpRouteAdvanced) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *deviceBgpRouteAdvanced) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *deviceBgpRouteAdvanced) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *deviceBgpRouteAdvanced) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type DeviceBgpRouteAdvanced interface {
 	msg() *snappipb.DeviceBgpRouteAdvanced
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	MultiExitDiscriminator() int32
 	SetMultiExitDiscriminator(value int32) DeviceBgpRouteAdvanced
 }
@@ -28514,20 +36936,44 @@ func (obj *deviceBgpv6RouteAddress) msg() *snappipb.DeviceBgpv6RouteAddress {
 	return obj.obj
 }
 
-func (obj *deviceBgpv6RouteAddress) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *deviceBgpv6RouteAddress) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *deviceBgpv6RouteAddress) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *deviceBgpv6RouteAddress) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *deviceBgpv6RouteAddress) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *deviceBgpv6RouteAddress) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type DeviceBgpv6RouteAddress interface {
 	msg() *snappipb.DeviceBgpv6RouteAddress
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Address() string
 	SetAddress(value string) DeviceBgpv6RouteAddress
 	Prefix() int32
@@ -28598,20 +37044,44 @@ func (obj *patternFlowIpv4PriorityRawCounter) msg() *snappipb.PatternFlowIpv4Pri
 	return obj.obj
 }
 
-func (obj *patternFlowIpv4PriorityRawCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowIpv4PriorityRawCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowIpv4PriorityRawCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowIpv4PriorityRawCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowIpv4PriorityRawCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowIpv4PriorityRawCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowIpv4PriorityRawCounter interface {
 	msg() *snappipb.PatternFlowIpv4PriorityRawCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowIpv4PriorityRawCounter
 	Step() int32
@@ -28667,20 +37137,44 @@ func (obj *patternFlowIpv4TosPrecedence) msg() *snappipb.PatternFlowIpv4TosPrece
 	return obj.obj
 }
 
-func (obj *patternFlowIpv4TosPrecedence) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowIpv4TosPrecedence) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowIpv4TosPrecedence) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowIpv4TosPrecedence) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowIpv4TosPrecedence) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowIpv4TosPrecedence) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowIpv4TosPrecedence interface {
 	msg() *snappipb.PatternFlowIpv4TosPrecedence
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowIpv4TosPrecedence
 	Values() []int32
@@ -28758,20 +37252,44 @@ func (obj *patternFlowIpv4TosDelay) msg() *snappipb.PatternFlowIpv4TosDelay {
 	return obj.obj
 }
 
-func (obj *patternFlowIpv4TosDelay) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowIpv4TosDelay) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowIpv4TosDelay) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowIpv4TosDelay) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowIpv4TosDelay) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowIpv4TosDelay) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowIpv4TosDelay interface {
 	msg() *snappipb.PatternFlowIpv4TosDelay
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowIpv4TosDelay
 	Values() []int32
@@ -28849,20 +37367,44 @@ func (obj *patternFlowIpv4TosThroughput) msg() *snappipb.PatternFlowIpv4TosThrou
 	return obj.obj
 }
 
-func (obj *patternFlowIpv4TosThroughput) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowIpv4TosThroughput) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowIpv4TosThroughput) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowIpv4TosThroughput) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowIpv4TosThroughput) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowIpv4TosThroughput) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowIpv4TosThroughput interface {
 	msg() *snappipb.PatternFlowIpv4TosThroughput
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowIpv4TosThroughput
 	Values() []int32
@@ -28940,20 +37482,44 @@ func (obj *patternFlowIpv4TosReliability) msg() *snappipb.PatternFlowIpv4TosReli
 	return obj.obj
 }
 
-func (obj *patternFlowIpv4TosReliability) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowIpv4TosReliability) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowIpv4TosReliability) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowIpv4TosReliability) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowIpv4TosReliability) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowIpv4TosReliability) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowIpv4TosReliability interface {
 	msg() *snappipb.PatternFlowIpv4TosReliability
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowIpv4TosReliability
 	Values() []int32
@@ -29031,20 +37597,44 @@ func (obj *patternFlowIpv4TosMonetary) msg() *snappipb.PatternFlowIpv4TosMonetar
 	return obj.obj
 }
 
-func (obj *patternFlowIpv4TosMonetary) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowIpv4TosMonetary) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowIpv4TosMonetary) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowIpv4TosMonetary) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowIpv4TosMonetary) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowIpv4TosMonetary) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowIpv4TosMonetary interface {
 	msg() *snappipb.PatternFlowIpv4TosMonetary
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowIpv4TosMonetary
 	Values() []int32
@@ -29122,20 +37712,44 @@ func (obj *patternFlowIpv4TosUnused) msg() *snappipb.PatternFlowIpv4TosUnused {
 	return obj.obj
 }
 
-func (obj *patternFlowIpv4TosUnused) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowIpv4TosUnused) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowIpv4TosUnused) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowIpv4TosUnused) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowIpv4TosUnused) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowIpv4TosUnused) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowIpv4TosUnused interface {
 	msg() *snappipb.PatternFlowIpv4TosUnused
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowIpv4TosUnused
 	Values() []int32
@@ -29213,20 +37827,44 @@ func (obj *patternFlowIpv4DscpPhb) msg() *snappipb.PatternFlowIpv4DscpPhb {
 	return obj.obj
 }
 
-func (obj *patternFlowIpv4DscpPhb) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowIpv4DscpPhb) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowIpv4DscpPhb) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowIpv4DscpPhb) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowIpv4DscpPhb) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowIpv4DscpPhb) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowIpv4DscpPhb interface {
 	msg() *snappipb.PatternFlowIpv4DscpPhb
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowIpv4DscpPhb
 	Values() []int32
@@ -29304,20 +37942,44 @@ func (obj *patternFlowIpv4DscpEcn) msg() *snappipb.PatternFlowIpv4DscpEcn {
 	return obj.obj
 }
 
-func (obj *patternFlowIpv4DscpEcn) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowIpv4DscpEcn) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowIpv4DscpEcn) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowIpv4DscpEcn) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowIpv4DscpEcn) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowIpv4DscpEcn) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowIpv4DscpEcn interface {
 	msg() *snappipb.PatternFlowIpv4DscpEcn
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Value() int32
 	SetValue(value int32) PatternFlowIpv4DscpEcn
 	Values() []int32
@@ -29395,20 +38057,44 @@ func (obj *patternFlowGtpExtensionExtensionLengthCounter) msg() *snappipb.Patter
 	return obj.obj
 }
 
-func (obj *patternFlowGtpExtensionExtensionLengthCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowGtpExtensionExtensionLengthCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowGtpExtensionExtensionLengthCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowGtpExtensionExtensionLengthCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowGtpExtensionExtensionLengthCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowGtpExtensionExtensionLengthCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowGtpExtensionExtensionLengthCounter interface {
 	msg() *snappipb.PatternFlowGtpExtensionExtensionLengthCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowGtpExtensionExtensionLengthCounter
 	Step() int32
@@ -29464,20 +38150,44 @@ func (obj *patternFlowGtpExtensionContentsCounter) msg() *snappipb.PatternFlowGt
 	return obj.obj
 }
 
-func (obj *patternFlowGtpExtensionContentsCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowGtpExtensionContentsCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowGtpExtensionContentsCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowGtpExtensionContentsCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowGtpExtensionContentsCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowGtpExtensionContentsCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowGtpExtensionContentsCounter interface {
 	msg() *snappipb.PatternFlowGtpExtensionContentsCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowGtpExtensionContentsCounter
 	Step() int32
@@ -29533,20 +38243,44 @@ func (obj *patternFlowGtpExtensionNextExtensionHeaderCounter) msg() *snappipb.Pa
 	return obj.obj
 }
 
-func (obj *patternFlowGtpExtensionNextExtensionHeaderCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowGtpExtensionNextExtensionHeaderCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowGtpExtensionNextExtensionHeaderCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowGtpExtensionNextExtensionHeaderCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowGtpExtensionNextExtensionHeaderCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowGtpExtensionNextExtensionHeaderCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowGtpExtensionNextExtensionHeaderCounter interface {
 	msg() *snappipb.PatternFlowGtpExtensionNextExtensionHeaderCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowGtpExtensionNextExtensionHeaderCounter
 	Step() int32
@@ -29602,20 +38336,44 @@ func (obj *patternFlowIcmpEchoTypeCounter) msg() *snappipb.PatternFlowIcmpEchoTy
 	return obj.obj
 }
 
-func (obj *patternFlowIcmpEchoTypeCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowIcmpEchoTypeCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowIcmpEchoTypeCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowIcmpEchoTypeCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowIcmpEchoTypeCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowIcmpEchoTypeCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowIcmpEchoTypeCounter interface {
 	msg() *snappipb.PatternFlowIcmpEchoTypeCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowIcmpEchoTypeCounter
 	Step() int32
@@ -29671,20 +38429,44 @@ func (obj *patternFlowIcmpEchoCodeCounter) msg() *snappipb.PatternFlowIcmpEchoCo
 	return obj.obj
 }
 
-func (obj *patternFlowIcmpEchoCodeCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowIcmpEchoCodeCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowIcmpEchoCodeCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowIcmpEchoCodeCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowIcmpEchoCodeCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowIcmpEchoCodeCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowIcmpEchoCodeCounter interface {
 	msg() *snappipb.PatternFlowIcmpEchoCodeCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowIcmpEchoCodeCounter
 	Step() int32
@@ -29740,20 +38522,44 @@ func (obj *patternFlowIcmpEchoIdentifierCounter) msg() *snappipb.PatternFlowIcmp
 	return obj.obj
 }
 
-func (obj *patternFlowIcmpEchoIdentifierCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowIcmpEchoIdentifierCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowIcmpEchoIdentifierCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowIcmpEchoIdentifierCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowIcmpEchoIdentifierCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowIcmpEchoIdentifierCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowIcmpEchoIdentifierCounter interface {
 	msg() *snappipb.PatternFlowIcmpEchoIdentifierCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowIcmpEchoIdentifierCounter
 	Step() int32
@@ -29809,20 +38615,44 @@ func (obj *patternFlowIcmpEchoSequenceNumberCounter) msg() *snappipb.PatternFlow
 	return obj.obj
 }
 
-func (obj *patternFlowIcmpEchoSequenceNumberCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowIcmpEchoSequenceNumberCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowIcmpEchoSequenceNumberCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowIcmpEchoSequenceNumberCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowIcmpEchoSequenceNumberCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowIcmpEchoSequenceNumberCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowIcmpEchoSequenceNumberCounter interface {
 	msg() *snappipb.PatternFlowIcmpEchoSequenceNumberCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowIcmpEchoSequenceNumberCounter
 	Step() int32
@@ -29878,20 +38708,44 @@ func (obj *patternFlowIcmpv6EchoTypeCounter) msg() *snappipb.PatternFlowIcmpv6Ec
 	return obj.obj
 }
 
-func (obj *patternFlowIcmpv6EchoTypeCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowIcmpv6EchoTypeCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowIcmpv6EchoTypeCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowIcmpv6EchoTypeCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowIcmpv6EchoTypeCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowIcmpv6EchoTypeCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowIcmpv6EchoTypeCounter interface {
 	msg() *snappipb.PatternFlowIcmpv6EchoTypeCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowIcmpv6EchoTypeCounter
 	Step() int32
@@ -29947,20 +38801,44 @@ func (obj *patternFlowIcmpv6EchoCodeCounter) msg() *snappipb.PatternFlowIcmpv6Ec
 	return obj.obj
 }
 
-func (obj *patternFlowIcmpv6EchoCodeCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowIcmpv6EchoCodeCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowIcmpv6EchoCodeCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowIcmpv6EchoCodeCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowIcmpv6EchoCodeCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowIcmpv6EchoCodeCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowIcmpv6EchoCodeCounter interface {
 	msg() *snappipb.PatternFlowIcmpv6EchoCodeCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowIcmpv6EchoCodeCounter
 	Step() int32
@@ -30016,20 +38894,44 @@ func (obj *patternFlowIcmpv6EchoIdentifierCounter) msg() *snappipb.PatternFlowIc
 	return obj.obj
 }
 
-func (obj *patternFlowIcmpv6EchoIdentifierCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowIcmpv6EchoIdentifierCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowIcmpv6EchoIdentifierCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowIcmpv6EchoIdentifierCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowIcmpv6EchoIdentifierCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowIcmpv6EchoIdentifierCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowIcmpv6EchoIdentifierCounter interface {
 	msg() *snappipb.PatternFlowIcmpv6EchoIdentifierCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowIcmpv6EchoIdentifierCounter
 	Step() int32
@@ -30085,20 +38987,44 @@ func (obj *patternFlowIcmpv6EchoSequenceNumberCounter) msg() *snappipb.PatternFl
 	return obj.obj
 }
 
-func (obj *patternFlowIcmpv6EchoSequenceNumberCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowIcmpv6EchoSequenceNumberCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowIcmpv6EchoSequenceNumberCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowIcmpv6EchoSequenceNumberCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowIcmpv6EchoSequenceNumberCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowIcmpv6EchoSequenceNumberCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowIcmpv6EchoSequenceNumberCounter interface {
 	msg() *snappipb.PatternFlowIcmpv6EchoSequenceNumberCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowIcmpv6EchoSequenceNumberCounter
 	Step() int32
@@ -30154,20 +39080,44 @@ func (obj *deviceBgpAsPathSegment) msg() *snappipb.DeviceBgpAsPathSegment {
 	return obj.obj
 }
 
-func (obj *deviceBgpAsPathSegment) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *deviceBgpAsPathSegment) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *deviceBgpAsPathSegment) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *deviceBgpAsPathSegment) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *deviceBgpAsPathSegment) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *deviceBgpAsPathSegment) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type DeviceBgpAsPathSegment interface {
 	msg() *snappipb.DeviceBgpAsPathSegment
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	AsNumbers() []int32
 	SetAsNumbers(value []int32) DeviceBgpAsPathSegment
 }
@@ -30193,24 +39143,47 @@ func (obj *deviceBgpSegmentList) msg() *snappipb.DeviceBgpSegmentList {
 	return obj.obj
 }
 
-func (obj *deviceBgpSegmentList) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *deviceBgpSegmentList) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *deviceBgpSegmentList) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *deviceBgpSegmentList) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *deviceBgpSegmentList) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *deviceBgpSegmentList) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type DeviceBgpSegmentList interface {
 	msg() *snappipb.DeviceBgpSegmentList
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	SegmentWeight() int32
 	SetSegmentWeight(value int32) DeviceBgpSegmentList
-	Segments() []DeviceBgpSegment
-	NewSegments() DeviceBgpSegment
+	Segments() DeviceBgpSegmentListDeviceBgpSegmentIter
 	Active() bool
 	SetActive(value bool) DeviceBgpSegmentList
 }
@@ -30230,27 +39203,35 @@ func (obj *deviceBgpSegmentList) SetSegmentWeight(value int32) DeviceBgpSegmentL
 
 // Segments returns a []DeviceBgpSegment
 //  description is TBD
-func (obj *deviceBgpSegmentList) Segments() []DeviceBgpSegment {
+func (obj *deviceBgpSegmentList) Segments() DeviceBgpSegmentListDeviceBgpSegmentIter {
 	if obj.obj.Segments == nil {
-		obj.obj.Segments = make([]*snappipb.DeviceBgpSegment, 0)
+		obj.obj.Segments = []*snappipb.DeviceBgpSegment{}
 	}
-	values := make([]DeviceBgpSegment, 0)
-	for _, item := range obj.obj.Segments {
-		values = append(values, &deviceBgpSegment{obj: item})
-	}
-	return values
+	return &deviceBgpSegmentListDeviceBgpSegmentIter{obj: obj}
 
 }
 
-// NewSegments creates and returns a new DeviceBgpSegment object
-//  description is TBD
-func (obj *deviceBgpSegmentList) NewSegments() DeviceBgpSegment {
-	if obj.obj.Segments == nil {
-		obj.obj.Segments = make([]*snappipb.DeviceBgpSegment, 0)
+type deviceBgpSegmentListDeviceBgpSegmentIter struct {
+	obj *deviceBgpSegmentList
+}
+
+type DeviceBgpSegmentListDeviceBgpSegmentIter interface {
+	Add() DeviceBgpSegment
+	Items() []DeviceBgpSegment
+}
+
+func (obj *deviceBgpSegmentListDeviceBgpSegmentIter) Add() DeviceBgpSegment {
+	newObj := &snappipb.DeviceBgpSegment{}
+	obj.obj.obj.Segments = append(obj.obj.obj.Segments, newObj)
+	return &deviceBgpSegment{obj: newObj}
+}
+
+func (obj *deviceBgpSegmentListDeviceBgpSegmentIter) Items() []DeviceBgpSegment {
+	slice := []DeviceBgpSegment{}
+	for _, item := range obj.obj.obj.Segments {
+		slice = append(slice, &deviceBgpSegment{obj: item})
 	}
-	slice := append(obj.obj.Segments, &snappipb.DeviceBgpSegment{})
-	obj.obj.Segments = slice
-	return &deviceBgpSegment{obj: slice[len(slice)-1]}
+	return slice
 }
 
 // Active returns a bool
@@ -30274,20 +39255,44 @@ func (obj *deviceBgpRemoteEndpointSubTlv) msg() *snappipb.DeviceBgpRemoteEndpoin
 	return obj.obj
 }
 
-func (obj *deviceBgpRemoteEndpointSubTlv) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *deviceBgpRemoteEndpointSubTlv) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *deviceBgpRemoteEndpointSubTlv) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *deviceBgpRemoteEndpointSubTlv) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *deviceBgpRemoteEndpointSubTlv) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *deviceBgpRemoteEndpointSubTlv) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type DeviceBgpRemoteEndpointSubTlv interface {
 	msg() *snappipb.DeviceBgpRemoteEndpointSubTlv
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	AsNumber() int32
 	SetAsNumber(value int32) DeviceBgpRemoteEndpointSubTlv
 	Ipv4Address() string
@@ -30343,20 +39348,44 @@ func (obj *deviceBgpPreferenceSubTlv) msg() *snappipb.DeviceBgpPreferenceSubTlv 
 	return obj.obj
 }
 
-func (obj *deviceBgpPreferenceSubTlv) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *deviceBgpPreferenceSubTlv) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *deviceBgpPreferenceSubTlv) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *deviceBgpPreferenceSubTlv) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *deviceBgpPreferenceSubTlv) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *deviceBgpPreferenceSubTlv) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type DeviceBgpPreferenceSubTlv interface {
 	msg() *snappipb.DeviceBgpPreferenceSubTlv
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Preference() int32
 	SetPreference(value int32) DeviceBgpPreferenceSubTlv
 }
@@ -30382,20 +39411,44 @@ func (obj *deviceBgpBindingSubTlv) msg() *snappipb.DeviceBgpBindingSubTlv {
 	return obj.obj
 }
 
-func (obj *deviceBgpBindingSubTlv) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *deviceBgpBindingSubTlv) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *deviceBgpBindingSubTlv) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *deviceBgpBindingSubTlv) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *deviceBgpBindingSubTlv) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *deviceBgpBindingSubTlv) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type DeviceBgpBindingSubTlv interface {
 	msg() *snappipb.DeviceBgpBindingSubTlv
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	FourOctetSid() int32
 	SetFourOctetSid(value int32) DeviceBgpBindingSubTlv
 	BsidAsMplsLabel() bool
@@ -30496,20 +39549,44 @@ func (obj *deviceBgpExplicitNullLabelPolicySubTlv) msg() *snappipb.DeviceBgpExpl
 	return obj.obj
 }
 
-func (obj *deviceBgpExplicitNullLabelPolicySubTlv) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *deviceBgpExplicitNullLabelPolicySubTlv) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *deviceBgpExplicitNullLabelPolicySubTlv) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *deviceBgpExplicitNullLabelPolicySubTlv) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *deviceBgpExplicitNullLabelPolicySubTlv) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *deviceBgpExplicitNullLabelPolicySubTlv) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type DeviceBgpExplicitNullLabelPolicySubTlv interface {
 	msg() *snappipb.DeviceBgpExplicitNullLabelPolicySubTlv
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 }
 
 type patternFlowIpv4TosPrecedenceCounter struct {
@@ -30520,20 +39597,44 @@ func (obj *patternFlowIpv4TosPrecedenceCounter) msg() *snappipb.PatternFlowIpv4T
 	return obj.obj
 }
 
-func (obj *patternFlowIpv4TosPrecedenceCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowIpv4TosPrecedenceCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowIpv4TosPrecedenceCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowIpv4TosPrecedenceCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowIpv4TosPrecedenceCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowIpv4TosPrecedenceCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowIpv4TosPrecedenceCounter interface {
 	msg() *snappipb.PatternFlowIpv4TosPrecedenceCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowIpv4TosPrecedenceCounter
 	Step() int32
@@ -30589,20 +39690,44 @@ func (obj *patternFlowIpv4TosDelayCounter) msg() *snappipb.PatternFlowIpv4TosDel
 	return obj.obj
 }
 
-func (obj *patternFlowIpv4TosDelayCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowIpv4TosDelayCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowIpv4TosDelayCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowIpv4TosDelayCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowIpv4TosDelayCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowIpv4TosDelayCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowIpv4TosDelayCounter interface {
 	msg() *snappipb.PatternFlowIpv4TosDelayCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowIpv4TosDelayCounter
 	Step() int32
@@ -30658,20 +39783,44 @@ func (obj *patternFlowIpv4TosThroughputCounter) msg() *snappipb.PatternFlowIpv4T
 	return obj.obj
 }
 
-func (obj *patternFlowIpv4TosThroughputCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowIpv4TosThroughputCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowIpv4TosThroughputCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowIpv4TosThroughputCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowIpv4TosThroughputCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowIpv4TosThroughputCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowIpv4TosThroughputCounter interface {
 	msg() *snappipb.PatternFlowIpv4TosThroughputCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowIpv4TosThroughputCounter
 	Step() int32
@@ -30727,20 +39876,44 @@ func (obj *patternFlowIpv4TosReliabilityCounter) msg() *snappipb.PatternFlowIpv4
 	return obj.obj
 }
 
-func (obj *patternFlowIpv4TosReliabilityCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowIpv4TosReliabilityCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowIpv4TosReliabilityCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowIpv4TosReliabilityCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowIpv4TosReliabilityCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowIpv4TosReliabilityCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowIpv4TosReliabilityCounter interface {
 	msg() *snappipb.PatternFlowIpv4TosReliabilityCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowIpv4TosReliabilityCounter
 	Step() int32
@@ -30796,20 +39969,44 @@ func (obj *patternFlowIpv4TosMonetaryCounter) msg() *snappipb.PatternFlowIpv4Tos
 	return obj.obj
 }
 
-func (obj *patternFlowIpv4TosMonetaryCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowIpv4TosMonetaryCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowIpv4TosMonetaryCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowIpv4TosMonetaryCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowIpv4TosMonetaryCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowIpv4TosMonetaryCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowIpv4TosMonetaryCounter interface {
 	msg() *snappipb.PatternFlowIpv4TosMonetaryCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowIpv4TosMonetaryCounter
 	Step() int32
@@ -30865,20 +40062,44 @@ func (obj *patternFlowIpv4TosUnusedCounter) msg() *snappipb.PatternFlowIpv4TosUn
 	return obj.obj
 }
 
-func (obj *patternFlowIpv4TosUnusedCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowIpv4TosUnusedCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowIpv4TosUnusedCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowIpv4TosUnusedCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowIpv4TosUnusedCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowIpv4TosUnusedCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowIpv4TosUnusedCounter interface {
 	msg() *snappipb.PatternFlowIpv4TosUnusedCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowIpv4TosUnusedCounter
 	Step() int32
@@ -30934,20 +40155,44 @@ func (obj *patternFlowIpv4DscpPhbCounter) msg() *snappipb.PatternFlowIpv4DscpPhb
 	return obj.obj
 }
 
-func (obj *patternFlowIpv4DscpPhbCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowIpv4DscpPhbCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowIpv4DscpPhbCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowIpv4DscpPhbCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowIpv4DscpPhbCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowIpv4DscpPhbCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowIpv4DscpPhbCounter interface {
 	msg() *snappipb.PatternFlowIpv4DscpPhbCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowIpv4DscpPhbCounter
 	Step() int32
@@ -31003,20 +40248,44 @@ func (obj *patternFlowIpv4DscpEcnCounter) msg() *snappipb.PatternFlowIpv4DscpEcn
 	return obj.obj
 }
 
-func (obj *patternFlowIpv4DscpEcnCounter) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *patternFlowIpv4DscpEcnCounter) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *patternFlowIpv4DscpEcnCounter) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *patternFlowIpv4DscpEcnCounter) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *patternFlowIpv4DscpEcnCounter) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *patternFlowIpv4DscpEcnCounter) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type PatternFlowIpv4DscpEcnCounter interface {
 	msg() *snappipb.PatternFlowIpv4DscpEcnCounter
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	Start() int32
 	SetStart(value int32) PatternFlowIpv4DscpEcnCounter
 	Step() int32
@@ -31072,20 +40341,44 @@ func (obj *deviceBgpSegment) msg() *snappipb.DeviceBgpSegment {
 	return obj.obj
 }
 
-func (obj *deviceBgpSegment) Yaml() string {
-	data, _ := yaml.Marshal(obj.msg())
+func (obj *deviceBgpSegment) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
-func (obj *deviceBgpSegment) Json() string {
-	data, _ := json.Marshal(obj.msg())
+func (obj *deviceBgpSegment) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *deviceBgpSegment) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
+}
+
+func (obj *deviceBgpSegment) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
 }
 
 type DeviceBgpSegment interface {
 	msg() *snappipb.DeviceBgpSegment
-	Yaml() string
-	Json() string
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 	MplsLabel() int32
 	SetMplsLabel(value int32) DeviceBgpSegment
 	MplsTc() int32
@@ -31191,4 +40484,484 @@ func (obj *deviceBgpSegment) Active() bool {
 func (obj *deviceBgpSegment) SetActive(value bool) DeviceBgpSegment {
 	obj.obj.Active = &value
 	return obj
+}
+
+type setConfigResponseStatusCode200 struct {
+	obj *snappipb.SetConfigResponse_StatusCode200
+}
+
+func (obj *setConfigResponseStatusCode200) msg() *snappipb.SetConfigResponse_StatusCode200 {
+	return obj.obj
+}
+
+func (obj *setConfigResponseStatusCode200) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *setConfigResponseStatusCode200) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *setConfigResponseStatusCode200) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *setConfigResponseStatusCode200) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
+}
+
+type SetConfigResponse_StatusCode200 interface {
+	msg() *snappipb.SetConfigResponse_StatusCode200
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
+}
+
+type getConfigResponseStatusCode200 struct {
+	obj *snappipb.GetConfigResponse_StatusCode200
+}
+
+func (obj *getConfigResponseStatusCode200) msg() *snappipb.GetConfigResponse_StatusCode200 {
+	return obj.obj
+}
+
+func (obj *getConfigResponseStatusCode200) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *getConfigResponseStatusCode200) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *getConfigResponseStatusCode200) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *getConfigResponseStatusCode200) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
+}
+
+type GetConfigResponse_StatusCode200 interface {
+	msg() *snappipb.GetConfigResponse_StatusCode200
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
+}
+
+type setTransmitStateResponseStatusCode200 struct {
+	obj *snappipb.SetTransmitStateResponse_StatusCode200
+}
+
+func (obj *setTransmitStateResponseStatusCode200) msg() *snappipb.SetTransmitStateResponse_StatusCode200 {
+	return obj.obj
+}
+
+func (obj *setTransmitStateResponseStatusCode200) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *setTransmitStateResponseStatusCode200) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *setTransmitStateResponseStatusCode200) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *setTransmitStateResponseStatusCode200) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
+}
+
+type SetTransmitStateResponse_StatusCode200 interface {
+	msg() *snappipb.SetTransmitStateResponse_StatusCode200
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
+}
+
+type setLinkStateResponseStatusCode200 struct {
+	obj *snappipb.SetLinkStateResponse_StatusCode200
+}
+
+func (obj *setLinkStateResponseStatusCode200) msg() *snappipb.SetLinkStateResponse_StatusCode200 {
+	return obj.obj
+}
+
+func (obj *setLinkStateResponseStatusCode200) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *setLinkStateResponseStatusCode200) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *setLinkStateResponseStatusCode200) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *setLinkStateResponseStatusCode200) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
+}
+
+type SetLinkStateResponse_StatusCode200 interface {
+	msg() *snappipb.SetLinkStateResponse_StatusCode200
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
+}
+
+type setCaptureStateResponseStatusCode200 struct {
+	obj *snappipb.SetCaptureStateResponse_StatusCode200
+}
+
+func (obj *setCaptureStateResponseStatusCode200) msg() *snappipb.SetCaptureStateResponse_StatusCode200 {
+	return obj.obj
+}
+
+func (obj *setCaptureStateResponseStatusCode200) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *setCaptureStateResponseStatusCode200) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *setCaptureStateResponseStatusCode200) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *setCaptureStateResponseStatusCode200) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
+}
+
+type SetCaptureStateResponse_StatusCode200 interface {
+	msg() *snappipb.SetCaptureStateResponse_StatusCode200
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
+}
+
+type updateFlowsResponseStatusCode200 struct {
+	obj *snappipb.UpdateFlowsResponse_StatusCode200
+}
+
+func (obj *updateFlowsResponseStatusCode200) msg() *snappipb.UpdateFlowsResponse_StatusCode200 {
+	return obj.obj
+}
+
+func (obj *updateFlowsResponseStatusCode200) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *updateFlowsResponseStatusCode200) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *updateFlowsResponseStatusCode200) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *updateFlowsResponseStatusCode200) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
+}
+
+type UpdateFlowsResponse_StatusCode200 interface {
+	msg() *snappipb.UpdateFlowsResponse_StatusCode200
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
+}
+
+type setRouteStateResponseStatusCode200 struct {
+	obj *snappipb.SetRouteStateResponse_StatusCode200
+}
+
+func (obj *setRouteStateResponseStatusCode200) msg() *snappipb.SetRouteStateResponse_StatusCode200 {
+	return obj.obj
+}
+
+func (obj *setRouteStateResponseStatusCode200) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *setRouteStateResponseStatusCode200) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *setRouteStateResponseStatusCode200) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *setRouteStateResponseStatusCode200) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
+}
+
+type SetRouteStateResponse_StatusCode200 interface {
+	msg() *snappipb.SetRouteStateResponse_StatusCode200
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
+}
+
+type getMetricsResponseStatusCode200 struct {
+	obj *snappipb.GetMetricsResponse_StatusCode200
+}
+
+func (obj *getMetricsResponseStatusCode200) msg() *snappipb.GetMetricsResponse_StatusCode200 {
+	return obj.obj
+}
+
+func (obj *getMetricsResponseStatusCode200) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *getMetricsResponseStatusCode200) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *getMetricsResponseStatusCode200) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *getMetricsResponseStatusCode200) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
+}
+
+type GetMetricsResponse_StatusCode200 interface {
+	msg() *snappipb.GetMetricsResponse_StatusCode200
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
+}
+
+type getStateMetricsResponseStatusCode200 struct {
+	obj *snappipb.GetStateMetricsResponse_StatusCode200
+}
+
+func (obj *getStateMetricsResponseStatusCode200) msg() *snappipb.GetStateMetricsResponse_StatusCode200 {
+	return obj.obj
+}
+
+func (obj *getStateMetricsResponseStatusCode200) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *getStateMetricsResponseStatusCode200) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *getStateMetricsResponseStatusCode200) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *getStateMetricsResponseStatusCode200) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
+}
+
+type GetStateMetricsResponse_StatusCode200 interface {
+	msg() *snappipb.GetStateMetricsResponse_StatusCode200
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
+}
+
+type getCaptureResponseStatusCode200 struct {
+	obj *snappipb.GetCaptureResponse_StatusCode200
+}
+
+func (obj *getCaptureResponseStatusCode200) msg() *snappipb.GetCaptureResponse_StatusCode200 {
+	return obj.obj
+}
+
+func (obj *getCaptureResponseStatusCode200) ToYaml() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *getCaptureResponseStatusCode200) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, obj.msg())
+}
+
+func (obj *getCaptureResponseStatusCode200) ToJson() string {
+	data, err := json.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *getCaptureResponseStatusCode200) FromJson(value string) error {
+	return json.Unmarshal([]byte(value), obj.msg())
+}
+
+type GetCaptureResponse_StatusCode200 interface {
+	msg() *snappipb.GetCaptureResponse_StatusCode200
+	ToYaml() string
+	ToJson() string
+	FromYaml(value string) error
+	FromJson(value string) error
 }

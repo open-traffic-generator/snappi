@@ -28,7 +28,7 @@ type OpenapiClient interface {
 	SetRouteState(ctx context.Context, in *SetRouteStateRequest, opts ...grpc.CallOption) (*SetRouteStateResponse, error)
 	GetMetrics(ctx context.Context, in *GetMetricsRequest, opts ...grpc.CallOption) (*GetMetricsResponse, error)
 	GetStateMetrics(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*GetStateMetricsResponse, error)
-	GetCapture(ctx context.Context, in *GetCaptureRequest, opts ...grpc.CallOption) (Openapi_GetCaptureClient, error)
+	GetCapture(ctx context.Context, in *GetCaptureRequest, opts ...grpc.CallOption) (*GetCaptureResponse, error)
 }
 
 type openapiClient struct {
@@ -120,36 +120,13 @@ func (c *openapiClient) GetStateMetrics(ctx context.Context, in *emptypb.Empty, 
 	return out, nil
 }
 
-func (c *openapiClient) GetCapture(ctx context.Context, in *GetCaptureRequest, opts ...grpc.CallOption) (Openapi_GetCaptureClient, error) {
-	stream, err := c.cc.NewStream(ctx, &Openapi_ServiceDesc.Streams[0], "/snappipb.Openapi/GetCapture", opts...)
+func (c *openapiClient) GetCapture(ctx context.Context, in *GetCaptureRequest, opts ...grpc.CallOption) (*GetCaptureResponse, error) {
+	out := new(GetCaptureResponse)
+	err := c.cc.Invoke(ctx, "/snappipb.Openapi/GetCapture", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
-	x := &openapiGetCaptureClient{stream}
-	if err := x.ClientStream.SendMsg(in); err != nil {
-		return nil, err
-	}
-	if err := x.ClientStream.CloseSend(); err != nil {
-		return nil, err
-	}
-	return x, nil
-}
-
-type Openapi_GetCaptureClient interface {
-	Recv() (*GetCaptureResponse, error)
-	grpc.ClientStream
-}
-
-type openapiGetCaptureClient struct {
-	grpc.ClientStream
-}
-
-func (x *openapiGetCaptureClient) Recv() (*GetCaptureResponse, error) {
-	m := new(GetCaptureResponse)
-	if err := x.ClientStream.RecvMsg(m); err != nil {
-		return nil, err
-	}
-	return m, nil
+	return out, nil
 }
 
 // OpenapiServer is the server API for Openapi service.
@@ -165,7 +142,7 @@ type OpenapiServer interface {
 	SetRouteState(context.Context, *SetRouteStateRequest) (*SetRouteStateResponse, error)
 	GetMetrics(context.Context, *GetMetricsRequest) (*GetMetricsResponse, error)
 	GetStateMetrics(context.Context, *emptypb.Empty) (*GetStateMetricsResponse, error)
-	GetCapture(*GetCaptureRequest, Openapi_GetCaptureServer) error
+	GetCapture(context.Context, *GetCaptureRequest) (*GetCaptureResponse, error)
 	mustEmbedUnimplementedOpenapiServer()
 }
 
@@ -200,8 +177,8 @@ func (UnimplementedOpenapiServer) GetMetrics(context.Context, *GetMetricsRequest
 func (UnimplementedOpenapiServer) GetStateMetrics(context.Context, *emptypb.Empty) (*GetStateMetricsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetStateMetrics not implemented")
 }
-func (UnimplementedOpenapiServer) GetCapture(*GetCaptureRequest, Openapi_GetCaptureServer) error {
-	return status.Errorf(codes.Unimplemented, "method GetCapture not implemented")
+func (UnimplementedOpenapiServer) GetCapture(context.Context, *GetCaptureRequest) (*GetCaptureResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetCapture not implemented")
 }
 func (UnimplementedOpenapiServer) mustEmbedUnimplementedOpenapiServer() {}
 
@@ -378,25 +355,22 @@ func _Openapi_GetStateMetrics_Handler(srv interface{}, ctx context.Context, dec 
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Openapi_GetCapture_Handler(srv interface{}, stream grpc.ServerStream) error {
-	m := new(GetCaptureRequest)
-	if err := stream.RecvMsg(m); err != nil {
-		return err
+func _Openapi_GetCapture_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetCaptureRequest)
+	if err := dec(in); err != nil {
+		return nil, err
 	}
-	return srv.(OpenapiServer).GetCapture(m, &openapiGetCaptureServer{stream})
-}
-
-type Openapi_GetCaptureServer interface {
-	Send(*GetCaptureResponse) error
-	grpc.ServerStream
-}
-
-type openapiGetCaptureServer struct {
-	grpc.ServerStream
-}
-
-func (x *openapiGetCaptureServer) Send(m *GetCaptureResponse) error {
-	return x.ServerStream.SendMsg(m)
+	if interceptor == nil {
+		return srv.(OpenapiServer).GetCapture(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/snappipb.Openapi/GetCapture",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(OpenapiServer).GetCapture(ctx, req.(*GetCaptureRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 // Openapi_ServiceDesc is the grpc.ServiceDesc for Openapi service.
@@ -442,13 +416,11 @@ var Openapi_ServiceDesc = grpc.ServiceDesc{
 			MethodName: "GetStateMetrics",
 			Handler:    _Openapi_GetStateMetrics_Handler,
 		},
-	},
-	Streams: []grpc.StreamDesc{
 		{
-			StreamName:    "GetCapture",
-			Handler:       _Openapi_GetCapture_Handler,
-			ServerStreams: true,
+			MethodName: "GetCapture",
+			Handler:    _Openapi_GetCapture_Handler,
 		},
 	},
+	Streams:  []grpc.StreamDesc{},
 	Metadata: "snappipb.proto",
 }
