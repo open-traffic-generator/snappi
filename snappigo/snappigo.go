@@ -1,4 +1,4 @@
-// Open Traffic Generator API 0.4.14
+// Open Traffic Generator API 0.4.15
 // License: MIT
 
 package snappigo
@@ -1014,7 +1014,7 @@ type FlowsUpdate interface {
 }
 
 // Flows returns a []Flow
-//  The list of configured flows for which given properties will be updated. An empty or null list will cause the update to be applied to all configured flows.
+//  The list of configured flows for which given property will be updated.
 func (obj *flowsUpdate) Flows() FlowsUpdateFlowIter {
 	if obj.obj.Flows == nil {
 		obj.obj.Flows = []*snappipb.Flow{}
