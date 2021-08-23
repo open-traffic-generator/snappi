@@ -225,7 +225,7 @@ func (api *gosnappiApi) SetConfig(config Config) (SetConfigResponse_StatusCode20
 		data, _ := yaml.Marshal(resp.GetStatusCode_400())
 		return nil, fmt.Errorf(string(data))
 	}
-	return nil, fmt.Errorf("Response not implemented")
+	return nil, fmt.Errorf("response not implemented")
 }
 
 func (api *gosnappiApi) GetConfig() (GetConfigResponse_StatusCode200, error) {
@@ -250,7 +250,7 @@ func (api *gosnappiApi) GetConfig() (GetConfigResponse_StatusCode200, error) {
 		data, _ := yaml.Marshal(resp.GetStatusCode_400())
 		return nil, fmt.Errorf(string(data))
 	}
-	return nil, fmt.Errorf("Response not implemented")
+	return nil, fmt.Errorf("response not implemented")
 }
 
 func (api *gosnappiApi) SetTransmitState(transmitState TransmitState) (SetTransmitStateResponse_StatusCode200, error) {
@@ -275,7 +275,7 @@ func (api *gosnappiApi) SetTransmitState(transmitState TransmitState) (SetTransm
 		data, _ := yaml.Marshal(resp.GetStatusCode_400())
 		return nil, fmt.Errorf(string(data))
 	}
-	return nil, fmt.Errorf("Response not implemented")
+	return nil, fmt.Errorf("response not implemented")
 }
 
 func (api *gosnappiApi) SetLinkState(linkState LinkState) (SetLinkStateResponse_StatusCode200, error) {
@@ -300,7 +300,7 @@ func (api *gosnappiApi) SetLinkState(linkState LinkState) (SetLinkStateResponse_
 		data, _ := yaml.Marshal(resp.GetStatusCode_400())
 		return nil, fmt.Errorf(string(data))
 	}
-	return nil, fmt.Errorf("Response not implemented")
+	return nil, fmt.Errorf("response not implemented")
 }
 
 func (api *gosnappiApi) SetCaptureState(captureState CaptureState) (SetCaptureStateResponse_StatusCode200, error) {
@@ -325,7 +325,7 @@ func (api *gosnappiApi) SetCaptureState(captureState CaptureState) (SetCaptureSt
 		data, _ := yaml.Marshal(resp.GetStatusCode_400())
 		return nil, fmt.Errorf(string(data))
 	}
-	return nil, fmt.Errorf("Response not implemented")
+	return nil, fmt.Errorf("response not implemented")
 }
 
 func (api *gosnappiApi) UpdateFlows(flowsUpdate FlowsUpdate) (UpdateFlowsResponse_StatusCode200, error) {
@@ -350,7 +350,7 @@ func (api *gosnappiApi) UpdateFlows(flowsUpdate FlowsUpdate) (UpdateFlowsRespons
 		data, _ := yaml.Marshal(resp.GetStatusCode_400())
 		return nil, fmt.Errorf(string(data))
 	}
-	return nil, fmt.Errorf("Response not implemented")
+	return nil, fmt.Errorf("response not implemented")
 }
 
 func (api *gosnappiApi) SetRouteState(routeState RouteState) (SetRouteStateResponse_StatusCode200, error) {
@@ -375,7 +375,7 @@ func (api *gosnappiApi) SetRouteState(routeState RouteState) (SetRouteStateRespo
 		data, _ := yaml.Marshal(resp.GetStatusCode_400())
 		return nil, fmt.Errorf(string(data))
 	}
-	return nil, fmt.Errorf("Response not implemented")
+	return nil, fmt.Errorf("response not implemented")
 }
 
 func (api *gosnappiApi) GetMetrics(metricsRequest MetricsRequest) (GetMetricsResponse_StatusCode200, error) {
@@ -400,7 +400,7 @@ func (api *gosnappiApi) GetMetrics(metricsRequest MetricsRequest) (GetMetricsRes
 		data, _ := yaml.Marshal(resp.GetStatusCode_400())
 		return nil, fmt.Errorf(string(data))
 	}
-	return nil, fmt.Errorf("Response not implemented")
+	return nil, fmt.Errorf("response not implemented")
 }
 
 func (api *gosnappiApi) GetStateMetrics() (GetStateMetricsResponse_StatusCode200, error) {
@@ -425,7 +425,7 @@ func (api *gosnappiApi) GetStateMetrics() (GetStateMetricsResponse_StatusCode200
 		data, _ := yaml.Marshal(resp.GetStatusCode_400())
 		return nil, fmt.Errorf(string(data))
 	}
-	return nil, fmt.Errorf("Response not implemented")
+	return nil, fmt.Errorf("response not implemented")
 }
 
 func (api *gosnappiApi) GetCapture(captureRequest CaptureRequest) (GetCaptureResponse_StatusCode200, error) {
@@ -450,7 +450,7 @@ func (api *gosnappiApi) GetCapture(captureRequest CaptureRequest) (GetCaptureRes
 		data, _ := yaml.Marshal(resp.GetStatusCode_400())
 		return nil, fmt.Errorf(string(data))
 	}
-	return nil, fmt.Errorf("Response not implemented")
+	return nil, fmt.Errorf("response not implemented")
 }
 
 type config struct {
