@@ -96,8 +96,9 @@ func TestGetMetricsBgpv4Response(t *testing.T) {
 	api := gosnappi.NewApi()
 	api.NewGrpcTransport().SetLocation(mockServerLocation)
 	req := api.NewMetricsRequest()
+	req.Bgpv4()
 	flow_req := req.Bgpv4()
-	flow_req.SetDeviceNames([]string{"d1"})
+	flow_req.SetDeviceNames([]string{"BGP-1"})
 	resp, _ := api.GetMetrics(req)
 	assert.NotNil(t, resp)
 }

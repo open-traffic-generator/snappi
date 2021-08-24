@@ -2,7 +2,6 @@ package gosnappi
 
 import (
 	context "context"
-	fmt "fmt"
 	log "log"
 	net "net"
 	"reflect"
@@ -32,19 +31,19 @@ type server struct {
 
 func StartMockServer(location string) error {
 	if mockServer != nil {
-		log.Print("MockServer: Server already running")
+		log.Println("MockServer: Server already running")
 		return nil
 	}
 
 	lis, err := net.Listen("tcp", location)
 
 	if err != nil {
-		log.Fatal(fmt.Sprintf("MockServer: Server failed to listen on address %s", location))
+		log.Fatal("MockServer: Server failed to listen on address " + location)
 	}
 	svr := grpc.NewServer()
-	log.Print(fmt.Sprintf("MockServer: started and listening on address %s", location))
+	log.Println("MockServer: started and listening on address " + location)
 	snappipb.RegisterOpenapiServer(svr, &server{})
-	log.Print("MockServer: Server subscribed with gRPC Protocol Service")
+	log.Println("MockServer: Server subscribed with gRPC Protocol Service")
 
 	go func() {
 		if err := svr.Serve(lis); err != nil {
@@ -76,7 +75,7 @@ func (s *server) SetConfig(ctx context.Context, req *snappipb.SetConfigRequest) 
 			},
 		}
 	}
-	fmt.Println(req.Config)
+	log.Printf("Got config: %v\n", req.Config)
 	return resp, nil
 }
 
@@ -87,6 +86,18 @@ func (s *server) GetConfig(ctx context.Context, in *emptypb.Empty) (*snappipb.Ge
 		},
 	}
 	return resp, nil
+}
+
+func getBgpDeviceNames(cfg *snappipb.Config) []string {
+	names := []string{}
+	for _, d := range cfg.Devices {
+		if d == nil || d.Ethernet == nil || d.Ethernet.Ipv4 == nil || d.Ethernet.Ipv4.Bgpv4 == nil {
+			continue
+		}
+		names = append(names, d.Ethernet.Ipv4.Bgpv4.Name)
+	}
+
+	return names
 }
 
 func (s *server) GetMetrics(ctx context.Context, req *snappipb.GetMetricsRequest) (*snappipb.GetMetricsResponse, error) {
@@ -149,33 +160,46 @@ func (s *server) GetMetrics(ctx context.Context, req *snappipb.GetMetricsRequest
 			}
 		}
 	} else if req.MetricsRequest.Bgpv4 != nil {
-		bgpName := "bgp"
-		d := &snappipb.Bgpv4Metric{Name: &bgpName}
-		deviceNames := []string{}
-		for _, device := range mockConfig.Devices {
-			deviceNames = append(deviceNames, device.Name)
-		}
-		for _, req_dev := range req.MetricsRequest.Bgpv4.DeviceNames {
-			res := contains(deviceNames, req_dev)
-			if res == false {
-				resp = &snappipb.GetMetricsResponse{
-					StatusCode_400: &snappipb.GetMetricsResponse_StatusCode400{
-						BadRequest: &snappipb.BadRequest{
-							ResponseError: &snappipb.ResponseError{
-								Errors: []string{"requested device is not available in configured devices"},
+		allNames := getBgpDeviceNames(mockConfig)
+		someNames := req.MetricsRequest.Bgpv4.DeviceNames
+		if len(someNames) == 0 {
+			someNames = allNames
+		} else {
+			for _, name := range someNames {
+				if !contains(allNames, name) {
+					return &snappipb.GetMetricsResponse{
+						StatusCode_400: &snappipb.GetMetricsResponse_StatusCode400{
+							BadRequest: &snappipb.BadRequest{
+								ResponseError: &snappipb.ResponseError{
+									Errors: []string{name + " is not a valid BGPv4 device"},
+								},
 							},
 						},
-					},
-				}
-			} else {
-				resp = &snappipb.GetMetricsResponse{
-					StatusCode_200: &snappipb.GetMetricsResponse_StatusCode200{
-						MetricsResponse: &snappipb.MetricsResponse{
-							Bgpv4Metrics: []*snappipb.Bgpv4Metric{d},
-						},
-					},
+					}, nil
 				}
 			}
+		}
+
+		metrics := []*snappipb.Bgpv4Metric{}
+
+		for _, name := range someNames {
+			one := int32(1)
+			zero := int32(0)
+			up := snappipb.Bgpv4Metric_SessionState_up
+			metrics = append(metrics, &snappipb.Bgpv4Metric{
+				Name:             &name,
+				SessionState:     &up,
+				RoutesAdvertised: &one,
+				RoutesWithdrawn:  &zero,
+			})
+		}
+
+		resp = &snappipb.GetMetricsResponse{
+			StatusCode_200: &snappipb.GetMetricsResponse_StatusCode200{
+				MetricsResponse: &snappipb.MetricsResponse{
+					Bgpv4Metrics: metrics,
+				},
+			},
 		}
 	}
 	return resp, nil
