@@ -1,4 +1,4 @@
-package gosnappi_test
+package gosnappi
 
 import (
 	context "context"
@@ -13,9 +13,8 @@ import (
 )
 
 var (
-	testport   uint             = 50001
-	testserver *grpc.Server     = nil
-	config     *snappipb.Config = nil
+	mockServer *grpc.Server     = nil
+	mockConfig *snappipb.Config = nil
 )
 
 func contains(s []string, e string) bool {
@@ -31,21 +30,19 @@ type server struct {
 	snappipb.UnimplementedOpenapiServer
 }
 
-func StartMockServer() error {
-	if testserver != nil {
+func StartMockServer(location string) error {
+	if mockServer != nil {
 		log.Print("MockServer: Server already running")
 		return nil
 	}
 
-	addr := fmt.Sprintf("127.0.0.1:%d", testport)
-
-	lis, err := net.Listen("tcp", addr)
+	lis, err := net.Listen("tcp", location)
 
 	if err != nil {
-		log.Fatal(fmt.Sprintf("MockServer: Server failed to listen on address %s", addr))
+		log.Fatal(fmt.Sprintf("MockServer: Server failed to listen on address %s", location))
 	}
 	svr := grpc.NewServer()
-	log.Print(fmt.Sprintf("MockServer: started and listening on address %s", addr))
+	log.Print(fmt.Sprintf("MockServer: started and listening on address %s", location))
 	snappipb.RegisterOpenapiServer(svr, &server{})
 	log.Print("MockServer: Server subscribed with gRPC Protocol Service")
 
@@ -55,13 +52,13 @@ func StartMockServer() error {
 
 		}
 	}()
-	testserver = svr
+	mockServer = svr
 	return nil
 }
 
 func (s *server) SetConfig(ctx context.Context, req *snappipb.SetConfigRequest) (*snappipb.SetConfigResponse, error) {
 	var resp *snappipb.SetConfigResponse
-	if reflect.TypeOf(req.Config) != reflect.TypeOf(config) {
+	if reflect.TypeOf(req.Config) != reflect.TypeOf(mockConfig) {
 		resp = &snappipb.SetConfigResponse{
 			StatusCode_400: &snappipb.SetConfigResponse_StatusCode400{
 				BadRequest: &snappipb.BadRequest{
@@ -72,7 +69,7 @@ func (s *server) SetConfig(ctx context.Context, req *snappipb.SetConfigRequest) 
 			},
 		}
 	} else {
-		config = req.Config
+		mockConfig = req.Config
 		resp = &snappipb.SetConfigResponse{
 			StatusCode_200: &snappipb.SetConfigResponse_StatusCode200{
 				Success: &snappipb.Success{},
@@ -86,7 +83,7 @@ func (s *server) SetConfig(ctx context.Context, req *snappipb.SetConfigRequest) 
 func (s *server) GetConfig(ctx context.Context, in *emptypb.Empty) (*snappipb.GetConfigResponse, error) {
 	resp := &snappipb.GetConfigResponse{
 		StatusCode_200: &snappipb.GetConfigResponse_StatusCode200{
-			Config: config,
+			Config: mockConfig,
 		},
 	}
 	return resp, nil
@@ -98,7 +95,7 @@ func (s *server) GetMetrics(ctx context.Context, req *snappipb.GetMetricsRequest
 	if req.MetricsRequest.Flow != nil {
 		f := &snappipb.FlowMetric{FramesTx: &tx}
 		flowNames := []string{}
-		for _, flow := range config.Flows {
+		for _, flow := range mockConfig.Flows {
 			flowNames = append(flowNames, flow.Name)
 		}
 		for _, req_flow := range req.MetricsRequest.Flow.FlowNames {
@@ -126,7 +123,7 @@ func (s *server) GetMetrics(ctx context.Context, req *snappipb.GetMetricsRequest
 	} else if req.MetricsRequest.Port != nil {
 		p := &snappipb.PortMetric{FramesTx: &tx}
 		portNames := []string{}
-		for _, port := range config.Ports {
+		for _, port := range mockConfig.Ports {
 			portNames = append(portNames, port.Name)
 		}
 		for _, req_port := range req.MetricsRequest.Port.PortNames {
@@ -155,7 +152,7 @@ func (s *server) GetMetrics(ctx context.Context, req *snappipb.GetMetricsRequest
 		bgpName := "bgp"
 		d := &snappipb.Bgpv4Metric{Name: &bgpName}
 		deviceNames := []string{}
-		for _, device := range config.Devices {
+		for _, device := range mockConfig.Devices {
 			deviceNames = append(deviceNames, device.Name)
 		}
 		for _, req_dev := range req.MetricsRequest.Bgpv4.DeviceNames {
