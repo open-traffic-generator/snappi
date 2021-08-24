@@ -4,7 +4,7 @@
 package gosnappi
 
 import (
-	"context"
+	context "context"
 	"encoding/json"
 	"fmt"
 	"time"
