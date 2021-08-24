@@ -85,5 +85,5 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               ref: "refs/tags/gosnappi/${{ steps.get_version.outputs.version }}",
-              sha: ${{ steps.get_sha.outputs.sha }}
+              sha: "${{ steps.get_sha.outputs.sha }}"
             })
