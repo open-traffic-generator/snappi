@@ -18,6 +18,15 @@ var (
 	config     *snappipb.Config = nil
 )
 
+func contains(s []string, e string) bool {
+	for _, a := range s {
+		if a == e {
+			return true
+		}
+	}
+	return false
+}
+
 type server struct {
 	snappipb.UnimplementedOpenapiServer
 }
@@ -83,8 +92,36 @@ func (s *server) GetConfig(ctx context.Context, in *emptypb.Empty) (*snappipb.Ge
 	return resp, nil
 }
 
-func init() {
-	if err := StartMockServer(); err != nil {
-		log.Fatal("Mock server init failed")
+func (s *server) GetMetrics(ctx context.Context, req *snappipb.GetMetricsRequest) (*snappipb.GetMetricsResponse, error) {
+	var resp *snappipb.GetMetricsResponse
+	var tx int32 = 100
+	f := &snappipb.FlowMetric{FramesTx: &tx}
+	resp = &snappipb.GetMetricsResponse{
+		StatusCode_200: &snappipb.GetMetricsResponse_StatusCode200{
+			MetricsResponse: &snappipb.MetricsResponse{
+				FlowMetrics: []*snappipb.FlowMetric{f},
+			},
+		},
 	}
+
+	flowNames := []string{}
+	for _, flow := range config.Flows {
+		flowNames = append(flowNames, flow.Name)
+	}
+
+	for _, req_flow := range req.MetricsRequest.Flow.FlowNames {
+		res := contains(flowNames, req_flow)
+		if res == false {
+			resp = &snappipb.GetMetricsResponse{
+				StatusCode_400: &snappipb.GetMetricsResponse_StatusCode400{
+					BadRequest: &snappipb.BadRequest{
+						ResponseError: &snappipb.ResponseError{
+							Errors: []string{"requested flow in not available in configured flows"},
+						},
+					},
+				},
+			}
+		}
+	}
+	return resp, nil
 }
