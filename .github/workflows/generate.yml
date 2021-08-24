@@ -73,3 +73,15 @@ jobs:
           artifacts: "dist/*,models-release"
           tag: ${{ steps.get_version.outputs.version }}
           token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create tag for gosnappi
+        if: steps.check_tag.outputs.exists == 'false' && matrix.python-version == '3.6'
+        uses: actions/github-script@v3
+        with:
+          github-token: ${{ github.token }}
+          script: |
+            github.git.createRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: "refs/tags/gosnappi/${{ steps.get_version.outputs.version }}",
+              sha: context.sha
+            })
