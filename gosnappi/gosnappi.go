@@ -516,7 +516,6 @@ func (obj *config) Ports() ConfigPortIter {
 		obj.obj.Ports = []*snappipb.Port{}
 	}
 	return &configPortIter{obj: obj}
-
 }
 
 type configPortIter struct {
@@ -549,7 +548,6 @@ func (obj *config) Lags() ConfigLagIter {
 		obj.obj.Lags = []*snappipb.Lag{}
 	}
 	return &configLagIter{obj: obj}
-
 }
 
 type configLagIter struct {
@@ -582,7 +580,6 @@ func (obj *config) Layer1() ConfigLayer1Iter {
 		obj.obj.Layer1 = []*snappipb.Layer1{}
 	}
 	return &configLayer1Iter{obj: obj}
-
 }
 
 type configLayer1Iter struct {
@@ -615,7 +612,6 @@ func (obj *config) Captures() ConfigCaptureIter {
 		obj.obj.Captures = []*snappipb.Capture{}
 	}
 	return &configCaptureIter{obj: obj}
-
 }
 
 type configCaptureIter struct {
@@ -648,7 +644,6 @@ func (obj *config) Devices() ConfigDeviceIter {
 		obj.obj.Devices = []*snappipb.Device{}
 	}
 	return &configDeviceIter{obj: obj}
-
 }
 
 type configDeviceIter struct {
@@ -681,7 +676,6 @@ func (obj *config) Flows() ConfigFlowIter {
 		obj.obj.Flows = []*snappipb.Flow{}
 	}
 	return &configFlowIter{obj: obj}
-
 }
 
 type configFlowIter struct {
@@ -713,8 +707,8 @@ func (obj *config) Events() Event {
 	if obj.obj.Events == nil {
 		obj.obj.Events = &snappipb.Event{}
 	}
-	return &event{obj: obj.obj.Events}
 
+	return &event{obj: obj.obj.Events}
 }
 
 // Options returns a ConfigOptions
@@ -723,8 +717,8 @@ func (obj *config) Options() ConfigOptions {
 	if obj.obj.Options == nil {
 		obj.obj.Options = &snappipb.ConfigOptions{}
 	}
-	return &configOptions{obj: obj.obj.Options}
 
+	return &configOptions{obj: obj.obj.Options}
 }
 
 type transmitState struct {
@@ -775,6 +769,8 @@ type TransmitState interface {
 	FromJson(value string) error
 	FlowNames() []string
 	SetFlowNames(value []string) TransmitState
+	State() TransmitStateStateEnum
+	SetState(value TransmitStateStateEnum) TransmitState
 }
 
 // FlowNames returns a []string
@@ -803,6 +799,31 @@ func (obj *transmitState) FlowNames() []string {
 //
 func (obj *transmitState) SetFlowNames(value []string) TransmitState {
 	obj.obj.FlowNames = value
+
+	return obj
+}
+
+type TransmitStateStateEnum string
+
+var TransmitStateState = struct {
+	UNSPECIFIED TransmitStateStateEnum
+	START       TransmitStateStateEnum
+	STOP        TransmitStateStateEnum
+	PAUSE       TransmitStateStateEnum
+}{
+	UNSPECIFIED: TransmitStateStateEnum("unspecified"),
+	START:       TransmitStateStateEnum("start"),
+	STOP:        TransmitStateStateEnum("stop"),
+	PAUSE:       TransmitStateStateEnum("pause"),
+}
+
+func (obj *transmitState) State() TransmitStateStateEnum {
+	return TransmitStateStateEnum(obj.obj.State.Enum().String())
+}
+
+func (obj *transmitState) SetState(value TransmitStateStateEnum) TransmitState {
+	intValue := snappipb.TransmitState_State_Enum_value[string(value)]
+	obj.obj.State = snappipb.TransmitState_State_Enum(intValue)
 	return obj
 }
 
@@ -854,6 +875,8 @@ type LinkState interface {
 	FromJson(value string) error
 	PortNames() []string
 	SetPortNames(value []string) LinkState
+	State() LinkStateStateEnum
+	SetState(value LinkStateStateEnum) LinkState
 }
 
 // PortNames returns a []string
@@ -882,6 +905,29 @@ func (obj *linkState) PortNames() []string {
 //
 func (obj *linkState) SetPortNames(value []string) LinkState {
 	obj.obj.PortNames = value
+
+	return obj
+}
+
+type LinkStateStateEnum string
+
+var LinkStateState = struct {
+	UNSPECIFIED LinkStateStateEnum
+	UP          LinkStateStateEnum
+	DOWN        LinkStateStateEnum
+}{
+	UNSPECIFIED: LinkStateStateEnum("unspecified"),
+	UP:          LinkStateStateEnum("up"),
+	DOWN:        LinkStateStateEnum("down"),
+}
+
+func (obj *linkState) State() LinkStateStateEnum {
+	return LinkStateStateEnum(obj.obj.State.Enum().String())
+}
+
+func (obj *linkState) SetState(value LinkStateStateEnum) LinkState {
+	intValue := snappipb.LinkState_State_Enum_value[string(value)]
+	obj.obj.State = snappipb.LinkState_State_Enum(intValue)
 	return obj
 }
 
@@ -933,6 +979,8 @@ type CaptureState interface {
 	FromJson(value string) error
 	PortNames() []string
 	SetPortNames(value []string) CaptureState
+	State() CaptureStateStateEnum
+	SetState(value CaptureStateStateEnum) CaptureState
 }
 
 // PortNames returns a []string
@@ -961,6 +1009,29 @@ func (obj *captureState) PortNames() []string {
 //
 func (obj *captureState) SetPortNames(value []string) CaptureState {
 	obj.obj.PortNames = value
+
+	return obj
+}
+
+type CaptureStateStateEnum string
+
+var CaptureStateState = struct {
+	UNSPECIFIED CaptureStateStateEnum
+	START       CaptureStateStateEnum
+	STOP        CaptureStateStateEnum
+}{
+	UNSPECIFIED: CaptureStateStateEnum("unspecified"),
+	START:       CaptureStateStateEnum("start"),
+	STOP:        CaptureStateStateEnum("stop"),
+}
+
+func (obj *captureState) State() CaptureStateStateEnum {
+	return CaptureStateStateEnum(obj.obj.State.Enum().String())
+}
+
+func (obj *captureState) SetState(value CaptureStateStateEnum) CaptureState {
+	intValue := snappipb.CaptureState_State_Enum_value[string(value)]
+	obj.obj.State = snappipb.CaptureState_State_Enum(intValue)
 	return obj
 }
 
@@ -1020,7 +1091,6 @@ func (obj *flowsUpdate) Flows() FlowsUpdateFlowIter {
 		obj.obj.Flows = []*snappipb.Flow{}
 	}
 	return &flowsUpdateFlowIter{obj: obj}
-
 }
 
 type flowsUpdateFlowIter struct {
@@ -1094,6 +1164,8 @@ type RouteState interface {
 	FromJson(value string) error
 	Names() []string
 	SetNames(value []string) RouteState
+	State() RouteStateStateEnum
+	SetState(value RouteStateStateEnum) RouteState
 }
 
 // Names returns a []string
@@ -1126,6 +1198,29 @@ func (obj *routeState) Names() []string {
 //
 func (obj *routeState) SetNames(value []string) RouteState {
 	obj.obj.Names = value
+
+	return obj
+}
+
+type RouteStateStateEnum string
+
+var RouteStateState = struct {
+	UNSPECIFIED RouteStateStateEnum
+	WITHDRAW    RouteStateStateEnum
+	ADVERTISE   RouteStateStateEnum
+}{
+	UNSPECIFIED: RouteStateStateEnum("unspecified"),
+	WITHDRAW:    RouteStateStateEnum("withdraw"),
+	ADVERTISE:   RouteStateStateEnum("advertise"),
+}
+
+func (obj *routeState) State() RouteStateStateEnum {
+	return RouteStateStateEnum(obj.obj.State.Enum().String())
+}
+
+func (obj *routeState) SetState(value RouteStateStateEnum) RouteState {
+	intValue := snappipb.RouteState_State_Enum_value[string(value)]
+	obj.obj.State = snappipb.RouteState_State_Enum(intValue)
 	return obj
 }
 
@@ -1175,10 +1270,39 @@ type MetricsRequest interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() MetricsRequestChoiceEnum
+	SetChoice(value MetricsRequestChoiceEnum) MetricsRequest
 	Port() PortMetricsRequest
 	Flow() FlowMetricsRequest
 	Bgpv4() Bgpv4MetricsRequest
 	Bgpv6() Bgpv6MetricsRequest
+}
+
+type MetricsRequestChoiceEnum string
+
+var MetricsRequestChoice = struct {
+	UNSPECIFIED MetricsRequestChoiceEnum
+	PORT        MetricsRequestChoiceEnum
+	FLOW        MetricsRequestChoiceEnum
+	BGPV4       MetricsRequestChoiceEnum
+	BGPV6       MetricsRequestChoiceEnum
+}{
+	UNSPECIFIED: MetricsRequestChoiceEnum("unspecified"),
+	PORT:        MetricsRequestChoiceEnum("port"),
+	FLOW:        MetricsRequestChoiceEnum("flow"),
+	BGPV4:       MetricsRequestChoiceEnum("bgpv4"),
+	BGPV6:       MetricsRequestChoiceEnum("bgpv6"),
+}
+
+func (obj *metricsRequest) Choice() MetricsRequestChoiceEnum {
+	return MetricsRequestChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *metricsRequest) SetChoice(value MetricsRequestChoiceEnum) MetricsRequest {
+	intValue := snappipb.MetricsRequest_Choice_Enum_value[string(value)]
+	enumValue := snappipb.MetricsRequest_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Port returns a PortMetricsRequest
@@ -1187,8 +1311,8 @@ func (obj *metricsRequest) Port() PortMetricsRequest {
 	if obj.obj.Port == nil {
 		obj.obj.Port = &snappipb.PortMetricsRequest{}
 	}
+	obj.SetChoice(MetricsRequestChoice.PORT)
 	return &portMetricsRequest{obj: obj.obj.Port}
-
 }
 
 // Flow returns a FlowMetricsRequest
@@ -1197,8 +1321,8 @@ func (obj *metricsRequest) Flow() FlowMetricsRequest {
 	if obj.obj.Flow == nil {
 		obj.obj.Flow = &snappipb.FlowMetricsRequest{}
 	}
+	obj.SetChoice(MetricsRequestChoice.FLOW)
 	return &flowMetricsRequest{obj: obj.obj.Flow}
-
 }
 
 // Bgpv4 returns a Bgpv4MetricsRequest
@@ -1207,8 +1331,8 @@ func (obj *metricsRequest) Bgpv4() Bgpv4MetricsRequest {
 	if obj.obj.Bgpv4 == nil {
 		obj.obj.Bgpv4 = &snappipb.Bgpv4MetricsRequest{}
 	}
+	obj.SetChoice(MetricsRequestChoice.BGPV4)
 	return &bgpv4MetricsRequest{obj: obj.obj.Bgpv4}
-
 }
 
 // Bgpv6 returns a Bgpv6MetricsRequest
@@ -1217,8 +1341,8 @@ func (obj *metricsRequest) Bgpv6() Bgpv6MetricsRequest {
 	if obj.obj.Bgpv6 == nil {
 		obj.obj.Bgpv6 = &snappipb.Bgpv6MetricsRequest{}
 	}
+	obj.SetChoice(MetricsRequestChoice.BGPV6)
 	return &bgpv6MetricsRequest{obj: obj.obj.Bgpv6}
-
 }
 
 type captureRequest struct {
@@ -1297,6 +1421,7 @@ func (obj *captureRequest) PortName() string {
 //
 func (obj *captureRequest) SetPortName(value string) CaptureRequest {
 	obj.obj.PortName = value
+
 	return obj
 }
 
@@ -1378,6 +1503,7 @@ func (obj *port) Location() string {
 //  Get the configured location state by using the /results/port API.
 func (obj *port) SetLocation(value string) Port {
 	obj.obj.Location = &value
+
 	return obj
 }
 
@@ -1391,6 +1517,7 @@ func (obj *port) Name() string {
 //  Globally unique name of an object. It also serves as the primary key for arrays of objects.
 func (obj *port) SetName(value string) Port {
 	obj.obj.Name = value
+
 	return obj
 }
 
@@ -1452,7 +1579,6 @@ func (obj *lag) Ports() LagLagPortIter {
 		obj.obj.Ports = []*snappipb.LagPort{}
 	}
 	return &lagLagPortIter{obj: obj}
-
 }
 
 type lagLagPortIter struct {
@@ -1488,6 +1614,7 @@ func (obj *lag) Name() string {
 //  Globally unique name of an object. It also serves as the primary key for arrays of objects.
 func (obj *lag) SetName(value string) Lag {
 	obj.obj.Name = value
+
 	return obj
 }
 
@@ -1539,6 +1666,10 @@ type Layer1 interface {
 	FromJson(value string) error
 	PortNames() []string
 	SetPortNames(value []string) Layer1
+	Speed() Layer1SpeedEnum
+	SetSpeed(value Layer1SpeedEnum) Layer1
+	Media() Layer1MediaEnum
+	SetMedia(value Layer1MediaEnum) Layer1
 	Promiscuous() bool
 	SetPromiscuous(value bool) Layer1
 	Mtu() int32
@@ -1581,6 +1712,73 @@ func (obj *layer1) PortNames() []string {
 //
 func (obj *layer1) SetPortNames(value []string) Layer1 {
 	obj.obj.PortNames = value
+
+	return obj
+}
+
+type Layer1SpeedEnum string
+
+var Layer1Speed = struct {
+	UNSPECIFIED       Layer1SpeedEnum
+	SPEED_10_FD_MBPS  Layer1SpeedEnum
+	SPEED_10_HD_MBPS  Layer1SpeedEnum
+	SPEED_100_FD_MBPS Layer1SpeedEnum
+	SPEED_100_HD_MBPS Layer1SpeedEnum
+	SPEED_1_GBPS      Layer1SpeedEnum
+	SPEED_10_GBPS     Layer1SpeedEnum
+	SPEED_25_GBPS     Layer1SpeedEnum
+	SPEED_40_GBPS     Layer1SpeedEnum
+	SPEED_100_GBPS    Layer1SpeedEnum
+	SPEED_200_GBPS    Layer1SpeedEnum
+	SPEED_400_GBPS    Layer1SpeedEnum
+}{
+	UNSPECIFIED:       Layer1SpeedEnum("unspecified"),
+	SPEED_10_FD_MBPS:  Layer1SpeedEnum("speed_10_fd_mbps"),
+	SPEED_10_HD_MBPS:  Layer1SpeedEnum("speed_10_hd_mbps"),
+	SPEED_100_FD_MBPS: Layer1SpeedEnum("speed_100_fd_mbps"),
+	SPEED_100_HD_MBPS: Layer1SpeedEnum("speed_100_hd_mbps"),
+	SPEED_1_GBPS:      Layer1SpeedEnum("speed_1_gbps"),
+	SPEED_10_GBPS:     Layer1SpeedEnum("speed_10_gbps"),
+	SPEED_25_GBPS:     Layer1SpeedEnum("speed_25_gbps"),
+	SPEED_40_GBPS:     Layer1SpeedEnum("speed_40_gbps"),
+	SPEED_100_GBPS:    Layer1SpeedEnum("speed_100_gbps"),
+	SPEED_200_GBPS:    Layer1SpeedEnum("speed_200_gbps"),
+	SPEED_400_GBPS:    Layer1SpeedEnum("speed_400_gbps"),
+}
+
+func (obj *layer1) Speed() Layer1SpeedEnum {
+	return Layer1SpeedEnum(obj.obj.Speed.Enum().String())
+}
+
+func (obj *layer1) SetSpeed(value Layer1SpeedEnum) Layer1 {
+	intValue := snappipb.Layer1_Speed_Enum_value[string(value)]
+	enumValue := snappipb.Layer1_Speed_Enum(intValue)
+	obj.obj.Speed = &enumValue
+	return obj
+}
+
+type Layer1MediaEnum string
+
+var Layer1Media = struct {
+	UNSPECIFIED Layer1MediaEnum
+	COPPER      Layer1MediaEnum
+	FIBER       Layer1MediaEnum
+	SGMII       Layer1MediaEnum
+}{
+	UNSPECIFIED: Layer1MediaEnum("unspecified"),
+	COPPER:      Layer1MediaEnum("copper"),
+	FIBER:       Layer1MediaEnum("fiber"),
+	SGMII:       Layer1MediaEnum("sgmii"),
+}
+
+func (obj *layer1) Media() Layer1MediaEnum {
+	return Layer1MediaEnum(obj.obj.Media.Enum().String())
+}
+
+func (obj *layer1) SetMedia(value Layer1MediaEnum) Layer1 {
+	intValue := snappipb.Layer1_Media_Enum_value[string(value)]
+	enumValue := snappipb.Layer1_Media_Enum(intValue)
+	obj.obj.Media = &enumValue
 	return obj
 }
 
@@ -1594,6 +1792,7 @@ func (obj *layer1) Promiscuous() bool {
 //  Enable promiscuous mode if supported.
 func (obj *layer1) SetPromiscuous(value bool) Layer1 {
 	obj.obj.Promiscuous = &value
+
 	return obj
 }
 
@@ -1607,6 +1806,7 @@ func (obj *layer1) Mtu() int32 {
 //  Set the maximum transmission unit size if supported.
 func (obj *layer1) SetMtu(value int32) Layer1 {
 	obj.obj.Mtu = &value
+
 	return obj
 }
 
@@ -1622,6 +1822,7 @@ func (obj *layer1) IeeeMediaDefaults() bool {
 //  and rs_fec settings for gigabit ethernet interfaces.
 func (obj *layer1) SetIeeeMediaDefaults(value bool) Layer1 {
 	obj.obj.IeeeMediaDefaults = &value
+
 	return obj
 }
 
@@ -1635,6 +1836,7 @@ func (obj *layer1) AutoNegotiate() bool {
 //  Enable/disable auto negotiation.
 func (obj *layer1) SetAutoNegotiate(value bool) Layer1 {
 	obj.obj.AutoNegotiate = &value
+
 	return obj
 }
 
@@ -1644,8 +1846,8 @@ func (obj *layer1) AutoNegotiation() Layer1AutoNegotiation {
 	if obj.obj.AutoNegotiation == nil {
 		obj.obj.AutoNegotiation = &snappipb.Layer1AutoNegotiation{}
 	}
-	return &layer1AutoNegotiation{obj: obj.obj.AutoNegotiation}
 
+	return &layer1AutoNegotiation{obj: obj.obj.AutoNegotiation}
 }
 
 // FlowControl returns a Layer1FlowControl
@@ -1654,8 +1856,8 @@ func (obj *layer1) FlowControl() Layer1FlowControl {
 	if obj.obj.FlowControl == nil {
 		obj.obj.FlowControl = &snappipb.Layer1FlowControl{}
 	}
-	return &layer1FlowControl{obj: obj.obj.FlowControl}
 
+	return &layer1FlowControl{obj: obj.obj.FlowControl}
 }
 
 // Name returns a string
@@ -1668,6 +1870,7 @@ func (obj *layer1) Name() string {
 //  Globally unique name of an object. It also serves as the primary key for arrays of objects.
 func (obj *layer1) SetName(value string) Layer1 {
 	obj.obj.Name = value
+
 	return obj
 }
 
@@ -1724,6 +1927,8 @@ type Capture interface {
 	SetOverwrite(value bool) Capture
 	PacketSize() int32
 	SetPacketSize(value int32) Capture
+	Format() CaptureFormatEnum
+	SetFormat(value CaptureFormatEnum) Capture
 	Name() string
 	SetName(value string) Capture
 }
@@ -1754,6 +1959,7 @@ func (obj *capture) PortNames() []string {
 //
 func (obj *capture) SetPortNames(value []string) Capture {
 	obj.obj.PortNames = value
+
 	return obj
 }
 
@@ -1765,7 +1971,6 @@ func (obj *capture) Filters() CaptureCaptureFilterIter {
 		obj.obj.Filters = []*snappipb.CaptureFilter{}
 	}
 	return &captureCaptureFilterIter{obj: obj}
-
 }
 
 type captureCaptureFilterIter struct {
@@ -1801,6 +2006,7 @@ func (obj *capture) Overwrite() bool {
 //  Overwrite the capture buffer.
 func (obj *capture) SetOverwrite(value bool) Capture {
 	obj.obj.Overwrite = &value
+
 	return obj
 }
 
@@ -1814,6 +2020,30 @@ func (obj *capture) PacketSize() int32 {
 //  The maximum size of each captured packet. If no value is specified or it is null then the entire packet will be captured.
 func (obj *capture) SetPacketSize(value int32) Capture {
 	obj.obj.PacketSize = &value
+
+	return obj
+}
+
+type CaptureFormatEnum string
+
+var CaptureFormat = struct {
+	UNSPECIFIED CaptureFormatEnum
+	PCAP        CaptureFormatEnum
+	PCAPNG      CaptureFormatEnum
+}{
+	UNSPECIFIED: CaptureFormatEnum("unspecified"),
+	PCAP:        CaptureFormatEnum("pcap"),
+	PCAPNG:      CaptureFormatEnum("pcapng"),
+}
+
+func (obj *capture) Format() CaptureFormatEnum {
+	return CaptureFormatEnum(obj.obj.Format.Enum().String())
+}
+
+func (obj *capture) SetFormat(value CaptureFormatEnum) Capture {
+	intValue := snappipb.Capture_Format_Enum_value[string(value)]
+	enumValue := snappipb.Capture_Format_Enum(intValue)
+	obj.obj.Format = &enumValue
 	return obj
 }
 
@@ -1827,6 +2057,7 @@ func (obj *capture) Name() string {
 //  Globally unique name of an object. It also serves as the primary key for arrays of objects.
 func (obj *capture) SetName(value string) Capture {
 	obj.obj.Name = value
+
 	return obj
 }
 
@@ -1913,6 +2144,7 @@ func (obj *device) ContainerName() string {
 //
 func (obj *device) SetContainerName(value string) Device {
 	obj.obj.ContainerName = value
+
 	return obj
 }
 
@@ -1922,8 +2154,8 @@ func (obj *device) Ethernet() DeviceEthernet {
 	if obj.obj.Ethernet == nil {
 		obj.obj.Ethernet = &snappipb.DeviceEthernet{}
 	}
-	return &deviceEthernet{obj: obj.obj.Ethernet}
 
+	return &deviceEthernet{obj: obj.obj.Ethernet}
 }
 
 // Name returns a string
@@ -1936,6 +2168,7 @@ func (obj *device) Name() string {
 //  Globally unique name of an object. It also serves as the primary key for arrays of objects.
 func (obj *device) SetName(value string) Device {
 	obj.obj.Name = value
+
 	return obj
 }
 
@@ -2001,8 +2234,8 @@ func (obj *flow) TxRx() FlowTxRx {
 	if obj.obj.TxRx == nil {
 		obj.obj.TxRx = &snappipb.FlowTxRx{}
 	}
-	return &flowTxRx{obj: obj.obj.TxRx}
 
+	return &flowTxRx{obj: obj.obj.TxRx}
 }
 
 // Packet returns a []FlowHeader
@@ -2023,7 +2256,6 @@ func (obj *flow) Packet() FlowFlowHeaderIter {
 		obj.obj.Packet = []*snappipb.FlowHeader{}
 	}
 	return &flowFlowHeaderIter{obj: obj}
-
 }
 
 type flowFlowHeaderIter struct {
@@ -2055,8 +2287,8 @@ func (obj *flow) Size() FlowSize {
 	if obj.obj.Size == nil {
 		obj.obj.Size = &snappipb.FlowSize{}
 	}
-	return &flowSize{obj: obj.obj.Size}
 
+	return &flowSize{obj: obj.obj.Size}
 }
 
 // Rate returns a FlowRate
@@ -2065,8 +2297,8 @@ func (obj *flow) Rate() FlowRate {
 	if obj.obj.Rate == nil {
 		obj.obj.Rate = &snappipb.FlowRate{}
 	}
-	return &flowRate{obj: obj.obj.Rate}
 
+	return &flowRate{obj: obj.obj.Rate}
 }
 
 // Duration returns a FlowDuration
@@ -2075,8 +2307,8 @@ func (obj *flow) Duration() FlowDuration {
 	if obj.obj.Duration == nil {
 		obj.obj.Duration = &snappipb.FlowDuration{}
 	}
-	return &flowDuration{obj: obj.obj.Duration}
 
+	return &flowDuration{obj: obj.obj.Duration}
 }
 
 // Metrics returns a FlowMetrics
@@ -2085,8 +2317,8 @@ func (obj *flow) Metrics() FlowMetrics {
 	if obj.obj.Metrics == nil {
 		obj.obj.Metrics = &snappipb.FlowMetrics{}
 	}
-	return &flowMetrics{obj: obj.obj.Metrics}
 
+	return &flowMetrics{obj: obj.obj.Metrics}
 }
 
 // Name returns a string
@@ -2099,6 +2331,7 @@ func (obj *flow) Name() string {
 //  Globally unique name of an object. It also serves as the primary key for arrays of objects.
 func (obj *flow) SetName(value string) Flow {
 	obj.obj.Name = value
+
 	return obj
 }
 
@@ -2169,6 +2402,7 @@ func (obj *event) Enable() bool {
 //  additional instrumentation data.
 func (obj *event) SetEnable(value bool) Event {
 	obj.obj.Enable = &value
+
 	return obj
 }
 
@@ -2178,8 +2412,8 @@ func (obj *event) Link() EventLink {
 	if obj.obj.Link == nil {
 		obj.obj.Link = &snappipb.EventLink{}
 	}
-	return &eventLink{obj: obj.obj.Link}
 
+	return &eventLink{obj: obj.obj.Link}
 }
 
 // RxRateThreshold returns a EventRxRateThreshold
@@ -2188,8 +2422,8 @@ func (obj *event) RxRateThreshold() EventRxRateThreshold {
 	if obj.obj.RxRateThreshold == nil {
 		obj.obj.RxRateThreshold = &snappipb.EventRxRateThreshold{}
 	}
-	return &eventRxRateThreshold{obj: obj.obj.RxRateThreshold}
 
+	return &eventRxRateThreshold{obj: obj.obj.RxRateThreshold}
 }
 
 // RouteAdvertiseWithdraw returns a EventRouteAdvertiseWithdraw
@@ -2198,8 +2432,8 @@ func (obj *event) RouteAdvertiseWithdraw() EventRouteAdvertiseWithdraw {
 	if obj.obj.RouteAdvertiseWithdraw == nil {
 		obj.obj.RouteAdvertiseWithdraw = &snappipb.EventRouteAdvertiseWithdraw{}
 	}
-	return &eventRouteAdvertiseWithdraw{obj: obj.obj.RouteAdvertiseWithdraw}
 
+	return &eventRouteAdvertiseWithdraw{obj: obj.obj.RouteAdvertiseWithdraw}
 }
 
 type configOptions struct {
@@ -2257,8 +2491,8 @@ func (obj *configOptions) PortOptions() PortOptions {
 	if obj.obj.PortOptions == nil {
 		obj.obj.PortOptions = &snappipb.PortOptions{}
 	}
-	return &portOptions{obj: obj.obj.PortOptions}
 
+	return &portOptions{obj: obj.obj.PortOptions}
 }
 
 type portMetricsRequest struct {
@@ -2337,6 +2571,7 @@ func (obj *portMetricsRequest) PortNames() []string {
 //
 func (obj *portMetricsRequest) SetPortNames(value []string) PortMetricsRequest {
 	obj.obj.PortNames = value
+
 	return obj
 }
 
@@ -2419,6 +2654,7 @@ func (obj *flowMetricsRequest) FlowNames() []string {
 //
 func (obj *flowMetricsRequest) SetFlowNames(value []string) FlowMetricsRequest {
 	obj.obj.FlowNames = value
+
 	return obj
 }
 
@@ -2428,8 +2664,8 @@ func (obj *flowMetricsRequest) MetricGroups() FlowMetricGroupRequest {
 	if obj.obj.MetricGroups == nil {
 		obj.obj.MetricGroups = &snappipb.FlowMetricGroupRequest{}
 	}
-	return &flowMetricGroupRequest{obj: obj.obj.MetricGroups}
 
+	return &flowMetricGroupRequest{obj: obj.obj.MetricGroups}
 }
 
 type bgpv4MetricsRequest struct {
@@ -2508,6 +2744,7 @@ func (obj *bgpv4MetricsRequest) DeviceNames() []string {
 //
 func (obj *bgpv4MetricsRequest) SetDeviceNames(value []string) Bgpv4MetricsRequest {
 	obj.obj.DeviceNames = value
+
 	return obj
 }
 
@@ -2587,6 +2824,7 @@ func (obj *bgpv6MetricsRequest) DeviceNames() []string {
 //
 func (obj *bgpv6MetricsRequest) SetDeviceNames(value []string) Bgpv6MetricsRequest {
 	obj.obj.DeviceNames = value
+
 	return obj
 }
 
@@ -2668,6 +2906,7 @@ func (obj *lagPort) PortName() string {
 //
 func (obj *lagPort) SetPortName(value string) LagPort {
 	obj.obj.PortName = value
+
 	return obj
 }
 
@@ -2677,8 +2916,8 @@ func (obj *lagPort) Protocol() LagProtocol {
 	if obj.obj.Protocol == nil {
 		obj.obj.Protocol = &snappipb.LagProtocol{}
 	}
-	return &lagProtocol{obj: obj.obj.Protocol}
 
+	return &lagProtocol{obj: obj.obj.Protocol}
 }
 
 // Ethernet returns a DeviceEthernetBase
@@ -2687,8 +2926,8 @@ func (obj *lagPort) Ethernet() DeviceEthernetBase {
 	if obj.obj.Ethernet == nil {
 		obj.obj.Ethernet = &snappipb.DeviceEthernetBase{}
 	}
-	return &deviceEthernetBase{obj: obj.obj.Ethernet}
 
+	return &deviceEthernetBase{obj: obj.obj.Ethernet}
 }
 
 type layer1AutoNegotiation struct {
@@ -2765,6 +3004,7 @@ func (obj *layer1AutoNegotiation) Advertise1000Mbps() bool {
 //  then this speed will be advertised.
 func (obj *layer1AutoNegotiation) SetAdvertise1000Mbps(value bool) Layer1AutoNegotiation {
 	obj.obj.Advertise_1000Mbps = &value
+
 	return obj
 }
 
@@ -2780,6 +3020,7 @@ func (obj *layer1AutoNegotiation) Advertise100FdMbps() bool {
 //  then this speed will be advertised.
 func (obj *layer1AutoNegotiation) SetAdvertise100FdMbps(value bool) Layer1AutoNegotiation {
 	obj.obj.Advertise_100FdMbps = &value
+
 	return obj
 }
 
@@ -2795,6 +3036,7 @@ func (obj *layer1AutoNegotiation) Advertise100HdMbps() bool {
 //  then this speed will be advertised.
 func (obj *layer1AutoNegotiation) SetAdvertise100HdMbps(value bool) Layer1AutoNegotiation {
 	obj.obj.Advertise_100HdMbps = &value
+
 	return obj
 }
 
@@ -2810,6 +3052,7 @@ func (obj *layer1AutoNegotiation) Advertise10FdMbps() bool {
 //  then this speed will be advertised.
 func (obj *layer1AutoNegotiation) SetAdvertise10FdMbps(value bool) Layer1AutoNegotiation {
 	obj.obj.Advertise_10FdMbps = &value
+
 	return obj
 }
 
@@ -2825,6 +3068,7 @@ func (obj *layer1AutoNegotiation) Advertise10HdMbps() bool {
 //  then this speed will be advertised.
 func (obj *layer1AutoNegotiation) SetAdvertise10HdMbps(value bool) Layer1AutoNegotiation {
 	obj.obj.Advertise_10HdMbps = &value
+
 	return obj
 }
 
@@ -2838,6 +3082,7 @@ func (obj *layer1AutoNegotiation) LinkTraining() bool {
 //  Enable/disable gigabit ethernet link training.
 func (obj *layer1AutoNegotiation) SetLinkTraining(value bool) Layer1AutoNegotiation {
 	obj.obj.LinkTraining = &value
+
 	return obj
 }
 
@@ -2851,6 +3096,7 @@ func (obj *layer1AutoNegotiation) RsFec() bool {
 //  Enable/disable gigabit ethernet reed solomon forward error correction (RS FEC).
 func (obj *layer1AutoNegotiation) SetRsFec(value bool) Layer1AutoNegotiation {
 	obj.obj.RsFec = &value
+
 	return obj
 }
 
@@ -2902,6 +3148,8 @@ type Layer1FlowControl interface {
 	FromJson(value string) error
 	DirectedAddress() string
 	SetDirectedAddress(value string) Layer1FlowControl
+	Choice() Layer1FlowControlChoiceEnum
+	SetChoice(value Layer1FlowControlChoiceEnum) Layer1FlowControl
 	Ieee8021Qbb() Layer1Ieee8021Qbb
 	Ieee8023X() Layer1Ieee8023X
 }
@@ -2918,6 +3166,30 @@ func (obj *layer1FlowControl) DirectedAddress() string {
 //  for a directed pause.
 func (obj *layer1FlowControl) SetDirectedAddress(value string) Layer1FlowControl {
 	obj.obj.DirectedAddress = &value
+
+	return obj
+}
+
+type Layer1FlowControlChoiceEnum string
+
+var Layer1FlowControlChoice = struct {
+	UNSPECIFIED   Layer1FlowControlChoiceEnum
+	IEEE_802_1QBB Layer1FlowControlChoiceEnum
+	IEEE_802_3X   Layer1FlowControlChoiceEnum
+}{
+	UNSPECIFIED:   Layer1FlowControlChoiceEnum("unspecified"),
+	IEEE_802_1QBB: Layer1FlowControlChoiceEnum("ieee_802_1qbb"),
+	IEEE_802_3X:   Layer1FlowControlChoiceEnum("ieee_802_3x"),
+}
+
+func (obj *layer1FlowControl) Choice() Layer1FlowControlChoiceEnum {
+	return Layer1FlowControlChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *layer1FlowControl) SetChoice(value Layer1FlowControlChoiceEnum) Layer1FlowControl {
+	intValue := snappipb.Layer1FlowControl_Choice_Enum_value[string(value)]
+	enumValue := snappipb.Layer1FlowControl_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
 	return obj
 }
 
@@ -2927,8 +3199,8 @@ func (obj *layer1FlowControl) Ieee8021Qbb() Layer1Ieee8021Qbb {
 	if obj.obj.Ieee_802_1Qbb == nil {
 		obj.obj.Ieee_802_1Qbb = &snappipb.Layer1Ieee8021Qbb{}
 	}
+	obj.SetChoice(Layer1FlowControlChoice.IEEE_802_1QBB)
 	return &layer1Ieee8021Qbb{obj: obj.obj.Ieee_802_1Qbb}
-
 }
 
 // Ieee_802_3X returns a Layer1Ieee8023X
@@ -2937,8 +3209,8 @@ func (obj *layer1FlowControl) Ieee8023X() Layer1Ieee8023X {
 	if obj.obj.Ieee_802_3X == nil {
 		obj.obj.Ieee_802_3X = &snappipb.Layer1Ieee8023X{}
 	}
+	obj.SetChoice(Layer1FlowControlChoice.IEEE_802_3X)
 	return &layer1Ieee8023X{obj: obj.obj.Ieee_802_3X}
-
 }
 
 type captureFilter struct {
@@ -2987,11 +3259,42 @@ type CaptureFilter interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() CaptureFilterChoiceEnum
+	SetChoice(value CaptureFilterChoiceEnum) CaptureFilter
 	Custom() CaptureCustom
 	Ethernet() CaptureEthernet
 	Vlan() CaptureVlan
 	Ipv4() CaptureIpv4
 	Ipv6() CaptureIpv6
+}
+
+type CaptureFilterChoiceEnum string
+
+var CaptureFilterChoice = struct {
+	UNSPECIFIED CaptureFilterChoiceEnum
+	CUSTOM      CaptureFilterChoiceEnum
+	ETHERNET    CaptureFilterChoiceEnum
+	VLAN        CaptureFilterChoiceEnum
+	IPV4        CaptureFilterChoiceEnum
+	IPV6        CaptureFilterChoiceEnum
+}{
+	UNSPECIFIED: CaptureFilterChoiceEnum("unspecified"),
+	CUSTOM:      CaptureFilterChoiceEnum("custom"),
+	ETHERNET:    CaptureFilterChoiceEnum("ethernet"),
+	VLAN:        CaptureFilterChoiceEnum("vlan"),
+	IPV4:        CaptureFilterChoiceEnum("ipv4"),
+	IPV6:        CaptureFilterChoiceEnum("ipv6"),
+}
+
+func (obj *captureFilter) Choice() CaptureFilterChoiceEnum {
+	return CaptureFilterChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *captureFilter) SetChoice(value CaptureFilterChoiceEnum) CaptureFilter {
+	intValue := snappipb.CaptureFilter_Choice_Enum_value[string(value)]
+	enumValue := snappipb.CaptureFilter_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Custom returns a CaptureCustom
@@ -3000,8 +3303,8 @@ func (obj *captureFilter) Custom() CaptureCustom {
 	if obj.obj.Custom == nil {
 		obj.obj.Custom = &snappipb.CaptureCustom{}
 	}
+	obj.SetChoice(CaptureFilterChoice.CUSTOM)
 	return &captureCustom{obj: obj.obj.Custom}
-
 }
 
 // Ethernet returns a CaptureEthernet
@@ -3010,8 +3313,8 @@ func (obj *captureFilter) Ethernet() CaptureEthernet {
 	if obj.obj.Ethernet == nil {
 		obj.obj.Ethernet = &snappipb.CaptureEthernet{}
 	}
+	obj.SetChoice(CaptureFilterChoice.ETHERNET)
 	return &captureEthernet{obj: obj.obj.Ethernet}
-
 }
 
 // Vlan returns a CaptureVlan
@@ -3020,8 +3323,8 @@ func (obj *captureFilter) Vlan() CaptureVlan {
 	if obj.obj.Vlan == nil {
 		obj.obj.Vlan = &snappipb.CaptureVlan{}
 	}
+	obj.SetChoice(CaptureFilterChoice.VLAN)
 	return &captureVlan{obj: obj.obj.Vlan}
-
 }
 
 // Ipv4 returns a CaptureIpv4
@@ -3030,8 +3333,8 @@ func (obj *captureFilter) Ipv4() CaptureIpv4 {
 	if obj.obj.Ipv4 == nil {
 		obj.obj.Ipv4 = &snappipb.CaptureIpv4{}
 	}
+	obj.SetChoice(CaptureFilterChoice.IPV4)
 	return &captureIpv4{obj: obj.obj.Ipv4}
-
 }
 
 // Ipv6 returns a CaptureIpv6
@@ -3040,8 +3343,8 @@ func (obj *captureFilter) Ipv6() CaptureIpv6 {
 	if obj.obj.Ipv6 == nil {
 		obj.obj.Ipv6 = &snappipb.CaptureIpv6{}
 	}
+	obj.SetChoice(CaptureFilterChoice.IPV6)
 	return &captureIpv6{obj: obj.obj.Ipv6}
-
 }
 
 type deviceEthernet struct {
@@ -3107,8 +3410,8 @@ func (obj *deviceEthernet) Ipv4() DeviceIpv4 {
 	if obj.obj.Ipv4 == nil {
 		obj.obj.Ipv4 = &snappipb.DeviceIpv4{}
 	}
-	return &deviceIpv4{obj: obj.obj.Ipv4}
 
+	return &deviceIpv4{obj: obj.obj.Ipv4}
 }
 
 // Ipv6 returns a DeviceIpv6
@@ -3117,8 +3420,8 @@ func (obj *deviceEthernet) Ipv6() DeviceIpv6 {
 	if obj.obj.Ipv6 == nil {
 		obj.obj.Ipv6 = &snappipb.DeviceIpv6{}
 	}
-	return &deviceIpv6{obj: obj.obj.Ipv6}
 
+	return &deviceIpv6{obj: obj.obj.Ipv6}
 }
 
 // Mac returns a string
@@ -3131,6 +3434,7 @@ func (obj *deviceEthernet) Mac() string {
 //  Media access control address
 func (obj *deviceEthernet) SetMac(value string) DeviceEthernet {
 	obj.obj.Mac = value
+
 	return obj
 }
 
@@ -3144,6 +3448,7 @@ func (obj *deviceEthernet) Mtu() int32 {
 //  Maximum transmission unit
 func (obj *deviceEthernet) SetMtu(value int32) DeviceEthernet {
 	obj.obj.Mtu = &value
+
 	return obj
 }
 
@@ -3154,7 +3459,6 @@ func (obj *deviceEthernet) Vlans() DeviceEthernetDeviceVlanIter {
 		obj.obj.Vlans = []*snappipb.DeviceVlan{}
 	}
 	return &deviceEthernetDeviceVlanIter{obj: obj}
-
 }
 
 type deviceEthernetDeviceVlanIter struct {
@@ -3190,6 +3494,7 @@ func (obj *deviceEthernet) Name() string {
 //  Globally unique name of an object. It also serves as the primary key for arrays of objects.
 func (obj *deviceEthernet) SetName(value string) DeviceEthernet {
 	obj.obj.Name = value
+
 	return obj
 }
 
@@ -3239,8 +3544,33 @@ type FlowTxRx interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() FlowTxRxChoiceEnum
+	SetChoice(value FlowTxRxChoiceEnum) FlowTxRx
 	Port() FlowPort
 	Device() FlowDevice
+}
+
+type FlowTxRxChoiceEnum string
+
+var FlowTxRxChoice = struct {
+	UNSPECIFIED FlowTxRxChoiceEnum
+	PORT        FlowTxRxChoiceEnum
+	DEVICE      FlowTxRxChoiceEnum
+}{
+	UNSPECIFIED: FlowTxRxChoiceEnum("unspecified"),
+	PORT:        FlowTxRxChoiceEnum("port"),
+	DEVICE:      FlowTxRxChoiceEnum("device"),
+}
+
+func (obj *flowTxRx) Choice() FlowTxRxChoiceEnum {
+	return FlowTxRxChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *flowTxRx) SetChoice(value FlowTxRxChoiceEnum) FlowTxRx {
+	intValue := snappipb.FlowTxRx_Choice_Enum_value[string(value)]
+	enumValue := snappipb.FlowTxRx_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Port returns a FlowPort
@@ -3249,8 +3579,8 @@ func (obj *flowTxRx) Port() FlowPort {
 	if obj.obj.Port == nil {
 		obj.obj.Port = &snappipb.FlowPort{}
 	}
+	obj.SetChoice(FlowTxRxChoice.PORT)
 	return &flowPort{obj: obj.obj.Port}
-
 }
 
 // Device returns a FlowDevice
@@ -3259,8 +3589,8 @@ func (obj *flowTxRx) Device() FlowDevice {
 	if obj.obj.Device == nil {
 		obj.obj.Device = &snappipb.FlowDevice{}
 	}
+	obj.SetChoice(FlowTxRxChoice.DEVICE)
 	return &flowDevice{obj: obj.obj.Device}
-
 }
 
 type flowHeader struct {
@@ -3309,6 +3639,8 @@ type FlowHeader interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() FlowHeaderChoiceEnum
+	SetChoice(value FlowHeaderChoiceEnum) FlowHeader
 	Custom() FlowCustom
 	Ethernet() FlowEthernet
 	Vlan() FlowVlan
@@ -3329,14 +3661,69 @@ type FlowHeader interface {
 	Igmpv1() FlowIgmpv1
 }
 
+type FlowHeaderChoiceEnum string
+
+var FlowHeaderChoice = struct {
+	UNSPECIFIED   FlowHeaderChoiceEnum
+	CUSTOM        FlowHeaderChoiceEnum
+	ETHERNET      FlowHeaderChoiceEnum
+	VLAN          FlowHeaderChoiceEnum
+	VXLAN         FlowHeaderChoiceEnum
+	IPV4          FlowHeaderChoiceEnum
+	IPV6          FlowHeaderChoiceEnum
+	PFCPAUSE      FlowHeaderChoiceEnum
+	ETHERNETPAUSE FlowHeaderChoiceEnum
+	TCP           FlowHeaderChoiceEnum
+	UDP           FlowHeaderChoiceEnum
+	GRE           FlowHeaderChoiceEnum
+	GTPV1         FlowHeaderChoiceEnum
+	GTPV2         FlowHeaderChoiceEnum
+	ARP           FlowHeaderChoiceEnum
+	ICMP          FlowHeaderChoiceEnum
+	ICMPV6        FlowHeaderChoiceEnum
+	PPP           FlowHeaderChoiceEnum
+	IGMPV1        FlowHeaderChoiceEnum
+}{
+	UNSPECIFIED:   FlowHeaderChoiceEnum("unspecified"),
+	CUSTOM:        FlowHeaderChoiceEnum("custom"),
+	ETHERNET:      FlowHeaderChoiceEnum("ethernet"),
+	VLAN:          FlowHeaderChoiceEnum("vlan"),
+	VXLAN:         FlowHeaderChoiceEnum("vxlan"),
+	IPV4:          FlowHeaderChoiceEnum("ipv4"),
+	IPV6:          FlowHeaderChoiceEnum("ipv6"),
+	PFCPAUSE:      FlowHeaderChoiceEnum("pfcpause"),
+	ETHERNETPAUSE: FlowHeaderChoiceEnum("ethernetpause"),
+	TCP:           FlowHeaderChoiceEnum("tcp"),
+	UDP:           FlowHeaderChoiceEnum("udp"),
+	GRE:           FlowHeaderChoiceEnum("gre"),
+	GTPV1:         FlowHeaderChoiceEnum("gtpv1"),
+	GTPV2:         FlowHeaderChoiceEnum("gtpv2"),
+	ARP:           FlowHeaderChoiceEnum("arp"),
+	ICMP:          FlowHeaderChoiceEnum("icmp"),
+	ICMPV6:        FlowHeaderChoiceEnum("icmpv6"),
+	PPP:           FlowHeaderChoiceEnum("ppp"),
+	IGMPV1:        FlowHeaderChoiceEnum("igmpv1"),
+}
+
+func (obj *flowHeader) Choice() FlowHeaderChoiceEnum {
+	return FlowHeaderChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *flowHeader) SetChoice(value FlowHeaderChoiceEnum) FlowHeader {
+	intValue := snappipb.FlowHeader_Choice_Enum_value[string(value)]
+	enumValue := snappipb.FlowHeader_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
+}
+
 // Custom returns a FlowCustom
 //  description is TBD
 func (obj *flowHeader) Custom() FlowCustom {
 	if obj.obj.Custom == nil {
 		obj.obj.Custom = &snappipb.FlowCustom{}
 	}
+	obj.SetChoice(FlowHeaderChoice.CUSTOM)
 	return &flowCustom{obj: obj.obj.Custom}
-
 }
 
 // Ethernet returns a FlowEthernet
@@ -3345,8 +3732,8 @@ func (obj *flowHeader) Ethernet() FlowEthernet {
 	if obj.obj.Ethernet == nil {
 		obj.obj.Ethernet = &snappipb.FlowEthernet{}
 	}
+	obj.SetChoice(FlowHeaderChoice.ETHERNET)
 	return &flowEthernet{obj: obj.obj.Ethernet}
-
 }
 
 // Vlan returns a FlowVlan
@@ -3355,8 +3742,8 @@ func (obj *flowHeader) Vlan() FlowVlan {
 	if obj.obj.Vlan == nil {
 		obj.obj.Vlan = &snappipb.FlowVlan{}
 	}
+	obj.SetChoice(FlowHeaderChoice.VLAN)
 	return &flowVlan{obj: obj.obj.Vlan}
-
 }
 
 // Vxlan returns a FlowVxlan
@@ -3365,8 +3752,8 @@ func (obj *flowHeader) Vxlan() FlowVxlan {
 	if obj.obj.Vxlan == nil {
 		obj.obj.Vxlan = &snappipb.FlowVxlan{}
 	}
+	obj.SetChoice(FlowHeaderChoice.VXLAN)
 	return &flowVxlan{obj: obj.obj.Vxlan}
-
 }
 
 // Ipv4 returns a FlowIpv4
@@ -3375,8 +3762,8 @@ func (obj *flowHeader) Ipv4() FlowIpv4 {
 	if obj.obj.Ipv4 == nil {
 		obj.obj.Ipv4 = &snappipb.FlowIpv4{}
 	}
+	obj.SetChoice(FlowHeaderChoice.IPV4)
 	return &flowIpv4{obj: obj.obj.Ipv4}
-
 }
 
 // Ipv6 returns a FlowIpv6
@@ -3385,8 +3772,8 @@ func (obj *flowHeader) Ipv6() FlowIpv6 {
 	if obj.obj.Ipv6 == nil {
 		obj.obj.Ipv6 = &snappipb.FlowIpv6{}
 	}
+	obj.SetChoice(FlowHeaderChoice.IPV6)
 	return &flowIpv6{obj: obj.obj.Ipv6}
-
 }
 
 // Pfcpause returns a FlowPfcPause
@@ -3395,8 +3782,8 @@ func (obj *flowHeader) Pfcpause() FlowPfcPause {
 	if obj.obj.Pfcpause == nil {
 		obj.obj.Pfcpause = &snappipb.FlowPfcPause{}
 	}
+	obj.SetChoice(FlowHeaderChoice.PFCPAUSE)
 	return &flowPfcPause{obj: obj.obj.Pfcpause}
-
 }
 
 // Ethernetpause returns a FlowEthernetPause
@@ -3405,8 +3792,8 @@ func (obj *flowHeader) Ethernetpause() FlowEthernetPause {
 	if obj.obj.Ethernetpause == nil {
 		obj.obj.Ethernetpause = &snappipb.FlowEthernetPause{}
 	}
+	obj.SetChoice(FlowHeaderChoice.ETHERNETPAUSE)
 	return &flowEthernetPause{obj: obj.obj.Ethernetpause}
-
 }
 
 // Tcp returns a FlowTcp
@@ -3415,8 +3802,8 @@ func (obj *flowHeader) Tcp() FlowTcp {
 	if obj.obj.Tcp == nil {
 		obj.obj.Tcp = &snappipb.FlowTcp{}
 	}
+	obj.SetChoice(FlowHeaderChoice.TCP)
 	return &flowTcp{obj: obj.obj.Tcp}
-
 }
 
 // Udp returns a FlowUdp
@@ -3425,8 +3812,8 @@ func (obj *flowHeader) Udp() FlowUdp {
 	if obj.obj.Udp == nil {
 		obj.obj.Udp = &snappipb.FlowUdp{}
 	}
+	obj.SetChoice(FlowHeaderChoice.UDP)
 	return &flowUdp{obj: obj.obj.Udp}
-
 }
 
 // Gre returns a FlowGre
@@ -3435,8 +3822,8 @@ func (obj *flowHeader) Gre() FlowGre {
 	if obj.obj.Gre == nil {
 		obj.obj.Gre = &snappipb.FlowGre{}
 	}
+	obj.SetChoice(FlowHeaderChoice.GRE)
 	return &flowGre{obj: obj.obj.Gre}
-
 }
 
 // Gtpv1 returns a FlowGtpv1
@@ -3445,8 +3832,8 @@ func (obj *flowHeader) Gtpv1() FlowGtpv1 {
 	if obj.obj.Gtpv1 == nil {
 		obj.obj.Gtpv1 = &snappipb.FlowGtpv1{}
 	}
+	obj.SetChoice(FlowHeaderChoice.GTPV1)
 	return &flowGtpv1{obj: obj.obj.Gtpv1}
-
 }
 
 // Gtpv2 returns a FlowGtpv2
@@ -3455,8 +3842,8 @@ func (obj *flowHeader) Gtpv2() FlowGtpv2 {
 	if obj.obj.Gtpv2 == nil {
 		obj.obj.Gtpv2 = &snappipb.FlowGtpv2{}
 	}
+	obj.SetChoice(FlowHeaderChoice.GTPV2)
 	return &flowGtpv2{obj: obj.obj.Gtpv2}
-
 }
 
 // Arp returns a FlowArp
@@ -3465,8 +3852,8 @@ func (obj *flowHeader) Arp() FlowArp {
 	if obj.obj.Arp == nil {
 		obj.obj.Arp = &snappipb.FlowArp{}
 	}
+	obj.SetChoice(FlowHeaderChoice.ARP)
 	return &flowArp{obj: obj.obj.Arp}
-
 }
 
 // Icmp returns a FlowIcmp
@@ -3475,8 +3862,8 @@ func (obj *flowHeader) Icmp() FlowIcmp {
 	if obj.obj.Icmp == nil {
 		obj.obj.Icmp = &snappipb.FlowIcmp{}
 	}
+	obj.SetChoice(FlowHeaderChoice.ICMP)
 	return &flowIcmp{obj: obj.obj.Icmp}
-
 }
 
 // Icmpv6 returns a FlowIcmpv6
@@ -3485,8 +3872,8 @@ func (obj *flowHeader) Icmpv6() FlowIcmpv6 {
 	if obj.obj.Icmpv6 == nil {
 		obj.obj.Icmpv6 = &snappipb.FlowIcmpv6{}
 	}
+	obj.SetChoice(FlowHeaderChoice.ICMPV6)
 	return &flowIcmpv6{obj: obj.obj.Icmpv6}
-
 }
 
 // Ppp returns a FlowPpp
@@ -3495,8 +3882,8 @@ func (obj *flowHeader) Ppp() FlowPpp {
 	if obj.obj.Ppp == nil {
 		obj.obj.Ppp = &snappipb.FlowPpp{}
 	}
+	obj.SetChoice(FlowHeaderChoice.PPP)
 	return &flowPpp{obj: obj.obj.Ppp}
-
 }
 
 // Igmpv1 returns a FlowIgmpv1
@@ -3505,8 +3892,8 @@ func (obj *flowHeader) Igmpv1() FlowIgmpv1 {
 	if obj.obj.Igmpv1 == nil {
 		obj.obj.Igmpv1 = &snappipb.FlowIgmpv1{}
 	}
+	obj.SetChoice(FlowHeaderChoice.IGMPV1)
 	return &flowIgmpv1{obj: obj.obj.Igmpv1}
-
 }
 
 type flowSize struct {
@@ -3555,10 +3942,37 @@ type FlowSize interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() FlowSizeChoiceEnum
+	SetChoice(value FlowSizeChoiceEnum) FlowSize
 	Fixed() int32
 	SetFixed(value int32) FlowSize
 	Increment() FlowSizeIncrement
 	Random() FlowSizeRandom
+}
+
+type FlowSizeChoiceEnum string
+
+var FlowSizeChoice = struct {
+	UNSPECIFIED FlowSizeChoiceEnum
+	FIXED       FlowSizeChoiceEnum
+	INCREMENT   FlowSizeChoiceEnum
+	RANDOM      FlowSizeChoiceEnum
+}{
+	UNSPECIFIED: FlowSizeChoiceEnum("unspecified"),
+	FIXED:       FlowSizeChoiceEnum("fixed"),
+	INCREMENT:   FlowSizeChoiceEnum("increment"),
+	RANDOM:      FlowSizeChoiceEnum("random"),
+}
+
+func (obj *flowSize) Choice() FlowSizeChoiceEnum {
+	return FlowSizeChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *flowSize) SetChoice(value FlowSizeChoiceEnum) FlowSize {
+	intValue := snappipb.FlowSize_Choice_Enum_value[string(value)]
+	enumValue := snappipb.FlowSize_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Fixed returns a int32
@@ -3571,6 +3985,7 @@ func (obj *flowSize) Fixed() int32 {
 //  description is TBD
 func (obj *flowSize) SetFixed(value int32) FlowSize {
 	obj.obj.Fixed = &value
+	obj.SetChoice(FlowSizeChoice.FIXED)
 	return obj
 }
 
@@ -3580,8 +3995,8 @@ func (obj *flowSize) Increment() FlowSizeIncrement {
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.FlowSizeIncrement{}
 	}
+	obj.SetChoice(FlowSizeChoice.INCREMENT)
 	return &flowSizeIncrement{obj: obj.obj.Increment}
-
 }
 
 // Random returns a FlowSizeRandom
@@ -3590,8 +4005,8 @@ func (obj *flowSize) Random() FlowSizeRandom {
 	if obj.obj.Random == nil {
 		obj.obj.Random = &snappipb.FlowSizeRandom{}
 	}
+	obj.SetChoice(FlowSizeChoice.RANDOM)
 	return &flowSizeRandom{obj: obj.obj.Random}
-
 }
 
 type flowRate struct {
@@ -3640,6 +4055,8 @@ type FlowRate interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() FlowRateChoiceEnum
+	SetChoice(value FlowRateChoiceEnum) FlowRate
 	Pps() int32
 	SetPps(value int32) FlowRate
 	Bps() int32
@@ -3654,6 +4071,37 @@ type FlowRate interface {
 	SetPercentage(value float32) FlowRate
 }
 
+type FlowRateChoiceEnum string
+
+var FlowRateChoice = struct {
+	UNSPECIFIED FlowRateChoiceEnum
+	PPS         FlowRateChoiceEnum
+	BPS         FlowRateChoiceEnum
+	KBPS        FlowRateChoiceEnum
+	MBPS        FlowRateChoiceEnum
+	GBPS        FlowRateChoiceEnum
+	PERCENTAGE  FlowRateChoiceEnum
+}{
+	UNSPECIFIED: FlowRateChoiceEnum("unspecified"),
+	PPS:         FlowRateChoiceEnum("pps"),
+	BPS:         FlowRateChoiceEnum("bps"),
+	KBPS:        FlowRateChoiceEnum("kbps"),
+	MBPS:        FlowRateChoiceEnum("mbps"),
+	GBPS:        FlowRateChoiceEnum("gbps"),
+	PERCENTAGE:  FlowRateChoiceEnum("percentage"),
+}
+
+func (obj *flowRate) Choice() FlowRateChoiceEnum {
+	return FlowRateChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *flowRate) SetChoice(value FlowRateChoiceEnum) FlowRate {
+	intValue := snappipb.FlowRate_Choice_Enum_value[string(value)]
+	enumValue := snappipb.FlowRate_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
+}
+
 // Pps returns a int32
 //  Packets per second.
 func (obj *flowRate) Pps() int32 {
@@ -3664,6 +4112,7 @@ func (obj *flowRate) Pps() int32 {
 //  Packets per second.
 func (obj *flowRate) SetPps(value int32) FlowRate {
 	obj.obj.Pps = &value
+	obj.SetChoice(FlowRateChoice.PPS)
 	return obj
 }
 
@@ -3677,6 +4126,7 @@ func (obj *flowRate) Bps() int32 {
 //  Bits per second.
 func (obj *flowRate) SetBps(value int32) FlowRate {
 	obj.obj.Bps = &value
+	obj.SetChoice(FlowRateChoice.BPS)
 	return obj
 }
 
@@ -3690,6 +4140,7 @@ func (obj *flowRate) Kbps() int32 {
 //  Kilobits per second.
 func (obj *flowRate) SetKbps(value int32) FlowRate {
 	obj.obj.Kbps = &value
+	obj.SetChoice(FlowRateChoice.KBPS)
 	return obj
 }
 
@@ -3703,6 +4154,7 @@ func (obj *flowRate) Mbps() int32 {
 //  Megabits per second.
 func (obj *flowRate) SetMbps(value int32) FlowRate {
 	obj.obj.Mbps = &value
+	obj.SetChoice(FlowRateChoice.MBPS)
 	return obj
 }
 
@@ -3716,6 +4168,7 @@ func (obj *flowRate) Gbps() int32 {
 //  Gigabits per second.
 func (obj *flowRate) SetGbps(value int32) FlowRate {
 	obj.obj.Gbps = &value
+	obj.SetChoice(FlowRateChoice.GBPS)
 	return obj
 }
 
@@ -3729,6 +4182,7 @@ func (obj *flowRate) Percentage() float32 {
 //  The percentage of a port location's available bandwidth.
 func (obj *flowRate) SetPercentage(value float32) FlowRate {
 	obj.obj.Percentage = &value
+	obj.SetChoice(FlowRateChoice.PERCENTAGE)
 	return obj
 }
 
@@ -3778,10 +4232,39 @@ type FlowDuration interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() FlowDurationChoiceEnum
+	SetChoice(value FlowDurationChoiceEnum) FlowDuration
 	FixedPackets() FlowFixedPackets
 	FixedSeconds() FlowFixedSeconds
 	Burst() FlowBurst
 	Continuous() FlowContinuous
+}
+
+type FlowDurationChoiceEnum string
+
+var FlowDurationChoice = struct {
+	UNSPECIFIED   FlowDurationChoiceEnum
+	FIXED_PACKETS FlowDurationChoiceEnum
+	FIXED_SECONDS FlowDurationChoiceEnum
+	BURST         FlowDurationChoiceEnum
+	CONTINUOUS    FlowDurationChoiceEnum
+}{
+	UNSPECIFIED:   FlowDurationChoiceEnum("unspecified"),
+	FIXED_PACKETS: FlowDurationChoiceEnum("fixed_packets"),
+	FIXED_SECONDS: FlowDurationChoiceEnum("fixed_seconds"),
+	BURST:         FlowDurationChoiceEnum("burst"),
+	CONTINUOUS:    FlowDurationChoiceEnum("continuous"),
+}
+
+func (obj *flowDuration) Choice() FlowDurationChoiceEnum {
+	return FlowDurationChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *flowDuration) SetChoice(value FlowDurationChoiceEnum) FlowDuration {
+	intValue := snappipb.FlowDuration_Choice_Enum_value[string(value)]
+	enumValue := snappipb.FlowDuration_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // FixedPackets returns a FlowFixedPackets
@@ -3790,8 +4273,8 @@ func (obj *flowDuration) FixedPackets() FlowFixedPackets {
 	if obj.obj.FixedPackets == nil {
 		obj.obj.FixedPackets = &snappipb.FlowFixedPackets{}
 	}
+	obj.SetChoice(FlowDurationChoice.FIXED_PACKETS)
 	return &flowFixedPackets{obj: obj.obj.FixedPackets}
-
 }
 
 // FixedSeconds returns a FlowFixedSeconds
@@ -3800,8 +4283,8 @@ func (obj *flowDuration) FixedSeconds() FlowFixedSeconds {
 	if obj.obj.FixedSeconds == nil {
 		obj.obj.FixedSeconds = &snappipb.FlowFixedSeconds{}
 	}
+	obj.SetChoice(FlowDurationChoice.FIXED_SECONDS)
 	return &flowFixedSeconds{obj: obj.obj.FixedSeconds}
-
 }
 
 // Burst returns a FlowBurst
@@ -3810,8 +4293,8 @@ func (obj *flowDuration) Burst() FlowBurst {
 	if obj.obj.Burst == nil {
 		obj.obj.Burst = &snappipb.FlowBurst{}
 	}
+	obj.SetChoice(FlowDurationChoice.BURST)
 	return &flowBurst{obj: obj.obj.Burst}
-
 }
 
 // Continuous returns a FlowContinuous
@@ -3820,8 +4303,8 @@ func (obj *flowDuration) Continuous() FlowContinuous {
 	if obj.obj.Continuous == nil {
 		obj.obj.Continuous = &snappipb.FlowContinuous{}
 	}
+	obj.SetChoice(FlowDurationChoice.CONTINUOUS)
 	return &flowContinuous{obj: obj.obj.Continuous}
-
 }
 
 type flowMetrics struct {
@@ -3893,6 +4376,7 @@ func (obj *flowMetrics) Enable() bool {
 //  additional instrumentation data.
 func (obj *flowMetrics) SetEnable(value bool) FlowMetrics {
 	obj.obj.Enable = &value
+
 	return obj
 }
 
@@ -3906,6 +4390,7 @@ func (obj *flowMetrics) Loss() bool {
 //  Enables additional flow metric loss calculation.
 func (obj *flowMetrics) SetLoss(value bool) FlowMetrics {
 	obj.obj.Loss = &value
+
 	return obj
 }
 
@@ -3919,6 +4404,7 @@ func (obj *flowMetrics) Timestamps() bool {
 //  Enables additional flow metric first and last timestamps.
 func (obj *flowMetrics) SetTimestamps(value bool) FlowMetrics {
 	obj.obj.Timestamps = &value
+
 	return obj
 }
 
@@ -3928,8 +4414,8 @@ func (obj *flowMetrics) Latency() FlowLatencyMetrics {
 	if obj.obj.Latency == nil {
 		obj.obj.Latency = &snappipb.FlowLatencyMetrics{}
 	}
-	return &flowLatencyMetrics{obj: obj.obj.Latency}
 
+	return &flowLatencyMetrics{obj: obj.obj.Latency}
 }
 
 type eventLink struct {
@@ -3992,6 +4478,7 @@ func (obj *eventLink) Enable() bool {
 //  True to enable notifications when a link up/down event occurs.
 func (obj *eventLink) SetEnable(value bool) EventLink {
 	obj.obj.Enable = &value
+
 	return obj
 }
 
@@ -4061,6 +4548,7 @@ func (obj *eventRxRateThreshold) Enable() bool {
 //  additional instrumentation data.
 func (obj *eventRxRateThreshold) SetEnable(value bool) EventRxRateThreshold {
 	obj.obj.Enable = &value
+
 	return obj
 }
 
@@ -4076,6 +4564,7 @@ func (obj *eventRxRateThreshold) Threshold() float32 {
 //  or below the threshold value.
 func (obj *eventRxRateThreshold) SetThreshold(value float32) EventRxRateThreshold {
 	obj.obj.Threshold = &value
+
 	return obj
 }
 
@@ -4141,6 +4630,7 @@ func (obj *eventRouteAdvertiseWithdraw) Enable() bool {
 //  event occurs.
 func (obj *eventRouteAdvertiseWithdraw) SetEnable(value bool) EventRouteAdvertiseWithdraw {
 	obj.obj.Enable = &value
+
 	return obj
 }
 
@@ -4204,6 +4694,7 @@ func (obj *portOptions) LocationPreemption() bool {
 //  Preempt all the test port locations as defined by the  Port.Port.properties.location. If the test ports defined by their location values are in use and  this value is true, the test ports will be preempted.
 func (obj *portOptions) SetLocationPreemption(value bool) PortOptions {
 	obj.obj.LocationPreemption = &value
+
 	return obj
 }
 
@@ -4253,10 +4744,35 @@ type FlowMetricGroupRequest interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() FlowMetricGroupRequestChoiceEnum
+	SetChoice(value FlowMetricGroupRequestChoiceEnum) FlowMetricGroupRequest
 	Ingress() []string
 	SetIngress(value []string) FlowMetricGroupRequest
 	Egress() []string
 	SetEgress(value []string) FlowMetricGroupRequest
+}
+
+type FlowMetricGroupRequestChoiceEnum string
+
+var FlowMetricGroupRequestChoice = struct {
+	UNSPECIFIED FlowMetricGroupRequestChoiceEnum
+	INGRESS     FlowMetricGroupRequestChoiceEnum
+	EGRESS      FlowMetricGroupRequestChoiceEnum
+}{
+	UNSPECIFIED: FlowMetricGroupRequestChoiceEnum("unspecified"),
+	INGRESS:     FlowMetricGroupRequestChoiceEnum("ingress"),
+	EGRESS:      FlowMetricGroupRequestChoiceEnum("egress"),
+}
+
+func (obj *flowMetricGroupRequest) Choice() FlowMetricGroupRequestChoiceEnum {
+	return FlowMetricGroupRequestChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *flowMetricGroupRequest) SetChoice(value FlowMetricGroupRequestChoiceEnum) FlowMetricGroupRequest {
+	intValue := snappipb.FlowMetricGroupRequest_Choice_Enum_value[string(value)]
+	enumValue := snappipb.FlowMetricGroupRequest_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Ingress returns a []string
@@ -4287,6 +4803,7 @@ func (obj *flowMetricGroupRequest) Ingress() []string {
 //
 func (obj *flowMetricGroupRequest) SetIngress(value []string) FlowMetricGroupRequest {
 	obj.obj.Ingress = value
+	obj.SetChoice(FlowMetricGroupRequestChoice.INGRESS)
 	return obj
 }
 
@@ -4318,6 +4835,7 @@ func (obj *flowMetricGroupRequest) Egress() []string {
 //
 func (obj *flowMetricGroupRequest) SetEgress(value []string) FlowMetricGroupRequest {
 	obj.obj.Egress = value
+	obj.SetChoice(FlowMetricGroupRequestChoice.EGRESS)
 	return obj
 }
 
@@ -4367,8 +4885,33 @@ type LagProtocol interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() LagProtocolChoiceEnum
+	SetChoice(value LagProtocolChoiceEnum) LagProtocol
 	Lacp() LagLacp
 	Static() LagStatic
+}
+
+type LagProtocolChoiceEnum string
+
+var LagProtocolChoice = struct {
+	UNSPECIFIED LagProtocolChoiceEnum
+	LACP        LagProtocolChoiceEnum
+	STATIC      LagProtocolChoiceEnum
+}{
+	UNSPECIFIED: LagProtocolChoiceEnum("unspecified"),
+	LACP:        LagProtocolChoiceEnum("lacp"),
+	STATIC:      LagProtocolChoiceEnum("static"),
+}
+
+func (obj *lagProtocol) Choice() LagProtocolChoiceEnum {
+	return LagProtocolChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *lagProtocol) SetChoice(value LagProtocolChoiceEnum) LagProtocol {
+	intValue := snappipb.LagProtocol_Choice_Enum_value[string(value)]
+	enumValue := snappipb.LagProtocol_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Lacp returns a LagLacp
@@ -4377,8 +4920,8 @@ func (obj *lagProtocol) Lacp() LagLacp {
 	if obj.obj.Lacp == nil {
 		obj.obj.Lacp = &snappipb.LagLacp{}
 	}
+	obj.SetChoice(LagProtocolChoice.LACP)
 	return &lagLacp{obj: obj.obj.Lacp}
-
 }
 
 // Static returns a LagStatic
@@ -4387,8 +4930,8 @@ func (obj *lagProtocol) Static() LagStatic {
 	if obj.obj.Static == nil {
 		obj.obj.Static = &snappipb.LagStatic{}
 	}
+	obj.SetChoice(LagProtocolChoice.STATIC)
 	return &lagStatic{obj: obj.obj.Static}
-
 }
 
 type deviceEthernetBase struct {
@@ -4456,6 +4999,7 @@ func (obj *deviceEthernetBase) Mac() string {
 //  Media access control address
 func (obj *deviceEthernetBase) SetMac(value string) DeviceEthernetBase {
 	obj.obj.Mac = value
+
 	return obj
 }
 
@@ -4469,6 +5013,7 @@ func (obj *deviceEthernetBase) Mtu() int32 {
 //  Maximum transmission unit
 func (obj *deviceEthernetBase) SetMtu(value int32) DeviceEthernetBase {
 	obj.obj.Mtu = &value
+
 	return obj
 }
 
@@ -4479,7 +5024,6 @@ func (obj *deviceEthernetBase) Vlans() DeviceEthernetBaseDeviceVlanIter {
 		obj.obj.Vlans = []*snappipb.DeviceVlan{}
 	}
 	return &deviceEthernetBaseDeviceVlanIter{obj: obj}
-
 }
 
 type deviceEthernetBaseDeviceVlanIter struct {
@@ -4515,6 +5059,7 @@ func (obj *deviceEthernetBase) Name() string {
 //  Globally unique name of an object. It also serves as the primary key for arrays of objects.
 func (obj *deviceEthernetBase) SetName(value string) DeviceEthernetBase {
 	obj.obj.Name = value
+
 	return obj
 }
 
@@ -4598,6 +5143,7 @@ func (obj *layer1Ieee8021Qbb) PfcDelay() int32 {
 //  A value of 0 or null indicates that pfc delay will not be enabled.
 func (obj *layer1Ieee8021Qbb) SetPfcDelay(value int32) Layer1Ieee8021Qbb {
 	obj.obj.PfcDelay = &value
+
 	return obj
 }
 
@@ -4613,6 +5159,7 @@ func (obj *layer1Ieee8021Qbb) PfcClass0() int32 {
 //  A null value indicates there is no setting for this pfc class.
 func (obj *layer1Ieee8021Qbb) SetPfcClass0(value int32) Layer1Ieee8021Qbb {
 	obj.obj.PfcClass_0 = &value
+
 	return obj
 }
 
@@ -4628,6 +5175,7 @@ func (obj *layer1Ieee8021Qbb) PfcClass1() int32 {
 //  A null value indicates there is no setting for this pfc class.
 func (obj *layer1Ieee8021Qbb) SetPfcClass1(value int32) Layer1Ieee8021Qbb {
 	obj.obj.PfcClass_1 = &value
+
 	return obj
 }
 
@@ -4643,6 +5191,7 @@ func (obj *layer1Ieee8021Qbb) PfcClass2() int32 {
 //  A null value indicates there is no setting for this pfc class.
 func (obj *layer1Ieee8021Qbb) SetPfcClass2(value int32) Layer1Ieee8021Qbb {
 	obj.obj.PfcClass_2 = &value
+
 	return obj
 }
 
@@ -4658,6 +5207,7 @@ func (obj *layer1Ieee8021Qbb) PfcClass3() int32 {
 //  A null value indicates there is no setting for this pfc class.
 func (obj *layer1Ieee8021Qbb) SetPfcClass3(value int32) Layer1Ieee8021Qbb {
 	obj.obj.PfcClass_3 = &value
+
 	return obj
 }
 
@@ -4673,6 +5223,7 @@ func (obj *layer1Ieee8021Qbb) PfcClass4() int32 {
 //  A null value indicates there is no setting for this pfc class.
 func (obj *layer1Ieee8021Qbb) SetPfcClass4(value int32) Layer1Ieee8021Qbb {
 	obj.obj.PfcClass_4 = &value
+
 	return obj
 }
 
@@ -4688,6 +5239,7 @@ func (obj *layer1Ieee8021Qbb) PfcClass5() int32 {
 //  A null value indicates there is no setting for this pfc class.
 func (obj *layer1Ieee8021Qbb) SetPfcClass5(value int32) Layer1Ieee8021Qbb {
 	obj.obj.PfcClass_5 = &value
+
 	return obj
 }
 
@@ -4703,6 +5255,7 @@ func (obj *layer1Ieee8021Qbb) PfcClass6() int32 {
 //  A null value indicates there is no setting for this pfc class.
 func (obj *layer1Ieee8021Qbb) SetPfcClass6(value int32) Layer1Ieee8021Qbb {
 	obj.obj.PfcClass_6 = &value
+
 	return obj
 }
 
@@ -4718,6 +5271,7 @@ func (obj *layer1Ieee8021Qbb) PfcClass7() int32 {
 //  A null value indicates there is no setting for this pfc class.
 func (obj *layer1Ieee8021Qbb) SetPfcClass7(value int32) Layer1Ieee8021Qbb {
 	obj.obj.PfcClass_7 = &value
+
 	return obj
 }
 
@@ -4837,6 +5391,7 @@ func (obj *captureCustom) Offset() int32 {
 //  The bit offset of field to filter on
 func (obj *captureCustom) SetOffset(value int32) CaptureCustom {
 	obj.obj.Offset = &value
+
 	return obj
 }
 
@@ -4850,6 +5405,7 @@ func (obj *captureCustom) BitLength() int32 {
 //  The bit length of field to filter on
 func (obj *captureCustom) SetBitLength(value int32) CaptureCustom {
 	obj.obj.BitLength = &value
+
 	return obj
 }
 
@@ -4863,6 +5419,7 @@ func (obj *captureCustom) Value() string {
 //  description is TBD
 func (obj *captureCustom) SetValue(value string) CaptureCustom {
 	obj.obj.Value = &value
+
 	return obj
 }
 
@@ -4876,6 +5433,7 @@ func (obj *captureCustom) Mask() string {
 //  description is TBD
 func (obj *captureCustom) SetMask(value string) CaptureCustom {
 	obj.obj.Mask = &value
+
 	return obj
 }
 
@@ -4889,6 +5447,7 @@ func (obj *captureCustom) Negate() bool {
 //  description is TBD
 func (obj *captureCustom) SetNegate(value bool) CaptureCustom {
 	obj.obj.Negate = &value
+
 	return obj
 }
 
@@ -4950,8 +5509,8 @@ func (obj *captureEthernet) Src() CaptureField {
 	if obj.obj.Src == nil {
 		obj.obj.Src = &snappipb.CaptureField{}
 	}
-	return &captureField{obj: obj.obj.Src}
 
+	return &captureField{obj: obj.obj.Src}
 }
 
 // Dst returns a CaptureField
@@ -4960,8 +5519,8 @@ func (obj *captureEthernet) Dst() CaptureField {
 	if obj.obj.Dst == nil {
 		obj.obj.Dst = &snappipb.CaptureField{}
 	}
-	return &captureField{obj: obj.obj.Dst}
 
+	return &captureField{obj: obj.obj.Dst}
 }
 
 // EtherType returns a CaptureField
@@ -4970,8 +5529,8 @@ func (obj *captureEthernet) EtherType() CaptureField {
 	if obj.obj.EtherType == nil {
 		obj.obj.EtherType = &snappipb.CaptureField{}
 	}
-	return &captureField{obj: obj.obj.EtherType}
 
+	return &captureField{obj: obj.obj.EtherType}
 }
 
 // PfcQueue returns a CaptureField
@@ -4980,8 +5539,8 @@ func (obj *captureEthernet) PfcQueue() CaptureField {
 	if obj.obj.PfcQueue == nil {
 		obj.obj.PfcQueue = &snappipb.CaptureField{}
 	}
-	return &captureField{obj: obj.obj.PfcQueue}
 
+	return &captureField{obj: obj.obj.PfcQueue}
 }
 
 type captureVlan struct {
@@ -5042,8 +5601,8 @@ func (obj *captureVlan) Priority() CaptureField {
 	if obj.obj.Priority == nil {
 		obj.obj.Priority = &snappipb.CaptureField{}
 	}
-	return &captureField{obj: obj.obj.Priority}
 
+	return &captureField{obj: obj.obj.Priority}
 }
 
 // Cfi returns a CaptureField
@@ -5052,8 +5611,8 @@ func (obj *captureVlan) Cfi() CaptureField {
 	if obj.obj.Cfi == nil {
 		obj.obj.Cfi = &snappipb.CaptureField{}
 	}
-	return &captureField{obj: obj.obj.Cfi}
 
+	return &captureField{obj: obj.obj.Cfi}
 }
 
 // Id returns a CaptureField
@@ -5062,8 +5621,8 @@ func (obj *captureVlan) Id() CaptureField {
 	if obj.obj.Id == nil {
 		obj.obj.Id = &snappipb.CaptureField{}
 	}
-	return &captureField{obj: obj.obj.Id}
 
+	return &captureField{obj: obj.obj.Id}
 }
 
 // Protocol returns a CaptureField
@@ -5072,8 +5631,8 @@ func (obj *captureVlan) Protocol() CaptureField {
 	if obj.obj.Protocol == nil {
 		obj.obj.Protocol = &snappipb.CaptureField{}
 	}
-	return &captureField{obj: obj.obj.Protocol}
 
+	return &captureField{obj: obj.obj.Protocol}
 }
 
 type captureIpv4 struct {
@@ -5144,8 +5703,8 @@ func (obj *captureIpv4) Version() CaptureField {
 	if obj.obj.Version == nil {
 		obj.obj.Version = &snappipb.CaptureField{}
 	}
-	return &captureField{obj: obj.obj.Version}
 
+	return &captureField{obj: obj.obj.Version}
 }
 
 // HeaderLength returns a CaptureField
@@ -5154,8 +5713,8 @@ func (obj *captureIpv4) HeaderLength() CaptureField {
 	if obj.obj.HeaderLength == nil {
 		obj.obj.HeaderLength = &snappipb.CaptureField{}
 	}
-	return &captureField{obj: obj.obj.HeaderLength}
 
+	return &captureField{obj: obj.obj.HeaderLength}
 }
 
 // Priority returns a CaptureField
@@ -5164,8 +5723,8 @@ func (obj *captureIpv4) Priority() CaptureField {
 	if obj.obj.Priority == nil {
 		obj.obj.Priority = &snappipb.CaptureField{}
 	}
-	return &captureField{obj: obj.obj.Priority}
 
+	return &captureField{obj: obj.obj.Priority}
 }
 
 // TotalLength returns a CaptureField
@@ -5174,8 +5733,8 @@ func (obj *captureIpv4) TotalLength() CaptureField {
 	if obj.obj.TotalLength == nil {
 		obj.obj.TotalLength = &snappipb.CaptureField{}
 	}
-	return &captureField{obj: obj.obj.TotalLength}
 
+	return &captureField{obj: obj.obj.TotalLength}
 }
 
 // Identification returns a CaptureField
@@ -5184,8 +5743,8 @@ func (obj *captureIpv4) Identification() CaptureField {
 	if obj.obj.Identification == nil {
 		obj.obj.Identification = &snappipb.CaptureField{}
 	}
-	return &captureField{obj: obj.obj.Identification}
 
+	return &captureField{obj: obj.obj.Identification}
 }
 
 // Reserved returns a CaptureField
@@ -5194,8 +5753,8 @@ func (obj *captureIpv4) Reserved() CaptureField {
 	if obj.obj.Reserved == nil {
 		obj.obj.Reserved = &snappipb.CaptureField{}
 	}
-	return &captureField{obj: obj.obj.Reserved}
 
+	return &captureField{obj: obj.obj.Reserved}
 }
 
 // DontFragment returns a CaptureField
@@ -5204,8 +5763,8 @@ func (obj *captureIpv4) DontFragment() CaptureField {
 	if obj.obj.DontFragment == nil {
 		obj.obj.DontFragment = &snappipb.CaptureField{}
 	}
-	return &captureField{obj: obj.obj.DontFragment}
 
+	return &captureField{obj: obj.obj.DontFragment}
 }
 
 // MoreFragments returns a CaptureField
@@ -5214,8 +5773,8 @@ func (obj *captureIpv4) MoreFragments() CaptureField {
 	if obj.obj.MoreFragments == nil {
 		obj.obj.MoreFragments = &snappipb.CaptureField{}
 	}
-	return &captureField{obj: obj.obj.MoreFragments}
 
+	return &captureField{obj: obj.obj.MoreFragments}
 }
 
 // FragmentOffset returns a CaptureField
@@ -5224,8 +5783,8 @@ func (obj *captureIpv4) FragmentOffset() CaptureField {
 	if obj.obj.FragmentOffset == nil {
 		obj.obj.FragmentOffset = &snappipb.CaptureField{}
 	}
-	return &captureField{obj: obj.obj.FragmentOffset}
 
+	return &captureField{obj: obj.obj.FragmentOffset}
 }
 
 // TimeToLive returns a CaptureField
@@ -5234,8 +5793,8 @@ func (obj *captureIpv4) TimeToLive() CaptureField {
 	if obj.obj.TimeToLive == nil {
 		obj.obj.TimeToLive = &snappipb.CaptureField{}
 	}
-	return &captureField{obj: obj.obj.TimeToLive}
 
+	return &captureField{obj: obj.obj.TimeToLive}
 }
 
 // Protocol returns a CaptureField
@@ -5244,8 +5803,8 @@ func (obj *captureIpv4) Protocol() CaptureField {
 	if obj.obj.Protocol == nil {
 		obj.obj.Protocol = &snappipb.CaptureField{}
 	}
-	return &captureField{obj: obj.obj.Protocol}
 
+	return &captureField{obj: obj.obj.Protocol}
 }
 
 // HeaderChecksum returns a CaptureField
@@ -5254,8 +5813,8 @@ func (obj *captureIpv4) HeaderChecksum() CaptureField {
 	if obj.obj.HeaderChecksum == nil {
 		obj.obj.HeaderChecksum = &snappipb.CaptureField{}
 	}
-	return &captureField{obj: obj.obj.HeaderChecksum}
 
+	return &captureField{obj: obj.obj.HeaderChecksum}
 }
 
 // Src returns a CaptureField
@@ -5264,8 +5823,8 @@ func (obj *captureIpv4) Src() CaptureField {
 	if obj.obj.Src == nil {
 		obj.obj.Src = &snappipb.CaptureField{}
 	}
-	return &captureField{obj: obj.obj.Src}
 
+	return &captureField{obj: obj.obj.Src}
 }
 
 // Dst returns a CaptureField
@@ -5274,8 +5833,8 @@ func (obj *captureIpv4) Dst() CaptureField {
 	if obj.obj.Dst == nil {
 		obj.obj.Dst = &snappipb.CaptureField{}
 	}
-	return &captureField{obj: obj.obj.Dst}
 
+	return &captureField{obj: obj.obj.Dst}
 }
 
 type captureIpv6 struct {
@@ -5340,8 +5899,8 @@ func (obj *captureIpv6) Version() CaptureField {
 	if obj.obj.Version == nil {
 		obj.obj.Version = &snappipb.CaptureField{}
 	}
-	return &captureField{obj: obj.obj.Version}
 
+	return &captureField{obj: obj.obj.Version}
 }
 
 // TrafficClass returns a CaptureField
@@ -5350,8 +5909,8 @@ func (obj *captureIpv6) TrafficClass() CaptureField {
 	if obj.obj.TrafficClass == nil {
 		obj.obj.TrafficClass = &snappipb.CaptureField{}
 	}
-	return &captureField{obj: obj.obj.TrafficClass}
 
+	return &captureField{obj: obj.obj.TrafficClass}
 }
 
 // FlowLabel returns a CaptureField
@@ -5360,8 +5919,8 @@ func (obj *captureIpv6) FlowLabel() CaptureField {
 	if obj.obj.FlowLabel == nil {
 		obj.obj.FlowLabel = &snappipb.CaptureField{}
 	}
-	return &captureField{obj: obj.obj.FlowLabel}
 
+	return &captureField{obj: obj.obj.FlowLabel}
 }
 
 // PayloadLength returns a CaptureField
@@ -5370,8 +5929,8 @@ func (obj *captureIpv6) PayloadLength() CaptureField {
 	if obj.obj.PayloadLength == nil {
 		obj.obj.PayloadLength = &snappipb.CaptureField{}
 	}
-	return &captureField{obj: obj.obj.PayloadLength}
 
+	return &captureField{obj: obj.obj.PayloadLength}
 }
 
 // NextHeader returns a CaptureField
@@ -5380,8 +5939,8 @@ func (obj *captureIpv6) NextHeader() CaptureField {
 	if obj.obj.NextHeader == nil {
 		obj.obj.NextHeader = &snappipb.CaptureField{}
 	}
-	return &captureField{obj: obj.obj.NextHeader}
 
+	return &captureField{obj: obj.obj.NextHeader}
 }
 
 // HopLimit returns a CaptureField
@@ -5390,8 +5949,8 @@ func (obj *captureIpv6) HopLimit() CaptureField {
 	if obj.obj.HopLimit == nil {
 		obj.obj.HopLimit = &snappipb.CaptureField{}
 	}
-	return &captureField{obj: obj.obj.HopLimit}
 
+	return &captureField{obj: obj.obj.HopLimit}
 }
 
 // Src returns a CaptureField
@@ -5400,8 +5959,8 @@ func (obj *captureIpv6) Src() CaptureField {
 	if obj.obj.Src == nil {
 		obj.obj.Src = &snappipb.CaptureField{}
 	}
-	return &captureField{obj: obj.obj.Src}
 
+	return &captureField{obj: obj.obj.Src}
 }
 
 // Dst returns a CaptureField
@@ -5410,8 +5969,8 @@ func (obj *captureIpv6) Dst() CaptureField {
 	if obj.obj.Dst == nil {
 		obj.obj.Dst = &snappipb.CaptureField{}
 	}
-	return &captureField{obj: obj.obj.Dst}
 
+	return &captureField{obj: obj.obj.Dst}
 }
 
 type deviceIpv4 struct {
@@ -5481,6 +6040,7 @@ func (obj *deviceIpv4) Gateway() string {
 //  The IPv4 address of the gateway
 func (obj *deviceIpv4) SetGateway(value string) DeviceIpv4 {
 	obj.obj.Gateway = value
+
 	return obj
 }
 
@@ -5494,6 +6054,7 @@ func (obj *deviceIpv4) Address() string {
 //  The IPv4 address
 func (obj *deviceIpv4) SetAddress(value string) DeviceIpv4 {
 	obj.obj.Address = value
+
 	return obj
 }
 
@@ -5507,6 +6068,7 @@ func (obj *deviceIpv4) Prefix() int32 {
 //  The prefix of the IPv4 address
 func (obj *deviceIpv4) SetPrefix(value int32) DeviceIpv4 {
 	obj.obj.Prefix = &value
+
 	return obj
 }
 
@@ -5516,8 +6078,8 @@ func (obj *deviceIpv4) Bgpv4() DeviceBgpv4 {
 	if obj.obj.Bgpv4 == nil {
 		obj.obj.Bgpv4 = &snappipb.DeviceBgpv4{}
 	}
-	return &deviceBgpv4{obj: obj.obj.Bgpv4}
 
+	return &deviceBgpv4{obj: obj.obj.Bgpv4}
 }
 
 // Name returns a string
@@ -5530,6 +6092,7 @@ func (obj *deviceIpv4) Name() string {
 //  Globally unique name of an object. It also serves as the primary key for arrays of objects.
 func (obj *deviceIpv4) SetName(value string) DeviceIpv4 {
 	obj.obj.Name = value
+
 	return obj
 }
 
@@ -5600,6 +6163,7 @@ func (obj *deviceIpv6) Gateway() string {
 //  The IPv6 gateway address
 func (obj *deviceIpv6) SetGateway(value string) DeviceIpv6 {
 	obj.obj.Gateway = value
+
 	return obj
 }
 
@@ -5613,6 +6177,7 @@ func (obj *deviceIpv6) Address() string {
 //  The IPv6 address.
 func (obj *deviceIpv6) SetAddress(value string) DeviceIpv6 {
 	obj.obj.Address = value
+
 	return obj
 }
 
@@ -5626,6 +6191,7 @@ func (obj *deviceIpv6) Prefix() int32 {
 //  The network prefix.
 func (obj *deviceIpv6) SetPrefix(value int32) DeviceIpv6 {
 	obj.obj.Prefix = &value
+
 	return obj
 }
 
@@ -5635,8 +6201,8 @@ func (obj *deviceIpv6) Bgpv6() DeviceBgpv6 {
 	if obj.obj.Bgpv6 == nil {
 		obj.obj.Bgpv6 = &snappipb.DeviceBgpv6{}
 	}
-	return &deviceBgpv6{obj: obj.obj.Bgpv6}
 
+	return &deviceBgpv6{obj: obj.obj.Bgpv6}
 }
 
 // Name returns a string
@@ -5649,6 +6215,7 @@ func (obj *deviceIpv6) Name() string {
 //  Globally unique name of an object. It also serves as the primary key for arrays of objects.
 func (obj *deviceIpv6) SetName(value string) DeviceIpv6 {
 	obj.obj.Name = value
+
 	return obj
 }
 
@@ -5698,12 +6265,43 @@ type DeviceVlan interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Tpid() DeviceVlanTpidEnum
+	SetTpid(value DeviceVlanTpidEnum) DeviceVlan
 	Priority() int32
 	SetPriority(value int32) DeviceVlan
 	Id() int32
 	SetId(value int32) DeviceVlan
 	Name() string
 	SetName(value string) DeviceVlan
+}
+
+type DeviceVlanTpidEnum string
+
+var DeviceVlanTpid = struct {
+	UNSPECIFIED DeviceVlanTpidEnum
+	X8100       DeviceVlanTpidEnum
+	X88A8       DeviceVlanTpidEnum
+	X9100       DeviceVlanTpidEnum
+	X9200       DeviceVlanTpidEnum
+	X9300       DeviceVlanTpidEnum
+}{
+	UNSPECIFIED: DeviceVlanTpidEnum("unspecified"),
+	X8100:       DeviceVlanTpidEnum("x8100"),
+	X88A8:       DeviceVlanTpidEnum("x88A8"),
+	X9100:       DeviceVlanTpidEnum("x9100"),
+	X9200:       DeviceVlanTpidEnum("x9200"),
+	X9300:       DeviceVlanTpidEnum("x9300"),
+}
+
+func (obj *deviceVlan) Tpid() DeviceVlanTpidEnum {
+	return DeviceVlanTpidEnum(obj.obj.Tpid.Enum().String())
+}
+
+func (obj *deviceVlan) SetTpid(value DeviceVlanTpidEnum) DeviceVlan {
+	intValue := snappipb.DeviceVlan_Tpid_Enum_value[string(value)]
+	enumValue := snappipb.DeviceVlan_Tpid_Enum(intValue)
+	obj.obj.Tpid = &enumValue
+	return obj
 }
 
 // Priority returns a int32
@@ -5716,6 +6314,7 @@ func (obj *deviceVlan) Priority() int32 {
 //  Priority code point
 func (obj *deviceVlan) SetPriority(value int32) DeviceVlan {
 	obj.obj.Priority = &value
+
 	return obj
 }
 
@@ -5729,6 +6328,7 @@ func (obj *deviceVlan) Id() int32 {
 //  VLAN identifier
 func (obj *deviceVlan) SetId(value int32) DeviceVlan {
 	obj.obj.Id = &value
+
 	return obj
 }
 
@@ -5742,6 +6342,7 @@ func (obj *deviceVlan) Name() string {
 //  Globally unique name of an object. It also serves as the primary key for arrays of objects.
 func (obj *deviceVlan) SetName(value string) DeviceVlan {
 	obj.obj.Name = value
+
 	return obj
 }
 
@@ -5827,6 +6428,7 @@ func (obj *flowPort) TxName() string {
 //
 func (obj *flowPort) SetTxName(value string) FlowPort {
 	obj.obj.TxName = value
+
 	return obj
 }
 
@@ -5860,6 +6462,7 @@ func (obj *flowPort) RxName() string {
 //
 func (obj *flowPort) SetRxName(value string) FlowPort {
 	obj.obj.RxName = &value
+
 	return obj
 }
 
@@ -5909,10 +6512,35 @@ type FlowDevice interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Mode() FlowDeviceModeEnum
+	SetMode(value FlowDeviceModeEnum) FlowDevice
 	TxNames() []string
 	SetTxNames(value []string) FlowDevice
 	RxNames() []string
 	SetRxNames(value []string) FlowDevice
+}
+
+type FlowDeviceModeEnum string
+
+var FlowDeviceMode = struct {
+	UNSPECIFIED FlowDeviceModeEnum
+	MESH        FlowDeviceModeEnum
+	ONE_TO_ONE  FlowDeviceModeEnum
+}{
+	UNSPECIFIED: FlowDeviceModeEnum("unspecified"),
+	MESH:        FlowDeviceModeEnum("mesh"),
+	ONE_TO_ONE:  FlowDeviceModeEnum("one_to_one"),
+}
+
+func (obj *flowDevice) Mode() FlowDeviceModeEnum {
+	return FlowDeviceModeEnum(obj.obj.Mode.Enum().String())
+}
+
+func (obj *flowDevice) SetMode(value FlowDeviceModeEnum) FlowDevice {
+	intValue := snappipb.FlowDevice_Mode_Enum_value[string(value)]
+	enumValue := snappipb.FlowDevice_Mode_Enum(intValue)
+	obj.obj.Mode = &enumValue
+	return obj
 }
 
 // TxNames returns a []string
@@ -5957,6 +6585,7 @@ func (obj *flowDevice) TxNames() []string {
 //
 func (obj *flowDevice) SetTxNames(value []string) FlowDevice {
 	obj.obj.TxNames = value
+
 	return obj
 }
 
@@ -6002,6 +6631,7 @@ func (obj *flowDevice) RxNames() []string {
 //
 func (obj *flowDevice) SetRxNames(value []string) FlowDevice {
 	obj.obj.RxNames = value
+
 	return obj
 }
 
@@ -6065,6 +6695,7 @@ func (obj *flowCustom) Bytes() string {
 //  A custom packet header defined as a string of hex bytes. The string MUST contain sequence of valid hex bytes. Spaces or colons can be part of the bytes but will be discarded. This packet header can be used in multiple places in the packet.
 func (obj *flowCustom) SetBytes(value string) FlowCustom {
 	obj.obj.Bytes = value
+
 	return obj
 }
 
@@ -6126,8 +6757,8 @@ func (obj *flowEthernet) Dst() PatternFlowEthernetDst {
 	if obj.obj.Dst == nil {
 		obj.obj.Dst = &snappipb.PatternFlowEthernetDst{}
 	}
-	return &patternFlowEthernetDst{obj: obj.obj.Dst}
 
+	return &patternFlowEthernetDst{obj: obj.obj.Dst}
 }
 
 // Src returns a PatternFlowEthernetSrc
@@ -6136,8 +6767,8 @@ func (obj *flowEthernet) Src() PatternFlowEthernetSrc {
 	if obj.obj.Src == nil {
 		obj.obj.Src = &snappipb.PatternFlowEthernetSrc{}
 	}
-	return &patternFlowEthernetSrc{obj: obj.obj.Src}
 
+	return &patternFlowEthernetSrc{obj: obj.obj.Src}
 }
 
 // EtherType returns a PatternFlowEthernetEtherType
@@ -6146,8 +6777,8 @@ func (obj *flowEthernet) EtherType() PatternFlowEthernetEtherType {
 	if obj.obj.EtherType == nil {
 		obj.obj.EtherType = &snappipb.PatternFlowEthernetEtherType{}
 	}
-	return &patternFlowEthernetEtherType{obj: obj.obj.EtherType}
 
+	return &patternFlowEthernetEtherType{obj: obj.obj.EtherType}
 }
 
 // PfcQueue returns a PatternFlowEthernetPfcQueue
@@ -6156,8 +6787,8 @@ func (obj *flowEthernet) PfcQueue() PatternFlowEthernetPfcQueue {
 	if obj.obj.PfcQueue == nil {
 		obj.obj.PfcQueue = &snappipb.PatternFlowEthernetPfcQueue{}
 	}
-	return &patternFlowEthernetPfcQueue{obj: obj.obj.PfcQueue}
 
+	return &patternFlowEthernetPfcQueue{obj: obj.obj.PfcQueue}
 }
 
 type flowVlan struct {
@@ -6218,8 +6849,8 @@ func (obj *flowVlan) Priority() PatternFlowVlanPriority {
 	if obj.obj.Priority == nil {
 		obj.obj.Priority = &snappipb.PatternFlowVlanPriority{}
 	}
-	return &patternFlowVlanPriority{obj: obj.obj.Priority}
 
+	return &patternFlowVlanPriority{obj: obj.obj.Priority}
 }
 
 // Cfi returns a PatternFlowVlanCfi
@@ -6228,8 +6859,8 @@ func (obj *flowVlan) Cfi() PatternFlowVlanCfi {
 	if obj.obj.Cfi == nil {
 		obj.obj.Cfi = &snappipb.PatternFlowVlanCfi{}
 	}
-	return &patternFlowVlanCfi{obj: obj.obj.Cfi}
 
+	return &patternFlowVlanCfi{obj: obj.obj.Cfi}
 }
 
 // Id returns a PatternFlowVlanId
@@ -6238,8 +6869,8 @@ func (obj *flowVlan) Id() PatternFlowVlanId {
 	if obj.obj.Id == nil {
 		obj.obj.Id = &snappipb.PatternFlowVlanId{}
 	}
-	return &patternFlowVlanId{obj: obj.obj.Id}
 
+	return &patternFlowVlanId{obj: obj.obj.Id}
 }
 
 // Tpid returns a PatternFlowVlanTpid
@@ -6248,8 +6879,8 @@ func (obj *flowVlan) Tpid() PatternFlowVlanTpid {
 	if obj.obj.Tpid == nil {
 		obj.obj.Tpid = &snappipb.PatternFlowVlanTpid{}
 	}
-	return &patternFlowVlanTpid{obj: obj.obj.Tpid}
 
+	return &patternFlowVlanTpid{obj: obj.obj.Tpid}
 }
 
 type flowVxlan struct {
@@ -6310,8 +6941,8 @@ func (obj *flowVxlan) Flags() PatternFlowVxlanFlags {
 	if obj.obj.Flags == nil {
 		obj.obj.Flags = &snappipb.PatternFlowVxlanFlags{}
 	}
-	return &patternFlowVxlanFlags{obj: obj.obj.Flags}
 
+	return &patternFlowVxlanFlags{obj: obj.obj.Flags}
 }
 
 // Reserved0 returns a PatternFlowVxlanReserved0
@@ -6320,8 +6951,8 @@ func (obj *flowVxlan) Reserved0() PatternFlowVxlanReserved0 {
 	if obj.obj.Reserved0 == nil {
 		obj.obj.Reserved0 = &snappipb.PatternFlowVxlanReserved0{}
 	}
-	return &patternFlowVxlanReserved0{obj: obj.obj.Reserved0}
 
+	return &patternFlowVxlanReserved0{obj: obj.obj.Reserved0}
 }
 
 // Vni returns a PatternFlowVxlanVni
@@ -6330,8 +6961,8 @@ func (obj *flowVxlan) Vni() PatternFlowVxlanVni {
 	if obj.obj.Vni == nil {
 		obj.obj.Vni = &snappipb.PatternFlowVxlanVni{}
 	}
-	return &patternFlowVxlanVni{obj: obj.obj.Vni}
 
+	return &patternFlowVxlanVni{obj: obj.obj.Vni}
 }
 
 // Reserved1 returns a PatternFlowVxlanReserved1
@@ -6340,8 +6971,8 @@ func (obj *flowVxlan) Reserved1() PatternFlowVxlanReserved1 {
 	if obj.obj.Reserved1 == nil {
 		obj.obj.Reserved1 = &snappipb.PatternFlowVxlanReserved1{}
 	}
-	return &patternFlowVxlanReserved1{obj: obj.obj.Reserved1}
 
+	return &patternFlowVxlanReserved1{obj: obj.obj.Reserved1}
 }
 
 type flowIpv4 struct {
@@ -6412,8 +7043,8 @@ func (obj *flowIpv4) Version() PatternFlowIpv4Version {
 	if obj.obj.Version == nil {
 		obj.obj.Version = &snappipb.PatternFlowIpv4Version{}
 	}
-	return &patternFlowIpv4Version{obj: obj.obj.Version}
 
+	return &patternFlowIpv4Version{obj: obj.obj.Version}
 }
 
 // HeaderLength returns a PatternFlowIpv4HeaderLength
@@ -6422,8 +7053,8 @@ func (obj *flowIpv4) HeaderLength() PatternFlowIpv4HeaderLength {
 	if obj.obj.HeaderLength == nil {
 		obj.obj.HeaderLength = &snappipb.PatternFlowIpv4HeaderLength{}
 	}
-	return &patternFlowIpv4HeaderLength{obj: obj.obj.HeaderLength}
 
+	return &patternFlowIpv4HeaderLength{obj: obj.obj.HeaderLength}
 }
 
 // Priority returns a FlowIpv4Priority
@@ -6432,8 +7063,8 @@ func (obj *flowIpv4) Priority() FlowIpv4Priority {
 	if obj.obj.Priority == nil {
 		obj.obj.Priority = &snappipb.FlowIpv4Priority{}
 	}
-	return &flowIpv4Priority{obj: obj.obj.Priority}
 
+	return &flowIpv4Priority{obj: obj.obj.Priority}
 }
 
 // TotalLength returns a PatternFlowIpv4TotalLength
@@ -6442,8 +7073,8 @@ func (obj *flowIpv4) TotalLength() PatternFlowIpv4TotalLength {
 	if obj.obj.TotalLength == nil {
 		obj.obj.TotalLength = &snappipb.PatternFlowIpv4TotalLength{}
 	}
-	return &patternFlowIpv4TotalLength{obj: obj.obj.TotalLength}
 
+	return &patternFlowIpv4TotalLength{obj: obj.obj.TotalLength}
 }
 
 // Identification returns a PatternFlowIpv4Identification
@@ -6452,8 +7083,8 @@ func (obj *flowIpv4) Identification() PatternFlowIpv4Identification {
 	if obj.obj.Identification == nil {
 		obj.obj.Identification = &snappipb.PatternFlowIpv4Identification{}
 	}
-	return &patternFlowIpv4Identification{obj: obj.obj.Identification}
 
+	return &patternFlowIpv4Identification{obj: obj.obj.Identification}
 }
 
 // Reserved returns a PatternFlowIpv4Reserved
@@ -6462,8 +7093,8 @@ func (obj *flowIpv4) Reserved() PatternFlowIpv4Reserved {
 	if obj.obj.Reserved == nil {
 		obj.obj.Reserved = &snappipb.PatternFlowIpv4Reserved{}
 	}
-	return &patternFlowIpv4Reserved{obj: obj.obj.Reserved}
 
+	return &patternFlowIpv4Reserved{obj: obj.obj.Reserved}
 }
 
 // DontFragment returns a PatternFlowIpv4DontFragment
@@ -6472,8 +7103,8 @@ func (obj *flowIpv4) DontFragment() PatternFlowIpv4DontFragment {
 	if obj.obj.DontFragment == nil {
 		obj.obj.DontFragment = &snappipb.PatternFlowIpv4DontFragment{}
 	}
-	return &patternFlowIpv4DontFragment{obj: obj.obj.DontFragment}
 
+	return &patternFlowIpv4DontFragment{obj: obj.obj.DontFragment}
 }
 
 // MoreFragments returns a PatternFlowIpv4MoreFragments
@@ -6482,8 +7113,8 @@ func (obj *flowIpv4) MoreFragments() PatternFlowIpv4MoreFragments {
 	if obj.obj.MoreFragments == nil {
 		obj.obj.MoreFragments = &snappipb.PatternFlowIpv4MoreFragments{}
 	}
-	return &patternFlowIpv4MoreFragments{obj: obj.obj.MoreFragments}
 
+	return &patternFlowIpv4MoreFragments{obj: obj.obj.MoreFragments}
 }
 
 // FragmentOffset returns a PatternFlowIpv4FragmentOffset
@@ -6492,8 +7123,8 @@ func (obj *flowIpv4) FragmentOffset() PatternFlowIpv4FragmentOffset {
 	if obj.obj.FragmentOffset == nil {
 		obj.obj.FragmentOffset = &snappipb.PatternFlowIpv4FragmentOffset{}
 	}
-	return &patternFlowIpv4FragmentOffset{obj: obj.obj.FragmentOffset}
 
+	return &patternFlowIpv4FragmentOffset{obj: obj.obj.FragmentOffset}
 }
 
 // TimeToLive returns a PatternFlowIpv4TimeToLive
@@ -6502,8 +7133,8 @@ func (obj *flowIpv4) TimeToLive() PatternFlowIpv4TimeToLive {
 	if obj.obj.TimeToLive == nil {
 		obj.obj.TimeToLive = &snappipb.PatternFlowIpv4TimeToLive{}
 	}
-	return &patternFlowIpv4TimeToLive{obj: obj.obj.TimeToLive}
 
+	return &patternFlowIpv4TimeToLive{obj: obj.obj.TimeToLive}
 }
 
 // Protocol returns a PatternFlowIpv4Protocol
@@ -6512,8 +7143,8 @@ func (obj *flowIpv4) Protocol() PatternFlowIpv4Protocol {
 	if obj.obj.Protocol == nil {
 		obj.obj.Protocol = &snappipb.PatternFlowIpv4Protocol{}
 	}
-	return &patternFlowIpv4Protocol{obj: obj.obj.Protocol}
 
+	return &patternFlowIpv4Protocol{obj: obj.obj.Protocol}
 }
 
 // HeaderChecksum returns a PatternFlowIpv4HeaderChecksum
@@ -6522,8 +7153,8 @@ func (obj *flowIpv4) HeaderChecksum() PatternFlowIpv4HeaderChecksum {
 	if obj.obj.HeaderChecksum == nil {
 		obj.obj.HeaderChecksum = &snappipb.PatternFlowIpv4HeaderChecksum{}
 	}
-	return &patternFlowIpv4HeaderChecksum{obj: obj.obj.HeaderChecksum}
 
+	return &patternFlowIpv4HeaderChecksum{obj: obj.obj.HeaderChecksum}
 }
 
 // Src returns a PatternFlowIpv4Src
@@ -6532,8 +7163,8 @@ func (obj *flowIpv4) Src() PatternFlowIpv4Src {
 	if obj.obj.Src == nil {
 		obj.obj.Src = &snappipb.PatternFlowIpv4Src{}
 	}
-	return &patternFlowIpv4Src{obj: obj.obj.Src}
 
+	return &patternFlowIpv4Src{obj: obj.obj.Src}
 }
 
 // Dst returns a PatternFlowIpv4Dst
@@ -6542,8 +7173,8 @@ func (obj *flowIpv4) Dst() PatternFlowIpv4Dst {
 	if obj.obj.Dst == nil {
 		obj.obj.Dst = &snappipb.PatternFlowIpv4Dst{}
 	}
-	return &patternFlowIpv4Dst{obj: obj.obj.Dst}
 
+	return &patternFlowIpv4Dst{obj: obj.obj.Dst}
 }
 
 type flowIpv6 struct {
@@ -6608,8 +7239,8 @@ func (obj *flowIpv6) Version() PatternFlowIpv6Version {
 	if obj.obj.Version == nil {
 		obj.obj.Version = &snappipb.PatternFlowIpv6Version{}
 	}
-	return &patternFlowIpv6Version{obj: obj.obj.Version}
 
+	return &patternFlowIpv6Version{obj: obj.obj.Version}
 }
 
 // TrafficClass returns a PatternFlowIpv6TrafficClass
@@ -6618,8 +7249,8 @@ func (obj *flowIpv6) TrafficClass() PatternFlowIpv6TrafficClass {
 	if obj.obj.TrafficClass == nil {
 		obj.obj.TrafficClass = &snappipb.PatternFlowIpv6TrafficClass{}
 	}
-	return &patternFlowIpv6TrafficClass{obj: obj.obj.TrafficClass}
 
+	return &patternFlowIpv6TrafficClass{obj: obj.obj.TrafficClass}
 }
 
 // FlowLabel returns a PatternFlowIpv6FlowLabel
@@ -6628,8 +7259,8 @@ func (obj *flowIpv6) FlowLabel() PatternFlowIpv6FlowLabel {
 	if obj.obj.FlowLabel == nil {
 		obj.obj.FlowLabel = &snappipb.PatternFlowIpv6FlowLabel{}
 	}
-	return &patternFlowIpv6FlowLabel{obj: obj.obj.FlowLabel}
 
+	return &patternFlowIpv6FlowLabel{obj: obj.obj.FlowLabel}
 }
 
 // PayloadLength returns a PatternFlowIpv6PayloadLength
@@ -6638,8 +7269,8 @@ func (obj *flowIpv6) PayloadLength() PatternFlowIpv6PayloadLength {
 	if obj.obj.PayloadLength == nil {
 		obj.obj.PayloadLength = &snappipb.PatternFlowIpv6PayloadLength{}
 	}
-	return &patternFlowIpv6PayloadLength{obj: obj.obj.PayloadLength}
 
+	return &patternFlowIpv6PayloadLength{obj: obj.obj.PayloadLength}
 }
 
 // NextHeader returns a PatternFlowIpv6NextHeader
@@ -6648,8 +7279,8 @@ func (obj *flowIpv6) NextHeader() PatternFlowIpv6NextHeader {
 	if obj.obj.NextHeader == nil {
 		obj.obj.NextHeader = &snappipb.PatternFlowIpv6NextHeader{}
 	}
-	return &patternFlowIpv6NextHeader{obj: obj.obj.NextHeader}
 
+	return &patternFlowIpv6NextHeader{obj: obj.obj.NextHeader}
 }
 
 // HopLimit returns a PatternFlowIpv6HopLimit
@@ -6658,8 +7289,8 @@ func (obj *flowIpv6) HopLimit() PatternFlowIpv6HopLimit {
 	if obj.obj.HopLimit == nil {
 		obj.obj.HopLimit = &snappipb.PatternFlowIpv6HopLimit{}
 	}
-	return &patternFlowIpv6HopLimit{obj: obj.obj.HopLimit}
 
+	return &patternFlowIpv6HopLimit{obj: obj.obj.HopLimit}
 }
 
 // Src returns a PatternFlowIpv6Src
@@ -6668,8 +7299,8 @@ func (obj *flowIpv6) Src() PatternFlowIpv6Src {
 	if obj.obj.Src == nil {
 		obj.obj.Src = &snappipb.PatternFlowIpv6Src{}
 	}
-	return &patternFlowIpv6Src{obj: obj.obj.Src}
 
+	return &patternFlowIpv6Src{obj: obj.obj.Src}
 }
 
 // Dst returns a PatternFlowIpv6Dst
@@ -6678,8 +7309,8 @@ func (obj *flowIpv6) Dst() PatternFlowIpv6Dst {
 	if obj.obj.Dst == nil {
 		obj.obj.Dst = &snappipb.PatternFlowIpv6Dst{}
 	}
-	return &patternFlowIpv6Dst{obj: obj.obj.Dst}
 
+	return &patternFlowIpv6Dst{obj: obj.obj.Dst}
 }
 
 type flowPfcPause struct {
@@ -6749,8 +7380,8 @@ func (obj *flowPfcPause) Dst() PatternFlowPfcPauseDst {
 	if obj.obj.Dst == nil {
 		obj.obj.Dst = &snappipb.PatternFlowPfcPauseDst{}
 	}
-	return &patternFlowPfcPauseDst{obj: obj.obj.Dst}
 
+	return &patternFlowPfcPauseDst{obj: obj.obj.Dst}
 }
 
 // Src returns a PatternFlowPfcPauseSrc
@@ -6759,8 +7390,8 @@ func (obj *flowPfcPause) Src() PatternFlowPfcPauseSrc {
 	if obj.obj.Src == nil {
 		obj.obj.Src = &snappipb.PatternFlowPfcPauseSrc{}
 	}
-	return &patternFlowPfcPauseSrc{obj: obj.obj.Src}
 
+	return &patternFlowPfcPauseSrc{obj: obj.obj.Src}
 }
 
 // EtherType returns a PatternFlowPfcPauseEtherType
@@ -6769,8 +7400,8 @@ func (obj *flowPfcPause) EtherType() PatternFlowPfcPauseEtherType {
 	if obj.obj.EtherType == nil {
 		obj.obj.EtherType = &snappipb.PatternFlowPfcPauseEtherType{}
 	}
-	return &patternFlowPfcPauseEtherType{obj: obj.obj.EtherType}
 
+	return &patternFlowPfcPauseEtherType{obj: obj.obj.EtherType}
 }
 
 // ControlOpCode returns a PatternFlowPfcPauseControlOpCode
@@ -6779,8 +7410,8 @@ func (obj *flowPfcPause) ControlOpCode() PatternFlowPfcPauseControlOpCode {
 	if obj.obj.ControlOpCode == nil {
 		obj.obj.ControlOpCode = &snappipb.PatternFlowPfcPauseControlOpCode{}
 	}
-	return &patternFlowPfcPauseControlOpCode{obj: obj.obj.ControlOpCode}
 
+	return &patternFlowPfcPauseControlOpCode{obj: obj.obj.ControlOpCode}
 }
 
 // ClassEnableVector returns a PatternFlowPfcPauseClassEnableVector
@@ -6789,8 +7420,8 @@ func (obj *flowPfcPause) ClassEnableVector() PatternFlowPfcPauseClassEnableVecto
 	if obj.obj.ClassEnableVector == nil {
 		obj.obj.ClassEnableVector = &snappipb.PatternFlowPfcPauseClassEnableVector{}
 	}
-	return &patternFlowPfcPauseClassEnableVector{obj: obj.obj.ClassEnableVector}
 
+	return &patternFlowPfcPauseClassEnableVector{obj: obj.obj.ClassEnableVector}
 }
 
 // PauseClass_0 returns a PatternFlowPfcPausePauseClass0
@@ -6799,8 +7430,8 @@ func (obj *flowPfcPause) PauseClass0() PatternFlowPfcPausePauseClass0 {
 	if obj.obj.PauseClass_0 == nil {
 		obj.obj.PauseClass_0 = &snappipb.PatternFlowPfcPausePauseClass0{}
 	}
-	return &patternFlowPfcPausePauseClass0{obj: obj.obj.PauseClass_0}
 
+	return &patternFlowPfcPausePauseClass0{obj: obj.obj.PauseClass_0}
 }
 
 // PauseClass_1 returns a PatternFlowPfcPausePauseClass1
@@ -6809,8 +7440,8 @@ func (obj *flowPfcPause) PauseClass1() PatternFlowPfcPausePauseClass1 {
 	if obj.obj.PauseClass_1 == nil {
 		obj.obj.PauseClass_1 = &snappipb.PatternFlowPfcPausePauseClass1{}
 	}
-	return &patternFlowPfcPausePauseClass1{obj: obj.obj.PauseClass_1}
 
+	return &patternFlowPfcPausePauseClass1{obj: obj.obj.PauseClass_1}
 }
 
 // PauseClass_2 returns a PatternFlowPfcPausePauseClass2
@@ -6819,8 +7450,8 @@ func (obj *flowPfcPause) PauseClass2() PatternFlowPfcPausePauseClass2 {
 	if obj.obj.PauseClass_2 == nil {
 		obj.obj.PauseClass_2 = &snappipb.PatternFlowPfcPausePauseClass2{}
 	}
-	return &patternFlowPfcPausePauseClass2{obj: obj.obj.PauseClass_2}
 
+	return &patternFlowPfcPausePauseClass2{obj: obj.obj.PauseClass_2}
 }
 
 // PauseClass_3 returns a PatternFlowPfcPausePauseClass3
@@ -6829,8 +7460,8 @@ func (obj *flowPfcPause) PauseClass3() PatternFlowPfcPausePauseClass3 {
 	if obj.obj.PauseClass_3 == nil {
 		obj.obj.PauseClass_3 = &snappipb.PatternFlowPfcPausePauseClass3{}
 	}
-	return &patternFlowPfcPausePauseClass3{obj: obj.obj.PauseClass_3}
 
+	return &patternFlowPfcPausePauseClass3{obj: obj.obj.PauseClass_3}
 }
 
 // PauseClass_4 returns a PatternFlowPfcPausePauseClass4
@@ -6839,8 +7470,8 @@ func (obj *flowPfcPause) PauseClass4() PatternFlowPfcPausePauseClass4 {
 	if obj.obj.PauseClass_4 == nil {
 		obj.obj.PauseClass_4 = &snappipb.PatternFlowPfcPausePauseClass4{}
 	}
-	return &patternFlowPfcPausePauseClass4{obj: obj.obj.PauseClass_4}
 
+	return &patternFlowPfcPausePauseClass4{obj: obj.obj.PauseClass_4}
 }
 
 // PauseClass_5 returns a PatternFlowPfcPausePauseClass5
@@ -6849,8 +7480,8 @@ func (obj *flowPfcPause) PauseClass5() PatternFlowPfcPausePauseClass5 {
 	if obj.obj.PauseClass_5 == nil {
 		obj.obj.PauseClass_5 = &snappipb.PatternFlowPfcPausePauseClass5{}
 	}
-	return &patternFlowPfcPausePauseClass5{obj: obj.obj.PauseClass_5}
 
+	return &patternFlowPfcPausePauseClass5{obj: obj.obj.PauseClass_5}
 }
 
 // PauseClass_6 returns a PatternFlowPfcPausePauseClass6
@@ -6859,8 +7490,8 @@ func (obj *flowPfcPause) PauseClass6() PatternFlowPfcPausePauseClass6 {
 	if obj.obj.PauseClass_6 == nil {
 		obj.obj.PauseClass_6 = &snappipb.PatternFlowPfcPausePauseClass6{}
 	}
-	return &patternFlowPfcPausePauseClass6{obj: obj.obj.PauseClass_6}
 
+	return &patternFlowPfcPausePauseClass6{obj: obj.obj.PauseClass_6}
 }
 
 // PauseClass_7 returns a PatternFlowPfcPausePauseClass7
@@ -6869,8 +7500,8 @@ func (obj *flowPfcPause) PauseClass7() PatternFlowPfcPausePauseClass7 {
 	if obj.obj.PauseClass_7 == nil {
 		obj.obj.PauseClass_7 = &snappipb.PatternFlowPfcPausePauseClass7{}
 	}
-	return &patternFlowPfcPausePauseClass7{obj: obj.obj.PauseClass_7}
 
+	return &patternFlowPfcPausePauseClass7{obj: obj.obj.PauseClass_7}
 }
 
 type flowEthernetPause struct {
@@ -6932,8 +7563,8 @@ func (obj *flowEthernetPause) Dst() PatternFlowEthernetPauseDst {
 	if obj.obj.Dst == nil {
 		obj.obj.Dst = &snappipb.PatternFlowEthernetPauseDst{}
 	}
-	return &patternFlowEthernetPauseDst{obj: obj.obj.Dst}
 
+	return &patternFlowEthernetPauseDst{obj: obj.obj.Dst}
 }
 
 // Src returns a PatternFlowEthernetPauseSrc
@@ -6942,8 +7573,8 @@ func (obj *flowEthernetPause) Src() PatternFlowEthernetPauseSrc {
 	if obj.obj.Src == nil {
 		obj.obj.Src = &snappipb.PatternFlowEthernetPauseSrc{}
 	}
-	return &patternFlowEthernetPauseSrc{obj: obj.obj.Src}
 
+	return &patternFlowEthernetPauseSrc{obj: obj.obj.Src}
 }
 
 // EtherType returns a PatternFlowEthernetPauseEtherType
@@ -6952,8 +7583,8 @@ func (obj *flowEthernetPause) EtherType() PatternFlowEthernetPauseEtherType {
 	if obj.obj.EtherType == nil {
 		obj.obj.EtherType = &snappipb.PatternFlowEthernetPauseEtherType{}
 	}
-	return &patternFlowEthernetPauseEtherType{obj: obj.obj.EtherType}
 
+	return &patternFlowEthernetPauseEtherType{obj: obj.obj.EtherType}
 }
 
 // ControlOpCode returns a PatternFlowEthernetPauseControlOpCode
@@ -6962,8 +7593,8 @@ func (obj *flowEthernetPause) ControlOpCode() PatternFlowEthernetPauseControlOpC
 	if obj.obj.ControlOpCode == nil {
 		obj.obj.ControlOpCode = &snappipb.PatternFlowEthernetPauseControlOpCode{}
 	}
-	return &patternFlowEthernetPauseControlOpCode{obj: obj.obj.ControlOpCode}
 
+	return &patternFlowEthernetPauseControlOpCode{obj: obj.obj.ControlOpCode}
 }
 
 // Time returns a PatternFlowEthernetPauseTime
@@ -6972,8 +7603,8 @@ func (obj *flowEthernetPause) Time() PatternFlowEthernetPauseTime {
 	if obj.obj.Time == nil {
 		obj.obj.Time = &snappipb.PatternFlowEthernetPauseTime{}
 	}
-	return &patternFlowEthernetPauseTime{obj: obj.obj.Time}
 
+	return &patternFlowEthernetPauseTime{obj: obj.obj.Time}
 }
 
 type flowTcp struct {
@@ -7045,8 +7676,8 @@ func (obj *flowTcp) SrcPort() PatternFlowTcpSrcPort {
 	if obj.obj.SrcPort == nil {
 		obj.obj.SrcPort = &snappipb.PatternFlowTcpSrcPort{}
 	}
-	return &patternFlowTcpSrcPort{obj: obj.obj.SrcPort}
 
+	return &patternFlowTcpSrcPort{obj: obj.obj.SrcPort}
 }
 
 // DstPort returns a PatternFlowTcpDstPort
@@ -7055,8 +7686,8 @@ func (obj *flowTcp) DstPort() PatternFlowTcpDstPort {
 	if obj.obj.DstPort == nil {
 		obj.obj.DstPort = &snappipb.PatternFlowTcpDstPort{}
 	}
-	return &patternFlowTcpDstPort{obj: obj.obj.DstPort}
 
+	return &patternFlowTcpDstPort{obj: obj.obj.DstPort}
 }
 
 // SeqNum returns a PatternFlowTcpSeqNum
@@ -7065,8 +7696,8 @@ func (obj *flowTcp) SeqNum() PatternFlowTcpSeqNum {
 	if obj.obj.SeqNum == nil {
 		obj.obj.SeqNum = &snappipb.PatternFlowTcpSeqNum{}
 	}
-	return &patternFlowTcpSeqNum{obj: obj.obj.SeqNum}
 
+	return &patternFlowTcpSeqNum{obj: obj.obj.SeqNum}
 }
 
 // AckNum returns a PatternFlowTcpAckNum
@@ -7075,8 +7706,8 @@ func (obj *flowTcp) AckNum() PatternFlowTcpAckNum {
 	if obj.obj.AckNum == nil {
 		obj.obj.AckNum = &snappipb.PatternFlowTcpAckNum{}
 	}
-	return &patternFlowTcpAckNum{obj: obj.obj.AckNum}
 
+	return &patternFlowTcpAckNum{obj: obj.obj.AckNum}
 }
 
 // DataOffset returns a PatternFlowTcpDataOffset
@@ -7085,8 +7716,8 @@ func (obj *flowTcp) DataOffset() PatternFlowTcpDataOffset {
 	if obj.obj.DataOffset == nil {
 		obj.obj.DataOffset = &snappipb.PatternFlowTcpDataOffset{}
 	}
-	return &patternFlowTcpDataOffset{obj: obj.obj.DataOffset}
 
+	return &patternFlowTcpDataOffset{obj: obj.obj.DataOffset}
 }
 
 // EcnNs returns a PatternFlowTcpEcnNs
@@ -7095,8 +7726,8 @@ func (obj *flowTcp) EcnNs() PatternFlowTcpEcnNs {
 	if obj.obj.EcnNs == nil {
 		obj.obj.EcnNs = &snappipb.PatternFlowTcpEcnNs{}
 	}
-	return &patternFlowTcpEcnNs{obj: obj.obj.EcnNs}
 
+	return &patternFlowTcpEcnNs{obj: obj.obj.EcnNs}
 }
 
 // EcnCwr returns a PatternFlowTcpEcnCwr
@@ -7105,8 +7736,8 @@ func (obj *flowTcp) EcnCwr() PatternFlowTcpEcnCwr {
 	if obj.obj.EcnCwr == nil {
 		obj.obj.EcnCwr = &snappipb.PatternFlowTcpEcnCwr{}
 	}
-	return &patternFlowTcpEcnCwr{obj: obj.obj.EcnCwr}
 
+	return &patternFlowTcpEcnCwr{obj: obj.obj.EcnCwr}
 }
 
 // EcnEcho returns a PatternFlowTcpEcnEcho
@@ -7115,8 +7746,8 @@ func (obj *flowTcp) EcnEcho() PatternFlowTcpEcnEcho {
 	if obj.obj.EcnEcho == nil {
 		obj.obj.EcnEcho = &snappipb.PatternFlowTcpEcnEcho{}
 	}
-	return &patternFlowTcpEcnEcho{obj: obj.obj.EcnEcho}
 
+	return &patternFlowTcpEcnEcho{obj: obj.obj.EcnEcho}
 }
 
 // CtlUrg returns a PatternFlowTcpCtlUrg
@@ -7125,8 +7756,8 @@ func (obj *flowTcp) CtlUrg() PatternFlowTcpCtlUrg {
 	if obj.obj.CtlUrg == nil {
 		obj.obj.CtlUrg = &snappipb.PatternFlowTcpCtlUrg{}
 	}
-	return &patternFlowTcpCtlUrg{obj: obj.obj.CtlUrg}
 
+	return &patternFlowTcpCtlUrg{obj: obj.obj.CtlUrg}
 }
 
 // CtlAck returns a PatternFlowTcpCtlAck
@@ -7135,8 +7766,8 @@ func (obj *flowTcp) CtlAck() PatternFlowTcpCtlAck {
 	if obj.obj.CtlAck == nil {
 		obj.obj.CtlAck = &snappipb.PatternFlowTcpCtlAck{}
 	}
-	return &patternFlowTcpCtlAck{obj: obj.obj.CtlAck}
 
+	return &patternFlowTcpCtlAck{obj: obj.obj.CtlAck}
 }
 
 // CtlPsh returns a PatternFlowTcpCtlPsh
@@ -7145,8 +7776,8 @@ func (obj *flowTcp) CtlPsh() PatternFlowTcpCtlPsh {
 	if obj.obj.CtlPsh == nil {
 		obj.obj.CtlPsh = &snappipb.PatternFlowTcpCtlPsh{}
 	}
-	return &patternFlowTcpCtlPsh{obj: obj.obj.CtlPsh}
 
+	return &patternFlowTcpCtlPsh{obj: obj.obj.CtlPsh}
 }
 
 // CtlRst returns a PatternFlowTcpCtlRst
@@ -7155,8 +7786,8 @@ func (obj *flowTcp) CtlRst() PatternFlowTcpCtlRst {
 	if obj.obj.CtlRst == nil {
 		obj.obj.CtlRst = &snappipb.PatternFlowTcpCtlRst{}
 	}
-	return &patternFlowTcpCtlRst{obj: obj.obj.CtlRst}
 
+	return &patternFlowTcpCtlRst{obj: obj.obj.CtlRst}
 }
 
 // CtlSyn returns a PatternFlowTcpCtlSyn
@@ -7165,8 +7796,8 @@ func (obj *flowTcp) CtlSyn() PatternFlowTcpCtlSyn {
 	if obj.obj.CtlSyn == nil {
 		obj.obj.CtlSyn = &snappipb.PatternFlowTcpCtlSyn{}
 	}
-	return &patternFlowTcpCtlSyn{obj: obj.obj.CtlSyn}
 
+	return &patternFlowTcpCtlSyn{obj: obj.obj.CtlSyn}
 }
 
 // CtlFin returns a PatternFlowTcpCtlFin
@@ -7175,8 +7806,8 @@ func (obj *flowTcp) CtlFin() PatternFlowTcpCtlFin {
 	if obj.obj.CtlFin == nil {
 		obj.obj.CtlFin = &snappipb.PatternFlowTcpCtlFin{}
 	}
-	return &patternFlowTcpCtlFin{obj: obj.obj.CtlFin}
 
+	return &patternFlowTcpCtlFin{obj: obj.obj.CtlFin}
 }
 
 // Window returns a PatternFlowTcpWindow
@@ -7185,8 +7816,8 @@ func (obj *flowTcp) Window() PatternFlowTcpWindow {
 	if obj.obj.Window == nil {
 		obj.obj.Window = &snappipb.PatternFlowTcpWindow{}
 	}
-	return &patternFlowTcpWindow{obj: obj.obj.Window}
 
+	return &patternFlowTcpWindow{obj: obj.obj.Window}
 }
 
 type flowUdp struct {
@@ -7247,8 +7878,8 @@ func (obj *flowUdp) SrcPort() PatternFlowUdpSrcPort {
 	if obj.obj.SrcPort == nil {
 		obj.obj.SrcPort = &snappipb.PatternFlowUdpSrcPort{}
 	}
-	return &patternFlowUdpSrcPort{obj: obj.obj.SrcPort}
 
+	return &patternFlowUdpSrcPort{obj: obj.obj.SrcPort}
 }
 
 // DstPort returns a PatternFlowUdpDstPort
@@ -7257,8 +7888,8 @@ func (obj *flowUdp) DstPort() PatternFlowUdpDstPort {
 	if obj.obj.DstPort == nil {
 		obj.obj.DstPort = &snappipb.PatternFlowUdpDstPort{}
 	}
-	return &patternFlowUdpDstPort{obj: obj.obj.DstPort}
 
+	return &patternFlowUdpDstPort{obj: obj.obj.DstPort}
 }
 
 // Length returns a PatternFlowUdpLength
@@ -7267,8 +7898,8 @@ func (obj *flowUdp) Length() PatternFlowUdpLength {
 	if obj.obj.Length == nil {
 		obj.obj.Length = &snappipb.PatternFlowUdpLength{}
 	}
-	return &patternFlowUdpLength{obj: obj.obj.Length}
 
+	return &patternFlowUdpLength{obj: obj.obj.Length}
 }
 
 // Checksum returns a PatternFlowUdpChecksum
@@ -7277,8 +7908,8 @@ func (obj *flowUdp) Checksum() PatternFlowUdpChecksum {
 	if obj.obj.Checksum == nil {
 		obj.obj.Checksum = &snappipb.PatternFlowUdpChecksum{}
 	}
-	return &patternFlowUdpChecksum{obj: obj.obj.Checksum}
 
+	return &patternFlowUdpChecksum{obj: obj.obj.Checksum}
 }
 
 type flowGre struct {
@@ -7341,8 +7972,8 @@ func (obj *flowGre) ChecksumPresent() PatternFlowGreChecksumPresent {
 	if obj.obj.ChecksumPresent == nil {
 		obj.obj.ChecksumPresent = &snappipb.PatternFlowGreChecksumPresent{}
 	}
-	return &patternFlowGreChecksumPresent{obj: obj.obj.ChecksumPresent}
 
+	return &patternFlowGreChecksumPresent{obj: obj.obj.ChecksumPresent}
 }
 
 // Reserved0 returns a PatternFlowGreReserved0
@@ -7351,8 +7982,8 @@ func (obj *flowGre) Reserved0() PatternFlowGreReserved0 {
 	if obj.obj.Reserved0 == nil {
 		obj.obj.Reserved0 = &snappipb.PatternFlowGreReserved0{}
 	}
-	return &patternFlowGreReserved0{obj: obj.obj.Reserved0}
 
+	return &patternFlowGreReserved0{obj: obj.obj.Reserved0}
 }
 
 // Version returns a PatternFlowGreVersion
@@ -7361,8 +7992,8 @@ func (obj *flowGre) Version() PatternFlowGreVersion {
 	if obj.obj.Version == nil {
 		obj.obj.Version = &snappipb.PatternFlowGreVersion{}
 	}
-	return &patternFlowGreVersion{obj: obj.obj.Version}
 
+	return &patternFlowGreVersion{obj: obj.obj.Version}
 }
 
 // Protocol returns a PatternFlowGreProtocol
@@ -7371,8 +8002,8 @@ func (obj *flowGre) Protocol() PatternFlowGreProtocol {
 	if obj.obj.Protocol == nil {
 		obj.obj.Protocol = &snappipb.PatternFlowGreProtocol{}
 	}
-	return &patternFlowGreProtocol{obj: obj.obj.Protocol}
 
+	return &patternFlowGreProtocol{obj: obj.obj.Protocol}
 }
 
 // Checksum returns a PatternFlowGreChecksum
@@ -7381,8 +8012,8 @@ func (obj *flowGre) Checksum() PatternFlowGreChecksum {
 	if obj.obj.Checksum == nil {
 		obj.obj.Checksum = &snappipb.PatternFlowGreChecksum{}
 	}
-	return &patternFlowGreChecksum{obj: obj.obj.Checksum}
 
+	return &patternFlowGreChecksum{obj: obj.obj.Checksum}
 }
 
 // Reserved1 returns a PatternFlowGreReserved1
@@ -7391,8 +8022,8 @@ func (obj *flowGre) Reserved1() PatternFlowGreReserved1 {
 	if obj.obj.Reserved1 == nil {
 		obj.obj.Reserved1 = &snappipb.PatternFlowGreReserved1{}
 	}
-	return &patternFlowGreReserved1{obj: obj.obj.Reserved1}
 
+	return &patternFlowGreReserved1{obj: obj.obj.Reserved1}
 }
 
 type flowGtpv1 struct {
@@ -7462,8 +8093,8 @@ func (obj *flowGtpv1) Version() PatternFlowGtpv1Version {
 	if obj.obj.Version == nil {
 		obj.obj.Version = &snappipb.PatternFlowGtpv1Version{}
 	}
-	return &patternFlowGtpv1Version{obj: obj.obj.Version}
 
+	return &patternFlowGtpv1Version{obj: obj.obj.Version}
 }
 
 // ProtocolType returns a PatternFlowGtpv1ProtocolType
@@ -7472,8 +8103,8 @@ func (obj *flowGtpv1) ProtocolType() PatternFlowGtpv1ProtocolType {
 	if obj.obj.ProtocolType == nil {
 		obj.obj.ProtocolType = &snappipb.PatternFlowGtpv1ProtocolType{}
 	}
-	return &patternFlowGtpv1ProtocolType{obj: obj.obj.ProtocolType}
 
+	return &patternFlowGtpv1ProtocolType{obj: obj.obj.ProtocolType}
 }
 
 // Reserved returns a PatternFlowGtpv1Reserved
@@ -7482,8 +8113,8 @@ func (obj *flowGtpv1) Reserved() PatternFlowGtpv1Reserved {
 	if obj.obj.Reserved == nil {
 		obj.obj.Reserved = &snappipb.PatternFlowGtpv1Reserved{}
 	}
-	return &patternFlowGtpv1Reserved{obj: obj.obj.Reserved}
 
+	return &patternFlowGtpv1Reserved{obj: obj.obj.Reserved}
 }
 
 // EFlag returns a PatternFlowGtpv1EFlag
@@ -7492,8 +8123,8 @@ func (obj *flowGtpv1) EFlag() PatternFlowGtpv1EFlag {
 	if obj.obj.EFlag == nil {
 		obj.obj.EFlag = &snappipb.PatternFlowGtpv1EFlag{}
 	}
-	return &patternFlowGtpv1EFlag{obj: obj.obj.EFlag}
 
+	return &patternFlowGtpv1EFlag{obj: obj.obj.EFlag}
 }
 
 // SFlag returns a PatternFlowGtpv1SFlag
@@ -7502,8 +8133,8 @@ func (obj *flowGtpv1) SFlag() PatternFlowGtpv1SFlag {
 	if obj.obj.SFlag == nil {
 		obj.obj.SFlag = &snappipb.PatternFlowGtpv1SFlag{}
 	}
-	return &patternFlowGtpv1SFlag{obj: obj.obj.SFlag}
 
+	return &patternFlowGtpv1SFlag{obj: obj.obj.SFlag}
 }
 
 // PnFlag returns a PatternFlowGtpv1PnFlag
@@ -7512,8 +8143,8 @@ func (obj *flowGtpv1) PnFlag() PatternFlowGtpv1PnFlag {
 	if obj.obj.PnFlag == nil {
 		obj.obj.PnFlag = &snappipb.PatternFlowGtpv1PnFlag{}
 	}
-	return &patternFlowGtpv1PnFlag{obj: obj.obj.PnFlag}
 
+	return &patternFlowGtpv1PnFlag{obj: obj.obj.PnFlag}
 }
 
 // MessageType returns a PatternFlowGtpv1MessageType
@@ -7522,8 +8153,8 @@ func (obj *flowGtpv1) MessageType() PatternFlowGtpv1MessageType {
 	if obj.obj.MessageType == nil {
 		obj.obj.MessageType = &snappipb.PatternFlowGtpv1MessageType{}
 	}
-	return &patternFlowGtpv1MessageType{obj: obj.obj.MessageType}
 
+	return &patternFlowGtpv1MessageType{obj: obj.obj.MessageType}
 }
 
 // MessageLength returns a PatternFlowGtpv1MessageLength
@@ -7532,8 +8163,8 @@ func (obj *flowGtpv1) MessageLength() PatternFlowGtpv1MessageLength {
 	if obj.obj.MessageLength == nil {
 		obj.obj.MessageLength = &snappipb.PatternFlowGtpv1MessageLength{}
 	}
-	return &patternFlowGtpv1MessageLength{obj: obj.obj.MessageLength}
 
+	return &patternFlowGtpv1MessageLength{obj: obj.obj.MessageLength}
 }
 
 // Teid returns a PatternFlowGtpv1Teid
@@ -7542,8 +8173,8 @@ func (obj *flowGtpv1) Teid() PatternFlowGtpv1Teid {
 	if obj.obj.Teid == nil {
 		obj.obj.Teid = &snappipb.PatternFlowGtpv1Teid{}
 	}
-	return &patternFlowGtpv1Teid{obj: obj.obj.Teid}
 
+	return &patternFlowGtpv1Teid{obj: obj.obj.Teid}
 }
 
 // SquenceNumber returns a PatternFlowGtpv1SquenceNumber
@@ -7552,8 +8183,8 @@ func (obj *flowGtpv1) SquenceNumber() PatternFlowGtpv1SquenceNumber {
 	if obj.obj.SquenceNumber == nil {
 		obj.obj.SquenceNumber = &snappipb.PatternFlowGtpv1SquenceNumber{}
 	}
-	return &patternFlowGtpv1SquenceNumber{obj: obj.obj.SquenceNumber}
 
+	return &patternFlowGtpv1SquenceNumber{obj: obj.obj.SquenceNumber}
 }
 
 // NPduNumber returns a PatternFlowGtpv1NPduNumber
@@ -7562,8 +8193,8 @@ func (obj *flowGtpv1) NPduNumber() PatternFlowGtpv1NPduNumber {
 	if obj.obj.NPduNumber == nil {
 		obj.obj.NPduNumber = &snappipb.PatternFlowGtpv1NPduNumber{}
 	}
-	return &patternFlowGtpv1NPduNumber{obj: obj.obj.NPduNumber}
 
+	return &patternFlowGtpv1NPduNumber{obj: obj.obj.NPduNumber}
 }
 
 // NextExtensionHeaderType returns a PatternFlowGtpv1NextExtensionHeaderType
@@ -7572,8 +8203,8 @@ func (obj *flowGtpv1) NextExtensionHeaderType() PatternFlowGtpv1NextExtensionHea
 	if obj.obj.NextExtensionHeaderType == nil {
 		obj.obj.NextExtensionHeaderType = &snappipb.PatternFlowGtpv1NextExtensionHeaderType{}
 	}
-	return &patternFlowGtpv1NextExtensionHeaderType{obj: obj.obj.NextExtensionHeaderType}
 
+	return &patternFlowGtpv1NextExtensionHeaderType{obj: obj.obj.NextExtensionHeaderType}
 }
 
 // ExtensionHeaders returns a []FlowGtpExtension
@@ -7583,7 +8214,6 @@ func (obj *flowGtpv1) ExtensionHeaders() FlowGtpv1FlowGtpExtensionIter {
 		obj.obj.ExtensionHeaders = []*snappipb.FlowGtpExtension{}
 	}
 	return &flowGtpv1FlowGtpExtensionIter{obj: obj}
-
 }
 
 type flowGtpv1FlowGtpExtensionIter struct {
@@ -7672,8 +8302,8 @@ func (obj *flowGtpv2) Version() PatternFlowGtpv2Version {
 	if obj.obj.Version == nil {
 		obj.obj.Version = &snappipb.PatternFlowGtpv2Version{}
 	}
-	return &patternFlowGtpv2Version{obj: obj.obj.Version}
 
+	return &patternFlowGtpv2Version{obj: obj.obj.Version}
 }
 
 // PiggybackingFlag returns a PatternFlowGtpv2PiggybackingFlag
@@ -7682,8 +8312,8 @@ func (obj *flowGtpv2) PiggybackingFlag() PatternFlowGtpv2PiggybackingFlag {
 	if obj.obj.PiggybackingFlag == nil {
 		obj.obj.PiggybackingFlag = &snappipb.PatternFlowGtpv2PiggybackingFlag{}
 	}
-	return &patternFlowGtpv2PiggybackingFlag{obj: obj.obj.PiggybackingFlag}
 
+	return &patternFlowGtpv2PiggybackingFlag{obj: obj.obj.PiggybackingFlag}
 }
 
 // TeidFlag returns a PatternFlowGtpv2TeidFlag
@@ -7692,8 +8322,8 @@ func (obj *flowGtpv2) TeidFlag() PatternFlowGtpv2TeidFlag {
 	if obj.obj.TeidFlag == nil {
 		obj.obj.TeidFlag = &snappipb.PatternFlowGtpv2TeidFlag{}
 	}
-	return &patternFlowGtpv2TeidFlag{obj: obj.obj.TeidFlag}
 
+	return &patternFlowGtpv2TeidFlag{obj: obj.obj.TeidFlag}
 }
 
 // Spare1 returns a PatternFlowGtpv2Spare1
@@ -7702,8 +8332,8 @@ func (obj *flowGtpv2) Spare1() PatternFlowGtpv2Spare1 {
 	if obj.obj.Spare1 == nil {
 		obj.obj.Spare1 = &snappipb.PatternFlowGtpv2Spare1{}
 	}
-	return &patternFlowGtpv2Spare1{obj: obj.obj.Spare1}
 
+	return &patternFlowGtpv2Spare1{obj: obj.obj.Spare1}
 }
 
 // MessageType returns a PatternFlowGtpv2MessageType
@@ -7712,8 +8342,8 @@ func (obj *flowGtpv2) MessageType() PatternFlowGtpv2MessageType {
 	if obj.obj.MessageType == nil {
 		obj.obj.MessageType = &snappipb.PatternFlowGtpv2MessageType{}
 	}
-	return &patternFlowGtpv2MessageType{obj: obj.obj.MessageType}
 
+	return &patternFlowGtpv2MessageType{obj: obj.obj.MessageType}
 }
 
 // MessageLength returns a PatternFlowGtpv2MessageLength
@@ -7722,8 +8352,8 @@ func (obj *flowGtpv2) MessageLength() PatternFlowGtpv2MessageLength {
 	if obj.obj.MessageLength == nil {
 		obj.obj.MessageLength = &snappipb.PatternFlowGtpv2MessageLength{}
 	}
-	return &patternFlowGtpv2MessageLength{obj: obj.obj.MessageLength}
 
+	return &patternFlowGtpv2MessageLength{obj: obj.obj.MessageLength}
 }
 
 // Teid returns a PatternFlowGtpv2Teid
@@ -7732,8 +8362,8 @@ func (obj *flowGtpv2) Teid() PatternFlowGtpv2Teid {
 	if obj.obj.Teid == nil {
 		obj.obj.Teid = &snappipb.PatternFlowGtpv2Teid{}
 	}
-	return &patternFlowGtpv2Teid{obj: obj.obj.Teid}
 
+	return &patternFlowGtpv2Teid{obj: obj.obj.Teid}
 }
 
 // SequenceNumber returns a PatternFlowGtpv2SequenceNumber
@@ -7742,8 +8372,8 @@ func (obj *flowGtpv2) SequenceNumber() PatternFlowGtpv2SequenceNumber {
 	if obj.obj.SequenceNumber == nil {
 		obj.obj.SequenceNumber = &snappipb.PatternFlowGtpv2SequenceNumber{}
 	}
-	return &patternFlowGtpv2SequenceNumber{obj: obj.obj.SequenceNumber}
 
+	return &patternFlowGtpv2SequenceNumber{obj: obj.obj.SequenceNumber}
 }
 
 // Spare2 returns a PatternFlowGtpv2Spare2
@@ -7752,8 +8382,8 @@ func (obj *flowGtpv2) Spare2() PatternFlowGtpv2Spare2 {
 	if obj.obj.Spare2 == nil {
 		obj.obj.Spare2 = &snappipb.PatternFlowGtpv2Spare2{}
 	}
-	return &patternFlowGtpv2Spare2{obj: obj.obj.Spare2}
 
+	return &patternFlowGtpv2Spare2{obj: obj.obj.Spare2}
 }
 
 type flowArp struct {
@@ -7819,8 +8449,8 @@ func (obj *flowArp) HardwareType() PatternFlowArpHardwareType {
 	if obj.obj.HardwareType == nil {
 		obj.obj.HardwareType = &snappipb.PatternFlowArpHardwareType{}
 	}
-	return &patternFlowArpHardwareType{obj: obj.obj.HardwareType}
 
+	return &patternFlowArpHardwareType{obj: obj.obj.HardwareType}
 }
 
 // ProtocolType returns a PatternFlowArpProtocolType
@@ -7829,8 +8459,8 @@ func (obj *flowArp) ProtocolType() PatternFlowArpProtocolType {
 	if obj.obj.ProtocolType == nil {
 		obj.obj.ProtocolType = &snappipb.PatternFlowArpProtocolType{}
 	}
-	return &patternFlowArpProtocolType{obj: obj.obj.ProtocolType}
 
+	return &patternFlowArpProtocolType{obj: obj.obj.ProtocolType}
 }
 
 // HardwareLength returns a PatternFlowArpHardwareLength
@@ -7839,8 +8469,8 @@ func (obj *flowArp) HardwareLength() PatternFlowArpHardwareLength {
 	if obj.obj.HardwareLength == nil {
 		obj.obj.HardwareLength = &snappipb.PatternFlowArpHardwareLength{}
 	}
-	return &patternFlowArpHardwareLength{obj: obj.obj.HardwareLength}
 
+	return &patternFlowArpHardwareLength{obj: obj.obj.HardwareLength}
 }
 
 // ProtocolLength returns a PatternFlowArpProtocolLength
@@ -7849,8 +8479,8 @@ func (obj *flowArp) ProtocolLength() PatternFlowArpProtocolLength {
 	if obj.obj.ProtocolLength == nil {
 		obj.obj.ProtocolLength = &snappipb.PatternFlowArpProtocolLength{}
 	}
-	return &patternFlowArpProtocolLength{obj: obj.obj.ProtocolLength}
 
+	return &patternFlowArpProtocolLength{obj: obj.obj.ProtocolLength}
 }
 
 // Operation returns a PatternFlowArpOperation
@@ -7859,8 +8489,8 @@ func (obj *flowArp) Operation() PatternFlowArpOperation {
 	if obj.obj.Operation == nil {
 		obj.obj.Operation = &snappipb.PatternFlowArpOperation{}
 	}
-	return &patternFlowArpOperation{obj: obj.obj.Operation}
 
+	return &patternFlowArpOperation{obj: obj.obj.Operation}
 }
 
 // SenderHardwareAddr returns a PatternFlowArpSenderHardwareAddr
@@ -7869,8 +8499,8 @@ func (obj *flowArp) SenderHardwareAddr() PatternFlowArpSenderHardwareAddr {
 	if obj.obj.SenderHardwareAddr == nil {
 		obj.obj.SenderHardwareAddr = &snappipb.PatternFlowArpSenderHardwareAddr{}
 	}
-	return &patternFlowArpSenderHardwareAddr{obj: obj.obj.SenderHardwareAddr}
 
+	return &patternFlowArpSenderHardwareAddr{obj: obj.obj.SenderHardwareAddr}
 }
 
 // SenderProtocolAddr returns a PatternFlowArpSenderProtocolAddr
@@ -7879,8 +8509,8 @@ func (obj *flowArp) SenderProtocolAddr() PatternFlowArpSenderProtocolAddr {
 	if obj.obj.SenderProtocolAddr == nil {
 		obj.obj.SenderProtocolAddr = &snappipb.PatternFlowArpSenderProtocolAddr{}
 	}
-	return &patternFlowArpSenderProtocolAddr{obj: obj.obj.SenderProtocolAddr}
 
+	return &patternFlowArpSenderProtocolAddr{obj: obj.obj.SenderProtocolAddr}
 }
 
 // TargetHardwareAddr returns a PatternFlowArpTargetHardwareAddr
@@ -7889,8 +8519,8 @@ func (obj *flowArp) TargetHardwareAddr() PatternFlowArpTargetHardwareAddr {
 	if obj.obj.TargetHardwareAddr == nil {
 		obj.obj.TargetHardwareAddr = &snappipb.PatternFlowArpTargetHardwareAddr{}
 	}
-	return &patternFlowArpTargetHardwareAddr{obj: obj.obj.TargetHardwareAddr}
 
+	return &patternFlowArpTargetHardwareAddr{obj: obj.obj.TargetHardwareAddr}
 }
 
 // TargetProtocolAddr returns a PatternFlowArpTargetProtocolAddr
@@ -7899,8 +8529,8 @@ func (obj *flowArp) TargetProtocolAddr() PatternFlowArpTargetProtocolAddr {
 	if obj.obj.TargetProtocolAddr == nil {
 		obj.obj.TargetProtocolAddr = &snappipb.PatternFlowArpTargetProtocolAddr{}
 	}
-	return &patternFlowArpTargetProtocolAddr{obj: obj.obj.TargetProtocolAddr}
 
+	return &patternFlowArpTargetProtocolAddr{obj: obj.obj.TargetProtocolAddr}
 }
 
 type flowIcmp struct {
@@ -7949,7 +8579,30 @@ type FlowIcmp interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() FlowIcmpChoiceEnum
+	SetChoice(value FlowIcmpChoiceEnum) FlowIcmp
 	Echo() FlowIcmpEcho
+}
+
+type FlowIcmpChoiceEnum string
+
+var FlowIcmpChoice = struct {
+	UNSPECIFIED FlowIcmpChoiceEnum
+	ECHO        FlowIcmpChoiceEnum
+}{
+	UNSPECIFIED: FlowIcmpChoiceEnum("unspecified"),
+	ECHO:        FlowIcmpChoiceEnum("echo"),
+}
+
+func (obj *flowIcmp) Choice() FlowIcmpChoiceEnum {
+	return FlowIcmpChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *flowIcmp) SetChoice(value FlowIcmpChoiceEnum) FlowIcmp {
+	intValue := snappipb.FlowIcmp_Choice_Enum_value[string(value)]
+	enumValue := snappipb.FlowIcmp_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Echo returns a FlowIcmpEcho
@@ -7958,8 +8611,8 @@ func (obj *flowIcmp) Echo() FlowIcmpEcho {
 	if obj.obj.Echo == nil {
 		obj.obj.Echo = &snappipb.FlowIcmpEcho{}
 	}
+	obj.SetChoice(FlowIcmpChoice.ECHO)
 	return &flowIcmpEcho{obj: obj.obj.Echo}
-
 }
 
 type flowIcmpv6 struct {
@@ -8008,7 +8661,30 @@ type FlowIcmpv6 interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() FlowIcmpv6ChoiceEnum
+	SetChoice(value FlowIcmpv6ChoiceEnum) FlowIcmpv6
 	Echo() FlowIcmpv6Echo
+}
+
+type FlowIcmpv6ChoiceEnum string
+
+var FlowIcmpv6Choice = struct {
+	UNSPECIFIED FlowIcmpv6ChoiceEnum
+	ECHO        FlowIcmpv6ChoiceEnum
+}{
+	UNSPECIFIED: FlowIcmpv6ChoiceEnum("unspecified"),
+	ECHO:        FlowIcmpv6ChoiceEnum("echo"),
+}
+
+func (obj *flowIcmpv6) Choice() FlowIcmpv6ChoiceEnum {
+	return FlowIcmpv6ChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *flowIcmpv6) SetChoice(value FlowIcmpv6ChoiceEnum) FlowIcmpv6 {
+	intValue := snappipb.FlowIcmpv6_Choice_Enum_value[string(value)]
+	enumValue := snappipb.FlowIcmpv6_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Echo returns a FlowIcmpv6Echo
@@ -8017,8 +8693,8 @@ func (obj *flowIcmpv6) Echo() FlowIcmpv6Echo {
 	if obj.obj.Echo == nil {
 		obj.obj.Echo = &snappipb.FlowIcmpv6Echo{}
 	}
+	obj.SetChoice(FlowIcmpv6Choice.ECHO)
 	return &flowIcmpv6Echo{obj: obj.obj.Echo}
-
 }
 
 type flowPpp struct {
@@ -8078,8 +8754,8 @@ func (obj *flowPpp) Address() PatternFlowPppAddress {
 	if obj.obj.Address == nil {
 		obj.obj.Address = &snappipb.PatternFlowPppAddress{}
 	}
-	return &patternFlowPppAddress{obj: obj.obj.Address}
 
+	return &patternFlowPppAddress{obj: obj.obj.Address}
 }
 
 // Control returns a PatternFlowPppControl
@@ -8088,8 +8764,8 @@ func (obj *flowPpp) Control() PatternFlowPppControl {
 	if obj.obj.Control == nil {
 		obj.obj.Control = &snappipb.PatternFlowPppControl{}
 	}
-	return &patternFlowPppControl{obj: obj.obj.Control}
 
+	return &patternFlowPppControl{obj: obj.obj.Control}
 }
 
 // ProtocolType returns a PatternFlowPppProtocolType
@@ -8098,8 +8774,8 @@ func (obj *flowPpp) ProtocolType() PatternFlowPppProtocolType {
 	if obj.obj.ProtocolType == nil {
 		obj.obj.ProtocolType = &snappipb.PatternFlowPppProtocolType{}
 	}
-	return &patternFlowPppProtocolType{obj: obj.obj.ProtocolType}
 
+	return &patternFlowPppProtocolType{obj: obj.obj.ProtocolType}
 }
 
 type flowIgmpv1 struct {
@@ -8161,8 +8837,8 @@ func (obj *flowIgmpv1) Version() PatternFlowIgmpv1Version {
 	if obj.obj.Version == nil {
 		obj.obj.Version = &snappipb.PatternFlowIgmpv1Version{}
 	}
-	return &patternFlowIgmpv1Version{obj: obj.obj.Version}
 
+	return &patternFlowIgmpv1Version{obj: obj.obj.Version}
 }
 
 // Type returns a PatternFlowIgmpv1Type
@@ -8171,8 +8847,8 @@ func (obj *flowIgmpv1) Type() PatternFlowIgmpv1Type {
 	if obj.obj.Type == nil {
 		obj.obj.Type = &snappipb.PatternFlowIgmpv1Type{}
 	}
-	return &patternFlowIgmpv1Type{obj: obj.obj.Type}
 
+	return &patternFlowIgmpv1Type{obj: obj.obj.Type}
 }
 
 // Unused returns a PatternFlowIgmpv1Unused
@@ -8181,8 +8857,8 @@ func (obj *flowIgmpv1) Unused() PatternFlowIgmpv1Unused {
 	if obj.obj.Unused == nil {
 		obj.obj.Unused = &snappipb.PatternFlowIgmpv1Unused{}
 	}
-	return &patternFlowIgmpv1Unused{obj: obj.obj.Unused}
 
+	return &patternFlowIgmpv1Unused{obj: obj.obj.Unused}
 }
 
 // Checksum returns a PatternFlowIgmpv1Checksum
@@ -8191,8 +8867,8 @@ func (obj *flowIgmpv1) Checksum() PatternFlowIgmpv1Checksum {
 	if obj.obj.Checksum == nil {
 		obj.obj.Checksum = &snappipb.PatternFlowIgmpv1Checksum{}
 	}
-	return &patternFlowIgmpv1Checksum{obj: obj.obj.Checksum}
 
+	return &patternFlowIgmpv1Checksum{obj: obj.obj.Checksum}
 }
 
 // GroupAddress returns a PatternFlowIgmpv1GroupAddress
@@ -8201,8 +8877,8 @@ func (obj *flowIgmpv1) GroupAddress() PatternFlowIgmpv1GroupAddress {
 	if obj.obj.GroupAddress == nil {
 		obj.obj.GroupAddress = &snappipb.PatternFlowIgmpv1GroupAddress{}
 	}
-	return &patternFlowIgmpv1GroupAddress{obj: obj.obj.GroupAddress}
 
+	return &patternFlowIgmpv1GroupAddress{obj: obj.obj.GroupAddress}
 }
 
 type flowSizeIncrement struct {
@@ -8269,6 +8945,7 @@ func (obj *flowSizeIncrement) Start() int32 {
 //  Starting frame size in bytes
 func (obj *flowSizeIncrement) SetStart(value int32) FlowSizeIncrement {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -8282,6 +8959,7 @@ func (obj *flowSizeIncrement) End() int32 {
 //  Ending frame size in bytes
 func (obj *flowSizeIncrement) SetEnd(value int32) FlowSizeIncrement {
 	obj.obj.End = &value
+
 	return obj
 }
 
@@ -8295,6 +8973,7 @@ func (obj *flowSizeIncrement) Step() int32 {
 //  Step frame size in bytes
 func (obj *flowSizeIncrement) SetStep(value int32) FlowSizeIncrement {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -8360,6 +9039,7 @@ func (obj *flowSizeRandom) Min() int32 {
 //  description is TBD
 func (obj *flowSizeRandom) SetMin(value int32) FlowSizeRandom {
 	obj.obj.Min = &value
+
 	return obj
 }
 
@@ -8373,6 +9053,7 @@ func (obj *flowSizeRandom) Max() int32 {
 //  description is TBD
 func (obj *flowSizeRandom) SetMax(value int32) FlowSizeRandom {
 	obj.obj.Max = &value
+
 	return obj
 }
 
@@ -8439,6 +9120,7 @@ func (obj *flowFixedPackets) Packets() int32 {
 //  Stop transmit of the flow after this number of packets.
 func (obj *flowFixedPackets) SetPackets(value int32) FlowFixedPackets {
 	obj.obj.Packets = &value
+
 	return obj
 }
 
@@ -8452,6 +9134,7 @@ func (obj *flowFixedPackets) Gap() int32 {
 //  The minimum gap between packets expressed as bytes.
 func (obj *flowFixedPackets) SetGap(value int32) FlowFixedPackets {
 	obj.obj.Gap = &value
+
 	return obj
 }
 
@@ -8461,8 +9144,8 @@ func (obj *flowFixedPackets) Delay() FlowDelay {
 	if obj.obj.Delay == nil {
 		obj.obj.Delay = &snappipb.FlowDelay{}
 	}
-	return &flowDelay{obj: obj.obj.Delay}
 
+	return &flowDelay{obj: obj.obj.Delay}
 }
 
 type flowFixedSeconds struct {
@@ -8528,6 +9211,7 @@ func (obj *flowFixedSeconds) Seconds() float32 {
 //  Stop transmit of the flow after this number of seconds.
 func (obj *flowFixedSeconds) SetSeconds(value float32) FlowFixedSeconds {
 	obj.obj.Seconds = &value
+
 	return obj
 }
 
@@ -8541,6 +9225,7 @@ func (obj *flowFixedSeconds) Gap() int32 {
 //  The minimum gap between packets expressed as bytes.
 func (obj *flowFixedSeconds) SetGap(value int32) FlowFixedSeconds {
 	obj.obj.Gap = &value
+
 	return obj
 }
 
@@ -8550,8 +9235,8 @@ func (obj *flowFixedSeconds) Delay() FlowDelay {
 	if obj.obj.Delay == nil {
 		obj.obj.Delay = &snappipb.FlowDelay{}
 	}
-	return &flowDelay{obj: obj.obj.Delay}
 
+	return &flowDelay{obj: obj.obj.Delay}
 }
 
 type flowBurst struct {
@@ -8621,6 +9306,7 @@ func (obj *flowBurst) Bursts() int32 {
 //  A value of 0 implies continuous burst of packets.
 func (obj *flowBurst) SetBursts(value int32) FlowBurst {
 	obj.obj.Bursts = &value
+
 	return obj
 }
 
@@ -8634,6 +9320,7 @@ func (obj *flowBurst) Packets() int32 {
 //  The number of packets transmitted per burst.
 func (obj *flowBurst) SetPackets(value int32) FlowBurst {
 	obj.obj.Packets = &value
+
 	return obj
 }
 
@@ -8647,6 +9334,7 @@ func (obj *flowBurst) Gap() int32 {
 //  The minimum gap between packets expressed as bytes.
 func (obj *flowBurst) SetGap(value int32) FlowBurst {
 	obj.obj.Gap = &value
+
 	return obj
 }
 
@@ -8656,8 +9344,8 @@ func (obj *flowBurst) InterBurstGap() FlowDurationInterBurstGap {
 	if obj.obj.InterBurstGap == nil {
 		obj.obj.InterBurstGap = &snappipb.FlowDurationInterBurstGap{}
 	}
-	return &flowDurationInterBurstGap{obj: obj.obj.InterBurstGap}
 
+	return &flowDurationInterBurstGap{obj: obj.obj.InterBurstGap}
 }
 
 type flowContinuous struct {
@@ -8721,6 +9409,7 @@ func (obj *flowContinuous) Gap() int32 {
 //  The minimum gap between packets expressed as bytes.
 func (obj *flowContinuous) SetGap(value int32) FlowContinuous {
 	obj.obj.Gap = &value
+
 	return obj
 }
 
@@ -8730,8 +9419,8 @@ func (obj *flowContinuous) Delay() FlowDelay {
 	if obj.obj.Delay == nil {
 		obj.obj.Delay = &snappipb.FlowDelay{}
 	}
-	return &flowDelay{obj: obj.obj.Delay}
 
+	return &flowDelay{obj: obj.obj.Delay}
 }
 
 type flowLatencyMetrics struct {
@@ -8782,6 +9471,8 @@ type FlowLatencyMetrics interface {
 	FromJson(value string) error
 	Enable() bool
 	SetEnable(value bool) FlowLatencyMetrics
+	Mode() FlowLatencyMetricsModeEnum
+	SetMode(value FlowLatencyMetricsModeEnum) FlowLatencyMetrics
 }
 
 // Enable returns a bool
@@ -8800,6 +9491,30 @@ func (obj *flowLatencyMetrics) Enable() bool {
 //  additional instrumentation data.
 func (obj *flowLatencyMetrics) SetEnable(value bool) FlowLatencyMetrics {
 	obj.obj.Enable = &value
+
+	return obj
+}
+
+type FlowLatencyMetricsModeEnum string
+
+var FlowLatencyMetricsMode = struct {
+	UNSPECIFIED   FlowLatencyMetricsModeEnum
+	STORE_FORWARD FlowLatencyMetricsModeEnum
+	CUT_THROUGH   FlowLatencyMetricsModeEnum
+}{
+	UNSPECIFIED:   FlowLatencyMetricsModeEnum("unspecified"),
+	STORE_FORWARD: FlowLatencyMetricsModeEnum("store_forward"),
+	CUT_THROUGH:   FlowLatencyMetricsModeEnum("cut_through"),
+}
+
+func (obj *flowLatencyMetrics) Mode() FlowLatencyMetricsModeEnum {
+	return FlowLatencyMetricsModeEnum(obj.obj.Mode.Enum().String())
+}
+
+func (obj *flowLatencyMetrics) SetMode(value FlowLatencyMetricsModeEnum) FlowLatencyMetrics {
+	intValue := snappipb.FlowLatencyMetrics_Mode_Enum_value[string(value)]
+	enumValue := snappipb.FlowLatencyMetrics_Mode_Enum(intValue)
+	obj.obj.Mode = &enumValue
 	return obj
 }
 
@@ -8863,6 +9578,8 @@ type LagLacp interface {
 	SetLacpduPeriodicTimeInterval(value int32) LagLacp
 	LacpduTimeout() int32
 	SetLacpduTimeout(value int32) LagLacp
+	ActorActivity() LagLacpActorActivityEnum
+	SetActorActivity(value LagLacpActorActivityEnum) LagLacp
 }
 
 // ActorKey returns a int32
@@ -8875,6 +9592,7 @@ func (obj *lagLacp) ActorKey() int32 {
 //  The actor key
 func (obj *lagLacp) SetActorKey(value int32) LagLacp {
 	obj.obj.ActorKey = &value
+
 	return obj
 }
 
@@ -8888,6 +9606,7 @@ func (obj *lagLacp) ActorPortNumber() int32 {
 //  The actor port number
 func (obj *lagLacp) SetActorPortNumber(value int32) LagLacp {
 	obj.obj.ActorPortNumber = &value
+
 	return obj
 }
 
@@ -8901,6 +9620,7 @@ func (obj *lagLacp) ActorPortPriority() int32 {
 //  The actor port priority
 func (obj *lagLacp) SetActorPortPriority(value int32) LagLacp {
 	obj.obj.ActorPortPriority = &value
+
 	return obj
 }
 
@@ -8914,6 +9634,7 @@ func (obj *lagLacp) ActorSystemId() string {
 //  The actor system id
 func (obj *lagLacp) SetActorSystemId(value string) LagLacp {
 	obj.obj.ActorSystemId = &value
+
 	return obj
 }
 
@@ -8927,6 +9648,7 @@ func (obj *lagLacp) ActorSystemPriority() int32 {
 //  The actor system priority
 func (obj *lagLacp) SetActorSystemPriority(value int32) LagLacp {
 	obj.obj.ActorSystemPriority = &value
+
 	return obj
 }
 
@@ -8940,6 +9662,7 @@ func (obj *lagLacp) LacpduPeriodicTimeInterval() int32 {
 //  This field defines how frequently LACPDUs are sent to the link partner
 func (obj *lagLacp) SetLacpduPeriodicTimeInterval(value int32) LagLacp {
 	obj.obj.LacpduPeriodicTimeInterval = &value
+
 	return obj
 }
 
@@ -8953,6 +9676,30 @@ func (obj *lagLacp) LacpduTimeout() int32 {
 //  This timer is used to detect whether received protocol information has expired
 func (obj *lagLacp) SetLacpduTimeout(value int32) LagLacp {
 	obj.obj.LacpduTimeout = &value
+
+	return obj
+}
+
+type LagLacpActorActivityEnum string
+
+var LagLacpActorActivity = struct {
+	UNSPECIFIED LagLacpActorActivityEnum
+	PASSIVE     LagLacpActorActivityEnum
+	ACTIVE      LagLacpActorActivityEnum
+}{
+	UNSPECIFIED: LagLacpActorActivityEnum("unspecified"),
+	PASSIVE:     LagLacpActorActivityEnum("passive"),
+	ACTIVE:      LagLacpActorActivityEnum("active"),
+}
+
+func (obj *lagLacp) ActorActivity() LagLacpActorActivityEnum {
+	return LagLacpActorActivityEnum(obj.obj.ActorActivity.Enum().String())
+}
+
+func (obj *lagLacp) SetActorActivity(value LagLacpActorActivityEnum) LagLacp {
+	intValue := snappipb.LagLacp_ActorActivity_Enum_value[string(value)]
+	enumValue := snappipb.LagLacp_ActorActivity_Enum(intValue)
+	obj.obj.ActorActivity = &enumValue
 	return obj
 }
 
@@ -9016,6 +9763,7 @@ func (obj *lagStatic) LagId() int32 {
 //  The static lag id
 func (obj *lagStatic) SetLagId(value int32) LagStatic {
 	obj.obj.LagId = &value
+
 	return obj
 }
 
@@ -9083,6 +9831,7 @@ func (obj *captureField) Value() string {
 //  description is TBD
 func (obj *captureField) SetValue(value string) CaptureField {
 	obj.obj.Value = &value
+
 	return obj
 }
 
@@ -9096,6 +9845,7 @@ func (obj *captureField) Mask() string {
 //  description is TBD
 func (obj *captureField) SetMask(value string) CaptureField {
 	obj.obj.Mask = &value
+
 	return obj
 }
 
@@ -9109,6 +9859,7 @@ func (obj *captureField) Negate() bool {
 //  description is TBD
 func (obj *captureField) SetNegate(value bool) CaptureField {
 	obj.obj.Negate = &value
+
 	return obj
 }
 
@@ -9164,8 +9915,14 @@ type DeviceBgpv4 interface {
 	SetDutAddress(value string) DeviceBgpv4
 	RouterId() string
 	SetRouterId(value string) DeviceBgpv4
+	AsType() DeviceBgpv4AsTypeEnum
+	SetAsType(value DeviceBgpv4AsTypeEnum) DeviceBgpv4
 	AsNumber() int32
 	SetAsNumber(value int32) DeviceBgpv4
+	AsNumberWidth() DeviceBgpv4AsNumberWidthEnum
+	SetAsNumberWidth(value DeviceBgpv4AsNumberWidthEnum) DeviceBgpv4
+	AsNumberSetMode() DeviceBgpv4AsNumberSetModeEnum
+	SetAsNumberSetMode(value DeviceBgpv4AsNumberSetModeEnum) DeviceBgpv4
 	Advanced() DeviceBgpAdvanced
 	Capability() DeviceBgpCapability
 	SrTePolicies() DeviceBgpv4DeviceBgpSrTePolicyIter
@@ -9187,6 +9944,7 @@ func (obj *deviceBgpv4) LocalAddress() string {
 //  Local IPv4 address of the emulated router
 func (obj *deviceBgpv4) SetLocalAddress(value string) DeviceBgpv4 {
 	obj.obj.LocalAddress = value
+
 	return obj
 }
 
@@ -9200,6 +9958,7 @@ func (obj *deviceBgpv4) DutAddress() string {
 //  IPv4 address of the BGP peer for the session
 func (obj *deviceBgpv4) SetDutAddress(value string) DeviceBgpv4 {
 	obj.obj.DutAddress = value
+
 	return obj
 }
 
@@ -9213,6 +9972,29 @@ func (obj *deviceBgpv4) RouterId() string {
 //  The BGP router ID is a unique identifier used by routing protocols. It is a 32-bit value that is often represented by an IPv4 address.
 func (obj *deviceBgpv4) SetRouterId(value string) DeviceBgpv4 {
 	obj.obj.RouterId = &value
+
+	return obj
+}
+
+type DeviceBgpv4AsTypeEnum string
+
+var DeviceBgpv4AsType = struct {
+	UNSPECIFIED DeviceBgpv4AsTypeEnum
+	IBGP        DeviceBgpv4AsTypeEnum
+	EBGP        DeviceBgpv4AsTypeEnum
+}{
+	UNSPECIFIED: DeviceBgpv4AsTypeEnum("unspecified"),
+	IBGP:        DeviceBgpv4AsTypeEnum("ibgp"),
+	EBGP:        DeviceBgpv4AsTypeEnum("ebgp"),
+}
+
+func (obj *deviceBgpv4) AsType() DeviceBgpv4AsTypeEnum {
+	return DeviceBgpv4AsTypeEnum(obj.obj.AsType.Enum().String())
+}
+
+func (obj *deviceBgpv4) SetAsType(value DeviceBgpv4AsTypeEnum) DeviceBgpv4 {
+	intValue := snappipb.DeviceBgpv4_AsType_Enum_value[string(value)]
+	obj.obj.AsType = snappipb.DeviceBgpv4_AsType_Enum(intValue)
 	return obj
 }
 
@@ -9226,6 +10008,61 @@ func (obj *deviceBgpv4) AsNumber() int32 {
 //  Autonomous System Number (AS number or ASN)
 func (obj *deviceBgpv4) SetAsNumber(value int32) DeviceBgpv4 {
 	obj.obj.AsNumber = value
+
+	return obj
+}
+
+type DeviceBgpv4AsNumberWidthEnum string
+
+var DeviceBgpv4AsNumberWidth = struct {
+	UNSPECIFIED DeviceBgpv4AsNumberWidthEnum
+	TWO         DeviceBgpv4AsNumberWidthEnum
+	FOUR        DeviceBgpv4AsNumberWidthEnum
+}{
+	UNSPECIFIED: DeviceBgpv4AsNumberWidthEnum("unspecified"),
+	TWO:         DeviceBgpv4AsNumberWidthEnum("two"),
+	FOUR:        DeviceBgpv4AsNumberWidthEnum("four"),
+}
+
+func (obj *deviceBgpv4) AsNumberWidth() DeviceBgpv4AsNumberWidthEnum {
+	return DeviceBgpv4AsNumberWidthEnum(obj.obj.AsNumberWidth.Enum().String())
+}
+
+func (obj *deviceBgpv4) SetAsNumberWidth(value DeviceBgpv4AsNumberWidthEnum) DeviceBgpv4 {
+	intValue := snappipb.DeviceBgpv4_AsNumberWidth_Enum_value[string(value)]
+	enumValue := snappipb.DeviceBgpv4_AsNumberWidth_Enum(intValue)
+	obj.obj.AsNumberWidth = &enumValue
+	return obj
+}
+
+type DeviceBgpv4AsNumberSetModeEnum string
+
+var DeviceBgpv4AsNumberSetMode = struct {
+	UNSPECIFIED                 DeviceBgpv4AsNumberSetModeEnum
+	DO_NOT_INCLUDE_AS           DeviceBgpv4AsNumberSetModeEnum
+	INCLUDE_AS_SEQ              DeviceBgpv4AsNumberSetModeEnum
+	INCLUDE_AS_SET              DeviceBgpv4AsNumberSetModeEnum
+	INCLUDE_AS_SEQ_CONFED       DeviceBgpv4AsNumberSetModeEnum
+	INCLUDE_AS_SET_CONFED       DeviceBgpv4AsNumberSetModeEnum
+	PREPEND_AS_TO_FIRST_SEGMENT DeviceBgpv4AsNumberSetModeEnum
+}{
+	UNSPECIFIED:                 DeviceBgpv4AsNumberSetModeEnum("unspecified"),
+	DO_NOT_INCLUDE_AS:           DeviceBgpv4AsNumberSetModeEnum("do_not_include_as"),
+	INCLUDE_AS_SEQ:              DeviceBgpv4AsNumberSetModeEnum("include_as_seq"),
+	INCLUDE_AS_SET:              DeviceBgpv4AsNumberSetModeEnum("include_as_set"),
+	INCLUDE_AS_SEQ_CONFED:       DeviceBgpv4AsNumberSetModeEnum("include_as_seq_confed"),
+	INCLUDE_AS_SET_CONFED:       DeviceBgpv4AsNumberSetModeEnum("include_as_set_confed"),
+	PREPEND_AS_TO_FIRST_SEGMENT: DeviceBgpv4AsNumberSetModeEnum("prepend_as_to_first_segment"),
+}
+
+func (obj *deviceBgpv4) AsNumberSetMode() DeviceBgpv4AsNumberSetModeEnum {
+	return DeviceBgpv4AsNumberSetModeEnum(obj.obj.AsNumberSetMode.Enum().String())
+}
+
+func (obj *deviceBgpv4) SetAsNumberSetMode(value DeviceBgpv4AsNumberSetModeEnum) DeviceBgpv4 {
+	intValue := snappipb.DeviceBgpv4_AsNumberSetMode_Enum_value[string(value)]
+	enumValue := snappipb.DeviceBgpv4_AsNumberSetMode_Enum(intValue)
+	obj.obj.AsNumberSetMode = &enumValue
 	return obj
 }
 
@@ -9235,8 +10072,8 @@ func (obj *deviceBgpv4) Advanced() DeviceBgpAdvanced {
 	if obj.obj.Advanced == nil {
 		obj.obj.Advanced = &snappipb.DeviceBgpAdvanced{}
 	}
-	return &deviceBgpAdvanced{obj: obj.obj.Advanced}
 
+	return &deviceBgpAdvanced{obj: obj.obj.Advanced}
 }
 
 // Capability returns a DeviceBgpCapability
@@ -9245,8 +10082,8 @@ func (obj *deviceBgpv4) Capability() DeviceBgpCapability {
 	if obj.obj.Capability == nil {
 		obj.obj.Capability = &snappipb.DeviceBgpCapability{}
 	}
-	return &deviceBgpCapability{obj: obj.obj.Capability}
 
+	return &deviceBgpCapability{obj: obj.obj.Capability}
 }
 
 // SrTePolicies returns a []DeviceBgpSrTePolicy
@@ -9256,7 +10093,6 @@ func (obj *deviceBgpv4) SrTePolicies() DeviceBgpv4DeviceBgpSrTePolicyIter {
 		obj.obj.SrTePolicies = []*snappipb.DeviceBgpSrTePolicy{}
 	}
 	return &deviceBgpv4DeviceBgpSrTePolicyIter{obj: obj}
-
 }
 
 type deviceBgpv4DeviceBgpSrTePolicyIter struct {
@@ -9289,7 +10125,6 @@ func (obj *deviceBgpv4) Bgpv4Routes() DeviceBgpv4DeviceBgpv4RouteIter {
 		obj.obj.Bgpv4Routes = []*snappipb.DeviceBgpv4Route{}
 	}
 	return &deviceBgpv4DeviceBgpv4RouteIter{obj: obj}
-
 }
 
 type deviceBgpv4DeviceBgpv4RouteIter struct {
@@ -9322,7 +10157,6 @@ func (obj *deviceBgpv4) Bgpv6Routes() DeviceBgpv4DeviceBgpv6RouteIter {
 		obj.obj.Bgpv6Routes = []*snappipb.DeviceBgpv6Route{}
 	}
 	return &deviceBgpv4DeviceBgpv6RouteIter{obj: obj}
-
 }
 
 type deviceBgpv4DeviceBgpv6RouteIter struct {
@@ -9358,6 +10192,7 @@ func (obj *deviceBgpv4) Name() string {
 //  Globally unique name of an object. It also serves as the primary key for arrays of objects.
 func (obj *deviceBgpv4) SetName(value string) DeviceBgpv4 {
 	obj.obj.Name = value
+
 	return obj
 }
 
@@ -9371,6 +10206,7 @@ func (obj *deviceBgpv4) Active() bool {
 //  If enabled means that this part of the configuration including any active 'children' nodes will be advertised to peer.  If disabled, this means that though config is present, it is not taking any part of the test but can be activated at run-time to advertise just this part of the configuration to the peer.
 func (obj *deviceBgpv4) SetActive(value bool) DeviceBgpv4 {
 	obj.obj.Active = &value
+
 	return obj
 }
 
@@ -9427,8 +10263,14 @@ type DeviceBgpv6 interface {
 	SegmentRouting() DeviceBgpv6SegmentRouting
 	RouterId() string
 	SetRouterId(value string) DeviceBgpv6
+	AsType() DeviceBgpv6AsTypeEnum
+	SetAsType(value DeviceBgpv6AsTypeEnum) DeviceBgpv6
 	AsNumber() int32
 	SetAsNumber(value int32) DeviceBgpv6
+	AsNumberWidth() DeviceBgpv6AsNumberWidthEnum
+	SetAsNumberWidth(value DeviceBgpv6AsNumberWidthEnum) DeviceBgpv6
+	AsNumberSetMode() DeviceBgpv6AsNumberSetModeEnum
+	SetAsNumberSetMode(value DeviceBgpv6AsNumberSetModeEnum) DeviceBgpv6
 	Advanced() DeviceBgpAdvanced
 	Capability() DeviceBgpCapability
 	SrTePolicies() DeviceBgpv6DeviceBgpSrTePolicyIter
@@ -9450,6 +10292,7 @@ func (obj *deviceBgpv6) LocalAddress() string {
 //  Local IPv6 address of the emulated router
 func (obj *deviceBgpv6) SetLocalAddress(value string) DeviceBgpv6 {
 	obj.obj.LocalAddress = value
+
 	return obj
 }
 
@@ -9463,6 +10306,7 @@ func (obj *deviceBgpv6) DutAddress() string {
 //  IPv6 address of the BGP peer for the session
 func (obj *deviceBgpv6) SetDutAddress(value string) DeviceBgpv6 {
 	obj.obj.DutAddress = value
+
 	return obj
 }
 
@@ -9472,8 +10316,8 @@ func (obj *deviceBgpv6) SegmentRouting() DeviceBgpv6SegmentRouting {
 	if obj.obj.SegmentRouting == nil {
 		obj.obj.SegmentRouting = &snappipb.DeviceBgpv6SegmentRouting{}
 	}
-	return &deviceBgpv6SegmentRouting{obj: obj.obj.SegmentRouting}
 
+	return &deviceBgpv6SegmentRouting{obj: obj.obj.SegmentRouting}
 }
 
 // RouterId returns a string
@@ -9486,6 +10330,29 @@ func (obj *deviceBgpv6) RouterId() string {
 //  The BGP router ID is a unique identifier used by routing protocols. It is a 32-bit value that is often represented by an IPv4 address.
 func (obj *deviceBgpv6) SetRouterId(value string) DeviceBgpv6 {
 	obj.obj.RouterId = &value
+
+	return obj
+}
+
+type DeviceBgpv6AsTypeEnum string
+
+var DeviceBgpv6AsType = struct {
+	UNSPECIFIED DeviceBgpv6AsTypeEnum
+	IBGP        DeviceBgpv6AsTypeEnum
+	EBGP        DeviceBgpv6AsTypeEnum
+}{
+	UNSPECIFIED: DeviceBgpv6AsTypeEnum("unspecified"),
+	IBGP:        DeviceBgpv6AsTypeEnum("ibgp"),
+	EBGP:        DeviceBgpv6AsTypeEnum("ebgp"),
+}
+
+func (obj *deviceBgpv6) AsType() DeviceBgpv6AsTypeEnum {
+	return DeviceBgpv6AsTypeEnum(obj.obj.AsType.Enum().String())
+}
+
+func (obj *deviceBgpv6) SetAsType(value DeviceBgpv6AsTypeEnum) DeviceBgpv6 {
+	intValue := snappipb.DeviceBgpv6_AsType_Enum_value[string(value)]
+	obj.obj.AsType = snappipb.DeviceBgpv6_AsType_Enum(intValue)
 	return obj
 }
 
@@ -9499,6 +10366,61 @@ func (obj *deviceBgpv6) AsNumber() int32 {
 //  Autonomous System Number (AS number or ASN)
 func (obj *deviceBgpv6) SetAsNumber(value int32) DeviceBgpv6 {
 	obj.obj.AsNumber = value
+
+	return obj
+}
+
+type DeviceBgpv6AsNumberWidthEnum string
+
+var DeviceBgpv6AsNumberWidth = struct {
+	UNSPECIFIED DeviceBgpv6AsNumberWidthEnum
+	TWO         DeviceBgpv6AsNumberWidthEnum
+	FOUR        DeviceBgpv6AsNumberWidthEnum
+}{
+	UNSPECIFIED: DeviceBgpv6AsNumberWidthEnum("unspecified"),
+	TWO:         DeviceBgpv6AsNumberWidthEnum("two"),
+	FOUR:        DeviceBgpv6AsNumberWidthEnum("four"),
+}
+
+func (obj *deviceBgpv6) AsNumberWidth() DeviceBgpv6AsNumberWidthEnum {
+	return DeviceBgpv6AsNumberWidthEnum(obj.obj.AsNumberWidth.Enum().String())
+}
+
+func (obj *deviceBgpv6) SetAsNumberWidth(value DeviceBgpv6AsNumberWidthEnum) DeviceBgpv6 {
+	intValue := snappipb.DeviceBgpv6_AsNumberWidth_Enum_value[string(value)]
+	enumValue := snappipb.DeviceBgpv6_AsNumberWidth_Enum(intValue)
+	obj.obj.AsNumberWidth = &enumValue
+	return obj
+}
+
+type DeviceBgpv6AsNumberSetModeEnum string
+
+var DeviceBgpv6AsNumberSetMode = struct {
+	UNSPECIFIED                 DeviceBgpv6AsNumberSetModeEnum
+	DO_NOT_INCLUDE_AS           DeviceBgpv6AsNumberSetModeEnum
+	INCLUDE_AS_SEQ              DeviceBgpv6AsNumberSetModeEnum
+	INCLUDE_AS_SET              DeviceBgpv6AsNumberSetModeEnum
+	INCLUDE_AS_SEQ_CONFED       DeviceBgpv6AsNumberSetModeEnum
+	INCLUDE_AS_SET_CONFED       DeviceBgpv6AsNumberSetModeEnum
+	PREPEND_AS_TO_FIRST_SEGMENT DeviceBgpv6AsNumberSetModeEnum
+}{
+	UNSPECIFIED:                 DeviceBgpv6AsNumberSetModeEnum("unspecified"),
+	DO_NOT_INCLUDE_AS:           DeviceBgpv6AsNumberSetModeEnum("do_not_include_as"),
+	INCLUDE_AS_SEQ:              DeviceBgpv6AsNumberSetModeEnum("include_as_seq"),
+	INCLUDE_AS_SET:              DeviceBgpv6AsNumberSetModeEnum("include_as_set"),
+	INCLUDE_AS_SEQ_CONFED:       DeviceBgpv6AsNumberSetModeEnum("include_as_seq_confed"),
+	INCLUDE_AS_SET_CONFED:       DeviceBgpv6AsNumberSetModeEnum("include_as_set_confed"),
+	PREPEND_AS_TO_FIRST_SEGMENT: DeviceBgpv6AsNumberSetModeEnum("prepend_as_to_first_segment"),
+}
+
+func (obj *deviceBgpv6) AsNumberSetMode() DeviceBgpv6AsNumberSetModeEnum {
+	return DeviceBgpv6AsNumberSetModeEnum(obj.obj.AsNumberSetMode.Enum().String())
+}
+
+func (obj *deviceBgpv6) SetAsNumberSetMode(value DeviceBgpv6AsNumberSetModeEnum) DeviceBgpv6 {
+	intValue := snappipb.DeviceBgpv6_AsNumberSetMode_Enum_value[string(value)]
+	enumValue := snappipb.DeviceBgpv6_AsNumberSetMode_Enum(intValue)
+	obj.obj.AsNumberSetMode = &enumValue
 	return obj
 }
 
@@ -9508,8 +10430,8 @@ func (obj *deviceBgpv6) Advanced() DeviceBgpAdvanced {
 	if obj.obj.Advanced == nil {
 		obj.obj.Advanced = &snappipb.DeviceBgpAdvanced{}
 	}
-	return &deviceBgpAdvanced{obj: obj.obj.Advanced}
 
+	return &deviceBgpAdvanced{obj: obj.obj.Advanced}
 }
 
 // Capability returns a DeviceBgpCapability
@@ -9518,8 +10440,8 @@ func (obj *deviceBgpv6) Capability() DeviceBgpCapability {
 	if obj.obj.Capability == nil {
 		obj.obj.Capability = &snappipb.DeviceBgpCapability{}
 	}
-	return &deviceBgpCapability{obj: obj.obj.Capability}
 
+	return &deviceBgpCapability{obj: obj.obj.Capability}
 }
 
 // SrTePolicies returns a []DeviceBgpSrTePolicy
@@ -9529,7 +10451,6 @@ func (obj *deviceBgpv6) SrTePolicies() DeviceBgpv6DeviceBgpSrTePolicyIter {
 		obj.obj.SrTePolicies = []*snappipb.DeviceBgpSrTePolicy{}
 	}
 	return &deviceBgpv6DeviceBgpSrTePolicyIter{obj: obj}
-
 }
 
 type deviceBgpv6DeviceBgpSrTePolicyIter struct {
@@ -9562,7 +10483,6 @@ func (obj *deviceBgpv6) Bgpv4Routes() DeviceBgpv6DeviceBgpv4RouteIter {
 		obj.obj.Bgpv4Routes = []*snappipb.DeviceBgpv4Route{}
 	}
 	return &deviceBgpv6DeviceBgpv4RouteIter{obj: obj}
-
 }
 
 type deviceBgpv6DeviceBgpv4RouteIter struct {
@@ -9595,7 +10515,6 @@ func (obj *deviceBgpv6) Bgpv6Routes() DeviceBgpv6DeviceBgpv6RouteIter {
 		obj.obj.Bgpv6Routes = []*snappipb.DeviceBgpv6Route{}
 	}
 	return &deviceBgpv6DeviceBgpv6RouteIter{obj: obj}
-
 }
 
 type deviceBgpv6DeviceBgpv6RouteIter struct {
@@ -9631,6 +10550,7 @@ func (obj *deviceBgpv6) Name() string {
 //  Globally unique name of an object. It also serves as the primary key for arrays of objects.
 func (obj *deviceBgpv6) SetName(value string) DeviceBgpv6 {
 	obj.obj.Name = value
+
 	return obj
 }
 
@@ -9644,6 +10564,7 @@ func (obj *deviceBgpv6) Active() bool {
 //  If enabled means that this part of the configuration including any active 'children' nodes will be advertised to peer.  If disabled, this means that though config is present, it is not taking any part of the test but can be activated at run-time to advertise just this part of the configuration to the peer.
 func (obj *deviceBgpv6) SetActive(value bool) DeviceBgpv6 {
 	obj.obj.Active = &value
+
 	return obj
 }
 
@@ -9693,6 +10614,8 @@ type PatternFlowEthernetDst interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowEthernetDstChoiceEnum
+	SetChoice(value PatternFlowEthernetDstChoiceEnum) PatternFlowEthernetDst
 	Value() string
 	SetValue(value string) PatternFlowEthernetDst
 	Values() []string
@@ -9701,6 +10624,33 @@ type PatternFlowEthernetDst interface {
 	SetMetricGroup(value string) PatternFlowEthernetDst
 	Increment() PatternFlowEthernetDstCounter
 	Decrement() PatternFlowEthernetDstCounter
+}
+
+type PatternFlowEthernetDstChoiceEnum string
+
+var PatternFlowEthernetDstChoice = struct {
+	UNSPECIFIED PatternFlowEthernetDstChoiceEnum
+	VALUE       PatternFlowEthernetDstChoiceEnum
+	VALUES      PatternFlowEthernetDstChoiceEnum
+	INCREMENT   PatternFlowEthernetDstChoiceEnum
+	DECREMENT   PatternFlowEthernetDstChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowEthernetDstChoiceEnum("unspecified"),
+	VALUE:       PatternFlowEthernetDstChoiceEnum("value"),
+	VALUES:      PatternFlowEthernetDstChoiceEnum("values"),
+	INCREMENT:   PatternFlowEthernetDstChoiceEnum("increment"),
+	DECREMENT:   PatternFlowEthernetDstChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowEthernetDst) Choice() PatternFlowEthernetDstChoiceEnum {
+	return PatternFlowEthernetDstChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowEthernetDst) SetChoice(value PatternFlowEthernetDstChoiceEnum) PatternFlowEthernetDst {
+	intValue := snappipb.PatternFlowEthernetDst_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowEthernetDst_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a string
@@ -9713,6 +10663,7 @@ func (obj *patternFlowEthernetDst) Value() string {
 //  description is TBD
 func (obj *patternFlowEthernetDst) SetValue(value string) PatternFlowEthernetDst {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowEthernetDstChoice.VALUE)
 	return obj
 }
 
@@ -9726,6 +10677,7 @@ func (obj *patternFlowEthernetDst) Values() []string {
 //  description is TBD
 func (obj *patternFlowEthernetDst) SetValues(value []string) PatternFlowEthernetDst {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowEthernetDstChoice.VALUES)
 	return obj
 }
 
@@ -9739,6 +10691,7 @@ func (obj *patternFlowEthernetDst) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowEthernetDst) SetMetricGroup(value string) PatternFlowEthernetDst {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -9748,8 +10701,8 @@ func (obj *patternFlowEthernetDst) Increment() PatternFlowEthernetDstCounter {
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowEthernetDstCounter{}
 	}
+	obj.SetChoice(PatternFlowEthernetDstChoice.INCREMENT)
 	return &patternFlowEthernetDstCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowEthernetDstCounter
@@ -9758,8 +10711,8 @@ func (obj *patternFlowEthernetDst) Decrement() PatternFlowEthernetDstCounter {
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowEthernetDstCounter{}
 	}
+	obj.SetChoice(PatternFlowEthernetDstChoice.DECREMENT)
 	return &patternFlowEthernetDstCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowEthernetSrc struct {
@@ -9808,6 +10761,8 @@ type PatternFlowEthernetSrc interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowEthernetSrcChoiceEnum
+	SetChoice(value PatternFlowEthernetSrcChoiceEnum) PatternFlowEthernetSrc
 	Value() string
 	SetValue(value string) PatternFlowEthernetSrc
 	Values() []string
@@ -9816,6 +10771,33 @@ type PatternFlowEthernetSrc interface {
 	SetMetricGroup(value string) PatternFlowEthernetSrc
 	Increment() PatternFlowEthernetSrcCounter
 	Decrement() PatternFlowEthernetSrcCounter
+}
+
+type PatternFlowEthernetSrcChoiceEnum string
+
+var PatternFlowEthernetSrcChoice = struct {
+	UNSPECIFIED PatternFlowEthernetSrcChoiceEnum
+	VALUE       PatternFlowEthernetSrcChoiceEnum
+	VALUES      PatternFlowEthernetSrcChoiceEnum
+	INCREMENT   PatternFlowEthernetSrcChoiceEnum
+	DECREMENT   PatternFlowEthernetSrcChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowEthernetSrcChoiceEnum("unspecified"),
+	VALUE:       PatternFlowEthernetSrcChoiceEnum("value"),
+	VALUES:      PatternFlowEthernetSrcChoiceEnum("values"),
+	INCREMENT:   PatternFlowEthernetSrcChoiceEnum("increment"),
+	DECREMENT:   PatternFlowEthernetSrcChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowEthernetSrc) Choice() PatternFlowEthernetSrcChoiceEnum {
+	return PatternFlowEthernetSrcChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowEthernetSrc) SetChoice(value PatternFlowEthernetSrcChoiceEnum) PatternFlowEthernetSrc {
+	intValue := snappipb.PatternFlowEthernetSrc_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowEthernetSrc_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a string
@@ -9828,6 +10810,7 @@ func (obj *patternFlowEthernetSrc) Value() string {
 //  description is TBD
 func (obj *patternFlowEthernetSrc) SetValue(value string) PatternFlowEthernetSrc {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowEthernetSrcChoice.VALUE)
 	return obj
 }
 
@@ -9841,6 +10824,7 @@ func (obj *patternFlowEthernetSrc) Values() []string {
 //  description is TBD
 func (obj *patternFlowEthernetSrc) SetValues(value []string) PatternFlowEthernetSrc {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowEthernetSrcChoice.VALUES)
 	return obj
 }
 
@@ -9854,6 +10838,7 @@ func (obj *patternFlowEthernetSrc) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowEthernetSrc) SetMetricGroup(value string) PatternFlowEthernetSrc {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -9863,8 +10848,8 @@ func (obj *patternFlowEthernetSrc) Increment() PatternFlowEthernetSrcCounter {
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowEthernetSrcCounter{}
 	}
+	obj.SetChoice(PatternFlowEthernetSrcChoice.INCREMENT)
 	return &patternFlowEthernetSrcCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowEthernetSrcCounter
@@ -9873,8 +10858,8 @@ func (obj *patternFlowEthernetSrc) Decrement() PatternFlowEthernetSrcCounter {
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowEthernetSrcCounter{}
 	}
+	obj.SetChoice(PatternFlowEthernetSrcChoice.DECREMENT)
 	return &patternFlowEthernetSrcCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowEthernetEtherType struct {
@@ -9923,14 +10908,47 @@ type PatternFlowEthernetEtherType interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowEthernetEtherTypeChoiceEnum
+	SetChoice(value PatternFlowEthernetEtherTypeChoiceEnum) PatternFlowEthernetEtherType
 	Value() int32
 	SetValue(value int32) PatternFlowEthernetEtherType
 	Values() []int32
 	SetValues(value []int32) PatternFlowEthernetEtherType
+	Auto() PatternFlowEthernetEtherTypeAutoEnum
+	SetAuto(value PatternFlowEthernetEtherTypeAutoEnum) PatternFlowEthernetEtherType
 	MetricGroup() string
 	SetMetricGroup(value string) PatternFlowEthernetEtherType
 	Increment() PatternFlowEthernetEtherTypeCounter
 	Decrement() PatternFlowEthernetEtherTypeCounter
+}
+
+type PatternFlowEthernetEtherTypeChoiceEnum string
+
+var PatternFlowEthernetEtherTypeChoice = struct {
+	UNSPECIFIED PatternFlowEthernetEtherTypeChoiceEnum
+	VALUE       PatternFlowEthernetEtherTypeChoiceEnum
+	VALUES      PatternFlowEthernetEtherTypeChoiceEnum
+	AUTO        PatternFlowEthernetEtherTypeChoiceEnum
+	INCREMENT   PatternFlowEthernetEtherTypeChoiceEnum
+	DECREMENT   PatternFlowEthernetEtherTypeChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowEthernetEtherTypeChoiceEnum("unspecified"),
+	VALUE:       PatternFlowEthernetEtherTypeChoiceEnum("value"),
+	VALUES:      PatternFlowEthernetEtherTypeChoiceEnum("values"),
+	AUTO:        PatternFlowEthernetEtherTypeChoiceEnum("auto"),
+	INCREMENT:   PatternFlowEthernetEtherTypeChoiceEnum("increment"),
+	DECREMENT:   PatternFlowEthernetEtherTypeChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowEthernetEtherType) Choice() PatternFlowEthernetEtherTypeChoiceEnum {
+	return PatternFlowEthernetEtherTypeChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowEthernetEtherType) SetChoice(value PatternFlowEthernetEtherTypeChoiceEnum) PatternFlowEthernetEtherType {
+	intValue := snappipb.PatternFlowEthernetEtherType_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowEthernetEtherType_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -9943,6 +10961,7 @@ func (obj *patternFlowEthernetEtherType) Value() int32 {
 //  description is TBD
 func (obj *patternFlowEthernetEtherType) SetValue(value int32) PatternFlowEthernetEtherType {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowEthernetEtherTypeChoice.VALUE)
 	return obj
 }
 
@@ -9956,6 +10975,28 @@ func (obj *patternFlowEthernetEtherType) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowEthernetEtherType) SetValues(value []int32) PatternFlowEthernetEtherType {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowEthernetEtherTypeChoice.VALUES)
+	return obj
+}
+
+type PatternFlowEthernetEtherTypeAutoEnum string
+
+var PatternFlowEthernetEtherTypeAuto = struct {
+	UNSPECIFIED PatternFlowEthernetEtherTypeAutoEnum
+	AUTO        PatternFlowEthernetEtherTypeAutoEnum
+}{
+	UNSPECIFIED: PatternFlowEthernetEtherTypeAutoEnum("unspecified"),
+	AUTO:        PatternFlowEthernetEtherTypeAutoEnum("auto"),
+}
+
+func (obj *patternFlowEthernetEtherType) Auto() PatternFlowEthernetEtherTypeAutoEnum {
+	return PatternFlowEthernetEtherTypeAutoEnum(obj.obj.Auto.Enum().String())
+}
+
+func (obj *patternFlowEthernetEtherType) SetAuto(value PatternFlowEthernetEtherTypeAutoEnum) PatternFlowEthernetEtherType {
+	intValue := snappipb.PatternFlowEthernetEtherType_Auto_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowEthernetEtherType_Auto_Enum(intValue)
+	obj.obj.Auto = &enumValue
 	return obj
 }
 
@@ -9969,6 +11010,7 @@ func (obj *patternFlowEthernetEtherType) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowEthernetEtherType) SetMetricGroup(value string) PatternFlowEthernetEtherType {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -9978,8 +11020,8 @@ func (obj *patternFlowEthernetEtherType) Increment() PatternFlowEthernetEtherTyp
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowEthernetEtherTypeCounter{}
 	}
+	obj.SetChoice(PatternFlowEthernetEtherTypeChoice.INCREMENT)
 	return &patternFlowEthernetEtherTypeCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowEthernetEtherTypeCounter
@@ -9988,8 +11030,8 @@ func (obj *patternFlowEthernetEtherType) Decrement() PatternFlowEthernetEtherTyp
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowEthernetEtherTypeCounter{}
 	}
+	obj.SetChoice(PatternFlowEthernetEtherTypeChoice.DECREMENT)
 	return &patternFlowEthernetEtherTypeCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowEthernetPfcQueue struct {
@@ -10038,6 +11080,8 @@ type PatternFlowEthernetPfcQueue interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowEthernetPfcQueueChoiceEnum
+	SetChoice(value PatternFlowEthernetPfcQueueChoiceEnum) PatternFlowEthernetPfcQueue
 	Value() int32
 	SetValue(value int32) PatternFlowEthernetPfcQueue
 	Values() []int32
@@ -10046,6 +11090,33 @@ type PatternFlowEthernetPfcQueue interface {
 	SetMetricGroup(value string) PatternFlowEthernetPfcQueue
 	Increment() PatternFlowEthernetPfcQueueCounter
 	Decrement() PatternFlowEthernetPfcQueueCounter
+}
+
+type PatternFlowEthernetPfcQueueChoiceEnum string
+
+var PatternFlowEthernetPfcQueueChoice = struct {
+	UNSPECIFIED PatternFlowEthernetPfcQueueChoiceEnum
+	VALUE       PatternFlowEthernetPfcQueueChoiceEnum
+	VALUES      PatternFlowEthernetPfcQueueChoiceEnum
+	INCREMENT   PatternFlowEthernetPfcQueueChoiceEnum
+	DECREMENT   PatternFlowEthernetPfcQueueChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowEthernetPfcQueueChoiceEnum("unspecified"),
+	VALUE:       PatternFlowEthernetPfcQueueChoiceEnum("value"),
+	VALUES:      PatternFlowEthernetPfcQueueChoiceEnum("values"),
+	INCREMENT:   PatternFlowEthernetPfcQueueChoiceEnum("increment"),
+	DECREMENT:   PatternFlowEthernetPfcQueueChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowEthernetPfcQueue) Choice() PatternFlowEthernetPfcQueueChoiceEnum {
+	return PatternFlowEthernetPfcQueueChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowEthernetPfcQueue) SetChoice(value PatternFlowEthernetPfcQueueChoiceEnum) PatternFlowEthernetPfcQueue {
+	intValue := snappipb.PatternFlowEthernetPfcQueue_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowEthernetPfcQueue_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -10058,6 +11129,7 @@ func (obj *patternFlowEthernetPfcQueue) Value() int32 {
 //  description is TBD
 func (obj *patternFlowEthernetPfcQueue) SetValue(value int32) PatternFlowEthernetPfcQueue {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowEthernetPfcQueueChoice.VALUE)
 	return obj
 }
 
@@ -10071,6 +11143,7 @@ func (obj *patternFlowEthernetPfcQueue) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowEthernetPfcQueue) SetValues(value []int32) PatternFlowEthernetPfcQueue {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowEthernetPfcQueueChoice.VALUES)
 	return obj
 }
 
@@ -10084,6 +11157,7 @@ func (obj *patternFlowEthernetPfcQueue) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowEthernetPfcQueue) SetMetricGroup(value string) PatternFlowEthernetPfcQueue {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -10093,8 +11167,8 @@ func (obj *patternFlowEthernetPfcQueue) Increment() PatternFlowEthernetPfcQueueC
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowEthernetPfcQueueCounter{}
 	}
+	obj.SetChoice(PatternFlowEthernetPfcQueueChoice.INCREMENT)
 	return &patternFlowEthernetPfcQueueCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowEthernetPfcQueueCounter
@@ -10103,8 +11177,8 @@ func (obj *patternFlowEthernetPfcQueue) Decrement() PatternFlowEthernetPfcQueueC
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowEthernetPfcQueueCounter{}
 	}
+	obj.SetChoice(PatternFlowEthernetPfcQueueChoice.DECREMENT)
 	return &patternFlowEthernetPfcQueueCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowVlanPriority struct {
@@ -10153,6 +11227,8 @@ type PatternFlowVlanPriority interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowVlanPriorityChoiceEnum
+	SetChoice(value PatternFlowVlanPriorityChoiceEnum) PatternFlowVlanPriority
 	Value() int32
 	SetValue(value int32) PatternFlowVlanPriority
 	Values() []int32
@@ -10161,6 +11237,33 @@ type PatternFlowVlanPriority interface {
 	SetMetricGroup(value string) PatternFlowVlanPriority
 	Increment() PatternFlowVlanPriorityCounter
 	Decrement() PatternFlowVlanPriorityCounter
+}
+
+type PatternFlowVlanPriorityChoiceEnum string
+
+var PatternFlowVlanPriorityChoice = struct {
+	UNSPECIFIED PatternFlowVlanPriorityChoiceEnum
+	VALUE       PatternFlowVlanPriorityChoiceEnum
+	VALUES      PatternFlowVlanPriorityChoiceEnum
+	INCREMENT   PatternFlowVlanPriorityChoiceEnum
+	DECREMENT   PatternFlowVlanPriorityChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowVlanPriorityChoiceEnum("unspecified"),
+	VALUE:       PatternFlowVlanPriorityChoiceEnum("value"),
+	VALUES:      PatternFlowVlanPriorityChoiceEnum("values"),
+	INCREMENT:   PatternFlowVlanPriorityChoiceEnum("increment"),
+	DECREMENT:   PatternFlowVlanPriorityChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowVlanPriority) Choice() PatternFlowVlanPriorityChoiceEnum {
+	return PatternFlowVlanPriorityChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowVlanPriority) SetChoice(value PatternFlowVlanPriorityChoiceEnum) PatternFlowVlanPriority {
+	intValue := snappipb.PatternFlowVlanPriority_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowVlanPriority_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -10173,6 +11276,7 @@ func (obj *patternFlowVlanPriority) Value() int32 {
 //  description is TBD
 func (obj *patternFlowVlanPriority) SetValue(value int32) PatternFlowVlanPriority {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowVlanPriorityChoice.VALUE)
 	return obj
 }
 
@@ -10186,6 +11290,7 @@ func (obj *patternFlowVlanPriority) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowVlanPriority) SetValues(value []int32) PatternFlowVlanPriority {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowVlanPriorityChoice.VALUES)
 	return obj
 }
 
@@ -10199,6 +11304,7 @@ func (obj *patternFlowVlanPriority) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowVlanPriority) SetMetricGroup(value string) PatternFlowVlanPriority {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -10208,8 +11314,8 @@ func (obj *patternFlowVlanPriority) Increment() PatternFlowVlanPriorityCounter {
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowVlanPriorityCounter{}
 	}
+	obj.SetChoice(PatternFlowVlanPriorityChoice.INCREMENT)
 	return &patternFlowVlanPriorityCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowVlanPriorityCounter
@@ -10218,8 +11324,8 @@ func (obj *patternFlowVlanPriority) Decrement() PatternFlowVlanPriorityCounter {
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowVlanPriorityCounter{}
 	}
+	obj.SetChoice(PatternFlowVlanPriorityChoice.DECREMENT)
 	return &patternFlowVlanPriorityCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowVlanCfi struct {
@@ -10268,6 +11374,8 @@ type PatternFlowVlanCfi interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowVlanCfiChoiceEnum
+	SetChoice(value PatternFlowVlanCfiChoiceEnum) PatternFlowVlanCfi
 	Value() int32
 	SetValue(value int32) PatternFlowVlanCfi
 	Values() []int32
@@ -10276,6 +11384,33 @@ type PatternFlowVlanCfi interface {
 	SetMetricGroup(value string) PatternFlowVlanCfi
 	Increment() PatternFlowVlanCfiCounter
 	Decrement() PatternFlowVlanCfiCounter
+}
+
+type PatternFlowVlanCfiChoiceEnum string
+
+var PatternFlowVlanCfiChoice = struct {
+	UNSPECIFIED PatternFlowVlanCfiChoiceEnum
+	VALUE       PatternFlowVlanCfiChoiceEnum
+	VALUES      PatternFlowVlanCfiChoiceEnum
+	INCREMENT   PatternFlowVlanCfiChoiceEnum
+	DECREMENT   PatternFlowVlanCfiChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowVlanCfiChoiceEnum("unspecified"),
+	VALUE:       PatternFlowVlanCfiChoiceEnum("value"),
+	VALUES:      PatternFlowVlanCfiChoiceEnum("values"),
+	INCREMENT:   PatternFlowVlanCfiChoiceEnum("increment"),
+	DECREMENT:   PatternFlowVlanCfiChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowVlanCfi) Choice() PatternFlowVlanCfiChoiceEnum {
+	return PatternFlowVlanCfiChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowVlanCfi) SetChoice(value PatternFlowVlanCfiChoiceEnum) PatternFlowVlanCfi {
+	intValue := snappipb.PatternFlowVlanCfi_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowVlanCfi_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -10288,6 +11423,7 @@ func (obj *patternFlowVlanCfi) Value() int32 {
 //  description is TBD
 func (obj *patternFlowVlanCfi) SetValue(value int32) PatternFlowVlanCfi {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowVlanCfiChoice.VALUE)
 	return obj
 }
 
@@ -10301,6 +11437,7 @@ func (obj *patternFlowVlanCfi) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowVlanCfi) SetValues(value []int32) PatternFlowVlanCfi {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowVlanCfiChoice.VALUES)
 	return obj
 }
 
@@ -10314,6 +11451,7 @@ func (obj *patternFlowVlanCfi) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowVlanCfi) SetMetricGroup(value string) PatternFlowVlanCfi {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -10323,8 +11461,8 @@ func (obj *patternFlowVlanCfi) Increment() PatternFlowVlanCfiCounter {
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowVlanCfiCounter{}
 	}
+	obj.SetChoice(PatternFlowVlanCfiChoice.INCREMENT)
 	return &patternFlowVlanCfiCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowVlanCfiCounter
@@ -10333,8 +11471,8 @@ func (obj *patternFlowVlanCfi) Decrement() PatternFlowVlanCfiCounter {
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowVlanCfiCounter{}
 	}
+	obj.SetChoice(PatternFlowVlanCfiChoice.DECREMENT)
 	return &patternFlowVlanCfiCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowVlanId struct {
@@ -10383,6 +11521,8 @@ type PatternFlowVlanId interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowVlanIdChoiceEnum
+	SetChoice(value PatternFlowVlanIdChoiceEnum) PatternFlowVlanId
 	Value() int32
 	SetValue(value int32) PatternFlowVlanId
 	Values() []int32
@@ -10391,6 +11531,33 @@ type PatternFlowVlanId interface {
 	SetMetricGroup(value string) PatternFlowVlanId
 	Increment() PatternFlowVlanIdCounter
 	Decrement() PatternFlowVlanIdCounter
+}
+
+type PatternFlowVlanIdChoiceEnum string
+
+var PatternFlowVlanIdChoice = struct {
+	UNSPECIFIED PatternFlowVlanIdChoiceEnum
+	VALUE       PatternFlowVlanIdChoiceEnum
+	VALUES      PatternFlowVlanIdChoiceEnum
+	INCREMENT   PatternFlowVlanIdChoiceEnum
+	DECREMENT   PatternFlowVlanIdChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowVlanIdChoiceEnum("unspecified"),
+	VALUE:       PatternFlowVlanIdChoiceEnum("value"),
+	VALUES:      PatternFlowVlanIdChoiceEnum("values"),
+	INCREMENT:   PatternFlowVlanIdChoiceEnum("increment"),
+	DECREMENT:   PatternFlowVlanIdChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowVlanId) Choice() PatternFlowVlanIdChoiceEnum {
+	return PatternFlowVlanIdChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowVlanId) SetChoice(value PatternFlowVlanIdChoiceEnum) PatternFlowVlanId {
+	intValue := snappipb.PatternFlowVlanId_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowVlanId_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -10403,6 +11570,7 @@ func (obj *patternFlowVlanId) Value() int32 {
 //  description is TBD
 func (obj *patternFlowVlanId) SetValue(value int32) PatternFlowVlanId {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowVlanIdChoice.VALUE)
 	return obj
 }
 
@@ -10416,6 +11584,7 @@ func (obj *patternFlowVlanId) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowVlanId) SetValues(value []int32) PatternFlowVlanId {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowVlanIdChoice.VALUES)
 	return obj
 }
 
@@ -10429,6 +11598,7 @@ func (obj *patternFlowVlanId) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowVlanId) SetMetricGroup(value string) PatternFlowVlanId {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -10438,8 +11608,8 @@ func (obj *patternFlowVlanId) Increment() PatternFlowVlanIdCounter {
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowVlanIdCounter{}
 	}
+	obj.SetChoice(PatternFlowVlanIdChoice.INCREMENT)
 	return &patternFlowVlanIdCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowVlanIdCounter
@@ -10448,8 +11618,8 @@ func (obj *patternFlowVlanId) Decrement() PatternFlowVlanIdCounter {
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowVlanIdCounter{}
 	}
+	obj.SetChoice(PatternFlowVlanIdChoice.DECREMENT)
 	return &patternFlowVlanIdCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowVlanTpid struct {
@@ -10498,6 +11668,8 @@ type PatternFlowVlanTpid interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowVlanTpidChoiceEnum
+	SetChoice(value PatternFlowVlanTpidChoiceEnum) PatternFlowVlanTpid
 	Value() int32
 	SetValue(value int32) PatternFlowVlanTpid
 	Values() []int32
@@ -10506,6 +11678,33 @@ type PatternFlowVlanTpid interface {
 	SetMetricGroup(value string) PatternFlowVlanTpid
 	Increment() PatternFlowVlanTpidCounter
 	Decrement() PatternFlowVlanTpidCounter
+}
+
+type PatternFlowVlanTpidChoiceEnum string
+
+var PatternFlowVlanTpidChoice = struct {
+	UNSPECIFIED PatternFlowVlanTpidChoiceEnum
+	VALUE       PatternFlowVlanTpidChoiceEnum
+	VALUES      PatternFlowVlanTpidChoiceEnum
+	INCREMENT   PatternFlowVlanTpidChoiceEnum
+	DECREMENT   PatternFlowVlanTpidChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowVlanTpidChoiceEnum("unspecified"),
+	VALUE:       PatternFlowVlanTpidChoiceEnum("value"),
+	VALUES:      PatternFlowVlanTpidChoiceEnum("values"),
+	INCREMENT:   PatternFlowVlanTpidChoiceEnum("increment"),
+	DECREMENT:   PatternFlowVlanTpidChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowVlanTpid) Choice() PatternFlowVlanTpidChoiceEnum {
+	return PatternFlowVlanTpidChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowVlanTpid) SetChoice(value PatternFlowVlanTpidChoiceEnum) PatternFlowVlanTpid {
+	intValue := snappipb.PatternFlowVlanTpid_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowVlanTpid_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -10518,6 +11717,7 @@ func (obj *patternFlowVlanTpid) Value() int32 {
 //  description is TBD
 func (obj *patternFlowVlanTpid) SetValue(value int32) PatternFlowVlanTpid {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowVlanTpidChoice.VALUE)
 	return obj
 }
 
@@ -10531,6 +11731,7 @@ func (obj *patternFlowVlanTpid) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowVlanTpid) SetValues(value []int32) PatternFlowVlanTpid {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowVlanTpidChoice.VALUES)
 	return obj
 }
 
@@ -10544,6 +11745,7 @@ func (obj *patternFlowVlanTpid) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowVlanTpid) SetMetricGroup(value string) PatternFlowVlanTpid {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -10553,8 +11755,8 @@ func (obj *patternFlowVlanTpid) Increment() PatternFlowVlanTpidCounter {
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowVlanTpidCounter{}
 	}
+	obj.SetChoice(PatternFlowVlanTpidChoice.INCREMENT)
 	return &patternFlowVlanTpidCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowVlanTpidCounter
@@ -10563,8 +11765,8 @@ func (obj *patternFlowVlanTpid) Decrement() PatternFlowVlanTpidCounter {
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowVlanTpidCounter{}
 	}
+	obj.SetChoice(PatternFlowVlanTpidChoice.DECREMENT)
 	return &patternFlowVlanTpidCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowVxlanFlags struct {
@@ -10613,6 +11815,8 @@ type PatternFlowVxlanFlags interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowVxlanFlagsChoiceEnum
+	SetChoice(value PatternFlowVxlanFlagsChoiceEnum) PatternFlowVxlanFlags
 	Value() int32
 	SetValue(value int32) PatternFlowVxlanFlags
 	Values() []int32
@@ -10621,6 +11825,33 @@ type PatternFlowVxlanFlags interface {
 	SetMetricGroup(value string) PatternFlowVxlanFlags
 	Increment() PatternFlowVxlanFlagsCounter
 	Decrement() PatternFlowVxlanFlagsCounter
+}
+
+type PatternFlowVxlanFlagsChoiceEnum string
+
+var PatternFlowVxlanFlagsChoice = struct {
+	UNSPECIFIED PatternFlowVxlanFlagsChoiceEnum
+	VALUE       PatternFlowVxlanFlagsChoiceEnum
+	VALUES      PatternFlowVxlanFlagsChoiceEnum
+	INCREMENT   PatternFlowVxlanFlagsChoiceEnum
+	DECREMENT   PatternFlowVxlanFlagsChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowVxlanFlagsChoiceEnum("unspecified"),
+	VALUE:       PatternFlowVxlanFlagsChoiceEnum("value"),
+	VALUES:      PatternFlowVxlanFlagsChoiceEnum("values"),
+	INCREMENT:   PatternFlowVxlanFlagsChoiceEnum("increment"),
+	DECREMENT:   PatternFlowVxlanFlagsChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowVxlanFlags) Choice() PatternFlowVxlanFlagsChoiceEnum {
+	return PatternFlowVxlanFlagsChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowVxlanFlags) SetChoice(value PatternFlowVxlanFlagsChoiceEnum) PatternFlowVxlanFlags {
+	intValue := snappipb.PatternFlowVxlanFlags_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowVxlanFlags_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -10633,6 +11864,7 @@ func (obj *patternFlowVxlanFlags) Value() int32 {
 //  description is TBD
 func (obj *patternFlowVxlanFlags) SetValue(value int32) PatternFlowVxlanFlags {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowVxlanFlagsChoice.VALUE)
 	return obj
 }
 
@@ -10646,6 +11878,7 @@ func (obj *patternFlowVxlanFlags) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowVxlanFlags) SetValues(value []int32) PatternFlowVxlanFlags {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowVxlanFlagsChoice.VALUES)
 	return obj
 }
 
@@ -10659,6 +11892,7 @@ func (obj *patternFlowVxlanFlags) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowVxlanFlags) SetMetricGroup(value string) PatternFlowVxlanFlags {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -10668,8 +11902,8 @@ func (obj *patternFlowVxlanFlags) Increment() PatternFlowVxlanFlagsCounter {
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowVxlanFlagsCounter{}
 	}
+	obj.SetChoice(PatternFlowVxlanFlagsChoice.INCREMENT)
 	return &patternFlowVxlanFlagsCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowVxlanFlagsCounter
@@ -10678,8 +11912,8 @@ func (obj *patternFlowVxlanFlags) Decrement() PatternFlowVxlanFlagsCounter {
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowVxlanFlagsCounter{}
 	}
+	obj.SetChoice(PatternFlowVxlanFlagsChoice.DECREMENT)
 	return &patternFlowVxlanFlagsCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowVxlanReserved0 struct {
@@ -10728,6 +11962,8 @@ type PatternFlowVxlanReserved0 interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowVxlanReserved0ChoiceEnum
+	SetChoice(value PatternFlowVxlanReserved0ChoiceEnum) PatternFlowVxlanReserved0
 	Value() int32
 	SetValue(value int32) PatternFlowVxlanReserved0
 	Values() []int32
@@ -10736,6 +11972,33 @@ type PatternFlowVxlanReserved0 interface {
 	SetMetricGroup(value string) PatternFlowVxlanReserved0
 	Increment() PatternFlowVxlanReserved0Counter
 	Decrement() PatternFlowVxlanReserved0Counter
+}
+
+type PatternFlowVxlanReserved0ChoiceEnum string
+
+var PatternFlowVxlanReserved0Choice = struct {
+	UNSPECIFIED PatternFlowVxlanReserved0ChoiceEnum
+	VALUE       PatternFlowVxlanReserved0ChoiceEnum
+	VALUES      PatternFlowVxlanReserved0ChoiceEnum
+	INCREMENT   PatternFlowVxlanReserved0ChoiceEnum
+	DECREMENT   PatternFlowVxlanReserved0ChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowVxlanReserved0ChoiceEnum("unspecified"),
+	VALUE:       PatternFlowVxlanReserved0ChoiceEnum("value"),
+	VALUES:      PatternFlowVxlanReserved0ChoiceEnum("values"),
+	INCREMENT:   PatternFlowVxlanReserved0ChoiceEnum("increment"),
+	DECREMENT:   PatternFlowVxlanReserved0ChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowVxlanReserved0) Choice() PatternFlowVxlanReserved0ChoiceEnum {
+	return PatternFlowVxlanReserved0ChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowVxlanReserved0) SetChoice(value PatternFlowVxlanReserved0ChoiceEnum) PatternFlowVxlanReserved0 {
+	intValue := snappipb.PatternFlowVxlanReserved0_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowVxlanReserved0_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -10748,6 +12011,7 @@ func (obj *patternFlowVxlanReserved0) Value() int32 {
 //  description is TBD
 func (obj *patternFlowVxlanReserved0) SetValue(value int32) PatternFlowVxlanReserved0 {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowVxlanReserved0Choice.VALUE)
 	return obj
 }
 
@@ -10761,6 +12025,7 @@ func (obj *patternFlowVxlanReserved0) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowVxlanReserved0) SetValues(value []int32) PatternFlowVxlanReserved0 {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowVxlanReserved0Choice.VALUES)
 	return obj
 }
 
@@ -10774,6 +12039,7 @@ func (obj *patternFlowVxlanReserved0) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowVxlanReserved0) SetMetricGroup(value string) PatternFlowVxlanReserved0 {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -10783,8 +12049,8 @@ func (obj *patternFlowVxlanReserved0) Increment() PatternFlowVxlanReserved0Count
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowVxlanReserved0Counter{}
 	}
+	obj.SetChoice(PatternFlowVxlanReserved0Choice.INCREMENT)
 	return &patternFlowVxlanReserved0Counter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowVxlanReserved0Counter
@@ -10793,8 +12059,8 @@ func (obj *patternFlowVxlanReserved0) Decrement() PatternFlowVxlanReserved0Count
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowVxlanReserved0Counter{}
 	}
+	obj.SetChoice(PatternFlowVxlanReserved0Choice.DECREMENT)
 	return &patternFlowVxlanReserved0Counter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowVxlanVni struct {
@@ -10843,6 +12109,8 @@ type PatternFlowVxlanVni interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowVxlanVniChoiceEnum
+	SetChoice(value PatternFlowVxlanVniChoiceEnum) PatternFlowVxlanVni
 	Value() int32
 	SetValue(value int32) PatternFlowVxlanVni
 	Values() []int32
@@ -10851,6 +12119,33 @@ type PatternFlowVxlanVni interface {
 	SetMetricGroup(value string) PatternFlowVxlanVni
 	Increment() PatternFlowVxlanVniCounter
 	Decrement() PatternFlowVxlanVniCounter
+}
+
+type PatternFlowVxlanVniChoiceEnum string
+
+var PatternFlowVxlanVniChoice = struct {
+	UNSPECIFIED PatternFlowVxlanVniChoiceEnum
+	VALUE       PatternFlowVxlanVniChoiceEnum
+	VALUES      PatternFlowVxlanVniChoiceEnum
+	INCREMENT   PatternFlowVxlanVniChoiceEnum
+	DECREMENT   PatternFlowVxlanVniChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowVxlanVniChoiceEnum("unspecified"),
+	VALUE:       PatternFlowVxlanVniChoiceEnum("value"),
+	VALUES:      PatternFlowVxlanVniChoiceEnum("values"),
+	INCREMENT:   PatternFlowVxlanVniChoiceEnum("increment"),
+	DECREMENT:   PatternFlowVxlanVniChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowVxlanVni) Choice() PatternFlowVxlanVniChoiceEnum {
+	return PatternFlowVxlanVniChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowVxlanVni) SetChoice(value PatternFlowVxlanVniChoiceEnum) PatternFlowVxlanVni {
+	intValue := snappipb.PatternFlowVxlanVni_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowVxlanVni_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -10863,6 +12158,7 @@ func (obj *patternFlowVxlanVni) Value() int32 {
 //  description is TBD
 func (obj *patternFlowVxlanVni) SetValue(value int32) PatternFlowVxlanVni {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowVxlanVniChoice.VALUE)
 	return obj
 }
 
@@ -10876,6 +12172,7 @@ func (obj *patternFlowVxlanVni) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowVxlanVni) SetValues(value []int32) PatternFlowVxlanVni {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowVxlanVniChoice.VALUES)
 	return obj
 }
 
@@ -10889,6 +12186,7 @@ func (obj *patternFlowVxlanVni) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowVxlanVni) SetMetricGroup(value string) PatternFlowVxlanVni {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -10898,8 +12196,8 @@ func (obj *patternFlowVxlanVni) Increment() PatternFlowVxlanVniCounter {
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowVxlanVniCounter{}
 	}
+	obj.SetChoice(PatternFlowVxlanVniChoice.INCREMENT)
 	return &patternFlowVxlanVniCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowVxlanVniCounter
@@ -10908,8 +12206,8 @@ func (obj *patternFlowVxlanVni) Decrement() PatternFlowVxlanVniCounter {
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowVxlanVniCounter{}
 	}
+	obj.SetChoice(PatternFlowVxlanVniChoice.DECREMENT)
 	return &patternFlowVxlanVniCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowVxlanReserved1 struct {
@@ -10958,6 +12256,8 @@ type PatternFlowVxlanReserved1 interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowVxlanReserved1ChoiceEnum
+	SetChoice(value PatternFlowVxlanReserved1ChoiceEnum) PatternFlowVxlanReserved1
 	Value() int32
 	SetValue(value int32) PatternFlowVxlanReserved1
 	Values() []int32
@@ -10966,6 +12266,33 @@ type PatternFlowVxlanReserved1 interface {
 	SetMetricGroup(value string) PatternFlowVxlanReserved1
 	Increment() PatternFlowVxlanReserved1Counter
 	Decrement() PatternFlowVxlanReserved1Counter
+}
+
+type PatternFlowVxlanReserved1ChoiceEnum string
+
+var PatternFlowVxlanReserved1Choice = struct {
+	UNSPECIFIED PatternFlowVxlanReserved1ChoiceEnum
+	VALUE       PatternFlowVxlanReserved1ChoiceEnum
+	VALUES      PatternFlowVxlanReserved1ChoiceEnum
+	INCREMENT   PatternFlowVxlanReserved1ChoiceEnum
+	DECREMENT   PatternFlowVxlanReserved1ChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowVxlanReserved1ChoiceEnum("unspecified"),
+	VALUE:       PatternFlowVxlanReserved1ChoiceEnum("value"),
+	VALUES:      PatternFlowVxlanReserved1ChoiceEnum("values"),
+	INCREMENT:   PatternFlowVxlanReserved1ChoiceEnum("increment"),
+	DECREMENT:   PatternFlowVxlanReserved1ChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowVxlanReserved1) Choice() PatternFlowVxlanReserved1ChoiceEnum {
+	return PatternFlowVxlanReserved1ChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowVxlanReserved1) SetChoice(value PatternFlowVxlanReserved1ChoiceEnum) PatternFlowVxlanReserved1 {
+	intValue := snappipb.PatternFlowVxlanReserved1_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowVxlanReserved1_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -10978,6 +12305,7 @@ func (obj *patternFlowVxlanReserved1) Value() int32 {
 //  description is TBD
 func (obj *patternFlowVxlanReserved1) SetValue(value int32) PatternFlowVxlanReserved1 {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowVxlanReserved1Choice.VALUE)
 	return obj
 }
 
@@ -10991,6 +12319,7 @@ func (obj *patternFlowVxlanReserved1) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowVxlanReserved1) SetValues(value []int32) PatternFlowVxlanReserved1 {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowVxlanReserved1Choice.VALUES)
 	return obj
 }
 
@@ -11004,6 +12333,7 @@ func (obj *patternFlowVxlanReserved1) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowVxlanReserved1) SetMetricGroup(value string) PatternFlowVxlanReserved1 {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -11013,8 +12343,8 @@ func (obj *patternFlowVxlanReserved1) Increment() PatternFlowVxlanReserved1Count
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowVxlanReserved1Counter{}
 	}
+	obj.SetChoice(PatternFlowVxlanReserved1Choice.INCREMENT)
 	return &patternFlowVxlanReserved1Counter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowVxlanReserved1Counter
@@ -11023,8 +12353,8 @@ func (obj *patternFlowVxlanReserved1) Decrement() PatternFlowVxlanReserved1Count
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowVxlanReserved1Counter{}
 	}
+	obj.SetChoice(PatternFlowVxlanReserved1Choice.DECREMENT)
 	return &patternFlowVxlanReserved1Counter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowIpv4Version struct {
@@ -11073,6 +12403,8 @@ type PatternFlowIpv4Version interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowIpv4VersionChoiceEnum
+	SetChoice(value PatternFlowIpv4VersionChoiceEnum) PatternFlowIpv4Version
 	Value() int32
 	SetValue(value int32) PatternFlowIpv4Version
 	Values() []int32
@@ -11081,6 +12413,33 @@ type PatternFlowIpv4Version interface {
 	SetMetricGroup(value string) PatternFlowIpv4Version
 	Increment() PatternFlowIpv4VersionCounter
 	Decrement() PatternFlowIpv4VersionCounter
+}
+
+type PatternFlowIpv4VersionChoiceEnum string
+
+var PatternFlowIpv4VersionChoice = struct {
+	UNSPECIFIED PatternFlowIpv4VersionChoiceEnum
+	VALUE       PatternFlowIpv4VersionChoiceEnum
+	VALUES      PatternFlowIpv4VersionChoiceEnum
+	INCREMENT   PatternFlowIpv4VersionChoiceEnum
+	DECREMENT   PatternFlowIpv4VersionChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowIpv4VersionChoiceEnum("unspecified"),
+	VALUE:       PatternFlowIpv4VersionChoiceEnum("value"),
+	VALUES:      PatternFlowIpv4VersionChoiceEnum("values"),
+	INCREMENT:   PatternFlowIpv4VersionChoiceEnum("increment"),
+	DECREMENT:   PatternFlowIpv4VersionChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowIpv4Version) Choice() PatternFlowIpv4VersionChoiceEnum {
+	return PatternFlowIpv4VersionChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowIpv4Version) SetChoice(value PatternFlowIpv4VersionChoiceEnum) PatternFlowIpv4Version {
+	intValue := snappipb.PatternFlowIpv4Version_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowIpv4Version_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -11093,6 +12452,7 @@ func (obj *patternFlowIpv4Version) Value() int32 {
 //  description is TBD
 func (obj *patternFlowIpv4Version) SetValue(value int32) PatternFlowIpv4Version {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowIpv4VersionChoice.VALUE)
 	return obj
 }
 
@@ -11106,6 +12466,7 @@ func (obj *patternFlowIpv4Version) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowIpv4Version) SetValues(value []int32) PatternFlowIpv4Version {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowIpv4VersionChoice.VALUES)
 	return obj
 }
 
@@ -11119,6 +12480,7 @@ func (obj *patternFlowIpv4Version) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowIpv4Version) SetMetricGroup(value string) PatternFlowIpv4Version {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -11128,8 +12490,8 @@ func (obj *patternFlowIpv4Version) Increment() PatternFlowIpv4VersionCounter {
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowIpv4VersionCounter{}
 	}
+	obj.SetChoice(PatternFlowIpv4VersionChoice.INCREMENT)
 	return &patternFlowIpv4VersionCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowIpv4VersionCounter
@@ -11138,8 +12500,8 @@ func (obj *patternFlowIpv4Version) Decrement() PatternFlowIpv4VersionCounter {
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowIpv4VersionCounter{}
 	}
+	obj.SetChoice(PatternFlowIpv4VersionChoice.DECREMENT)
 	return &patternFlowIpv4VersionCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowIpv4HeaderLength struct {
@@ -11188,14 +12550,47 @@ type PatternFlowIpv4HeaderLength interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowIpv4HeaderLengthChoiceEnum
+	SetChoice(value PatternFlowIpv4HeaderLengthChoiceEnum) PatternFlowIpv4HeaderLength
 	Value() int32
 	SetValue(value int32) PatternFlowIpv4HeaderLength
 	Values() []int32
 	SetValues(value []int32) PatternFlowIpv4HeaderLength
+	Auto() PatternFlowIpv4HeaderLengthAutoEnum
+	SetAuto(value PatternFlowIpv4HeaderLengthAutoEnum) PatternFlowIpv4HeaderLength
 	MetricGroup() string
 	SetMetricGroup(value string) PatternFlowIpv4HeaderLength
 	Increment() PatternFlowIpv4HeaderLengthCounter
 	Decrement() PatternFlowIpv4HeaderLengthCounter
+}
+
+type PatternFlowIpv4HeaderLengthChoiceEnum string
+
+var PatternFlowIpv4HeaderLengthChoice = struct {
+	UNSPECIFIED PatternFlowIpv4HeaderLengthChoiceEnum
+	VALUE       PatternFlowIpv4HeaderLengthChoiceEnum
+	VALUES      PatternFlowIpv4HeaderLengthChoiceEnum
+	AUTO        PatternFlowIpv4HeaderLengthChoiceEnum
+	INCREMENT   PatternFlowIpv4HeaderLengthChoiceEnum
+	DECREMENT   PatternFlowIpv4HeaderLengthChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowIpv4HeaderLengthChoiceEnum("unspecified"),
+	VALUE:       PatternFlowIpv4HeaderLengthChoiceEnum("value"),
+	VALUES:      PatternFlowIpv4HeaderLengthChoiceEnum("values"),
+	AUTO:        PatternFlowIpv4HeaderLengthChoiceEnum("auto"),
+	INCREMENT:   PatternFlowIpv4HeaderLengthChoiceEnum("increment"),
+	DECREMENT:   PatternFlowIpv4HeaderLengthChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowIpv4HeaderLength) Choice() PatternFlowIpv4HeaderLengthChoiceEnum {
+	return PatternFlowIpv4HeaderLengthChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowIpv4HeaderLength) SetChoice(value PatternFlowIpv4HeaderLengthChoiceEnum) PatternFlowIpv4HeaderLength {
+	intValue := snappipb.PatternFlowIpv4HeaderLength_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowIpv4HeaderLength_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -11208,6 +12603,7 @@ func (obj *patternFlowIpv4HeaderLength) Value() int32 {
 //  description is TBD
 func (obj *patternFlowIpv4HeaderLength) SetValue(value int32) PatternFlowIpv4HeaderLength {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowIpv4HeaderLengthChoice.VALUE)
 	return obj
 }
 
@@ -11221,6 +12617,28 @@ func (obj *patternFlowIpv4HeaderLength) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowIpv4HeaderLength) SetValues(value []int32) PatternFlowIpv4HeaderLength {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowIpv4HeaderLengthChoice.VALUES)
+	return obj
+}
+
+type PatternFlowIpv4HeaderLengthAutoEnum string
+
+var PatternFlowIpv4HeaderLengthAuto = struct {
+	UNSPECIFIED PatternFlowIpv4HeaderLengthAutoEnum
+	AUTO        PatternFlowIpv4HeaderLengthAutoEnum
+}{
+	UNSPECIFIED: PatternFlowIpv4HeaderLengthAutoEnum("unspecified"),
+	AUTO:        PatternFlowIpv4HeaderLengthAutoEnum("auto"),
+}
+
+func (obj *patternFlowIpv4HeaderLength) Auto() PatternFlowIpv4HeaderLengthAutoEnum {
+	return PatternFlowIpv4HeaderLengthAutoEnum(obj.obj.Auto.Enum().String())
+}
+
+func (obj *patternFlowIpv4HeaderLength) SetAuto(value PatternFlowIpv4HeaderLengthAutoEnum) PatternFlowIpv4HeaderLength {
+	intValue := snappipb.PatternFlowIpv4HeaderLength_Auto_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowIpv4HeaderLength_Auto_Enum(intValue)
+	obj.obj.Auto = &enumValue
 	return obj
 }
 
@@ -11234,6 +12652,7 @@ func (obj *patternFlowIpv4HeaderLength) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowIpv4HeaderLength) SetMetricGroup(value string) PatternFlowIpv4HeaderLength {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -11243,8 +12662,8 @@ func (obj *patternFlowIpv4HeaderLength) Increment() PatternFlowIpv4HeaderLengthC
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowIpv4HeaderLengthCounter{}
 	}
+	obj.SetChoice(PatternFlowIpv4HeaderLengthChoice.INCREMENT)
 	return &patternFlowIpv4HeaderLengthCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowIpv4HeaderLengthCounter
@@ -11253,8 +12672,8 @@ func (obj *patternFlowIpv4HeaderLength) Decrement() PatternFlowIpv4HeaderLengthC
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowIpv4HeaderLengthCounter{}
 	}
+	obj.SetChoice(PatternFlowIpv4HeaderLengthChoice.DECREMENT)
 	return &patternFlowIpv4HeaderLengthCounter{obj: obj.obj.Decrement}
-
 }
 
 type flowIpv4Priority struct {
@@ -11303,9 +12722,36 @@ type FlowIpv4Priority interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() FlowIpv4PriorityChoiceEnum
+	SetChoice(value FlowIpv4PriorityChoiceEnum) FlowIpv4Priority
 	Raw() PatternFlowIpv4PriorityRaw
 	Tos() FlowIpv4Tos
 	Dscp() FlowIpv4Dscp
+}
+
+type FlowIpv4PriorityChoiceEnum string
+
+var FlowIpv4PriorityChoice = struct {
+	UNSPECIFIED FlowIpv4PriorityChoiceEnum
+	RAW         FlowIpv4PriorityChoiceEnum
+	TOS         FlowIpv4PriorityChoiceEnum
+	DSCP        FlowIpv4PriorityChoiceEnum
+}{
+	UNSPECIFIED: FlowIpv4PriorityChoiceEnum("unspecified"),
+	RAW:         FlowIpv4PriorityChoiceEnum("raw"),
+	TOS:         FlowIpv4PriorityChoiceEnum("tos"),
+	DSCP:        FlowIpv4PriorityChoiceEnum("dscp"),
+}
+
+func (obj *flowIpv4Priority) Choice() FlowIpv4PriorityChoiceEnum {
+	return FlowIpv4PriorityChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *flowIpv4Priority) SetChoice(value FlowIpv4PriorityChoiceEnum) FlowIpv4Priority {
+	intValue := snappipb.FlowIpv4Priority_Choice_Enum_value[string(value)]
+	enumValue := snappipb.FlowIpv4Priority_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Raw returns a PatternFlowIpv4PriorityRaw
@@ -11314,8 +12760,8 @@ func (obj *flowIpv4Priority) Raw() PatternFlowIpv4PriorityRaw {
 	if obj.obj.Raw == nil {
 		obj.obj.Raw = &snappipb.PatternFlowIpv4PriorityRaw{}
 	}
+	obj.SetChoice(FlowIpv4PriorityChoice.RAW)
 	return &patternFlowIpv4PriorityRaw{obj: obj.obj.Raw}
-
 }
 
 // Tos returns a FlowIpv4Tos
@@ -11324,8 +12770,8 @@ func (obj *flowIpv4Priority) Tos() FlowIpv4Tos {
 	if obj.obj.Tos == nil {
 		obj.obj.Tos = &snappipb.FlowIpv4Tos{}
 	}
+	obj.SetChoice(FlowIpv4PriorityChoice.TOS)
 	return &flowIpv4Tos{obj: obj.obj.Tos}
-
 }
 
 // Dscp returns a FlowIpv4Dscp
@@ -11334,8 +12780,8 @@ func (obj *flowIpv4Priority) Dscp() FlowIpv4Dscp {
 	if obj.obj.Dscp == nil {
 		obj.obj.Dscp = &snappipb.FlowIpv4Dscp{}
 	}
+	obj.SetChoice(FlowIpv4PriorityChoice.DSCP)
 	return &flowIpv4Dscp{obj: obj.obj.Dscp}
-
 }
 
 type patternFlowIpv4TotalLength struct {
@@ -11384,14 +12830,47 @@ type PatternFlowIpv4TotalLength interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowIpv4TotalLengthChoiceEnum
+	SetChoice(value PatternFlowIpv4TotalLengthChoiceEnum) PatternFlowIpv4TotalLength
 	Value() int32
 	SetValue(value int32) PatternFlowIpv4TotalLength
 	Values() []int32
 	SetValues(value []int32) PatternFlowIpv4TotalLength
+	Auto() PatternFlowIpv4TotalLengthAutoEnum
+	SetAuto(value PatternFlowIpv4TotalLengthAutoEnum) PatternFlowIpv4TotalLength
 	MetricGroup() string
 	SetMetricGroup(value string) PatternFlowIpv4TotalLength
 	Increment() PatternFlowIpv4TotalLengthCounter
 	Decrement() PatternFlowIpv4TotalLengthCounter
+}
+
+type PatternFlowIpv4TotalLengthChoiceEnum string
+
+var PatternFlowIpv4TotalLengthChoice = struct {
+	UNSPECIFIED PatternFlowIpv4TotalLengthChoiceEnum
+	VALUE       PatternFlowIpv4TotalLengthChoiceEnum
+	VALUES      PatternFlowIpv4TotalLengthChoiceEnum
+	AUTO        PatternFlowIpv4TotalLengthChoiceEnum
+	INCREMENT   PatternFlowIpv4TotalLengthChoiceEnum
+	DECREMENT   PatternFlowIpv4TotalLengthChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowIpv4TotalLengthChoiceEnum("unspecified"),
+	VALUE:       PatternFlowIpv4TotalLengthChoiceEnum("value"),
+	VALUES:      PatternFlowIpv4TotalLengthChoiceEnum("values"),
+	AUTO:        PatternFlowIpv4TotalLengthChoiceEnum("auto"),
+	INCREMENT:   PatternFlowIpv4TotalLengthChoiceEnum("increment"),
+	DECREMENT:   PatternFlowIpv4TotalLengthChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowIpv4TotalLength) Choice() PatternFlowIpv4TotalLengthChoiceEnum {
+	return PatternFlowIpv4TotalLengthChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowIpv4TotalLength) SetChoice(value PatternFlowIpv4TotalLengthChoiceEnum) PatternFlowIpv4TotalLength {
+	intValue := snappipb.PatternFlowIpv4TotalLength_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowIpv4TotalLength_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -11404,6 +12883,7 @@ func (obj *patternFlowIpv4TotalLength) Value() int32 {
 //  description is TBD
 func (obj *patternFlowIpv4TotalLength) SetValue(value int32) PatternFlowIpv4TotalLength {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowIpv4TotalLengthChoice.VALUE)
 	return obj
 }
 
@@ -11417,6 +12897,28 @@ func (obj *patternFlowIpv4TotalLength) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowIpv4TotalLength) SetValues(value []int32) PatternFlowIpv4TotalLength {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowIpv4TotalLengthChoice.VALUES)
+	return obj
+}
+
+type PatternFlowIpv4TotalLengthAutoEnum string
+
+var PatternFlowIpv4TotalLengthAuto = struct {
+	UNSPECIFIED PatternFlowIpv4TotalLengthAutoEnum
+	AUTO        PatternFlowIpv4TotalLengthAutoEnum
+}{
+	UNSPECIFIED: PatternFlowIpv4TotalLengthAutoEnum("unspecified"),
+	AUTO:        PatternFlowIpv4TotalLengthAutoEnum("auto"),
+}
+
+func (obj *patternFlowIpv4TotalLength) Auto() PatternFlowIpv4TotalLengthAutoEnum {
+	return PatternFlowIpv4TotalLengthAutoEnum(obj.obj.Auto.Enum().String())
+}
+
+func (obj *patternFlowIpv4TotalLength) SetAuto(value PatternFlowIpv4TotalLengthAutoEnum) PatternFlowIpv4TotalLength {
+	intValue := snappipb.PatternFlowIpv4TotalLength_Auto_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowIpv4TotalLength_Auto_Enum(intValue)
+	obj.obj.Auto = &enumValue
 	return obj
 }
 
@@ -11430,6 +12932,7 @@ func (obj *patternFlowIpv4TotalLength) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowIpv4TotalLength) SetMetricGroup(value string) PatternFlowIpv4TotalLength {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -11439,8 +12942,8 @@ func (obj *patternFlowIpv4TotalLength) Increment() PatternFlowIpv4TotalLengthCou
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowIpv4TotalLengthCounter{}
 	}
+	obj.SetChoice(PatternFlowIpv4TotalLengthChoice.INCREMENT)
 	return &patternFlowIpv4TotalLengthCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowIpv4TotalLengthCounter
@@ -11449,8 +12952,8 @@ func (obj *patternFlowIpv4TotalLength) Decrement() PatternFlowIpv4TotalLengthCou
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowIpv4TotalLengthCounter{}
 	}
+	obj.SetChoice(PatternFlowIpv4TotalLengthChoice.DECREMENT)
 	return &patternFlowIpv4TotalLengthCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowIpv4Identification struct {
@@ -11499,6 +13002,8 @@ type PatternFlowIpv4Identification interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowIpv4IdentificationChoiceEnum
+	SetChoice(value PatternFlowIpv4IdentificationChoiceEnum) PatternFlowIpv4Identification
 	Value() int32
 	SetValue(value int32) PatternFlowIpv4Identification
 	Values() []int32
@@ -11507,6 +13012,33 @@ type PatternFlowIpv4Identification interface {
 	SetMetricGroup(value string) PatternFlowIpv4Identification
 	Increment() PatternFlowIpv4IdentificationCounter
 	Decrement() PatternFlowIpv4IdentificationCounter
+}
+
+type PatternFlowIpv4IdentificationChoiceEnum string
+
+var PatternFlowIpv4IdentificationChoice = struct {
+	UNSPECIFIED PatternFlowIpv4IdentificationChoiceEnum
+	VALUE       PatternFlowIpv4IdentificationChoiceEnum
+	VALUES      PatternFlowIpv4IdentificationChoiceEnum
+	INCREMENT   PatternFlowIpv4IdentificationChoiceEnum
+	DECREMENT   PatternFlowIpv4IdentificationChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowIpv4IdentificationChoiceEnum("unspecified"),
+	VALUE:       PatternFlowIpv4IdentificationChoiceEnum("value"),
+	VALUES:      PatternFlowIpv4IdentificationChoiceEnum("values"),
+	INCREMENT:   PatternFlowIpv4IdentificationChoiceEnum("increment"),
+	DECREMENT:   PatternFlowIpv4IdentificationChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowIpv4Identification) Choice() PatternFlowIpv4IdentificationChoiceEnum {
+	return PatternFlowIpv4IdentificationChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowIpv4Identification) SetChoice(value PatternFlowIpv4IdentificationChoiceEnum) PatternFlowIpv4Identification {
+	intValue := snappipb.PatternFlowIpv4Identification_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowIpv4Identification_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -11519,6 +13051,7 @@ func (obj *patternFlowIpv4Identification) Value() int32 {
 //  description is TBD
 func (obj *patternFlowIpv4Identification) SetValue(value int32) PatternFlowIpv4Identification {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowIpv4IdentificationChoice.VALUE)
 	return obj
 }
 
@@ -11532,6 +13065,7 @@ func (obj *patternFlowIpv4Identification) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowIpv4Identification) SetValues(value []int32) PatternFlowIpv4Identification {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowIpv4IdentificationChoice.VALUES)
 	return obj
 }
 
@@ -11545,6 +13079,7 @@ func (obj *patternFlowIpv4Identification) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowIpv4Identification) SetMetricGroup(value string) PatternFlowIpv4Identification {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -11554,8 +13089,8 @@ func (obj *patternFlowIpv4Identification) Increment() PatternFlowIpv4Identificat
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowIpv4IdentificationCounter{}
 	}
+	obj.SetChoice(PatternFlowIpv4IdentificationChoice.INCREMENT)
 	return &patternFlowIpv4IdentificationCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowIpv4IdentificationCounter
@@ -11564,8 +13099,8 @@ func (obj *patternFlowIpv4Identification) Decrement() PatternFlowIpv4Identificat
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowIpv4IdentificationCounter{}
 	}
+	obj.SetChoice(PatternFlowIpv4IdentificationChoice.DECREMENT)
 	return &patternFlowIpv4IdentificationCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowIpv4Reserved struct {
@@ -11614,6 +13149,8 @@ type PatternFlowIpv4Reserved interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowIpv4ReservedChoiceEnum
+	SetChoice(value PatternFlowIpv4ReservedChoiceEnum) PatternFlowIpv4Reserved
 	Value() int32
 	SetValue(value int32) PatternFlowIpv4Reserved
 	Values() []int32
@@ -11622,6 +13159,33 @@ type PatternFlowIpv4Reserved interface {
 	SetMetricGroup(value string) PatternFlowIpv4Reserved
 	Increment() PatternFlowIpv4ReservedCounter
 	Decrement() PatternFlowIpv4ReservedCounter
+}
+
+type PatternFlowIpv4ReservedChoiceEnum string
+
+var PatternFlowIpv4ReservedChoice = struct {
+	UNSPECIFIED PatternFlowIpv4ReservedChoiceEnum
+	VALUE       PatternFlowIpv4ReservedChoiceEnum
+	VALUES      PatternFlowIpv4ReservedChoiceEnum
+	INCREMENT   PatternFlowIpv4ReservedChoiceEnum
+	DECREMENT   PatternFlowIpv4ReservedChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowIpv4ReservedChoiceEnum("unspecified"),
+	VALUE:       PatternFlowIpv4ReservedChoiceEnum("value"),
+	VALUES:      PatternFlowIpv4ReservedChoiceEnum("values"),
+	INCREMENT:   PatternFlowIpv4ReservedChoiceEnum("increment"),
+	DECREMENT:   PatternFlowIpv4ReservedChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowIpv4Reserved) Choice() PatternFlowIpv4ReservedChoiceEnum {
+	return PatternFlowIpv4ReservedChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowIpv4Reserved) SetChoice(value PatternFlowIpv4ReservedChoiceEnum) PatternFlowIpv4Reserved {
+	intValue := snappipb.PatternFlowIpv4Reserved_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowIpv4Reserved_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -11634,6 +13198,7 @@ func (obj *patternFlowIpv4Reserved) Value() int32 {
 //  description is TBD
 func (obj *patternFlowIpv4Reserved) SetValue(value int32) PatternFlowIpv4Reserved {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowIpv4ReservedChoice.VALUE)
 	return obj
 }
 
@@ -11647,6 +13212,7 @@ func (obj *patternFlowIpv4Reserved) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowIpv4Reserved) SetValues(value []int32) PatternFlowIpv4Reserved {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowIpv4ReservedChoice.VALUES)
 	return obj
 }
 
@@ -11660,6 +13226,7 @@ func (obj *patternFlowIpv4Reserved) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowIpv4Reserved) SetMetricGroup(value string) PatternFlowIpv4Reserved {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -11669,8 +13236,8 @@ func (obj *patternFlowIpv4Reserved) Increment() PatternFlowIpv4ReservedCounter {
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowIpv4ReservedCounter{}
 	}
+	obj.SetChoice(PatternFlowIpv4ReservedChoice.INCREMENT)
 	return &patternFlowIpv4ReservedCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowIpv4ReservedCounter
@@ -11679,8 +13246,8 @@ func (obj *patternFlowIpv4Reserved) Decrement() PatternFlowIpv4ReservedCounter {
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowIpv4ReservedCounter{}
 	}
+	obj.SetChoice(PatternFlowIpv4ReservedChoice.DECREMENT)
 	return &patternFlowIpv4ReservedCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowIpv4DontFragment struct {
@@ -11729,6 +13296,8 @@ type PatternFlowIpv4DontFragment interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowIpv4DontFragmentChoiceEnum
+	SetChoice(value PatternFlowIpv4DontFragmentChoiceEnum) PatternFlowIpv4DontFragment
 	Value() int32
 	SetValue(value int32) PatternFlowIpv4DontFragment
 	Values() []int32
@@ -11737,6 +13306,33 @@ type PatternFlowIpv4DontFragment interface {
 	SetMetricGroup(value string) PatternFlowIpv4DontFragment
 	Increment() PatternFlowIpv4DontFragmentCounter
 	Decrement() PatternFlowIpv4DontFragmentCounter
+}
+
+type PatternFlowIpv4DontFragmentChoiceEnum string
+
+var PatternFlowIpv4DontFragmentChoice = struct {
+	UNSPECIFIED PatternFlowIpv4DontFragmentChoiceEnum
+	VALUE       PatternFlowIpv4DontFragmentChoiceEnum
+	VALUES      PatternFlowIpv4DontFragmentChoiceEnum
+	INCREMENT   PatternFlowIpv4DontFragmentChoiceEnum
+	DECREMENT   PatternFlowIpv4DontFragmentChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowIpv4DontFragmentChoiceEnum("unspecified"),
+	VALUE:       PatternFlowIpv4DontFragmentChoiceEnum("value"),
+	VALUES:      PatternFlowIpv4DontFragmentChoiceEnum("values"),
+	INCREMENT:   PatternFlowIpv4DontFragmentChoiceEnum("increment"),
+	DECREMENT:   PatternFlowIpv4DontFragmentChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowIpv4DontFragment) Choice() PatternFlowIpv4DontFragmentChoiceEnum {
+	return PatternFlowIpv4DontFragmentChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowIpv4DontFragment) SetChoice(value PatternFlowIpv4DontFragmentChoiceEnum) PatternFlowIpv4DontFragment {
+	intValue := snappipb.PatternFlowIpv4DontFragment_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowIpv4DontFragment_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -11749,6 +13345,7 @@ func (obj *patternFlowIpv4DontFragment) Value() int32 {
 //  description is TBD
 func (obj *patternFlowIpv4DontFragment) SetValue(value int32) PatternFlowIpv4DontFragment {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowIpv4DontFragmentChoice.VALUE)
 	return obj
 }
 
@@ -11762,6 +13359,7 @@ func (obj *patternFlowIpv4DontFragment) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowIpv4DontFragment) SetValues(value []int32) PatternFlowIpv4DontFragment {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowIpv4DontFragmentChoice.VALUES)
 	return obj
 }
 
@@ -11775,6 +13373,7 @@ func (obj *patternFlowIpv4DontFragment) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowIpv4DontFragment) SetMetricGroup(value string) PatternFlowIpv4DontFragment {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -11784,8 +13383,8 @@ func (obj *patternFlowIpv4DontFragment) Increment() PatternFlowIpv4DontFragmentC
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowIpv4DontFragmentCounter{}
 	}
+	obj.SetChoice(PatternFlowIpv4DontFragmentChoice.INCREMENT)
 	return &patternFlowIpv4DontFragmentCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowIpv4DontFragmentCounter
@@ -11794,8 +13393,8 @@ func (obj *patternFlowIpv4DontFragment) Decrement() PatternFlowIpv4DontFragmentC
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowIpv4DontFragmentCounter{}
 	}
+	obj.SetChoice(PatternFlowIpv4DontFragmentChoice.DECREMENT)
 	return &patternFlowIpv4DontFragmentCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowIpv4MoreFragments struct {
@@ -11844,6 +13443,8 @@ type PatternFlowIpv4MoreFragments interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowIpv4MoreFragmentsChoiceEnum
+	SetChoice(value PatternFlowIpv4MoreFragmentsChoiceEnum) PatternFlowIpv4MoreFragments
 	Value() int32
 	SetValue(value int32) PatternFlowIpv4MoreFragments
 	Values() []int32
@@ -11852,6 +13453,33 @@ type PatternFlowIpv4MoreFragments interface {
 	SetMetricGroup(value string) PatternFlowIpv4MoreFragments
 	Increment() PatternFlowIpv4MoreFragmentsCounter
 	Decrement() PatternFlowIpv4MoreFragmentsCounter
+}
+
+type PatternFlowIpv4MoreFragmentsChoiceEnum string
+
+var PatternFlowIpv4MoreFragmentsChoice = struct {
+	UNSPECIFIED PatternFlowIpv4MoreFragmentsChoiceEnum
+	VALUE       PatternFlowIpv4MoreFragmentsChoiceEnum
+	VALUES      PatternFlowIpv4MoreFragmentsChoiceEnum
+	INCREMENT   PatternFlowIpv4MoreFragmentsChoiceEnum
+	DECREMENT   PatternFlowIpv4MoreFragmentsChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowIpv4MoreFragmentsChoiceEnum("unspecified"),
+	VALUE:       PatternFlowIpv4MoreFragmentsChoiceEnum("value"),
+	VALUES:      PatternFlowIpv4MoreFragmentsChoiceEnum("values"),
+	INCREMENT:   PatternFlowIpv4MoreFragmentsChoiceEnum("increment"),
+	DECREMENT:   PatternFlowIpv4MoreFragmentsChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowIpv4MoreFragments) Choice() PatternFlowIpv4MoreFragmentsChoiceEnum {
+	return PatternFlowIpv4MoreFragmentsChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowIpv4MoreFragments) SetChoice(value PatternFlowIpv4MoreFragmentsChoiceEnum) PatternFlowIpv4MoreFragments {
+	intValue := snappipb.PatternFlowIpv4MoreFragments_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowIpv4MoreFragments_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -11864,6 +13492,7 @@ func (obj *patternFlowIpv4MoreFragments) Value() int32 {
 //  description is TBD
 func (obj *patternFlowIpv4MoreFragments) SetValue(value int32) PatternFlowIpv4MoreFragments {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowIpv4MoreFragmentsChoice.VALUE)
 	return obj
 }
 
@@ -11877,6 +13506,7 @@ func (obj *patternFlowIpv4MoreFragments) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowIpv4MoreFragments) SetValues(value []int32) PatternFlowIpv4MoreFragments {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowIpv4MoreFragmentsChoice.VALUES)
 	return obj
 }
 
@@ -11890,6 +13520,7 @@ func (obj *patternFlowIpv4MoreFragments) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowIpv4MoreFragments) SetMetricGroup(value string) PatternFlowIpv4MoreFragments {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -11899,8 +13530,8 @@ func (obj *patternFlowIpv4MoreFragments) Increment() PatternFlowIpv4MoreFragment
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowIpv4MoreFragmentsCounter{}
 	}
+	obj.SetChoice(PatternFlowIpv4MoreFragmentsChoice.INCREMENT)
 	return &patternFlowIpv4MoreFragmentsCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowIpv4MoreFragmentsCounter
@@ -11909,8 +13540,8 @@ func (obj *patternFlowIpv4MoreFragments) Decrement() PatternFlowIpv4MoreFragment
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowIpv4MoreFragmentsCounter{}
 	}
+	obj.SetChoice(PatternFlowIpv4MoreFragmentsChoice.DECREMENT)
 	return &patternFlowIpv4MoreFragmentsCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowIpv4FragmentOffset struct {
@@ -11959,6 +13590,8 @@ type PatternFlowIpv4FragmentOffset interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowIpv4FragmentOffsetChoiceEnum
+	SetChoice(value PatternFlowIpv4FragmentOffsetChoiceEnum) PatternFlowIpv4FragmentOffset
 	Value() int32
 	SetValue(value int32) PatternFlowIpv4FragmentOffset
 	Values() []int32
@@ -11967,6 +13600,33 @@ type PatternFlowIpv4FragmentOffset interface {
 	SetMetricGroup(value string) PatternFlowIpv4FragmentOffset
 	Increment() PatternFlowIpv4FragmentOffsetCounter
 	Decrement() PatternFlowIpv4FragmentOffsetCounter
+}
+
+type PatternFlowIpv4FragmentOffsetChoiceEnum string
+
+var PatternFlowIpv4FragmentOffsetChoice = struct {
+	UNSPECIFIED PatternFlowIpv4FragmentOffsetChoiceEnum
+	VALUE       PatternFlowIpv4FragmentOffsetChoiceEnum
+	VALUES      PatternFlowIpv4FragmentOffsetChoiceEnum
+	INCREMENT   PatternFlowIpv4FragmentOffsetChoiceEnum
+	DECREMENT   PatternFlowIpv4FragmentOffsetChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowIpv4FragmentOffsetChoiceEnum("unspecified"),
+	VALUE:       PatternFlowIpv4FragmentOffsetChoiceEnum("value"),
+	VALUES:      PatternFlowIpv4FragmentOffsetChoiceEnum("values"),
+	INCREMENT:   PatternFlowIpv4FragmentOffsetChoiceEnum("increment"),
+	DECREMENT:   PatternFlowIpv4FragmentOffsetChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowIpv4FragmentOffset) Choice() PatternFlowIpv4FragmentOffsetChoiceEnum {
+	return PatternFlowIpv4FragmentOffsetChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowIpv4FragmentOffset) SetChoice(value PatternFlowIpv4FragmentOffsetChoiceEnum) PatternFlowIpv4FragmentOffset {
+	intValue := snappipb.PatternFlowIpv4FragmentOffset_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowIpv4FragmentOffset_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -11979,6 +13639,7 @@ func (obj *patternFlowIpv4FragmentOffset) Value() int32 {
 //  description is TBD
 func (obj *patternFlowIpv4FragmentOffset) SetValue(value int32) PatternFlowIpv4FragmentOffset {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowIpv4FragmentOffsetChoice.VALUE)
 	return obj
 }
 
@@ -11992,6 +13653,7 @@ func (obj *patternFlowIpv4FragmentOffset) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowIpv4FragmentOffset) SetValues(value []int32) PatternFlowIpv4FragmentOffset {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowIpv4FragmentOffsetChoice.VALUES)
 	return obj
 }
 
@@ -12005,6 +13667,7 @@ func (obj *patternFlowIpv4FragmentOffset) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowIpv4FragmentOffset) SetMetricGroup(value string) PatternFlowIpv4FragmentOffset {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -12014,8 +13677,8 @@ func (obj *patternFlowIpv4FragmentOffset) Increment() PatternFlowIpv4FragmentOff
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowIpv4FragmentOffsetCounter{}
 	}
+	obj.SetChoice(PatternFlowIpv4FragmentOffsetChoice.INCREMENT)
 	return &patternFlowIpv4FragmentOffsetCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowIpv4FragmentOffsetCounter
@@ -12024,8 +13687,8 @@ func (obj *patternFlowIpv4FragmentOffset) Decrement() PatternFlowIpv4FragmentOff
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowIpv4FragmentOffsetCounter{}
 	}
+	obj.SetChoice(PatternFlowIpv4FragmentOffsetChoice.DECREMENT)
 	return &patternFlowIpv4FragmentOffsetCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowIpv4TimeToLive struct {
@@ -12074,6 +13737,8 @@ type PatternFlowIpv4TimeToLive interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowIpv4TimeToLiveChoiceEnum
+	SetChoice(value PatternFlowIpv4TimeToLiveChoiceEnum) PatternFlowIpv4TimeToLive
 	Value() int32
 	SetValue(value int32) PatternFlowIpv4TimeToLive
 	Values() []int32
@@ -12082,6 +13747,33 @@ type PatternFlowIpv4TimeToLive interface {
 	SetMetricGroup(value string) PatternFlowIpv4TimeToLive
 	Increment() PatternFlowIpv4TimeToLiveCounter
 	Decrement() PatternFlowIpv4TimeToLiveCounter
+}
+
+type PatternFlowIpv4TimeToLiveChoiceEnum string
+
+var PatternFlowIpv4TimeToLiveChoice = struct {
+	UNSPECIFIED PatternFlowIpv4TimeToLiveChoiceEnum
+	VALUE       PatternFlowIpv4TimeToLiveChoiceEnum
+	VALUES      PatternFlowIpv4TimeToLiveChoiceEnum
+	INCREMENT   PatternFlowIpv4TimeToLiveChoiceEnum
+	DECREMENT   PatternFlowIpv4TimeToLiveChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowIpv4TimeToLiveChoiceEnum("unspecified"),
+	VALUE:       PatternFlowIpv4TimeToLiveChoiceEnum("value"),
+	VALUES:      PatternFlowIpv4TimeToLiveChoiceEnum("values"),
+	INCREMENT:   PatternFlowIpv4TimeToLiveChoiceEnum("increment"),
+	DECREMENT:   PatternFlowIpv4TimeToLiveChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowIpv4TimeToLive) Choice() PatternFlowIpv4TimeToLiveChoiceEnum {
+	return PatternFlowIpv4TimeToLiveChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowIpv4TimeToLive) SetChoice(value PatternFlowIpv4TimeToLiveChoiceEnum) PatternFlowIpv4TimeToLive {
+	intValue := snappipb.PatternFlowIpv4TimeToLive_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowIpv4TimeToLive_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -12094,6 +13786,7 @@ func (obj *patternFlowIpv4TimeToLive) Value() int32 {
 //  description is TBD
 func (obj *patternFlowIpv4TimeToLive) SetValue(value int32) PatternFlowIpv4TimeToLive {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowIpv4TimeToLiveChoice.VALUE)
 	return obj
 }
 
@@ -12107,6 +13800,7 @@ func (obj *patternFlowIpv4TimeToLive) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowIpv4TimeToLive) SetValues(value []int32) PatternFlowIpv4TimeToLive {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowIpv4TimeToLiveChoice.VALUES)
 	return obj
 }
 
@@ -12120,6 +13814,7 @@ func (obj *patternFlowIpv4TimeToLive) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowIpv4TimeToLive) SetMetricGroup(value string) PatternFlowIpv4TimeToLive {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -12129,8 +13824,8 @@ func (obj *patternFlowIpv4TimeToLive) Increment() PatternFlowIpv4TimeToLiveCount
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowIpv4TimeToLiveCounter{}
 	}
+	obj.SetChoice(PatternFlowIpv4TimeToLiveChoice.INCREMENT)
 	return &patternFlowIpv4TimeToLiveCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowIpv4TimeToLiveCounter
@@ -12139,8 +13834,8 @@ func (obj *patternFlowIpv4TimeToLive) Decrement() PatternFlowIpv4TimeToLiveCount
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowIpv4TimeToLiveCounter{}
 	}
+	obj.SetChoice(PatternFlowIpv4TimeToLiveChoice.DECREMENT)
 	return &patternFlowIpv4TimeToLiveCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowIpv4Protocol struct {
@@ -12189,6 +13884,8 @@ type PatternFlowIpv4Protocol interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowIpv4ProtocolChoiceEnum
+	SetChoice(value PatternFlowIpv4ProtocolChoiceEnum) PatternFlowIpv4Protocol
 	Value() int32
 	SetValue(value int32) PatternFlowIpv4Protocol
 	Values() []int32
@@ -12197,6 +13894,33 @@ type PatternFlowIpv4Protocol interface {
 	SetMetricGroup(value string) PatternFlowIpv4Protocol
 	Increment() PatternFlowIpv4ProtocolCounter
 	Decrement() PatternFlowIpv4ProtocolCounter
+}
+
+type PatternFlowIpv4ProtocolChoiceEnum string
+
+var PatternFlowIpv4ProtocolChoice = struct {
+	UNSPECIFIED PatternFlowIpv4ProtocolChoiceEnum
+	VALUE       PatternFlowIpv4ProtocolChoiceEnum
+	VALUES      PatternFlowIpv4ProtocolChoiceEnum
+	INCREMENT   PatternFlowIpv4ProtocolChoiceEnum
+	DECREMENT   PatternFlowIpv4ProtocolChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowIpv4ProtocolChoiceEnum("unspecified"),
+	VALUE:       PatternFlowIpv4ProtocolChoiceEnum("value"),
+	VALUES:      PatternFlowIpv4ProtocolChoiceEnum("values"),
+	INCREMENT:   PatternFlowIpv4ProtocolChoiceEnum("increment"),
+	DECREMENT:   PatternFlowIpv4ProtocolChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowIpv4Protocol) Choice() PatternFlowIpv4ProtocolChoiceEnum {
+	return PatternFlowIpv4ProtocolChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowIpv4Protocol) SetChoice(value PatternFlowIpv4ProtocolChoiceEnum) PatternFlowIpv4Protocol {
+	intValue := snappipb.PatternFlowIpv4Protocol_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowIpv4Protocol_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -12209,6 +13933,7 @@ func (obj *patternFlowIpv4Protocol) Value() int32 {
 //  description is TBD
 func (obj *patternFlowIpv4Protocol) SetValue(value int32) PatternFlowIpv4Protocol {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowIpv4ProtocolChoice.VALUE)
 	return obj
 }
 
@@ -12222,6 +13947,7 @@ func (obj *patternFlowIpv4Protocol) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowIpv4Protocol) SetValues(value []int32) PatternFlowIpv4Protocol {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowIpv4ProtocolChoice.VALUES)
 	return obj
 }
 
@@ -12235,6 +13961,7 @@ func (obj *patternFlowIpv4Protocol) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowIpv4Protocol) SetMetricGroup(value string) PatternFlowIpv4Protocol {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -12244,8 +13971,8 @@ func (obj *patternFlowIpv4Protocol) Increment() PatternFlowIpv4ProtocolCounter {
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowIpv4ProtocolCounter{}
 	}
+	obj.SetChoice(PatternFlowIpv4ProtocolChoice.INCREMENT)
 	return &patternFlowIpv4ProtocolCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowIpv4ProtocolCounter
@@ -12254,8 +13981,8 @@ func (obj *patternFlowIpv4Protocol) Decrement() PatternFlowIpv4ProtocolCounter {
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowIpv4ProtocolCounter{}
 	}
+	obj.SetChoice(PatternFlowIpv4ProtocolChoice.DECREMENT)
 	return &patternFlowIpv4ProtocolCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowIpv4HeaderChecksum struct {
@@ -12304,8 +14031,57 @@ type PatternFlowIpv4HeaderChecksum interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowIpv4HeaderChecksumChoiceEnum
+	SetChoice(value PatternFlowIpv4HeaderChecksumChoiceEnum) PatternFlowIpv4HeaderChecksum
+	Generated() PatternFlowIpv4HeaderChecksumGeneratedEnum
+	SetGenerated(value PatternFlowIpv4HeaderChecksumGeneratedEnum) PatternFlowIpv4HeaderChecksum
 	Custom() int32
 	SetCustom(value int32) PatternFlowIpv4HeaderChecksum
+}
+
+type PatternFlowIpv4HeaderChecksumChoiceEnum string
+
+var PatternFlowIpv4HeaderChecksumChoice = struct {
+	UNSPECIFIED PatternFlowIpv4HeaderChecksumChoiceEnum
+	GENERATED   PatternFlowIpv4HeaderChecksumChoiceEnum
+	CUSTOM      PatternFlowIpv4HeaderChecksumChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowIpv4HeaderChecksumChoiceEnum("unspecified"),
+	GENERATED:   PatternFlowIpv4HeaderChecksumChoiceEnum("generated"),
+	CUSTOM:      PatternFlowIpv4HeaderChecksumChoiceEnum("custom"),
+}
+
+func (obj *patternFlowIpv4HeaderChecksum) Choice() PatternFlowIpv4HeaderChecksumChoiceEnum {
+	return PatternFlowIpv4HeaderChecksumChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowIpv4HeaderChecksum) SetChoice(value PatternFlowIpv4HeaderChecksumChoiceEnum) PatternFlowIpv4HeaderChecksum {
+	intValue := snappipb.PatternFlowIpv4HeaderChecksum_Choice_Enum_value[string(value)]
+	obj.obj.Choice = snappipb.PatternFlowIpv4HeaderChecksum_Choice_Enum(intValue)
+	return obj
+}
+
+type PatternFlowIpv4HeaderChecksumGeneratedEnum string
+
+var PatternFlowIpv4HeaderChecksumGenerated = struct {
+	UNSPECIFIED PatternFlowIpv4HeaderChecksumGeneratedEnum
+	GOOD        PatternFlowIpv4HeaderChecksumGeneratedEnum
+	BAD         PatternFlowIpv4HeaderChecksumGeneratedEnum
+}{
+	UNSPECIFIED: PatternFlowIpv4HeaderChecksumGeneratedEnum("unspecified"),
+	GOOD:        PatternFlowIpv4HeaderChecksumGeneratedEnum("good"),
+	BAD:         PatternFlowIpv4HeaderChecksumGeneratedEnum("bad"),
+}
+
+func (obj *patternFlowIpv4HeaderChecksum) Generated() PatternFlowIpv4HeaderChecksumGeneratedEnum {
+	return PatternFlowIpv4HeaderChecksumGeneratedEnum(obj.obj.Generated.Enum().String())
+}
+
+func (obj *patternFlowIpv4HeaderChecksum) SetGenerated(value PatternFlowIpv4HeaderChecksumGeneratedEnum) PatternFlowIpv4HeaderChecksum {
+	intValue := snappipb.PatternFlowIpv4HeaderChecksum_Generated_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowIpv4HeaderChecksum_Generated_Enum(intValue)
+	obj.obj.Generated = &enumValue
+	return obj
 }
 
 // Custom returns a int32
@@ -12318,6 +14094,7 @@ func (obj *patternFlowIpv4HeaderChecksum) Custom() int32 {
 //  A custom checksum value
 func (obj *patternFlowIpv4HeaderChecksum) SetCustom(value int32) PatternFlowIpv4HeaderChecksum {
 	obj.obj.Custom = &value
+	obj.SetChoice(PatternFlowIpv4HeaderChecksumChoice.CUSTOM)
 	return obj
 }
 
@@ -12367,6 +14144,8 @@ type PatternFlowIpv4Src interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowIpv4SrcChoiceEnum
+	SetChoice(value PatternFlowIpv4SrcChoiceEnum) PatternFlowIpv4Src
 	Value() string
 	SetValue(value string) PatternFlowIpv4Src
 	Values() []string
@@ -12375,6 +14154,33 @@ type PatternFlowIpv4Src interface {
 	SetMetricGroup(value string) PatternFlowIpv4Src
 	Increment() PatternFlowIpv4SrcCounter
 	Decrement() PatternFlowIpv4SrcCounter
+}
+
+type PatternFlowIpv4SrcChoiceEnum string
+
+var PatternFlowIpv4SrcChoice = struct {
+	UNSPECIFIED PatternFlowIpv4SrcChoiceEnum
+	VALUE       PatternFlowIpv4SrcChoiceEnum
+	VALUES      PatternFlowIpv4SrcChoiceEnum
+	INCREMENT   PatternFlowIpv4SrcChoiceEnum
+	DECREMENT   PatternFlowIpv4SrcChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowIpv4SrcChoiceEnum("unspecified"),
+	VALUE:       PatternFlowIpv4SrcChoiceEnum("value"),
+	VALUES:      PatternFlowIpv4SrcChoiceEnum("values"),
+	INCREMENT:   PatternFlowIpv4SrcChoiceEnum("increment"),
+	DECREMENT:   PatternFlowIpv4SrcChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowIpv4Src) Choice() PatternFlowIpv4SrcChoiceEnum {
+	return PatternFlowIpv4SrcChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowIpv4Src) SetChoice(value PatternFlowIpv4SrcChoiceEnum) PatternFlowIpv4Src {
+	intValue := snappipb.PatternFlowIpv4Src_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowIpv4Src_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a string
@@ -12387,6 +14193,7 @@ func (obj *patternFlowIpv4Src) Value() string {
 //  description is TBD
 func (obj *patternFlowIpv4Src) SetValue(value string) PatternFlowIpv4Src {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowIpv4SrcChoice.VALUE)
 	return obj
 }
 
@@ -12400,6 +14207,7 @@ func (obj *patternFlowIpv4Src) Values() []string {
 //  description is TBD
 func (obj *patternFlowIpv4Src) SetValues(value []string) PatternFlowIpv4Src {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowIpv4SrcChoice.VALUES)
 	return obj
 }
 
@@ -12413,6 +14221,7 @@ func (obj *patternFlowIpv4Src) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowIpv4Src) SetMetricGroup(value string) PatternFlowIpv4Src {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -12422,8 +14231,8 @@ func (obj *patternFlowIpv4Src) Increment() PatternFlowIpv4SrcCounter {
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowIpv4SrcCounter{}
 	}
+	obj.SetChoice(PatternFlowIpv4SrcChoice.INCREMENT)
 	return &patternFlowIpv4SrcCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowIpv4SrcCounter
@@ -12432,8 +14241,8 @@ func (obj *patternFlowIpv4Src) Decrement() PatternFlowIpv4SrcCounter {
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowIpv4SrcCounter{}
 	}
+	obj.SetChoice(PatternFlowIpv4SrcChoice.DECREMENT)
 	return &patternFlowIpv4SrcCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowIpv4Dst struct {
@@ -12482,6 +14291,8 @@ type PatternFlowIpv4Dst interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowIpv4DstChoiceEnum
+	SetChoice(value PatternFlowIpv4DstChoiceEnum) PatternFlowIpv4Dst
 	Value() string
 	SetValue(value string) PatternFlowIpv4Dst
 	Values() []string
@@ -12490,6 +14301,33 @@ type PatternFlowIpv4Dst interface {
 	SetMetricGroup(value string) PatternFlowIpv4Dst
 	Increment() PatternFlowIpv4DstCounter
 	Decrement() PatternFlowIpv4DstCounter
+}
+
+type PatternFlowIpv4DstChoiceEnum string
+
+var PatternFlowIpv4DstChoice = struct {
+	UNSPECIFIED PatternFlowIpv4DstChoiceEnum
+	VALUE       PatternFlowIpv4DstChoiceEnum
+	VALUES      PatternFlowIpv4DstChoiceEnum
+	INCREMENT   PatternFlowIpv4DstChoiceEnum
+	DECREMENT   PatternFlowIpv4DstChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowIpv4DstChoiceEnum("unspecified"),
+	VALUE:       PatternFlowIpv4DstChoiceEnum("value"),
+	VALUES:      PatternFlowIpv4DstChoiceEnum("values"),
+	INCREMENT:   PatternFlowIpv4DstChoiceEnum("increment"),
+	DECREMENT:   PatternFlowIpv4DstChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowIpv4Dst) Choice() PatternFlowIpv4DstChoiceEnum {
+	return PatternFlowIpv4DstChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowIpv4Dst) SetChoice(value PatternFlowIpv4DstChoiceEnum) PatternFlowIpv4Dst {
+	intValue := snappipb.PatternFlowIpv4Dst_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowIpv4Dst_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a string
@@ -12502,6 +14340,7 @@ func (obj *patternFlowIpv4Dst) Value() string {
 //  description is TBD
 func (obj *patternFlowIpv4Dst) SetValue(value string) PatternFlowIpv4Dst {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowIpv4DstChoice.VALUE)
 	return obj
 }
 
@@ -12515,6 +14354,7 @@ func (obj *patternFlowIpv4Dst) Values() []string {
 //  description is TBD
 func (obj *patternFlowIpv4Dst) SetValues(value []string) PatternFlowIpv4Dst {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowIpv4DstChoice.VALUES)
 	return obj
 }
 
@@ -12528,6 +14368,7 @@ func (obj *patternFlowIpv4Dst) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowIpv4Dst) SetMetricGroup(value string) PatternFlowIpv4Dst {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -12537,8 +14378,8 @@ func (obj *patternFlowIpv4Dst) Increment() PatternFlowIpv4DstCounter {
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowIpv4DstCounter{}
 	}
+	obj.SetChoice(PatternFlowIpv4DstChoice.INCREMENT)
 	return &patternFlowIpv4DstCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowIpv4DstCounter
@@ -12547,8 +14388,8 @@ func (obj *patternFlowIpv4Dst) Decrement() PatternFlowIpv4DstCounter {
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowIpv4DstCounter{}
 	}
+	obj.SetChoice(PatternFlowIpv4DstChoice.DECREMENT)
 	return &patternFlowIpv4DstCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowIpv6Version struct {
@@ -12597,6 +14438,8 @@ type PatternFlowIpv6Version interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowIpv6VersionChoiceEnum
+	SetChoice(value PatternFlowIpv6VersionChoiceEnum) PatternFlowIpv6Version
 	Value() int32
 	SetValue(value int32) PatternFlowIpv6Version
 	Values() []int32
@@ -12605,6 +14448,33 @@ type PatternFlowIpv6Version interface {
 	SetMetricGroup(value string) PatternFlowIpv6Version
 	Increment() PatternFlowIpv6VersionCounter
 	Decrement() PatternFlowIpv6VersionCounter
+}
+
+type PatternFlowIpv6VersionChoiceEnum string
+
+var PatternFlowIpv6VersionChoice = struct {
+	UNSPECIFIED PatternFlowIpv6VersionChoiceEnum
+	VALUE       PatternFlowIpv6VersionChoiceEnum
+	VALUES      PatternFlowIpv6VersionChoiceEnum
+	INCREMENT   PatternFlowIpv6VersionChoiceEnum
+	DECREMENT   PatternFlowIpv6VersionChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowIpv6VersionChoiceEnum("unspecified"),
+	VALUE:       PatternFlowIpv6VersionChoiceEnum("value"),
+	VALUES:      PatternFlowIpv6VersionChoiceEnum("values"),
+	INCREMENT:   PatternFlowIpv6VersionChoiceEnum("increment"),
+	DECREMENT:   PatternFlowIpv6VersionChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowIpv6Version) Choice() PatternFlowIpv6VersionChoiceEnum {
+	return PatternFlowIpv6VersionChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowIpv6Version) SetChoice(value PatternFlowIpv6VersionChoiceEnum) PatternFlowIpv6Version {
+	intValue := snappipb.PatternFlowIpv6Version_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowIpv6Version_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -12617,6 +14487,7 @@ func (obj *patternFlowIpv6Version) Value() int32 {
 //  description is TBD
 func (obj *patternFlowIpv6Version) SetValue(value int32) PatternFlowIpv6Version {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowIpv6VersionChoice.VALUE)
 	return obj
 }
 
@@ -12630,6 +14501,7 @@ func (obj *patternFlowIpv6Version) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowIpv6Version) SetValues(value []int32) PatternFlowIpv6Version {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowIpv6VersionChoice.VALUES)
 	return obj
 }
 
@@ -12643,6 +14515,7 @@ func (obj *patternFlowIpv6Version) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowIpv6Version) SetMetricGroup(value string) PatternFlowIpv6Version {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -12652,8 +14525,8 @@ func (obj *patternFlowIpv6Version) Increment() PatternFlowIpv6VersionCounter {
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowIpv6VersionCounter{}
 	}
+	obj.SetChoice(PatternFlowIpv6VersionChoice.INCREMENT)
 	return &patternFlowIpv6VersionCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowIpv6VersionCounter
@@ -12662,8 +14535,8 @@ func (obj *patternFlowIpv6Version) Decrement() PatternFlowIpv6VersionCounter {
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowIpv6VersionCounter{}
 	}
+	obj.SetChoice(PatternFlowIpv6VersionChoice.DECREMENT)
 	return &patternFlowIpv6VersionCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowIpv6TrafficClass struct {
@@ -12712,6 +14585,8 @@ type PatternFlowIpv6TrafficClass interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowIpv6TrafficClassChoiceEnum
+	SetChoice(value PatternFlowIpv6TrafficClassChoiceEnum) PatternFlowIpv6TrafficClass
 	Value() int32
 	SetValue(value int32) PatternFlowIpv6TrafficClass
 	Values() []int32
@@ -12720,6 +14595,33 @@ type PatternFlowIpv6TrafficClass interface {
 	SetMetricGroup(value string) PatternFlowIpv6TrafficClass
 	Increment() PatternFlowIpv6TrafficClassCounter
 	Decrement() PatternFlowIpv6TrafficClassCounter
+}
+
+type PatternFlowIpv6TrafficClassChoiceEnum string
+
+var PatternFlowIpv6TrafficClassChoice = struct {
+	UNSPECIFIED PatternFlowIpv6TrafficClassChoiceEnum
+	VALUE       PatternFlowIpv6TrafficClassChoiceEnum
+	VALUES      PatternFlowIpv6TrafficClassChoiceEnum
+	INCREMENT   PatternFlowIpv6TrafficClassChoiceEnum
+	DECREMENT   PatternFlowIpv6TrafficClassChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowIpv6TrafficClassChoiceEnum("unspecified"),
+	VALUE:       PatternFlowIpv6TrafficClassChoiceEnum("value"),
+	VALUES:      PatternFlowIpv6TrafficClassChoiceEnum("values"),
+	INCREMENT:   PatternFlowIpv6TrafficClassChoiceEnum("increment"),
+	DECREMENT:   PatternFlowIpv6TrafficClassChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowIpv6TrafficClass) Choice() PatternFlowIpv6TrafficClassChoiceEnum {
+	return PatternFlowIpv6TrafficClassChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowIpv6TrafficClass) SetChoice(value PatternFlowIpv6TrafficClassChoiceEnum) PatternFlowIpv6TrafficClass {
+	intValue := snappipb.PatternFlowIpv6TrafficClass_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowIpv6TrafficClass_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -12732,6 +14634,7 @@ func (obj *patternFlowIpv6TrafficClass) Value() int32 {
 //  description is TBD
 func (obj *patternFlowIpv6TrafficClass) SetValue(value int32) PatternFlowIpv6TrafficClass {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowIpv6TrafficClassChoice.VALUE)
 	return obj
 }
 
@@ -12745,6 +14648,7 @@ func (obj *patternFlowIpv6TrafficClass) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowIpv6TrafficClass) SetValues(value []int32) PatternFlowIpv6TrafficClass {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowIpv6TrafficClassChoice.VALUES)
 	return obj
 }
 
@@ -12758,6 +14662,7 @@ func (obj *patternFlowIpv6TrafficClass) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowIpv6TrafficClass) SetMetricGroup(value string) PatternFlowIpv6TrafficClass {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -12767,8 +14672,8 @@ func (obj *patternFlowIpv6TrafficClass) Increment() PatternFlowIpv6TrafficClassC
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowIpv6TrafficClassCounter{}
 	}
+	obj.SetChoice(PatternFlowIpv6TrafficClassChoice.INCREMENT)
 	return &patternFlowIpv6TrafficClassCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowIpv6TrafficClassCounter
@@ -12777,8 +14682,8 @@ func (obj *patternFlowIpv6TrafficClass) Decrement() PatternFlowIpv6TrafficClassC
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowIpv6TrafficClassCounter{}
 	}
+	obj.SetChoice(PatternFlowIpv6TrafficClassChoice.DECREMENT)
 	return &patternFlowIpv6TrafficClassCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowIpv6FlowLabel struct {
@@ -12827,6 +14732,8 @@ type PatternFlowIpv6FlowLabel interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowIpv6FlowLabelChoiceEnum
+	SetChoice(value PatternFlowIpv6FlowLabelChoiceEnum) PatternFlowIpv6FlowLabel
 	Value() int32
 	SetValue(value int32) PatternFlowIpv6FlowLabel
 	Values() []int32
@@ -12835,6 +14742,33 @@ type PatternFlowIpv6FlowLabel interface {
 	SetMetricGroup(value string) PatternFlowIpv6FlowLabel
 	Increment() PatternFlowIpv6FlowLabelCounter
 	Decrement() PatternFlowIpv6FlowLabelCounter
+}
+
+type PatternFlowIpv6FlowLabelChoiceEnum string
+
+var PatternFlowIpv6FlowLabelChoice = struct {
+	UNSPECIFIED PatternFlowIpv6FlowLabelChoiceEnum
+	VALUE       PatternFlowIpv6FlowLabelChoiceEnum
+	VALUES      PatternFlowIpv6FlowLabelChoiceEnum
+	INCREMENT   PatternFlowIpv6FlowLabelChoiceEnum
+	DECREMENT   PatternFlowIpv6FlowLabelChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowIpv6FlowLabelChoiceEnum("unspecified"),
+	VALUE:       PatternFlowIpv6FlowLabelChoiceEnum("value"),
+	VALUES:      PatternFlowIpv6FlowLabelChoiceEnum("values"),
+	INCREMENT:   PatternFlowIpv6FlowLabelChoiceEnum("increment"),
+	DECREMENT:   PatternFlowIpv6FlowLabelChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowIpv6FlowLabel) Choice() PatternFlowIpv6FlowLabelChoiceEnum {
+	return PatternFlowIpv6FlowLabelChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowIpv6FlowLabel) SetChoice(value PatternFlowIpv6FlowLabelChoiceEnum) PatternFlowIpv6FlowLabel {
+	intValue := snappipb.PatternFlowIpv6FlowLabel_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowIpv6FlowLabel_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -12847,6 +14781,7 @@ func (obj *patternFlowIpv6FlowLabel) Value() int32 {
 //  description is TBD
 func (obj *patternFlowIpv6FlowLabel) SetValue(value int32) PatternFlowIpv6FlowLabel {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowIpv6FlowLabelChoice.VALUE)
 	return obj
 }
 
@@ -12860,6 +14795,7 @@ func (obj *patternFlowIpv6FlowLabel) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowIpv6FlowLabel) SetValues(value []int32) PatternFlowIpv6FlowLabel {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowIpv6FlowLabelChoice.VALUES)
 	return obj
 }
 
@@ -12873,6 +14809,7 @@ func (obj *patternFlowIpv6FlowLabel) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowIpv6FlowLabel) SetMetricGroup(value string) PatternFlowIpv6FlowLabel {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -12882,8 +14819,8 @@ func (obj *patternFlowIpv6FlowLabel) Increment() PatternFlowIpv6FlowLabelCounter
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowIpv6FlowLabelCounter{}
 	}
+	obj.SetChoice(PatternFlowIpv6FlowLabelChoice.INCREMENT)
 	return &patternFlowIpv6FlowLabelCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowIpv6FlowLabelCounter
@@ -12892,8 +14829,8 @@ func (obj *patternFlowIpv6FlowLabel) Decrement() PatternFlowIpv6FlowLabelCounter
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowIpv6FlowLabelCounter{}
 	}
+	obj.SetChoice(PatternFlowIpv6FlowLabelChoice.DECREMENT)
 	return &patternFlowIpv6FlowLabelCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowIpv6PayloadLength struct {
@@ -12942,14 +14879,47 @@ type PatternFlowIpv6PayloadLength interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowIpv6PayloadLengthChoiceEnum
+	SetChoice(value PatternFlowIpv6PayloadLengthChoiceEnum) PatternFlowIpv6PayloadLength
 	Value() int32
 	SetValue(value int32) PatternFlowIpv6PayloadLength
 	Values() []int32
 	SetValues(value []int32) PatternFlowIpv6PayloadLength
+	Auto() PatternFlowIpv6PayloadLengthAutoEnum
+	SetAuto(value PatternFlowIpv6PayloadLengthAutoEnum) PatternFlowIpv6PayloadLength
 	MetricGroup() string
 	SetMetricGroup(value string) PatternFlowIpv6PayloadLength
 	Increment() PatternFlowIpv6PayloadLengthCounter
 	Decrement() PatternFlowIpv6PayloadLengthCounter
+}
+
+type PatternFlowIpv6PayloadLengthChoiceEnum string
+
+var PatternFlowIpv6PayloadLengthChoice = struct {
+	UNSPECIFIED PatternFlowIpv6PayloadLengthChoiceEnum
+	VALUE       PatternFlowIpv6PayloadLengthChoiceEnum
+	VALUES      PatternFlowIpv6PayloadLengthChoiceEnum
+	AUTO        PatternFlowIpv6PayloadLengthChoiceEnum
+	INCREMENT   PatternFlowIpv6PayloadLengthChoiceEnum
+	DECREMENT   PatternFlowIpv6PayloadLengthChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowIpv6PayloadLengthChoiceEnum("unspecified"),
+	VALUE:       PatternFlowIpv6PayloadLengthChoiceEnum("value"),
+	VALUES:      PatternFlowIpv6PayloadLengthChoiceEnum("values"),
+	AUTO:        PatternFlowIpv6PayloadLengthChoiceEnum("auto"),
+	INCREMENT:   PatternFlowIpv6PayloadLengthChoiceEnum("increment"),
+	DECREMENT:   PatternFlowIpv6PayloadLengthChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowIpv6PayloadLength) Choice() PatternFlowIpv6PayloadLengthChoiceEnum {
+	return PatternFlowIpv6PayloadLengthChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowIpv6PayloadLength) SetChoice(value PatternFlowIpv6PayloadLengthChoiceEnum) PatternFlowIpv6PayloadLength {
+	intValue := snappipb.PatternFlowIpv6PayloadLength_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowIpv6PayloadLength_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -12962,6 +14932,7 @@ func (obj *patternFlowIpv6PayloadLength) Value() int32 {
 //  description is TBD
 func (obj *patternFlowIpv6PayloadLength) SetValue(value int32) PatternFlowIpv6PayloadLength {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowIpv6PayloadLengthChoice.VALUE)
 	return obj
 }
 
@@ -12975,6 +14946,28 @@ func (obj *patternFlowIpv6PayloadLength) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowIpv6PayloadLength) SetValues(value []int32) PatternFlowIpv6PayloadLength {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowIpv6PayloadLengthChoice.VALUES)
+	return obj
+}
+
+type PatternFlowIpv6PayloadLengthAutoEnum string
+
+var PatternFlowIpv6PayloadLengthAuto = struct {
+	UNSPECIFIED PatternFlowIpv6PayloadLengthAutoEnum
+	AUTO        PatternFlowIpv6PayloadLengthAutoEnum
+}{
+	UNSPECIFIED: PatternFlowIpv6PayloadLengthAutoEnum("unspecified"),
+	AUTO:        PatternFlowIpv6PayloadLengthAutoEnum("auto"),
+}
+
+func (obj *patternFlowIpv6PayloadLength) Auto() PatternFlowIpv6PayloadLengthAutoEnum {
+	return PatternFlowIpv6PayloadLengthAutoEnum(obj.obj.Auto.Enum().String())
+}
+
+func (obj *patternFlowIpv6PayloadLength) SetAuto(value PatternFlowIpv6PayloadLengthAutoEnum) PatternFlowIpv6PayloadLength {
+	intValue := snappipb.PatternFlowIpv6PayloadLength_Auto_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowIpv6PayloadLength_Auto_Enum(intValue)
+	obj.obj.Auto = &enumValue
 	return obj
 }
 
@@ -12988,6 +14981,7 @@ func (obj *patternFlowIpv6PayloadLength) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowIpv6PayloadLength) SetMetricGroup(value string) PatternFlowIpv6PayloadLength {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -12997,8 +14991,8 @@ func (obj *patternFlowIpv6PayloadLength) Increment() PatternFlowIpv6PayloadLengt
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowIpv6PayloadLengthCounter{}
 	}
+	obj.SetChoice(PatternFlowIpv6PayloadLengthChoice.INCREMENT)
 	return &patternFlowIpv6PayloadLengthCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowIpv6PayloadLengthCounter
@@ -13007,8 +15001,8 @@ func (obj *patternFlowIpv6PayloadLength) Decrement() PatternFlowIpv6PayloadLengt
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowIpv6PayloadLengthCounter{}
 	}
+	obj.SetChoice(PatternFlowIpv6PayloadLengthChoice.DECREMENT)
 	return &patternFlowIpv6PayloadLengthCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowIpv6NextHeader struct {
@@ -13057,6 +15051,8 @@ type PatternFlowIpv6NextHeader interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowIpv6NextHeaderChoiceEnum
+	SetChoice(value PatternFlowIpv6NextHeaderChoiceEnum) PatternFlowIpv6NextHeader
 	Value() int32
 	SetValue(value int32) PatternFlowIpv6NextHeader
 	Values() []int32
@@ -13065,6 +15061,33 @@ type PatternFlowIpv6NextHeader interface {
 	SetMetricGroup(value string) PatternFlowIpv6NextHeader
 	Increment() PatternFlowIpv6NextHeaderCounter
 	Decrement() PatternFlowIpv6NextHeaderCounter
+}
+
+type PatternFlowIpv6NextHeaderChoiceEnum string
+
+var PatternFlowIpv6NextHeaderChoice = struct {
+	UNSPECIFIED PatternFlowIpv6NextHeaderChoiceEnum
+	VALUE       PatternFlowIpv6NextHeaderChoiceEnum
+	VALUES      PatternFlowIpv6NextHeaderChoiceEnum
+	INCREMENT   PatternFlowIpv6NextHeaderChoiceEnum
+	DECREMENT   PatternFlowIpv6NextHeaderChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowIpv6NextHeaderChoiceEnum("unspecified"),
+	VALUE:       PatternFlowIpv6NextHeaderChoiceEnum("value"),
+	VALUES:      PatternFlowIpv6NextHeaderChoiceEnum("values"),
+	INCREMENT:   PatternFlowIpv6NextHeaderChoiceEnum("increment"),
+	DECREMENT:   PatternFlowIpv6NextHeaderChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowIpv6NextHeader) Choice() PatternFlowIpv6NextHeaderChoiceEnum {
+	return PatternFlowIpv6NextHeaderChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowIpv6NextHeader) SetChoice(value PatternFlowIpv6NextHeaderChoiceEnum) PatternFlowIpv6NextHeader {
+	intValue := snappipb.PatternFlowIpv6NextHeader_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowIpv6NextHeader_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -13077,6 +15100,7 @@ func (obj *patternFlowIpv6NextHeader) Value() int32 {
 //  description is TBD
 func (obj *patternFlowIpv6NextHeader) SetValue(value int32) PatternFlowIpv6NextHeader {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowIpv6NextHeaderChoice.VALUE)
 	return obj
 }
 
@@ -13090,6 +15114,7 @@ func (obj *patternFlowIpv6NextHeader) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowIpv6NextHeader) SetValues(value []int32) PatternFlowIpv6NextHeader {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowIpv6NextHeaderChoice.VALUES)
 	return obj
 }
 
@@ -13103,6 +15128,7 @@ func (obj *patternFlowIpv6NextHeader) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowIpv6NextHeader) SetMetricGroup(value string) PatternFlowIpv6NextHeader {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -13112,8 +15138,8 @@ func (obj *patternFlowIpv6NextHeader) Increment() PatternFlowIpv6NextHeaderCount
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowIpv6NextHeaderCounter{}
 	}
+	obj.SetChoice(PatternFlowIpv6NextHeaderChoice.INCREMENT)
 	return &patternFlowIpv6NextHeaderCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowIpv6NextHeaderCounter
@@ -13122,8 +15148,8 @@ func (obj *patternFlowIpv6NextHeader) Decrement() PatternFlowIpv6NextHeaderCount
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowIpv6NextHeaderCounter{}
 	}
+	obj.SetChoice(PatternFlowIpv6NextHeaderChoice.DECREMENT)
 	return &patternFlowIpv6NextHeaderCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowIpv6HopLimit struct {
@@ -13172,6 +15198,8 @@ type PatternFlowIpv6HopLimit interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowIpv6HopLimitChoiceEnum
+	SetChoice(value PatternFlowIpv6HopLimitChoiceEnum) PatternFlowIpv6HopLimit
 	Value() int32
 	SetValue(value int32) PatternFlowIpv6HopLimit
 	Values() []int32
@@ -13180,6 +15208,33 @@ type PatternFlowIpv6HopLimit interface {
 	SetMetricGroup(value string) PatternFlowIpv6HopLimit
 	Increment() PatternFlowIpv6HopLimitCounter
 	Decrement() PatternFlowIpv6HopLimitCounter
+}
+
+type PatternFlowIpv6HopLimitChoiceEnum string
+
+var PatternFlowIpv6HopLimitChoice = struct {
+	UNSPECIFIED PatternFlowIpv6HopLimitChoiceEnum
+	VALUE       PatternFlowIpv6HopLimitChoiceEnum
+	VALUES      PatternFlowIpv6HopLimitChoiceEnum
+	INCREMENT   PatternFlowIpv6HopLimitChoiceEnum
+	DECREMENT   PatternFlowIpv6HopLimitChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowIpv6HopLimitChoiceEnum("unspecified"),
+	VALUE:       PatternFlowIpv6HopLimitChoiceEnum("value"),
+	VALUES:      PatternFlowIpv6HopLimitChoiceEnum("values"),
+	INCREMENT:   PatternFlowIpv6HopLimitChoiceEnum("increment"),
+	DECREMENT:   PatternFlowIpv6HopLimitChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowIpv6HopLimit) Choice() PatternFlowIpv6HopLimitChoiceEnum {
+	return PatternFlowIpv6HopLimitChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowIpv6HopLimit) SetChoice(value PatternFlowIpv6HopLimitChoiceEnum) PatternFlowIpv6HopLimit {
+	intValue := snappipb.PatternFlowIpv6HopLimit_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowIpv6HopLimit_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -13192,6 +15247,7 @@ func (obj *patternFlowIpv6HopLimit) Value() int32 {
 //  description is TBD
 func (obj *patternFlowIpv6HopLimit) SetValue(value int32) PatternFlowIpv6HopLimit {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowIpv6HopLimitChoice.VALUE)
 	return obj
 }
 
@@ -13205,6 +15261,7 @@ func (obj *patternFlowIpv6HopLimit) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowIpv6HopLimit) SetValues(value []int32) PatternFlowIpv6HopLimit {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowIpv6HopLimitChoice.VALUES)
 	return obj
 }
 
@@ -13218,6 +15275,7 @@ func (obj *patternFlowIpv6HopLimit) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowIpv6HopLimit) SetMetricGroup(value string) PatternFlowIpv6HopLimit {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -13227,8 +15285,8 @@ func (obj *patternFlowIpv6HopLimit) Increment() PatternFlowIpv6HopLimitCounter {
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowIpv6HopLimitCounter{}
 	}
+	obj.SetChoice(PatternFlowIpv6HopLimitChoice.INCREMENT)
 	return &patternFlowIpv6HopLimitCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowIpv6HopLimitCounter
@@ -13237,8 +15295,8 @@ func (obj *patternFlowIpv6HopLimit) Decrement() PatternFlowIpv6HopLimitCounter {
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowIpv6HopLimitCounter{}
 	}
+	obj.SetChoice(PatternFlowIpv6HopLimitChoice.DECREMENT)
 	return &patternFlowIpv6HopLimitCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowIpv6Src struct {
@@ -13287,6 +15345,8 @@ type PatternFlowIpv6Src interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowIpv6SrcChoiceEnum
+	SetChoice(value PatternFlowIpv6SrcChoiceEnum) PatternFlowIpv6Src
 	Value() string
 	SetValue(value string) PatternFlowIpv6Src
 	Values() []string
@@ -13295,6 +15355,33 @@ type PatternFlowIpv6Src interface {
 	SetMetricGroup(value string) PatternFlowIpv6Src
 	Increment() PatternFlowIpv6SrcCounter
 	Decrement() PatternFlowIpv6SrcCounter
+}
+
+type PatternFlowIpv6SrcChoiceEnum string
+
+var PatternFlowIpv6SrcChoice = struct {
+	UNSPECIFIED PatternFlowIpv6SrcChoiceEnum
+	VALUE       PatternFlowIpv6SrcChoiceEnum
+	VALUES      PatternFlowIpv6SrcChoiceEnum
+	INCREMENT   PatternFlowIpv6SrcChoiceEnum
+	DECREMENT   PatternFlowIpv6SrcChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowIpv6SrcChoiceEnum("unspecified"),
+	VALUE:       PatternFlowIpv6SrcChoiceEnum("value"),
+	VALUES:      PatternFlowIpv6SrcChoiceEnum("values"),
+	INCREMENT:   PatternFlowIpv6SrcChoiceEnum("increment"),
+	DECREMENT:   PatternFlowIpv6SrcChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowIpv6Src) Choice() PatternFlowIpv6SrcChoiceEnum {
+	return PatternFlowIpv6SrcChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowIpv6Src) SetChoice(value PatternFlowIpv6SrcChoiceEnum) PatternFlowIpv6Src {
+	intValue := snappipb.PatternFlowIpv6Src_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowIpv6Src_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a string
@@ -13307,6 +15394,7 @@ func (obj *patternFlowIpv6Src) Value() string {
 //  description is TBD
 func (obj *patternFlowIpv6Src) SetValue(value string) PatternFlowIpv6Src {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowIpv6SrcChoice.VALUE)
 	return obj
 }
 
@@ -13320,6 +15408,7 @@ func (obj *patternFlowIpv6Src) Values() []string {
 //  description is TBD
 func (obj *patternFlowIpv6Src) SetValues(value []string) PatternFlowIpv6Src {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowIpv6SrcChoice.VALUES)
 	return obj
 }
 
@@ -13333,6 +15422,7 @@ func (obj *patternFlowIpv6Src) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowIpv6Src) SetMetricGroup(value string) PatternFlowIpv6Src {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -13342,8 +15432,8 @@ func (obj *patternFlowIpv6Src) Increment() PatternFlowIpv6SrcCounter {
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowIpv6SrcCounter{}
 	}
+	obj.SetChoice(PatternFlowIpv6SrcChoice.INCREMENT)
 	return &patternFlowIpv6SrcCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowIpv6SrcCounter
@@ -13352,8 +15442,8 @@ func (obj *patternFlowIpv6Src) Decrement() PatternFlowIpv6SrcCounter {
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowIpv6SrcCounter{}
 	}
+	obj.SetChoice(PatternFlowIpv6SrcChoice.DECREMENT)
 	return &patternFlowIpv6SrcCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowIpv6Dst struct {
@@ -13402,6 +15492,8 @@ type PatternFlowIpv6Dst interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowIpv6DstChoiceEnum
+	SetChoice(value PatternFlowIpv6DstChoiceEnum) PatternFlowIpv6Dst
 	Value() string
 	SetValue(value string) PatternFlowIpv6Dst
 	Values() []string
@@ -13410,6 +15502,33 @@ type PatternFlowIpv6Dst interface {
 	SetMetricGroup(value string) PatternFlowIpv6Dst
 	Increment() PatternFlowIpv6DstCounter
 	Decrement() PatternFlowIpv6DstCounter
+}
+
+type PatternFlowIpv6DstChoiceEnum string
+
+var PatternFlowIpv6DstChoice = struct {
+	UNSPECIFIED PatternFlowIpv6DstChoiceEnum
+	VALUE       PatternFlowIpv6DstChoiceEnum
+	VALUES      PatternFlowIpv6DstChoiceEnum
+	INCREMENT   PatternFlowIpv6DstChoiceEnum
+	DECREMENT   PatternFlowIpv6DstChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowIpv6DstChoiceEnum("unspecified"),
+	VALUE:       PatternFlowIpv6DstChoiceEnum("value"),
+	VALUES:      PatternFlowIpv6DstChoiceEnum("values"),
+	INCREMENT:   PatternFlowIpv6DstChoiceEnum("increment"),
+	DECREMENT:   PatternFlowIpv6DstChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowIpv6Dst) Choice() PatternFlowIpv6DstChoiceEnum {
+	return PatternFlowIpv6DstChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowIpv6Dst) SetChoice(value PatternFlowIpv6DstChoiceEnum) PatternFlowIpv6Dst {
+	intValue := snappipb.PatternFlowIpv6Dst_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowIpv6Dst_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a string
@@ -13422,6 +15541,7 @@ func (obj *patternFlowIpv6Dst) Value() string {
 //  description is TBD
 func (obj *patternFlowIpv6Dst) SetValue(value string) PatternFlowIpv6Dst {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowIpv6DstChoice.VALUE)
 	return obj
 }
 
@@ -13435,6 +15555,7 @@ func (obj *patternFlowIpv6Dst) Values() []string {
 //  description is TBD
 func (obj *patternFlowIpv6Dst) SetValues(value []string) PatternFlowIpv6Dst {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowIpv6DstChoice.VALUES)
 	return obj
 }
 
@@ -13448,6 +15569,7 @@ func (obj *patternFlowIpv6Dst) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowIpv6Dst) SetMetricGroup(value string) PatternFlowIpv6Dst {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -13457,8 +15579,8 @@ func (obj *patternFlowIpv6Dst) Increment() PatternFlowIpv6DstCounter {
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowIpv6DstCounter{}
 	}
+	obj.SetChoice(PatternFlowIpv6DstChoice.INCREMENT)
 	return &patternFlowIpv6DstCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowIpv6DstCounter
@@ -13467,8 +15589,8 @@ func (obj *patternFlowIpv6Dst) Decrement() PatternFlowIpv6DstCounter {
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowIpv6DstCounter{}
 	}
+	obj.SetChoice(PatternFlowIpv6DstChoice.DECREMENT)
 	return &patternFlowIpv6DstCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowPfcPauseDst struct {
@@ -13517,6 +15639,8 @@ type PatternFlowPfcPauseDst interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowPfcPauseDstChoiceEnum
+	SetChoice(value PatternFlowPfcPauseDstChoiceEnum) PatternFlowPfcPauseDst
 	Value() string
 	SetValue(value string) PatternFlowPfcPauseDst
 	Values() []string
@@ -13525,6 +15649,33 @@ type PatternFlowPfcPauseDst interface {
 	SetMetricGroup(value string) PatternFlowPfcPauseDst
 	Increment() PatternFlowPfcPauseDstCounter
 	Decrement() PatternFlowPfcPauseDstCounter
+}
+
+type PatternFlowPfcPauseDstChoiceEnum string
+
+var PatternFlowPfcPauseDstChoice = struct {
+	UNSPECIFIED PatternFlowPfcPauseDstChoiceEnum
+	VALUE       PatternFlowPfcPauseDstChoiceEnum
+	VALUES      PatternFlowPfcPauseDstChoiceEnum
+	INCREMENT   PatternFlowPfcPauseDstChoiceEnum
+	DECREMENT   PatternFlowPfcPauseDstChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowPfcPauseDstChoiceEnum("unspecified"),
+	VALUE:       PatternFlowPfcPauseDstChoiceEnum("value"),
+	VALUES:      PatternFlowPfcPauseDstChoiceEnum("values"),
+	INCREMENT:   PatternFlowPfcPauseDstChoiceEnum("increment"),
+	DECREMENT:   PatternFlowPfcPauseDstChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowPfcPauseDst) Choice() PatternFlowPfcPauseDstChoiceEnum {
+	return PatternFlowPfcPauseDstChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowPfcPauseDst) SetChoice(value PatternFlowPfcPauseDstChoiceEnum) PatternFlowPfcPauseDst {
+	intValue := snappipb.PatternFlowPfcPauseDst_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowPfcPauseDst_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a string
@@ -13537,6 +15688,7 @@ func (obj *patternFlowPfcPauseDst) Value() string {
 //  description is TBD
 func (obj *patternFlowPfcPauseDst) SetValue(value string) PatternFlowPfcPauseDst {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowPfcPauseDstChoice.VALUE)
 	return obj
 }
 
@@ -13550,6 +15702,7 @@ func (obj *patternFlowPfcPauseDst) Values() []string {
 //  description is TBD
 func (obj *patternFlowPfcPauseDst) SetValues(value []string) PatternFlowPfcPauseDst {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowPfcPauseDstChoice.VALUES)
 	return obj
 }
 
@@ -13563,6 +15716,7 @@ func (obj *patternFlowPfcPauseDst) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowPfcPauseDst) SetMetricGroup(value string) PatternFlowPfcPauseDst {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -13572,8 +15726,8 @@ func (obj *patternFlowPfcPauseDst) Increment() PatternFlowPfcPauseDstCounter {
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowPfcPauseDstCounter{}
 	}
+	obj.SetChoice(PatternFlowPfcPauseDstChoice.INCREMENT)
 	return &patternFlowPfcPauseDstCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowPfcPauseDstCounter
@@ -13582,8 +15736,8 @@ func (obj *patternFlowPfcPauseDst) Decrement() PatternFlowPfcPauseDstCounter {
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowPfcPauseDstCounter{}
 	}
+	obj.SetChoice(PatternFlowPfcPauseDstChoice.DECREMENT)
 	return &patternFlowPfcPauseDstCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowPfcPauseSrc struct {
@@ -13632,6 +15786,8 @@ type PatternFlowPfcPauseSrc interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowPfcPauseSrcChoiceEnum
+	SetChoice(value PatternFlowPfcPauseSrcChoiceEnum) PatternFlowPfcPauseSrc
 	Value() string
 	SetValue(value string) PatternFlowPfcPauseSrc
 	Values() []string
@@ -13640,6 +15796,33 @@ type PatternFlowPfcPauseSrc interface {
 	SetMetricGroup(value string) PatternFlowPfcPauseSrc
 	Increment() PatternFlowPfcPauseSrcCounter
 	Decrement() PatternFlowPfcPauseSrcCounter
+}
+
+type PatternFlowPfcPauseSrcChoiceEnum string
+
+var PatternFlowPfcPauseSrcChoice = struct {
+	UNSPECIFIED PatternFlowPfcPauseSrcChoiceEnum
+	VALUE       PatternFlowPfcPauseSrcChoiceEnum
+	VALUES      PatternFlowPfcPauseSrcChoiceEnum
+	INCREMENT   PatternFlowPfcPauseSrcChoiceEnum
+	DECREMENT   PatternFlowPfcPauseSrcChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowPfcPauseSrcChoiceEnum("unspecified"),
+	VALUE:       PatternFlowPfcPauseSrcChoiceEnum("value"),
+	VALUES:      PatternFlowPfcPauseSrcChoiceEnum("values"),
+	INCREMENT:   PatternFlowPfcPauseSrcChoiceEnum("increment"),
+	DECREMENT:   PatternFlowPfcPauseSrcChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowPfcPauseSrc) Choice() PatternFlowPfcPauseSrcChoiceEnum {
+	return PatternFlowPfcPauseSrcChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowPfcPauseSrc) SetChoice(value PatternFlowPfcPauseSrcChoiceEnum) PatternFlowPfcPauseSrc {
+	intValue := snappipb.PatternFlowPfcPauseSrc_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowPfcPauseSrc_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a string
@@ -13652,6 +15835,7 @@ func (obj *patternFlowPfcPauseSrc) Value() string {
 //  description is TBD
 func (obj *patternFlowPfcPauseSrc) SetValue(value string) PatternFlowPfcPauseSrc {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowPfcPauseSrcChoice.VALUE)
 	return obj
 }
 
@@ -13665,6 +15849,7 @@ func (obj *patternFlowPfcPauseSrc) Values() []string {
 //  description is TBD
 func (obj *patternFlowPfcPauseSrc) SetValues(value []string) PatternFlowPfcPauseSrc {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowPfcPauseSrcChoice.VALUES)
 	return obj
 }
 
@@ -13678,6 +15863,7 @@ func (obj *patternFlowPfcPauseSrc) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowPfcPauseSrc) SetMetricGroup(value string) PatternFlowPfcPauseSrc {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -13687,8 +15873,8 @@ func (obj *patternFlowPfcPauseSrc) Increment() PatternFlowPfcPauseSrcCounter {
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowPfcPauseSrcCounter{}
 	}
+	obj.SetChoice(PatternFlowPfcPauseSrcChoice.INCREMENT)
 	return &patternFlowPfcPauseSrcCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowPfcPauseSrcCounter
@@ -13697,8 +15883,8 @@ func (obj *patternFlowPfcPauseSrc) Decrement() PatternFlowPfcPauseSrcCounter {
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowPfcPauseSrcCounter{}
 	}
+	obj.SetChoice(PatternFlowPfcPauseSrcChoice.DECREMENT)
 	return &patternFlowPfcPauseSrcCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowPfcPauseEtherType struct {
@@ -13747,6 +15933,8 @@ type PatternFlowPfcPauseEtherType interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowPfcPauseEtherTypeChoiceEnum
+	SetChoice(value PatternFlowPfcPauseEtherTypeChoiceEnum) PatternFlowPfcPauseEtherType
 	Value() int32
 	SetValue(value int32) PatternFlowPfcPauseEtherType
 	Values() []int32
@@ -13755,6 +15943,33 @@ type PatternFlowPfcPauseEtherType interface {
 	SetMetricGroup(value string) PatternFlowPfcPauseEtherType
 	Increment() PatternFlowPfcPauseEtherTypeCounter
 	Decrement() PatternFlowPfcPauseEtherTypeCounter
+}
+
+type PatternFlowPfcPauseEtherTypeChoiceEnum string
+
+var PatternFlowPfcPauseEtherTypeChoice = struct {
+	UNSPECIFIED PatternFlowPfcPauseEtherTypeChoiceEnum
+	VALUE       PatternFlowPfcPauseEtherTypeChoiceEnum
+	VALUES      PatternFlowPfcPauseEtherTypeChoiceEnum
+	INCREMENT   PatternFlowPfcPauseEtherTypeChoiceEnum
+	DECREMENT   PatternFlowPfcPauseEtherTypeChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowPfcPauseEtherTypeChoiceEnum("unspecified"),
+	VALUE:       PatternFlowPfcPauseEtherTypeChoiceEnum("value"),
+	VALUES:      PatternFlowPfcPauseEtherTypeChoiceEnum("values"),
+	INCREMENT:   PatternFlowPfcPauseEtherTypeChoiceEnum("increment"),
+	DECREMENT:   PatternFlowPfcPauseEtherTypeChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowPfcPauseEtherType) Choice() PatternFlowPfcPauseEtherTypeChoiceEnum {
+	return PatternFlowPfcPauseEtherTypeChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowPfcPauseEtherType) SetChoice(value PatternFlowPfcPauseEtherTypeChoiceEnum) PatternFlowPfcPauseEtherType {
+	intValue := snappipb.PatternFlowPfcPauseEtherType_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowPfcPauseEtherType_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -13767,6 +15982,7 @@ func (obj *patternFlowPfcPauseEtherType) Value() int32 {
 //  description is TBD
 func (obj *patternFlowPfcPauseEtherType) SetValue(value int32) PatternFlowPfcPauseEtherType {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowPfcPauseEtherTypeChoice.VALUE)
 	return obj
 }
 
@@ -13780,6 +15996,7 @@ func (obj *patternFlowPfcPauseEtherType) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowPfcPauseEtherType) SetValues(value []int32) PatternFlowPfcPauseEtherType {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowPfcPauseEtherTypeChoice.VALUES)
 	return obj
 }
 
@@ -13793,6 +16010,7 @@ func (obj *patternFlowPfcPauseEtherType) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowPfcPauseEtherType) SetMetricGroup(value string) PatternFlowPfcPauseEtherType {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -13802,8 +16020,8 @@ func (obj *patternFlowPfcPauseEtherType) Increment() PatternFlowPfcPauseEtherTyp
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowPfcPauseEtherTypeCounter{}
 	}
+	obj.SetChoice(PatternFlowPfcPauseEtherTypeChoice.INCREMENT)
 	return &patternFlowPfcPauseEtherTypeCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowPfcPauseEtherTypeCounter
@@ -13812,8 +16030,8 @@ func (obj *patternFlowPfcPauseEtherType) Decrement() PatternFlowPfcPauseEtherTyp
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowPfcPauseEtherTypeCounter{}
 	}
+	obj.SetChoice(PatternFlowPfcPauseEtherTypeChoice.DECREMENT)
 	return &patternFlowPfcPauseEtherTypeCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowPfcPauseControlOpCode struct {
@@ -13862,6 +16080,8 @@ type PatternFlowPfcPauseControlOpCode interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowPfcPauseControlOpCodeChoiceEnum
+	SetChoice(value PatternFlowPfcPauseControlOpCodeChoiceEnum) PatternFlowPfcPauseControlOpCode
 	Value() int32
 	SetValue(value int32) PatternFlowPfcPauseControlOpCode
 	Values() []int32
@@ -13870,6 +16090,33 @@ type PatternFlowPfcPauseControlOpCode interface {
 	SetMetricGroup(value string) PatternFlowPfcPauseControlOpCode
 	Increment() PatternFlowPfcPauseControlOpCodeCounter
 	Decrement() PatternFlowPfcPauseControlOpCodeCounter
+}
+
+type PatternFlowPfcPauseControlOpCodeChoiceEnum string
+
+var PatternFlowPfcPauseControlOpCodeChoice = struct {
+	UNSPECIFIED PatternFlowPfcPauseControlOpCodeChoiceEnum
+	VALUE       PatternFlowPfcPauseControlOpCodeChoiceEnum
+	VALUES      PatternFlowPfcPauseControlOpCodeChoiceEnum
+	INCREMENT   PatternFlowPfcPauseControlOpCodeChoiceEnum
+	DECREMENT   PatternFlowPfcPauseControlOpCodeChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowPfcPauseControlOpCodeChoiceEnum("unspecified"),
+	VALUE:       PatternFlowPfcPauseControlOpCodeChoiceEnum("value"),
+	VALUES:      PatternFlowPfcPauseControlOpCodeChoiceEnum("values"),
+	INCREMENT:   PatternFlowPfcPauseControlOpCodeChoiceEnum("increment"),
+	DECREMENT:   PatternFlowPfcPauseControlOpCodeChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowPfcPauseControlOpCode) Choice() PatternFlowPfcPauseControlOpCodeChoiceEnum {
+	return PatternFlowPfcPauseControlOpCodeChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowPfcPauseControlOpCode) SetChoice(value PatternFlowPfcPauseControlOpCodeChoiceEnum) PatternFlowPfcPauseControlOpCode {
+	intValue := snappipb.PatternFlowPfcPauseControlOpCode_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowPfcPauseControlOpCode_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -13882,6 +16129,7 @@ func (obj *patternFlowPfcPauseControlOpCode) Value() int32 {
 //  description is TBD
 func (obj *patternFlowPfcPauseControlOpCode) SetValue(value int32) PatternFlowPfcPauseControlOpCode {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowPfcPauseControlOpCodeChoice.VALUE)
 	return obj
 }
 
@@ -13895,6 +16143,7 @@ func (obj *patternFlowPfcPauseControlOpCode) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowPfcPauseControlOpCode) SetValues(value []int32) PatternFlowPfcPauseControlOpCode {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowPfcPauseControlOpCodeChoice.VALUES)
 	return obj
 }
 
@@ -13908,6 +16157,7 @@ func (obj *patternFlowPfcPauseControlOpCode) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowPfcPauseControlOpCode) SetMetricGroup(value string) PatternFlowPfcPauseControlOpCode {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -13917,8 +16167,8 @@ func (obj *patternFlowPfcPauseControlOpCode) Increment() PatternFlowPfcPauseCont
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowPfcPauseControlOpCodeCounter{}
 	}
+	obj.SetChoice(PatternFlowPfcPauseControlOpCodeChoice.INCREMENT)
 	return &patternFlowPfcPauseControlOpCodeCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowPfcPauseControlOpCodeCounter
@@ -13927,8 +16177,8 @@ func (obj *patternFlowPfcPauseControlOpCode) Decrement() PatternFlowPfcPauseCont
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowPfcPauseControlOpCodeCounter{}
 	}
+	obj.SetChoice(PatternFlowPfcPauseControlOpCodeChoice.DECREMENT)
 	return &patternFlowPfcPauseControlOpCodeCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowPfcPauseClassEnableVector struct {
@@ -13977,6 +16227,8 @@ type PatternFlowPfcPauseClassEnableVector interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowPfcPauseClassEnableVectorChoiceEnum
+	SetChoice(value PatternFlowPfcPauseClassEnableVectorChoiceEnum) PatternFlowPfcPauseClassEnableVector
 	Value() int32
 	SetValue(value int32) PatternFlowPfcPauseClassEnableVector
 	Values() []int32
@@ -13985,6 +16237,33 @@ type PatternFlowPfcPauseClassEnableVector interface {
 	SetMetricGroup(value string) PatternFlowPfcPauseClassEnableVector
 	Increment() PatternFlowPfcPauseClassEnableVectorCounter
 	Decrement() PatternFlowPfcPauseClassEnableVectorCounter
+}
+
+type PatternFlowPfcPauseClassEnableVectorChoiceEnum string
+
+var PatternFlowPfcPauseClassEnableVectorChoice = struct {
+	UNSPECIFIED PatternFlowPfcPauseClassEnableVectorChoiceEnum
+	VALUE       PatternFlowPfcPauseClassEnableVectorChoiceEnum
+	VALUES      PatternFlowPfcPauseClassEnableVectorChoiceEnum
+	INCREMENT   PatternFlowPfcPauseClassEnableVectorChoiceEnum
+	DECREMENT   PatternFlowPfcPauseClassEnableVectorChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowPfcPauseClassEnableVectorChoiceEnum("unspecified"),
+	VALUE:       PatternFlowPfcPauseClassEnableVectorChoiceEnum("value"),
+	VALUES:      PatternFlowPfcPauseClassEnableVectorChoiceEnum("values"),
+	INCREMENT:   PatternFlowPfcPauseClassEnableVectorChoiceEnum("increment"),
+	DECREMENT:   PatternFlowPfcPauseClassEnableVectorChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowPfcPauseClassEnableVector) Choice() PatternFlowPfcPauseClassEnableVectorChoiceEnum {
+	return PatternFlowPfcPauseClassEnableVectorChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowPfcPauseClassEnableVector) SetChoice(value PatternFlowPfcPauseClassEnableVectorChoiceEnum) PatternFlowPfcPauseClassEnableVector {
+	intValue := snappipb.PatternFlowPfcPauseClassEnableVector_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowPfcPauseClassEnableVector_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -13997,6 +16276,7 @@ func (obj *patternFlowPfcPauseClassEnableVector) Value() int32 {
 //  description is TBD
 func (obj *patternFlowPfcPauseClassEnableVector) SetValue(value int32) PatternFlowPfcPauseClassEnableVector {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowPfcPauseClassEnableVectorChoice.VALUE)
 	return obj
 }
 
@@ -14010,6 +16290,7 @@ func (obj *patternFlowPfcPauseClassEnableVector) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowPfcPauseClassEnableVector) SetValues(value []int32) PatternFlowPfcPauseClassEnableVector {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowPfcPauseClassEnableVectorChoice.VALUES)
 	return obj
 }
 
@@ -14023,6 +16304,7 @@ func (obj *patternFlowPfcPauseClassEnableVector) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowPfcPauseClassEnableVector) SetMetricGroup(value string) PatternFlowPfcPauseClassEnableVector {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -14032,8 +16314,8 @@ func (obj *patternFlowPfcPauseClassEnableVector) Increment() PatternFlowPfcPause
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowPfcPauseClassEnableVectorCounter{}
 	}
+	obj.SetChoice(PatternFlowPfcPauseClassEnableVectorChoice.INCREMENT)
 	return &patternFlowPfcPauseClassEnableVectorCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowPfcPauseClassEnableVectorCounter
@@ -14042,8 +16324,8 @@ func (obj *patternFlowPfcPauseClassEnableVector) Decrement() PatternFlowPfcPause
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowPfcPauseClassEnableVectorCounter{}
 	}
+	obj.SetChoice(PatternFlowPfcPauseClassEnableVectorChoice.DECREMENT)
 	return &patternFlowPfcPauseClassEnableVectorCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowPfcPausePauseClass0 struct {
@@ -14092,6 +16374,8 @@ type PatternFlowPfcPausePauseClass0 interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowPfcPausePauseClass0ChoiceEnum
+	SetChoice(value PatternFlowPfcPausePauseClass0ChoiceEnum) PatternFlowPfcPausePauseClass0
 	Value() int32
 	SetValue(value int32) PatternFlowPfcPausePauseClass0
 	Values() []int32
@@ -14100,6 +16384,33 @@ type PatternFlowPfcPausePauseClass0 interface {
 	SetMetricGroup(value string) PatternFlowPfcPausePauseClass0
 	Increment() PatternFlowPfcPausePauseClass0Counter
 	Decrement() PatternFlowPfcPausePauseClass0Counter
+}
+
+type PatternFlowPfcPausePauseClass0ChoiceEnum string
+
+var PatternFlowPfcPausePauseClass0Choice = struct {
+	UNSPECIFIED PatternFlowPfcPausePauseClass0ChoiceEnum
+	VALUE       PatternFlowPfcPausePauseClass0ChoiceEnum
+	VALUES      PatternFlowPfcPausePauseClass0ChoiceEnum
+	INCREMENT   PatternFlowPfcPausePauseClass0ChoiceEnum
+	DECREMENT   PatternFlowPfcPausePauseClass0ChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowPfcPausePauseClass0ChoiceEnum("unspecified"),
+	VALUE:       PatternFlowPfcPausePauseClass0ChoiceEnum("value"),
+	VALUES:      PatternFlowPfcPausePauseClass0ChoiceEnum("values"),
+	INCREMENT:   PatternFlowPfcPausePauseClass0ChoiceEnum("increment"),
+	DECREMENT:   PatternFlowPfcPausePauseClass0ChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowPfcPausePauseClass0) Choice() PatternFlowPfcPausePauseClass0ChoiceEnum {
+	return PatternFlowPfcPausePauseClass0ChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowPfcPausePauseClass0) SetChoice(value PatternFlowPfcPausePauseClass0ChoiceEnum) PatternFlowPfcPausePauseClass0 {
+	intValue := snappipb.PatternFlowPfcPausePauseClass0_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowPfcPausePauseClass0_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -14112,6 +16423,7 @@ func (obj *patternFlowPfcPausePauseClass0) Value() int32 {
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass0) SetValue(value int32) PatternFlowPfcPausePauseClass0 {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowPfcPausePauseClass0Choice.VALUE)
 	return obj
 }
 
@@ -14125,6 +16437,7 @@ func (obj *patternFlowPfcPausePauseClass0) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass0) SetValues(value []int32) PatternFlowPfcPausePauseClass0 {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowPfcPausePauseClass0Choice.VALUES)
 	return obj
 }
 
@@ -14138,6 +16451,7 @@ func (obj *patternFlowPfcPausePauseClass0) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowPfcPausePauseClass0) SetMetricGroup(value string) PatternFlowPfcPausePauseClass0 {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -14147,8 +16461,8 @@ func (obj *patternFlowPfcPausePauseClass0) Increment() PatternFlowPfcPausePauseC
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowPfcPausePauseClass0Counter{}
 	}
+	obj.SetChoice(PatternFlowPfcPausePauseClass0Choice.INCREMENT)
 	return &patternFlowPfcPausePauseClass0Counter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowPfcPausePauseClass0Counter
@@ -14157,8 +16471,8 @@ func (obj *patternFlowPfcPausePauseClass0) Decrement() PatternFlowPfcPausePauseC
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowPfcPausePauseClass0Counter{}
 	}
+	obj.SetChoice(PatternFlowPfcPausePauseClass0Choice.DECREMENT)
 	return &patternFlowPfcPausePauseClass0Counter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowPfcPausePauseClass1 struct {
@@ -14207,6 +16521,8 @@ type PatternFlowPfcPausePauseClass1 interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowPfcPausePauseClass1ChoiceEnum
+	SetChoice(value PatternFlowPfcPausePauseClass1ChoiceEnum) PatternFlowPfcPausePauseClass1
 	Value() int32
 	SetValue(value int32) PatternFlowPfcPausePauseClass1
 	Values() []int32
@@ -14215,6 +16531,33 @@ type PatternFlowPfcPausePauseClass1 interface {
 	SetMetricGroup(value string) PatternFlowPfcPausePauseClass1
 	Increment() PatternFlowPfcPausePauseClass1Counter
 	Decrement() PatternFlowPfcPausePauseClass1Counter
+}
+
+type PatternFlowPfcPausePauseClass1ChoiceEnum string
+
+var PatternFlowPfcPausePauseClass1Choice = struct {
+	UNSPECIFIED PatternFlowPfcPausePauseClass1ChoiceEnum
+	VALUE       PatternFlowPfcPausePauseClass1ChoiceEnum
+	VALUES      PatternFlowPfcPausePauseClass1ChoiceEnum
+	INCREMENT   PatternFlowPfcPausePauseClass1ChoiceEnum
+	DECREMENT   PatternFlowPfcPausePauseClass1ChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowPfcPausePauseClass1ChoiceEnum("unspecified"),
+	VALUE:       PatternFlowPfcPausePauseClass1ChoiceEnum("value"),
+	VALUES:      PatternFlowPfcPausePauseClass1ChoiceEnum("values"),
+	INCREMENT:   PatternFlowPfcPausePauseClass1ChoiceEnum("increment"),
+	DECREMENT:   PatternFlowPfcPausePauseClass1ChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowPfcPausePauseClass1) Choice() PatternFlowPfcPausePauseClass1ChoiceEnum {
+	return PatternFlowPfcPausePauseClass1ChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowPfcPausePauseClass1) SetChoice(value PatternFlowPfcPausePauseClass1ChoiceEnum) PatternFlowPfcPausePauseClass1 {
+	intValue := snappipb.PatternFlowPfcPausePauseClass1_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowPfcPausePauseClass1_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -14227,6 +16570,7 @@ func (obj *patternFlowPfcPausePauseClass1) Value() int32 {
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass1) SetValue(value int32) PatternFlowPfcPausePauseClass1 {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowPfcPausePauseClass1Choice.VALUE)
 	return obj
 }
 
@@ -14240,6 +16584,7 @@ func (obj *patternFlowPfcPausePauseClass1) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass1) SetValues(value []int32) PatternFlowPfcPausePauseClass1 {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowPfcPausePauseClass1Choice.VALUES)
 	return obj
 }
 
@@ -14253,6 +16598,7 @@ func (obj *patternFlowPfcPausePauseClass1) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowPfcPausePauseClass1) SetMetricGroup(value string) PatternFlowPfcPausePauseClass1 {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -14262,8 +16608,8 @@ func (obj *patternFlowPfcPausePauseClass1) Increment() PatternFlowPfcPausePauseC
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowPfcPausePauseClass1Counter{}
 	}
+	obj.SetChoice(PatternFlowPfcPausePauseClass1Choice.INCREMENT)
 	return &patternFlowPfcPausePauseClass1Counter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowPfcPausePauseClass1Counter
@@ -14272,8 +16618,8 @@ func (obj *patternFlowPfcPausePauseClass1) Decrement() PatternFlowPfcPausePauseC
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowPfcPausePauseClass1Counter{}
 	}
+	obj.SetChoice(PatternFlowPfcPausePauseClass1Choice.DECREMENT)
 	return &patternFlowPfcPausePauseClass1Counter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowPfcPausePauseClass2 struct {
@@ -14322,6 +16668,8 @@ type PatternFlowPfcPausePauseClass2 interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowPfcPausePauseClass2ChoiceEnum
+	SetChoice(value PatternFlowPfcPausePauseClass2ChoiceEnum) PatternFlowPfcPausePauseClass2
 	Value() int32
 	SetValue(value int32) PatternFlowPfcPausePauseClass2
 	Values() []int32
@@ -14330,6 +16678,33 @@ type PatternFlowPfcPausePauseClass2 interface {
 	SetMetricGroup(value string) PatternFlowPfcPausePauseClass2
 	Increment() PatternFlowPfcPausePauseClass2Counter
 	Decrement() PatternFlowPfcPausePauseClass2Counter
+}
+
+type PatternFlowPfcPausePauseClass2ChoiceEnum string
+
+var PatternFlowPfcPausePauseClass2Choice = struct {
+	UNSPECIFIED PatternFlowPfcPausePauseClass2ChoiceEnum
+	VALUE       PatternFlowPfcPausePauseClass2ChoiceEnum
+	VALUES      PatternFlowPfcPausePauseClass2ChoiceEnum
+	INCREMENT   PatternFlowPfcPausePauseClass2ChoiceEnum
+	DECREMENT   PatternFlowPfcPausePauseClass2ChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowPfcPausePauseClass2ChoiceEnum("unspecified"),
+	VALUE:       PatternFlowPfcPausePauseClass2ChoiceEnum("value"),
+	VALUES:      PatternFlowPfcPausePauseClass2ChoiceEnum("values"),
+	INCREMENT:   PatternFlowPfcPausePauseClass2ChoiceEnum("increment"),
+	DECREMENT:   PatternFlowPfcPausePauseClass2ChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowPfcPausePauseClass2) Choice() PatternFlowPfcPausePauseClass2ChoiceEnum {
+	return PatternFlowPfcPausePauseClass2ChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowPfcPausePauseClass2) SetChoice(value PatternFlowPfcPausePauseClass2ChoiceEnum) PatternFlowPfcPausePauseClass2 {
+	intValue := snappipb.PatternFlowPfcPausePauseClass2_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowPfcPausePauseClass2_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -14342,6 +16717,7 @@ func (obj *patternFlowPfcPausePauseClass2) Value() int32 {
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass2) SetValue(value int32) PatternFlowPfcPausePauseClass2 {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowPfcPausePauseClass2Choice.VALUE)
 	return obj
 }
 
@@ -14355,6 +16731,7 @@ func (obj *patternFlowPfcPausePauseClass2) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass2) SetValues(value []int32) PatternFlowPfcPausePauseClass2 {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowPfcPausePauseClass2Choice.VALUES)
 	return obj
 }
 
@@ -14368,6 +16745,7 @@ func (obj *patternFlowPfcPausePauseClass2) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowPfcPausePauseClass2) SetMetricGroup(value string) PatternFlowPfcPausePauseClass2 {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -14377,8 +16755,8 @@ func (obj *patternFlowPfcPausePauseClass2) Increment() PatternFlowPfcPausePauseC
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowPfcPausePauseClass2Counter{}
 	}
+	obj.SetChoice(PatternFlowPfcPausePauseClass2Choice.INCREMENT)
 	return &patternFlowPfcPausePauseClass2Counter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowPfcPausePauseClass2Counter
@@ -14387,8 +16765,8 @@ func (obj *patternFlowPfcPausePauseClass2) Decrement() PatternFlowPfcPausePauseC
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowPfcPausePauseClass2Counter{}
 	}
+	obj.SetChoice(PatternFlowPfcPausePauseClass2Choice.DECREMENT)
 	return &patternFlowPfcPausePauseClass2Counter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowPfcPausePauseClass3 struct {
@@ -14437,6 +16815,8 @@ type PatternFlowPfcPausePauseClass3 interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowPfcPausePauseClass3ChoiceEnum
+	SetChoice(value PatternFlowPfcPausePauseClass3ChoiceEnum) PatternFlowPfcPausePauseClass3
 	Value() int32
 	SetValue(value int32) PatternFlowPfcPausePauseClass3
 	Values() []int32
@@ -14445,6 +16825,33 @@ type PatternFlowPfcPausePauseClass3 interface {
 	SetMetricGroup(value string) PatternFlowPfcPausePauseClass3
 	Increment() PatternFlowPfcPausePauseClass3Counter
 	Decrement() PatternFlowPfcPausePauseClass3Counter
+}
+
+type PatternFlowPfcPausePauseClass3ChoiceEnum string
+
+var PatternFlowPfcPausePauseClass3Choice = struct {
+	UNSPECIFIED PatternFlowPfcPausePauseClass3ChoiceEnum
+	VALUE       PatternFlowPfcPausePauseClass3ChoiceEnum
+	VALUES      PatternFlowPfcPausePauseClass3ChoiceEnum
+	INCREMENT   PatternFlowPfcPausePauseClass3ChoiceEnum
+	DECREMENT   PatternFlowPfcPausePauseClass3ChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowPfcPausePauseClass3ChoiceEnum("unspecified"),
+	VALUE:       PatternFlowPfcPausePauseClass3ChoiceEnum("value"),
+	VALUES:      PatternFlowPfcPausePauseClass3ChoiceEnum("values"),
+	INCREMENT:   PatternFlowPfcPausePauseClass3ChoiceEnum("increment"),
+	DECREMENT:   PatternFlowPfcPausePauseClass3ChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowPfcPausePauseClass3) Choice() PatternFlowPfcPausePauseClass3ChoiceEnum {
+	return PatternFlowPfcPausePauseClass3ChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowPfcPausePauseClass3) SetChoice(value PatternFlowPfcPausePauseClass3ChoiceEnum) PatternFlowPfcPausePauseClass3 {
+	intValue := snappipb.PatternFlowPfcPausePauseClass3_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowPfcPausePauseClass3_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -14457,6 +16864,7 @@ func (obj *patternFlowPfcPausePauseClass3) Value() int32 {
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass3) SetValue(value int32) PatternFlowPfcPausePauseClass3 {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowPfcPausePauseClass3Choice.VALUE)
 	return obj
 }
 
@@ -14470,6 +16878,7 @@ func (obj *patternFlowPfcPausePauseClass3) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass3) SetValues(value []int32) PatternFlowPfcPausePauseClass3 {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowPfcPausePauseClass3Choice.VALUES)
 	return obj
 }
 
@@ -14483,6 +16892,7 @@ func (obj *patternFlowPfcPausePauseClass3) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowPfcPausePauseClass3) SetMetricGroup(value string) PatternFlowPfcPausePauseClass3 {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -14492,8 +16902,8 @@ func (obj *patternFlowPfcPausePauseClass3) Increment() PatternFlowPfcPausePauseC
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowPfcPausePauseClass3Counter{}
 	}
+	obj.SetChoice(PatternFlowPfcPausePauseClass3Choice.INCREMENT)
 	return &patternFlowPfcPausePauseClass3Counter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowPfcPausePauseClass3Counter
@@ -14502,8 +16912,8 @@ func (obj *patternFlowPfcPausePauseClass3) Decrement() PatternFlowPfcPausePauseC
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowPfcPausePauseClass3Counter{}
 	}
+	obj.SetChoice(PatternFlowPfcPausePauseClass3Choice.DECREMENT)
 	return &patternFlowPfcPausePauseClass3Counter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowPfcPausePauseClass4 struct {
@@ -14552,6 +16962,8 @@ type PatternFlowPfcPausePauseClass4 interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowPfcPausePauseClass4ChoiceEnum
+	SetChoice(value PatternFlowPfcPausePauseClass4ChoiceEnum) PatternFlowPfcPausePauseClass4
 	Value() int32
 	SetValue(value int32) PatternFlowPfcPausePauseClass4
 	Values() []int32
@@ -14560,6 +16972,33 @@ type PatternFlowPfcPausePauseClass4 interface {
 	SetMetricGroup(value string) PatternFlowPfcPausePauseClass4
 	Increment() PatternFlowPfcPausePauseClass4Counter
 	Decrement() PatternFlowPfcPausePauseClass4Counter
+}
+
+type PatternFlowPfcPausePauseClass4ChoiceEnum string
+
+var PatternFlowPfcPausePauseClass4Choice = struct {
+	UNSPECIFIED PatternFlowPfcPausePauseClass4ChoiceEnum
+	VALUE       PatternFlowPfcPausePauseClass4ChoiceEnum
+	VALUES      PatternFlowPfcPausePauseClass4ChoiceEnum
+	INCREMENT   PatternFlowPfcPausePauseClass4ChoiceEnum
+	DECREMENT   PatternFlowPfcPausePauseClass4ChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowPfcPausePauseClass4ChoiceEnum("unspecified"),
+	VALUE:       PatternFlowPfcPausePauseClass4ChoiceEnum("value"),
+	VALUES:      PatternFlowPfcPausePauseClass4ChoiceEnum("values"),
+	INCREMENT:   PatternFlowPfcPausePauseClass4ChoiceEnum("increment"),
+	DECREMENT:   PatternFlowPfcPausePauseClass4ChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowPfcPausePauseClass4) Choice() PatternFlowPfcPausePauseClass4ChoiceEnum {
+	return PatternFlowPfcPausePauseClass4ChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowPfcPausePauseClass4) SetChoice(value PatternFlowPfcPausePauseClass4ChoiceEnum) PatternFlowPfcPausePauseClass4 {
+	intValue := snappipb.PatternFlowPfcPausePauseClass4_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowPfcPausePauseClass4_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -14572,6 +17011,7 @@ func (obj *patternFlowPfcPausePauseClass4) Value() int32 {
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass4) SetValue(value int32) PatternFlowPfcPausePauseClass4 {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowPfcPausePauseClass4Choice.VALUE)
 	return obj
 }
 
@@ -14585,6 +17025,7 @@ func (obj *patternFlowPfcPausePauseClass4) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass4) SetValues(value []int32) PatternFlowPfcPausePauseClass4 {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowPfcPausePauseClass4Choice.VALUES)
 	return obj
 }
 
@@ -14598,6 +17039,7 @@ func (obj *patternFlowPfcPausePauseClass4) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowPfcPausePauseClass4) SetMetricGroup(value string) PatternFlowPfcPausePauseClass4 {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -14607,8 +17049,8 @@ func (obj *patternFlowPfcPausePauseClass4) Increment() PatternFlowPfcPausePauseC
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowPfcPausePauseClass4Counter{}
 	}
+	obj.SetChoice(PatternFlowPfcPausePauseClass4Choice.INCREMENT)
 	return &patternFlowPfcPausePauseClass4Counter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowPfcPausePauseClass4Counter
@@ -14617,8 +17059,8 @@ func (obj *patternFlowPfcPausePauseClass4) Decrement() PatternFlowPfcPausePauseC
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowPfcPausePauseClass4Counter{}
 	}
+	obj.SetChoice(PatternFlowPfcPausePauseClass4Choice.DECREMENT)
 	return &patternFlowPfcPausePauseClass4Counter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowPfcPausePauseClass5 struct {
@@ -14667,6 +17109,8 @@ type PatternFlowPfcPausePauseClass5 interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowPfcPausePauseClass5ChoiceEnum
+	SetChoice(value PatternFlowPfcPausePauseClass5ChoiceEnum) PatternFlowPfcPausePauseClass5
 	Value() int32
 	SetValue(value int32) PatternFlowPfcPausePauseClass5
 	Values() []int32
@@ -14675,6 +17119,33 @@ type PatternFlowPfcPausePauseClass5 interface {
 	SetMetricGroup(value string) PatternFlowPfcPausePauseClass5
 	Increment() PatternFlowPfcPausePauseClass5Counter
 	Decrement() PatternFlowPfcPausePauseClass5Counter
+}
+
+type PatternFlowPfcPausePauseClass5ChoiceEnum string
+
+var PatternFlowPfcPausePauseClass5Choice = struct {
+	UNSPECIFIED PatternFlowPfcPausePauseClass5ChoiceEnum
+	VALUE       PatternFlowPfcPausePauseClass5ChoiceEnum
+	VALUES      PatternFlowPfcPausePauseClass5ChoiceEnum
+	INCREMENT   PatternFlowPfcPausePauseClass5ChoiceEnum
+	DECREMENT   PatternFlowPfcPausePauseClass5ChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowPfcPausePauseClass5ChoiceEnum("unspecified"),
+	VALUE:       PatternFlowPfcPausePauseClass5ChoiceEnum("value"),
+	VALUES:      PatternFlowPfcPausePauseClass5ChoiceEnum("values"),
+	INCREMENT:   PatternFlowPfcPausePauseClass5ChoiceEnum("increment"),
+	DECREMENT:   PatternFlowPfcPausePauseClass5ChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowPfcPausePauseClass5) Choice() PatternFlowPfcPausePauseClass5ChoiceEnum {
+	return PatternFlowPfcPausePauseClass5ChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowPfcPausePauseClass5) SetChoice(value PatternFlowPfcPausePauseClass5ChoiceEnum) PatternFlowPfcPausePauseClass5 {
+	intValue := snappipb.PatternFlowPfcPausePauseClass5_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowPfcPausePauseClass5_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -14687,6 +17158,7 @@ func (obj *patternFlowPfcPausePauseClass5) Value() int32 {
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass5) SetValue(value int32) PatternFlowPfcPausePauseClass5 {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowPfcPausePauseClass5Choice.VALUE)
 	return obj
 }
 
@@ -14700,6 +17172,7 @@ func (obj *patternFlowPfcPausePauseClass5) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass5) SetValues(value []int32) PatternFlowPfcPausePauseClass5 {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowPfcPausePauseClass5Choice.VALUES)
 	return obj
 }
 
@@ -14713,6 +17186,7 @@ func (obj *patternFlowPfcPausePauseClass5) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowPfcPausePauseClass5) SetMetricGroup(value string) PatternFlowPfcPausePauseClass5 {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -14722,8 +17196,8 @@ func (obj *patternFlowPfcPausePauseClass5) Increment() PatternFlowPfcPausePauseC
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowPfcPausePauseClass5Counter{}
 	}
+	obj.SetChoice(PatternFlowPfcPausePauseClass5Choice.INCREMENT)
 	return &patternFlowPfcPausePauseClass5Counter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowPfcPausePauseClass5Counter
@@ -14732,8 +17206,8 @@ func (obj *patternFlowPfcPausePauseClass5) Decrement() PatternFlowPfcPausePauseC
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowPfcPausePauseClass5Counter{}
 	}
+	obj.SetChoice(PatternFlowPfcPausePauseClass5Choice.DECREMENT)
 	return &patternFlowPfcPausePauseClass5Counter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowPfcPausePauseClass6 struct {
@@ -14782,6 +17256,8 @@ type PatternFlowPfcPausePauseClass6 interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowPfcPausePauseClass6ChoiceEnum
+	SetChoice(value PatternFlowPfcPausePauseClass6ChoiceEnum) PatternFlowPfcPausePauseClass6
 	Value() int32
 	SetValue(value int32) PatternFlowPfcPausePauseClass6
 	Values() []int32
@@ -14790,6 +17266,33 @@ type PatternFlowPfcPausePauseClass6 interface {
 	SetMetricGroup(value string) PatternFlowPfcPausePauseClass6
 	Increment() PatternFlowPfcPausePauseClass6Counter
 	Decrement() PatternFlowPfcPausePauseClass6Counter
+}
+
+type PatternFlowPfcPausePauseClass6ChoiceEnum string
+
+var PatternFlowPfcPausePauseClass6Choice = struct {
+	UNSPECIFIED PatternFlowPfcPausePauseClass6ChoiceEnum
+	VALUE       PatternFlowPfcPausePauseClass6ChoiceEnum
+	VALUES      PatternFlowPfcPausePauseClass6ChoiceEnum
+	INCREMENT   PatternFlowPfcPausePauseClass6ChoiceEnum
+	DECREMENT   PatternFlowPfcPausePauseClass6ChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowPfcPausePauseClass6ChoiceEnum("unspecified"),
+	VALUE:       PatternFlowPfcPausePauseClass6ChoiceEnum("value"),
+	VALUES:      PatternFlowPfcPausePauseClass6ChoiceEnum("values"),
+	INCREMENT:   PatternFlowPfcPausePauseClass6ChoiceEnum("increment"),
+	DECREMENT:   PatternFlowPfcPausePauseClass6ChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowPfcPausePauseClass6) Choice() PatternFlowPfcPausePauseClass6ChoiceEnum {
+	return PatternFlowPfcPausePauseClass6ChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowPfcPausePauseClass6) SetChoice(value PatternFlowPfcPausePauseClass6ChoiceEnum) PatternFlowPfcPausePauseClass6 {
+	intValue := snappipb.PatternFlowPfcPausePauseClass6_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowPfcPausePauseClass6_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -14802,6 +17305,7 @@ func (obj *patternFlowPfcPausePauseClass6) Value() int32 {
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass6) SetValue(value int32) PatternFlowPfcPausePauseClass6 {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowPfcPausePauseClass6Choice.VALUE)
 	return obj
 }
 
@@ -14815,6 +17319,7 @@ func (obj *patternFlowPfcPausePauseClass6) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass6) SetValues(value []int32) PatternFlowPfcPausePauseClass6 {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowPfcPausePauseClass6Choice.VALUES)
 	return obj
 }
 
@@ -14828,6 +17333,7 @@ func (obj *patternFlowPfcPausePauseClass6) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowPfcPausePauseClass6) SetMetricGroup(value string) PatternFlowPfcPausePauseClass6 {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -14837,8 +17343,8 @@ func (obj *patternFlowPfcPausePauseClass6) Increment() PatternFlowPfcPausePauseC
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowPfcPausePauseClass6Counter{}
 	}
+	obj.SetChoice(PatternFlowPfcPausePauseClass6Choice.INCREMENT)
 	return &patternFlowPfcPausePauseClass6Counter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowPfcPausePauseClass6Counter
@@ -14847,8 +17353,8 @@ func (obj *patternFlowPfcPausePauseClass6) Decrement() PatternFlowPfcPausePauseC
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowPfcPausePauseClass6Counter{}
 	}
+	obj.SetChoice(PatternFlowPfcPausePauseClass6Choice.DECREMENT)
 	return &patternFlowPfcPausePauseClass6Counter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowPfcPausePauseClass7 struct {
@@ -14897,6 +17403,8 @@ type PatternFlowPfcPausePauseClass7 interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowPfcPausePauseClass7ChoiceEnum
+	SetChoice(value PatternFlowPfcPausePauseClass7ChoiceEnum) PatternFlowPfcPausePauseClass7
 	Value() int32
 	SetValue(value int32) PatternFlowPfcPausePauseClass7
 	Values() []int32
@@ -14905,6 +17413,33 @@ type PatternFlowPfcPausePauseClass7 interface {
 	SetMetricGroup(value string) PatternFlowPfcPausePauseClass7
 	Increment() PatternFlowPfcPausePauseClass7Counter
 	Decrement() PatternFlowPfcPausePauseClass7Counter
+}
+
+type PatternFlowPfcPausePauseClass7ChoiceEnum string
+
+var PatternFlowPfcPausePauseClass7Choice = struct {
+	UNSPECIFIED PatternFlowPfcPausePauseClass7ChoiceEnum
+	VALUE       PatternFlowPfcPausePauseClass7ChoiceEnum
+	VALUES      PatternFlowPfcPausePauseClass7ChoiceEnum
+	INCREMENT   PatternFlowPfcPausePauseClass7ChoiceEnum
+	DECREMENT   PatternFlowPfcPausePauseClass7ChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowPfcPausePauseClass7ChoiceEnum("unspecified"),
+	VALUE:       PatternFlowPfcPausePauseClass7ChoiceEnum("value"),
+	VALUES:      PatternFlowPfcPausePauseClass7ChoiceEnum("values"),
+	INCREMENT:   PatternFlowPfcPausePauseClass7ChoiceEnum("increment"),
+	DECREMENT:   PatternFlowPfcPausePauseClass7ChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowPfcPausePauseClass7) Choice() PatternFlowPfcPausePauseClass7ChoiceEnum {
+	return PatternFlowPfcPausePauseClass7ChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowPfcPausePauseClass7) SetChoice(value PatternFlowPfcPausePauseClass7ChoiceEnum) PatternFlowPfcPausePauseClass7 {
+	intValue := snappipb.PatternFlowPfcPausePauseClass7_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowPfcPausePauseClass7_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -14917,6 +17452,7 @@ func (obj *patternFlowPfcPausePauseClass7) Value() int32 {
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass7) SetValue(value int32) PatternFlowPfcPausePauseClass7 {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowPfcPausePauseClass7Choice.VALUE)
 	return obj
 }
 
@@ -14930,6 +17466,7 @@ func (obj *patternFlowPfcPausePauseClass7) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass7) SetValues(value []int32) PatternFlowPfcPausePauseClass7 {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowPfcPausePauseClass7Choice.VALUES)
 	return obj
 }
 
@@ -14943,6 +17480,7 @@ func (obj *patternFlowPfcPausePauseClass7) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowPfcPausePauseClass7) SetMetricGroup(value string) PatternFlowPfcPausePauseClass7 {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -14952,8 +17490,8 @@ func (obj *patternFlowPfcPausePauseClass7) Increment() PatternFlowPfcPausePauseC
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowPfcPausePauseClass7Counter{}
 	}
+	obj.SetChoice(PatternFlowPfcPausePauseClass7Choice.INCREMENT)
 	return &patternFlowPfcPausePauseClass7Counter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowPfcPausePauseClass7Counter
@@ -14962,8 +17500,8 @@ func (obj *patternFlowPfcPausePauseClass7) Decrement() PatternFlowPfcPausePauseC
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowPfcPausePauseClass7Counter{}
 	}
+	obj.SetChoice(PatternFlowPfcPausePauseClass7Choice.DECREMENT)
 	return &patternFlowPfcPausePauseClass7Counter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowEthernetPauseDst struct {
@@ -15012,6 +17550,8 @@ type PatternFlowEthernetPauseDst interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowEthernetPauseDstChoiceEnum
+	SetChoice(value PatternFlowEthernetPauseDstChoiceEnum) PatternFlowEthernetPauseDst
 	Value() string
 	SetValue(value string) PatternFlowEthernetPauseDst
 	Values() []string
@@ -15020,6 +17560,33 @@ type PatternFlowEthernetPauseDst interface {
 	SetMetricGroup(value string) PatternFlowEthernetPauseDst
 	Increment() PatternFlowEthernetPauseDstCounter
 	Decrement() PatternFlowEthernetPauseDstCounter
+}
+
+type PatternFlowEthernetPauseDstChoiceEnum string
+
+var PatternFlowEthernetPauseDstChoice = struct {
+	UNSPECIFIED PatternFlowEthernetPauseDstChoiceEnum
+	VALUE       PatternFlowEthernetPauseDstChoiceEnum
+	VALUES      PatternFlowEthernetPauseDstChoiceEnum
+	INCREMENT   PatternFlowEthernetPauseDstChoiceEnum
+	DECREMENT   PatternFlowEthernetPauseDstChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowEthernetPauseDstChoiceEnum("unspecified"),
+	VALUE:       PatternFlowEthernetPauseDstChoiceEnum("value"),
+	VALUES:      PatternFlowEthernetPauseDstChoiceEnum("values"),
+	INCREMENT:   PatternFlowEthernetPauseDstChoiceEnum("increment"),
+	DECREMENT:   PatternFlowEthernetPauseDstChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowEthernetPauseDst) Choice() PatternFlowEthernetPauseDstChoiceEnum {
+	return PatternFlowEthernetPauseDstChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowEthernetPauseDst) SetChoice(value PatternFlowEthernetPauseDstChoiceEnum) PatternFlowEthernetPauseDst {
+	intValue := snappipb.PatternFlowEthernetPauseDst_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowEthernetPauseDst_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a string
@@ -15032,6 +17599,7 @@ func (obj *patternFlowEthernetPauseDst) Value() string {
 //  description is TBD
 func (obj *patternFlowEthernetPauseDst) SetValue(value string) PatternFlowEthernetPauseDst {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowEthernetPauseDstChoice.VALUE)
 	return obj
 }
 
@@ -15045,6 +17613,7 @@ func (obj *patternFlowEthernetPauseDst) Values() []string {
 //  description is TBD
 func (obj *patternFlowEthernetPauseDst) SetValues(value []string) PatternFlowEthernetPauseDst {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowEthernetPauseDstChoice.VALUES)
 	return obj
 }
 
@@ -15058,6 +17627,7 @@ func (obj *patternFlowEthernetPauseDst) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowEthernetPauseDst) SetMetricGroup(value string) PatternFlowEthernetPauseDst {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -15067,8 +17637,8 @@ func (obj *patternFlowEthernetPauseDst) Increment() PatternFlowEthernetPauseDstC
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowEthernetPauseDstCounter{}
 	}
+	obj.SetChoice(PatternFlowEthernetPauseDstChoice.INCREMENT)
 	return &patternFlowEthernetPauseDstCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowEthernetPauseDstCounter
@@ -15077,8 +17647,8 @@ func (obj *patternFlowEthernetPauseDst) Decrement() PatternFlowEthernetPauseDstC
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowEthernetPauseDstCounter{}
 	}
+	obj.SetChoice(PatternFlowEthernetPauseDstChoice.DECREMENT)
 	return &patternFlowEthernetPauseDstCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowEthernetPauseSrc struct {
@@ -15127,6 +17697,8 @@ type PatternFlowEthernetPauseSrc interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowEthernetPauseSrcChoiceEnum
+	SetChoice(value PatternFlowEthernetPauseSrcChoiceEnum) PatternFlowEthernetPauseSrc
 	Value() string
 	SetValue(value string) PatternFlowEthernetPauseSrc
 	Values() []string
@@ -15135,6 +17707,33 @@ type PatternFlowEthernetPauseSrc interface {
 	SetMetricGroup(value string) PatternFlowEthernetPauseSrc
 	Increment() PatternFlowEthernetPauseSrcCounter
 	Decrement() PatternFlowEthernetPauseSrcCounter
+}
+
+type PatternFlowEthernetPauseSrcChoiceEnum string
+
+var PatternFlowEthernetPauseSrcChoice = struct {
+	UNSPECIFIED PatternFlowEthernetPauseSrcChoiceEnum
+	VALUE       PatternFlowEthernetPauseSrcChoiceEnum
+	VALUES      PatternFlowEthernetPauseSrcChoiceEnum
+	INCREMENT   PatternFlowEthernetPauseSrcChoiceEnum
+	DECREMENT   PatternFlowEthernetPauseSrcChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowEthernetPauseSrcChoiceEnum("unspecified"),
+	VALUE:       PatternFlowEthernetPauseSrcChoiceEnum("value"),
+	VALUES:      PatternFlowEthernetPauseSrcChoiceEnum("values"),
+	INCREMENT:   PatternFlowEthernetPauseSrcChoiceEnum("increment"),
+	DECREMENT:   PatternFlowEthernetPauseSrcChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowEthernetPauseSrc) Choice() PatternFlowEthernetPauseSrcChoiceEnum {
+	return PatternFlowEthernetPauseSrcChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowEthernetPauseSrc) SetChoice(value PatternFlowEthernetPauseSrcChoiceEnum) PatternFlowEthernetPauseSrc {
+	intValue := snappipb.PatternFlowEthernetPauseSrc_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowEthernetPauseSrc_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a string
@@ -15147,6 +17746,7 @@ func (obj *patternFlowEthernetPauseSrc) Value() string {
 //  description is TBD
 func (obj *patternFlowEthernetPauseSrc) SetValue(value string) PatternFlowEthernetPauseSrc {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowEthernetPauseSrcChoice.VALUE)
 	return obj
 }
 
@@ -15160,6 +17760,7 @@ func (obj *patternFlowEthernetPauseSrc) Values() []string {
 //  description is TBD
 func (obj *patternFlowEthernetPauseSrc) SetValues(value []string) PatternFlowEthernetPauseSrc {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowEthernetPauseSrcChoice.VALUES)
 	return obj
 }
 
@@ -15173,6 +17774,7 @@ func (obj *patternFlowEthernetPauseSrc) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowEthernetPauseSrc) SetMetricGroup(value string) PatternFlowEthernetPauseSrc {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -15182,8 +17784,8 @@ func (obj *patternFlowEthernetPauseSrc) Increment() PatternFlowEthernetPauseSrcC
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowEthernetPauseSrcCounter{}
 	}
+	obj.SetChoice(PatternFlowEthernetPauseSrcChoice.INCREMENT)
 	return &patternFlowEthernetPauseSrcCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowEthernetPauseSrcCounter
@@ -15192,8 +17794,8 @@ func (obj *patternFlowEthernetPauseSrc) Decrement() PatternFlowEthernetPauseSrcC
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowEthernetPauseSrcCounter{}
 	}
+	obj.SetChoice(PatternFlowEthernetPauseSrcChoice.DECREMENT)
 	return &patternFlowEthernetPauseSrcCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowEthernetPauseEtherType struct {
@@ -15242,6 +17844,8 @@ type PatternFlowEthernetPauseEtherType interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowEthernetPauseEtherTypeChoiceEnum
+	SetChoice(value PatternFlowEthernetPauseEtherTypeChoiceEnum) PatternFlowEthernetPauseEtherType
 	Value() int32
 	SetValue(value int32) PatternFlowEthernetPauseEtherType
 	Values() []int32
@@ -15250,6 +17854,33 @@ type PatternFlowEthernetPauseEtherType interface {
 	SetMetricGroup(value string) PatternFlowEthernetPauseEtherType
 	Increment() PatternFlowEthernetPauseEtherTypeCounter
 	Decrement() PatternFlowEthernetPauseEtherTypeCounter
+}
+
+type PatternFlowEthernetPauseEtherTypeChoiceEnum string
+
+var PatternFlowEthernetPauseEtherTypeChoice = struct {
+	UNSPECIFIED PatternFlowEthernetPauseEtherTypeChoiceEnum
+	VALUE       PatternFlowEthernetPauseEtherTypeChoiceEnum
+	VALUES      PatternFlowEthernetPauseEtherTypeChoiceEnum
+	INCREMENT   PatternFlowEthernetPauseEtherTypeChoiceEnum
+	DECREMENT   PatternFlowEthernetPauseEtherTypeChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowEthernetPauseEtherTypeChoiceEnum("unspecified"),
+	VALUE:       PatternFlowEthernetPauseEtherTypeChoiceEnum("value"),
+	VALUES:      PatternFlowEthernetPauseEtherTypeChoiceEnum("values"),
+	INCREMENT:   PatternFlowEthernetPauseEtherTypeChoiceEnum("increment"),
+	DECREMENT:   PatternFlowEthernetPauseEtherTypeChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowEthernetPauseEtherType) Choice() PatternFlowEthernetPauseEtherTypeChoiceEnum {
+	return PatternFlowEthernetPauseEtherTypeChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowEthernetPauseEtherType) SetChoice(value PatternFlowEthernetPauseEtherTypeChoiceEnum) PatternFlowEthernetPauseEtherType {
+	intValue := snappipb.PatternFlowEthernetPauseEtherType_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowEthernetPauseEtherType_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -15262,6 +17893,7 @@ func (obj *patternFlowEthernetPauseEtherType) Value() int32 {
 //  description is TBD
 func (obj *patternFlowEthernetPauseEtherType) SetValue(value int32) PatternFlowEthernetPauseEtherType {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowEthernetPauseEtherTypeChoice.VALUE)
 	return obj
 }
 
@@ -15275,6 +17907,7 @@ func (obj *patternFlowEthernetPauseEtherType) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowEthernetPauseEtherType) SetValues(value []int32) PatternFlowEthernetPauseEtherType {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowEthernetPauseEtherTypeChoice.VALUES)
 	return obj
 }
 
@@ -15288,6 +17921,7 @@ func (obj *patternFlowEthernetPauseEtherType) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowEthernetPauseEtherType) SetMetricGroup(value string) PatternFlowEthernetPauseEtherType {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -15297,8 +17931,8 @@ func (obj *patternFlowEthernetPauseEtherType) Increment() PatternFlowEthernetPau
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowEthernetPauseEtherTypeCounter{}
 	}
+	obj.SetChoice(PatternFlowEthernetPauseEtherTypeChoice.INCREMENT)
 	return &patternFlowEthernetPauseEtherTypeCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowEthernetPauseEtherTypeCounter
@@ -15307,8 +17941,8 @@ func (obj *patternFlowEthernetPauseEtherType) Decrement() PatternFlowEthernetPau
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowEthernetPauseEtherTypeCounter{}
 	}
+	obj.SetChoice(PatternFlowEthernetPauseEtherTypeChoice.DECREMENT)
 	return &patternFlowEthernetPauseEtherTypeCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowEthernetPauseControlOpCode struct {
@@ -15357,6 +17991,8 @@ type PatternFlowEthernetPauseControlOpCode interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowEthernetPauseControlOpCodeChoiceEnum
+	SetChoice(value PatternFlowEthernetPauseControlOpCodeChoiceEnum) PatternFlowEthernetPauseControlOpCode
 	Value() int32
 	SetValue(value int32) PatternFlowEthernetPauseControlOpCode
 	Values() []int32
@@ -15365,6 +18001,33 @@ type PatternFlowEthernetPauseControlOpCode interface {
 	SetMetricGroup(value string) PatternFlowEthernetPauseControlOpCode
 	Increment() PatternFlowEthernetPauseControlOpCodeCounter
 	Decrement() PatternFlowEthernetPauseControlOpCodeCounter
+}
+
+type PatternFlowEthernetPauseControlOpCodeChoiceEnum string
+
+var PatternFlowEthernetPauseControlOpCodeChoice = struct {
+	UNSPECIFIED PatternFlowEthernetPauseControlOpCodeChoiceEnum
+	VALUE       PatternFlowEthernetPauseControlOpCodeChoiceEnum
+	VALUES      PatternFlowEthernetPauseControlOpCodeChoiceEnum
+	INCREMENT   PatternFlowEthernetPauseControlOpCodeChoiceEnum
+	DECREMENT   PatternFlowEthernetPauseControlOpCodeChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowEthernetPauseControlOpCodeChoiceEnum("unspecified"),
+	VALUE:       PatternFlowEthernetPauseControlOpCodeChoiceEnum("value"),
+	VALUES:      PatternFlowEthernetPauseControlOpCodeChoiceEnum("values"),
+	INCREMENT:   PatternFlowEthernetPauseControlOpCodeChoiceEnum("increment"),
+	DECREMENT:   PatternFlowEthernetPauseControlOpCodeChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowEthernetPauseControlOpCode) Choice() PatternFlowEthernetPauseControlOpCodeChoiceEnum {
+	return PatternFlowEthernetPauseControlOpCodeChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowEthernetPauseControlOpCode) SetChoice(value PatternFlowEthernetPauseControlOpCodeChoiceEnum) PatternFlowEthernetPauseControlOpCode {
+	intValue := snappipb.PatternFlowEthernetPauseControlOpCode_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowEthernetPauseControlOpCode_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -15377,6 +18040,7 @@ func (obj *patternFlowEthernetPauseControlOpCode) Value() int32 {
 //  description is TBD
 func (obj *patternFlowEthernetPauseControlOpCode) SetValue(value int32) PatternFlowEthernetPauseControlOpCode {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowEthernetPauseControlOpCodeChoice.VALUE)
 	return obj
 }
 
@@ -15390,6 +18054,7 @@ func (obj *patternFlowEthernetPauseControlOpCode) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowEthernetPauseControlOpCode) SetValues(value []int32) PatternFlowEthernetPauseControlOpCode {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowEthernetPauseControlOpCodeChoice.VALUES)
 	return obj
 }
 
@@ -15403,6 +18068,7 @@ func (obj *patternFlowEthernetPauseControlOpCode) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowEthernetPauseControlOpCode) SetMetricGroup(value string) PatternFlowEthernetPauseControlOpCode {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -15412,8 +18078,8 @@ func (obj *patternFlowEthernetPauseControlOpCode) Increment() PatternFlowEtherne
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowEthernetPauseControlOpCodeCounter{}
 	}
+	obj.SetChoice(PatternFlowEthernetPauseControlOpCodeChoice.INCREMENT)
 	return &patternFlowEthernetPauseControlOpCodeCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowEthernetPauseControlOpCodeCounter
@@ -15422,8 +18088,8 @@ func (obj *patternFlowEthernetPauseControlOpCode) Decrement() PatternFlowEtherne
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowEthernetPauseControlOpCodeCounter{}
 	}
+	obj.SetChoice(PatternFlowEthernetPauseControlOpCodeChoice.DECREMENT)
 	return &patternFlowEthernetPauseControlOpCodeCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowEthernetPauseTime struct {
@@ -15472,6 +18138,8 @@ type PatternFlowEthernetPauseTime interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowEthernetPauseTimeChoiceEnum
+	SetChoice(value PatternFlowEthernetPauseTimeChoiceEnum) PatternFlowEthernetPauseTime
 	Value() int32
 	SetValue(value int32) PatternFlowEthernetPauseTime
 	Values() []int32
@@ -15480,6 +18148,33 @@ type PatternFlowEthernetPauseTime interface {
 	SetMetricGroup(value string) PatternFlowEthernetPauseTime
 	Increment() PatternFlowEthernetPauseTimeCounter
 	Decrement() PatternFlowEthernetPauseTimeCounter
+}
+
+type PatternFlowEthernetPauseTimeChoiceEnum string
+
+var PatternFlowEthernetPauseTimeChoice = struct {
+	UNSPECIFIED PatternFlowEthernetPauseTimeChoiceEnum
+	VALUE       PatternFlowEthernetPauseTimeChoiceEnum
+	VALUES      PatternFlowEthernetPauseTimeChoiceEnum
+	INCREMENT   PatternFlowEthernetPauseTimeChoiceEnum
+	DECREMENT   PatternFlowEthernetPauseTimeChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowEthernetPauseTimeChoiceEnum("unspecified"),
+	VALUE:       PatternFlowEthernetPauseTimeChoiceEnum("value"),
+	VALUES:      PatternFlowEthernetPauseTimeChoiceEnum("values"),
+	INCREMENT:   PatternFlowEthernetPauseTimeChoiceEnum("increment"),
+	DECREMENT:   PatternFlowEthernetPauseTimeChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowEthernetPauseTime) Choice() PatternFlowEthernetPauseTimeChoiceEnum {
+	return PatternFlowEthernetPauseTimeChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowEthernetPauseTime) SetChoice(value PatternFlowEthernetPauseTimeChoiceEnum) PatternFlowEthernetPauseTime {
+	intValue := snappipb.PatternFlowEthernetPauseTime_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowEthernetPauseTime_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -15492,6 +18187,7 @@ func (obj *patternFlowEthernetPauseTime) Value() int32 {
 //  description is TBD
 func (obj *patternFlowEthernetPauseTime) SetValue(value int32) PatternFlowEthernetPauseTime {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowEthernetPauseTimeChoice.VALUE)
 	return obj
 }
 
@@ -15505,6 +18201,7 @@ func (obj *patternFlowEthernetPauseTime) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowEthernetPauseTime) SetValues(value []int32) PatternFlowEthernetPauseTime {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowEthernetPauseTimeChoice.VALUES)
 	return obj
 }
 
@@ -15518,6 +18215,7 @@ func (obj *patternFlowEthernetPauseTime) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowEthernetPauseTime) SetMetricGroup(value string) PatternFlowEthernetPauseTime {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -15527,8 +18225,8 @@ func (obj *patternFlowEthernetPauseTime) Increment() PatternFlowEthernetPauseTim
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowEthernetPauseTimeCounter{}
 	}
+	obj.SetChoice(PatternFlowEthernetPauseTimeChoice.INCREMENT)
 	return &patternFlowEthernetPauseTimeCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowEthernetPauseTimeCounter
@@ -15537,8 +18235,8 @@ func (obj *patternFlowEthernetPauseTime) Decrement() PatternFlowEthernetPauseTim
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowEthernetPauseTimeCounter{}
 	}
+	obj.SetChoice(PatternFlowEthernetPauseTimeChoice.DECREMENT)
 	return &patternFlowEthernetPauseTimeCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowTcpSrcPort struct {
@@ -15587,6 +18285,8 @@ type PatternFlowTcpSrcPort interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowTcpSrcPortChoiceEnum
+	SetChoice(value PatternFlowTcpSrcPortChoiceEnum) PatternFlowTcpSrcPort
 	Value() int32
 	SetValue(value int32) PatternFlowTcpSrcPort
 	Values() []int32
@@ -15595,6 +18295,33 @@ type PatternFlowTcpSrcPort interface {
 	SetMetricGroup(value string) PatternFlowTcpSrcPort
 	Increment() PatternFlowTcpSrcPortCounter
 	Decrement() PatternFlowTcpSrcPortCounter
+}
+
+type PatternFlowTcpSrcPortChoiceEnum string
+
+var PatternFlowTcpSrcPortChoice = struct {
+	UNSPECIFIED PatternFlowTcpSrcPortChoiceEnum
+	VALUE       PatternFlowTcpSrcPortChoiceEnum
+	VALUES      PatternFlowTcpSrcPortChoiceEnum
+	INCREMENT   PatternFlowTcpSrcPortChoiceEnum
+	DECREMENT   PatternFlowTcpSrcPortChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowTcpSrcPortChoiceEnum("unspecified"),
+	VALUE:       PatternFlowTcpSrcPortChoiceEnum("value"),
+	VALUES:      PatternFlowTcpSrcPortChoiceEnum("values"),
+	INCREMENT:   PatternFlowTcpSrcPortChoiceEnum("increment"),
+	DECREMENT:   PatternFlowTcpSrcPortChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowTcpSrcPort) Choice() PatternFlowTcpSrcPortChoiceEnum {
+	return PatternFlowTcpSrcPortChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowTcpSrcPort) SetChoice(value PatternFlowTcpSrcPortChoiceEnum) PatternFlowTcpSrcPort {
+	intValue := snappipb.PatternFlowTcpSrcPort_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowTcpSrcPort_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -15607,6 +18334,7 @@ func (obj *patternFlowTcpSrcPort) Value() int32 {
 //  description is TBD
 func (obj *patternFlowTcpSrcPort) SetValue(value int32) PatternFlowTcpSrcPort {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowTcpSrcPortChoice.VALUE)
 	return obj
 }
 
@@ -15620,6 +18348,7 @@ func (obj *patternFlowTcpSrcPort) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowTcpSrcPort) SetValues(value []int32) PatternFlowTcpSrcPort {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowTcpSrcPortChoice.VALUES)
 	return obj
 }
 
@@ -15633,6 +18362,7 @@ func (obj *patternFlowTcpSrcPort) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowTcpSrcPort) SetMetricGroup(value string) PatternFlowTcpSrcPort {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -15642,8 +18372,8 @@ func (obj *patternFlowTcpSrcPort) Increment() PatternFlowTcpSrcPortCounter {
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowTcpSrcPortCounter{}
 	}
+	obj.SetChoice(PatternFlowTcpSrcPortChoice.INCREMENT)
 	return &patternFlowTcpSrcPortCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowTcpSrcPortCounter
@@ -15652,8 +18382,8 @@ func (obj *patternFlowTcpSrcPort) Decrement() PatternFlowTcpSrcPortCounter {
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowTcpSrcPortCounter{}
 	}
+	obj.SetChoice(PatternFlowTcpSrcPortChoice.DECREMENT)
 	return &patternFlowTcpSrcPortCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowTcpDstPort struct {
@@ -15702,6 +18432,8 @@ type PatternFlowTcpDstPort interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowTcpDstPortChoiceEnum
+	SetChoice(value PatternFlowTcpDstPortChoiceEnum) PatternFlowTcpDstPort
 	Value() int32
 	SetValue(value int32) PatternFlowTcpDstPort
 	Values() []int32
@@ -15710,6 +18442,33 @@ type PatternFlowTcpDstPort interface {
 	SetMetricGroup(value string) PatternFlowTcpDstPort
 	Increment() PatternFlowTcpDstPortCounter
 	Decrement() PatternFlowTcpDstPortCounter
+}
+
+type PatternFlowTcpDstPortChoiceEnum string
+
+var PatternFlowTcpDstPortChoice = struct {
+	UNSPECIFIED PatternFlowTcpDstPortChoiceEnum
+	VALUE       PatternFlowTcpDstPortChoiceEnum
+	VALUES      PatternFlowTcpDstPortChoiceEnum
+	INCREMENT   PatternFlowTcpDstPortChoiceEnum
+	DECREMENT   PatternFlowTcpDstPortChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowTcpDstPortChoiceEnum("unspecified"),
+	VALUE:       PatternFlowTcpDstPortChoiceEnum("value"),
+	VALUES:      PatternFlowTcpDstPortChoiceEnum("values"),
+	INCREMENT:   PatternFlowTcpDstPortChoiceEnum("increment"),
+	DECREMENT:   PatternFlowTcpDstPortChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowTcpDstPort) Choice() PatternFlowTcpDstPortChoiceEnum {
+	return PatternFlowTcpDstPortChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowTcpDstPort) SetChoice(value PatternFlowTcpDstPortChoiceEnum) PatternFlowTcpDstPort {
+	intValue := snappipb.PatternFlowTcpDstPort_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowTcpDstPort_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -15722,6 +18481,7 @@ func (obj *patternFlowTcpDstPort) Value() int32 {
 //  description is TBD
 func (obj *patternFlowTcpDstPort) SetValue(value int32) PatternFlowTcpDstPort {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowTcpDstPortChoice.VALUE)
 	return obj
 }
 
@@ -15735,6 +18495,7 @@ func (obj *patternFlowTcpDstPort) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowTcpDstPort) SetValues(value []int32) PatternFlowTcpDstPort {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowTcpDstPortChoice.VALUES)
 	return obj
 }
 
@@ -15748,6 +18509,7 @@ func (obj *patternFlowTcpDstPort) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowTcpDstPort) SetMetricGroup(value string) PatternFlowTcpDstPort {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -15757,8 +18519,8 @@ func (obj *patternFlowTcpDstPort) Increment() PatternFlowTcpDstPortCounter {
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowTcpDstPortCounter{}
 	}
+	obj.SetChoice(PatternFlowTcpDstPortChoice.INCREMENT)
 	return &patternFlowTcpDstPortCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowTcpDstPortCounter
@@ -15767,8 +18529,8 @@ func (obj *patternFlowTcpDstPort) Decrement() PatternFlowTcpDstPortCounter {
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowTcpDstPortCounter{}
 	}
+	obj.SetChoice(PatternFlowTcpDstPortChoice.DECREMENT)
 	return &patternFlowTcpDstPortCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowTcpSeqNum struct {
@@ -15817,6 +18579,8 @@ type PatternFlowTcpSeqNum interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowTcpSeqNumChoiceEnum
+	SetChoice(value PatternFlowTcpSeqNumChoiceEnum) PatternFlowTcpSeqNum
 	Value() int32
 	SetValue(value int32) PatternFlowTcpSeqNum
 	Values() []int32
@@ -15825,6 +18589,33 @@ type PatternFlowTcpSeqNum interface {
 	SetMetricGroup(value string) PatternFlowTcpSeqNum
 	Increment() PatternFlowTcpSeqNumCounter
 	Decrement() PatternFlowTcpSeqNumCounter
+}
+
+type PatternFlowTcpSeqNumChoiceEnum string
+
+var PatternFlowTcpSeqNumChoice = struct {
+	UNSPECIFIED PatternFlowTcpSeqNumChoiceEnum
+	VALUE       PatternFlowTcpSeqNumChoiceEnum
+	VALUES      PatternFlowTcpSeqNumChoiceEnum
+	INCREMENT   PatternFlowTcpSeqNumChoiceEnum
+	DECREMENT   PatternFlowTcpSeqNumChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowTcpSeqNumChoiceEnum("unspecified"),
+	VALUE:       PatternFlowTcpSeqNumChoiceEnum("value"),
+	VALUES:      PatternFlowTcpSeqNumChoiceEnum("values"),
+	INCREMENT:   PatternFlowTcpSeqNumChoiceEnum("increment"),
+	DECREMENT:   PatternFlowTcpSeqNumChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowTcpSeqNum) Choice() PatternFlowTcpSeqNumChoiceEnum {
+	return PatternFlowTcpSeqNumChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowTcpSeqNum) SetChoice(value PatternFlowTcpSeqNumChoiceEnum) PatternFlowTcpSeqNum {
+	intValue := snappipb.PatternFlowTcpSeqNum_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowTcpSeqNum_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -15837,6 +18628,7 @@ func (obj *patternFlowTcpSeqNum) Value() int32 {
 //  description is TBD
 func (obj *patternFlowTcpSeqNum) SetValue(value int32) PatternFlowTcpSeqNum {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowTcpSeqNumChoice.VALUE)
 	return obj
 }
 
@@ -15850,6 +18642,7 @@ func (obj *patternFlowTcpSeqNum) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowTcpSeqNum) SetValues(value []int32) PatternFlowTcpSeqNum {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowTcpSeqNumChoice.VALUES)
 	return obj
 }
 
@@ -15863,6 +18656,7 @@ func (obj *patternFlowTcpSeqNum) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowTcpSeqNum) SetMetricGroup(value string) PatternFlowTcpSeqNum {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -15872,8 +18666,8 @@ func (obj *patternFlowTcpSeqNum) Increment() PatternFlowTcpSeqNumCounter {
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowTcpSeqNumCounter{}
 	}
+	obj.SetChoice(PatternFlowTcpSeqNumChoice.INCREMENT)
 	return &patternFlowTcpSeqNumCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowTcpSeqNumCounter
@@ -15882,8 +18676,8 @@ func (obj *patternFlowTcpSeqNum) Decrement() PatternFlowTcpSeqNumCounter {
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowTcpSeqNumCounter{}
 	}
+	obj.SetChoice(PatternFlowTcpSeqNumChoice.DECREMENT)
 	return &patternFlowTcpSeqNumCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowTcpAckNum struct {
@@ -15932,6 +18726,8 @@ type PatternFlowTcpAckNum interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowTcpAckNumChoiceEnum
+	SetChoice(value PatternFlowTcpAckNumChoiceEnum) PatternFlowTcpAckNum
 	Value() int32
 	SetValue(value int32) PatternFlowTcpAckNum
 	Values() []int32
@@ -15940,6 +18736,33 @@ type PatternFlowTcpAckNum interface {
 	SetMetricGroup(value string) PatternFlowTcpAckNum
 	Increment() PatternFlowTcpAckNumCounter
 	Decrement() PatternFlowTcpAckNumCounter
+}
+
+type PatternFlowTcpAckNumChoiceEnum string
+
+var PatternFlowTcpAckNumChoice = struct {
+	UNSPECIFIED PatternFlowTcpAckNumChoiceEnum
+	VALUE       PatternFlowTcpAckNumChoiceEnum
+	VALUES      PatternFlowTcpAckNumChoiceEnum
+	INCREMENT   PatternFlowTcpAckNumChoiceEnum
+	DECREMENT   PatternFlowTcpAckNumChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowTcpAckNumChoiceEnum("unspecified"),
+	VALUE:       PatternFlowTcpAckNumChoiceEnum("value"),
+	VALUES:      PatternFlowTcpAckNumChoiceEnum("values"),
+	INCREMENT:   PatternFlowTcpAckNumChoiceEnum("increment"),
+	DECREMENT:   PatternFlowTcpAckNumChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowTcpAckNum) Choice() PatternFlowTcpAckNumChoiceEnum {
+	return PatternFlowTcpAckNumChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowTcpAckNum) SetChoice(value PatternFlowTcpAckNumChoiceEnum) PatternFlowTcpAckNum {
+	intValue := snappipb.PatternFlowTcpAckNum_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowTcpAckNum_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -15952,6 +18775,7 @@ func (obj *patternFlowTcpAckNum) Value() int32 {
 //  description is TBD
 func (obj *patternFlowTcpAckNum) SetValue(value int32) PatternFlowTcpAckNum {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowTcpAckNumChoice.VALUE)
 	return obj
 }
 
@@ -15965,6 +18789,7 @@ func (obj *patternFlowTcpAckNum) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowTcpAckNum) SetValues(value []int32) PatternFlowTcpAckNum {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowTcpAckNumChoice.VALUES)
 	return obj
 }
 
@@ -15978,6 +18803,7 @@ func (obj *patternFlowTcpAckNum) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowTcpAckNum) SetMetricGroup(value string) PatternFlowTcpAckNum {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -15987,8 +18813,8 @@ func (obj *patternFlowTcpAckNum) Increment() PatternFlowTcpAckNumCounter {
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowTcpAckNumCounter{}
 	}
+	obj.SetChoice(PatternFlowTcpAckNumChoice.INCREMENT)
 	return &patternFlowTcpAckNumCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowTcpAckNumCounter
@@ -15997,8 +18823,8 @@ func (obj *patternFlowTcpAckNum) Decrement() PatternFlowTcpAckNumCounter {
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowTcpAckNumCounter{}
 	}
+	obj.SetChoice(PatternFlowTcpAckNumChoice.DECREMENT)
 	return &patternFlowTcpAckNumCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowTcpDataOffset struct {
@@ -16047,6 +18873,8 @@ type PatternFlowTcpDataOffset interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowTcpDataOffsetChoiceEnum
+	SetChoice(value PatternFlowTcpDataOffsetChoiceEnum) PatternFlowTcpDataOffset
 	Value() int32
 	SetValue(value int32) PatternFlowTcpDataOffset
 	Values() []int32
@@ -16055,6 +18883,33 @@ type PatternFlowTcpDataOffset interface {
 	SetMetricGroup(value string) PatternFlowTcpDataOffset
 	Increment() PatternFlowTcpDataOffsetCounter
 	Decrement() PatternFlowTcpDataOffsetCounter
+}
+
+type PatternFlowTcpDataOffsetChoiceEnum string
+
+var PatternFlowTcpDataOffsetChoice = struct {
+	UNSPECIFIED PatternFlowTcpDataOffsetChoiceEnum
+	VALUE       PatternFlowTcpDataOffsetChoiceEnum
+	VALUES      PatternFlowTcpDataOffsetChoiceEnum
+	INCREMENT   PatternFlowTcpDataOffsetChoiceEnum
+	DECREMENT   PatternFlowTcpDataOffsetChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowTcpDataOffsetChoiceEnum("unspecified"),
+	VALUE:       PatternFlowTcpDataOffsetChoiceEnum("value"),
+	VALUES:      PatternFlowTcpDataOffsetChoiceEnum("values"),
+	INCREMENT:   PatternFlowTcpDataOffsetChoiceEnum("increment"),
+	DECREMENT:   PatternFlowTcpDataOffsetChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowTcpDataOffset) Choice() PatternFlowTcpDataOffsetChoiceEnum {
+	return PatternFlowTcpDataOffsetChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowTcpDataOffset) SetChoice(value PatternFlowTcpDataOffsetChoiceEnum) PatternFlowTcpDataOffset {
+	intValue := snappipb.PatternFlowTcpDataOffset_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowTcpDataOffset_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -16067,6 +18922,7 @@ func (obj *patternFlowTcpDataOffset) Value() int32 {
 //  description is TBD
 func (obj *patternFlowTcpDataOffset) SetValue(value int32) PatternFlowTcpDataOffset {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowTcpDataOffsetChoice.VALUE)
 	return obj
 }
 
@@ -16080,6 +18936,7 @@ func (obj *patternFlowTcpDataOffset) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowTcpDataOffset) SetValues(value []int32) PatternFlowTcpDataOffset {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowTcpDataOffsetChoice.VALUES)
 	return obj
 }
 
@@ -16093,6 +18950,7 @@ func (obj *patternFlowTcpDataOffset) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowTcpDataOffset) SetMetricGroup(value string) PatternFlowTcpDataOffset {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -16102,8 +18960,8 @@ func (obj *patternFlowTcpDataOffset) Increment() PatternFlowTcpDataOffsetCounter
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowTcpDataOffsetCounter{}
 	}
+	obj.SetChoice(PatternFlowTcpDataOffsetChoice.INCREMENT)
 	return &patternFlowTcpDataOffsetCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowTcpDataOffsetCounter
@@ -16112,8 +18970,8 @@ func (obj *patternFlowTcpDataOffset) Decrement() PatternFlowTcpDataOffsetCounter
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowTcpDataOffsetCounter{}
 	}
+	obj.SetChoice(PatternFlowTcpDataOffsetChoice.DECREMENT)
 	return &patternFlowTcpDataOffsetCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowTcpEcnNs struct {
@@ -16162,6 +19020,8 @@ type PatternFlowTcpEcnNs interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowTcpEcnNsChoiceEnum
+	SetChoice(value PatternFlowTcpEcnNsChoiceEnum) PatternFlowTcpEcnNs
 	Value() int32
 	SetValue(value int32) PatternFlowTcpEcnNs
 	Values() []int32
@@ -16170,6 +19030,33 @@ type PatternFlowTcpEcnNs interface {
 	SetMetricGroup(value string) PatternFlowTcpEcnNs
 	Increment() PatternFlowTcpEcnNsCounter
 	Decrement() PatternFlowTcpEcnNsCounter
+}
+
+type PatternFlowTcpEcnNsChoiceEnum string
+
+var PatternFlowTcpEcnNsChoice = struct {
+	UNSPECIFIED PatternFlowTcpEcnNsChoiceEnum
+	VALUE       PatternFlowTcpEcnNsChoiceEnum
+	VALUES      PatternFlowTcpEcnNsChoiceEnum
+	INCREMENT   PatternFlowTcpEcnNsChoiceEnum
+	DECREMENT   PatternFlowTcpEcnNsChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowTcpEcnNsChoiceEnum("unspecified"),
+	VALUE:       PatternFlowTcpEcnNsChoiceEnum("value"),
+	VALUES:      PatternFlowTcpEcnNsChoiceEnum("values"),
+	INCREMENT:   PatternFlowTcpEcnNsChoiceEnum("increment"),
+	DECREMENT:   PatternFlowTcpEcnNsChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowTcpEcnNs) Choice() PatternFlowTcpEcnNsChoiceEnum {
+	return PatternFlowTcpEcnNsChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowTcpEcnNs) SetChoice(value PatternFlowTcpEcnNsChoiceEnum) PatternFlowTcpEcnNs {
+	intValue := snappipb.PatternFlowTcpEcnNs_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowTcpEcnNs_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -16182,6 +19069,7 @@ func (obj *patternFlowTcpEcnNs) Value() int32 {
 //  description is TBD
 func (obj *patternFlowTcpEcnNs) SetValue(value int32) PatternFlowTcpEcnNs {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowTcpEcnNsChoice.VALUE)
 	return obj
 }
 
@@ -16195,6 +19083,7 @@ func (obj *patternFlowTcpEcnNs) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowTcpEcnNs) SetValues(value []int32) PatternFlowTcpEcnNs {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowTcpEcnNsChoice.VALUES)
 	return obj
 }
 
@@ -16208,6 +19097,7 @@ func (obj *patternFlowTcpEcnNs) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowTcpEcnNs) SetMetricGroup(value string) PatternFlowTcpEcnNs {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -16217,8 +19107,8 @@ func (obj *patternFlowTcpEcnNs) Increment() PatternFlowTcpEcnNsCounter {
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowTcpEcnNsCounter{}
 	}
+	obj.SetChoice(PatternFlowTcpEcnNsChoice.INCREMENT)
 	return &patternFlowTcpEcnNsCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowTcpEcnNsCounter
@@ -16227,8 +19117,8 @@ func (obj *patternFlowTcpEcnNs) Decrement() PatternFlowTcpEcnNsCounter {
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowTcpEcnNsCounter{}
 	}
+	obj.SetChoice(PatternFlowTcpEcnNsChoice.DECREMENT)
 	return &patternFlowTcpEcnNsCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowTcpEcnCwr struct {
@@ -16277,6 +19167,8 @@ type PatternFlowTcpEcnCwr interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowTcpEcnCwrChoiceEnum
+	SetChoice(value PatternFlowTcpEcnCwrChoiceEnum) PatternFlowTcpEcnCwr
 	Value() int32
 	SetValue(value int32) PatternFlowTcpEcnCwr
 	Values() []int32
@@ -16285,6 +19177,33 @@ type PatternFlowTcpEcnCwr interface {
 	SetMetricGroup(value string) PatternFlowTcpEcnCwr
 	Increment() PatternFlowTcpEcnCwrCounter
 	Decrement() PatternFlowTcpEcnCwrCounter
+}
+
+type PatternFlowTcpEcnCwrChoiceEnum string
+
+var PatternFlowTcpEcnCwrChoice = struct {
+	UNSPECIFIED PatternFlowTcpEcnCwrChoiceEnum
+	VALUE       PatternFlowTcpEcnCwrChoiceEnum
+	VALUES      PatternFlowTcpEcnCwrChoiceEnum
+	INCREMENT   PatternFlowTcpEcnCwrChoiceEnum
+	DECREMENT   PatternFlowTcpEcnCwrChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowTcpEcnCwrChoiceEnum("unspecified"),
+	VALUE:       PatternFlowTcpEcnCwrChoiceEnum("value"),
+	VALUES:      PatternFlowTcpEcnCwrChoiceEnum("values"),
+	INCREMENT:   PatternFlowTcpEcnCwrChoiceEnum("increment"),
+	DECREMENT:   PatternFlowTcpEcnCwrChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowTcpEcnCwr) Choice() PatternFlowTcpEcnCwrChoiceEnum {
+	return PatternFlowTcpEcnCwrChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowTcpEcnCwr) SetChoice(value PatternFlowTcpEcnCwrChoiceEnum) PatternFlowTcpEcnCwr {
+	intValue := snappipb.PatternFlowTcpEcnCwr_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowTcpEcnCwr_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -16297,6 +19216,7 @@ func (obj *patternFlowTcpEcnCwr) Value() int32 {
 //  description is TBD
 func (obj *patternFlowTcpEcnCwr) SetValue(value int32) PatternFlowTcpEcnCwr {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowTcpEcnCwrChoice.VALUE)
 	return obj
 }
 
@@ -16310,6 +19230,7 @@ func (obj *patternFlowTcpEcnCwr) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowTcpEcnCwr) SetValues(value []int32) PatternFlowTcpEcnCwr {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowTcpEcnCwrChoice.VALUES)
 	return obj
 }
 
@@ -16323,6 +19244,7 @@ func (obj *patternFlowTcpEcnCwr) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowTcpEcnCwr) SetMetricGroup(value string) PatternFlowTcpEcnCwr {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -16332,8 +19254,8 @@ func (obj *patternFlowTcpEcnCwr) Increment() PatternFlowTcpEcnCwrCounter {
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowTcpEcnCwrCounter{}
 	}
+	obj.SetChoice(PatternFlowTcpEcnCwrChoice.INCREMENT)
 	return &patternFlowTcpEcnCwrCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowTcpEcnCwrCounter
@@ -16342,8 +19264,8 @@ func (obj *patternFlowTcpEcnCwr) Decrement() PatternFlowTcpEcnCwrCounter {
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowTcpEcnCwrCounter{}
 	}
+	obj.SetChoice(PatternFlowTcpEcnCwrChoice.DECREMENT)
 	return &patternFlowTcpEcnCwrCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowTcpEcnEcho struct {
@@ -16392,6 +19314,8 @@ type PatternFlowTcpEcnEcho interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowTcpEcnEchoChoiceEnum
+	SetChoice(value PatternFlowTcpEcnEchoChoiceEnum) PatternFlowTcpEcnEcho
 	Value() int32
 	SetValue(value int32) PatternFlowTcpEcnEcho
 	Values() []int32
@@ -16400,6 +19324,33 @@ type PatternFlowTcpEcnEcho interface {
 	SetMetricGroup(value string) PatternFlowTcpEcnEcho
 	Increment() PatternFlowTcpEcnEchoCounter
 	Decrement() PatternFlowTcpEcnEchoCounter
+}
+
+type PatternFlowTcpEcnEchoChoiceEnum string
+
+var PatternFlowTcpEcnEchoChoice = struct {
+	UNSPECIFIED PatternFlowTcpEcnEchoChoiceEnum
+	VALUE       PatternFlowTcpEcnEchoChoiceEnum
+	VALUES      PatternFlowTcpEcnEchoChoiceEnum
+	INCREMENT   PatternFlowTcpEcnEchoChoiceEnum
+	DECREMENT   PatternFlowTcpEcnEchoChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowTcpEcnEchoChoiceEnum("unspecified"),
+	VALUE:       PatternFlowTcpEcnEchoChoiceEnum("value"),
+	VALUES:      PatternFlowTcpEcnEchoChoiceEnum("values"),
+	INCREMENT:   PatternFlowTcpEcnEchoChoiceEnum("increment"),
+	DECREMENT:   PatternFlowTcpEcnEchoChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowTcpEcnEcho) Choice() PatternFlowTcpEcnEchoChoiceEnum {
+	return PatternFlowTcpEcnEchoChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowTcpEcnEcho) SetChoice(value PatternFlowTcpEcnEchoChoiceEnum) PatternFlowTcpEcnEcho {
+	intValue := snappipb.PatternFlowTcpEcnEcho_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowTcpEcnEcho_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -16412,6 +19363,7 @@ func (obj *patternFlowTcpEcnEcho) Value() int32 {
 //  description is TBD
 func (obj *patternFlowTcpEcnEcho) SetValue(value int32) PatternFlowTcpEcnEcho {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowTcpEcnEchoChoice.VALUE)
 	return obj
 }
 
@@ -16425,6 +19377,7 @@ func (obj *patternFlowTcpEcnEcho) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowTcpEcnEcho) SetValues(value []int32) PatternFlowTcpEcnEcho {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowTcpEcnEchoChoice.VALUES)
 	return obj
 }
 
@@ -16438,6 +19391,7 @@ func (obj *patternFlowTcpEcnEcho) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowTcpEcnEcho) SetMetricGroup(value string) PatternFlowTcpEcnEcho {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -16447,8 +19401,8 @@ func (obj *patternFlowTcpEcnEcho) Increment() PatternFlowTcpEcnEchoCounter {
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowTcpEcnEchoCounter{}
 	}
+	obj.SetChoice(PatternFlowTcpEcnEchoChoice.INCREMENT)
 	return &patternFlowTcpEcnEchoCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowTcpEcnEchoCounter
@@ -16457,8 +19411,8 @@ func (obj *patternFlowTcpEcnEcho) Decrement() PatternFlowTcpEcnEchoCounter {
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowTcpEcnEchoCounter{}
 	}
+	obj.SetChoice(PatternFlowTcpEcnEchoChoice.DECREMENT)
 	return &patternFlowTcpEcnEchoCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowTcpCtlUrg struct {
@@ -16507,6 +19461,8 @@ type PatternFlowTcpCtlUrg interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowTcpCtlUrgChoiceEnum
+	SetChoice(value PatternFlowTcpCtlUrgChoiceEnum) PatternFlowTcpCtlUrg
 	Value() int32
 	SetValue(value int32) PatternFlowTcpCtlUrg
 	Values() []int32
@@ -16515,6 +19471,33 @@ type PatternFlowTcpCtlUrg interface {
 	SetMetricGroup(value string) PatternFlowTcpCtlUrg
 	Increment() PatternFlowTcpCtlUrgCounter
 	Decrement() PatternFlowTcpCtlUrgCounter
+}
+
+type PatternFlowTcpCtlUrgChoiceEnum string
+
+var PatternFlowTcpCtlUrgChoice = struct {
+	UNSPECIFIED PatternFlowTcpCtlUrgChoiceEnum
+	VALUE       PatternFlowTcpCtlUrgChoiceEnum
+	VALUES      PatternFlowTcpCtlUrgChoiceEnum
+	INCREMENT   PatternFlowTcpCtlUrgChoiceEnum
+	DECREMENT   PatternFlowTcpCtlUrgChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowTcpCtlUrgChoiceEnum("unspecified"),
+	VALUE:       PatternFlowTcpCtlUrgChoiceEnum("value"),
+	VALUES:      PatternFlowTcpCtlUrgChoiceEnum("values"),
+	INCREMENT:   PatternFlowTcpCtlUrgChoiceEnum("increment"),
+	DECREMENT:   PatternFlowTcpCtlUrgChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowTcpCtlUrg) Choice() PatternFlowTcpCtlUrgChoiceEnum {
+	return PatternFlowTcpCtlUrgChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowTcpCtlUrg) SetChoice(value PatternFlowTcpCtlUrgChoiceEnum) PatternFlowTcpCtlUrg {
+	intValue := snappipb.PatternFlowTcpCtlUrg_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowTcpCtlUrg_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -16527,6 +19510,7 @@ func (obj *patternFlowTcpCtlUrg) Value() int32 {
 //  description is TBD
 func (obj *patternFlowTcpCtlUrg) SetValue(value int32) PatternFlowTcpCtlUrg {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowTcpCtlUrgChoice.VALUE)
 	return obj
 }
 
@@ -16540,6 +19524,7 @@ func (obj *patternFlowTcpCtlUrg) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowTcpCtlUrg) SetValues(value []int32) PatternFlowTcpCtlUrg {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowTcpCtlUrgChoice.VALUES)
 	return obj
 }
 
@@ -16553,6 +19538,7 @@ func (obj *patternFlowTcpCtlUrg) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowTcpCtlUrg) SetMetricGroup(value string) PatternFlowTcpCtlUrg {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -16562,8 +19548,8 @@ func (obj *patternFlowTcpCtlUrg) Increment() PatternFlowTcpCtlUrgCounter {
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowTcpCtlUrgCounter{}
 	}
+	obj.SetChoice(PatternFlowTcpCtlUrgChoice.INCREMENT)
 	return &patternFlowTcpCtlUrgCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowTcpCtlUrgCounter
@@ -16572,8 +19558,8 @@ func (obj *patternFlowTcpCtlUrg) Decrement() PatternFlowTcpCtlUrgCounter {
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowTcpCtlUrgCounter{}
 	}
+	obj.SetChoice(PatternFlowTcpCtlUrgChoice.DECREMENT)
 	return &patternFlowTcpCtlUrgCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowTcpCtlAck struct {
@@ -16622,6 +19608,8 @@ type PatternFlowTcpCtlAck interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowTcpCtlAckChoiceEnum
+	SetChoice(value PatternFlowTcpCtlAckChoiceEnum) PatternFlowTcpCtlAck
 	Value() int32
 	SetValue(value int32) PatternFlowTcpCtlAck
 	Values() []int32
@@ -16630,6 +19618,33 @@ type PatternFlowTcpCtlAck interface {
 	SetMetricGroup(value string) PatternFlowTcpCtlAck
 	Increment() PatternFlowTcpCtlAckCounter
 	Decrement() PatternFlowTcpCtlAckCounter
+}
+
+type PatternFlowTcpCtlAckChoiceEnum string
+
+var PatternFlowTcpCtlAckChoice = struct {
+	UNSPECIFIED PatternFlowTcpCtlAckChoiceEnum
+	VALUE       PatternFlowTcpCtlAckChoiceEnum
+	VALUES      PatternFlowTcpCtlAckChoiceEnum
+	INCREMENT   PatternFlowTcpCtlAckChoiceEnum
+	DECREMENT   PatternFlowTcpCtlAckChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowTcpCtlAckChoiceEnum("unspecified"),
+	VALUE:       PatternFlowTcpCtlAckChoiceEnum("value"),
+	VALUES:      PatternFlowTcpCtlAckChoiceEnum("values"),
+	INCREMENT:   PatternFlowTcpCtlAckChoiceEnum("increment"),
+	DECREMENT:   PatternFlowTcpCtlAckChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowTcpCtlAck) Choice() PatternFlowTcpCtlAckChoiceEnum {
+	return PatternFlowTcpCtlAckChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowTcpCtlAck) SetChoice(value PatternFlowTcpCtlAckChoiceEnum) PatternFlowTcpCtlAck {
+	intValue := snappipb.PatternFlowTcpCtlAck_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowTcpCtlAck_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -16642,6 +19657,7 @@ func (obj *patternFlowTcpCtlAck) Value() int32 {
 //  description is TBD
 func (obj *patternFlowTcpCtlAck) SetValue(value int32) PatternFlowTcpCtlAck {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowTcpCtlAckChoice.VALUE)
 	return obj
 }
 
@@ -16655,6 +19671,7 @@ func (obj *patternFlowTcpCtlAck) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowTcpCtlAck) SetValues(value []int32) PatternFlowTcpCtlAck {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowTcpCtlAckChoice.VALUES)
 	return obj
 }
 
@@ -16668,6 +19685,7 @@ func (obj *patternFlowTcpCtlAck) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowTcpCtlAck) SetMetricGroup(value string) PatternFlowTcpCtlAck {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -16677,8 +19695,8 @@ func (obj *patternFlowTcpCtlAck) Increment() PatternFlowTcpCtlAckCounter {
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowTcpCtlAckCounter{}
 	}
+	obj.SetChoice(PatternFlowTcpCtlAckChoice.INCREMENT)
 	return &patternFlowTcpCtlAckCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowTcpCtlAckCounter
@@ -16687,8 +19705,8 @@ func (obj *patternFlowTcpCtlAck) Decrement() PatternFlowTcpCtlAckCounter {
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowTcpCtlAckCounter{}
 	}
+	obj.SetChoice(PatternFlowTcpCtlAckChoice.DECREMENT)
 	return &patternFlowTcpCtlAckCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowTcpCtlPsh struct {
@@ -16737,6 +19755,8 @@ type PatternFlowTcpCtlPsh interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowTcpCtlPshChoiceEnum
+	SetChoice(value PatternFlowTcpCtlPshChoiceEnum) PatternFlowTcpCtlPsh
 	Value() int32
 	SetValue(value int32) PatternFlowTcpCtlPsh
 	Values() []int32
@@ -16745,6 +19765,33 @@ type PatternFlowTcpCtlPsh interface {
 	SetMetricGroup(value string) PatternFlowTcpCtlPsh
 	Increment() PatternFlowTcpCtlPshCounter
 	Decrement() PatternFlowTcpCtlPshCounter
+}
+
+type PatternFlowTcpCtlPshChoiceEnum string
+
+var PatternFlowTcpCtlPshChoice = struct {
+	UNSPECIFIED PatternFlowTcpCtlPshChoiceEnum
+	VALUE       PatternFlowTcpCtlPshChoiceEnum
+	VALUES      PatternFlowTcpCtlPshChoiceEnum
+	INCREMENT   PatternFlowTcpCtlPshChoiceEnum
+	DECREMENT   PatternFlowTcpCtlPshChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowTcpCtlPshChoiceEnum("unspecified"),
+	VALUE:       PatternFlowTcpCtlPshChoiceEnum("value"),
+	VALUES:      PatternFlowTcpCtlPshChoiceEnum("values"),
+	INCREMENT:   PatternFlowTcpCtlPshChoiceEnum("increment"),
+	DECREMENT:   PatternFlowTcpCtlPshChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowTcpCtlPsh) Choice() PatternFlowTcpCtlPshChoiceEnum {
+	return PatternFlowTcpCtlPshChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowTcpCtlPsh) SetChoice(value PatternFlowTcpCtlPshChoiceEnum) PatternFlowTcpCtlPsh {
+	intValue := snappipb.PatternFlowTcpCtlPsh_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowTcpCtlPsh_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -16757,6 +19804,7 @@ func (obj *patternFlowTcpCtlPsh) Value() int32 {
 //  description is TBD
 func (obj *patternFlowTcpCtlPsh) SetValue(value int32) PatternFlowTcpCtlPsh {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowTcpCtlPshChoice.VALUE)
 	return obj
 }
 
@@ -16770,6 +19818,7 @@ func (obj *patternFlowTcpCtlPsh) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowTcpCtlPsh) SetValues(value []int32) PatternFlowTcpCtlPsh {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowTcpCtlPshChoice.VALUES)
 	return obj
 }
 
@@ -16783,6 +19832,7 @@ func (obj *patternFlowTcpCtlPsh) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowTcpCtlPsh) SetMetricGroup(value string) PatternFlowTcpCtlPsh {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -16792,8 +19842,8 @@ func (obj *patternFlowTcpCtlPsh) Increment() PatternFlowTcpCtlPshCounter {
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowTcpCtlPshCounter{}
 	}
+	obj.SetChoice(PatternFlowTcpCtlPshChoice.INCREMENT)
 	return &patternFlowTcpCtlPshCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowTcpCtlPshCounter
@@ -16802,8 +19852,8 @@ func (obj *patternFlowTcpCtlPsh) Decrement() PatternFlowTcpCtlPshCounter {
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowTcpCtlPshCounter{}
 	}
+	obj.SetChoice(PatternFlowTcpCtlPshChoice.DECREMENT)
 	return &patternFlowTcpCtlPshCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowTcpCtlRst struct {
@@ -16852,6 +19902,8 @@ type PatternFlowTcpCtlRst interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowTcpCtlRstChoiceEnum
+	SetChoice(value PatternFlowTcpCtlRstChoiceEnum) PatternFlowTcpCtlRst
 	Value() int32
 	SetValue(value int32) PatternFlowTcpCtlRst
 	Values() []int32
@@ -16860,6 +19912,33 @@ type PatternFlowTcpCtlRst interface {
 	SetMetricGroup(value string) PatternFlowTcpCtlRst
 	Increment() PatternFlowTcpCtlRstCounter
 	Decrement() PatternFlowTcpCtlRstCounter
+}
+
+type PatternFlowTcpCtlRstChoiceEnum string
+
+var PatternFlowTcpCtlRstChoice = struct {
+	UNSPECIFIED PatternFlowTcpCtlRstChoiceEnum
+	VALUE       PatternFlowTcpCtlRstChoiceEnum
+	VALUES      PatternFlowTcpCtlRstChoiceEnum
+	INCREMENT   PatternFlowTcpCtlRstChoiceEnum
+	DECREMENT   PatternFlowTcpCtlRstChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowTcpCtlRstChoiceEnum("unspecified"),
+	VALUE:       PatternFlowTcpCtlRstChoiceEnum("value"),
+	VALUES:      PatternFlowTcpCtlRstChoiceEnum("values"),
+	INCREMENT:   PatternFlowTcpCtlRstChoiceEnum("increment"),
+	DECREMENT:   PatternFlowTcpCtlRstChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowTcpCtlRst) Choice() PatternFlowTcpCtlRstChoiceEnum {
+	return PatternFlowTcpCtlRstChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowTcpCtlRst) SetChoice(value PatternFlowTcpCtlRstChoiceEnum) PatternFlowTcpCtlRst {
+	intValue := snappipb.PatternFlowTcpCtlRst_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowTcpCtlRst_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -16872,6 +19951,7 @@ func (obj *patternFlowTcpCtlRst) Value() int32 {
 //  description is TBD
 func (obj *patternFlowTcpCtlRst) SetValue(value int32) PatternFlowTcpCtlRst {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowTcpCtlRstChoice.VALUE)
 	return obj
 }
 
@@ -16885,6 +19965,7 @@ func (obj *patternFlowTcpCtlRst) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowTcpCtlRst) SetValues(value []int32) PatternFlowTcpCtlRst {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowTcpCtlRstChoice.VALUES)
 	return obj
 }
 
@@ -16898,6 +19979,7 @@ func (obj *patternFlowTcpCtlRst) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowTcpCtlRst) SetMetricGroup(value string) PatternFlowTcpCtlRst {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -16907,8 +19989,8 @@ func (obj *patternFlowTcpCtlRst) Increment() PatternFlowTcpCtlRstCounter {
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowTcpCtlRstCounter{}
 	}
+	obj.SetChoice(PatternFlowTcpCtlRstChoice.INCREMENT)
 	return &patternFlowTcpCtlRstCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowTcpCtlRstCounter
@@ -16917,8 +19999,8 @@ func (obj *patternFlowTcpCtlRst) Decrement() PatternFlowTcpCtlRstCounter {
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowTcpCtlRstCounter{}
 	}
+	obj.SetChoice(PatternFlowTcpCtlRstChoice.DECREMENT)
 	return &patternFlowTcpCtlRstCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowTcpCtlSyn struct {
@@ -16967,6 +20049,8 @@ type PatternFlowTcpCtlSyn interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowTcpCtlSynChoiceEnum
+	SetChoice(value PatternFlowTcpCtlSynChoiceEnum) PatternFlowTcpCtlSyn
 	Value() int32
 	SetValue(value int32) PatternFlowTcpCtlSyn
 	Values() []int32
@@ -16975,6 +20059,33 @@ type PatternFlowTcpCtlSyn interface {
 	SetMetricGroup(value string) PatternFlowTcpCtlSyn
 	Increment() PatternFlowTcpCtlSynCounter
 	Decrement() PatternFlowTcpCtlSynCounter
+}
+
+type PatternFlowTcpCtlSynChoiceEnum string
+
+var PatternFlowTcpCtlSynChoice = struct {
+	UNSPECIFIED PatternFlowTcpCtlSynChoiceEnum
+	VALUE       PatternFlowTcpCtlSynChoiceEnum
+	VALUES      PatternFlowTcpCtlSynChoiceEnum
+	INCREMENT   PatternFlowTcpCtlSynChoiceEnum
+	DECREMENT   PatternFlowTcpCtlSynChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowTcpCtlSynChoiceEnum("unspecified"),
+	VALUE:       PatternFlowTcpCtlSynChoiceEnum("value"),
+	VALUES:      PatternFlowTcpCtlSynChoiceEnum("values"),
+	INCREMENT:   PatternFlowTcpCtlSynChoiceEnum("increment"),
+	DECREMENT:   PatternFlowTcpCtlSynChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowTcpCtlSyn) Choice() PatternFlowTcpCtlSynChoiceEnum {
+	return PatternFlowTcpCtlSynChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowTcpCtlSyn) SetChoice(value PatternFlowTcpCtlSynChoiceEnum) PatternFlowTcpCtlSyn {
+	intValue := snappipb.PatternFlowTcpCtlSyn_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowTcpCtlSyn_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -16987,6 +20098,7 @@ func (obj *patternFlowTcpCtlSyn) Value() int32 {
 //  description is TBD
 func (obj *patternFlowTcpCtlSyn) SetValue(value int32) PatternFlowTcpCtlSyn {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowTcpCtlSynChoice.VALUE)
 	return obj
 }
 
@@ -17000,6 +20112,7 @@ func (obj *patternFlowTcpCtlSyn) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowTcpCtlSyn) SetValues(value []int32) PatternFlowTcpCtlSyn {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowTcpCtlSynChoice.VALUES)
 	return obj
 }
 
@@ -17013,6 +20126,7 @@ func (obj *patternFlowTcpCtlSyn) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowTcpCtlSyn) SetMetricGroup(value string) PatternFlowTcpCtlSyn {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -17022,8 +20136,8 @@ func (obj *patternFlowTcpCtlSyn) Increment() PatternFlowTcpCtlSynCounter {
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowTcpCtlSynCounter{}
 	}
+	obj.SetChoice(PatternFlowTcpCtlSynChoice.INCREMENT)
 	return &patternFlowTcpCtlSynCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowTcpCtlSynCounter
@@ -17032,8 +20146,8 @@ func (obj *patternFlowTcpCtlSyn) Decrement() PatternFlowTcpCtlSynCounter {
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowTcpCtlSynCounter{}
 	}
+	obj.SetChoice(PatternFlowTcpCtlSynChoice.DECREMENT)
 	return &patternFlowTcpCtlSynCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowTcpCtlFin struct {
@@ -17082,6 +20196,8 @@ type PatternFlowTcpCtlFin interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowTcpCtlFinChoiceEnum
+	SetChoice(value PatternFlowTcpCtlFinChoiceEnum) PatternFlowTcpCtlFin
 	Value() int32
 	SetValue(value int32) PatternFlowTcpCtlFin
 	Values() []int32
@@ -17090,6 +20206,33 @@ type PatternFlowTcpCtlFin interface {
 	SetMetricGroup(value string) PatternFlowTcpCtlFin
 	Increment() PatternFlowTcpCtlFinCounter
 	Decrement() PatternFlowTcpCtlFinCounter
+}
+
+type PatternFlowTcpCtlFinChoiceEnum string
+
+var PatternFlowTcpCtlFinChoice = struct {
+	UNSPECIFIED PatternFlowTcpCtlFinChoiceEnum
+	VALUE       PatternFlowTcpCtlFinChoiceEnum
+	VALUES      PatternFlowTcpCtlFinChoiceEnum
+	INCREMENT   PatternFlowTcpCtlFinChoiceEnum
+	DECREMENT   PatternFlowTcpCtlFinChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowTcpCtlFinChoiceEnum("unspecified"),
+	VALUE:       PatternFlowTcpCtlFinChoiceEnum("value"),
+	VALUES:      PatternFlowTcpCtlFinChoiceEnum("values"),
+	INCREMENT:   PatternFlowTcpCtlFinChoiceEnum("increment"),
+	DECREMENT:   PatternFlowTcpCtlFinChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowTcpCtlFin) Choice() PatternFlowTcpCtlFinChoiceEnum {
+	return PatternFlowTcpCtlFinChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowTcpCtlFin) SetChoice(value PatternFlowTcpCtlFinChoiceEnum) PatternFlowTcpCtlFin {
+	intValue := snappipb.PatternFlowTcpCtlFin_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowTcpCtlFin_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -17102,6 +20245,7 @@ func (obj *patternFlowTcpCtlFin) Value() int32 {
 //  description is TBD
 func (obj *patternFlowTcpCtlFin) SetValue(value int32) PatternFlowTcpCtlFin {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowTcpCtlFinChoice.VALUE)
 	return obj
 }
 
@@ -17115,6 +20259,7 @@ func (obj *patternFlowTcpCtlFin) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowTcpCtlFin) SetValues(value []int32) PatternFlowTcpCtlFin {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowTcpCtlFinChoice.VALUES)
 	return obj
 }
 
@@ -17128,6 +20273,7 @@ func (obj *patternFlowTcpCtlFin) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowTcpCtlFin) SetMetricGroup(value string) PatternFlowTcpCtlFin {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -17137,8 +20283,8 @@ func (obj *patternFlowTcpCtlFin) Increment() PatternFlowTcpCtlFinCounter {
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowTcpCtlFinCounter{}
 	}
+	obj.SetChoice(PatternFlowTcpCtlFinChoice.INCREMENT)
 	return &patternFlowTcpCtlFinCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowTcpCtlFinCounter
@@ -17147,8 +20293,8 @@ func (obj *patternFlowTcpCtlFin) Decrement() PatternFlowTcpCtlFinCounter {
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowTcpCtlFinCounter{}
 	}
+	obj.SetChoice(PatternFlowTcpCtlFinChoice.DECREMENT)
 	return &patternFlowTcpCtlFinCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowTcpWindow struct {
@@ -17197,6 +20343,8 @@ type PatternFlowTcpWindow interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowTcpWindowChoiceEnum
+	SetChoice(value PatternFlowTcpWindowChoiceEnum) PatternFlowTcpWindow
 	Value() int32
 	SetValue(value int32) PatternFlowTcpWindow
 	Values() []int32
@@ -17205,6 +20353,33 @@ type PatternFlowTcpWindow interface {
 	SetMetricGroup(value string) PatternFlowTcpWindow
 	Increment() PatternFlowTcpWindowCounter
 	Decrement() PatternFlowTcpWindowCounter
+}
+
+type PatternFlowTcpWindowChoiceEnum string
+
+var PatternFlowTcpWindowChoice = struct {
+	UNSPECIFIED PatternFlowTcpWindowChoiceEnum
+	VALUE       PatternFlowTcpWindowChoiceEnum
+	VALUES      PatternFlowTcpWindowChoiceEnum
+	INCREMENT   PatternFlowTcpWindowChoiceEnum
+	DECREMENT   PatternFlowTcpWindowChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowTcpWindowChoiceEnum("unspecified"),
+	VALUE:       PatternFlowTcpWindowChoiceEnum("value"),
+	VALUES:      PatternFlowTcpWindowChoiceEnum("values"),
+	INCREMENT:   PatternFlowTcpWindowChoiceEnum("increment"),
+	DECREMENT:   PatternFlowTcpWindowChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowTcpWindow) Choice() PatternFlowTcpWindowChoiceEnum {
+	return PatternFlowTcpWindowChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowTcpWindow) SetChoice(value PatternFlowTcpWindowChoiceEnum) PatternFlowTcpWindow {
+	intValue := snappipb.PatternFlowTcpWindow_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowTcpWindow_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -17217,6 +20392,7 @@ func (obj *patternFlowTcpWindow) Value() int32 {
 //  description is TBD
 func (obj *patternFlowTcpWindow) SetValue(value int32) PatternFlowTcpWindow {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowTcpWindowChoice.VALUE)
 	return obj
 }
 
@@ -17230,6 +20406,7 @@ func (obj *patternFlowTcpWindow) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowTcpWindow) SetValues(value []int32) PatternFlowTcpWindow {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowTcpWindowChoice.VALUES)
 	return obj
 }
 
@@ -17243,6 +20420,7 @@ func (obj *patternFlowTcpWindow) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowTcpWindow) SetMetricGroup(value string) PatternFlowTcpWindow {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -17252,8 +20430,8 @@ func (obj *patternFlowTcpWindow) Increment() PatternFlowTcpWindowCounter {
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowTcpWindowCounter{}
 	}
+	obj.SetChoice(PatternFlowTcpWindowChoice.INCREMENT)
 	return &patternFlowTcpWindowCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowTcpWindowCounter
@@ -17262,8 +20440,8 @@ func (obj *patternFlowTcpWindow) Decrement() PatternFlowTcpWindowCounter {
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowTcpWindowCounter{}
 	}
+	obj.SetChoice(PatternFlowTcpWindowChoice.DECREMENT)
 	return &patternFlowTcpWindowCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowUdpSrcPort struct {
@@ -17312,6 +20490,8 @@ type PatternFlowUdpSrcPort interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowUdpSrcPortChoiceEnum
+	SetChoice(value PatternFlowUdpSrcPortChoiceEnum) PatternFlowUdpSrcPort
 	Value() int32
 	SetValue(value int32) PatternFlowUdpSrcPort
 	Values() []int32
@@ -17320,6 +20500,33 @@ type PatternFlowUdpSrcPort interface {
 	SetMetricGroup(value string) PatternFlowUdpSrcPort
 	Increment() PatternFlowUdpSrcPortCounter
 	Decrement() PatternFlowUdpSrcPortCounter
+}
+
+type PatternFlowUdpSrcPortChoiceEnum string
+
+var PatternFlowUdpSrcPortChoice = struct {
+	UNSPECIFIED PatternFlowUdpSrcPortChoiceEnum
+	VALUE       PatternFlowUdpSrcPortChoiceEnum
+	VALUES      PatternFlowUdpSrcPortChoiceEnum
+	INCREMENT   PatternFlowUdpSrcPortChoiceEnum
+	DECREMENT   PatternFlowUdpSrcPortChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowUdpSrcPortChoiceEnum("unspecified"),
+	VALUE:       PatternFlowUdpSrcPortChoiceEnum("value"),
+	VALUES:      PatternFlowUdpSrcPortChoiceEnum("values"),
+	INCREMENT:   PatternFlowUdpSrcPortChoiceEnum("increment"),
+	DECREMENT:   PatternFlowUdpSrcPortChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowUdpSrcPort) Choice() PatternFlowUdpSrcPortChoiceEnum {
+	return PatternFlowUdpSrcPortChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowUdpSrcPort) SetChoice(value PatternFlowUdpSrcPortChoiceEnum) PatternFlowUdpSrcPort {
+	intValue := snappipb.PatternFlowUdpSrcPort_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowUdpSrcPort_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -17332,6 +20539,7 @@ func (obj *patternFlowUdpSrcPort) Value() int32 {
 //  description is TBD
 func (obj *patternFlowUdpSrcPort) SetValue(value int32) PatternFlowUdpSrcPort {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowUdpSrcPortChoice.VALUE)
 	return obj
 }
 
@@ -17345,6 +20553,7 @@ func (obj *patternFlowUdpSrcPort) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowUdpSrcPort) SetValues(value []int32) PatternFlowUdpSrcPort {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowUdpSrcPortChoice.VALUES)
 	return obj
 }
 
@@ -17358,6 +20567,7 @@ func (obj *patternFlowUdpSrcPort) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowUdpSrcPort) SetMetricGroup(value string) PatternFlowUdpSrcPort {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -17367,8 +20577,8 @@ func (obj *patternFlowUdpSrcPort) Increment() PatternFlowUdpSrcPortCounter {
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowUdpSrcPortCounter{}
 	}
+	obj.SetChoice(PatternFlowUdpSrcPortChoice.INCREMENT)
 	return &patternFlowUdpSrcPortCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowUdpSrcPortCounter
@@ -17377,8 +20587,8 @@ func (obj *patternFlowUdpSrcPort) Decrement() PatternFlowUdpSrcPortCounter {
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowUdpSrcPortCounter{}
 	}
+	obj.SetChoice(PatternFlowUdpSrcPortChoice.DECREMENT)
 	return &patternFlowUdpSrcPortCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowUdpDstPort struct {
@@ -17427,6 +20637,8 @@ type PatternFlowUdpDstPort interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowUdpDstPortChoiceEnum
+	SetChoice(value PatternFlowUdpDstPortChoiceEnum) PatternFlowUdpDstPort
 	Value() int32
 	SetValue(value int32) PatternFlowUdpDstPort
 	Values() []int32
@@ -17435,6 +20647,33 @@ type PatternFlowUdpDstPort interface {
 	SetMetricGroup(value string) PatternFlowUdpDstPort
 	Increment() PatternFlowUdpDstPortCounter
 	Decrement() PatternFlowUdpDstPortCounter
+}
+
+type PatternFlowUdpDstPortChoiceEnum string
+
+var PatternFlowUdpDstPortChoice = struct {
+	UNSPECIFIED PatternFlowUdpDstPortChoiceEnum
+	VALUE       PatternFlowUdpDstPortChoiceEnum
+	VALUES      PatternFlowUdpDstPortChoiceEnum
+	INCREMENT   PatternFlowUdpDstPortChoiceEnum
+	DECREMENT   PatternFlowUdpDstPortChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowUdpDstPortChoiceEnum("unspecified"),
+	VALUE:       PatternFlowUdpDstPortChoiceEnum("value"),
+	VALUES:      PatternFlowUdpDstPortChoiceEnum("values"),
+	INCREMENT:   PatternFlowUdpDstPortChoiceEnum("increment"),
+	DECREMENT:   PatternFlowUdpDstPortChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowUdpDstPort) Choice() PatternFlowUdpDstPortChoiceEnum {
+	return PatternFlowUdpDstPortChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowUdpDstPort) SetChoice(value PatternFlowUdpDstPortChoiceEnum) PatternFlowUdpDstPort {
+	intValue := snappipb.PatternFlowUdpDstPort_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowUdpDstPort_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -17447,6 +20686,7 @@ func (obj *patternFlowUdpDstPort) Value() int32 {
 //  description is TBD
 func (obj *patternFlowUdpDstPort) SetValue(value int32) PatternFlowUdpDstPort {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowUdpDstPortChoice.VALUE)
 	return obj
 }
 
@@ -17460,6 +20700,7 @@ func (obj *patternFlowUdpDstPort) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowUdpDstPort) SetValues(value []int32) PatternFlowUdpDstPort {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowUdpDstPortChoice.VALUES)
 	return obj
 }
 
@@ -17473,6 +20714,7 @@ func (obj *patternFlowUdpDstPort) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowUdpDstPort) SetMetricGroup(value string) PatternFlowUdpDstPort {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -17482,8 +20724,8 @@ func (obj *patternFlowUdpDstPort) Increment() PatternFlowUdpDstPortCounter {
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowUdpDstPortCounter{}
 	}
+	obj.SetChoice(PatternFlowUdpDstPortChoice.INCREMENT)
 	return &patternFlowUdpDstPortCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowUdpDstPortCounter
@@ -17492,8 +20734,8 @@ func (obj *patternFlowUdpDstPort) Decrement() PatternFlowUdpDstPortCounter {
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowUdpDstPortCounter{}
 	}
+	obj.SetChoice(PatternFlowUdpDstPortChoice.DECREMENT)
 	return &patternFlowUdpDstPortCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowUdpLength struct {
@@ -17542,6 +20784,8 @@ type PatternFlowUdpLength interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowUdpLengthChoiceEnum
+	SetChoice(value PatternFlowUdpLengthChoiceEnum) PatternFlowUdpLength
 	Value() int32
 	SetValue(value int32) PatternFlowUdpLength
 	Values() []int32
@@ -17550,6 +20794,33 @@ type PatternFlowUdpLength interface {
 	SetMetricGroup(value string) PatternFlowUdpLength
 	Increment() PatternFlowUdpLengthCounter
 	Decrement() PatternFlowUdpLengthCounter
+}
+
+type PatternFlowUdpLengthChoiceEnum string
+
+var PatternFlowUdpLengthChoice = struct {
+	UNSPECIFIED PatternFlowUdpLengthChoiceEnum
+	VALUE       PatternFlowUdpLengthChoiceEnum
+	VALUES      PatternFlowUdpLengthChoiceEnum
+	INCREMENT   PatternFlowUdpLengthChoiceEnum
+	DECREMENT   PatternFlowUdpLengthChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowUdpLengthChoiceEnum("unspecified"),
+	VALUE:       PatternFlowUdpLengthChoiceEnum("value"),
+	VALUES:      PatternFlowUdpLengthChoiceEnum("values"),
+	INCREMENT:   PatternFlowUdpLengthChoiceEnum("increment"),
+	DECREMENT:   PatternFlowUdpLengthChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowUdpLength) Choice() PatternFlowUdpLengthChoiceEnum {
+	return PatternFlowUdpLengthChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowUdpLength) SetChoice(value PatternFlowUdpLengthChoiceEnum) PatternFlowUdpLength {
+	intValue := snappipb.PatternFlowUdpLength_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowUdpLength_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -17562,6 +20833,7 @@ func (obj *patternFlowUdpLength) Value() int32 {
 //  description is TBD
 func (obj *patternFlowUdpLength) SetValue(value int32) PatternFlowUdpLength {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowUdpLengthChoice.VALUE)
 	return obj
 }
 
@@ -17575,6 +20847,7 @@ func (obj *patternFlowUdpLength) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowUdpLength) SetValues(value []int32) PatternFlowUdpLength {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowUdpLengthChoice.VALUES)
 	return obj
 }
 
@@ -17588,6 +20861,7 @@ func (obj *patternFlowUdpLength) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowUdpLength) SetMetricGroup(value string) PatternFlowUdpLength {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -17597,8 +20871,8 @@ func (obj *patternFlowUdpLength) Increment() PatternFlowUdpLengthCounter {
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowUdpLengthCounter{}
 	}
+	obj.SetChoice(PatternFlowUdpLengthChoice.INCREMENT)
 	return &patternFlowUdpLengthCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowUdpLengthCounter
@@ -17607,8 +20881,8 @@ func (obj *patternFlowUdpLength) Decrement() PatternFlowUdpLengthCounter {
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowUdpLengthCounter{}
 	}
+	obj.SetChoice(PatternFlowUdpLengthChoice.DECREMENT)
 	return &patternFlowUdpLengthCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowUdpChecksum struct {
@@ -17657,8 +20931,57 @@ type PatternFlowUdpChecksum interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowUdpChecksumChoiceEnum
+	SetChoice(value PatternFlowUdpChecksumChoiceEnum) PatternFlowUdpChecksum
+	Generated() PatternFlowUdpChecksumGeneratedEnum
+	SetGenerated(value PatternFlowUdpChecksumGeneratedEnum) PatternFlowUdpChecksum
 	Custom() int32
 	SetCustom(value int32) PatternFlowUdpChecksum
+}
+
+type PatternFlowUdpChecksumChoiceEnum string
+
+var PatternFlowUdpChecksumChoice = struct {
+	UNSPECIFIED PatternFlowUdpChecksumChoiceEnum
+	GENERATED   PatternFlowUdpChecksumChoiceEnum
+	CUSTOM      PatternFlowUdpChecksumChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowUdpChecksumChoiceEnum("unspecified"),
+	GENERATED:   PatternFlowUdpChecksumChoiceEnum("generated"),
+	CUSTOM:      PatternFlowUdpChecksumChoiceEnum("custom"),
+}
+
+func (obj *patternFlowUdpChecksum) Choice() PatternFlowUdpChecksumChoiceEnum {
+	return PatternFlowUdpChecksumChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowUdpChecksum) SetChoice(value PatternFlowUdpChecksumChoiceEnum) PatternFlowUdpChecksum {
+	intValue := snappipb.PatternFlowUdpChecksum_Choice_Enum_value[string(value)]
+	obj.obj.Choice = snappipb.PatternFlowUdpChecksum_Choice_Enum(intValue)
+	return obj
+}
+
+type PatternFlowUdpChecksumGeneratedEnum string
+
+var PatternFlowUdpChecksumGenerated = struct {
+	UNSPECIFIED PatternFlowUdpChecksumGeneratedEnum
+	GOOD        PatternFlowUdpChecksumGeneratedEnum
+	BAD         PatternFlowUdpChecksumGeneratedEnum
+}{
+	UNSPECIFIED: PatternFlowUdpChecksumGeneratedEnum("unspecified"),
+	GOOD:        PatternFlowUdpChecksumGeneratedEnum("good"),
+	BAD:         PatternFlowUdpChecksumGeneratedEnum("bad"),
+}
+
+func (obj *patternFlowUdpChecksum) Generated() PatternFlowUdpChecksumGeneratedEnum {
+	return PatternFlowUdpChecksumGeneratedEnum(obj.obj.Generated.Enum().String())
+}
+
+func (obj *patternFlowUdpChecksum) SetGenerated(value PatternFlowUdpChecksumGeneratedEnum) PatternFlowUdpChecksum {
+	intValue := snappipb.PatternFlowUdpChecksum_Generated_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowUdpChecksum_Generated_Enum(intValue)
+	obj.obj.Generated = &enumValue
+	return obj
 }
 
 // Custom returns a int32
@@ -17671,6 +20994,7 @@ func (obj *patternFlowUdpChecksum) Custom() int32 {
 //  A custom checksum value
 func (obj *patternFlowUdpChecksum) SetCustom(value int32) PatternFlowUdpChecksum {
 	obj.obj.Custom = &value
+	obj.SetChoice(PatternFlowUdpChecksumChoice.CUSTOM)
 	return obj
 }
 
@@ -17720,6 +21044,8 @@ type PatternFlowGreChecksumPresent interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowGreChecksumPresentChoiceEnum
+	SetChoice(value PatternFlowGreChecksumPresentChoiceEnum) PatternFlowGreChecksumPresent
 	Value() int32
 	SetValue(value int32) PatternFlowGreChecksumPresent
 	Values() []int32
@@ -17728,6 +21054,33 @@ type PatternFlowGreChecksumPresent interface {
 	SetMetricGroup(value string) PatternFlowGreChecksumPresent
 	Increment() PatternFlowGreChecksumPresentCounter
 	Decrement() PatternFlowGreChecksumPresentCounter
+}
+
+type PatternFlowGreChecksumPresentChoiceEnum string
+
+var PatternFlowGreChecksumPresentChoice = struct {
+	UNSPECIFIED PatternFlowGreChecksumPresentChoiceEnum
+	VALUE       PatternFlowGreChecksumPresentChoiceEnum
+	VALUES      PatternFlowGreChecksumPresentChoiceEnum
+	INCREMENT   PatternFlowGreChecksumPresentChoiceEnum
+	DECREMENT   PatternFlowGreChecksumPresentChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowGreChecksumPresentChoiceEnum("unspecified"),
+	VALUE:       PatternFlowGreChecksumPresentChoiceEnum("value"),
+	VALUES:      PatternFlowGreChecksumPresentChoiceEnum("values"),
+	INCREMENT:   PatternFlowGreChecksumPresentChoiceEnum("increment"),
+	DECREMENT:   PatternFlowGreChecksumPresentChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowGreChecksumPresent) Choice() PatternFlowGreChecksumPresentChoiceEnum {
+	return PatternFlowGreChecksumPresentChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowGreChecksumPresent) SetChoice(value PatternFlowGreChecksumPresentChoiceEnum) PatternFlowGreChecksumPresent {
+	intValue := snappipb.PatternFlowGreChecksumPresent_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowGreChecksumPresent_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -17740,6 +21093,7 @@ func (obj *patternFlowGreChecksumPresent) Value() int32 {
 //  description is TBD
 func (obj *patternFlowGreChecksumPresent) SetValue(value int32) PatternFlowGreChecksumPresent {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowGreChecksumPresentChoice.VALUE)
 	return obj
 }
 
@@ -17753,6 +21107,7 @@ func (obj *patternFlowGreChecksumPresent) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowGreChecksumPresent) SetValues(value []int32) PatternFlowGreChecksumPresent {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowGreChecksumPresentChoice.VALUES)
 	return obj
 }
 
@@ -17766,6 +21121,7 @@ func (obj *patternFlowGreChecksumPresent) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowGreChecksumPresent) SetMetricGroup(value string) PatternFlowGreChecksumPresent {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -17775,8 +21131,8 @@ func (obj *patternFlowGreChecksumPresent) Increment() PatternFlowGreChecksumPres
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowGreChecksumPresentCounter{}
 	}
+	obj.SetChoice(PatternFlowGreChecksumPresentChoice.INCREMENT)
 	return &patternFlowGreChecksumPresentCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowGreChecksumPresentCounter
@@ -17785,8 +21141,8 @@ func (obj *patternFlowGreChecksumPresent) Decrement() PatternFlowGreChecksumPres
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowGreChecksumPresentCounter{}
 	}
+	obj.SetChoice(PatternFlowGreChecksumPresentChoice.DECREMENT)
 	return &patternFlowGreChecksumPresentCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowGreReserved0 struct {
@@ -17835,6 +21191,8 @@ type PatternFlowGreReserved0 interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowGreReserved0ChoiceEnum
+	SetChoice(value PatternFlowGreReserved0ChoiceEnum) PatternFlowGreReserved0
 	Value() int32
 	SetValue(value int32) PatternFlowGreReserved0
 	Values() []int32
@@ -17843,6 +21201,33 @@ type PatternFlowGreReserved0 interface {
 	SetMetricGroup(value string) PatternFlowGreReserved0
 	Increment() PatternFlowGreReserved0Counter
 	Decrement() PatternFlowGreReserved0Counter
+}
+
+type PatternFlowGreReserved0ChoiceEnum string
+
+var PatternFlowGreReserved0Choice = struct {
+	UNSPECIFIED PatternFlowGreReserved0ChoiceEnum
+	VALUE       PatternFlowGreReserved0ChoiceEnum
+	VALUES      PatternFlowGreReserved0ChoiceEnum
+	INCREMENT   PatternFlowGreReserved0ChoiceEnum
+	DECREMENT   PatternFlowGreReserved0ChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowGreReserved0ChoiceEnum("unspecified"),
+	VALUE:       PatternFlowGreReserved0ChoiceEnum("value"),
+	VALUES:      PatternFlowGreReserved0ChoiceEnum("values"),
+	INCREMENT:   PatternFlowGreReserved0ChoiceEnum("increment"),
+	DECREMENT:   PatternFlowGreReserved0ChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowGreReserved0) Choice() PatternFlowGreReserved0ChoiceEnum {
+	return PatternFlowGreReserved0ChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowGreReserved0) SetChoice(value PatternFlowGreReserved0ChoiceEnum) PatternFlowGreReserved0 {
+	intValue := snappipb.PatternFlowGreReserved0_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowGreReserved0_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -17855,6 +21240,7 @@ func (obj *patternFlowGreReserved0) Value() int32 {
 //  description is TBD
 func (obj *patternFlowGreReserved0) SetValue(value int32) PatternFlowGreReserved0 {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowGreReserved0Choice.VALUE)
 	return obj
 }
 
@@ -17868,6 +21254,7 @@ func (obj *patternFlowGreReserved0) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowGreReserved0) SetValues(value []int32) PatternFlowGreReserved0 {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowGreReserved0Choice.VALUES)
 	return obj
 }
 
@@ -17881,6 +21268,7 @@ func (obj *patternFlowGreReserved0) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowGreReserved0) SetMetricGroup(value string) PatternFlowGreReserved0 {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -17890,8 +21278,8 @@ func (obj *patternFlowGreReserved0) Increment() PatternFlowGreReserved0Counter {
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowGreReserved0Counter{}
 	}
+	obj.SetChoice(PatternFlowGreReserved0Choice.INCREMENT)
 	return &patternFlowGreReserved0Counter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowGreReserved0Counter
@@ -17900,8 +21288,8 @@ func (obj *patternFlowGreReserved0) Decrement() PatternFlowGreReserved0Counter {
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowGreReserved0Counter{}
 	}
+	obj.SetChoice(PatternFlowGreReserved0Choice.DECREMENT)
 	return &patternFlowGreReserved0Counter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowGreVersion struct {
@@ -17950,6 +21338,8 @@ type PatternFlowGreVersion interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowGreVersionChoiceEnum
+	SetChoice(value PatternFlowGreVersionChoiceEnum) PatternFlowGreVersion
 	Value() int32
 	SetValue(value int32) PatternFlowGreVersion
 	Values() []int32
@@ -17958,6 +21348,33 @@ type PatternFlowGreVersion interface {
 	SetMetricGroup(value string) PatternFlowGreVersion
 	Increment() PatternFlowGreVersionCounter
 	Decrement() PatternFlowGreVersionCounter
+}
+
+type PatternFlowGreVersionChoiceEnum string
+
+var PatternFlowGreVersionChoice = struct {
+	UNSPECIFIED PatternFlowGreVersionChoiceEnum
+	VALUE       PatternFlowGreVersionChoiceEnum
+	VALUES      PatternFlowGreVersionChoiceEnum
+	INCREMENT   PatternFlowGreVersionChoiceEnum
+	DECREMENT   PatternFlowGreVersionChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowGreVersionChoiceEnum("unspecified"),
+	VALUE:       PatternFlowGreVersionChoiceEnum("value"),
+	VALUES:      PatternFlowGreVersionChoiceEnum("values"),
+	INCREMENT:   PatternFlowGreVersionChoiceEnum("increment"),
+	DECREMENT:   PatternFlowGreVersionChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowGreVersion) Choice() PatternFlowGreVersionChoiceEnum {
+	return PatternFlowGreVersionChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowGreVersion) SetChoice(value PatternFlowGreVersionChoiceEnum) PatternFlowGreVersion {
+	intValue := snappipb.PatternFlowGreVersion_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowGreVersion_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -17970,6 +21387,7 @@ func (obj *patternFlowGreVersion) Value() int32 {
 //  description is TBD
 func (obj *patternFlowGreVersion) SetValue(value int32) PatternFlowGreVersion {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowGreVersionChoice.VALUE)
 	return obj
 }
 
@@ -17983,6 +21401,7 @@ func (obj *patternFlowGreVersion) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowGreVersion) SetValues(value []int32) PatternFlowGreVersion {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowGreVersionChoice.VALUES)
 	return obj
 }
 
@@ -17996,6 +21415,7 @@ func (obj *patternFlowGreVersion) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowGreVersion) SetMetricGroup(value string) PatternFlowGreVersion {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -18005,8 +21425,8 @@ func (obj *patternFlowGreVersion) Increment() PatternFlowGreVersionCounter {
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowGreVersionCounter{}
 	}
+	obj.SetChoice(PatternFlowGreVersionChoice.INCREMENT)
 	return &patternFlowGreVersionCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowGreVersionCounter
@@ -18015,8 +21435,8 @@ func (obj *patternFlowGreVersion) Decrement() PatternFlowGreVersionCounter {
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowGreVersionCounter{}
 	}
+	obj.SetChoice(PatternFlowGreVersionChoice.DECREMENT)
 	return &patternFlowGreVersionCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowGreProtocol struct {
@@ -18065,6 +21485,8 @@ type PatternFlowGreProtocol interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowGreProtocolChoiceEnum
+	SetChoice(value PatternFlowGreProtocolChoiceEnum) PatternFlowGreProtocol
 	Value() int32
 	SetValue(value int32) PatternFlowGreProtocol
 	Values() []int32
@@ -18073,6 +21495,33 @@ type PatternFlowGreProtocol interface {
 	SetMetricGroup(value string) PatternFlowGreProtocol
 	Increment() PatternFlowGreProtocolCounter
 	Decrement() PatternFlowGreProtocolCounter
+}
+
+type PatternFlowGreProtocolChoiceEnum string
+
+var PatternFlowGreProtocolChoice = struct {
+	UNSPECIFIED PatternFlowGreProtocolChoiceEnum
+	VALUE       PatternFlowGreProtocolChoiceEnum
+	VALUES      PatternFlowGreProtocolChoiceEnum
+	INCREMENT   PatternFlowGreProtocolChoiceEnum
+	DECREMENT   PatternFlowGreProtocolChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowGreProtocolChoiceEnum("unspecified"),
+	VALUE:       PatternFlowGreProtocolChoiceEnum("value"),
+	VALUES:      PatternFlowGreProtocolChoiceEnum("values"),
+	INCREMENT:   PatternFlowGreProtocolChoiceEnum("increment"),
+	DECREMENT:   PatternFlowGreProtocolChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowGreProtocol) Choice() PatternFlowGreProtocolChoiceEnum {
+	return PatternFlowGreProtocolChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowGreProtocol) SetChoice(value PatternFlowGreProtocolChoiceEnum) PatternFlowGreProtocol {
+	intValue := snappipb.PatternFlowGreProtocol_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowGreProtocol_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -18085,6 +21534,7 @@ func (obj *patternFlowGreProtocol) Value() int32 {
 //  description is TBD
 func (obj *patternFlowGreProtocol) SetValue(value int32) PatternFlowGreProtocol {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowGreProtocolChoice.VALUE)
 	return obj
 }
 
@@ -18098,6 +21548,7 @@ func (obj *patternFlowGreProtocol) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowGreProtocol) SetValues(value []int32) PatternFlowGreProtocol {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowGreProtocolChoice.VALUES)
 	return obj
 }
 
@@ -18111,6 +21562,7 @@ func (obj *patternFlowGreProtocol) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowGreProtocol) SetMetricGroup(value string) PatternFlowGreProtocol {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -18120,8 +21572,8 @@ func (obj *patternFlowGreProtocol) Increment() PatternFlowGreProtocolCounter {
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowGreProtocolCounter{}
 	}
+	obj.SetChoice(PatternFlowGreProtocolChoice.INCREMENT)
 	return &patternFlowGreProtocolCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowGreProtocolCounter
@@ -18130,8 +21582,8 @@ func (obj *patternFlowGreProtocol) Decrement() PatternFlowGreProtocolCounter {
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowGreProtocolCounter{}
 	}
+	obj.SetChoice(PatternFlowGreProtocolChoice.DECREMENT)
 	return &patternFlowGreProtocolCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowGreChecksum struct {
@@ -18180,8 +21632,57 @@ type PatternFlowGreChecksum interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowGreChecksumChoiceEnum
+	SetChoice(value PatternFlowGreChecksumChoiceEnum) PatternFlowGreChecksum
+	Generated() PatternFlowGreChecksumGeneratedEnum
+	SetGenerated(value PatternFlowGreChecksumGeneratedEnum) PatternFlowGreChecksum
 	Custom() int32
 	SetCustom(value int32) PatternFlowGreChecksum
+}
+
+type PatternFlowGreChecksumChoiceEnum string
+
+var PatternFlowGreChecksumChoice = struct {
+	UNSPECIFIED PatternFlowGreChecksumChoiceEnum
+	GENERATED   PatternFlowGreChecksumChoiceEnum
+	CUSTOM      PatternFlowGreChecksumChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowGreChecksumChoiceEnum("unspecified"),
+	GENERATED:   PatternFlowGreChecksumChoiceEnum("generated"),
+	CUSTOM:      PatternFlowGreChecksumChoiceEnum("custom"),
+}
+
+func (obj *patternFlowGreChecksum) Choice() PatternFlowGreChecksumChoiceEnum {
+	return PatternFlowGreChecksumChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowGreChecksum) SetChoice(value PatternFlowGreChecksumChoiceEnum) PatternFlowGreChecksum {
+	intValue := snappipb.PatternFlowGreChecksum_Choice_Enum_value[string(value)]
+	obj.obj.Choice = snappipb.PatternFlowGreChecksum_Choice_Enum(intValue)
+	return obj
+}
+
+type PatternFlowGreChecksumGeneratedEnum string
+
+var PatternFlowGreChecksumGenerated = struct {
+	UNSPECIFIED PatternFlowGreChecksumGeneratedEnum
+	GOOD        PatternFlowGreChecksumGeneratedEnum
+	BAD         PatternFlowGreChecksumGeneratedEnum
+}{
+	UNSPECIFIED: PatternFlowGreChecksumGeneratedEnum("unspecified"),
+	GOOD:        PatternFlowGreChecksumGeneratedEnum("good"),
+	BAD:         PatternFlowGreChecksumGeneratedEnum("bad"),
+}
+
+func (obj *patternFlowGreChecksum) Generated() PatternFlowGreChecksumGeneratedEnum {
+	return PatternFlowGreChecksumGeneratedEnum(obj.obj.Generated.Enum().String())
+}
+
+func (obj *patternFlowGreChecksum) SetGenerated(value PatternFlowGreChecksumGeneratedEnum) PatternFlowGreChecksum {
+	intValue := snappipb.PatternFlowGreChecksum_Generated_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowGreChecksum_Generated_Enum(intValue)
+	obj.obj.Generated = &enumValue
+	return obj
 }
 
 // Custom returns a int32
@@ -18194,6 +21695,7 @@ func (obj *patternFlowGreChecksum) Custom() int32 {
 //  A custom checksum value
 func (obj *patternFlowGreChecksum) SetCustom(value int32) PatternFlowGreChecksum {
 	obj.obj.Custom = &value
+	obj.SetChoice(PatternFlowGreChecksumChoice.CUSTOM)
 	return obj
 }
 
@@ -18243,6 +21745,8 @@ type PatternFlowGreReserved1 interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowGreReserved1ChoiceEnum
+	SetChoice(value PatternFlowGreReserved1ChoiceEnum) PatternFlowGreReserved1
 	Value() int32
 	SetValue(value int32) PatternFlowGreReserved1
 	Values() []int32
@@ -18251,6 +21755,33 @@ type PatternFlowGreReserved1 interface {
 	SetMetricGroup(value string) PatternFlowGreReserved1
 	Increment() PatternFlowGreReserved1Counter
 	Decrement() PatternFlowGreReserved1Counter
+}
+
+type PatternFlowGreReserved1ChoiceEnum string
+
+var PatternFlowGreReserved1Choice = struct {
+	UNSPECIFIED PatternFlowGreReserved1ChoiceEnum
+	VALUE       PatternFlowGreReserved1ChoiceEnum
+	VALUES      PatternFlowGreReserved1ChoiceEnum
+	INCREMENT   PatternFlowGreReserved1ChoiceEnum
+	DECREMENT   PatternFlowGreReserved1ChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowGreReserved1ChoiceEnum("unspecified"),
+	VALUE:       PatternFlowGreReserved1ChoiceEnum("value"),
+	VALUES:      PatternFlowGreReserved1ChoiceEnum("values"),
+	INCREMENT:   PatternFlowGreReserved1ChoiceEnum("increment"),
+	DECREMENT:   PatternFlowGreReserved1ChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowGreReserved1) Choice() PatternFlowGreReserved1ChoiceEnum {
+	return PatternFlowGreReserved1ChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowGreReserved1) SetChoice(value PatternFlowGreReserved1ChoiceEnum) PatternFlowGreReserved1 {
+	intValue := snappipb.PatternFlowGreReserved1_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowGreReserved1_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -18263,6 +21794,7 @@ func (obj *patternFlowGreReserved1) Value() int32 {
 //  description is TBD
 func (obj *patternFlowGreReserved1) SetValue(value int32) PatternFlowGreReserved1 {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowGreReserved1Choice.VALUE)
 	return obj
 }
 
@@ -18276,6 +21808,7 @@ func (obj *patternFlowGreReserved1) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowGreReserved1) SetValues(value []int32) PatternFlowGreReserved1 {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowGreReserved1Choice.VALUES)
 	return obj
 }
 
@@ -18289,6 +21822,7 @@ func (obj *patternFlowGreReserved1) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowGreReserved1) SetMetricGroup(value string) PatternFlowGreReserved1 {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -18298,8 +21832,8 @@ func (obj *patternFlowGreReserved1) Increment() PatternFlowGreReserved1Counter {
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowGreReserved1Counter{}
 	}
+	obj.SetChoice(PatternFlowGreReserved1Choice.INCREMENT)
 	return &patternFlowGreReserved1Counter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowGreReserved1Counter
@@ -18308,8 +21842,8 @@ func (obj *patternFlowGreReserved1) Decrement() PatternFlowGreReserved1Counter {
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowGreReserved1Counter{}
 	}
+	obj.SetChoice(PatternFlowGreReserved1Choice.DECREMENT)
 	return &patternFlowGreReserved1Counter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowGtpv1Version struct {
@@ -18358,6 +21892,8 @@ type PatternFlowGtpv1Version interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowGtpv1VersionChoiceEnum
+	SetChoice(value PatternFlowGtpv1VersionChoiceEnum) PatternFlowGtpv1Version
 	Value() int32
 	SetValue(value int32) PatternFlowGtpv1Version
 	Values() []int32
@@ -18366,6 +21902,33 @@ type PatternFlowGtpv1Version interface {
 	SetMetricGroup(value string) PatternFlowGtpv1Version
 	Increment() PatternFlowGtpv1VersionCounter
 	Decrement() PatternFlowGtpv1VersionCounter
+}
+
+type PatternFlowGtpv1VersionChoiceEnum string
+
+var PatternFlowGtpv1VersionChoice = struct {
+	UNSPECIFIED PatternFlowGtpv1VersionChoiceEnum
+	VALUE       PatternFlowGtpv1VersionChoiceEnum
+	VALUES      PatternFlowGtpv1VersionChoiceEnum
+	INCREMENT   PatternFlowGtpv1VersionChoiceEnum
+	DECREMENT   PatternFlowGtpv1VersionChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowGtpv1VersionChoiceEnum("unspecified"),
+	VALUE:       PatternFlowGtpv1VersionChoiceEnum("value"),
+	VALUES:      PatternFlowGtpv1VersionChoiceEnum("values"),
+	INCREMENT:   PatternFlowGtpv1VersionChoiceEnum("increment"),
+	DECREMENT:   PatternFlowGtpv1VersionChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowGtpv1Version) Choice() PatternFlowGtpv1VersionChoiceEnum {
+	return PatternFlowGtpv1VersionChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowGtpv1Version) SetChoice(value PatternFlowGtpv1VersionChoiceEnum) PatternFlowGtpv1Version {
+	intValue := snappipb.PatternFlowGtpv1Version_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowGtpv1Version_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -18378,6 +21941,7 @@ func (obj *patternFlowGtpv1Version) Value() int32 {
 //  description is TBD
 func (obj *patternFlowGtpv1Version) SetValue(value int32) PatternFlowGtpv1Version {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowGtpv1VersionChoice.VALUE)
 	return obj
 }
 
@@ -18391,6 +21955,7 @@ func (obj *patternFlowGtpv1Version) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowGtpv1Version) SetValues(value []int32) PatternFlowGtpv1Version {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowGtpv1VersionChoice.VALUES)
 	return obj
 }
 
@@ -18404,6 +21969,7 @@ func (obj *patternFlowGtpv1Version) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowGtpv1Version) SetMetricGroup(value string) PatternFlowGtpv1Version {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -18413,8 +21979,8 @@ func (obj *patternFlowGtpv1Version) Increment() PatternFlowGtpv1VersionCounter {
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowGtpv1VersionCounter{}
 	}
+	obj.SetChoice(PatternFlowGtpv1VersionChoice.INCREMENT)
 	return &patternFlowGtpv1VersionCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowGtpv1VersionCounter
@@ -18423,8 +21989,8 @@ func (obj *patternFlowGtpv1Version) Decrement() PatternFlowGtpv1VersionCounter {
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowGtpv1VersionCounter{}
 	}
+	obj.SetChoice(PatternFlowGtpv1VersionChoice.DECREMENT)
 	return &patternFlowGtpv1VersionCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowGtpv1ProtocolType struct {
@@ -18473,6 +22039,8 @@ type PatternFlowGtpv1ProtocolType interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowGtpv1ProtocolTypeChoiceEnum
+	SetChoice(value PatternFlowGtpv1ProtocolTypeChoiceEnum) PatternFlowGtpv1ProtocolType
 	Value() int32
 	SetValue(value int32) PatternFlowGtpv1ProtocolType
 	Values() []int32
@@ -18481,6 +22049,33 @@ type PatternFlowGtpv1ProtocolType interface {
 	SetMetricGroup(value string) PatternFlowGtpv1ProtocolType
 	Increment() PatternFlowGtpv1ProtocolTypeCounter
 	Decrement() PatternFlowGtpv1ProtocolTypeCounter
+}
+
+type PatternFlowGtpv1ProtocolTypeChoiceEnum string
+
+var PatternFlowGtpv1ProtocolTypeChoice = struct {
+	UNSPECIFIED PatternFlowGtpv1ProtocolTypeChoiceEnum
+	VALUE       PatternFlowGtpv1ProtocolTypeChoiceEnum
+	VALUES      PatternFlowGtpv1ProtocolTypeChoiceEnum
+	INCREMENT   PatternFlowGtpv1ProtocolTypeChoiceEnum
+	DECREMENT   PatternFlowGtpv1ProtocolTypeChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowGtpv1ProtocolTypeChoiceEnum("unspecified"),
+	VALUE:       PatternFlowGtpv1ProtocolTypeChoiceEnum("value"),
+	VALUES:      PatternFlowGtpv1ProtocolTypeChoiceEnum("values"),
+	INCREMENT:   PatternFlowGtpv1ProtocolTypeChoiceEnum("increment"),
+	DECREMENT:   PatternFlowGtpv1ProtocolTypeChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowGtpv1ProtocolType) Choice() PatternFlowGtpv1ProtocolTypeChoiceEnum {
+	return PatternFlowGtpv1ProtocolTypeChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowGtpv1ProtocolType) SetChoice(value PatternFlowGtpv1ProtocolTypeChoiceEnum) PatternFlowGtpv1ProtocolType {
+	intValue := snappipb.PatternFlowGtpv1ProtocolType_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowGtpv1ProtocolType_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -18493,6 +22088,7 @@ func (obj *patternFlowGtpv1ProtocolType) Value() int32 {
 //  description is TBD
 func (obj *patternFlowGtpv1ProtocolType) SetValue(value int32) PatternFlowGtpv1ProtocolType {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowGtpv1ProtocolTypeChoice.VALUE)
 	return obj
 }
 
@@ -18506,6 +22102,7 @@ func (obj *patternFlowGtpv1ProtocolType) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowGtpv1ProtocolType) SetValues(value []int32) PatternFlowGtpv1ProtocolType {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowGtpv1ProtocolTypeChoice.VALUES)
 	return obj
 }
 
@@ -18519,6 +22116,7 @@ func (obj *patternFlowGtpv1ProtocolType) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowGtpv1ProtocolType) SetMetricGroup(value string) PatternFlowGtpv1ProtocolType {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -18528,8 +22126,8 @@ func (obj *patternFlowGtpv1ProtocolType) Increment() PatternFlowGtpv1ProtocolTyp
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowGtpv1ProtocolTypeCounter{}
 	}
+	obj.SetChoice(PatternFlowGtpv1ProtocolTypeChoice.INCREMENT)
 	return &patternFlowGtpv1ProtocolTypeCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowGtpv1ProtocolTypeCounter
@@ -18538,8 +22136,8 @@ func (obj *patternFlowGtpv1ProtocolType) Decrement() PatternFlowGtpv1ProtocolTyp
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowGtpv1ProtocolTypeCounter{}
 	}
+	obj.SetChoice(PatternFlowGtpv1ProtocolTypeChoice.DECREMENT)
 	return &patternFlowGtpv1ProtocolTypeCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowGtpv1Reserved struct {
@@ -18588,6 +22186,8 @@ type PatternFlowGtpv1Reserved interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowGtpv1ReservedChoiceEnum
+	SetChoice(value PatternFlowGtpv1ReservedChoiceEnum) PatternFlowGtpv1Reserved
 	Value() int32
 	SetValue(value int32) PatternFlowGtpv1Reserved
 	Values() []int32
@@ -18596,6 +22196,33 @@ type PatternFlowGtpv1Reserved interface {
 	SetMetricGroup(value string) PatternFlowGtpv1Reserved
 	Increment() PatternFlowGtpv1ReservedCounter
 	Decrement() PatternFlowGtpv1ReservedCounter
+}
+
+type PatternFlowGtpv1ReservedChoiceEnum string
+
+var PatternFlowGtpv1ReservedChoice = struct {
+	UNSPECIFIED PatternFlowGtpv1ReservedChoiceEnum
+	VALUE       PatternFlowGtpv1ReservedChoiceEnum
+	VALUES      PatternFlowGtpv1ReservedChoiceEnum
+	INCREMENT   PatternFlowGtpv1ReservedChoiceEnum
+	DECREMENT   PatternFlowGtpv1ReservedChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowGtpv1ReservedChoiceEnum("unspecified"),
+	VALUE:       PatternFlowGtpv1ReservedChoiceEnum("value"),
+	VALUES:      PatternFlowGtpv1ReservedChoiceEnum("values"),
+	INCREMENT:   PatternFlowGtpv1ReservedChoiceEnum("increment"),
+	DECREMENT:   PatternFlowGtpv1ReservedChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowGtpv1Reserved) Choice() PatternFlowGtpv1ReservedChoiceEnum {
+	return PatternFlowGtpv1ReservedChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowGtpv1Reserved) SetChoice(value PatternFlowGtpv1ReservedChoiceEnum) PatternFlowGtpv1Reserved {
+	intValue := snappipb.PatternFlowGtpv1Reserved_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowGtpv1Reserved_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -18608,6 +22235,7 @@ func (obj *patternFlowGtpv1Reserved) Value() int32 {
 //  description is TBD
 func (obj *patternFlowGtpv1Reserved) SetValue(value int32) PatternFlowGtpv1Reserved {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowGtpv1ReservedChoice.VALUE)
 	return obj
 }
 
@@ -18621,6 +22249,7 @@ func (obj *patternFlowGtpv1Reserved) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowGtpv1Reserved) SetValues(value []int32) PatternFlowGtpv1Reserved {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowGtpv1ReservedChoice.VALUES)
 	return obj
 }
 
@@ -18634,6 +22263,7 @@ func (obj *patternFlowGtpv1Reserved) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowGtpv1Reserved) SetMetricGroup(value string) PatternFlowGtpv1Reserved {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -18643,8 +22273,8 @@ func (obj *patternFlowGtpv1Reserved) Increment() PatternFlowGtpv1ReservedCounter
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowGtpv1ReservedCounter{}
 	}
+	obj.SetChoice(PatternFlowGtpv1ReservedChoice.INCREMENT)
 	return &patternFlowGtpv1ReservedCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowGtpv1ReservedCounter
@@ -18653,8 +22283,8 @@ func (obj *patternFlowGtpv1Reserved) Decrement() PatternFlowGtpv1ReservedCounter
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowGtpv1ReservedCounter{}
 	}
+	obj.SetChoice(PatternFlowGtpv1ReservedChoice.DECREMENT)
 	return &patternFlowGtpv1ReservedCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowGtpv1EFlag struct {
@@ -18703,6 +22333,8 @@ type PatternFlowGtpv1EFlag interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowGtpv1EFlagChoiceEnum
+	SetChoice(value PatternFlowGtpv1EFlagChoiceEnum) PatternFlowGtpv1EFlag
 	Value() int32
 	SetValue(value int32) PatternFlowGtpv1EFlag
 	Values() []int32
@@ -18711,6 +22343,33 @@ type PatternFlowGtpv1EFlag interface {
 	SetMetricGroup(value string) PatternFlowGtpv1EFlag
 	Increment() PatternFlowGtpv1EFlagCounter
 	Decrement() PatternFlowGtpv1EFlagCounter
+}
+
+type PatternFlowGtpv1EFlagChoiceEnum string
+
+var PatternFlowGtpv1EFlagChoice = struct {
+	UNSPECIFIED PatternFlowGtpv1EFlagChoiceEnum
+	VALUE       PatternFlowGtpv1EFlagChoiceEnum
+	VALUES      PatternFlowGtpv1EFlagChoiceEnum
+	INCREMENT   PatternFlowGtpv1EFlagChoiceEnum
+	DECREMENT   PatternFlowGtpv1EFlagChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowGtpv1EFlagChoiceEnum("unspecified"),
+	VALUE:       PatternFlowGtpv1EFlagChoiceEnum("value"),
+	VALUES:      PatternFlowGtpv1EFlagChoiceEnum("values"),
+	INCREMENT:   PatternFlowGtpv1EFlagChoiceEnum("increment"),
+	DECREMENT:   PatternFlowGtpv1EFlagChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowGtpv1EFlag) Choice() PatternFlowGtpv1EFlagChoiceEnum {
+	return PatternFlowGtpv1EFlagChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowGtpv1EFlag) SetChoice(value PatternFlowGtpv1EFlagChoiceEnum) PatternFlowGtpv1EFlag {
+	intValue := snappipb.PatternFlowGtpv1EFlag_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowGtpv1EFlag_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -18723,6 +22382,7 @@ func (obj *patternFlowGtpv1EFlag) Value() int32 {
 //  description is TBD
 func (obj *patternFlowGtpv1EFlag) SetValue(value int32) PatternFlowGtpv1EFlag {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowGtpv1EFlagChoice.VALUE)
 	return obj
 }
 
@@ -18736,6 +22396,7 @@ func (obj *patternFlowGtpv1EFlag) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowGtpv1EFlag) SetValues(value []int32) PatternFlowGtpv1EFlag {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowGtpv1EFlagChoice.VALUES)
 	return obj
 }
 
@@ -18749,6 +22410,7 @@ func (obj *patternFlowGtpv1EFlag) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowGtpv1EFlag) SetMetricGroup(value string) PatternFlowGtpv1EFlag {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -18758,8 +22420,8 @@ func (obj *patternFlowGtpv1EFlag) Increment() PatternFlowGtpv1EFlagCounter {
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowGtpv1EFlagCounter{}
 	}
+	obj.SetChoice(PatternFlowGtpv1EFlagChoice.INCREMENT)
 	return &patternFlowGtpv1EFlagCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowGtpv1EFlagCounter
@@ -18768,8 +22430,8 @@ func (obj *patternFlowGtpv1EFlag) Decrement() PatternFlowGtpv1EFlagCounter {
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowGtpv1EFlagCounter{}
 	}
+	obj.SetChoice(PatternFlowGtpv1EFlagChoice.DECREMENT)
 	return &patternFlowGtpv1EFlagCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowGtpv1SFlag struct {
@@ -18818,6 +22480,8 @@ type PatternFlowGtpv1SFlag interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowGtpv1SFlagChoiceEnum
+	SetChoice(value PatternFlowGtpv1SFlagChoiceEnum) PatternFlowGtpv1SFlag
 	Value() int32
 	SetValue(value int32) PatternFlowGtpv1SFlag
 	Values() []int32
@@ -18826,6 +22490,33 @@ type PatternFlowGtpv1SFlag interface {
 	SetMetricGroup(value string) PatternFlowGtpv1SFlag
 	Increment() PatternFlowGtpv1SFlagCounter
 	Decrement() PatternFlowGtpv1SFlagCounter
+}
+
+type PatternFlowGtpv1SFlagChoiceEnum string
+
+var PatternFlowGtpv1SFlagChoice = struct {
+	UNSPECIFIED PatternFlowGtpv1SFlagChoiceEnum
+	VALUE       PatternFlowGtpv1SFlagChoiceEnum
+	VALUES      PatternFlowGtpv1SFlagChoiceEnum
+	INCREMENT   PatternFlowGtpv1SFlagChoiceEnum
+	DECREMENT   PatternFlowGtpv1SFlagChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowGtpv1SFlagChoiceEnum("unspecified"),
+	VALUE:       PatternFlowGtpv1SFlagChoiceEnum("value"),
+	VALUES:      PatternFlowGtpv1SFlagChoiceEnum("values"),
+	INCREMENT:   PatternFlowGtpv1SFlagChoiceEnum("increment"),
+	DECREMENT:   PatternFlowGtpv1SFlagChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowGtpv1SFlag) Choice() PatternFlowGtpv1SFlagChoiceEnum {
+	return PatternFlowGtpv1SFlagChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowGtpv1SFlag) SetChoice(value PatternFlowGtpv1SFlagChoiceEnum) PatternFlowGtpv1SFlag {
+	intValue := snappipb.PatternFlowGtpv1SFlag_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowGtpv1SFlag_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -18838,6 +22529,7 @@ func (obj *patternFlowGtpv1SFlag) Value() int32 {
 //  description is TBD
 func (obj *patternFlowGtpv1SFlag) SetValue(value int32) PatternFlowGtpv1SFlag {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowGtpv1SFlagChoice.VALUE)
 	return obj
 }
 
@@ -18851,6 +22543,7 @@ func (obj *patternFlowGtpv1SFlag) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowGtpv1SFlag) SetValues(value []int32) PatternFlowGtpv1SFlag {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowGtpv1SFlagChoice.VALUES)
 	return obj
 }
 
@@ -18864,6 +22557,7 @@ func (obj *patternFlowGtpv1SFlag) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowGtpv1SFlag) SetMetricGroup(value string) PatternFlowGtpv1SFlag {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -18873,8 +22567,8 @@ func (obj *patternFlowGtpv1SFlag) Increment() PatternFlowGtpv1SFlagCounter {
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowGtpv1SFlagCounter{}
 	}
+	obj.SetChoice(PatternFlowGtpv1SFlagChoice.INCREMENT)
 	return &patternFlowGtpv1SFlagCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowGtpv1SFlagCounter
@@ -18883,8 +22577,8 @@ func (obj *patternFlowGtpv1SFlag) Decrement() PatternFlowGtpv1SFlagCounter {
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowGtpv1SFlagCounter{}
 	}
+	obj.SetChoice(PatternFlowGtpv1SFlagChoice.DECREMENT)
 	return &patternFlowGtpv1SFlagCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowGtpv1PnFlag struct {
@@ -18933,6 +22627,8 @@ type PatternFlowGtpv1PnFlag interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowGtpv1PnFlagChoiceEnum
+	SetChoice(value PatternFlowGtpv1PnFlagChoiceEnum) PatternFlowGtpv1PnFlag
 	Value() int32
 	SetValue(value int32) PatternFlowGtpv1PnFlag
 	Values() []int32
@@ -18941,6 +22637,33 @@ type PatternFlowGtpv1PnFlag interface {
 	SetMetricGroup(value string) PatternFlowGtpv1PnFlag
 	Increment() PatternFlowGtpv1PnFlagCounter
 	Decrement() PatternFlowGtpv1PnFlagCounter
+}
+
+type PatternFlowGtpv1PnFlagChoiceEnum string
+
+var PatternFlowGtpv1PnFlagChoice = struct {
+	UNSPECIFIED PatternFlowGtpv1PnFlagChoiceEnum
+	VALUE       PatternFlowGtpv1PnFlagChoiceEnum
+	VALUES      PatternFlowGtpv1PnFlagChoiceEnum
+	INCREMENT   PatternFlowGtpv1PnFlagChoiceEnum
+	DECREMENT   PatternFlowGtpv1PnFlagChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowGtpv1PnFlagChoiceEnum("unspecified"),
+	VALUE:       PatternFlowGtpv1PnFlagChoiceEnum("value"),
+	VALUES:      PatternFlowGtpv1PnFlagChoiceEnum("values"),
+	INCREMENT:   PatternFlowGtpv1PnFlagChoiceEnum("increment"),
+	DECREMENT:   PatternFlowGtpv1PnFlagChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowGtpv1PnFlag) Choice() PatternFlowGtpv1PnFlagChoiceEnum {
+	return PatternFlowGtpv1PnFlagChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowGtpv1PnFlag) SetChoice(value PatternFlowGtpv1PnFlagChoiceEnum) PatternFlowGtpv1PnFlag {
+	intValue := snappipb.PatternFlowGtpv1PnFlag_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowGtpv1PnFlag_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -18953,6 +22676,7 @@ func (obj *patternFlowGtpv1PnFlag) Value() int32 {
 //  description is TBD
 func (obj *patternFlowGtpv1PnFlag) SetValue(value int32) PatternFlowGtpv1PnFlag {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowGtpv1PnFlagChoice.VALUE)
 	return obj
 }
 
@@ -18966,6 +22690,7 @@ func (obj *patternFlowGtpv1PnFlag) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowGtpv1PnFlag) SetValues(value []int32) PatternFlowGtpv1PnFlag {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowGtpv1PnFlagChoice.VALUES)
 	return obj
 }
 
@@ -18979,6 +22704,7 @@ func (obj *patternFlowGtpv1PnFlag) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowGtpv1PnFlag) SetMetricGroup(value string) PatternFlowGtpv1PnFlag {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -18988,8 +22714,8 @@ func (obj *patternFlowGtpv1PnFlag) Increment() PatternFlowGtpv1PnFlagCounter {
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowGtpv1PnFlagCounter{}
 	}
+	obj.SetChoice(PatternFlowGtpv1PnFlagChoice.INCREMENT)
 	return &patternFlowGtpv1PnFlagCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowGtpv1PnFlagCounter
@@ -18998,8 +22724,8 @@ func (obj *patternFlowGtpv1PnFlag) Decrement() PatternFlowGtpv1PnFlagCounter {
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowGtpv1PnFlagCounter{}
 	}
+	obj.SetChoice(PatternFlowGtpv1PnFlagChoice.DECREMENT)
 	return &patternFlowGtpv1PnFlagCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowGtpv1MessageType struct {
@@ -19048,6 +22774,8 @@ type PatternFlowGtpv1MessageType interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowGtpv1MessageTypeChoiceEnum
+	SetChoice(value PatternFlowGtpv1MessageTypeChoiceEnum) PatternFlowGtpv1MessageType
 	Value() int32
 	SetValue(value int32) PatternFlowGtpv1MessageType
 	Values() []int32
@@ -19056,6 +22784,33 @@ type PatternFlowGtpv1MessageType interface {
 	SetMetricGroup(value string) PatternFlowGtpv1MessageType
 	Increment() PatternFlowGtpv1MessageTypeCounter
 	Decrement() PatternFlowGtpv1MessageTypeCounter
+}
+
+type PatternFlowGtpv1MessageTypeChoiceEnum string
+
+var PatternFlowGtpv1MessageTypeChoice = struct {
+	UNSPECIFIED PatternFlowGtpv1MessageTypeChoiceEnum
+	VALUE       PatternFlowGtpv1MessageTypeChoiceEnum
+	VALUES      PatternFlowGtpv1MessageTypeChoiceEnum
+	INCREMENT   PatternFlowGtpv1MessageTypeChoiceEnum
+	DECREMENT   PatternFlowGtpv1MessageTypeChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowGtpv1MessageTypeChoiceEnum("unspecified"),
+	VALUE:       PatternFlowGtpv1MessageTypeChoiceEnum("value"),
+	VALUES:      PatternFlowGtpv1MessageTypeChoiceEnum("values"),
+	INCREMENT:   PatternFlowGtpv1MessageTypeChoiceEnum("increment"),
+	DECREMENT:   PatternFlowGtpv1MessageTypeChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowGtpv1MessageType) Choice() PatternFlowGtpv1MessageTypeChoiceEnum {
+	return PatternFlowGtpv1MessageTypeChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowGtpv1MessageType) SetChoice(value PatternFlowGtpv1MessageTypeChoiceEnum) PatternFlowGtpv1MessageType {
+	intValue := snappipb.PatternFlowGtpv1MessageType_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowGtpv1MessageType_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -19068,6 +22823,7 @@ func (obj *patternFlowGtpv1MessageType) Value() int32 {
 //  description is TBD
 func (obj *patternFlowGtpv1MessageType) SetValue(value int32) PatternFlowGtpv1MessageType {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowGtpv1MessageTypeChoice.VALUE)
 	return obj
 }
 
@@ -19081,6 +22837,7 @@ func (obj *patternFlowGtpv1MessageType) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowGtpv1MessageType) SetValues(value []int32) PatternFlowGtpv1MessageType {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowGtpv1MessageTypeChoice.VALUES)
 	return obj
 }
 
@@ -19094,6 +22851,7 @@ func (obj *patternFlowGtpv1MessageType) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowGtpv1MessageType) SetMetricGroup(value string) PatternFlowGtpv1MessageType {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -19103,8 +22861,8 @@ func (obj *patternFlowGtpv1MessageType) Increment() PatternFlowGtpv1MessageTypeC
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowGtpv1MessageTypeCounter{}
 	}
+	obj.SetChoice(PatternFlowGtpv1MessageTypeChoice.INCREMENT)
 	return &patternFlowGtpv1MessageTypeCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowGtpv1MessageTypeCounter
@@ -19113,8 +22871,8 @@ func (obj *patternFlowGtpv1MessageType) Decrement() PatternFlowGtpv1MessageTypeC
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowGtpv1MessageTypeCounter{}
 	}
+	obj.SetChoice(PatternFlowGtpv1MessageTypeChoice.DECREMENT)
 	return &patternFlowGtpv1MessageTypeCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowGtpv1MessageLength struct {
@@ -19163,6 +22921,8 @@ type PatternFlowGtpv1MessageLength interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowGtpv1MessageLengthChoiceEnum
+	SetChoice(value PatternFlowGtpv1MessageLengthChoiceEnum) PatternFlowGtpv1MessageLength
 	Value() int32
 	SetValue(value int32) PatternFlowGtpv1MessageLength
 	Values() []int32
@@ -19171,6 +22931,33 @@ type PatternFlowGtpv1MessageLength interface {
 	SetMetricGroup(value string) PatternFlowGtpv1MessageLength
 	Increment() PatternFlowGtpv1MessageLengthCounter
 	Decrement() PatternFlowGtpv1MessageLengthCounter
+}
+
+type PatternFlowGtpv1MessageLengthChoiceEnum string
+
+var PatternFlowGtpv1MessageLengthChoice = struct {
+	UNSPECIFIED PatternFlowGtpv1MessageLengthChoiceEnum
+	VALUE       PatternFlowGtpv1MessageLengthChoiceEnum
+	VALUES      PatternFlowGtpv1MessageLengthChoiceEnum
+	INCREMENT   PatternFlowGtpv1MessageLengthChoiceEnum
+	DECREMENT   PatternFlowGtpv1MessageLengthChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowGtpv1MessageLengthChoiceEnum("unspecified"),
+	VALUE:       PatternFlowGtpv1MessageLengthChoiceEnum("value"),
+	VALUES:      PatternFlowGtpv1MessageLengthChoiceEnum("values"),
+	INCREMENT:   PatternFlowGtpv1MessageLengthChoiceEnum("increment"),
+	DECREMENT:   PatternFlowGtpv1MessageLengthChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowGtpv1MessageLength) Choice() PatternFlowGtpv1MessageLengthChoiceEnum {
+	return PatternFlowGtpv1MessageLengthChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowGtpv1MessageLength) SetChoice(value PatternFlowGtpv1MessageLengthChoiceEnum) PatternFlowGtpv1MessageLength {
+	intValue := snappipb.PatternFlowGtpv1MessageLength_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowGtpv1MessageLength_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -19183,6 +22970,7 @@ func (obj *patternFlowGtpv1MessageLength) Value() int32 {
 //  description is TBD
 func (obj *patternFlowGtpv1MessageLength) SetValue(value int32) PatternFlowGtpv1MessageLength {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowGtpv1MessageLengthChoice.VALUE)
 	return obj
 }
 
@@ -19196,6 +22984,7 @@ func (obj *patternFlowGtpv1MessageLength) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowGtpv1MessageLength) SetValues(value []int32) PatternFlowGtpv1MessageLength {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowGtpv1MessageLengthChoice.VALUES)
 	return obj
 }
 
@@ -19209,6 +22998,7 @@ func (obj *patternFlowGtpv1MessageLength) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowGtpv1MessageLength) SetMetricGroup(value string) PatternFlowGtpv1MessageLength {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -19218,8 +23008,8 @@ func (obj *patternFlowGtpv1MessageLength) Increment() PatternFlowGtpv1MessageLen
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowGtpv1MessageLengthCounter{}
 	}
+	obj.SetChoice(PatternFlowGtpv1MessageLengthChoice.INCREMENT)
 	return &patternFlowGtpv1MessageLengthCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowGtpv1MessageLengthCounter
@@ -19228,8 +23018,8 @@ func (obj *patternFlowGtpv1MessageLength) Decrement() PatternFlowGtpv1MessageLen
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowGtpv1MessageLengthCounter{}
 	}
+	obj.SetChoice(PatternFlowGtpv1MessageLengthChoice.DECREMENT)
 	return &patternFlowGtpv1MessageLengthCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowGtpv1Teid struct {
@@ -19278,6 +23068,8 @@ type PatternFlowGtpv1Teid interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowGtpv1TeidChoiceEnum
+	SetChoice(value PatternFlowGtpv1TeidChoiceEnum) PatternFlowGtpv1Teid
 	Value() int32
 	SetValue(value int32) PatternFlowGtpv1Teid
 	Values() []int32
@@ -19286,6 +23078,33 @@ type PatternFlowGtpv1Teid interface {
 	SetMetricGroup(value string) PatternFlowGtpv1Teid
 	Increment() PatternFlowGtpv1TeidCounter
 	Decrement() PatternFlowGtpv1TeidCounter
+}
+
+type PatternFlowGtpv1TeidChoiceEnum string
+
+var PatternFlowGtpv1TeidChoice = struct {
+	UNSPECIFIED PatternFlowGtpv1TeidChoiceEnum
+	VALUE       PatternFlowGtpv1TeidChoiceEnum
+	VALUES      PatternFlowGtpv1TeidChoiceEnum
+	INCREMENT   PatternFlowGtpv1TeidChoiceEnum
+	DECREMENT   PatternFlowGtpv1TeidChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowGtpv1TeidChoiceEnum("unspecified"),
+	VALUE:       PatternFlowGtpv1TeidChoiceEnum("value"),
+	VALUES:      PatternFlowGtpv1TeidChoiceEnum("values"),
+	INCREMENT:   PatternFlowGtpv1TeidChoiceEnum("increment"),
+	DECREMENT:   PatternFlowGtpv1TeidChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowGtpv1Teid) Choice() PatternFlowGtpv1TeidChoiceEnum {
+	return PatternFlowGtpv1TeidChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowGtpv1Teid) SetChoice(value PatternFlowGtpv1TeidChoiceEnum) PatternFlowGtpv1Teid {
+	intValue := snappipb.PatternFlowGtpv1Teid_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowGtpv1Teid_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -19298,6 +23117,7 @@ func (obj *patternFlowGtpv1Teid) Value() int32 {
 //  description is TBD
 func (obj *patternFlowGtpv1Teid) SetValue(value int32) PatternFlowGtpv1Teid {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowGtpv1TeidChoice.VALUE)
 	return obj
 }
 
@@ -19311,6 +23131,7 @@ func (obj *patternFlowGtpv1Teid) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowGtpv1Teid) SetValues(value []int32) PatternFlowGtpv1Teid {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowGtpv1TeidChoice.VALUES)
 	return obj
 }
 
@@ -19324,6 +23145,7 @@ func (obj *patternFlowGtpv1Teid) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowGtpv1Teid) SetMetricGroup(value string) PatternFlowGtpv1Teid {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -19333,8 +23155,8 @@ func (obj *patternFlowGtpv1Teid) Increment() PatternFlowGtpv1TeidCounter {
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowGtpv1TeidCounter{}
 	}
+	obj.SetChoice(PatternFlowGtpv1TeidChoice.INCREMENT)
 	return &patternFlowGtpv1TeidCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowGtpv1TeidCounter
@@ -19343,8 +23165,8 @@ func (obj *patternFlowGtpv1Teid) Decrement() PatternFlowGtpv1TeidCounter {
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowGtpv1TeidCounter{}
 	}
+	obj.SetChoice(PatternFlowGtpv1TeidChoice.DECREMENT)
 	return &patternFlowGtpv1TeidCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowGtpv1SquenceNumber struct {
@@ -19393,6 +23215,8 @@ type PatternFlowGtpv1SquenceNumber interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowGtpv1SquenceNumberChoiceEnum
+	SetChoice(value PatternFlowGtpv1SquenceNumberChoiceEnum) PatternFlowGtpv1SquenceNumber
 	Value() int32
 	SetValue(value int32) PatternFlowGtpv1SquenceNumber
 	Values() []int32
@@ -19401,6 +23225,33 @@ type PatternFlowGtpv1SquenceNumber interface {
 	SetMetricGroup(value string) PatternFlowGtpv1SquenceNumber
 	Increment() PatternFlowGtpv1SquenceNumberCounter
 	Decrement() PatternFlowGtpv1SquenceNumberCounter
+}
+
+type PatternFlowGtpv1SquenceNumberChoiceEnum string
+
+var PatternFlowGtpv1SquenceNumberChoice = struct {
+	UNSPECIFIED PatternFlowGtpv1SquenceNumberChoiceEnum
+	VALUE       PatternFlowGtpv1SquenceNumberChoiceEnum
+	VALUES      PatternFlowGtpv1SquenceNumberChoiceEnum
+	INCREMENT   PatternFlowGtpv1SquenceNumberChoiceEnum
+	DECREMENT   PatternFlowGtpv1SquenceNumberChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowGtpv1SquenceNumberChoiceEnum("unspecified"),
+	VALUE:       PatternFlowGtpv1SquenceNumberChoiceEnum("value"),
+	VALUES:      PatternFlowGtpv1SquenceNumberChoiceEnum("values"),
+	INCREMENT:   PatternFlowGtpv1SquenceNumberChoiceEnum("increment"),
+	DECREMENT:   PatternFlowGtpv1SquenceNumberChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowGtpv1SquenceNumber) Choice() PatternFlowGtpv1SquenceNumberChoiceEnum {
+	return PatternFlowGtpv1SquenceNumberChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowGtpv1SquenceNumber) SetChoice(value PatternFlowGtpv1SquenceNumberChoiceEnum) PatternFlowGtpv1SquenceNumber {
+	intValue := snappipb.PatternFlowGtpv1SquenceNumber_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowGtpv1SquenceNumber_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -19413,6 +23264,7 @@ func (obj *patternFlowGtpv1SquenceNumber) Value() int32 {
 //  description is TBD
 func (obj *patternFlowGtpv1SquenceNumber) SetValue(value int32) PatternFlowGtpv1SquenceNumber {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowGtpv1SquenceNumberChoice.VALUE)
 	return obj
 }
 
@@ -19426,6 +23278,7 @@ func (obj *patternFlowGtpv1SquenceNumber) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowGtpv1SquenceNumber) SetValues(value []int32) PatternFlowGtpv1SquenceNumber {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowGtpv1SquenceNumberChoice.VALUES)
 	return obj
 }
 
@@ -19439,6 +23292,7 @@ func (obj *patternFlowGtpv1SquenceNumber) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowGtpv1SquenceNumber) SetMetricGroup(value string) PatternFlowGtpv1SquenceNumber {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -19448,8 +23302,8 @@ func (obj *patternFlowGtpv1SquenceNumber) Increment() PatternFlowGtpv1SquenceNum
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowGtpv1SquenceNumberCounter{}
 	}
+	obj.SetChoice(PatternFlowGtpv1SquenceNumberChoice.INCREMENT)
 	return &patternFlowGtpv1SquenceNumberCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowGtpv1SquenceNumberCounter
@@ -19458,8 +23312,8 @@ func (obj *patternFlowGtpv1SquenceNumber) Decrement() PatternFlowGtpv1SquenceNum
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowGtpv1SquenceNumberCounter{}
 	}
+	obj.SetChoice(PatternFlowGtpv1SquenceNumberChoice.DECREMENT)
 	return &patternFlowGtpv1SquenceNumberCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowGtpv1NPduNumber struct {
@@ -19508,6 +23362,8 @@ type PatternFlowGtpv1NPduNumber interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowGtpv1NPduNumberChoiceEnum
+	SetChoice(value PatternFlowGtpv1NPduNumberChoiceEnum) PatternFlowGtpv1NPduNumber
 	Value() int32
 	SetValue(value int32) PatternFlowGtpv1NPduNumber
 	Values() []int32
@@ -19516,6 +23372,33 @@ type PatternFlowGtpv1NPduNumber interface {
 	SetMetricGroup(value string) PatternFlowGtpv1NPduNumber
 	Increment() PatternFlowGtpv1NPduNumberCounter
 	Decrement() PatternFlowGtpv1NPduNumberCounter
+}
+
+type PatternFlowGtpv1NPduNumberChoiceEnum string
+
+var PatternFlowGtpv1NPduNumberChoice = struct {
+	UNSPECIFIED PatternFlowGtpv1NPduNumberChoiceEnum
+	VALUE       PatternFlowGtpv1NPduNumberChoiceEnum
+	VALUES      PatternFlowGtpv1NPduNumberChoiceEnum
+	INCREMENT   PatternFlowGtpv1NPduNumberChoiceEnum
+	DECREMENT   PatternFlowGtpv1NPduNumberChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowGtpv1NPduNumberChoiceEnum("unspecified"),
+	VALUE:       PatternFlowGtpv1NPduNumberChoiceEnum("value"),
+	VALUES:      PatternFlowGtpv1NPduNumberChoiceEnum("values"),
+	INCREMENT:   PatternFlowGtpv1NPduNumberChoiceEnum("increment"),
+	DECREMENT:   PatternFlowGtpv1NPduNumberChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowGtpv1NPduNumber) Choice() PatternFlowGtpv1NPduNumberChoiceEnum {
+	return PatternFlowGtpv1NPduNumberChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowGtpv1NPduNumber) SetChoice(value PatternFlowGtpv1NPduNumberChoiceEnum) PatternFlowGtpv1NPduNumber {
+	intValue := snappipb.PatternFlowGtpv1NPduNumber_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowGtpv1NPduNumber_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -19528,6 +23411,7 @@ func (obj *patternFlowGtpv1NPduNumber) Value() int32 {
 //  description is TBD
 func (obj *patternFlowGtpv1NPduNumber) SetValue(value int32) PatternFlowGtpv1NPduNumber {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowGtpv1NPduNumberChoice.VALUE)
 	return obj
 }
 
@@ -19541,6 +23425,7 @@ func (obj *patternFlowGtpv1NPduNumber) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowGtpv1NPduNumber) SetValues(value []int32) PatternFlowGtpv1NPduNumber {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowGtpv1NPduNumberChoice.VALUES)
 	return obj
 }
 
@@ -19554,6 +23439,7 @@ func (obj *patternFlowGtpv1NPduNumber) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowGtpv1NPduNumber) SetMetricGroup(value string) PatternFlowGtpv1NPduNumber {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -19563,8 +23449,8 @@ func (obj *patternFlowGtpv1NPduNumber) Increment() PatternFlowGtpv1NPduNumberCou
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowGtpv1NPduNumberCounter{}
 	}
+	obj.SetChoice(PatternFlowGtpv1NPduNumberChoice.INCREMENT)
 	return &patternFlowGtpv1NPduNumberCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowGtpv1NPduNumberCounter
@@ -19573,8 +23459,8 @@ func (obj *patternFlowGtpv1NPduNumber) Decrement() PatternFlowGtpv1NPduNumberCou
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowGtpv1NPduNumberCounter{}
 	}
+	obj.SetChoice(PatternFlowGtpv1NPduNumberChoice.DECREMENT)
 	return &patternFlowGtpv1NPduNumberCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowGtpv1NextExtensionHeaderType struct {
@@ -19623,6 +23509,8 @@ type PatternFlowGtpv1NextExtensionHeaderType interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowGtpv1NextExtensionHeaderTypeChoiceEnum
+	SetChoice(value PatternFlowGtpv1NextExtensionHeaderTypeChoiceEnum) PatternFlowGtpv1NextExtensionHeaderType
 	Value() int32
 	SetValue(value int32) PatternFlowGtpv1NextExtensionHeaderType
 	Values() []int32
@@ -19631,6 +23519,33 @@ type PatternFlowGtpv1NextExtensionHeaderType interface {
 	SetMetricGroup(value string) PatternFlowGtpv1NextExtensionHeaderType
 	Increment() PatternFlowGtpv1NextExtensionHeaderTypeCounter
 	Decrement() PatternFlowGtpv1NextExtensionHeaderTypeCounter
+}
+
+type PatternFlowGtpv1NextExtensionHeaderTypeChoiceEnum string
+
+var PatternFlowGtpv1NextExtensionHeaderTypeChoice = struct {
+	UNSPECIFIED PatternFlowGtpv1NextExtensionHeaderTypeChoiceEnum
+	VALUE       PatternFlowGtpv1NextExtensionHeaderTypeChoiceEnum
+	VALUES      PatternFlowGtpv1NextExtensionHeaderTypeChoiceEnum
+	INCREMENT   PatternFlowGtpv1NextExtensionHeaderTypeChoiceEnum
+	DECREMENT   PatternFlowGtpv1NextExtensionHeaderTypeChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowGtpv1NextExtensionHeaderTypeChoiceEnum("unspecified"),
+	VALUE:       PatternFlowGtpv1NextExtensionHeaderTypeChoiceEnum("value"),
+	VALUES:      PatternFlowGtpv1NextExtensionHeaderTypeChoiceEnum("values"),
+	INCREMENT:   PatternFlowGtpv1NextExtensionHeaderTypeChoiceEnum("increment"),
+	DECREMENT:   PatternFlowGtpv1NextExtensionHeaderTypeChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowGtpv1NextExtensionHeaderType) Choice() PatternFlowGtpv1NextExtensionHeaderTypeChoiceEnum {
+	return PatternFlowGtpv1NextExtensionHeaderTypeChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowGtpv1NextExtensionHeaderType) SetChoice(value PatternFlowGtpv1NextExtensionHeaderTypeChoiceEnum) PatternFlowGtpv1NextExtensionHeaderType {
+	intValue := snappipb.PatternFlowGtpv1NextExtensionHeaderType_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowGtpv1NextExtensionHeaderType_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -19643,6 +23558,7 @@ func (obj *patternFlowGtpv1NextExtensionHeaderType) Value() int32 {
 //  description is TBD
 func (obj *patternFlowGtpv1NextExtensionHeaderType) SetValue(value int32) PatternFlowGtpv1NextExtensionHeaderType {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowGtpv1NextExtensionHeaderTypeChoice.VALUE)
 	return obj
 }
 
@@ -19656,6 +23572,7 @@ func (obj *patternFlowGtpv1NextExtensionHeaderType) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowGtpv1NextExtensionHeaderType) SetValues(value []int32) PatternFlowGtpv1NextExtensionHeaderType {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowGtpv1NextExtensionHeaderTypeChoice.VALUES)
 	return obj
 }
 
@@ -19669,6 +23586,7 @@ func (obj *patternFlowGtpv1NextExtensionHeaderType) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowGtpv1NextExtensionHeaderType) SetMetricGroup(value string) PatternFlowGtpv1NextExtensionHeaderType {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -19678,8 +23596,8 @@ func (obj *patternFlowGtpv1NextExtensionHeaderType) Increment() PatternFlowGtpv1
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowGtpv1NextExtensionHeaderTypeCounter{}
 	}
+	obj.SetChoice(PatternFlowGtpv1NextExtensionHeaderTypeChoice.INCREMENT)
 	return &patternFlowGtpv1NextExtensionHeaderTypeCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowGtpv1NextExtensionHeaderTypeCounter
@@ -19688,8 +23606,8 @@ func (obj *patternFlowGtpv1NextExtensionHeaderType) Decrement() PatternFlowGtpv1
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowGtpv1NextExtensionHeaderTypeCounter{}
 	}
+	obj.SetChoice(PatternFlowGtpv1NextExtensionHeaderTypeChoice.DECREMENT)
 	return &patternFlowGtpv1NextExtensionHeaderTypeCounter{obj: obj.obj.Decrement}
-
 }
 
 type flowGtpExtension struct {
@@ -19749,8 +23667,8 @@ func (obj *flowGtpExtension) ExtensionLength() PatternFlowGtpExtensionExtensionL
 	if obj.obj.ExtensionLength == nil {
 		obj.obj.ExtensionLength = &snappipb.PatternFlowGtpExtensionExtensionLength{}
 	}
-	return &patternFlowGtpExtensionExtensionLength{obj: obj.obj.ExtensionLength}
 
+	return &patternFlowGtpExtensionExtensionLength{obj: obj.obj.ExtensionLength}
 }
 
 // Contents returns a PatternFlowGtpExtensionContents
@@ -19759,8 +23677,8 @@ func (obj *flowGtpExtension) Contents() PatternFlowGtpExtensionContents {
 	if obj.obj.Contents == nil {
 		obj.obj.Contents = &snappipb.PatternFlowGtpExtensionContents{}
 	}
-	return &patternFlowGtpExtensionContents{obj: obj.obj.Contents}
 
+	return &patternFlowGtpExtensionContents{obj: obj.obj.Contents}
 }
 
 // NextExtensionHeader returns a PatternFlowGtpExtensionNextExtensionHeader
@@ -19769,8 +23687,8 @@ func (obj *flowGtpExtension) NextExtensionHeader() PatternFlowGtpExtensionNextEx
 	if obj.obj.NextExtensionHeader == nil {
 		obj.obj.NextExtensionHeader = &snappipb.PatternFlowGtpExtensionNextExtensionHeader{}
 	}
-	return &patternFlowGtpExtensionNextExtensionHeader{obj: obj.obj.NextExtensionHeader}
 
+	return &patternFlowGtpExtensionNextExtensionHeader{obj: obj.obj.NextExtensionHeader}
 }
 
 type patternFlowGtpv2Version struct {
@@ -19819,6 +23737,8 @@ type PatternFlowGtpv2Version interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowGtpv2VersionChoiceEnum
+	SetChoice(value PatternFlowGtpv2VersionChoiceEnum) PatternFlowGtpv2Version
 	Value() int32
 	SetValue(value int32) PatternFlowGtpv2Version
 	Values() []int32
@@ -19827,6 +23747,33 @@ type PatternFlowGtpv2Version interface {
 	SetMetricGroup(value string) PatternFlowGtpv2Version
 	Increment() PatternFlowGtpv2VersionCounter
 	Decrement() PatternFlowGtpv2VersionCounter
+}
+
+type PatternFlowGtpv2VersionChoiceEnum string
+
+var PatternFlowGtpv2VersionChoice = struct {
+	UNSPECIFIED PatternFlowGtpv2VersionChoiceEnum
+	VALUE       PatternFlowGtpv2VersionChoiceEnum
+	VALUES      PatternFlowGtpv2VersionChoiceEnum
+	INCREMENT   PatternFlowGtpv2VersionChoiceEnum
+	DECREMENT   PatternFlowGtpv2VersionChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowGtpv2VersionChoiceEnum("unspecified"),
+	VALUE:       PatternFlowGtpv2VersionChoiceEnum("value"),
+	VALUES:      PatternFlowGtpv2VersionChoiceEnum("values"),
+	INCREMENT:   PatternFlowGtpv2VersionChoiceEnum("increment"),
+	DECREMENT:   PatternFlowGtpv2VersionChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowGtpv2Version) Choice() PatternFlowGtpv2VersionChoiceEnum {
+	return PatternFlowGtpv2VersionChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowGtpv2Version) SetChoice(value PatternFlowGtpv2VersionChoiceEnum) PatternFlowGtpv2Version {
+	intValue := snappipb.PatternFlowGtpv2Version_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowGtpv2Version_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -19839,6 +23786,7 @@ func (obj *patternFlowGtpv2Version) Value() int32 {
 //  description is TBD
 func (obj *patternFlowGtpv2Version) SetValue(value int32) PatternFlowGtpv2Version {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowGtpv2VersionChoice.VALUE)
 	return obj
 }
 
@@ -19852,6 +23800,7 @@ func (obj *patternFlowGtpv2Version) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowGtpv2Version) SetValues(value []int32) PatternFlowGtpv2Version {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowGtpv2VersionChoice.VALUES)
 	return obj
 }
 
@@ -19865,6 +23814,7 @@ func (obj *patternFlowGtpv2Version) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowGtpv2Version) SetMetricGroup(value string) PatternFlowGtpv2Version {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -19874,8 +23824,8 @@ func (obj *patternFlowGtpv2Version) Increment() PatternFlowGtpv2VersionCounter {
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowGtpv2VersionCounter{}
 	}
+	obj.SetChoice(PatternFlowGtpv2VersionChoice.INCREMENT)
 	return &patternFlowGtpv2VersionCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowGtpv2VersionCounter
@@ -19884,8 +23834,8 @@ func (obj *patternFlowGtpv2Version) Decrement() PatternFlowGtpv2VersionCounter {
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowGtpv2VersionCounter{}
 	}
+	obj.SetChoice(PatternFlowGtpv2VersionChoice.DECREMENT)
 	return &patternFlowGtpv2VersionCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowGtpv2PiggybackingFlag struct {
@@ -19934,6 +23884,8 @@ type PatternFlowGtpv2PiggybackingFlag interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowGtpv2PiggybackingFlagChoiceEnum
+	SetChoice(value PatternFlowGtpv2PiggybackingFlagChoiceEnum) PatternFlowGtpv2PiggybackingFlag
 	Value() int32
 	SetValue(value int32) PatternFlowGtpv2PiggybackingFlag
 	Values() []int32
@@ -19942,6 +23894,33 @@ type PatternFlowGtpv2PiggybackingFlag interface {
 	SetMetricGroup(value string) PatternFlowGtpv2PiggybackingFlag
 	Increment() PatternFlowGtpv2PiggybackingFlagCounter
 	Decrement() PatternFlowGtpv2PiggybackingFlagCounter
+}
+
+type PatternFlowGtpv2PiggybackingFlagChoiceEnum string
+
+var PatternFlowGtpv2PiggybackingFlagChoice = struct {
+	UNSPECIFIED PatternFlowGtpv2PiggybackingFlagChoiceEnum
+	VALUE       PatternFlowGtpv2PiggybackingFlagChoiceEnum
+	VALUES      PatternFlowGtpv2PiggybackingFlagChoiceEnum
+	INCREMENT   PatternFlowGtpv2PiggybackingFlagChoiceEnum
+	DECREMENT   PatternFlowGtpv2PiggybackingFlagChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowGtpv2PiggybackingFlagChoiceEnum("unspecified"),
+	VALUE:       PatternFlowGtpv2PiggybackingFlagChoiceEnum("value"),
+	VALUES:      PatternFlowGtpv2PiggybackingFlagChoiceEnum("values"),
+	INCREMENT:   PatternFlowGtpv2PiggybackingFlagChoiceEnum("increment"),
+	DECREMENT:   PatternFlowGtpv2PiggybackingFlagChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowGtpv2PiggybackingFlag) Choice() PatternFlowGtpv2PiggybackingFlagChoiceEnum {
+	return PatternFlowGtpv2PiggybackingFlagChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowGtpv2PiggybackingFlag) SetChoice(value PatternFlowGtpv2PiggybackingFlagChoiceEnum) PatternFlowGtpv2PiggybackingFlag {
+	intValue := snappipb.PatternFlowGtpv2PiggybackingFlag_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowGtpv2PiggybackingFlag_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -19954,6 +23933,7 @@ func (obj *patternFlowGtpv2PiggybackingFlag) Value() int32 {
 //  description is TBD
 func (obj *patternFlowGtpv2PiggybackingFlag) SetValue(value int32) PatternFlowGtpv2PiggybackingFlag {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowGtpv2PiggybackingFlagChoice.VALUE)
 	return obj
 }
 
@@ -19967,6 +23947,7 @@ func (obj *patternFlowGtpv2PiggybackingFlag) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowGtpv2PiggybackingFlag) SetValues(value []int32) PatternFlowGtpv2PiggybackingFlag {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowGtpv2PiggybackingFlagChoice.VALUES)
 	return obj
 }
 
@@ -19980,6 +23961,7 @@ func (obj *patternFlowGtpv2PiggybackingFlag) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowGtpv2PiggybackingFlag) SetMetricGroup(value string) PatternFlowGtpv2PiggybackingFlag {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -19989,8 +23971,8 @@ func (obj *patternFlowGtpv2PiggybackingFlag) Increment() PatternFlowGtpv2Piggyba
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowGtpv2PiggybackingFlagCounter{}
 	}
+	obj.SetChoice(PatternFlowGtpv2PiggybackingFlagChoice.INCREMENT)
 	return &patternFlowGtpv2PiggybackingFlagCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowGtpv2PiggybackingFlagCounter
@@ -19999,8 +23981,8 @@ func (obj *patternFlowGtpv2PiggybackingFlag) Decrement() PatternFlowGtpv2Piggyba
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowGtpv2PiggybackingFlagCounter{}
 	}
+	obj.SetChoice(PatternFlowGtpv2PiggybackingFlagChoice.DECREMENT)
 	return &patternFlowGtpv2PiggybackingFlagCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowGtpv2TeidFlag struct {
@@ -20049,6 +24031,8 @@ type PatternFlowGtpv2TeidFlag interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowGtpv2TeidFlagChoiceEnum
+	SetChoice(value PatternFlowGtpv2TeidFlagChoiceEnum) PatternFlowGtpv2TeidFlag
 	Value() int32
 	SetValue(value int32) PatternFlowGtpv2TeidFlag
 	Values() []int32
@@ -20057,6 +24041,33 @@ type PatternFlowGtpv2TeidFlag interface {
 	SetMetricGroup(value string) PatternFlowGtpv2TeidFlag
 	Increment() PatternFlowGtpv2TeidFlagCounter
 	Decrement() PatternFlowGtpv2TeidFlagCounter
+}
+
+type PatternFlowGtpv2TeidFlagChoiceEnum string
+
+var PatternFlowGtpv2TeidFlagChoice = struct {
+	UNSPECIFIED PatternFlowGtpv2TeidFlagChoiceEnum
+	VALUE       PatternFlowGtpv2TeidFlagChoiceEnum
+	VALUES      PatternFlowGtpv2TeidFlagChoiceEnum
+	INCREMENT   PatternFlowGtpv2TeidFlagChoiceEnum
+	DECREMENT   PatternFlowGtpv2TeidFlagChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowGtpv2TeidFlagChoiceEnum("unspecified"),
+	VALUE:       PatternFlowGtpv2TeidFlagChoiceEnum("value"),
+	VALUES:      PatternFlowGtpv2TeidFlagChoiceEnum("values"),
+	INCREMENT:   PatternFlowGtpv2TeidFlagChoiceEnum("increment"),
+	DECREMENT:   PatternFlowGtpv2TeidFlagChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowGtpv2TeidFlag) Choice() PatternFlowGtpv2TeidFlagChoiceEnum {
+	return PatternFlowGtpv2TeidFlagChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowGtpv2TeidFlag) SetChoice(value PatternFlowGtpv2TeidFlagChoiceEnum) PatternFlowGtpv2TeidFlag {
+	intValue := snappipb.PatternFlowGtpv2TeidFlag_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowGtpv2TeidFlag_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -20069,6 +24080,7 @@ func (obj *patternFlowGtpv2TeidFlag) Value() int32 {
 //  description is TBD
 func (obj *patternFlowGtpv2TeidFlag) SetValue(value int32) PatternFlowGtpv2TeidFlag {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowGtpv2TeidFlagChoice.VALUE)
 	return obj
 }
 
@@ -20082,6 +24094,7 @@ func (obj *patternFlowGtpv2TeidFlag) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowGtpv2TeidFlag) SetValues(value []int32) PatternFlowGtpv2TeidFlag {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowGtpv2TeidFlagChoice.VALUES)
 	return obj
 }
 
@@ -20095,6 +24108,7 @@ func (obj *patternFlowGtpv2TeidFlag) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowGtpv2TeidFlag) SetMetricGroup(value string) PatternFlowGtpv2TeidFlag {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -20104,8 +24118,8 @@ func (obj *patternFlowGtpv2TeidFlag) Increment() PatternFlowGtpv2TeidFlagCounter
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowGtpv2TeidFlagCounter{}
 	}
+	obj.SetChoice(PatternFlowGtpv2TeidFlagChoice.INCREMENT)
 	return &patternFlowGtpv2TeidFlagCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowGtpv2TeidFlagCounter
@@ -20114,8 +24128,8 @@ func (obj *patternFlowGtpv2TeidFlag) Decrement() PatternFlowGtpv2TeidFlagCounter
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowGtpv2TeidFlagCounter{}
 	}
+	obj.SetChoice(PatternFlowGtpv2TeidFlagChoice.DECREMENT)
 	return &patternFlowGtpv2TeidFlagCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowGtpv2Spare1 struct {
@@ -20164,6 +24178,8 @@ type PatternFlowGtpv2Spare1 interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowGtpv2Spare1ChoiceEnum
+	SetChoice(value PatternFlowGtpv2Spare1ChoiceEnum) PatternFlowGtpv2Spare1
 	Value() int32
 	SetValue(value int32) PatternFlowGtpv2Spare1
 	Values() []int32
@@ -20172,6 +24188,33 @@ type PatternFlowGtpv2Spare1 interface {
 	SetMetricGroup(value string) PatternFlowGtpv2Spare1
 	Increment() PatternFlowGtpv2Spare1Counter
 	Decrement() PatternFlowGtpv2Spare1Counter
+}
+
+type PatternFlowGtpv2Spare1ChoiceEnum string
+
+var PatternFlowGtpv2Spare1Choice = struct {
+	UNSPECIFIED PatternFlowGtpv2Spare1ChoiceEnum
+	VALUE       PatternFlowGtpv2Spare1ChoiceEnum
+	VALUES      PatternFlowGtpv2Spare1ChoiceEnum
+	INCREMENT   PatternFlowGtpv2Spare1ChoiceEnum
+	DECREMENT   PatternFlowGtpv2Spare1ChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowGtpv2Spare1ChoiceEnum("unspecified"),
+	VALUE:       PatternFlowGtpv2Spare1ChoiceEnum("value"),
+	VALUES:      PatternFlowGtpv2Spare1ChoiceEnum("values"),
+	INCREMENT:   PatternFlowGtpv2Spare1ChoiceEnum("increment"),
+	DECREMENT:   PatternFlowGtpv2Spare1ChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowGtpv2Spare1) Choice() PatternFlowGtpv2Spare1ChoiceEnum {
+	return PatternFlowGtpv2Spare1ChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowGtpv2Spare1) SetChoice(value PatternFlowGtpv2Spare1ChoiceEnum) PatternFlowGtpv2Spare1 {
+	intValue := snappipb.PatternFlowGtpv2Spare1_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowGtpv2Spare1_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -20184,6 +24227,7 @@ func (obj *patternFlowGtpv2Spare1) Value() int32 {
 //  description is TBD
 func (obj *patternFlowGtpv2Spare1) SetValue(value int32) PatternFlowGtpv2Spare1 {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowGtpv2Spare1Choice.VALUE)
 	return obj
 }
 
@@ -20197,6 +24241,7 @@ func (obj *patternFlowGtpv2Spare1) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowGtpv2Spare1) SetValues(value []int32) PatternFlowGtpv2Spare1 {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowGtpv2Spare1Choice.VALUES)
 	return obj
 }
 
@@ -20210,6 +24255,7 @@ func (obj *patternFlowGtpv2Spare1) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowGtpv2Spare1) SetMetricGroup(value string) PatternFlowGtpv2Spare1 {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -20219,8 +24265,8 @@ func (obj *patternFlowGtpv2Spare1) Increment() PatternFlowGtpv2Spare1Counter {
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowGtpv2Spare1Counter{}
 	}
+	obj.SetChoice(PatternFlowGtpv2Spare1Choice.INCREMENT)
 	return &patternFlowGtpv2Spare1Counter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowGtpv2Spare1Counter
@@ -20229,8 +24275,8 @@ func (obj *patternFlowGtpv2Spare1) Decrement() PatternFlowGtpv2Spare1Counter {
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowGtpv2Spare1Counter{}
 	}
+	obj.SetChoice(PatternFlowGtpv2Spare1Choice.DECREMENT)
 	return &patternFlowGtpv2Spare1Counter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowGtpv2MessageType struct {
@@ -20279,6 +24325,8 @@ type PatternFlowGtpv2MessageType interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowGtpv2MessageTypeChoiceEnum
+	SetChoice(value PatternFlowGtpv2MessageTypeChoiceEnum) PatternFlowGtpv2MessageType
 	Value() int32
 	SetValue(value int32) PatternFlowGtpv2MessageType
 	Values() []int32
@@ -20287,6 +24335,33 @@ type PatternFlowGtpv2MessageType interface {
 	SetMetricGroup(value string) PatternFlowGtpv2MessageType
 	Increment() PatternFlowGtpv2MessageTypeCounter
 	Decrement() PatternFlowGtpv2MessageTypeCounter
+}
+
+type PatternFlowGtpv2MessageTypeChoiceEnum string
+
+var PatternFlowGtpv2MessageTypeChoice = struct {
+	UNSPECIFIED PatternFlowGtpv2MessageTypeChoiceEnum
+	VALUE       PatternFlowGtpv2MessageTypeChoiceEnum
+	VALUES      PatternFlowGtpv2MessageTypeChoiceEnum
+	INCREMENT   PatternFlowGtpv2MessageTypeChoiceEnum
+	DECREMENT   PatternFlowGtpv2MessageTypeChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowGtpv2MessageTypeChoiceEnum("unspecified"),
+	VALUE:       PatternFlowGtpv2MessageTypeChoiceEnum("value"),
+	VALUES:      PatternFlowGtpv2MessageTypeChoiceEnum("values"),
+	INCREMENT:   PatternFlowGtpv2MessageTypeChoiceEnum("increment"),
+	DECREMENT:   PatternFlowGtpv2MessageTypeChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowGtpv2MessageType) Choice() PatternFlowGtpv2MessageTypeChoiceEnum {
+	return PatternFlowGtpv2MessageTypeChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowGtpv2MessageType) SetChoice(value PatternFlowGtpv2MessageTypeChoiceEnum) PatternFlowGtpv2MessageType {
+	intValue := snappipb.PatternFlowGtpv2MessageType_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowGtpv2MessageType_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -20299,6 +24374,7 @@ func (obj *patternFlowGtpv2MessageType) Value() int32 {
 //  description is TBD
 func (obj *patternFlowGtpv2MessageType) SetValue(value int32) PatternFlowGtpv2MessageType {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowGtpv2MessageTypeChoice.VALUE)
 	return obj
 }
 
@@ -20312,6 +24388,7 @@ func (obj *patternFlowGtpv2MessageType) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowGtpv2MessageType) SetValues(value []int32) PatternFlowGtpv2MessageType {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowGtpv2MessageTypeChoice.VALUES)
 	return obj
 }
 
@@ -20325,6 +24402,7 @@ func (obj *patternFlowGtpv2MessageType) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowGtpv2MessageType) SetMetricGroup(value string) PatternFlowGtpv2MessageType {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -20334,8 +24412,8 @@ func (obj *patternFlowGtpv2MessageType) Increment() PatternFlowGtpv2MessageTypeC
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowGtpv2MessageTypeCounter{}
 	}
+	obj.SetChoice(PatternFlowGtpv2MessageTypeChoice.INCREMENT)
 	return &patternFlowGtpv2MessageTypeCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowGtpv2MessageTypeCounter
@@ -20344,8 +24422,8 @@ func (obj *patternFlowGtpv2MessageType) Decrement() PatternFlowGtpv2MessageTypeC
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowGtpv2MessageTypeCounter{}
 	}
+	obj.SetChoice(PatternFlowGtpv2MessageTypeChoice.DECREMENT)
 	return &patternFlowGtpv2MessageTypeCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowGtpv2MessageLength struct {
@@ -20394,6 +24472,8 @@ type PatternFlowGtpv2MessageLength interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowGtpv2MessageLengthChoiceEnum
+	SetChoice(value PatternFlowGtpv2MessageLengthChoiceEnum) PatternFlowGtpv2MessageLength
 	Value() int32
 	SetValue(value int32) PatternFlowGtpv2MessageLength
 	Values() []int32
@@ -20402,6 +24482,33 @@ type PatternFlowGtpv2MessageLength interface {
 	SetMetricGroup(value string) PatternFlowGtpv2MessageLength
 	Increment() PatternFlowGtpv2MessageLengthCounter
 	Decrement() PatternFlowGtpv2MessageLengthCounter
+}
+
+type PatternFlowGtpv2MessageLengthChoiceEnum string
+
+var PatternFlowGtpv2MessageLengthChoice = struct {
+	UNSPECIFIED PatternFlowGtpv2MessageLengthChoiceEnum
+	VALUE       PatternFlowGtpv2MessageLengthChoiceEnum
+	VALUES      PatternFlowGtpv2MessageLengthChoiceEnum
+	INCREMENT   PatternFlowGtpv2MessageLengthChoiceEnum
+	DECREMENT   PatternFlowGtpv2MessageLengthChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowGtpv2MessageLengthChoiceEnum("unspecified"),
+	VALUE:       PatternFlowGtpv2MessageLengthChoiceEnum("value"),
+	VALUES:      PatternFlowGtpv2MessageLengthChoiceEnum("values"),
+	INCREMENT:   PatternFlowGtpv2MessageLengthChoiceEnum("increment"),
+	DECREMENT:   PatternFlowGtpv2MessageLengthChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowGtpv2MessageLength) Choice() PatternFlowGtpv2MessageLengthChoiceEnum {
+	return PatternFlowGtpv2MessageLengthChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowGtpv2MessageLength) SetChoice(value PatternFlowGtpv2MessageLengthChoiceEnum) PatternFlowGtpv2MessageLength {
+	intValue := snappipb.PatternFlowGtpv2MessageLength_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowGtpv2MessageLength_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -20414,6 +24521,7 @@ func (obj *patternFlowGtpv2MessageLength) Value() int32 {
 //  description is TBD
 func (obj *patternFlowGtpv2MessageLength) SetValue(value int32) PatternFlowGtpv2MessageLength {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowGtpv2MessageLengthChoice.VALUE)
 	return obj
 }
 
@@ -20427,6 +24535,7 @@ func (obj *patternFlowGtpv2MessageLength) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowGtpv2MessageLength) SetValues(value []int32) PatternFlowGtpv2MessageLength {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowGtpv2MessageLengthChoice.VALUES)
 	return obj
 }
 
@@ -20440,6 +24549,7 @@ func (obj *patternFlowGtpv2MessageLength) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowGtpv2MessageLength) SetMetricGroup(value string) PatternFlowGtpv2MessageLength {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -20449,8 +24559,8 @@ func (obj *patternFlowGtpv2MessageLength) Increment() PatternFlowGtpv2MessageLen
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowGtpv2MessageLengthCounter{}
 	}
+	obj.SetChoice(PatternFlowGtpv2MessageLengthChoice.INCREMENT)
 	return &patternFlowGtpv2MessageLengthCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowGtpv2MessageLengthCounter
@@ -20459,8 +24569,8 @@ func (obj *patternFlowGtpv2MessageLength) Decrement() PatternFlowGtpv2MessageLen
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowGtpv2MessageLengthCounter{}
 	}
+	obj.SetChoice(PatternFlowGtpv2MessageLengthChoice.DECREMENT)
 	return &patternFlowGtpv2MessageLengthCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowGtpv2Teid struct {
@@ -20509,6 +24619,8 @@ type PatternFlowGtpv2Teid interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowGtpv2TeidChoiceEnum
+	SetChoice(value PatternFlowGtpv2TeidChoiceEnum) PatternFlowGtpv2Teid
 	Value() int32
 	SetValue(value int32) PatternFlowGtpv2Teid
 	Values() []int32
@@ -20517,6 +24629,33 @@ type PatternFlowGtpv2Teid interface {
 	SetMetricGroup(value string) PatternFlowGtpv2Teid
 	Increment() PatternFlowGtpv2TeidCounter
 	Decrement() PatternFlowGtpv2TeidCounter
+}
+
+type PatternFlowGtpv2TeidChoiceEnum string
+
+var PatternFlowGtpv2TeidChoice = struct {
+	UNSPECIFIED PatternFlowGtpv2TeidChoiceEnum
+	VALUE       PatternFlowGtpv2TeidChoiceEnum
+	VALUES      PatternFlowGtpv2TeidChoiceEnum
+	INCREMENT   PatternFlowGtpv2TeidChoiceEnum
+	DECREMENT   PatternFlowGtpv2TeidChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowGtpv2TeidChoiceEnum("unspecified"),
+	VALUE:       PatternFlowGtpv2TeidChoiceEnum("value"),
+	VALUES:      PatternFlowGtpv2TeidChoiceEnum("values"),
+	INCREMENT:   PatternFlowGtpv2TeidChoiceEnum("increment"),
+	DECREMENT:   PatternFlowGtpv2TeidChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowGtpv2Teid) Choice() PatternFlowGtpv2TeidChoiceEnum {
+	return PatternFlowGtpv2TeidChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowGtpv2Teid) SetChoice(value PatternFlowGtpv2TeidChoiceEnum) PatternFlowGtpv2Teid {
+	intValue := snappipb.PatternFlowGtpv2Teid_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowGtpv2Teid_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -20529,6 +24668,7 @@ func (obj *patternFlowGtpv2Teid) Value() int32 {
 //  description is TBD
 func (obj *patternFlowGtpv2Teid) SetValue(value int32) PatternFlowGtpv2Teid {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowGtpv2TeidChoice.VALUE)
 	return obj
 }
 
@@ -20542,6 +24682,7 @@ func (obj *patternFlowGtpv2Teid) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowGtpv2Teid) SetValues(value []int32) PatternFlowGtpv2Teid {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowGtpv2TeidChoice.VALUES)
 	return obj
 }
 
@@ -20555,6 +24696,7 @@ func (obj *patternFlowGtpv2Teid) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowGtpv2Teid) SetMetricGroup(value string) PatternFlowGtpv2Teid {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -20564,8 +24706,8 @@ func (obj *patternFlowGtpv2Teid) Increment() PatternFlowGtpv2TeidCounter {
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowGtpv2TeidCounter{}
 	}
+	obj.SetChoice(PatternFlowGtpv2TeidChoice.INCREMENT)
 	return &patternFlowGtpv2TeidCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowGtpv2TeidCounter
@@ -20574,8 +24716,8 @@ func (obj *patternFlowGtpv2Teid) Decrement() PatternFlowGtpv2TeidCounter {
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowGtpv2TeidCounter{}
 	}
+	obj.SetChoice(PatternFlowGtpv2TeidChoice.DECREMENT)
 	return &patternFlowGtpv2TeidCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowGtpv2SequenceNumber struct {
@@ -20624,6 +24766,8 @@ type PatternFlowGtpv2SequenceNumber interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowGtpv2SequenceNumberChoiceEnum
+	SetChoice(value PatternFlowGtpv2SequenceNumberChoiceEnum) PatternFlowGtpv2SequenceNumber
 	Value() int32
 	SetValue(value int32) PatternFlowGtpv2SequenceNumber
 	Values() []int32
@@ -20632,6 +24776,33 @@ type PatternFlowGtpv2SequenceNumber interface {
 	SetMetricGroup(value string) PatternFlowGtpv2SequenceNumber
 	Increment() PatternFlowGtpv2SequenceNumberCounter
 	Decrement() PatternFlowGtpv2SequenceNumberCounter
+}
+
+type PatternFlowGtpv2SequenceNumberChoiceEnum string
+
+var PatternFlowGtpv2SequenceNumberChoice = struct {
+	UNSPECIFIED PatternFlowGtpv2SequenceNumberChoiceEnum
+	VALUE       PatternFlowGtpv2SequenceNumberChoiceEnum
+	VALUES      PatternFlowGtpv2SequenceNumberChoiceEnum
+	INCREMENT   PatternFlowGtpv2SequenceNumberChoiceEnum
+	DECREMENT   PatternFlowGtpv2SequenceNumberChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowGtpv2SequenceNumberChoiceEnum("unspecified"),
+	VALUE:       PatternFlowGtpv2SequenceNumberChoiceEnum("value"),
+	VALUES:      PatternFlowGtpv2SequenceNumberChoiceEnum("values"),
+	INCREMENT:   PatternFlowGtpv2SequenceNumberChoiceEnum("increment"),
+	DECREMENT:   PatternFlowGtpv2SequenceNumberChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowGtpv2SequenceNumber) Choice() PatternFlowGtpv2SequenceNumberChoiceEnum {
+	return PatternFlowGtpv2SequenceNumberChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowGtpv2SequenceNumber) SetChoice(value PatternFlowGtpv2SequenceNumberChoiceEnum) PatternFlowGtpv2SequenceNumber {
+	intValue := snappipb.PatternFlowGtpv2SequenceNumber_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowGtpv2SequenceNumber_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -20644,6 +24815,7 @@ func (obj *patternFlowGtpv2SequenceNumber) Value() int32 {
 //  description is TBD
 func (obj *patternFlowGtpv2SequenceNumber) SetValue(value int32) PatternFlowGtpv2SequenceNumber {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowGtpv2SequenceNumberChoice.VALUE)
 	return obj
 }
 
@@ -20657,6 +24829,7 @@ func (obj *patternFlowGtpv2SequenceNumber) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowGtpv2SequenceNumber) SetValues(value []int32) PatternFlowGtpv2SequenceNumber {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowGtpv2SequenceNumberChoice.VALUES)
 	return obj
 }
 
@@ -20670,6 +24843,7 @@ func (obj *patternFlowGtpv2SequenceNumber) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowGtpv2SequenceNumber) SetMetricGroup(value string) PatternFlowGtpv2SequenceNumber {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -20679,8 +24853,8 @@ func (obj *patternFlowGtpv2SequenceNumber) Increment() PatternFlowGtpv2SequenceN
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowGtpv2SequenceNumberCounter{}
 	}
+	obj.SetChoice(PatternFlowGtpv2SequenceNumberChoice.INCREMENT)
 	return &patternFlowGtpv2SequenceNumberCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowGtpv2SequenceNumberCounter
@@ -20689,8 +24863,8 @@ func (obj *patternFlowGtpv2SequenceNumber) Decrement() PatternFlowGtpv2SequenceN
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowGtpv2SequenceNumberCounter{}
 	}
+	obj.SetChoice(PatternFlowGtpv2SequenceNumberChoice.DECREMENT)
 	return &patternFlowGtpv2SequenceNumberCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowGtpv2Spare2 struct {
@@ -20739,6 +24913,8 @@ type PatternFlowGtpv2Spare2 interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowGtpv2Spare2ChoiceEnum
+	SetChoice(value PatternFlowGtpv2Spare2ChoiceEnum) PatternFlowGtpv2Spare2
 	Value() int32
 	SetValue(value int32) PatternFlowGtpv2Spare2
 	Values() []int32
@@ -20747,6 +24923,33 @@ type PatternFlowGtpv2Spare2 interface {
 	SetMetricGroup(value string) PatternFlowGtpv2Spare2
 	Increment() PatternFlowGtpv2Spare2Counter
 	Decrement() PatternFlowGtpv2Spare2Counter
+}
+
+type PatternFlowGtpv2Spare2ChoiceEnum string
+
+var PatternFlowGtpv2Spare2Choice = struct {
+	UNSPECIFIED PatternFlowGtpv2Spare2ChoiceEnum
+	VALUE       PatternFlowGtpv2Spare2ChoiceEnum
+	VALUES      PatternFlowGtpv2Spare2ChoiceEnum
+	INCREMENT   PatternFlowGtpv2Spare2ChoiceEnum
+	DECREMENT   PatternFlowGtpv2Spare2ChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowGtpv2Spare2ChoiceEnum("unspecified"),
+	VALUE:       PatternFlowGtpv2Spare2ChoiceEnum("value"),
+	VALUES:      PatternFlowGtpv2Spare2ChoiceEnum("values"),
+	INCREMENT:   PatternFlowGtpv2Spare2ChoiceEnum("increment"),
+	DECREMENT:   PatternFlowGtpv2Spare2ChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowGtpv2Spare2) Choice() PatternFlowGtpv2Spare2ChoiceEnum {
+	return PatternFlowGtpv2Spare2ChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowGtpv2Spare2) SetChoice(value PatternFlowGtpv2Spare2ChoiceEnum) PatternFlowGtpv2Spare2 {
+	intValue := snappipb.PatternFlowGtpv2Spare2_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowGtpv2Spare2_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -20759,6 +24962,7 @@ func (obj *patternFlowGtpv2Spare2) Value() int32 {
 //  description is TBD
 func (obj *patternFlowGtpv2Spare2) SetValue(value int32) PatternFlowGtpv2Spare2 {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowGtpv2Spare2Choice.VALUE)
 	return obj
 }
 
@@ -20772,6 +24976,7 @@ func (obj *patternFlowGtpv2Spare2) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowGtpv2Spare2) SetValues(value []int32) PatternFlowGtpv2Spare2 {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowGtpv2Spare2Choice.VALUES)
 	return obj
 }
 
@@ -20785,6 +24990,7 @@ func (obj *patternFlowGtpv2Spare2) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowGtpv2Spare2) SetMetricGroup(value string) PatternFlowGtpv2Spare2 {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -20794,8 +25000,8 @@ func (obj *patternFlowGtpv2Spare2) Increment() PatternFlowGtpv2Spare2Counter {
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowGtpv2Spare2Counter{}
 	}
+	obj.SetChoice(PatternFlowGtpv2Spare2Choice.INCREMENT)
 	return &patternFlowGtpv2Spare2Counter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowGtpv2Spare2Counter
@@ -20804,8 +25010,8 @@ func (obj *patternFlowGtpv2Spare2) Decrement() PatternFlowGtpv2Spare2Counter {
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowGtpv2Spare2Counter{}
 	}
+	obj.SetChoice(PatternFlowGtpv2Spare2Choice.DECREMENT)
 	return &patternFlowGtpv2Spare2Counter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowArpHardwareType struct {
@@ -20854,6 +25060,8 @@ type PatternFlowArpHardwareType interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowArpHardwareTypeChoiceEnum
+	SetChoice(value PatternFlowArpHardwareTypeChoiceEnum) PatternFlowArpHardwareType
 	Value() int32
 	SetValue(value int32) PatternFlowArpHardwareType
 	Values() []int32
@@ -20862,6 +25070,33 @@ type PatternFlowArpHardwareType interface {
 	SetMetricGroup(value string) PatternFlowArpHardwareType
 	Increment() PatternFlowArpHardwareTypeCounter
 	Decrement() PatternFlowArpHardwareTypeCounter
+}
+
+type PatternFlowArpHardwareTypeChoiceEnum string
+
+var PatternFlowArpHardwareTypeChoice = struct {
+	UNSPECIFIED PatternFlowArpHardwareTypeChoiceEnum
+	VALUE       PatternFlowArpHardwareTypeChoiceEnum
+	VALUES      PatternFlowArpHardwareTypeChoiceEnum
+	INCREMENT   PatternFlowArpHardwareTypeChoiceEnum
+	DECREMENT   PatternFlowArpHardwareTypeChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowArpHardwareTypeChoiceEnum("unspecified"),
+	VALUE:       PatternFlowArpHardwareTypeChoiceEnum("value"),
+	VALUES:      PatternFlowArpHardwareTypeChoiceEnum("values"),
+	INCREMENT:   PatternFlowArpHardwareTypeChoiceEnum("increment"),
+	DECREMENT:   PatternFlowArpHardwareTypeChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowArpHardwareType) Choice() PatternFlowArpHardwareTypeChoiceEnum {
+	return PatternFlowArpHardwareTypeChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowArpHardwareType) SetChoice(value PatternFlowArpHardwareTypeChoiceEnum) PatternFlowArpHardwareType {
+	intValue := snappipb.PatternFlowArpHardwareType_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowArpHardwareType_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -20874,6 +25109,7 @@ func (obj *patternFlowArpHardwareType) Value() int32 {
 //  description is TBD
 func (obj *patternFlowArpHardwareType) SetValue(value int32) PatternFlowArpHardwareType {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowArpHardwareTypeChoice.VALUE)
 	return obj
 }
 
@@ -20887,6 +25123,7 @@ func (obj *patternFlowArpHardwareType) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowArpHardwareType) SetValues(value []int32) PatternFlowArpHardwareType {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowArpHardwareTypeChoice.VALUES)
 	return obj
 }
 
@@ -20900,6 +25137,7 @@ func (obj *patternFlowArpHardwareType) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowArpHardwareType) SetMetricGroup(value string) PatternFlowArpHardwareType {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -20909,8 +25147,8 @@ func (obj *patternFlowArpHardwareType) Increment() PatternFlowArpHardwareTypeCou
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowArpHardwareTypeCounter{}
 	}
+	obj.SetChoice(PatternFlowArpHardwareTypeChoice.INCREMENT)
 	return &patternFlowArpHardwareTypeCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowArpHardwareTypeCounter
@@ -20919,8 +25157,8 @@ func (obj *patternFlowArpHardwareType) Decrement() PatternFlowArpHardwareTypeCou
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowArpHardwareTypeCounter{}
 	}
+	obj.SetChoice(PatternFlowArpHardwareTypeChoice.DECREMENT)
 	return &patternFlowArpHardwareTypeCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowArpProtocolType struct {
@@ -20969,6 +25207,8 @@ type PatternFlowArpProtocolType interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowArpProtocolTypeChoiceEnum
+	SetChoice(value PatternFlowArpProtocolTypeChoiceEnum) PatternFlowArpProtocolType
 	Value() int32
 	SetValue(value int32) PatternFlowArpProtocolType
 	Values() []int32
@@ -20977,6 +25217,33 @@ type PatternFlowArpProtocolType interface {
 	SetMetricGroup(value string) PatternFlowArpProtocolType
 	Increment() PatternFlowArpProtocolTypeCounter
 	Decrement() PatternFlowArpProtocolTypeCounter
+}
+
+type PatternFlowArpProtocolTypeChoiceEnum string
+
+var PatternFlowArpProtocolTypeChoice = struct {
+	UNSPECIFIED PatternFlowArpProtocolTypeChoiceEnum
+	VALUE       PatternFlowArpProtocolTypeChoiceEnum
+	VALUES      PatternFlowArpProtocolTypeChoiceEnum
+	INCREMENT   PatternFlowArpProtocolTypeChoiceEnum
+	DECREMENT   PatternFlowArpProtocolTypeChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowArpProtocolTypeChoiceEnum("unspecified"),
+	VALUE:       PatternFlowArpProtocolTypeChoiceEnum("value"),
+	VALUES:      PatternFlowArpProtocolTypeChoiceEnum("values"),
+	INCREMENT:   PatternFlowArpProtocolTypeChoiceEnum("increment"),
+	DECREMENT:   PatternFlowArpProtocolTypeChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowArpProtocolType) Choice() PatternFlowArpProtocolTypeChoiceEnum {
+	return PatternFlowArpProtocolTypeChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowArpProtocolType) SetChoice(value PatternFlowArpProtocolTypeChoiceEnum) PatternFlowArpProtocolType {
+	intValue := snappipb.PatternFlowArpProtocolType_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowArpProtocolType_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -20989,6 +25256,7 @@ func (obj *patternFlowArpProtocolType) Value() int32 {
 //  description is TBD
 func (obj *patternFlowArpProtocolType) SetValue(value int32) PatternFlowArpProtocolType {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowArpProtocolTypeChoice.VALUE)
 	return obj
 }
 
@@ -21002,6 +25270,7 @@ func (obj *patternFlowArpProtocolType) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowArpProtocolType) SetValues(value []int32) PatternFlowArpProtocolType {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowArpProtocolTypeChoice.VALUES)
 	return obj
 }
 
@@ -21015,6 +25284,7 @@ func (obj *patternFlowArpProtocolType) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowArpProtocolType) SetMetricGroup(value string) PatternFlowArpProtocolType {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -21024,8 +25294,8 @@ func (obj *patternFlowArpProtocolType) Increment() PatternFlowArpProtocolTypeCou
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowArpProtocolTypeCounter{}
 	}
+	obj.SetChoice(PatternFlowArpProtocolTypeChoice.INCREMENT)
 	return &patternFlowArpProtocolTypeCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowArpProtocolTypeCounter
@@ -21034,8 +25304,8 @@ func (obj *patternFlowArpProtocolType) Decrement() PatternFlowArpProtocolTypeCou
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowArpProtocolTypeCounter{}
 	}
+	obj.SetChoice(PatternFlowArpProtocolTypeChoice.DECREMENT)
 	return &patternFlowArpProtocolTypeCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowArpHardwareLength struct {
@@ -21084,6 +25354,8 @@ type PatternFlowArpHardwareLength interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowArpHardwareLengthChoiceEnum
+	SetChoice(value PatternFlowArpHardwareLengthChoiceEnum) PatternFlowArpHardwareLength
 	Value() int32
 	SetValue(value int32) PatternFlowArpHardwareLength
 	Values() []int32
@@ -21092,6 +25364,33 @@ type PatternFlowArpHardwareLength interface {
 	SetMetricGroup(value string) PatternFlowArpHardwareLength
 	Increment() PatternFlowArpHardwareLengthCounter
 	Decrement() PatternFlowArpHardwareLengthCounter
+}
+
+type PatternFlowArpHardwareLengthChoiceEnum string
+
+var PatternFlowArpHardwareLengthChoice = struct {
+	UNSPECIFIED PatternFlowArpHardwareLengthChoiceEnum
+	VALUE       PatternFlowArpHardwareLengthChoiceEnum
+	VALUES      PatternFlowArpHardwareLengthChoiceEnum
+	INCREMENT   PatternFlowArpHardwareLengthChoiceEnum
+	DECREMENT   PatternFlowArpHardwareLengthChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowArpHardwareLengthChoiceEnum("unspecified"),
+	VALUE:       PatternFlowArpHardwareLengthChoiceEnum("value"),
+	VALUES:      PatternFlowArpHardwareLengthChoiceEnum("values"),
+	INCREMENT:   PatternFlowArpHardwareLengthChoiceEnum("increment"),
+	DECREMENT:   PatternFlowArpHardwareLengthChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowArpHardwareLength) Choice() PatternFlowArpHardwareLengthChoiceEnum {
+	return PatternFlowArpHardwareLengthChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowArpHardwareLength) SetChoice(value PatternFlowArpHardwareLengthChoiceEnum) PatternFlowArpHardwareLength {
+	intValue := snappipb.PatternFlowArpHardwareLength_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowArpHardwareLength_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -21104,6 +25403,7 @@ func (obj *patternFlowArpHardwareLength) Value() int32 {
 //  description is TBD
 func (obj *patternFlowArpHardwareLength) SetValue(value int32) PatternFlowArpHardwareLength {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowArpHardwareLengthChoice.VALUE)
 	return obj
 }
 
@@ -21117,6 +25417,7 @@ func (obj *patternFlowArpHardwareLength) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowArpHardwareLength) SetValues(value []int32) PatternFlowArpHardwareLength {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowArpHardwareLengthChoice.VALUES)
 	return obj
 }
 
@@ -21130,6 +25431,7 @@ func (obj *patternFlowArpHardwareLength) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowArpHardwareLength) SetMetricGroup(value string) PatternFlowArpHardwareLength {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -21139,8 +25441,8 @@ func (obj *patternFlowArpHardwareLength) Increment() PatternFlowArpHardwareLengt
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowArpHardwareLengthCounter{}
 	}
+	obj.SetChoice(PatternFlowArpHardwareLengthChoice.INCREMENT)
 	return &patternFlowArpHardwareLengthCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowArpHardwareLengthCounter
@@ -21149,8 +25451,8 @@ func (obj *patternFlowArpHardwareLength) Decrement() PatternFlowArpHardwareLengt
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowArpHardwareLengthCounter{}
 	}
+	obj.SetChoice(PatternFlowArpHardwareLengthChoice.DECREMENT)
 	return &patternFlowArpHardwareLengthCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowArpProtocolLength struct {
@@ -21199,6 +25501,8 @@ type PatternFlowArpProtocolLength interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowArpProtocolLengthChoiceEnum
+	SetChoice(value PatternFlowArpProtocolLengthChoiceEnum) PatternFlowArpProtocolLength
 	Value() int32
 	SetValue(value int32) PatternFlowArpProtocolLength
 	Values() []int32
@@ -21207,6 +25511,33 @@ type PatternFlowArpProtocolLength interface {
 	SetMetricGroup(value string) PatternFlowArpProtocolLength
 	Increment() PatternFlowArpProtocolLengthCounter
 	Decrement() PatternFlowArpProtocolLengthCounter
+}
+
+type PatternFlowArpProtocolLengthChoiceEnum string
+
+var PatternFlowArpProtocolLengthChoice = struct {
+	UNSPECIFIED PatternFlowArpProtocolLengthChoiceEnum
+	VALUE       PatternFlowArpProtocolLengthChoiceEnum
+	VALUES      PatternFlowArpProtocolLengthChoiceEnum
+	INCREMENT   PatternFlowArpProtocolLengthChoiceEnum
+	DECREMENT   PatternFlowArpProtocolLengthChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowArpProtocolLengthChoiceEnum("unspecified"),
+	VALUE:       PatternFlowArpProtocolLengthChoiceEnum("value"),
+	VALUES:      PatternFlowArpProtocolLengthChoiceEnum("values"),
+	INCREMENT:   PatternFlowArpProtocolLengthChoiceEnum("increment"),
+	DECREMENT:   PatternFlowArpProtocolLengthChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowArpProtocolLength) Choice() PatternFlowArpProtocolLengthChoiceEnum {
+	return PatternFlowArpProtocolLengthChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowArpProtocolLength) SetChoice(value PatternFlowArpProtocolLengthChoiceEnum) PatternFlowArpProtocolLength {
+	intValue := snappipb.PatternFlowArpProtocolLength_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowArpProtocolLength_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -21219,6 +25550,7 @@ func (obj *patternFlowArpProtocolLength) Value() int32 {
 //  description is TBD
 func (obj *patternFlowArpProtocolLength) SetValue(value int32) PatternFlowArpProtocolLength {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowArpProtocolLengthChoice.VALUE)
 	return obj
 }
 
@@ -21232,6 +25564,7 @@ func (obj *patternFlowArpProtocolLength) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowArpProtocolLength) SetValues(value []int32) PatternFlowArpProtocolLength {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowArpProtocolLengthChoice.VALUES)
 	return obj
 }
 
@@ -21245,6 +25578,7 @@ func (obj *patternFlowArpProtocolLength) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowArpProtocolLength) SetMetricGroup(value string) PatternFlowArpProtocolLength {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -21254,8 +25588,8 @@ func (obj *patternFlowArpProtocolLength) Increment() PatternFlowArpProtocolLengt
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowArpProtocolLengthCounter{}
 	}
+	obj.SetChoice(PatternFlowArpProtocolLengthChoice.INCREMENT)
 	return &patternFlowArpProtocolLengthCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowArpProtocolLengthCounter
@@ -21264,8 +25598,8 @@ func (obj *patternFlowArpProtocolLength) Decrement() PatternFlowArpProtocolLengt
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowArpProtocolLengthCounter{}
 	}
+	obj.SetChoice(PatternFlowArpProtocolLengthChoice.DECREMENT)
 	return &patternFlowArpProtocolLengthCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowArpOperation struct {
@@ -21314,6 +25648,8 @@ type PatternFlowArpOperation interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowArpOperationChoiceEnum
+	SetChoice(value PatternFlowArpOperationChoiceEnum) PatternFlowArpOperation
 	Value() int32
 	SetValue(value int32) PatternFlowArpOperation
 	Values() []int32
@@ -21322,6 +25658,33 @@ type PatternFlowArpOperation interface {
 	SetMetricGroup(value string) PatternFlowArpOperation
 	Increment() PatternFlowArpOperationCounter
 	Decrement() PatternFlowArpOperationCounter
+}
+
+type PatternFlowArpOperationChoiceEnum string
+
+var PatternFlowArpOperationChoice = struct {
+	UNSPECIFIED PatternFlowArpOperationChoiceEnum
+	VALUE       PatternFlowArpOperationChoiceEnum
+	VALUES      PatternFlowArpOperationChoiceEnum
+	INCREMENT   PatternFlowArpOperationChoiceEnum
+	DECREMENT   PatternFlowArpOperationChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowArpOperationChoiceEnum("unspecified"),
+	VALUE:       PatternFlowArpOperationChoiceEnum("value"),
+	VALUES:      PatternFlowArpOperationChoiceEnum("values"),
+	INCREMENT:   PatternFlowArpOperationChoiceEnum("increment"),
+	DECREMENT:   PatternFlowArpOperationChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowArpOperation) Choice() PatternFlowArpOperationChoiceEnum {
+	return PatternFlowArpOperationChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowArpOperation) SetChoice(value PatternFlowArpOperationChoiceEnum) PatternFlowArpOperation {
+	intValue := snappipb.PatternFlowArpOperation_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowArpOperation_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -21334,6 +25697,7 @@ func (obj *patternFlowArpOperation) Value() int32 {
 //  description is TBD
 func (obj *patternFlowArpOperation) SetValue(value int32) PatternFlowArpOperation {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowArpOperationChoice.VALUE)
 	return obj
 }
 
@@ -21347,6 +25711,7 @@ func (obj *patternFlowArpOperation) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowArpOperation) SetValues(value []int32) PatternFlowArpOperation {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowArpOperationChoice.VALUES)
 	return obj
 }
 
@@ -21360,6 +25725,7 @@ func (obj *patternFlowArpOperation) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowArpOperation) SetMetricGroup(value string) PatternFlowArpOperation {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -21369,8 +25735,8 @@ func (obj *patternFlowArpOperation) Increment() PatternFlowArpOperationCounter {
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowArpOperationCounter{}
 	}
+	obj.SetChoice(PatternFlowArpOperationChoice.INCREMENT)
 	return &patternFlowArpOperationCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowArpOperationCounter
@@ -21379,8 +25745,8 @@ func (obj *patternFlowArpOperation) Decrement() PatternFlowArpOperationCounter {
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowArpOperationCounter{}
 	}
+	obj.SetChoice(PatternFlowArpOperationChoice.DECREMENT)
 	return &patternFlowArpOperationCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowArpSenderHardwareAddr struct {
@@ -21429,6 +25795,8 @@ type PatternFlowArpSenderHardwareAddr interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowArpSenderHardwareAddrChoiceEnum
+	SetChoice(value PatternFlowArpSenderHardwareAddrChoiceEnum) PatternFlowArpSenderHardwareAddr
 	Value() string
 	SetValue(value string) PatternFlowArpSenderHardwareAddr
 	Values() []string
@@ -21437,6 +25805,33 @@ type PatternFlowArpSenderHardwareAddr interface {
 	SetMetricGroup(value string) PatternFlowArpSenderHardwareAddr
 	Increment() PatternFlowArpSenderHardwareAddrCounter
 	Decrement() PatternFlowArpSenderHardwareAddrCounter
+}
+
+type PatternFlowArpSenderHardwareAddrChoiceEnum string
+
+var PatternFlowArpSenderHardwareAddrChoice = struct {
+	UNSPECIFIED PatternFlowArpSenderHardwareAddrChoiceEnum
+	VALUE       PatternFlowArpSenderHardwareAddrChoiceEnum
+	VALUES      PatternFlowArpSenderHardwareAddrChoiceEnum
+	INCREMENT   PatternFlowArpSenderHardwareAddrChoiceEnum
+	DECREMENT   PatternFlowArpSenderHardwareAddrChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowArpSenderHardwareAddrChoiceEnum("unspecified"),
+	VALUE:       PatternFlowArpSenderHardwareAddrChoiceEnum("value"),
+	VALUES:      PatternFlowArpSenderHardwareAddrChoiceEnum("values"),
+	INCREMENT:   PatternFlowArpSenderHardwareAddrChoiceEnum("increment"),
+	DECREMENT:   PatternFlowArpSenderHardwareAddrChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowArpSenderHardwareAddr) Choice() PatternFlowArpSenderHardwareAddrChoiceEnum {
+	return PatternFlowArpSenderHardwareAddrChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowArpSenderHardwareAddr) SetChoice(value PatternFlowArpSenderHardwareAddrChoiceEnum) PatternFlowArpSenderHardwareAddr {
+	intValue := snappipb.PatternFlowArpSenderHardwareAddr_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowArpSenderHardwareAddr_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a string
@@ -21449,6 +25844,7 @@ func (obj *patternFlowArpSenderHardwareAddr) Value() string {
 //  description is TBD
 func (obj *patternFlowArpSenderHardwareAddr) SetValue(value string) PatternFlowArpSenderHardwareAddr {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowArpSenderHardwareAddrChoice.VALUE)
 	return obj
 }
 
@@ -21462,6 +25858,7 @@ func (obj *patternFlowArpSenderHardwareAddr) Values() []string {
 //  description is TBD
 func (obj *patternFlowArpSenderHardwareAddr) SetValues(value []string) PatternFlowArpSenderHardwareAddr {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowArpSenderHardwareAddrChoice.VALUES)
 	return obj
 }
 
@@ -21475,6 +25872,7 @@ func (obj *patternFlowArpSenderHardwareAddr) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowArpSenderHardwareAddr) SetMetricGroup(value string) PatternFlowArpSenderHardwareAddr {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -21484,8 +25882,8 @@ func (obj *patternFlowArpSenderHardwareAddr) Increment() PatternFlowArpSenderHar
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowArpSenderHardwareAddrCounter{}
 	}
+	obj.SetChoice(PatternFlowArpSenderHardwareAddrChoice.INCREMENT)
 	return &patternFlowArpSenderHardwareAddrCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowArpSenderHardwareAddrCounter
@@ -21494,8 +25892,8 @@ func (obj *patternFlowArpSenderHardwareAddr) Decrement() PatternFlowArpSenderHar
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowArpSenderHardwareAddrCounter{}
 	}
+	obj.SetChoice(PatternFlowArpSenderHardwareAddrChoice.DECREMENT)
 	return &patternFlowArpSenderHardwareAddrCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowArpSenderProtocolAddr struct {
@@ -21544,6 +25942,8 @@ type PatternFlowArpSenderProtocolAddr interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowArpSenderProtocolAddrChoiceEnum
+	SetChoice(value PatternFlowArpSenderProtocolAddrChoiceEnum) PatternFlowArpSenderProtocolAddr
 	Value() string
 	SetValue(value string) PatternFlowArpSenderProtocolAddr
 	Values() []string
@@ -21552,6 +25952,33 @@ type PatternFlowArpSenderProtocolAddr interface {
 	SetMetricGroup(value string) PatternFlowArpSenderProtocolAddr
 	Increment() PatternFlowArpSenderProtocolAddrCounter
 	Decrement() PatternFlowArpSenderProtocolAddrCounter
+}
+
+type PatternFlowArpSenderProtocolAddrChoiceEnum string
+
+var PatternFlowArpSenderProtocolAddrChoice = struct {
+	UNSPECIFIED PatternFlowArpSenderProtocolAddrChoiceEnum
+	VALUE       PatternFlowArpSenderProtocolAddrChoiceEnum
+	VALUES      PatternFlowArpSenderProtocolAddrChoiceEnum
+	INCREMENT   PatternFlowArpSenderProtocolAddrChoiceEnum
+	DECREMENT   PatternFlowArpSenderProtocolAddrChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowArpSenderProtocolAddrChoiceEnum("unspecified"),
+	VALUE:       PatternFlowArpSenderProtocolAddrChoiceEnum("value"),
+	VALUES:      PatternFlowArpSenderProtocolAddrChoiceEnum("values"),
+	INCREMENT:   PatternFlowArpSenderProtocolAddrChoiceEnum("increment"),
+	DECREMENT:   PatternFlowArpSenderProtocolAddrChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowArpSenderProtocolAddr) Choice() PatternFlowArpSenderProtocolAddrChoiceEnum {
+	return PatternFlowArpSenderProtocolAddrChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowArpSenderProtocolAddr) SetChoice(value PatternFlowArpSenderProtocolAddrChoiceEnum) PatternFlowArpSenderProtocolAddr {
+	intValue := snappipb.PatternFlowArpSenderProtocolAddr_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowArpSenderProtocolAddr_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a string
@@ -21564,6 +25991,7 @@ func (obj *patternFlowArpSenderProtocolAddr) Value() string {
 //  description is TBD
 func (obj *patternFlowArpSenderProtocolAddr) SetValue(value string) PatternFlowArpSenderProtocolAddr {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowArpSenderProtocolAddrChoice.VALUE)
 	return obj
 }
 
@@ -21577,6 +26005,7 @@ func (obj *patternFlowArpSenderProtocolAddr) Values() []string {
 //  description is TBD
 func (obj *patternFlowArpSenderProtocolAddr) SetValues(value []string) PatternFlowArpSenderProtocolAddr {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowArpSenderProtocolAddrChoice.VALUES)
 	return obj
 }
 
@@ -21590,6 +26019,7 @@ func (obj *patternFlowArpSenderProtocolAddr) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowArpSenderProtocolAddr) SetMetricGroup(value string) PatternFlowArpSenderProtocolAddr {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -21599,8 +26029,8 @@ func (obj *patternFlowArpSenderProtocolAddr) Increment() PatternFlowArpSenderPro
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowArpSenderProtocolAddrCounter{}
 	}
+	obj.SetChoice(PatternFlowArpSenderProtocolAddrChoice.INCREMENT)
 	return &patternFlowArpSenderProtocolAddrCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowArpSenderProtocolAddrCounter
@@ -21609,8 +26039,8 @@ func (obj *patternFlowArpSenderProtocolAddr) Decrement() PatternFlowArpSenderPro
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowArpSenderProtocolAddrCounter{}
 	}
+	obj.SetChoice(PatternFlowArpSenderProtocolAddrChoice.DECREMENT)
 	return &patternFlowArpSenderProtocolAddrCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowArpTargetHardwareAddr struct {
@@ -21659,6 +26089,8 @@ type PatternFlowArpTargetHardwareAddr interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowArpTargetHardwareAddrChoiceEnum
+	SetChoice(value PatternFlowArpTargetHardwareAddrChoiceEnum) PatternFlowArpTargetHardwareAddr
 	Value() string
 	SetValue(value string) PatternFlowArpTargetHardwareAddr
 	Values() []string
@@ -21667,6 +26099,33 @@ type PatternFlowArpTargetHardwareAddr interface {
 	SetMetricGroup(value string) PatternFlowArpTargetHardwareAddr
 	Increment() PatternFlowArpTargetHardwareAddrCounter
 	Decrement() PatternFlowArpTargetHardwareAddrCounter
+}
+
+type PatternFlowArpTargetHardwareAddrChoiceEnum string
+
+var PatternFlowArpTargetHardwareAddrChoice = struct {
+	UNSPECIFIED PatternFlowArpTargetHardwareAddrChoiceEnum
+	VALUE       PatternFlowArpTargetHardwareAddrChoiceEnum
+	VALUES      PatternFlowArpTargetHardwareAddrChoiceEnum
+	INCREMENT   PatternFlowArpTargetHardwareAddrChoiceEnum
+	DECREMENT   PatternFlowArpTargetHardwareAddrChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowArpTargetHardwareAddrChoiceEnum("unspecified"),
+	VALUE:       PatternFlowArpTargetHardwareAddrChoiceEnum("value"),
+	VALUES:      PatternFlowArpTargetHardwareAddrChoiceEnum("values"),
+	INCREMENT:   PatternFlowArpTargetHardwareAddrChoiceEnum("increment"),
+	DECREMENT:   PatternFlowArpTargetHardwareAddrChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowArpTargetHardwareAddr) Choice() PatternFlowArpTargetHardwareAddrChoiceEnum {
+	return PatternFlowArpTargetHardwareAddrChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowArpTargetHardwareAddr) SetChoice(value PatternFlowArpTargetHardwareAddrChoiceEnum) PatternFlowArpTargetHardwareAddr {
+	intValue := snappipb.PatternFlowArpTargetHardwareAddr_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowArpTargetHardwareAddr_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a string
@@ -21679,6 +26138,7 @@ func (obj *patternFlowArpTargetHardwareAddr) Value() string {
 //  description is TBD
 func (obj *patternFlowArpTargetHardwareAddr) SetValue(value string) PatternFlowArpTargetHardwareAddr {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowArpTargetHardwareAddrChoice.VALUE)
 	return obj
 }
 
@@ -21692,6 +26152,7 @@ func (obj *patternFlowArpTargetHardwareAddr) Values() []string {
 //  description is TBD
 func (obj *patternFlowArpTargetHardwareAddr) SetValues(value []string) PatternFlowArpTargetHardwareAddr {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowArpTargetHardwareAddrChoice.VALUES)
 	return obj
 }
 
@@ -21705,6 +26166,7 @@ func (obj *patternFlowArpTargetHardwareAddr) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowArpTargetHardwareAddr) SetMetricGroup(value string) PatternFlowArpTargetHardwareAddr {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -21714,8 +26176,8 @@ func (obj *patternFlowArpTargetHardwareAddr) Increment() PatternFlowArpTargetHar
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowArpTargetHardwareAddrCounter{}
 	}
+	obj.SetChoice(PatternFlowArpTargetHardwareAddrChoice.INCREMENT)
 	return &patternFlowArpTargetHardwareAddrCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowArpTargetHardwareAddrCounter
@@ -21724,8 +26186,8 @@ func (obj *patternFlowArpTargetHardwareAddr) Decrement() PatternFlowArpTargetHar
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowArpTargetHardwareAddrCounter{}
 	}
+	obj.SetChoice(PatternFlowArpTargetHardwareAddrChoice.DECREMENT)
 	return &patternFlowArpTargetHardwareAddrCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowArpTargetProtocolAddr struct {
@@ -21774,6 +26236,8 @@ type PatternFlowArpTargetProtocolAddr interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowArpTargetProtocolAddrChoiceEnum
+	SetChoice(value PatternFlowArpTargetProtocolAddrChoiceEnum) PatternFlowArpTargetProtocolAddr
 	Value() string
 	SetValue(value string) PatternFlowArpTargetProtocolAddr
 	Values() []string
@@ -21782,6 +26246,33 @@ type PatternFlowArpTargetProtocolAddr interface {
 	SetMetricGroup(value string) PatternFlowArpTargetProtocolAddr
 	Increment() PatternFlowArpTargetProtocolAddrCounter
 	Decrement() PatternFlowArpTargetProtocolAddrCounter
+}
+
+type PatternFlowArpTargetProtocolAddrChoiceEnum string
+
+var PatternFlowArpTargetProtocolAddrChoice = struct {
+	UNSPECIFIED PatternFlowArpTargetProtocolAddrChoiceEnum
+	VALUE       PatternFlowArpTargetProtocolAddrChoiceEnum
+	VALUES      PatternFlowArpTargetProtocolAddrChoiceEnum
+	INCREMENT   PatternFlowArpTargetProtocolAddrChoiceEnum
+	DECREMENT   PatternFlowArpTargetProtocolAddrChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowArpTargetProtocolAddrChoiceEnum("unspecified"),
+	VALUE:       PatternFlowArpTargetProtocolAddrChoiceEnum("value"),
+	VALUES:      PatternFlowArpTargetProtocolAddrChoiceEnum("values"),
+	INCREMENT:   PatternFlowArpTargetProtocolAddrChoiceEnum("increment"),
+	DECREMENT:   PatternFlowArpTargetProtocolAddrChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowArpTargetProtocolAddr) Choice() PatternFlowArpTargetProtocolAddrChoiceEnum {
+	return PatternFlowArpTargetProtocolAddrChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowArpTargetProtocolAddr) SetChoice(value PatternFlowArpTargetProtocolAddrChoiceEnum) PatternFlowArpTargetProtocolAddr {
+	intValue := snappipb.PatternFlowArpTargetProtocolAddr_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowArpTargetProtocolAddr_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a string
@@ -21794,6 +26285,7 @@ func (obj *patternFlowArpTargetProtocolAddr) Value() string {
 //  description is TBD
 func (obj *patternFlowArpTargetProtocolAddr) SetValue(value string) PatternFlowArpTargetProtocolAddr {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowArpTargetProtocolAddrChoice.VALUE)
 	return obj
 }
 
@@ -21807,6 +26299,7 @@ func (obj *patternFlowArpTargetProtocolAddr) Values() []string {
 //  description is TBD
 func (obj *patternFlowArpTargetProtocolAddr) SetValues(value []string) PatternFlowArpTargetProtocolAddr {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowArpTargetProtocolAddrChoice.VALUES)
 	return obj
 }
 
@@ -21820,6 +26313,7 @@ func (obj *patternFlowArpTargetProtocolAddr) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowArpTargetProtocolAddr) SetMetricGroup(value string) PatternFlowArpTargetProtocolAddr {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -21829,8 +26323,8 @@ func (obj *patternFlowArpTargetProtocolAddr) Increment() PatternFlowArpTargetPro
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowArpTargetProtocolAddrCounter{}
 	}
+	obj.SetChoice(PatternFlowArpTargetProtocolAddrChoice.INCREMENT)
 	return &patternFlowArpTargetProtocolAddrCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowArpTargetProtocolAddrCounter
@@ -21839,8 +26333,8 @@ func (obj *patternFlowArpTargetProtocolAddr) Decrement() PatternFlowArpTargetPro
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowArpTargetProtocolAddrCounter{}
 	}
+	obj.SetChoice(PatternFlowArpTargetProtocolAddrChoice.DECREMENT)
 	return &patternFlowArpTargetProtocolAddrCounter{obj: obj.obj.Decrement}
-
 }
 
 type flowIcmpEcho struct {
@@ -21902,8 +26396,8 @@ func (obj *flowIcmpEcho) Type() PatternFlowIcmpEchoType {
 	if obj.obj.Type == nil {
 		obj.obj.Type = &snappipb.PatternFlowIcmpEchoType{}
 	}
-	return &patternFlowIcmpEchoType{obj: obj.obj.Type}
 
+	return &patternFlowIcmpEchoType{obj: obj.obj.Type}
 }
 
 // Code returns a PatternFlowIcmpEchoCode
@@ -21912,8 +26406,8 @@ func (obj *flowIcmpEcho) Code() PatternFlowIcmpEchoCode {
 	if obj.obj.Code == nil {
 		obj.obj.Code = &snappipb.PatternFlowIcmpEchoCode{}
 	}
-	return &patternFlowIcmpEchoCode{obj: obj.obj.Code}
 
+	return &patternFlowIcmpEchoCode{obj: obj.obj.Code}
 }
 
 // Checksum returns a PatternFlowIcmpEchoChecksum
@@ -21922,8 +26416,8 @@ func (obj *flowIcmpEcho) Checksum() PatternFlowIcmpEchoChecksum {
 	if obj.obj.Checksum == nil {
 		obj.obj.Checksum = &snappipb.PatternFlowIcmpEchoChecksum{}
 	}
-	return &patternFlowIcmpEchoChecksum{obj: obj.obj.Checksum}
 
+	return &patternFlowIcmpEchoChecksum{obj: obj.obj.Checksum}
 }
 
 // Identifier returns a PatternFlowIcmpEchoIdentifier
@@ -21932,8 +26426,8 @@ func (obj *flowIcmpEcho) Identifier() PatternFlowIcmpEchoIdentifier {
 	if obj.obj.Identifier == nil {
 		obj.obj.Identifier = &snappipb.PatternFlowIcmpEchoIdentifier{}
 	}
-	return &patternFlowIcmpEchoIdentifier{obj: obj.obj.Identifier}
 
+	return &patternFlowIcmpEchoIdentifier{obj: obj.obj.Identifier}
 }
 
 // SequenceNumber returns a PatternFlowIcmpEchoSequenceNumber
@@ -21942,8 +26436,8 @@ func (obj *flowIcmpEcho) SequenceNumber() PatternFlowIcmpEchoSequenceNumber {
 	if obj.obj.SequenceNumber == nil {
 		obj.obj.SequenceNumber = &snappipb.PatternFlowIcmpEchoSequenceNumber{}
 	}
-	return &patternFlowIcmpEchoSequenceNumber{obj: obj.obj.SequenceNumber}
 
+	return &patternFlowIcmpEchoSequenceNumber{obj: obj.obj.SequenceNumber}
 }
 
 type flowIcmpv6Echo struct {
@@ -22005,8 +26499,8 @@ func (obj *flowIcmpv6Echo) Type() PatternFlowIcmpv6EchoType {
 	if obj.obj.Type == nil {
 		obj.obj.Type = &snappipb.PatternFlowIcmpv6EchoType{}
 	}
-	return &patternFlowIcmpv6EchoType{obj: obj.obj.Type}
 
+	return &patternFlowIcmpv6EchoType{obj: obj.obj.Type}
 }
 
 // Code returns a PatternFlowIcmpv6EchoCode
@@ -22015,8 +26509,8 @@ func (obj *flowIcmpv6Echo) Code() PatternFlowIcmpv6EchoCode {
 	if obj.obj.Code == nil {
 		obj.obj.Code = &snappipb.PatternFlowIcmpv6EchoCode{}
 	}
-	return &patternFlowIcmpv6EchoCode{obj: obj.obj.Code}
 
+	return &patternFlowIcmpv6EchoCode{obj: obj.obj.Code}
 }
 
 // Identifier returns a PatternFlowIcmpv6EchoIdentifier
@@ -22025,8 +26519,8 @@ func (obj *flowIcmpv6Echo) Identifier() PatternFlowIcmpv6EchoIdentifier {
 	if obj.obj.Identifier == nil {
 		obj.obj.Identifier = &snappipb.PatternFlowIcmpv6EchoIdentifier{}
 	}
-	return &patternFlowIcmpv6EchoIdentifier{obj: obj.obj.Identifier}
 
+	return &patternFlowIcmpv6EchoIdentifier{obj: obj.obj.Identifier}
 }
 
 // SequenceNumber returns a PatternFlowIcmpv6EchoSequenceNumber
@@ -22035,8 +26529,8 @@ func (obj *flowIcmpv6Echo) SequenceNumber() PatternFlowIcmpv6EchoSequenceNumber 
 	if obj.obj.SequenceNumber == nil {
 		obj.obj.SequenceNumber = &snappipb.PatternFlowIcmpv6EchoSequenceNumber{}
 	}
-	return &patternFlowIcmpv6EchoSequenceNumber{obj: obj.obj.SequenceNumber}
 
+	return &patternFlowIcmpv6EchoSequenceNumber{obj: obj.obj.SequenceNumber}
 }
 
 // Checksum returns a PatternFlowIcmpv6EchoChecksum
@@ -22045,8 +26539,8 @@ func (obj *flowIcmpv6Echo) Checksum() PatternFlowIcmpv6EchoChecksum {
 	if obj.obj.Checksum == nil {
 		obj.obj.Checksum = &snappipb.PatternFlowIcmpv6EchoChecksum{}
 	}
-	return &patternFlowIcmpv6EchoChecksum{obj: obj.obj.Checksum}
 
+	return &patternFlowIcmpv6EchoChecksum{obj: obj.obj.Checksum}
 }
 
 type patternFlowPppAddress struct {
@@ -22095,6 +26589,8 @@ type PatternFlowPppAddress interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowPppAddressChoiceEnum
+	SetChoice(value PatternFlowPppAddressChoiceEnum) PatternFlowPppAddress
 	Value() int32
 	SetValue(value int32) PatternFlowPppAddress
 	Values() []int32
@@ -22103,6 +26599,33 @@ type PatternFlowPppAddress interface {
 	SetMetricGroup(value string) PatternFlowPppAddress
 	Increment() PatternFlowPppAddressCounter
 	Decrement() PatternFlowPppAddressCounter
+}
+
+type PatternFlowPppAddressChoiceEnum string
+
+var PatternFlowPppAddressChoice = struct {
+	UNSPECIFIED PatternFlowPppAddressChoiceEnum
+	VALUE       PatternFlowPppAddressChoiceEnum
+	VALUES      PatternFlowPppAddressChoiceEnum
+	INCREMENT   PatternFlowPppAddressChoiceEnum
+	DECREMENT   PatternFlowPppAddressChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowPppAddressChoiceEnum("unspecified"),
+	VALUE:       PatternFlowPppAddressChoiceEnum("value"),
+	VALUES:      PatternFlowPppAddressChoiceEnum("values"),
+	INCREMENT:   PatternFlowPppAddressChoiceEnum("increment"),
+	DECREMENT:   PatternFlowPppAddressChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowPppAddress) Choice() PatternFlowPppAddressChoiceEnum {
+	return PatternFlowPppAddressChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowPppAddress) SetChoice(value PatternFlowPppAddressChoiceEnum) PatternFlowPppAddress {
+	intValue := snappipb.PatternFlowPppAddress_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowPppAddress_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -22115,6 +26638,7 @@ func (obj *patternFlowPppAddress) Value() int32 {
 //  description is TBD
 func (obj *patternFlowPppAddress) SetValue(value int32) PatternFlowPppAddress {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowPppAddressChoice.VALUE)
 	return obj
 }
 
@@ -22128,6 +26652,7 @@ func (obj *patternFlowPppAddress) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowPppAddress) SetValues(value []int32) PatternFlowPppAddress {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowPppAddressChoice.VALUES)
 	return obj
 }
 
@@ -22141,6 +26666,7 @@ func (obj *patternFlowPppAddress) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowPppAddress) SetMetricGroup(value string) PatternFlowPppAddress {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -22150,8 +26676,8 @@ func (obj *patternFlowPppAddress) Increment() PatternFlowPppAddressCounter {
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowPppAddressCounter{}
 	}
+	obj.SetChoice(PatternFlowPppAddressChoice.INCREMENT)
 	return &patternFlowPppAddressCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowPppAddressCounter
@@ -22160,8 +26686,8 @@ func (obj *patternFlowPppAddress) Decrement() PatternFlowPppAddressCounter {
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowPppAddressCounter{}
 	}
+	obj.SetChoice(PatternFlowPppAddressChoice.DECREMENT)
 	return &patternFlowPppAddressCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowPppControl struct {
@@ -22210,6 +26736,8 @@ type PatternFlowPppControl interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowPppControlChoiceEnum
+	SetChoice(value PatternFlowPppControlChoiceEnum) PatternFlowPppControl
 	Value() int32
 	SetValue(value int32) PatternFlowPppControl
 	Values() []int32
@@ -22218,6 +26746,33 @@ type PatternFlowPppControl interface {
 	SetMetricGroup(value string) PatternFlowPppControl
 	Increment() PatternFlowPppControlCounter
 	Decrement() PatternFlowPppControlCounter
+}
+
+type PatternFlowPppControlChoiceEnum string
+
+var PatternFlowPppControlChoice = struct {
+	UNSPECIFIED PatternFlowPppControlChoiceEnum
+	VALUE       PatternFlowPppControlChoiceEnum
+	VALUES      PatternFlowPppControlChoiceEnum
+	INCREMENT   PatternFlowPppControlChoiceEnum
+	DECREMENT   PatternFlowPppControlChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowPppControlChoiceEnum("unspecified"),
+	VALUE:       PatternFlowPppControlChoiceEnum("value"),
+	VALUES:      PatternFlowPppControlChoiceEnum("values"),
+	INCREMENT:   PatternFlowPppControlChoiceEnum("increment"),
+	DECREMENT:   PatternFlowPppControlChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowPppControl) Choice() PatternFlowPppControlChoiceEnum {
+	return PatternFlowPppControlChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowPppControl) SetChoice(value PatternFlowPppControlChoiceEnum) PatternFlowPppControl {
+	intValue := snappipb.PatternFlowPppControl_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowPppControl_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -22230,6 +26785,7 @@ func (obj *patternFlowPppControl) Value() int32 {
 //  description is TBD
 func (obj *patternFlowPppControl) SetValue(value int32) PatternFlowPppControl {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowPppControlChoice.VALUE)
 	return obj
 }
 
@@ -22243,6 +26799,7 @@ func (obj *patternFlowPppControl) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowPppControl) SetValues(value []int32) PatternFlowPppControl {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowPppControlChoice.VALUES)
 	return obj
 }
 
@@ -22256,6 +26813,7 @@ func (obj *patternFlowPppControl) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowPppControl) SetMetricGroup(value string) PatternFlowPppControl {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -22265,8 +26823,8 @@ func (obj *patternFlowPppControl) Increment() PatternFlowPppControlCounter {
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowPppControlCounter{}
 	}
+	obj.SetChoice(PatternFlowPppControlChoice.INCREMENT)
 	return &patternFlowPppControlCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowPppControlCounter
@@ -22275,8 +26833,8 @@ func (obj *patternFlowPppControl) Decrement() PatternFlowPppControlCounter {
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowPppControlCounter{}
 	}
+	obj.SetChoice(PatternFlowPppControlChoice.DECREMENT)
 	return &patternFlowPppControlCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowPppProtocolType struct {
@@ -22325,14 +26883,47 @@ type PatternFlowPppProtocolType interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowPppProtocolTypeChoiceEnum
+	SetChoice(value PatternFlowPppProtocolTypeChoiceEnum) PatternFlowPppProtocolType
 	Value() int32
 	SetValue(value int32) PatternFlowPppProtocolType
 	Values() []int32
 	SetValues(value []int32) PatternFlowPppProtocolType
+	Auto() PatternFlowPppProtocolTypeAutoEnum
+	SetAuto(value PatternFlowPppProtocolTypeAutoEnum) PatternFlowPppProtocolType
 	MetricGroup() string
 	SetMetricGroup(value string) PatternFlowPppProtocolType
 	Increment() PatternFlowPppProtocolTypeCounter
 	Decrement() PatternFlowPppProtocolTypeCounter
+}
+
+type PatternFlowPppProtocolTypeChoiceEnum string
+
+var PatternFlowPppProtocolTypeChoice = struct {
+	UNSPECIFIED PatternFlowPppProtocolTypeChoiceEnum
+	VALUE       PatternFlowPppProtocolTypeChoiceEnum
+	VALUES      PatternFlowPppProtocolTypeChoiceEnum
+	AUTO        PatternFlowPppProtocolTypeChoiceEnum
+	INCREMENT   PatternFlowPppProtocolTypeChoiceEnum
+	DECREMENT   PatternFlowPppProtocolTypeChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowPppProtocolTypeChoiceEnum("unspecified"),
+	VALUE:       PatternFlowPppProtocolTypeChoiceEnum("value"),
+	VALUES:      PatternFlowPppProtocolTypeChoiceEnum("values"),
+	AUTO:        PatternFlowPppProtocolTypeChoiceEnum("auto"),
+	INCREMENT:   PatternFlowPppProtocolTypeChoiceEnum("increment"),
+	DECREMENT:   PatternFlowPppProtocolTypeChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowPppProtocolType) Choice() PatternFlowPppProtocolTypeChoiceEnum {
+	return PatternFlowPppProtocolTypeChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowPppProtocolType) SetChoice(value PatternFlowPppProtocolTypeChoiceEnum) PatternFlowPppProtocolType {
+	intValue := snappipb.PatternFlowPppProtocolType_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowPppProtocolType_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -22345,6 +26936,7 @@ func (obj *patternFlowPppProtocolType) Value() int32 {
 //  description is TBD
 func (obj *patternFlowPppProtocolType) SetValue(value int32) PatternFlowPppProtocolType {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowPppProtocolTypeChoice.VALUE)
 	return obj
 }
 
@@ -22358,6 +26950,28 @@ func (obj *patternFlowPppProtocolType) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowPppProtocolType) SetValues(value []int32) PatternFlowPppProtocolType {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowPppProtocolTypeChoice.VALUES)
+	return obj
+}
+
+type PatternFlowPppProtocolTypeAutoEnum string
+
+var PatternFlowPppProtocolTypeAuto = struct {
+	UNSPECIFIED PatternFlowPppProtocolTypeAutoEnum
+	AUTO        PatternFlowPppProtocolTypeAutoEnum
+}{
+	UNSPECIFIED: PatternFlowPppProtocolTypeAutoEnum("unspecified"),
+	AUTO:        PatternFlowPppProtocolTypeAutoEnum("auto"),
+}
+
+func (obj *patternFlowPppProtocolType) Auto() PatternFlowPppProtocolTypeAutoEnum {
+	return PatternFlowPppProtocolTypeAutoEnum(obj.obj.Auto.Enum().String())
+}
+
+func (obj *patternFlowPppProtocolType) SetAuto(value PatternFlowPppProtocolTypeAutoEnum) PatternFlowPppProtocolType {
+	intValue := snappipb.PatternFlowPppProtocolType_Auto_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowPppProtocolType_Auto_Enum(intValue)
+	obj.obj.Auto = &enumValue
 	return obj
 }
 
@@ -22371,6 +26985,7 @@ func (obj *patternFlowPppProtocolType) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowPppProtocolType) SetMetricGroup(value string) PatternFlowPppProtocolType {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -22380,8 +26995,8 @@ func (obj *patternFlowPppProtocolType) Increment() PatternFlowPppProtocolTypeCou
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowPppProtocolTypeCounter{}
 	}
+	obj.SetChoice(PatternFlowPppProtocolTypeChoice.INCREMENT)
 	return &patternFlowPppProtocolTypeCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowPppProtocolTypeCounter
@@ -22390,8 +27005,8 @@ func (obj *patternFlowPppProtocolType) Decrement() PatternFlowPppProtocolTypeCou
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowPppProtocolTypeCounter{}
 	}
+	obj.SetChoice(PatternFlowPppProtocolTypeChoice.DECREMENT)
 	return &patternFlowPppProtocolTypeCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowIgmpv1Version struct {
@@ -22440,6 +27055,8 @@ type PatternFlowIgmpv1Version interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowIgmpv1VersionChoiceEnum
+	SetChoice(value PatternFlowIgmpv1VersionChoiceEnum) PatternFlowIgmpv1Version
 	Value() int32
 	SetValue(value int32) PatternFlowIgmpv1Version
 	Values() []int32
@@ -22448,6 +27065,33 @@ type PatternFlowIgmpv1Version interface {
 	SetMetricGroup(value string) PatternFlowIgmpv1Version
 	Increment() PatternFlowIgmpv1VersionCounter
 	Decrement() PatternFlowIgmpv1VersionCounter
+}
+
+type PatternFlowIgmpv1VersionChoiceEnum string
+
+var PatternFlowIgmpv1VersionChoice = struct {
+	UNSPECIFIED PatternFlowIgmpv1VersionChoiceEnum
+	VALUE       PatternFlowIgmpv1VersionChoiceEnum
+	VALUES      PatternFlowIgmpv1VersionChoiceEnum
+	INCREMENT   PatternFlowIgmpv1VersionChoiceEnum
+	DECREMENT   PatternFlowIgmpv1VersionChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowIgmpv1VersionChoiceEnum("unspecified"),
+	VALUE:       PatternFlowIgmpv1VersionChoiceEnum("value"),
+	VALUES:      PatternFlowIgmpv1VersionChoiceEnum("values"),
+	INCREMENT:   PatternFlowIgmpv1VersionChoiceEnum("increment"),
+	DECREMENT:   PatternFlowIgmpv1VersionChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowIgmpv1Version) Choice() PatternFlowIgmpv1VersionChoiceEnum {
+	return PatternFlowIgmpv1VersionChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowIgmpv1Version) SetChoice(value PatternFlowIgmpv1VersionChoiceEnum) PatternFlowIgmpv1Version {
+	intValue := snappipb.PatternFlowIgmpv1Version_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowIgmpv1Version_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -22460,6 +27104,7 @@ func (obj *patternFlowIgmpv1Version) Value() int32 {
 //  description is TBD
 func (obj *patternFlowIgmpv1Version) SetValue(value int32) PatternFlowIgmpv1Version {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowIgmpv1VersionChoice.VALUE)
 	return obj
 }
 
@@ -22473,6 +27118,7 @@ func (obj *patternFlowIgmpv1Version) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowIgmpv1Version) SetValues(value []int32) PatternFlowIgmpv1Version {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowIgmpv1VersionChoice.VALUES)
 	return obj
 }
 
@@ -22486,6 +27132,7 @@ func (obj *patternFlowIgmpv1Version) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowIgmpv1Version) SetMetricGroup(value string) PatternFlowIgmpv1Version {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -22495,8 +27142,8 @@ func (obj *patternFlowIgmpv1Version) Increment() PatternFlowIgmpv1VersionCounter
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowIgmpv1VersionCounter{}
 	}
+	obj.SetChoice(PatternFlowIgmpv1VersionChoice.INCREMENT)
 	return &patternFlowIgmpv1VersionCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowIgmpv1VersionCounter
@@ -22505,8 +27152,8 @@ func (obj *patternFlowIgmpv1Version) Decrement() PatternFlowIgmpv1VersionCounter
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowIgmpv1VersionCounter{}
 	}
+	obj.SetChoice(PatternFlowIgmpv1VersionChoice.DECREMENT)
 	return &patternFlowIgmpv1VersionCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowIgmpv1Type struct {
@@ -22555,6 +27202,8 @@ type PatternFlowIgmpv1Type interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowIgmpv1TypeChoiceEnum
+	SetChoice(value PatternFlowIgmpv1TypeChoiceEnum) PatternFlowIgmpv1Type
 	Value() int32
 	SetValue(value int32) PatternFlowIgmpv1Type
 	Values() []int32
@@ -22563,6 +27212,33 @@ type PatternFlowIgmpv1Type interface {
 	SetMetricGroup(value string) PatternFlowIgmpv1Type
 	Increment() PatternFlowIgmpv1TypeCounter
 	Decrement() PatternFlowIgmpv1TypeCounter
+}
+
+type PatternFlowIgmpv1TypeChoiceEnum string
+
+var PatternFlowIgmpv1TypeChoice = struct {
+	UNSPECIFIED PatternFlowIgmpv1TypeChoiceEnum
+	VALUE       PatternFlowIgmpv1TypeChoiceEnum
+	VALUES      PatternFlowIgmpv1TypeChoiceEnum
+	INCREMENT   PatternFlowIgmpv1TypeChoiceEnum
+	DECREMENT   PatternFlowIgmpv1TypeChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowIgmpv1TypeChoiceEnum("unspecified"),
+	VALUE:       PatternFlowIgmpv1TypeChoiceEnum("value"),
+	VALUES:      PatternFlowIgmpv1TypeChoiceEnum("values"),
+	INCREMENT:   PatternFlowIgmpv1TypeChoiceEnum("increment"),
+	DECREMENT:   PatternFlowIgmpv1TypeChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowIgmpv1Type) Choice() PatternFlowIgmpv1TypeChoiceEnum {
+	return PatternFlowIgmpv1TypeChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowIgmpv1Type) SetChoice(value PatternFlowIgmpv1TypeChoiceEnum) PatternFlowIgmpv1Type {
+	intValue := snappipb.PatternFlowIgmpv1Type_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowIgmpv1Type_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -22575,6 +27251,7 @@ func (obj *patternFlowIgmpv1Type) Value() int32 {
 //  description is TBD
 func (obj *patternFlowIgmpv1Type) SetValue(value int32) PatternFlowIgmpv1Type {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowIgmpv1TypeChoice.VALUE)
 	return obj
 }
 
@@ -22588,6 +27265,7 @@ func (obj *patternFlowIgmpv1Type) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowIgmpv1Type) SetValues(value []int32) PatternFlowIgmpv1Type {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowIgmpv1TypeChoice.VALUES)
 	return obj
 }
 
@@ -22601,6 +27279,7 @@ func (obj *patternFlowIgmpv1Type) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowIgmpv1Type) SetMetricGroup(value string) PatternFlowIgmpv1Type {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -22610,8 +27289,8 @@ func (obj *patternFlowIgmpv1Type) Increment() PatternFlowIgmpv1TypeCounter {
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowIgmpv1TypeCounter{}
 	}
+	obj.SetChoice(PatternFlowIgmpv1TypeChoice.INCREMENT)
 	return &patternFlowIgmpv1TypeCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowIgmpv1TypeCounter
@@ -22620,8 +27299,8 @@ func (obj *patternFlowIgmpv1Type) Decrement() PatternFlowIgmpv1TypeCounter {
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowIgmpv1TypeCounter{}
 	}
+	obj.SetChoice(PatternFlowIgmpv1TypeChoice.DECREMENT)
 	return &patternFlowIgmpv1TypeCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowIgmpv1Unused struct {
@@ -22670,6 +27349,8 @@ type PatternFlowIgmpv1Unused interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowIgmpv1UnusedChoiceEnum
+	SetChoice(value PatternFlowIgmpv1UnusedChoiceEnum) PatternFlowIgmpv1Unused
 	Value() int32
 	SetValue(value int32) PatternFlowIgmpv1Unused
 	Values() []int32
@@ -22678,6 +27359,33 @@ type PatternFlowIgmpv1Unused interface {
 	SetMetricGroup(value string) PatternFlowIgmpv1Unused
 	Increment() PatternFlowIgmpv1UnusedCounter
 	Decrement() PatternFlowIgmpv1UnusedCounter
+}
+
+type PatternFlowIgmpv1UnusedChoiceEnum string
+
+var PatternFlowIgmpv1UnusedChoice = struct {
+	UNSPECIFIED PatternFlowIgmpv1UnusedChoiceEnum
+	VALUE       PatternFlowIgmpv1UnusedChoiceEnum
+	VALUES      PatternFlowIgmpv1UnusedChoiceEnum
+	INCREMENT   PatternFlowIgmpv1UnusedChoiceEnum
+	DECREMENT   PatternFlowIgmpv1UnusedChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowIgmpv1UnusedChoiceEnum("unspecified"),
+	VALUE:       PatternFlowIgmpv1UnusedChoiceEnum("value"),
+	VALUES:      PatternFlowIgmpv1UnusedChoiceEnum("values"),
+	INCREMENT:   PatternFlowIgmpv1UnusedChoiceEnum("increment"),
+	DECREMENT:   PatternFlowIgmpv1UnusedChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowIgmpv1Unused) Choice() PatternFlowIgmpv1UnusedChoiceEnum {
+	return PatternFlowIgmpv1UnusedChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowIgmpv1Unused) SetChoice(value PatternFlowIgmpv1UnusedChoiceEnum) PatternFlowIgmpv1Unused {
+	intValue := snappipb.PatternFlowIgmpv1Unused_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowIgmpv1Unused_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -22690,6 +27398,7 @@ func (obj *patternFlowIgmpv1Unused) Value() int32 {
 //  description is TBD
 func (obj *patternFlowIgmpv1Unused) SetValue(value int32) PatternFlowIgmpv1Unused {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowIgmpv1UnusedChoice.VALUE)
 	return obj
 }
 
@@ -22703,6 +27412,7 @@ func (obj *patternFlowIgmpv1Unused) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowIgmpv1Unused) SetValues(value []int32) PatternFlowIgmpv1Unused {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowIgmpv1UnusedChoice.VALUES)
 	return obj
 }
 
@@ -22716,6 +27426,7 @@ func (obj *patternFlowIgmpv1Unused) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowIgmpv1Unused) SetMetricGroup(value string) PatternFlowIgmpv1Unused {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -22725,8 +27436,8 @@ func (obj *patternFlowIgmpv1Unused) Increment() PatternFlowIgmpv1UnusedCounter {
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowIgmpv1UnusedCounter{}
 	}
+	obj.SetChoice(PatternFlowIgmpv1UnusedChoice.INCREMENT)
 	return &patternFlowIgmpv1UnusedCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowIgmpv1UnusedCounter
@@ -22735,8 +27446,8 @@ func (obj *patternFlowIgmpv1Unused) Decrement() PatternFlowIgmpv1UnusedCounter {
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowIgmpv1UnusedCounter{}
 	}
+	obj.SetChoice(PatternFlowIgmpv1UnusedChoice.DECREMENT)
 	return &patternFlowIgmpv1UnusedCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowIgmpv1Checksum struct {
@@ -22785,8 +27496,57 @@ type PatternFlowIgmpv1Checksum interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowIgmpv1ChecksumChoiceEnum
+	SetChoice(value PatternFlowIgmpv1ChecksumChoiceEnum) PatternFlowIgmpv1Checksum
+	Generated() PatternFlowIgmpv1ChecksumGeneratedEnum
+	SetGenerated(value PatternFlowIgmpv1ChecksumGeneratedEnum) PatternFlowIgmpv1Checksum
 	Custom() int32
 	SetCustom(value int32) PatternFlowIgmpv1Checksum
+}
+
+type PatternFlowIgmpv1ChecksumChoiceEnum string
+
+var PatternFlowIgmpv1ChecksumChoice = struct {
+	UNSPECIFIED PatternFlowIgmpv1ChecksumChoiceEnum
+	GENERATED   PatternFlowIgmpv1ChecksumChoiceEnum
+	CUSTOM      PatternFlowIgmpv1ChecksumChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowIgmpv1ChecksumChoiceEnum("unspecified"),
+	GENERATED:   PatternFlowIgmpv1ChecksumChoiceEnum("generated"),
+	CUSTOM:      PatternFlowIgmpv1ChecksumChoiceEnum("custom"),
+}
+
+func (obj *patternFlowIgmpv1Checksum) Choice() PatternFlowIgmpv1ChecksumChoiceEnum {
+	return PatternFlowIgmpv1ChecksumChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowIgmpv1Checksum) SetChoice(value PatternFlowIgmpv1ChecksumChoiceEnum) PatternFlowIgmpv1Checksum {
+	intValue := snappipb.PatternFlowIgmpv1Checksum_Choice_Enum_value[string(value)]
+	obj.obj.Choice = snappipb.PatternFlowIgmpv1Checksum_Choice_Enum(intValue)
+	return obj
+}
+
+type PatternFlowIgmpv1ChecksumGeneratedEnum string
+
+var PatternFlowIgmpv1ChecksumGenerated = struct {
+	UNSPECIFIED PatternFlowIgmpv1ChecksumGeneratedEnum
+	GOOD        PatternFlowIgmpv1ChecksumGeneratedEnum
+	BAD         PatternFlowIgmpv1ChecksumGeneratedEnum
+}{
+	UNSPECIFIED: PatternFlowIgmpv1ChecksumGeneratedEnum("unspecified"),
+	GOOD:        PatternFlowIgmpv1ChecksumGeneratedEnum("good"),
+	BAD:         PatternFlowIgmpv1ChecksumGeneratedEnum("bad"),
+}
+
+func (obj *patternFlowIgmpv1Checksum) Generated() PatternFlowIgmpv1ChecksumGeneratedEnum {
+	return PatternFlowIgmpv1ChecksumGeneratedEnum(obj.obj.Generated.Enum().String())
+}
+
+func (obj *patternFlowIgmpv1Checksum) SetGenerated(value PatternFlowIgmpv1ChecksumGeneratedEnum) PatternFlowIgmpv1Checksum {
+	intValue := snappipb.PatternFlowIgmpv1Checksum_Generated_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowIgmpv1Checksum_Generated_Enum(intValue)
+	obj.obj.Generated = &enumValue
+	return obj
 }
 
 // Custom returns a int32
@@ -22799,6 +27559,7 @@ func (obj *patternFlowIgmpv1Checksum) Custom() int32 {
 //  A custom checksum value
 func (obj *patternFlowIgmpv1Checksum) SetCustom(value int32) PatternFlowIgmpv1Checksum {
 	obj.obj.Custom = &value
+	obj.SetChoice(PatternFlowIgmpv1ChecksumChoice.CUSTOM)
 	return obj
 }
 
@@ -22848,6 +27609,8 @@ type PatternFlowIgmpv1GroupAddress interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowIgmpv1GroupAddressChoiceEnum
+	SetChoice(value PatternFlowIgmpv1GroupAddressChoiceEnum) PatternFlowIgmpv1GroupAddress
 	Value() string
 	SetValue(value string) PatternFlowIgmpv1GroupAddress
 	Values() []string
@@ -22856,6 +27619,33 @@ type PatternFlowIgmpv1GroupAddress interface {
 	SetMetricGroup(value string) PatternFlowIgmpv1GroupAddress
 	Increment() PatternFlowIgmpv1GroupAddressCounter
 	Decrement() PatternFlowIgmpv1GroupAddressCounter
+}
+
+type PatternFlowIgmpv1GroupAddressChoiceEnum string
+
+var PatternFlowIgmpv1GroupAddressChoice = struct {
+	UNSPECIFIED PatternFlowIgmpv1GroupAddressChoiceEnum
+	VALUE       PatternFlowIgmpv1GroupAddressChoiceEnum
+	VALUES      PatternFlowIgmpv1GroupAddressChoiceEnum
+	INCREMENT   PatternFlowIgmpv1GroupAddressChoiceEnum
+	DECREMENT   PatternFlowIgmpv1GroupAddressChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowIgmpv1GroupAddressChoiceEnum("unspecified"),
+	VALUE:       PatternFlowIgmpv1GroupAddressChoiceEnum("value"),
+	VALUES:      PatternFlowIgmpv1GroupAddressChoiceEnum("values"),
+	INCREMENT:   PatternFlowIgmpv1GroupAddressChoiceEnum("increment"),
+	DECREMENT:   PatternFlowIgmpv1GroupAddressChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowIgmpv1GroupAddress) Choice() PatternFlowIgmpv1GroupAddressChoiceEnum {
+	return PatternFlowIgmpv1GroupAddressChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowIgmpv1GroupAddress) SetChoice(value PatternFlowIgmpv1GroupAddressChoiceEnum) PatternFlowIgmpv1GroupAddress {
+	intValue := snappipb.PatternFlowIgmpv1GroupAddress_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowIgmpv1GroupAddress_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a string
@@ -22868,6 +27658,7 @@ func (obj *patternFlowIgmpv1GroupAddress) Value() string {
 //  description is TBD
 func (obj *patternFlowIgmpv1GroupAddress) SetValue(value string) PatternFlowIgmpv1GroupAddress {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowIgmpv1GroupAddressChoice.VALUE)
 	return obj
 }
 
@@ -22881,6 +27672,7 @@ func (obj *patternFlowIgmpv1GroupAddress) Values() []string {
 //  description is TBD
 func (obj *patternFlowIgmpv1GroupAddress) SetValues(value []string) PatternFlowIgmpv1GroupAddress {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowIgmpv1GroupAddressChoice.VALUES)
 	return obj
 }
 
@@ -22894,6 +27686,7 @@ func (obj *patternFlowIgmpv1GroupAddress) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowIgmpv1GroupAddress) SetMetricGroup(value string) PatternFlowIgmpv1GroupAddress {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -22903,8 +27696,8 @@ func (obj *patternFlowIgmpv1GroupAddress) Increment() PatternFlowIgmpv1GroupAddr
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowIgmpv1GroupAddressCounter{}
 	}
+	obj.SetChoice(PatternFlowIgmpv1GroupAddressChoice.INCREMENT)
 	return &patternFlowIgmpv1GroupAddressCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowIgmpv1GroupAddressCounter
@@ -22913,8 +27706,8 @@ func (obj *patternFlowIgmpv1GroupAddress) Decrement() PatternFlowIgmpv1GroupAddr
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowIgmpv1GroupAddressCounter{}
 	}
+	obj.SetChoice(PatternFlowIgmpv1GroupAddressChoice.DECREMENT)
 	return &patternFlowIgmpv1GroupAddressCounter{obj: obj.obj.Decrement}
-
 }
 
 type flowDelay struct {
@@ -22963,12 +27756,39 @@ type FlowDelay interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() FlowDelayChoiceEnum
+	SetChoice(value FlowDelayChoiceEnum) FlowDelay
 	Bytes() float32
 	SetBytes(value float32) FlowDelay
 	Nanoseconds() float32
 	SetNanoseconds(value float32) FlowDelay
 	Microseconds() float32
 	SetMicroseconds(value float32) FlowDelay
+}
+
+type FlowDelayChoiceEnum string
+
+var FlowDelayChoice = struct {
+	UNSPECIFIED  FlowDelayChoiceEnum
+	BYTES        FlowDelayChoiceEnum
+	NANOSECONDS  FlowDelayChoiceEnum
+	MICROSECONDS FlowDelayChoiceEnum
+}{
+	UNSPECIFIED:  FlowDelayChoiceEnum("unspecified"),
+	BYTES:        FlowDelayChoiceEnum("bytes"),
+	NANOSECONDS:  FlowDelayChoiceEnum("nanoseconds"),
+	MICROSECONDS: FlowDelayChoiceEnum("microseconds"),
+}
+
+func (obj *flowDelay) Choice() FlowDelayChoiceEnum {
+	return FlowDelayChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *flowDelay) SetChoice(value FlowDelayChoiceEnum) FlowDelay {
+	intValue := snappipb.FlowDelay_Choice_Enum_value[string(value)]
+	enumValue := snappipb.FlowDelay_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Bytes returns a float32
@@ -22983,6 +27803,7 @@ func (obj *flowDelay) Bytes() float32 {
 //  A value of 0 indicates no delay.
 func (obj *flowDelay) SetBytes(value float32) FlowDelay {
 	obj.obj.Bytes = &value
+	obj.SetChoice(FlowDelayChoice.BYTES)
 	return obj
 }
 
@@ -22998,6 +27819,7 @@ func (obj *flowDelay) Nanoseconds() float32 {
 //  A value of 0 indicates no delay.
 func (obj *flowDelay) SetNanoseconds(value float32) FlowDelay {
 	obj.obj.Nanoseconds = &value
+	obj.SetChoice(FlowDelayChoice.NANOSECONDS)
 	return obj
 }
 
@@ -23013,6 +27835,7 @@ func (obj *flowDelay) Microseconds() float32 {
 //  A value of 0 indicates no delay.
 func (obj *flowDelay) SetMicroseconds(value float32) FlowDelay {
 	obj.obj.Microseconds = &value
+	obj.SetChoice(FlowDelayChoice.MICROSECONDS)
 	return obj
 }
 
@@ -23062,12 +27885,39 @@ type FlowDurationInterBurstGap interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() FlowDurationInterBurstGapChoiceEnum
+	SetChoice(value FlowDurationInterBurstGapChoiceEnum) FlowDurationInterBurstGap
 	Bytes() float64
 	SetBytes(value float64) FlowDurationInterBurstGap
 	Nanoseconds() float64
 	SetNanoseconds(value float64) FlowDurationInterBurstGap
 	Microseconds() float64
 	SetMicroseconds(value float64) FlowDurationInterBurstGap
+}
+
+type FlowDurationInterBurstGapChoiceEnum string
+
+var FlowDurationInterBurstGapChoice = struct {
+	UNSPECIFIED  FlowDurationInterBurstGapChoiceEnum
+	BYTES        FlowDurationInterBurstGapChoiceEnum
+	NANOSECONDS  FlowDurationInterBurstGapChoiceEnum
+	MICROSECONDS FlowDurationInterBurstGapChoiceEnum
+}{
+	UNSPECIFIED:  FlowDurationInterBurstGapChoiceEnum("unspecified"),
+	BYTES:        FlowDurationInterBurstGapChoiceEnum("bytes"),
+	NANOSECONDS:  FlowDurationInterBurstGapChoiceEnum("nanoseconds"),
+	MICROSECONDS: FlowDurationInterBurstGapChoiceEnum("microseconds"),
+}
+
+func (obj *flowDurationInterBurstGap) Choice() FlowDurationInterBurstGapChoiceEnum {
+	return FlowDurationInterBurstGapChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *flowDurationInterBurstGap) SetChoice(value FlowDurationInterBurstGapChoiceEnum) FlowDurationInterBurstGap {
+	intValue := snappipb.FlowDurationInterBurstGap_Choice_Enum_value[string(value)]
+	enumValue := snappipb.FlowDurationInterBurstGap_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Bytes returns a float64
@@ -23082,6 +27932,7 @@ func (obj *flowDurationInterBurstGap) Bytes() float64 {
 //  A value of 0 indicates no gap between bursts.
 func (obj *flowDurationInterBurstGap) SetBytes(value float64) FlowDurationInterBurstGap {
 	obj.obj.Bytes = &value
+	obj.SetChoice(FlowDurationInterBurstGapChoice.BYTES)
 	return obj
 }
 
@@ -23097,6 +27948,7 @@ func (obj *flowDurationInterBurstGap) Nanoseconds() float64 {
 //  A value of 0 indicates no gap between bursts.
 func (obj *flowDurationInterBurstGap) SetNanoseconds(value float64) FlowDurationInterBurstGap {
 	obj.obj.Nanoseconds = &value
+	obj.SetChoice(FlowDurationInterBurstGapChoice.NANOSECONDS)
 	return obj
 }
 
@@ -23112,6 +27964,7 @@ func (obj *flowDurationInterBurstGap) Microseconds() float64 {
 //  A value of 0 indicates no gap between bursts.
 func (obj *flowDurationInterBurstGap) SetMicroseconds(value float64) FlowDurationInterBurstGap {
 	obj.obj.Microseconds = &value
+	obj.SetChoice(FlowDurationInterBurstGapChoice.MICROSECONDS)
 	return obj
 }
 
@@ -23183,6 +28036,7 @@ func (obj *deviceBgpAdvanced) HoldTimeInterval() int32 {
 //  Number of seconds the sender proposes for the value of the Hold Timer
 func (obj *deviceBgpAdvanced) SetHoldTimeInterval(value int32) DeviceBgpAdvanced {
 	obj.obj.HoldTimeInterval = &value
+
 	return obj
 }
 
@@ -23196,6 +28050,7 @@ func (obj *deviceBgpAdvanced) KeepAliveInterval() int32 {
 //  Number of seconds between transmissions of Keep Alive messages by router
 func (obj *deviceBgpAdvanced) SetKeepAliveInterval(value int32) DeviceBgpAdvanced {
 	obj.obj.KeepAliveInterval = &value
+
 	return obj
 }
 
@@ -23209,6 +28064,7 @@ func (obj *deviceBgpAdvanced) UpdateInterval() int32 {
 //  The time interval at which UPDATE messages are sent to the DUT, expressed as the number of milliseconds between UPDATE messages.
 func (obj *deviceBgpAdvanced) SetUpdateInterval(value int32) DeviceBgpAdvanced {
 	obj.obj.UpdateInterval = &value
+
 	return obj
 }
 
@@ -23222,6 +28078,7 @@ func (obj *deviceBgpAdvanced) TimeToLive() int32 {
 //  The limited number of iterations that a unit of data can experience before the data is discarded. This is placed in the TTL field in the IP header of the  transmitted packets.
 func (obj *deviceBgpAdvanced) SetTimeToLive(value int32) DeviceBgpAdvanced {
 	obj.obj.TimeToLive = &value
+
 	return obj
 }
 
@@ -23235,6 +28092,7 @@ func (obj *deviceBgpAdvanced) Md5Key() string {
 //  The value to be used as a secret MD5 key for authentication. If null or an empty string then authentication will not be enabled.
 func (obj *deviceBgpAdvanced) SetMd5Key(value string) DeviceBgpAdvanced {
 	obj.obj.Md5Key = &value
+
 	return obj
 }
 
@@ -23346,6 +28204,7 @@ func (obj *deviceBgpCapability) Vpls() bool {
 //  TBD
 func (obj *deviceBgpCapability) SetVpls(value bool) DeviceBgpCapability {
 	obj.obj.Vpls = &value
+
 	return obj
 }
 
@@ -23359,6 +28218,7 @@ func (obj *deviceBgpCapability) RouteRefresh() bool {
 //  TBD
 func (obj *deviceBgpCapability) SetRouteRefresh(value bool) DeviceBgpCapability {
 	obj.obj.RouteRefresh = &value
+
 	return obj
 }
 
@@ -23372,6 +28232,7 @@ func (obj *deviceBgpCapability) RouteConstraint() bool {
 //  TBD
 func (obj *deviceBgpCapability) SetRouteConstraint(value bool) DeviceBgpCapability {
 	obj.obj.RouteConstraint = &value
+
 	return obj
 }
 
@@ -23385,6 +28246,7 @@ func (obj *deviceBgpCapability) LinkStateNonVpn() bool {
 //  TBD
 func (obj *deviceBgpCapability) SetLinkStateNonVpn(value bool) DeviceBgpCapability {
 	obj.obj.LinkStateNonVpn = &value
+
 	return obj
 }
 
@@ -23398,6 +28260,7 @@ func (obj *deviceBgpCapability) LinkStateVpn() bool {
 //  TBD
 func (obj *deviceBgpCapability) SetLinkStateVpn(value bool) DeviceBgpCapability {
 	obj.obj.LinkStateVpn = &value
+
 	return obj
 }
 
@@ -23411,6 +28274,7 @@ func (obj *deviceBgpCapability) Evpn() bool {
 //  TBD
 func (obj *deviceBgpCapability) SetEvpn(value bool) DeviceBgpCapability {
 	obj.obj.Evpn = &value
+
 	return obj
 }
 
@@ -23424,6 +28288,7 @@ func (obj *deviceBgpCapability) ExtendedNextHopEncoding() bool {
 //  TBD
 func (obj *deviceBgpCapability) SetExtendedNextHopEncoding(value bool) DeviceBgpCapability {
 	obj.obj.ExtendedNextHopEncoding = &value
+
 	return obj
 }
 
@@ -23437,6 +28302,7 @@ func (obj *deviceBgpCapability) Ipv4Unicast() bool {
 //  TBD
 func (obj *deviceBgpCapability) SetIpv4Unicast(value bool) DeviceBgpCapability {
 	obj.obj.Ipv4Unicast = &value
+
 	return obj
 }
 
@@ -23450,6 +28316,7 @@ func (obj *deviceBgpCapability) Ipv4Multicast() bool {
 //  TBD
 func (obj *deviceBgpCapability) SetIpv4Multicast(value bool) DeviceBgpCapability {
 	obj.obj.Ipv4Multicast = &value
+
 	return obj
 }
 
@@ -23463,6 +28330,7 @@ func (obj *deviceBgpCapability) Ipv4MulticastVpn() bool {
 //  TBD
 func (obj *deviceBgpCapability) SetIpv4MulticastVpn(value bool) DeviceBgpCapability {
 	obj.obj.Ipv4MulticastVpn = &value
+
 	return obj
 }
 
@@ -23476,6 +28344,7 @@ func (obj *deviceBgpCapability) Ipv4MplsVpn() bool {
 //  TBD
 func (obj *deviceBgpCapability) SetIpv4MplsVpn(value bool) DeviceBgpCapability {
 	obj.obj.Ipv4MplsVpn = &value
+
 	return obj
 }
 
@@ -23489,6 +28358,7 @@ func (obj *deviceBgpCapability) Ipv4Mdt() bool {
 //  TBD
 func (obj *deviceBgpCapability) SetIpv4Mdt(value bool) DeviceBgpCapability {
 	obj.obj.Ipv4Mdt = &value
+
 	return obj
 }
 
@@ -23502,6 +28372,7 @@ func (obj *deviceBgpCapability) Ipv4MulticastMplsVpn() bool {
 //  TBD
 func (obj *deviceBgpCapability) SetIpv4MulticastMplsVpn(value bool) DeviceBgpCapability {
 	obj.obj.Ipv4MulticastMplsVpn = &value
+
 	return obj
 }
 
@@ -23515,6 +28386,7 @@ func (obj *deviceBgpCapability) Ipv4UnicastFlowSpec() bool {
 //  TBD
 func (obj *deviceBgpCapability) SetIpv4UnicastFlowSpec(value bool) DeviceBgpCapability {
 	obj.obj.Ipv4UnicastFlowSpec = &value
+
 	return obj
 }
 
@@ -23528,6 +28400,7 @@ func (obj *deviceBgpCapability) Ipv4SrTePolicy() bool {
 //  TBD
 func (obj *deviceBgpCapability) SetIpv4SrTePolicy(value bool) DeviceBgpCapability {
 	obj.obj.Ipv4SrTePolicy = &value
+
 	return obj
 }
 
@@ -23541,6 +28414,7 @@ func (obj *deviceBgpCapability) Ipv4UnicastAddPath() bool {
 //  TBD
 func (obj *deviceBgpCapability) SetIpv4UnicastAddPath(value bool) DeviceBgpCapability {
 	obj.obj.Ipv4UnicastAddPath = &value
+
 	return obj
 }
 
@@ -23554,6 +28428,7 @@ func (obj *deviceBgpCapability) Ipv6Unicast() bool {
 //  TBD
 func (obj *deviceBgpCapability) SetIpv6Unicast(value bool) DeviceBgpCapability {
 	obj.obj.Ipv6Unicast = &value
+
 	return obj
 }
 
@@ -23567,6 +28442,7 @@ func (obj *deviceBgpCapability) Ipv6Multicast() bool {
 //  TBD
 func (obj *deviceBgpCapability) SetIpv6Multicast(value bool) DeviceBgpCapability {
 	obj.obj.Ipv6Multicast = &value
+
 	return obj
 }
 
@@ -23580,6 +28456,7 @@ func (obj *deviceBgpCapability) Ipv6MulticastVpn() bool {
 //  TBD
 func (obj *deviceBgpCapability) SetIpv6MulticastVpn(value bool) DeviceBgpCapability {
 	obj.obj.Ipv6MulticastVpn = &value
+
 	return obj
 }
 
@@ -23593,6 +28470,7 @@ func (obj *deviceBgpCapability) Ipv6MplsVpn() bool {
 //  TBD
 func (obj *deviceBgpCapability) SetIpv6MplsVpn(value bool) DeviceBgpCapability {
 	obj.obj.Ipv6MplsVpn = &value
+
 	return obj
 }
 
@@ -23606,6 +28484,7 @@ func (obj *deviceBgpCapability) Ipv6Mdt() bool {
 //  TBD
 func (obj *deviceBgpCapability) SetIpv6Mdt(value bool) DeviceBgpCapability {
 	obj.obj.Ipv6Mdt = &value
+
 	return obj
 }
 
@@ -23619,6 +28498,7 @@ func (obj *deviceBgpCapability) Ipv6MulticastMplsVpn() bool {
 //  TBD
 func (obj *deviceBgpCapability) SetIpv6MulticastMplsVpn(value bool) DeviceBgpCapability {
 	obj.obj.Ipv6MulticastMplsVpn = &value
+
 	return obj
 }
 
@@ -23632,6 +28512,7 @@ func (obj *deviceBgpCapability) Ipv6UnicastFlowSpec() bool {
 //  TBD
 func (obj *deviceBgpCapability) SetIpv6UnicastFlowSpec(value bool) DeviceBgpCapability {
 	obj.obj.Ipv6UnicastFlowSpec = &value
+
 	return obj
 }
 
@@ -23645,6 +28526,7 @@ func (obj *deviceBgpCapability) Ipv6SrTePolicy() bool {
 //  TBD
 func (obj *deviceBgpCapability) SetIpv6SrTePolicy(value bool) DeviceBgpCapability {
 	obj.obj.Ipv6SrTePolicy = &value
+
 	return obj
 }
 
@@ -23658,6 +28540,7 @@ func (obj *deviceBgpCapability) Ipv6UnicastAddPath() bool {
 //  TBD
 func (obj *deviceBgpCapability) SetIpv6UnicastAddPath(value bool) DeviceBgpCapability {
 	obj.obj.Ipv6UnicastAddPath = &value
+
 	return obj
 }
 
@@ -23707,6 +28590,8 @@ type DeviceBgpSrTePolicy interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	PolicyType() DeviceBgpSrTePolicyPolicyTypeEnum
+	SetPolicyType(value DeviceBgpSrTePolicyPolicyTypeEnum) DeviceBgpSrTePolicy
 	Distinguisher() int32
 	SetDistinguisher(value int32) DeviceBgpSrTePolicy
 	Color() int32
@@ -23722,6 +28607,29 @@ type DeviceBgpSrTePolicy interface {
 	Communities() DeviceBgpSrTePolicyDeviceBgpCommunityIter
 }
 
+type DeviceBgpSrTePolicyPolicyTypeEnum string
+
+var DeviceBgpSrTePolicyPolicyType = struct {
+	UNSPECIFIED DeviceBgpSrTePolicyPolicyTypeEnum
+	IPV4        DeviceBgpSrTePolicyPolicyTypeEnum
+	IPV6        DeviceBgpSrTePolicyPolicyTypeEnum
+}{
+	UNSPECIFIED: DeviceBgpSrTePolicyPolicyTypeEnum("unspecified"),
+	IPV4:        DeviceBgpSrTePolicyPolicyTypeEnum("ipv4"),
+	IPV6:        DeviceBgpSrTePolicyPolicyTypeEnum("ipv6"),
+}
+
+func (obj *deviceBgpSrTePolicy) PolicyType() DeviceBgpSrTePolicyPolicyTypeEnum {
+	return DeviceBgpSrTePolicyPolicyTypeEnum(obj.obj.PolicyType.Enum().String())
+}
+
+func (obj *deviceBgpSrTePolicy) SetPolicyType(value DeviceBgpSrTePolicyPolicyTypeEnum) DeviceBgpSrTePolicy {
+	intValue := snappipb.DeviceBgpSrTePolicy_PolicyType_Enum_value[string(value)]
+	enumValue := snappipb.DeviceBgpSrTePolicy_PolicyType_Enum(intValue)
+	obj.obj.PolicyType = &enumValue
+	return obj
+}
+
 // Distinguisher returns a int32
 //  Identifies the policy in the context of (color and endpoint) tuple.  It is used by the SR Policy originator to make unique multiple  occurrences of the same SR Policy.
 func (obj *deviceBgpSrTePolicy) Distinguisher() int32 {
@@ -23732,6 +28640,7 @@ func (obj *deviceBgpSrTePolicy) Distinguisher() int32 {
 //  Identifies the policy in the context of (color and endpoint) tuple.  It is used by the SR Policy originator to make unique multiple  occurrences of the same SR Policy.
 func (obj *deviceBgpSrTePolicy) SetDistinguisher(value int32) DeviceBgpSrTePolicy {
 	obj.obj.Distinguisher = &value
+
 	return obj
 }
 
@@ -23745,6 +28654,7 @@ func (obj *deviceBgpSrTePolicy) Color() int32 {
 //  Identifies the policy. It is used to match the color of the  destination prefixes to steer traffic into the SR Policy.
 func (obj *deviceBgpSrTePolicy) SetColor(value int32) DeviceBgpSrTePolicy {
 	obj.obj.Color = &value
+
 	return obj
 }
 
@@ -23758,6 +28668,7 @@ func (obj *deviceBgpSrTePolicy) Ipv4Endpoint() string {
 //  Specifies a single node or a set of nodes. It is selected on the basis of the policy_type (AFI).
 func (obj *deviceBgpSrTePolicy) SetIpv4Endpoint(value string) DeviceBgpSrTePolicy {
 	obj.obj.Ipv4Endpoint = &value
+
 	return obj
 }
 
@@ -23771,6 +28682,7 @@ func (obj *deviceBgpSrTePolicy) Ipv6Endpoint() string {
 //  Specifies a single node or a set of nodes. It is selected on the basis of the policy_type (AFI).
 func (obj *deviceBgpSrTePolicy) SetIpv6Endpoint(value string) DeviceBgpSrTePolicy {
 	obj.obj.Ipv6Endpoint = &value
+
 	return obj
 }
 
@@ -23780,8 +28692,8 @@ func (obj *deviceBgpSrTePolicy) NextHop() DeviceBgpSrTePolicyNextHop {
 	if obj.obj.NextHop == nil {
 		obj.obj.NextHop = &snappipb.DeviceBgpSrTePolicyNextHop{}
 	}
-	return &deviceBgpSrTePolicyNextHop{obj: obj.obj.NextHop}
 
+	return &deviceBgpSrTePolicyNextHop{obj: obj.obj.NextHop}
 }
 
 // AddPath returns a DeviceBgpAddPath
@@ -23790,8 +28702,8 @@ func (obj *deviceBgpSrTePolicy) AddPath() DeviceBgpAddPath {
 	if obj.obj.AddPath == nil {
 		obj.obj.AddPath = &snappipb.DeviceBgpAddPath{}
 	}
-	return &deviceBgpAddPath{obj: obj.obj.AddPath}
 
+	return &deviceBgpAddPath{obj: obj.obj.AddPath}
 }
 
 // AsPath returns a DeviceBgpAsPath
@@ -23800,8 +28712,8 @@ func (obj *deviceBgpSrTePolicy) AsPath() DeviceBgpAsPath {
 	if obj.obj.AsPath == nil {
 		obj.obj.AsPath = &snappipb.DeviceBgpAsPath{}
 	}
-	return &deviceBgpAsPath{obj: obj.obj.AsPath}
 
+	return &deviceBgpAsPath{obj: obj.obj.AsPath}
 }
 
 // TunnelTlvs returns a []DeviceBgpTunnelTlv
@@ -23811,7 +28723,6 @@ func (obj *deviceBgpSrTePolicy) TunnelTlvs() DeviceBgpSrTePolicyDeviceBgpTunnelT
 		obj.obj.TunnelTlvs = []*snappipb.DeviceBgpTunnelTlv{}
 	}
 	return &deviceBgpSrTePolicyDeviceBgpTunnelTlvIter{obj: obj}
-
 }
 
 type deviceBgpSrTePolicyDeviceBgpTunnelTlvIter struct {
@@ -23844,7 +28755,6 @@ func (obj *deviceBgpSrTePolicy) Communities() DeviceBgpSrTePolicyDeviceBgpCommun
 		obj.obj.Communities = []*snappipb.DeviceBgpCommunity{}
 	}
 	return &deviceBgpSrTePolicyDeviceBgpCommunityIter{obj: obj}
-
 }
 
 type deviceBgpSrTePolicyDeviceBgpCommunityIter struct {
@@ -23934,7 +28844,6 @@ func (obj *deviceBgpv4Route) Addresses() DeviceBgpv4RouteDeviceBgpv4RouteAddress
 		obj.obj.Addresses = []*snappipb.DeviceBgpv4RouteAddress{}
 	}
 	return &deviceBgpv4RouteDeviceBgpv4RouteAddressIter{obj: obj}
-
 }
 
 type deviceBgpv4RouteDeviceBgpv4RouteAddressIter struct {
@@ -23970,6 +28879,7 @@ func (obj *deviceBgpv4Route) NextHopAddress() string {
 //  IP Address of next router to forward a packet to its final destination
 func (obj *deviceBgpv4Route) SetNextHopAddress(value string) DeviceBgpv4Route {
 	obj.obj.NextHopAddress = &value
+
 	return obj
 }
 
@@ -23979,8 +28889,8 @@ func (obj *deviceBgpv4Route) Advanced() DeviceBgpRouteAdvanced {
 	if obj.obj.Advanced == nil {
 		obj.obj.Advanced = &snappipb.DeviceBgpRouteAdvanced{}
 	}
-	return &deviceBgpRouteAdvanced{obj: obj.obj.Advanced}
 
+	return &deviceBgpRouteAdvanced{obj: obj.obj.Advanced}
 }
 
 // Communities returns a []DeviceBgpCommunity
@@ -23990,7 +28900,6 @@ func (obj *deviceBgpv4Route) Communities() DeviceBgpv4RouteDeviceBgpCommunityIte
 		obj.obj.Communities = []*snappipb.DeviceBgpCommunity{}
 	}
 	return &deviceBgpv4RouteDeviceBgpCommunityIter{obj: obj}
-
 }
 
 type deviceBgpv4RouteDeviceBgpCommunityIter struct {
@@ -24022,8 +28931,8 @@ func (obj *deviceBgpv4Route) AsPath() DeviceBgpAsPath {
 	if obj.obj.AsPath == nil {
 		obj.obj.AsPath = &snappipb.DeviceBgpAsPath{}
 	}
-	return &deviceBgpAsPath{obj: obj.obj.AsPath}
 
+	return &deviceBgpAsPath{obj: obj.obj.AsPath}
 }
 
 // AddPath returns a DeviceBgpAddPath
@@ -24032,8 +28941,8 @@ func (obj *deviceBgpv4Route) AddPath() DeviceBgpAddPath {
 	if obj.obj.AddPath == nil {
 		obj.obj.AddPath = &snappipb.DeviceBgpAddPath{}
 	}
-	return &deviceBgpAddPath{obj: obj.obj.AddPath}
 
+	return &deviceBgpAddPath{obj: obj.obj.AddPath}
 }
 
 // Name returns a string
@@ -24046,6 +28955,7 @@ func (obj *deviceBgpv4Route) Name() string {
 //  Globally unique name of an object. It also serves as the primary key for arrays of objects.
 func (obj *deviceBgpv4Route) SetName(value string) DeviceBgpv4Route {
 	obj.obj.Name = value
+
 	return obj
 }
 
@@ -24113,7 +29023,6 @@ func (obj *deviceBgpv6Route) Addresses() DeviceBgpv6RouteDeviceBgpv6RouteAddress
 		obj.obj.Addresses = []*snappipb.DeviceBgpv6RouteAddress{}
 	}
 	return &deviceBgpv6RouteDeviceBgpv6RouteAddressIter{obj: obj}
-
 }
 
 type deviceBgpv6RouteDeviceBgpv6RouteAddressIter struct {
@@ -24149,6 +29058,7 @@ func (obj *deviceBgpv6Route) NextHopAddress() string {
 //  IP Address of next router to forward a packet to its final destination
 func (obj *deviceBgpv6Route) SetNextHopAddress(value string) DeviceBgpv6Route {
 	obj.obj.NextHopAddress = &value
+
 	return obj
 }
 
@@ -24158,8 +29068,8 @@ func (obj *deviceBgpv6Route) Advanced() DeviceBgpRouteAdvanced {
 	if obj.obj.Advanced == nil {
 		obj.obj.Advanced = &snappipb.DeviceBgpRouteAdvanced{}
 	}
-	return &deviceBgpRouteAdvanced{obj: obj.obj.Advanced}
 
+	return &deviceBgpRouteAdvanced{obj: obj.obj.Advanced}
 }
 
 // Communities returns a []DeviceBgpCommunity
@@ -24169,7 +29079,6 @@ func (obj *deviceBgpv6Route) Communities() DeviceBgpv6RouteDeviceBgpCommunityIte
 		obj.obj.Communities = []*snappipb.DeviceBgpCommunity{}
 	}
 	return &deviceBgpv6RouteDeviceBgpCommunityIter{obj: obj}
-
 }
 
 type deviceBgpv6RouteDeviceBgpCommunityIter struct {
@@ -24201,8 +29110,8 @@ func (obj *deviceBgpv6Route) AsPath() DeviceBgpAsPath {
 	if obj.obj.AsPath == nil {
 		obj.obj.AsPath = &snappipb.DeviceBgpAsPath{}
 	}
-	return &deviceBgpAsPath{obj: obj.obj.AsPath}
 
+	return &deviceBgpAsPath{obj: obj.obj.AsPath}
 }
 
 // AddPath returns a DeviceBgpAddPath
@@ -24211,8 +29120,8 @@ func (obj *deviceBgpv6Route) AddPath() DeviceBgpAddPath {
 	if obj.obj.AddPath == nil {
 		obj.obj.AddPath = &snappipb.DeviceBgpAddPath{}
 	}
-	return &deviceBgpAddPath{obj: obj.obj.AddPath}
 
+	return &deviceBgpAddPath{obj: obj.obj.AddPath}
 }
 
 // Name returns a string
@@ -24225,6 +29134,7 @@ func (obj *deviceBgpv6Route) Name() string {
 //  Globally unique name of an object. It also serves as the primary key for arrays of objects.
 func (obj *deviceBgpv6Route) SetName(value string) DeviceBgpv6Route {
 	obj.obj.Name = value
+
 	return obj
 }
 
@@ -24302,6 +29212,7 @@ func (obj *deviceBgpv6SegmentRouting) IngressSupportsVpn() bool {
 //  TBD
 func (obj *deviceBgpv6SegmentRouting) SetIngressSupportsVpn(value bool) DeviceBgpv6SegmentRouting {
 	obj.obj.IngressSupportsVpn = &value
+
 	return obj
 }
 
@@ -24315,6 +29226,7 @@ func (obj *deviceBgpv6SegmentRouting) ReducedEncapsulation() bool {
 //  TBD
 func (obj *deviceBgpv6SegmentRouting) SetReducedEncapsulation(value bool) DeviceBgpv6SegmentRouting {
 	obj.obj.ReducedEncapsulation = &value
+
 	return obj
 }
 
@@ -24328,6 +29240,7 @@ func (obj *deviceBgpv6SegmentRouting) CopyTimeToLive() bool {
 //  TBD
 func (obj *deviceBgpv6SegmentRouting) SetCopyTimeToLive(value bool) DeviceBgpv6SegmentRouting {
 	obj.obj.CopyTimeToLive = &value
+
 	return obj
 }
 
@@ -24341,6 +29254,7 @@ func (obj *deviceBgpv6SegmentRouting) TimeToLive() int32 {
 //  TBD
 func (obj *deviceBgpv6SegmentRouting) SetTimeToLive(value int32) DeviceBgpv6SegmentRouting {
 	obj.obj.TimeToLive = &value
+
 	return obj
 }
 
@@ -24354,6 +29268,7 @@ func (obj *deviceBgpv6SegmentRouting) MaxSidsPerSrh() int32 {
 //  TBD
 func (obj *deviceBgpv6SegmentRouting) SetMaxSidsPerSrh(value int32) DeviceBgpv6SegmentRouting {
 	obj.obj.MaxSidsPerSrh = &value
+
 	return obj
 }
 
@@ -24367,6 +29282,7 @@ func (obj *deviceBgpv6SegmentRouting) AutoGenerateSegmentLeftValue() bool {
 //  TBD
 func (obj *deviceBgpv6SegmentRouting) SetAutoGenerateSegmentLeftValue(value bool) DeviceBgpv6SegmentRouting {
 	obj.obj.AutoGenerateSegmentLeftValue = &value
+
 	return obj
 }
 
@@ -24380,6 +29296,7 @@ func (obj *deviceBgpv6SegmentRouting) SegmentLeftValue() int32 {
 //  TBD
 func (obj *deviceBgpv6SegmentRouting) SetSegmentLeftValue(value int32) DeviceBgpv6SegmentRouting {
 	obj.obj.SegmentLeftValue = &value
+
 	return obj
 }
 
@@ -24393,6 +29310,7 @@ func (obj *deviceBgpv6SegmentRouting) AdvertiseSrTePolicy() bool {
 //  TBD
 func (obj *deviceBgpv6SegmentRouting) SetAdvertiseSrTePolicy(value bool) DeviceBgpv6SegmentRouting {
 	obj.obj.AdvertiseSrTePolicy = &value
+
 	return obj
 }
 
@@ -24460,6 +29378,7 @@ func (obj *patternFlowEthernetDstCounter) Start() string {
 //  description is TBD
 func (obj *patternFlowEthernetDstCounter) SetStart(value string) PatternFlowEthernetDstCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -24473,6 +29392,7 @@ func (obj *patternFlowEthernetDstCounter) Step() string {
 //  description is TBD
 func (obj *patternFlowEthernetDstCounter) SetStep(value string) PatternFlowEthernetDstCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -24486,6 +29406,7 @@ func (obj *patternFlowEthernetDstCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowEthernetDstCounter) SetCount(value int32) PatternFlowEthernetDstCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -24553,6 +29474,7 @@ func (obj *patternFlowEthernetSrcCounter) Start() string {
 //  description is TBD
 func (obj *patternFlowEthernetSrcCounter) SetStart(value string) PatternFlowEthernetSrcCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -24566,6 +29488,7 @@ func (obj *patternFlowEthernetSrcCounter) Step() string {
 //  description is TBD
 func (obj *patternFlowEthernetSrcCounter) SetStep(value string) PatternFlowEthernetSrcCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -24579,6 +29502,7 @@ func (obj *patternFlowEthernetSrcCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowEthernetSrcCounter) SetCount(value int32) PatternFlowEthernetSrcCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -24646,6 +29570,7 @@ func (obj *patternFlowEthernetEtherTypeCounter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowEthernetEtherTypeCounter) SetStart(value int32) PatternFlowEthernetEtherTypeCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -24659,6 +29584,7 @@ func (obj *patternFlowEthernetEtherTypeCounter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowEthernetEtherTypeCounter) SetStep(value int32) PatternFlowEthernetEtherTypeCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -24672,6 +29598,7 @@ func (obj *patternFlowEthernetEtherTypeCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowEthernetEtherTypeCounter) SetCount(value int32) PatternFlowEthernetEtherTypeCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -24739,6 +29666,7 @@ func (obj *patternFlowEthernetPfcQueueCounter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowEthernetPfcQueueCounter) SetStart(value int32) PatternFlowEthernetPfcQueueCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -24752,6 +29680,7 @@ func (obj *patternFlowEthernetPfcQueueCounter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowEthernetPfcQueueCounter) SetStep(value int32) PatternFlowEthernetPfcQueueCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -24765,6 +29694,7 @@ func (obj *patternFlowEthernetPfcQueueCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowEthernetPfcQueueCounter) SetCount(value int32) PatternFlowEthernetPfcQueueCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -24832,6 +29762,7 @@ func (obj *patternFlowVlanPriorityCounter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowVlanPriorityCounter) SetStart(value int32) PatternFlowVlanPriorityCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -24845,6 +29776,7 @@ func (obj *patternFlowVlanPriorityCounter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowVlanPriorityCounter) SetStep(value int32) PatternFlowVlanPriorityCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -24858,6 +29790,7 @@ func (obj *patternFlowVlanPriorityCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowVlanPriorityCounter) SetCount(value int32) PatternFlowVlanPriorityCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -24925,6 +29858,7 @@ func (obj *patternFlowVlanCfiCounter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowVlanCfiCounter) SetStart(value int32) PatternFlowVlanCfiCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -24938,6 +29872,7 @@ func (obj *patternFlowVlanCfiCounter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowVlanCfiCounter) SetStep(value int32) PatternFlowVlanCfiCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -24951,6 +29886,7 @@ func (obj *patternFlowVlanCfiCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowVlanCfiCounter) SetCount(value int32) PatternFlowVlanCfiCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -25018,6 +29954,7 @@ func (obj *patternFlowVlanIdCounter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowVlanIdCounter) SetStart(value int32) PatternFlowVlanIdCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -25031,6 +29968,7 @@ func (obj *patternFlowVlanIdCounter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowVlanIdCounter) SetStep(value int32) PatternFlowVlanIdCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -25044,6 +29982,7 @@ func (obj *patternFlowVlanIdCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowVlanIdCounter) SetCount(value int32) PatternFlowVlanIdCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -25111,6 +30050,7 @@ func (obj *patternFlowVlanTpidCounter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowVlanTpidCounter) SetStart(value int32) PatternFlowVlanTpidCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -25124,6 +30064,7 @@ func (obj *patternFlowVlanTpidCounter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowVlanTpidCounter) SetStep(value int32) PatternFlowVlanTpidCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -25137,6 +30078,7 @@ func (obj *patternFlowVlanTpidCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowVlanTpidCounter) SetCount(value int32) PatternFlowVlanTpidCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -25204,6 +30146,7 @@ func (obj *patternFlowVxlanFlagsCounter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowVxlanFlagsCounter) SetStart(value int32) PatternFlowVxlanFlagsCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -25217,6 +30160,7 @@ func (obj *patternFlowVxlanFlagsCounter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowVxlanFlagsCounter) SetStep(value int32) PatternFlowVxlanFlagsCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -25230,6 +30174,7 @@ func (obj *patternFlowVxlanFlagsCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowVxlanFlagsCounter) SetCount(value int32) PatternFlowVxlanFlagsCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -25297,6 +30242,7 @@ func (obj *patternFlowVxlanReserved0Counter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowVxlanReserved0Counter) SetStart(value int32) PatternFlowVxlanReserved0Counter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -25310,6 +30256,7 @@ func (obj *patternFlowVxlanReserved0Counter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowVxlanReserved0Counter) SetStep(value int32) PatternFlowVxlanReserved0Counter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -25323,6 +30270,7 @@ func (obj *patternFlowVxlanReserved0Counter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowVxlanReserved0Counter) SetCount(value int32) PatternFlowVxlanReserved0Counter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -25390,6 +30338,7 @@ func (obj *patternFlowVxlanVniCounter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowVxlanVniCounter) SetStart(value int32) PatternFlowVxlanVniCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -25403,6 +30352,7 @@ func (obj *patternFlowVxlanVniCounter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowVxlanVniCounter) SetStep(value int32) PatternFlowVxlanVniCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -25416,6 +30366,7 @@ func (obj *patternFlowVxlanVniCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowVxlanVniCounter) SetCount(value int32) PatternFlowVxlanVniCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -25483,6 +30434,7 @@ func (obj *patternFlowVxlanReserved1Counter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowVxlanReserved1Counter) SetStart(value int32) PatternFlowVxlanReserved1Counter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -25496,6 +30448,7 @@ func (obj *patternFlowVxlanReserved1Counter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowVxlanReserved1Counter) SetStep(value int32) PatternFlowVxlanReserved1Counter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -25509,6 +30462,7 @@ func (obj *patternFlowVxlanReserved1Counter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowVxlanReserved1Counter) SetCount(value int32) PatternFlowVxlanReserved1Counter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -25576,6 +30530,7 @@ func (obj *patternFlowIpv4VersionCounter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowIpv4VersionCounter) SetStart(value int32) PatternFlowIpv4VersionCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -25589,6 +30544,7 @@ func (obj *patternFlowIpv4VersionCounter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowIpv4VersionCounter) SetStep(value int32) PatternFlowIpv4VersionCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -25602,6 +30558,7 @@ func (obj *patternFlowIpv4VersionCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowIpv4VersionCounter) SetCount(value int32) PatternFlowIpv4VersionCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -25669,6 +30626,7 @@ func (obj *patternFlowIpv4HeaderLengthCounter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowIpv4HeaderLengthCounter) SetStart(value int32) PatternFlowIpv4HeaderLengthCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -25682,6 +30640,7 @@ func (obj *patternFlowIpv4HeaderLengthCounter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowIpv4HeaderLengthCounter) SetStep(value int32) PatternFlowIpv4HeaderLengthCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -25695,6 +30654,7 @@ func (obj *patternFlowIpv4HeaderLengthCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowIpv4HeaderLengthCounter) SetCount(value int32) PatternFlowIpv4HeaderLengthCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -25744,6 +30704,8 @@ type PatternFlowIpv4PriorityRaw interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowIpv4PriorityRawChoiceEnum
+	SetChoice(value PatternFlowIpv4PriorityRawChoiceEnum) PatternFlowIpv4PriorityRaw
 	Value() int32
 	SetValue(value int32) PatternFlowIpv4PriorityRaw
 	Values() []int32
@@ -25752,6 +30714,33 @@ type PatternFlowIpv4PriorityRaw interface {
 	SetMetricGroup(value string) PatternFlowIpv4PriorityRaw
 	Increment() PatternFlowIpv4PriorityRawCounter
 	Decrement() PatternFlowIpv4PriorityRawCounter
+}
+
+type PatternFlowIpv4PriorityRawChoiceEnum string
+
+var PatternFlowIpv4PriorityRawChoice = struct {
+	UNSPECIFIED PatternFlowIpv4PriorityRawChoiceEnum
+	VALUE       PatternFlowIpv4PriorityRawChoiceEnum
+	VALUES      PatternFlowIpv4PriorityRawChoiceEnum
+	INCREMENT   PatternFlowIpv4PriorityRawChoiceEnum
+	DECREMENT   PatternFlowIpv4PriorityRawChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowIpv4PriorityRawChoiceEnum("unspecified"),
+	VALUE:       PatternFlowIpv4PriorityRawChoiceEnum("value"),
+	VALUES:      PatternFlowIpv4PriorityRawChoiceEnum("values"),
+	INCREMENT:   PatternFlowIpv4PriorityRawChoiceEnum("increment"),
+	DECREMENT:   PatternFlowIpv4PriorityRawChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowIpv4PriorityRaw) Choice() PatternFlowIpv4PriorityRawChoiceEnum {
+	return PatternFlowIpv4PriorityRawChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowIpv4PriorityRaw) SetChoice(value PatternFlowIpv4PriorityRawChoiceEnum) PatternFlowIpv4PriorityRaw {
+	intValue := snappipb.PatternFlowIpv4PriorityRaw_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowIpv4PriorityRaw_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -25764,6 +30753,7 @@ func (obj *patternFlowIpv4PriorityRaw) Value() int32 {
 //  description is TBD
 func (obj *patternFlowIpv4PriorityRaw) SetValue(value int32) PatternFlowIpv4PriorityRaw {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowIpv4PriorityRawChoice.VALUE)
 	return obj
 }
 
@@ -25777,6 +30767,7 @@ func (obj *patternFlowIpv4PriorityRaw) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowIpv4PriorityRaw) SetValues(value []int32) PatternFlowIpv4PriorityRaw {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowIpv4PriorityRawChoice.VALUES)
 	return obj
 }
 
@@ -25790,6 +30781,7 @@ func (obj *patternFlowIpv4PriorityRaw) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowIpv4PriorityRaw) SetMetricGroup(value string) PatternFlowIpv4PriorityRaw {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -25799,8 +30791,8 @@ func (obj *patternFlowIpv4PriorityRaw) Increment() PatternFlowIpv4PriorityRawCou
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowIpv4PriorityRawCounter{}
 	}
+	obj.SetChoice(PatternFlowIpv4PriorityRawChoice.INCREMENT)
 	return &patternFlowIpv4PriorityRawCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowIpv4PriorityRawCounter
@@ -25809,8 +30801,8 @@ func (obj *patternFlowIpv4PriorityRaw) Decrement() PatternFlowIpv4PriorityRawCou
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowIpv4PriorityRawCounter{}
 	}
+	obj.SetChoice(PatternFlowIpv4PriorityRawChoice.DECREMENT)
 	return &patternFlowIpv4PriorityRawCounter{obj: obj.obj.Decrement}
-
 }
 
 type flowIpv4Tos struct {
@@ -25873,8 +30865,8 @@ func (obj *flowIpv4Tos) Precedence() PatternFlowIpv4TosPrecedence {
 	if obj.obj.Precedence == nil {
 		obj.obj.Precedence = &snappipb.PatternFlowIpv4TosPrecedence{}
 	}
-	return &patternFlowIpv4TosPrecedence{obj: obj.obj.Precedence}
 
+	return &patternFlowIpv4TosPrecedence{obj: obj.obj.Precedence}
 }
 
 // Delay returns a PatternFlowIpv4TosDelay
@@ -25883,8 +30875,8 @@ func (obj *flowIpv4Tos) Delay() PatternFlowIpv4TosDelay {
 	if obj.obj.Delay == nil {
 		obj.obj.Delay = &snappipb.PatternFlowIpv4TosDelay{}
 	}
-	return &patternFlowIpv4TosDelay{obj: obj.obj.Delay}
 
+	return &patternFlowIpv4TosDelay{obj: obj.obj.Delay}
 }
 
 // Throughput returns a PatternFlowIpv4TosThroughput
@@ -25893,8 +30885,8 @@ func (obj *flowIpv4Tos) Throughput() PatternFlowIpv4TosThroughput {
 	if obj.obj.Throughput == nil {
 		obj.obj.Throughput = &snappipb.PatternFlowIpv4TosThroughput{}
 	}
-	return &patternFlowIpv4TosThroughput{obj: obj.obj.Throughput}
 
+	return &patternFlowIpv4TosThroughput{obj: obj.obj.Throughput}
 }
 
 // Reliability returns a PatternFlowIpv4TosReliability
@@ -25903,8 +30895,8 @@ func (obj *flowIpv4Tos) Reliability() PatternFlowIpv4TosReliability {
 	if obj.obj.Reliability == nil {
 		obj.obj.Reliability = &snappipb.PatternFlowIpv4TosReliability{}
 	}
-	return &patternFlowIpv4TosReliability{obj: obj.obj.Reliability}
 
+	return &patternFlowIpv4TosReliability{obj: obj.obj.Reliability}
 }
 
 // Monetary returns a PatternFlowIpv4TosMonetary
@@ -25913,8 +30905,8 @@ func (obj *flowIpv4Tos) Monetary() PatternFlowIpv4TosMonetary {
 	if obj.obj.Monetary == nil {
 		obj.obj.Monetary = &snappipb.PatternFlowIpv4TosMonetary{}
 	}
-	return &patternFlowIpv4TosMonetary{obj: obj.obj.Monetary}
 
+	return &patternFlowIpv4TosMonetary{obj: obj.obj.Monetary}
 }
 
 // Unused returns a PatternFlowIpv4TosUnused
@@ -25923,8 +30915,8 @@ func (obj *flowIpv4Tos) Unused() PatternFlowIpv4TosUnused {
 	if obj.obj.Unused == nil {
 		obj.obj.Unused = &snappipb.PatternFlowIpv4TosUnused{}
 	}
-	return &patternFlowIpv4TosUnused{obj: obj.obj.Unused}
 
+	return &patternFlowIpv4TosUnused{obj: obj.obj.Unused}
 }
 
 type flowIpv4Dscp struct {
@@ -25983,8 +30975,8 @@ func (obj *flowIpv4Dscp) Phb() PatternFlowIpv4DscpPhb {
 	if obj.obj.Phb == nil {
 		obj.obj.Phb = &snappipb.PatternFlowIpv4DscpPhb{}
 	}
-	return &patternFlowIpv4DscpPhb{obj: obj.obj.Phb}
 
+	return &patternFlowIpv4DscpPhb{obj: obj.obj.Phb}
 }
 
 // Ecn returns a PatternFlowIpv4DscpEcn
@@ -25993,8 +30985,8 @@ func (obj *flowIpv4Dscp) Ecn() PatternFlowIpv4DscpEcn {
 	if obj.obj.Ecn == nil {
 		obj.obj.Ecn = &snappipb.PatternFlowIpv4DscpEcn{}
 	}
-	return &patternFlowIpv4DscpEcn{obj: obj.obj.Ecn}
 
+	return &patternFlowIpv4DscpEcn{obj: obj.obj.Ecn}
 }
 
 type patternFlowIpv4TotalLengthCounter struct {
@@ -26061,6 +31053,7 @@ func (obj *patternFlowIpv4TotalLengthCounter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowIpv4TotalLengthCounter) SetStart(value int32) PatternFlowIpv4TotalLengthCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -26074,6 +31067,7 @@ func (obj *patternFlowIpv4TotalLengthCounter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowIpv4TotalLengthCounter) SetStep(value int32) PatternFlowIpv4TotalLengthCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -26087,6 +31081,7 @@ func (obj *patternFlowIpv4TotalLengthCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowIpv4TotalLengthCounter) SetCount(value int32) PatternFlowIpv4TotalLengthCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -26154,6 +31149,7 @@ func (obj *patternFlowIpv4IdentificationCounter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowIpv4IdentificationCounter) SetStart(value int32) PatternFlowIpv4IdentificationCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -26167,6 +31163,7 @@ func (obj *patternFlowIpv4IdentificationCounter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowIpv4IdentificationCounter) SetStep(value int32) PatternFlowIpv4IdentificationCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -26180,6 +31177,7 @@ func (obj *patternFlowIpv4IdentificationCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowIpv4IdentificationCounter) SetCount(value int32) PatternFlowIpv4IdentificationCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -26247,6 +31245,7 @@ func (obj *patternFlowIpv4ReservedCounter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowIpv4ReservedCounter) SetStart(value int32) PatternFlowIpv4ReservedCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -26260,6 +31259,7 @@ func (obj *patternFlowIpv4ReservedCounter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowIpv4ReservedCounter) SetStep(value int32) PatternFlowIpv4ReservedCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -26273,6 +31273,7 @@ func (obj *patternFlowIpv4ReservedCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowIpv4ReservedCounter) SetCount(value int32) PatternFlowIpv4ReservedCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -26340,6 +31341,7 @@ func (obj *patternFlowIpv4DontFragmentCounter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowIpv4DontFragmentCounter) SetStart(value int32) PatternFlowIpv4DontFragmentCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -26353,6 +31355,7 @@ func (obj *patternFlowIpv4DontFragmentCounter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowIpv4DontFragmentCounter) SetStep(value int32) PatternFlowIpv4DontFragmentCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -26366,6 +31369,7 @@ func (obj *patternFlowIpv4DontFragmentCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowIpv4DontFragmentCounter) SetCount(value int32) PatternFlowIpv4DontFragmentCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -26433,6 +31437,7 @@ func (obj *patternFlowIpv4MoreFragmentsCounter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowIpv4MoreFragmentsCounter) SetStart(value int32) PatternFlowIpv4MoreFragmentsCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -26446,6 +31451,7 @@ func (obj *patternFlowIpv4MoreFragmentsCounter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowIpv4MoreFragmentsCounter) SetStep(value int32) PatternFlowIpv4MoreFragmentsCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -26459,6 +31465,7 @@ func (obj *patternFlowIpv4MoreFragmentsCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowIpv4MoreFragmentsCounter) SetCount(value int32) PatternFlowIpv4MoreFragmentsCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -26526,6 +31533,7 @@ func (obj *patternFlowIpv4FragmentOffsetCounter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowIpv4FragmentOffsetCounter) SetStart(value int32) PatternFlowIpv4FragmentOffsetCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -26539,6 +31547,7 @@ func (obj *patternFlowIpv4FragmentOffsetCounter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowIpv4FragmentOffsetCounter) SetStep(value int32) PatternFlowIpv4FragmentOffsetCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -26552,6 +31561,7 @@ func (obj *patternFlowIpv4FragmentOffsetCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowIpv4FragmentOffsetCounter) SetCount(value int32) PatternFlowIpv4FragmentOffsetCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -26619,6 +31629,7 @@ func (obj *patternFlowIpv4TimeToLiveCounter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowIpv4TimeToLiveCounter) SetStart(value int32) PatternFlowIpv4TimeToLiveCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -26632,6 +31643,7 @@ func (obj *patternFlowIpv4TimeToLiveCounter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowIpv4TimeToLiveCounter) SetStep(value int32) PatternFlowIpv4TimeToLiveCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -26645,6 +31657,7 @@ func (obj *patternFlowIpv4TimeToLiveCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowIpv4TimeToLiveCounter) SetCount(value int32) PatternFlowIpv4TimeToLiveCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -26712,6 +31725,7 @@ func (obj *patternFlowIpv4ProtocolCounter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowIpv4ProtocolCounter) SetStart(value int32) PatternFlowIpv4ProtocolCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -26725,6 +31739,7 @@ func (obj *patternFlowIpv4ProtocolCounter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowIpv4ProtocolCounter) SetStep(value int32) PatternFlowIpv4ProtocolCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -26738,6 +31753,7 @@ func (obj *patternFlowIpv4ProtocolCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowIpv4ProtocolCounter) SetCount(value int32) PatternFlowIpv4ProtocolCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -26805,6 +31821,7 @@ func (obj *patternFlowIpv4SrcCounter) Start() string {
 //  description is TBD
 func (obj *patternFlowIpv4SrcCounter) SetStart(value string) PatternFlowIpv4SrcCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -26818,6 +31835,7 @@ func (obj *patternFlowIpv4SrcCounter) Step() string {
 //  description is TBD
 func (obj *patternFlowIpv4SrcCounter) SetStep(value string) PatternFlowIpv4SrcCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -26831,6 +31849,7 @@ func (obj *patternFlowIpv4SrcCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowIpv4SrcCounter) SetCount(value int32) PatternFlowIpv4SrcCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -26898,6 +31917,7 @@ func (obj *patternFlowIpv4DstCounter) Start() string {
 //  description is TBD
 func (obj *patternFlowIpv4DstCounter) SetStart(value string) PatternFlowIpv4DstCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -26911,6 +31931,7 @@ func (obj *patternFlowIpv4DstCounter) Step() string {
 //  description is TBD
 func (obj *patternFlowIpv4DstCounter) SetStep(value string) PatternFlowIpv4DstCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -26924,6 +31945,7 @@ func (obj *patternFlowIpv4DstCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowIpv4DstCounter) SetCount(value int32) PatternFlowIpv4DstCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -26991,6 +32013,7 @@ func (obj *patternFlowIpv6VersionCounter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowIpv6VersionCounter) SetStart(value int32) PatternFlowIpv6VersionCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -27004,6 +32027,7 @@ func (obj *patternFlowIpv6VersionCounter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowIpv6VersionCounter) SetStep(value int32) PatternFlowIpv6VersionCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -27017,6 +32041,7 @@ func (obj *patternFlowIpv6VersionCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowIpv6VersionCounter) SetCount(value int32) PatternFlowIpv6VersionCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -27084,6 +32109,7 @@ func (obj *patternFlowIpv6TrafficClassCounter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowIpv6TrafficClassCounter) SetStart(value int32) PatternFlowIpv6TrafficClassCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -27097,6 +32123,7 @@ func (obj *patternFlowIpv6TrafficClassCounter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowIpv6TrafficClassCounter) SetStep(value int32) PatternFlowIpv6TrafficClassCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -27110,6 +32137,7 @@ func (obj *patternFlowIpv6TrafficClassCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowIpv6TrafficClassCounter) SetCount(value int32) PatternFlowIpv6TrafficClassCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -27177,6 +32205,7 @@ func (obj *patternFlowIpv6FlowLabelCounter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowIpv6FlowLabelCounter) SetStart(value int32) PatternFlowIpv6FlowLabelCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -27190,6 +32219,7 @@ func (obj *patternFlowIpv6FlowLabelCounter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowIpv6FlowLabelCounter) SetStep(value int32) PatternFlowIpv6FlowLabelCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -27203,6 +32233,7 @@ func (obj *patternFlowIpv6FlowLabelCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowIpv6FlowLabelCounter) SetCount(value int32) PatternFlowIpv6FlowLabelCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -27270,6 +32301,7 @@ func (obj *patternFlowIpv6PayloadLengthCounter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowIpv6PayloadLengthCounter) SetStart(value int32) PatternFlowIpv6PayloadLengthCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -27283,6 +32315,7 @@ func (obj *patternFlowIpv6PayloadLengthCounter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowIpv6PayloadLengthCounter) SetStep(value int32) PatternFlowIpv6PayloadLengthCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -27296,6 +32329,7 @@ func (obj *patternFlowIpv6PayloadLengthCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowIpv6PayloadLengthCounter) SetCount(value int32) PatternFlowIpv6PayloadLengthCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -27363,6 +32397,7 @@ func (obj *patternFlowIpv6NextHeaderCounter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowIpv6NextHeaderCounter) SetStart(value int32) PatternFlowIpv6NextHeaderCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -27376,6 +32411,7 @@ func (obj *patternFlowIpv6NextHeaderCounter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowIpv6NextHeaderCounter) SetStep(value int32) PatternFlowIpv6NextHeaderCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -27389,6 +32425,7 @@ func (obj *patternFlowIpv6NextHeaderCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowIpv6NextHeaderCounter) SetCount(value int32) PatternFlowIpv6NextHeaderCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -27456,6 +32493,7 @@ func (obj *patternFlowIpv6HopLimitCounter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowIpv6HopLimitCounter) SetStart(value int32) PatternFlowIpv6HopLimitCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -27469,6 +32507,7 @@ func (obj *patternFlowIpv6HopLimitCounter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowIpv6HopLimitCounter) SetStep(value int32) PatternFlowIpv6HopLimitCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -27482,6 +32521,7 @@ func (obj *patternFlowIpv6HopLimitCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowIpv6HopLimitCounter) SetCount(value int32) PatternFlowIpv6HopLimitCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -27549,6 +32589,7 @@ func (obj *patternFlowIpv6SrcCounter) Start() string {
 //  description is TBD
 func (obj *patternFlowIpv6SrcCounter) SetStart(value string) PatternFlowIpv6SrcCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -27562,6 +32603,7 @@ func (obj *patternFlowIpv6SrcCounter) Step() string {
 //  description is TBD
 func (obj *patternFlowIpv6SrcCounter) SetStep(value string) PatternFlowIpv6SrcCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -27575,6 +32617,7 @@ func (obj *patternFlowIpv6SrcCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowIpv6SrcCounter) SetCount(value int32) PatternFlowIpv6SrcCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -27642,6 +32685,7 @@ func (obj *patternFlowIpv6DstCounter) Start() string {
 //  description is TBD
 func (obj *patternFlowIpv6DstCounter) SetStart(value string) PatternFlowIpv6DstCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -27655,6 +32699,7 @@ func (obj *patternFlowIpv6DstCounter) Step() string {
 //  description is TBD
 func (obj *patternFlowIpv6DstCounter) SetStep(value string) PatternFlowIpv6DstCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -27668,6 +32713,7 @@ func (obj *patternFlowIpv6DstCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowIpv6DstCounter) SetCount(value int32) PatternFlowIpv6DstCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -27735,6 +32781,7 @@ func (obj *patternFlowPfcPauseDstCounter) Start() string {
 //  description is TBD
 func (obj *patternFlowPfcPauseDstCounter) SetStart(value string) PatternFlowPfcPauseDstCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -27748,6 +32795,7 @@ func (obj *patternFlowPfcPauseDstCounter) Step() string {
 //  description is TBD
 func (obj *patternFlowPfcPauseDstCounter) SetStep(value string) PatternFlowPfcPauseDstCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -27761,6 +32809,7 @@ func (obj *patternFlowPfcPauseDstCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowPfcPauseDstCounter) SetCount(value int32) PatternFlowPfcPauseDstCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -27828,6 +32877,7 @@ func (obj *patternFlowPfcPauseSrcCounter) Start() string {
 //  description is TBD
 func (obj *patternFlowPfcPauseSrcCounter) SetStart(value string) PatternFlowPfcPauseSrcCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -27841,6 +32891,7 @@ func (obj *patternFlowPfcPauseSrcCounter) Step() string {
 //  description is TBD
 func (obj *patternFlowPfcPauseSrcCounter) SetStep(value string) PatternFlowPfcPauseSrcCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -27854,6 +32905,7 @@ func (obj *patternFlowPfcPauseSrcCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowPfcPauseSrcCounter) SetCount(value int32) PatternFlowPfcPauseSrcCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -27921,6 +32973,7 @@ func (obj *patternFlowPfcPauseEtherTypeCounter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowPfcPauseEtherTypeCounter) SetStart(value int32) PatternFlowPfcPauseEtherTypeCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -27934,6 +32987,7 @@ func (obj *patternFlowPfcPauseEtherTypeCounter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowPfcPauseEtherTypeCounter) SetStep(value int32) PatternFlowPfcPauseEtherTypeCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -27947,6 +33001,7 @@ func (obj *patternFlowPfcPauseEtherTypeCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowPfcPauseEtherTypeCounter) SetCount(value int32) PatternFlowPfcPauseEtherTypeCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -28014,6 +33069,7 @@ func (obj *patternFlowPfcPauseControlOpCodeCounter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowPfcPauseControlOpCodeCounter) SetStart(value int32) PatternFlowPfcPauseControlOpCodeCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -28027,6 +33083,7 @@ func (obj *patternFlowPfcPauseControlOpCodeCounter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowPfcPauseControlOpCodeCounter) SetStep(value int32) PatternFlowPfcPauseControlOpCodeCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -28040,6 +33097,7 @@ func (obj *patternFlowPfcPauseControlOpCodeCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowPfcPauseControlOpCodeCounter) SetCount(value int32) PatternFlowPfcPauseControlOpCodeCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -28107,6 +33165,7 @@ func (obj *patternFlowPfcPauseClassEnableVectorCounter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowPfcPauseClassEnableVectorCounter) SetStart(value int32) PatternFlowPfcPauseClassEnableVectorCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -28120,6 +33179,7 @@ func (obj *patternFlowPfcPauseClassEnableVectorCounter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowPfcPauseClassEnableVectorCounter) SetStep(value int32) PatternFlowPfcPauseClassEnableVectorCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -28133,6 +33193,7 @@ func (obj *patternFlowPfcPauseClassEnableVectorCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowPfcPauseClassEnableVectorCounter) SetCount(value int32) PatternFlowPfcPauseClassEnableVectorCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -28200,6 +33261,7 @@ func (obj *patternFlowPfcPausePauseClass0Counter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass0Counter) SetStart(value int32) PatternFlowPfcPausePauseClass0Counter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -28213,6 +33275,7 @@ func (obj *patternFlowPfcPausePauseClass0Counter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass0Counter) SetStep(value int32) PatternFlowPfcPausePauseClass0Counter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -28226,6 +33289,7 @@ func (obj *patternFlowPfcPausePauseClass0Counter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass0Counter) SetCount(value int32) PatternFlowPfcPausePauseClass0Counter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -28293,6 +33357,7 @@ func (obj *patternFlowPfcPausePauseClass1Counter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass1Counter) SetStart(value int32) PatternFlowPfcPausePauseClass1Counter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -28306,6 +33371,7 @@ func (obj *patternFlowPfcPausePauseClass1Counter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass1Counter) SetStep(value int32) PatternFlowPfcPausePauseClass1Counter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -28319,6 +33385,7 @@ func (obj *patternFlowPfcPausePauseClass1Counter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass1Counter) SetCount(value int32) PatternFlowPfcPausePauseClass1Counter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -28386,6 +33453,7 @@ func (obj *patternFlowPfcPausePauseClass2Counter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass2Counter) SetStart(value int32) PatternFlowPfcPausePauseClass2Counter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -28399,6 +33467,7 @@ func (obj *patternFlowPfcPausePauseClass2Counter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass2Counter) SetStep(value int32) PatternFlowPfcPausePauseClass2Counter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -28412,6 +33481,7 @@ func (obj *patternFlowPfcPausePauseClass2Counter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass2Counter) SetCount(value int32) PatternFlowPfcPausePauseClass2Counter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -28479,6 +33549,7 @@ func (obj *patternFlowPfcPausePauseClass3Counter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass3Counter) SetStart(value int32) PatternFlowPfcPausePauseClass3Counter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -28492,6 +33563,7 @@ func (obj *patternFlowPfcPausePauseClass3Counter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass3Counter) SetStep(value int32) PatternFlowPfcPausePauseClass3Counter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -28505,6 +33577,7 @@ func (obj *patternFlowPfcPausePauseClass3Counter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass3Counter) SetCount(value int32) PatternFlowPfcPausePauseClass3Counter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -28572,6 +33645,7 @@ func (obj *patternFlowPfcPausePauseClass4Counter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass4Counter) SetStart(value int32) PatternFlowPfcPausePauseClass4Counter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -28585,6 +33659,7 @@ func (obj *patternFlowPfcPausePauseClass4Counter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass4Counter) SetStep(value int32) PatternFlowPfcPausePauseClass4Counter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -28598,6 +33673,7 @@ func (obj *patternFlowPfcPausePauseClass4Counter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass4Counter) SetCount(value int32) PatternFlowPfcPausePauseClass4Counter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -28665,6 +33741,7 @@ func (obj *patternFlowPfcPausePauseClass5Counter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass5Counter) SetStart(value int32) PatternFlowPfcPausePauseClass5Counter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -28678,6 +33755,7 @@ func (obj *patternFlowPfcPausePauseClass5Counter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass5Counter) SetStep(value int32) PatternFlowPfcPausePauseClass5Counter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -28691,6 +33769,7 @@ func (obj *patternFlowPfcPausePauseClass5Counter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass5Counter) SetCount(value int32) PatternFlowPfcPausePauseClass5Counter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -28758,6 +33837,7 @@ func (obj *patternFlowPfcPausePauseClass6Counter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass6Counter) SetStart(value int32) PatternFlowPfcPausePauseClass6Counter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -28771,6 +33851,7 @@ func (obj *patternFlowPfcPausePauseClass6Counter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass6Counter) SetStep(value int32) PatternFlowPfcPausePauseClass6Counter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -28784,6 +33865,7 @@ func (obj *patternFlowPfcPausePauseClass6Counter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass6Counter) SetCount(value int32) PatternFlowPfcPausePauseClass6Counter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -28851,6 +33933,7 @@ func (obj *patternFlowPfcPausePauseClass7Counter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass7Counter) SetStart(value int32) PatternFlowPfcPausePauseClass7Counter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -28864,6 +33947,7 @@ func (obj *patternFlowPfcPausePauseClass7Counter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass7Counter) SetStep(value int32) PatternFlowPfcPausePauseClass7Counter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -28877,6 +33961,7 @@ func (obj *patternFlowPfcPausePauseClass7Counter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass7Counter) SetCount(value int32) PatternFlowPfcPausePauseClass7Counter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -28944,6 +34029,7 @@ func (obj *patternFlowEthernetPauseDstCounter) Start() string {
 //  description is TBD
 func (obj *patternFlowEthernetPauseDstCounter) SetStart(value string) PatternFlowEthernetPauseDstCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -28957,6 +34043,7 @@ func (obj *patternFlowEthernetPauseDstCounter) Step() string {
 //  description is TBD
 func (obj *patternFlowEthernetPauseDstCounter) SetStep(value string) PatternFlowEthernetPauseDstCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -28970,6 +34057,7 @@ func (obj *patternFlowEthernetPauseDstCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowEthernetPauseDstCounter) SetCount(value int32) PatternFlowEthernetPauseDstCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -29037,6 +34125,7 @@ func (obj *patternFlowEthernetPauseSrcCounter) Start() string {
 //  description is TBD
 func (obj *patternFlowEthernetPauseSrcCounter) SetStart(value string) PatternFlowEthernetPauseSrcCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -29050,6 +34139,7 @@ func (obj *patternFlowEthernetPauseSrcCounter) Step() string {
 //  description is TBD
 func (obj *patternFlowEthernetPauseSrcCounter) SetStep(value string) PatternFlowEthernetPauseSrcCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -29063,6 +34153,7 @@ func (obj *patternFlowEthernetPauseSrcCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowEthernetPauseSrcCounter) SetCount(value int32) PatternFlowEthernetPauseSrcCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -29130,6 +34221,7 @@ func (obj *patternFlowEthernetPauseEtherTypeCounter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowEthernetPauseEtherTypeCounter) SetStart(value int32) PatternFlowEthernetPauseEtherTypeCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -29143,6 +34235,7 @@ func (obj *patternFlowEthernetPauseEtherTypeCounter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowEthernetPauseEtherTypeCounter) SetStep(value int32) PatternFlowEthernetPauseEtherTypeCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -29156,6 +34249,7 @@ func (obj *patternFlowEthernetPauseEtherTypeCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowEthernetPauseEtherTypeCounter) SetCount(value int32) PatternFlowEthernetPauseEtherTypeCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -29223,6 +34317,7 @@ func (obj *patternFlowEthernetPauseControlOpCodeCounter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowEthernetPauseControlOpCodeCounter) SetStart(value int32) PatternFlowEthernetPauseControlOpCodeCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -29236,6 +34331,7 @@ func (obj *patternFlowEthernetPauseControlOpCodeCounter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowEthernetPauseControlOpCodeCounter) SetStep(value int32) PatternFlowEthernetPauseControlOpCodeCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -29249,6 +34345,7 @@ func (obj *patternFlowEthernetPauseControlOpCodeCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowEthernetPauseControlOpCodeCounter) SetCount(value int32) PatternFlowEthernetPauseControlOpCodeCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -29316,6 +34413,7 @@ func (obj *patternFlowEthernetPauseTimeCounter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowEthernetPauseTimeCounter) SetStart(value int32) PatternFlowEthernetPauseTimeCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -29329,6 +34427,7 @@ func (obj *patternFlowEthernetPauseTimeCounter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowEthernetPauseTimeCounter) SetStep(value int32) PatternFlowEthernetPauseTimeCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -29342,6 +34441,7 @@ func (obj *patternFlowEthernetPauseTimeCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowEthernetPauseTimeCounter) SetCount(value int32) PatternFlowEthernetPauseTimeCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -29409,6 +34509,7 @@ func (obj *patternFlowTcpSrcPortCounter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowTcpSrcPortCounter) SetStart(value int32) PatternFlowTcpSrcPortCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -29422,6 +34523,7 @@ func (obj *patternFlowTcpSrcPortCounter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowTcpSrcPortCounter) SetStep(value int32) PatternFlowTcpSrcPortCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -29435,6 +34537,7 @@ func (obj *patternFlowTcpSrcPortCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowTcpSrcPortCounter) SetCount(value int32) PatternFlowTcpSrcPortCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -29502,6 +34605,7 @@ func (obj *patternFlowTcpDstPortCounter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowTcpDstPortCounter) SetStart(value int32) PatternFlowTcpDstPortCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -29515,6 +34619,7 @@ func (obj *patternFlowTcpDstPortCounter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowTcpDstPortCounter) SetStep(value int32) PatternFlowTcpDstPortCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -29528,6 +34633,7 @@ func (obj *patternFlowTcpDstPortCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowTcpDstPortCounter) SetCount(value int32) PatternFlowTcpDstPortCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -29595,6 +34701,7 @@ func (obj *patternFlowTcpSeqNumCounter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowTcpSeqNumCounter) SetStart(value int32) PatternFlowTcpSeqNumCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -29608,6 +34715,7 @@ func (obj *patternFlowTcpSeqNumCounter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowTcpSeqNumCounter) SetStep(value int32) PatternFlowTcpSeqNumCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -29621,6 +34729,7 @@ func (obj *patternFlowTcpSeqNumCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowTcpSeqNumCounter) SetCount(value int32) PatternFlowTcpSeqNumCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -29688,6 +34797,7 @@ func (obj *patternFlowTcpAckNumCounter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowTcpAckNumCounter) SetStart(value int32) PatternFlowTcpAckNumCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -29701,6 +34811,7 @@ func (obj *patternFlowTcpAckNumCounter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowTcpAckNumCounter) SetStep(value int32) PatternFlowTcpAckNumCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -29714,6 +34825,7 @@ func (obj *patternFlowTcpAckNumCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowTcpAckNumCounter) SetCount(value int32) PatternFlowTcpAckNumCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -29781,6 +34893,7 @@ func (obj *patternFlowTcpDataOffsetCounter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowTcpDataOffsetCounter) SetStart(value int32) PatternFlowTcpDataOffsetCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -29794,6 +34907,7 @@ func (obj *patternFlowTcpDataOffsetCounter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowTcpDataOffsetCounter) SetStep(value int32) PatternFlowTcpDataOffsetCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -29807,6 +34921,7 @@ func (obj *patternFlowTcpDataOffsetCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowTcpDataOffsetCounter) SetCount(value int32) PatternFlowTcpDataOffsetCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -29874,6 +34989,7 @@ func (obj *patternFlowTcpEcnNsCounter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowTcpEcnNsCounter) SetStart(value int32) PatternFlowTcpEcnNsCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -29887,6 +35003,7 @@ func (obj *patternFlowTcpEcnNsCounter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowTcpEcnNsCounter) SetStep(value int32) PatternFlowTcpEcnNsCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -29900,6 +35017,7 @@ func (obj *patternFlowTcpEcnNsCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowTcpEcnNsCounter) SetCount(value int32) PatternFlowTcpEcnNsCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -29967,6 +35085,7 @@ func (obj *patternFlowTcpEcnCwrCounter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowTcpEcnCwrCounter) SetStart(value int32) PatternFlowTcpEcnCwrCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -29980,6 +35099,7 @@ func (obj *patternFlowTcpEcnCwrCounter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowTcpEcnCwrCounter) SetStep(value int32) PatternFlowTcpEcnCwrCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -29993,6 +35113,7 @@ func (obj *patternFlowTcpEcnCwrCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowTcpEcnCwrCounter) SetCount(value int32) PatternFlowTcpEcnCwrCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -30060,6 +35181,7 @@ func (obj *patternFlowTcpEcnEchoCounter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowTcpEcnEchoCounter) SetStart(value int32) PatternFlowTcpEcnEchoCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -30073,6 +35195,7 @@ func (obj *patternFlowTcpEcnEchoCounter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowTcpEcnEchoCounter) SetStep(value int32) PatternFlowTcpEcnEchoCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -30086,6 +35209,7 @@ func (obj *patternFlowTcpEcnEchoCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowTcpEcnEchoCounter) SetCount(value int32) PatternFlowTcpEcnEchoCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -30153,6 +35277,7 @@ func (obj *patternFlowTcpCtlUrgCounter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowTcpCtlUrgCounter) SetStart(value int32) PatternFlowTcpCtlUrgCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -30166,6 +35291,7 @@ func (obj *patternFlowTcpCtlUrgCounter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowTcpCtlUrgCounter) SetStep(value int32) PatternFlowTcpCtlUrgCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -30179,6 +35305,7 @@ func (obj *patternFlowTcpCtlUrgCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowTcpCtlUrgCounter) SetCount(value int32) PatternFlowTcpCtlUrgCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -30246,6 +35373,7 @@ func (obj *patternFlowTcpCtlAckCounter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowTcpCtlAckCounter) SetStart(value int32) PatternFlowTcpCtlAckCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -30259,6 +35387,7 @@ func (obj *patternFlowTcpCtlAckCounter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowTcpCtlAckCounter) SetStep(value int32) PatternFlowTcpCtlAckCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -30272,6 +35401,7 @@ func (obj *patternFlowTcpCtlAckCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowTcpCtlAckCounter) SetCount(value int32) PatternFlowTcpCtlAckCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -30339,6 +35469,7 @@ func (obj *patternFlowTcpCtlPshCounter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowTcpCtlPshCounter) SetStart(value int32) PatternFlowTcpCtlPshCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -30352,6 +35483,7 @@ func (obj *patternFlowTcpCtlPshCounter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowTcpCtlPshCounter) SetStep(value int32) PatternFlowTcpCtlPshCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -30365,6 +35497,7 @@ func (obj *patternFlowTcpCtlPshCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowTcpCtlPshCounter) SetCount(value int32) PatternFlowTcpCtlPshCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -30432,6 +35565,7 @@ func (obj *patternFlowTcpCtlRstCounter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowTcpCtlRstCounter) SetStart(value int32) PatternFlowTcpCtlRstCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -30445,6 +35579,7 @@ func (obj *patternFlowTcpCtlRstCounter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowTcpCtlRstCounter) SetStep(value int32) PatternFlowTcpCtlRstCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -30458,6 +35593,7 @@ func (obj *patternFlowTcpCtlRstCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowTcpCtlRstCounter) SetCount(value int32) PatternFlowTcpCtlRstCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -30525,6 +35661,7 @@ func (obj *patternFlowTcpCtlSynCounter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowTcpCtlSynCounter) SetStart(value int32) PatternFlowTcpCtlSynCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -30538,6 +35675,7 @@ func (obj *patternFlowTcpCtlSynCounter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowTcpCtlSynCounter) SetStep(value int32) PatternFlowTcpCtlSynCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -30551,6 +35689,7 @@ func (obj *patternFlowTcpCtlSynCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowTcpCtlSynCounter) SetCount(value int32) PatternFlowTcpCtlSynCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -30618,6 +35757,7 @@ func (obj *patternFlowTcpCtlFinCounter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowTcpCtlFinCounter) SetStart(value int32) PatternFlowTcpCtlFinCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -30631,6 +35771,7 @@ func (obj *patternFlowTcpCtlFinCounter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowTcpCtlFinCounter) SetStep(value int32) PatternFlowTcpCtlFinCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -30644,6 +35785,7 @@ func (obj *patternFlowTcpCtlFinCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowTcpCtlFinCounter) SetCount(value int32) PatternFlowTcpCtlFinCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -30711,6 +35853,7 @@ func (obj *patternFlowTcpWindowCounter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowTcpWindowCounter) SetStart(value int32) PatternFlowTcpWindowCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -30724,6 +35867,7 @@ func (obj *patternFlowTcpWindowCounter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowTcpWindowCounter) SetStep(value int32) PatternFlowTcpWindowCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -30737,6 +35881,7 @@ func (obj *patternFlowTcpWindowCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowTcpWindowCounter) SetCount(value int32) PatternFlowTcpWindowCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -30804,6 +35949,7 @@ func (obj *patternFlowUdpSrcPortCounter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowUdpSrcPortCounter) SetStart(value int32) PatternFlowUdpSrcPortCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -30817,6 +35963,7 @@ func (obj *patternFlowUdpSrcPortCounter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowUdpSrcPortCounter) SetStep(value int32) PatternFlowUdpSrcPortCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -30830,6 +35977,7 @@ func (obj *patternFlowUdpSrcPortCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowUdpSrcPortCounter) SetCount(value int32) PatternFlowUdpSrcPortCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -30897,6 +36045,7 @@ func (obj *patternFlowUdpDstPortCounter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowUdpDstPortCounter) SetStart(value int32) PatternFlowUdpDstPortCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -30910,6 +36059,7 @@ func (obj *patternFlowUdpDstPortCounter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowUdpDstPortCounter) SetStep(value int32) PatternFlowUdpDstPortCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -30923,6 +36073,7 @@ func (obj *patternFlowUdpDstPortCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowUdpDstPortCounter) SetCount(value int32) PatternFlowUdpDstPortCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -30990,6 +36141,7 @@ func (obj *patternFlowUdpLengthCounter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowUdpLengthCounter) SetStart(value int32) PatternFlowUdpLengthCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -31003,6 +36155,7 @@ func (obj *patternFlowUdpLengthCounter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowUdpLengthCounter) SetStep(value int32) PatternFlowUdpLengthCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -31016,6 +36169,7 @@ func (obj *patternFlowUdpLengthCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowUdpLengthCounter) SetCount(value int32) PatternFlowUdpLengthCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -31083,6 +36237,7 @@ func (obj *patternFlowGreChecksumPresentCounter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowGreChecksumPresentCounter) SetStart(value int32) PatternFlowGreChecksumPresentCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -31096,6 +36251,7 @@ func (obj *patternFlowGreChecksumPresentCounter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowGreChecksumPresentCounter) SetStep(value int32) PatternFlowGreChecksumPresentCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -31109,6 +36265,7 @@ func (obj *patternFlowGreChecksumPresentCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowGreChecksumPresentCounter) SetCount(value int32) PatternFlowGreChecksumPresentCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -31176,6 +36333,7 @@ func (obj *patternFlowGreReserved0Counter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowGreReserved0Counter) SetStart(value int32) PatternFlowGreReserved0Counter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -31189,6 +36347,7 @@ func (obj *patternFlowGreReserved0Counter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowGreReserved0Counter) SetStep(value int32) PatternFlowGreReserved0Counter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -31202,6 +36361,7 @@ func (obj *patternFlowGreReserved0Counter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowGreReserved0Counter) SetCount(value int32) PatternFlowGreReserved0Counter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -31269,6 +36429,7 @@ func (obj *patternFlowGreVersionCounter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowGreVersionCounter) SetStart(value int32) PatternFlowGreVersionCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -31282,6 +36443,7 @@ func (obj *patternFlowGreVersionCounter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowGreVersionCounter) SetStep(value int32) PatternFlowGreVersionCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -31295,6 +36457,7 @@ func (obj *patternFlowGreVersionCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowGreVersionCounter) SetCount(value int32) PatternFlowGreVersionCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -31362,6 +36525,7 @@ func (obj *patternFlowGreProtocolCounter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowGreProtocolCounter) SetStart(value int32) PatternFlowGreProtocolCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -31375,6 +36539,7 @@ func (obj *patternFlowGreProtocolCounter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowGreProtocolCounter) SetStep(value int32) PatternFlowGreProtocolCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -31388,6 +36553,7 @@ func (obj *patternFlowGreProtocolCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowGreProtocolCounter) SetCount(value int32) PatternFlowGreProtocolCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -31455,6 +36621,7 @@ func (obj *patternFlowGreReserved1Counter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowGreReserved1Counter) SetStart(value int32) PatternFlowGreReserved1Counter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -31468,6 +36635,7 @@ func (obj *patternFlowGreReserved1Counter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowGreReserved1Counter) SetStep(value int32) PatternFlowGreReserved1Counter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -31481,6 +36649,7 @@ func (obj *patternFlowGreReserved1Counter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowGreReserved1Counter) SetCount(value int32) PatternFlowGreReserved1Counter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -31548,6 +36717,7 @@ func (obj *patternFlowGtpv1VersionCounter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowGtpv1VersionCounter) SetStart(value int32) PatternFlowGtpv1VersionCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -31561,6 +36731,7 @@ func (obj *patternFlowGtpv1VersionCounter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowGtpv1VersionCounter) SetStep(value int32) PatternFlowGtpv1VersionCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -31574,6 +36745,7 @@ func (obj *patternFlowGtpv1VersionCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowGtpv1VersionCounter) SetCount(value int32) PatternFlowGtpv1VersionCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -31641,6 +36813,7 @@ func (obj *patternFlowGtpv1ProtocolTypeCounter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowGtpv1ProtocolTypeCounter) SetStart(value int32) PatternFlowGtpv1ProtocolTypeCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -31654,6 +36827,7 @@ func (obj *patternFlowGtpv1ProtocolTypeCounter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowGtpv1ProtocolTypeCounter) SetStep(value int32) PatternFlowGtpv1ProtocolTypeCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -31667,6 +36841,7 @@ func (obj *patternFlowGtpv1ProtocolTypeCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowGtpv1ProtocolTypeCounter) SetCount(value int32) PatternFlowGtpv1ProtocolTypeCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -31734,6 +36909,7 @@ func (obj *patternFlowGtpv1ReservedCounter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowGtpv1ReservedCounter) SetStart(value int32) PatternFlowGtpv1ReservedCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -31747,6 +36923,7 @@ func (obj *patternFlowGtpv1ReservedCounter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowGtpv1ReservedCounter) SetStep(value int32) PatternFlowGtpv1ReservedCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -31760,6 +36937,7 @@ func (obj *patternFlowGtpv1ReservedCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowGtpv1ReservedCounter) SetCount(value int32) PatternFlowGtpv1ReservedCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -31827,6 +37005,7 @@ func (obj *patternFlowGtpv1EFlagCounter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowGtpv1EFlagCounter) SetStart(value int32) PatternFlowGtpv1EFlagCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -31840,6 +37019,7 @@ func (obj *patternFlowGtpv1EFlagCounter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowGtpv1EFlagCounter) SetStep(value int32) PatternFlowGtpv1EFlagCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -31853,6 +37033,7 @@ func (obj *patternFlowGtpv1EFlagCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowGtpv1EFlagCounter) SetCount(value int32) PatternFlowGtpv1EFlagCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -31920,6 +37101,7 @@ func (obj *patternFlowGtpv1SFlagCounter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowGtpv1SFlagCounter) SetStart(value int32) PatternFlowGtpv1SFlagCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -31933,6 +37115,7 @@ func (obj *patternFlowGtpv1SFlagCounter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowGtpv1SFlagCounter) SetStep(value int32) PatternFlowGtpv1SFlagCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -31946,6 +37129,7 @@ func (obj *patternFlowGtpv1SFlagCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowGtpv1SFlagCounter) SetCount(value int32) PatternFlowGtpv1SFlagCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -32013,6 +37197,7 @@ func (obj *patternFlowGtpv1PnFlagCounter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowGtpv1PnFlagCounter) SetStart(value int32) PatternFlowGtpv1PnFlagCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -32026,6 +37211,7 @@ func (obj *patternFlowGtpv1PnFlagCounter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowGtpv1PnFlagCounter) SetStep(value int32) PatternFlowGtpv1PnFlagCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -32039,6 +37225,7 @@ func (obj *patternFlowGtpv1PnFlagCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowGtpv1PnFlagCounter) SetCount(value int32) PatternFlowGtpv1PnFlagCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -32106,6 +37293,7 @@ func (obj *patternFlowGtpv1MessageTypeCounter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowGtpv1MessageTypeCounter) SetStart(value int32) PatternFlowGtpv1MessageTypeCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -32119,6 +37307,7 @@ func (obj *patternFlowGtpv1MessageTypeCounter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowGtpv1MessageTypeCounter) SetStep(value int32) PatternFlowGtpv1MessageTypeCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -32132,6 +37321,7 @@ func (obj *patternFlowGtpv1MessageTypeCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowGtpv1MessageTypeCounter) SetCount(value int32) PatternFlowGtpv1MessageTypeCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -32199,6 +37389,7 @@ func (obj *patternFlowGtpv1MessageLengthCounter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowGtpv1MessageLengthCounter) SetStart(value int32) PatternFlowGtpv1MessageLengthCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -32212,6 +37403,7 @@ func (obj *patternFlowGtpv1MessageLengthCounter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowGtpv1MessageLengthCounter) SetStep(value int32) PatternFlowGtpv1MessageLengthCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -32225,6 +37417,7 @@ func (obj *patternFlowGtpv1MessageLengthCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowGtpv1MessageLengthCounter) SetCount(value int32) PatternFlowGtpv1MessageLengthCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -32292,6 +37485,7 @@ func (obj *patternFlowGtpv1TeidCounter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowGtpv1TeidCounter) SetStart(value int32) PatternFlowGtpv1TeidCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -32305,6 +37499,7 @@ func (obj *patternFlowGtpv1TeidCounter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowGtpv1TeidCounter) SetStep(value int32) PatternFlowGtpv1TeidCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -32318,6 +37513,7 @@ func (obj *patternFlowGtpv1TeidCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowGtpv1TeidCounter) SetCount(value int32) PatternFlowGtpv1TeidCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -32385,6 +37581,7 @@ func (obj *patternFlowGtpv1SquenceNumberCounter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowGtpv1SquenceNumberCounter) SetStart(value int32) PatternFlowGtpv1SquenceNumberCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -32398,6 +37595,7 @@ func (obj *patternFlowGtpv1SquenceNumberCounter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowGtpv1SquenceNumberCounter) SetStep(value int32) PatternFlowGtpv1SquenceNumberCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -32411,6 +37609,7 @@ func (obj *patternFlowGtpv1SquenceNumberCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowGtpv1SquenceNumberCounter) SetCount(value int32) PatternFlowGtpv1SquenceNumberCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -32478,6 +37677,7 @@ func (obj *patternFlowGtpv1NPduNumberCounter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowGtpv1NPduNumberCounter) SetStart(value int32) PatternFlowGtpv1NPduNumberCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -32491,6 +37691,7 @@ func (obj *patternFlowGtpv1NPduNumberCounter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowGtpv1NPduNumberCounter) SetStep(value int32) PatternFlowGtpv1NPduNumberCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -32504,6 +37705,7 @@ func (obj *patternFlowGtpv1NPduNumberCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowGtpv1NPduNumberCounter) SetCount(value int32) PatternFlowGtpv1NPduNumberCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -32571,6 +37773,7 @@ func (obj *patternFlowGtpv1NextExtensionHeaderTypeCounter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowGtpv1NextExtensionHeaderTypeCounter) SetStart(value int32) PatternFlowGtpv1NextExtensionHeaderTypeCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -32584,6 +37787,7 @@ func (obj *patternFlowGtpv1NextExtensionHeaderTypeCounter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowGtpv1NextExtensionHeaderTypeCounter) SetStep(value int32) PatternFlowGtpv1NextExtensionHeaderTypeCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -32597,6 +37801,7 @@ func (obj *patternFlowGtpv1NextExtensionHeaderTypeCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowGtpv1NextExtensionHeaderTypeCounter) SetCount(value int32) PatternFlowGtpv1NextExtensionHeaderTypeCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -32646,6 +37851,8 @@ type PatternFlowGtpExtensionExtensionLength interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowGtpExtensionExtensionLengthChoiceEnum
+	SetChoice(value PatternFlowGtpExtensionExtensionLengthChoiceEnum) PatternFlowGtpExtensionExtensionLength
 	Value() int32
 	SetValue(value int32) PatternFlowGtpExtensionExtensionLength
 	Values() []int32
@@ -32654,6 +37861,33 @@ type PatternFlowGtpExtensionExtensionLength interface {
 	SetMetricGroup(value string) PatternFlowGtpExtensionExtensionLength
 	Increment() PatternFlowGtpExtensionExtensionLengthCounter
 	Decrement() PatternFlowGtpExtensionExtensionLengthCounter
+}
+
+type PatternFlowGtpExtensionExtensionLengthChoiceEnum string
+
+var PatternFlowGtpExtensionExtensionLengthChoice = struct {
+	UNSPECIFIED PatternFlowGtpExtensionExtensionLengthChoiceEnum
+	VALUE       PatternFlowGtpExtensionExtensionLengthChoiceEnum
+	VALUES      PatternFlowGtpExtensionExtensionLengthChoiceEnum
+	INCREMENT   PatternFlowGtpExtensionExtensionLengthChoiceEnum
+	DECREMENT   PatternFlowGtpExtensionExtensionLengthChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowGtpExtensionExtensionLengthChoiceEnum("unspecified"),
+	VALUE:       PatternFlowGtpExtensionExtensionLengthChoiceEnum("value"),
+	VALUES:      PatternFlowGtpExtensionExtensionLengthChoiceEnum("values"),
+	INCREMENT:   PatternFlowGtpExtensionExtensionLengthChoiceEnum("increment"),
+	DECREMENT:   PatternFlowGtpExtensionExtensionLengthChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowGtpExtensionExtensionLength) Choice() PatternFlowGtpExtensionExtensionLengthChoiceEnum {
+	return PatternFlowGtpExtensionExtensionLengthChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowGtpExtensionExtensionLength) SetChoice(value PatternFlowGtpExtensionExtensionLengthChoiceEnum) PatternFlowGtpExtensionExtensionLength {
+	intValue := snappipb.PatternFlowGtpExtensionExtensionLength_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowGtpExtensionExtensionLength_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -32666,6 +37900,7 @@ func (obj *patternFlowGtpExtensionExtensionLength) Value() int32 {
 //  description is TBD
 func (obj *patternFlowGtpExtensionExtensionLength) SetValue(value int32) PatternFlowGtpExtensionExtensionLength {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowGtpExtensionExtensionLengthChoice.VALUE)
 	return obj
 }
 
@@ -32679,6 +37914,7 @@ func (obj *patternFlowGtpExtensionExtensionLength) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowGtpExtensionExtensionLength) SetValues(value []int32) PatternFlowGtpExtensionExtensionLength {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowGtpExtensionExtensionLengthChoice.VALUES)
 	return obj
 }
 
@@ -32692,6 +37928,7 @@ func (obj *patternFlowGtpExtensionExtensionLength) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowGtpExtensionExtensionLength) SetMetricGroup(value string) PatternFlowGtpExtensionExtensionLength {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -32701,8 +37938,8 @@ func (obj *patternFlowGtpExtensionExtensionLength) Increment() PatternFlowGtpExt
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowGtpExtensionExtensionLengthCounter{}
 	}
+	obj.SetChoice(PatternFlowGtpExtensionExtensionLengthChoice.INCREMENT)
 	return &patternFlowGtpExtensionExtensionLengthCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowGtpExtensionExtensionLengthCounter
@@ -32711,8 +37948,8 @@ func (obj *patternFlowGtpExtensionExtensionLength) Decrement() PatternFlowGtpExt
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowGtpExtensionExtensionLengthCounter{}
 	}
+	obj.SetChoice(PatternFlowGtpExtensionExtensionLengthChoice.DECREMENT)
 	return &patternFlowGtpExtensionExtensionLengthCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowGtpExtensionContents struct {
@@ -32761,6 +37998,8 @@ type PatternFlowGtpExtensionContents interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowGtpExtensionContentsChoiceEnum
+	SetChoice(value PatternFlowGtpExtensionContentsChoiceEnum) PatternFlowGtpExtensionContents
 	Value() int32
 	SetValue(value int32) PatternFlowGtpExtensionContents
 	Values() []int32
@@ -32769,6 +38008,33 @@ type PatternFlowGtpExtensionContents interface {
 	SetMetricGroup(value string) PatternFlowGtpExtensionContents
 	Increment() PatternFlowGtpExtensionContentsCounter
 	Decrement() PatternFlowGtpExtensionContentsCounter
+}
+
+type PatternFlowGtpExtensionContentsChoiceEnum string
+
+var PatternFlowGtpExtensionContentsChoice = struct {
+	UNSPECIFIED PatternFlowGtpExtensionContentsChoiceEnum
+	VALUE       PatternFlowGtpExtensionContentsChoiceEnum
+	VALUES      PatternFlowGtpExtensionContentsChoiceEnum
+	INCREMENT   PatternFlowGtpExtensionContentsChoiceEnum
+	DECREMENT   PatternFlowGtpExtensionContentsChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowGtpExtensionContentsChoiceEnum("unspecified"),
+	VALUE:       PatternFlowGtpExtensionContentsChoiceEnum("value"),
+	VALUES:      PatternFlowGtpExtensionContentsChoiceEnum("values"),
+	INCREMENT:   PatternFlowGtpExtensionContentsChoiceEnum("increment"),
+	DECREMENT:   PatternFlowGtpExtensionContentsChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowGtpExtensionContents) Choice() PatternFlowGtpExtensionContentsChoiceEnum {
+	return PatternFlowGtpExtensionContentsChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowGtpExtensionContents) SetChoice(value PatternFlowGtpExtensionContentsChoiceEnum) PatternFlowGtpExtensionContents {
+	intValue := snappipb.PatternFlowGtpExtensionContents_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowGtpExtensionContents_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -32781,6 +38047,7 @@ func (obj *patternFlowGtpExtensionContents) Value() int32 {
 //  description is TBD
 func (obj *patternFlowGtpExtensionContents) SetValue(value int32) PatternFlowGtpExtensionContents {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowGtpExtensionContentsChoice.VALUE)
 	return obj
 }
 
@@ -32794,6 +38061,7 @@ func (obj *patternFlowGtpExtensionContents) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowGtpExtensionContents) SetValues(value []int32) PatternFlowGtpExtensionContents {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowGtpExtensionContentsChoice.VALUES)
 	return obj
 }
 
@@ -32807,6 +38075,7 @@ func (obj *patternFlowGtpExtensionContents) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowGtpExtensionContents) SetMetricGroup(value string) PatternFlowGtpExtensionContents {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -32816,8 +38085,8 @@ func (obj *patternFlowGtpExtensionContents) Increment() PatternFlowGtpExtensionC
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowGtpExtensionContentsCounter{}
 	}
+	obj.SetChoice(PatternFlowGtpExtensionContentsChoice.INCREMENT)
 	return &patternFlowGtpExtensionContentsCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowGtpExtensionContentsCounter
@@ -32826,8 +38095,8 @@ func (obj *patternFlowGtpExtensionContents) Decrement() PatternFlowGtpExtensionC
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowGtpExtensionContentsCounter{}
 	}
+	obj.SetChoice(PatternFlowGtpExtensionContentsChoice.DECREMENT)
 	return &patternFlowGtpExtensionContentsCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowGtpExtensionNextExtensionHeader struct {
@@ -32876,6 +38145,8 @@ type PatternFlowGtpExtensionNextExtensionHeader interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowGtpExtensionNextExtensionHeaderChoiceEnum
+	SetChoice(value PatternFlowGtpExtensionNextExtensionHeaderChoiceEnum) PatternFlowGtpExtensionNextExtensionHeader
 	Value() int32
 	SetValue(value int32) PatternFlowGtpExtensionNextExtensionHeader
 	Values() []int32
@@ -32884,6 +38155,33 @@ type PatternFlowGtpExtensionNextExtensionHeader interface {
 	SetMetricGroup(value string) PatternFlowGtpExtensionNextExtensionHeader
 	Increment() PatternFlowGtpExtensionNextExtensionHeaderCounter
 	Decrement() PatternFlowGtpExtensionNextExtensionHeaderCounter
+}
+
+type PatternFlowGtpExtensionNextExtensionHeaderChoiceEnum string
+
+var PatternFlowGtpExtensionNextExtensionHeaderChoice = struct {
+	UNSPECIFIED PatternFlowGtpExtensionNextExtensionHeaderChoiceEnum
+	VALUE       PatternFlowGtpExtensionNextExtensionHeaderChoiceEnum
+	VALUES      PatternFlowGtpExtensionNextExtensionHeaderChoiceEnum
+	INCREMENT   PatternFlowGtpExtensionNextExtensionHeaderChoiceEnum
+	DECREMENT   PatternFlowGtpExtensionNextExtensionHeaderChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowGtpExtensionNextExtensionHeaderChoiceEnum("unspecified"),
+	VALUE:       PatternFlowGtpExtensionNextExtensionHeaderChoiceEnum("value"),
+	VALUES:      PatternFlowGtpExtensionNextExtensionHeaderChoiceEnum("values"),
+	INCREMENT:   PatternFlowGtpExtensionNextExtensionHeaderChoiceEnum("increment"),
+	DECREMENT:   PatternFlowGtpExtensionNextExtensionHeaderChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowGtpExtensionNextExtensionHeader) Choice() PatternFlowGtpExtensionNextExtensionHeaderChoiceEnum {
+	return PatternFlowGtpExtensionNextExtensionHeaderChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowGtpExtensionNextExtensionHeader) SetChoice(value PatternFlowGtpExtensionNextExtensionHeaderChoiceEnum) PatternFlowGtpExtensionNextExtensionHeader {
+	intValue := snappipb.PatternFlowGtpExtensionNextExtensionHeader_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowGtpExtensionNextExtensionHeader_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -32896,6 +38194,7 @@ func (obj *patternFlowGtpExtensionNextExtensionHeader) Value() int32 {
 //  description is TBD
 func (obj *patternFlowGtpExtensionNextExtensionHeader) SetValue(value int32) PatternFlowGtpExtensionNextExtensionHeader {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowGtpExtensionNextExtensionHeaderChoice.VALUE)
 	return obj
 }
 
@@ -32909,6 +38208,7 @@ func (obj *patternFlowGtpExtensionNextExtensionHeader) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowGtpExtensionNextExtensionHeader) SetValues(value []int32) PatternFlowGtpExtensionNextExtensionHeader {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowGtpExtensionNextExtensionHeaderChoice.VALUES)
 	return obj
 }
 
@@ -32922,6 +38222,7 @@ func (obj *patternFlowGtpExtensionNextExtensionHeader) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowGtpExtensionNextExtensionHeader) SetMetricGroup(value string) PatternFlowGtpExtensionNextExtensionHeader {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -32931,8 +38232,8 @@ func (obj *patternFlowGtpExtensionNextExtensionHeader) Increment() PatternFlowGt
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowGtpExtensionNextExtensionHeaderCounter{}
 	}
+	obj.SetChoice(PatternFlowGtpExtensionNextExtensionHeaderChoice.INCREMENT)
 	return &patternFlowGtpExtensionNextExtensionHeaderCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowGtpExtensionNextExtensionHeaderCounter
@@ -32941,8 +38242,8 @@ func (obj *patternFlowGtpExtensionNextExtensionHeader) Decrement() PatternFlowGt
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowGtpExtensionNextExtensionHeaderCounter{}
 	}
+	obj.SetChoice(PatternFlowGtpExtensionNextExtensionHeaderChoice.DECREMENT)
 	return &patternFlowGtpExtensionNextExtensionHeaderCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowGtpv2VersionCounter struct {
@@ -33009,6 +38310,7 @@ func (obj *patternFlowGtpv2VersionCounter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowGtpv2VersionCounter) SetStart(value int32) PatternFlowGtpv2VersionCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -33022,6 +38324,7 @@ func (obj *patternFlowGtpv2VersionCounter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowGtpv2VersionCounter) SetStep(value int32) PatternFlowGtpv2VersionCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -33035,6 +38338,7 @@ func (obj *patternFlowGtpv2VersionCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowGtpv2VersionCounter) SetCount(value int32) PatternFlowGtpv2VersionCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -33102,6 +38406,7 @@ func (obj *patternFlowGtpv2PiggybackingFlagCounter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowGtpv2PiggybackingFlagCounter) SetStart(value int32) PatternFlowGtpv2PiggybackingFlagCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -33115,6 +38420,7 @@ func (obj *patternFlowGtpv2PiggybackingFlagCounter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowGtpv2PiggybackingFlagCounter) SetStep(value int32) PatternFlowGtpv2PiggybackingFlagCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -33128,6 +38434,7 @@ func (obj *patternFlowGtpv2PiggybackingFlagCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowGtpv2PiggybackingFlagCounter) SetCount(value int32) PatternFlowGtpv2PiggybackingFlagCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -33195,6 +38502,7 @@ func (obj *patternFlowGtpv2TeidFlagCounter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowGtpv2TeidFlagCounter) SetStart(value int32) PatternFlowGtpv2TeidFlagCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -33208,6 +38516,7 @@ func (obj *patternFlowGtpv2TeidFlagCounter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowGtpv2TeidFlagCounter) SetStep(value int32) PatternFlowGtpv2TeidFlagCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -33221,6 +38530,7 @@ func (obj *patternFlowGtpv2TeidFlagCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowGtpv2TeidFlagCounter) SetCount(value int32) PatternFlowGtpv2TeidFlagCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -33288,6 +38598,7 @@ func (obj *patternFlowGtpv2Spare1Counter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowGtpv2Spare1Counter) SetStart(value int32) PatternFlowGtpv2Spare1Counter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -33301,6 +38612,7 @@ func (obj *patternFlowGtpv2Spare1Counter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowGtpv2Spare1Counter) SetStep(value int32) PatternFlowGtpv2Spare1Counter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -33314,6 +38626,7 @@ func (obj *patternFlowGtpv2Spare1Counter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowGtpv2Spare1Counter) SetCount(value int32) PatternFlowGtpv2Spare1Counter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -33381,6 +38694,7 @@ func (obj *patternFlowGtpv2MessageTypeCounter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowGtpv2MessageTypeCounter) SetStart(value int32) PatternFlowGtpv2MessageTypeCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -33394,6 +38708,7 @@ func (obj *patternFlowGtpv2MessageTypeCounter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowGtpv2MessageTypeCounter) SetStep(value int32) PatternFlowGtpv2MessageTypeCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -33407,6 +38722,7 @@ func (obj *patternFlowGtpv2MessageTypeCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowGtpv2MessageTypeCounter) SetCount(value int32) PatternFlowGtpv2MessageTypeCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -33474,6 +38790,7 @@ func (obj *patternFlowGtpv2MessageLengthCounter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowGtpv2MessageLengthCounter) SetStart(value int32) PatternFlowGtpv2MessageLengthCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -33487,6 +38804,7 @@ func (obj *patternFlowGtpv2MessageLengthCounter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowGtpv2MessageLengthCounter) SetStep(value int32) PatternFlowGtpv2MessageLengthCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -33500,6 +38818,7 @@ func (obj *patternFlowGtpv2MessageLengthCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowGtpv2MessageLengthCounter) SetCount(value int32) PatternFlowGtpv2MessageLengthCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -33567,6 +38886,7 @@ func (obj *patternFlowGtpv2TeidCounter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowGtpv2TeidCounter) SetStart(value int32) PatternFlowGtpv2TeidCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -33580,6 +38900,7 @@ func (obj *patternFlowGtpv2TeidCounter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowGtpv2TeidCounter) SetStep(value int32) PatternFlowGtpv2TeidCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -33593,6 +38914,7 @@ func (obj *patternFlowGtpv2TeidCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowGtpv2TeidCounter) SetCount(value int32) PatternFlowGtpv2TeidCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -33660,6 +38982,7 @@ func (obj *patternFlowGtpv2SequenceNumberCounter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowGtpv2SequenceNumberCounter) SetStart(value int32) PatternFlowGtpv2SequenceNumberCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -33673,6 +38996,7 @@ func (obj *patternFlowGtpv2SequenceNumberCounter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowGtpv2SequenceNumberCounter) SetStep(value int32) PatternFlowGtpv2SequenceNumberCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -33686,6 +39010,7 @@ func (obj *patternFlowGtpv2SequenceNumberCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowGtpv2SequenceNumberCounter) SetCount(value int32) PatternFlowGtpv2SequenceNumberCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -33753,6 +39078,7 @@ func (obj *patternFlowGtpv2Spare2Counter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowGtpv2Spare2Counter) SetStart(value int32) PatternFlowGtpv2Spare2Counter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -33766,6 +39092,7 @@ func (obj *patternFlowGtpv2Spare2Counter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowGtpv2Spare2Counter) SetStep(value int32) PatternFlowGtpv2Spare2Counter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -33779,6 +39106,7 @@ func (obj *patternFlowGtpv2Spare2Counter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowGtpv2Spare2Counter) SetCount(value int32) PatternFlowGtpv2Spare2Counter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -33846,6 +39174,7 @@ func (obj *patternFlowArpHardwareTypeCounter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowArpHardwareTypeCounter) SetStart(value int32) PatternFlowArpHardwareTypeCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -33859,6 +39188,7 @@ func (obj *patternFlowArpHardwareTypeCounter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowArpHardwareTypeCounter) SetStep(value int32) PatternFlowArpHardwareTypeCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -33872,6 +39202,7 @@ func (obj *patternFlowArpHardwareTypeCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowArpHardwareTypeCounter) SetCount(value int32) PatternFlowArpHardwareTypeCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -33939,6 +39270,7 @@ func (obj *patternFlowArpProtocolTypeCounter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowArpProtocolTypeCounter) SetStart(value int32) PatternFlowArpProtocolTypeCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -33952,6 +39284,7 @@ func (obj *patternFlowArpProtocolTypeCounter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowArpProtocolTypeCounter) SetStep(value int32) PatternFlowArpProtocolTypeCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -33965,6 +39298,7 @@ func (obj *patternFlowArpProtocolTypeCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowArpProtocolTypeCounter) SetCount(value int32) PatternFlowArpProtocolTypeCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -34032,6 +39366,7 @@ func (obj *patternFlowArpHardwareLengthCounter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowArpHardwareLengthCounter) SetStart(value int32) PatternFlowArpHardwareLengthCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -34045,6 +39380,7 @@ func (obj *patternFlowArpHardwareLengthCounter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowArpHardwareLengthCounter) SetStep(value int32) PatternFlowArpHardwareLengthCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -34058,6 +39394,7 @@ func (obj *patternFlowArpHardwareLengthCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowArpHardwareLengthCounter) SetCount(value int32) PatternFlowArpHardwareLengthCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -34125,6 +39462,7 @@ func (obj *patternFlowArpProtocolLengthCounter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowArpProtocolLengthCounter) SetStart(value int32) PatternFlowArpProtocolLengthCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -34138,6 +39476,7 @@ func (obj *patternFlowArpProtocolLengthCounter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowArpProtocolLengthCounter) SetStep(value int32) PatternFlowArpProtocolLengthCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -34151,6 +39490,7 @@ func (obj *patternFlowArpProtocolLengthCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowArpProtocolLengthCounter) SetCount(value int32) PatternFlowArpProtocolLengthCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -34218,6 +39558,7 @@ func (obj *patternFlowArpOperationCounter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowArpOperationCounter) SetStart(value int32) PatternFlowArpOperationCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -34231,6 +39572,7 @@ func (obj *patternFlowArpOperationCounter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowArpOperationCounter) SetStep(value int32) PatternFlowArpOperationCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -34244,6 +39586,7 @@ func (obj *patternFlowArpOperationCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowArpOperationCounter) SetCount(value int32) PatternFlowArpOperationCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -34311,6 +39654,7 @@ func (obj *patternFlowArpSenderHardwareAddrCounter) Start() string {
 //  description is TBD
 func (obj *patternFlowArpSenderHardwareAddrCounter) SetStart(value string) PatternFlowArpSenderHardwareAddrCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -34324,6 +39668,7 @@ func (obj *patternFlowArpSenderHardwareAddrCounter) Step() string {
 //  description is TBD
 func (obj *patternFlowArpSenderHardwareAddrCounter) SetStep(value string) PatternFlowArpSenderHardwareAddrCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -34337,6 +39682,7 @@ func (obj *patternFlowArpSenderHardwareAddrCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowArpSenderHardwareAddrCounter) SetCount(value int32) PatternFlowArpSenderHardwareAddrCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -34404,6 +39750,7 @@ func (obj *patternFlowArpSenderProtocolAddrCounter) Start() string {
 //  description is TBD
 func (obj *patternFlowArpSenderProtocolAddrCounter) SetStart(value string) PatternFlowArpSenderProtocolAddrCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -34417,6 +39764,7 @@ func (obj *patternFlowArpSenderProtocolAddrCounter) Step() string {
 //  description is TBD
 func (obj *patternFlowArpSenderProtocolAddrCounter) SetStep(value string) PatternFlowArpSenderProtocolAddrCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -34430,6 +39778,7 @@ func (obj *patternFlowArpSenderProtocolAddrCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowArpSenderProtocolAddrCounter) SetCount(value int32) PatternFlowArpSenderProtocolAddrCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -34497,6 +39846,7 @@ func (obj *patternFlowArpTargetHardwareAddrCounter) Start() string {
 //  description is TBD
 func (obj *patternFlowArpTargetHardwareAddrCounter) SetStart(value string) PatternFlowArpTargetHardwareAddrCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -34510,6 +39860,7 @@ func (obj *patternFlowArpTargetHardwareAddrCounter) Step() string {
 //  description is TBD
 func (obj *patternFlowArpTargetHardwareAddrCounter) SetStep(value string) PatternFlowArpTargetHardwareAddrCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -34523,6 +39874,7 @@ func (obj *patternFlowArpTargetHardwareAddrCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowArpTargetHardwareAddrCounter) SetCount(value int32) PatternFlowArpTargetHardwareAddrCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -34590,6 +39942,7 @@ func (obj *patternFlowArpTargetProtocolAddrCounter) Start() string {
 //  description is TBD
 func (obj *patternFlowArpTargetProtocolAddrCounter) SetStart(value string) PatternFlowArpTargetProtocolAddrCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -34603,6 +39956,7 @@ func (obj *patternFlowArpTargetProtocolAddrCounter) Step() string {
 //  description is TBD
 func (obj *patternFlowArpTargetProtocolAddrCounter) SetStep(value string) PatternFlowArpTargetProtocolAddrCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -34616,6 +39970,7 @@ func (obj *patternFlowArpTargetProtocolAddrCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowArpTargetProtocolAddrCounter) SetCount(value int32) PatternFlowArpTargetProtocolAddrCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -34665,6 +40020,8 @@ type PatternFlowIcmpEchoType interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowIcmpEchoTypeChoiceEnum
+	SetChoice(value PatternFlowIcmpEchoTypeChoiceEnum) PatternFlowIcmpEchoType
 	Value() int32
 	SetValue(value int32) PatternFlowIcmpEchoType
 	Values() []int32
@@ -34673,6 +40030,33 @@ type PatternFlowIcmpEchoType interface {
 	SetMetricGroup(value string) PatternFlowIcmpEchoType
 	Increment() PatternFlowIcmpEchoTypeCounter
 	Decrement() PatternFlowIcmpEchoTypeCounter
+}
+
+type PatternFlowIcmpEchoTypeChoiceEnum string
+
+var PatternFlowIcmpEchoTypeChoice = struct {
+	UNSPECIFIED PatternFlowIcmpEchoTypeChoiceEnum
+	VALUE       PatternFlowIcmpEchoTypeChoiceEnum
+	VALUES      PatternFlowIcmpEchoTypeChoiceEnum
+	INCREMENT   PatternFlowIcmpEchoTypeChoiceEnum
+	DECREMENT   PatternFlowIcmpEchoTypeChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowIcmpEchoTypeChoiceEnum("unspecified"),
+	VALUE:       PatternFlowIcmpEchoTypeChoiceEnum("value"),
+	VALUES:      PatternFlowIcmpEchoTypeChoiceEnum("values"),
+	INCREMENT:   PatternFlowIcmpEchoTypeChoiceEnum("increment"),
+	DECREMENT:   PatternFlowIcmpEchoTypeChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowIcmpEchoType) Choice() PatternFlowIcmpEchoTypeChoiceEnum {
+	return PatternFlowIcmpEchoTypeChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowIcmpEchoType) SetChoice(value PatternFlowIcmpEchoTypeChoiceEnum) PatternFlowIcmpEchoType {
+	intValue := snappipb.PatternFlowIcmpEchoType_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowIcmpEchoType_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -34685,6 +40069,7 @@ func (obj *patternFlowIcmpEchoType) Value() int32 {
 //  description is TBD
 func (obj *patternFlowIcmpEchoType) SetValue(value int32) PatternFlowIcmpEchoType {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowIcmpEchoTypeChoice.VALUE)
 	return obj
 }
 
@@ -34698,6 +40083,7 @@ func (obj *patternFlowIcmpEchoType) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowIcmpEchoType) SetValues(value []int32) PatternFlowIcmpEchoType {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowIcmpEchoTypeChoice.VALUES)
 	return obj
 }
 
@@ -34711,6 +40097,7 @@ func (obj *patternFlowIcmpEchoType) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowIcmpEchoType) SetMetricGroup(value string) PatternFlowIcmpEchoType {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -34720,8 +40107,8 @@ func (obj *patternFlowIcmpEchoType) Increment() PatternFlowIcmpEchoTypeCounter {
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowIcmpEchoTypeCounter{}
 	}
+	obj.SetChoice(PatternFlowIcmpEchoTypeChoice.INCREMENT)
 	return &patternFlowIcmpEchoTypeCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowIcmpEchoTypeCounter
@@ -34730,8 +40117,8 @@ func (obj *patternFlowIcmpEchoType) Decrement() PatternFlowIcmpEchoTypeCounter {
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowIcmpEchoTypeCounter{}
 	}
+	obj.SetChoice(PatternFlowIcmpEchoTypeChoice.DECREMENT)
 	return &patternFlowIcmpEchoTypeCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowIcmpEchoCode struct {
@@ -34780,6 +40167,8 @@ type PatternFlowIcmpEchoCode interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowIcmpEchoCodeChoiceEnum
+	SetChoice(value PatternFlowIcmpEchoCodeChoiceEnum) PatternFlowIcmpEchoCode
 	Value() int32
 	SetValue(value int32) PatternFlowIcmpEchoCode
 	Values() []int32
@@ -34788,6 +40177,33 @@ type PatternFlowIcmpEchoCode interface {
 	SetMetricGroup(value string) PatternFlowIcmpEchoCode
 	Increment() PatternFlowIcmpEchoCodeCounter
 	Decrement() PatternFlowIcmpEchoCodeCounter
+}
+
+type PatternFlowIcmpEchoCodeChoiceEnum string
+
+var PatternFlowIcmpEchoCodeChoice = struct {
+	UNSPECIFIED PatternFlowIcmpEchoCodeChoiceEnum
+	VALUE       PatternFlowIcmpEchoCodeChoiceEnum
+	VALUES      PatternFlowIcmpEchoCodeChoiceEnum
+	INCREMENT   PatternFlowIcmpEchoCodeChoiceEnum
+	DECREMENT   PatternFlowIcmpEchoCodeChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowIcmpEchoCodeChoiceEnum("unspecified"),
+	VALUE:       PatternFlowIcmpEchoCodeChoiceEnum("value"),
+	VALUES:      PatternFlowIcmpEchoCodeChoiceEnum("values"),
+	INCREMENT:   PatternFlowIcmpEchoCodeChoiceEnum("increment"),
+	DECREMENT:   PatternFlowIcmpEchoCodeChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowIcmpEchoCode) Choice() PatternFlowIcmpEchoCodeChoiceEnum {
+	return PatternFlowIcmpEchoCodeChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowIcmpEchoCode) SetChoice(value PatternFlowIcmpEchoCodeChoiceEnum) PatternFlowIcmpEchoCode {
+	intValue := snappipb.PatternFlowIcmpEchoCode_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowIcmpEchoCode_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -34800,6 +40216,7 @@ func (obj *patternFlowIcmpEchoCode) Value() int32 {
 //  description is TBD
 func (obj *patternFlowIcmpEchoCode) SetValue(value int32) PatternFlowIcmpEchoCode {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowIcmpEchoCodeChoice.VALUE)
 	return obj
 }
 
@@ -34813,6 +40230,7 @@ func (obj *patternFlowIcmpEchoCode) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowIcmpEchoCode) SetValues(value []int32) PatternFlowIcmpEchoCode {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowIcmpEchoCodeChoice.VALUES)
 	return obj
 }
 
@@ -34826,6 +40244,7 @@ func (obj *patternFlowIcmpEchoCode) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowIcmpEchoCode) SetMetricGroup(value string) PatternFlowIcmpEchoCode {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -34835,8 +40254,8 @@ func (obj *patternFlowIcmpEchoCode) Increment() PatternFlowIcmpEchoCodeCounter {
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowIcmpEchoCodeCounter{}
 	}
+	obj.SetChoice(PatternFlowIcmpEchoCodeChoice.INCREMENT)
 	return &patternFlowIcmpEchoCodeCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowIcmpEchoCodeCounter
@@ -34845,8 +40264,8 @@ func (obj *patternFlowIcmpEchoCode) Decrement() PatternFlowIcmpEchoCodeCounter {
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowIcmpEchoCodeCounter{}
 	}
+	obj.SetChoice(PatternFlowIcmpEchoCodeChoice.DECREMENT)
 	return &patternFlowIcmpEchoCodeCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowIcmpEchoChecksum struct {
@@ -34895,8 +40314,57 @@ type PatternFlowIcmpEchoChecksum interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowIcmpEchoChecksumChoiceEnum
+	SetChoice(value PatternFlowIcmpEchoChecksumChoiceEnum) PatternFlowIcmpEchoChecksum
+	Generated() PatternFlowIcmpEchoChecksumGeneratedEnum
+	SetGenerated(value PatternFlowIcmpEchoChecksumGeneratedEnum) PatternFlowIcmpEchoChecksum
 	Custom() int32
 	SetCustom(value int32) PatternFlowIcmpEchoChecksum
+}
+
+type PatternFlowIcmpEchoChecksumChoiceEnum string
+
+var PatternFlowIcmpEchoChecksumChoice = struct {
+	UNSPECIFIED PatternFlowIcmpEchoChecksumChoiceEnum
+	GENERATED   PatternFlowIcmpEchoChecksumChoiceEnum
+	CUSTOM      PatternFlowIcmpEchoChecksumChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowIcmpEchoChecksumChoiceEnum("unspecified"),
+	GENERATED:   PatternFlowIcmpEchoChecksumChoiceEnum("generated"),
+	CUSTOM:      PatternFlowIcmpEchoChecksumChoiceEnum("custom"),
+}
+
+func (obj *patternFlowIcmpEchoChecksum) Choice() PatternFlowIcmpEchoChecksumChoiceEnum {
+	return PatternFlowIcmpEchoChecksumChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowIcmpEchoChecksum) SetChoice(value PatternFlowIcmpEchoChecksumChoiceEnum) PatternFlowIcmpEchoChecksum {
+	intValue := snappipb.PatternFlowIcmpEchoChecksum_Choice_Enum_value[string(value)]
+	obj.obj.Choice = snappipb.PatternFlowIcmpEchoChecksum_Choice_Enum(intValue)
+	return obj
+}
+
+type PatternFlowIcmpEchoChecksumGeneratedEnum string
+
+var PatternFlowIcmpEchoChecksumGenerated = struct {
+	UNSPECIFIED PatternFlowIcmpEchoChecksumGeneratedEnum
+	GOOD        PatternFlowIcmpEchoChecksumGeneratedEnum
+	BAD         PatternFlowIcmpEchoChecksumGeneratedEnum
+}{
+	UNSPECIFIED: PatternFlowIcmpEchoChecksumGeneratedEnum("unspecified"),
+	GOOD:        PatternFlowIcmpEchoChecksumGeneratedEnum("good"),
+	BAD:         PatternFlowIcmpEchoChecksumGeneratedEnum("bad"),
+}
+
+func (obj *patternFlowIcmpEchoChecksum) Generated() PatternFlowIcmpEchoChecksumGeneratedEnum {
+	return PatternFlowIcmpEchoChecksumGeneratedEnum(obj.obj.Generated.Enum().String())
+}
+
+func (obj *patternFlowIcmpEchoChecksum) SetGenerated(value PatternFlowIcmpEchoChecksumGeneratedEnum) PatternFlowIcmpEchoChecksum {
+	intValue := snappipb.PatternFlowIcmpEchoChecksum_Generated_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowIcmpEchoChecksum_Generated_Enum(intValue)
+	obj.obj.Generated = &enumValue
+	return obj
 }
 
 // Custom returns a int32
@@ -34909,6 +40377,7 @@ func (obj *patternFlowIcmpEchoChecksum) Custom() int32 {
 //  A custom checksum value
 func (obj *patternFlowIcmpEchoChecksum) SetCustom(value int32) PatternFlowIcmpEchoChecksum {
 	obj.obj.Custom = &value
+	obj.SetChoice(PatternFlowIcmpEchoChecksumChoice.CUSTOM)
 	return obj
 }
 
@@ -34958,6 +40427,8 @@ type PatternFlowIcmpEchoIdentifier interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowIcmpEchoIdentifierChoiceEnum
+	SetChoice(value PatternFlowIcmpEchoIdentifierChoiceEnum) PatternFlowIcmpEchoIdentifier
 	Value() int32
 	SetValue(value int32) PatternFlowIcmpEchoIdentifier
 	Values() []int32
@@ -34966,6 +40437,33 @@ type PatternFlowIcmpEchoIdentifier interface {
 	SetMetricGroup(value string) PatternFlowIcmpEchoIdentifier
 	Increment() PatternFlowIcmpEchoIdentifierCounter
 	Decrement() PatternFlowIcmpEchoIdentifierCounter
+}
+
+type PatternFlowIcmpEchoIdentifierChoiceEnum string
+
+var PatternFlowIcmpEchoIdentifierChoice = struct {
+	UNSPECIFIED PatternFlowIcmpEchoIdentifierChoiceEnum
+	VALUE       PatternFlowIcmpEchoIdentifierChoiceEnum
+	VALUES      PatternFlowIcmpEchoIdentifierChoiceEnum
+	INCREMENT   PatternFlowIcmpEchoIdentifierChoiceEnum
+	DECREMENT   PatternFlowIcmpEchoIdentifierChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowIcmpEchoIdentifierChoiceEnum("unspecified"),
+	VALUE:       PatternFlowIcmpEchoIdentifierChoiceEnum("value"),
+	VALUES:      PatternFlowIcmpEchoIdentifierChoiceEnum("values"),
+	INCREMENT:   PatternFlowIcmpEchoIdentifierChoiceEnum("increment"),
+	DECREMENT:   PatternFlowIcmpEchoIdentifierChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowIcmpEchoIdentifier) Choice() PatternFlowIcmpEchoIdentifierChoiceEnum {
+	return PatternFlowIcmpEchoIdentifierChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowIcmpEchoIdentifier) SetChoice(value PatternFlowIcmpEchoIdentifierChoiceEnum) PatternFlowIcmpEchoIdentifier {
+	intValue := snappipb.PatternFlowIcmpEchoIdentifier_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowIcmpEchoIdentifier_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -34978,6 +40476,7 @@ func (obj *patternFlowIcmpEchoIdentifier) Value() int32 {
 //  description is TBD
 func (obj *patternFlowIcmpEchoIdentifier) SetValue(value int32) PatternFlowIcmpEchoIdentifier {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowIcmpEchoIdentifierChoice.VALUE)
 	return obj
 }
 
@@ -34991,6 +40490,7 @@ func (obj *patternFlowIcmpEchoIdentifier) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowIcmpEchoIdentifier) SetValues(value []int32) PatternFlowIcmpEchoIdentifier {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowIcmpEchoIdentifierChoice.VALUES)
 	return obj
 }
 
@@ -35004,6 +40504,7 @@ func (obj *patternFlowIcmpEchoIdentifier) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowIcmpEchoIdentifier) SetMetricGroup(value string) PatternFlowIcmpEchoIdentifier {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -35013,8 +40514,8 @@ func (obj *patternFlowIcmpEchoIdentifier) Increment() PatternFlowIcmpEchoIdentif
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowIcmpEchoIdentifierCounter{}
 	}
+	obj.SetChoice(PatternFlowIcmpEchoIdentifierChoice.INCREMENT)
 	return &patternFlowIcmpEchoIdentifierCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowIcmpEchoIdentifierCounter
@@ -35023,8 +40524,8 @@ func (obj *patternFlowIcmpEchoIdentifier) Decrement() PatternFlowIcmpEchoIdentif
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowIcmpEchoIdentifierCounter{}
 	}
+	obj.SetChoice(PatternFlowIcmpEchoIdentifierChoice.DECREMENT)
 	return &patternFlowIcmpEchoIdentifierCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowIcmpEchoSequenceNumber struct {
@@ -35073,6 +40574,8 @@ type PatternFlowIcmpEchoSequenceNumber interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowIcmpEchoSequenceNumberChoiceEnum
+	SetChoice(value PatternFlowIcmpEchoSequenceNumberChoiceEnum) PatternFlowIcmpEchoSequenceNumber
 	Value() int32
 	SetValue(value int32) PatternFlowIcmpEchoSequenceNumber
 	Values() []int32
@@ -35081,6 +40584,33 @@ type PatternFlowIcmpEchoSequenceNumber interface {
 	SetMetricGroup(value string) PatternFlowIcmpEchoSequenceNumber
 	Increment() PatternFlowIcmpEchoSequenceNumberCounter
 	Decrement() PatternFlowIcmpEchoSequenceNumberCounter
+}
+
+type PatternFlowIcmpEchoSequenceNumberChoiceEnum string
+
+var PatternFlowIcmpEchoSequenceNumberChoice = struct {
+	UNSPECIFIED PatternFlowIcmpEchoSequenceNumberChoiceEnum
+	VALUE       PatternFlowIcmpEchoSequenceNumberChoiceEnum
+	VALUES      PatternFlowIcmpEchoSequenceNumberChoiceEnum
+	INCREMENT   PatternFlowIcmpEchoSequenceNumberChoiceEnum
+	DECREMENT   PatternFlowIcmpEchoSequenceNumberChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowIcmpEchoSequenceNumberChoiceEnum("unspecified"),
+	VALUE:       PatternFlowIcmpEchoSequenceNumberChoiceEnum("value"),
+	VALUES:      PatternFlowIcmpEchoSequenceNumberChoiceEnum("values"),
+	INCREMENT:   PatternFlowIcmpEchoSequenceNumberChoiceEnum("increment"),
+	DECREMENT:   PatternFlowIcmpEchoSequenceNumberChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowIcmpEchoSequenceNumber) Choice() PatternFlowIcmpEchoSequenceNumberChoiceEnum {
+	return PatternFlowIcmpEchoSequenceNumberChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowIcmpEchoSequenceNumber) SetChoice(value PatternFlowIcmpEchoSequenceNumberChoiceEnum) PatternFlowIcmpEchoSequenceNumber {
+	intValue := snappipb.PatternFlowIcmpEchoSequenceNumber_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowIcmpEchoSequenceNumber_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -35093,6 +40623,7 @@ func (obj *patternFlowIcmpEchoSequenceNumber) Value() int32 {
 //  description is TBD
 func (obj *patternFlowIcmpEchoSequenceNumber) SetValue(value int32) PatternFlowIcmpEchoSequenceNumber {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowIcmpEchoSequenceNumberChoice.VALUE)
 	return obj
 }
 
@@ -35106,6 +40637,7 @@ func (obj *patternFlowIcmpEchoSequenceNumber) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowIcmpEchoSequenceNumber) SetValues(value []int32) PatternFlowIcmpEchoSequenceNumber {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowIcmpEchoSequenceNumberChoice.VALUES)
 	return obj
 }
 
@@ -35119,6 +40651,7 @@ func (obj *patternFlowIcmpEchoSequenceNumber) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowIcmpEchoSequenceNumber) SetMetricGroup(value string) PatternFlowIcmpEchoSequenceNumber {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -35128,8 +40661,8 @@ func (obj *patternFlowIcmpEchoSequenceNumber) Increment() PatternFlowIcmpEchoSeq
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowIcmpEchoSequenceNumberCounter{}
 	}
+	obj.SetChoice(PatternFlowIcmpEchoSequenceNumberChoice.INCREMENT)
 	return &patternFlowIcmpEchoSequenceNumberCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowIcmpEchoSequenceNumberCounter
@@ -35138,8 +40671,8 @@ func (obj *patternFlowIcmpEchoSequenceNumber) Decrement() PatternFlowIcmpEchoSeq
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowIcmpEchoSequenceNumberCounter{}
 	}
+	obj.SetChoice(PatternFlowIcmpEchoSequenceNumberChoice.DECREMENT)
 	return &patternFlowIcmpEchoSequenceNumberCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowIcmpv6EchoType struct {
@@ -35188,6 +40721,8 @@ type PatternFlowIcmpv6EchoType interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowIcmpv6EchoTypeChoiceEnum
+	SetChoice(value PatternFlowIcmpv6EchoTypeChoiceEnum) PatternFlowIcmpv6EchoType
 	Value() int32
 	SetValue(value int32) PatternFlowIcmpv6EchoType
 	Values() []int32
@@ -35196,6 +40731,33 @@ type PatternFlowIcmpv6EchoType interface {
 	SetMetricGroup(value string) PatternFlowIcmpv6EchoType
 	Increment() PatternFlowIcmpv6EchoTypeCounter
 	Decrement() PatternFlowIcmpv6EchoTypeCounter
+}
+
+type PatternFlowIcmpv6EchoTypeChoiceEnum string
+
+var PatternFlowIcmpv6EchoTypeChoice = struct {
+	UNSPECIFIED PatternFlowIcmpv6EchoTypeChoiceEnum
+	VALUE       PatternFlowIcmpv6EchoTypeChoiceEnum
+	VALUES      PatternFlowIcmpv6EchoTypeChoiceEnum
+	INCREMENT   PatternFlowIcmpv6EchoTypeChoiceEnum
+	DECREMENT   PatternFlowIcmpv6EchoTypeChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowIcmpv6EchoTypeChoiceEnum("unspecified"),
+	VALUE:       PatternFlowIcmpv6EchoTypeChoiceEnum("value"),
+	VALUES:      PatternFlowIcmpv6EchoTypeChoiceEnum("values"),
+	INCREMENT:   PatternFlowIcmpv6EchoTypeChoiceEnum("increment"),
+	DECREMENT:   PatternFlowIcmpv6EchoTypeChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowIcmpv6EchoType) Choice() PatternFlowIcmpv6EchoTypeChoiceEnum {
+	return PatternFlowIcmpv6EchoTypeChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowIcmpv6EchoType) SetChoice(value PatternFlowIcmpv6EchoTypeChoiceEnum) PatternFlowIcmpv6EchoType {
+	intValue := snappipb.PatternFlowIcmpv6EchoType_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowIcmpv6EchoType_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -35208,6 +40770,7 @@ func (obj *patternFlowIcmpv6EchoType) Value() int32 {
 //  description is TBD
 func (obj *patternFlowIcmpv6EchoType) SetValue(value int32) PatternFlowIcmpv6EchoType {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowIcmpv6EchoTypeChoice.VALUE)
 	return obj
 }
 
@@ -35221,6 +40784,7 @@ func (obj *patternFlowIcmpv6EchoType) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowIcmpv6EchoType) SetValues(value []int32) PatternFlowIcmpv6EchoType {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowIcmpv6EchoTypeChoice.VALUES)
 	return obj
 }
 
@@ -35234,6 +40798,7 @@ func (obj *patternFlowIcmpv6EchoType) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowIcmpv6EchoType) SetMetricGroup(value string) PatternFlowIcmpv6EchoType {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -35243,8 +40808,8 @@ func (obj *patternFlowIcmpv6EchoType) Increment() PatternFlowIcmpv6EchoTypeCount
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowIcmpv6EchoTypeCounter{}
 	}
+	obj.SetChoice(PatternFlowIcmpv6EchoTypeChoice.INCREMENT)
 	return &patternFlowIcmpv6EchoTypeCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowIcmpv6EchoTypeCounter
@@ -35253,8 +40818,8 @@ func (obj *patternFlowIcmpv6EchoType) Decrement() PatternFlowIcmpv6EchoTypeCount
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowIcmpv6EchoTypeCounter{}
 	}
+	obj.SetChoice(PatternFlowIcmpv6EchoTypeChoice.DECREMENT)
 	return &patternFlowIcmpv6EchoTypeCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowIcmpv6EchoCode struct {
@@ -35303,6 +40868,8 @@ type PatternFlowIcmpv6EchoCode interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowIcmpv6EchoCodeChoiceEnum
+	SetChoice(value PatternFlowIcmpv6EchoCodeChoiceEnum) PatternFlowIcmpv6EchoCode
 	Value() int32
 	SetValue(value int32) PatternFlowIcmpv6EchoCode
 	Values() []int32
@@ -35311,6 +40878,33 @@ type PatternFlowIcmpv6EchoCode interface {
 	SetMetricGroup(value string) PatternFlowIcmpv6EchoCode
 	Increment() PatternFlowIcmpv6EchoCodeCounter
 	Decrement() PatternFlowIcmpv6EchoCodeCounter
+}
+
+type PatternFlowIcmpv6EchoCodeChoiceEnum string
+
+var PatternFlowIcmpv6EchoCodeChoice = struct {
+	UNSPECIFIED PatternFlowIcmpv6EchoCodeChoiceEnum
+	VALUE       PatternFlowIcmpv6EchoCodeChoiceEnum
+	VALUES      PatternFlowIcmpv6EchoCodeChoiceEnum
+	INCREMENT   PatternFlowIcmpv6EchoCodeChoiceEnum
+	DECREMENT   PatternFlowIcmpv6EchoCodeChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowIcmpv6EchoCodeChoiceEnum("unspecified"),
+	VALUE:       PatternFlowIcmpv6EchoCodeChoiceEnum("value"),
+	VALUES:      PatternFlowIcmpv6EchoCodeChoiceEnum("values"),
+	INCREMENT:   PatternFlowIcmpv6EchoCodeChoiceEnum("increment"),
+	DECREMENT:   PatternFlowIcmpv6EchoCodeChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowIcmpv6EchoCode) Choice() PatternFlowIcmpv6EchoCodeChoiceEnum {
+	return PatternFlowIcmpv6EchoCodeChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowIcmpv6EchoCode) SetChoice(value PatternFlowIcmpv6EchoCodeChoiceEnum) PatternFlowIcmpv6EchoCode {
+	intValue := snappipb.PatternFlowIcmpv6EchoCode_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowIcmpv6EchoCode_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -35323,6 +40917,7 @@ func (obj *patternFlowIcmpv6EchoCode) Value() int32 {
 //  description is TBD
 func (obj *patternFlowIcmpv6EchoCode) SetValue(value int32) PatternFlowIcmpv6EchoCode {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowIcmpv6EchoCodeChoice.VALUE)
 	return obj
 }
 
@@ -35336,6 +40931,7 @@ func (obj *patternFlowIcmpv6EchoCode) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowIcmpv6EchoCode) SetValues(value []int32) PatternFlowIcmpv6EchoCode {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowIcmpv6EchoCodeChoice.VALUES)
 	return obj
 }
 
@@ -35349,6 +40945,7 @@ func (obj *patternFlowIcmpv6EchoCode) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowIcmpv6EchoCode) SetMetricGroup(value string) PatternFlowIcmpv6EchoCode {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -35358,8 +40955,8 @@ func (obj *patternFlowIcmpv6EchoCode) Increment() PatternFlowIcmpv6EchoCodeCount
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowIcmpv6EchoCodeCounter{}
 	}
+	obj.SetChoice(PatternFlowIcmpv6EchoCodeChoice.INCREMENT)
 	return &patternFlowIcmpv6EchoCodeCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowIcmpv6EchoCodeCounter
@@ -35368,8 +40965,8 @@ func (obj *patternFlowIcmpv6EchoCode) Decrement() PatternFlowIcmpv6EchoCodeCount
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowIcmpv6EchoCodeCounter{}
 	}
+	obj.SetChoice(PatternFlowIcmpv6EchoCodeChoice.DECREMENT)
 	return &patternFlowIcmpv6EchoCodeCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowIcmpv6EchoIdentifier struct {
@@ -35418,6 +41015,8 @@ type PatternFlowIcmpv6EchoIdentifier interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowIcmpv6EchoIdentifierChoiceEnum
+	SetChoice(value PatternFlowIcmpv6EchoIdentifierChoiceEnum) PatternFlowIcmpv6EchoIdentifier
 	Value() int32
 	SetValue(value int32) PatternFlowIcmpv6EchoIdentifier
 	Values() []int32
@@ -35426,6 +41025,33 @@ type PatternFlowIcmpv6EchoIdentifier interface {
 	SetMetricGroup(value string) PatternFlowIcmpv6EchoIdentifier
 	Increment() PatternFlowIcmpv6EchoIdentifierCounter
 	Decrement() PatternFlowIcmpv6EchoIdentifierCounter
+}
+
+type PatternFlowIcmpv6EchoIdentifierChoiceEnum string
+
+var PatternFlowIcmpv6EchoIdentifierChoice = struct {
+	UNSPECIFIED PatternFlowIcmpv6EchoIdentifierChoiceEnum
+	VALUE       PatternFlowIcmpv6EchoIdentifierChoiceEnum
+	VALUES      PatternFlowIcmpv6EchoIdentifierChoiceEnum
+	INCREMENT   PatternFlowIcmpv6EchoIdentifierChoiceEnum
+	DECREMENT   PatternFlowIcmpv6EchoIdentifierChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowIcmpv6EchoIdentifierChoiceEnum("unspecified"),
+	VALUE:       PatternFlowIcmpv6EchoIdentifierChoiceEnum("value"),
+	VALUES:      PatternFlowIcmpv6EchoIdentifierChoiceEnum("values"),
+	INCREMENT:   PatternFlowIcmpv6EchoIdentifierChoiceEnum("increment"),
+	DECREMENT:   PatternFlowIcmpv6EchoIdentifierChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowIcmpv6EchoIdentifier) Choice() PatternFlowIcmpv6EchoIdentifierChoiceEnum {
+	return PatternFlowIcmpv6EchoIdentifierChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowIcmpv6EchoIdentifier) SetChoice(value PatternFlowIcmpv6EchoIdentifierChoiceEnum) PatternFlowIcmpv6EchoIdentifier {
+	intValue := snappipb.PatternFlowIcmpv6EchoIdentifier_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowIcmpv6EchoIdentifier_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -35438,6 +41064,7 @@ func (obj *patternFlowIcmpv6EchoIdentifier) Value() int32 {
 //  description is TBD
 func (obj *patternFlowIcmpv6EchoIdentifier) SetValue(value int32) PatternFlowIcmpv6EchoIdentifier {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowIcmpv6EchoIdentifierChoice.VALUE)
 	return obj
 }
 
@@ -35451,6 +41078,7 @@ func (obj *patternFlowIcmpv6EchoIdentifier) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowIcmpv6EchoIdentifier) SetValues(value []int32) PatternFlowIcmpv6EchoIdentifier {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowIcmpv6EchoIdentifierChoice.VALUES)
 	return obj
 }
 
@@ -35464,6 +41092,7 @@ func (obj *patternFlowIcmpv6EchoIdentifier) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowIcmpv6EchoIdentifier) SetMetricGroup(value string) PatternFlowIcmpv6EchoIdentifier {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -35473,8 +41102,8 @@ func (obj *patternFlowIcmpv6EchoIdentifier) Increment() PatternFlowIcmpv6EchoIde
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowIcmpv6EchoIdentifierCounter{}
 	}
+	obj.SetChoice(PatternFlowIcmpv6EchoIdentifierChoice.INCREMENT)
 	return &patternFlowIcmpv6EchoIdentifierCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowIcmpv6EchoIdentifierCounter
@@ -35483,8 +41112,8 @@ func (obj *patternFlowIcmpv6EchoIdentifier) Decrement() PatternFlowIcmpv6EchoIde
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowIcmpv6EchoIdentifierCounter{}
 	}
+	obj.SetChoice(PatternFlowIcmpv6EchoIdentifierChoice.DECREMENT)
 	return &patternFlowIcmpv6EchoIdentifierCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowIcmpv6EchoSequenceNumber struct {
@@ -35533,6 +41162,8 @@ type PatternFlowIcmpv6EchoSequenceNumber interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowIcmpv6EchoSequenceNumberChoiceEnum
+	SetChoice(value PatternFlowIcmpv6EchoSequenceNumberChoiceEnum) PatternFlowIcmpv6EchoSequenceNumber
 	Value() int32
 	SetValue(value int32) PatternFlowIcmpv6EchoSequenceNumber
 	Values() []int32
@@ -35541,6 +41172,33 @@ type PatternFlowIcmpv6EchoSequenceNumber interface {
 	SetMetricGroup(value string) PatternFlowIcmpv6EchoSequenceNumber
 	Increment() PatternFlowIcmpv6EchoSequenceNumberCounter
 	Decrement() PatternFlowIcmpv6EchoSequenceNumberCounter
+}
+
+type PatternFlowIcmpv6EchoSequenceNumberChoiceEnum string
+
+var PatternFlowIcmpv6EchoSequenceNumberChoice = struct {
+	UNSPECIFIED PatternFlowIcmpv6EchoSequenceNumberChoiceEnum
+	VALUE       PatternFlowIcmpv6EchoSequenceNumberChoiceEnum
+	VALUES      PatternFlowIcmpv6EchoSequenceNumberChoiceEnum
+	INCREMENT   PatternFlowIcmpv6EchoSequenceNumberChoiceEnum
+	DECREMENT   PatternFlowIcmpv6EchoSequenceNumberChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowIcmpv6EchoSequenceNumberChoiceEnum("unspecified"),
+	VALUE:       PatternFlowIcmpv6EchoSequenceNumberChoiceEnum("value"),
+	VALUES:      PatternFlowIcmpv6EchoSequenceNumberChoiceEnum("values"),
+	INCREMENT:   PatternFlowIcmpv6EchoSequenceNumberChoiceEnum("increment"),
+	DECREMENT:   PatternFlowIcmpv6EchoSequenceNumberChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowIcmpv6EchoSequenceNumber) Choice() PatternFlowIcmpv6EchoSequenceNumberChoiceEnum {
+	return PatternFlowIcmpv6EchoSequenceNumberChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowIcmpv6EchoSequenceNumber) SetChoice(value PatternFlowIcmpv6EchoSequenceNumberChoiceEnum) PatternFlowIcmpv6EchoSequenceNumber {
+	intValue := snappipb.PatternFlowIcmpv6EchoSequenceNumber_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowIcmpv6EchoSequenceNumber_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -35553,6 +41211,7 @@ func (obj *patternFlowIcmpv6EchoSequenceNumber) Value() int32 {
 //  description is TBD
 func (obj *patternFlowIcmpv6EchoSequenceNumber) SetValue(value int32) PatternFlowIcmpv6EchoSequenceNumber {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowIcmpv6EchoSequenceNumberChoice.VALUE)
 	return obj
 }
 
@@ -35566,6 +41225,7 @@ func (obj *patternFlowIcmpv6EchoSequenceNumber) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowIcmpv6EchoSequenceNumber) SetValues(value []int32) PatternFlowIcmpv6EchoSequenceNumber {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowIcmpv6EchoSequenceNumberChoice.VALUES)
 	return obj
 }
 
@@ -35579,6 +41239,7 @@ func (obj *patternFlowIcmpv6EchoSequenceNumber) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowIcmpv6EchoSequenceNumber) SetMetricGroup(value string) PatternFlowIcmpv6EchoSequenceNumber {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -35588,8 +41249,8 @@ func (obj *patternFlowIcmpv6EchoSequenceNumber) Increment() PatternFlowIcmpv6Ech
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowIcmpv6EchoSequenceNumberCounter{}
 	}
+	obj.SetChoice(PatternFlowIcmpv6EchoSequenceNumberChoice.INCREMENT)
 	return &patternFlowIcmpv6EchoSequenceNumberCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowIcmpv6EchoSequenceNumberCounter
@@ -35598,8 +41259,8 @@ func (obj *patternFlowIcmpv6EchoSequenceNumber) Decrement() PatternFlowIcmpv6Ech
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowIcmpv6EchoSequenceNumberCounter{}
 	}
+	obj.SetChoice(PatternFlowIcmpv6EchoSequenceNumberChoice.DECREMENT)
 	return &patternFlowIcmpv6EchoSequenceNumberCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowIcmpv6EchoChecksum struct {
@@ -35648,8 +41309,57 @@ type PatternFlowIcmpv6EchoChecksum interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowIcmpv6EchoChecksumChoiceEnum
+	SetChoice(value PatternFlowIcmpv6EchoChecksumChoiceEnum) PatternFlowIcmpv6EchoChecksum
+	Generated() PatternFlowIcmpv6EchoChecksumGeneratedEnum
+	SetGenerated(value PatternFlowIcmpv6EchoChecksumGeneratedEnum) PatternFlowIcmpv6EchoChecksum
 	Custom() int32
 	SetCustom(value int32) PatternFlowIcmpv6EchoChecksum
+}
+
+type PatternFlowIcmpv6EchoChecksumChoiceEnum string
+
+var PatternFlowIcmpv6EchoChecksumChoice = struct {
+	UNSPECIFIED PatternFlowIcmpv6EchoChecksumChoiceEnum
+	GENERATED   PatternFlowIcmpv6EchoChecksumChoiceEnum
+	CUSTOM      PatternFlowIcmpv6EchoChecksumChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowIcmpv6EchoChecksumChoiceEnum("unspecified"),
+	GENERATED:   PatternFlowIcmpv6EchoChecksumChoiceEnum("generated"),
+	CUSTOM:      PatternFlowIcmpv6EchoChecksumChoiceEnum("custom"),
+}
+
+func (obj *patternFlowIcmpv6EchoChecksum) Choice() PatternFlowIcmpv6EchoChecksumChoiceEnum {
+	return PatternFlowIcmpv6EchoChecksumChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowIcmpv6EchoChecksum) SetChoice(value PatternFlowIcmpv6EchoChecksumChoiceEnum) PatternFlowIcmpv6EchoChecksum {
+	intValue := snappipb.PatternFlowIcmpv6EchoChecksum_Choice_Enum_value[string(value)]
+	obj.obj.Choice = snappipb.PatternFlowIcmpv6EchoChecksum_Choice_Enum(intValue)
+	return obj
+}
+
+type PatternFlowIcmpv6EchoChecksumGeneratedEnum string
+
+var PatternFlowIcmpv6EchoChecksumGenerated = struct {
+	UNSPECIFIED PatternFlowIcmpv6EchoChecksumGeneratedEnum
+	GOOD        PatternFlowIcmpv6EchoChecksumGeneratedEnum
+	BAD         PatternFlowIcmpv6EchoChecksumGeneratedEnum
+}{
+	UNSPECIFIED: PatternFlowIcmpv6EchoChecksumGeneratedEnum("unspecified"),
+	GOOD:        PatternFlowIcmpv6EchoChecksumGeneratedEnum("good"),
+	BAD:         PatternFlowIcmpv6EchoChecksumGeneratedEnum("bad"),
+}
+
+func (obj *patternFlowIcmpv6EchoChecksum) Generated() PatternFlowIcmpv6EchoChecksumGeneratedEnum {
+	return PatternFlowIcmpv6EchoChecksumGeneratedEnum(obj.obj.Generated.Enum().String())
+}
+
+func (obj *patternFlowIcmpv6EchoChecksum) SetGenerated(value PatternFlowIcmpv6EchoChecksumGeneratedEnum) PatternFlowIcmpv6EchoChecksum {
+	intValue := snappipb.PatternFlowIcmpv6EchoChecksum_Generated_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowIcmpv6EchoChecksum_Generated_Enum(intValue)
+	obj.obj.Generated = &enumValue
+	return obj
 }
 
 // Custom returns a int32
@@ -35662,6 +41372,7 @@ func (obj *patternFlowIcmpv6EchoChecksum) Custom() int32 {
 //  A custom checksum value
 func (obj *patternFlowIcmpv6EchoChecksum) SetCustom(value int32) PatternFlowIcmpv6EchoChecksum {
 	obj.obj.Custom = &value
+	obj.SetChoice(PatternFlowIcmpv6EchoChecksumChoice.CUSTOM)
 	return obj
 }
 
@@ -35729,6 +41440,7 @@ func (obj *patternFlowPppAddressCounter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowPppAddressCounter) SetStart(value int32) PatternFlowPppAddressCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -35742,6 +41454,7 @@ func (obj *patternFlowPppAddressCounter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowPppAddressCounter) SetStep(value int32) PatternFlowPppAddressCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -35755,6 +41468,7 @@ func (obj *patternFlowPppAddressCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowPppAddressCounter) SetCount(value int32) PatternFlowPppAddressCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -35822,6 +41536,7 @@ func (obj *patternFlowPppControlCounter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowPppControlCounter) SetStart(value int32) PatternFlowPppControlCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -35835,6 +41550,7 @@ func (obj *patternFlowPppControlCounter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowPppControlCounter) SetStep(value int32) PatternFlowPppControlCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -35848,6 +41564,7 @@ func (obj *patternFlowPppControlCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowPppControlCounter) SetCount(value int32) PatternFlowPppControlCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -35915,6 +41632,7 @@ func (obj *patternFlowPppProtocolTypeCounter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowPppProtocolTypeCounter) SetStart(value int32) PatternFlowPppProtocolTypeCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -35928,6 +41646,7 @@ func (obj *patternFlowPppProtocolTypeCounter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowPppProtocolTypeCounter) SetStep(value int32) PatternFlowPppProtocolTypeCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -35941,6 +41660,7 @@ func (obj *patternFlowPppProtocolTypeCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowPppProtocolTypeCounter) SetCount(value int32) PatternFlowPppProtocolTypeCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -36008,6 +41728,7 @@ func (obj *patternFlowIgmpv1VersionCounter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowIgmpv1VersionCounter) SetStart(value int32) PatternFlowIgmpv1VersionCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -36021,6 +41742,7 @@ func (obj *patternFlowIgmpv1VersionCounter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowIgmpv1VersionCounter) SetStep(value int32) PatternFlowIgmpv1VersionCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -36034,6 +41756,7 @@ func (obj *patternFlowIgmpv1VersionCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowIgmpv1VersionCounter) SetCount(value int32) PatternFlowIgmpv1VersionCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -36101,6 +41824,7 @@ func (obj *patternFlowIgmpv1TypeCounter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowIgmpv1TypeCounter) SetStart(value int32) PatternFlowIgmpv1TypeCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -36114,6 +41838,7 @@ func (obj *patternFlowIgmpv1TypeCounter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowIgmpv1TypeCounter) SetStep(value int32) PatternFlowIgmpv1TypeCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -36127,6 +41852,7 @@ func (obj *patternFlowIgmpv1TypeCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowIgmpv1TypeCounter) SetCount(value int32) PatternFlowIgmpv1TypeCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -36194,6 +41920,7 @@ func (obj *patternFlowIgmpv1UnusedCounter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowIgmpv1UnusedCounter) SetStart(value int32) PatternFlowIgmpv1UnusedCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -36207,6 +41934,7 @@ func (obj *patternFlowIgmpv1UnusedCounter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowIgmpv1UnusedCounter) SetStep(value int32) PatternFlowIgmpv1UnusedCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -36220,6 +41948,7 @@ func (obj *patternFlowIgmpv1UnusedCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowIgmpv1UnusedCounter) SetCount(value int32) PatternFlowIgmpv1UnusedCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -36287,6 +42016,7 @@ func (obj *patternFlowIgmpv1GroupAddressCounter) Start() string {
 //  description is TBD
 func (obj *patternFlowIgmpv1GroupAddressCounter) SetStart(value string) PatternFlowIgmpv1GroupAddressCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -36300,6 +42030,7 @@ func (obj *patternFlowIgmpv1GroupAddressCounter) Step() string {
 //  description is TBD
 func (obj *patternFlowIgmpv1GroupAddressCounter) SetStep(value string) PatternFlowIgmpv1GroupAddressCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -36313,6 +42044,7 @@ func (obj *patternFlowIgmpv1GroupAddressCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowIgmpv1GroupAddressCounter) SetCount(value int32) PatternFlowIgmpv1GroupAddressCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -36362,10 +42094,60 @@ type DeviceBgpSrTePolicyNextHop interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	NextHopMode() DeviceBgpSrTePolicyNextHopNextHopModeEnum
+	SetNextHopMode(value DeviceBgpSrTePolicyNextHopNextHopModeEnum) DeviceBgpSrTePolicyNextHop
+	NextHopAddressType() DeviceBgpSrTePolicyNextHopNextHopAddressTypeEnum
+	SetNextHopAddressType(value DeviceBgpSrTePolicyNextHopNextHopAddressTypeEnum) DeviceBgpSrTePolicyNextHop
 	Ipv4Address() string
 	SetIpv4Address(value string) DeviceBgpSrTePolicyNextHop
 	Ipv6Address() string
 	SetIpv6Address(value string) DeviceBgpSrTePolicyNextHop
+}
+
+type DeviceBgpSrTePolicyNextHopNextHopModeEnum string
+
+var DeviceBgpSrTePolicyNextHopNextHopMode = struct {
+	UNSPECIFIED DeviceBgpSrTePolicyNextHopNextHopModeEnum
+	LOCAL_IP    DeviceBgpSrTePolicyNextHopNextHopModeEnum
+	MANUAL      DeviceBgpSrTePolicyNextHopNextHopModeEnum
+}{
+	UNSPECIFIED: DeviceBgpSrTePolicyNextHopNextHopModeEnum("unspecified"),
+	LOCAL_IP:    DeviceBgpSrTePolicyNextHopNextHopModeEnum("local_ip"),
+	MANUAL:      DeviceBgpSrTePolicyNextHopNextHopModeEnum("manual"),
+}
+
+func (obj *deviceBgpSrTePolicyNextHop) NextHopMode() DeviceBgpSrTePolicyNextHopNextHopModeEnum {
+	return DeviceBgpSrTePolicyNextHopNextHopModeEnum(obj.obj.NextHopMode.Enum().String())
+}
+
+func (obj *deviceBgpSrTePolicyNextHop) SetNextHopMode(value DeviceBgpSrTePolicyNextHopNextHopModeEnum) DeviceBgpSrTePolicyNextHop {
+	intValue := snappipb.DeviceBgpSrTePolicyNextHop_NextHopMode_Enum_value[string(value)]
+	enumValue := snappipb.DeviceBgpSrTePolicyNextHop_NextHopMode_Enum(intValue)
+	obj.obj.NextHopMode = &enumValue
+	return obj
+}
+
+type DeviceBgpSrTePolicyNextHopNextHopAddressTypeEnum string
+
+var DeviceBgpSrTePolicyNextHopNextHopAddressType = struct {
+	UNSPECIFIED DeviceBgpSrTePolicyNextHopNextHopAddressTypeEnum
+	IPV4        DeviceBgpSrTePolicyNextHopNextHopAddressTypeEnum
+	IPV6        DeviceBgpSrTePolicyNextHopNextHopAddressTypeEnum
+}{
+	UNSPECIFIED: DeviceBgpSrTePolicyNextHopNextHopAddressTypeEnum("unspecified"),
+	IPV4:        DeviceBgpSrTePolicyNextHopNextHopAddressTypeEnum("ipv4"),
+	IPV6:        DeviceBgpSrTePolicyNextHopNextHopAddressTypeEnum("ipv6"),
+}
+
+func (obj *deviceBgpSrTePolicyNextHop) NextHopAddressType() DeviceBgpSrTePolicyNextHopNextHopAddressTypeEnum {
+	return DeviceBgpSrTePolicyNextHopNextHopAddressTypeEnum(obj.obj.NextHopAddressType.Enum().String())
+}
+
+func (obj *deviceBgpSrTePolicyNextHop) SetNextHopAddressType(value DeviceBgpSrTePolicyNextHopNextHopAddressTypeEnum) DeviceBgpSrTePolicyNextHop {
+	intValue := snappipb.DeviceBgpSrTePolicyNextHop_NextHopAddressType_Enum_value[string(value)]
+	enumValue := snappipb.DeviceBgpSrTePolicyNextHop_NextHopAddressType_Enum(intValue)
+	obj.obj.NextHopAddressType = &enumValue
+	return obj
 }
 
 // Ipv4Address returns a string
@@ -36378,6 +42160,7 @@ func (obj *deviceBgpSrTePolicyNextHop) Ipv4Address() string {
 //  The IPv4 address of the next hop if the next_hop_mode is manual and the next_hop_address_type is IPv4.
 func (obj *deviceBgpSrTePolicyNextHop) SetIpv4Address(value string) DeviceBgpSrTePolicyNextHop {
 	obj.obj.Ipv4Address = &value
+
 	return obj
 }
 
@@ -36391,6 +42174,7 @@ func (obj *deviceBgpSrTePolicyNextHop) Ipv6Address() string {
 //  The IPv6 address of the next hop if the next_hop_mode is manual and the next_hop_address_type is IPv6.
 func (obj *deviceBgpSrTePolicyNextHop) SetIpv6Address(value string) DeviceBgpSrTePolicyNextHop {
 	obj.obj.Ipv6Address = &value
+
 	return obj
 }
 
@@ -36454,6 +42238,7 @@ func (obj *deviceBgpAddPath) PathId() int32 {
 //  The id of the additional path.
 func (obj *deviceBgpAddPath) SetPathId(value int32) DeviceBgpAddPath {
 	obj.obj.PathId = &value
+
 	return obj
 }
 
@@ -36505,6 +42290,8 @@ type DeviceBgpAsPath interface {
 	FromJson(value string) error
 	OverridePeerAsSetMode() bool
 	SetOverridePeerAsSetMode(value bool) DeviceBgpAsPath
+	AsSetMode() DeviceBgpAsPathAsSetModeEnum
+	SetAsSetMode(value DeviceBgpAsPathAsSetModeEnum) DeviceBgpAsPath
 	AsPathSegments() DeviceBgpAsPathDeviceBgpAsPathSegmentIter
 }
 
@@ -36518,6 +42305,38 @@ func (obj *deviceBgpAsPath) OverridePeerAsSetMode() bool {
 //  TBD
 func (obj *deviceBgpAsPath) SetOverridePeerAsSetMode(value bool) DeviceBgpAsPath {
 	obj.obj.OverridePeerAsSetMode = &value
+
+	return obj
+}
+
+type DeviceBgpAsPathAsSetModeEnum string
+
+var DeviceBgpAsPathAsSetMode = struct {
+	UNSPECIFIED              DeviceBgpAsPathAsSetModeEnum
+	DO_NOT_INCLUDE_LOCAL_AS  DeviceBgpAsPathAsSetModeEnum
+	INCLUDE_AS_SEQ           DeviceBgpAsPathAsSetModeEnum
+	INCLUDE_AS_SET           DeviceBgpAsPathAsSetModeEnum
+	INCLUDE_AS_CONFED_SEQ    DeviceBgpAsPathAsSetModeEnum
+	INCLUDE_AS_CONFED_SET    DeviceBgpAsPathAsSetModeEnum
+	PREPEND_TO_FIRST_SEGMENT DeviceBgpAsPathAsSetModeEnum
+}{
+	UNSPECIFIED:              DeviceBgpAsPathAsSetModeEnum("unspecified"),
+	DO_NOT_INCLUDE_LOCAL_AS:  DeviceBgpAsPathAsSetModeEnum("do_not_include_local_as"),
+	INCLUDE_AS_SEQ:           DeviceBgpAsPathAsSetModeEnum("include_as_seq"),
+	INCLUDE_AS_SET:           DeviceBgpAsPathAsSetModeEnum("include_as_set"),
+	INCLUDE_AS_CONFED_SEQ:    DeviceBgpAsPathAsSetModeEnum("include_as_confed_seq"),
+	INCLUDE_AS_CONFED_SET:    DeviceBgpAsPathAsSetModeEnum("include_as_confed_set"),
+	PREPEND_TO_FIRST_SEGMENT: DeviceBgpAsPathAsSetModeEnum("prepend_to_first_segment"),
+}
+
+func (obj *deviceBgpAsPath) AsSetMode() DeviceBgpAsPathAsSetModeEnum {
+	return DeviceBgpAsPathAsSetModeEnum(obj.obj.AsSetMode.Enum().String())
+}
+
+func (obj *deviceBgpAsPath) SetAsSetMode(value DeviceBgpAsPathAsSetModeEnum) DeviceBgpAsPath {
+	intValue := snappipb.DeviceBgpAsPath_AsSetMode_Enum_value[string(value)]
+	enumValue := snappipb.DeviceBgpAsPath_AsSetMode_Enum(intValue)
+	obj.obj.AsSetMode = &enumValue
 	return obj
 }
 
@@ -36528,7 +42347,6 @@ func (obj *deviceBgpAsPath) AsPathSegments() DeviceBgpAsPathDeviceBgpAsPathSegme
 		obj.obj.AsPathSegments = []*snappipb.DeviceBgpAsPathSegment{}
 	}
 	return &deviceBgpAsPathDeviceBgpAsPathSegmentIter{obj: obj}
-
 }
 
 type deviceBgpAsPathDeviceBgpAsPathSegmentIter struct {
@@ -36616,7 +42434,6 @@ func (obj *deviceBgpTunnelTlv) SegmentLists() DeviceBgpTunnelTlvDeviceBgpSegment
 		obj.obj.SegmentLists = []*snappipb.DeviceBgpSegmentList{}
 	}
 	return &deviceBgpTunnelTlvDeviceBgpSegmentListIter{obj: obj}
-
 }
 
 type deviceBgpTunnelTlvDeviceBgpSegmentListIter struct {
@@ -36648,8 +42465,8 @@ func (obj *deviceBgpTunnelTlv) RemoteEndpointSubTlv() DeviceBgpRemoteEndpointSub
 	if obj.obj.RemoteEndpointSubTlv == nil {
 		obj.obj.RemoteEndpointSubTlv = &snappipb.DeviceBgpRemoteEndpointSubTlv{}
 	}
-	return &deviceBgpRemoteEndpointSubTlv{obj: obj.obj.RemoteEndpointSubTlv}
 
+	return &deviceBgpRemoteEndpointSubTlv{obj: obj.obj.RemoteEndpointSubTlv}
 }
 
 // PreferenceSubTlv returns a DeviceBgpPreferenceSubTlv
@@ -36658,8 +42475,8 @@ func (obj *deviceBgpTunnelTlv) PreferenceSubTlv() DeviceBgpPreferenceSubTlv {
 	if obj.obj.PreferenceSubTlv == nil {
 		obj.obj.PreferenceSubTlv = &snappipb.DeviceBgpPreferenceSubTlv{}
 	}
-	return &deviceBgpPreferenceSubTlv{obj: obj.obj.PreferenceSubTlv}
 
+	return &deviceBgpPreferenceSubTlv{obj: obj.obj.PreferenceSubTlv}
 }
 
 // BindingSubTlv returns a DeviceBgpBindingSubTlv
@@ -36668,8 +42485,8 @@ func (obj *deviceBgpTunnelTlv) BindingSubTlv() DeviceBgpBindingSubTlv {
 	if obj.obj.BindingSubTlv == nil {
 		obj.obj.BindingSubTlv = &snappipb.DeviceBgpBindingSubTlv{}
 	}
-	return &deviceBgpBindingSubTlv{obj: obj.obj.BindingSubTlv}
 
+	return &deviceBgpBindingSubTlv{obj: obj.obj.BindingSubTlv}
 }
 
 // ExplicitNullLabelPolicySubTlv returns a DeviceBgpExplicitNullLabelPolicySubTlv
@@ -36678,8 +42495,8 @@ func (obj *deviceBgpTunnelTlv) ExplicitNullLabelPolicySubTlv() DeviceBgpExplicit
 	if obj.obj.ExplicitNullLabelPolicySubTlv == nil {
 		obj.obj.ExplicitNullLabelPolicySubTlv = &snappipb.DeviceBgpExplicitNullLabelPolicySubTlv{}
 	}
-	return &deviceBgpExplicitNullLabelPolicySubTlv{obj: obj.obj.ExplicitNullLabelPolicySubTlv}
 
+	return &deviceBgpExplicitNullLabelPolicySubTlv{obj: obj.obj.ExplicitNullLabelPolicySubTlv}
 }
 
 // Active returns a bool
@@ -36692,6 +42509,7 @@ func (obj *deviceBgpTunnelTlv) Active() bool {
 //  If enabled means that this part of the configuration including any active 'children' nodes will be advertised to peer.  If disabled, this means that though config is present, it is not taking any part of the test but can be activated at run-time to advertise just this part of the configuration to the peer.
 func (obj *deviceBgpTunnelTlv) SetActive(value bool) DeviceBgpTunnelTlv {
 	obj.obj.Active = &value
+
 	return obj
 }
 
@@ -36741,10 +42559,43 @@ type DeviceBgpCommunity interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	CommunityType() DeviceBgpCommunityCommunityTypeEnum
+	SetCommunityType(value DeviceBgpCommunityCommunityTypeEnum) DeviceBgpCommunity
 	AsNumber() int32
 	SetAsNumber(value int32) DeviceBgpCommunity
 	AsCustom() int32
 	SetAsCustom(value int32) DeviceBgpCommunity
+}
+
+type DeviceBgpCommunityCommunityTypeEnum string
+
+var DeviceBgpCommunityCommunityType = struct {
+	UNSPECIFIED         DeviceBgpCommunityCommunityTypeEnum
+	MANUAL_AS_NUMBER    DeviceBgpCommunityCommunityTypeEnum
+	NO_EXPORT           DeviceBgpCommunityCommunityTypeEnum
+	NO_ADVERTISED       DeviceBgpCommunityCommunityTypeEnum
+	NO_EXPORT_SUBCONFED DeviceBgpCommunityCommunityTypeEnum
+	LLGR_STALE          DeviceBgpCommunityCommunityTypeEnum
+	NO_LLGR             DeviceBgpCommunityCommunityTypeEnum
+}{
+	UNSPECIFIED:         DeviceBgpCommunityCommunityTypeEnum("unspecified"),
+	MANUAL_AS_NUMBER:    DeviceBgpCommunityCommunityTypeEnum("manual_as_number"),
+	NO_EXPORT:           DeviceBgpCommunityCommunityTypeEnum("no_export"),
+	NO_ADVERTISED:       DeviceBgpCommunityCommunityTypeEnum("no_advertised"),
+	NO_EXPORT_SUBCONFED: DeviceBgpCommunityCommunityTypeEnum("no_export_subconfed"),
+	LLGR_STALE:          DeviceBgpCommunityCommunityTypeEnum("llgr_stale"),
+	NO_LLGR:             DeviceBgpCommunityCommunityTypeEnum("no_llgr"),
+}
+
+func (obj *deviceBgpCommunity) CommunityType() DeviceBgpCommunityCommunityTypeEnum {
+	return DeviceBgpCommunityCommunityTypeEnum(obj.obj.CommunityType.Enum().String())
+}
+
+func (obj *deviceBgpCommunity) SetCommunityType(value DeviceBgpCommunityCommunityTypeEnum) DeviceBgpCommunity {
+	intValue := snappipb.DeviceBgpCommunity_CommunityType_Enum_value[string(value)]
+	enumValue := snappipb.DeviceBgpCommunity_CommunityType_Enum(intValue)
+	obj.obj.CommunityType = &enumValue
+	return obj
 }
 
 // AsNumber returns a int32
@@ -36757,6 +42608,7 @@ func (obj *deviceBgpCommunity) AsNumber() int32 {
 //  First two octets of 32 bit community AS number
 func (obj *deviceBgpCommunity) SetAsNumber(value int32) DeviceBgpCommunity {
 	obj.obj.AsNumber = &value
+
 	return obj
 }
 
@@ -36770,6 +42622,7 @@ func (obj *deviceBgpCommunity) AsCustom() int32 {
 //  Last two octets of the community AS number
 func (obj *deviceBgpCommunity) SetAsCustom(value int32) DeviceBgpCommunity {
 	obj.obj.AsCustom = &value
+
 	return obj
 }
 
@@ -36839,6 +42692,7 @@ func (obj *deviceBgpv4RouteAddress) Address() string {
 //  The starting address of the network
 func (obj *deviceBgpv4RouteAddress) SetAddress(value string) DeviceBgpv4RouteAddress {
 	obj.obj.Address = value
+
 	return obj
 }
 
@@ -36852,6 +42706,7 @@ func (obj *deviceBgpv4RouteAddress) Prefix() int32 {
 //  The IPv4 network prefix to be applied to the address.
 func (obj *deviceBgpv4RouteAddress) SetPrefix(value int32) DeviceBgpv4RouteAddress {
 	obj.obj.Prefix = &value
+
 	return obj
 }
 
@@ -36865,6 +42720,7 @@ func (obj *deviceBgpv4RouteAddress) Count() int32 {
 //  The total number of addresses in the range
 func (obj *deviceBgpv4RouteAddress) SetCount(value int32) DeviceBgpv4RouteAddress {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -36878,6 +42734,7 @@ func (obj *deviceBgpv4RouteAddress) Step() int32 {
 //  The amount to increase each address by
 func (obj *deviceBgpv4RouteAddress) SetStep(value int32) DeviceBgpv4RouteAddress {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -36929,6 +42786,8 @@ type DeviceBgpRouteAdvanced interface {
 	FromJson(value string) error
 	MultiExitDiscriminator() int32
 	SetMultiExitDiscriminator(value int32) DeviceBgpRouteAdvanced
+	Origin() DeviceBgpRouteAdvancedOriginEnum
+	SetOrigin(value DeviceBgpRouteAdvancedOriginEnum) DeviceBgpRouteAdvanced
 }
 
 // MultiExitDiscriminator returns a int32
@@ -36941,6 +42800,30 @@ func (obj *deviceBgpRouteAdvanced) MultiExitDiscriminator() int32 {
 //  The multi exit discriminator (MED) value.  A null value means the MED feature is not enabled.
 func (obj *deviceBgpRouteAdvanced) SetMultiExitDiscriminator(value int32) DeviceBgpRouteAdvanced {
 	obj.obj.MultiExitDiscriminator = &value
+
+	return obj
+}
+
+type DeviceBgpRouteAdvancedOriginEnum string
+
+var DeviceBgpRouteAdvancedOrigin = struct {
+	UNSPECIFIED DeviceBgpRouteAdvancedOriginEnum
+	IGP         DeviceBgpRouteAdvancedOriginEnum
+	EGP         DeviceBgpRouteAdvancedOriginEnum
+}{
+	UNSPECIFIED: DeviceBgpRouteAdvancedOriginEnum("unspecified"),
+	IGP:         DeviceBgpRouteAdvancedOriginEnum("igp"),
+	EGP:         DeviceBgpRouteAdvancedOriginEnum("egp"),
+}
+
+func (obj *deviceBgpRouteAdvanced) Origin() DeviceBgpRouteAdvancedOriginEnum {
+	return DeviceBgpRouteAdvancedOriginEnum(obj.obj.Origin.Enum().String())
+}
+
+func (obj *deviceBgpRouteAdvanced) SetOrigin(value DeviceBgpRouteAdvancedOriginEnum) DeviceBgpRouteAdvanced {
+	intValue := snappipb.DeviceBgpRouteAdvanced_Origin_Enum_value[string(value)]
+	enumValue := snappipb.DeviceBgpRouteAdvanced_Origin_Enum(intValue)
+	obj.obj.Origin = &enumValue
 	return obj
 }
 
@@ -37010,6 +42893,7 @@ func (obj *deviceBgpv6RouteAddress) Address() string {
 //  The starting address of the network
 func (obj *deviceBgpv6RouteAddress) SetAddress(value string) DeviceBgpv6RouteAddress {
 	obj.obj.Address = value
+
 	return obj
 }
 
@@ -37023,6 +42907,7 @@ func (obj *deviceBgpv6RouteAddress) Prefix() int32 {
 //  The IPv6 network prefix to be applied to the address
 func (obj *deviceBgpv6RouteAddress) SetPrefix(value int32) DeviceBgpv6RouteAddress {
 	obj.obj.Prefix = &value
+
 	return obj
 }
 
@@ -37036,6 +42921,7 @@ func (obj *deviceBgpv6RouteAddress) Count() int32 {
 //  The total number of addresses in the range
 func (obj *deviceBgpv6RouteAddress) SetCount(value int32) DeviceBgpv6RouteAddress {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -37049,6 +42935,7 @@ func (obj *deviceBgpv6RouteAddress) Step() int32 {
 //  The amount to increase each address by
 func (obj *deviceBgpv6RouteAddress) SetStep(value int32) DeviceBgpv6RouteAddress {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -37116,6 +43003,7 @@ func (obj *patternFlowIpv4PriorityRawCounter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowIpv4PriorityRawCounter) SetStart(value int32) PatternFlowIpv4PriorityRawCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -37129,6 +43017,7 @@ func (obj *patternFlowIpv4PriorityRawCounter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowIpv4PriorityRawCounter) SetStep(value int32) PatternFlowIpv4PriorityRawCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -37142,6 +43031,7 @@ func (obj *patternFlowIpv4PriorityRawCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowIpv4PriorityRawCounter) SetCount(value int32) PatternFlowIpv4PriorityRawCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -37191,6 +43081,8 @@ type PatternFlowIpv4TosPrecedence interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowIpv4TosPrecedenceChoiceEnum
+	SetChoice(value PatternFlowIpv4TosPrecedenceChoiceEnum) PatternFlowIpv4TosPrecedence
 	Value() int32
 	SetValue(value int32) PatternFlowIpv4TosPrecedence
 	Values() []int32
@@ -37199,6 +43091,33 @@ type PatternFlowIpv4TosPrecedence interface {
 	SetMetricGroup(value string) PatternFlowIpv4TosPrecedence
 	Increment() PatternFlowIpv4TosPrecedenceCounter
 	Decrement() PatternFlowIpv4TosPrecedenceCounter
+}
+
+type PatternFlowIpv4TosPrecedenceChoiceEnum string
+
+var PatternFlowIpv4TosPrecedenceChoice = struct {
+	UNSPECIFIED PatternFlowIpv4TosPrecedenceChoiceEnum
+	VALUE       PatternFlowIpv4TosPrecedenceChoiceEnum
+	VALUES      PatternFlowIpv4TosPrecedenceChoiceEnum
+	INCREMENT   PatternFlowIpv4TosPrecedenceChoiceEnum
+	DECREMENT   PatternFlowIpv4TosPrecedenceChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowIpv4TosPrecedenceChoiceEnum("unspecified"),
+	VALUE:       PatternFlowIpv4TosPrecedenceChoiceEnum("value"),
+	VALUES:      PatternFlowIpv4TosPrecedenceChoiceEnum("values"),
+	INCREMENT:   PatternFlowIpv4TosPrecedenceChoiceEnum("increment"),
+	DECREMENT:   PatternFlowIpv4TosPrecedenceChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowIpv4TosPrecedence) Choice() PatternFlowIpv4TosPrecedenceChoiceEnum {
+	return PatternFlowIpv4TosPrecedenceChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowIpv4TosPrecedence) SetChoice(value PatternFlowIpv4TosPrecedenceChoiceEnum) PatternFlowIpv4TosPrecedence {
+	intValue := snappipb.PatternFlowIpv4TosPrecedence_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowIpv4TosPrecedence_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -37211,6 +43130,7 @@ func (obj *patternFlowIpv4TosPrecedence) Value() int32 {
 //  description is TBD
 func (obj *patternFlowIpv4TosPrecedence) SetValue(value int32) PatternFlowIpv4TosPrecedence {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowIpv4TosPrecedenceChoice.VALUE)
 	return obj
 }
 
@@ -37224,6 +43144,7 @@ func (obj *patternFlowIpv4TosPrecedence) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowIpv4TosPrecedence) SetValues(value []int32) PatternFlowIpv4TosPrecedence {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowIpv4TosPrecedenceChoice.VALUES)
 	return obj
 }
 
@@ -37237,6 +43158,7 @@ func (obj *patternFlowIpv4TosPrecedence) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowIpv4TosPrecedence) SetMetricGroup(value string) PatternFlowIpv4TosPrecedence {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -37246,8 +43168,8 @@ func (obj *patternFlowIpv4TosPrecedence) Increment() PatternFlowIpv4TosPrecedenc
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowIpv4TosPrecedenceCounter{}
 	}
+	obj.SetChoice(PatternFlowIpv4TosPrecedenceChoice.INCREMENT)
 	return &patternFlowIpv4TosPrecedenceCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowIpv4TosPrecedenceCounter
@@ -37256,8 +43178,8 @@ func (obj *patternFlowIpv4TosPrecedence) Decrement() PatternFlowIpv4TosPrecedenc
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowIpv4TosPrecedenceCounter{}
 	}
+	obj.SetChoice(PatternFlowIpv4TosPrecedenceChoice.DECREMENT)
 	return &patternFlowIpv4TosPrecedenceCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowIpv4TosDelay struct {
@@ -37306,6 +43228,8 @@ type PatternFlowIpv4TosDelay interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowIpv4TosDelayChoiceEnum
+	SetChoice(value PatternFlowIpv4TosDelayChoiceEnum) PatternFlowIpv4TosDelay
 	Value() int32
 	SetValue(value int32) PatternFlowIpv4TosDelay
 	Values() []int32
@@ -37314,6 +43238,33 @@ type PatternFlowIpv4TosDelay interface {
 	SetMetricGroup(value string) PatternFlowIpv4TosDelay
 	Increment() PatternFlowIpv4TosDelayCounter
 	Decrement() PatternFlowIpv4TosDelayCounter
+}
+
+type PatternFlowIpv4TosDelayChoiceEnum string
+
+var PatternFlowIpv4TosDelayChoice = struct {
+	UNSPECIFIED PatternFlowIpv4TosDelayChoiceEnum
+	VALUE       PatternFlowIpv4TosDelayChoiceEnum
+	VALUES      PatternFlowIpv4TosDelayChoiceEnum
+	INCREMENT   PatternFlowIpv4TosDelayChoiceEnum
+	DECREMENT   PatternFlowIpv4TosDelayChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowIpv4TosDelayChoiceEnum("unspecified"),
+	VALUE:       PatternFlowIpv4TosDelayChoiceEnum("value"),
+	VALUES:      PatternFlowIpv4TosDelayChoiceEnum("values"),
+	INCREMENT:   PatternFlowIpv4TosDelayChoiceEnum("increment"),
+	DECREMENT:   PatternFlowIpv4TosDelayChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowIpv4TosDelay) Choice() PatternFlowIpv4TosDelayChoiceEnum {
+	return PatternFlowIpv4TosDelayChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowIpv4TosDelay) SetChoice(value PatternFlowIpv4TosDelayChoiceEnum) PatternFlowIpv4TosDelay {
+	intValue := snappipb.PatternFlowIpv4TosDelay_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowIpv4TosDelay_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -37326,6 +43277,7 @@ func (obj *patternFlowIpv4TosDelay) Value() int32 {
 //  description is TBD
 func (obj *patternFlowIpv4TosDelay) SetValue(value int32) PatternFlowIpv4TosDelay {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowIpv4TosDelayChoice.VALUE)
 	return obj
 }
 
@@ -37339,6 +43291,7 @@ func (obj *patternFlowIpv4TosDelay) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowIpv4TosDelay) SetValues(value []int32) PatternFlowIpv4TosDelay {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowIpv4TosDelayChoice.VALUES)
 	return obj
 }
 
@@ -37352,6 +43305,7 @@ func (obj *patternFlowIpv4TosDelay) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowIpv4TosDelay) SetMetricGroup(value string) PatternFlowIpv4TosDelay {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -37361,8 +43315,8 @@ func (obj *patternFlowIpv4TosDelay) Increment() PatternFlowIpv4TosDelayCounter {
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowIpv4TosDelayCounter{}
 	}
+	obj.SetChoice(PatternFlowIpv4TosDelayChoice.INCREMENT)
 	return &patternFlowIpv4TosDelayCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowIpv4TosDelayCounter
@@ -37371,8 +43325,8 @@ func (obj *patternFlowIpv4TosDelay) Decrement() PatternFlowIpv4TosDelayCounter {
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowIpv4TosDelayCounter{}
 	}
+	obj.SetChoice(PatternFlowIpv4TosDelayChoice.DECREMENT)
 	return &patternFlowIpv4TosDelayCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowIpv4TosThroughput struct {
@@ -37421,6 +43375,8 @@ type PatternFlowIpv4TosThroughput interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowIpv4TosThroughputChoiceEnum
+	SetChoice(value PatternFlowIpv4TosThroughputChoiceEnum) PatternFlowIpv4TosThroughput
 	Value() int32
 	SetValue(value int32) PatternFlowIpv4TosThroughput
 	Values() []int32
@@ -37429,6 +43385,33 @@ type PatternFlowIpv4TosThroughput interface {
 	SetMetricGroup(value string) PatternFlowIpv4TosThroughput
 	Increment() PatternFlowIpv4TosThroughputCounter
 	Decrement() PatternFlowIpv4TosThroughputCounter
+}
+
+type PatternFlowIpv4TosThroughputChoiceEnum string
+
+var PatternFlowIpv4TosThroughputChoice = struct {
+	UNSPECIFIED PatternFlowIpv4TosThroughputChoiceEnum
+	VALUE       PatternFlowIpv4TosThroughputChoiceEnum
+	VALUES      PatternFlowIpv4TosThroughputChoiceEnum
+	INCREMENT   PatternFlowIpv4TosThroughputChoiceEnum
+	DECREMENT   PatternFlowIpv4TosThroughputChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowIpv4TosThroughputChoiceEnum("unspecified"),
+	VALUE:       PatternFlowIpv4TosThroughputChoiceEnum("value"),
+	VALUES:      PatternFlowIpv4TosThroughputChoiceEnum("values"),
+	INCREMENT:   PatternFlowIpv4TosThroughputChoiceEnum("increment"),
+	DECREMENT:   PatternFlowIpv4TosThroughputChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowIpv4TosThroughput) Choice() PatternFlowIpv4TosThroughputChoiceEnum {
+	return PatternFlowIpv4TosThroughputChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowIpv4TosThroughput) SetChoice(value PatternFlowIpv4TosThroughputChoiceEnum) PatternFlowIpv4TosThroughput {
+	intValue := snappipb.PatternFlowIpv4TosThroughput_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowIpv4TosThroughput_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -37441,6 +43424,7 @@ func (obj *patternFlowIpv4TosThroughput) Value() int32 {
 //  description is TBD
 func (obj *patternFlowIpv4TosThroughput) SetValue(value int32) PatternFlowIpv4TosThroughput {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowIpv4TosThroughputChoice.VALUE)
 	return obj
 }
 
@@ -37454,6 +43438,7 @@ func (obj *patternFlowIpv4TosThroughput) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowIpv4TosThroughput) SetValues(value []int32) PatternFlowIpv4TosThroughput {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowIpv4TosThroughputChoice.VALUES)
 	return obj
 }
 
@@ -37467,6 +43452,7 @@ func (obj *patternFlowIpv4TosThroughput) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowIpv4TosThroughput) SetMetricGroup(value string) PatternFlowIpv4TosThroughput {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -37476,8 +43462,8 @@ func (obj *patternFlowIpv4TosThroughput) Increment() PatternFlowIpv4TosThroughpu
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowIpv4TosThroughputCounter{}
 	}
+	obj.SetChoice(PatternFlowIpv4TosThroughputChoice.INCREMENT)
 	return &patternFlowIpv4TosThroughputCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowIpv4TosThroughputCounter
@@ -37486,8 +43472,8 @@ func (obj *patternFlowIpv4TosThroughput) Decrement() PatternFlowIpv4TosThroughpu
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowIpv4TosThroughputCounter{}
 	}
+	obj.SetChoice(PatternFlowIpv4TosThroughputChoice.DECREMENT)
 	return &patternFlowIpv4TosThroughputCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowIpv4TosReliability struct {
@@ -37536,6 +43522,8 @@ type PatternFlowIpv4TosReliability interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowIpv4TosReliabilityChoiceEnum
+	SetChoice(value PatternFlowIpv4TosReliabilityChoiceEnum) PatternFlowIpv4TosReliability
 	Value() int32
 	SetValue(value int32) PatternFlowIpv4TosReliability
 	Values() []int32
@@ -37544,6 +43532,33 @@ type PatternFlowIpv4TosReliability interface {
 	SetMetricGroup(value string) PatternFlowIpv4TosReliability
 	Increment() PatternFlowIpv4TosReliabilityCounter
 	Decrement() PatternFlowIpv4TosReliabilityCounter
+}
+
+type PatternFlowIpv4TosReliabilityChoiceEnum string
+
+var PatternFlowIpv4TosReliabilityChoice = struct {
+	UNSPECIFIED PatternFlowIpv4TosReliabilityChoiceEnum
+	VALUE       PatternFlowIpv4TosReliabilityChoiceEnum
+	VALUES      PatternFlowIpv4TosReliabilityChoiceEnum
+	INCREMENT   PatternFlowIpv4TosReliabilityChoiceEnum
+	DECREMENT   PatternFlowIpv4TosReliabilityChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowIpv4TosReliabilityChoiceEnum("unspecified"),
+	VALUE:       PatternFlowIpv4TosReliabilityChoiceEnum("value"),
+	VALUES:      PatternFlowIpv4TosReliabilityChoiceEnum("values"),
+	INCREMENT:   PatternFlowIpv4TosReliabilityChoiceEnum("increment"),
+	DECREMENT:   PatternFlowIpv4TosReliabilityChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowIpv4TosReliability) Choice() PatternFlowIpv4TosReliabilityChoiceEnum {
+	return PatternFlowIpv4TosReliabilityChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowIpv4TosReliability) SetChoice(value PatternFlowIpv4TosReliabilityChoiceEnum) PatternFlowIpv4TosReliability {
+	intValue := snappipb.PatternFlowIpv4TosReliability_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowIpv4TosReliability_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -37556,6 +43571,7 @@ func (obj *patternFlowIpv4TosReliability) Value() int32 {
 //  description is TBD
 func (obj *patternFlowIpv4TosReliability) SetValue(value int32) PatternFlowIpv4TosReliability {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowIpv4TosReliabilityChoice.VALUE)
 	return obj
 }
 
@@ -37569,6 +43585,7 @@ func (obj *patternFlowIpv4TosReliability) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowIpv4TosReliability) SetValues(value []int32) PatternFlowIpv4TosReliability {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowIpv4TosReliabilityChoice.VALUES)
 	return obj
 }
 
@@ -37582,6 +43599,7 @@ func (obj *patternFlowIpv4TosReliability) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowIpv4TosReliability) SetMetricGroup(value string) PatternFlowIpv4TosReliability {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -37591,8 +43609,8 @@ func (obj *patternFlowIpv4TosReliability) Increment() PatternFlowIpv4TosReliabil
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowIpv4TosReliabilityCounter{}
 	}
+	obj.SetChoice(PatternFlowIpv4TosReliabilityChoice.INCREMENT)
 	return &patternFlowIpv4TosReliabilityCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowIpv4TosReliabilityCounter
@@ -37601,8 +43619,8 @@ func (obj *patternFlowIpv4TosReliability) Decrement() PatternFlowIpv4TosReliabil
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowIpv4TosReliabilityCounter{}
 	}
+	obj.SetChoice(PatternFlowIpv4TosReliabilityChoice.DECREMENT)
 	return &patternFlowIpv4TosReliabilityCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowIpv4TosMonetary struct {
@@ -37651,6 +43669,8 @@ type PatternFlowIpv4TosMonetary interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowIpv4TosMonetaryChoiceEnum
+	SetChoice(value PatternFlowIpv4TosMonetaryChoiceEnum) PatternFlowIpv4TosMonetary
 	Value() int32
 	SetValue(value int32) PatternFlowIpv4TosMonetary
 	Values() []int32
@@ -37659,6 +43679,33 @@ type PatternFlowIpv4TosMonetary interface {
 	SetMetricGroup(value string) PatternFlowIpv4TosMonetary
 	Increment() PatternFlowIpv4TosMonetaryCounter
 	Decrement() PatternFlowIpv4TosMonetaryCounter
+}
+
+type PatternFlowIpv4TosMonetaryChoiceEnum string
+
+var PatternFlowIpv4TosMonetaryChoice = struct {
+	UNSPECIFIED PatternFlowIpv4TosMonetaryChoiceEnum
+	VALUE       PatternFlowIpv4TosMonetaryChoiceEnum
+	VALUES      PatternFlowIpv4TosMonetaryChoiceEnum
+	INCREMENT   PatternFlowIpv4TosMonetaryChoiceEnum
+	DECREMENT   PatternFlowIpv4TosMonetaryChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowIpv4TosMonetaryChoiceEnum("unspecified"),
+	VALUE:       PatternFlowIpv4TosMonetaryChoiceEnum("value"),
+	VALUES:      PatternFlowIpv4TosMonetaryChoiceEnum("values"),
+	INCREMENT:   PatternFlowIpv4TosMonetaryChoiceEnum("increment"),
+	DECREMENT:   PatternFlowIpv4TosMonetaryChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowIpv4TosMonetary) Choice() PatternFlowIpv4TosMonetaryChoiceEnum {
+	return PatternFlowIpv4TosMonetaryChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowIpv4TosMonetary) SetChoice(value PatternFlowIpv4TosMonetaryChoiceEnum) PatternFlowIpv4TosMonetary {
+	intValue := snappipb.PatternFlowIpv4TosMonetary_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowIpv4TosMonetary_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -37671,6 +43718,7 @@ func (obj *patternFlowIpv4TosMonetary) Value() int32 {
 //  description is TBD
 func (obj *patternFlowIpv4TosMonetary) SetValue(value int32) PatternFlowIpv4TosMonetary {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowIpv4TosMonetaryChoice.VALUE)
 	return obj
 }
 
@@ -37684,6 +43732,7 @@ func (obj *patternFlowIpv4TosMonetary) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowIpv4TosMonetary) SetValues(value []int32) PatternFlowIpv4TosMonetary {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowIpv4TosMonetaryChoice.VALUES)
 	return obj
 }
 
@@ -37697,6 +43746,7 @@ func (obj *patternFlowIpv4TosMonetary) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowIpv4TosMonetary) SetMetricGroup(value string) PatternFlowIpv4TosMonetary {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -37706,8 +43756,8 @@ func (obj *patternFlowIpv4TosMonetary) Increment() PatternFlowIpv4TosMonetaryCou
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowIpv4TosMonetaryCounter{}
 	}
+	obj.SetChoice(PatternFlowIpv4TosMonetaryChoice.INCREMENT)
 	return &patternFlowIpv4TosMonetaryCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowIpv4TosMonetaryCounter
@@ -37716,8 +43766,8 @@ func (obj *patternFlowIpv4TosMonetary) Decrement() PatternFlowIpv4TosMonetaryCou
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowIpv4TosMonetaryCounter{}
 	}
+	obj.SetChoice(PatternFlowIpv4TosMonetaryChoice.DECREMENT)
 	return &patternFlowIpv4TosMonetaryCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowIpv4TosUnused struct {
@@ -37766,6 +43816,8 @@ type PatternFlowIpv4TosUnused interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowIpv4TosUnusedChoiceEnum
+	SetChoice(value PatternFlowIpv4TosUnusedChoiceEnum) PatternFlowIpv4TosUnused
 	Value() int32
 	SetValue(value int32) PatternFlowIpv4TosUnused
 	Values() []int32
@@ -37774,6 +43826,33 @@ type PatternFlowIpv4TosUnused interface {
 	SetMetricGroup(value string) PatternFlowIpv4TosUnused
 	Increment() PatternFlowIpv4TosUnusedCounter
 	Decrement() PatternFlowIpv4TosUnusedCounter
+}
+
+type PatternFlowIpv4TosUnusedChoiceEnum string
+
+var PatternFlowIpv4TosUnusedChoice = struct {
+	UNSPECIFIED PatternFlowIpv4TosUnusedChoiceEnum
+	VALUE       PatternFlowIpv4TosUnusedChoiceEnum
+	VALUES      PatternFlowIpv4TosUnusedChoiceEnum
+	INCREMENT   PatternFlowIpv4TosUnusedChoiceEnum
+	DECREMENT   PatternFlowIpv4TosUnusedChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowIpv4TosUnusedChoiceEnum("unspecified"),
+	VALUE:       PatternFlowIpv4TosUnusedChoiceEnum("value"),
+	VALUES:      PatternFlowIpv4TosUnusedChoiceEnum("values"),
+	INCREMENT:   PatternFlowIpv4TosUnusedChoiceEnum("increment"),
+	DECREMENT:   PatternFlowIpv4TosUnusedChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowIpv4TosUnused) Choice() PatternFlowIpv4TosUnusedChoiceEnum {
+	return PatternFlowIpv4TosUnusedChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowIpv4TosUnused) SetChoice(value PatternFlowIpv4TosUnusedChoiceEnum) PatternFlowIpv4TosUnused {
+	intValue := snappipb.PatternFlowIpv4TosUnused_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowIpv4TosUnused_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -37786,6 +43865,7 @@ func (obj *patternFlowIpv4TosUnused) Value() int32 {
 //  description is TBD
 func (obj *patternFlowIpv4TosUnused) SetValue(value int32) PatternFlowIpv4TosUnused {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowIpv4TosUnusedChoice.VALUE)
 	return obj
 }
 
@@ -37799,6 +43879,7 @@ func (obj *patternFlowIpv4TosUnused) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowIpv4TosUnused) SetValues(value []int32) PatternFlowIpv4TosUnused {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowIpv4TosUnusedChoice.VALUES)
 	return obj
 }
 
@@ -37812,6 +43893,7 @@ func (obj *patternFlowIpv4TosUnused) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowIpv4TosUnused) SetMetricGroup(value string) PatternFlowIpv4TosUnused {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -37821,8 +43903,8 @@ func (obj *patternFlowIpv4TosUnused) Increment() PatternFlowIpv4TosUnusedCounter
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowIpv4TosUnusedCounter{}
 	}
+	obj.SetChoice(PatternFlowIpv4TosUnusedChoice.INCREMENT)
 	return &patternFlowIpv4TosUnusedCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowIpv4TosUnusedCounter
@@ -37831,8 +43913,8 @@ func (obj *patternFlowIpv4TosUnused) Decrement() PatternFlowIpv4TosUnusedCounter
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowIpv4TosUnusedCounter{}
 	}
+	obj.SetChoice(PatternFlowIpv4TosUnusedChoice.DECREMENT)
 	return &patternFlowIpv4TosUnusedCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowIpv4DscpPhb struct {
@@ -37881,6 +43963,8 @@ type PatternFlowIpv4DscpPhb interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowIpv4DscpPhbChoiceEnum
+	SetChoice(value PatternFlowIpv4DscpPhbChoiceEnum) PatternFlowIpv4DscpPhb
 	Value() int32
 	SetValue(value int32) PatternFlowIpv4DscpPhb
 	Values() []int32
@@ -37889,6 +43973,33 @@ type PatternFlowIpv4DscpPhb interface {
 	SetMetricGroup(value string) PatternFlowIpv4DscpPhb
 	Increment() PatternFlowIpv4DscpPhbCounter
 	Decrement() PatternFlowIpv4DscpPhbCounter
+}
+
+type PatternFlowIpv4DscpPhbChoiceEnum string
+
+var PatternFlowIpv4DscpPhbChoice = struct {
+	UNSPECIFIED PatternFlowIpv4DscpPhbChoiceEnum
+	VALUE       PatternFlowIpv4DscpPhbChoiceEnum
+	VALUES      PatternFlowIpv4DscpPhbChoiceEnum
+	INCREMENT   PatternFlowIpv4DscpPhbChoiceEnum
+	DECREMENT   PatternFlowIpv4DscpPhbChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowIpv4DscpPhbChoiceEnum("unspecified"),
+	VALUE:       PatternFlowIpv4DscpPhbChoiceEnum("value"),
+	VALUES:      PatternFlowIpv4DscpPhbChoiceEnum("values"),
+	INCREMENT:   PatternFlowIpv4DscpPhbChoiceEnum("increment"),
+	DECREMENT:   PatternFlowIpv4DscpPhbChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowIpv4DscpPhb) Choice() PatternFlowIpv4DscpPhbChoiceEnum {
+	return PatternFlowIpv4DscpPhbChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowIpv4DscpPhb) SetChoice(value PatternFlowIpv4DscpPhbChoiceEnum) PatternFlowIpv4DscpPhb {
+	intValue := snappipb.PatternFlowIpv4DscpPhb_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowIpv4DscpPhb_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -37901,6 +44012,7 @@ func (obj *patternFlowIpv4DscpPhb) Value() int32 {
 //  description is TBD
 func (obj *patternFlowIpv4DscpPhb) SetValue(value int32) PatternFlowIpv4DscpPhb {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowIpv4DscpPhbChoice.VALUE)
 	return obj
 }
 
@@ -37914,6 +44026,7 @@ func (obj *patternFlowIpv4DscpPhb) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowIpv4DscpPhb) SetValues(value []int32) PatternFlowIpv4DscpPhb {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowIpv4DscpPhbChoice.VALUES)
 	return obj
 }
 
@@ -37927,6 +44040,7 @@ func (obj *patternFlowIpv4DscpPhb) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowIpv4DscpPhb) SetMetricGroup(value string) PatternFlowIpv4DscpPhb {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -37936,8 +44050,8 @@ func (obj *patternFlowIpv4DscpPhb) Increment() PatternFlowIpv4DscpPhbCounter {
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowIpv4DscpPhbCounter{}
 	}
+	obj.SetChoice(PatternFlowIpv4DscpPhbChoice.INCREMENT)
 	return &patternFlowIpv4DscpPhbCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowIpv4DscpPhbCounter
@@ -37946,8 +44060,8 @@ func (obj *patternFlowIpv4DscpPhb) Decrement() PatternFlowIpv4DscpPhbCounter {
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowIpv4DscpPhbCounter{}
 	}
+	obj.SetChoice(PatternFlowIpv4DscpPhbChoice.DECREMENT)
 	return &patternFlowIpv4DscpPhbCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowIpv4DscpEcn struct {
@@ -37996,6 +44110,8 @@ type PatternFlowIpv4DscpEcn interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	Choice() PatternFlowIpv4DscpEcnChoiceEnum
+	SetChoice(value PatternFlowIpv4DscpEcnChoiceEnum) PatternFlowIpv4DscpEcn
 	Value() int32
 	SetValue(value int32) PatternFlowIpv4DscpEcn
 	Values() []int32
@@ -38004,6 +44120,33 @@ type PatternFlowIpv4DscpEcn interface {
 	SetMetricGroup(value string) PatternFlowIpv4DscpEcn
 	Increment() PatternFlowIpv4DscpEcnCounter
 	Decrement() PatternFlowIpv4DscpEcnCounter
+}
+
+type PatternFlowIpv4DscpEcnChoiceEnum string
+
+var PatternFlowIpv4DscpEcnChoice = struct {
+	UNSPECIFIED PatternFlowIpv4DscpEcnChoiceEnum
+	VALUE       PatternFlowIpv4DscpEcnChoiceEnum
+	VALUES      PatternFlowIpv4DscpEcnChoiceEnum
+	INCREMENT   PatternFlowIpv4DscpEcnChoiceEnum
+	DECREMENT   PatternFlowIpv4DscpEcnChoiceEnum
+}{
+	UNSPECIFIED: PatternFlowIpv4DscpEcnChoiceEnum("unspecified"),
+	VALUE:       PatternFlowIpv4DscpEcnChoiceEnum("value"),
+	VALUES:      PatternFlowIpv4DscpEcnChoiceEnum("values"),
+	INCREMENT:   PatternFlowIpv4DscpEcnChoiceEnum("increment"),
+	DECREMENT:   PatternFlowIpv4DscpEcnChoiceEnum("decrement"),
+}
+
+func (obj *patternFlowIpv4DscpEcn) Choice() PatternFlowIpv4DscpEcnChoiceEnum {
+	return PatternFlowIpv4DscpEcnChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *patternFlowIpv4DscpEcn) SetChoice(value PatternFlowIpv4DscpEcnChoiceEnum) PatternFlowIpv4DscpEcn {
+	intValue := snappipb.PatternFlowIpv4DscpEcn_Choice_Enum_value[string(value)]
+	enumValue := snappipb.PatternFlowIpv4DscpEcn_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
 }
 
 // Value returns a int32
@@ -38016,6 +44159,7 @@ func (obj *patternFlowIpv4DscpEcn) Value() int32 {
 //  description is TBD
 func (obj *patternFlowIpv4DscpEcn) SetValue(value int32) PatternFlowIpv4DscpEcn {
 	obj.obj.Value = &value
+	obj.SetChoice(PatternFlowIpv4DscpEcnChoice.VALUE)
 	return obj
 }
 
@@ -38029,6 +44173,7 @@ func (obj *patternFlowIpv4DscpEcn) Values() []int32 {
 //  description is TBD
 func (obj *patternFlowIpv4DscpEcn) SetValues(value []int32) PatternFlowIpv4DscpEcn {
 	obj.obj.Values = value
+	obj.SetChoice(PatternFlowIpv4DscpEcnChoice.VALUES)
 	return obj
 }
 
@@ -38042,6 +44187,7 @@ func (obj *patternFlowIpv4DscpEcn) MetricGroup() string {
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowIpv4DscpEcn) SetMetricGroup(value string) PatternFlowIpv4DscpEcn {
 	obj.obj.MetricGroup = &value
+
 	return obj
 }
 
@@ -38051,8 +44197,8 @@ func (obj *patternFlowIpv4DscpEcn) Increment() PatternFlowIpv4DscpEcnCounter {
 	if obj.obj.Increment == nil {
 		obj.obj.Increment = &snappipb.PatternFlowIpv4DscpEcnCounter{}
 	}
+	obj.SetChoice(PatternFlowIpv4DscpEcnChoice.INCREMENT)
 	return &patternFlowIpv4DscpEcnCounter{obj: obj.obj.Increment}
-
 }
 
 // Decrement returns a PatternFlowIpv4DscpEcnCounter
@@ -38061,8 +44207,8 @@ func (obj *patternFlowIpv4DscpEcn) Decrement() PatternFlowIpv4DscpEcnCounter {
 	if obj.obj.Decrement == nil {
 		obj.obj.Decrement = &snappipb.PatternFlowIpv4DscpEcnCounter{}
 	}
+	obj.SetChoice(PatternFlowIpv4DscpEcnChoice.DECREMENT)
 	return &patternFlowIpv4DscpEcnCounter{obj: obj.obj.Decrement}
-
 }
 
 type patternFlowGtpExtensionExtensionLengthCounter struct {
@@ -38129,6 +44275,7 @@ func (obj *patternFlowGtpExtensionExtensionLengthCounter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowGtpExtensionExtensionLengthCounter) SetStart(value int32) PatternFlowGtpExtensionExtensionLengthCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -38142,6 +44289,7 @@ func (obj *patternFlowGtpExtensionExtensionLengthCounter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowGtpExtensionExtensionLengthCounter) SetStep(value int32) PatternFlowGtpExtensionExtensionLengthCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -38155,6 +44303,7 @@ func (obj *patternFlowGtpExtensionExtensionLengthCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowGtpExtensionExtensionLengthCounter) SetCount(value int32) PatternFlowGtpExtensionExtensionLengthCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -38222,6 +44371,7 @@ func (obj *patternFlowGtpExtensionContentsCounter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowGtpExtensionContentsCounter) SetStart(value int32) PatternFlowGtpExtensionContentsCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -38235,6 +44385,7 @@ func (obj *patternFlowGtpExtensionContentsCounter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowGtpExtensionContentsCounter) SetStep(value int32) PatternFlowGtpExtensionContentsCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -38248,6 +44399,7 @@ func (obj *patternFlowGtpExtensionContentsCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowGtpExtensionContentsCounter) SetCount(value int32) PatternFlowGtpExtensionContentsCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -38315,6 +44467,7 @@ func (obj *patternFlowGtpExtensionNextExtensionHeaderCounter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowGtpExtensionNextExtensionHeaderCounter) SetStart(value int32) PatternFlowGtpExtensionNextExtensionHeaderCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -38328,6 +44481,7 @@ func (obj *patternFlowGtpExtensionNextExtensionHeaderCounter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowGtpExtensionNextExtensionHeaderCounter) SetStep(value int32) PatternFlowGtpExtensionNextExtensionHeaderCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -38341,6 +44495,7 @@ func (obj *patternFlowGtpExtensionNextExtensionHeaderCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowGtpExtensionNextExtensionHeaderCounter) SetCount(value int32) PatternFlowGtpExtensionNextExtensionHeaderCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -38408,6 +44563,7 @@ func (obj *patternFlowIcmpEchoTypeCounter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowIcmpEchoTypeCounter) SetStart(value int32) PatternFlowIcmpEchoTypeCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -38421,6 +44577,7 @@ func (obj *patternFlowIcmpEchoTypeCounter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowIcmpEchoTypeCounter) SetStep(value int32) PatternFlowIcmpEchoTypeCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -38434,6 +44591,7 @@ func (obj *patternFlowIcmpEchoTypeCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowIcmpEchoTypeCounter) SetCount(value int32) PatternFlowIcmpEchoTypeCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -38501,6 +44659,7 @@ func (obj *patternFlowIcmpEchoCodeCounter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowIcmpEchoCodeCounter) SetStart(value int32) PatternFlowIcmpEchoCodeCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -38514,6 +44673,7 @@ func (obj *patternFlowIcmpEchoCodeCounter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowIcmpEchoCodeCounter) SetStep(value int32) PatternFlowIcmpEchoCodeCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -38527,6 +44687,7 @@ func (obj *patternFlowIcmpEchoCodeCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowIcmpEchoCodeCounter) SetCount(value int32) PatternFlowIcmpEchoCodeCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -38594,6 +44755,7 @@ func (obj *patternFlowIcmpEchoIdentifierCounter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowIcmpEchoIdentifierCounter) SetStart(value int32) PatternFlowIcmpEchoIdentifierCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -38607,6 +44769,7 @@ func (obj *patternFlowIcmpEchoIdentifierCounter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowIcmpEchoIdentifierCounter) SetStep(value int32) PatternFlowIcmpEchoIdentifierCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -38620,6 +44783,7 @@ func (obj *patternFlowIcmpEchoIdentifierCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowIcmpEchoIdentifierCounter) SetCount(value int32) PatternFlowIcmpEchoIdentifierCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -38687,6 +44851,7 @@ func (obj *patternFlowIcmpEchoSequenceNumberCounter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowIcmpEchoSequenceNumberCounter) SetStart(value int32) PatternFlowIcmpEchoSequenceNumberCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -38700,6 +44865,7 @@ func (obj *patternFlowIcmpEchoSequenceNumberCounter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowIcmpEchoSequenceNumberCounter) SetStep(value int32) PatternFlowIcmpEchoSequenceNumberCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -38713,6 +44879,7 @@ func (obj *patternFlowIcmpEchoSequenceNumberCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowIcmpEchoSequenceNumberCounter) SetCount(value int32) PatternFlowIcmpEchoSequenceNumberCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -38780,6 +44947,7 @@ func (obj *patternFlowIcmpv6EchoTypeCounter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowIcmpv6EchoTypeCounter) SetStart(value int32) PatternFlowIcmpv6EchoTypeCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -38793,6 +44961,7 @@ func (obj *patternFlowIcmpv6EchoTypeCounter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowIcmpv6EchoTypeCounter) SetStep(value int32) PatternFlowIcmpv6EchoTypeCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -38806,6 +44975,7 @@ func (obj *patternFlowIcmpv6EchoTypeCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowIcmpv6EchoTypeCounter) SetCount(value int32) PatternFlowIcmpv6EchoTypeCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -38873,6 +45043,7 @@ func (obj *patternFlowIcmpv6EchoCodeCounter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowIcmpv6EchoCodeCounter) SetStart(value int32) PatternFlowIcmpv6EchoCodeCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -38886,6 +45057,7 @@ func (obj *patternFlowIcmpv6EchoCodeCounter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowIcmpv6EchoCodeCounter) SetStep(value int32) PatternFlowIcmpv6EchoCodeCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -38899,6 +45071,7 @@ func (obj *patternFlowIcmpv6EchoCodeCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowIcmpv6EchoCodeCounter) SetCount(value int32) PatternFlowIcmpv6EchoCodeCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -38966,6 +45139,7 @@ func (obj *patternFlowIcmpv6EchoIdentifierCounter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowIcmpv6EchoIdentifierCounter) SetStart(value int32) PatternFlowIcmpv6EchoIdentifierCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -38979,6 +45153,7 @@ func (obj *patternFlowIcmpv6EchoIdentifierCounter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowIcmpv6EchoIdentifierCounter) SetStep(value int32) PatternFlowIcmpv6EchoIdentifierCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -38992,6 +45167,7 @@ func (obj *patternFlowIcmpv6EchoIdentifierCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowIcmpv6EchoIdentifierCounter) SetCount(value int32) PatternFlowIcmpv6EchoIdentifierCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -39059,6 +45235,7 @@ func (obj *patternFlowIcmpv6EchoSequenceNumberCounter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowIcmpv6EchoSequenceNumberCounter) SetStart(value int32) PatternFlowIcmpv6EchoSequenceNumberCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -39072,6 +45249,7 @@ func (obj *patternFlowIcmpv6EchoSequenceNumberCounter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowIcmpv6EchoSequenceNumberCounter) SetStep(value int32) PatternFlowIcmpv6EchoSequenceNumberCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -39085,6 +45263,7 @@ func (obj *patternFlowIcmpv6EchoSequenceNumberCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowIcmpv6EchoSequenceNumberCounter) SetCount(value int32) PatternFlowIcmpv6EchoSequenceNumberCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -39134,8 +45313,37 @@ type DeviceBgpAsPathSegment interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	SegmentType() DeviceBgpAsPathSegmentSegmentTypeEnum
+	SetSegmentType(value DeviceBgpAsPathSegmentSegmentTypeEnum) DeviceBgpAsPathSegment
 	AsNumbers() []int32
 	SetAsNumbers(value []int32) DeviceBgpAsPathSegment
+}
+
+type DeviceBgpAsPathSegmentSegmentTypeEnum string
+
+var DeviceBgpAsPathSegmentSegmentType = struct {
+	UNSPECIFIED   DeviceBgpAsPathSegmentSegmentTypeEnum
+	AS_SEQ        DeviceBgpAsPathSegmentSegmentTypeEnum
+	AS_SET        DeviceBgpAsPathSegmentSegmentTypeEnum
+	AS_CONFED_SEQ DeviceBgpAsPathSegmentSegmentTypeEnum
+	AS_CONFED_SET DeviceBgpAsPathSegmentSegmentTypeEnum
+}{
+	UNSPECIFIED:   DeviceBgpAsPathSegmentSegmentTypeEnum("unspecified"),
+	AS_SEQ:        DeviceBgpAsPathSegmentSegmentTypeEnum("as_seq"),
+	AS_SET:        DeviceBgpAsPathSegmentSegmentTypeEnum("as_set"),
+	AS_CONFED_SEQ: DeviceBgpAsPathSegmentSegmentTypeEnum("as_confed_seq"),
+	AS_CONFED_SET: DeviceBgpAsPathSegmentSegmentTypeEnum("as_confed_set"),
+}
+
+func (obj *deviceBgpAsPathSegment) SegmentType() DeviceBgpAsPathSegmentSegmentTypeEnum {
+	return DeviceBgpAsPathSegmentSegmentTypeEnum(obj.obj.SegmentType.Enum().String())
+}
+
+func (obj *deviceBgpAsPathSegment) SetSegmentType(value DeviceBgpAsPathSegmentSegmentTypeEnum) DeviceBgpAsPathSegment {
+	intValue := snappipb.DeviceBgpAsPathSegment_SegmentType_Enum_value[string(value)]
+	enumValue := snappipb.DeviceBgpAsPathSegment_SegmentType_Enum(intValue)
+	obj.obj.SegmentType = &enumValue
+	return obj
 }
 
 // AsNumbers returns a []int32
@@ -39148,6 +45356,7 @@ func (obj *deviceBgpAsPathSegment) AsNumbers() []int32 {
 //  The AS numbers in this AS path segment.
 func (obj *deviceBgpAsPathSegment) SetAsNumbers(value []int32) DeviceBgpAsPathSegment {
 	obj.obj.AsNumbers = value
+
 	return obj
 }
 
@@ -39214,6 +45423,7 @@ func (obj *deviceBgpSegmentList) SegmentWeight() int32 {
 //  The weight associated with a given path.
 func (obj *deviceBgpSegmentList) SetSegmentWeight(value int32) DeviceBgpSegmentList {
 	obj.obj.SegmentWeight = &value
+
 	return obj
 }
 
@@ -39224,7 +45434,6 @@ func (obj *deviceBgpSegmentList) Segments() DeviceBgpSegmentListDeviceBgpSegment
 		obj.obj.Segments = []*snappipb.DeviceBgpSegment{}
 	}
 	return &deviceBgpSegmentListDeviceBgpSegmentIter{obj: obj}
-
 }
 
 type deviceBgpSegmentListDeviceBgpSegmentIter struct {
@@ -39260,6 +45469,7 @@ func (obj *deviceBgpSegmentList) Active() bool {
 //  If enabled means that this part of the configuration including any active 'children' nodes will be advertised to peer.  If disabled, this means that though config is present, it is not taking any part of the test but can be activated at run-time to advertise just this part of the configuration to the peer.
 func (obj *deviceBgpSegmentList) SetActive(value bool) DeviceBgpSegmentList {
 	obj.obj.Active = &value
+
 	return obj
 }
 
@@ -39311,6 +45521,8 @@ type DeviceBgpRemoteEndpointSubTlv interface {
 	FromJson(value string) error
 	AsNumber() int32
 	SetAsNumber(value int32) DeviceBgpRemoteEndpointSubTlv
+	AddressFamily() DeviceBgpRemoteEndpointSubTlvAddressFamilyEnum
+	SetAddressFamily(value DeviceBgpRemoteEndpointSubTlvAddressFamilyEnum) DeviceBgpRemoteEndpointSubTlv
 	Ipv4Address() string
 	SetIpv4Address(value string) DeviceBgpRemoteEndpointSubTlv
 	Ipv6Address() string
@@ -39327,6 +45539,30 @@ func (obj *deviceBgpRemoteEndpointSubTlv) AsNumber() int32 {
 //  Autonomous system (AS) number
 func (obj *deviceBgpRemoteEndpointSubTlv) SetAsNumber(value int32) DeviceBgpRemoteEndpointSubTlv {
 	obj.obj.AsNumber = &value
+
+	return obj
+}
+
+type DeviceBgpRemoteEndpointSubTlvAddressFamilyEnum string
+
+var DeviceBgpRemoteEndpointSubTlvAddressFamily = struct {
+	UNSPECIFIED DeviceBgpRemoteEndpointSubTlvAddressFamilyEnum
+	IPV4        DeviceBgpRemoteEndpointSubTlvAddressFamilyEnum
+	IPV6        DeviceBgpRemoteEndpointSubTlvAddressFamilyEnum
+}{
+	UNSPECIFIED: DeviceBgpRemoteEndpointSubTlvAddressFamilyEnum("unspecified"),
+	IPV4:        DeviceBgpRemoteEndpointSubTlvAddressFamilyEnum("ipv4"),
+	IPV6:        DeviceBgpRemoteEndpointSubTlvAddressFamilyEnum("ipv6"),
+}
+
+func (obj *deviceBgpRemoteEndpointSubTlv) AddressFamily() DeviceBgpRemoteEndpointSubTlvAddressFamilyEnum {
+	return DeviceBgpRemoteEndpointSubTlvAddressFamilyEnum(obj.obj.AddressFamily.Enum().String())
+}
+
+func (obj *deviceBgpRemoteEndpointSubTlv) SetAddressFamily(value DeviceBgpRemoteEndpointSubTlvAddressFamilyEnum) DeviceBgpRemoteEndpointSubTlv {
+	intValue := snappipb.DeviceBgpRemoteEndpointSubTlv_AddressFamily_Enum_value[string(value)]
+	enumValue := snappipb.DeviceBgpRemoteEndpointSubTlv_AddressFamily_Enum(intValue)
+	obj.obj.AddressFamily = &enumValue
 	return obj
 }
 
@@ -39340,6 +45576,7 @@ func (obj *deviceBgpRemoteEndpointSubTlv) Ipv4Address() string {
 //  The IPv4 address
 func (obj *deviceBgpRemoteEndpointSubTlv) SetIpv4Address(value string) DeviceBgpRemoteEndpointSubTlv {
 	obj.obj.Ipv4Address = &value
+
 	return obj
 }
 
@@ -39353,6 +45590,7 @@ func (obj *deviceBgpRemoteEndpointSubTlv) Ipv6Address() string {
 //  The IPv6 address
 func (obj *deviceBgpRemoteEndpointSubTlv) SetIpv6Address(value string) DeviceBgpRemoteEndpointSubTlv {
 	obj.obj.Ipv6Address = &value
+
 	return obj
 }
 
@@ -39416,6 +45654,7 @@ func (obj *deviceBgpPreferenceSubTlv) Preference() int32 {
 //  TBD
 func (obj *deviceBgpPreferenceSubTlv) SetPreference(value int32) DeviceBgpPreferenceSubTlv {
 	obj.obj.Preference = &value
+
 	return obj
 }
 
@@ -39465,6 +45704,8 @@ type DeviceBgpBindingSubTlv interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	BindingSidType() DeviceBgpBindingSubTlvBindingSidTypeEnum
+	SetBindingSidType(value DeviceBgpBindingSubTlvBindingSidTypeEnum) DeviceBgpBindingSubTlv
 	FourOctetSid() int32
 	SetFourOctetSid(value int32) DeviceBgpBindingSubTlv
 	BsidAsMplsLabel() bool
@@ -39479,6 +45720,31 @@ type DeviceBgpBindingSubTlv interface {
 	SetRemainingFlagBits(value int32) DeviceBgpBindingSubTlv
 }
 
+type DeviceBgpBindingSubTlvBindingSidTypeEnum string
+
+var DeviceBgpBindingSubTlvBindingSidType = struct {
+	UNSPECIFIED    DeviceBgpBindingSubTlvBindingSidTypeEnum
+	NO_BINDING     DeviceBgpBindingSubTlvBindingSidTypeEnum
+	FOUR_OCTET_SID DeviceBgpBindingSubTlvBindingSidTypeEnum
+	IPV6_SID       DeviceBgpBindingSubTlvBindingSidTypeEnum
+}{
+	UNSPECIFIED:    DeviceBgpBindingSubTlvBindingSidTypeEnum("unspecified"),
+	NO_BINDING:     DeviceBgpBindingSubTlvBindingSidTypeEnum("no_binding"),
+	FOUR_OCTET_SID: DeviceBgpBindingSubTlvBindingSidTypeEnum("four_octet_sid"),
+	IPV6_SID:       DeviceBgpBindingSubTlvBindingSidTypeEnum("ipv6_sid"),
+}
+
+func (obj *deviceBgpBindingSubTlv) BindingSidType() DeviceBgpBindingSubTlvBindingSidTypeEnum {
+	return DeviceBgpBindingSubTlvBindingSidTypeEnum(obj.obj.BindingSidType.Enum().String())
+}
+
+func (obj *deviceBgpBindingSubTlv) SetBindingSidType(value DeviceBgpBindingSubTlvBindingSidTypeEnum) DeviceBgpBindingSubTlv {
+	intValue := snappipb.DeviceBgpBindingSubTlv_BindingSidType_Enum_value[string(value)]
+	enumValue := snappipb.DeviceBgpBindingSubTlv_BindingSidType_Enum(intValue)
+	obj.obj.BindingSidType = &enumValue
+	return obj
+}
+
 // FourOctetSid returns a int32
 //  TBD
 func (obj *deviceBgpBindingSubTlv) FourOctetSid() int32 {
@@ -39489,6 +45755,7 @@ func (obj *deviceBgpBindingSubTlv) FourOctetSid() int32 {
 //  TBD
 func (obj *deviceBgpBindingSubTlv) SetFourOctetSid(value int32) DeviceBgpBindingSubTlv {
 	obj.obj.FourOctetSid = &value
+
 	return obj
 }
 
@@ -39502,6 +45769,7 @@ func (obj *deviceBgpBindingSubTlv) BsidAsMplsLabel() bool {
 //  Only valid if binding_sid_type is four_octet_sid
 func (obj *deviceBgpBindingSubTlv) SetBsidAsMplsLabel(value bool) DeviceBgpBindingSubTlv {
 	obj.obj.BsidAsMplsLabel = &value
+
 	return obj
 }
 
@@ -39515,6 +45783,7 @@ func (obj *deviceBgpBindingSubTlv) Ipv6Sid() string {
 //  Only valid if binding_sid_type is ipv6_sid
 func (obj *deviceBgpBindingSubTlv) SetIpv6Sid(value string) DeviceBgpBindingSubTlv {
 	obj.obj.Ipv6Sid = &value
+
 	return obj
 }
 
@@ -39528,6 +45797,7 @@ func (obj *deviceBgpBindingSubTlv) SFlag() bool {
 //  TBD
 func (obj *deviceBgpBindingSubTlv) SetSFlag(value bool) DeviceBgpBindingSubTlv {
 	obj.obj.SFlag = &value
+
 	return obj
 }
 
@@ -39541,6 +45811,7 @@ func (obj *deviceBgpBindingSubTlv) IFlag() bool {
 //  TBD
 func (obj *deviceBgpBindingSubTlv) SetIFlag(value bool) DeviceBgpBindingSubTlv {
 	obj.obj.IFlag = &value
+
 	return obj
 }
 
@@ -39554,6 +45825,7 @@ func (obj *deviceBgpBindingSubTlv) RemainingFlagBits() int32 {
 //  TBD
 func (obj *deviceBgpBindingSubTlv) SetRemainingFlagBits(value int32) DeviceBgpBindingSubTlv {
 	obj.obj.RemainingFlagBits = &value
+
 	return obj
 }
 
@@ -39603,6 +45875,37 @@ type DeviceBgpExplicitNullLabelPolicySubTlv interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	ExplicitNullLabelPolicy() DeviceBgpExplicitNullLabelPolicySubTlvExplicitNullLabelPolicyEnum
+	SetExplicitNullLabelPolicy(value DeviceBgpExplicitNullLabelPolicySubTlvExplicitNullLabelPolicyEnum) DeviceBgpExplicitNullLabelPolicySubTlv
+}
+
+type DeviceBgpExplicitNullLabelPolicySubTlvExplicitNullLabelPolicyEnum string
+
+var DeviceBgpExplicitNullLabelPolicySubTlvExplicitNullLabelPolicy = struct {
+	UNSPECIFIED         DeviceBgpExplicitNullLabelPolicySubTlvExplicitNullLabelPolicyEnum
+	RESERVED_ENLP       DeviceBgpExplicitNullLabelPolicySubTlvExplicitNullLabelPolicyEnum
+	PUSH_IPV4_ENLP      DeviceBgpExplicitNullLabelPolicySubTlvExplicitNullLabelPolicyEnum
+	PUSH_IPV6_ENLP      DeviceBgpExplicitNullLabelPolicySubTlvExplicitNullLabelPolicyEnum
+	PUSH_IPV4_IPV6_ENLP DeviceBgpExplicitNullLabelPolicySubTlvExplicitNullLabelPolicyEnum
+	DO_NOT_PUSH_ENLP    DeviceBgpExplicitNullLabelPolicySubTlvExplicitNullLabelPolicyEnum
+}{
+	UNSPECIFIED:         DeviceBgpExplicitNullLabelPolicySubTlvExplicitNullLabelPolicyEnum("unspecified"),
+	RESERVED_ENLP:       DeviceBgpExplicitNullLabelPolicySubTlvExplicitNullLabelPolicyEnum("reserved_enlp"),
+	PUSH_IPV4_ENLP:      DeviceBgpExplicitNullLabelPolicySubTlvExplicitNullLabelPolicyEnum("push_ipv4_enlp"),
+	PUSH_IPV6_ENLP:      DeviceBgpExplicitNullLabelPolicySubTlvExplicitNullLabelPolicyEnum("push_ipv6_enlp"),
+	PUSH_IPV4_IPV6_ENLP: DeviceBgpExplicitNullLabelPolicySubTlvExplicitNullLabelPolicyEnum("push_ipv4_ipv6_enlp"),
+	DO_NOT_PUSH_ENLP:    DeviceBgpExplicitNullLabelPolicySubTlvExplicitNullLabelPolicyEnum("do_not_push_enlp"),
+}
+
+func (obj *deviceBgpExplicitNullLabelPolicySubTlv) ExplicitNullLabelPolicy() DeviceBgpExplicitNullLabelPolicySubTlvExplicitNullLabelPolicyEnum {
+	return DeviceBgpExplicitNullLabelPolicySubTlvExplicitNullLabelPolicyEnum(obj.obj.ExplicitNullLabelPolicy.Enum().String())
+}
+
+func (obj *deviceBgpExplicitNullLabelPolicySubTlv) SetExplicitNullLabelPolicy(value DeviceBgpExplicitNullLabelPolicySubTlvExplicitNullLabelPolicyEnum) DeviceBgpExplicitNullLabelPolicySubTlv {
+	intValue := snappipb.DeviceBgpExplicitNullLabelPolicySubTlv_ExplicitNullLabelPolicy_Enum_value[string(value)]
+	enumValue := snappipb.DeviceBgpExplicitNullLabelPolicySubTlv_ExplicitNullLabelPolicy_Enum(intValue)
+	obj.obj.ExplicitNullLabelPolicy = &enumValue
+	return obj
 }
 
 type patternFlowIpv4TosPrecedenceCounter struct {
@@ -39669,6 +45972,7 @@ func (obj *patternFlowIpv4TosPrecedenceCounter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowIpv4TosPrecedenceCounter) SetStart(value int32) PatternFlowIpv4TosPrecedenceCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -39682,6 +45986,7 @@ func (obj *patternFlowIpv4TosPrecedenceCounter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowIpv4TosPrecedenceCounter) SetStep(value int32) PatternFlowIpv4TosPrecedenceCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -39695,6 +46000,7 @@ func (obj *patternFlowIpv4TosPrecedenceCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowIpv4TosPrecedenceCounter) SetCount(value int32) PatternFlowIpv4TosPrecedenceCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -39762,6 +46068,7 @@ func (obj *patternFlowIpv4TosDelayCounter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowIpv4TosDelayCounter) SetStart(value int32) PatternFlowIpv4TosDelayCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -39775,6 +46082,7 @@ func (obj *patternFlowIpv4TosDelayCounter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowIpv4TosDelayCounter) SetStep(value int32) PatternFlowIpv4TosDelayCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -39788,6 +46096,7 @@ func (obj *patternFlowIpv4TosDelayCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowIpv4TosDelayCounter) SetCount(value int32) PatternFlowIpv4TosDelayCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -39855,6 +46164,7 @@ func (obj *patternFlowIpv4TosThroughputCounter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowIpv4TosThroughputCounter) SetStart(value int32) PatternFlowIpv4TosThroughputCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -39868,6 +46178,7 @@ func (obj *patternFlowIpv4TosThroughputCounter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowIpv4TosThroughputCounter) SetStep(value int32) PatternFlowIpv4TosThroughputCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -39881,6 +46192,7 @@ func (obj *patternFlowIpv4TosThroughputCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowIpv4TosThroughputCounter) SetCount(value int32) PatternFlowIpv4TosThroughputCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -39948,6 +46260,7 @@ func (obj *patternFlowIpv4TosReliabilityCounter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowIpv4TosReliabilityCounter) SetStart(value int32) PatternFlowIpv4TosReliabilityCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -39961,6 +46274,7 @@ func (obj *patternFlowIpv4TosReliabilityCounter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowIpv4TosReliabilityCounter) SetStep(value int32) PatternFlowIpv4TosReliabilityCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -39974,6 +46288,7 @@ func (obj *patternFlowIpv4TosReliabilityCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowIpv4TosReliabilityCounter) SetCount(value int32) PatternFlowIpv4TosReliabilityCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -40041,6 +46356,7 @@ func (obj *patternFlowIpv4TosMonetaryCounter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowIpv4TosMonetaryCounter) SetStart(value int32) PatternFlowIpv4TosMonetaryCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -40054,6 +46370,7 @@ func (obj *patternFlowIpv4TosMonetaryCounter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowIpv4TosMonetaryCounter) SetStep(value int32) PatternFlowIpv4TosMonetaryCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -40067,6 +46384,7 @@ func (obj *patternFlowIpv4TosMonetaryCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowIpv4TosMonetaryCounter) SetCount(value int32) PatternFlowIpv4TosMonetaryCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -40134,6 +46452,7 @@ func (obj *patternFlowIpv4TosUnusedCounter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowIpv4TosUnusedCounter) SetStart(value int32) PatternFlowIpv4TosUnusedCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -40147,6 +46466,7 @@ func (obj *patternFlowIpv4TosUnusedCounter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowIpv4TosUnusedCounter) SetStep(value int32) PatternFlowIpv4TosUnusedCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -40160,6 +46480,7 @@ func (obj *patternFlowIpv4TosUnusedCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowIpv4TosUnusedCounter) SetCount(value int32) PatternFlowIpv4TosUnusedCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -40227,6 +46548,7 @@ func (obj *patternFlowIpv4DscpPhbCounter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowIpv4DscpPhbCounter) SetStart(value int32) PatternFlowIpv4DscpPhbCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -40240,6 +46562,7 @@ func (obj *patternFlowIpv4DscpPhbCounter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowIpv4DscpPhbCounter) SetStep(value int32) PatternFlowIpv4DscpPhbCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -40253,6 +46576,7 @@ func (obj *patternFlowIpv4DscpPhbCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowIpv4DscpPhbCounter) SetCount(value int32) PatternFlowIpv4DscpPhbCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -40320,6 +46644,7 @@ func (obj *patternFlowIpv4DscpEcnCounter) Start() int32 {
 //  description is TBD
 func (obj *patternFlowIpv4DscpEcnCounter) SetStart(value int32) PatternFlowIpv4DscpEcnCounter {
 	obj.obj.Start = &value
+
 	return obj
 }
 
@@ -40333,6 +46658,7 @@ func (obj *patternFlowIpv4DscpEcnCounter) Step() int32 {
 //  description is TBD
 func (obj *patternFlowIpv4DscpEcnCounter) SetStep(value int32) PatternFlowIpv4DscpEcnCounter {
 	obj.obj.Step = &value
+
 	return obj
 }
 
@@ -40346,6 +46672,7 @@ func (obj *patternFlowIpv4DscpEcnCounter) Count() int32 {
 //  description is TBD
 func (obj *patternFlowIpv4DscpEcnCounter) SetCount(value int32) PatternFlowIpv4DscpEcnCounter {
 	obj.obj.Count = &value
+
 	return obj
 }
 
@@ -40395,6 +46722,8 @@ type DeviceBgpSegment interface {
 	ToJson() string
 	FromYaml(value string) error
 	FromJson(value string) error
+	SegmentType() DeviceBgpSegmentSegmentTypeEnum
+	SetSegmentType(value DeviceBgpSegmentSegmentTypeEnum) DeviceBgpSegment
 	MplsLabel() int32
 	SetMplsLabel(value int32) DeviceBgpSegment
 	MplsTc() int32
@@ -40411,6 +46740,29 @@ type DeviceBgpSegment interface {
 	SetActive(value bool) DeviceBgpSegment
 }
 
+type DeviceBgpSegmentSegmentTypeEnum string
+
+var DeviceBgpSegmentSegmentType = struct {
+	UNSPECIFIED DeviceBgpSegmentSegmentTypeEnum
+	MPLS_SID    DeviceBgpSegmentSegmentTypeEnum
+	IPV6_SID    DeviceBgpSegmentSegmentTypeEnum
+}{
+	UNSPECIFIED: DeviceBgpSegmentSegmentTypeEnum("unspecified"),
+	MPLS_SID:    DeviceBgpSegmentSegmentTypeEnum("mpls_sid"),
+	IPV6_SID:    DeviceBgpSegmentSegmentTypeEnum("ipv6_sid"),
+}
+
+func (obj *deviceBgpSegment) SegmentType() DeviceBgpSegmentSegmentTypeEnum {
+	return DeviceBgpSegmentSegmentTypeEnum(obj.obj.SegmentType.Enum().String())
+}
+
+func (obj *deviceBgpSegment) SetSegmentType(value DeviceBgpSegmentSegmentTypeEnum) DeviceBgpSegment {
+	intValue := snappipb.DeviceBgpSegment_SegmentType_Enum_value[string(value)]
+	enumValue := snappipb.DeviceBgpSegment_SegmentType_Enum(intValue)
+	obj.obj.SegmentType = &enumValue
+	return obj
+}
+
 // MplsLabel returns a int32
 //  MPLS label
 func (obj *deviceBgpSegment) MplsLabel() int32 {
@@ -40421,6 +46773,7 @@ func (obj *deviceBgpSegment) MplsLabel() int32 {
 //  MPLS label
 func (obj *deviceBgpSegment) SetMplsLabel(value int32) DeviceBgpSegment {
 	obj.obj.MplsLabel = &value
+
 	return obj
 }
 
@@ -40434,6 +46787,7 @@ func (obj *deviceBgpSegment) MplsTc() int32 {
 //  TBD
 func (obj *deviceBgpSegment) SetMplsTc(value int32) DeviceBgpSegment {
 	obj.obj.MplsTc = &value
+
 	return obj
 }
 
@@ -40447,6 +46801,7 @@ func (obj *deviceBgpSegment) MplsTtl() int32 {
 //  TBD
 func (obj *deviceBgpSegment) SetMplsTtl(value int32) DeviceBgpSegment {
 	obj.obj.MplsTtl = &value
+
 	return obj
 }
 
@@ -40460,6 +46815,7 @@ func (obj *deviceBgpSegment) VFlag() bool {
 //  TBD
 func (obj *deviceBgpSegment) SetVFlag(value bool) DeviceBgpSegment {
 	obj.obj.VFlag = &value
+
 	return obj
 }
 
@@ -40473,6 +46829,7 @@ func (obj *deviceBgpSegment) Ipv6Sid() string {
 //  TBD
 func (obj *deviceBgpSegment) SetIpv6Sid(value string) DeviceBgpSegment {
 	obj.obj.Ipv6Sid = &value
+
 	return obj
 }
 
@@ -40486,6 +46843,7 @@ func (obj *deviceBgpSegment) RemainingFlagBits() int32 {
 //  TBD
 func (obj *deviceBgpSegment) SetRemainingFlagBits(value int32) DeviceBgpSegment {
 	obj.obj.RemainingFlagBits = &value
+
 	return obj
 }
 
@@ -40499,6 +46857,7 @@ func (obj *deviceBgpSegment) Active() bool {
 //  If enabled means that this part of the configuration including any active 'children' nodes will be advertised to peer.  If disabled, this means that though config is present, it is not taking any part of the test but can be activated at run-time to advertise just this part of the configuration to the peer.
 func (obj *deviceBgpSegment) SetActive(value bool) DeviceBgpSegment {
 	obj.obj.Active = &value
+
 	return obj
 }
 
