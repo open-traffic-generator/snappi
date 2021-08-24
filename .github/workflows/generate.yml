@@ -36,6 +36,7 @@ jobs:
           python do.py setup
           python do.py install
       - name: Commit go pkg
+        id: get_sha
         if: ${{ matrix.python-version == 3.6 }}
         run: |
           git config user.name "Github Actions Bot"
@@ -48,6 +49,7 @@ jobs:
             else
               echo "No change in auto generated go snappi"
           fi
+          echo "::set-output name=sha::$(git rev-parse HEAD)"
       - name: Run tests
         run: |
           sudo python do.py test
@@ -83,5 +85,5 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               ref: "refs/tags/gosnappi/${{ steps.get_version.outputs.version }}",
-              sha: context.sha
+              sha: ${{ steps.get_sha.outputs.sha }}
             })
