@@ -2,16 +2,17 @@ package gosnappi_test
 
 import (
 	"encoding/json"
-	"fmt"
 	log "log"
 	"testing"
 
-	gosnappi "github.com/open-traffic-generator/snappi/gosnappi"
+	"github.com/open-traffic-generator/snappi/gosnappi"
 	"github.com/stretchr/testify/assert"
 )
 
+var mockServerLocation = "127.0.0.1:50001"
+
 func init() {
-	if err := StartMockServer(); err != nil {
+	if err := gosnappi.StartMockServer(mockServerLocation); err != nil {
 		log.Fatal("Mock server init failed")
 	}
 }
@@ -20,7 +21,7 @@ func init() {
 func TestApi(t *testing.T) {
 	api := gosnappi.NewApi()
 	grpc := api.NewGrpcTransport()
-	grpc.SetLocation("127.0.0.1:50001").SetRequestTimeout(10000)
+	grpc.SetLocation(mockServerLocation).SetRequestTimeout(10000)
 	config := api.NewConfig()
 	port := config.Ports().Add()
 	port.SetName("port1")
@@ -43,7 +44,7 @@ func TestGetMetricsFlowResponse(t *testing.T) {
 	// Send Get Metrics request with flow name f2 which is available in
 	// the config, validate the response is not nil
 	api := gosnappi.NewApi()
-	api.NewGrpcTransport().SetLocation(fmt.Sprintf("127.0.0.1:%d", testport))
+	api.NewGrpcTransport().SetLocation(mockServerLocation)
 	req := api.NewMetricsRequest()
 	flow_req := req.Flow()
 	flow_req.SetFlowNames([]string{"f2"})
@@ -55,7 +56,7 @@ func TestGetMetricsFlowResponseError(t *testing.T) {
 	// Send Get Metrics request with flow name f3 which is not available in
 	// the config, validate the err is not nil
 	api := gosnappi.NewApi()
-	api.NewGrpcTransport().SetLocation(fmt.Sprintf("127.0.0.1:%d", testport))
+	api.NewGrpcTransport().SetLocation(mockServerLocation)
 	req := api.NewMetricsRequest()
 	flow_req := req.Flow()
 	flow_req.SetFlowNames([]string{"f3"})
@@ -68,7 +69,7 @@ func TestGetMetricsPortResponse(t *testing.T) {
 	// Send Get Metrics request with port name port1 which is available in
 	// the config, validate the response is not nil
 	api := gosnappi.NewApi()
-	api.NewGrpcTransport().SetLocation(fmt.Sprintf("127.0.0.1:%d", testport))
+	api.NewGrpcTransport().SetLocation(mockServerLocation)
 	req := api.NewMetricsRequest()
 	flow_req := req.Port()
 	flow_req.SetPortNames([]string{"port1"})
@@ -80,7 +81,7 @@ func TestGetMetricsPortResponseError(t *testing.T) {
 	// Send Get Metrics request with port name port2 which is not available in
 	// the config, validate the err is not nil
 	api := gosnappi.NewApi()
-	api.NewGrpcTransport().SetLocation(fmt.Sprintf("127.0.0.1:%d", testport))
+	api.NewGrpcTransport().SetLocation(mockServerLocation)
 	req := api.NewMetricsRequest()
 	flow_req := req.Port()
 	flow_req.SetPortNames([]string{"port2"})
@@ -93,7 +94,7 @@ func TestGetMetricsBgpv4Response(t *testing.T) {
 	// Send Get Metrics request with device name d1 which is available in
 	// the config, validate the response is not nil
 	api := gosnappi.NewApi()
-	api.NewGrpcTransport().SetLocation(fmt.Sprintf("127.0.0.1:%d", testport))
+	api.NewGrpcTransport().SetLocation(mockServerLocation)
 	req := api.NewMetricsRequest()
 	flow_req := req.Bgpv4()
 	flow_req.SetDeviceNames([]string{"d1"})
@@ -105,7 +106,7 @@ func TestGetMetricsBgpv4ResponseError(t *testing.T) {
 	// Send Get Metrics request with port name d2 which is not available in
 	// the config, validate the err is not nil
 	api := gosnappi.NewApi()
-	api.NewGrpcTransport().SetLocation(fmt.Sprintf("127.0.0.1:%d", testport))
+	api.NewGrpcTransport().SetLocation(mockServerLocation)
 	req := api.NewMetricsRequest()
 	flow_req := req.Bgpv4()
 	flow_req.SetDeviceNames([]string{"d2"})
