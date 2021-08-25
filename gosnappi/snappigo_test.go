@@ -44,11 +44,12 @@ func TestApi(t *testing.T) {
 func TestGetMetricsFlowResponse(t *testing.T) {
 	// Send Get Metrics request with flow name f2 which is available in
 	// the config, validate the response is not nil
+	flow_names := []string{"f2"}
 	api := gosnappi.NewApi()
 	api.NewGrpcTransport().SetLocation(mockServerLocation)
 	req := api.NewMetricsRequest()
-	flow_req := req.Flow()
-	flow_req.SetFlowNames([]string{"f2"})
+	req.Flow().SetFlowNames([]string{"f2"})
+	assert.Equal(t, flow_names, req.Flow().FlowNames())
 	resp, _ := api.GetMetrics(req)
 	assert.NotNil(t, resp)
 }
@@ -59,8 +60,7 @@ func TestGetMetricsFlowResponseError(t *testing.T) {
 	api := gosnappi.NewApi()
 	api.NewGrpcTransport().SetLocation(mockServerLocation)
 	req := api.NewMetricsRequest()
-	flow_req := req.Flow()
-	flow_req.SetFlowNames([]string{"f3"})
+	req.Flow().SetFlowNames([]string{"f3"})
 	_, err := api.GetMetrics(req)
 	log.Print(err)
 	assert.NotNil(t, err)
@@ -69,11 +69,12 @@ func TestGetMetricsFlowResponseError(t *testing.T) {
 func TestGetMetricsPortResponse(t *testing.T) {
 	// Send Get Metrics request with port name port1 which is available in
 	// the config, validate the response is not nil
+	port_names := []string{"port1"}
 	api := gosnappi.NewApi()
 	api.NewGrpcTransport().SetLocation(mockServerLocation)
 	req := api.NewMetricsRequest()
-	flow_req := req.Port()
-	flow_req.SetPortNames([]string{"port1"})
+	req.Port().SetPortNames([]string{"port1"})
+	assert.Equal(t, port_names, req.Port().PortNames())
 	resp, _ := api.GetMetrics(req)
 	assert.NotNil(t, resp)
 }
@@ -84,8 +85,7 @@ func TestGetMetricsPortResponseError(t *testing.T) {
 	api := gosnappi.NewApi()
 	api.NewGrpcTransport().SetLocation(mockServerLocation)
 	req := api.NewMetricsRequest()
-	flow_req := req.Port()
-	flow_req.SetPortNames([]string{"port2"})
+	req.Port().SetPortNames([]string{"port2"})
 	_, err := api.GetMetrics(req)
 	log.Print(err)
 	assert.NotNil(t, err)
@@ -94,12 +94,12 @@ func TestGetMetricsPortResponseError(t *testing.T) {
 func TestGetMetricsBgpv4Response(t *testing.T) {
 	// Send Get Metrics request with device name d1 which is available in
 	// the config, validate the response is not nil
+	device_names := []string{"BGP-1"}
 	api := gosnappi.NewApi()
 	api.NewGrpcTransport().SetLocation(mockServerLocation)
 	req := api.NewMetricsRequest()
-	req.Bgpv4()
-	flow_req := req.Bgpv4()
-	flow_req.SetDeviceNames([]string{"BGP-1"})
+	req.Bgpv4().SetDeviceNames([]string{"BGP-1"})
+	assert.Equal(t, device_names, req.Bgpv4().DeviceNames())
 	resp, _ := api.GetMetrics(req)
 	assert.NotNil(t, resp)
 }
@@ -110,19 +110,20 @@ func TestGetMetricsBgpv4ResponseError(t *testing.T) {
 	api := gosnappi.NewApi()
 	api.NewGrpcTransport().SetLocation(mockServerLocation)
 	req := api.NewMetricsRequest()
-	flow_req := req.Bgpv4()
-	flow_req.SetDeviceNames([]string{"d2"})
+	req.Bgpv4().SetDeviceNames([]string{"d2"})
 	_, err := api.GetMetrics(req)
 	log.Print(err)
 	assert.NotNil(t, err)
 }
 
 func TestSetTransmitStateResponse(t *testing.T) {
+	flow_names := []string{"f1", "f2"}
 	api := gosnappi.NewApi()
 	api.NewGrpcTransport().SetLocation(mockServerLocation)
 	req := api.NewTransmitState()
 	req.SetFlowNames([]string{"f1", "f2"})
 	req.SetState(gosnappi.TransmitStateState.START)
+	assert.Equal(t, flow_names, req.FlowNames())
 	resp, _ := api.SetTransmitState(req)
 	assert.NotNil(t, resp)
 }
@@ -139,11 +140,13 @@ func TestSetTransmitStateResponseError(t *testing.T) {
 }
 
 func TestSetLinkStateResponse(t *testing.T) {
+	port_names := []string{"port1"}
 	api := gosnappi.NewApi()
 	api.NewGrpcTransport().SetLocation(mockServerLocation)
 	req := api.NewLinkState()
 	req.SetPortNames([]string{"port1"})
 	req.SetState(gosnappi.LinkStateState.DOWN)
+	assert.Equal(t, port_names, req.PortNames())
 	resp, _ := api.SetLinkState(req)
 	assert.NotNil(t, resp)
 }
@@ -160,11 +163,13 @@ func TestSetLinkStateResponseError(t *testing.T) {
 }
 
 func TestSetCaptureStateResponse(t *testing.T) {
+	port_names := []string{"port1"}
 	api := gosnappi.NewApi()
 	api.NewGrpcTransport().SetLocation(mockServerLocation)
 	req := api.NewCaptureState()
 	req.SetPortNames([]string{"port1"})
 	req.SetState(gosnappi.CaptureStateState.START)
+	assert.Equal(t, port_names, req.PortNames())
 	resp, _ := api.SetCaptureState(req)
 	assert.NotNil(t, resp)
 }
@@ -181,11 +186,13 @@ func TestSetCaptureStateResponseError(t *testing.T) {
 }
 
 func TestSetRouteStateResponse(t *testing.T) {
+	route_names := []string{"RR-1"}
 	api := gosnappi.NewApi()
 	api.NewGrpcTransport().SetLocation(mockServerLocation)
 	req := api.NewRouteState()
 	req.SetNames([]string{"RR-1"})
 	req.SetState(gosnappi.RouteStateState.ADVERTISE)
+	assert.Equal(t, route_names, req.Names())
 	resp, _ := api.SetRouteState(req)
 	assert.NotNil(t, resp)
 }
@@ -386,4 +393,43 @@ func TestDevices(t *testing.T) {
 	// TODO: Add validation on Json and Yaml
 	cap6.ToJson()
 	cap6.ToYaml()
+}
+
+func TestFlows(t *testing.T) {
+	flow_names := []string{"f1", "f2"}
+	port_names := []string{"p1", "p2"}
+	api := gosnappi.NewApi()
+	config := api.NewConfig()
+	port1 := config.Ports().Add().SetName("p1")
+	port2 := config.Ports().Add().SetName("p2")
+	flow1 := config.Flows().Add().SetName("f1")
+	flow2 := config.Flows().Add().SetName("f2")
+	flow1.TxRx().Port().SetTxName(port1.Name()).SetRxName(port2.Name())
+	flow2.TxRx().Port().SetTxName(port1.Name()).SetRxName(port2.Name())
+	for i, P := range config.Ports().Items() {
+		assert.Equal(t, port_names[i], P.Name())
+	}
+	for i, F := range config.Flows().Items() {
+		assert.Equal(t, flow_names[i], F.Name())
+		assert.Equal(t, port_names[0], F.TxRx().Port().TxName())
+		assert.Equal(t, port_names[1], F.TxRx().Port().RxName())
+	}
+
+	eth := flow1.Packet().Add().Ethernet()
+	eth.Src().SetValue("a2:71:d4:59:b3:b8")
+	eth.Dst().SetValue("6e:d2:47:65:aa:69")
+	assert.Equal(t, "a2:71:d4:59:b3:b8", eth.Src().Value())
+	assert.Equal(t, "6e:d2:47:65:aa:69", eth.Dst().Value())
+
+	ipv4 := flow1.Packet().Add().Ipv4()
+	ipv4.Src().SetValue("10.10.10.1")
+	ipv4.Dst().SetValue("10.10.10.2")
+	assert.Equal(t, "10.10.10.1", ipv4.Src().Value())
+	assert.Equal(t, "10.10.10.2", ipv4.Dst().Value())
+
+	flow1.Duration().FixedPackets().SetPackets(10000)
+	flow1.Rate().SetPps(1000)
+	assert.Equal(t, int32(10000), flow1.Duration().FixedPackets().Packets())
+	assert.Equal(t, int32(1000), flow1.Rate().Pps())
+	log.Print(config.ToYaml())
 }
