@@ -427,9 +427,19 @@ func TestFlows(t *testing.T) {
 	assert.Equal(t, "10.10.10.1", ipv4.Src().Value())
 	assert.Equal(t, "10.10.10.2", ipv4.Dst().Value())
 
-	flow1.Duration().FixedPackets().SetPackets(10000)
+	udp := flow1.Packet().Add().Udp()
+	udp.SrcPort().SetValue(3000)
+	udp.DstPort().SetValue(4000)
+	udp.Checksum().SetCustom(1)
+	assert.Equal(t, int32(3000), udp.SrcPort().Value())
+	assert.Equal(t, int32(4000), udp.DstPort().Value())
+	assert.Equal(t, int32(1), udp.Checksum().Custom())
+
+	flow1.Duration().FixedPackets().SetPackets(10000).SetGap(2).Delay().SetBytes(8)
 	flow1.Rate().SetPps(1000)
 	assert.Equal(t, int32(10000), flow1.Duration().FixedPackets().Packets())
+	assert.Equal(t, int32(2), flow1.Duration().FixedPackets().Gap())
+	assert.Equal(t, float32(8), flow1.Duration().FixedPackets().Delay().Bytes())
 	assert.Equal(t, int32(1000), flow1.Rate().Pps())
 	log.Print(config.ToYaml())
 }
