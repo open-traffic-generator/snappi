@@ -32,7 +32,7 @@ func TestApi(t *testing.T) {
 	eth1 := d1.Ethernet().SetName("Ethernet1")
 	ip1 := eth1.Ipv4().SetName("IPv41")
 	bgp1 := ip1.Bgpv4().SetName("BGP-1")
-	bgp1.Bgpv4Routes().Add().SetName("RR 2")
+	bgp1.Bgpv4Routes().Add().SetName("RR-1")
 	state, err := api.SetConfig(config)
 	assert.NotNil(t, state)
 	assert.Nil(t, err)
@@ -176,6 +176,27 @@ func TestSetCaptureStateResponseError(t *testing.T) {
 	req.SetPortNames([]string{"port3"})
 	req.SetState(gosnappi.CaptureStateState.START)
 	_, err := api.SetCaptureState(req)
+	log.Print(err)
+	assert.NotNil(t, err)
+}
+
+func TestSetRouteStateResponse(t *testing.T) {
+	api := gosnappi.NewApi()
+	api.NewGrpcTransport().SetLocation(mockServerLocation)
+	req := api.NewRouteState()
+	req.SetNames([]string{"RR-1"})
+	req.SetState(gosnappi.RouteStateState.ADVERTISE)
+	resp, _ := api.SetRouteState(req)
+	assert.NotNil(t, resp)
+}
+
+func TestSetRouteStateResponseError(t *testing.T) {
+	api := gosnappi.NewApi()
+	api.NewGrpcTransport().SetLocation(mockServerLocation)
+	req := api.NewRouteState()
+	req.SetNames([]string{"RR-2"})
+	req.SetState(gosnappi.RouteStateState.ADVERTISE)
+	_, err := api.SetRouteState(req)
 	log.Print(err)
 	assert.NotNil(t, err)
 }
