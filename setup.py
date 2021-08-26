@@ -9,7 +9,7 @@ import shutil
 
 pkg_name = "snappi"
 go_pkg_name = "gosnappi"
-version = "0.4.37"
+version = "0.4.38"
 models_version = "0.4.15"
 
 # read long description from readme.md
@@ -78,7 +78,7 @@ setuptools.setup(
     python_requires=">=2.7, <4",
     install_requires=["requests", "pyyaml", "jsonpath-ng", "typing"],
     extras_require={
-        "ixnetwork": ["snappi_ixnetwork==0.4.12"],
+        "ixnetwork": ["snappi_ixnetwork==0.4.14"],
         "trex": ["snappi_trex==0.0.124"],
         "convergence": ["snappi_convergence==0.0.27"],
         "testing": ["pytest", "flask"],
