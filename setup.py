@@ -10,7 +10,7 @@ import shutil
 pkg_name = "snappi"
 go_pkg_name = "gosnappi"
 version = "0.4.38"
-models_version = "0.4.15"
+models_version = "0.5.1"
 
 # read long description from readme.md
 base_dir = os.path.abspath(os.path.dirname(__file__))
@@ -26,12 +26,14 @@ with open(os.path.join("openapi.yaml"), "wb") as fp:
 
 openapiart.OpenApiArt(
     api_files=["openapi.yaml"],
-    python_module_name=pkg_name,
-    protobuf_package_name=pkg_name + "pb",
-    go_sdk_package_dir="github.com/open-traffic-generator/snappi/%s" % go_pkg_name,
-    go_sdk_package_name=go_pkg_name,
-    output_dir="artifacts",
+    protobuf_name=pkg_name + "pb",
+    artifact_dir="artifacts",
     extension_prefix=pkg_name,
+).GeneratePythonSdk(
+    package_name=pkg_name
+).GenerateGoSdk(
+    package_dir="github.com/open-traffic-generator/snappi/%s" % go_pkg_name,
+    package_name=go_pkg_name
 )
 
 if os.path.exists(pkg_name):
