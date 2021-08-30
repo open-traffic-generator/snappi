@@ -2,26 +2,53 @@ package gosnappi_test
 
 import (
 	"encoding/json"
-	log "log"
+	"log"
+	"strings"
 	"testing"
 
 	"github.com/open-traffic-generator/snappi/gosnappi"
+
 	"github.com/stretchr/testify/assert"
 )
 
 var mockServerLocation = "127.0.0.1:50001"
+var mockHttpServerLocation = "http://127.0.0.1:50002"
 
 func init() {
 	if err := gosnappi.StartMockServer(mockServerLocation); err != nil {
-		log.Fatal("Mock server init failed")
+		log.Fatal("Mock Grpc server init failed")
 	}
+	http_path := strings.Split(mockHttpServerLocation, "//")
+	gosnappi.StartMockHttpServer(http_path[1])
+
 }
 
 // Basic test for the grpc mock server
-func TestApi(t *testing.T) {
+func TestGrpcApi(t *testing.T) {
 	api := gosnappi.NewApi()
 	grpc := api.NewGrpcTransport()
 	grpc.SetLocation(mockServerLocation).SetRequestTimeout(10000)
+	config := api.NewConfig()
+	port := config.Ports().Add()
+	port.SetName("port1")
+	port.SetLocation("location1")
+	config.Flows().Add().SetName("f1")
+	config.Flows().Add().SetName("f2")
+	d1 := config.Devices().Add().SetName("d1")
+	eth1 := d1.Ethernet().SetName("Ethernet1")
+	ip1 := eth1.Ipv4().SetName("IPv41")
+	ip1.Bgpv4().SetName("BGP-1")
+	state, err := api.SetConfig(config)
+	assert.NotNil(t, state)
+	assert.Nil(t, err)
+	status, _error := api.GetConfig()
+	assert.NotNil(t, status)
+	assert.Nil(t, _error)
+}
+
+func TestHttpApi(t *testing.T) {
+	api := gosnappi.NewApi()
+	api.NewHttpTransport().SetLocation(mockHttpServerLocation)
 	config := api.NewConfig()
 	port := config.Ports().Add()
 	port.SetName("port1")
