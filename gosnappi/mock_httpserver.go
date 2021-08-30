@@ -41,6 +41,30 @@ func StartMockHttpServer(location string) {
 		}
 	})
 
+	http.HandleFunc("/results/metrics", func(w http.ResponseWriter, r *http.Request) {
+		switch r.Method {
+		case http.MethodPost:
+			body, _ := ioutil.ReadAll(r.Body)
+			metricsReq := httpServer.Api.NewMetricsRequest()
+			metricsReq.FromJson(string(body))
+			if metricsReq.Choice() == MetricsRequestChoice.FLOW {
+				flow_responses := httpServer.Api.NewGetMetricsResponse_StatusCode200().MetricsResponse()
+				for _, flow_name := range metricsReq.Flow().FlowNames() {
+					flow_rsp := flow_responses.FlowMetrics().Add()
+					flow_rsp.SetName(flow_name)
+					flow_rsp.SetBytesTx(1000)
+					flow_rsp.SetBytesRx(1000)
+				}
+				response := httpServer.Api.NewGetMetricsResponse_StatusCode200().MetricsResponse()
+				response.FromJson(flow_responses.ToJson())
+				w.Header().Set("Content-Type", "application/json")
+				w.WriteHeader(http.StatusOK)
+				w.Write([]byte(response.ToJson()))
+			}
+
+		}
+	})
+
 	go func() {
 		if err := http.ListenAndServe(httpServer.serverLocation, nil); err != nil {
 			log.Fatal("Server failed to serve incoming HTTP request.")
