@@ -60,8 +60,20 @@ func StartMockHttpServer(location string) {
 				w.Header().Set("Content-Type", "application/json")
 				w.WriteHeader(http.StatusOK)
 				w.Write([]byte(response.ToJson()))
+			} else if metricsReq.Choice() == MetricsRequestChoice.PORT {
+				port_response := httpServer.Api.NewGetMetricsResponse_StatusCode200().MetricsResponse()
+				for _, port_name := range metricsReq.Port().PortNames() {
+					port_rsp := port_response.PortMetrics().Add()
+					port_rsp.SetName(port_name)
+					port_rsp.SetBytesTx(2000)
+					port_rsp.SetBytesRx(2000)
+				}
+				response := httpServer.Api.NewGetMetricsResponse_StatusCode200().MetricsResponse()
+				response.FromJson(port_response.ToJson())
+				w.Header().Set("Content-Type", "application/json")
+				w.WriteHeader(http.StatusOK)
+				w.Write([]byte(response.ToJson()))
 			}
-
 		}
 	})
 

@@ -92,6 +92,12 @@ func TestHttpGetMetricsFlowResponse(t *testing.T) {
 	resp, _ := api.GetMetrics(req)
 	fmt.Println("HTTP flow response :", resp.ToJson())
 	assert.NotNil(t, resp)
+	assert.Equal(t, resp.FlowMetrics().Items()[0].Name(), string("f1"))
+	assert.Equal(t, resp.FlowMetrics().Items()[0].BytesTx(), int32(1000))
+	assert.Equal(t, resp.FlowMetrics().Items()[0].BytesRx(), int32(1000))
+	assert.Equal(t, resp.FlowMetrics().Items()[1].Name(), string("f2"))
+	assert.Equal(t, resp.FlowMetrics().Items()[1].BytesTx(), int32(1000))
+	assert.Equal(t, resp.FlowMetrics().Items()[1].BytesRx(), int32(1000))
 }
 
 func TestGetMetricsFlowResponseError(t *testing.T) {
@@ -107,7 +113,7 @@ func TestGetMetricsFlowResponseError(t *testing.T) {
 	assert.NotNil(t, err)
 }
 
-func TestGetMetricsPortResponse(t *testing.T) {
+func TestGrpcGetMetricsPortResponse(t *testing.T) {
 	// Send Get Metrics request with port name port1 which is available in
 	// the config, validate the response is not nil
 	api := gosnappi.NewApi()
@@ -117,6 +123,22 @@ func TestGetMetricsPortResponse(t *testing.T) {
 	flow_req.SetPortNames([]string{"port1"})
 	resp, _ := api.GetMetrics(req)
 	assert.NotNil(t, resp)
+}
+
+func TestHttpGetMetricsPortResponse(t *testing.T) {
+	// Send Get Metrics request with port name port1 which is available in
+	// the config, validate the response is not nil
+	api := gosnappi.NewApi()
+	api.NewHttpTransport().SetLocation(mockHttpServerLocation)
+	req := api.NewMetricsRequest()
+	flow_req := req.Port()
+	flow_req.SetPortNames([]string{"port1"})
+	resp, _ := api.GetMetrics(req)
+	fmt.Println("HTTP Port Response :", resp.ToJson())
+	assert.NotNil(t, resp)
+	assert.Equal(t, resp.PortMetrics().Items()[0].Name(), string("port1"))
+	assert.Equal(t, resp.PortMetrics().Items()[0].BytesTx(), int32(2000))
+	assert.Equal(t, resp.PortMetrics().Items()[0].BytesRx(), int32(2000))
 }
 
 func TestGetMetricsPortResponseError(t *testing.T) {
