@@ -42,6 +42,7 @@ func StartMockHttpServer(location string) {
 	})
 
 	http.HandleFunc("/results/metrics", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
 		switch r.Method {
 		case http.MethodPost:
 			body, _ := ioutil.ReadAll(r.Body)
@@ -57,7 +58,6 @@ func StartMockHttpServer(location string) {
 				}
 				response := httpServer.Api.NewGetMetricsResponse_StatusCode200().MetricsResponse()
 				response.FromJson(flow_responses.ToJson())
-				w.Header().Set("Content-Type", "application/json")
 				w.WriteHeader(http.StatusOK)
 				w.Write([]byte(response.ToJson()))
 			} else if metricsReq.Choice() == MetricsRequestChoice.PORT {
@@ -70,7 +70,17 @@ func StartMockHttpServer(location string) {
 				}
 				response := httpServer.Api.NewGetMetricsResponse_StatusCode200().MetricsResponse()
 				response.FromJson(port_response.ToJson())
-				w.Header().Set("Content-Type", "application/json")
+				w.WriteHeader(http.StatusOK)
+				w.Write([]byte(response.ToJson()))
+			} else if metricsReq.Choice() == MetricsRequestChoice.BGPV4 {
+				bgpv4_response := httpServer.Api.NewGetMetricsResponse_StatusCode200().MetricsResponse()
+				for _, bgpv4_name := range metricsReq.Bgpv4().DeviceNames() {
+					bgpv4_rsp := bgpv4_response.Bgpv4Metrics().Add()
+					bgpv4_rsp.SetName(bgpv4_name)
+					bgpv4_rsp.SetRoutesAdvertised(80)
+				}
+				response := httpServer.Api.NewGetMetricsResponse_StatusCode200().MetricsResponse()
+				response.FromJson(bgpv4_response.ToJson())
 				w.WriteHeader(http.StatusOK)
 				w.Write([]byte(response.ToJson()))
 			}

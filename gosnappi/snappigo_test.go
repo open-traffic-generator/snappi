@@ -76,9 +76,10 @@ func TestGrpcGetMetricsFlowResponse(t *testing.T) {
 	req := api.NewMetricsRequest()
 	flow_req := req.Flow()
 	flow_req.SetFlowNames([]string{"f1", "f2"})
-	resp, _ := api.GetMetrics(req)
+	resp, err := api.GetMetrics(req)
 	fmt.Println("grpc flow response :", resp.ToJson())
 	assert.NotNil(t, resp)
+	assert.Nil(t, err)
 }
 
 func TestHttpGetMetricsFlowResponse(t *testing.T) {
@@ -89,9 +90,10 @@ func TestHttpGetMetricsFlowResponse(t *testing.T) {
 	req := api.NewMetricsRequest()
 	flow_req := req.Flow()
 	flow_req.SetFlowNames([]string{"f1", "f2"})
-	resp, _ := api.GetMetrics(req)
+	resp, err := api.GetMetrics(req)
 	fmt.Println("HTTP flow response :", resp.ToJson())
 	assert.NotNil(t, resp)
+	assert.Nil(t, err)
 	assert.Equal(t, resp.FlowMetrics().Items()[0].Name(), string("f1"))
 	assert.Equal(t, resp.FlowMetrics().Items()[0].BytesTx(), int32(1000))
 	assert.Equal(t, resp.FlowMetrics().Items()[0].BytesRx(), int32(1000))
@@ -121,8 +123,9 @@ func TestGrpcGetMetricsPortResponse(t *testing.T) {
 	req := api.NewMetricsRequest()
 	flow_req := req.Port()
 	flow_req.SetPortNames([]string{"port1"})
-	resp, _ := api.GetMetrics(req)
+	resp, err := api.GetMetrics(req)
 	assert.NotNil(t, resp)
+	assert.Nil(t, err)
 }
 
 func TestHttpGetMetricsPortResponse(t *testing.T) {
@@ -133,9 +136,10 @@ func TestHttpGetMetricsPortResponse(t *testing.T) {
 	req := api.NewMetricsRequest()
 	flow_req := req.Port()
 	flow_req.SetPortNames([]string{"port1"})
-	resp, _ := api.GetMetrics(req)
+	resp, err := api.GetMetrics(req)
 	fmt.Println("HTTP Port Response :", resp.ToJson())
 	assert.NotNil(t, resp)
+	assert.Nil(t, err)
 	assert.Equal(t, resp.PortMetrics().Items()[0].Name(), string("port1"))
 	assert.Equal(t, resp.PortMetrics().Items()[0].BytesTx(), int32(2000))
 	assert.Equal(t, resp.PortMetrics().Items()[0].BytesRx(), int32(2000))
@@ -154,7 +158,7 @@ func TestGetMetricsPortResponseError(t *testing.T) {
 	assert.NotNil(t, err)
 }
 
-func TestGetMetricsBgpv4Response(t *testing.T) {
+func TestGrpcGetMetricsBgpv4Response(t *testing.T) {
 	// Send Get Metrics request with device name d1 which is available in
 	// the config, validate the response is not nil
 	api := gosnappi.NewApi()
@@ -163,8 +167,25 @@ func TestGetMetricsBgpv4Response(t *testing.T) {
 	req.Bgpv4()
 	flow_req := req.Bgpv4()
 	flow_req.SetDeviceNames([]string{"BGP-1"})
-	resp, _ := api.GetMetrics(req)
+	resp, err := api.GetMetrics(req)
 	assert.NotNil(t, resp)
+	assert.Nil(t, err)
+}
+
+func TestHttpGetMetricsBgpv4Response(t *testing.T) {
+	// Send Get Metrics request with device name d1 which is available in
+	// the config, validate the response is not nil
+	api := gosnappi.NewApi()
+	api.NewHttpTransport().SetLocation(mockHttpServerLocation)
+	req := api.NewMetricsRequest()
+	flow_req := req.Bgpv4()
+	flow_req.SetDeviceNames([]string{"BGP-1"})
+	resp, err := api.GetMetrics(req)
+	fmt.Println(resp.ToJson())
+	assert.NotNil(t, resp)
+	assert.Nil(t, err)
+	assert.Equal(t, resp.Bgpv4Metrics().Items()[0].Name(), string("BGP-1"))
+	assert.Equal(t, resp.Bgpv4Metrics().Items()[0].RoutesAdvertised(), int32(80))
 }
 
 func TestGetMetricsBgpv4ResponseError(t *testing.T) {
