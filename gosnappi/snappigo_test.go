@@ -38,7 +38,8 @@ func TestGrpcApi(t *testing.T) {
 	d1 := config.Devices().Add().SetName("d1")
 	eth1 := d1.Ethernet().SetName("Ethernet1")
 	ip1 := eth1.Ipv4().SetName("IPv41")
-	ip1.Bgpv4().SetName("BGP-1")
+	bgp1 := ip1.Bgpv4().SetName("BGP-1")
+	bgp1.Bgpv4Routes().Add().SetName("RR-1")
 	state, err := api.SetConfig(config)
 	assert.NotNil(t, state)
 	assert.Nil(t, err)
@@ -77,7 +78,7 @@ func TestGrpcGetMetricsFlowResponse(t *testing.T) {
 	flow_req := req.Flow()
 	flow_req.SetFlowNames([]string{"f1", "f2"})
 	resp, err := api.GetMetrics(req)
-	fmt.Println("grpc flow response :", resp.ToJson())
+	fmt.Println("grpc flow response :", resp.ToYaml())
 	assert.NotNil(t, resp)
 	assert.Nil(t, err)
 }
@@ -201,6 +202,98 @@ func TestGetMetricsBgpv4ResponseError(t *testing.T) {
 	assert.NotNil(t, err)
 }
 
+func TestSetTransmitStateResponse(t *testing.T) {
+	flow_names := []string{"f1", "f2"}
+	api := gosnappi.NewApi()
+	api.NewGrpcTransport().SetLocation(mockGrpcServerLocation)
+	req := api.NewTransmitState()
+	req.SetFlowNames([]string{"f1", "f2"})
+	req.SetState(gosnappi.TransmitStateState.START)
+	assert.Equal(t, flow_names, req.FlowNames())
+	resp, _ := api.SetTransmitState(req)
+	assert.NotNil(t, resp)
+}
+
+func TestSetTransmitStateResponseError(t *testing.T) {
+	api := gosnappi.NewApi()
+	api.NewGrpcTransport().SetLocation(mockGrpcServerLocation)
+	req := api.NewTransmitState()
+	req.SetFlowNames([]string{"f3"})
+	req.SetState(gosnappi.TransmitStateState.START)
+	_, err := api.SetTransmitState(req)
+	log.Print(err)
+	assert.NotNil(t, err)
+}
+
+func TestSetLinkStateResponse(t *testing.T) {
+	port_names := []string{"port1"}
+	api := gosnappi.NewApi()
+	api.NewGrpcTransport().SetLocation(mockGrpcServerLocation)
+	req := api.NewLinkState()
+	req.SetPortNames([]string{"port1"})
+	req.SetState(gosnappi.LinkStateState.DOWN)
+	assert.Equal(t, port_names, req.PortNames())
+	resp, _ := api.SetLinkState(req)
+	assert.NotNil(t, resp)
+}
+
+func TestSetLinkStateResponseError(t *testing.T) {
+	api := gosnappi.NewApi()
+	api.NewGrpcTransport().SetLocation(mockGrpcServerLocation)
+	req := api.NewLinkState()
+	req.SetPortNames([]string{"port3"})
+	req.SetState(gosnappi.LinkStateState.DOWN)
+	_, err := api.SetLinkState(req)
+	log.Print(err)
+	assert.NotNil(t, err)
+}
+
+func TestSetCaptureStateResponse(t *testing.T) {
+	port_names := []string{"port1"}
+	api := gosnappi.NewApi()
+	api.NewGrpcTransport().SetLocation(mockGrpcServerLocation)
+	req := api.NewCaptureState()
+	req.SetPortNames([]string{"port1"})
+	req.SetState(gosnappi.CaptureStateState.START)
+	assert.Equal(t, port_names, req.PortNames())
+	resp, _ := api.SetCaptureState(req)
+	assert.NotNil(t, resp)
+}
+
+func TestSetCaptureStateResponseError(t *testing.T) {
+	api := gosnappi.NewApi()
+	api.NewGrpcTransport().SetLocation(mockGrpcServerLocation)
+	req := api.NewCaptureState()
+	req.SetPortNames([]string{"port3"})
+	req.SetState(gosnappi.CaptureStateState.START)
+	_, err := api.SetCaptureState(req)
+	log.Print(err)
+	assert.NotNil(t, err)
+}
+
+func TestSetRouteStateResponse(t *testing.T) {
+	route_names := []string{"RR-1"}
+	api := gosnappi.NewApi()
+	api.NewGrpcTransport().SetLocation(mockGrpcServerLocation)
+	req := api.NewRouteState()
+	req.SetNames([]string{"RR-1"})
+	req.SetState(gosnappi.RouteStateState.ADVERTISE)
+	assert.Equal(t, route_names, req.Names())
+	resp, _ := api.SetRouteState(req)
+	assert.NotNil(t, resp)
+}
+
+func TestSetRouteStateResponseError(t *testing.T) {
+	api := gosnappi.NewApi()
+	api.NewGrpcTransport().SetLocation(mockGrpcServerLocation)
+	req := api.NewRouteState()
+	req.SetNames([]string{"RR-2"})
+	req.SetState(gosnappi.RouteStateState.ADVERTISE)
+	_, err := api.SetRouteState(req)
+	log.Print(err)
+	assert.NotNil(t, err)
+}
+
 func TestPorts(t *testing.T) {
 	api := gosnappi.NewApi()
 	config := api.NewConfig()
@@ -215,7 +308,6 @@ func TestPorts(t *testing.T) {
 	config_new := api.NewConfig()
 	config_new.FromJson(string(data))
 
-	// TODO: check why this is failing
 	// assert.Equal(t, config, config_new, "Both configs shall be equal")
 	assert.Equal(t, config.ToJson(), config_new.ToJson(), "Both json shall be equal")
 }
