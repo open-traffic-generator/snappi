@@ -1355,6 +1355,9 @@ type TransmitState interface {
 //  - /components/schemas/Flow/properties/name
 //
 func (obj *transmitState) FlowNames() []string {
+	if obj.obj.FlowNames == nil {
+		obj.obj.FlowNames = make([]string, 0)
+	}
 	return obj.obj.FlowNames
 }
 
@@ -1369,7 +1372,12 @@ func (obj *transmitState) FlowNames() []string {
 //  - /components/schemas/Flow/properties/name
 //
 func (obj *transmitState) SetFlowNames(value []string) TransmitState {
-	obj.obj.FlowNames = value
+	if obj.obj.FlowNames == nil {
+		obj.obj.FlowNames = make([]string, 0)
+	}
+	for _, item := range value {
+		obj.obj.FlowNames = append(obj.obj.FlowNames, item)
+	}
 
 	return obj
 }
@@ -1485,6 +1493,9 @@ type LinkState interface {
 //  - /components/schemas/Port/properties/name
 //
 func (obj *linkState) PortNames() []string {
+	if obj.obj.PortNames == nil {
+		obj.obj.PortNames = make([]string, 0)
+	}
 	return obj.obj.PortNames
 }
 
@@ -1499,7 +1510,12 @@ func (obj *linkState) PortNames() []string {
 //  - /components/schemas/Port/properties/name
 //
 func (obj *linkState) SetPortNames(value []string) LinkState {
-	obj.obj.PortNames = value
+	if obj.obj.PortNames == nil {
+		obj.obj.PortNames = make([]string, 0)
+	}
+	for _, item := range value {
+		obj.obj.PortNames = append(obj.obj.PortNames, item)
+	}
 
 	return obj
 }
@@ -1613,6 +1629,9 @@ type CaptureState interface {
 //  - /components/schemas/Port/properties/name
 //
 func (obj *captureState) PortNames() []string {
+	if obj.obj.PortNames == nil {
+		obj.obj.PortNames = make([]string, 0)
+	}
 	return obj.obj.PortNames
 }
 
@@ -1627,7 +1646,12 @@ func (obj *captureState) PortNames() []string {
 //  - /components/schemas/Port/properties/name
 //
 func (obj *captureState) SetPortNames(value []string) CaptureState {
-	obj.obj.PortNames = value
+	if obj.obj.PortNames == nil {
+		obj.obj.PortNames = make([]string, 0)
+	}
+	for _, item := range value {
+		obj.obj.PortNames = append(obj.obj.PortNames, item)
+	}
 
 	return obj
 }
@@ -1724,7 +1748,40 @@ type FlowsUpdate interface {
 	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
+	PropertyNames() []FlowsUpdatePropertyNamesEnum
+	SetPropertyNames(value []FlowsUpdatePropertyNamesEnum) FlowsUpdate
 	Flows() FlowsUpdateFlowIter
+}
+
+type FlowsUpdatePropertyNamesEnum string
+
+var FlowsUpdatePropertyNames = struct {
+	RATE FlowsUpdatePropertyNamesEnum
+	SIZE FlowsUpdatePropertyNamesEnum
+}{
+	RATE: FlowsUpdatePropertyNamesEnum("rate"),
+	SIZE: FlowsUpdatePropertyNamesEnum("size"),
+}
+
+func (obj *flowsUpdate) PropertyNames() []FlowsUpdatePropertyNamesEnum {
+	items := []FlowsUpdatePropertyNamesEnum{}
+	for _, item := range obj.obj.PropertyNames {
+		items = append(items, FlowsUpdatePropertyNamesEnum(item.String()))
+	}
+	return items
+}
+
+// SetPropertyNames sets the []string value in the FlowsUpdate object
+//  Flow properties to be updated without affecting the transmit state
+func (obj *flowsUpdate) SetPropertyNames(value []FlowsUpdatePropertyNamesEnum) FlowsUpdate {
+	items := []snappipb.FlowsUpdate_PropertyNames_Enum{}
+	for _, item := range value {
+		intValue := snappipb.FlowsUpdate_PropertyNames_Enum_value[string(item)]
+		items = append(items, snappipb.FlowsUpdate_PropertyNames_Enum(intValue))
+	}
+	obj.obj.PropertyNames = items
+
+	return obj
 }
 
 // Flows returns a []Flow
@@ -1850,6 +1907,9 @@ type RouteState interface {
 //  - /components/schemas/Device.Bgpv6Route/properties/name
 //
 func (obj *routeState) Names() []string {
+	if obj.obj.Names == nil {
+		obj.obj.Names = make([]string, 0)
+	}
 	return obj.obj.Names
 }
 
@@ -1866,7 +1926,12 @@ func (obj *routeState) Names() []string {
 //  - /components/schemas/Device.Bgpv6Route/properties/name
 //
 func (obj *routeState) SetNames(value []string) RouteState {
-	obj.obj.Names = value
+	if obj.obj.Names == nil {
+		obj.obj.Names = make([]string, 0)
+	}
+	for _, item := range value {
+		obj.obj.Names = append(obj.obj.Names, item)
+	}
 
 	return obj
 }
@@ -5046,6 +5111,9 @@ type Layer1 interface {
 //  - /components/schemas/Port/properties/name
 //
 func (obj *layer1) PortNames() []string {
+	if obj.obj.PortNames == nil {
+		obj.obj.PortNames = make([]string, 0)
+	}
 	return obj.obj.PortNames
 }
 
@@ -5061,7 +5129,12 @@ func (obj *layer1) PortNames() []string {
 //  - /components/schemas/Port/properties/name
 //
 func (obj *layer1) SetPortNames(value []string) Layer1 {
-	obj.obj.PortNames = value
+	if obj.obj.PortNames == nil {
+		obj.obj.PortNames = make([]string, 0)
+	}
+	for _, item := range value {
+		obj.obj.PortNames = append(obj.obj.PortNames, item)
+	}
 
 	return obj
 }
@@ -5316,6 +5389,9 @@ type Capture interface {
 //  - /components/schemas/Port/properties/name
 //
 func (obj *capture) PortNames() []string {
+	if obj.obj.PortNames == nil {
+		obj.obj.PortNames = make([]string, 0)
+	}
 	return obj.obj.PortNames
 }
 
@@ -5330,7 +5406,12 @@ func (obj *capture) PortNames() []string {
 //  - /components/schemas/Port/properties/name
 //
 func (obj *capture) SetPortNames(value []string) Capture {
-	obj.obj.PortNames = value
+	if obj.obj.PortNames == nil {
+		obj.obj.PortNames = make([]string, 0)
+	}
+	for _, item := range value {
+		obj.obj.PortNames = append(obj.obj.PortNames, item)
+	}
 
 	return obj
 }
@@ -6043,6 +6124,8 @@ type PortMetricsRequest interface {
 	FromJson(value string) error
 	PortNames() []string
 	SetPortNames(value []string) PortMetricsRequest
+	ColumnNames() []PortMetricsRequestColumnNamesEnum
+	SetColumnNames(value []PortMetricsRequestColumnNamesEnum) PortMetricsRequest
 }
 
 // PortNames returns a []string
@@ -6056,6 +6139,9 @@ type PortMetricsRequest interface {
 //  - /components/schemas/Port/properties/name
 //
 func (obj *portMetricsRequest) PortNames() []string {
+	if obj.obj.PortNames == nil {
+		obj.obj.PortNames = make([]string, 0)
+	}
 	return obj.obj.PortNames
 }
 
@@ -6070,7 +6156,63 @@ func (obj *portMetricsRequest) PortNames() []string {
 //  - /components/schemas/Port/properties/name
 //
 func (obj *portMetricsRequest) SetPortNames(value []string) PortMetricsRequest {
-	obj.obj.PortNames = value
+	if obj.obj.PortNames == nil {
+		obj.obj.PortNames = make([]string, 0)
+	}
+	for _, item := range value {
+		obj.obj.PortNames = append(obj.obj.PortNames, item)
+	}
+
+	return obj
+}
+
+type PortMetricsRequestColumnNamesEnum string
+
+var PortMetricsRequestColumnNames = struct {
+	TRANSMIT       PortMetricsRequestColumnNamesEnum
+	LOCATION       PortMetricsRequestColumnNamesEnum
+	LINK           PortMetricsRequestColumnNamesEnum
+	CAPTURE        PortMetricsRequestColumnNamesEnum
+	FRAMES_TX      PortMetricsRequestColumnNamesEnum
+	FRAMES_RX      PortMetricsRequestColumnNamesEnum
+	BYTES_TX       PortMetricsRequestColumnNamesEnum
+	BYTES_RX       PortMetricsRequestColumnNamesEnum
+	FRAMES_TX_RATE PortMetricsRequestColumnNamesEnum
+	FRAMES_RX_RATE PortMetricsRequestColumnNamesEnum
+	BYTES_TX_RATE  PortMetricsRequestColumnNamesEnum
+	BYTES_RX_RATE  PortMetricsRequestColumnNamesEnum
+}{
+	TRANSMIT:       PortMetricsRequestColumnNamesEnum("transmit"),
+	LOCATION:       PortMetricsRequestColumnNamesEnum("location"),
+	LINK:           PortMetricsRequestColumnNamesEnum("link"),
+	CAPTURE:        PortMetricsRequestColumnNamesEnum("capture"),
+	FRAMES_TX:      PortMetricsRequestColumnNamesEnum("frames_tx"),
+	FRAMES_RX:      PortMetricsRequestColumnNamesEnum("frames_rx"),
+	BYTES_TX:       PortMetricsRequestColumnNamesEnum("bytes_tx"),
+	BYTES_RX:       PortMetricsRequestColumnNamesEnum("bytes_rx"),
+	FRAMES_TX_RATE: PortMetricsRequestColumnNamesEnum("frames_tx_rate"),
+	FRAMES_RX_RATE: PortMetricsRequestColumnNamesEnum("frames_rx_rate"),
+	BYTES_TX_RATE:  PortMetricsRequestColumnNamesEnum("bytes_tx_rate"),
+	BYTES_RX_RATE:  PortMetricsRequestColumnNamesEnum("bytes_rx_rate"),
+}
+
+func (obj *portMetricsRequest) ColumnNames() []PortMetricsRequestColumnNamesEnum {
+	items := []PortMetricsRequestColumnNamesEnum{}
+	for _, item := range obj.obj.ColumnNames {
+		items = append(items, PortMetricsRequestColumnNamesEnum(item.String()))
+	}
+	return items
+}
+
+// SetColumnNames sets the []string value in the PortMetricsRequest object
+//  The list of column names that the returned result set will contain. If the list is empty then all columns will be returned. The name of the port cannot be excluded.
+func (obj *portMetricsRequest) SetColumnNames(value []PortMetricsRequestColumnNamesEnum) PortMetricsRequest {
+	items := []snappipb.PortMetricsRequest_ColumnNames_Enum{}
+	for _, item := range value {
+		intValue := snappipb.PortMetricsRequest_ColumnNames_Enum_value[string(item)]
+		items = append(items, snappipb.PortMetricsRequest_ColumnNames_Enum(intValue))
+	}
+	obj.obj.ColumnNames = items
 
 	return obj
 }
@@ -6150,6 +6292,8 @@ type FlowMetricsRequest interface {
 	FlowNames() []string
 	SetFlowNames(value []string) FlowMetricsRequest
 	MetricGroups() FlowMetricGroupRequest
+	MetricNames() []FlowMetricsRequestMetricNamesEnum
+	SetMetricNames(value []FlowMetricsRequestMetricNamesEnum) FlowMetricsRequest
 }
 
 // FlowNames returns a []string
@@ -6164,6 +6308,9 @@ type FlowMetricsRequest interface {
 //  - /components/schemas/Flow/properties/name
 //
 func (obj *flowMetricsRequest) FlowNames() []string {
+	if obj.obj.FlowNames == nil {
+		obj.obj.FlowNames = make([]string, 0)
+	}
 	return obj.obj.FlowNames
 }
 
@@ -6179,7 +6326,12 @@ func (obj *flowMetricsRequest) FlowNames() []string {
 //  - /components/schemas/Flow/properties/name
 //
 func (obj *flowMetricsRequest) SetFlowNames(value []string) FlowMetricsRequest {
-	obj.obj.FlowNames = value
+	if obj.obj.FlowNames == nil {
+		obj.obj.FlowNames = make([]string, 0)
+	}
+	for _, item := range value {
+		obj.obj.FlowNames = append(obj.obj.FlowNames, item)
+	}
 
 	return obj
 }
@@ -6192,6 +6344,47 @@ func (obj *flowMetricsRequest) MetricGroups() FlowMetricGroupRequest {
 	}
 
 	return &flowMetricGroupRequest{obj: obj.obj.MetricGroups}
+}
+
+type FlowMetricsRequestMetricNamesEnum string
+
+var FlowMetricsRequestMetricNames = struct {
+	TRANSMIT       FlowMetricsRequestMetricNamesEnum
+	FRAMES_TX      FlowMetricsRequestMetricNamesEnum
+	FRAMES_RX      FlowMetricsRequestMetricNamesEnum
+	BYTES_TX       FlowMetricsRequestMetricNamesEnum
+	BYTES_RX       FlowMetricsRequestMetricNamesEnum
+	FRAMES_TX_RATE FlowMetricsRequestMetricNamesEnum
+	FRAMES_RX_RATE FlowMetricsRequestMetricNamesEnum
+}{
+	TRANSMIT:       FlowMetricsRequestMetricNamesEnum("transmit"),
+	FRAMES_TX:      FlowMetricsRequestMetricNamesEnum("frames_tx"),
+	FRAMES_RX:      FlowMetricsRequestMetricNamesEnum("frames_rx"),
+	BYTES_TX:       FlowMetricsRequestMetricNamesEnum("bytes_tx"),
+	BYTES_RX:       FlowMetricsRequestMetricNamesEnum("bytes_rx"),
+	FRAMES_TX_RATE: FlowMetricsRequestMetricNamesEnum("frames_tx_rate"),
+	FRAMES_RX_RATE: FlowMetricsRequestMetricNamesEnum("frames_rx_rate"),
+}
+
+func (obj *flowMetricsRequest) MetricNames() []FlowMetricsRequestMetricNamesEnum {
+	items := []FlowMetricsRequestMetricNamesEnum{}
+	for _, item := range obj.obj.MetricNames {
+		items = append(items, FlowMetricsRequestMetricNamesEnum(item.String()))
+	}
+	return items
+}
+
+// SetMetricNames sets the []string value in the FlowMetricsRequest object
+//  The list of metric names that the returned result set will contain. If the list is empty then all metrics will be returned.
+func (obj *flowMetricsRequest) SetMetricNames(value []FlowMetricsRequestMetricNamesEnum) FlowMetricsRequest {
+	items := []snappipb.FlowMetricsRequest_MetricNames_Enum{}
+	for _, item := range value {
+		intValue := snappipb.FlowMetricsRequest_MetricNames_Enum_value[string(item)]
+		items = append(items, snappipb.FlowMetricsRequest_MetricNames_Enum(intValue))
+	}
+	obj.obj.MetricNames = items
+
+	return obj
 }
 
 type bgpv4MetricsRequest struct {
@@ -6268,6 +6461,8 @@ type Bgpv4MetricsRequest interface {
 	FromJson(value string) error
 	PeerNames() []string
 	SetPeerNames(value []string) Bgpv4MetricsRequest
+	ColumnNames() []Bgpv4MetricsRequestColumnNamesEnum
+	SetColumnNames(value []Bgpv4MetricsRequestColumnNamesEnum) Bgpv4MetricsRequest
 }
 
 // PeerNames returns a []string
@@ -6281,6 +6476,9 @@ type Bgpv4MetricsRequest interface {
 //  - /components/schemas/Device.Bgpv4/properties/name
 //
 func (obj *bgpv4MetricsRequest) PeerNames() []string {
+	if obj.obj.PeerNames == nil {
+		obj.obj.PeerNames = make([]string, 0)
+	}
 	return obj.obj.PeerNames
 }
 
@@ -6295,7 +6493,67 @@ func (obj *bgpv4MetricsRequest) PeerNames() []string {
 //  - /components/schemas/Device.Bgpv4/properties/name
 //
 func (obj *bgpv4MetricsRequest) SetPeerNames(value []string) Bgpv4MetricsRequest {
-	obj.obj.PeerNames = value
+	if obj.obj.PeerNames == nil {
+		obj.obj.PeerNames = make([]string, 0)
+	}
+	for _, item := range value {
+		obj.obj.PeerNames = append(obj.obj.PeerNames, item)
+	}
+
+	return obj
+}
+
+type Bgpv4MetricsRequestColumnNamesEnum string
+
+var Bgpv4MetricsRequestColumnNames = struct {
+	SESSION_STATE            Bgpv4MetricsRequestColumnNamesEnum
+	SESSION_FLAP_COUNT       Bgpv4MetricsRequestColumnNamesEnum
+	ROUTES_ADVERTISED        Bgpv4MetricsRequestColumnNamesEnum
+	ROUTES_RECEIVED          Bgpv4MetricsRequestColumnNamesEnum
+	ROUTE_WITHDRAWS_SENT     Bgpv4MetricsRequestColumnNamesEnum
+	ROUTE_WITHDRAWS_RECEIVED Bgpv4MetricsRequestColumnNamesEnum
+	UPDATES_SENT             Bgpv4MetricsRequestColumnNamesEnum
+	UPDATES_RECEIVED         Bgpv4MetricsRequestColumnNamesEnum
+	OPENS_SENT               Bgpv4MetricsRequestColumnNamesEnum
+	OPENS_RECEIVED           Bgpv4MetricsRequestColumnNamesEnum
+	KEEPALIVES_SENT          Bgpv4MetricsRequestColumnNamesEnum
+	KEEPALIVES_RECEIVED      Bgpv4MetricsRequestColumnNamesEnum
+	NOTIFICATIONS_SENT       Bgpv4MetricsRequestColumnNamesEnum
+	NOTIFICATIONS_RECEIVED   Bgpv4MetricsRequestColumnNamesEnum
+}{
+	SESSION_STATE:            Bgpv4MetricsRequestColumnNamesEnum("session_state"),
+	SESSION_FLAP_COUNT:       Bgpv4MetricsRequestColumnNamesEnum("session_flap_count"),
+	ROUTES_ADVERTISED:        Bgpv4MetricsRequestColumnNamesEnum("routes_advertised"),
+	ROUTES_RECEIVED:          Bgpv4MetricsRequestColumnNamesEnum("routes_received"),
+	ROUTE_WITHDRAWS_SENT:     Bgpv4MetricsRequestColumnNamesEnum("route_withdraws_sent"),
+	ROUTE_WITHDRAWS_RECEIVED: Bgpv4MetricsRequestColumnNamesEnum("route_withdraws_received"),
+	UPDATES_SENT:             Bgpv4MetricsRequestColumnNamesEnum("updates_sent"),
+	UPDATES_RECEIVED:         Bgpv4MetricsRequestColumnNamesEnum("updates_received"),
+	OPENS_SENT:               Bgpv4MetricsRequestColumnNamesEnum("opens_sent"),
+	OPENS_RECEIVED:           Bgpv4MetricsRequestColumnNamesEnum("opens_received"),
+	KEEPALIVES_SENT:          Bgpv4MetricsRequestColumnNamesEnum("keepalives_sent"),
+	KEEPALIVES_RECEIVED:      Bgpv4MetricsRequestColumnNamesEnum("keepalives_received"),
+	NOTIFICATIONS_SENT:       Bgpv4MetricsRequestColumnNamesEnum("notifications_sent"),
+	NOTIFICATIONS_RECEIVED:   Bgpv4MetricsRequestColumnNamesEnum("notifications_received"),
+}
+
+func (obj *bgpv4MetricsRequest) ColumnNames() []Bgpv4MetricsRequestColumnNamesEnum {
+	items := []Bgpv4MetricsRequestColumnNamesEnum{}
+	for _, item := range obj.obj.ColumnNames {
+		items = append(items, Bgpv4MetricsRequestColumnNamesEnum(item.String()))
+	}
+	return items
+}
+
+// SetColumnNames sets the []string value in the Bgpv4MetricsRequest object
+//  The list of column names that the returned result set will contain. If the list is empty then all columns will be returned except for any result_groups. The name of the BGPv4 peer cannot be excluded.
+func (obj *bgpv4MetricsRequest) SetColumnNames(value []Bgpv4MetricsRequestColumnNamesEnum) Bgpv4MetricsRequest {
+	items := []snappipb.Bgpv4MetricsRequest_ColumnNames_Enum{}
+	for _, item := range value {
+		intValue := snappipb.Bgpv4MetricsRequest_ColumnNames_Enum_value[string(item)]
+		items = append(items, snappipb.Bgpv4MetricsRequest_ColumnNames_Enum(intValue))
+	}
+	obj.obj.ColumnNames = items
 
 	return obj
 }
@@ -6374,6 +6632,8 @@ type Bgpv6MetricsRequest interface {
 	FromJson(value string) error
 	PeerNames() []string
 	SetPeerNames(value []string) Bgpv6MetricsRequest
+	ColumnNames() []Bgpv6MetricsRequestColumnNamesEnum
+	SetColumnNames(value []Bgpv6MetricsRequestColumnNamesEnum) Bgpv6MetricsRequest
 }
 
 // PeerNames returns a []string
@@ -6387,6 +6647,9 @@ type Bgpv6MetricsRequest interface {
 //  - /components/schemas/Device.Bgpv6/properties/name
 //
 func (obj *bgpv6MetricsRequest) PeerNames() []string {
+	if obj.obj.PeerNames == nil {
+		obj.obj.PeerNames = make([]string, 0)
+	}
 	return obj.obj.PeerNames
 }
 
@@ -6401,7 +6664,67 @@ func (obj *bgpv6MetricsRequest) PeerNames() []string {
 //  - /components/schemas/Device.Bgpv6/properties/name
 //
 func (obj *bgpv6MetricsRequest) SetPeerNames(value []string) Bgpv6MetricsRequest {
-	obj.obj.PeerNames = value
+	if obj.obj.PeerNames == nil {
+		obj.obj.PeerNames = make([]string, 0)
+	}
+	for _, item := range value {
+		obj.obj.PeerNames = append(obj.obj.PeerNames, item)
+	}
+
+	return obj
+}
+
+type Bgpv6MetricsRequestColumnNamesEnum string
+
+var Bgpv6MetricsRequestColumnNames = struct {
+	SESSION_STATE            Bgpv6MetricsRequestColumnNamesEnum
+	SESSION_FLAP_COUNT       Bgpv6MetricsRequestColumnNamesEnum
+	ROUTES_ADVERTISED        Bgpv6MetricsRequestColumnNamesEnum
+	ROUTES_RECEIVED          Bgpv6MetricsRequestColumnNamesEnum
+	ROUTE_WITHDRAWS_SENT     Bgpv6MetricsRequestColumnNamesEnum
+	ROUTE_WITHDRAWS_RECEIVED Bgpv6MetricsRequestColumnNamesEnum
+	UPDATES_SENT             Bgpv6MetricsRequestColumnNamesEnum
+	UPDATES_RECEIVED         Bgpv6MetricsRequestColumnNamesEnum
+	OPENS_SENT               Bgpv6MetricsRequestColumnNamesEnum
+	OPENS_RECEIVED           Bgpv6MetricsRequestColumnNamesEnum
+	KEEPALIVES_SENT          Bgpv6MetricsRequestColumnNamesEnum
+	KEEPALIVES_RECEIVED      Bgpv6MetricsRequestColumnNamesEnum
+	NOTIFICATIONS_SENT       Bgpv6MetricsRequestColumnNamesEnum
+	NOTIFICATIONS_RECEIVED   Bgpv6MetricsRequestColumnNamesEnum
+}{
+	SESSION_STATE:            Bgpv6MetricsRequestColumnNamesEnum("session_state"),
+	SESSION_FLAP_COUNT:       Bgpv6MetricsRequestColumnNamesEnum("session_flap_count"),
+	ROUTES_ADVERTISED:        Bgpv6MetricsRequestColumnNamesEnum("routes_advertised"),
+	ROUTES_RECEIVED:          Bgpv6MetricsRequestColumnNamesEnum("routes_received"),
+	ROUTE_WITHDRAWS_SENT:     Bgpv6MetricsRequestColumnNamesEnum("route_withdraws_sent"),
+	ROUTE_WITHDRAWS_RECEIVED: Bgpv6MetricsRequestColumnNamesEnum("route_withdraws_received"),
+	UPDATES_SENT:             Bgpv6MetricsRequestColumnNamesEnum("updates_sent"),
+	UPDATES_RECEIVED:         Bgpv6MetricsRequestColumnNamesEnum("updates_received"),
+	OPENS_SENT:               Bgpv6MetricsRequestColumnNamesEnum("opens_sent"),
+	OPENS_RECEIVED:           Bgpv6MetricsRequestColumnNamesEnum("opens_received"),
+	KEEPALIVES_SENT:          Bgpv6MetricsRequestColumnNamesEnum("keepalives_sent"),
+	KEEPALIVES_RECEIVED:      Bgpv6MetricsRequestColumnNamesEnum("keepalives_received"),
+	NOTIFICATIONS_SENT:       Bgpv6MetricsRequestColumnNamesEnum("notifications_sent"),
+	NOTIFICATIONS_RECEIVED:   Bgpv6MetricsRequestColumnNamesEnum("notifications_received"),
+}
+
+func (obj *bgpv6MetricsRequest) ColumnNames() []Bgpv6MetricsRequestColumnNamesEnum {
+	items := []Bgpv6MetricsRequestColumnNamesEnum{}
+	for _, item := range obj.obj.ColumnNames {
+		items = append(items, Bgpv6MetricsRequestColumnNamesEnum(item.String()))
+	}
+	return items
+}
+
+// SetColumnNames sets the []string value in the Bgpv6MetricsRequest object
+//  The list of column names that the returned result set will contain. If the list is empty then all columns will be returned except for any result_groups. The name of the BGPv6 peer cannot be excluded.
+func (obj *bgpv6MetricsRequest) SetColumnNames(value []Bgpv6MetricsRequestColumnNamesEnum) Bgpv6MetricsRequest {
+	items := []snappipb.Bgpv6MetricsRequest_ColumnNames_Enum{}
+	for _, item := range value {
+		intValue := snappipb.Bgpv6MetricsRequest_ColumnNames_Enum_value[string(item)]
+		items = append(items, snappipb.Bgpv6MetricsRequest_ColumnNames_Enum(intValue))
+	}
+	obj.obj.ColumnNames = items
 
 	return obj
 }
@@ -9360,6 +9683,9 @@ func (obj *flowMetricGroupRequest) SetChoice(value FlowMetricGroupRequestChoiceE
 //  - /components/schemas/Flow/properties/packet/../metric_group
 //
 func (obj *flowMetricGroupRequest) Ingress() []string {
+	if obj.obj.Ingress == nil {
+		obj.obj.Ingress = make([]string, 0)
+	}
 	return obj.obj.Ingress
 }
 
@@ -9375,7 +9701,12 @@ func (obj *flowMetricGroupRequest) Ingress() []string {
 //  - /components/schemas/Flow/properties/packet/../metric_group
 //
 func (obj *flowMetricGroupRequest) SetIngress(value []string) FlowMetricGroupRequest {
-	obj.obj.Ingress = value
+	if obj.obj.Ingress == nil {
+		obj.obj.Ingress = make([]string, 0)
+	}
+	for _, item := range value {
+		obj.obj.Ingress = append(obj.obj.Ingress, item)
+	}
 	obj.SetChoice(FlowMetricGroupRequestChoice.INGRESS)
 	return obj
 }
@@ -9392,6 +9723,9 @@ func (obj *flowMetricGroupRequest) SetIngress(value []string) FlowMetricGroupReq
 //  - /components/schemas/Flow/properties/egress/../metric_group
 //
 func (obj *flowMetricGroupRequest) Egress() []string {
+	if obj.obj.Egress == nil {
+		obj.obj.Egress = make([]string, 0)
+	}
 	return obj.obj.Egress
 }
 
@@ -9407,7 +9741,12 @@ func (obj *flowMetricGroupRequest) Egress() []string {
 //  - /components/schemas/Flow/properties/egress/../metric_group
 //
 func (obj *flowMetricGroupRequest) SetEgress(value []string) FlowMetricGroupRequest {
-	obj.obj.Egress = value
+	if obj.obj.Egress == nil {
+		obj.obj.Egress = make([]string, 0)
+	}
+	for _, item := range value {
+		obj.obj.Egress = append(obj.obj.Egress, item)
+	}
 	obj.SetChoice(FlowMetricGroupRequestChoice.EGRESS)
 	return obj
 }
@@ -12996,6 +13335,9 @@ func (obj *flowDevice) SetMode(value FlowDeviceModeEnum) FlowDevice {
 //  - /components/schemas/Device.Bgpv6RouteRange/properties/name
 //
 func (obj *flowDevice) TxNames() []string {
+	if obj.obj.TxNames == nil {
+		obj.obj.TxNames = make([]string, 0)
+	}
 	return obj.obj.TxNames
 }
 
@@ -13018,7 +13360,12 @@ func (obj *flowDevice) TxNames() []string {
 //  - /components/schemas/Device.Bgpv6RouteRange/properties/name
 //
 func (obj *flowDevice) SetTxNames(value []string) FlowDevice {
-	obj.obj.TxNames = value
+	if obj.obj.TxNames == nil {
+		obj.obj.TxNames = make([]string, 0)
+	}
+	for _, item := range value {
+		obj.obj.TxNames = append(obj.obj.TxNames, item)
+	}
 
 	return obj
 }
@@ -13042,6 +13389,9 @@ func (obj *flowDevice) SetTxNames(value []string) FlowDevice {
 //  - /components/schemas/Device.Bgpv6RouteRange/properties/name
 //
 func (obj *flowDevice) RxNames() []string {
+	if obj.obj.RxNames == nil {
+		obj.obj.RxNames = make([]string, 0)
+	}
 	return obj.obj.RxNames
 }
 
@@ -13064,7 +13414,12 @@ func (obj *flowDevice) RxNames() []string {
 //  - /components/schemas/Device.Bgpv6RouteRange/properties/name
 //
 func (obj *flowDevice) SetRxNames(value []string) FlowDevice {
-	obj.obj.RxNames = value
+	if obj.obj.RxNames == nil {
+		obj.obj.RxNames = make([]string, 0)
+	}
+	for _, item := range value {
+		obj.obj.RxNames = append(obj.obj.RxNames, item)
+	}
 
 	return obj
 }
@@ -18222,13 +18577,21 @@ func (obj *patternFlowEthernetDst) SetValue(value string) PatternFlowEthernetDst
 // Values returns a []string
 //  description is TBD
 func (obj *patternFlowEthernetDst) Values() []string {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]string, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []string value in the PatternFlowEthernetDst object
 //  description is TBD
 func (obj *patternFlowEthernetDst) SetValues(value []string) PatternFlowEthernetDst {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]string, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowEthernetDstChoice.VALUES)
 	return obj
 }
@@ -18393,13 +18756,21 @@ func (obj *patternFlowEthernetSrc) SetValue(value string) PatternFlowEthernetSrc
 // Values returns a []string
 //  description is TBD
 func (obj *patternFlowEthernetSrc) Values() []string {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]string, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []string value in the PatternFlowEthernetSrc object
 //  description is TBD
 func (obj *patternFlowEthernetSrc) SetValues(value []string) PatternFlowEthernetSrc {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]string, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowEthernetSrcChoice.VALUES)
 	return obj
 }
@@ -18568,13 +18939,21 @@ func (obj *patternFlowEthernetEtherType) SetValue(value int32) PatternFlowEthern
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowEthernetEtherType) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowEthernetEtherType object
 //  description is TBD
 func (obj *patternFlowEthernetEtherType) SetValues(value []int32) PatternFlowEthernetEtherType {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowEthernetEtherTypeChoice.VALUES)
 	return obj
 }
@@ -18758,13 +19137,21 @@ func (obj *patternFlowEthernetPfcQueue) SetValue(value int32) PatternFlowEtherne
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowEthernetPfcQueue) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowEthernetPfcQueue object
 //  description is TBD
 func (obj *patternFlowEthernetPfcQueue) SetValues(value []int32) PatternFlowEthernetPfcQueue {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowEthernetPfcQueueChoice.VALUES)
 	return obj
 }
@@ -18929,13 +19316,21 @@ func (obj *patternFlowVlanPriority) SetValue(value int32) PatternFlowVlanPriorit
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowVlanPriority) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowVlanPriority object
 //  description is TBD
 func (obj *patternFlowVlanPriority) SetValues(value []int32) PatternFlowVlanPriority {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowVlanPriorityChoice.VALUES)
 	return obj
 }
@@ -19100,13 +19495,21 @@ func (obj *patternFlowVlanCfi) SetValue(value int32) PatternFlowVlanCfi {
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowVlanCfi) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowVlanCfi object
 //  description is TBD
 func (obj *patternFlowVlanCfi) SetValues(value []int32) PatternFlowVlanCfi {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowVlanCfiChoice.VALUES)
 	return obj
 }
@@ -19271,13 +19674,21 @@ func (obj *patternFlowVlanId) SetValue(value int32) PatternFlowVlanId {
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowVlanId) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowVlanId object
 //  description is TBD
 func (obj *patternFlowVlanId) SetValues(value []int32) PatternFlowVlanId {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowVlanIdChoice.VALUES)
 	return obj
 }
@@ -19442,13 +19853,21 @@ func (obj *patternFlowVlanTpid) SetValue(value int32) PatternFlowVlanTpid {
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowVlanTpid) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowVlanTpid object
 //  description is TBD
 func (obj *patternFlowVlanTpid) SetValues(value []int32) PatternFlowVlanTpid {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowVlanTpidChoice.VALUES)
 	return obj
 }
@@ -19613,13 +20032,21 @@ func (obj *patternFlowVxlanFlags) SetValue(value int32) PatternFlowVxlanFlags {
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowVxlanFlags) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowVxlanFlags object
 //  description is TBD
 func (obj *patternFlowVxlanFlags) SetValues(value []int32) PatternFlowVxlanFlags {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowVxlanFlagsChoice.VALUES)
 	return obj
 }
@@ -19784,13 +20211,21 @@ func (obj *patternFlowVxlanReserved0) SetValue(value int32) PatternFlowVxlanRese
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowVxlanReserved0) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowVxlanReserved0 object
 //  description is TBD
 func (obj *patternFlowVxlanReserved0) SetValues(value []int32) PatternFlowVxlanReserved0 {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowVxlanReserved0Choice.VALUES)
 	return obj
 }
@@ -19955,13 +20390,21 @@ func (obj *patternFlowVxlanVni) SetValue(value int32) PatternFlowVxlanVni {
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowVxlanVni) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowVxlanVni object
 //  description is TBD
 func (obj *patternFlowVxlanVni) SetValues(value []int32) PatternFlowVxlanVni {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowVxlanVniChoice.VALUES)
 	return obj
 }
@@ -20126,13 +20569,21 @@ func (obj *patternFlowVxlanReserved1) SetValue(value int32) PatternFlowVxlanRese
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowVxlanReserved1) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowVxlanReserved1 object
 //  description is TBD
 func (obj *patternFlowVxlanReserved1) SetValues(value []int32) PatternFlowVxlanReserved1 {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowVxlanReserved1Choice.VALUES)
 	return obj
 }
@@ -20297,13 +20748,21 @@ func (obj *patternFlowIpv4Version) SetValue(value int32) PatternFlowIpv4Version 
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowIpv4Version) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowIpv4Version object
 //  description is TBD
 func (obj *patternFlowIpv4Version) SetValues(value []int32) PatternFlowIpv4Version {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowIpv4VersionChoice.VALUES)
 	return obj
 }
@@ -20472,13 +20931,21 @@ func (obj *patternFlowIpv4HeaderLength) SetValue(value int32) PatternFlowIpv4Hea
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowIpv4HeaderLength) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowIpv4HeaderLength object
 //  description is TBD
 func (obj *patternFlowIpv4HeaderLength) SetValues(value []int32) PatternFlowIpv4HeaderLength {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowIpv4HeaderLengthChoice.VALUES)
 	return obj
 }
@@ -20798,13 +21265,21 @@ func (obj *patternFlowIpv4TotalLength) SetValue(value int32) PatternFlowIpv4Tota
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowIpv4TotalLength) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowIpv4TotalLength object
 //  description is TBD
 func (obj *patternFlowIpv4TotalLength) SetValues(value []int32) PatternFlowIpv4TotalLength {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowIpv4TotalLengthChoice.VALUES)
 	return obj
 }
@@ -20988,13 +21463,21 @@ func (obj *patternFlowIpv4Identification) SetValue(value int32) PatternFlowIpv4I
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowIpv4Identification) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowIpv4Identification object
 //  description is TBD
 func (obj *patternFlowIpv4Identification) SetValues(value []int32) PatternFlowIpv4Identification {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowIpv4IdentificationChoice.VALUES)
 	return obj
 }
@@ -21159,13 +21642,21 @@ func (obj *patternFlowIpv4Reserved) SetValue(value int32) PatternFlowIpv4Reserve
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowIpv4Reserved) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowIpv4Reserved object
 //  description is TBD
 func (obj *patternFlowIpv4Reserved) SetValues(value []int32) PatternFlowIpv4Reserved {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowIpv4ReservedChoice.VALUES)
 	return obj
 }
@@ -21330,13 +21821,21 @@ func (obj *patternFlowIpv4DontFragment) SetValue(value int32) PatternFlowIpv4Don
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowIpv4DontFragment) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowIpv4DontFragment object
 //  description is TBD
 func (obj *patternFlowIpv4DontFragment) SetValues(value []int32) PatternFlowIpv4DontFragment {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowIpv4DontFragmentChoice.VALUES)
 	return obj
 }
@@ -21501,13 +22000,21 @@ func (obj *patternFlowIpv4MoreFragments) SetValue(value int32) PatternFlowIpv4Mo
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowIpv4MoreFragments) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowIpv4MoreFragments object
 //  description is TBD
 func (obj *patternFlowIpv4MoreFragments) SetValues(value []int32) PatternFlowIpv4MoreFragments {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowIpv4MoreFragmentsChoice.VALUES)
 	return obj
 }
@@ -21672,13 +22179,21 @@ func (obj *patternFlowIpv4FragmentOffset) SetValue(value int32) PatternFlowIpv4F
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowIpv4FragmentOffset) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowIpv4FragmentOffset object
 //  description is TBD
 func (obj *patternFlowIpv4FragmentOffset) SetValues(value []int32) PatternFlowIpv4FragmentOffset {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowIpv4FragmentOffsetChoice.VALUES)
 	return obj
 }
@@ -21843,13 +22358,21 @@ func (obj *patternFlowIpv4TimeToLive) SetValue(value int32) PatternFlowIpv4TimeT
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowIpv4TimeToLive) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowIpv4TimeToLive object
 //  description is TBD
 func (obj *patternFlowIpv4TimeToLive) SetValues(value []int32) PatternFlowIpv4TimeToLive {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowIpv4TimeToLiveChoice.VALUES)
 	return obj
 }
@@ -22014,13 +22537,21 @@ func (obj *patternFlowIpv4Protocol) SetValue(value int32) PatternFlowIpv4Protoco
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowIpv4Protocol) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowIpv4Protocol object
 //  description is TBD
 func (obj *patternFlowIpv4Protocol) SetValues(value []int32) PatternFlowIpv4Protocol {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowIpv4ProtocolChoice.VALUES)
 	return obj
 }
@@ -22320,13 +22851,21 @@ func (obj *patternFlowIpv4Src) SetValue(value string) PatternFlowIpv4Src {
 // Values returns a []string
 //  description is TBD
 func (obj *patternFlowIpv4Src) Values() []string {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]string, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []string value in the PatternFlowIpv4Src object
 //  description is TBD
 func (obj *patternFlowIpv4Src) SetValues(value []string) PatternFlowIpv4Src {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]string, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowIpv4SrcChoice.VALUES)
 	return obj
 }
@@ -22491,13 +23030,21 @@ func (obj *patternFlowIpv4Dst) SetValue(value string) PatternFlowIpv4Dst {
 // Values returns a []string
 //  description is TBD
 func (obj *patternFlowIpv4Dst) Values() []string {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]string, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []string value in the PatternFlowIpv4Dst object
 //  description is TBD
 func (obj *patternFlowIpv4Dst) SetValues(value []string) PatternFlowIpv4Dst {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]string, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowIpv4DstChoice.VALUES)
 	return obj
 }
@@ -22662,13 +23209,21 @@ func (obj *patternFlowIpv6Version) SetValue(value int32) PatternFlowIpv6Version 
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowIpv6Version) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowIpv6Version object
 //  description is TBD
 func (obj *patternFlowIpv6Version) SetValues(value []int32) PatternFlowIpv6Version {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowIpv6VersionChoice.VALUES)
 	return obj
 }
@@ -22833,13 +23388,21 @@ func (obj *patternFlowIpv6TrafficClass) SetValue(value int32) PatternFlowIpv6Tra
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowIpv6TrafficClass) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowIpv6TrafficClass object
 //  description is TBD
 func (obj *patternFlowIpv6TrafficClass) SetValues(value []int32) PatternFlowIpv6TrafficClass {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowIpv6TrafficClassChoice.VALUES)
 	return obj
 }
@@ -23004,13 +23567,21 @@ func (obj *patternFlowIpv6FlowLabel) SetValue(value int32) PatternFlowIpv6FlowLa
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowIpv6FlowLabel) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowIpv6FlowLabel object
 //  description is TBD
 func (obj *patternFlowIpv6FlowLabel) SetValues(value []int32) PatternFlowIpv6FlowLabel {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowIpv6FlowLabelChoice.VALUES)
 	return obj
 }
@@ -23179,13 +23750,21 @@ func (obj *patternFlowIpv6PayloadLength) SetValue(value int32) PatternFlowIpv6Pa
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowIpv6PayloadLength) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowIpv6PayloadLength object
 //  description is TBD
 func (obj *patternFlowIpv6PayloadLength) SetValues(value []int32) PatternFlowIpv6PayloadLength {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowIpv6PayloadLengthChoice.VALUES)
 	return obj
 }
@@ -23369,13 +23948,21 @@ func (obj *patternFlowIpv6NextHeader) SetValue(value int32) PatternFlowIpv6NextH
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowIpv6NextHeader) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowIpv6NextHeader object
 //  description is TBD
 func (obj *patternFlowIpv6NextHeader) SetValues(value []int32) PatternFlowIpv6NextHeader {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowIpv6NextHeaderChoice.VALUES)
 	return obj
 }
@@ -23540,13 +24127,21 @@ func (obj *patternFlowIpv6HopLimit) SetValue(value int32) PatternFlowIpv6HopLimi
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowIpv6HopLimit) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowIpv6HopLimit object
 //  description is TBD
 func (obj *patternFlowIpv6HopLimit) SetValues(value []int32) PatternFlowIpv6HopLimit {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowIpv6HopLimitChoice.VALUES)
 	return obj
 }
@@ -23711,13 +24306,21 @@ func (obj *patternFlowIpv6Src) SetValue(value string) PatternFlowIpv6Src {
 // Values returns a []string
 //  description is TBD
 func (obj *patternFlowIpv6Src) Values() []string {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]string, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []string value in the PatternFlowIpv6Src object
 //  description is TBD
 func (obj *patternFlowIpv6Src) SetValues(value []string) PatternFlowIpv6Src {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]string, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowIpv6SrcChoice.VALUES)
 	return obj
 }
@@ -23882,13 +24485,21 @@ func (obj *patternFlowIpv6Dst) SetValue(value string) PatternFlowIpv6Dst {
 // Values returns a []string
 //  description is TBD
 func (obj *patternFlowIpv6Dst) Values() []string {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]string, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []string value in the PatternFlowIpv6Dst object
 //  description is TBD
 func (obj *patternFlowIpv6Dst) SetValues(value []string) PatternFlowIpv6Dst {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]string, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowIpv6DstChoice.VALUES)
 	return obj
 }
@@ -24053,13 +24664,21 @@ func (obj *patternFlowPfcPauseDst) SetValue(value string) PatternFlowPfcPauseDst
 // Values returns a []string
 //  description is TBD
 func (obj *patternFlowPfcPauseDst) Values() []string {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]string, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []string value in the PatternFlowPfcPauseDst object
 //  description is TBD
 func (obj *patternFlowPfcPauseDst) SetValues(value []string) PatternFlowPfcPauseDst {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]string, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowPfcPauseDstChoice.VALUES)
 	return obj
 }
@@ -24224,13 +24843,21 @@ func (obj *patternFlowPfcPauseSrc) SetValue(value string) PatternFlowPfcPauseSrc
 // Values returns a []string
 //  description is TBD
 func (obj *patternFlowPfcPauseSrc) Values() []string {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]string, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []string value in the PatternFlowPfcPauseSrc object
 //  description is TBD
 func (obj *patternFlowPfcPauseSrc) SetValues(value []string) PatternFlowPfcPauseSrc {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]string, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowPfcPauseSrcChoice.VALUES)
 	return obj
 }
@@ -24395,13 +25022,21 @@ func (obj *patternFlowPfcPauseEtherType) SetValue(value int32) PatternFlowPfcPau
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowPfcPauseEtherType) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowPfcPauseEtherType object
 //  description is TBD
 func (obj *patternFlowPfcPauseEtherType) SetValues(value []int32) PatternFlowPfcPauseEtherType {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowPfcPauseEtherTypeChoice.VALUES)
 	return obj
 }
@@ -24566,13 +25201,21 @@ func (obj *patternFlowPfcPauseControlOpCode) SetValue(value int32) PatternFlowPf
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowPfcPauseControlOpCode) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowPfcPauseControlOpCode object
 //  description is TBD
 func (obj *patternFlowPfcPauseControlOpCode) SetValues(value []int32) PatternFlowPfcPauseControlOpCode {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowPfcPauseControlOpCodeChoice.VALUES)
 	return obj
 }
@@ -24737,13 +25380,21 @@ func (obj *patternFlowPfcPauseClassEnableVector) SetValue(value int32) PatternFl
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowPfcPauseClassEnableVector) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowPfcPauseClassEnableVector object
 //  description is TBD
 func (obj *patternFlowPfcPauseClassEnableVector) SetValues(value []int32) PatternFlowPfcPauseClassEnableVector {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowPfcPauseClassEnableVectorChoice.VALUES)
 	return obj
 }
@@ -24908,13 +25559,21 @@ func (obj *patternFlowPfcPausePauseClass0) SetValue(value int32) PatternFlowPfcP
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass0) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowPfcPausePauseClass0 object
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass0) SetValues(value []int32) PatternFlowPfcPausePauseClass0 {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowPfcPausePauseClass0Choice.VALUES)
 	return obj
 }
@@ -25079,13 +25738,21 @@ func (obj *patternFlowPfcPausePauseClass1) SetValue(value int32) PatternFlowPfcP
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass1) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowPfcPausePauseClass1 object
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass1) SetValues(value []int32) PatternFlowPfcPausePauseClass1 {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowPfcPausePauseClass1Choice.VALUES)
 	return obj
 }
@@ -25250,13 +25917,21 @@ func (obj *patternFlowPfcPausePauseClass2) SetValue(value int32) PatternFlowPfcP
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass2) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowPfcPausePauseClass2 object
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass2) SetValues(value []int32) PatternFlowPfcPausePauseClass2 {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowPfcPausePauseClass2Choice.VALUES)
 	return obj
 }
@@ -25421,13 +26096,21 @@ func (obj *patternFlowPfcPausePauseClass3) SetValue(value int32) PatternFlowPfcP
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass3) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowPfcPausePauseClass3 object
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass3) SetValues(value []int32) PatternFlowPfcPausePauseClass3 {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowPfcPausePauseClass3Choice.VALUES)
 	return obj
 }
@@ -25592,13 +26275,21 @@ func (obj *patternFlowPfcPausePauseClass4) SetValue(value int32) PatternFlowPfcP
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass4) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowPfcPausePauseClass4 object
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass4) SetValues(value []int32) PatternFlowPfcPausePauseClass4 {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowPfcPausePauseClass4Choice.VALUES)
 	return obj
 }
@@ -25763,13 +26454,21 @@ func (obj *patternFlowPfcPausePauseClass5) SetValue(value int32) PatternFlowPfcP
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass5) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowPfcPausePauseClass5 object
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass5) SetValues(value []int32) PatternFlowPfcPausePauseClass5 {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowPfcPausePauseClass5Choice.VALUES)
 	return obj
 }
@@ -25934,13 +26633,21 @@ func (obj *patternFlowPfcPausePauseClass6) SetValue(value int32) PatternFlowPfcP
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass6) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowPfcPausePauseClass6 object
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass6) SetValues(value []int32) PatternFlowPfcPausePauseClass6 {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowPfcPausePauseClass6Choice.VALUES)
 	return obj
 }
@@ -26105,13 +26812,21 @@ func (obj *patternFlowPfcPausePauseClass7) SetValue(value int32) PatternFlowPfcP
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass7) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowPfcPausePauseClass7 object
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass7) SetValues(value []int32) PatternFlowPfcPausePauseClass7 {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowPfcPausePauseClass7Choice.VALUES)
 	return obj
 }
@@ -26276,13 +26991,21 @@ func (obj *patternFlowEthernetPauseDst) SetValue(value string) PatternFlowEthern
 // Values returns a []string
 //  description is TBD
 func (obj *patternFlowEthernetPauseDst) Values() []string {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]string, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []string value in the PatternFlowEthernetPauseDst object
 //  description is TBD
 func (obj *patternFlowEthernetPauseDst) SetValues(value []string) PatternFlowEthernetPauseDst {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]string, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowEthernetPauseDstChoice.VALUES)
 	return obj
 }
@@ -26447,13 +27170,21 @@ func (obj *patternFlowEthernetPauseSrc) SetValue(value string) PatternFlowEthern
 // Values returns a []string
 //  description is TBD
 func (obj *patternFlowEthernetPauseSrc) Values() []string {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]string, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []string value in the PatternFlowEthernetPauseSrc object
 //  description is TBD
 func (obj *patternFlowEthernetPauseSrc) SetValues(value []string) PatternFlowEthernetPauseSrc {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]string, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowEthernetPauseSrcChoice.VALUES)
 	return obj
 }
@@ -26618,13 +27349,21 @@ func (obj *patternFlowEthernetPauseEtherType) SetValue(value int32) PatternFlowE
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowEthernetPauseEtherType) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowEthernetPauseEtherType object
 //  description is TBD
 func (obj *patternFlowEthernetPauseEtherType) SetValues(value []int32) PatternFlowEthernetPauseEtherType {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowEthernetPauseEtherTypeChoice.VALUES)
 	return obj
 }
@@ -26789,13 +27528,21 @@ func (obj *patternFlowEthernetPauseControlOpCode) SetValue(value int32) PatternF
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowEthernetPauseControlOpCode) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowEthernetPauseControlOpCode object
 //  description is TBD
 func (obj *patternFlowEthernetPauseControlOpCode) SetValues(value []int32) PatternFlowEthernetPauseControlOpCode {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowEthernetPauseControlOpCodeChoice.VALUES)
 	return obj
 }
@@ -26960,13 +27707,21 @@ func (obj *patternFlowEthernetPauseTime) SetValue(value int32) PatternFlowEthern
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowEthernetPauseTime) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowEthernetPauseTime object
 //  description is TBD
 func (obj *patternFlowEthernetPauseTime) SetValues(value []int32) PatternFlowEthernetPauseTime {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowEthernetPauseTimeChoice.VALUES)
 	return obj
 }
@@ -27131,13 +27886,21 @@ func (obj *patternFlowTcpSrcPort) SetValue(value int32) PatternFlowTcpSrcPort {
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowTcpSrcPort) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowTcpSrcPort object
 //  description is TBD
 func (obj *patternFlowTcpSrcPort) SetValues(value []int32) PatternFlowTcpSrcPort {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowTcpSrcPortChoice.VALUES)
 	return obj
 }
@@ -27302,13 +28065,21 @@ func (obj *patternFlowTcpDstPort) SetValue(value int32) PatternFlowTcpDstPort {
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowTcpDstPort) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowTcpDstPort object
 //  description is TBD
 func (obj *patternFlowTcpDstPort) SetValues(value []int32) PatternFlowTcpDstPort {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowTcpDstPortChoice.VALUES)
 	return obj
 }
@@ -27473,13 +28244,21 @@ func (obj *patternFlowTcpSeqNum) SetValue(value int32) PatternFlowTcpSeqNum {
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowTcpSeqNum) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowTcpSeqNum object
 //  description is TBD
 func (obj *patternFlowTcpSeqNum) SetValues(value []int32) PatternFlowTcpSeqNum {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowTcpSeqNumChoice.VALUES)
 	return obj
 }
@@ -27644,13 +28423,21 @@ func (obj *patternFlowTcpAckNum) SetValue(value int32) PatternFlowTcpAckNum {
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowTcpAckNum) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowTcpAckNum object
 //  description is TBD
 func (obj *patternFlowTcpAckNum) SetValues(value []int32) PatternFlowTcpAckNum {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowTcpAckNumChoice.VALUES)
 	return obj
 }
@@ -27815,13 +28602,21 @@ func (obj *patternFlowTcpDataOffset) SetValue(value int32) PatternFlowTcpDataOff
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowTcpDataOffset) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowTcpDataOffset object
 //  description is TBD
 func (obj *patternFlowTcpDataOffset) SetValues(value []int32) PatternFlowTcpDataOffset {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowTcpDataOffsetChoice.VALUES)
 	return obj
 }
@@ -27986,13 +28781,21 @@ func (obj *patternFlowTcpEcnNs) SetValue(value int32) PatternFlowTcpEcnNs {
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowTcpEcnNs) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowTcpEcnNs object
 //  description is TBD
 func (obj *patternFlowTcpEcnNs) SetValues(value []int32) PatternFlowTcpEcnNs {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowTcpEcnNsChoice.VALUES)
 	return obj
 }
@@ -28157,13 +28960,21 @@ func (obj *patternFlowTcpEcnCwr) SetValue(value int32) PatternFlowTcpEcnCwr {
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowTcpEcnCwr) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowTcpEcnCwr object
 //  description is TBD
 func (obj *patternFlowTcpEcnCwr) SetValues(value []int32) PatternFlowTcpEcnCwr {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowTcpEcnCwrChoice.VALUES)
 	return obj
 }
@@ -28328,13 +29139,21 @@ func (obj *patternFlowTcpEcnEcho) SetValue(value int32) PatternFlowTcpEcnEcho {
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowTcpEcnEcho) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowTcpEcnEcho object
 //  description is TBD
 func (obj *patternFlowTcpEcnEcho) SetValues(value []int32) PatternFlowTcpEcnEcho {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowTcpEcnEchoChoice.VALUES)
 	return obj
 }
@@ -28499,13 +29318,21 @@ func (obj *patternFlowTcpCtlUrg) SetValue(value int32) PatternFlowTcpCtlUrg {
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowTcpCtlUrg) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowTcpCtlUrg object
 //  description is TBD
 func (obj *patternFlowTcpCtlUrg) SetValues(value []int32) PatternFlowTcpCtlUrg {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowTcpCtlUrgChoice.VALUES)
 	return obj
 }
@@ -28670,13 +29497,21 @@ func (obj *patternFlowTcpCtlAck) SetValue(value int32) PatternFlowTcpCtlAck {
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowTcpCtlAck) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowTcpCtlAck object
 //  description is TBD
 func (obj *patternFlowTcpCtlAck) SetValues(value []int32) PatternFlowTcpCtlAck {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowTcpCtlAckChoice.VALUES)
 	return obj
 }
@@ -28841,13 +29676,21 @@ func (obj *patternFlowTcpCtlPsh) SetValue(value int32) PatternFlowTcpCtlPsh {
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowTcpCtlPsh) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowTcpCtlPsh object
 //  description is TBD
 func (obj *patternFlowTcpCtlPsh) SetValues(value []int32) PatternFlowTcpCtlPsh {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowTcpCtlPshChoice.VALUES)
 	return obj
 }
@@ -29012,13 +29855,21 @@ func (obj *patternFlowTcpCtlRst) SetValue(value int32) PatternFlowTcpCtlRst {
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowTcpCtlRst) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowTcpCtlRst object
 //  description is TBD
 func (obj *patternFlowTcpCtlRst) SetValues(value []int32) PatternFlowTcpCtlRst {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowTcpCtlRstChoice.VALUES)
 	return obj
 }
@@ -29183,13 +30034,21 @@ func (obj *patternFlowTcpCtlSyn) SetValue(value int32) PatternFlowTcpCtlSyn {
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowTcpCtlSyn) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowTcpCtlSyn object
 //  description is TBD
 func (obj *patternFlowTcpCtlSyn) SetValues(value []int32) PatternFlowTcpCtlSyn {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowTcpCtlSynChoice.VALUES)
 	return obj
 }
@@ -29354,13 +30213,21 @@ func (obj *patternFlowTcpCtlFin) SetValue(value int32) PatternFlowTcpCtlFin {
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowTcpCtlFin) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowTcpCtlFin object
 //  description is TBD
 func (obj *patternFlowTcpCtlFin) SetValues(value []int32) PatternFlowTcpCtlFin {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowTcpCtlFinChoice.VALUES)
 	return obj
 }
@@ -29525,13 +30392,21 @@ func (obj *patternFlowTcpWindow) SetValue(value int32) PatternFlowTcpWindow {
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowTcpWindow) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowTcpWindow object
 //  description is TBD
 func (obj *patternFlowTcpWindow) SetValues(value []int32) PatternFlowTcpWindow {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowTcpWindowChoice.VALUES)
 	return obj
 }
@@ -29696,13 +30571,21 @@ func (obj *patternFlowUdpSrcPort) SetValue(value int32) PatternFlowUdpSrcPort {
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowUdpSrcPort) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowUdpSrcPort object
 //  description is TBD
 func (obj *patternFlowUdpSrcPort) SetValues(value []int32) PatternFlowUdpSrcPort {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowUdpSrcPortChoice.VALUES)
 	return obj
 }
@@ -29867,13 +30750,21 @@ func (obj *patternFlowUdpDstPort) SetValue(value int32) PatternFlowUdpDstPort {
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowUdpDstPort) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowUdpDstPort object
 //  description is TBD
 func (obj *patternFlowUdpDstPort) SetValues(value []int32) PatternFlowUdpDstPort {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowUdpDstPortChoice.VALUES)
 	return obj
 }
@@ -30038,13 +30929,21 @@ func (obj *patternFlowUdpLength) SetValue(value int32) PatternFlowUdpLength {
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowUdpLength) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowUdpLength object
 //  description is TBD
 func (obj *patternFlowUdpLength) SetValues(value []int32) PatternFlowUdpLength {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowUdpLengthChoice.VALUES)
 	return obj
 }
@@ -30344,13 +31243,21 @@ func (obj *patternFlowGreChecksumPresent) SetValue(value int32) PatternFlowGreCh
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowGreChecksumPresent) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowGreChecksumPresent object
 //  description is TBD
 func (obj *patternFlowGreChecksumPresent) SetValues(value []int32) PatternFlowGreChecksumPresent {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowGreChecksumPresentChoice.VALUES)
 	return obj
 }
@@ -30515,13 +31422,21 @@ func (obj *patternFlowGreReserved0) SetValue(value int32) PatternFlowGreReserved
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowGreReserved0) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowGreReserved0 object
 //  description is TBD
 func (obj *patternFlowGreReserved0) SetValues(value []int32) PatternFlowGreReserved0 {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowGreReserved0Choice.VALUES)
 	return obj
 }
@@ -30686,13 +31601,21 @@ func (obj *patternFlowGreVersion) SetValue(value int32) PatternFlowGreVersion {
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowGreVersion) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowGreVersion object
 //  description is TBD
 func (obj *patternFlowGreVersion) SetValues(value []int32) PatternFlowGreVersion {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowGreVersionChoice.VALUES)
 	return obj
 }
@@ -30857,13 +31780,21 @@ func (obj *patternFlowGreProtocol) SetValue(value int32) PatternFlowGreProtocol 
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowGreProtocol) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowGreProtocol object
 //  description is TBD
 func (obj *patternFlowGreProtocol) SetValues(value []int32) PatternFlowGreProtocol {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowGreProtocolChoice.VALUES)
 	return obj
 }
@@ -31163,13 +32094,21 @@ func (obj *patternFlowGreReserved1) SetValue(value int32) PatternFlowGreReserved
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowGreReserved1) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowGreReserved1 object
 //  description is TBD
 func (obj *patternFlowGreReserved1) SetValues(value []int32) PatternFlowGreReserved1 {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowGreReserved1Choice.VALUES)
 	return obj
 }
@@ -31334,13 +32273,21 @@ func (obj *patternFlowGtpv1Version) SetValue(value int32) PatternFlowGtpv1Versio
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowGtpv1Version) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowGtpv1Version object
 //  description is TBD
 func (obj *patternFlowGtpv1Version) SetValues(value []int32) PatternFlowGtpv1Version {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowGtpv1VersionChoice.VALUES)
 	return obj
 }
@@ -31505,13 +32452,21 @@ func (obj *patternFlowGtpv1ProtocolType) SetValue(value int32) PatternFlowGtpv1P
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowGtpv1ProtocolType) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowGtpv1ProtocolType object
 //  description is TBD
 func (obj *patternFlowGtpv1ProtocolType) SetValues(value []int32) PatternFlowGtpv1ProtocolType {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowGtpv1ProtocolTypeChoice.VALUES)
 	return obj
 }
@@ -31676,13 +32631,21 @@ func (obj *patternFlowGtpv1Reserved) SetValue(value int32) PatternFlowGtpv1Reser
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowGtpv1Reserved) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowGtpv1Reserved object
 //  description is TBD
 func (obj *patternFlowGtpv1Reserved) SetValues(value []int32) PatternFlowGtpv1Reserved {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowGtpv1ReservedChoice.VALUES)
 	return obj
 }
@@ -31847,13 +32810,21 @@ func (obj *patternFlowGtpv1EFlag) SetValue(value int32) PatternFlowGtpv1EFlag {
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowGtpv1EFlag) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowGtpv1EFlag object
 //  description is TBD
 func (obj *patternFlowGtpv1EFlag) SetValues(value []int32) PatternFlowGtpv1EFlag {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowGtpv1EFlagChoice.VALUES)
 	return obj
 }
@@ -32018,13 +32989,21 @@ func (obj *patternFlowGtpv1SFlag) SetValue(value int32) PatternFlowGtpv1SFlag {
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowGtpv1SFlag) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowGtpv1SFlag object
 //  description is TBD
 func (obj *patternFlowGtpv1SFlag) SetValues(value []int32) PatternFlowGtpv1SFlag {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowGtpv1SFlagChoice.VALUES)
 	return obj
 }
@@ -32189,13 +33168,21 @@ func (obj *patternFlowGtpv1PnFlag) SetValue(value int32) PatternFlowGtpv1PnFlag 
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowGtpv1PnFlag) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowGtpv1PnFlag object
 //  description is TBD
 func (obj *patternFlowGtpv1PnFlag) SetValues(value []int32) PatternFlowGtpv1PnFlag {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowGtpv1PnFlagChoice.VALUES)
 	return obj
 }
@@ -32360,13 +33347,21 @@ func (obj *patternFlowGtpv1MessageType) SetValue(value int32) PatternFlowGtpv1Me
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowGtpv1MessageType) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowGtpv1MessageType object
 //  description is TBD
 func (obj *patternFlowGtpv1MessageType) SetValues(value []int32) PatternFlowGtpv1MessageType {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowGtpv1MessageTypeChoice.VALUES)
 	return obj
 }
@@ -32531,13 +33526,21 @@ func (obj *patternFlowGtpv1MessageLength) SetValue(value int32) PatternFlowGtpv1
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowGtpv1MessageLength) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowGtpv1MessageLength object
 //  description is TBD
 func (obj *patternFlowGtpv1MessageLength) SetValues(value []int32) PatternFlowGtpv1MessageLength {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowGtpv1MessageLengthChoice.VALUES)
 	return obj
 }
@@ -32702,13 +33705,21 @@ func (obj *patternFlowGtpv1Teid) SetValue(value int32) PatternFlowGtpv1Teid {
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowGtpv1Teid) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowGtpv1Teid object
 //  description is TBD
 func (obj *patternFlowGtpv1Teid) SetValues(value []int32) PatternFlowGtpv1Teid {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowGtpv1TeidChoice.VALUES)
 	return obj
 }
@@ -32873,13 +33884,21 @@ func (obj *patternFlowGtpv1SquenceNumber) SetValue(value int32) PatternFlowGtpv1
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowGtpv1SquenceNumber) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowGtpv1SquenceNumber object
 //  description is TBD
 func (obj *patternFlowGtpv1SquenceNumber) SetValues(value []int32) PatternFlowGtpv1SquenceNumber {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowGtpv1SquenceNumberChoice.VALUES)
 	return obj
 }
@@ -33044,13 +34063,21 @@ func (obj *patternFlowGtpv1NPduNumber) SetValue(value int32) PatternFlowGtpv1NPd
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowGtpv1NPduNumber) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowGtpv1NPduNumber object
 //  description is TBD
 func (obj *patternFlowGtpv1NPduNumber) SetValues(value []int32) PatternFlowGtpv1NPduNumber {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowGtpv1NPduNumberChoice.VALUES)
 	return obj
 }
@@ -33215,13 +34242,21 @@ func (obj *patternFlowGtpv1NextExtensionHeaderType) SetValue(value int32) Patter
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowGtpv1NextExtensionHeaderType) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowGtpv1NextExtensionHeaderType object
 //  description is TBD
 func (obj *patternFlowGtpv1NextExtensionHeaderType) SetValues(value []int32) PatternFlowGtpv1NextExtensionHeaderType {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowGtpv1NextExtensionHeaderTypeChoice.VALUES)
 	return obj
 }
@@ -33493,13 +34528,21 @@ func (obj *patternFlowGtpv2Version) SetValue(value int32) PatternFlowGtpv2Versio
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowGtpv2Version) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowGtpv2Version object
 //  description is TBD
 func (obj *patternFlowGtpv2Version) SetValues(value []int32) PatternFlowGtpv2Version {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowGtpv2VersionChoice.VALUES)
 	return obj
 }
@@ -33664,13 +34707,21 @@ func (obj *patternFlowGtpv2PiggybackingFlag) SetValue(value int32) PatternFlowGt
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowGtpv2PiggybackingFlag) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowGtpv2PiggybackingFlag object
 //  description is TBD
 func (obj *patternFlowGtpv2PiggybackingFlag) SetValues(value []int32) PatternFlowGtpv2PiggybackingFlag {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowGtpv2PiggybackingFlagChoice.VALUES)
 	return obj
 }
@@ -33835,13 +34886,21 @@ func (obj *patternFlowGtpv2TeidFlag) SetValue(value int32) PatternFlowGtpv2TeidF
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowGtpv2TeidFlag) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowGtpv2TeidFlag object
 //  description is TBD
 func (obj *patternFlowGtpv2TeidFlag) SetValues(value []int32) PatternFlowGtpv2TeidFlag {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowGtpv2TeidFlagChoice.VALUES)
 	return obj
 }
@@ -34006,13 +35065,21 @@ func (obj *patternFlowGtpv2Spare1) SetValue(value int32) PatternFlowGtpv2Spare1 
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowGtpv2Spare1) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowGtpv2Spare1 object
 //  description is TBD
 func (obj *patternFlowGtpv2Spare1) SetValues(value []int32) PatternFlowGtpv2Spare1 {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowGtpv2Spare1Choice.VALUES)
 	return obj
 }
@@ -34177,13 +35244,21 @@ func (obj *patternFlowGtpv2MessageType) SetValue(value int32) PatternFlowGtpv2Me
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowGtpv2MessageType) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowGtpv2MessageType object
 //  description is TBD
 func (obj *patternFlowGtpv2MessageType) SetValues(value []int32) PatternFlowGtpv2MessageType {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowGtpv2MessageTypeChoice.VALUES)
 	return obj
 }
@@ -34348,13 +35423,21 @@ func (obj *patternFlowGtpv2MessageLength) SetValue(value int32) PatternFlowGtpv2
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowGtpv2MessageLength) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowGtpv2MessageLength object
 //  description is TBD
 func (obj *patternFlowGtpv2MessageLength) SetValues(value []int32) PatternFlowGtpv2MessageLength {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowGtpv2MessageLengthChoice.VALUES)
 	return obj
 }
@@ -34519,13 +35602,21 @@ func (obj *patternFlowGtpv2Teid) SetValue(value int32) PatternFlowGtpv2Teid {
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowGtpv2Teid) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowGtpv2Teid object
 //  description is TBD
 func (obj *patternFlowGtpv2Teid) SetValues(value []int32) PatternFlowGtpv2Teid {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowGtpv2TeidChoice.VALUES)
 	return obj
 }
@@ -34690,13 +35781,21 @@ func (obj *patternFlowGtpv2SequenceNumber) SetValue(value int32) PatternFlowGtpv
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowGtpv2SequenceNumber) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowGtpv2SequenceNumber object
 //  description is TBD
 func (obj *patternFlowGtpv2SequenceNumber) SetValues(value []int32) PatternFlowGtpv2SequenceNumber {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowGtpv2SequenceNumberChoice.VALUES)
 	return obj
 }
@@ -34861,13 +35960,21 @@ func (obj *patternFlowGtpv2Spare2) SetValue(value int32) PatternFlowGtpv2Spare2 
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowGtpv2Spare2) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowGtpv2Spare2 object
 //  description is TBD
 func (obj *patternFlowGtpv2Spare2) SetValues(value []int32) PatternFlowGtpv2Spare2 {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowGtpv2Spare2Choice.VALUES)
 	return obj
 }
@@ -35032,13 +36139,21 @@ func (obj *patternFlowArpHardwareType) SetValue(value int32) PatternFlowArpHardw
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowArpHardwareType) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowArpHardwareType object
 //  description is TBD
 func (obj *patternFlowArpHardwareType) SetValues(value []int32) PatternFlowArpHardwareType {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowArpHardwareTypeChoice.VALUES)
 	return obj
 }
@@ -35203,13 +36318,21 @@ func (obj *patternFlowArpProtocolType) SetValue(value int32) PatternFlowArpProto
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowArpProtocolType) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowArpProtocolType object
 //  description is TBD
 func (obj *patternFlowArpProtocolType) SetValues(value []int32) PatternFlowArpProtocolType {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowArpProtocolTypeChoice.VALUES)
 	return obj
 }
@@ -35374,13 +36497,21 @@ func (obj *patternFlowArpHardwareLength) SetValue(value int32) PatternFlowArpHar
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowArpHardwareLength) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowArpHardwareLength object
 //  description is TBD
 func (obj *patternFlowArpHardwareLength) SetValues(value []int32) PatternFlowArpHardwareLength {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowArpHardwareLengthChoice.VALUES)
 	return obj
 }
@@ -35545,13 +36676,21 @@ func (obj *patternFlowArpProtocolLength) SetValue(value int32) PatternFlowArpPro
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowArpProtocolLength) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowArpProtocolLength object
 //  description is TBD
 func (obj *patternFlowArpProtocolLength) SetValues(value []int32) PatternFlowArpProtocolLength {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowArpProtocolLengthChoice.VALUES)
 	return obj
 }
@@ -35716,13 +36855,21 @@ func (obj *patternFlowArpOperation) SetValue(value int32) PatternFlowArpOperatio
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowArpOperation) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowArpOperation object
 //  description is TBD
 func (obj *patternFlowArpOperation) SetValues(value []int32) PatternFlowArpOperation {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowArpOperationChoice.VALUES)
 	return obj
 }
@@ -35887,13 +37034,21 @@ func (obj *patternFlowArpSenderHardwareAddr) SetValue(value string) PatternFlowA
 // Values returns a []string
 //  description is TBD
 func (obj *patternFlowArpSenderHardwareAddr) Values() []string {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]string, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []string value in the PatternFlowArpSenderHardwareAddr object
 //  description is TBD
 func (obj *patternFlowArpSenderHardwareAddr) SetValues(value []string) PatternFlowArpSenderHardwareAddr {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]string, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowArpSenderHardwareAddrChoice.VALUES)
 	return obj
 }
@@ -36058,13 +37213,21 @@ func (obj *patternFlowArpSenderProtocolAddr) SetValue(value string) PatternFlowA
 // Values returns a []string
 //  description is TBD
 func (obj *patternFlowArpSenderProtocolAddr) Values() []string {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]string, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []string value in the PatternFlowArpSenderProtocolAddr object
 //  description is TBD
 func (obj *patternFlowArpSenderProtocolAddr) SetValues(value []string) PatternFlowArpSenderProtocolAddr {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]string, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowArpSenderProtocolAddrChoice.VALUES)
 	return obj
 }
@@ -36229,13 +37392,21 @@ func (obj *patternFlowArpTargetHardwareAddr) SetValue(value string) PatternFlowA
 // Values returns a []string
 //  description is TBD
 func (obj *patternFlowArpTargetHardwareAddr) Values() []string {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]string, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []string value in the PatternFlowArpTargetHardwareAddr object
 //  description is TBD
 func (obj *patternFlowArpTargetHardwareAddr) SetValues(value []string) PatternFlowArpTargetHardwareAddr {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]string, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowArpTargetHardwareAddrChoice.VALUES)
 	return obj
 }
@@ -36400,13 +37571,21 @@ func (obj *patternFlowArpTargetProtocolAddr) SetValue(value string) PatternFlowA
 // Values returns a []string
 //  description is TBD
 func (obj *patternFlowArpTargetProtocolAddr) Values() []string {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]string, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []string value in the PatternFlowArpTargetProtocolAddr object
 //  description is TBD
 func (obj *patternFlowArpTargetProtocolAddr) SetValues(value []string) PatternFlowArpTargetProtocolAddr {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]string, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowArpTargetProtocolAddrChoice.VALUES)
 	return obj
 }
@@ -36829,13 +38008,21 @@ func (obj *patternFlowPppAddress) SetValue(value int32) PatternFlowPppAddress {
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowPppAddress) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowPppAddress object
 //  description is TBD
 func (obj *patternFlowPppAddress) SetValues(value []int32) PatternFlowPppAddress {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowPppAddressChoice.VALUES)
 	return obj
 }
@@ -37000,13 +38187,21 @@ func (obj *patternFlowPppControl) SetValue(value int32) PatternFlowPppControl {
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowPppControl) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowPppControl object
 //  description is TBD
 func (obj *patternFlowPppControl) SetValues(value []int32) PatternFlowPppControl {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowPppControlChoice.VALUES)
 	return obj
 }
@@ -37175,13 +38370,21 @@ func (obj *patternFlowPppProtocolType) SetValue(value int32) PatternFlowPppProto
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowPppProtocolType) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowPppProtocolType object
 //  description is TBD
 func (obj *patternFlowPppProtocolType) SetValues(value []int32) PatternFlowPppProtocolType {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowPppProtocolTypeChoice.VALUES)
 	return obj
 }
@@ -37365,13 +38568,21 @@ func (obj *patternFlowIgmpv1Version) SetValue(value int32) PatternFlowIgmpv1Vers
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowIgmpv1Version) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowIgmpv1Version object
 //  description is TBD
 func (obj *patternFlowIgmpv1Version) SetValues(value []int32) PatternFlowIgmpv1Version {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowIgmpv1VersionChoice.VALUES)
 	return obj
 }
@@ -37536,13 +38747,21 @@ func (obj *patternFlowIgmpv1Type) SetValue(value int32) PatternFlowIgmpv1Type {
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowIgmpv1Type) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowIgmpv1Type object
 //  description is TBD
 func (obj *patternFlowIgmpv1Type) SetValues(value []int32) PatternFlowIgmpv1Type {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowIgmpv1TypeChoice.VALUES)
 	return obj
 }
@@ -37707,13 +38926,21 @@ func (obj *patternFlowIgmpv1Unused) SetValue(value int32) PatternFlowIgmpv1Unuse
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowIgmpv1Unused) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowIgmpv1Unused object
 //  description is TBD
 func (obj *patternFlowIgmpv1Unused) SetValues(value []int32) PatternFlowIgmpv1Unused {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowIgmpv1UnusedChoice.VALUES)
 	return obj
 }
@@ -38013,13 +39240,21 @@ func (obj *patternFlowIgmpv1GroupAddress) SetValue(value string) PatternFlowIgmp
 // Values returns a []string
 //  description is TBD
 func (obj *patternFlowIgmpv1GroupAddress) Values() []string {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]string, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []string value in the PatternFlowIgmpv1GroupAddress object
 //  description is TBD
 func (obj *patternFlowIgmpv1GroupAddress) SetValues(value []string) PatternFlowIgmpv1GroupAddress {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]string, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowIgmpv1GroupAddressChoice.VALUES)
 	return obj
 }
@@ -41698,13 +42933,21 @@ func (obj *patternFlowIpv4PriorityRaw) SetValue(value int32) PatternFlowIpv4Prio
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowIpv4PriorityRaw) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowIpv4PriorityRaw object
 //  description is TBD
 func (obj *patternFlowIpv4PriorityRaw) SetValues(value []int32) PatternFlowIpv4PriorityRaw {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowIpv4PriorityRawChoice.VALUES)
 	return obj
 }
@@ -50767,13 +52010,21 @@ func (obj *patternFlowGtpExtensionExtensionLength) SetValue(value int32) Pattern
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowGtpExtensionExtensionLength) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowGtpExtensionExtensionLength object
 //  description is TBD
 func (obj *patternFlowGtpExtensionExtensionLength) SetValues(value []int32) PatternFlowGtpExtensionExtensionLength {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowGtpExtensionExtensionLengthChoice.VALUES)
 	return obj
 }
@@ -50938,13 +52189,21 @@ func (obj *patternFlowGtpExtensionContents) SetValue(value int32) PatternFlowGtp
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowGtpExtensionContents) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowGtpExtensionContents object
 //  description is TBD
 func (obj *patternFlowGtpExtensionContents) SetValues(value []int32) PatternFlowGtpExtensionContents {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowGtpExtensionContentsChoice.VALUES)
 	return obj
 }
@@ -51109,13 +52368,21 @@ func (obj *patternFlowGtpExtensionNextExtensionHeader) SetValue(value int32) Pat
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowGtpExtensionNextExtensionHeader) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowGtpExtensionNextExtensionHeader object
 //  description is TBD
 func (obj *patternFlowGtpExtensionNextExtensionHeader) SetValues(value []int32) PatternFlowGtpExtensionNextExtensionHeader {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowGtpExtensionNextExtensionHeaderChoice.VALUES)
 	return obj
 }
@@ -53476,13 +54743,21 @@ func (obj *patternFlowIcmpEchoType) SetValue(value int32) PatternFlowIcmpEchoTyp
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowIcmpEchoType) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowIcmpEchoType object
 //  description is TBD
 func (obj *patternFlowIcmpEchoType) SetValues(value []int32) PatternFlowIcmpEchoType {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowIcmpEchoTypeChoice.VALUES)
 	return obj
 }
@@ -53647,13 +54922,21 @@ func (obj *patternFlowIcmpEchoCode) SetValue(value int32) PatternFlowIcmpEchoCod
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowIcmpEchoCode) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowIcmpEchoCode object
 //  description is TBD
 func (obj *patternFlowIcmpEchoCode) SetValues(value []int32) PatternFlowIcmpEchoCode {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowIcmpEchoCodeChoice.VALUES)
 	return obj
 }
@@ -53953,13 +55236,21 @@ func (obj *patternFlowIcmpEchoIdentifier) SetValue(value int32) PatternFlowIcmpE
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowIcmpEchoIdentifier) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowIcmpEchoIdentifier object
 //  description is TBD
 func (obj *patternFlowIcmpEchoIdentifier) SetValues(value []int32) PatternFlowIcmpEchoIdentifier {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowIcmpEchoIdentifierChoice.VALUES)
 	return obj
 }
@@ -54124,13 +55415,21 @@ func (obj *patternFlowIcmpEchoSequenceNumber) SetValue(value int32) PatternFlowI
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowIcmpEchoSequenceNumber) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowIcmpEchoSequenceNumber object
 //  description is TBD
 func (obj *patternFlowIcmpEchoSequenceNumber) SetValues(value []int32) PatternFlowIcmpEchoSequenceNumber {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowIcmpEchoSequenceNumberChoice.VALUES)
 	return obj
 }
@@ -54295,13 +55594,21 @@ func (obj *patternFlowIcmpv6EchoType) SetValue(value int32) PatternFlowIcmpv6Ech
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowIcmpv6EchoType) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowIcmpv6EchoType object
 //  description is TBD
 func (obj *patternFlowIcmpv6EchoType) SetValues(value []int32) PatternFlowIcmpv6EchoType {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowIcmpv6EchoTypeChoice.VALUES)
 	return obj
 }
@@ -54466,13 +55773,21 @@ func (obj *patternFlowIcmpv6EchoCode) SetValue(value int32) PatternFlowIcmpv6Ech
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowIcmpv6EchoCode) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowIcmpv6EchoCode object
 //  description is TBD
 func (obj *patternFlowIcmpv6EchoCode) SetValues(value []int32) PatternFlowIcmpv6EchoCode {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowIcmpv6EchoCodeChoice.VALUES)
 	return obj
 }
@@ -54637,13 +55952,21 @@ func (obj *patternFlowIcmpv6EchoIdentifier) SetValue(value int32) PatternFlowIcm
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowIcmpv6EchoIdentifier) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowIcmpv6EchoIdentifier object
 //  description is TBD
 func (obj *patternFlowIcmpv6EchoIdentifier) SetValues(value []int32) PatternFlowIcmpv6EchoIdentifier {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowIcmpv6EchoIdentifierChoice.VALUES)
 	return obj
 }
@@ -54808,13 +56131,21 @@ func (obj *patternFlowIcmpv6EchoSequenceNumber) SetValue(value int32) PatternFlo
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowIcmpv6EchoSequenceNumber) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowIcmpv6EchoSequenceNumber object
 //  description is TBD
 func (obj *patternFlowIcmpv6EchoSequenceNumber) SetValues(value []int32) PatternFlowIcmpv6EchoSequenceNumber {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowIcmpv6EchoSequenceNumberChoice.VALUES)
 	return obj
 }
@@ -57179,13 +58510,21 @@ func (obj *patternFlowIpv4TosPrecedence) SetValue(value int32) PatternFlowIpv4To
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowIpv4TosPrecedence) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowIpv4TosPrecedence object
 //  description is TBD
 func (obj *patternFlowIpv4TosPrecedence) SetValues(value []int32) PatternFlowIpv4TosPrecedence {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowIpv4TosPrecedenceChoice.VALUES)
 	return obj
 }
@@ -57350,13 +58689,21 @@ func (obj *patternFlowIpv4TosDelay) SetValue(value int32) PatternFlowIpv4TosDela
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowIpv4TosDelay) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowIpv4TosDelay object
 //  description is TBD
 func (obj *patternFlowIpv4TosDelay) SetValues(value []int32) PatternFlowIpv4TosDelay {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowIpv4TosDelayChoice.VALUES)
 	return obj
 }
@@ -57521,13 +58868,21 @@ func (obj *patternFlowIpv4TosThroughput) SetValue(value int32) PatternFlowIpv4To
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowIpv4TosThroughput) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowIpv4TosThroughput object
 //  description is TBD
 func (obj *patternFlowIpv4TosThroughput) SetValues(value []int32) PatternFlowIpv4TosThroughput {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowIpv4TosThroughputChoice.VALUES)
 	return obj
 }
@@ -57692,13 +59047,21 @@ func (obj *patternFlowIpv4TosReliability) SetValue(value int32) PatternFlowIpv4T
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowIpv4TosReliability) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowIpv4TosReliability object
 //  description is TBD
 func (obj *patternFlowIpv4TosReliability) SetValues(value []int32) PatternFlowIpv4TosReliability {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowIpv4TosReliabilityChoice.VALUES)
 	return obj
 }
@@ -57863,13 +59226,21 @@ func (obj *patternFlowIpv4TosMonetary) SetValue(value int32) PatternFlowIpv4TosM
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowIpv4TosMonetary) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowIpv4TosMonetary object
 //  description is TBD
 func (obj *patternFlowIpv4TosMonetary) SetValues(value []int32) PatternFlowIpv4TosMonetary {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowIpv4TosMonetaryChoice.VALUES)
 	return obj
 }
@@ -58034,13 +59405,21 @@ func (obj *patternFlowIpv4TosUnused) SetValue(value int32) PatternFlowIpv4TosUnu
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowIpv4TosUnused) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowIpv4TosUnused object
 //  description is TBD
 func (obj *patternFlowIpv4TosUnused) SetValues(value []int32) PatternFlowIpv4TosUnused {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowIpv4TosUnusedChoice.VALUES)
 	return obj
 }
@@ -58205,13 +59584,21 @@ func (obj *patternFlowIpv4DscpPhb) SetValue(value int32) PatternFlowIpv4DscpPhb 
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowIpv4DscpPhb) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowIpv4DscpPhb object
 //  description is TBD
 func (obj *patternFlowIpv4DscpPhb) SetValues(value []int32) PatternFlowIpv4DscpPhb {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowIpv4DscpPhbChoice.VALUES)
 	return obj
 }
@@ -58376,13 +59763,21 @@ func (obj *patternFlowIpv4DscpEcn) SetValue(value int32) PatternFlowIpv4DscpEcn 
 // Values returns a []int32
 //  description is TBD
 func (obj *patternFlowIpv4DscpEcn) Values() []int32 {
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
 	return obj.obj.Values
 }
 
 // SetValues sets the []int32 value in the PatternFlowIpv4DscpEcn object
 //  description is TBD
 func (obj *patternFlowIpv4DscpEcn) SetValues(value []int32) PatternFlowIpv4DscpEcn {
-	obj.obj.Values = value
+	if obj.obj.Values == nil {
+		obj.obj.Values = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.Values = append(obj.obj.Values, item)
+	}
 	obj.SetChoice(PatternFlowIpv4DscpEcnChoice.VALUES)
 	return obj
 }
@@ -59869,13 +61264,21 @@ func (obj *deviceBgpAsPathSegment) SetSegmentType(value DeviceBgpAsPathSegmentSe
 // AsNumbers returns a []int32
 //  The AS numbers in this AS path segment.
 func (obj *deviceBgpAsPathSegment) AsNumbers() []int32 {
+	if obj.obj.AsNumbers == nil {
+		obj.obj.AsNumbers = make([]int32, 0)
+	}
 	return obj.obj.AsNumbers
 }
 
 // SetAsNumbers sets the []int32 value in the DeviceBgpAsPathSegment object
 //  The AS numbers in this AS path segment.
 func (obj *deviceBgpAsPathSegment) SetAsNumbers(value []int32) DeviceBgpAsPathSegment {
-	obj.obj.AsNumbers = value
+	if obj.obj.AsNumbers == nil {
+		obj.obj.AsNumbers = make([]int32, 0)
+	}
+	for _, item := range value {
+		obj.obj.AsNumbers = append(obj.obj.AsNumbers, item)
+	}
 
 	return obj
 }
