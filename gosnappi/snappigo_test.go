@@ -2,26 +2,33 @@ package gosnappi_test
 
 import (
 	"encoding/json"
-	log "log"
+	"fmt"
+	"log"
+	"strings"
 	"testing"
 
 	"github.com/open-traffic-generator/snappi/gosnappi"
+
 	"github.com/stretchr/testify/assert"
 )
 
-var mockServerLocation = "127.0.0.1:50001"
+var mockGrpcServerLocation = "127.0.0.1:50001"
+var mockHttpServerLocation = "http://127.0.0.1:50002"
 
 func init() {
-	if err := gosnappi.StartMockServer(mockServerLocation); err != nil {
-		log.Fatal("Mock server init failed")
+	if err := gosnappi.StartMockGrpcServer(mockGrpcServerLocation); err != nil {
+		log.Fatal("Mock Grpc server init failed")
 	}
+	http_path := strings.Split(mockHttpServerLocation, "//")
+	gosnappi.StartMockHttpServer(http_path[1])
+
 }
 
 // Basic test for the grpc mock server
-func TestApi(t *testing.T) {
+func TestGrpcApi(t *testing.T) {
 	api := gosnappi.NewApi()
 	grpc := api.NewGrpcTransport()
-	grpc.SetLocation(mockServerLocation).SetRequestTimeout(10000)
+	grpc.SetLocation(mockGrpcServerLocation).SetRequestTimeout(10000)
 	config := api.NewConfig()
 	port := config.Ports().Add()
 	port.SetName("port1")
@@ -31,8 +38,7 @@ func TestApi(t *testing.T) {
 	d1 := config.Devices().Add().SetName("d1")
 	eth1 := d1.Ethernet().SetName("Ethernet1")
 	ip1 := eth1.Ipv4().SetName("IPv41")
-	bgp1 := ip1.Bgpv4().SetName("BGP-1")
-	bgp1.Bgpv4Routes().Add().SetName("RR-1")
+	ip1.Bgpv4().SetName("BGP-1")
 	state, err := api.SetConfig(config)
 	assert.NotNil(t, state)
 	assert.Nil(t, err)
@@ -41,169 +47,156 @@ func TestApi(t *testing.T) {
 	assert.Nil(t, _error)
 }
 
-func TestGetMetricsFlowResponse(t *testing.T) {
+func TestHttpApi(t *testing.T) {
+	api := gosnappi.NewApi()
+	api.NewHttpTransport().SetLocation(mockHttpServerLocation)
+	config := api.NewConfig()
+	port := config.Ports().Add()
+	port.SetName("port1")
+	port.SetLocation("location1")
+	config.Flows().Add().SetName("f1")
+	config.Flows().Add().SetName("f2")
+	d1 := config.Devices().Add().SetName("d1")
+	eth1 := d1.Ethernet().SetName("Ethernet1")
+	ip1 := eth1.Ipv4().SetName("IPv41")
+	ip1.Bgpv4().SetName("BGP-1")
+	state, err := api.SetConfig(config)
+	assert.NotNil(t, state)
+	assert.Nil(t, err)
+	status, _error := api.GetConfig()
+	assert.NotNil(t, status)
+	assert.Nil(t, _error)
+}
+
+func TestGrpcGetMetricsFlowResponse(t *testing.T) {
 	// Send Get Metrics request with flow name f2 which is available in
 	// the config, validate the response is not nil
-	flow_names := []string{"f2"}
 	api := gosnappi.NewApi()
-	api.NewGrpcTransport().SetLocation(mockServerLocation)
+	api.NewGrpcTransport().SetLocation(mockGrpcServerLocation)
 	req := api.NewMetricsRequest()
-	req.Flow().SetFlowNames([]string{"f2"})
-	assert.Equal(t, flow_names, req.Flow().FlowNames())
-	resp, _ := api.GetMetrics(req)
+	flow_req := req.Flow()
+	flow_req.SetFlowNames([]string{"f1", "f2"})
+	resp, err := api.GetMetrics(req)
+	fmt.Println("grpc flow response :", resp.ToJson())
 	assert.NotNil(t, resp)
+	assert.Nil(t, err)
+}
+
+func TestHttpGetMetricsFlowResponse(t *testing.T) {
+	// Send Get Metrics request with flow name f2 which is available in
+	// the config, validate the response is not nil
+	api := gosnappi.NewApi()
+	api.NewHttpTransport().SetLocation(mockHttpServerLocation)
+	req := api.NewMetricsRequest()
+	flow_req := req.Flow()
+	flow_req.SetFlowNames([]string{"f1", "f2"})
+	resp, err := api.GetMetrics(req)
+	fmt.Println("HTTP flow response :", resp.ToJson())
+	assert.NotNil(t, resp)
+	assert.Nil(t, err)
+	assert.Equal(t, resp.FlowMetrics().Items()[0].Name(), string("f1"))
+	assert.Equal(t, resp.FlowMetrics().Items()[0].BytesTx(), int32(1000))
+	assert.Equal(t, resp.FlowMetrics().Items()[0].BytesRx(), int32(1000))
+	assert.Equal(t, resp.FlowMetrics().Items()[1].Name(), string("f2"))
+	assert.Equal(t, resp.FlowMetrics().Items()[1].BytesTx(), int32(1000))
+	assert.Equal(t, resp.FlowMetrics().Items()[1].BytesRx(), int32(1000))
 }
 
 func TestGetMetricsFlowResponseError(t *testing.T) {
 	// Send Get Metrics request with flow name f3 which is not available in
 	// the config, validate the err is not nil
 	api := gosnappi.NewApi()
-	api.NewGrpcTransport().SetLocation(mockServerLocation)
+	api.NewGrpcTransport().SetLocation(mockGrpcServerLocation)
 	req := api.NewMetricsRequest()
-	req.Flow().SetFlowNames([]string{"f3"})
+	flow_req := req.Flow()
+	flow_req.SetFlowNames([]string{"f3"})
 	_, err := api.GetMetrics(req)
 	log.Print(err)
 	assert.NotNil(t, err)
 }
 
-func TestGetMetricsPortResponse(t *testing.T) {
+func TestGrpcGetMetricsPortResponse(t *testing.T) {
 	// Send Get Metrics request with port name port1 which is available in
 	// the config, validate the response is not nil
-	port_names := []string{"port1"}
 	api := gosnappi.NewApi()
-	api.NewGrpcTransport().SetLocation(mockServerLocation)
+	api.NewGrpcTransport().SetLocation(mockGrpcServerLocation)
 	req := api.NewMetricsRequest()
-	req.Port().SetPortNames([]string{"port1"})
-	assert.Equal(t, port_names, req.Port().PortNames())
-	resp, _ := api.GetMetrics(req)
+	flow_req := req.Port()
+	flow_req.SetPortNames([]string{"port1"})
+	resp, err := api.GetMetrics(req)
 	assert.NotNil(t, resp)
+	assert.Nil(t, err)
+}
+
+func TestHttpGetMetricsPortResponse(t *testing.T) {
+	// Send Get Metrics request with port name port1 which is available in
+	// the config, validate the response is not nil
+	api := gosnappi.NewApi()
+	api.NewHttpTransport().SetLocation(mockHttpServerLocation)
+	req := api.NewMetricsRequest()
+	flow_req := req.Port()
+	flow_req.SetPortNames([]string{"port1"})
+	resp, err := api.GetMetrics(req)
+	fmt.Println("HTTP Port Response :", resp.ToJson())
+	assert.NotNil(t, resp)
+	assert.Nil(t, err)
+	assert.Equal(t, resp.PortMetrics().Items()[0].Name(), string("port1"))
+	assert.Equal(t, resp.PortMetrics().Items()[0].BytesTx(), int32(2000))
+	assert.Equal(t, resp.PortMetrics().Items()[0].BytesRx(), int32(2000))
 }
 
 func TestGetMetricsPortResponseError(t *testing.T) {
 	// Send Get Metrics request with port name port2 which is not available in
 	// the config, validate the err is not nil
 	api := gosnappi.NewApi()
-	api.NewGrpcTransport().SetLocation(mockServerLocation)
+	api.NewGrpcTransport().SetLocation(mockGrpcServerLocation)
 	req := api.NewMetricsRequest()
-	req.Port().SetPortNames([]string{"port2"})
+	flow_req := req.Port()
+	flow_req.SetPortNames([]string{"port2"})
 	_, err := api.GetMetrics(req)
 	log.Print(err)
 	assert.NotNil(t, err)
 }
 
-func TestGetMetricsBgpv4Response(t *testing.T) {
+func TestGrpcGetMetricsBgpv4Response(t *testing.T) {
 	// Send Get Metrics request with device name d1 which is available in
 	// the config, validate the response is not nil
-	device_names := []string{"BGP-1"}
 	api := gosnappi.NewApi()
-	api.NewGrpcTransport().SetLocation(mockServerLocation)
+	api.NewGrpcTransport().SetLocation(mockGrpcServerLocation)
 	req := api.NewMetricsRequest()
-	req.Bgpv4().SetDeviceNames([]string{"BGP-1"})
-	assert.Equal(t, device_names, req.Bgpv4().DeviceNames())
-	resp, _ := api.GetMetrics(req)
+	req.Bgpv4()
+	flow_req := req.Bgpv4()
+	flow_req.SetPeerNames([]string{"BGP-1"})
+	resp, err := api.GetMetrics(req)
 	assert.NotNil(t, resp)
+	assert.Nil(t, err)
+}
+
+func TestHttpGetMetricsBgpv4Response(t *testing.T) {
+	// Send Get Metrics request with device name d1 which is available in
+	// the config, validate the response is not nil
+	api := gosnappi.NewApi()
+	api.NewHttpTransport().SetLocation(mockHttpServerLocation)
+	req := api.NewMetricsRequest()
+	flow_req := req.Bgpv4()
+	flow_req.SetPeerNames([]string{"BGP-1"})
+	resp, err := api.GetMetrics(req)
+	fmt.Println(resp.ToJson())
+	assert.NotNil(t, resp)
+	assert.Nil(t, err)
+	assert.Equal(t, resp.Bgpv4Metrics().Items()[0].Name(), string("BGP-1"))
+	assert.Equal(t, resp.Bgpv4Metrics().Items()[0].RoutesAdvertised(), int32(80))
 }
 
 func TestGetMetricsBgpv4ResponseError(t *testing.T) {
 	// Send Get Metrics request with port name d2 which is not available in
 	// the config, validate the err is not nil
 	api := gosnappi.NewApi()
-	api.NewGrpcTransport().SetLocation(mockServerLocation)
+	api.NewGrpcTransport().SetLocation(mockGrpcServerLocation)
 	req := api.NewMetricsRequest()
-	req.Bgpv4().SetDeviceNames([]string{"d2"})
+	flow_req := req.Bgpv4()
+	flow_req.SetPeerNames([]string{"d2"})
 	_, err := api.GetMetrics(req)
-	log.Print(err)
-	assert.NotNil(t, err)
-}
-
-func TestSetTransmitStateResponse(t *testing.T) {
-	flow_names := []string{"f1", "f2"}
-	api := gosnappi.NewApi()
-	api.NewGrpcTransport().SetLocation(mockServerLocation)
-	req := api.NewTransmitState()
-	req.SetFlowNames([]string{"f1", "f2"})
-	req.SetState(gosnappi.TransmitStateState.START)
-	assert.Equal(t, flow_names, req.FlowNames())
-	resp, _ := api.SetTransmitState(req)
-	assert.NotNil(t, resp)
-}
-
-func TestSetTransmitStateResponseError(t *testing.T) {
-	api := gosnappi.NewApi()
-	api.NewGrpcTransport().SetLocation(mockServerLocation)
-	req := api.NewTransmitState()
-	req.SetFlowNames([]string{"f3"})
-	req.SetState(gosnappi.TransmitStateState.START)
-	_, err := api.SetTransmitState(req)
-	log.Print(err)
-	assert.NotNil(t, err)
-}
-
-func TestSetLinkStateResponse(t *testing.T) {
-	port_names := []string{"port1"}
-	api := gosnappi.NewApi()
-	api.NewGrpcTransport().SetLocation(mockServerLocation)
-	req := api.NewLinkState()
-	req.SetPortNames([]string{"port1"})
-	req.SetState(gosnappi.LinkStateState.DOWN)
-	assert.Equal(t, port_names, req.PortNames())
-	resp, _ := api.SetLinkState(req)
-	assert.NotNil(t, resp)
-}
-
-func TestSetLinkStateResponseError(t *testing.T) {
-	api := gosnappi.NewApi()
-	api.NewGrpcTransport().SetLocation(mockServerLocation)
-	req := api.NewLinkState()
-	req.SetPortNames([]string{"port3"})
-	req.SetState(gosnappi.LinkStateState.DOWN)
-	_, err := api.SetLinkState(req)
-	log.Print(err)
-	assert.NotNil(t, err)
-}
-
-func TestSetCaptureStateResponse(t *testing.T) {
-	port_names := []string{"port1"}
-	api := gosnappi.NewApi()
-	api.NewGrpcTransport().SetLocation(mockServerLocation)
-	req := api.NewCaptureState()
-	req.SetPortNames([]string{"port1"})
-	req.SetState(gosnappi.CaptureStateState.START)
-	assert.Equal(t, port_names, req.PortNames())
-	resp, _ := api.SetCaptureState(req)
-	assert.NotNil(t, resp)
-}
-
-func TestSetCaptureStateResponseError(t *testing.T) {
-	api := gosnappi.NewApi()
-	api.NewGrpcTransport().SetLocation(mockServerLocation)
-	req := api.NewCaptureState()
-	req.SetPortNames([]string{"port3"})
-	req.SetState(gosnappi.CaptureStateState.START)
-	_, err := api.SetCaptureState(req)
-	log.Print(err)
-	assert.NotNil(t, err)
-}
-
-func TestSetRouteStateResponse(t *testing.T) {
-	route_names := []string{"RR-1"}
-	api := gosnappi.NewApi()
-	api.NewGrpcTransport().SetLocation(mockServerLocation)
-	req := api.NewRouteState()
-	req.SetNames([]string{"RR-1"})
-	req.SetState(gosnappi.RouteStateState.ADVERTISE)
-	assert.Equal(t, route_names, req.Names())
-	resp, _ := api.SetRouteState(req)
-	assert.NotNil(t, resp)
-}
-
-func TestSetRouteStateResponseError(t *testing.T) {
-	api := gosnappi.NewApi()
-	api.NewGrpcTransport().SetLocation(mockServerLocation)
-	req := api.NewRouteState()
-	req.SetNames([]string{"RR-2"})
-	req.SetState(gosnappi.RouteStateState.ADVERTISE)
-	_, err := api.SetRouteState(req)
 	log.Print(err)
 	assert.NotNil(t, err)
 }
@@ -222,6 +215,7 @@ func TestPorts(t *testing.T) {
 	config_new := api.NewConfig()
 	config_new.FromJson(string(data))
 
+	// TODO: check why this is failing
 	// assert.Equal(t, config, config_new, "Both configs shall be equal")
 	assert.Equal(t, config.ToJson(), config_new.ToJson(), "Both json shall be equal")
 }
@@ -393,53 +387,4 @@ func TestDevices(t *testing.T) {
 	// TODO: Add validation on Json and Yaml
 	cap6.ToJson()
 	cap6.ToYaml()
-}
-
-func TestFlows(t *testing.T) {
-	flow_names := []string{"f1", "f2"}
-	port_names := []string{"p1", "p2"}
-	api := gosnappi.NewApi()
-	config := api.NewConfig()
-	port1 := config.Ports().Add().SetName("p1")
-	port2 := config.Ports().Add().SetName("p2")
-	flow1 := config.Flows().Add().SetName("f1")
-	flow2 := config.Flows().Add().SetName("f2")
-	flow1.TxRx().Port().SetTxName(port1.Name()).SetRxName(port2.Name())
-	flow2.TxRx().Port().SetTxName(port1.Name()).SetRxName(port2.Name())
-	for i, P := range config.Ports().Items() {
-		assert.Equal(t, port_names[i], P.Name())
-	}
-	for i, F := range config.Flows().Items() {
-		assert.Equal(t, flow_names[i], F.Name())
-		assert.Equal(t, port_names[0], F.TxRx().Port().TxName())
-		assert.Equal(t, port_names[1], F.TxRx().Port().RxName())
-	}
-
-	eth := flow1.Packet().Add().Ethernet()
-	eth.Src().SetValue("a2:71:d4:59:b3:b8")
-	eth.Dst().SetValue("6e:d2:47:65:aa:69")
-	assert.Equal(t, "a2:71:d4:59:b3:b8", eth.Src().Value())
-	assert.Equal(t, "6e:d2:47:65:aa:69", eth.Dst().Value())
-
-	ipv4 := flow1.Packet().Add().Ipv4()
-	ipv4.Src().SetValue("10.10.10.1")
-	ipv4.Dst().SetValue("10.10.10.2")
-	assert.Equal(t, "10.10.10.1", ipv4.Src().Value())
-	assert.Equal(t, "10.10.10.2", ipv4.Dst().Value())
-
-	udp := flow1.Packet().Add().Udp()
-	udp.SrcPort().SetValue(3000)
-	udp.DstPort().SetValue(4000)
-	udp.Checksum().SetCustom(1)
-	assert.Equal(t, int32(3000), udp.SrcPort().Value())
-	assert.Equal(t, int32(4000), udp.DstPort().Value())
-	assert.Equal(t, int32(1), udp.Checksum().Custom())
-
-	flow1.Duration().FixedPackets().SetPackets(10000).SetGap(2).Delay().SetBytes(8)
-	flow1.Rate().SetPps(1000)
-	assert.Equal(t, int32(10000), flow1.Duration().FixedPackets().Packets())
-	assert.Equal(t, int32(2), flow1.Duration().FixedPackets().Gap())
-	assert.Equal(t, float32(8), flow1.Duration().FixedPackets().Delay().Bytes())
-	assert.Equal(t, int32(1000), flow1.Rate().Pps())
-	log.Print(config.ToYaml())
 }
