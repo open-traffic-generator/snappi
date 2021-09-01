@@ -88,7 +88,7 @@ func (s *server) GetConfig(ctx context.Context, in *emptypb.Empty) (*snappipb.Ge
 	return resp, nil
 }
 
-func getBgpDeviceNames(cfg *snappipb.Config) []string {
+func getBgpPeerNames(cfg *snappipb.Config) []string {
 	names := []string{}
 	for _, d := range cfg.Devices {
 		if d == nil || d.Ethernet == nil || d.Ethernet.Ipv4 == nil || d.Ethernet.Ipv4.Bgpv4 == nil {
@@ -160,8 +160,8 @@ func (s *server) GetMetrics(ctx context.Context, req *snappipb.GetMetricsRequest
 			}
 		}
 	} else if req.MetricsRequest.Bgpv4 != nil {
-		allNames := getBgpDeviceNames(mockConfig)
-		someNames := req.MetricsRequest.Bgpv4.DeviceNames
+		allNames := getBgpPeerNames(mockConfig)
+		someNames := req.MetricsRequest.Bgpv4.PeerNames
 		if len(someNames) == 0 {
 			someNames = allNames
 		} else {
@@ -187,10 +187,10 @@ func (s *server) GetMetrics(ctx context.Context, req *snappipb.GetMetricsRequest
 			zero := int32(0)
 			up := snappipb.Bgpv4Metric_SessionState_up
 			metrics = append(metrics, &snappipb.Bgpv4Metric{
-				Name:             &name,
-				SessionState:     &up,
-				RoutesAdvertised: &one,
-				RoutesWithdrawn:  &zero,
+				Name:               &name,
+				SessionState:       &up,
+				RoutesAdvertised:   &one,
+				RouteWithdrawsSent: &zero,
 			})
 		}
 

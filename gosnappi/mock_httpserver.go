@@ -74,7 +74,7 @@ func StartMockHttpServer(location string) {
 				w.Write([]byte(response.ToJson()))
 			} else if metricsReq.Choice() == MetricsRequestChoice.BGPV4 {
 				bgpv4_response := httpServer.Api.NewGetMetricsResponse_StatusCode200().MetricsResponse()
-				for _, bgpv4_name := range metricsReq.Bgpv4().DeviceNames() {
+				for _, bgpv4_name := range metricsReq.Bgpv4().PeerNames() {
 					bgpv4_rsp := bgpv4_response.Bgpv4Metrics().Add()
 					bgpv4_rsp.SetName(bgpv4_name)
 					bgpv4_rsp.SetRoutesAdvertised(80)

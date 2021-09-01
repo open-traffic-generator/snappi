@@ -1,4 +1,4 @@
-// Open Traffic Generator API 0.5.1
+// Open Traffic Generator API 0.5.3
 // License: MIT
 
 package gosnappi
@@ -6266,12 +6266,12 @@ type Bgpv4MetricsRequest interface {
 	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
-	DeviceNames() []string
-	SetDeviceNames(value []string) Bgpv4MetricsRequest
+	PeerNames() []string
+	SetPeerNames(value []string) Bgpv4MetricsRequest
 }
 
-// DeviceNames returns a []string
-//  The names of BGPv4 device to return results for. An empty list will return results for all BGPv4 devices.
+// PeerNames returns a []string
+//  The names of BGPv4 peers to return results for. An empty list will return results for all BGPv4 peers.
 //
 //  x-constraint:
 //  - /components/schemas/Device.Bgpv4/properties/name
@@ -6280,12 +6280,12 @@ type Bgpv4MetricsRequest interface {
 //  x-constraint:
 //  - /components/schemas/Device.Bgpv4/properties/name
 //
-func (obj *bgpv4MetricsRequest) DeviceNames() []string {
-	return obj.obj.DeviceNames
+func (obj *bgpv4MetricsRequest) PeerNames() []string {
+	return obj.obj.PeerNames
 }
 
-// SetDeviceNames sets the []string value in the Bgpv4MetricsRequest object
-//  The names of BGPv4 device to return results for. An empty list will return results for all BGPv4 devices.
+// SetPeerNames sets the []string value in the Bgpv4MetricsRequest object
+//  The names of BGPv4 peers to return results for. An empty list will return results for all BGPv4 peers.
 //
 //  x-constraint:
 //  - /components/schemas/Device.Bgpv4/properties/name
@@ -6294,8 +6294,8 @@ func (obj *bgpv4MetricsRequest) DeviceNames() []string {
 //  x-constraint:
 //  - /components/schemas/Device.Bgpv4/properties/name
 //
-func (obj *bgpv4MetricsRequest) SetDeviceNames(value []string) Bgpv4MetricsRequest {
-	obj.obj.DeviceNames = value
+func (obj *bgpv4MetricsRequest) SetPeerNames(value []string) Bgpv4MetricsRequest {
+	obj.obj.PeerNames = value
 
 	return obj
 }
@@ -6372,11 +6372,11 @@ type Bgpv6MetricsRequest interface {
 	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
-	DeviceNames() []string
-	SetDeviceNames(value []string) Bgpv6MetricsRequest
+	PeerNames() []string
+	SetPeerNames(value []string) Bgpv6MetricsRequest
 }
 
-// DeviceNames returns a []string
+// PeerNames returns a []string
 //  The names of BGPv6 device to return results for. An empty list will return results for all BGPv6 devices.
 //
 //  x-constraint:
@@ -6386,11 +6386,11 @@ type Bgpv6MetricsRequest interface {
 //  x-constraint:
 //  - /components/schemas/Device.Bgpv6/properties/name
 //
-func (obj *bgpv6MetricsRequest) DeviceNames() []string {
-	return obj.obj.DeviceNames
+func (obj *bgpv6MetricsRequest) PeerNames() []string {
+	return obj.obj.PeerNames
 }
 
-// SetDeviceNames sets the []string value in the Bgpv6MetricsRequest object
+// SetPeerNames sets the []string value in the Bgpv6MetricsRequest object
 //  The names of BGPv6 device to return results for. An empty list will return results for all BGPv6 devices.
 //
 //  x-constraint:
@@ -6400,8 +6400,8 @@ func (obj *bgpv6MetricsRequest) DeviceNames() []string {
 //  x-constraint:
 //  - /components/schemas/Device.Bgpv6/properties/name
 //
-func (obj *bgpv6MetricsRequest) SetDeviceNames(value []string) Bgpv6MetricsRequest {
-	obj.obj.DeviceNames = value
+func (obj *bgpv6MetricsRequest) SetPeerNames(value []string) Bgpv6MetricsRequest {
+	obj.obj.PeerNames = value
 
 	return obj
 }
@@ -10098,20 +10098,42 @@ type Bgpv4Metric interface {
 	SetName(value string) Bgpv4Metric
 	SessionState() Bgpv4MetricSessionStateEnum
 	SetSessionState(value Bgpv4MetricSessionStateEnum) Bgpv4Metric
+	SessionFlapCount() int32
+	SetSessionFlapCount(value int32) Bgpv4Metric
 	RoutesAdvertised() int32
 	SetRoutesAdvertised(value int32) Bgpv4Metric
-	RoutesWithdrawn() int32
-	SetRoutesWithdrawn(value int32) Bgpv4Metric
+	RoutesReceived() int32
+	SetRoutesReceived(value int32) Bgpv4Metric
+	RouteWithdrawsSent() int32
+	SetRouteWithdrawsSent(value int32) Bgpv4Metric
+	RouteWithdrawsReceived() int32
+	SetRouteWithdrawsReceived(value int32) Bgpv4Metric
+	UpdatesSent() int32
+	SetUpdatesSent(value int32) Bgpv4Metric
+	UpdatesReceived() int32
+	SetUpdatesReceived(value int32) Bgpv4Metric
+	OpensSent() int32
+	SetOpensSent(value int32) Bgpv4Metric
+	OpensReceived() int32
+	SetOpensReceived(value int32) Bgpv4Metric
+	KeepalivesSent() int32
+	SetKeepalivesSent(value int32) Bgpv4Metric
+	KeepalivesReceived() int32
+	SetKeepalivesReceived(value int32) Bgpv4Metric
+	NotificationsSent() int32
+	SetNotificationsSent(value int32) Bgpv4Metric
+	NotificationsReceived() int32
+	SetNotificationsReceived(value int32) Bgpv4Metric
 }
 
 // Name returns a string
-//  The name of a configured BGPv4 device.
+//  The name of a configured BGPv4 peer.
 func (obj *bgpv4Metric) Name() string {
 	return *obj.obj.Name
 }
 
 // SetName sets the string value in the Bgpv4Metric object
-//  The name of a configured BGPv4 device.
+//  The name of a configured BGPv4 peer.
 func (obj *bgpv4Metric) SetName(value string) Bgpv4Metric {
 	obj.obj.Name = &value
 
@@ -10139,30 +10161,184 @@ func (obj *bgpv4Metric) SetSessionState(value Bgpv4MetricSessionStateEnum) Bgpv4
 	return obj
 }
 
+// SessionFlapCount returns a int32
+//  Number of times the session went from Up to Down state.
+func (obj *bgpv4Metric) SessionFlapCount() int32 {
+	return *obj.obj.SessionFlapCount
+}
+
+// SetSessionFlapCount sets the int32 value in the Bgpv4Metric object
+//  Number of times the session went from Up to Down state.
+func (obj *bgpv4Metric) SetSessionFlapCount(value int32) Bgpv4Metric {
+	obj.obj.SessionFlapCount = &value
+
+	return obj
+}
+
 // RoutesAdvertised returns a int32
-//  Number of advertised routes sent
+//  Number of routes advertised.
 func (obj *bgpv4Metric) RoutesAdvertised() int32 {
 	return *obj.obj.RoutesAdvertised
 }
 
 // SetRoutesAdvertised sets the int32 value in the Bgpv4Metric object
-//  Number of advertised routes sent
+//  Number of routes advertised.
 func (obj *bgpv4Metric) SetRoutesAdvertised(value int32) Bgpv4Metric {
 	obj.obj.RoutesAdvertised = &value
 
 	return obj
 }
 
-// RoutesWithdrawn returns a int32
-//  Number of routes withdrawn
-func (obj *bgpv4Metric) RoutesWithdrawn() int32 {
-	return *obj.obj.RoutesWithdrawn
+// RoutesReceived returns a int32
+//  Number of routes received.
+func (obj *bgpv4Metric) RoutesReceived() int32 {
+	return *obj.obj.RoutesReceived
 }
 
-// SetRoutesWithdrawn sets the int32 value in the Bgpv4Metric object
-//  Number of routes withdrawn
-func (obj *bgpv4Metric) SetRoutesWithdrawn(value int32) Bgpv4Metric {
-	obj.obj.RoutesWithdrawn = &value
+// SetRoutesReceived sets the int32 value in the Bgpv4Metric object
+//  Number of routes received.
+func (obj *bgpv4Metric) SetRoutesReceived(value int32) Bgpv4Metric {
+	obj.obj.RoutesReceived = &value
+
+	return obj
+}
+
+// RouteWithdrawsSent returns a int32
+//  Number of route withdraws sent.
+func (obj *bgpv4Metric) RouteWithdrawsSent() int32 {
+	return *obj.obj.RouteWithdrawsSent
+}
+
+// SetRouteWithdrawsSent sets the int32 value in the Bgpv4Metric object
+//  Number of route withdraws sent.
+func (obj *bgpv4Metric) SetRouteWithdrawsSent(value int32) Bgpv4Metric {
+	obj.obj.RouteWithdrawsSent = &value
+
+	return obj
+}
+
+// RouteWithdrawsReceived returns a int32
+//  Number of route withdraws received.
+func (obj *bgpv4Metric) RouteWithdrawsReceived() int32 {
+	return *obj.obj.RouteWithdrawsReceived
+}
+
+// SetRouteWithdrawsReceived sets the int32 value in the Bgpv4Metric object
+//  Number of route withdraws received.
+func (obj *bgpv4Metric) SetRouteWithdrawsReceived(value int32) Bgpv4Metric {
+	obj.obj.RouteWithdrawsReceived = &value
+
+	return obj
+}
+
+// UpdatesSent returns a int32
+//  Number of Update messages sent.
+func (obj *bgpv4Metric) UpdatesSent() int32 {
+	return *obj.obj.UpdatesSent
+}
+
+// SetUpdatesSent sets the int32 value in the Bgpv4Metric object
+//  Number of Update messages sent.
+func (obj *bgpv4Metric) SetUpdatesSent(value int32) Bgpv4Metric {
+	obj.obj.UpdatesSent = &value
+
+	return obj
+}
+
+// UpdatesReceived returns a int32
+//  Number of Update messages received.
+func (obj *bgpv4Metric) UpdatesReceived() int32 {
+	return *obj.obj.UpdatesReceived
+}
+
+// SetUpdatesReceived sets the int32 value in the Bgpv4Metric object
+//  Number of Update messages received.
+func (obj *bgpv4Metric) SetUpdatesReceived(value int32) Bgpv4Metric {
+	obj.obj.UpdatesReceived = &value
+
+	return obj
+}
+
+// OpensSent returns a int32
+//  Number of Open messages sent.
+func (obj *bgpv4Metric) OpensSent() int32 {
+	return *obj.obj.OpensSent
+}
+
+// SetOpensSent sets the int32 value in the Bgpv4Metric object
+//  Number of Open messages sent.
+func (obj *bgpv4Metric) SetOpensSent(value int32) Bgpv4Metric {
+	obj.obj.OpensSent = &value
+
+	return obj
+}
+
+// OpensReceived returns a int32
+//  Number of Open messages received.
+func (obj *bgpv4Metric) OpensReceived() int32 {
+	return *obj.obj.OpensReceived
+}
+
+// SetOpensReceived sets the int32 value in the Bgpv4Metric object
+//  Number of Open messages received.
+func (obj *bgpv4Metric) SetOpensReceived(value int32) Bgpv4Metric {
+	obj.obj.OpensReceived = &value
+
+	return obj
+}
+
+// KeepalivesSent returns a int32
+//  Number of Keepalive messages sent.
+func (obj *bgpv4Metric) KeepalivesSent() int32 {
+	return *obj.obj.KeepalivesSent
+}
+
+// SetKeepalivesSent sets the int32 value in the Bgpv4Metric object
+//  Number of Keepalive messages sent.
+func (obj *bgpv4Metric) SetKeepalivesSent(value int32) Bgpv4Metric {
+	obj.obj.KeepalivesSent = &value
+
+	return obj
+}
+
+// KeepalivesReceived returns a int32
+//  Number of Keepalive messages received.
+func (obj *bgpv4Metric) KeepalivesReceived() int32 {
+	return *obj.obj.KeepalivesReceived
+}
+
+// SetKeepalivesReceived sets the int32 value in the Bgpv4Metric object
+//  Number of Keepalive messages received.
+func (obj *bgpv4Metric) SetKeepalivesReceived(value int32) Bgpv4Metric {
+	obj.obj.KeepalivesReceived = &value
+
+	return obj
+}
+
+// NotificationsSent returns a int32
+//  Number of Notification messages sent.
+func (obj *bgpv4Metric) NotificationsSent() int32 {
+	return *obj.obj.NotificationsSent
+}
+
+// SetNotificationsSent sets the int32 value in the Bgpv4Metric object
+//  Number of Notification messages sent.
+func (obj *bgpv4Metric) SetNotificationsSent(value int32) Bgpv4Metric {
+	obj.obj.NotificationsSent = &value
+
+	return obj
+}
+
+// NotificationsReceived returns a int32
+//  Number of Notification messages received.
+func (obj *bgpv4Metric) NotificationsReceived() int32 {
+	return *obj.obj.NotificationsReceived
+}
+
+// SetNotificationsReceived sets the int32 value in the Bgpv4Metric object
+//  Number of Notification messages received.
+func (obj *bgpv4Metric) SetNotificationsReceived(value int32) Bgpv4Metric {
+	obj.obj.NotificationsReceived = &value
 
 	return obj
 }
@@ -10243,20 +10419,42 @@ type Bgpv6Metric interface {
 	SetName(value string) Bgpv6Metric
 	SessionState() Bgpv6MetricSessionStateEnum
 	SetSessionState(value Bgpv6MetricSessionStateEnum) Bgpv6Metric
+	SessionFlapCount() int32
+	SetSessionFlapCount(value int32) Bgpv6Metric
 	RoutesAdvertised() int32
 	SetRoutesAdvertised(value int32) Bgpv6Metric
-	RoutesWithdrawn() int32
-	SetRoutesWithdrawn(value int32) Bgpv6Metric
+	RoutesReceived() int32
+	SetRoutesReceived(value int32) Bgpv6Metric
+	RouteWithdrawsSent() int32
+	SetRouteWithdrawsSent(value int32) Bgpv6Metric
+	RouteWithdrawsReceived() int32
+	SetRouteWithdrawsReceived(value int32) Bgpv6Metric
+	UpdatesSent() int32
+	SetUpdatesSent(value int32) Bgpv6Metric
+	UpdatesReceived() int32
+	SetUpdatesReceived(value int32) Bgpv6Metric
+	OpensSent() int32
+	SetOpensSent(value int32) Bgpv6Metric
+	OpensReceived() int32
+	SetOpensReceived(value int32) Bgpv6Metric
+	KeepalivesSent() int32
+	SetKeepalivesSent(value int32) Bgpv6Metric
+	KeepalivesReceived() int32
+	SetKeepalivesReceived(value int32) Bgpv6Metric
+	NotificationsSent() int32
+	SetNotificationsSent(value int32) Bgpv6Metric
+	NotificationsReceived() int32
+	SetNotificationsReceived(value int32) Bgpv6Metric
 }
 
 // Name returns a string
-//  The name of a configured BGPv6 device.
+//  The name of a configured BGPv6 peer.
 func (obj *bgpv6Metric) Name() string {
 	return *obj.obj.Name
 }
 
 // SetName sets the string value in the Bgpv6Metric object
-//  The name of a configured BGPv6 device.
+//  The name of a configured BGPv6 peer.
 func (obj *bgpv6Metric) SetName(value string) Bgpv6Metric {
 	obj.obj.Name = &value
 
@@ -10284,30 +10482,184 @@ func (obj *bgpv6Metric) SetSessionState(value Bgpv6MetricSessionStateEnum) Bgpv6
 	return obj
 }
 
+// SessionFlapCount returns a int32
+//  Number of times the session went from Up to Down state.
+func (obj *bgpv6Metric) SessionFlapCount() int32 {
+	return *obj.obj.SessionFlapCount
+}
+
+// SetSessionFlapCount sets the int32 value in the Bgpv6Metric object
+//  Number of times the session went from Up to Down state.
+func (obj *bgpv6Metric) SetSessionFlapCount(value int32) Bgpv6Metric {
+	obj.obj.SessionFlapCount = &value
+
+	return obj
+}
+
 // RoutesAdvertised returns a int32
-//  Number of advertised routes sent
+//  Number of routes advertised.
 func (obj *bgpv6Metric) RoutesAdvertised() int32 {
 	return *obj.obj.RoutesAdvertised
 }
 
 // SetRoutesAdvertised sets the int32 value in the Bgpv6Metric object
-//  Number of advertised routes sent
+//  Number of routes advertised.
 func (obj *bgpv6Metric) SetRoutesAdvertised(value int32) Bgpv6Metric {
 	obj.obj.RoutesAdvertised = &value
 
 	return obj
 }
 
-// RoutesWithdrawn returns a int32
-//  Number of routes withdrawn
-func (obj *bgpv6Metric) RoutesWithdrawn() int32 {
-	return *obj.obj.RoutesWithdrawn
+// RoutesReceived returns a int32
+//  Number of routes received.
+func (obj *bgpv6Metric) RoutesReceived() int32 {
+	return *obj.obj.RoutesReceived
 }
 
-// SetRoutesWithdrawn sets the int32 value in the Bgpv6Metric object
-//  Number of routes withdrawn
-func (obj *bgpv6Metric) SetRoutesWithdrawn(value int32) Bgpv6Metric {
-	obj.obj.RoutesWithdrawn = &value
+// SetRoutesReceived sets the int32 value in the Bgpv6Metric object
+//  Number of routes received.
+func (obj *bgpv6Metric) SetRoutesReceived(value int32) Bgpv6Metric {
+	obj.obj.RoutesReceived = &value
+
+	return obj
+}
+
+// RouteWithdrawsSent returns a int32
+//  Number of route withdraws sent.
+func (obj *bgpv6Metric) RouteWithdrawsSent() int32 {
+	return *obj.obj.RouteWithdrawsSent
+}
+
+// SetRouteWithdrawsSent sets the int32 value in the Bgpv6Metric object
+//  Number of route withdraws sent.
+func (obj *bgpv6Metric) SetRouteWithdrawsSent(value int32) Bgpv6Metric {
+	obj.obj.RouteWithdrawsSent = &value
+
+	return obj
+}
+
+// RouteWithdrawsReceived returns a int32
+//  Number of route withdraws received.
+func (obj *bgpv6Metric) RouteWithdrawsReceived() int32 {
+	return *obj.obj.RouteWithdrawsReceived
+}
+
+// SetRouteWithdrawsReceived sets the int32 value in the Bgpv6Metric object
+//  Number of route withdraws received.
+func (obj *bgpv6Metric) SetRouteWithdrawsReceived(value int32) Bgpv6Metric {
+	obj.obj.RouteWithdrawsReceived = &value
+
+	return obj
+}
+
+// UpdatesSent returns a int32
+//  Number of Update messages sent.
+func (obj *bgpv6Metric) UpdatesSent() int32 {
+	return *obj.obj.UpdatesSent
+}
+
+// SetUpdatesSent sets the int32 value in the Bgpv6Metric object
+//  Number of Update messages sent.
+func (obj *bgpv6Metric) SetUpdatesSent(value int32) Bgpv6Metric {
+	obj.obj.UpdatesSent = &value
+
+	return obj
+}
+
+// UpdatesReceived returns a int32
+//  Number of Update messages received.
+func (obj *bgpv6Metric) UpdatesReceived() int32 {
+	return *obj.obj.UpdatesReceived
+}
+
+// SetUpdatesReceived sets the int32 value in the Bgpv6Metric object
+//  Number of Update messages received.
+func (obj *bgpv6Metric) SetUpdatesReceived(value int32) Bgpv6Metric {
+	obj.obj.UpdatesReceived = &value
+
+	return obj
+}
+
+// OpensSent returns a int32
+//  Number of Open messages sent.
+func (obj *bgpv6Metric) OpensSent() int32 {
+	return *obj.obj.OpensSent
+}
+
+// SetOpensSent sets the int32 value in the Bgpv6Metric object
+//  Number of Open messages sent.
+func (obj *bgpv6Metric) SetOpensSent(value int32) Bgpv6Metric {
+	obj.obj.OpensSent = &value
+
+	return obj
+}
+
+// OpensReceived returns a int32
+//  Number of Open messages received.
+func (obj *bgpv6Metric) OpensReceived() int32 {
+	return *obj.obj.OpensReceived
+}
+
+// SetOpensReceived sets the int32 value in the Bgpv6Metric object
+//  Number of Open messages received.
+func (obj *bgpv6Metric) SetOpensReceived(value int32) Bgpv6Metric {
+	obj.obj.OpensReceived = &value
+
+	return obj
+}
+
+// KeepalivesSent returns a int32
+//  Number of Keepalive messages sent.
+func (obj *bgpv6Metric) KeepalivesSent() int32 {
+	return *obj.obj.KeepalivesSent
+}
+
+// SetKeepalivesSent sets the int32 value in the Bgpv6Metric object
+//  Number of Keepalive messages sent.
+func (obj *bgpv6Metric) SetKeepalivesSent(value int32) Bgpv6Metric {
+	obj.obj.KeepalivesSent = &value
+
+	return obj
+}
+
+// KeepalivesReceived returns a int32
+//  Number of Keepalive messages received.
+func (obj *bgpv6Metric) KeepalivesReceived() int32 {
+	return *obj.obj.KeepalivesReceived
+}
+
+// SetKeepalivesReceived sets the int32 value in the Bgpv6Metric object
+//  Number of Keepalive messages received.
+func (obj *bgpv6Metric) SetKeepalivesReceived(value int32) Bgpv6Metric {
+	obj.obj.KeepalivesReceived = &value
+
+	return obj
+}
+
+// NotificationsSent returns a int32
+//  Number of Notification messages sent.
+func (obj *bgpv6Metric) NotificationsSent() int32 {
+	return *obj.obj.NotificationsSent
+}
+
+// SetNotificationsSent sets the int32 value in the Bgpv6Metric object
+//  Number of Notification messages sent.
+func (obj *bgpv6Metric) SetNotificationsSent(value int32) Bgpv6Metric {
+	obj.obj.NotificationsSent = &value
+
+	return obj
+}
+
+// NotificationsReceived returns a int32
+//  Number of Notification messages received.
+func (obj *bgpv6Metric) NotificationsReceived() int32 {
+	return *obj.obj.NotificationsReceived
+}
+
+// SetNotificationsReceived sets the int32 value in the Bgpv6Metric object
+//  Number of Notification messages received.
+func (obj *bgpv6Metric) SetNotificationsReceived(value int32) Bgpv6Metric {
+	obj.obj.NotificationsReceived = &value
 
 	return obj
 }
