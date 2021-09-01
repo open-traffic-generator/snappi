@@ -26,12 +26,14 @@ with open(os.path.join("openapi.yaml"), "wb") as fp:
 
 openapiart.OpenApiArt(
     api_files=["openapi.yaml"],
-    python_module_name=pkg_name,
-    protobuf_package_name=pkg_name + "pb",
-    go_sdk_package_dir="github.com/open-traffic-generator/snappi/%s" % go_pkg_name,
-    go_sdk_package_name=go_pkg_name,
-    output_dir="artifacts",
+    protobuf_name=pkg_name + "pb",
+    artifact_dir="artifacts",
     extension_prefix=pkg_name,
+).GeneratePythonSdk(
+    package_name=pkg_name
+).GenerateGoSdk(
+    package_dir="github.com/open-traffic-generator/snappi/%s" % go_pkg_name,
+    package_name=go_pkg_name
 )
 
 if os.path.exists(pkg_name):

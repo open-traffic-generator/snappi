@@ -29,7 +29,7 @@ type server struct {
 	snappipb.UnimplementedOpenapiServer
 }
 
-func StartMockServer(location string) error {
+func StartMockGrpcServer(location string) error {
 	if mockServer != nil {
 		log.Println("MockServer: Server already running")
 		return nil

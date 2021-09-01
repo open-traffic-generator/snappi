@@ -1,14 +1,20 @@
-// Open Traffic Generator API 0.4.15
+// Open Traffic Generator API 0.5.1
 // License: MIT
 
 package gosnappi
 
 import (
+	"bytes"
 	context "context"
+	"crypto/tls"
 	"fmt"
+	"io/ioutil"
+	"net/http"
+	"net/url"
 	"time"
 
 	"github.com/ghodss/yaml"
+	"github.com/golang/protobuf/proto"
 	snappipb "github.com/open-traffic-generator/snappi/gosnappi/snappipb"
 	"google.golang.org/grpc"
 	"google.golang.org/protobuf/encoding/protojson"
@@ -90,7 +96,9 @@ type api struct {
 
 type Api interface {
 	NewGrpcTransport() GrpcTransport
+	hasGrpcTransport() bool
 	NewHttpTransport() HttpTransport
+	hasHttpTransport() bool
 }
 
 // NewGrpcTransport sets the underlying transport of the Api as grpc
@@ -103,6 +111,11 @@ func (api *api) NewGrpcTransport() GrpcTransport {
 	return api.grpc
 }
 
+// HasGrpcTransport will return True for gRPC transport
+func (api *api) hasGrpcTransport() bool {
+	return api.grpc != nil
+}
+
 // NewHttpTransport sets the underlying transport of the Api as http
 func (api *api) NewHttpTransport() HttpTransport {
 	api.http = &httpTransport{
@@ -111,6 +124,20 @@ func (api *api) NewHttpTransport() HttpTransport {
 	}
 	api.grpc = nil
 	return api.http
+}
+
+func (api *api) hasHttpTransport() bool {
+	return api.http != nil
+}
+
+// HttpRequestDoer will return True for HTTP transport
+type httpRequestDoer interface {
+	Do(req *http.Request) (*http.Response, error)
+}
+
+type httpClient struct {
+	client httpRequestDoer
+	ctx    context.Context
 }
 
 // All methods that perform validation will add errors here
@@ -129,6 +156,7 @@ func Validate() {
 type gosnappiApi struct {
 	api
 	grpcClient snappipb.OpenapiClient
+	httpClient httpClient
 }
 
 // grpcConnect builds up a grpc connection
@@ -144,9 +172,45 @@ func (api *gosnappiApi) grpcConnect() error {
 }
 
 // NewApi returns a new instance of the top level interface hierarchy
-func NewApi() *gosnappiApi {
+func NewApi() GosnappiApi {
 	api := gosnappiApi{}
 	return &api
+}
+
+// httpConnect builds up a http connection
+func (api *gosnappiApi) httpConnect() error {
+	if api.httpClient.client == nil {
+		var verify = !api.http.verify
+		client := httpClient{
+			client: &http.Client{
+				Transport: &http.Transport{
+					TLSClientConfig: &tls.Config{InsecureSkipVerify: verify},
+				},
+			},
+			ctx: context.Background(),
+		}
+		api.httpClient = client
+	}
+	return nil
+}
+
+func (api *gosnappiApi) httpSendRecv(urlPath string, jsonBody string, method string) (*http.Response, error) {
+	err := api.httpConnect()
+	if err != nil {
+		return nil, err
+	}
+	httpClient := api.httpClient
+	var bodyReader = bytes.NewReader([]byte(jsonBody))
+	queryUrl, err := url.Parse(api.http.location)
+	if err != nil {
+		return nil, err
+	}
+	basePath := fmt.Sprintf(urlPath)
+	queryUrl, _ = queryUrl.Parse(basePath)
+	req, _ := http.NewRequest(method, queryUrl.String(), bodyReader)
+	req.Header.Set("Content-Type", "application/json")
+	req = req.WithContext(httpClient.ctx)
+	return httpClient.client.Do(req)
 }
 
 type GosnappiApi interface {
@@ -159,16 +223,46 @@ type GosnappiApi interface {
 	NewRouteState() RouteState
 	NewMetricsRequest() MetricsRequest
 	NewCaptureRequest() CaptureRequest
-	SetConfig(config Config) (SetConfigResponse_StatusCode200, error)
-	GetConfig() (GetConfigResponse_StatusCode200, error)
-	SetTransmitState(transmitState TransmitState) (SetTransmitStateResponse_StatusCode200, error)
-	SetLinkState(linkState LinkState) (SetLinkStateResponse_StatusCode200, error)
-	SetCaptureState(captureState CaptureState) (SetCaptureStateResponse_StatusCode200, error)
-	UpdateFlows(flowsUpdate FlowsUpdate) (UpdateFlowsResponse_StatusCode200, error)
-	SetRouteState(routeState RouteState) (SetRouteStateResponse_StatusCode200, error)
-	GetMetrics(metricsRequest MetricsRequest) (GetMetricsResponse_StatusCode200, error)
-	GetStateMetrics() (GetStateMetricsResponse_StatusCode200, error)
-	GetCapture(captureRequest CaptureRequest) (GetCaptureResponse_StatusCode200, error)
+	NewSetConfigResponse_StatusCode200() SetConfigResponse_StatusCode200
+	NewSetConfigResponse_StatusCode400() SetConfigResponse_StatusCode400
+	NewSetConfigResponse_StatusCode500() SetConfigResponse_StatusCode500
+	NewGetConfigResponse_StatusCode200() GetConfigResponse_StatusCode200
+	NewGetConfigResponse_StatusCode400() GetConfigResponse_StatusCode400
+	NewGetConfigResponse_StatusCode500() GetConfigResponse_StatusCode500
+	NewSetTransmitStateResponse_StatusCode200() SetTransmitStateResponse_StatusCode200
+	NewSetTransmitStateResponse_StatusCode400() SetTransmitStateResponse_StatusCode400
+	NewSetTransmitStateResponse_StatusCode500() SetTransmitStateResponse_StatusCode500
+	NewSetLinkStateResponse_StatusCode200() SetLinkStateResponse_StatusCode200
+	NewSetLinkStateResponse_StatusCode400() SetLinkStateResponse_StatusCode400
+	NewSetLinkStateResponse_StatusCode500() SetLinkStateResponse_StatusCode500
+	NewSetCaptureStateResponse_StatusCode200() SetCaptureStateResponse_StatusCode200
+	NewSetCaptureStateResponse_StatusCode400() SetCaptureStateResponse_StatusCode400
+	NewSetCaptureStateResponse_StatusCode500() SetCaptureStateResponse_StatusCode500
+	NewUpdateFlowsResponse_StatusCode200() UpdateFlowsResponse_StatusCode200
+	NewUpdateFlowsResponse_StatusCode400() UpdateFlowsResponse_StatusCode400
+	NewUpdateFlowsResponse_StatusCode500() UpdateFlowsResponse_StatusCode500
+	NewSetRouteStateResponse_StatusCode200() SetRouteStateResponse_StatusCode200
+	NewSetRouteStateResponse_StatusCode400() SetRouteStateResponse_StatusCode400
+	NewSetRouteStateResponse_StatusCode500() SetRouteStateResponse_StatusCode500
+	NewGetMetricsResponse_StatusCode200() GetMetricsResponse_StatusCode200
+	NewGetMetricsResponse_StatusCode400() GetMetricsResponse_StatusCode400
+	NewGetMetricsResponse_StatusCode500() GetMetricsResponse_StatusCode500
+	NewGetStateMetricsResponse_StatusCode200() GetStateMetricsResponse_StatusCode200
+	NewGetStateMetricsResponse_StatusCode400() GetStateMetricsResponse_StatusCode400
+	NewGetStateMetricsResponse_StatusCode500() GetStateMetricsResponse_StatusCode500
+	NewGetCaptureResponse_StatusCode200() GetCaptureResponse_StatusCode200
+	NewGetCaptureResponse_StatusCode400() GetCaptureResponse_StatusCode400
+	NewGetCaptureResponse_StatusCode500() GetCaptureResponse_StatusCode500
+	SetConfig(config Config) (Success, error)
+	GetConfig() (Config, error)
+	SetTransmitState(transmitState TransmitState) (Success, error)
+	SetLinkState(linkState LinkState) (Success, error)
+	SetCaptureState(captureState CaptureState) (Success, error)
+	UpdateFlows(flowsUpdate FlowsUpdate) (Config, error)
+	SetRouteState(routeState RouteState) (Success, error)
+	GetMetrics(metricsRequest MetricsRequest) (MetricsResponse, error)
+	GetStateMetrics() (StateMetrics, error)
+	GetCapture(captureRequest CaptureRequest) ([]byte, error)
 }
 
 func (api *gosnappiApi) NewConfig() Config {
@@ -203,7 +297,131 @@ func (api *gosnappiApi) NewCaptureRequest() CaptureRequest {
 	return &captureRequest{obj: &snappipb.CaptureRequest{}}
 }
 
-func (api *gosnappiApi) SetConfig(config Config) (SetConfigResponse_StatusCode200, error) {
+func (api *gosnappiApi) NewSetConfigResponse_StatusCode200() SetConfigResponse_StatusCode200 {
+	return &setConfigResponse_StatusCode200{obj: &snappipb.SetConfigResponse_StatusCode200{}}
+}
+
+func (api *gosnappiApi) NewSetConfigResponse_StatusCode400() SetConfigResponse_StatusCode400 {
+	return &setConfigResponse_StatusCode400{obj: &snappipb.SetConfigResponse_StatusCode400{}}
+}
+
+func (api *gosnappiApi) NewSetConfigResponse_StatusCode500() SetConfigResponse_StatusCode500 {
+	return &setConfigResponse_StatusCode500{obj: &snappipb.SetConfigResponse_StatusCode500{}}
+}
+
+func (api *gosnappiApi) NewGetConfigResponse_StatusCode200() GetConfigResponse_StatusCode200 {
+	return &getConfigResponse_StatusCode200{obj: &snappipb.GetConfigResponse_StatusCode200{}}
+}
+
+func (api *gosnappiApi) NewGetConfigResponse_StatusCode400() GetConfigResponse_StatusCode400 {
+	return &getConfigResponse_StatusCode400{obj: &snappipb.GetConfigResponse_StatusCode400{}}
+}
+
+func (api *gosnappiApi) NewGetConfigResponse_StatusCode500() GetConfigResponse_StatusCode500 {
+	return &getConfigResponse_StatusCode500{obj: &snappipb.GetConfigResponse_StatusCode500{}}
+}
+
+func (api *gosnappiApi) NewSetTransmitStateResponse_StatusCode200() SetTransmitStateResponse_StatusCode200 {
+	return &setTransmitStateResponse_StatusCode200{obj: &snappipb.SetTransmitStateResponse_StatusCode200{}}
+}
+
+func (api *gosnappiApi) NewSetTransmitStateResponse_StatusCode400() SetTransmitStateResponse_StatusCode400 {
+	return &setTransmitStateResponse_StatusCode400{obj: &snappipb.SetTransmitStateResponse_StatusCode400{}}
+}
+
+func (api *gosnappiApi) NewSetTransmitStateResponse_StatusCode500() SetTransmitStateResponse_StatusCode500 {
+	return &setTransmitStateResponse_StatusCode500{obj: &snappipb.SetTransmitStateResponse_StatusCode500{}}
+}
+
+func (api *gosnappiApi) NewSetLinkStateResponse_StatusCode200() SetLinkStateResponse_StatusCode200 {
+	return &setLinkStateResponse_StatusCode200{obj: &snappipb.SetLinkStateResponse_StatusCode200{}}
+}
+
+func (api *gosnappiApi) NewSetLinkStateResponse_StatusCode400() SetLinkStateResponse_StatusCode400 {
+	return &setLinkStateResponse_StatusCode400{obj: &snappipb.SetLinkStateResponse_StatusCode400{}}
+}
+
+func (api *gosnappiApi) NewSetLinkStateResponse_StatusCode500() SetLinkStateResponse_StatusCode500 {
+	return &setLinkStateResponse_StatusCode500{obj: &snappipb.SetLinkStateResponse_StatusCode500{}}
+}
+
+func (api *gosnappiApi) NewSetCaptureStateResponse_StatusCode200() SetCaptureStateResponse_StatusCode200 {
+	return &setCaptureStateResponse_StatusCode200{obj: &snappipb.SetCaptureStateResponse_StatusCode200{}}
+}
+
+func (api *gosnappiApi) NewSetCaptureStateResponse_StatusCode400() SetCaptureStateResponse_StatusCode400 {
+	return &setCaptureStateResponse_StatusCode400{obj: &snappipb.SetCaptureStateResponse_StatusCode400{}}
+}
+
+func (api *gosnappiApi) NewSetCaptureStateResponse_StatusCode500() SetCaptureStateResponse_StatusCode500 {
+	return &setCaptureStateResponse_StatusCode500{obj: &snappipb.SetCaptureStateResponse_StatusCode500{}}
+}
+
+func (api *gosnappiApi) NewUpdateFlowsResponse_StatusCode200() UpdateFlowsResponse_StatusCode200 {
+	return &updateFlowsResponse_StatusCode200{obj: &snappipb.UpdateFlowsResponse_StatusCode200{}}
+}
+
+func (api *gosnappiApi) NewUpdateFlowsResponse_StatusCode400() UpdateFlowsResponse_StatusCode400 {
+	return &updateFlowsResponse_StatusCode400{obj: &snappipb.UpdateFlowsResponse_StatusCode400{}}
+}
+
+func (api *gosnappiApi) NewUpdateFlowsResponse_StatusCode500() UpdateFlowsResponse_StatusCode500 {
+	return &updateFlowsResponse_StatusCode500{obj: &snappipb.UpdateFlowsResponse_StatusCode500{}}
+}
+
+func (api *gosnappiApi) NewSetRouteStateResponse_StatusCode200() SetRouteStateResponse_StatusCode200 {
+	return &setRouteStateResponse_StatusCode200{obj: &snappipb.SetRouteStateResponse_StatusCode200{}}
+}
+
+func (api *gosnappiApi) NewSetRouteStateResponse_StatusCode400() SetRouteStateResponse_StatusCode400 {
+	return &setRouteStateResponse_StatusCode400{obj: &snappipb.SetRouteStateResponse_StatusCode400{}}
+}
+
+func (api *gosnappiApi) NewSetRouteStateResponse_StatusCode500() SetRouteStateResponse_StatusCode500 {
+	return &setRouteStateResponse_StatusCode500{obj: &snappipb.SetRouteStateResponse_StatusCode500{}}
+}
+
+func (api *gosnappiApi) NewGetMetricsResponse_StatusCode200() GetMetricsResponse_StatusCode200 {
+	return &getMetricsResponse_StatusCode200{obj: &snappipb.GetMetricsResponse_StatusCode200{}}
+}
+
+func (api *gosnappiApi) NewGetMetricsResponse_StatusCode400() GetMetricsResponse_StatusCode400 {
+	return &getMetricsResponse_StatusCode400{obj: &snappipb.GetMetricsResponse_StatusCode400{}}
+}
+
+func (api *gosnappiApi) NewGetMetricsResponse_StatusCode500() GetMetricsResponse_StatusCode500 {
+	return &getMetricsResponse_StatusCode500{obj: &snappipb.GetMetricsResponse_StatusCode500{}}
+}
+
+func (api *gosnappiApi) NewGetStateMetricsResponse_StatusCode200() GetStateMetricsResponse_StatusCode200 {
+	return &getStateMetricsResponse_StatusCode200{obj: &snappipb.GetStateMetricsResponse_StatusCode200{}}
+}
+
+func (api *gosnappiApi) NewGetStateMetricsResponse_StatusCode400() GetStateMetricsResponse_StatusCode400 {
+	return &getStateMetricsResponse_StatusCode400{obj: &snappipb.GetStateMetricsResponse_StatusCode400{}}
+}
+
+func (api *gosnappiApi) NewGetStateMetricsResponse_StatusCode500() GetStateMetricsResponse_StatusCode500 {
+	return &getStateMetricsResponse_StatusCode500{obj: &snappipb.GetStateMetricsResponse_StatusCode500{}}
+}
+
+func (api *gosnappiApi) NewGetCaptureResponse_StatusCode200() GetCaptureResponse_StatusCode200 {
+	return &getCaptureResponse_StatusCode200{obj: &snappipb.GetCaptureResponse_StatusCode200{}}
+}
+
+func (api *gosnappiApi) NewGetCaptureResponse_StatusCode400() GetCaptureResponse_StatusCode400 {
+	return &getCaptureResponse_StatusCode400{obj: &snappipb.GetCaptureResponse_StatusCode400{}}
+}
+
+func (api *gosnappiApi) NewGetCaptureResponse_StatusCode500() GetCaptureResponse_StatusCode500 {
+	return &getCaptureResponse_StatusCode500{obj: &snappipb.GetCaptureResponse_StatusCode500{}}
+}
+
+func (api *gosnappiApi) SetConfig(config Config) (Success, error) {
+	if api.hasHttpTransport() {
+		return api.httpSetConfig(config)
+	}
+
 	if err := api.grpcConnect(); err != nil {
 		return nil, err
 	}
@@ -215,7 +433,7 @@ func (api *gosnappiApi) SetConfig(config Config) (SetConfigResponse_StatusCode20
 		return nil, err
 	}
 	if resp.GetStatusCode_200() != nil {
-		return &setConfigResponseStatusCode200{obj: resp.GetStatusCode_200()}, nil
+		return &success{obj: resp.GetStatusCode_200().Success}, nil
 	}
 	if resp.GetStatusCode_400() != nil {
 		data, _ := yaml.Marshal(resp.GetStatusCode_400())
@@ -228,7 +446,11 @@ func (api *gosnappiApi) SetConfig(config Config) (SetConfigResponse_StatusCode20
 	return nil, fmt.Errorf("response not implemented")
 }
 
-func (api *gosnappiApi) GetConfig() (GetConfigResponse_StatusCode200, error) {
+func (api *gosnappiApi) GetConfig() (Config, error) {
+	if api.hasHttpTransport() {
+		return api.httpGetConfig()
+	}
+
 	if err := api.grpcConnect(); err != nil {
 		return nil, err
 	}
@@ -240,7 +462,7 @@ func (api *gosnappiApi) GetConfig() (GetConfigResponse_StatusCode200, error) {
 		return nil, err
 	}
 	if resp.GetStatusCode_200() != nil {
-		return &getConfigResponseStatusCode200{obj: resp.GetStatusCode_200()}, nil
+		return &config{obj: resp.GetStatusCode_200().Config}, nil
 	}
 	if resp.GetStatusCode_400() != nil {
 		data, _ := yaml.Marshal(resp.GetStatusCode_400())
@@ -253,7 +475,11 @@ func (api *gosnappiApi) GetConfig() (GetConfigResponse_StatusCode200, error) {
 	return nil, fmt.Errorf("response not implemented")
 }
 
-func (api *gosnappiApi) SetTransmitState(transmitState TransmitState) (SetTransmitStateResponse_StatusCode200, error) {
+func (api *gosnappiApi) SetTransmitState(transmitState TransmitState) (Success, error) {
+	if api.hasHttpTransport() {
+		return api.httpSetTransmitState(transmitState)
+	}
+
 	if err := api.grpcConnect(); err != nil {
 		return nil, err
 	}
@@ -265,7 +491,7 @@ func (api *gosnappiApi) SetTransmitState(transmitState TransmitState) (SetTransm
 		return nil, err
 	}
 	if resp.GetStatusCode_200() != nil {
-		return &setTransmitStateResponseStatusCode200{obj: resp.GetStatusCode_200()}, nil
+		return &success{obj: resp.GetStatusCode_200().Success}, nil
 	}
 	if resp.GetStatusCode_400() != nil {
 		data, _ := yaml.Marshal(resp.GetStatusCode_400())
@@ -278,7 +504,11 @@ func (api *gosnappiApi) SetTransmitState(transmitState TransmitState) (SetTransm
 	return nil, fmt.Errorf("response not implemented")
 }
 
-func (api *gosnappiApi) SetLinkState(linkState LinkState) (SetLinkStateResponse_StatusCode200, error) {
+func (api *gosnappiApi) SetLinkState(linkState LinkState) (Success, error) {
+	if api.hasHttpTransport() {
+		return api.httpSetLinkState(linkState)
+	}
+
 	if err := api.grpcConnect(); err != nil {
 		return nil, err
 	}
@@ -290,7 +520,7 @@ func (api *gosnappiApi) SetLinkState(linkState LinkState) (SetLinkStateResponse_
 		return nil, err
 	}
 	if resp.GetStatusCode_200() != nil {
-		return &setLinkStateResponseStatusCode200{obj: resp.GetStatusCode_200()}, nil
+		return &success{obj: resp.GetStatusCode_200().Success}, nil
 	}
 	if resp.GetStatusCode_400() != nil {
 		data, _ := yaml.Marshal(resp.GetStatusCode_400())
@@ -303,7 +533,11 @@ func (api *gosnappiApi) SetLinkState(linkState LinkState) (SetLinkStateResponse_
 	return nil, fmt.Errorf("response not implemented")
 }
 
-func (api *gosnappiApi) SetCaptureState(captureState CaptureState) (SetCaptureStateResponse_StatusCode200, error) {
+func (api *gosnappiApi) SetCaptureState(captureState CaptureState) (Success, error) {
+	if api.hasHttpTransport() {
+		return api.httpSetCaptureState(captureState)
+	}
+
 	if err := api.grpcConnect(); err != nil {
 		return nil, err
 	}
@@ -315,7 +549,7 @@ func (api *gosnappiApi) SetCaptureState(captureState CaptureState) (SetCaptureSt
 		return nil, err
 	}
 	if resp.GetStatusCode_200() != nil {
-		return &setCaptureStateResponseStatusCode200{obj: resp.GetStatusCode_200()}, nil
+		return &success{obj: resp.GetStatusCode_200().Success}, nil
 	}
 	if resp.GetStatusCode_400() != nil {
 		data, _ := yaml.Marshal(resp.GetStatusCode_400())
@@ -328,7 +562,11 @@ func (api *gosnappiApi) SetCaptureState(captureState CaptureState) (SetCaptureSt
 	return nil, fmt.Errorf("response not implemented")
 }
 
-func (api *gosnappiApi) UpdateFlows(flowsUpdate FlowsUpdate) (UpdateFlowsResponse_StatusCode200, error) {
+func (api *gosnappiApi) UpdateFlows(flowsUpdate FlowsUpdate) (Config, error) {
+	if api.hasHttpTransport() {
+		return api.httpUpdateFlows(flowsUpdate)
+	}
+
 	if err := api.grpcConnect(); err != nil {
 		return nil, err
 	}
@@ -340,7 +578,7 @@ func (api *gosnappiApi) UpdateFlows(flowsUpdate FlowsUpdate) (UpdateFlowsRespons
 		return nil, err
 	}
 	if resp.GetStatusCode_200() != nil {
-		return &updateFlowsResponseStatusCode200{obj: resp.GetStatusCode_200()}, nil
+		return &config{obj: resp.GetStatusCode_200().Config}, nil
 	}
 	if resp.GetStatusCode_400() != nil {
 		data, _ := yaml.Marshal(resp.GetStatusCode_400())
@@ -353,7 +591,11 @@ func (api *gosnappiApi) UpdateFlows(flowsUpdate FlowsUpdate) (UpdateFlowsRespons
 	return nil, fmt.Errorf("response not implemented")
 }
 
-func (api *gosnappiApi) SetRouteState(routeState RouteState) (SetRouteStateResponse_StatusCode200, error) {
+func (api *gosnappiApi) SetRouteState(routeState RouteState) (Success, error) {
+	if api.hasHttpTransport() {
+		return api.httpSetRouteState(routeState)
+	}
+
 	if err := api.grpcConnect(); err != nil {
 		return nil, err
 	}
@@ -365,7 +607,7 @@ func (api *gosnappiApi) SetRouteState(routeState RouteState) (SetRouteStateRespo
 		return nil, err
 	}
 	if resp.GetStatusCode_200() != nil {
-		return &setRouteStateResponseStatusCode200{obj: resp.GetStatusCode_200()}, nil
+		return &success{obj: resp.GetStatusCode_200().Success}, nil
 	}
 	if resp.GetStatusCode_400() != nil {
 		data, _ := yaml.Marshal(resp.GetStatusCode_400())
@@ -378,7 +620,11 @@ func (api *gosnappiApi) SetRouteState(routeState RouteState) (SetRouteStateRespo
 	return nil, fmt.Errorf("response not implemented")
 }
 
-func (api *gosnappiApi) GetMetrics(metricsRequest MetricsRequest) (GetMetricsResponse_StatusCode200, error) {
+func (api *gosnappiApi) GetMetrics(metricsRequest MetricsRequest) (MetricsResponse, error) {
+	if api.hasHttpTransport() {
+		return api.httpGetMetrics(metricsRequest)
+	}
+
 	if err := api.grpcConnect(); err != nil {
 		return nil, err
 	}
@@ -390,7 +636,7 @@ func (api *gosnappiApi) GetMetrics(metricsRequest MetricsRequest) (GetMetricsRes
 		return nil, err
 	}
 	if resp.GetStatusCode_200() != nil {
-		return &getMetricsResponseStatusCode200{obj: resp.GetStatusCode_200()}, nil
+		return &metricsResponse{obj: resp.GetStatusCode_200().MetricsResponse}, nil
 	}
 	if resp.GetStatusCode_400() != nil {
 		data, _ := yaml.Marshal(resp.GetStatusCode_400())
@@ -403,7 +649,11 @@ func (api *gosnappiApi) GetMetrics(metricsRequest MetricsRequest) (GetMetricsRes
 	return nil, fmt.Errorf("response not implemented")
 }
 
-func (api *gosnappiApi) GetStateMetrics() (GetStateMetricsResponse_StatusCode200, error) {
+func (api *gosnappiApi) GetStateMetrics() (StateMetrics, error) {
+	if api.hasHttpTransport() {
+		return api.httpGetStateMetrics()
+	}
+
 	if err := api.grpcConnect(); err != nil {
 		return nil, err
 	}
@@ -415,7 +665,7 @@ func (api *gosnappiApi) GetStateMetrics() (GetStateMetricsResponse_StatusCode200
 		return nil, err
 	}
 	if resp.GetStatusCode_200() != nil {
-		return &getStateMetricsResponseStatusCode200{obj: resp.GetStatusCode_200()}, nil
+		return &stateMetrics{obj: resp.GetStatusCode_200().StateMetrics}, nil
 	}
 	if resp.GetStatusCode_400() != nil {
 		data, _ := yaml.Marshal(resp.GetStatusCode_400())
@@ -428,7 +678,11 @@ func (api *gosnappiApi) GetStateMetrics() (GetStateMetricsResponse_StatusCode200
 	return nil, fmt.Errorf("response not implemented")
 }
 
-func (api *gosnappiApi) GetCapture(captureRequest CaptureRequest) (GetCaptureResponse_StatusCode200, error) {
+func (api *gosnappiApi) GetCapture(captureRequest CaptureRequest) ([]byte, error) {
+	if api.hasHttpTransport() {
+		return api.httpGetCapture(captureRequest)
+	}
+
 	if err := api.grpcConnect(); err != nil {
 		return nil, err
 	}
@@ -440,7 +694,7 @@ func (api *gosnappiApi) GetCapture(captureRequest CaptureRequest) (GetCaptureRes
 		return nil, err
 	}
 	if resp.GetStatusCode_200() != nil {
-		return &getCaptureResponseStatusCode200{obj: resp.GetStatusCode_200()}, nil
+		return resp.GetStatusCode_200().Bytes, nil
 	}
 	if resp.GetStatusCode_400() != nil {
 		data, _ := yaml.Marshal(resp.GetStatusCode_400())
@@ -453,12 +707,285 @@ func (api *gosnappiApi) GetCapture(captureRequest CaptureRequest) (GetCaptureRes
 	return nil, fmt.Errorf("response not implemented")
 }
 
+func (api *gosnappiApi) httpSetConfig(config Config) (Success, error) {
+	rsp, err := api.httpSendRecv("config", config.ToJson(), "POST")
+	if err != nil {
+		return nil, err
+	}
+	bodyBytes, err := ioutil.ReadAll(rsp.Body)
+	defer rsp.Body.Close()
+	if err != nil {
+		return nil, err
+	}
+	if rsp.StatusCode == 200 {
+		value := snappipb.Success{}
+		dest := success{obj: &value}
+		if err := dest.FromJson(string(bodyBytes)); err != nil {
+			return nil, err
+		}
+		return &dest, nil
+	}
+	if rsp.StatusCode == 400 {
+		return nil, fmt.Errorf(string(bodyBytes))
+	}
+	if rsp.StatusCode == 500 {
+		return nil, fmt.Errorf(string(bodyBytes))
+	}
+	return nil, fmt.Errorf("response not implemented")
+}
+
+func (api *gosnappiApi) httpGetConfig() (Config, error) {
+	rsp, err := api.httpSendRecv("config", "", "GET")
+	if err != nil {
+		return nil, err
+	}
+	bodyBytes, err := ioutil.ReadAll(rsp.Body)
+	defer rsp.Body.Close()
+	if err != nil {
+		return nil, err
+	}
+	if rsp.StatusCode == 200 {
+		value := snappipb.Config{}
+		dest := config{obj: &value}
+		if err := dest.FromJson(string(bodyBytes)); err != nil {
+			return nil, err
+		}
+		return &dest, nil
+	}
+	if rsp.StatusCode == 400 {
+		return nil, fmt.Errorf(string(bodyBytes))
+	}
+	if rsp.StatusCode == 500 {
+		return nil, fmt.Errorf(string(bodyBytes))
+	}
+	return nil, fmt.Errorf("response not implemented")
+}
+
+func (api *gosnappiApi) httpSetTransmitState(transmitState TransmitState) (Success, error) {
+	rsp, err := api.httpSendRecv("control/transmit", transmitState.ToJson(), "POST")
+	if err != nil {
+		return nil, err
+	}
+	bodyBytes, err := ioutil.ReadAll(rsp.Body)
+	defer rsp.Body.Close()
+	if err != nil {
+		return nil, err
+	}
+	if rsp.StatusCode == 200 {
+		value := snappipb.Success{}
+		dest := success{obj: &value}
+		if err := dest.FromJson(string(bodyBytes)); err != nil {
+			return nil, err
+		}
+		return &dest, nil
+	}
+	if rsp.StatusCode == 400 {
+		return nil, fmt.Errorf(string(bodyBytes))
+	}
+	if rsp.StatusCode == 500 {
+		return nil, fmt.Errorf(string(bodyBytes))
+	}
+	return nil, fmt.Errorf("response not implemented")
+}
+
+func (api *gosnappiApi) httpSetLinkState(linkState LinkState) (Success, error) {
+	rsp, err := api.httpSendRecv("control/link", linkState.ToJson(), "POST")
+	if err != nil {
+		return nil, err
+	}
+	bodyBytes, err := ioutil.ReadAll(rsp.Body)
+	defer rsp.Body.Close()
+	if err != nil {
+		return nil, err
+	}
+	if rsp.StatusCode == 200 {
+		value := snappipb.Success{}
+		dest := success{obj: &value}
+		if err := dest.FromJson(string(bodyBytes)); err != nil {
+			return nil, err
+		}
+		return &dest, nil
+	}
+	if rsp.StatusCode == 400 {
+		return nil, fmt.Errorf(string(bodyBytes))
+	}
+	if rsp.StatusCode == 500 {
+		return nil, fmt.Errorf(string(bodyBytes))
+	}
+	return nil, fmt.Errorf("response not implemented")
+}
+
+func (api *gosnappiApi) httpSetCaptureState(captureState CaptureState) (Success, error) {
+	rsp, err := api.httpSendRecv("control/capture", captureState.ToJson(), "POST")
+	if err != nil {
+		return nil, err
+	}
+	bodyBytes, err := ioutil.ReadAll(rsp.Body)
+	defer rsp.Body.Close()
+	if err != nil {
+		return nil, err
+	}
+	if rsp.StatusCode == 200 {
+		value := snappipb.Success{}
+		dest := success{obj: &value}
+		if err := dest.FromJson(string(bodyBytes)); err != nil {
+			return nil, err
+		}
+		return &dest, nil
+	}
+	if rsp.StatusCode == 400 {
+		return nil, fmt.Errorf(string(bodyBytes))
+	}
+	if rsp.StatusCode == 500 {
+		return nil, fmt.Errorf(string(bodyBytes))
+	}
+	return nil, fmt.Errorf("response not implemented")
+}
+
+func (api *gosnappiApi) httpUpdateFlows(flowsUpdate FlowsUpdate) (Config, error) {
+	rsp, err := api.httpSendRecv("control/flows", flowsUpdate.ToJson(), "POST")
+	if err != nil {
+		return nil, err
+	}
+	bodyBytes, err := ioutil.ReadAll(rsp.Body)
+	defer rsp.Body.Close()
+	if err != nil {
+		return nil, err
+	}
+	if rsp.StatusCode == 200 {
+		value := snappipb.Config{}
+		dest := config{obj: &value}
+		if err := dest.FromJson(string(bodyBytes)); err != nil {
+			return nil, err
+		}
+		return &dest, nil
+	}
+	if rsp.StatusCode == 400 {
+		return nil, fmt.Errorf(string(bodyBytes))
+	}
+	if rsp.StatusCode == 500 {
+		return nil, fmt.Errorf(string(bodyBytes))
+	}
+	return nil, fmt.Errorf("response not implemented")
+}
+
+func (api *gosnappiApi) httpSetRouteState(routeState RouteState) (Success, error) {
+	rsp, err := api.httpSendRecv("control/routes", routeState.ToJson(), "POST")
+	if err != nil {
+		return nil, err
+	}
+	bodyBytes, err := ioutil.ReadAll(rsp.Body)
+	defer rsp.Body.Close()
+	if err != nil {
+		return nil, err
+	}
+	if rsp.StatusCode == 200 {
+		value := snappipb.Success{}
+		dest := success{obj: &value}
+		if err := dest.FromJson(string(bodyBytes)); err != nil {
+			return nil, err
+		}
+		return &dest, nil
+	}
+	if rsp.StatusCode == 400 {
+		return nil, fmt.Errorf(string(bodyBytes))
+	}
+	if rsp.StatusCode == 500 {
+		return nil, fmt.Errorf(string(bodyBytes))
+	}
+	return nil, fmt.Errorf("response not implemented")
+}
+
+func (api *gosnappiApi) httpGetMetrics(metricsRequest MetricsRequest) (MetricsResponse, error) {
+	rsp, err := api.httpSendRecv("results/metrics", metricsRequest.ToJson(), "POST")
+	if err != nil {
+		return nil, err
+	}
+	bodyBytes, err := ioutil.ReadAll(rsp.Body)
+	defer rsp.Body.Close()
+	if err != nil {
+		return nil, err
+	}
+	if rsp.StatusCode == 200 {
+		value := snappipb.MetricsResponse{}
+		dest := metricsResponse{obj: &value}
+		if err := dest.FromJson(string(bodyBytes)); err != nil {
+			return nil, err
+		}
+		return &dest, nil
+	}
+	if rsp.StatusCode == 400 {
+		return nil, fmt.Errorf(string(bodyBytes))
+	}
+	if rsp.StatusCode == 500 {
+		return nil, fmt.Errorf(string(bodyBytes))
+	}
+	return nil, fmt.Errorf("response not implemented")
+}
+
+func (api *gosnappiApi) httpGetStateMetrics() (StateMetrics, error) {
+	rsp, err := api.httpSendRecv("/results/state", "", "POST")
+	if err != nil {
+		return nil, err
+	}
+	bodyBytes, err := ioutil.ReadAll(rsp.Body)
+	defer rsp.Body.Close()
+	if err != nil {
+		return nil, err
+	}
+	if rsp.StatusCode == 200 {
+		value := snappipb.StateMetrics{}
+		dest := stateMetrics{obj: &value}
+		if err := dest.FromJson(string(bodyBytes)); err != nil {
+			return nil, err
+		}
+		return &dest, nil
+	}
+	if rsp.StatusCode == 400 {
+		return nil, fmt.Errorf(string(bodyBytes))
+	}
+	if rsp.StatusCode == 500 {
+		return nil, fmt.Errorf(string(bodyBytes))
+	}
+	return nil, fmt.Errorf("response not implemented")
+}
+
+func (api *gosnappiApi) httpGetCapture(captureRequest CaptureRequest) ([]byte, error) {
+	rsp, err := api.httpSendRecv("results/capture", captureRequest.ToJson(), "POST")
+	if err != nil {
+		return nil, err
+	}
+	bodyBytes, err := ioutil.ReadAll(rsp.Body)
+	defer rsp.Body.Close()
+	if err != nil {
+		return nil, err
+	}
+	if rsp.StatusCode == 200 {
+		return bodyBytes, nil
+	}
+	if rsp.StatusCode == 400 {
+		return nil, fmt.Errorf(string(bodyBytes))
+	}
+	if rsp.StatusCode == 500 {
+		return nil, fmt.Errorf(string(bodyBytes))
+	}
+	return nil, fmt.Errorf("response not implemented")
+}
+
 type config struct {
 	obj *snappipb.Config
 }
 
 func (obj *config) msg() *snappipb.Config {
 	return obj.obj
+}
+
+func (obj *config) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *config) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
 }
 
 func (obj *config) ToYaml() string {
@@ -511,8 +1038,10 @@ func (obj *config) FromJson(value string) error {
 
 type Config interface {
 	msg() *snappipb.Config
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Ports() ConfigPortIter
@@ -745,6 +1274,14 @@ func (obj *transmitState) msg() *snappipb.TransmitState {
 	return obj.obj
 }
 
+func (obj *transmitState) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *transmitState) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *transmitState) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -795,8 +1332,10 @@ func (obj *transmitState) FromJson(value string) error {
 
 type TransmitState interface {
 	msg() *snappipb.TransmitState
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	FlowNames() []string
@@ -865,6 +1404,14 @@ func (obj *linkState) msg() *snappipb.LinkState {
 	return obj.obj
 }
 
+func (obj *linkState) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *linkState) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *linkState) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -915,8 +1462,10 @@ func (obj *linkState) FromJson(value string) error {
 
 type LinkState interface {
 	msg() *snappipb.LinkState
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	PortNames() []string
@@ -983,6 +1532,14 @@ func (obj *captureState) msg() *snappipb.CaptureState {
 	return obj.obj
 }
 
+func (obj *captureState) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *captureState) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *captureState) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -1033,8 +1590,10 @@ func (obj *captureState) FromJson(value string) error {
 
 type CaptureState interface {
 	msg() *snappipb.CaptureState
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	PortNames() []string
@@ -1101,6 +1660,14 @@ func (obj *flowsUpdate) msg() *snappipb.FlowsUpdate {
 	return obj.obj
 }
 
+func (obj *flowsUpdate) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *flowsUpdate) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *flowsUpdate) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -1151,8 +1718,10 @@ func (obj *flowsUpdate) FromJson(value string) error {
 
 type FlowsUpdate interface {
 	msg() *snappipb.FlowsUpdate
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Flows() FlowsUpdateFlowIter
@@ -1196,6 +1765,14 @@ type routeState struct {
 
 func (obj *routeState) msg() *snappipb.RouteState {
 	return obj.obj
+}
+
+func (obj *routeState) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *routeState) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
 }
 
 func (obj *routeState) ToYaml() string {
@@ -1248,8 +1825,10 @@ func (obj *routeState) FromJson(value string) error {
 
 type RouteState interface {
 	msg() *snappipb.RouteState
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Names() []string
@@ -1320,6 +1899,14 @@ func (obj *metricsRequest) msg() *snappipb.MetricsRequest {
 	return obj.obj
 }
 
+func (obj *metricsRequest) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *metricsRequest) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *metricsRequest) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -1370,8 +1957,10 @@ func (obj *metricsRequest) FromJson(value string) error {
 
 type MetricsRequest interface {
 	msg() *snappipb.MetricsRequest
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() MetricsRequestChoiceEnum
@@ -1455,6 +2044,14 @@ func (obj *captureRequest) msg() *snappipb.CaptureRequest {
 	return obj.obj
 }
 
+func (obj *captureRequest) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *captureRequest) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *captureRequest) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -1505,8 +2102,10 @@ func (obj *captureRequest) FromJson(value string) error {
 
 type CaptureRequest interface {
 	msg() *snappipb.CaptureRequest
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	PortName() string
@@ -1543,12 +2142,2575 @@ func (obj *captureRequest) SetPortName(value string) CaptureRequest {
 	return obj
 }
 
+type setConfigResponse_StatusCode200 struct {
+	obj *snappipb.SetConfigResponse_StatusCode200
+}
+
+func (obj *setConfigResponse_StatusCode200) msg() *snappipb.SetConfigResponse_StatusCode200 {
+	return obj.obj
+}
+
+func (obj *setConfigResponse_StatusCode200) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *setConfigResponse_StatusCode200) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
+func (obj *setConfigResponse_StatusCode200) ToYaml() string {
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(obj.msg())
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *setConfigResponse_StatusCode200) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: true,
+	}
+	return opts.Unmarshal([]byte(data), obj.msg())
+}
+
+func (obj *setConfigResponse_StatusCode200) ToJson() string {
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+		Indent:          "  ",
+	}
+	data, err := opts.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *setConfigResponse_StatusCode200) FromJson(value string) error {
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: true,
+	}
+	return opts.Unmarshal([]byte(value), obj.msg())
+}
+
+type SetConfigResponse_StatusCode200 interface {
+	msg() *snappipb.SetConfigResponse_StatusCode200
+	ToPbText() string
+	ToYaml() string
+	ToJson() string
+	FromPbText(value string) error
+	FromYaml(value string) error
+	FromJson(value string) error
+	Success() Success
+}
+
+// Success returns a Success
+//  description is TBD
+func (obj *setConfigResponse_StatusCode200) Success() Success {
+	if obj.obj.Success == nil {
+		obj.obj.Success = &snappipb.Success{}
+	}
+
+	return &success{obj: obj.obj.Success}
+}
+
+type setConfigResponse_StatusCode400 struct {
+	obj *snappipb.SetConfigResponse_StatusCode400
+}
+
+func (obj *setConfigResponse_StatusCode400) msg() *snappipb.SetConfigResponse_StatusCode400 {
+	return obj.obj
+}
+
+func (obj *setConfigResponse_StatusCode400) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *setConfigResponse_StatusCode400) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
+func (obj *setConfigResponse_StatusCode400) ToYaml() string {
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(obj.msg())
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *setConfigResponse_StatusCode400) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: true,
+	}
+	return opts.Unmarshal([]byte(data), obj.msg())
+}
+
+func (obj *setConfigResponse_StatusCode400) ToJson() string {
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+		Indent:          "  ",
+	}
+	data, err := opts.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *setConfigResponse_StatusCode400) FromJson(value string) error {
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: true,
+	}
+	return opts.Unmarshal([]byte(value), obj.msg())
+}
+
+type SetConfigResponse_StatusCode400 interface {
+	msg() *snappipb.SetConfigResponse_StatusCode400
+	ToPbText() string
+	ToYaml() string
+	ToJson() string
+	FromPbText(value string) error
+	FromYaml(value string) error
+	FromJson(value string) error
+	BadRequest() BadRequest
+}
+
+// BadRequest returns a BadRequest
+//  description is TBD
+func (obj *setConfigResponse_StatusCode400) BadRequest() BadRequest {
+	if obj.obj.BadRequest == nil {
+		obj.obj.BadRequest = &snappipb.BadRequest{}
+	}
+
+	return &badRequest{obj: obj.obj.BadRequest}
+}
+
+type setConfigResponse_StatusCode500 struct {
+	obj *snappipb.SetConfigResponse_StatusCode500
+}
+
+func (obj *setConfigResponse_StatusCode500) msg() *snappipb.SetConfigResponse_StatusCode500 {
+	return obj.obj
+}
+
+func (obj *setConfigResponse_StatusCode500) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *setConfigResponse_StatusCode500) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
+func (obj *setConfigResponse_StatusCode500) ToYaml() string {
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(obj.msg())
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *setConfigResponse_StatusCode500) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: true,
+	}
+	return opts.Unmarshal([]byte(data), obj.msg())
+}
+
+func (obj *setConfigResponse_StatusCode500) ToJson() string {
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+		Indent:          "  ",
+	}
+	data, err := opts.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *setConfigResponse_StatusCode500) FromJson(value string) error {
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: true,
+	}
+	return opts.Unmarshal([]byte(value), obj.msg())
+}
+
+type SetConfigResponse_StatusCode500 interface {
+	msg() *snappipb.SetConfigResponse_StatusCode500
+	ToPbText() string
+	ToYaml() string
+	ToJson() string
+	FromPbText(value string) error
+	FromYaml(value string) error
+	FromJson(value string) error
+	InternalServerError() InternalServerError
+}
+
+// InternalServerError returns a InternalServerError
+//  description is TBD
+func (obj *setConfigResponse_StatusCode500) InternalServerError() InternalServerError {
+	if obj.obj.InternalServerError == nil {
+		obj.obj.InternalServerError = &snappipb.InternalServerError{}
+	}
+
+	return &internalServerError{obj: obj.obj.InternalServerError}
+}
+
+type getConfigResponse_StatusCode200 struct {
+	obj *snappipb.GetConfigResponse_StatusCode200
+}
+
+func (obj *getConfigResponse_StatusCode200) msg() *snappipb.GetConfigResponse_StatusCode200 {
+	return obj.obj
+}
+
+func (obj *getConfigResponse_StatusCode200) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *getConfigResponse_StatusCode200) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
+func (obj *getConfigResponse_StatusCode200) ToYaml() string {
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(obj.msg())
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *getConfigResponse_StatusCode200) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: true,
+	}
+	return opts.Unmarshal([]byte(data), obj.msg())
+}
+
+func (obj *getConfigResponse_StatusCode200) ToJson() string {
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+		Indent:          "  ",
+	}
+	data, err := opts.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *getConfigResponse_StatusCode200) FromJson(value string) error {
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: true,
+	}
+	return opts.Unmarshal([]byte(value), obj.msg())
+}
+
+type GetConfigResponse_StatusCode200 interface {
+	msg() *snappipb.GetConfigResponse_StatusCode200
+	ToPbText() string
+	ToYaml() string
+	ToJson() string
+	FromPbText(value string) error
+	FromYaml(value string) error
+	FromJson(value string) error
+	Config() Config
+}
+
+// Config returns a Config
+//  description is TBD
+func (obj *getConfigResponse_StatusCode200) Config() Config {
+	if obj.obj.Config == nil {
+		obj.obj.Config = &snappipb.Config{}
+	}
+
+	return &config{obj: obj.obj.Config}
+}
+
+type getConfigResponse_StatusCode400 struct {
+	obj *snappipb.GetConfigResponse_StatusCode400
+}
+
+func (obj *getConfigResponse_StatusCode400) msg() *snappipb.GetConfigResponse_StatusCode400 {
+	return obj.obj
+}
+
+func (obj *getConfigResponse_StatusCode400) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *getConfigResponse_StatusCode400) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
+func (obj *getConfigResponse_StatusCode400) ToYaml() string {
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(obj.msg())
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *getConfigResponse_StatusCode400) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: true,
+	}
+	return opts.Unmarshal([]byte(data), obj.msg())
+}
+
+func (obj *getConfigResponse_StatusCode400) ToJson() string {
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+		Indent:          "  ",
+	}
+	data, err := opts.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *getConfigResponse_StatusCode400) FromJson(value string) error {
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: true,
+	}
+	return opts.Unmarshal([]byte(value), obj.msg())
+}
+
+type GetConfigResponse_StatusCode400 interface {
+	msg() *snappipb.GetConfigResponse_StatusCode400
+	ToPbText() string
+	ToYaml() string
+	ToJson() string
+	FromPbText(value string) error
+	FromYaml(value string) error
+	FromJson(value string) error
+	BadRequest() BadRequest
+}
+
+// BadRequest returns a BadRequest
+//  description is TBD
+func (obj *getConfigResponse_StatusCode400) BadRequest() BadRequest {
+	if obj.obj.BadRequest == nil {
+		obj.obj.BadRequest = &snappipb.BadRequest{}
+	}
+
+	return &badRequest{obj: obj.obj.BadRequest}
+}
+
+type getConfigResponse_StatusCode500 struct {
+	obj *snappipb.GetConfigResponse_StatusCode500
+}
+
+func (obj *getConfigResponse_StatusCode500) msg() *snappipb.GetConfigResponse_StatusCode500 {
+	return obj.obj
+}
+
+func (obj *getConfigResponse_StatusCode500) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *getConfigResponse_StatusCode500) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
+func (obj *getConfigResponse_StatusCode500) ToYaml() string {
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(obj.msg())
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *getConfigResponse_StatusCode500) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: true,
+	}
+	return opts.Unmarshal([]byte(data), obj.msg())
+}
+
+func (obj *getConfigResponse_StatusCode500) ToJson() string {
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+		Indent:          "  ",
+	}
+	data, err := opts.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *getConfigResponse_StatusCode500) FromJson(value string) error {
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: true,
+	}
+	return opts.Unmarshal([]byte(value), obj.msg())
+}
+
+type GetConfigResponse_StatusCode500 interface {
+	msg() *snappipb.GetConfigResponse_StatusCode500
+	ToPbText() string
+	ToYaml() string
+	ToJson() string
+	FromPbText(value string) error
+	FromYaml(value string) error
+	FromJson(value string) error
+	InternalServerError() InternalServerError
+}
+
+// InternalServerError returns a InternalServerError
+//  description is TBD
+func (obj *getConfigResponse_StatusCode500) InternalServerError() InternalServerError {
+	if obj.obj.InternalServerError == nil {
+		obj.obj.InternalServerError = &snappipb.InternalServerError{}
+	}
+
+	return &internalServerError{obj: obj.obj.InternalServerError}
+}
+
+type setTransmitStateResponse_StatusCode200 struct {
+	obj *snappipb.SetTransmitStateResponse_StatusCode200
+}
+
+func (obj *setTransmitStateResponse_StatusCode200) msg() *snappipb.SetTransmitStateResponse_StatusCode200 {
+	return obj.obj
+}
+
+func (obj *setTransmitStateResponse_StatusCode200) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *setTransmitStateResponse_StatusCode200) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
+func (obj *setTransmitStateResponse_StatusCode200) ToYaml() string {
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(obj.msg())
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *setTransmitStateResponse_StatusCode200) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: true,
+	}
+	return opts.Unmarshal([]byte(data), obj.msg())
+}
+
+func (obj *setTransmitStateResponse_StatusCode200) ToJson() string {
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+		Indent:          "  ",
+	}
+	data, err := opts.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *setTransmitStateResponse_StatusCode200) FromJson(value string) error {
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: true,
+	}
+	return opts.Unmarshal([]byte(value), obj.msg())
+}
+
+type SetTransmitStateResponse_StatusCode200 interface {
+	msg() *snappipb.SetTransmitStateResponse_StatusCode200
+	ToPbText() string
+	ToYaml() string
+	ToJson() string
+	FromPbText(value string) error
+	FromYaml(value string) error
+	FromJson(value string) error
+	Success() Success
+}
+
+// Success returns a Success
+//  description is TBD
+func (obj *setTransmitStateResponse_StatusCode200) Success() Success {
+	if obj.obj.Success == nil {
+		obj.obj.Success = &snappipb.Success{}
+	}
+
+	return &success{obj: obj.obj.Success}
+}
+
+type setTransmitStateResponse_StatusCode400 struct {
+	obj *snappipb.SetTransmitStateResponse_StatusCode400
+}
+
+func (obj *setTransmitStateResponse_StatusCode400) msg() *snappipb.SetTransmitStateResponse_StatusCode400 {
+	return obj.obj
+}
+
+func (obj *setTransmitStateResponse_StatusCode400) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *setTransmitStateResponse_StatusCode400) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
+func (obj *setTransmitStateResponse_StatusCode400) ToYaml() string {
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(obj.msg())
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *setTransmitStateResponse_StatusCode400) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: true,
+	}
+	return opts.Unmarshal([]byte(data), obj.msg())
+}
+
+func (obj *setTransmitStateResponse_StatusCode400) ToJson() string {
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+		Indent:          "  ",
+	}
+	data, err := opts.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *setTransmitStateResponse_StatusCode400) FromJson(value string) error {
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: true,
+	}
+	return opts.Unmarshal([]byte(value), obj.msg())
+}
+
+type SetTransmitStateResponse_StatusCode400 interface {
+	msg() *snappipb.SetTransmitStateResponse_StatusCode400
+	ToPbText() string
+	ToYaml() string
+	ToJson() string
+	FromPbText(value string) error
+	FromYaml(value string) error
+	FromJson(value string) error
+	BadRequest() BadRequest
+}
+
+// BadRequest returns a BadRequest
+//  description is TBD
+func (obj *setTransmitStateResponse_StatusCode400) BadRequest() BadRequest {
+	if obj.obj.BadRequest == nil {
+		obj.obj.BadRequest = &snappipb.BadRequest{}
+	}
+
+	return &badRequest{obj: obj.obj.BadRequest}
+}
+
+type setTransmitStateResponse_StatusCode500 struct {
+	obj *snappipb.SetTransmitStateResponse_StatusCode500
+}
+
+func (obj *setTransmitStateResponse_StatusCode500) msg() *snappipb.SetTransmitStateResponse_StatusCode500 {
+	return obj.obj
+}
+
+func (obj *setTransmitStateResponse_StatusCode500) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *setTransmitStateResponse_StatusCode500) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
+func (obj *setTransmitStateResponse_StatusCode500) ToYaml() string {
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(obj.msg())
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *setTransmitStateResponse_StatusCode500) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: true,
+	}
+	return opts.Unmarshal([]byte(data), obj.msg())
+}
+
+func (obj *setTransmitStateResponse_StatusCode500) ToJson() string {
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+		Indent:          "  ",
+	}
+	data, err := opts.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *setTransmitStateResponse_StatusCode500) FromJson(value string) error {
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: true,
+	}
+	return opts.Unmarshal([]byte(value), obj.msg())
+}
+
+type SetTransmitStateResponse_StatusCode500 interface {
+	msg() *snappipb.SetTransmitStateResponse_StatusCode500
+	ToPbText() string
+	ToYaml() string
+	ToJson() string
+	FromPbText(value string) error
+	FromYaml(value string) error
+	FromJson(value string) error
+	InternalServerError() InternalServerError
+}
+
+// InternalServerError returns a InternalServerError
+//  description is TBD
+func (obj *setTransmitStateResponse_StatusCode500) InternalServerError() InternalServerError {
+	if obj.obj.InternalServerError == nil {
+		obj.obj.InternalServerError = &snappipb.InternalServerError{}
+	}
+
+	return &internalServerError{obj: obj.obj.InternalServerError}
+}
+
+type setLinkStateResponse_StatusCode200 struct {
+	obj *snappipb.SetLinkStateResponse_StatusCode200
+}
+
+func (obj *setLinkStateResponse_StatusCode200) msg() *snappipb.SetLinkStateResponse_StatusCode200 {
+	return obj.obj
+}
+
+func (obj *setLinkStateResponse_StatusCode200) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *setLinkStateResponse_StatusCode200) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
+func (obj *setLinkStateResponse_StatusCode200) ToYaml() string {
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(obj.msg())
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *setLinkStateResponse_StatusCode200) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: true,
+	}
+	return opts.Unmarshal([]byte(data), obj.msg())
+}
+
+func (obj *setLinkStateResponse_StatusCode200) ToJson() string {
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+		Indent:          "  ",
+	}
+	data, err := opts.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *setLinkStateResponse_StatusCode200) FromJson(value string) error {
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: true,
+	}
+	return opts.Unmarshal([]byte(value), obj.msg())
+}
+
+type SetLinkStateResponse_StatusCode200 interface {
+	msg() *snappipb.SetLinkStateResponse_StatusCode200
+	ToPbText() string
+	ToYaml() string
+	ToJson() string
+	FromPbText(value string) error
+	FromYaml(value string) error
+	FromJson(value string) error
+	Success() Success
+}
+
+// Success returns a Success
+//  description is TBD
+func (obj *setLinkStateResponse_StatusCode200) Success() Success {
+	if obj.obj.Success == nil {
+		obj.obj.Success = &snappipb.Success{}
+	}
+
+	return &success{obj: obj.obj.Success}
+}
+
+type setLinkStateResponse_StatusCode400 struct {
+	obj *snappipb.SetLinkStateResponse_StatusCode400
+}
+
+func (obj *setLinkStateResponse_StatusCode400) msg() *snappipb.SetLinkStateResponse_StatusCode400 {
+	return obj.obj
+}
+
+func (obj *setLinkStateResponse_StatusCode400) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *setLinkStateResponse_StatusCode400) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
+func (obj *setLinkStateResponse_StatusCode400) ToYaml() string {
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(obj.msg())
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *setLinkStateResponse_StatusCode400) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: true,
+	}
+	return opts.Unmarshal([]byte(data), obj.msg())
+}
+
+func (obj *setLinkStateResponse_StatusCode400) ToJson() string {
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+		Indent:          "  ",
+	}
+	data, err := opts.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *setLinkStateResponse_StatusCode400) FromJson(value string) error {
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: true,
+	}
+	return opts.Unmarshal([]byte(value), obj.msg())
+}
+
+type SetLinkStateResponse_StatusCode400 interface {
+	msg() *snappipb.SetLinkStateResponse_StatusCode400
+	ToPbText() string
+	ToYaml() string
+	ToJson() string
+	FromPbText(value string) error
+	FromYaml(value string) error
+	FromJson(value string) error
+	BadRequest() BadRequest
+}
+
+// BadRequest returns a BadRequest
+//  description is TBD
+func (obj *setLinkStateResponse_StatusCode400) BadRequest() BadRequest {
+	if obj.obj.BadRequest == nil {
+		obj.obj.BadRequest = &snappipb.BadRequest{}
+	}
+
+	return &badRequest{obj: obj.obj.BadRequest}
+}
+
+type setLinkStateResponse_StatusCode500 struct {
+	obj *snappipb.SetLinkStateResponse_StatusCode500
+}
+
+func (obj *setLinkStateResponse_StatusCode500) msg() *snappipb.SetLinkStateResponse_StatusCode500 {
+	return obj.obj
+}
+
+func (obj *setLinkStateResponse_StatusCode500) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *setLinkStateResponse_StatusCode500) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
+func (obj *setLinkStateResponse_StatusCode500) ToYaml() string {
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(obj.msg())
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *setLinkStateResponse_StatusCode500) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: true,
+	}
+	return opts.Unmarshal([]byte(data), obj.msg())
+}
+
+func (obj *setLinkStateResponse_StatusCode500) ToJson() string {
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+		Indent:          "  ",
+	}
+	data, err := opts.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *setLinkStateResponse_StatusCode500) FromJson(value string) error {
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: true,
+	}
+	return opts.Unmarshal([]byte(value), obj.msg())
+}
+
+type SetLinkStateResponse_StatusCode500 interface {
+	msg() *snappipb.SetLinkStateResponse_StatusCode500
+	ToPbText() string
+	ToYaml() string
+	ToJson() string
+	FromPbText(value string) error
+	FromYaml(value string) error
+	FromJson(value string) error
+	InternalServerError() InternalServerError
+}
+
+// InternalServerError returns a InternalServerError
+//  description is TBD
+func (obj *setLinkStateResponse_StatusCode500) InternalServerError() InternalServerError {
+	if obj.obj.InternalServerError == nil {
+		obj.obj.InternalServerError = &snappipb.InternalServerError{}
+	}
+
+	return &internalServerError{obj: obj.obj.InternalServerError}
+}
+
+type setCaptureStateResponse_StatusCode200 struct {
+	obj *snappipb.SetCaptureStateResponse_StatusCode200
+}
+
+func (obj *setCaptureStateResponse_StatusCode200) msg() *snappipb.SetCaptureStateResponse_StatusCode200 {
+	return obj.obj
+}
+
+func (obj *setCaptureStateResponse_StatusCode200) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *setCaptureStateResponse_StatusCode200) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
+func (obj *setCaptureStateResponse_StatusCode200) ToYaml() string {
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(obj.msg())
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *setCaptureStateResponse_StatusCode200) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: true,
+	}
+	return opts.Unmarshal([]byte(data), obj.msg())
+}
+
+func (obj *setCaptureStateResponse_StatusCode200) ToJson() string {
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+		Indent:          "  ",
+	}
+	data, err := opts.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *setCaptureStateResponse_StatusCode200) FromJson(value string) error {
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: true,
+	}
+	return opts.Unmarshal([]byte(value), obj.msg())
+}
+
+type SetCaptureStateResponse_StatusCode200 interface {
+	msg() *snappipb.SetCaptureStateResponse_StatusCode200
+	ToPbText() string
+	ToYaml() string
+	ToJson() string
+	FromPbText(value string) error
+	FromYaml(value string) error
+	FromJson(value string) error
+	Success() Success
+}
+
+// Success returns a Success
+//  description is TBD
+func (obj *setCaptureStateResponse_StatusCode200) Success() Success {
+	if obj.obj.Success == nil {
+		obj.obj.Success = &snappipb.Success{}
+	}
+
+	return &success{obj: obj.obj.Success}
+}
+
+type setCaptureStateResponse_StatusCode400 struct {
+	obj *snappipb.SetCaptureStateResponse_StatusCode400
+}
+
+func (obj *setCaptureStateResponse_StatusCode400) msg() *snappipb.SetCaptureStateResponse_StatusCode400 {
+	return obj.obj
+}
+
+func (obj *setCaptureStateResponse_StatusCode400) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *setCaptureStateResponse_StatusCode400) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
+func (obj *setCaptureStateResponse_StatusCode400) ToYaml() string {
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(obj.msg())
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *setCaptureStateResponse_StatusCode400) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: true,
+	}
+	return opts.Unmarshal([]byte(data), obj.msg())
+}
+
+func (obj *setCaptureStateResponse_StatusCode400) ToJson() string {
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+		Indent:          "  ",
+	}
+	data, err := opts.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *setCaptureStateResponse_StatusCode400) FromJson(value string) error {
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: true,
+	}
+	return opts.Unmarshal([]byte(value), obj.msg())
+}
+
+type SetCaptureStateResponse_StatusCode400 interface {
+	msg() *snappipb.SetCaptureStateResponse_StatusCode400
+	ToPbText() string
+	ToYaml() string
+	ToJson() string
+	FromPbText(value string) error
+	FromYaml(value string) error
+	FromJson(value string) error
+	BadRequest() BadRequest
+}
+
+// BadRequest returns a BadRequest
+//  description is TBD
+func (obj *setCaptureStateResponse_StatusCode400) BadRequest() BadRequest {
+	if obj.obj.BadRequest == nil {
+		obj.obj.BadRequest = &snappipb.BadRequest{}
+	}
+
+	return &badRequest{obj: obj.obj.BadRequest}
+}
+
+type setCaptureStateResponse_StatusCode500 struct {
+	obj *snappipb.SetCaptureStateResponse_StatusCode500
+}
+
+func (obj *setCaptureStateResponse_StatusCode500) msg() *snappipb.SetCaptureStateResponse_StatusCode500 {
+	return obj.obj
+}
+
+func (obj *setCaptureStateResponse_StatusCode500) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *setCaptureStateResponse_StatusCode500) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
+func (obj *setCaptureStateResponse_StatusCode500) ToYaml() string {
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(obj.msg())
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *setCaptureStateResponse_StatusCode500) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: true,
+	}
+	return opts.Unmarshal([]byte(data), obj.msg())
+}
+
+func (obj *setCaptureStateResponse_StatusCode500) ToJson() string {
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+		Indent:          "  ",
+	}
+	data, err := opts.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *setCaptureStateResponse_StatusCode500) FromJson(value string) error {
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: true,
+	}
+	return opts.Unmarshal([]byte(value), obj.msg())
+}
+
+type SetCaptureStateResponse_StatusCode500 interface {
+	msg() *snappipb.SetCaptureStateResponse_StatusCode500
+	ToPbText() string
+	ToYaml() string
+	ToJson() string
+	FromPbText(value string) error
+	FromYaml(value string) error
+	FromJson(value string) error
+	InternalServerError() InternalServerError
+}
+
+// InternalServerError returns a InternalServerError
+//  description is TBD
+func (obj *setCaptureStateResponse_StatusCode500) InternalServerError() InternalServerError {
+	if obj.obj.InternalServerError == nil {
+		obj.obj.InternalServerError = &snappipb.InternalServerError{}
+	}
+
+	return &internalServerError{obj: obj.obj.InternalServerError}
+}
+
+type updateFlowsResponse_StatusCode200 struct {
+	obj *snappipb.UpdateFlowsResponse_StatusCode200
+}
+
+func (obj *updateFlowsResponse_StatusCode200) msg() *snappipb.UpdateFlowsResponse_StatusCode200 {
+	return obj.obj
+}
+
+func (obj *updateFlowsResponse_StatusCode200) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *updateFlowsResponse_StatusCode200) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
+func (obj *updateFlowsResponse_StatusCode200) ToYaml() string {
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(obj.msg())
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *updateFlowsResponse_StatusCode200) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: true,
+	}
+	return opts.Unmarshal([]byte(data), obj.msg())
+}
+
+func (obj *updateFlowsResponse_StatusCode200) ToJson() string {
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+		Indent:          "  ",
+	}
+	data, err := opts.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *updateFlowsResponse_StatusCode200) FromJson(value string) error {
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: true,
+	}
+	return opts.Unmarshal([]byte(value), obj.msg())
+}
+
+type UpdateFlowsResponse_StatusCode200 interface {
+	msg() *snappipb.UpdateFlowsResponse_StatusCode200
+	ToPbText() string
+	ToYaml() string
+	ToJson() string
+	FromPbText(value string) error
+	FromYaml(value string) error
+	FromJson(value string) error
+	Config() Config
+}
+
+// Config returns a Config
+//  description is TBD
+func (obj *updateFlowsResponse_StatusCode200) Config() Config {
+	if obj.obj.Config == nil {
+		obj.obj.Config = &snappipb.Config{}
+	}
+
+	return &config{obj: obj.obj.Config}
+}
+
+type updateFlowsResponse_StatusCode400 struct {
+	obj *snappipb.UpdateFlowsResponse_StatusCode400
+}
+
+func (obj *updateFlowsResponse_StatusCode400) msg() *snappipb.UpdateFlowsResponse_StatusCode400 {
+	return obj.obj
+}
+
+func (obj *updateFlowsResponse_StatusCode400) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *updateFlowsResponse_StatusCode400) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
+func (obj *updateFlowsResponse_StatusCode400) ToYaml() string {
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(obj.msg())
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *updateFlowsResponse_StatusCode400) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: true,
+	}
+	return opts.Unmarshal([]byte(data), obj.msg())
+}
+
+func (obj *updateFlowsResponse_StatusCode400) ToJson() string {
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+		Indent:          "  ",
+	}
+	data, err := opts.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *updateFlowsResponse_StatusCode400) FromJson(value string) error {
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: true,
+	}
+	return opts.Unmarshal([]byte(value), obj.msg())
+}
+
+type UpdateFlowsResponse_StatusCode400 interface {
+	msg() *snappipb.UpdateFlowsResponse_StatusCode400
+	ToPbText() string
+	ToYaml() string
+	ToJson() string
+	FromPbText(value string) error
+	FromYaml(value string) error
+	FromJson(value string) error
+	BadRequest() BadRequest
+}
+
+// BadRequest returns a BadRequest
+//  description is TBD
+func (obj *updateFlowsResponse_StatusCode400) BadRequest() BadRequest {
+	if obj.obj.BadRequest == nil {
+		obj.obj.BadRequest = &snappipb.BadRequest{}
+	}
+
+	return &badRequest{obj: obj.obj.BadRequest}
+}
+
+type updateFlowsResponse_StatusCode500 struct {
+	obj *snappipb.UpdateFlowsResponse_StatusCode500
+}
+
+func (obj *updateFlowsResponse_StatusCode500) msg() *snappipb.UpdateFlowsResponse_StatusCode500 {
+	return obj.obj
+}
+
+func (obj *updateFlowsResponse_StatusCode500) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *updateFlowsResponse_StatusCode500) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
+func (obj *updateFlowsResponse_StatusCode500) ToYaml() string {
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(obj.msg())
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *updateFlowsResponse_StatusCode500) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: true,
+	}
+	return opts.Unmarshal([]byte(data), obj.msg())
+}
+
+func (obj *updateFlowsResponse_StatusCode500) ToJson() string {
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+		Indent:          "  ",
+	}
+	data, err := opts.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *updateFlowsResponse_StatusCode500) FromJson(value string) error {
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: true,
+	}
+	return opts.Unmarshal([]byte(value), obj.msg())
+}
+
+type UpdateFlowsResponse_StatusCode500 interface {
+	msg() *snappipb.UpdateFlowsResponse_StatusCode500
+	ToPbText() string
+	ToYaml() string
+	ToJson() string
+	FromPbText(value string) error
+	FromYaml(value string) error
+	FromJson(value string) error
+	InternalServerError() InternalServerError
+}
+
+// InternalServerError returns a InternalServerError
+//  description is TBD
+func (obj *updateFlowsResponse_StatusCode500) InternalServerError() InternalServerError {
+	if obj.obj.InternalServerError == nil {
+		obj.obj.InternalServerError = &snappipb.InternalServerError{}
+	}
+
+	return &internalServerError{obj: obj.obj.InternalServerError}
+}
+
+type setRouteStateResponse_StatusCode200 struct {
+	obj *snappipb.SetRouteStateResponse_StatusCode200
+}
+
+func (obj *setRouteStateResponse_StatusCode200) msg() *snappipb.SetRouteStateResponse_StatusCode200 {
+	return obj.obj
+}
+
+func (obj *setRouteStateResponse_StatusCode200) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *setRouteStateResponse_StatusCode200) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
+func (obj *setRouteStateResponse_StatusCode200) ToYaml() string {
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(obj.msg())
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *setRouteStateResponse_StatusCode200) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: true,
+	}
+	return opts.Unmarshal([]byte(data), obj.msg())
+}
+
+func (obj *setRouteStateResponse_StatusCode200) ToJson() string {
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+		Indent:          "  ",
+	}
+	data, err := opts.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *setRouteStateResponse_StatusCode200) FromJson(value string) error {
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: true,
+	}
+	return opts.Unmarshal([]byte(value), obj.msg())
+}
+
+type SetRouteStateResponse_StatusCode200 interface {
+	msg() *snappipb.SetRouteStateResponse_StatusCode200
+	ToPbText() string
+	ToYaml() string
+	ToJson() string
+	FromPbText(value string) error
+	FromYaml(value string) error
+	FromJson(value string) error
+	Success() Success
+}
+
+// Success returns a Success
+//  description is TBD
+func (obj *setRouteStateResponse_StatusCode200) Success() Success {
+	if obj.obj.Success == nil {
+		obj.obj.Success = &snappipb.Success{}
+	}
+
+	return &success{obj: obj.obj.Success}
+}
+
+type setRouteStateResponse_StatusCode400 struct {
+	obj *snappipb.SetRouteStateResponse_StatusCode400
+}
+
+func (obj *setRouteStateResponse_StatusCode400) msg() *snappipb.SetRouteStateResponse_StatusCode400 {
+	return obj.obj
+}
+
+func (obj *setRouteStateResponse_StatusCode400) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *setRouteStateResponse_StatusCode400) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
+func (obj *setRouteStateResponse_StatusCode400) ToYaml() string {
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(obj.msg())
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *setRouteStateResponse_StatusCode400) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: true,
+	}
+	return opts.Unmarshal([]byte(data), obj.msg())
+}
+
+func (obj *setRouteStateResponse_StatusCode400) ToJson() string {
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+		Indent:          "  ",
+	}
+	data, err := opts.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *setRouteStateResponse_StatusCode400) FromJson(value string) error {
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: true,
+	}
+	return opts.Unmarshal([]byte(value), obj.msg())
+}
+
+type SetRouteStateResponse_StatusCode400 interface {
+	msg() *snappipb.SetRouteStateResponse_StatusCode400
+	ToPbText() string
+	ToYaml() string
+	ToJson() string
+	FromPbText(value string) error
+	FromYaml(value string) error
+	FromJson(value string) error
+	BadRequest() BadRequest
+}
+
+// BadRequest returns a BadRequest
+//  description is TBD
+func (obj *setRouteStateResponse_StatusCode400) BadRequest() BadRequest {
+	if obj.obj.BadRequest == nil {
+		obj.obj.BadRequest = &snappipb.BadRequest{}
+	}
+
+	return &badRequest{obj: obj.obj.BadRequest}
+}
+
+type setRouteStateResponse_StatusCode500 struct {
+	obj *snappipb.SetRouteStateResponse_StatusCode500
+}
+
+func (obj *setRouteStateResponse_StatusCode500) msg() *snappipb.SetRouteStateResponse_StatusCode500 {
+	return obj.obj
+}
+
+func (obj *setRouteStateResponse_StatusCode500) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *setRouteStateResponse_StatusCode500) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
+func (obj *setRouteStateResponse_StatusCode500) ToYaml() string {
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(obj.msg())
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *setRouteStateResponse_StatusCode500) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: true,
+	}
+	return opts.Unmarshal([]byte(data), obj.msg())
+}
+
+func (obj *setRouteStateResponse_StatusCode500) ToJson() string {
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+		Indent:          "  ",
+	}
+	data, err := opts.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *setRouteStateResponse_StatusCode500) FromJson(value string) error {
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: true,
+	}
+	return opts.Unmarshal([]byte(value), obj.msg())
+}
+
+type SetRouteStateResponse_StatusCode500 interface {
+	msg() *snappipb.SetRouteStateResponse_StatusCode500
+	ToPbText() string
+	ToYaml() string
+	ToJson() string
+	FromPbText(value string) error
+	FromYaml(value string) error
+	FromJson(value string) error
+	InternalServerError() InternalServerError
+}
+
+// InternalServerError returns a InternalServerError
+//  description is TBD
+func (obj *setRouteStateResponse_StatusCode500) InternalServerError() InternalServerError {
+	if obj.obj.InternalServerError == nil {
+		obj.obj.InternalServerError = &snappipb.InternalServerError{}
+	}
+
+	return &internalServerError{obj: obj.obj.InternalServerError}
+}
+
+type getMetricsResponse_StatusCode200 struct {
+	obj *snappipb.GetMetricsResponse_StatusCode200
+}
+
+func (obj *getMetricsResponse_StatusCode200) msg() *snappipb.GetMetricsResponse_StatusCode200 {
+	return obj.obj
+}
+
+func (obj *getMetricsResponse_StatusCode200) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *getMetricsResponse_StatusCode200) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
+func (obj *getMetricsResponse_StatusCode200) ToYaml() string {
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(obj.msg())
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *getMetricsResponse_StatusCode200) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: true,
+	}
+	return opts.Unmarshal([]byte(data), obj.msg())
+}
+
+func (obj *getMetricsResponse_StatusCode200) ToJson() string {
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+		Indent:          "  ",
+	}
+	data, err := opts.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *getMetricsResponse_StatusCode200) FromJson(value string) error {
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: true,
+	}
+	return opts.Unmarshal([]byte(value), obj.msg())
+}
+
+type GetMetricsResponse_StatusCode200 interface {
+	msg() *snappipb.GetMetricsResponse_StatusCode200
+	ToPbText() string
+	ToYaml() string
+	ToJson() string
+	FromPbText(value string) error
+	FromYaml(value string) error
+	FromJson(value string) error
+	MetricsResponse() MetricsResponse
+}
+
+// MetricsResponse returns a MetricsResponse
+//  description is TBD
+func (obj *getMetricsResponse_StatusCode200) MetricsResponse() MetricsResponse {
+	if obj.obj.MetricsResponse == nil {
+		obj.obj.MetricsResponse = &snappipb.MetricsResponse{}
+	}
+
+	return &metricsResponse{obj: obj.obj.MetricsResponse}
+}
+
+type getMetricsResponse_StatusCode400 struct {
+	obj *snappipb.GetMetricsResponse_StatusCode400
+}
+
+func (obj *getMetricsResponse_StatusCode400) msg() *snappipb.GetMetricsResponse_StatusCode400 {
+	return obj.obj
+}
+
+func (obj *getMetricsResponse_StatusCode400) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *getMetricsResponse_StatusCode400) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
+func (obj *getMetricsResponse_StatusCode400) ToYaml() string {
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(obj.msg())
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *getMetricsResponse_StatusCode400) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: true,
+	}
+	return opts.Unmarshal([]byte(data), obj.msg())
+}
+
+func (obj *getMetricsResponse_StatusCode400) ToJson() string {
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+		Indent:          "  ",
+	}
+	data, err := opts.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *getMetricsResponse_StatusCode400) FromJson(value string) error {
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: true,
+	}
+	return opts.Unmarshal([]byte(value), obj.msg())
+}
+
+type GetMetricsResponse_StatusCode400 interface {
+	msg() *snappipb.GetMetricsResponse_StatusCode400
+	ToPbText() string
+	ToYaml() string
+	ToJson() string
+	FromPbText(value string) error
+	FromYaml(value string) error
+	FromJson(value string) error
+	BadRequest() BadRequest
+}
+
+// BadRequest returns a BadRequest
+//  description is TBD
+func (obj *getMetricsResponse_StatusCode400) BadRequest() BadRequest {
+	if obj.obj.BadRequest == nil {
+		obj.obj.BadRequest = &snappipb.BadRequest{}
+	}
+
+	return &badRequest{obj: obj.obj.BadRequest}
+}
+
+type getMetricsResponse_StatusCode500 struct {
+	obj *snappipb.GetMetricsResponse_StatusCode500
+}
+
+func (obj *getMetricsResponse_StatusCode500) msg() *snappipb.GetMetricsResponse_StatusCode500 {
+	return obj.obj
+}
+
+func (obj *getMetricsResponse_StatusCode500) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *getMetricsResponse_StatusCode500) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
+func (obj *getMetricsResponse_StatusCode500) ToYaml() string {
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(obj.msg())
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *getMetricsResponse_StatusCode500) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: true,
+	}
+	return opts.Unmarshal([]byte(data), obj.msg())
+}
+
+func (obj *getMetricsResponse_StatusCode500) ToJson() string {
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+		Indent:          "  ",
+	}
+	data, err := opts.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *getMetricsResponse_StatusCode500) FromJson(value string) error {
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: true,
+	}
+	return opts.Unmarshal([]byte(value), obj.msg())
+}
+
+type GetMetricsResponse_StatusCode500 interface {
+	msg() *snappipb.GetMetricsResponse_StatusCode500
+	ToPbText() string
+	ToYaml() string
+	ToJson() string
+	FromPbText(value string) error
+	FromYaml(value string) error
+	FromJson(value string) error
+	InternalServerError() InternalServerError
+}
+
+// InternalServerError returns a InternalServerError
+//  description is TBD
+func (obj *getMetricsResponse_StatusCode500) InternalServerError() InternalServerError {
+	if obj.obj.InternalServerError == nil {
+		obj.obj.InternalServerError = &snappipb.InternalServerError{}
+	}
+
+	return &internalServerError{obj: obj.obj.InternalServerError}
+}
+
+type getStateMetricsResponse_StatusCode200 struct {
+	obj *snappipb.GetStateMetricsResponse_StatusCode200
+}
+
+func (obj *getStateMetricsResponse_StatusCode200) msg() *snappipb.GetStateMetricsResponse_StatusCode200 {
+	return obj.obj
+}
+
+func (obj *getStateMetricsResponse_StatusCode200) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *getStateMetricsResponse_StatusCode200) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
+func (obj *getStateMetricsResponse_StatusCode200) ToYaml() string {
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(obj.msg())
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *getStateMetricsResponse_StatusCode200) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: true,
+	}
+	return opts.Unmarshal([]byte(data), obj.msg())
+}
+
+func (obj *getStateMetricsResponse_StatusCode200) ToJson() string {
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+		Indent:          "  ",
+	}
+	data, err := opts.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *getStateMetricsResponse_StatusCode200) FromJson(value string) error {
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: true,
+	}
+	return opts.Unmarshal([]byte(value), obj.msg())
+}
+
+type GetStateMetricsResponse_StatusCode200 interface {
+	msg() *snappipb.GetStateMetricsResponse_StatusCode200
+	ToPbText() string
+	ToYaml() string
+	ToJson() string
+	FromPbText(value string) error
+	FromYaml(value string) error
+	FromJson(value string) error
+	StateMetrics() StateMetrics
+}
+
+// StateMetrics returns a StateMetrics
+//  description is TBD
+func (obj *getStateMetricsResponse_StatusCode200) StateMetrics() StateMetrics {
+	if obj.obj.StateMetrics == nil {
+		obj.obj.StateMetrics = &snappipb.StateMetrics{}
+	}
+
+	return &stateMetrics{obj: obj.obj.StateMetrics}
+}
+
+type getStateMetricsResponse_StatusCode400 struct {
+	obj *snappipb.GetStateMetricsResponse_StatusCode400
+}
+
+func (obj *getStateMetricsResponse_StatusCode400) msg() *snappipb.GetStateMetricsResponse_StatusCode400 {
+	return obj.obj
+}
+
+func (obj *getStateMetricsResponse_StatusCode400) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *getStateMetricsResponse_StatusCode400) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
+func (obj *getStateMetricsResponse_StatusCode400) ToYaml() string {
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(obj.msg())
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *getStateMetricsResponse_StatusCode400) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: true,
+	}
+	return opts.Unmarshal([]byte(data), obj.msg())
+}
+
+func (obj *getStateMetricsResponse_StatusCode400) ToJson() string {
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+		Indent:          "  ",
+	}
+	data, err := opts.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *getStateMetricsResponse_StatusCode400) FromJson(value string) error {
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: true,
+	}
+	return opts.Unmarshal([]byte(value), obj.msg())
+}
+
+type GetStateMetricsResponse_StatusCode400 interface {
+	msg() *snappipb.GetStateMetricsResponse_StatusCode400
+	ToPbText() string
+	ToYaml() string
+	ToJson() string
+	FromPbText(value string) error
+	FromYaml(value string) error
+	FromJson(value string) error
+	BadRequest() BadRequest
+}
+
+// BadRequest returns a BadRequest
+//  description is TBD
+func (obj *getStateMetricsResponse_StatusCode400) BadRequest() BadRequest {
+	if obj.obj.BadRequest == nil {
+		obj.obj.BadRequest = &snappipb.BadRequest{}
+	}
+
+	return &badRequest{obj: obj.obj.BadRequest}
+}
+
+type getStateMetricsResponse_StatusCode500 struct {
+	obj *snappipb.GetStateMetricsResponse_StatusCode500
+}
+
+func (obj *getStateMetricsResponse_StatusCode500) msg() *snappipb.GetStateMetricsResponse_StatusCode500 {
+	return obj.obj
+}
+
+func (obj *getStateMetricsResponse_StatusCode500) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *getStateMetricsResponse_StatusCode500) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
+func (obj *getStateMetricsResponse_StatusCode500) ToYaml() string {
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(obj.msg())
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *getStateMetricsResponse_StatusCode500) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: true,
+	}
+	return opts.Unmarshal([]byte(data), obj.msg())
+}
+
+func (obj *getStateMetricsResponse_StatusCode500) ToJson() string {
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+		Indent:          "  ",
+	}
+	data, err := opts.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *getStateMetricsResponse_StatusCode500) FromJson(value string) error {
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: true,
+	}
+	return opts.Unmarshal([]byte(value), obj.msg())
+}
+
+type GetStateMetricsResponse_StatusCode500 interface {
+	msg() *snappipb.GetStateMetricsResponse_StatusCode500
+	ToPbText() string
+	ToYaml() string
+	ToJson() string
+	FromPbText(value string) error
+	FromYaml(value string) error
+	FromJson(value string) error
+	InternalServerError() InternalServerError
+}
+
+// InternalServerError returns a InternalServerError
+//  description is TBD
+func (obj *getStateMetricsResponse_StatusCode500) InternalServerError() InternalServerError {
+	if obj.obj.InternalServerError == nil {
+		obj.obj.InternalServerError = &snappipb.InternalServerError{}
+	}
+
+	return &internalServerError{obj: obj.obj.InternalServerError}
+}
+
+type getCaptureResponse_StatusCode200 struct {
+	obj *snappipb.GetCaptureResponse_StatusCode200
+}
+
+func (obj *getCaptureResponse_StatusCode200) msg() *snappipb.GetCaptureResponse_StatusCode200 {
+	return obj.obj
+}
+
+func (obj *getCaptureResponse_StatusCode200) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *getCaptureResponse_StatusCode200) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
+func (obj *getCaptureResponse_StatusCode200) ToYaml() string {
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(obj.msg())
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *getCaptureResponse_StatusCode200) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: true,
+	}
+	return opts.Unmarshal([]byte(data), obj.msg())
+}
+
+func (obj *getCaptureResponse_StatusCode200) ToJson() string {
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+		Indent:          "  ",
+	}
+	data, err := opts.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *getCaptureResponse_StatusCode200) FromJson(value string) error {
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: true,
+	}
+	return opts.Unmarshal([]byte(value), obj.msg())
+}
+
+type GetCaptureResponse_StatusCode200 interface {
+	msg() *snappipb.GetCaptureResponse_StatusCode200
+	ToPbText() string
+	ToYaml() string
+	ToJson() string
+	FromPbText(value string) error
+	FromYaml(value string) error
+	FromJson(value string) error
+	Bytes() []byte
+	SetBytes(value []byte) GetCaptureResponse_StatusCode200
+}
+
+// Bytes returns a []byte
+//  description is TBD
+func (obj *getCaptureResponse_StatusCode200) Bytes() []byte {
+	return obj.obj.Bytes
+}
+
+// SetBytes sets the []byte value in the GetCaptureResponse_StatusCode200 object
+//  description is TBD
+func (obj *getCaptureResponse_StatusCode200) SetBytes(value []byte) GetCaptureResponse_StatusCode200 {
+	obj.obj.Bytes = value
+
+	return obj
+}
+
+type getCaptureResponse_StatusCode400 struct {
+	obj *snappipb.GetCaptureResponse_StatusCode400
+}
+
+func (obj *getCaptureResponse_StatusCode400) msg() *snappipb.GetCaptureResponse_StatusCode400 {
+	return obj.obj
+}
+
+func (obj *getCaptureResponse_StatusCode400) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *getCaptureResponse_StatusCode400) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
+func (obj *getCaptureResponse_StatusCode400) ToYaml() string {
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(obj.msg())
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *getCaptureResponse_StatusCode400) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: true,
+	}
+	return opts.Unmarshal([]byte(data), obj.msg())
+}
+
+func (obj *getCaptureResponse_StatusCode400) ToJson() string {
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+		Indent:          "  ",
+	}
+	data, err := opts.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *getCaptureResponse_StatusCode400) FromJson(value string) error {
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: true,
+	}
+	return opts.Unmarshal([]byte(value), obj.msg())
+}
+
+type GetCaptureResponse_StatusCode400 interface {
+	msg() *snappipb.GetCaptureResponse_StatusCode400
+	ToPbText() string
+	ToYaml() string
+	ToJson() string
+	FromPbText(value string) error
+	FromYaml(value string) error
+	FromJson(value string) error
+	BadRequest() BadRequest
+}
+
+// BadRequest returns a BadRequest
+//  description is TBD
+func (obj *getCaptureResponse_StatusCode400) BadRequest() BadRequest {
+	if obj.obj.BadRequest == nil {
+		obj.obj.BadRequest = &snappipb.BadRequest{}
+	}
+
+	return &badRequest{obj: obj.obj.BadRequest}
+}
+
+type getCaptureResponse_StatusCode500 struct {
+	obj *snappipb.GetCaptureResponse_StatusCode500
+}
+
+func (obj *getCaptureResponse_StatusCode500) msg() *snappipb.GetCaptureResponse_StatusCode500 {
+	return obj.obj
+}
+
+func (obj *getCaptureResponse_StatusCode500) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *getCaptureResponse_StatusCode500) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
+func (obj *getCaptureResponse_StatusCode500) ToYaml() string {
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(obj.msg())
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *getCaptureResponse_StatusCode500) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: true,
+	}
+	return opts.Unmarshal([]byte(data), obj.msg())
+}
+
+func (obj *getCaptureResponse_StatusCode500) ToJson() string {
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+		Indent:          "  ",
+	}
+	data, err := opts.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *getCaptureResponse_StatusCode500) FromJson(value string) error {
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: true,
+	}
+	return opts.Unmarshal([]byte(value), obj.msg())
+}
+
+type GetCaptureResponse_StatusCode500 interface {
+	msg() *snappipb.GetCaptureResponse_StatusCode500
+	ToPbText() string
+	ToYaml() string
+	ToJson() string
+	FromPbText(value string) error
+	FromYaml(value string) error
+	FromJson(value string) error
+	InternalServerError() InternalServerError
+}
+
+// InternalServerError returns a InternalServerError
+//  description is TBD
+func (obj *getCaptureResponse_StatusCode500) InternalServerError() InternalServerError {
+	if obj.obj.InternalServerError == nil {
+		obj.obj.InternalServerError = &snappipb.InternalServerError{}
+	}
+
+	return &internalServerError{obj: obj.obj.InternalServerError}
+}
+
 type port struct {
 	obj *snappipb.Port
 }
 
 func (obj *port) msg() *snappipb.Port {
 	return obj.obj
+}
+
+func (obj *port) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *port) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
 }
 
 func (obj *port) ToYaml() string {
@@ -1601,8 +4763,10 @@ func (obj *port) FromJson(value string) error {
 
 type Port interface {
 	msg() *snappipb.Port
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Location() string
@@ -1663,6 +4827,14 @@ func (obj *lag) msg() *snappipb.Lag {
 	return obj.obj
 }
 
+func (obj *lag) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *lag) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *lag) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -1713,8 +4885,10 @@ func (obj *lag) FromJson(value string) error {
 
 type Lag interface {
 	msg() *snappipb.Lag
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Ports() LagLagPortIter
@@ -1776,6 +4950,14 @@ func (obj *layer1) msg() *snappipb.Layer1 {
 	return obj.obj
 }
 
+func (obj *layer1) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *layer1) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *layer1) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -1826,8 +5008,10 @@ func (obj *layer1) FromJson(value string) error {
 
 type Layer1 interface {
 	msg() *snappipb.Layer1
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	PortNames() []string
@@ -2044,6 +5228,14 @@ func (obj *capture) msg() *snappipb.Capture {
 	return obj.obj
 }
 
+func (obj *capture) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *capture) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *capture) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -2094,8 +5286,10 @@ func (obj *capture) FromJson(value string) error {
 
 type Capture interface {
 	msg() *snappipb.Capture
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	PortNames() []string
@@ -2245,6 +5439,14 @@ func (obj *device) msg() *snappipb.Device {
 	return obj.obj
 }
 
+func (obj *device) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *device) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *device) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -2295,8 +5497,10 @@ func (obj *device) FromJson(value string) error {
 
 type Device interface {
 	msg() *snappipb.Device
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	ContainerName() string
@@ -2372,6 +5576,14 @@ func (obj *flow) msg() *snappipb.Flow {
 	return obj.obj
 }
 
+func (obj *flow) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *flow) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *flow) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -2422,8 +5634,10 @@ func (obj *flow) FromJson(value string) error {
 
 type Flow interface {
 	msg() *snappipb.Flow
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	TxRx() FlowTxRx
@@ -2551,6 +5765,14 @@ func (obj *event) msg() *snappipb.Event {
 	return obj.obj
 }
 
+func (obj *event) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *event) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *event) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -2601,8 +5823,10 @@ func (obj *event) FromJson(value string) error {
 
 type Event interface {
 	msg() *snappipb.Event
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Enable() bool
@@ -2668,6 +5892,14 @@ func (obj *configOptions) msg() *snappipb.ConfigOptions {
 	return obj.obj
 }
 
+func (obj *configOptions) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *configOptions) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *configOptions) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -2718,8 +5950,10 @@ func (obj *configOptions) FromJson(value string) error {
 
 type ConfigOptions interface {
 	msg() *snappipb.ConfigOptions
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	PortOptions() PortOptions
@@ -2741,6 +5975,14 @@ type portMetricsRequest struct {
 
 func (obj *portMetricsRequest) msg() *snappipb.PortMetricsRequest {
 	return obj.obj
+}
+
+func (obj *portMetricsRequest) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *portMetricsRequest) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
 }
 
 func (obj *portMetricsRequest) ToYaml() string {
@@ -2793,8 +6035,10 @@ func (obj *portMetricsRequest) FromJson(value string) error {
 
 type PortMetricsRequest interface {
 	msg() *snappipb.PortMetricsRequest
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	PortNames() []string
@@ -2837,6 +6081,14 @@ type flowMetricsRequest struct {
 
 func (obj *flowMetricsRequest) msg() *snappipb.FlowMetricsRequest {
 	return obj.obj
+}
+
+func (obj *flowMetricsRequest) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *flowMetricsRequest) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
 }
 
 func (obj *flowMetricsRequest) ToYaml() string {
@@ -2889,8 +6141,10 @@ func (obj *flowMetricsRequest) FromJson(value string) error {
 
 type FlowMetricsRequest interface {
 	msg() *snappipb.FlowMetricsRequest
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	FlowNames() []string
@@ -2948,6 +6202,14 @@ func (obj *bgpv4MetricsRequest) msg() *snappipb.Bgpv4MetricsRequest {
 	return obj.obj
 }
 
+func (obj *bgpv4MetricsRequest) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *bgpv4MetricsRequest) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *bgpv4MetricsRequest) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -2998,8 +6260,10 @@ func (obj *bgpv4MetricsRequest) FromJson(value string) error {
 
 type Bgpv4MetricsRequest interface {
 	msg() *snappipb.Bgpv4MetricsRequest
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	DeviceNames() []string
@@ -3042,6 +6306,14 @@ type bgpv6MetricsRequest struct {
 
 func (obj *bgpv6MetricsRequest) msg() *snappipb.Bgpv6MetricsRequest {
 	return obj.obj
+}
+
+func (obj *bgpv6MetricsRequest) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *bgpv6MetricsRequest) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
 }
 
 func (obj *bgpv6MetricsRequest) ToYaml() string {
@@ -3094,8 +6366,10 @@ func (obj *bgpv6MetricsRequest) FromJson(value string) error {
 
 type Bgpv6MetricsRequest interface {
 	msg() *snappipb.Bgpv6MetricsRequest
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	DeviceNames() []string
@@ -3132,12 +6406,615 @@ func (obj *bgpv6MetricsRequest) SetDeviceNames(value []string) Bgpv6MetricsReque
 	return obj
 }
 
+type success struct {
+	obj *snappipb.Success
+}
+
+func (obj *success) msg() *snappipb.Success {
+	return obj.obj
+}
+
+func (obj *success) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *success) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
+func (obj *success) ToYaml() string {
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(obj.msg())
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *success) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: true,
+	}
+	return opts.Unmarshal([]byte(data), obj.msg())
+}
+
+func (obj *success) ToJson() string {
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+		Indent:          "  ",
+	}
+	data, err := opts.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *success) FromJson(value string) error {
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: true,
+	}
+	return opts.Unmarshal([]byte(value), obj.msg())
+}
+
+type Success interface {
+	msg() *snappipb.Success
+	ToPbText() string
+	ToYaml() string
+	ToJson() string
+	FromPbText(value string) error
+	FromYaml(value string) error
+	FromJson(value string) error
+}
+
+type badRequest struct {
+	obj *snappipb.BadRequest
+}
+
+func (obj *badRequest) msg() *snappipb.BadRequest {
+	return obj.obj
+}
+
+func (obj *badRequest) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *badRequest) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
+func (obj *badRequest) ToYaml() string {
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(obj.msg())
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *badRequest) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: true,
+	}
+	return opts.Unmarshal([]byte(data), obj.msg())
+}
+
+func (obj *badRequest) ToJson() string {
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+		Indent:          "  ",
+	}
+	data, err := opts.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *badRequest) FromJson(value string) error {
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: true,
+	}
+	return opts.Unmarshal([]byte(value), obj.msg())
+}
+
+type BadRequest interface {
+	msg() *snappipb.BadRequest
+	ToPbText() string
+	ToYaml() string
+	ToJson() string
+	FromPbText(value string) error
+	FromYaml(value string) error
+	FromJson(value string) error
+}
+
+type internalServerError struct {
+	obj *snappipb.InternalServerError
+}
+
+func (obj *internalServerError) msg() *snappipb.InternalServerError {
+	return obj.obj
+}
+
+func (obj *internalServerError) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *internalServerError) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
+func (obj *internalServerError) ToYaml() string {
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(obj.msg())
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *internalServerError) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: true,
+	}
+	return opts.Unmarshal([]byte(data), obj.msg())
+}
+
+func (obj *internalServerError) ToJson() string {
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+		Indent:          "  ",
+	}
+	data, err := opts.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *internalServerError) FromJson(value string) error {
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: true,
+	}
+	return opts.Unmarshal([]byte(value), obj.msg())
+}
+
+type InternalServerError interface {
+	msg() *snappipb.InternalServerError
+	ToPbText() string
+	ToYaml() string
+	ToJson() string
+	FromPbText(value string) error
+	FromYaml(value string) error
+	FromJson(value string) error
+}
+
+type metricsResponse struct {
+	obj *snappipb.MetricsResponse
+}
+
+func (obj *metricsResponse) msg() *snappipb.MetricsResponse {
+	return obj.obj
+}
+
+func (obj *metricsResponse) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *metricsResponse) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
+func (obj *metricsResponse) ToYaml() string {
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(obj.msg())
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *metricsResponse) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: true,
+	}
+	return opts.Unmarshal([]byte(data), obj.msg())
+}
+
+func (obj *metricsResponse) ToJson() string {
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+		Indent:          "  ",
+	}
+	data, err := opts.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *metricsResponse) FromJson(value string) error {
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: true,
+	}
+	return opts.Unmarshal([]byte(value), obj.msg())
+}
+
+type MetricsResponse interface {
+	msg() *snappipb.MetricsResponse
+	ToPbText() string
+	ToYaml() string
+	ToJson() string
+	FromPbText(value string) error
+	FromYaml(value string) error
+	FromJson(value string) error
+	Choice() MetricsResponseChoiceEnum
+	SetChoice(value MetricsResponseChoiceEnum) MetricsResponse
+	PortMetrics() MetricsResponsePortMetricIter
+	FlowMetrics() MetricsResponseFlowMetricIter
+	Bgpv4Metrics() MetricsResponseBgpv4MetricIter
+	Bgpv6Metrics() MetricsResponseBgpv6MetricIter
+}
+
+type MetricsResponseChoiceEnum string
+
+var MetricsResponseChoice = struct {
+	FLOW_METRICS  MetricsResponseChoiceEnum
+	PORT_METRICS  MetricsResponseChoiceEnum
+	BGPV4_METRICS MetricsResponseChoiceEnum
+	BGPV6_METRICS MetricsResponseChoiceEnum
+}{
+	FLOW_METRICS:  MetricsResponseChoiceEnum("flow_metrics"),
+	PORT_METRICS:  MetricsResponseChoiceEnum("port_metrics"),
+	BGPV4_METRICS: MetricsResponseChoiceEnum("bgpv4_metrics"),
+	BGPV6_METRICS: MetricsResponseChoiceEnum("bgpv6_metrics"),
+}
+
+func (obj *metricsResponse) Choice() MetricsResponseChoiceEnum {
+	return MetricsResponseChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *metricsResponse) SetChoice(value MetricsResponseChoiceEnum) MetricsResponse {
+	intValue := snappipb.MetricsResponse_Choice_Enum_value[string(value)]
+	enumValue := snappipb.MetricsResponse_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
+}
+
+// PortMetrics returns a []PortMetric
+//  description is TBD
+func (obj *metricsResponse) PortMetrics() MetricsResponsePortMetricIter {
+	if obj.obj.PortMetrics == nil {
+		obj.obj.PortMetrics = []*snappipb.PortMetric{}
+	}
+	return &metricsResponsePortMetricIter{obj: obj}
+}
+
+type metricsResponsePortMetricIter struct {
+	obj *metricsResponse
+}
+
+type MetricsResponsePortMetricIter interface {
+	Add() PortMetric
+	Items() []PortMetric
+}
+
+func (obj *metricsResponsePortMetricIter) Add() PortMetric {
+	newObj := &snappipb.PortMetric{}
+	obj.obj.obj.PortMetrics = append(obj.obj.obj.PortMetrics, newObj)
+	return &portMetric{obj: newObj}
+}
+
+func (obj *metricsResponsePortMetricIter) Items() []PortMetric {
+	slice := []PortMetric{}
+	for _, item := range obj.obj.obj.PortMetrics {
+		slice = append(slice, &portMetric{obj: item})
+	}
+	return slice
+}
+
+// FlowMetrics returns a []FlowMetric
+//  description is TBD
+func (obj *metricsResponse) FlowMetrics() MetricsResponseFlowMetricIter {
+	if obj.obj.FlowMetrics == nil {
+		obj.obj.FlowMetrics = []*snappipb.FlowMetric{}
+	}
+	return &metricsResponseFlowMetricIter{obj: obj}
+}
+
+type metricsResponseFlowMetricIter struct {
+	obj *metricsResponse
+}
+
+type MetricsResponseFlowMetricIter interface {
+	Add() FlowMetric
+	Items() []FlowMetric
+}
+
+func (obj *metricsResponseFlowMetricIter) Add() FlowMetric {
+	newObj := &snappipb.FlowMetric{}
+	obj.obj.obj.FlowMetrics = append(obj.obj.obj.FlowMetrics, newObj)
+	return &flowMetric{obj: newObj}
+}
+
+func (obj *metricsResponseFlowMetricIter) Items() []FlowMetric {
+	slice := []FlowMetric{}
+	for _, item := range obj.obj.obj.FlowMetrics {
+		slice = append(slice, &flowMetric{obj: item})
+	}
+	return slice
+}
+
+// Bgpv4Metrics returns a []Bgpv4Metric
+//  description is TBD
+func (obj *metricsResponse) Bgpv4Metrics() MetricsResponseBgpv4MetricIter {
+	if obj.obj.Bgpv4Metrics == nil {
+		obj.obj.Bgpv4Metrics = []*snappipb.Bgpv4Metric{}
+	}
+	return &metricsResponseBgpv4MetricIter{obj: obj}
+}
+
+type metricsResponseBgpv4MetricIter struct {
+	obj *metricsResponse
+}
+
+type MetricsResponseBgpv4MetricIter interface {
+	Add() Bgpv4Metric
+	Items() []Bgpv4Metric
+}
+
+func (obj *metricsResponseBgpv4MetricIter) Add() Bgpv4Metric {
+	newObj := &snappipb.Bgpv4Metric{}
+	obj.obj.obj.Bgpv4Metrics = append(obj.obj.obj.Bgpv4Metrics, newObj)
+	return &bgpv4Metric{obj: newObj}
+}
+
+func (obj *metricsResponseBgpv4MetricIter) Items() []Bgpv4Metric {
+	slice := []Bgpv4Metric{}
+	for _, item := range obj.obj.obj.Bgpv4Metrics {
+		slice = append(slice, &bgpv4Metric{obj: item})
+	}
+	return slice
+}
+
+// Bgpv6Metrics returns a []Bgpv6Metric
+//  description is TBD
+func (obj *metricsResponse) Bgpv6Metrics() MetricsResponseBgpv6MetricIter {
+	if obj.obj.Bgpv6Metrics == nil {
+		obj.obj.Bgpv6Metrics = []*snappipb.Bgpv6Metric{}
+	}
+	return &metricsResponseBgpv6MetricIter{obj: obj}
+}
+
+type metricsResponseBgpv6MetricIter struct {
+	obj *metricsResponse
+}
+
+type MetricsResponseBgpv6MetricIter interface {
+	Add() Bgpv6Metric
+	Items() []Bgpv6Metric
+}
+
+func (obj *metricsResponseBgpv6MetricIter) Add() Bgpv6Metric {
+	newObj := &snappipb.Bgpv6Metric{}
+	obj.obj.obj.Bgpv6Metrics = append(obj.obj.obj.Bgpv6Metrics, newObj)
+	return &bgpv6Metric{obj: newObj}
+}
+
+func (obj *metricsResponseBgpv6MetricIter) Items() []Bgpv6Metric {
+	slice := []Bgpv6Metric{}
+	for _, item := range obj.obj.obj.Bgpv6Metrics {
+		slice = append(slice, &bgpv6Metric{obj: item})
+	}
+	return slice
+}
+
+type stateMetrics struct {
+	obj *snappipb.StateMetrics
+}
+
+func (obj *stateMetrics) msg() *snappipb.StateMetrics {
+	return obj.obj
+}
+
+func (obj *stateMetrics) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *stateMetrics) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
+func (obj *stateMetrics) ToYaml() string {
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(obj.msg())
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *stateMetrics) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: true,
+	}
+	return opts.Unmarshal([]byte(data), obj.msg())
+}
+
+func (obj *stateMetrics) ToJson() string {
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+		Indent:          "  ",
+	}
+	data, err := opts.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *stateMetrics) FromJson(value string) error {
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: true,
+	}
+	return opts.Unmarshal([]byte(value), obj.msg())
+}
+
+type StateMetrics interface {
+	msg() *snappipb.StateMetrics
+	ToPbText() string
+	ToYaml() string
+	ToJson() string
+	FromPbText(value string) error
+	FromYaml(value string) error
+	FromJson(value string) error
+	PortState() StateMetricsPortStateIter
+	FlowState() StateMetricsFlowStateIter
+}
+
+// PortState returns a []PortState
+//  description is TBD
+func (obj *stateMetrics) PortState() StateMetricsPortStateIter {
+	if obj.obj.PortState == nil {
+		obj.obj.PortState = []*snappipb.PortState{}
+	}
+	return &stateMetricsPortStateIter{obj: obj}
+}
+
+type stateMetricsPortStateIter struct {
+	obj *stateMetrics
+}
+
+type StateMetricsPortStateIter interface {
+	Add() PortState
+	Items() []PortState
+}
+
+func (obj *stateMetricsPortStateIter) Add() PortState {
+	newObj := &snappipb.PortState{}
+	obj.obj.obj.PortState = append(obj.obj.obj.PortState, newObj)
+	return &portState{obj: newObj}
+}
+
+func (obj *stateMetricsPortStateIter) Items() []PortState {
+	slice := []PortState{}
+	for _, item := range obj.obj.obj.PortState {
+		slice = append(slice, &portState{obj: item})
+	}
+	return slice
+}
+
+// FlowState returns a []FlowState
+//  description is TBD
+func (obj *stateMetrics) FlowState() StateMetricsFlowStateIter {
+	if obj.obj.FlowState == nil {
+		obj.obj.FlowState = []*snappipb.FlowState{}
+	}
+	return &stateMetricsFlowStateIter{obj: obj}
+}
+
+type stateMetricsFlowStateIter struct {
+	obj *stateMetrics
+}
+
+type StateMetricsFlowStateIter interface {
+	Add() FlowState
+	Items() []FlowState
+}
+
+func (obj *stateMetricsFlowStateIter) Add() FlowState {
+	newObj := &snappipb.FlowState{}
+	obj.obj.obj.FlowState = append(obj.obj.obj.FlowState, newObj)
+	return &flowState{obj: newObj}
+}
+
+func (obj *stateMetricsFlowStateIter) Items() []FlowState {
+	slice := []FlowState{}
+	for _, item := range obj.obj.obj.FlowState {
+		slice = append(slice, &flowState{obj: item})
+	}
+	return slice
+}
+
 type lagPort struct {
 	obj *snappipb.LagPort
 }
 
 func (obj *lagPort) msg() *snappipb.LagPort {
 	return obj.obj
+}
+
+func (obj *lagPort) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *lagPort) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
 }
 
 func (obj *lagPort) ToYaml() string {
@@ -3190,8 +7067,10 @@ func (obj *lagPort) FromJson(value string) error {
 
 type LagPort interface {
 	msg() *snappipb.LagPort
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	PortName() string
@@ -3258,6 +7137,14 @@ func (obj *layer1AutoNegotiation) msg() *snappipb.Layer1AutoNegotiation {
 	return obj.obj
 }
 
+func (obj *layer1AutoNegotiation) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *layer1AutoNegotiation) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *layer1AutoNegotiation) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -3308,8 +7195,10 @@ func (obj *layer1AutoNegotiation) FromJson(value string) error {
 
 type Layer1AutoNegotiation interface {
 	msg() *snappipb.Layer1AutoNegotiation
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Advertise1000Mbps() bool
@@ -3444,6 +7333,14 @@ func (obj *layer1FlowControl) msg() *snappipb.Layer1FlowControl {
 	return obj.obj
 }
 
+func (obj *layer1FlowControl) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *layer1FlowControl) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *layer1FlowControl) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -3494,8 +7391,10 @@ func (obj *layer1FlowControl) FromJson(value string) error {
 
 type Layer1FlowControl interface {
 	msg() *snappipb.Layer1FlowControl
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	DirectedAddress() string
@@ -3571,6 +7470,14 @@ func (obj *captureFilter) msg() *snappipb.CaptureFilter {
 	return obj.obj
 }
 
+func (obj *captureFilter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *captureFilter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *captureFilter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -3621,8 +7528,10 @@ func (obj *captureFilter) FromJson(value string) error {
 
 type CaptureFilter interface {
 	msg() *snappipb.CaptureFilter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() CaptureFilterChoiceEnum
@@ -3719,6 +7628,14 @@ func (obj *deviceEthernet) msg() *snappipb.DeviceEthernet {
 	return obj.obj
 }
 
+func (obj *deviceEthernet) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *deviceEthernet) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *deviceEthernet) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -3769,8 +7686,10 @@ func (obj *deviceEthernet) FromJson(value string) error {
 
 type DeviceEthernet interface {
 	msg() *snappipb.DeviceEthernet
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Ipv4() DeviceIpv4
@@ -3886,6 +7805,14 @@ func (obj *flowTxRx) msg() *snappipb.FlowTxRx {
 	return obj.obj
 }
 
+func (obj *flowTxRx) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *flowTxRx) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *flowTxRx) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -3936,8 +7863,10 @@ func (obj *flowTxRx) FromJson(value string) error {
 
 type FlowTxRx interface {
 	msg() *snappipb.FlowTxRx
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() FlowTxRxChoiceEnum
@@ -3995,6 +7924,14 @@ func (obj *flowHeader) msg() *snappipb.FlowHeader {
 	return obj.obj
 }
 
+func (obj *flowHeader) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *flowHeader) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *flowHeader) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -4045,8 +7982,10 @@ func (obj *flowHeader) FromJson(value string) error {
 
 type FlowHeader interface {
 	msg() *snappipb.FlowHeader
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() FlowHeaderChoiceEnum
@@ -4312,6 +8251,14 @@ func (obj *flowSize) msg() *snappipb.FlowSize {
 	return obj.obj
 }
 
+func (obj *flowSize) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *flowSize) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *flowSize) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -4362,8 +8309,10 @@ func (obj *flowSize) FromJson(value string) error {
 
 type FlowSize interface {
 	msg() *snappipb.FlowSize
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() FlowSizeChoiceEnum
@@ -4439,6 +8388,14 @@ func (obj *flowRate) msg() *snappipb.FlowRate {
 	return obj.obj
 }
 
+func (obj *flowRate) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *flowRate) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *flowRate) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -4489,8 +8446,10 @@ func (obj *flowRate) FromJson(value string) error {
 
 type FlowRate interface {
 	msg() *snappipb.FlowRate
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() FlowRateChoiceEnum
@@ -4630,6 +8589,14 @@ func (obj *flowDuration) msg() *snappipb.FlowDuration {
 	return obj.obj
 }
 
+func (obj *flowDuration) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *flowDuration) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *flowDuration) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -4680,8 +8647,10 @@ func (obj *flowDuration) FromJson(value string) error {
 
 type FlowDuration interface {
 	msg() *snappipb.FlowDuration
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() FlowDurationChoiceEnum
@@ -4765,6 +8734,14 @@ func (obj *flowMetrics) msg() *snappipb.FlowMetrics {
 	return obj.obj
 }
 
+func (obj *flowMetrics) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *flowMetrics) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *flowMetrics) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -4815,8 +8792,10 @@ func (obj *flowMetrics) FromJson(value string) error {
 
 type FlowMetrics interface {
 	msg() *snappipb.FlowMetrics
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Enable() bool
@@ -4892,6 +8871,14 @@ func (obj *eventLink) msg() *snappipb.EventLink {
 	return obj.obj
 }
 
+func (obj *eventLink) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *eventLink) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *eventLink) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -4942,8 +8929,10 @@ func (obj *eventLink) FromJson(value string) error {
 
 type EventLink interface {
 	msg() *snappipb.EventLink
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Enable() bool
@@ -4970,6 +8959,14 @@ type eventRxRateThreshold struct {
 
 func (obj *eventRxRateThreshold) msg() *snappipb.EventRxRateThreshold {
 	return obj.obj
+}
+
+func (obj *eventRxRateThreshold) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *eventRxRateThreshold) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
 }
 
 func (obj *eventRxRateThreshold) ToYaml() string {
@@ -5022,8 +9019,10 @@ func (obj *eventRxRateThreshold) FromJson(value string) error {
 
 type EventRxRateThreshold interface {
 	msg() *snappipb.EventRxRateThreshold
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Enable() bool
@@ -5072,6 +9071,14 @@ type eventRouteAdvertiseWithdraw struct {
 
 func (obj *eventRouteAdvertiseWithdraw) msg() *snappipb.EventRouteAdvertiseWithdraw {
 	return obj.obj
+}
+
+func (obj *eventRouteAdvertiseWithdraw) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *eventRouteAdvertiseWithdraw) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
 }
 
 func (obj *eventRouteAdvertiseWithdraw) ToYaml() string {
@@ -5124,8 +9131,10 @@ func (obj *eventRouteAdvertiseWithdraw) FromJson(value string) error {
 
 type EventRouteAdvertiseWithdraw interface {
 	msg() *snappipb.EventRouteAdvertiseWithdraw
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Enable() bool
@@ -5154,6 +9163,14 @@ type portOptions struct {
 
 func (obj *portOptions) msg() *snappipb.PortOptions {
 	return obj.obj
+}
+
+func (obj *portOptions) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *portOptions) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
 }
 
 func (obj *portOptions) ToYaml() string {
@@ -5206,8 +9223,10 @@ func (obj *portOptions) FromJson(value string) error {
 
 type PortOptions interface {
 	msg() *snappipb.PortOptions
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	LocationPreemption() bool
@@ -5234,6 +9253,14 @@ type flowMetricGroupRequest struct {
 
 func (obj *flowMetricGroupRequest) msg() *snappipb.FlowMetricGroupRequest {
 	return obj.obj
+}
+
+func (obj *flowMetricGroupRequest) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *flowMetricGroupRequest) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
 }
 
 func (obj *flowMetricGroupRequest) ToYaml() string {
@@ -5286,8 +9313,10 @@ func (obj *flowMetricGroupRequest) FromJson(value string) error {
 
 type FlowMetricGroupRequest interface {
 	msg() *snappipb.FlowMetricGroupRequest
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() FlowMetricGroupRequestChoiceEnum
@@ -5383,12 +9412,1171 @@ func (obj *flowMetricGroupRequest) SetEgress(value []string) FlowMetricGroupRequ
 	return obj
 }
 
+type portMetric struct {
+	obj *snappipb.PortMetric
+}
+
+func (obj *portMetric) msg() *snappipb.PortMetric {
+	return obj.obj
+}
+
+func (obj *portMetric) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *portMetric) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
+func (obj *portMetric) ToYaml() string {
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(obj.msg())
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *portMetric) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: true,
+	}
+	return opts.Unmarshal([]byte(data), obj.msg())
+}
+
+func (obj *portMetric) ToJson() string {
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+		Indent:          "  ",
+	}
+	data, err := opts.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *portMetric) FromJson(value string) error {
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: true,
+	}
+	return opts.Unmarshal([]byte(value), obj.msg())
+}
+
+type PortMetric interface {
+	msg() *snappipb.PortMetric
+	ToPbText() string
+	ToYaml() string
+	ToJson() string
+	FromPbText(value string) error
+	FromYaml(value string) error
+	FromJson(value string) error
+	Name() string
+	SetName(value string) PortMetric
+	Location() string
+	SetLocation(value string) PortMetric
+	Link() PortMetricLinkEnum
+	SetLink(value PortMetricLinkEnum) PortMetric
+	Capture() PortMetricCaptureEnum
+	SetCapture(value PortMetricCaptureEnum) PortMetric
+	FramesTx() int32
+	SetFramesTx(value int32) PortMetric
+	FramesRx() int32
+	SetFramesRx(value int32) PortMetric
+	BytesTx() int32
+	SetBytesTx(value int32) PortMetric
+	BytesRx() int32
+	SetBytesRx(value int32) PortMetric
+	FramesTxRate() float32
+	SetFramesTxRate(value float32) PortMetric
+	FramesRxRate() float32
+	SetFramesRxRate(value float32) PortMetric
+	BytesTxRate() float32
+	SetBytesTxRate(value float32) PortMetric
+	BytesRxRate() float32
+	SetBytesRxRate(value float32) PortMetric
+}
+
+// Name returns a string
+//  The name of a configured port
+//
+//  x-constraint:
+//  - /components/schemas/Port/properties/name
+//
+//
+//  x-constraint:
+//  - /components/schemas/Port/properties/name
+//
+func (obj *portMetric) Name() string {
+	return *obj.obj.Name
+}
+
+// SetName sets the string value in the PortMetric object
+//  The name of a configured port
+//
+//  x-constraint:
+//  - /components/schemas/Port/properties/name
+//
+//
+//  x-constraint:
+//  - /components/schemas/Port/properties/name
+//
+func (obj *portMetric) SetName(value string) PortMetric {
+	obj.obj.Name = &value
+
+	return obj
+}
+
+// Location returns a string
+//  The state of the connection to the test port location. The format should be the configured port location along with  any custom connection state message.
+func (obj *portMetric) Location() string {
+	return *obj.obj.Location
+}
+
+// SetLocation sets the string value in the PortMetric object
+//  The state of the connection to the test port location. The format should be the configured port location along with  any custom connection state message.
+func (obj *portMetric) SetLocation(value string) PortMetric {
+	obj.obj.Location = &value
+
+	return obj
+}
+
+type PortMetricLinkEnum string
+
+var PortMetricLink = struct {
+	UP   PortMetricLinkEnum
+	DOWN PortMetricLinkEnum
+}{
+	UP:   PortMetricLinkEnum("up"),
+	DOWN: PortMetricLinkEnum("down"),
+}
+
+func (obj *portMetric) Link() PortMetricLinkEnum {
+	return PortMetricLinkEnum(obj.obj.Link.Enum().String())
+}
+
+func (obj *portMetric) SetLink(value PortMetricLinkEnum) PortMetric {
+	intValue := snappipb.PortMetric_Link_Enum_value[string(value)]
+	enumValue := snappipb.PortMetric_Link_Enum(intValue)
+	obj.obj.Link = &enumValue
+	return obj
+}
+
+type PortMetricCaptureEnum string
+
+var PortMetricCapture = struct {
+	STARTED PortMetricCaptureEnum
+	STOPPED PortMetricCaptureEnum
+}{
+	STARTED: PortMetricCaptureEnum("started"),
+	STOPPED: PortMetricCaptureEnum("stopped"),
+}
+
+func (obj *portMetric) Capture() PortMetricCaptureEnum {
+	return PortMetricCaptureEnum(obj.obj.Capture.Enum().String())
+}
+
+func (obj *portMetric) SetCapture(value PortMetricCaptureEnum) PortMetric {
+	intValue := snappipb.PortMetric_Capture_Enum_value[string(value)]
+	enumValue := snappipb.PortMetric_Capture_Enum(intValue)
+	obj.obj.Capture = &enumValue
+	return obj
+}
+
+// FramesTx returns a int32
+//  The current total number of frames transmitted
+func (obj *portMetric) FramesTx() int32 {
+	return *obj.obj.FramesTx
+}
+
+// SetFramesTx sets the int32 value in the PortMetric object
+//  The current total number of frames transmitted
+func (obj *portMetric) SetFramesTx(value int32) PortMetric {
+	obj.obj.FramesTx = &value
+
+	return obj
+}
+
+// FramesRx returns a int32
+//  The current total number of valid frames received
+func (obj *portMetric) FramesRx() int32 {
+	return *obj.obj.FramesRx
+}
+
+// SetFramesRx sets the int32 value in the PortMetric object
+//  The current total number of valid frames received
+func (obj *portMetric) SetFramesRx(value int32) PortMetric {
+	obj.obj.FramesRx = &value
+
+	return obj
+}
+
+// BytesTx returns a int32
+//  The current total number of bytes transmitted
+func (obj *portMetric) BytesTx() int32 {
+	return *obj.obj.BytesTx
+}
+
+// SetBytesTx sets the int32 value in the PortMetric object
+//  The current total number of bytes transmitted
+func (obj *portMetric) SetBytesTx(value int32) PortMetric {
+	obj.obj.BytesTx = &value
+
+	return obj
+}
+
+// BytesRx returns a int32
+//  The current total number of valid bytes received
+func (obj *portMetric) BytesRx() int32 {
+	return *obj.obj.BytesRx
+}
+
+// SetBytesRx sets the int32 value in the PortMetric object
+//  The current total number of valid bytes received
+func (obj *portMetric) SetBytesRx(value int32) PortMetric {
+	obj.obj.BytesRx = &value
+
+	return obj
+}
+
+// FramesTxRate returns a float32
+//  The current rate of frames transmitted
+func (obj *portMetric) FramesTxRate() float32 {
+	return *obj.obj.FramesTxRate
+}
+
+// SetFramesTxRate sets the float32 value in the PortMetric object
+//  The current rate of frames transmitted
+func (obj *portMetric) SetFramesTxRate(value float32) PortMetric {
+	obj.obj.FramesTxRate = &value
+
+	return obj
+}
+
+// FramesRxRate returns a float32
+//  The current rate of valid frames received
+func (obj *portMetric) FramesRxRate() float32 {
+	return *obj.obj.FramesRxRate
+}
+
+// SetFramesRxRate sets the float32 value in the PortMetric object
+//  The current rate of valid frames received
+func (obj *portMetric) SetFramesRxRate(value float32) PortMetric {
+	obj.obj.FramesRxRate = &value
+
+	return obj
+}
+
+// BytesTxRate returns a float32
+//  The current rate of bytes transmitted
+func (obj *portMetric) BytesTxRate() float32 {
+	return *obj.obj.BytesTxRate
+}
+
+// SetBytesTxRate sets the float32 value in the PortMetric object
+//  The current rate of bytes transmitted
+func (obj *portMetric) SetBytesTxRate(value float32) PortMetric {
+	obj.obj.BytesTxRate = &value
+
+	return obj
+}
+
+// BytesRxRate returns a float32
+//  The current rate of bytes received
+func (obj *portMetric) BytesRxRate() float32 {
+	return *obj.obj.BytesRxRate
+}
+
+// SetBytesRxRate sets the float32 value in the PortMetric object
+//  The current rate of bytes received
+func (obj *portMetric) SetBytesRxRate(value float32) PortMetric {
+	obj.obj.BytesRxRate = &value
+
+	return obj
+}
+
+type flowMetric struct {
+	obj *snappipb.FlowMetric
+}
+
+func (obj *flowMetric) msg() *snappipb.FlowMetric {
+	return obj.obj
+}
+
+func (obj *flowMetric) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *flowMetric) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
+func (obj *flowMetric) ToYaml() string {
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(obj.msg())
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *flowMetric) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: true,
+	}
+	return opts.Unmarshal([]byte(data), obj.msg())
+}
+
+func (obj *flowMetric) ToJson() string {
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+		Indent:          "  ",
+	}
+	data, err := opts.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *flowMetric) FromJson(value string) error {
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: true,
+	}
+	return opts.Unmarshal([]byte(value), obj.msg())
+}
+
+type FlowMetric interface {
+	msg() *snappipb.FlowMetric
+	ToPbText() string
+	ToYaml() string
+	ToJson() string
+	FromPbText(value string) error
+	FromYaml(value string) error
+	FromJson(value string) error
+	Name() string
+	SetName(value string) FlowMetric
+	PortTx() string
+	SetPortTx(value string) FlowMetric
+	PortRx() string
+	SetPortRx(value string) FlowMetric
+	MetricGroups() FlowMetricFlowMetricGroupIter
+	Transmit() FlowMetricTransmitEnum
+	SetTransmit(value FlowMetricTransmitEnum) FlowMetric
+	FramesTx() int32
+	SetFramesTx(value int32) FlowMetric
+	FramesRx() int32
+	SetFramesRx(value int32) FlowMetric
+	BytesTx() int32
+	SetBytesTx(value int32) FlowMetric
+	BytesRx() int32
+	SetBytesRx(value int32) FlowMetric
+	FramesTxRate() float32
+	SetFramesTxRate(value float32) FlowMetric
+	FramesRxRate() float32
+	SetFramesRxRate(value float32) FlowMetric
+	Loss() float32
+	SetLoss(value float32) FlowMetric
+	Timestamps() MetricTimestamp
+	Latency() MetricLatency
+}
+
+// Name returns a string
+//  The name of the flow
+func (obj *flowMetric) Name() string {
+	return *obj.obj.Name
+}
+
+// SetName sets the string value in the FlowMetric object
+//  The name of the flow
+func (obj *flowMetric) SetName(value string) FlowMetric {
+	obj.obj.Name = &value
+
+	return obj
+}
+
+// PortTx returns a string
+//  The name of the transmit port
+func (obj *flowMetric) PortTx() string {
+	return *obj.obj.PortTx
+}
+
+// SetPortTx sets the string value in the FlowMetric object
+//  The name of the transmit port
+func (obj *flowMetric) SetPortTx(value string) FlowMetric {
+	obj.obj.PortTx = &value
+
+	return obj
+}
+
+// PortRx returns a string
+//  The name of the receive port
+func (obj *flowMetric) PortRx() string {
+	return *obj.obj.PortRx
+}
+
+// SetPortRx sets the string value in the FlowMetric object
+//  The name of the receive port
+func (obj *flowMetric) SetPortRx(value string) FlowMetric {
+	obj.obj.PortRx = &value
+
+	return obj
+}
+
+// MetricGroups returns a []FlowMetricGroup
+//  Flow disaggregation groups.
+func (obj *flowMetric) MetricGroups() FlowMetricFlowMetricGroupIter {
+	if obj.obj.MetricGroups == nil {
+		obj.obj.MetricGroups = []*snappipb.FlowMetricGroup{}
+	}
+	return &flowMetricFlowMetricGroupIter{obj: obj}
+}
+
+type flowMetricFlowMetricGroupIter struct {
+	obj *flowMetric
+}
+
+type FlowMetricFlowMetricGroupIter interface {
+	Add() FlowMetricGroup
+	Items() []FlowMetricGroup
+}
+
+func (obj *flowMetricFlowMetricGroupIter) Add() FlowMetricGroup {
+	newObj := &snappipb.FlowMetricGroup{}
+	obj.obj.obj.MetricGroups = append(obj.obj.obj.MetricGroups, newObj)
+	return &flowMetricGroup{obj: newObj}
+}
+
+func (obj *flowMetricFlowMetricGroupIter) Items() []FlowMetricGroup {
+	slice := []FlowMetricGroup{}
+	for _, item := range obj.obj.obj.MetricGroups {
+		slice = append(slice, &flowMetricGroup{obj: item})
+	}
+	return slice
+}
+
+type FlowMetricTransmitEnum string
+
+var FlowMetricTransmit = struct {
+	STARTED FlowMetricTransmitEnum
+	STOPPED FlowMetricTransmitEnum
+	PAUSED  FlowMetricTransmitEnum
+}{
+	STARTED: FlowMetricTransmitEnum("started"),
+	STOPPED: FlowMetricTransmitEnum("stopped"),
+	PAUSED:  FlowMetricTransmitEnum("paused"),
+}
+
+func (obj *flowMetric) Transmit() FlowMetricTransmitEnum {
+	return FlowMetricTransmitEnum(obj.obj.Transmit.Enum().String())
+}
+
+func (obj *flowMetric) SetTransmit(value FlowMetricTransmitEnum) FlowMetric {
+	intValue := snappipb.FlowMetric_Transmit_Enum_value[string(value)]
+	enumValue := snappipb.FlowMetric_Transmit_Enum(intValue)
+	obj.obj.Transmit = &enumValue
+	return obj
+}
+
+// FramesTx returns a int32
+//  The current total number of frames transmitted
+func (obj *flowMetric) FramesTx() int32 {
+	return *obj.obj.FramesTx
+}
+
+// SetFramesTx sets the int32 value in the FlowMetric object
+//  The current total number of frames transmitted
+func (obj *flowMetric) SetFramesTx(value int32) FlowMetric {
+	obj.obj.FramesTx = &value
+
+	return obj
+}
+
+// FramesRx returns a int32
+//  The current total number of valid frames received
+func (obj *flowMetric) FramesRx() int32 {
+	return *obj.obj.FramesRx
+}
+
+// SetFramesRx sets the int32 value in the FlowMetric object
+//  The current total number of valid frames received
+func (obj *flowMetric) SetFramesRx(value int32) FlowMetric {
+	obj.obj.FramesRx = &value
+
+	return obj
+}
+
+// BytesTx returns a int32
+//  The current total number of bytes transmitted
+func (obj *flowMetric) BytesTx() int32 {
+	return *obj.obj.BytesTx
+}
+
+// SetBytesTx sets the int32 value in the FlowMetric object
+//  The current total number of bytes transmitted
+func (obj *flowMetric) SetBytesTx(value int32) FlowMetric {
+	obj.obj.BytesTx = &value
+
+	return obj
+}
+
+// BytesRx returns a int32
+//  The current total number of bytes received
+func (obj *flowMetric) BytesRx() int32 {
+	return *obj.obj.BytesRx
+}
+
+// SetBytesRx sets the int32 value in the FlowMetric object
+//  The current total number of bytes received
+func (obj *flowMetric) SetBytesRx(value int32) FlowMetric {
+	obj.obj.BytesRx = &value
+
+	return obj
+}
+
+// FramesTxRate returns a float32
+//  The current rate of frames transmitted
+func (obj *flowMetric) FramesTxRate() float32 {
+	return *obj.obj.FramesTxRate
+}
+
+// SetFramesTxRate sets the float32 value in the FlowMetric object
+//  The current rate of frames transmitted
+func (obj *flowMetric) SetFramesTxRate(value float32) FlowMetric {
+	obj.obj.FramesTxRate = &value
+
+	return obj
+}
+
+// FramesRxRate returns a float32
+//  The current rate of valid frames received
+func (obj *flowMetric) FramesRxRate() float32 {
+	return *obj.obj.FramesRxRate
+}
+
+// SetFramesRxRate sets the float32 value in the FlowMetric object
+//  The current rate of valid frames received
+func (obj *flowMetric) SetFramesRxRate(value float32) FlowMetric {
+	obj.obj.FramesRxRate = &value
+
+	return obj
+}
+
+// Loss returns a float32
+//  The percentage of lost frames
+func (obj *flowMetric) Loss() float32 {
+	return *obj.obj.Loss
+}
+
+// SetLoss sets the float32 value in the FlowMetric object
+//  The percentage of lost frames
+func (obj *flowMetric) SetLoss(value float32) FlowMetric {
+	obj.obj.Loss = &value
+
+	return obj
+}
+
+// Timestamps returns a MetricTimestamp
+//  description is TBD
+func (obj *flowMetric) Timestamps() MetricTimestamp {
+	if obj.obj.Timestamps == nil {
+		obj.obj.Timestamps = &snappipb.MetricTimestamp{}
+	}
+
+	return &metricTimestamp{obj: obj.obj.Timestamps}
+}
+
+// Latency returns a MetricLatency
+//  description is TBD
+func (obj *flowMetric) Latency() MetricLatency {
+	if obj.obj.Latency == nil {
+		obj.obj.Latency = &snappipb.MetricLatency{}
+	}
+
+	return &metricLatency{obj: obj.obj.Latency}
+}
+
+type bgpv4Metric struct {
+	obj *snappipb.Bgpv4Metric
+}
+
+func (obj *bgpv4Metric) msg() *snappipb.Bgpv4Metric {
+	return obj.obj
+}
+
+func (obj *bgpv4Metric) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *bgpv4Metric) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
+func (obj *bgpv4Metric) ToYaml() string {
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(obj.msg())
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *bgpv4Metric) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: true,
+	}
+	return opts.Unmarshal([]byte(data), obj.msg())
+}
+
+func (obj *bgpv4Metric) ToJson() string {
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+		Indent:          "  ",
+	}
+	data, err := opts.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *bgpv4Metric) FromJson(value string) error {
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: true,
+	}
+	return opts.Unmarshal([]byte(value), obj.msg())
+}
+
+type Bgpv4Metric interface {
+	msg() *snappipb.Bgpv4Metric
+	ToPbText() string
+	ToYaml() string
+	ToJson() string
+	FromPbText(value string) error
+	FromYaml(value string) error
+	FromJson(value string) error
+	Name() string
+	SetName(value string) Bgpv4Metric
+	SessionState() Bgpv4MetricSessionStateEnum
+	SetSessionState(value Bgpv4MetricSessionStateEnum) Bgpv4Metric
+	RoutesAdvertised() int32
+	SetRoutesAdvertised(value int32) Bgpv4Metric
+	RoutesWithdrawn() int32
+	SetRoutesWithdrawn(value int32) Bgpv4Metric
+}
+
+// Name returns a string
+//  The name of a configured BGPv4 device.
+func (obj *bgpv4Metric) Name() string {
+	return *obj.obj.Name
+}
+
+// SetName sets the string value in the Bgpv4Metric object
+//  The name of a configured BGPv4 device.
+func (obj *bgpv4Metric) SetName(value string) Bgpv4Metric {
+	obj.obj.Name = &value
+
+	return obj
+}
+
+type Bgpv4MetricSessionStateEnum string
+
+var Bgpv4MetricSessionState = struct {
+	UP   Bgpv4MetricSessionStateEnum
+	DOWN Bgpv4MetricSessionStateEnum
+}{
+	UP:   Bgpv4MetricSessionStateEnum("up"),
+	DOWN: Bgpv4MetricSessionStateEnum("down"),
+}
+
+func (obj *bgpv4Metric) SessionState() Bgpv4MetricSessionStateEnum {
+	return Bgpv4MetricSessionStateEnum(obj.obj.SessionState.Enum().String())
+}
+
+func (obj *bgpv4Metric) SetSessionState(value Bgpv4MetricSessionStateEnum) Bgpv4Metric {
+	intValue := snappipb.Bgpv4Metric_SessionState_Enum_value[string(value)]
+	enumValue := snappipb.Bgpv4Metric_SessionState_Enum(intValue)
+	obj.obj.SessionState = &enumValue
+	return obj
+}
+
+// RoutesAdvertised returns a int32
+//  Number of advertised routes sent
+func (obj *bgpv4Metric) RoutesAdvertised() int32 {
+	return *obj.obj.RoutesAdvertised
+}
+
+// SetRoutesAdvertised sets the int32 value in the Bgpv4Metric object
+//  Number of advertised routes sent
+func (obj *bgpv4Metric) SetRoutesAdvertised(value int32) Bgpv4Metric {
+	obj.obj.RoutesAdvertised = &value
+
+	return obj
+}
+
+// RoutesWithdrawn returns a int32
+//  Number of routes withdrawn
+func (obj *bgpv4Metric) RoutesWithdrawn() int32 {
+	return *obj.obj.RoutesWithdrawn
+}
+
+// SetRoutesWithdrawn sets the int32 value in the Bgpv4Metric object
+//  Number of routes withdrawn
+func (obj *bgpv4Metric) SetRoutesWithdrawn(value int32) Bgpv4Metric {
+	obj.obj.RoutesWithdrawn = &value
+
+	return obj
+}
+
+type bgpv6Metric struct {
+	obj *snappipb.Bgpv6Metric
+}
+
+func (obj *bgpv6Metric) msg() *snappipb.Bgpv6Metric {
+	return obj.obj
+}
+
+func (obj *bgpv6Metric) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *bgpv6Metric) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
+func (obj *bgpv6Metric) ToYaml() string {
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(obj.msg())
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *bgpv6Metric) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: true,
+	}
+	return opts.Unmarshal([]byte(data), obj.msg())
+}
+
+func (obj *bgpv6Metric) ToJson() string {
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+		Indent:          "  ",
+	}
+	data, err := opts.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *bgpv6Metric) FromJson(value string) error {
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: true,
+	}
+	return opts.Unmarshal([]byte(value), obj.msg())
+}
+
+type Bgpv6Metric interface {
+	msg() *snappipb.Bgpv6Metric
+	ToPbText() string
+	ToYaml() string
+	ToJson() string
+	FromPbText(value string) error
+	FromYaml(value string) error
+	FromJson(value string) error
+	Name() string
+	SetName(value string) Bgpv6Metric
+	SessionState() Bgpv6MetricSessionStateEnum
+	SetSessionState(value Bgpv6MetricSessionStateEnum) Bgpv6Metric
+	RoutesAdvertised() int32
+	SetRoutesAdvertised(value int32) Bgpv6Metric
+	RoutesWithdrawn() int32
+	SetRoutesWithdrawn(value int32) Bgpv6Metric
+}
+
+// Name returns a string
+//  The name of a configured BGPv6 device.
+func (obj *bgpv6Metric) Name() string {
+	return *obj.obj.Name
+}
+
+// SetName sets the string value in the Bgpv6Metric object
+//  The name of a configured BGPv6 device.
+func (obj *bgpv6Metric) SetName(value string) Bgpv6Metric {
+	obj.obj.Name = &value
+
+	return obj
+}
+
+type Bgpv6MetricSessionStateEnum string
+
+var Bgpv6MetricSessionState = struct {
+	UP   Bgpv6MetricSessionStateEnum
+	DOWN Bgpv6MetricSessionStateEnum
+}{
+	UP:   Bgpv6MetricSessionStateEnum("up"),
+	DOWN: Bgpv6MetricSessionStateEnum("down"),
+}
+
+func (obj *bgpv6Metric) SessionState() Bgpv6MetricSessionStateEnum {
+	return Bgpv6MetricSessionStateEnum(obj.obj.SessionState.Enum().String())
+}
+
+func (obj *bgpv6Metric) SetSessionState(value Bgpv6MetricSessionStateEnum) Bgpv6Metric {
+	intValue := snappipb.Bgpv6Metric_SessionState_Enum_value[string(value)]
+	enumValue := snappipb.Bgpv6Metric_SessionState_Enum(intValue)
+	obj.obj.SessionState = &enumValue
+	return obj
+}
+
+// RoutesAdvertised returns a int32
+//  Number of advertised routes sent
+func (obj *bgpv6Metric) RoutesAdvertised() int32 {
+	return *obj.obj.RoutesAdvertised
+}
+
+// SetRoutesAdvertised sets the int32 value in the Bgpv6Metric object
+//  Number of advertised routes sent
+func (obj *bgpv6Metric) SetRoutesAdvertised(value int32) Bgpv6Metric {
+	obj.obj.RoutesAdvertised = &value
+
+	return obj
+}
+
+// RoutesWithdrawn returns a int32
+//  Number of routes withdrawn
+func (obj *bgpv6Metric) RoutesWithdrawn() int32 {
+	return *obj.obj.RoutesWithdrawn
+}
+
+// SetRoutesWithdrawn sets the int32 value in the Bgpv6Metric object
+//  Number of routes withdrawn
+func (obj *bgpv6Metric) SetRoutesWithdrawn(value int32) Bgpv6Metric {
+	obj.obj.RoutesWithdrawn = &value
+
+	return obj
+}
+
+type portState struct {
+	obj *snappipb.PortState
+}
+
+func (obj *portState) msg() *snappipb.PortState {
+	return obj.obj
+}
+
+func (obj *portState) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *portState) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
+func (obj *portState) ToYaml() string {
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(obj.msg())
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *portState) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: true,
+	}
+	return opts.Unmarshal([]byte(data), obj.msg())
+}
+
+func (obj *portState) ToJson() string {
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+		Indent:          "  ",
+	}
+	data, err := opts.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *portState) FromJson(value string) error {
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: true,
+	}
+	return opts.Unmarshal([]byte(value), obj.msg())
+}
+
+type PortState interface {
+	msg() *snappipb.PortState
+	ToPbText() string
+	ToYaml() string
+	ToJson() string
+	FromPbText(value string) error
+	FromYaml(value string) error
+	FromJson(value string) error
+	Name() string
+	SetName(value string) PortState
+	Link() PortStateLinkEnum
+	SetLink(value PortStateLinkEnum) PortState
+	Capture() PortStateCaptureEnum
+	SetCapture(value PortStateCaptureEnum) PortState
+}
+
+// Name returns a string
+//  description is TBD
+func (obj *portState) Name() string {
+	return *obj.obj.Name
+}
+
+// SetName sets the string value in the PortState object
+//  description is TBD
+func (obj *portState) SetName(value string) PortState {
+	obj.obj.Name = &value
+
+	return obj
+}
+
+type PortStateLinkEnum string
+
+var PortStateLink = struct {
+	UP   PortStateLinkEnum
+	DOWN PortStateLinkEnum
+}{
+	UP:   PortStateLinkEnum("up"),
+	DOWN: PortStateLinkEnum("down"),
+}
+
+func (obj *portState) Link() PortStateLinkEnum {
+	return PortStateLinkEnum(obj.obj.Link.Enum().String())
+}
+
+func (obj *portState) SetLink(value PortStateLinkEnum) PortState {
+	intValue := snappipb.PortState_Link_Enum_value[string(value)]
+	enumValue := snappipb.PortState_Link_Enum(intValue)
+	obj.obj.Link = &enumValue
+	return obj
+}
+
+type PortStateCaptureEnum string
+
+var PortStateCapture = struct {
+	STARTED PortStateCaptureEnum
+	STOPPED PortStateCaptureEnum
+}{
+	STARTED: PortStateCaptureEnum("started"),
+	STOPPED: PortStateCaptureEnum("stopped"),
+}
+
+func (obj *portState) Capture() PortStateCaptureEnum {
+	return PortStateCaptureEnum(obj.obj.Capture.Enum().String())
+}
+
+func (obj *portState) SetCapture(value PortStateCaptureEnum) PortState {
+	intValue := snappipb.PortState_Capture_Enum_value[string(value)]
+	enumValue := snappipb.PortState_Capture_Enum(intValue)
+	obj.obj.Capture = &enumValue
+	return obj
+}
+
+type flowState struct {
+	obj *snappipb.FlowState
+}
+
+func (obj *flowState) msg() *snappipb.FlowState {
+	return obj.obj
+}
+
+func (obj *flowState) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *flowState) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
+func (obj *flowState) ToYaml() string {
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(obj.msg())
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *flowState) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: true,
+	}
+	return opts.Unmarshal([]byte(data), obj.msg())
+}
+
+func (obj *flowState) ToJson() string {
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+		Indent:          "  ",
+	}
+	data, err := opts.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *flowState) FromJson(value string) error {
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: true,
+	}
+	return opts.Unmarshal([]byte(value), obj.msg())
+}
+
+type FlowState interface {
+	msg() *snappipb.FlowState
+	ToPbText() string
+	ToYaml() string
+	ToJson() string
+	FromPbText(value string) error
+	FromYaml(value string) error
+	FromJson(value string) error
+	Name() string
+	SetName(value string) FlowState
+	Transmit() FlowStateTransmitEnum
+	SetTransmit(value FlowStateTransmitEnum) FlowState
+}
+
+// Name returns a string
+//  description is TBD
+func (obj *flowState) Name() string {
+	return *obj.obj.Name
+}
+
+// SetName sets the string value in the FlowState object
+//  description is TBD
+func (obj *flowState) SetName(value string) FlowState {
+	obj.obj.Name = &value
+
+	return obj
+}
+
+type FlowStateTransmitEnum string
+
+var FlowStateTransmit = struct {
+	STARTED FlowStateTransmitEnum
+	STOPPED FlowStateTransmitEnum
+	PAUSED  FlowStateTransmitEnum
+}{
+	STARTED: FlowStateTransmitEnum("started"),
+	STOPPED: FlowStateTransmitEnum("stopped"),
+	PAUSED:  FlowStateTransmitEnum("paused"),
+}
+
+func (obj *flowState) Transmit() FlowStateTransmitEnum {
+	return FlowStateTransmitEnum(obj.obj.Transmit.Enum().String())
+}
+
+func (obj *flowState) SetTransmit(value FlowStateTransmitEnum) FlowState {
+	intValue := snappipb.FlowState_Transmit_Enum_value[string(value)]
+	enumValue := snappipb.FlowState_Transmit_Enum(intValue)
+	obj.obj.Transmit = &enumValue
+	return obj
+}
+
 type lagProtocol struct {
 	obj *snappipb.LagProtocol
 }
 
 func (obj *lagProtocol) msg() *snappipb.LagProtocol {
 	return obj.obj
+}
+
+func (obj *lagProtocol) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *lagProtocol) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
 }
 
 func (obj *lagProtocol) ToYaml() string {
@@ -5441,8 +10629,10 @@ func (obj *lagProtocol) FromJson(value string) error {
 
 type LagProtocol interface {
 	msg() *snappipb.LagProtocol
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() LagProtocolChoiceEnum
@@ -5500,6 +10690,14 @@ func (obj *deviceEthernetBase) msg() *snappipb.DeviceEthernetBase {
 	return obj.obj
 }
 
+func (obj *deviceEthernetBase) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *deviceEthernetBase) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *deviceEthernetBase) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -5550,8 +10748,10 @@ func (obj *deviceEthernetBase) FromJson(value string) error {
 
 type DeviceEthernetBase interface {
 	msg() *snappipb.DeviceEthernetBase
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Mac() string
@@ -5645,6 +10845,14 @@ func (obj *layer1Ieee8021Qbb) msg() *snappipb.Layer1Ieee8021Qbb {
 	return obj.obj
 }
 
+func (obj *layer1Ieee8021Qbb) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *layer1Ieee8021Qbb) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *layer1Ieee8021Qbb) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -5695,8 +10903,10 @@ func (obj *layer1Ieee8021Qbb) FromJson(value string) error {
 
 type Layer1Ieee8021Qbb interface {
 	msg() *snappipb.Layer1Ieee8021Qbb
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	PfcDelay() int32
@@ -5873,6 +11083,14 @@ func (obj *layer1Ieee8023X) msg() *snappipb.Layer1Ieee8023X {
 	return obj.obj
 }
 
+func (obj *layer1Ieee8023X) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *layer1Ieee8023X) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *layer1Ieee8023X) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -5923,8 +11141,10 @@ func (obj *layer1Ieee8023X) FromJson(value string) error {
 
 type Layer1Ieee8023X interface {
 	msg() *snappipb.Layer1Ieee8023X
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 }
@@ -5935,6 +11155,14 @@ type captureCustom struct {
 
 func (obj *captureCustom) msg() *snappipb.CaptureCustom {
 	return obj.obj
+}
+
+func (obj *captureCustom) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *captureCustom) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
 }
 
 func (obj *captureCustom) ToYaml() string {
@@ -5987,8 +11215,10 @@ func (obj *captureCustom) FromJson(value string) error {
 
 type CaptureCustom interface {
 	msg() *snappipb.CaptureCustom
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Offset() int32
@@ -6081,6 +11311,14 @@ func (obj *captureEthernet) msg() *snappipb.CaptureEthernet {
 	return obj.obj
 }
 
+func (obj *captureEthernet) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *captureEthernet) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *captureEthernet) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -6131,8 +11369,10 @@ func (obj *captureEthernet) FromJson(value string) error {
 
 type CaptureEthernet interface {
 	msg() *snappipb.CaptureEthernet
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Src() CaptureField
@@ -6189,6 +11429,14 @@ func (obj *captureVlan) msg() *snappipb.CaptureVlan {
 	return obj.obj
 }
 
+func (obj *captureVlan) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *captureVlan) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *captureVlan) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -6239,8 +11487,10 @@ func (obj *captureVlan) FromJson(value string) error {
 
 type CaptureVlan interface {
 	msg() *snappipb.CaptureVlan
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Priority() CaptureField
@@ -6297,6 +11547,14 @@ func (obj *captureIpv4) msg() *snappipb.CaptureIpv4 {
 	return obj.obj
 }
 
+func (obj *captureIpv4) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *captureIpv4) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *captureIpv4) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -6347,8 +11605,10 @@ func (obj *captureIpv4) FromJson(value string) error {
 
 type CaptureIpv4 interface {
 	msg() *snappipb.CaptureIpv4
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Version() CaptureField
@@ -6515,6 +11775,14 @@ func (obj *captureIpv6) msg() *snappipb.CaptureIpv6 {
 	return obj.obj
 }
 
+func (obj *captureIpv6) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *captureIpv6) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *captureIpv6) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -6565,8 +11833,10 @@ func (obj *captureIpv6) FromJson(value string) error {
 
 type CaptureIpv6 interface {
 	msg() *snappipb.CaptureIpv6
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Version() CaptureField
@@ -6667,6 +11937,14 @@ func (obj *deviceIpv4) msg() *snappipb.DeviceIpv4 {
 	return obj.obj
 }
 
+func (obj *deviceIpv4) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *deviceIpv4) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *deviceIpv4) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -6717,8 +11995,10 @@ func (obj *deviceIpv4) FromJson(value string) error {
 
 type DeviceIpv4 interface {
 	msg() *snappipb.DeviceIpv4
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Gateway() string
@@ -6806,6 +12086,14 @@ func (obj *deviceIpv6) msg() *snappipb.DeviceIpv6 {
 	return obj.obj
 }
 
+func (obj *deviceIpv6) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *deviceIpv6) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *deviceIpv6) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -6856,8 +12144,10 @@ func (obj *deviceIpv6) FromJson(value string) error {
 
 type DeviceIpv6 interface {
 	msg() *snappipb.DeviceIpv6
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Gateway() string
@@ -6945,6 +12235,14 @@ func (obj *deviceVlan) msg() *snappipb.DeviceVlan {
 	return obj.obj
 }
 
+func (obj *deviceVlan) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *deviceVlan) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *deviceVlan) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -6995,8 +12293,10 @@ func (obj *deviceVlan) FromJson(value string) error {
 
 type DeviceVlan interface {
 	msg() *snappipb.DeviceVlan
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Tpid() DeviceVlanTpidEnum
@@ -7086,6 +12386,14 @@ func (obj *flowPort) msg() *snappipb.FlowPort {
 	return obj.obj
 }
 
+func (obj *flowPort) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *flowPort) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *flowPort) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -7136,8 +12444,10 @@ func (obj *flowPort) FromJson(value string) error {
 
 type FlowPort interface {
 	msg() *snappipb.FlowPort
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	TxName() string
@@ -7222,6 +12532,14 @@ func (obj *flowDevice) msg() *snappipb.FlowDevice {
 	return obj.obj
 }
 
+func (obj *flowDevice) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *flowDevice) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *flowDevice) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -7272,8 +12590,10 @@ func (obj *flowDevice) FromJson(value string) error {
 
 type FlowDevice interface {
 	msg() *snappipb.FlowDevice
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Mode() FlowDeviceModeEnum
@@ -7405,6 +12725,14 @@ func (obj *flowCustom) msg() *snappipb.FlowCustom {
 	return obj.obj
 }
 
+func (obj *flowCustom) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *flowCustom) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *flowCustom) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -7455,8 +12783,10 @@ func (obj *flowCustom) FromJson(value string) error {
 
 type FlowCustom interface {
 	msg() *snappipb.FlowCustom
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Bytes() string
@@ -7483,6 +12813,14 @@ type flowEthernet struct {
 
 func (obj *flowEthernet) msg() *snappipb.FlowEthernet {
 	return obj.obj
+}
+
+func (obj *flowEthernet) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *flowEthernet) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
 }
 
 func (obj *flowEthernet) ToYaml() string {
@@ -7535,8 +12873,10 @@ func (obj *flowEthernet) FromJson(value string) error {
 
 type FlowEthernet interface {
 	msg() *snappipb.FlowEthernet
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Dst() PatternFlowEthernetDst
@@ -7593,6 +12933,14 @@ func (obj *flowVlan) msg() *snappipb.FlowVlan {
 	return obj.obj
 }
 
+func (obj *flowVlan) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *flowVlan) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *flowVlan) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -7643,8 +12991,10 @@ func (obj *flowVlan) FromJson(value string) error {
 
 type FlowVlan interface {
 	msg() *snappipb.FlowVlan
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Priority() PatternFlowVlanPriority
@@ -7701,6 +13051,14 @@ func (obj *flowVxlan) msg() *snappipb.FlowVxlan {
 	return obj.obj
 }
 
+func (obj *flowVxlan) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *flowVxlan) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *flowVxlan) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -7751,8 +13109,10 @@ func (obj *flowVxlan) FromJson(value string) error {
 
 type FlowVxlan interface {
 	msg() *snappipb.FlowVxlan
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Flags() PatternFlowVxlanFlags
@@ -7809,6 +13169,14 @@ func (obj *flowIpv4) msg() *snappipb.FlowIpv4 {
 	return obj.obj
 }
 
+func (obj *flowIpv4) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *flowIpv4) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *flowIpv4) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -7859,8 +13227,10 @@ func (obj *flowIpv4) FromJson(value string) error {
 
 type FlowIpv4 interface {
 	msg() *snappipb.FlowIpv4
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Version() PatternFlowIpv4Version
@@ -8027,6 +13397,14 @@ func (obj *flowIpv6) msg() *snappipb.FlowIpv6 {
 	return obj.obj
 }
 
+func (obj *flowIpv6) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *flowIpv6) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *flowIpv6) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -8077,8 +13455,10 @@ func (obj *flowIpv6) FromJson(value string) error {
 
 type FlowIpv6 interface {
 	msg() *snappipb.FlowIpv6
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Version() PatternFlowIpv6Version
@@ -8179,6 +13559,14 @@ func (obj *flowPfcPause) msg() *snappipb.FlowPfcPause {
 	return obj.obj
 }
 
+func (obj *flowPfcPause) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *flowPfcPause) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *flowPfcPause) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -8229,8 +13617,10 @@ func (obj *flowPfcPause) FromJson(value string) error {
 
 type FlowPfcPause interface {
 	msg() *snappipb.FlowPfcPause
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Dst() PatternFlowPfcPauseDst
@@ -8386,6 +13776,14 @@ func (obj *flowEthernetPause) msg() *snappipb.FlowEthernetPause {
 	return obj.obj
 }
 
+func (obj *flowEthernetPause) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *flowEthernetPause) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *flowEthernetPause) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -8436,8 +13834,10 @@ func (obj *flowEthernetPause) FromJson(value string) error {
 
 type FlowEthernetPause interface {
 	msg() *snappipb.FlowEthernetPause
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Dst() PatternFlowEthernetPauseDst
@@ -8505,6 +13905,14 @@ func (obj *flowTcp) msg() *snappipb.FlowTcp {
 	return obj.obj
 }
 
+func (obj *flowTcp) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *flowTcp) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *flowTcp) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -8555,8 +13963,10 @@ func (obj *flowTcp) FromJson(value string) error {
 
 type FlowTcp interface {
 	msg() *snappipb.FlowTcp
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	SrcPort() PatternFlowTcpSrcPort
@@ -8734,6 +14144,14 @@ func (obj *flowUdp) msg() *snappipb.FlowUdp {
 	return obj.obj
 }
 
+func (obj *flowUdp) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *flowUdp) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *flowUdp) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -8784,8 +14202,10 @@ func (obj *flowUdp) FromJson(value string) error {
 
 type FlowUdp interface {
 	msg() *snappipb.FlowUdp
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	SrcPort() PatternFlowUdpSrcPort
@@ -8842,6 +14262,14 @@ func (obj *flowGre) msg() *snappipb.FlowGre {
 	return obj.obj
 }
 
+func (obj *flowGre) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *flowGre) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *flowGre) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -8892,8 +14320,10 @@ func (obj *flowGre) FromJson(value string) error {
 
 type FlowGre interface {
 	msg() *snappipb.FlowGre
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	ChecksumPresent() PatternFlowGreChecksumPresent
@@ -8972,6 +14402,14 @@ func (obj *flowGtpv1) msg() *snappipb.FlowGtpv1 {
 	return obj.obj
 }
 
+func (obj *flowGtpv1) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *flowGtpv1) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *flowGtpv1) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -9022,8 +14460,10 @@ func (obj *flowGtpv1) FromJson(value string) error {
 
 type FlowGtpv1 interface {
 	msg() *snappipb.FlowGtpv1
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Version() PatternFlowGtpv1Version
@@ -9201,6 +14641,14 @@ func (obj *flowGtpv2) msg() *snappipb.FlowGtpv2 {
 	return obj.obj
 }
 
+func (obj *flowGtpv2) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *flowGtpv2) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *flowGtpv2) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -9251,8 +14699,10 @@ func (obj *flowGtpv2) FromJson(value string) error {
 
 type FlowGtpv2 interface {
 	msg() *snappipb.FlowGtpv2
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Version() PatternFlowGtpv2Version
@@ -9364,6 +14814,14 @@ func (obj *flowArp) msg() *snappipb.FlowArp {
 	return obj.obj
 }
 
+func (obj *flowArp) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *flowArp) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *flowArp) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -9414,8 +14872,10 @@ func (obj *flowArp) FromJson(value string) error {
 
 type FlowArp interface {
 	msg() *snappipb.FlowArp
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	HardwareType() PatternFlowArpHardwareType
@@ -9527,6 +14987,14 @@ func (obj *flowIcmp) msg() *snappipb.FlowIcmp {
 	return obj.obj
 }
 
+func (obj *flowIcmp) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *flowIcmp) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *flowIcmp) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -9577,8 +15045,10 @@ func (obj *flowIcmp) FromJson(value string) error {
 
 type FlowIcmp interface {
 	msg() *snappipb.FlowIcmp
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() FlowIcmpChoiceEnum
@@ -9621,6 +15091,14 @@ type flowIcmpv6 struct {
 
 func (obj *flowIcmpv6) msg() *snappipb.FlowIcmpv6 {
 	return obj.obj
+}
+
+func (obj *flowIcmpv6) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *flowIcmpv6) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
 }
 
 func (obj *flowIcmpv6) ToYaml() string {
@@ -9673,8 +15151,10 @@ func (obj *flowIcmpv6) FromJson(value string) error {
 
 type FlowIcmpv6 interface {
 	msg() *snappipb.FlowIcmpv6
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() FlowIcmpv6ChoiceEnum
@@ -9717,6 +15197,14 @@ type flowPpp struct {
 
 func (obj *flowPpp) msg() *snappipb.FlowPpp {
 	return obj.obj
+}
+
+func (obj *flowPpp) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *flowPpp) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
 }
 
 func (obj *flowPpp) ToYaml() string {
@@ -9769,8 +15257,10 @@ func (obj *flowPpp) FromJson(value string) error {
 
 type FlowPpp interface {
 	msg() *snappipb.FlowPpp
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Address() PatternFlowPppAddress
@@ -9814,6 +15304,14 @@ type flowIgmpv1 struct {
 
 func (obj *flowIgmpv1) msg() *snappipb.FlowIgmpv1 {
 	return obj.obj
+}
+
+func (obj *flowIgmpv1) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *flowIgmpv1) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
 }
 
 func (obj *flowIgmpv1) ToYaml() string {
@@ -9866,8 +15364,10 @@ func (obj *flowIgmpv1) FromJson(value string) error {
 
 type FlowIgmpv1 interface {
 	msg() *snappipb.FlowIgmpv1
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Version() PatternFlowIgmpv1Version
@@ -9935,6 +15435,14 @@ func (obj *flowSizeIncrement) msg() *snappipb.FlowSizeIncrement {
 	return obj.obj
 }
 
+func (obj *flowSizeIncrement) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *flowSizeIncrement) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *flowSizeIncrement) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -9985,8 +15493,10 @@ func (obj *flowSizeIncrement) FromJson(value string) error {
 
 type FlowSizeIncrement interface {
 	msg() *snappipb.FlowSizeIncrement
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -10047,6 +15557,14 @@ func (obj *flowSizeRandom) msg() *snappipb.FlowSizeRandom {
 	return obj.obj
 }
 
+func (obj *flowSizeRandom) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *flowSizeRandom) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *flowSizeRandom) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -10097,8 +15615,10 @@ func (obj *flowSizeRandom) FromJson(value string) error {
 
 type FlowSizeRandom interface {
 	msg() *snappipb.FlowSizeRandom
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Min() int32
@@ -10141,6 +15661,14 @@ type flowFixedPackets struct {
 
 func (obj *flowFixedPackets) msg() *snappipb.FlowFixedPackets {
 	return obj.obj
+}
+
+func (obj *flowFixedPackets) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *flowFixedPackets) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
 }
 
 func (obj *flowFixedPackets) ToYaml() string {
@@ -10193,8 +15721,10 @@ func (obj *flowFixedPackets) FromJson(value string) error {
 
 type FlowFixedPackets interface {
 	msg() *snappipb.FlowFixedPackets
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Packets() int32
@@ -10250,6 +15780,14 @@ func (obj *flowFixedSeconds) msg() *snappipb.FlowFixedSeconds {
 	return obj.obj
 }
 
+func (obj *flowFixedSeconds) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *flowFixedSeconds) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *flowFixedSeconds) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -10300,8 +15838,10 @@ func (obj *flowFixedSeconds) FromJson(value string) error {
 
 type FlowFixedSeconds interface {
 	msg() *snappipb.FlowFixedSeconds
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Seconds() float32
@@ -10357,6 +15897,14 @@ func (obj *flowBurst) msg() *snappipb.FlowBurst {
 	return obj.obj
 }
 
+func (obj *flowBurst) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *flowBurst) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *flowBurst) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -10407,8 +15955,10 @@ func (obj *flowBurst) FromJson(value string) error {
 
 type FlowBurst interface {
 	msg() *snappipb.FlowBurst
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Bursts() int32
@@ -10482,6 +16032,14 @@ func (obj *flowContinuous) msg() *snappipb.FlowContinuous {
 	return obj.obj
 }
 
+func (obj *flowContinuous) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *flowContinuous) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *flowContinuous) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -10532,8 +16090,10 @@ func (obj *flowContinuous) FromJson(value string) error {
 
 type FlowContinuous interface {
 	msg() *snappipb.FlowContinuous
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Gap() int32
@@ -10571,6 +16131,14 @@ type flowLatencyMetrics struct {
 
 func (obj *flowLatencyMetrics) msg() *snappipb.FlowLatencyMetrics {
 	return obj.obj
+}
+
+func (obj *flowLatencyMetrics) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *flowLatencyMetrics) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
 }
 
 func (obj *flowLatencyMetrics) ToYaml() string {
@@ -10623,8 +16191,10 @@ func (obj *flowLatencyMetrics) FromJson(value string) error {
 
 type FlowLatencyMetrics interface {
 	msg() *snappipb.FlowLatencyMetrics
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Enable() bool
@@ -10674,12 +16244,354 @@ func (obj *flowLatencyMetrics) SetMode(value FlowLatencyMetricsModeEnum) FlowLat
 	return obj
 }
 
+type flowMetricGroup struct {
+	obj *snappipb.FlowMetricGroup
+}
+
+func (obj *flowMetricGroup) msg() *snappipb.FlowMetricGroup {
+	return obj.obj
+}
+
+func (obj *flowMetricGroup) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *flowMetricGroup) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
+func (obj *flowMetricGroup) ToYaml() string {
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(obj.msg())
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *flowMetricGroup) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: true,
+	}
+	return opts.Unmarshal([]byte(data), obj.msg())
+}
+
+func (obj *flowMetricGroup) ToJson() string {
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+		Indent:          "  ",
+	}
+	data, err := opts.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *flowMetricGroup) FromJson(value string) error {
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: true,
+	}
+	return opts.Unmarshal([]byte(value), obj.msg())
+}
+
+type FlowMetricGroup interface {
+	msg() *snappipb.FlowMetricGroup
+	ToPbText() string
+	ToYaml() string
+	ToJson() string
+	FromPbText(value string) error
+	FromYaml(value string) error
+	FromJson(value string) error
+	Name() string
+	SetName(value string) FlowMetricGroup
+	Value() string
+	SetValue(value string) FlowMetricGroup
+}
+
+// Name returns a string
+//  Name of packet field metric group
+func (obj *flowMetricGroup) Name() string {
+	return *obj.obj.Name
+}
+
+// SetName sets the string value in the FlowMetricGroup object
+//  Name of packet field metric group
+func (obj *flowMetricGroup) SetName(value string) FlowMetricGroup {
+	obj.obj.Name = &value
+
+	return obj
+}
+
+// Value returns a string
+//  Value of named packet field metric group
+func (obj *flowMetricGroup) Value() string {
+	return *obj.obj.Value
+}
+
+// SetValue sets the string value in the FlowMetricGroup object
+//  Value of named packet field metric group
+func (obj *flowMetricGroup) SetValue(value string) FlowMetricGroup {
+	obj.obj.Value = &value
+
+	return obj
+}
+
+type metricTimestamp struct {
+	obj *snappipb.MetricTimestamp
+}
+
+func (obj *metricTimestamp) msg() *snappipb.MetricTimestamp {
+	return obj.obj
+}
+
+func (obj *metricTimestamp) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *metricTimestamp) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
+func (obj *metricTimestamp) ToYaml() string {
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(obj.msg())
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *metricTimestamp) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: true,
+	}
+	return opts.Unmarshal([]byte(data), obj.msg())
+}
+
+func (obj *metricTimestamp) ToJson() string {
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+		Indent:          "  ",
+	}
+	data, err := opts.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *metricTimestamp) FromJson(value string) error {
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: true,
+	}
+	return opts.Unmarshal([]byte(value), obj.msg())
+}
+
+type MetricTimestamp interface {
+	msg() *snappipb.MetricTimestamp
+	ToPbText() string
+	ToYaml() string
+	ToJson() string
+	FromPbText(value string) error
+	FromYaml(value string) error
+	FromJson(value string) error
+	FirstTimestampNs() float64
+	SetFirstTimestampNs(value float64) MetricTimestamp
+	LastTimestampNs() float64
+	SetLastTimestampNs(value float64) MetricTimestamp
+}
+
+// FirstTimestampNs returns a float64
+//  First timestamp in nanoseconds
+func (obj *metricTimestamp) FirstTimestampNs() float64 {
+	return *obj.obj.FirstTimestampNs
+}
+
+// SetFirstTimestampNs sets the float64 value in the MetricTimestamp object
+//  First timestamp in nanoseconds
+func (obj *metricTimestamp) SetFirstTimestampNs(value float64) MetricTimestamp {
+	obj.obj.FirstTimestampNs = &value
+
+	return obj
+}
+
+// LastTimestampNs returns a float64
+//  Last timestamp in nanoseconds
+func (obj *metricTimestamp) LastTimestampNs() float64 {
+	return *obj.obj.LastTimestampNs
+}
+
+// SetLastTimestampNs sets the float64 value in the MetricTimestamp object
+//  Last timestamp in nanoseconds
+func (obj *metricTimestamp) SetLastTimestampNs(value float64) MetricTimestamp {
+	obj.obj.LastTimestampNs = &value
+
+	return obj
+}
+
+type metricLatency struct {
+	obj *snappipb.MetricLatency
+}
+
+func (obj *metricLatency) msg() *snappipb.MetricLatency {
+	return obj.obj
+}
+
+func (obj *metricLatency) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *metricLatency) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
+func (obj *metricLatency) ToYaml() string {
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(obj.msg())
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *metricLatency) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: true,
+	}
+	return opts.Unmarshal([]byte(data), obj.msg())
+}
+
+func (obj *metricLatency) ToJson() string {
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+		Indent:          "  ",
+	}
+	data, err := opts.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *metricLatency) FromJson(value string) error {
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: true,
+	}
+	return opts.Unmarshal([]byte(value), obj.msg())
+}
+
+type MetricLatency interface {
+	msg() *snappipb.MetricLatency
+	ToPbText() string
+	ToYaml() string
+	ToJson() string
+	FromPbText(value string) error
+	FromYaml(value string) error
+	FromJson(value string) error
+	MinimumNs() float64
+	SetMinimumNs(value float64) MetricLatency
+	MaximumNs() float64
+	SetMaximumNs(value float64) MetricLatency
+	AverageNs() float64
+	SetAverageNs(value float64) MetricLatency
+}
+
+// MinimumNs returns a float64
+//  Minimum latency in nanoseconds
+func (obj *metricLatency) MinimumNs() float64 {
+	return *obj.obj.MinimumNs
+}
+
+// SetMinimumNs sets the float64 value in the MetricLatency object
+//  Minimum latency in nanoseconds
+func (obj *metricLatency) SetMinimumNs(value float64) MetricLatency {
+	obj.obj.MinimumNs = &value
+
+	return obj
+}
+
+// MaximumNs returns a float64
+//  Maximum latency in nanoseconds
+func (obj *metricLatency) MaximumNs() float64 {
+	return *obj.obj.MaximumNs
+}
+
+// SetMaximumNs sets the float64 value in the MetricLatency object
+//  Maximum latency in nanoseconds
+func (obj *metricLatency) SetMaximumNs(value float64) MetricLatency {
+	obj.obj.MaximumNs = &value
+
+	return obj
+}
+
+// AverageNs returns a float64
+//  Average latency in nanoseconds
+func (obj *metricLatency) AverageNs() float64 {
+	return *obj.obj.AverageNs
+}
+
+// SetAverageNs sets the float64 value in the MetricLatency object
+//  Average latency in nanoseconds
+func (obj *metricLatency) SetAverageNs(value float64) MetricLatency {
+	obj.obj.AverageNs = &value
+
+	return obj
+}
+
 type lagLacp struct {
 	obj *snappipb.LagLacp
 }
 
 func (obj *lagLacp) msg() *snappipb.LagLacp {
 	return obj.obj
+}
+
+func (obj *lagLacp) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *lagLacp) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
 }
 
 func (obj *lagLacp) ToYaml() string {
@@ -10732,8 +16644,10 @@ func (obj *lagLacp) FromJson(value string) error {
 
 type LagLacp interface {
 	msg() *snappipb.LagLacp
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	ActorKey() int32
@@ -10881,6 +16795,14 @@ func (obj *lagStatic) msg() *snappipb.LagStatic {
 	return obj.obj
 }
 
+func (obj *lagStatic) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *lagStatic) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *lagStatic) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -10931,8 +16853,10 @@ func (obj *lagStatic) FromJson(value string) error {
 
 type LagStatic interface {
 	msg() *snappipb.LagStatic
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	LagId() int32
@@ -10959,6 +16883,14 @@ type captureField struct {
 
 func (obj *captureField) msg() *snappipb.CaptureField {
 	return obj.obj
+}
+
+func (obj *captureField) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *captureField) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
 }
 
 func (obj *captureField) ToYaml() string {
@@ -11011,8 +16943,10 @@ func (obj *captureField) FromJson(value string) error {
 
 type CaptureField interface {
 	msg() *snappipb.CaptureField
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Value() string
@@ -11073,6 +17007,14 @@ func (obj *deviceBgpv4) msg() *snappipb.DeviceBgpv4 {
 	return obj.obj
 }
 
+func (obj *deviceBgpv4) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *deviceBgpv4) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *deviceBgpv4) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -11123,8 +17065,10 @@ func (obj *deviceBgpv4) FromJson(value string) error {
 
 type DeviceBgpv4 interface {
 	msg() *snappipb.DeviceBgpv4
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	LocalAddress() string
@@ -11430,6 +17374,14 @@ func (obj *deviceBgpv6) msg() *snappipb.DeviceBgpv6 {
 	return obj.obj
 }
 
+func (obj *deviceBgpv6) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *deviceBgpv6) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *deviceBgpv6) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -11480,8 +17432,10 @@ func (obj *deviceBgpv6) FromJson(value string) error {
 
 type DeviceBgpv6 interface {
 	msg() *snappipb.DeviceBgpv6
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	LocalAddress() string
@@ -11798,6 +17752,14 @@ func (obj *patternFlowEthernetDst) msg() *snappipb.PatternFlowEthernetDst {
 	return obj.obj
 }
 
+func (obj *patternFlowEthernetDst) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowEthernetDst) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowEthernetDst) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -11848,8 +17810,10 @@ func (obj *patternFlowEthernetDst) FromJson(value string) error {
 
 type PatternFlowEthernetDst interface {
 	msg() *snappipb.PatternFlowEthernetDst
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowEthernetDstChoiceEnum
@@ -11959,6 +17923,14 @@ func (obj *patternFlowEthernetSrc) msg() *snappipb.PatternFlowEthernetSrc {
 	return obj.obj
 }
 
+func (obj *patternFlowEthernetSrc) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowEthernetSrc) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowEthernetSrc) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -12009,8 +17981,10 @@ func (obj *patternFlowEthernetSrc) FromJson(value string) error {
 
 type PatternFlowEthernetSrc interface {
 	msg() *snappipb.PatternFlowEthernetSrc
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowEthernetSrcChoiceEnum
@@ -12120,6 +18094,14 @@ func (obj *patternFlowEthernetEtherType) msg() *snappipb.PatternFlowEthernetEthe
 	return obj.obj
 }
 
+func (obj *patternFlowEthernetEtherType) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowEthernetEtherType) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowEthernetEtherType) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -12170,8 +18152,10 @@ func (obj *patternFlowEthernetEtherType) FromJson(value string) error {
 
 type PatternFlowEthernetEtherType interface {
 	msg() *snappipb.PatternFlowEthernetEtherType
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowEthernetEtherTypeChoiceEnum
@@ -12304,6 +18288,14 @@ func (obj *patternFlowEthernetPfcQueue) msg() *snappipb.PatternFlowEthernetPfcQu
 	return obj.obj
 }
 
+func (obj *patternFlowEthernetPfcQueue) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowEthernetPfcQueue) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowEthernetPfcQueue) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -12354,8 +18346,10 @@ func (obj *patternFlowEthernetPfcQueue) FromJson(value string) error {
 
 type PatternFlowEthernetPfcQueue interface {
 	msg() *snappipb.PatternFlowEthernetPfcQueue
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowEthernetPfcQueueChoiceEnum
@@ -12465,6 +18459,14 @@ func (obj *patternFlowVlanPriority) msg() *snappipb.PatternFlowVlanPriority {
 	return obj.obj
 }
 
+func (obj *patternFlowVlanPriority) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowVlanPriority) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowVlanPriority) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -12515,8 +18517,10 @@ func (obj *patternFlowVlanPriority) FromJson(value string) error {
 
 type PatternFlowVlanPriority interface {
 	msg() *snappipb.PatternFlowVlanPriority
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowVlanPriorityChoiceEnum
@@ -12626,6 +18630,14 @@ func (obj *patternFlowVlanCfi) msg() *snappipb.PatternFlowVlanCfi {
 	return obj.obj
 }
 
+func (obj *patternFlowVlanCfi) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowVlanCfi) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowVlanCfi) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -12676,8 +18688,10 @@ func (obj *patternFlowVlanCfi) FromJson(value string) error {
 
 type PatternFlowVlanCfi interface {
 	msg() *snappipb.PatternFlowVlanCfi
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowVlanCfiChoiceEnum
@@ -12787,6 +18801,14 @@ func (obj *patternFlowVlanId) msg() *snappipb.PatternFlowVlanId {
 	return obj.obj
 }
 
+func (obj *patternFlowVlanId) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowVlanId) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowVlanId) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -12837,8 +18859,10 @@ func (obj *patternFlowVlanId) FromJson(value string) error {
 
 type PatternFlowVlanId interface {
 	msg() *snappipb.PatternFlowVlanId
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowVlanIdChoiceEnum
@@ -12948,6 +18972,14 @@ func (obj *patternFlowVlanTpid) msg() *snappipb.PatternFlowVlanTpid {
 	return obj.obj
 }
 
+func (obj *patternFlowVlanTpid) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowVlanTpid) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowVlanTpid) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -12998,8 +19030,10 @@ func (obj *patternFlowVlanTpid) FromJson(value string) error {
 
 type PatternFlowVlanTpid interface {
 	msg() *snappipb.PatternFlowVlanTpid
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowVlanTpidChoiceEnum
@@ -13109,6 +19143,14 @@ func (obj *patternFlowVxlanFlags) msg() *snappipb.PatternFlowVxlanFlags {
 	return obj.obj
 }
 
+func (obj *patternFlowVxlanFlags) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowVxlanFlags) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowVxlanFlags) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -13159,8 +19201,10 @@ func (obj *patternFlowVxlanFlags) FromJson(value string) error {
 
 type PatternFlowVxlanFlags interface {
 	msg() *snappipb.PatternFlowVxlanFlags
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowVxlanFlagsChoiceEnum
@@ -13270,6 +19314,14 @@ func (obj *patternFlowVxlanReserved0) msg() *snappipb.PatternFlowVxlanReserved0 
 	return obj.obj
 }
 
+func (obj *patternFlowVxlanReserved0) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowVxlanReserved0) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowVxlanReserved0) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -13320,8 +19372,10 @@ func (obj *patternFlowVxlanReserved0) FromJson(value string) error {
 
 type PatternFlowVxlanReserved0 interface {
 	msg() *snappipb.PatternFlowVxlanReserved0
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowVxlanReserved0ChoiceEnum
@@ -13431,6 +19485,14 @@ func (obj *patternFlowVxlanVni) msg() *snappipb.PatternFlowVxlanVni {
 	return obj.obj
 }
 
+func (obj *patternFlowVxlanVni) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowVxlanVni) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowVxlanVni) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -13481,8 +19543,10 @@ func (obj *patternFlowVxlanVni) FromJson(value string) error {
 
 type PatternFlowVxlanVni interface {
 	msg() *snappipb.PatternFlowVxlanVni
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowVxlanVniChoiceEnum
@@ -13592,6 +19656,14 @@ func (obj *patternFlowVxlanReserved1) msg() *snappipb.PatternFlowVxlanReserved1 
 	return obj.obj
 }
 
+func (obj *patternFlowVxlanReserved1) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowVxlanReserved1) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowVxlanReserved1) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -13642,8 +19714,10 @@ func (obj *patternFlowVxlanReserved1) FromJson(value string) error {
 
 type PatternFlowVxlanReserved1 interface {
 	msg() *snappipb.PatternFlowVxlanReserved1
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowVxlanReserved1ChoiceEnum
@@ -13753,6 +19827,14 @@ func (obj *patternFlowIpv4Version) msg() *snappipb.PatternFlowIpv4Version {
 	return obj.obj
 }
 
+func (obj *patternFlowIpv4Version) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowIpv4Version) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowIpv4Version) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -13803,8 +19885,10 @@ func (obj *patternFlowIpv4Version) FromJson(value string) error {
 
 type PatternFlowIpv4Version interface {
 	msg() *snappipb.PatternFlowIpv4Version
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowIpv4VersionChoiceEnum
@@ -13914,6 +19998,14 @@ func (obj *patternFlowIpv4HeaderLength) msg() *snappipb.PatternFlowIpv4HeaderLen
 	return obj.obj
 }
 
+func (obj *patternFlowIpv4HeaderLength) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowIpv4HeaderLength) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowIpv4HeaderLength) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -13964,8 +20056,10 @@ func (obj *patternFlowIpv4HeaderLength) FromJson(value string) error {
 
 type PatternFlowIpv4HeaderLength interface {
 	msg() *snappipb.PatternFlowIpv4HeaderLength
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowIpv4HeaderLengthChoiceEnum
@@ -14098,6 +20192,14 @@ func (obj *flowIpv4Priority) msg() *snappipb.FlowIpv4Priority {
 	return obj.obj
 }
 
+func (obj *flowIpv4Priority) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *flowIpv4Priority) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *flowIpv4Priority) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -14148,8 +20250,10 @@ func (obj *flowIpv4Priority) FromJson(value string) error {
 
 type FlowIpv4Priority interface {
 	msg() *snappipb.FlowIpv4Priority
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() FlowIpv4PriorityChoiceEnum
@@ -14220,6 +20324,14 @@ func (obj *patternFlowIpv4TotalLength) msg() *snappipb.PatternFlowIpv4TotalLengt
 	return obj.obj
 }
 
+func (obj *patternFlowIpv4TotalLength) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowIpv4TotalLength) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowIpv4TotalLength) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -14270,8 +20382,10 @@ func (obj *patternFlowIpv4TotalLength) FromJson(value string) error {
 
 type PatternFlowIpv4TotalLength interface {
 	msg() *snappipb.PatternFlowIpv4TotalLength
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowIpv4TotalLengthChoiceEnum
@@ -14404,6 +20518,14 @@ func (obj *patternFlowIpv4Identification) msg() *snappipb.PatternFlowIpv4Identif
 	return obj.obj
 }
 
+func (obj *patternFlowIpv4Identification) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowIpv4Identification) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowIpv4Identification) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -14454,8 +20576,10 @@ func (obj *patternFlowIpv4Identification) FromJson(value string) error {
 
 type PatternFlowIpv4Identification interface {
 	msg() *snappipb.PatternFlowIpv4Identification
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowIpv4IdentificationChoiceEnum
@@ -14565,6 +20689,14 @@ func (obj *patternFlowIpv4Reserved) msg() *snappipb.PatternFlowIpv4Reserved {
 	return obj.obj
 }
 
+func (obj *patternFlowIpv4Reserved) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowIpv4Reserved) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowIpv4Reserved) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -14615,8 +20747,10 @@ func (obj *patternFlowIpv4Reserved) FromJson(value string) error {
 
 type PatternFlowIpv4Reserved interface {
 	msg() *snappipb.PatternFlowIpv4Reserved
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowIpv4ReservedChoiceEnum
@@ -14726,6 +20860,14 @@ func (obj *patternFlowIpv4DontFragment) msg() *snappipb.PatternFlowIpv4DontFragm
 	return obj.obj
 }
 
+func (obj *patternFlowIpv4DontFragment) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowIpv4DontFragment) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowIpv4DontFragment) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -14776,8 +20918,10 @@ func (obj *patternFlowIpv4DontFragment) FromJson(value string) error {
 
 type PatternFlowIpv4DontFragment interface {
 	msg() *snappipb.PatternFlowIpv4DontFragment
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowIpv4DontFragmentChoiceEnum
@@ -14887,6 +21031,14 @@ func (obj *patternFlowIpv4MoreFragments) msg() *snappipb.PatternFlowIpv4MoreFrag
 	return obj.obj
 }
 
+func (obj *patternFlowIpv4MoreFragments) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowIpv4MoreFragments) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowIpv4MoreFragments) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -14937,8 +21089,10 @@ func (obj *patternFlowIpv4MoreFragments) FromJson(value string) error {
 
 type PatternFlowIpv4MoreFragments interface {
 	msg() *snappipb.PatternFlowIpv4MoreFragments
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowIpv4MoreFragmentsChoiceEnum
@@ -15048,6 +21202,14 @@ func (obj *patternFlowIpv4FragmentOffset) msg() *snappipb.PatternFlowIpv4Fragmen
 	return obj.obj
 }
 
+func (obj *patternFlowIpv4FragmentOffset) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowIpv4FragmentOffset) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowIpv4FragmentOffset) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -15098,8 +21260,10 @@ func (obj *patternFlowIpv4FragmentOffset) FromJson(value string) error {
 
 type PatternFlowIpv4FragmentOffset interface {
 	msg() *snappipb.PatternFlowIpv4FragmentOffset
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowIpv4FragmentOffsetChoiceEnum
@@ -15209,6 +21373,14 @@ func (obj *patternFlowIpv4TimeToLive) msg() *snappipb.PatternFlowIpv4TimeToLive 
 	return obj.obj
 }
 
+func (obj *patternFlowIpv4TimeToLive) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowIpv4TimeToLive) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowIpv4TimeToLive) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -15259,8 +21431,10 @@ func (obj *patternFlowIpv4TimeToLive) FromJson(value string) error {
 
 type PatternFlowIpv4TimeToLive interface {
 	msg() *snappipb.PatternFlowIpv4TimeToLive
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowIpv4TimeToLiveChoiceEnum
@@ -15370,6 +21544,14 @@ func (obj *patternFlowIpv4Protocol) msg() *snappipb.PatternFlowIpv4Protocol {
 	return obj.obj
 }
 
+func (obj *patternFlowIpv4Protocol) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowIpv4Protocol) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowIpv4Protocol) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -15420,8 +21602,10 @@ func (obj *patternFlowIpv4Protocol) FromJson(value string) error {
 
 type PatternFlowIpv4Protocol interface {
 	msg() *snappipb.PatternFlowIpv4Protocol
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowIpv4ProtocolChoiceEnum
@@ -15531,6 +21715,14 @@ func (obj *patternFlowIpv4HeaderChecksum) msg() *snappipb.PatternFlowIpv4HeaderC
 	return obj.obj
 }
 
+func (obj *patternFlowIpv4HeaderChecksum) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowIpv4HeaderChecksum) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowIpv4HeaderChecksum) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -15581,8 +21773,10 @@ func (obj *patternFlowIpv4HeaderChecksum) FromJson(value string) error {
 
 type PatternFlowIpv4HeaderChecksum interface {
 	msg() *snappipb.PatternFlowIpv4HeaderChecksum
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowIpv4HeaderChecksumChoiceEnum
@@ -15656,6 +21850,14 @@ func (obj *patternFlowIpv4Src) msg() *snappipb.PatternFlowIpv4Src {
 	return obj.obj
 }
 
+func (obj *patternFlowIpv4Src) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowIpv4Src) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowIpv4Src) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -15706,8 +21908,10 @@ func (obj *patternFlowIpv4Src) FromJson(value string) error {
 
 type PatternFlowIpv4Src interface {
 	msg() *snappipb.PatternFlowIpv4Src
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowIpv4SrcChoiceEnum
@@ -15817,6 +22021,14 @@ func (obj *patternFlowIpv4Dst) msg() *snappipb.PatternFlowIpv4Dst {
 	return obj.obj
 }
 
+func (obj *patternFlowIpv4Dst) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowIpv4Dst) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowIpv4Dst) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -15867,8 +22079,10 @@ func (obj *patternFlowIpv4Dst) FromJson(value string) error {
 
 type PatternFlowIpv4Dst interface {
 	msg() *snappipb.PatternFlowIpv4Dst
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowIpv4DstChoiceEnum
@@ -15978,6 +22192,14 @@ func (obj *patternFlowIpv6Version) msg() *snappipb.PatternFlowIpv6Version {
 	return obj.obj
 }
 
+func (obj *patternFlowIpv6Version) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowIpv6Version) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowIpv6Version) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -16028,8 +22250,10 @@ func (obj *patternFlowIpv6Version) FromJson(value string) error {
 
 type PatternFlowIpv6Version interface {
 	msg() *snappipb.PatternFlowIpv6Version
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowIpv6VersionChoiceEnum
@@ -16139,6 +22363,14 @@ func (obj *patternFlowIpv6TrafficClass) msg() *snappipb.PatternFlowIpv6TrafficCl
 	return obj.obj
 }
 
+func (obj *patternFlowIpv6TrafficClass) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowIpv6TrafficClass) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowIpv6TrafficClass) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -16189,8 +22421,10 @@ func (obj *patternFlowIpv6TrafficClass) FromJson(value string) error {
 
 type PatternFlowIpv6TrafficClass interface {
 	msg() *snappipb.PatternFlowIpv6TrafficClass
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowIpv6TrafficClassChoiceEnum
@@ -16300,6 +22534,14 @@ func (obj *patternFlowIpv6FlowLabel) msg() *snappipb.PatternFlowIpv6FlowLabel {
 	return obj.obj
 }
 
+func (obj *patternFlowIpv6FlowLabel) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowIpv6FlowLabel) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowIpv6FlowLabel) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -16350,8 +22592,10 @@ func (obj *patternFlowIpv6FlowLabel) FromJson(value string) error {
 
 type PatternFlowIpv6FlowLabel interface {
 	msg() *snappipb.PatternFlowIpv6FlowLabel
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowIpv6FlowLabelChoiceEnum
@@ -16461,6 +22705,14 @@ func (obj *patternFlowIpv6PayloadLength) msg() *snappipb.PatternFlowIpv6PayloadL
 	return obj.obj
 }
 
+func (obj *patternFlowIpv6PayloadLength) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowIpv6PayloadLength) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowIpv6PayloadLength) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -16511,8 +22763,10 @@ func (obj *patternFlowIpv6PayloadLength) FromJson(value string) error {
 
 type PatternFlowIpv6PayloadLength interface {
 	msg() *snappipb.PatternFlowIpv6PayloadLength
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowIpv6PayloadLengthChoiceEnum
@@ -16645,6 +22899,14 @@ func (obj *patternFlowIpv6NextHeader) msg() *snappipb.PatternFlowIpv6NextHeader 
 	return obj.obj
 }
 
+func (obj *patternFlowIpv6NextHeader) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowIpv6NextHeader) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowIpv6NextHeader) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -16695,8 +22957,10 @@ func (obj *patternFlowIpv6NextHeader) FromJson(value string) error {
 
 type PatternFlowIpv6NextHeader interface {
 	msg() *snappipb.PatternFlowIpv6NextHeader
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowIpv6NextHeaderChoiceEnum
@@ -16806,6 +23070,14 @@ func (obj *patternFlowIpv6HopLimit) msg() *snappipb.PatternFlowIpv6HopLimit {
 	return obj.obj
 }
 
+func (obj *patternFlowIpv6HopLimit) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowIpv6HopLimit) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowIpv6HopLimit) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -16856,8 +23128,10 @@ func (obj *patternFlowIpv6HopLimit) FromJson(value string) error {
 
 type PatternFlowIpv6HopLimit interface {
 	msg() *snappipb.PatternFlowIpv6HopLimit
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowIpv6HopLimitChoiceEnum
@@ -16967,6 +23241,14 @@ func (obj *patternFlowIpv6Src) msg() *snappipb.PatternFlowIpv6Src {
 	return obj.obj
 }
 
+func (obj *patternFlowIpv6Src) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowIpv6Src) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowIpv6Src) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -17017,8 +23299,10 @@ func (obj *patternFlowIpv6Src) FromJson(value string) error {
 
 type PatternFlowIpv6Src interface {
 	msg() *snappipb.PatternFlowIpv6Src
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowIpv6SrcChoiceEnum
@@ -17128,6 +23412,14 @@ func (obj *patternFlowIpv6Dst) msg() *snappipb.PatternFlowIpv6Dst {
 	return obj.obj
 }
 
+func (obj *patternFlowIpv6Dst) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowIpv6Dst) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowIpv6Dst) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -17178,8 +23470,10 @@ func (obj *patternFlowIpv6Dst) FromJson(value string) error {
 
 type PatternFlowIpv6Dst interface {
 	msg() *snappipb.PatternFlowIpv6Dst
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowIpv6DstChoiceEnum
@@ -17289,6 +23583,14 @@ func (obj *patternFlowPfcPauseDst) msg() *snappipb.PatternFlowPfcPauseDst {
 	return obj.obj
 }
 
+func (obj *patternFlowPfcPauseDst) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowPfcPauseDst) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowPfcPauseDst) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -17339,8 +23641,10 @@ func (obj *patternFlowPfcPauseDst) FromJson(value string) error {
 
 type PatternFlowPfcPauseDst interface {
 	msg() *snappipb.PatternFlowPfcPauseDst
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowPfcPauseDstChoiceEnum
@@ -17450,6 +23754,14 @@ func (obj *patternFlowPfcPauseSrc) msg() *snappipb.PatternFlowPfcPauseSrc {
 	return obj.obj
 }
 
+func (obj *patternFlowPfcPauseSrc) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowPfcPauseSrc) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowPfcPauseSrc) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -17500,8 +23812,10 @@ func (obj *patternFlowPfcPauseSrc) FromJson(value string) error {
 
 type PatternFlowPfcPauseSrc interface {
 	msg() *snappipb.PatternFlowPfcPauseSrc
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowPfcPauseSrcChoiceEnum
@@ -17611,6 +23925,14 @@ func (obj *patternFlowPfcPauseEtherType) msg() *snappipb.PatternFlowPfcPauseEthe
 	return obj.obj
 }
 
+func (obj *patternFlowPfcPauseEtherType) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowPfcPauseEtherType) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowPfcPauseEtherType) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -17661,8 +23983,10 @@ func (obj *patternFlowPfcPauseEtherType) FromJson(value string) error {
 
 type PatternFlowPfcPauseEtherType interface {
 	msg() *snappipb.PatternFlowPfcPauseEtherType
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowPfcPauseEtherTypeChoiceEnum
@@ -17772,6 +24096,14 @@ func (obj *patternFlowPfcPauseControlOpCode) msg() *snappipb.PatternFlowPfcPause
 	return obj.obj
 }
 
+func (obj *patternFlowPfcPauseControlOpCode) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowPfcPauseControlOpCode) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowPfcPauseControlOpCode) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -17822,8 +24154,10 @@ func (obj *patternFlowPfcPauseControlOpCode) FromJson(value string) error {
 
 type PatternFlowPfcPauseControlOpCode interface {
 	msg() *snappipb.PatternFlowPfcPauseControlOpCode
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowPfcPauseControlOpCodeChoiceEnum
@@ -17933,6 +24267,14 @@ func (obj *patternFlowPfcPauseClassEnableVector) msg() *snappipb.PatternFlowPfcP
 	return obj.obj
 }
 
+func (obj *patternFlowPfcPauseClassEnableVector) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowPfcPauseClassEnableVector) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowPfcPauseClassEnableVector) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -17983,8 +24325,10 @@ func (obj *patternFlowPfcPauseClassEnableVector) FromJson(value string) error {
 
 type PatternFlowPfcPauseClassEnableVector interface {
 	msg() *snappipb.PatternFlowPfcPauseClassEnableVector
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowPfcPauseClassEnableVectorChoiceEnum
@@ -18094,6 +24438,14 @@ func (obj *patternFlowPfcPausePauseClass0) msg() *snappipb.PatternFlowPfcPausePa
 	return obj.obj
 }
 
+func (obj *patternFlowPfcPausePauseClass0) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowPfcPausePauseClass0) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowPfcPausePauseClass0) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -18144,8 +24496,10 @@ func (obj *patternFlowPfcPausePauseClass0) FromJson(value string) error {
 
 type PatternFlowPfcPausePauseClass0 interface {
 	msg() *snappipb.PatternFlowPfcPausePauseClass0
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowPfcPausePauseClass0ChoiceEnum
@@ -18255,6 +24609,14 @@ func (obj *patternFlowPfcPausePauseClass1) msg() *snappipb.PatternFlowPfcPausePa
 	return obj.obj
 }
 
+func (obj *patternFlowPfcPausePauseClass1) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowPfcPausePauseClass1) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowPfcPausePauseClass1) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -18305,8 +24667,10 @@ func (obj *patternFlowPfcPausePauseClass1) FromJson(value string) error {
 
 type PatternFlowPfcPausePauseClass1 interface {
 	msg() *snappipb.PatternFlowPfcPausePauseClass1
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowPfcPausePauseClass1ChoiceEnum
@@ -18416,6 +24780,14 @@ func (obj *patternFlowPfcPausePauseClass2) msg() *snappipb.PatternFlowPfcPausePa
 	return obj.obj
 }
 
+func (obj *patternFlowPfcPausePauseClass2) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowPfcPausePauseClass2) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowPfcPausePauseClass2) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -18466,8 +24838,10 @@ func (obj *patternFlowPfcPausePauseClass2) FromJson(value string) error {
 
 type PatternFlowPfcPausePauseClass2 interface {
 	msg() *snappipb.PatternFlowPfcPausePauseClass2
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowPfcPausePauseClass2ChoiceEnum
@@ -18577,6 +24951,14 @@ func (obj *patternFlowPfcPausePauseClass3) msg() *snappipb.PatternFlowPfcPausePa
 	return obj.obj
 }
 
+func (obj *patternFlowPfcPausePauseClass3) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowPfcPausePauseClass3) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowPfcPausePauseClass3) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -18627,8 +25009,10 @@ func (obj *patternFlowPfcPausePauseClass3) FromJson(value string) error {
 
 type PatternFlowPfcPausePauseClass3 interface {
 	msg() *snappipb.PatternFlowPfcPausePauseClass3
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowPfcPausePauseClass3ChoiceEnum
@@ -18738,6 +25122,14 @@ func (obj *patternFlowPfcPausePauseClass4) msg() *snappipb.PatternFlowPfcPausePa
 	return obj.obj
 }
 
+func (obj *patternFlowPfcPausePauseClass4) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowPfcPausePauseClass4) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowPfcPausePauseClass4) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -18788,8 +25180,10 @@ func (obj *patternFlowPfcPausePauseClass4) FromJson(value string) error {
 
 type PatternFlowPfcPausePauseClass4 interface {
 	msg() *snappipb.PatternFlowPfcPausePauseClass4
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowPfcPausePauseClass4ChoiceEnum
@@ -18899,6 +25293,14 @@ func (obj *patternFlowPfcPausePauseClass5) msg() *snappipb.PatternFlowPfcPausePa
 	return obj.obj
 }
 
+func (obj *patternFlowPfcPausePauseClass5) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowPfcPausePauseClass5) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowPfcPausePauseClass5) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -18949,8 +25351,10 @@ func (obj *patternFlowPfcPausePauseClass5) FromJson(value string) error {
 
 type PatternFlowPfcPausePauseClass5 interface {
 	msg() *snappipb.PatternFlowPfcPausePauseClass5
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowPfcPausePauseClass5ChoiceEnum
@@ -19060,6 +25464,14 @@ func (obj *patternFlowPfcPausePauseClass6) msg() *snappipb.PatternFlowPfcPausePa
 	return obj.obj
 }
 
+func (obj *patternFlowPfcPausePauseClass6) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowPfcPausePauseClass6) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowPfcPausePauseClass6) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -19110,8 +25522,10 @@ func (obj *patternFlowPfcPausePauseClass6) FromJson(value string) error {
 
 type PatternFlowPfcPausePauseClass6 interface {
 	msg() *snappipb.PatternFlowPfcPausePauseClass6
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowPfcPausePauseClass6ChoiceEnum
@@ -19221,6 +25635,14 @@ func (obj *patternFlowPfcPausePauseClass7) msg() *snappipb.PatternFlowPfcPausePa
 	return obj.obj
 }
 
+func (obj *patternFlowPfcPausePauseClass7) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowPfcPausePauseClass7) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowPfcPausePauseClass7) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -19271,8 +25693,10 @@ func (obj *patternFlowPfcPausePauseClass7) FromJson(value string) error {
 
 type PatternFlowPfcPausePauseClass7 interface {
 	msg() *snappipb.PatternFlowPfcPausePauseClass7
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowPfcPausePauseClass7ChoiceEnum
@@ -19382,6 +25806,14 @@ func (obj *patternFlowEthernetPauseDst) msg() *snappipb.PatternFlowEthernetPause
 	return obj.obj
 }
 
+func (obj *patternFlowEthernetPauseDst) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowEthernetPauseDst) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowEthernetPauseDst) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -19432,8 +25864,10 @@ func (obj *patternFlowEthernetPauseDst) FromJson(value string) error {
 
 type PatternFlowEthernetPauseDst interface {
 	msg() *snappipb.PatternFlowEthernetPauseDst
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowEthernetPauseDstChoiceEnum
@@ -19543,6 +25977,14 @@ func (obj *patternFlowEthernetPauseSrc) msg() *snappipb.PatternFlowEthernetPause
 	return obj.obj
 }
 
+func (obj *patternFlowEthernetPauseSrc) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowEthernetPauseSrc) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowEthernetPauseSrc) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -19593,8 +26035,10 @@ func (obj *patternFlowEthernetPauseSrc) FromJson(value string) error {
 
 type PatternFlowEthernetPauseSrc interface {
 	msg() *snappipb.PatternFlowEthernetPauseSrc
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowEthernetPauseSrcChoiceEnum
@@ -19704,6 +26148,14 @@ func (obj *patternFlowEthernetPauseEtherType) msg() *snappipb.PatternFlowEtherne
 	return obj.obj
 }
 
+func (obj *patternFlowEthernetPauseEtherType) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowEthernetPauseEtherType) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowEthernetPauseEtherType) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -19754,8 +26206,10 @@ func (obj *patternFlowEthernetPauseEtherType) FromJson(value string) error {
 
 type PatternFlowEthernetPauseEtherType interface {
 	msg() *snappipb.PatternFlowEthernetPauseEtherType
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowEthernetPauseEtherTypeChoiceEnum
@@ -19865,6 +26319,14 @@ func (obj *patternFlowEthernetPauseControlOpCode) msg() *snappipb.PatternFlowEth
 	return obj.obj
 }
 
+func (obj *patternFlowEthernetPauseControlOpCode) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowEthernetPauseControlOpCode) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowEthernetPauseControlOpCode) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -19915,8 +26377,10 @@ func (obj *patternFlowEthernetPauseControlOpCode) FromJson(value string) error {
 
 type PatternFlowEthernetPauseControlOpCode interface {
 	msg() *snappipb.PatternFlowEthernetPauseControlOpCode
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowEthernetPauseControlOpCodeChoiceEnum
@@ -20026,6 +26490,14 @@ func (obj *patternFlowEthernetPauseTime) msg() *snappipb.PatternFlowEthernetPaus
 	return obj.obj
 }
 
+func (obj *patternFlowEthernetPauseTime) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowEthernetPauseTime) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowEthernetPauseTime) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -20076,8 +26548,10 @@ func (obj *patternFlowEthernetPauseTime) FromJson(value string) error {
 
 type PatternFlowEthernetPauseTime interface {
 	msg() *snappipb.PatternFlowEthernetPauseTime
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowEthernetPauseTimeChoiceEnum
@@ -20187,6 +26661,14 @@ func (obj *patternFlowTcpSrcPort) msg() *snappipb.PatternFlowTcpSrcPort {
 	return obj.obj
 }
 
+func (obj *patternFlowTcpSrcPort) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowTcpSrcPort) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowTcpSrcPort) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -20237,8 +26719,10 @@ func (obj *patternFlowTcpSrcPort) FromJson(value string) error {
 
 type PatternFlowTcpSrcPort interface {
 	msg() *snappipb.PatternFlowTcpSrcPort
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowTcpSrcPortChoiceEnum
@@ -20348,6 +26832,14 @@ func (obj *patternFlowTcpDstPort) msg() *snappipb.PatternFlowTcpDstPort {
 	return obj.obj
 }
 
+func (obj *patternFlowTcpDstPort) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowTcpDstPort) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowTcpDstPort) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -20398,8 +26890,10 @@ func (obj *patternFlowTcpDstPort) FromJson(value string) error {
 
 type PatternFlowTcpDstPort interface {
 	msg() *snappipb.PatternFlowTcpDstPort
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowTcpDstPortChoiceEnum
@@ -20509,6 +27003,14 @@ func (obj *patternFlowTcpSeqNum) msg() *snappipb.PatternFlowTcpSeqNum {
 	return obj.obj
 }
 
+func (obj *patternFlowTcpSeqNum) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowTcpSeqNum) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowTcpSeqNum) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -20559,8 +27061,10 @@ func (obj *patternFlowTcpSeqNum) FromJson(value string) error {
 
 type PatternFlowTcpSeqNum interface {
 	msg() *snappipb.PatternFlowTcpSeqNum
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowTcpSeqNumChoiceEnum
@@ -20670,6 +27174,14 @@ func (obj *patternFlowTcpAckNum) msg() *snappipb.PatternFlowTcpAckNum {
 	return obj.obj
 }
 
+func (obj *patternFlowTcpAckNum) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowTcpAckNum) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowTcpAckNum) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -20720,8 +27232,10 @@ func (obj *patternFlowTcpAckNum) FromJson(value string) error {
 
 type PatternFlowTcpAckNum interface {
 	msg() *snappipb.PatternFlowTcpAckNum
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowTcpAckNumChoiceEnum
@@ -20831,6 +27345,14 @@ func (obj *patternFlowTcpDataOffset) msg() *snappipb.PatternFlowTcpDataOffset {
 	return obj.obj
 }
 
+func (obj *patternFlowTcpDataOffset) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowTcpDataOffset) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowTcpDataOffset) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -20881,8 +27403,10 @@ func (obj *patternFlowTcpDataOffset) FromJson(value string) error {
 
 type PatternFlowTcpDataOffset interface {
 	msg() *snappipb.PatternFlowTcpDataOffset
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowTcpDataOffsetChoiceEnum
@@ -20992,6 +27516,14 @@ func (obj *patternFlowTcpEcnNs) msg() *snappipb.PatternFlowTcpEcnNs {
 	return obj.obj
 }
 
+func (obj *patternFlowTcpEcnNs) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowTcpEcnNs) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowTcpEcnNs) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -21042,8 +27574,10 @@ func (obj *patternFlowTcpEcnNs) FromJson(value string) error {
 
 type PatternFlowTcpEcnNs interface {
 	msg() *snappipb.PatternFlowTcpEcnNs
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowTcpEcnNsChoiceEnum
@@ -21153,6 +27687,14 @@ func (obj *patternFlowTcpEcnCwr) msg() *snappipb.PatternFlowTcpEcnCwr {
 	return obj.obj
 }
 
+func (obj *patternFlowTcpEcnCwr) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowTcpEcnCwr) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowTcpEcnCwr) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -21203,8 +27745,10 @@ func (obj *patternFlowTcpEcnCwr) FromJson(value string) error {
 
 type PatternFlowTcpEcnCwr interface {
 	msg() *snappipb.PatternFlowTcpEcnCwr
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowTcpEcnCwrChoiceEnum
@@ -21314,6 +27858,14 @@ func (obj *patternFlowTcpEcnEcho) msg() *snappipb.PatternFlowTcpEcnEcho {
 	return obj.obj
 }
 
+func (obj *patternFlowTcpEcnEcho) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowTcpEcnEcho) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowTcpEcnEcho) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -21364,8 +27916,10 @@ func (obj *patternFlowTcpEcnEcho) FromJson(value string) error {
 
 type PatternFlowTcpEcnEcho interface {
 	msg() *snappipb.PatternFlowTcpEcnEcho
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowTcpEcnEchoChoiceEnum
@@ -21475,6 +28029,14 @@ func (obj *patternFlowTcpCtlUrg) msg() *snappipb.PatternFlowTcpCtlUrg {
 	return obj.obj
 }
 
+func (obj *patternFlowTcpCtlUrg) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowTcpCtlUrg) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowTcpCtlUrg) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -21525,8 +28087,10 @@ func (obj *patternFlowTcpCtlUrg) FromJson(value string) error {
 
 type PatternFlowTcpCtlUrg interface {
 	msg() *snappipb.PatternFlowTcpCtlUrg
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowTcpCtlUrgChoiceEnum
@@ -21636,6 +28200,14 @@ func (obj *patternFlowTcpCtlAck) msg() *snappipb.PatternFlowTcpCtlAck {
 	return obj.obj
 }
 
+func (obj *patternFlowTcpCtlAck) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowTcpCtlAck) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowTcpCtlAck) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -21686,8 +28258,10 @@ func (obj *patternFlowTcpCtlAck) FromJson(value string) error {
 
 type PatternFlowTcpCtlAck interface {
 	msg() *snappipb.PatternFlowTcpCtlAck
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowTcpCtlAckChoiceEnum
@@ -21797,6 +28371,14 @@ func (obj *patternFlowTcpCtlPsh) msg() *snappipb.PatternFlowTcpCtlPsh {
 	return obj.obj
 }
 
+func (obj *patternFlowTcpCtlPsh) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowTcpCtlPsh) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowTcpCtlPsh) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -21847,8 +28429,10 @@ func (obj *patternFlowTcpCtlPsh) FromJson(value string) error {
 
 type PatternFlowTcpCtlPsh interface {
 	msg() *snappipb.PatternFlowTcpCtlPsh
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowTcpCtlPshChoiceEnum
@@ -21958,6 +28542,14 @@ func (obj *patternFlowTcpCtlRst) msg() *snappipb.PatternFlowTcpCtlRst {
 	return obj.obj
 }
 
+func (obj *patternFlowTcpCtlRst) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowTcpCtlRst) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowTcpCtlRst) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -22008,8 +28600,10 @@ func (obj *patternFlowTcpCtlRst) FromJson(value string) error {
 
 type PatternFlowTcpCtlRst interface {
 	msg() *snappipb.PatternFlowTcpCtlRst
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowTcpCtlRstChoiceEnum
@@ -22119,6 +28713,14 @@ func (obj *patternFlowTcpCtlSyn) msg() *snappipb.PatternFlowTcpCtlSyn {
 	return obj.obj
 }
 
+func (obj *patternFlowTcpCtlSyn) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowTcpCtlSyn) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowTcpCtlSyn) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -22169,8 +28771,10 @@ func (obj *patternFlowTcpCtlSyn) FromJson(value string) error {
 
 type PatternFlowTcpCtlSyn interface {
 	msg() *snappipb.PatternFlowTcpCtlSyn
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowTcpCtlSynChoiceEnum
@@ -22280,6 +28884,14 @@ func (obj *patternFlowTcpCtlFin) msg() *snappipb.PatternFlowTcpCtlFin {
 	return obj.obj
 }
 
+func (obj *patternFlowTcpCtlFin) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowTcpCtlFin) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowTcpCtlFin) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -22330,8 +28942,10 @@ func (obj *patternFlowTcpCtlFin) FromJson(value string) error {
 
 type PatternFlowTcpCtlFin interface {
 	msg() *snappipb.PatternFlowTcpCtlFin
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowTcpCtlFinChoiceEnum
@@ -22441,6 +29055,14 @@ func (obj *patternFlowTcpWindow) msg() *snappipb.PatternFlowTcpWindow {
 	return obj.obj
 }
 
+func (obj *patternFlowTcpWindow) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowTcpWindow) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowTcpWindow) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -22491,8 +29113,10 @@ func (obj *patternFlowTcpWindow) FromJson(value string) error {
 
 type PatternFlowTcpWindow interface {
 	msg() *snappipb.PatternFlowTcpWindow
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowTcpWindowChoiceEnum
@@ -22602,6 +29226,14 @@ func (obj *patternFlowUdpSrcPort) msg() *snappipb.PatternFlowUdpSrcPort {
 	return obj.obj
 }
 
+func (obj *patternFlowUdpSrcPort) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowUdpSrcPort) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowUdpSrcPort) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -22652,8 +29284,10 @@ func (obj *patternFlowUdpSrcPort) FromJson(value string) error {
 
 type PatternFlowUdpSrcPort interface {
 	msg() *snappipb.PatternFlowUdpSrcPort
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowUdpSrcPortChoiceEnum
@@ -22763,6 +29397,14 @@ func (obj *patternFlowUdpDstPort) msg() *snappipb.PatternFlowUdpDstPort {
 	return obj.obj
 }
 
+func (obj *patternFlowUdpDstPort) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowUdpDstPort) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowUdpDstPort) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -22813,8 +29455,10 @@ func (obj *patternFlowUdpDstPort) FromJson(value string) error {
 
 type PatternFlowUdpDstPort interface {
 	msg() *snappipb.PatternFlowUdpDstPort
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowUdpDstPortChoiceEnum
@@ -22924,6 +29568,14 @@ func (obj *patternFlowUdpLength) msg() *snappipb.PatternFlowUdpLength {
 	return obj.obj
 }
 
+func (obj *patternFlowUdpLength) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowUdpLength) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowUdpLength) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -22974,8 +29626,10 @@ func (obj *patternFlowUdpLength) FromJson(value string) error {
 
 type PatternFlowUdpLength interface {
 	msg() *snappipb.PatternFlowUdpLength
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowUdpLengthChoiceEnum
@@ -23085,6 +29739,14 @@ func (obj *patternFlowUdpChecksum) msg() *snappipb.PatternFlowUdpChecksum {
 	return obj.obj
 }
 
+func (obj *patternFlowUdpChecksum) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowUdpChecksum) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowUdpChecksum) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -23135,8 +29797,10 @@ func (obj *patternFlowUdpChecksum) FromJson(value string) error {
 
 type PatternFlowUdpChecksum interface {
 	msg() *snappipb.PatternFlowUdpChecksum
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowUdpChecksumChoiceEnum
@@ -23210,6 +29874,14 @@ func (obj *patternFlowGreChecksumPresent) msg() *snappipb.PatternFlowGreChecksum
 	return obj.obj
 }
 
+func (obj *patternFlowGreChecksumPresent) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowGreChecksumPresent) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowGreChecksumPresent) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -23260,8 +29932,10 @@ func (obj *patternFlowGreChecksumPresent) FromJson(value string) error {
 
 type PatternFlowGreChecksumPresent interface {
 	msg() *snappipb.PatternFlowGreChecksumPresent
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowGreChecksumPresentChoiceEnum
@@ -23371,6 +30045,14 @@ func (obj *patternFlowGreReserved0) msg() *snappipb.PatternFlowGreReserved0 {
 	return obj.obj
 }
 
+func (obj *patternFlowGreReserved0) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowGreReserved0) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowGreReserved0) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -23421,8 +30103,10 @@ func (obj *patternFlowGreReserved0) FromJson(value string) error {
 
 type PatternFlowGreReserved0 interface {
 	msg() *snappipb.PatternFlowGreReserved0
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowGreReserved0ChoiceEnum
@@ -23532,6 +30216,14 @@ func (obj *patternFlowGreVersion) msg() *snappipb.PatternFlowGreVersion {
 	return obj.obj
 }
 
+func (obj *patternFlowGreVersion) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowGreVersion) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowGreVersion) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -23582,8 +30274,10 @@ func (obj *patternFlowGreVersion) FromJson(value string) error {
 
 type PatternFlowGreVersion interface {
 	msg() *snappipb.PatternFlowGreVersion
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowGreVersionChoiceEnum
@@ -23693,6 +30387,14 @@ func (obj *patternFlowGreProtocol) msg() *snappipb.PatternFlowGreProtocol {
 	return obj.obj
 }
 
+func (obj *patternFlowGreProtocol) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowGreProtocol) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowGreProtocol) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -23743,8 +30445,10 @@ func (obj *patternFlowGreProtocol) FromJson(value string) error {
 
 type PatternFlowGreProtocol interface {
 	msg() *snappipb.PatternFlowGreProtocol
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowGreProtocolChoiceEnum
@@ -23854,6 +30558,14 @@ func (obj *patternFlowGreChecksum) msg() *snappipb.PatternFlowGreChecksum {
 	return obj.obj
 }
 
+func (obj *patternFlowGreChecksum) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowGreChecksum) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowGreChecksum) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -23904,8 +30616,10 @@ func (obj *patternFlowGreChecksum) FromJson(value string) error {
 
 type PatternFlowGreChecksum interface {
 	msg() *snappipb.PatternFlowGreChecksum
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowGreChecksumChoiceEnum
@@ -23979,6 +30693,14 @@ func (obj *patternFlowGreReserved1) msg() *snappipb.PatternFlowGreReserved1 {
 	return obj.obj
 }
 
+func (obj *patternFlowGreReserved1) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowGreReserved1) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowGreReserved1) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -24029,8 +30751,10 @@ func (obj *patternFlowGreReserved1) FromJson(value string) error {
 
 type PatternFlowGreReserved1 interface {
 	msg() *snappipb.PatternFlowGreReserved1
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowGreReserved1ChoiceEnum
@@ -24140,6 +30864,14 @@ func (obj *patternFlowGtpv1Version) msg() *snappipb.PatternFlowGtpv1Version {
 	return obj.obj
 }
 
+func (obj *patternFlowGtpv1Version) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowGtpv1Version) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowGtpv1Version) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -24190,8 +30922,10 @@ func (obj *patternFlowGtpv1Version) FromJson(value string) error {
 
 type PatternFlowGtpv1Version interface {
 	msg() *snappipb.PatternFlowGtpv1Version
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowGtpv1VersionChoiceEnum
@@ -24301,6 +31035,14 @@ func (obj *patternFlowGtpv1ProtocolType) msg() *snappipb.PatternFlowGtpv1Protoco
 	return obj.obj
 }
 
+func (obj *patternFlowGtpv1ProtocolType) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowGtpv1ProtocolType) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowGtpv1ProtocolType) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -24351,8 +31093,10 @@ func (obj *patternFlowGtpv1ProtocolType) FromJson(value string) error {
 
 type PatternFlowGtpv1ProtocolType interface {
 	msg() *snappipb.PatternFlowGtpv1ProtocolType
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowGtpv1ProtocolTypeChoiceEnum
@@ -24462,6 +31206,14 @@ func (obj *patternFlowGtpv1Reserved) msg() *snappipb.PatternFlowGtpv1Reserved {
 	return obj.obj
 }
 
+func (obj *patternFlowGtpv1Reserved) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowGtpv1Reserved) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowGtpv1Reserved) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -24512,8 +31264,10 @@ func (obj *patternFlowGtpv1Reserved) FromJson(value string) error {
 
 type PatternFlowGtpv1Reserved interface {
 	msg() *snappipb.PatternFlowGtpv1Reserved
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowGtpv1ReservedChoiceEnum
@@ -24623,6 +31377,14 @@ func (obj *patternFlowGtpv1EFlag) msg() *snappipb.PatternFlowGtpv1EFlag {
 	return obj.obj
 }
 
+func (obj *patternFlowGtpv1EFlag) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowGtpv1EFlag) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowGtpv1EFlag) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -24673,8 +31435,10 @@ func (obj *patternFlowGtpv1EFlag) FromJson(value string) error {
 
 type PatternFlowGtpv1EFlag interface {
 	msg() *snappipb.PatternFlowGtpv1EFlag
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowGtpv1EFlagChoiceEnum
@@ -24784,6 +31548,14 @@ func (obj *patternFlowGtpv1SFlag) msg() *snappipb.PatternFlowGtpv1SFlag {
 	return obj.obj
 }
 
+func (obj *patternFlowGtpv1SFlag) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowGtpv1SFlag) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowGtpv1SFlag) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -24834,8 +31606,10 @@ func (obj *patternFlowGtpv1SFlag) FromJson(value string) error {
 
 type PatternFlowGtpv1SFlag interface {
 	msg() *snappipb.PatternFlowGtpv1SFlag
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowGtpv1SFlagChoiceEnum
@@ -24945,6 +31719,14 @@ func (obj *patternFlowGtpv1PnFlag) msg() *snappipb.PatternFlowGtpv1PnFlag {
 	return obj.obj
 }
 
+func (obj *patternFlowGtpv1PnFlag) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowGtpv1PnFlag) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowGtpv1PnFlag) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -24995,8 +31777,10 @@ func (obj *patternFlowGtpv1PnFlag) FromJson(value string) error {
 
 type PatternFlowGtpv1PnFlag interface {
 	msg() *snappipb.PatternFlowGtpv1PnFlag
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowGtpv1PnFlagChoiceEnum
@@ -25106,6 +31890,14 @@ func (obj *patternFlowGtpv1MessageType) msg() *snappipb.PatternFlowGtpv1MessageT
 	return obj.obj
 }
 
+func (obj *patternFlowGtpv1MessageType) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowGtpv1MessageType) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowGtpv1MessageType) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -25156,8 +31948,10 @@ func (obj *patternFlowGtpv1MessageType) FromJson(value string) error {
 
 type PatternFlowGtpv1MessageType interface {
 	msg() *snappipb.PatternFlowGtpv1MessageType
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowGtpv1MessageTypeChoiceEnum
@@ -25267,6 +32061,14 @@ func (obj *patternFlowGtpv1MessageLength) msg() *snappipb.PatternFlowGtpv1Messag
 	return obj.obj
 }
 
+func (obj *patternFlowGtpv1MessageLength) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowGtpv1MessageLength) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowGtpv1MessageLength) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -25317,8 +32119,10 @@ func (obj *patternFlowGtpv1MessageLength) FromJson(value string) error {
 
 type PatternFlowGtpv1MessageLength interface {
 	msg() *snappipb.PatternFlowGtpv1MessageLength
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowGtpv1MessageLengthChoiceEnum
@@ -25428,6 +32232,14 @@ func (obj *patternFlowGtpv1Teid) msg() *snappipb.PatternFlowGtpv1Teid {
 	return obj.obj
 }
 
+func (obj *patternFlowGtpv1Teid) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowGtpv1Teid) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowGtpv1Teid) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -25478,8 +32290,10 @@ func (obj *patternFlowGtpv1Teid) FromJson(value string) error {
 
 type PatternFlowGtpv1Teid interface {
 	msg() *snappipb.PatternFlowGtpv1Teid
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowGtpv1TeidChoiceEnum
@@ -25589,6 +32403,14 @@ func (obj *patternFlowGtpv1SquenceNumber) msg() *snappipb.PatternFlowGtpv1Squenc
 	return obj.obj
 }
 
+func (obj *patternFlowGtpv1SquenceNumber) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowGtpv1SquenceNumber) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowGtpv1SquenceNumber) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -25639,8 +32461,10 @@ func (obj *patternFlowGtpv1SquenceNumber) FromJson(value string) error {
 
 type PatternFlowGtpv1SquenceNumber interface {
 	msg() *snappipb.PatternFlowGtpv1SquenceNumber
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowGtpv1SquenceNumberChoiceEnum
@@ -25750,6 +32574,14 @@ func (obj *patternFlowGtpv1NPduNumber) msg() *snappipb.PatternFlowGtpv1NPduNumbe
 	return obj.obj
 }
 
+func (obj *patternFlowGtpv1NPduNumber) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowGtpv1NPduNumber) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowGtpv1NPduNumber) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -25800,8 +32632,10 @@ func (obj *patternFlowGtpv1NPduNumber) FromJson(value string) error {
 
 type PatternFlowGtpv1NPduNumber interface {
 	msg() *snappipb.PatternFlowGtpv1NPduNumber
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowGtpv1NPduNumberChoiceEnum
@@ -25911,6 +32745,14 @@ func (obj *patternFlowGtpv1NextExtensionHeaderType) msg() *snappipb.PatternFlowG
 	return obj.obj
 }
 
+func (obj *patternFlowGtpv1NextExtensionHeaderType) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowGtpv1NextExtensionHeaderType) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowGtpv1NextExtensionHeaderType) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -25961,8 +32803,10 @@ func (obj *patternFlowGtpv1NextExtensionHeaderType) FromJson(value string) error
 
 type PatternFlowGtpv1NextExtensionHeaderType interface {
 	msg() *snappipb.PatternFlowGtpv1NextExtensionHeaderType
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowGtpv1NextExtensionHeaderTypeChoiceEnum
@@ -26072,6 +32916,14 @@ func (obj *flowGtpExtension) msg() *snappipb.FlowGtpExtension {
 	return obj.obj
 }
 
+func (obj *flowGtpExtension) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *flowGtpExtension) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *flowGtpExtension) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -26122,8 +32974,10 @@ func (obj *flowGtpExtension) FromJson(value string) error {
 
 type FlowGtpExtension interface {
 	msg() *snappipb.FlowGtpExtension
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	ExtensionLength() PatternFlowGtpExtensionExtensionLength
@@ -26167,6 +33021,14 @@ type patternFlowGtpv2Version struct {
 
 func (obj *patternFlowGtpv2Version) msg() *snappipb.PatternFlowGtpv2Version {
 	return obj.obj
+}
+
+func (obj *patternFlowGtpv2Version) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowGtpv2Version) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
 }
 
 func (obj *patternFlowGtpv2Version) ToYaml() string {
@@ -26219,8 +33081,10 @@ func (obj *patternFlowGtpv2Version) FromJson(value string) error {
 
 type PatternFlowGtpv2Version interface {
 	msg() *snappipb.PatternFlowGtpv2Version
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowGtpv2VersionChoiceEnum
@@ -26330,6 +33194,14 @@ func (obj *patternFlowGtpv2PiggybackingFlag) msg() *snappipb.PatternFlowGtpv2Pig
 	return obj.obj
 }
 
+func (obj *patternFlowGtpv2PiggybackingFlag) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowGtpv2PiggybackingFlag) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowGtpv2PiggybackingFlag) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -26380,8 +33252,10 @@ func (obj *patternFlowGtpv2PiggybackingFlag) FromJson(value string) error {
 
 type PatternFlowGtpv2PiggybackingFlag interface {
 	msg() *snappipb.PatternFlowGtpv2PiggybackingFlag
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowGtpv2PiggybackingFlagChoiceEnum
@@ -26491,6 +33365,14 @@ func (obj *patternFlowGtpv2TeidFlag) msg() *snappipb.PatternFlowGtpv2TeidFlag {
 	return obj.obj
 }
 
+func (obj *patternFlowGtpv2TeidFlag) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowGtpv2TeidFlag) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowGtpv2TeidFlag) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -26541,8 +33423,10 @@ func (obj *patternFlowGtpv2TeidFlag) FromJson(value string) error {
 
 type PatternFlowGtpv2TeidFlag interface {
 	msg() *snappipb.PatternFlowGtpv2TeidFlag
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowGtpv2TeidFlagChoiceEnum
@@ -26652,6 +33536,14 @@ func (obj *patternFlowGtpv2Spare1) msg() *snappipb.PatternFlowGtpv2Spare1 {
 	return obj.obj
 }
 
+func (obj *patternFlowGtpv2Spare1) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowGtpv2Spare1) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowGtpv2Spare1) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -26702,8 +33594,10 @@ func (obj *patternFlowGtpv2Spare1) FromJson(value string) error {
 
 type PatternFlowGtpv2Spare1 interface {
 	msg() *snappipb.PatternFlowGtpv2Spare1
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowGtpv2Spare1ChoiceEnum
@@ -26813,6 +33707,14 @@ func (obj *patternFlowGtpv2MessageType) msg() *snappipb.PatternFlowGtpv2MessageT
 	return obj.obj
 }
 
+func (obj *patternFlowGtpv2MessageType) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowGtpv2MessageType) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowGtpv2MessageType) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -26863,8 +33765,10 @@ func (obj *patternFlowGtpv2MessageType) FromJson(value string) error {
 
 type PatternFlowGtpv2MessageType interface {
 	msg() *snappipb.PatternFlowGtpv2MessageType
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowGtpv2MessageTypeChoiceEnum
@@ -26974,6 +33878,14 @@ func (obj *patternFlowGtpv2MessageLength) msg() *snappipb.PatternFlowGtpv2Messag
 	return obj.obj
 }
 
+func (obj *patternFlowGtpv2MessageLength) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowGtpv2MessageLength) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowGtpv2MessageLength) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -27024,8 +33936,10 @@ func (obj *patternFlowGtpv2MessageLength) FromJson(value string) error {
 
 type PatternFlowGtpv2MessageLength interface {
 	msg() *snappipb.PatternFlowGtpv2MessageLength
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowGtpv2MessageLengthChoiceEnum
@@ -27135,6 +34049,14 @@ func (obj *patternFlowGtpv2Teid) msg() *snappipb.PatternFlowGtpv2Teid {
 	return obj.obj
 }
 
+func (obj *patternFlowGtpv2Teid) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowGtpv2Teid) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowGtpv2Teid) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -27185,8 +34107,10 @@ func (obj *patternFlowGtpv2Teid) FromJson(value string) error {
 
 type PatternFlowGtpv2Teid interface {
 	msg() *snappipb.PatternFlowGtpv2Teid
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowGtpv2TeidChoiceEnum
@@ -27296,6 +34220,14 @@ func (obj *patternFlowGtpv2SequenceNumber) msg() *snappipb.PatternFlowGtpv2Seque
 	return obj.obj
 }
 
+func (obj *patternFlowGtpv2SequenceNumber) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowGtpv2SequenceNumber) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowGtpv2SequenceNumber) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -27346,8 +34278,10 @@ func (obj *patternFlowGtpv2SequenceNumber) FromJson(value string) error {
 
 type PatternFlowGtpv2SequenceNumber interface {
 	msg() *snappipb.PatternFlowGtpv2SequenceNumber
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowGtpv2SequenceNumberChoiceEnum
@@ -27457,6 +34391,14 @@ func (obj *patternFlowGtpv2Spare2) msg() *snappipb.PatternFlowGtpv2Spare2 {
 	return obj.obj
 }
 
+func (obj *patternFlowGtpv2Spare2) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowGtpv2Spare2) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowGtpv2Spare2) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -27507,8 +34449,10 @@ func (obj *patternFlowGtpv2Spare2) FromJson(value string) error {
 
 type PatternFlowGtpv2Spare2 interface {
 	msg() *snappipb.PatternFlowGtpv2Spare2
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowGtpv2Spare2ChoiceEnum
@@ -27618,6 +34562,14 @@ func (obj *patternFlowArpHardwareType) msg() *snappipb.PatternFlowArpHardwareTyp
 	return obj.obj
 }
 
+func (obj *patternFlowArpHardwareType) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowArpHardwareType) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowArpHardwareType) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -27668,8 +34620,10 @@ func (obj *patternFlowArpHardwareType) FromJson(value string) error {
 
 type PatternFlowArpHardwareType interface {
 	msg() *snappipb.PatternFlowArpHardwareType
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowArpHardwareTypeChoiceEnum
@@ -27779,6 +34733,14 @@ func (obj *patternFlowArpProtocolType) msg() *snappipb.PatternFlowArpProtocolTyp
 	return obj.obj
 }
 
+func (obj *patternFlowArpProtocolType) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowArpProtocolType) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowArpProtocolType) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -27829,8 +34791,10 @@ func (obj *patternFlowArpProtocolType) FromJson(value string) error {
 
 type PatternFlowArpProtocolType interface {
 	msg() *snappipb.PatternFlowArpProtocolType
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowArpProtocolTypeChoiceEnum
@@ -27940,6 +34904,14 @@ func (obj *patternFlowArpHardwareLength) msg() *snappipb.PatternFlowArpHardwareL
 	return obj.obj
 }
 
+func (obj *patternFlowArpHardwareLength) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowArpHardwareLength) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowArpHardwareLength) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -27990,8 +34962,10 @@ func (obj *patternFlowArpHardwareLength) FromJson(value string) error {
 
 type PatternFlowArpHardwareLength interface {
 	msg() *snappipb.PatternFlowArpHardwareLength
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowArpHardwareLengthChoiceEnum
@@ -28101,6 +35075,14 @@ func (obj *patternFlowArpProtocolLength) msg() *snappipb.PatternFlowArpProtocolL
 	return obj.obj
 }
 
+func (obj *patternFlowArpProtocolLength) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowArpProtocolLength) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowArpProtocolLength) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -28151,8 +35133,10 @@ func (obj *patternFlowArpProtocolLength) FromJson(value string) error {
 
 type PatternFlowArpProtocolLength interface {
 	msg() *snappipb.PatternFlowArpProtocolLength
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowArpProtocolLengthChoiceEnum
@@ -28262,6 +35246,14 @@ func (obj *patternFlowArpOperation) msg() *snappipb.PatternFlowArpOperation {
 	return obj.obj
 }
 
+func (obj *patternFlowArpOperation) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowArpOperation) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowArpOperation) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -28312,8 +35304,10 @@ func (obj *patternFlowArpOperation) FromJson(value string) error {
 
 type PatternFlowArpOperation interface {
 	msg() *snappipb.PatternFlowArpOperation
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowArpOperationChoiceEnum
@@ -28423,6 +35417,14 @@ func (obj *patternFlowArpSenderHardwareAddr) msg() *snappipb.PatternFlowArpSende
 	return obj.obj
 }
 
+func (obj *patternFlowArpSenderHardwareAddr) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowArpSenderHardwareAddr) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowArpSenderHardwareAddr) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -28473,8 +35475,10 @@ func (obj *patternFlowArpSenderHardwareAddr) FromJson(value string) error {
 
 type PatternFlowArpSenderHardwareAddr interface {
 	msg() *snappipb.PatternFlowArpSenderHardwareAddr
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowArpSenderHardwareAddrChoiceEnum
@@ -28584,6 +35588,14 @@ func (obj *patternFlowArpSenderProtocolAddr) msg() *snappipb.PatternFlowArpSende
 	return obj.obj
 }
 
+func (obj *patternFlowArpSenderProtocolAddr) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowArpSenderProtocolAddr) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowArpSenderProtocolAddr) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -28634,8 +35646,10 @@ func (obj *patternFlowArpSenderProtocolAddr) FromJson(value string) error {
 
 type PatternFlowArpSenderProtocolAddr interface {
 	msg() *snappipb.PatternFlowArpSenderProtocolAddr
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowArpSenderProtocolAddrChoiceEnum
@@ -28745,6 +35759,14 @@ func (obj *patternFlowArpTargetHardwareAddr) msg() *snappipb.PatternFlowArpTarge
 	return obj.obj
 }
 
+func (obj *patternFlowArpTargetHardwareAddr) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowArpTargetHardwareAddr) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowArpTargetHardwareAddr) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -28795,8 +35817,10 @@ func (obj *patternFlowArpTargetHardwareAddr) FromJson(value string) error {
 
 type PatternFlowArpTargetHardwareAddr interface {
 	msg() *snappipb.PatternFlowArpTargetHardwareAddr
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowArpTargetHardwareAddrChoiceEnum
@@ -28906,6 +35930,14 @@ func (obj *patternFlowArpTargetProtocolAddr) msg() *snappipb.PatternFlowArpTarge
 	return obj.obj
 }
 
+func (obj *patternFlowArpTargetProtocolAddr) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowArpTargetProtocolAddr) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowArpTargetProtocolAddr) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -28956,8 +35988,10 @@ func (obj *patternFlowArpTargetProtocolAddr) FromJson(value string) error {
 
 type PatternFlowArpTargetProtocolAddr interface {
 	msg() *snappipb.PatternFlowArpTargetProtocolAddr
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowArpTargetProtocolAddrChoiceEnum
@@ -29067,6 +36101,14 @@ func (obj *flowIcmpEcho) msg() *snappipb.FlowIcmpEcho {
 	return obj.obj
 }
 
+func (obj *flowIcmpEcho) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *flowIcmpEcho) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *flowIcmpEcho) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -29117,8 +36159,10 @@ func (obj *flowIcmpEcho) FromJson(value string) error {
 
 type FlowIcmpEcho interface {
 	msg() *snappipb.FlowIcmpEcho
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Type() PatternFlowIcmpEchoType
@@ -29186,6 +36230,14 @@ func (obj *flowIcmpv6Echo) msg() *snappipb.FlowIcmpv6Echo {
 	return obj.obj
 }
 
+func (obj *flowIcmpv6Echo) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *flowIcmpv6Echo) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *flowIcmpv6Echo) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -29236,8 +36288,10 @@ func (obj *flowIcmpv6Echo) FromJson(value string) error {
 
 type FlowIcmpv6Echo interface {
 	msg() *snappipb.FlowIcmpv6Echo
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Type() PatternFlowIcmpv6EchoType
@@ -29305,6 +36359,14 @@ func (obj *patternFlowPppAddress) msg() *snappipb.PatternFlowPppAddress {
 	return obj.obj
 }
 
+func (obj *patternFlowPppAddress) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowPppAddress) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowPppAddress) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -29355,8 +36417,10 @@ func (obj *patternFlowPppAddress) FromJson(value string) error {
 
 type PatternFlowPppAddress interface {
 	msg() *snappipb.PatternFlowPppAddress
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowPppAddressChoiceEnum
@@ -29466,6 +36530,14 @@ func (obj *patternFlowPppControl) msg() *snappipb.PatternFlowPppControl {
 	return obj.obj
 }
 
+func (obj *patternFlowPppControl) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowPppControl) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowPppControl) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -29516,8 +36588,10 @@ func (obj *patternFlowPppControl) FromJson(value string) error {
 
 type PatternFlowPppControl interface {
 	msg() *snappipb.PatternFlowPppControl
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowPppControlChoiceEnum
@@ -29627,6 +36701,14 @@ func (obj *patternFlowPppProtocolType) msg() *snappipb.PatternFlowPppProtocolTyp
 	return obj.obj
 }
 
+func (obj *patternFlowPppProtocolType) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowPppProtocolType) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowPppProtocolType) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -29677,8 +36759,10 @@ func (obj *patternFlowPppProtocolType) FromJson(value string) error {
 
 type PatternFlowPppProtocolType interface {
 	msg() *snappipb.PatternFlowPppProtocolType
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowPppProtocolTypeChoiceEnum
@@ -29811,6 +36895,14 @@ func (obj *patternFlowIgmpv1Version) msg() *snappipb.PatternFlowIgmpv1Version {
 	return obj.obj
 }
 
+func (obj *patternFlowIgmpv1Version) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowIgmpv1Version) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowIgmpv1Version) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -29861,8 +36953,10 @@ func (obj *patternFlowIgmpv1Version) FromJson(value string) error {
 
 type PatternFlowIgmpv1Version interface {
 	msg() *snappipb.PatternFlowIgmpv1Version
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowIgmpv1VersionChoiceEnum
@@ -29972,6 +37066,14 @@ func (obj *patternFlowIgmpv1Type) msg() *snappipb.PatternFlowIgmpv1Type {
 	return obj.obj
 }
 
+func (obj *patternFlowIgmpv1Type) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowIgmpv1Type) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowIgmpv1Type) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -30022,8 +37124,10 @@ func (obj *patternFlowIgmpv1Type) FromJson(value string) error {
 
 type PatternFlowIgmpv1Type interface {
 	msg() *snappipb.PatternFlowIgmpv1Type
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowIgmpv1TypeChoiceEnum
@@ -30133,6 +37237,14 @@ func (obj *patternFlowIgmpv1Unused) msg() *snappipb.PatternFlowIgmpv1Unused {
 	return obj.obj
 }
 
+func (obj *patternFlowIgmpv1Unused) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowIgmpv1Unused) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowIgmpv1Unused) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -30183,8 +37295,10 @@ func (obj *patternFlowIgmpv1Unused) FromJson(value string) error {
 
 type PatternFlowIgmpv1Unused interface {
 	msg() *snappipb.PatternFlowIgmpv1Unused
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowIgmpv1UnusedChoiceEnum
@@ -30294,6 +37408,14 @@ func (obj *patternFlowIgmpv1Checksum) msg() *snappipb.PatternFlowIgmpv1Checksum 
 	return obj.obj
 }
 
+func (obj *patternFlowIgmpv1Checksum) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowIgmpv1Checksum) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowIgmpv1Checksum) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -30344,8 +37466,10 @@ func (obj *patternFlowIgmpv1Checksum) FromJson(value string) error {
 
 type PatternFlowIgmpv1Checksum interface {
 	msg() *snappipb.PatternFlowIgmpv1Checksum
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowIgmpv1ChecksumChoiceEnum
@@ -30419,6 +37543,14 @@ func (obj *patternFlowIgmpv1GroupAddress) msg() *snappipb.PatternFlowIgmpv1Group
 	return obj.obj
 }
 
+func (obj *patternFlowIgmpv1GroupAddress) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowIgmpv1GroupAddress) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowIgmpv1GroupAddress) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -30469,8 +37601,10 @@ func (obj *patternFlowIgmpv1GroupAddress) FromJson(value string) error {
 
 type PatternFlowIgmpv1GroupAddress interface {
 	msg() *snappipb.PatternFlowIgmpv1GroupAddress
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowIgmpv1GroupAddressChoiceEnum
@@ -30580,6 +37714,14 @@ func (obj *flowDelay) msg() *snappipb.FlowDelay {
 	return obj.obj
 }
 
+func (obj *flowDelay) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *flowDelay) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *flowDelay) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -30630,8 +37772,10 @@ func (obj *flowDelay) FromJson(value string) error {
 
 type FlowDelay interface {
 	msg() *snappipb.FlowDelay
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() FlowDelayChoiceEnum
@@ -30723,6 +37867,14 @@ func (obj *flowDurationInterBurstGap) msg() *snappipb.FlowDurationInterBurstGap 
 	return obj.obj
 }
 
+func (obj *flowDurationInterBurstGap) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *flowDurationInterBurstGap) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *flowDurationInterBurstGap) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -30773,8 +37925,10 @@ func (obj *flowDurationInterBurstGap) FromJson(value string) error {
 
 type FlowDurationInterBurstGap interface {
 	msg() *snappipb.FlowDurationInterBurstGap
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() FlowDurationInterBurstGapChoiceEnum
@@ -30866,6 +38020,14 @@ func (obj *deviceBgpAdvanced) msg() *snappipb.DeviceBgpAdvanced {
 	return obj.obj
 }
 
+func (obj *deviceBgpAdvanced) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *deviceBgpAdvanced) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *deviceBgpAdvanced) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -30916,8 +38078,10 @@ func (obj *deviceBgpAdvanced) FromJson(value string) error {
 
 type DeviceBgpAdvanced interface {
 	msg() *snappipb.DeviceBgpAdvanced
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	HoldTimeInterval() int32
@@ -31010,6 +38174,14 @@ func (obj *deviceBgpCapability) msg() *snappipb.DeviceBgpCapability {
 	return obj.obj
 }
 
+func (obj *deviceBgpCapability) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *deviceBgpCapability) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *deviceBgpCapability) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -31060,8 +38232,10 @@ func (obj *deviceBgpCapability) FromJson(value string) error {
 
 type DeviceBgpCapability interface {
 	msg() *snappipb.DeviceBgpCapability
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Vpls() bool
@@ -31474,6 +38648,14 @@ func (obj *deviceBgpSrTePolicy) msg() *snappipb.DeviceBgpSrTePolicy {
 	return obj.obj
 }
 
+func (obj *deviceBgpSrTePolicy) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *deviceBgpSrTePolicy) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *deviceBgpSrTePolicy) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -31524,8 +38706,10 @@ func (obj *deviceBgpSrTePolicy) FromJson(value string) error {
 
 type DeviceBgpSrTePolicy interface {
 	msg() *snappipb.DeviceBgpSrTePolicy
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	PolicyType() DeviceBgpSrTePolicyPolicyTypeEnum
@@ -31724,6 +38908,14 @@ func (obj *deviceBgpv4Route) msg() *snappipb.DeviceBgpv4Route {
 	return obj.obj
 }
 
+func (obj *deviceBgpv4Route) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *deviceBgpv4Route) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *deviceBgpv4Route) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -31774,8 +38966,10 @@ func (obj *deviceBgpv4Route) FromJson(value string) error {
 
 type DeviceBgpv4Route interface {
 	msg() *snappipb.DeviceBgpv4Route
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Addresses() DeviceBgpv4RouteDeviceBgpv4RouteAddressIter
@@ -31919,6 +39113,14 @@ func (obj *deviceBgpv6Route) msg() *snappipb.DeviceBgpv6Route {
 	return obj.obj
 }
 
+func (obj *deviceBgpv6Route) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *deviceBgpv6Route) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *deviceBgpv6Route) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -31969,8 +39171,10 @@ func (obj *deviceBgpv6Route) FromJson(value string) error {
 
 type DeviceBgpv6Route interface {
 	msg() *snappipb.DeviceBgpv6Route
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Addresses() DeviceBgpv6RouteDeviceBgpv6RouteAddressIter
@@ -32114,6 +39318,14 @@ func (obj *deviceBgpv6SegmentRouting) msg() *snappipb.DeviceBgpv6SegmentRouting 
 	return obj.obj
 }
 
+func (obj *deviceBgpv6SegmentRouting) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *deviceBgpv6SegmentRouting) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *deviceBgpv6SegmentRouting) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -32164,8 +39376,10 @@ func (obj *deviceBgpv6SegmentRouting) FromJson(value string) error {
 
 type DeviceBgpv6SegmentRouting interface {
 	msg() *snappipb.DeviceBgpv6SegmentRouting
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	IngressSupportsVpn() bool
@@ -32306,6 +39520,14 @@ func (obj *patternFlowEthernetDstCounter) msg() *snappipb.PatternFlowEthernetDst
 	return obj.obj
 }
 
+func (obj *patternFlowEthernetDstCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowEthernetDstCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowEthernetDstCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -32356,8 +39578,10 @@ func (obj *patternFlowEthernetDstCounter) FromJson(value string) error {
 
 type PatternFlowEthernetDstCounter interface {
 	msg() *snappipb.PatternFlowEthernetDstCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() string
@@ -32418,6 +39642,14 @@ func (obj *patternFlowEthernetSrcCounter) msg() *snappipb.PatternFlowEthernetSrc
 	return obj.obj
 }
 
+func (obj *patternFlowEthernetSrcCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowEthernetSrcCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowEthernetSrcCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -32468,8 +39700,10 @@ func (obj *patternFlowEthernetSrcCounter) FromJson(value string) error {
 
 type PatternFlowEthernetSrcCounter interface {
 	msg() *snappipb.PatternFlowEthernetSrcCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() string
@@ -32530,6 +39764,14 @@ func (obj *patternFlowEthernetEtherTypeCounter) msg() *snappipb.PatternFlowEther
 	return obj.obj
 }
 
+func (obj *patternFlowEthernetEtherTypeCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowEthernetEtherTypeCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowEthernetEtherTypeCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -32580,8 +39822,10 @@ func (obj *patternFlowEthernetEtherTypeCounter) FromJson(value string) error {
 
 type PatternFlowEthernetEtherTypeCounter interface {
 	msg() *snappipb.PatternFlowEthernetEtherTypeCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -32642,6 +39886,14 @@ func (obj *patternFlowEthernetPfcQueueCounter) msg() *snappipb.PatternFlowEthern
 	return obj.obj
 }
 
+func (obj *patternFlowEthernetPfcQueueCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowEthernetPfcQueueCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowEthernetPfcQueueCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -32692,8 +39944,10 @@ func (obj *patternFlowEthernetPfcQueueCounter) FromJson(value string) error {
 
 type PatternFlowEthernetPfcQueueCounter interface {
 	msg() *snappipb.PatternFlowEthernetPfcQueueCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -32754,6 +40008,14 @@ func (obj *patternFlowVlanPriorityCounter) msg() *snappipb.PatternFlowVlanPriori
 	return obj.obj
 }
 
+func (obj *patternFlowVlanPriorityCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowVlanPriorityCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowVlanPriorityCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -32804,8 +40066,10 @@ func (obj *patternFlowVlanPriorityCounter) FromJson(value string) error {
 
 type PatternFlowVlanPriorityCounter interface {
 	msg() *snappipb.PatternFlowVlanPriorityCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -32866,6 +40130,14 @@ func (obj *patternFlowVlanCfiCounter) msg() *snappipb.PatternFlowVlanCfiCounter 
 	return obj.obj
 }
 
+func (obj *patternFlowVlanCfiCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowVlanCfiCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowVlanCfiCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -32916,8 +40188,10 @@ func (obj *patternFlowVlanCfiCounter) FromJson(value string) error {
 
 type PatternFlowVlanCfiCounter interface {
 	msg() *snappipb.PatternFlowVlanCfiCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -32978,6 +40252,14 @@ func (obj *patternFlowVlanIdCounter) msg() *snappipb.PatternFlowVlanIdCounter {
 	return obj.obj
 }
 
+func (obj *patternFlowVlanIdCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowVlanIdCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowVlanIdCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -33028,8 +40310,10 @@ func (obj *patternFlowVlanIdCounter) FromJson(value string) error {
 
 type PatternFlowVlanIdCounter interface {
 	msg() *snappipb.PatternFlowVlanIdCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -33090,6 +40374,14 @@ func (obj *patternFlowVlanTpidCounter) msg() *snappipb.PatternFlowVlanTpidCounte
 	return obj.obj
 }
 
+func (obj *patternFlowVlanTpidCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowVlanTpidCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowVlanTpidCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -33140,8 +40432,10 @@ func (obj *patternFlowVlanTpidCounter) FromJson(value string) error {
 
 type PatternFlowVlanTpidCounter interface {
 	msg() *snappipb.PatternFlowVlanTpidCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -33202,6 +40496,14 @@ func (obj *patternFlowVxlanFlagsCounter) msg() *snappipb.PatternFlowVxlanFlagsCo
 	return obj.obj
 }
 
+func (obj *patternFlowVxlanFlagsCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowVxlanFlagsCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowVxlanFlagsCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -33252,8 +40554,10 @@ func (obj *patternFlowVxlanFlagsCounter) FromJson(value string) error {
 
 type PatternFlowVxlanFlagsCounter interface {
 	msg() *snappipb.PatternFlowVxlanFlagsCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -33314,6 +40618,14 @@ func (obj *patternFlowVxlanReserved0Counter) msg() *snappipb.PatternFlowVxlanRes
 	return obj.obj
 }
 
+func (obj *patternFlowVxlanReserved0Counter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowVxlanReserved0Counter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowVxlanReserved0Counter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -33364,8 +40676,10 @@ func (obj *patternFlowVxlanReserved0Counter) FromJson(value string) error {
 
 type PatternFlowVxlanReserved0Counter interface {
 	msg() *snappipb.PatternFlowVxlanReserved0Counter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -33426,6 +40740,14 @@ func (obj *patternFlowVxlanVniCounter) msg() *snappipb.PatternFlowVxlanVniCounte
 	return obj.obj
 }
 
+func (obj *patternFlowVxlanVniCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowVxlanVniCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowVxlanVniCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -33476,8 +40798,10 @@ func (obj *patternFlowVxlanVniCounter) FromJson(value string) error {
 
 type PatternFlowVxlanVniCounter interface {
 	msg() *snappipb.PatternFlowVxlanVniCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -33538,6 +40862,14 @@ func (obj *patternFlowVxlanReserved1Counter) msg() *snappipb.PatternFlowVxlanRes
 	return obj.obj
 }
 
+func (obj *patternFlowVxlanReserved1Counter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowVxlanReserved1Counter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowVxlanReserved1Counter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -33588,8 +40920,10 @@ func (obj *patternFlowVxlanReserved1Counter) FromJson(value string) error {
 
 type PatternFlowVxlanReserved1Counter interface {
 	msg() *snappipb.PatternFlowVxlanReserved1Counter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -33650,6 +40984,14 @@ func (obj *patternFlowIpv4VersionCounter) msg() *snappipb.PatternFlowIpv4Version
 	return obj.obj
 }
 
+func (obj *patternFlowIpv4VersionCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowIpv4VersionCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowIpv4VersionCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -33700,8 +41042,10 @@ func (obj *patternFlowIpv4VersionCounter) FromJson(value string) error {
 
 type PatternFlowIpv4VersionCounter interface {
 	msg() *snappipb.PatternFlowIpv4VersionCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -33762,6 +41106,14 @@ func (obj *patternFlowIpv4HeaderLengthCounter) msg() *snappipb.PatternFlowIpv4He
 	return obj.obj
 }
 
+func (obj *patternFlowIpv4HeaderLengthCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowIpv4HeaderLengthCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowIpv4HeaderLengthCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -33812,8 +41164,10 @@ func (obj *patternFlowIpv4HeaderLengthCounter) FromJson(value string) error {
 
 type PatternFlowIpv4HeaderLengthCounter interface {
 	msg() *snappipb.PatternFlowIpv4HeaderLengthCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -33874,6 +41228,14 @@ func (obj *patternFlowIpv4PriorityRaw) msg() *snappipb.PatternFlowIpv4PriorityRa
 	return obj.obj
 }
 
+func (obj *patternFlowIpv4PriorityRaw) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowIpv4PriorityRaw) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowIpv4PriorityRaw) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -33924,8 +41286,10 @@ func (obj *patternFlowIpv4PriorityRaw) FromJson(value string) error {
 
 type PatternFlowIpv4PriorityRaw interface {
 	msg() *snappipb.PatternFlowIpv4PriorityRaw
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowIpv4PriorityRawChoiceEnum
@@ -34035,6 +41399,14 @@ func (obj *flowIpv4Tos) msg() *snappipb.FlowIpv4Tos {
 	return obj.obj
 }
 
+func (obj *flowIpv4Tos) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *flowIpv4Tos) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *flowIpv4Tos) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -34085,8 +41457,10 @@ func (obj *flowIpv4Tos) FromJson(value string) error {
 
 type FlowIpv4Tos interface {
 	msg() *snappipb.FlowIpv4Tos
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Precedence() PatternFlowIpv4TosPrecedence
@@ -34165,6 +41539,14 @@ func (obj *flowIpv4Dscp) msg() *snappipb.FlowIpv4Dscp {
 	return obj.obj
 }
 
+func (obj *flowIpv4Dscp) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *flowIpv4Dscp) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *flowIpv4Dscp) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -34215,8 +41597,10 @@ func (obj *flowIpv4Dscp) FromJson(value string) error {
 
 type FlowIpv4Dscp interface {
 	msg() *snappipb.FlowIpv4Dscp
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Phb() PatternFlowIpv4DscpPhb
@@ -34249,6 +41633,14 @@ type patternFlowIpv4TotalLengthCounter struct {
 
 func (obj *patternFlowIpv4TotalLengthCounter) msg() *snappipb.PatternFlowIpv4TotalLengthCounter {
 	return obj.obj
+}
+
+func (obj *patternFlowIpv4TotalLengthCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowIpv4TotalLengthCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
 }
 
 func (obj *patternFlowIpv4TotalLengthCounter) ToYaml() string {
@@ -34301,8 +41693,10 @@ func (obj *patternFlowIpv4TotalLengthCounter) FromJson(value string) error {
 
 type PatternFlowIpv4TotalLengthCounter interface {
 	msg() *snappipb.PatternFlowIpv4TotalLengthCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -34363,6 +41757,14 @@ func (obj *patternFlowIpv4IdentificationCounter) msg() *snappipb.PatternFlowIpv4
 	return obj.obj
 }
 
+func (obj *patternFlowIpv4IdentificationCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowIpv4IdentificationCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowIpv4IdentificationCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -34413,8 +41815,10 @@ func (obj *patternFlowIpv4IdentificationCounter) FromJson(value string) error {
 
 type PatternFlowIpv4IdentificationCounter interface {
 	msg() *snappipb.PatternFlowIpv4IdentificationCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -34475,6 +41879,14 @@ func (obj *patternFlowIpv4ReservedCounter) msg() *snappipb.PatternFlowIpv4Reserv
 	return obj.obj
 }
 
+func (obj *patternFlowIpv4ReservedCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowIpv4ReservedCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowIpv4ReservedCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -34525,8 +41937,10 @@ func (obj *patternFlowIpv4ReservedCounter) FromJson(value string) error {
 
 type PatternFlowIpv4ReservedCounter interface {
 	msg() *snappipb.PatternFlowIpv4ReservedCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -34587,6 +42001,14 @@ func (obj *patternFlowIpv4DontFragmentCounter) msg() *snappipb.PatternFlowIpv4Do
 	return obj.obj
 }
 
+func (obj *patternFlowIpv4DontFragmentCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowIpv4DontFragmentCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowIpv4DontFragmentCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -34637,8 +42059,10 @@ func (obj *patternFlowIpv4DontFragmentCounter) FromJson(value string) error {
 
 type PatternFlowIpv4DontFragmentCounter interface {
 	msg() *snappipb.PatternFlowIpv4DontFragmentCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -34699,6 +42123,14 @@ func (obj *patternFlowIpv4MoreFragmentsCounter) msg() *snappipb.PatternFlowIpv4M
 	return obj.obj
 }
 
+func (obj *patternFlowIpv4MoreFragmentsCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowIpv4MoreFragmentsCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowIpv4MoreFragmentsCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -34749,8 +42181,10 @@ func (obj *patternFlowIpv4MoreFragmentsCounter) FromJson(value string) error {
 
 type PatternFlowIpv4MoreFragmentsCounter interface {
 	msg() *snappipb.PatternFlowIpv4MoreFragmentsCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -34811,6 +42245,14 @@ func (obj *patternFlowIpv4FragmentOffsetCounter) msg() *snappipb.PatternFlowIpv4
 	return obj.obj
 }
 
+func (obj *patternFlowIpv4FragmentOffsetCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowIpv4FragmentOffsetCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowIpv4FragmentOffsetCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -34861,8 +42303,10 @@ func (obj *patternFlowIpv4FragmentOffsetCounter) FromJson(value string) error {
 
 type PatternFlowIpv4FragmentOffsetCounter interface {
 	msg() *snappipb.PatternFlowIpv4FragmentOffsetCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -34923,6 +42367,14 @@ func (obj *patternFlowIpv4TimeToLiveCounter) msg() *snappipb.PatternFlowIpv4Time
 	return obj.obj
 }
 
+func (obj *patternFlowIpv4TimeToLiveCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowIpv4TimeToLiveCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowIpv4TimeToLiveCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -34973,8 +42425,10 @@ func (obj *patternFlowIpv4TimeToLiveCounter) FromJson(value string) error {
 
 type PatternFlowIpv4TimeToLiveCounter interface {
 	msg() *snappipb.PatternFlowIpv4TimeToLiveCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -35035,6 +42489,14 @@ func (obj *patternFlowIpv4ProtocolCounter) msg() *snappipb.PatternFlowIpv4Protoc
 	return obj.obj
 }
 
+func (obj *patternFlowIpv4ProtocolCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowIpv4ProtocolCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowIpv4ProtocolCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -35085,8 +42547,10 @@ func (obj *patternFlowIpv4ProtocolCounter) FromJson(value string) error {
 
 type PatternFlowIpv4ProtocolCounter interface {
 	msg() *snappipb.PatternFlowIpv4ProtocolCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -35147,6 +42611,14 @@ func (obj *patternFlowIpv4SrcCounter) msg() *snappipb.PatternFlowIpv4SrcCounter 
 	return obj.obj
 }
 
+func (obj *patternFlowIpv4SrcCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowIpv4SrcCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowIpv4SrcCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -35197,8 +42669,10 @@ func (obj *patternFlowIpv4SrcCounter) FromJson(value string) error {
 
 type PatternFlowIpv4SrcCounter interface {
 	msg() *snappipb.PatternFlowIpv4SrcCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() string
@@ -35259,6 +42733,14 @@ func (obj *patternFlowIpv4DstCounter) msg() *snappipb.PatternFlowIpv4DstCounter 
 	return obj.obj
 }
 
+func (obj *patternFlowIpv4DstCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowIpv4DstCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowIpv4DstCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -35309,8 +42791,10 @@ func (obj *patternFlowIpv4DstCounter) FromJson(value string) error {
 
 type PatternFlowIpv4DstCounter interface {
 	msg() *snappipb.PatternFlowIpv4DstCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() string
@@ -35371,6 +42855,14 @@ func (obj *patternFlowIpv6VersionCounter) msg() *snappipb.PatternFlowIpv6Version
 	return obj.obj
 }
 
+func (obj *patternFlowIpv6VersionCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowIpv6VersionCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowIpv6VersionCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -35421,8 +42913,10 @@ func (obj *patternFlowIpv6VersionCounter) FromJson(value string) error {
 
 type PatternFlowIpv6VersionCounter interface {
 	msg() *snappipb.PatternFlowIpv6VersionCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -35483,6 +42977,14 @@ func (obj *patternFlowIpv6TrafficClassCounter) msg() *snappipb.PatternFlowIpv6Tr
 	return obj.obj
 }
 
+func (obj *patternFlowIpv6TrafficClassCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowIpv6TrafficClassCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowIpv6TrafficClassCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -35533,8 +43035,10 @@ func (obj *patternFlowIpv6TrafficClassCounter) FromJson(value string) error {
 
 type PatternFlowIpv6TrafficClassCounter interface {
 	msg() *snappipb.PatternFlowIpv6TrafficClassCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -35595,6 +43099,14 @@ func (obj *patternFlowIpv6FlowLabelCounter) msg() *snappipb.PatternFlowIpv6FlowL
 	return obj.obj
 }
 
+func (obj *patternFlowIpv6FlowLabelCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowIpv6FlowLabelCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowIpv6FlowLabelCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -35645,8 +43157,10 @@ func (obj *patternFlowIpv6FlowLabelCounter) FromJson(value string) error {
 
 type PatternFlowIpv6FlowLabelCounter interface {
 	msg() *snappipb.PatternFlowIpv6FlowLabelCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -35707,6 +43221,14 @@ func (obj *patternFlowIpv6PayloadLengthCounter) msg() *snappipb.PatternFlowIpv6P
 	return obj.obj
 }
 
+func (obj *patternFlowIpv6PayloadLengthCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowIpv6PayloadLengthCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowIpv6PayloadLengthCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -35757,8 +43279,10 @@ func (obj *patternFlowIpv6PayloadLengthCounter) FromJson(value string) error {
 
 type PatternFlowIpv6PayloadLengthCounter interface {
 	msg() *snappipb.PatternFlowIpv6PayloadLengthCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -35819,6 +43343,14 @@ func (obj *patternFlowIpv6NextHeaderCounter) msg() *snappipb.PatternFlowIpv6Next
 	return obj.obj
 }
 
+func (obj *patternFlowIpv6NextHeaderCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowIpv6NextHeaderCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowIpv6NextHeaderCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -35869,8 +43401,10 @@ func (obj *patternFlowIpv6NextHeaderCounter) FromJson(value string) error {
 
 type PatternFlowIpv6NextHeaderCounter interface {
 	msg() *snappipb.PatternFlowIpv6NextHeaderCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -35931,6 +43465,14 @@ func (obj *patternFlowIpv6HopLimitCounter) msg() *snappipb.PatternFlowIpv6HopLim
 	return obj.obj
 }
 
+func (obj *patternFlowIpv6HopLimitCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowIpv6HopLimitCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowIpv6HopLimitCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -35981,8 +43523,10 @@ func (obj *patternFlowIpv6HopLimitCounter) FromJson(value string) error {
 
 type PatternFlowIpv6HopLimitCounter interface {
 	msg() *snappipb.PatternFlowIpv6HopLimitCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -36043,6 +43587,14 @@ func (obj *patternFlowIpv6SrcCounter) msg() *snappipb.PatternFlowIpv6SrcCounter 
 	return obj.obj
 }
 
+func (obj *patternFlowIpv6SrcCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowIpv6SrcCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowIpv6SrcCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -36093,8 +43645,10 @@ func (obj *patternFlowIpv6SrcCounter) FromJson(value string) error {
 
 type PatternFlowIpv6SrcCounter interface {
 	msg() *snappipb.PatternFlowIpv6SrcCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() string
@@ -36155,6 +43709,14 @@ func (obj *patternFlowIpv6DstCounter) msg() *snappipb.PatternFlowIpv6DstCounter 
 	return obj.obj
 }
 
+func (obj *patternFlowIpv6DstCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowIpv6DstCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowIpv6DstCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -36205,8 +43767,10 @@ func (obj *patternFlowIpv6DstCounter) FromJson(value string) error {
 
 type PatternFlowIpv6DstCounter interface {
 	msg() *snappipb.PatternFlowIpv6DstCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() string
@@ -36267,6 +43831,14 @@ func (obj *patternFlowPfcPauseDstCounter) msg() *snappipb.PatternFlowPfcPauseDst
 	return obj.obj
 }
 
+func (obj *patternFlowPfcPauseDstCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowPfcPauseDstCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowPfcPauseDstCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -36317,8 +43889,10 @@ func (obj *patternFlowPfcPauseDstCounter) FromJson(value string) error {
 
 type PatternFlowPfcPauseDstCounter interface {
 	msg() *snappipb.PatternFlowPfcPauseDstCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() string
@@ -36379,6 +43953,14 @@ func (obj *patternFlowPfcPauseSrcCounter) msg() *snappipb.PatternFlowPfcPauseSrc
 	return obj.obj
 }
 
+func (obj *patternFlowPfcPauseSrcCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowPfcPauseSrcCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowPfcPauseSrcCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -36429,8 +44011,10 @@ func (obj *patternFlowPfcPauseSrcCounter) FromJson(value string) error {
 
 type PatternFlowPfcPauseSrcCounter interface {
 	msg() *snappipb.PatternFlowPfcPauseSrcCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() string
@@ -36491,6 +44075,14 @@ func (obj *patternFlowPfcPauseEtherTypeCounter) msg() *snappipb.PatternFlowPfcPa
 	return obj.obj
 }
 
+func (obj *patternFlowPfcPauseEtherTypeCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowPfcPauseEtherTypeCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowPfcPauseEtherTypeCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -36541,8 +44133,10 @@ func (obj *patternFlowPfcPauseEtherTypeCounter) FromJson(value string) error {
 
 type PatternFlowPfcPauseEtherTypeCounter interface {
 	msg() *snappipb.PatternFlowPfcPauseEtherTypeCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -36603,6 +44197,14 @@ func (obj *patternFlowPfcPauseControlOpCodeCounter) msg() *snappipb.PatternFlowP
 	return obj.obj
 }
 
+func (obj *patternFlowPfcPauseControlOpCodeCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowPfcPauseControlOpCodeCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowPfcPauseControlOpCodeCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -36653,8 +44255,10 @@ func (obj *patternFlowPfcPauseControlOpCodeCounter) FromJson(value string) error
 
 type PatternFlowPfcPauseControlOpCodeCounter interface {
 	msg() *snappipb.PatternFlowPfcPauseControlOpCodeCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -36715,6 +44319,14 @@ func (obj *patternFlowPfcPauseClassEnableVectorCounter) msg() *snappipb.PatternF
 	return obj.obj
 }
 
+func (obj *patternFlowPfcPauseClassEnableVectorCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowPfcPauseClassEnableVectorCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowPfcPauseClassEnableVectorCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -36765,8 +44377,10 @@ func (obj *patternFlowPfcPauseClassEnableVectorCounter) FromJson(value string) e
 
 type PatternFlowPfcPauseClassEnableVectorCounter interface {
 	msg() *snappipb.PatternFlowPfcPauseClassEnableVectorCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -36827,6 +44441,14 @@ func (obj *patternFlowPfcPausePauseClass0Counter) msg() *snappipb.PatternFlowPfc
 	return obj.obj
 }
 
+func (obj *patternFlowPfcPausePauseClass0Counter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowPfcPausePauseClass0Counter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowPfcPausePauseClass0Counter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -36877,8 +44499,10 @@ func (obj *patternFlowPfcPausePauseClass0Counter) FromJson(value string) error {
 
 type PatternFlowPfcPausePauseClass0Counter interface {
 	msg() *snappipb.PatternFlowPfcPausePauseClass0Counter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -36939,6 +44563,14 @@ func (obj *patternFlowPfcPausePauseClass1Counter) msg() *snappipb.PatternFlowPfc
 	return obj.obj
 }
 
+func (obj *patternFlowPfcPausePauseClass1Counter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowPfcPausePauseClass1Counter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowPfcPausePauseClass1Counter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -36989,8 +44621,10 @@ func (obj *patternFlowPfcPausePauseClass1Counter) FromJson(value string) error {
 
 type PatternFlowPfcPausePauseClass1Counter interface {
 	msg() *snappipb.PatternFlowPfcPausePauseClass1Counter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -37051,6 +44685,14 @@ func (obj *patternFlowPfcPausePauseClass2Counter) msg() *snappipb.PatternFlowPfc
 	return obj.obj
 }
 
+func (obj *patternFlowPfcPausePauseClass2Counter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowPfcPausePauseClass2Counter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowPfcPausePauseClass2Counter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -37101,8 +44743,10 @@ func (obj *patternFlowPfcPausePauseClass2Counter) FromJson(value string) error {
 
 type PatternFlowPfcPausePauseClass2Counter interface {
 	msg() *snappipb.PatternFlowPfcPausePauseClass2Counter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -37163,6 +44807,14 @@ func (obj *patternFlowPfcPausePauseClass3Counter) msg() *snappipb.PatternFlowPfc
 	return obj.obj
 }
 
+func (obj *patternFlowPfcPausePauseClass3Counter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowPfcPausePauseClass3Counter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowPfcPausePauseClass3Counter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -37213,8 +44865,10 @@ func (obj *patternFlowPfcPausePauseClass3Counter) FromJson(value string) error {
 
 type PatternFlowPfcPausePauseClass3Counter interface {
 	msg() *snappipb.PatternFlowPfcPausePauseClass3Counter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -37275,6 +44929,14 @@ func (obj *patternFlowPfcPausePauseClass4Counter) msg() *snappipb.PatternFlowPfc
 	return obj.obj
 }
 
+func (obj *patternFlowPfcPausePauseClass4Counter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowPfcPausePauseClass4Counter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowPfcPausePauseClass4Counter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -37325,8 +44987,10 @@ func (obj *patternFlowPfcPausePauseClass4Counter) FromJson(value string) error {
 
 type PatternFlowPfcPausePauseClass4Counter interface {
 	msg() *snappipb.PatternFlowPfcPausePauseClass4Counter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -37387,6 +45051,14 @@ func (obj *patternFlowPfcPausePauseClass5Counter) msg() *snappipb.PatternFlowPfc
 	return obj.obj
 }
 
+func (obj *patternFlowPfcPausePauseClass5Counter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowPfcPausePauseClass5Counter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowPfcPausePauseClass5Counter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -37437,8 +45109,10 @@ func (obj *patternFlowPfcPausePauseClass5Counter) FromJson(value string) error {
 
 type PatternFlowPfcPausePauseClass5Counter interface {
 	msg() *snappipb.PatternFlowPfcPausePauseClass5Counter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -37499,6 +45173,14 @@ func (obj *patternFlowPfcPausePauseClass6Counter) msg() *snappipb.PatternFlowPfc
 	return obj.obj
 }
 
+func (obj *patternFlowPfcPausePauseClass6Counter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowPfcPausePauseClass6Counter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowPfcPausePauseClass6Counter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -37549,8 +45231,10 @@ func (obj *patternFlowPfcPausePauseClass6Counter) FromJson(value string) error {
 
 type PatternFlowPfcPausePauseClass6Counter interface {
 	msg() *snappipb.PatternFlowPfcPausePauseClass6Counter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -37611,6 +45295,14 @@ func (obj *patternFlowPfcPausePauseClass7Counter) msg() *snappipb.PatternFlowPfc
 	return obj.obj
 }
 
+func (obj *patternFlowPfcPausePauseClass7Counter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowPfcPausePauseClass7Counter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowPfcPausePauseClass7Counter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -37661,8 +45353,10 @@ func (obj *patternFlowPfcPausePauseClass7Counter) FromJson(value string) error {
 
 type PatternFlowPfcPausePauseClass7Counter interface {
 	msg() *snappipb.PatternFlowPfcPausePauseClass7Counter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -37723,6 +45417,14 @@ func (obj *patternFlowEthernetPauseDstCounter) msg() *snappipb.PatternFlowEthern
 	return obj.obj
 }
 
+func (obj *patternFlowEthernetPauseDstCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowEthernetPauseDstCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowEthernetPauseDstCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -37773,8 +45475,10 @@ func (obj *patternFlowEthernetPauseDstCounter) FromJson(value string) error {
 
 type PatternFlowEthernetPauseDstCounter interface {
 	msg() *snappipb.PatternFlowEthernetPauseDstCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() string
@@ -37835,6 +45539,14 @@ func (obj *patternFlowEthernetPauseSrcCounter) msg() *snappipb.PatternFlowEthern
 	return obj.obj
 }
 
+func (obj *patternFlowEthernetPauseSrcCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowEthernetPauseSrcCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowEthernetPauseSrcCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -37885,8 +45597,10 @@ func (obj *patternFlowEthernetPauseSrcCounter) FromJson(value string) error {
 
 type PatternFlowEthernetPauseSrcCounter interface {
 	msg() *snappipb.PatternFlowEthernetPauseSrcCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() string
@@ -37947,6 +45661,14 @@ func (obj *patternFlowEthernetPauseEtherTypeCounter) msg() *snappipb.PatternFlow
 	return obj.obj
 }
 
+func (obj *patternFlowEthernetPauseEtherTypeCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowEthernetPauseEtherTypeCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowEthernetPauseEtherTypeCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -37997,8 +45719,10 @@ func (obj *patternFlowEthernetPauseEtherTypeCounter) FromJson(value string) erro
 
 type PatternFlowEthernetPauseEtherTypeCounter interface {
 	msg() *snappipb.PatternFlowEthernetPauseEtherTypeCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -38059,6 +45783,14 @@ func (obj *patternFlowEthernetPauseControlOpCodeCounter) msg() *snappipb.Pattern
 	return obj.obj
 }
 
+func (obj *patternFlowEthernetPauseControlOpCodeCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowEthernetPauseControlOpCodeCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowEthernetPauseControlOpCodeCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -38109,8 +45841,10 @@ func (obj *patternFlowEthernetPauseControlOpCodeCounter) FromJson(value string) 
 
 type PatternFlowEthernetPauseControlOpCodeCounter interface {
 	msg() *snappipb.PatternFlowEthernetPauseControlOpCodeCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -38171,6 +45905,14 @@ func (obj *patternFlowEthernetPauseTimeCounter) msg() *snappipb.PatternFlowEther
 	return obj.obj
 }
 
+func (obj *patternFlowEthernetPauseTimeCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowEthernetPauseTimeCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowEthernetPauseTimeCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -38221,8 +45963,10 @@ func (obj *patternFlowEthernetPauseTimeCounter) FromJson(value string) error {
 
 type PatternFlowEthernetPauseTimeCounter interface {
 	msg() *snappipb.PatternFlowEthernetPauseTimeCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -38283,6 +46027,14 @@ func (obj *patternFlowTcpSrcPortCounter) msg() *snappipb.PatternFlowTcpSrcPortCo
 	return obj.obj
 }
 
+func (obj *patternFlowTcpSrcPortCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowTcpSrcPortCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowTcpSrcPortCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -38333,8 +46085,10 @@ func (obj *patternFlowTcpSrcPortCounter) FromJson(value string) error {
 
 type PatternFlowTcpSrcPortCounter interface {
 	msg() *snappipb.PatternFlowTcpSrcPortCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -38395,6 +46149,14 @@ func (obj *patternFlowTcpDstPortCounter) msg() *snappipb.PatternFlowTcpDstPortCo
 	return obj.obj
 }
 
+func (obj *patternFlowTcpDstPortCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowTcpDstPortCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowTcpDstPortCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -38445,8 +46207,10 @@ func (obj *patternFlowTcpDstPortCounter) FromJson(value string) error {
 
 type PatternFlowTcpDstPortCounter interface {
 	msg() *snappipb.PatternFlowTcpDstPortCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -38507,6 +46271,14 @@ func (obj *patternFlowTcpSeqNumCounter) msg() *snappipb.PatternFlowTcpSeqNumCoun
 	return obj.obj
 }
 
+func (obj *patternFlowTcpSeqNumCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowTcpSeqNumCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowTcpSeqNumCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -38557,8 +46329,10 @@ func (obj *patternFlowTcpSeqNumCounter) FromJson(value string) error {
 
 type PatternFlowTcpSeqNumCounter interface {
 	msg() *snappipb.PatternFlowTcpSeqNumCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -38619,6 +46393,14 @@ func (obj *patternFlowTcpAckNumCounter) msg() *snappipb.PatternFlowTcpAckNumCoun
 	return obj.obj
 }
 
+func (obj *patternFlowTcpAckNumCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowTcpAckNumCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowTcpAckNumCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -38669,8 +46451,10 @@ func (obj *patternFlowTcpAckNumCounter) FromJson(value string) error {
 
 type PatternFlowTcpAckNumCounter interface {
 	msg() *snappipb.PatternFlowTcpAckNumCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -38731,6 +46515,14 @@ func (obj *patternFlowTcpDataOffsetCounter) msg() *snappipb.PatternFlowTcpDataOf
 	return obj.obj
 }
 
+func (obj *patternFlowTcpDataOffsetCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowTcpDataOffsetCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowTcpDataOffsetCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -38781,8 +46573,10 @@ func (obj *patternFlowTcpDataOffsetCounter) FromJson(value string) error {
 
 type PatternFlowTcpDataOffsetCounter interface {
 	msg() *snappipb.PatternFlowTcpDataOffsetCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -38843,6 +46637,14 @@ func (obj *patternFlowTcpEcnNsCounter) msg() *snappipb.PatternFlowTcpEcnNsCounte
 	return obj.obj
 }
 
+func (obj *patternFlowTcpEcnNsCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowTcpEcnNsCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowTcpEcnNsCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -38893,8 +46695,10 @@ func (obj *patternFlowTcpEcnNsCounter) FromJson(value string) error {
 
 type PatternFlowTcpEcnNsCounter interface {
 	msg() *snappipb.PatternFlowTcpEcnNsCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -38955,6 +46759,14 @@ func (obj *patternFlowTcpEcnCwrCounter) msg() *snappipb.PatternFlowTcpEcnCwrCoun
 	return obj.obj
 }
 
+func (obj *patternFlowTcpEcnCwrCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowTcpEcnCwrCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowTcpEcnCwrCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -39005,8 +46817,10 @@ func (obj *patternFlowTcpEcnCwrCounter) FromJson(value string) error {
 
 type PatternFlowTcpEcnCwrCounter interface {
 	msg() *snappipb.PatternFlowTcpEcnCwrCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -39067,6 +46881,14 @@ func (obj *patternFlowTcpEcnEchoCounter) msg() *snappipb.PatternFlowTcpEcnEchoCo
 	return obj.obj
 }
 
+func (obj *patternFlowTcpEcnEchoCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowTcpEcnEchoCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowTcpEcnEchoCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -39117,8 +46939,10 @@ func (obj *patternFlowTcpEcnEchoCounter) FromJson(value string) error {
 
 type PatternFlowTcpEcnEchoCounter interface {
 	msg() *snappipb.PatternFlowTcpEcnEchoCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -39179,6 +47003,14 @@ func (obj *patternFlowTcpCtlUrgCounter) msg() *snappipb.PatternFlowTcpCtlUrgCoun
 	return obj.obj
 }
 
+func (obj *patternFlowTcpCtlUrgCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowTcpCtlUrgCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowTcpCtlUrgCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -39229,8 +47061,10 @@ func (obj *patternFlowTcpCtlUrgCounter) FromJson(value string) error {
 
 type PatternFlowTcpCtlUrgCounter interface {
 	msg() *snappipb.PatternFlowTcpCtlUrgCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -39291,6 +47125,14 @@ func (obj *patternFlowTcpCtlAckCounter) msg() *snappipb.PatternFlowTcpCtlAckCoun
 	return obj.obj
 }
 
+func (obj *patternFlowTcpCtlAckCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowTcpCtlAckCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowTcpCtlAckCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -39341,8 +47183,10 @@ func (obj *patternFlowTcpCtlAckCounter) FromJson(value string) error {
 
 type PatternFlowTcpCtlAckCounter interface {
 	msg() *snappipb.PatternFlowTcpCtlAckCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -39403,6 +47247,14 @@ func (obj *patternFlowTcpCtlPshCounter) msg() *snappipb.PatternFlowTcpCtlPshCoun
 	return obj.obj
 }
 
+func (obj *patternFlowTcpCtlPshCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowTcpCtlPshCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowTcpCtlPshCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -39453,8 +47305,10 @@ func (obj *patternFlowTcpCtlPshCounter) FromJson(value string) error {
 
 type PatternFlowTcpCtlPshCounter interface {
 	msg() *snappipb.PatternFlowTcpCtlPshCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -39515,6 +47369,14 @@ func (obj *patternFlowTcpCtlRstCounter) msg() *snappipb.PatternFlowTcpCtlRstCoun
 	return obj.obj
 }
 
+func (obj *patternFlowTcpCtlRstCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowTcpCtlRstCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowTcpCtlRstCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -39565,8 +47427,10 @@ func (obj *patternFlowTcpCtlRstCounter) FromJson(value string) error {
 
 type PatternFlowTcpCtlRstCounter interface {
 	msg() *snappipb.PatternFlowTcpCtlRstCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -39627,6 +47491,14 @@ func (obj *patternFlowTcpCtlSynCounter) msg() *snappipb.PatternFlowTcpCtlSynCoun
 	return obj.obj
 }
 
+func (obj *patternFlowTcpCtlSynCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowTcpCtlSynCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowTcpCtlSynCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -39677,8 +47549,10 @@ func (obj *patternFlowTcpCtlSynCounter) FromJson(value string) error {
 
 type PatternFlowTcpCtlSynCounter interface {
 	msg() *snappipb.PatternFlowTcpCtlSynCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -39739,6 +47613,14 @@ func (obj *patternFlowTcpCtlFinCounter) msg() *snappipb.PatternFlowTcpCtlFinCoun
 	return obj.obj
 }
 
+func (obj *patternFlowTcpCtlFinCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowTcpCtlFinCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowTcpCtlFinCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -39789,8 +47671,10 @@ func (obj *patternFlowTcpCtlFinCounter) FromJson(value string) error {
 
 type PatternFlowTcpCtlFinCounter interface {
 	msg() *snappipb.PatternFlowTcpCtlFinCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -39851,6 +47735,14 @@ func (obj *patternFlowTcpWindowCounter) msg() *snappipb.PatternFlowTcpWindowCoun
 	return obj.obj
 }
 
+func (obj *patternFlowTcpWindowCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowTcpWindowCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowTcpWindowCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -39901,8 +47793,10 @@ func (obj *patternFlowTcpWindowCounter) FromJson(value string) error {
 
 type PatternFlowTcpWindowCounter interface {
 	msg() *snappipb.PatternFlowTcpWindowCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -39963,6 +47857,14 @@ func (obj *patternFlowUdpSrcPortCounter) msg() *snappipb.PatternFlowUdpSrcPortCo
 	return obj.obj
 }
 
+func (obj *patternFlowUdpSrcPortCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowUdpSrcPortCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowUdpSrcPortCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -40013,8 +47915,10 @@ func (obj *patternFlowUdpSrcPortCounter) FromJson(value string) error {
 
 type PatternFlowUdpSrcPortCounter interface {
 	msg() *snappipb.PatternFlowUdpSrcPortCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -40075,6 +47979,14 @@ func (obj *patternFlowUdpDstPortCounter) msg() *snappipb.PatternFlowUdpDstPortCo
 	return obj.obj
 }
 
+func (obj *patternFlowUdpDstPortCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowUdpDstPortCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowUdpDstPortCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -40125,8 +48037,10 @@ func (obj *patternFlowUdpDstPortCounter) FromJson(value string) error {
 
 type PatternFlowUdpDstPortCounter interface {
 	msg() *snappipb.PatternFlowUdpDstPortCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -40187,6 +48101,14 @@ func (obj *patternFlowUdpLengthCounter) msg() *snappipb.PatternFlowUdpLengthCoun
 	return obj.obj
 }
 
+func (obj *patternFlowUdpLengthCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowUdpLengthCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowUdpLengthCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -40237,8 +48159,10 @@ func (obj *patternFlowUdpLengthCounter) FromJson(value string) error {
 
 type PatternFlowUdpLengthCounter interface {
 	msg() *snappipb.PatternFlowUdpLengthCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -40299,6 +48223,14 @@ func (obj *patternFlowGreChecksumPresentCounter) msg() *snappipb.PatternFlowGreC
 	return obj.obj
 }
 
+func (obj *patternFlowGreChecksumPresentCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowGreChecksumPresentCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowGreChecksumPresentCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -40349,8 +48281,10 @@ func (obj *patternFlowGreChecksumPresentCounter) FromJson(value string) error {
 
 type PatternFlowGreChecksumPresentCounter interface {
 	msg() *snappipb.PatternFlowGreChecksumPresentCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -40411,6 +48345,14 @@ func (obj *patternFlowGreReserved0Counter) msg() *snappipb.PatternFlowGreReserve
 	return obj.obj
 }
 
+func (obj *patternFlowGreReserved0Counter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowGreReserved0Counter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowGreReserved0Counter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -40461,8 +48403,10 @@ func (obj *patternFlowGreReserved0Counter) FromJson(value string) error {
 
 type PatternFlowGreReserved0Counter interface {
 	msg() *snappipb.PatternFlowGreReserved0Counter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -40523,6 +48467,14 @@ func (obj *patternFlowGreVersionCounter) msg() *snappipb.PatternFlowGreVersionCo
 	return obj.obj
 }
 
+func (obj *patternFlowGreVersionCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowGreVersionCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowGreVersionCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -40573,8 +48525,10 @@ func (obj *patternFlowGreVersionCounter) FromJson(value string) error {
 
 type PatternFlowGreVersionCounter interface {
 	msg() *snappipb.PatternFlowGreVersionCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -40635,6 +48589,14 @@ func (obj *patternFlowGreProtocolCounter) msg() *snappipb.PatternFlowGreProtocol
 	return obj.obj
 }
 
+func (obj *patternFlowGreProtocolCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowGreProtocolCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowGreProtocolCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -40685,8 +48647,10 @@ func (obj *patternFlowGreProtocolCounter) FromJson(value string) error {
 
 type PatternFlowGreProtocolCounter interface {
 	msg() *snappipb.PatternFlowGreProtocolCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -40747,6 +48711,14 @@ func (obj *patternFlowGreReserved1Counter) msg() *snappipb.PatternFlowGreReserve
 	return obj.obj
 }
 
+func (obj *patternFlowGreReserved1Counter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowGreReserved1Counter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowGreReserved1Counter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -40797,8 +48769,10 @@ func (obj *patternFlowGreReserved1Counter) FromJson(value string) error {
 
 type PatternFlowGreReserved1Counter interface {
 	msg() *snappipb.PatternFlowGreReserved1Counter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -40859,6 +48833,14 @@ func (obj *patternFlowGtpv1VersionCounter) msg() *snappipb.PatternFlowGtpv1Versi
 	return obj.obj
 }
 
+func (obj *patternFlowGtpv1VersionCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowGtpv1VersionCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowGtpv1VersionCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -40909,8 +48891,10 @@ func (obj *patternFlowGtpv1VersionCounter) FromJson(value string) error {
 
 type PatternFlowGtpv1VersionCounter interface {
 	msg() *snappipb.PatternFlowGtpv1VersionCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -40971,6 +48955,14 @@ func (obj *patternFlowGtpv1ProtocolTypeCounter) msg() *snappipb.PatternFlowGtpv1
 	return obj.obj
 }
 
+func (obj *patternFlowGtpv1ProtocolTypeCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowGtpv1ProtocolTypeCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowGtpv1ProtocolTypeCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -41021,8 +49013,10 @@ func (obj *patternFlowGtpv1ProtocolTypeCounter) FromJson(value string) error {
 
 type PatternFlowGtpv1ProtocolTypeCounter interface {
 	msg() *snappipb.PatternFlowGtpv1ProtocolTypeCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -41083,6 +49077,14 @@ func (obj *patternFlowGtpv1ReservedCounter) msg() *snappipb.PatternFlowGtpv1Rese
 	return obj.obj
 }
 
+func (obj *patternFlowGtpv1ReservedCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowGtpv1ReservedCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowGtpv1ReservedCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -41133,8 +49135,10 @@ func (obj *patternFlowGtpv1ReservedCounter) FromJson(value string) error {
 
 type PatternFlowGtpv1ReservedCounter interface {
 	msg() *snappipb.PatternFlowGtpv1ReservedCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -41195,6 +49199,14 @@ func (obj *patternFlowGtpv1EFlagCounter) msg() *snappipb.PatternFlowGtpv1EFlagCo
 	return obj.obj
 }
 
+func (obj *patternFlowGtpv1EFlagCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowGtpv1EFlagCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowGtpv1EFlagCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -41245,8 +49257,10 @@ func (obj *patternFlowGtpv1EFlagCounter) FromJson(value string) error {
 
 type PatternFlowGtpv1EFlagCounter interface {
 	msg() *snappipb.PatternFlowGtpv1EFlagCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -41307,6 +49321,14 @@ func (obj *patternFlowGtpv1SFlagCounter) msg() *snappipb.PatternFlowGtpv1SFlagCo
 	return obj.obj
 }
 
+func (obj *patternFlowGtpv1SFlagCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowGtpv1SFlagCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowGtpv1SFlagCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -41357,8 +49379,10 @@ func (obj *patternFlowGtpv1SFlagCounter) FromJson(value string) error {
 
 type PatternFlowGtpv1SFlagCounter interface {
 	msg() *snappipb.PatternFlowGtpv1SFlagCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -41419,6 +49443,14 @@ func (obj *patternFlowGtpv1PnFlagCounter) msg() *snappipb.PatternFlowGtpv1PnFlag
 	return obj.obj
 }
 
+func (obj *patternFlowGtpv1PnFlagCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowGtpv1PnFlagCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowGtpv1PnFlagCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -41469,8 +49501,10 @@ func (obj *patternFlowGtpv1PnFlagCounter) FromJson(value string) error {
 
 type PatternFlowGtpv1PnFlagCounter interface {
 	msg() *snappipb.PatternFlowGtpv1PnFlagCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -41531,6 +49565,14 @@ func (obj *patternFlowGtpv1MessageTypeCounter) msg() *snappipb.PatternFlowGtpv1M
 	return obj.obj
 }
 
+func (obj *patternFlowGtpv1MessageTypeCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowGtpv1MessageTypeCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowGtpv1MessageTypeCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -41581,8 +49623,10 @@ func (obj *patternFlowGtpv1MessageTypeCounter) FromJson(value string) error {
 
 type PatternFlowGtpv1MessageTypeCounter interface {
 	msg() *snappipb.PatternFlowGtpv1MessageTypeCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -41643,6 +49687,14 @@ func (obj *patternFlowGtpv1MessageLengthCounter) msg() *snappipb.PatternFlowGtpv
 	return obj.obj
 }
 
+func (obj *patternFlowGtpv1MessageLengthCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowGtpv1MessageLengthCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowGtpv1MessageLengthCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -41693,8 +49745,10 @@ func (obj *patternFlowGtpv1MessageLengthCounter) FromJson(value string) error {
 
 type PatternFlowGtpv1MessageLengthCounter interface {
 	msg() *snappipb.PatternFlowGtpv1MessageLengthCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -41755,6 +49809,14 @@ func (obj *patternFlowGtpv1TeidCounter) msg() *snappipb.PatternFlowGtpv1TeidCoun
 	return obj.obj
 }
 
+func (obj *patternFlowGtpv1TeidCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowGtpv1TeidCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowGtpv1TeidCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -41805,8 +49867,10 @@ func (obj *patternFlowGtpv1TeidCounter) FromJson(value string) error {
 
 type PatternFlowGtpv1TeidCounter interface {
 	msg() *snappipb.PatternFlowGtpv1TeidCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -41867,6 +49931,14 @@ func (obj *patternFlowGtpv1SquenceNumberCounter) msg() *snappipb.PatternFlowGtpv
 	return obj.obj
 }
 
+func (obj *patternFlowGtpv1SquenceNumberCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowGtpv1SquenceNumberCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowGtpv1SquenceNumberCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -41917,8 +49989,10 @@ func (obj *patternFlowGtpv1SquenceNumberCounter) FromJson(value string) error {
 
 type PatternFlowGtpv1SquenceNumberCounter interface {
 	msg() *snappipb.PatternFlowGtpv1SquenceNumberCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -41979,6 +50053,14 @@ func (obj *patternFlowGtpv1NPduNumberCounter) msg() *snappipb.PatternFlowGtpv1NP
 	return obj.obj
 }
 
+func (obj *patternFlowGtpv1NPduNumberCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowGtpv1NPduNumberCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowGtpv1NPduNumberCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -42029,8 +50111,10 @@ func (obj *patternFlowGtpv1NPduNumberCounter) FromJson(value string) error {
 
 type PatternFlowGtpv1NPduNumberCounter interface {
 	msg() *snappipb.PatternFlowGtpv1NPduNumberCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -42091,6 +50175,14 @@ func (obj *patternFlowGtpv1NextExtensionHeaderTypeCounter) msg() *snappipb.Patte
 	return obj.obj
 }
 
+func (obj *patternFlowGtpv1NextExtensionHeaderTypeCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowGtpv1NextExtensionHeaderTypeCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowGtpv1NextExtensionHeaderTypeCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -42141,8 +50233,10 @@ func (obj *patternFlowGtpv1NextExtensionHeaderTypeCounter) FromJson(value string
 
 type PatternFlowGtpv1NextExtensionHeaderTypeCounter interface {
 	msg() *snappipb.PatternFlowGtpv1NextExtensionHeaderTypeCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -42203,6 +50297,14 @@ func (obj *patternFlowGtpExtensionExtensionLength) msg() *snappipb.PatternFlowGt
 	return obj.obj
 }
 
+func (obj *patternFlowGtpExtensionExtensionLength) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowGtpExtensionExtensionLength) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowGtpExtensionExtensionLength) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -42253,8 +50355,10 @@ func (obj *patternFlowGtpExtensionExtensionLength) FromJson(value string) error 
 
 type PatternFlowGtpExtensionExtensionLength interface {
 	msg() *snappipb.PatternFlowGtpExtensionExtensionLength
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowGtpExtensionExtensionLengthChoiceEnum
@@ -42364,6 +50468,14 @@ func (obj *patternFlowGtpExtensionContents) msg() *snappipb.PatternFlowGtpExtens
 	return obj.obj
 }
 
+func (obj *patternFlowGtpExtensionContents) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowGtpExtensionContents) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowGtpExtensionContents) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -42414,8 +50526,10 @@ func (obj *patternFlowGtpExtensionContents) FromJson(value string) error {
 
 type PatternFlowGtpExtensionContents interface {
 	msg() *snappipb.PatternFlowGtpExtensionContents
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowGtpExtensionContentsChoiceEnum
@@ -42525,6 +50639,14 @@ func (obj *patternFlowGtpExtensionNextExtensionHeader) msg() *snappipb.PatternFl
 	return obj.obj
 }
 
+func (obj *patternFlowGtpExtensionNextExtensionHeader) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowGtpExtensionNextExtensionHeader) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowGtpExtensionNextExtensionHeader) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -42575,8 +50697,10 @@ func (obj *patternFlowGtpExtensionNextExtensionHeader) FromJson(value string) er
 
 type PatternFlowGtpExtensionNextExtensionHeader interface {
 	msg() *snappipb.PatternFlowGtpExtensionNextExtensionHeader
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowGtpExtensionNextExtensionHeaderChoiceEnum
@@ -42686,6 +50810,14 @@ func (obj *patternFlowGtpv2VersionCounter) msg() *snappipb.PatternFlowGtpv2Versi
 	return obj.obj
 }
 
+func (obj *patternFlowGtpv2VersionCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowGtpv2VersionCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowGtpv2VersionCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -42736,8 +50868,10 @@ func (obj *patternFlowGtpv2VersionCounter) FromJson(value string) error {
 
 type PatternFlowGtpv2VersionCounter interface {
 	msg() *snappipb.PatternFlowGtpv2VersionCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -42798,6 +50932,14 @@ func (obj *patternFlowGtpv2PiggybackingFlagCounter) msg() *snappipb.PatternFlowG
 	return obj.obj
 }
 
+func (obj *patternFlowGtpv2PiggybackingFlagCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowGtpv2PiggybackingFlagCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowGtpv2PiggybackingFlagCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -42848,8 +50990,10 @@ func (obj *patternFlowGtpv2PiggybackingFlagCounter) FromJson(value string) error
 
 type PatternFlowGtpv2PiggybackingFlagCounter interface {
 	msg() *snappipb.PatternFlowGtpv2PiggybackingFlagCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -42910,6 +51054,14 @@ func (obj *patternFlowGtpv2TeidFlagCounter) msg() *snappipb.PatternFlowGtpv2Teid
 	return obj.obj
 }
 
+func (obj *patternFlowGtpv2TeidFlagCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowGtpv2TeidFlagCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowGtpv2TeidFlagCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -42960,8 +51112,10 @@ func (obj *patternFlowGtpv2TeidFlagCounter) FromJson(value string) error {
 
 type PatternFlowGtpv2TeidFlagCounter interface {
 	msg() *snappipb.PatternFlowGtpv2TeidFlagCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -43022,6 +51176,14 @@ func (obj *patternFlowGtpv2Spare1Counter) msg() *snappipb.PatternFlowGtpv2Spare1
 	return obj.obj
 }
 
+func (obj *patternFlowGtpv2Spare1Counter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowGtpv2Spare1Counter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowGtpv2Spare1Counter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -43072,8 +51234,10 @@ func (obj *patternFlowGtpv2Spare1Counter) FromJson(value string) error {
 
 type PatternFlowGtpv2Spare1Counter interface {
 	msg() *snappipb.PatternFlowGtpv2Spare1Counter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -43134,6 +51298,14 @@ func (obj *patternFlowGtpv2MessageTypeCounter) msg() *snappipb.PatternFlowGtpv2M
 	return obj.obj
 }
 
+func (obj *patternFlowGtpv2MessageTypeCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowGtpv2MessageTypeCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowGtpv2MessageTypeCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -43184,8 +51356,10 @@ func (obj *patternFlowGtpv2MessageTypeCounter) FromJson(value string) error {
 
 type PatternFlowGtpv2MessageTypeCounter interface {
 	msg() *snappipb.PatternFlowGtpv2MessageTypeCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -43246,6 +51420,14 @@ func (obj *patternFlowGtpv2MessageLengthCounter) msg() *snappipb.PatternFlowGtpv
 	return obj.obj
 }
 
+func (obj *patternFlowGtpv2MessageLengthCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowGtpv2MessageLengthCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowGtpv2MessageLengthCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -43296,8 +51478,10 @@ func (obj *patternFlowGtpv2MessageLengthCounter) FromJson(value string) error {
 
 type PatternFlowGtpv2MessageLengthCounter interface {
 	msg() *snappipb.PatternFlowGtpv2MessageLengthCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -43358,6 +51542,14 @@ func (obj *patternFlowGtpv2TeidCounter) msg() *snappipb.PatternFlowGtpv2TeidCoun
 	return obj.obj
 }
 
+func (obj *patternFlowGtpv2TeidCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowGtpv2TeidCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowGtpv2TeidCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -43408,8 +51600,10 @@ func (obj *patternFlowGtpv2TeidCounter) FromJson(value string) error {
 
 type PatternFlowGtpv2TeidCounter interface {
 	msg() *snappipb.PatternFlowGtpv2TeidCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -43470,6 +51664,14 @@ func (obj *patternFlowGtpv2SequenceNumberCounter) msg() *snappipb.PatternFlowGtp
 	return obj.obj
 }
 
+func (obj *patternFlowGtpv2SequenceNumberCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowGtpv2SequenceNumberCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowGtpv2SequenceNumberCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -43520,8 +51722,10 @@ func (obj *patternFlowGtpv2SequenceNumberCounter) FromJson(value string) error {
 
 type PatternFlowGtpv2SequenceNumberCounter interface {
 	msg() *snappipb.PatternFlowGtpv2SequenceNumberCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -43582,6 +51786,14 @@ func (obj *patternFlowGtpv2Spare2Counter) msg() *snappipb.PatternFlowGtpv2Spare2
 	return obj.obj
 }
 
+func (obj *patternFlowGtpv2Spare2Counter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowGtpv2Spare2Counter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowGtpv2Spare2Counter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -43632,8 +51844,10 @@ func (obj *patternFlowGtpv2Spare2Counter) FromJson(value string) error {
 
 type PatternFlowGtpv2Spare2Counter interface {
 	msg() *snappipb.PatternFlowGtpv2Spare2Counter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -43694,6 +51908,14 @@ func (obj *patternFlowArpHardwareTypeCounter) msg() *snappipb.PatternFlowArpHard
 	return obj.obj
 }
 
+func (obj *patternFlowArpHardwareTypeCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowArpHardwareTypeCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowArpHardwareTypeCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -43744,8 +51966,10 @@ func (obj *patternFlowArpHardwareTypeCounter) FromJson(value string) error {
 
 type PatternFlowArpHardwareTypeCounter interface {
 	msg() *snappipb.PatternFlowArpHardwareTypeCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -43806,6 +52030,14 @@ func (obj *patternFlowArpProtocolTypeCounter) msg() *snappipb.PatternFlowArpProt
 	return obj.obj
 }
 
+func (obj *patternFlowArpProtocolTypeCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowArpProtocolTypeCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowArpProtocolTypeCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -43856,8 +52088,10 @@ func (obj *patternFlowArpProtocolTypeCounter) FromJson(value string) error {
 
 type PatternFlowArpProtocolTypeCounter interface {
 	msg() *snappipb.PatternFlowArpProtocolTypeCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -43918,6 +52152,14 @@ func (obj *patternFlowArpHardwareLengthCounter) msg() *snappipb.PatternFlowArpHa
 	return obj.obj
 }
 
+func (obj *patternFlowArpHardwareLengthCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowArpHardwareLengthCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowArpHardwareLengthCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -43968,8 +52210,10 @@ func (obj *patternFlowArpHardwareLengthCounter) FromJson(value string) error {
 
 type PatternFlowArpHardwareLengthCounter interface {
 	msg() *snappipb.PatternFlowArpHardwareLengthCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -44030,6 +52274,14 @@ func (obj *patternFlowArpProtocolLengthCounter) msg() *snappipb.PatternFlowArpPr
 	return obj.obj
 }
 
+func (obj *patternFlowArpProtocolLengthCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowArpProtocolLengthCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowArpProtocolLengthCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -44080,8 +52332,10 @@ func (obj *patternFlowArpProtocolLengthCounter) FromJson(value string) error {
 
 type PatternFlowArpProtocolLengthCounter interface {
 	msg() *snappipb.PatternFlowArpProtocolLengthCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -44142,6 +52396,14 @@ func (obj *patternFlowArpOperationCounter) msg() *snappipb.PatternFlowArpOperati
 	return obj.obj
 }
 
+func (obj *patternFlowArpOperationCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowArpOperationCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowArpOperationCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -44192,8 +52454,10 @@ func (obj *patternFlowArpOperationCounter) FromJson(value string) error {
 
 type PatternFlowArpOperationCounter interface {
 	msg() *snappipb.PatternFlowArpOperationCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -44254,6 +52518,14 @@ func (obj *patternFlowArpSenderHardwareAddrCounter) msg() *snappipb.PatternFlowA
 	return obj.obj
 }
 
+func (obj *patternFlowArpSenderHardwareAddrCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowArpSenderHardwareAddrCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowArpSenderHardwareAddrCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -44304,8 +52576,10 @@ func (obj *patternFlowArpSenderHardwareAddrCounter) FromJson(value string) error
 
 type PatternFlowArpSenderHardwareAddrCounter interface {
 	msg() *snappipb.PatternFlowArpSenderHardwareAddrCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() string
@@ -44366,6 +52640,14 @@ func (obj *patternFlowArpSenderProtocolAddrCounter) msg() *snappipb.PatternFlowA
 	return obj.obj
 }
 
+func (obj *patternFlowArpSenderProtocolAddrCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowArpSenderProtocolAddrCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowArpSenderProtocolAddrCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -44416,8 +52698,10 @@ func (obj *patternFlowArpSenderProtocolAddrCounter) FromJson(value string) error
 
 type PatternFlowArpSenderProtocolAddrCounter interface {
 	msg() *snappipb.PatternFlowArpSenderProtocolAddrCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() string
@@ -44478,6 +52762,14 @@ func (obj *patternFlowArpTargetHardwareAddrCounter) msg() *snappipb.PatternFlowA
 	return obj.obj
 }
 
+func (obj *patternFlowArpTargetHardwareAddrCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowArpTargetHardwareAddrCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowArpTargetHardwareAddrCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -44528,8 +52820,10 @@ func (obj *patternFlowArpTargetHardwareAddrCounter) FromJson(value string) error
 
 type PatternFlowArpTargetHardwareAddrCounter interface {
 	msg() *snappipb.PatternFlowArpTargetHardwareAddrCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() string
@@ -44590,6 +52884,14 @@ func (obj *patternFlowArpTargetProtocolAddrCounter) msg() *snappipb.PatternFlowA
 	return obj.obj
 }
 
+func (obj *patternFlowArpTargetProtocolAddrCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowArpTargetProtocolAddrCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowArpTargetProtocolAddrCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -44640,8 +52942,10 @@ func (obj *patternFlowArpTargetProtocolAddrCounter) FromJson(value string) error
 
 type PatternFlowArpTargetProtocolAddrCounter interface {
 	msg() *snappipb.PatternFlowArpTargetProtocolAddrCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() string
@@ -44702,6 +53006,14 @@ func (obj *patternFlowIcmpEchoType) msg() *snappipb.PatternFlowIcmpEchoType {
 	return obj.obj
 }
 
+func (obj *patternFlowIcmpEchoType) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowIcmpEchoType) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowIcmpEchoType) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -44752,8 +53064,10 @@ func (obj *patternFlowIcmpEchoType) FromJson(value string) error {
 
 type PatternFlowIcmpEchoType interface {
 	msg() *snappipb.PatternFlowIcmpEchoType
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowIcmpEchoTypeChoiceEnum
@@ -44863,6 +53177,14 @@ func (obj *patternFlowIcmpEchoCode) msg() *snappipb.PatternFlowIcmpEchoCode {
 	return obj.obj
 }
 
+func (obj *patternFlowIcmpEchoCode) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowIcmpEchoCode) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowIcmpEchoCode) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -44913,8 +53235,10 @@ func (obj *patternFlowIcmpEchoCode) FromJson(value string) error {
 
 type PatternFlowIcmpEchoCode interface {
 	msg() *snappipb.PatternFlowIcmpEchoCode
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowIcmpEchoCodeChoiceEnum
@@ -45024,6 +53348,14 @@ func (obj *patternFlowIcmpEchoChecksum) msg() *snappipb.PatternFlowIcmpEchoCheck
 	return obj.obj
 }
 
+func (obj *patternFlowIcmpEchoChecksum) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowIcmpEchoChecksum) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowIcmpEchoChecksum) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -45074,8 +53406,10 @@ func (obj *patternFlowIcmpEchoChecksum) FromJson(value string) error {
 
 type PatternFlowIcmpEchoChecksum interface {
 	msg() *snappipb.PatternFlowIcmpEchoChecksum
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowIcmpEchoChecksumChoiceEnum
@@ -45149,6 +53483,14 @@ func (obj *patternFlowIcmpEchoIdentifier) msg() *snappipb.PatternFlowIcmpEchoIde
 	return obj.obj
 }
 
+func (obj *patternFlowIcmpEchoIdentifier) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowIcmpEchoIdentifier) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowIcmpEchoIdentifier) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -45199,8 +53541,10 @@ func (obj *patternFlowIcmpEchoIdentifier) FromJson(value string) error {
 
 type PatternFlowIcmpEchoIdentifier interface {
 	msg() *snappipb.PatternFlowIcmpEchoIdentifier
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowIcmpEchoIdentifierChoiceEnum
@@ -45310,6 +53654,14 @@ func (obj *patternFlowIcmpEchoSequenceNumber) msg() *snappipb.PatternFlowIcmpEch
 	return obj.obj
 }
 
+func (obj *patternFlowIcmpEchoSequenceNumber) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowIcmpEchoSequenceNumber) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowIcmpEchoSequenceNumber) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -45360,8 +53712,10 @@ func (obj *patternFlowIcmpEchoSequenceNumber) FromJson(value string) error {
 
 type PatternFlowIcmpEchoSequenceNumber interface {
 	msg() *snappipb.PatternFlowIcmpEchoSequenceNumber
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowIcmpEchoSequenceNumberChoiceEnum
@@ -45471,6 +53825,14 @@ func (obj *patternFlowIcmpv6EchoType) msg() *snappipb.PatternFlowIcmpv6EchoType 
 	return obj.obj
 }
 
+func (obj *patternFlowIcmpv6EchoType) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowIcmpv6EchoType) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowIcmpv6EchoType) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -45521,8 +53883,10 @@ func (obj *patternFlowIcmpv6EchoType) FromJson(value string) error {
 
 type PatternFlowIcmpv6EchoType interface {
 	msg() *snappipb.PatternFlowIcmpv6EchoType
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowIcmpv6EchoTypeChoiceEnum
@@ -45632,6 +53996,14 @@ func (obj *patternFlowIcmpv6EchoCode) msg() *snappipb.PatternFlowIcmpv6EchoCode 
 	return obj.obj
 }
 
+func (obj *patternFlowIcmpv6EchoCode) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowIcmpv6EchoCode) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowIcmpv6EchoCode) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -45682,8 +54054,10 @@ func (obj *patternFlowIcmpv6EchoCode) FromJson(value string) error {
 
 type PatternFlowIcmpv6EchoCode interface {
 	msg() *snappipb.PatternFlowIcmpv6EchoCode
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowIcmpv6EchoCodeChoiceEnum
@@ -45793,6 +54167,14 @@ func (obj *patternFlowIcmpv6EchoIdentifier) msg() *snappipb.PatternFlowIcmpv6Ech
 	return obj.obj
 }
 
+func (obj *patternFlowIcmpv6EchoIdentifier) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowIcmpv6EchoIdentifier) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowIcmpv6EchoIdentifier) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -45843,8 +54225,10 @@ func (obj *patternFlowIcmpv6EchoIdentifier) FromJson(value string) error {
 
 type PatternFlowIcmpv6EchoIdentifier interface {
 	msg() *snappipb.PatternFlowIcmpv6EchoIdentifier
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowIcmpv6EchoIdentifierChoiceEnum
@@ -45954,6 +54338,14 @@ func (obj *patternFlowIcmpv6EchoSequenceNumber) msg() *snappipb.PatternFlowIcmpv
 	return obj.obj
 }
 
+func (obj *patternFlowIcmpv6EchoSequenceNumber) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowIcmpv6EchoSequenceNumber) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowIcmpv6EchoSequenceNumber) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -46004,8 +54396,10 @@ func (obj *patternFlowIcmpv6EchoSequenceNumber) FromJson(value string) error {
 
 type PatternFlowIcmpv6EchoSequenceNumber interface {
 	msg() *snappipb.PatternFlowIcmpv6EchoSequenceNumber
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowIcmpv6EchoSequenceNumberChoiceEnum
@@ -46115,6 +54509,14 @@ func (obj *patternFlowIcmpv6EchoChecksum) msg() *snappipb.PatternFlowIcmpv6EchoC
 	return obj.obj
 }
 
+func (obj *patternFlowIcmpv6EchoChecksum) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowIcmpv6EchoChecksum) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowIcmpv6EchoChecksum) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -46165,8 +54567,10 @@ func (obj *patternFlowIcmpv6EchoChecksum) FromJson(value string) error {
 
 type PatternFlowIcmpv6EchoChecksum interface {
 	msg() *snappipb.PatternFlowIcmpv6EchoChecksum
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowIcmpv6EchoChecksumChoiceEnum
@@ -46240,6 +54644,14 @@ func (obj *patternFlowPppAddressCounter) msg() *snappipb.PatternFlowPppAddressCo
 	return obj.obj
 }
 
+func (obj *patternFlowPppAddressCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowPppAddressCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowPppAddressCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -46290,8 +54702,10 @@ func (obj *patternFlowPppAddressCounter) FromJson(value string) error {
 
 type PatternFlowPppAddressCounter interface {
 	msg() *snappipb.PatternFlowPppAddressCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -46352,6 +54766,14 @@ func (obj *patternFlowPppControlCounter) msg() *snappipb.PatternFlowPppControlCo
 	return obj.obj
 }
 
+func (obj *patternFlowPppControlCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowPppControlCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowPppControlCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -46402,8 +54824,10 @@ func (obj *patternFlowPppControlCounter) FromJson(value string) error {
 
 type PatternFlowPppControlCounter interface {
 	msg() *snappipb.PatternFlowPppControlCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -46464,6 +54888,14 @@ func (obj *patternFlowPppProtocolTypeCounter) msg() *snappipb.PatternFlowPppProt
 	return obj.obj
 }
 
+func (obj *patternFlowPppProtocolTypeCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowPppProtocolTypeCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowPppProtocolTypeCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -46514,8 +54946,10 @@ func (obj *patternFlowPppProtocolTypeCounter) FromJson(value string) error {
 
 type PatternFlowPppProtocolTypeCounter interface {
 	msg() *snappipb.PatternFlowPppProtocolTypeCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -46576,6 +55010,14 @@ func (obj *patternFlowIgmpv1VersionCounter) msg() *snappipb.PatternFlowIgmpv1Ver
 	return obj.obj
 }
 
+func (obj *patternFlowIgmpv1VersionCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowIgmpv1VersionCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowIgmpv1VersionCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -46626,8 +55068,10 @@ func (obj *patternFlowIgmpv1VersionCounter) FromJson(value string) error {
 
 type PatternFlowIgmpv1VersionCounter interface {
 	msg() *snappipb.PatternFlowIgmpv1VersionCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -46688,6 +55132,14 @@ func (obj *patternFlowIgmpv1TypeCounter) msg() *snappipb.PatternFlowIgmpv1TypeCo
 	return obj.obj
 }
 
+func (obj *patternFlowIgmpv1TypeCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowIgmpv1TypeCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowIgmpv1TypeCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -46738,8 +55190,10 @@ func (obj *patternFlowIgmpv1TypeCounter) FromJson(value string) error {
 
 type PatternFlowIgmpv1TypeCounter interface {
 	msg() *snappipb.PatternFlowIgmpv1TypeCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -46800,6 +55254,14 @@ func (obj *patternFlowIgmpv1UnusedCounter) msg() *snappipb.PatternFlowIgmpv1Unus
 	return obj.obj
 }
 
+func (obj *patternFlowIgmpv1UnusedCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowIgmpv1UnusedCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowIgmpv1UnusedCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -46850,8 +55312,10 @@ func (obj *patternFlowIgmpv1UnusedCounter) FromJson(value string) error {
 
 type PatternFlowIgmpv1UnusedCounter interface {
 	msg() *snappipb.PatternFlowIgmpv1UnusedCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -46912,6 +55376,14 @@ func (obj *patternFlowIgmpv1GroupAddressCounter) msg() *snappipb.PatternFlowIgmp
 	return obj.obj
 }
 
+func (obj *patternFlowIgmpv1GroupAddressCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowIgmpv1GroupAddressCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowIgmpv1GroupAddressCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -46962,8 +55434,10 @@ func (obj *patternFlowIgmpv1GroupAddressCounter) FromJson(value string) error {
 
 type PatternFlowIgmpv1GroupAddressCounter interface {
 	msg() *snappipb.PatternFlowIgmpv1GroupAddressCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() string
@@ -47024,6 +55498,14 @@ func (obj *deviceBgpSrTePolicyNextHop) msg() *snappipb.DeviceBgpSrTePolicyNextHo
 	return obj.obj
 }
 
+func (obj *deviceBgpSrTePolicyNextHop) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *deviceBgpSrTePolicyNextHop) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *deviceBgpSrTePolicyNextHop) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -47074,8 +55556,10 @@ func (obj *deviceBgpSrTePolicyNextHop) FromJson(value string) error {
 
 type DeviceBgpSrTePolicyNextHop interface {
 	msg() *snappipb.DeviceBgpSrTePolicyNextHop
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	NextHopMode() DeviceBgpSrTePolicyNextHopNextHopModeEnum
@@ -47166,6 +55650,14 @@ func (obj *deviceBgpAddPath) msg() *snappipb.DeviceBgpAddPath {
 	return obj.obj
 }
 
+func (obj *deviceBgpAddPath) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *deviceBgpAddPath) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *deviceBgpAddPath) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -47216,8 +55708,10 @@ func (obj *deviceBgpAddPath) FromJson(value string) error {
 
 type DeviceBgpAddPath interface {
 	msg() *snappipb.DeviceBgpAddPath
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	PathId() int32
@@ -47244,6 +55738,14 @@ type deviceBgpAsPath struct {
 
 func (obj *deviceBgpAsPath) msg() *snappipb.DeviceBgpAsPath {
 	return obj.obj
+}
+
+func (obj *deviceBgpAsPath) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *deviceBgpAsPath) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
 }
 
 func (obj *deviceBgpAsPath) ToYaml() string {
@@ -47296,8 +55798,10 @@ func (obj *deviceBgpAsPath) FromJson(value string) error {
 
 type DeviceBgpAsPath interface {
 	msg() *snappipb.DeviceBgpAsPath
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	OverridePeerAsSetMode() bool
@@ -47390,6 +55894,14 @@ func (obj *deviceBgpTunnelTlv) msg() *snappipb.DeviceBgpTunnelTlv {
 	return obj.obj
 }
 
+func (obj *deviceBgpTunnelTlv) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *deviceBgpTunnelTlv) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *deviceBgpTunnelTlv) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -47440,8 +55952,10 @@ func (obj *deviceBgpTunnelTlv) FromJson(value string) error {
 
 type DeviceBgpTunnelTlv interface {
 	msg() *snappipb.DeviceBgpTunnelTlv
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	SegmentLists() DeviceBgpTunnelTlvDeviceBgpSegmentListIter
@@ -47547,6 +56061,14 @@ func (obj *deviceBgpCommunity) msg() *snappipb.DeviceBgpCommunity {
 	return obj.obj
 }
 
+func (obj *deviceBgpCommunity) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *deviceBgpCommunity) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *deviceBgpCommunity) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -47597,8 +56119,10 @@ func (obj *deviceBgpCommunity) FromJson(value string) error {
 
 type DeviceBgpCommunity interface {
 	msg() *snappipb.DeviceBgpCommunity
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	CommunityType() DeviceBgpCommunityCommunityTypeEnum
@@ -47674,6 +56198,14 @@ func (obj *deviceBgpv4RouteAddress) msg() *snappipb.DeviceBgpv4RouteAddress {
 	return obj.obj
 }
 
+func (obj *deviceBgpv4RouteAddress) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *deviceBgpv4RouteAddress) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *deviceBgpv4RouteAddress) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -47724,8 +56256,10 @@ func (obj *deviceBgpv4RouteAddress) FromJson(value string) error {
 
 type DeviceBgpv4RouteAddress interface {
 	msg() *snappipb.DeviceBgpv4RouteAddress
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Address() string
@@ -47802,6 +56336,14 @@ func (obj *deviceBgpRouteAdvanced) msg() *snappipb.DeviceBgpRouteAdvanced {
 	return obj.obj
 }
 
+func (obj *deviceBgpRouteAdvanced) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *deviceBgpRouteAdvanced) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *deviceBgpRouteAdvanced) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -47852,8 +56394,10 @@ func (obj *deviceBgpRouteAdvanced) FromJson(value string) error {
 
 type DeviceBgpRouteAdvanced interface {
 	msg() *snappipb.DeviceBgpRouteAdvanced
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	MultiExitDiscriminator() int32
@@ -47903,6 +56447,14 @@ type deviceBgpv6RouteAddress struct {
 
 func (obj *deviceBgpv6RouteAddress) msg() *snappipb.DeviceBgpv6RouteAddress {
 	return obj.obj
+}
+
+func (obj *deviceBgpv6RouteAddress) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *deviceBgpv6RouteAddress) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
 }
 
 func (obj *deviceBgpv6RouteAddress) ToYaml() string {
@@ -47955,8 +56507,10 @@ func (obj *deviceBgpv6RouteAddress) FromJson(value string) error {
 
 type DeviceBgpv6RouteAddress interface {
 	msg() *snappipb.DeviceBgpv6RouteAddress
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Address() string
@@ -48033,6 +56587,14 @@ func (obj *patternFlowIpv4PriorityRawCounter) msg() *snappipb.PatternFlowIpv4Pri
 	return obj.obj
 }
 
+func (obj *patternFlowIpv4PriorityRawCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowIpv4PriorityRawCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowIpv4PriorityRawCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -48083,8 +56645,10 @@ func (obj *patternFlowIpv4PriorityRawCounter) FromJson(value string) error {
 
 type PatternFlowIpv4PriorityRawCounter interface {
 	msg() *snappipb.PatternFlowIpv4PriorityRawCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -48145,6 +56709,14 @@ func (obj *patternFlowIpv4TosPrecedence) msg() *snappipb.PatternFlowIpv4TosPrece
 	return obj.obj
 }
 
+func (obj *patternFlowIpv4TosPrecedence) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowIpv4TosPrecedence) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowIpv4TosPrecedence) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -48195,8 +56767,10 @@ func (obj *patternFlowIpv4TosPrecedence) FromJson(value string) error {
 
 type PatternFlowIpv4TosPrecedence interface {
 	msg() *snappipb.PatternFlowIpv4TosPrecedence
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowIpv4TosPrecedenceChoiceEnum
@@ -48306,6 +56880,14 @@ func (obj *patternFlowIpv4TosDelay) msg() *snappipb.PatternFlowIpv4TosDelay {
 	return obj.obj
 }
 
+func (obj *patternFlowIpv4TosDelay) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowIpv4TosDelay) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowIpv4TosDelay) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -48356,8 +56938,10 @@ func (obj *patternFlowIpv4TosDelay) FromJson(value string) error {
 
 type PatternFlowIpv4TosDelay interface {
 	msg() *snappipb.PatternFlowIpv4TosDelay
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowIpv4TosDelayChoiceEnum
@@ -48467,6 +57051,14 @@ func (obj *patternFlowIpv4TosThroughput) msg() *snappipb.PatternFlowIpv4TosThrou
 	return obj.obj
 }
 
+func (obj *patternFlowIpv4TosThroughput) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowIpv4TosThroughput) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowIpv4TosThroughput) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -48517,8 +57109,10 @@ func (obj *patternFlowIpv4TosThroughput) FromJson(value string) error {
 
 type PatternFlowIpv4TosThroughput interface {
 	msg() *snappipb.PatternFlowIpv4TosThroughput
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowIpv4TosThroughputChoiceEnum
@@ -48628,6 +57222,14 @@ func (obj *patternFlowIpv4TosReliability) msg() *snappipb.PatternFlowIpv4TosReli
 	return obj.obj
 }
 
+func (obj *patternFlowIpv4TosReliability) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowIpv4TosReliability) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowIpv4TosReliability) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -48678,8 +57280,10 @@ func (obj *patternFlowIpv4TosReliability) FromJson(value string) error {
 
 type PatternFlowIpv4TosReliability interface {
 	msg() *snappipb.PatternFlowIpv4TosReliability
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowIpv4TosReliabilityChoiceEnum
@@ -48789,6 +57393,14 @@ func (obj *patternFlowIpv4TosMonetary) msg() *snappipb.PatternFlowIpv4TosMonetar
 	return obj.obj
 }
 
+func (obj *patternFlowIpv4TosMonetary) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowIpv4TosMonetary) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowIpv4TosMonetary) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -48839,8 +57451,10 @@ func (obj *patternFlowIpv4TosMonetary) FromJson(value string) error {
 
 type PatternFlowIpv4TosMonetary interface {
 	msg() *snappipb.PatternFlowIpv4TosMonetary
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowIpv4TosMonetaryChoiceEnum
@@ -48950,6 +57564,14 @@ func (obj *patternFlowIpv4TosUnused) msg() *snappipb.PatternFlowIpv4TosUnused {
 	return obj.obj
 }
 
+func (obj *patternFlowIpv4TosUnused) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowIpv4TosUnused) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowIpv4TosUnused) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -49000,8 +57622,10 @@ func (obj *patternFlowIpv4TosUnused) FromJson(value string) error {
 
 type PatternFlowIpv4TosUnused interface {
 	msg() *snappipb.PatternFlowIpv4TosUnused
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowIpv4TosUnusedChoiceEnum
@@ -49111,6 +57735,14 @@ func (obj *patternFlowIpv4DscpPhb) msg() *snappipb.PatternFlowIpv4DscpPhb {
 	return obj.obj
 }
 
+func (obj *patternFlowIpv4DscpPhb) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowIpv4DscpPhb) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowIpv4DscpPhb) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -49161,8 +57793,10 @@ func (obj *patternFlowIpv4DscpPhb) FromJson(value string) error {
 
 type PatternFlowIpv4DscpPhb interface {
 	msg() *snappipb.PatternFlowIpv4DscpPhb
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowIpv4DscpPhbChoiceEnum
@@ -49272,6 +57906,14 @@ func (obj *patternFlowIpv4DscpEcn) msg() *snappipb.PatternFlowIpv4DscpEcn {
 	return obj.obj
 }
 
+func (obj *patternFlowIpv4DscpEcn) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowIpv4DscpEcn) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowIpv4DscpEcn) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -49322,8 +57964,10 @@ func (obj *patternFlowIpv4DscpEcn) FromJson(value string) error {
 
 type PatternFlowIpv4DscpEcn interface {
 	msg() *snappipb.PatternFlowIpv4DscpEcn
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Choice() PatternFlowIpv4DscpEcnChoiceEnum
@@ -49433,6 +58077,14 @@ func (obj *patternFlowGtpExtensionExtensionLengthCounter) msg() *snappipb.Patter
 	return obj.obj
 }
 
+func (obj *patternFlowGtpExtensionExtensionLengthCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowGtpExtensionExtensionLengthCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowGtpExtensionExtensionLengthCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -49483,8 +58135,10 @@ func (obj *patternFlowGtpExtensionExtensionLengthCounter) FromJson(value string)
 
 type PatternFlowGtpExtensionExtensionLengthCounter interface {
 	msg() *snappipb.PatternFlowGtpExtensionExtensionLengthCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -49545,6 +58199,14 @@ func (obj *patternFlowGtpExtensionContentsCounter) msg() *snappipb.PatternFlowGt
 	return obj.obj
 }
 
+func (obj *patternFlowGtpExtensionContentsCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowGtpExtensionContentsCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowGtpExtensionContentsCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -49595,8 +58257,10 @@ func (obj *patternFlowGtpExtensionContentsCounter) FromJson(value string) error 
 
 type PatternFlowGtpExtensionContentsCounter interface {
 	msg() *snappipb.PatternFlowGtpExtensionContentsCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -49657,6 +58321,14 @@ func (obj *patternFlowGtpExtensionNextExtensionHeaderCounter) msg() *snappipb.Pa
 	return obj.obj
 }
 
+func (obj *patternFlowGtpExtensionNextExtensionHeaderCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowGtpExtensionNextExtensionHeaderCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowGtpExtensionNextExtensionHeaderCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -49707,8 +58379,10 @@ func (obj *patternFlowGtpExtensionNextExtensionHeaderCounter) FromJson(value str
 
 type PatternFlowGtpExtensionNextExtensionHeaderCounter interface {
 	msg() *snappipb.PatternFlowGtpExtensionNextExtensionHeaderCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -49769,6 +58443,14 @@ func (obj *patternFlowIcmpEchoTypeCounter) msg() *snappipb.PatternFlowIcmpEchoTy
 	return obj.obj
 }
 
+func (obj *patternFlowIcmpEchoTypeCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowIcmpEchoTypeCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowIcmpEchoTypeCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -49819,8 +58501,10 @@ func (obj *patternFlowIcmpEchoTypeCounter) FromJson(value string) error {
 
 type PatternFlowIcmpEchoTypeCounter interface {
 	msg() *snappipb.PatternFlowIcmpEchoTypeCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -49881,6 +58565,14 @@ func (obj *patternFlowIcmpEchoCodeCounter) msg() *snappipb.PatternFlowIcmpEchoCo
 	return obj.obj
 }
 
+func (obj *patternFlowIcmpEchoCodeCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowIcmpEchoCodeCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowIcmpEchoCodeCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -49931,8 +58623,10 @@ func (obj *patternFlowIcmpEchoCodeCounter) FromJson(value string) error {
 
 type PatternFlowIcmpEchoCodeCounter interface {
 	msg() *snappipb.PatternFlowIcmpEchoCodeCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -49993,6 +58687,14 @@ func (obj *patternFlowIcmpEchoIdentifierCounter) msg() *snappipb.PatternFlowIcmp
 	return obj.obj
 }
 
+func (obj *patternFlowIcmpEchoIdentifierCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowIcmpEchoIdentifierCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowIcmpEchoIdentifierCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -50043,8 +58745,10 @@ func (obj *patternFlowIcmpEchoIdentifierCounter) FromJson(value string) error {
 
 type PatternFlowIcmpEchoIdentifierCounter interface {
 	msg() *snappipb.PatternFlowIcmpEchoIdentifierCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -50105,6 +58809,14 @@ func (obj *patternFlowIcmpEchoSequenceNumberCounter) msg() *snappipb.PatternFlow
 	return obj.obj
 }
 
+func (obj *patternFlowIcmpEchoSequenceNumberCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowIcmpEchoSequenceNumberCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowIcmpEchoSequenceNumberCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -50155,8 +58867,10 @@ func (obj *patternFlowIcmpEchoSequenceNumberCounter) FromJson(value string) erro
 
 type PatternFlowIcmpEchoSequenceNumberCounter interface {
 	msg() *snappipb.PatternFlowIcmpEchoSequenceNumberCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -50217,6 +58931,14 @@ func (obj *patternFlowIcmpv6EchoTypeCounter) msg() *snappipb.PatternFlowIcmpv6Ec
 	return obj.obj
 }
 
+func (obj *patternFlowIcmpv6EchoTypeCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowIcmpv6EchoTypeCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowIcmpv6EchoTypeCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -50267,8 +58989,10 @@ func (obj *patternFlowIcmpv6EchoTypeCounter) FromJson(value string) error {
 
 type PatternFlowIcmpv6EchoTypeCounter interface {
 	msg() *snappipb.PatternFlowIcmpv6EchoTypeCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -50329,6 +59053,14 @@ func (obj *patternFlowIcmpv6EchoCodeCounter) msg() *snappipb.PatternFlowIcmpv6Ec
 	return obj.obj
 }
 
+func (obj *patternFlowIcmpv6EchoCodeCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowIcmpv6EchoCodeCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowIcmpv6EchoCodeCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -50379,8 +59111,10 @@ func (obj *patternFlowIcmpv6EchoCodeCounter) FromJson(value string) error {
 
 type PatternFlowIcmpv6EchoCodeCounter interface {
 	msg() *snappipb.PatternFlowIcmpv6EchoCodeCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -50441,6 +59175,14 @@ func (obj *patternFlowIcmpv6EchoIdentifierCounter) msg() *snappipb.PatternFlowIc
 	return obj.obj
 }
 
+func (obj *patternFlowIcmpv6EchoIdentifierCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowIcmpv6EchoIdentifierCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowIcmpv6EchoIdentifierCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -50491,8 +59233,10 @@ func (obj *patternFlowIcmpv6EchoIdentifierCounter) FromJson(value string) error 
 
 type PatternFlowIcmpv6EchoIdentifierCounter interface {
 	msg() *snappipb.PatternFlowIcmpv6EchoIdentifierCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -50553,6 +59297,14 @@ func (obj *patternFlowIcmpv6EchoSequenceNumberCounter) msg() *snappipb.PatternFl
 	return obj.obj
 }
 
+func (obj *patternFlowIcmpv6EchoSequenceNumberCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowIcmpv6EchoSequenceNumberCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowIcmpv6EchoSequenceNumberCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -50603,8 +59355,10 @@ func (obj *patternFlowIcmpv6EchoSequenceNumberCounter) FromJson(value string) er
 
 type PatternFlowIcmpv6EchoSequenceNumberCounter interface {
 	msg() *snappipb.PatternFlowIcmpv6EchoSequenceNumberCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -50665,6 +59419,14 @@ func (obj *deviceBgpAsPathSegment) msg() *snappipb.DeviceBgpAsPathSegment {
 	return obj.obj
 }
 
+func (obj *deviceBgpAsPathSegment) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *deviceBgpAsPathSegment) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *deviceBgpAsPathSegment) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -50715,8 +59477,10 @@ func (obj *deviceBgpAsPathSegment) FromJson(value string) error {
 
 type DeviceBgpAsPathSegment interface {
 	msg() *snappipb.DeviceBgpAsPathSegment
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	SegmentType() DeviceBgpAsPathSegmentSegmentTypeEnum
@@ -50772,6 +59536,14 @@ func (obj *deviceBgpSegmentList) msg() *snappipb.DeviceBgpSegmentList {
 	return obj.obj
 }
 
+func (obj *deviceBgpSegmentList) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *deviceBgpSegmentList) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *deviceBgpSegmentList) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -50822,8 +59594,10 @@ func (obj *deviceBgpSegmentList) FromJson(value string) error {
 
 type DeviceBgpSegmentList interface {
 	msg() *snappipb.DeviceBgpSegmentList
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	SegmentWeight() int32
@@ -50901,6 +59675,14 @@ func (obj *deviceBgpRemoteEndpointSubTlv) msg() *snappipb.DeviceBgpRemoteEndpoin
 	return obj.obj
 }
 
+func (obj *deviceBgpRemoteEndpointSubTlv) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *deviceBgpRemoteEndpointSubTlv) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *deviceBgpRemoteEndpointSubTlv) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -50951,8 +59733,10 @@ func (obj *deviceBgpRemoteEndpointSubTlv) FromJson(value string) error {
 
 type DeviceBgpRemoteEndpointSubTlv interface {
 	msg() *snappipb.DeviceBgpRemoteEndpointSubTlv
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	AsNumber() int32
@@ -51036,6 +59820,14 @@ func (obj *deviceBgpPreferenceSubTlv) msg() *snappipb.DeviceBgpPreferenceSubTlv 
 	return obj.obj
 }
 
+func (obj *deviceBgpPreferenceSubTlv) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *deviceBgpPreferenceSubTlv) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *deviceBgpPreferenceSubTlv) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -51086,8 +59878,10 @@ func (obj *deviceBgpPreferenceSubTlv) FromJson(value string) error {
 
 type DeviceBgpPreferenceSubTlv interface {
 	msg() *snappipb.DeviceBgpPreferenceSubTlv
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Preference() int32
@@ -51114,6 +59908,14 @@ type deviceBgpBindingSubTlv struct {
 
 func (obj *deviceBgpBindingSubTlv) msg() *snappipb.DeviceBgpBindingSubTlv {
 	return obj.obj
+}
+
+func (obj *deviceBgpBindingSubTlv) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *deviceBgpBindingSubTlv) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
 }
 
 func (obj *deviceBgpBindingSubTlv) ToYaml() string {
@@ -51166,8 +59968,10 @@ func (obj *deviceBgpBindingSubTlv) FromJson(value string) error {
 
 type DeviceBgpBindingSubTlv interface {
 	msg() *snappipb.DeviceBgpBindingSubTlv
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	BindingSidType() DeviceBgpBindingSubTlvBindingSidTypeEnum
@@ -51301,6 +60105,14 @@ func (obj *deviceBgpExplicitNullLabelPolicySubTlv) msg() *snappipb.DeviceBgpExpl
 	return obj.obj
 }
 
+func (obj *deviceBgpExplicitNullLabelPolicySubTlv) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *deviceBgpExplicitNullLabelPolicySubTlv) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *deviceBgpExplicitNullLabelPolicySubTlv) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -51351,8 +60163,10 @@ func (obj *deviceBgpExplicitNullLabelPolicySubTlv) FromJson(value string) error 
 
 type DeviceBgpExplicitNullLabelPolicySubTlv interface {
 	msg() *snappipb.DeviceBgpExplicitNullLabelPolicySubTlv
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	ExplicitNullLabelPolicy() DeviceBgpExplicitNullLabelPolicySubTlvExplicitNullLabelPolicyEnum
@@ -51392,6 +60206,14 @@ type patternFlowIpv4TosPrecedenceCounter struct {
 
 func (obj *patternFlowIpv4TosPrecedenceCounter) msg() *snappipb.PatternFlowIpv4TosPrecedenceCounter {
 	return obj.obj
+}
+
+func (obj *patternFlowIpv4TosPrecedenceCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowIpv4TosPrecedenceCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
 }
 
 func (obj *patternFlowIpv4TosPrecedenceCounter) ToYaml() string {
@@ -51444,8 +60266,10 @@ func (obj *patternFlowIpv4TosPrecedenceCounter) FromJson(value string) error {
 
 type PatternFlowIpv4TosPrecedenceCounter interface {
 	msg() *snappipb.PatternFlowIpv4TosPrecedenceCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -51506,6 +60330,14 @@ func (obj *patternFlowIpv4TosDelayCounter) msg() *snappipb.PatternFlowIpv4TosDel
 	return obj.obj
 }
 
+func (obj *patternFlowIpv4TosDelayCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowIpv4TosDelayCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowIpv4TosDelayCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -51556,8 +60388,10 @@ func (obj *patternFlowIpv4TosDelayCounter) FromJson(value string) error {
 
 type PatternFlowIpv4TosDelayCounter interface {
 	msg() *snappipb.PatternFlowIpv4TosDelayCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -51618,6 +60452,14 @@ func (obj *patternFlowIpv4TosThroughputCounter) msg() *snappipb.PatternFlowIpv4T
 	return obj.obj
 }
 
+func (obj *patternFlowIpv4TosThroughputCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowIpv4TosThroughputCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowIpv4TosThroughputCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -51668,8 +60510,10 @@ func (obj *patternFlowIpv4TosThroughputCounter) FromJson(value string) error {
 
 type PatternFlowIpv4TosThroughputCounter interface {
 	msg() *snappipb.PatternFlowIpv4TosThroughputCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -51730,6 +60574,14 @@ func (obj *patternFlowIpv4TosReliabilityCounter) msg() *snappipb.PatternFlowIpv4
 	return obj.obj
 }
 
+func (obj *patternFlowIpv4TosReliabilityCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowIpv4TosReliabilityCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowIpv4TosReliabilityCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -51780,8 +60632,10 @@ func (obj *patternFlowIpv4TosReliabilityCounter) FromJson(value string) error {
 
 type PatternFlowIpv4TosReliabilityCounter interface {
 	msg() *snappipb.PatternFlowIpv4TosReliabilityCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -51842,6 +60696,14 @@ func (obj *patternFlowIpv4TosMonetaryCounter) msg() *snappipb.PatternFlowIpv4Tos
 	return obj.obj
 }
 
+func (obj *patternFlowIpv4TosMonetaryCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowIpv4TosMonetaryCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowIpv4TosMonetaryCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -51892,8 +60754,10 @@ func (obj *patternFlowIpv4TosMonetaryCounter) FromJson(value string) error {
 
 type PatternFlowIpv4TosMonetaryCounter interface {
 	msg() *snappipb.PatternFlowIpv4TosMonetaryCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -51954,6 +60818,14 @@ func (obj *patternFlowIpv4TosUnusedCounter) msg() *snappipb.PatternFlowIpv4TosUn
 	return obj.obj
 }
 
+func (obj *patternFlowIpv4TosUnusedCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowIpv4TosUnusedCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowIpv4TosUnusedCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -52004,8 +60876,10 @@ func (obj *patternFlowIpv4TosUnusedCounter) FromJson(value string) error {
 
 type PatternFlowIpv4TosUnusedCounter interface {
 	msg() *snappipb.PatternFlowIpv4TosUnusedCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -52066,6 +60940,14 @@ func (obj *patternFlowIpv4DscpPhbCounter) msg() *snappipb.PatternFlowIpv4DscpPhb
 	return obj.obj
 }
 
+func (obj *patternFlowIpv4DscpPhbCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowIpv4DscpPhbCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowIpv4DscpPhbCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -52116,8 +60998,10 @@ func (obj *patternFlowIpv4DscpPhbCounter) FromJson(value string) error {
 
 type PatternFlowIpv4DscpPhbCounter interface {
 	msg() *snappipb.PatternFlowIpv4DscpPhbCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -52178,6 +61062,14 @@ func (obj *patternFlowIpv4DscpEcnCounter) msg() *snappipb.PatternFlowIpv4DscpEcn
 	return obj.obj
 }
 
+func (obj *patternFlowIpv4DscpEcnCounter) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *patternFlowIpv4DscpEcnCounter) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *patternFlowIpv4DscpEcnCounter) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -52228,8 +61120,10 @@ func (obj *patternFlowIpv4DscpEcnCounter) FromJson(value string) error {
 
 type PatternFlowIpv4DscpEcnCounter interface {
 	msg() *snappipb.PatternFlowIpv4DscpEcnCounter
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	Start() int32
@@ -52290,6 +61184,14 @@ func (obj *deviceBgpSegment) msg() *snappipb.DeviceBgpSegment {
 	return obj.obj
 }
 
+func (obj *deviceBgpSegment) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *deviceBgpSegment) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
 func (obj *deviceBgpSegment) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
@@ -52340,8 +61242,10 @@ func (obj *deviceBgpSegment) FromJson(value string) error {
 
 type DeviceBgpSegment interface {
 	msg() *snappipb.DeviceBgpSegment
+	ToPbText() string
 	ToYaml() string
 	ToJson() string
+	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
 	SegmentType() DeviceBgpSegmentSegmentTypeEnum
@@ -52479,644 +61383,4 @@ func (obj *deviceBgpSegment) SetActive(value bool) DeviceBgpSegment {
 	obj.obj.Active = &value
 
 	return obj
-}
-
-type setConfigResponseStatusCode200 struct {
-	obj *snappipb.SetConfigResponse_StatusCode200
-}
-
-func (obj *setConfigResponseStatusCode200) msg() *snappipb.SetConfigResponse_StatusCode200 {
-	return obj.obj
-}
-
-func (obj *setConfigResponseStatusCode200) ToYaml() string {
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(obj.msg())
-	data, err = yaml.JSONToYAML(data)
-	if err != nil {
-		panic(err)
-	}
-	return string(data)
-}
-
-func (obj *setConfigResponseStatusCode200) FromYaml(value string) error {
-	data, err := yaml.YAMLToJSON([]byte(value))
-	if err != nil {
-		return err
-	}
-	opts := protojson.UnmarshalOptions{
-		AllowPartial:   true,
-		DiscardUnknown: true,
-	}
-	return opts.Unmarshal([]byte(data), obj.msg())
-}
-
-func (obj *setConfigResponseStatusCode200) ToJson() string {
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-		Indent:          "  ",
-	}
-	data, err := opts.Marshal(obj.msg())
-	if err != nil {
-		panic(err)
-	}
-	return string(data)
-}
-
-func (obj *setConfigResponseStatusCode200) FromJson(value string) error {
-	opts := protojson.UnmarshalOptions{
-		AllowPartial:   true,
-		DiscardUnknown: true,
-	}
-	return opts.Unmarshal([]byte(value), obj.msg())
-}
-
-type SetConfigResponse_StatusCode200 interface {
-	msg() *snappipb.SetConfigResponse_StatusCode200
-	ToYaml() string
-	ToJson() string
-	FromYaml(value string) error
-	FromJson(value string) error
-}
-
-type getConfigResponseStatusCode200 struct {
-	obj *snappipb.GetConfigResponse_StatusCode200
-}
-
-func (obj *getConfigResponseStatusCode200) msg() *snappipb.GetConfigResponse_StatusCode200 {
-	return obj.obj
-}
-
-func (obj *getConfigResponseStatusCode200) ToYaml() string {
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(obj.msg())
-	data, err = yaml.JSONToYAML(data)
-	if err != nil {
-		panic(err)
-	}
-	return string(data)
-}
-
-func (obj *getConfigResponseStatusCode200) FromYaml(value string) error {
-	data, err := yaml.YAMLToJSON([]byte(value))
-	if err != nil {
-		return err
-	}
-	opts := protojson.UnmarshalOptions{
-		AllowPartial:   true,
-		DiscardUnknown: true,
-	}
-	return opts.Unmarshal([]byte(data), obj.msg())
-}
-
-func (obj *getConfigResponseStatusCode200) ToJson() string {
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-		Indent:          "  ",
-	}
-	data, err := opts.Marshal(obj.msg())
-	if err != nil {
-		panic(err)
-	}
-	return string(data)
-}
-
-func (obj *getConfigResponseStatusCode200) FromJson(value string) error {
-	opts := protojson.UnmarshalOptions{
-		AllowPartial:   true,
-		DiscardUnknown: true,
-	}
-	return opts.Unmarshal([]byte(value), obj.msg())
-}
-
-type GetConfigResponse_StatusCode200 interface {
-	msg() *snappipb.GetConfigResponse_StatusCode200
-	ToYaml() string
-	ToJson() string
-	FromYaml(value string) error
-	FromJson(value string) error
-}
-
-type setTransmitStateResponseStatusCode200 struct {
-	obj *snappipb.SetTransmitStateResponse_StatusCode200
-}
-
-func (obj *setTransmitStateResponseStatusCode200) msg() *snappipb.SetTransmitStateResponse_StatusCode200 {
-	return obj.obj
-}
-
-func (obj *setTransmitStateResponseStatusCode200) ToYaml() string {
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(obj.msg())
-	data, err = yaml.JSONToYAML(data)
-	if err != nil {
-		panic(err)
-	}
-	return string(data)
-}
-
-func (obj *setTransmitStateResponseStatusCode200) FromYaml(value string) error {
-	data, err := yaml.YAMLToJSON([]byte(value))
-	if err != nil {
-		return err
-	}
-	opts := protojson.UnmarshalOptions{
-		AllowPartial:   true,
-		DiscardUnknown: true,
-	}
-	return opts.Unmarshal([]byte(data), obj.msg())
-}
-
-func (obj *setTransmitStateResponseStatusCode200) ToJson() string {
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-		Indent:          "  ",
-	}
-	data, err := opts.Marshal(obj.msg())
-	if err != nil {
-		panic(err)
-	}
-	return string(data)
-}
-
-func (obj *setTransmitStateResponseStatusCode200) FromJson(value string) error {
-	opts := protojson.UnmarshalOptions{
-		AllowPartial:   true,
-		DiscardUnknown: true,
-	}
-	return opts.Unmarshal([]byte(value), obj.msg())
-}
-
-type SetTransmitStateResponse_StatusCode200 interface {
-	msg() *snappipb.SetTransmitStateResponse_StatusCode200
-	ToYaml() string
-	ToJson() string
-	FromYaml(value string) error
-	FromJson(value string) error
-}
-
-type setLinkStateResponseStatusCode200 struct {
-	obj *snappipb.SetLinkStateResponse_StatusCode200
-}
-
-func (obj *setLinkStateResponseStatusCode200) msg() *snappipb.SetLinkStateResponse_StatusCode200 {
-	return obj.obj
-}
-
-func (obj *setLinkStateResponseStatusCode200) ToYaml() string {
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(obj.msg())
-	data, err = yaml.JSONToYAML(data)
-	if err != nil {
-		panic(err)
-	}
-	return string(data)
-}
-
-func (obj *setLinkStateResponseStatusCode200) FromYaml(value string) error {
-	data, err := yaml.YAMLToJSON([]byte(value))
-	if err != nil {
-		return err
-	}
-	opts := protojson.UnmarshalOptions{
-		AllowPartial:   true,
-		DiscardUnknown: true,
-	}
-	return opts.Unmarshal([]byte(data), obj.msg())
-}
-
-func (obj *setLinkStateResponseStatusCode200) ToJson() string {
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-		Indent:          "  ",
-	}
-	data, err := opts.Marshal(obj.msg())
-	if err != nil {
-		panic(err)
-	}
-	return string(data)
-}
-
-func (obj *setLinkStateResponseStatusCode200) FromJson(value string) error {
-	opts := protojson.UnmarshalOptions{
-		AllowPartial:   true,
-		DiscardUnknown: true,
-	}
-	return opts.Unmarshal([]byte(value), obj.msg())
-}
-
-type SetLinkStateResponse_StatusCode200 interface {
-	msg() *snappipb.SetLinkStateResponse_StatusCode200
-	ToYaml() string
-	ToJson() string
-	FromYaml(value string) error
-	FromJson(value string) error
-}
-
-type setCaptureStateResponseStatusCode200 struct {
-	obj *snappipb.SetCaptureStateResponse_StatusCode200
-}
-
-func (obj *setCaptureStateResponseStatusCode200) msg() *snappipb.SetCaptureStateResponse_StatusCode200 {
-	return obj.obj
-}
-
-func (obj *setCaptureStateResponseStatusCode200) ToYaml() string {
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(obj.msg())
-	data, err = yaml.JSONToYAML(data)
-	if err != nil {
-		panic(err)
-	}
-	return string(data)
-}
-
-func (obj *setCaptureStateResponseStatusCode200) FromYaml(value string) error {
-	data, err := yaml.YAMLToJSON([]byte(value))
-	if err != nil {
-		return err
-	}
-	opts := protojson.UnmarshalOptions{
-		AllowPartial:   true,
-		DiscardUnknown: true,
-	}
-	return opts.Unmarshal([]byte(data), obj.msg())
-}
-
-func (obj *setCaptureStateResponseStatusCode200) ToJson() string {
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-		Indent:          "  ",
-	}
-	data, err := opts.Marshal(obj.msg())
-	if err != nil {
-		panic(err)
-	}
-	return string(data)
-}
-
-func (obj *setCaptureStateResponseStatusCode200) FromJson(value string) error {
-	opts := protojson.UnmarshalOptions{
-		AllowPartial:   true,
-		DiscardUnknown: true,
-	}
-	return opts.Unmarshal([]byte(value), obj.msg())
-}
-
-type SetCaptureStateResponse_StatusCode200 interface {
-	msg() *snappipb.SetCaptureStateResponse_StatusCode200
-	ToYaml() string
-	ToJson() string
-	FromYaml(value string) error
-	FromJson(value string) error
-}
-
-type updateFlowsResponseStatusCode200 struct {
-	obj *snappipb.UpdateFlowsResponse_StatusCode200
-}
-
-func (obj *updateFlowsResponseStatusCode200) msg() *snappipb.UpdateFlowsResponse_StatusCode200 {
-	return obj.obj
-}
-
-func (obj *updateFlowsResponseStatusCode200) ToYaml() string {
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(obj.msg())
-	data, err = yaml.JSONToYAML(data)
-	if err != nil {
-		panic(err)
-	}
-	return string(data)
-}
-
-func (obj *updateFlowsResponseStatusCode200) FromYaml(value string) error {
-	data, err := yaml.YAMLToJSON([]byte(value))
-	if err != nil {
-		return err
-	}
-	opts := protojson.UnmarshalOptions{
-		AllowPartial:   true,
-		DiscardUnknown: true,
-	}
-	return opts.Unmarshal([]byte(data), obj.msg())
-}
-
-func (obj *updateFlowsResponseStatusCode200) ToJson() string {
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-		Indent:          "  ",
-	}
-	data, err := opts.Marshal(obj.msg())
-	if err != nil {
-		panic(err)
-	}
-	return string(data)
-}
-
-func (obj *updateFlowsResponseStatusCode200) FromJson(value string) error {
-	opts := protojson.UnmarshalOptions{
-		AllowPartial:   true,
-		DiscardUnknown: true,
-	}
-	return opts.Unmarshal([]byte(value), obj.msg())
-}
-
-type UpdateFlowsResponse_StatusCode200 interface {
-	msg() *snappipb.UpdateFlowsResponse_StatusCode200
-	ToYaml() string
-	ToJson() string
-	FromYaml(value string) error
-	FromJson(value string) error
-}
-
-type setRouteStateResponseStatusCode200 struct {
-	obj *snappipb.SetRouteStateResponse_StatusCode200
-}
-
-func (obj *setRouteStateResponseStatusCode200) msg() *snappipb.SetRouteStateResponse_StatusCode200 {
-	return obj.obj
-}
-
-func (obj *setRouteStateResponseStatusCode200) ToYaml() string {
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(obj.msg())
-	data, err = yaml.JSONToYAML(data)
-	if err != nil {
-		panic(err)
-	}
-	return string(data)
-}
-
-func (obj *setRouteStateResponseStatusCode200) FromYaml(value string) error {
-	data, err := yaml.YAMLToJSON([]byte(value))
-	if err != nil {
-		return err
-	}
-	opts := protojson.UnmarshalOptions{
-		AllowPartial:   true,
-		DiscardUnknown: true,
-	}
-	return opts.Unmarshal([]byte(data), obj.msg())
-}
-
-func (obj *setRouteStateResponseStatusCode200) ToJson() string {
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-		Indent:          "  ",
-	}
-	data, err := opts.Marshal(obj.msg())
-	if err != nil {
-		panic(err)
-	}
-	return string(data)
-}
-
-func (obj *setRouteStateResponseStatusCode200) FromJson(value string) error {
-	opts := protojson.UnmarshalOptions{
-		AllowPartial:   true,
-		DiscardUnknown: true,
-	}
-	return opts.Unmarshal([]byte(value), obj.msg())
-}
-
-type SetRouteStateResponse_StatusCode200 interface {
-	msg() *snappipb.SetRouteStateResponse_StatusCode200
-	ToYaml() string
-	ToJson() string
-	FromYaml(value string) error
-	FromJson(value string) error
-}
-
-type getMetricsResponseStatusCode200 struct {
-	obj *snappipb.GetMetricsResponse_StatusCode200
-}
-
-func (obj *getMetricsResponseStatusCode200) msg() *snappipb.GetMetricsResponse_StatusCode200 {
-	return obj.obj
-}
-
-func (obj *getMetricsResponseStatusCode200) ToYaml() string {
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(obj.msg())
-	data, err = yaml.JSONToYAML(data)
-	if err != nil {
-		panic(err)
-	}
-	return string(data)
-}
-
-func (obj *getMetricsResponseStatusCode200) FromYaml(value string) error {
-	data, err := yaml.YAMLToJSON([]byte(value))
-	if err != nil {
-		return err
-	}
-	opts := protojson.UnmarshalOptions{
-		AllowPartial:   true,
-		DiscardUnknown: true,
-	}
-	return opts.Unmarshal([]byte(data), obj.msg())
-}
-
-func (obj *getMetricsResponseStatusCode200) ToJson() string {
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-		Indent:          "  ",
-	}
-	data, err := opts.Marshal(obj.msg())
-	if err != nil {
-		panic(err)
-	}
-	return string(data)
-}
-
-func (obj *getMetricsResponseStatusCode200) FromJson(value string) error {
-	opts := protojson.UnmarshalOptions{
-		AllowPartial:   true,
-		DiscardUnknown: true,
-	}
-	return opts.Unmarshal([]byte(value), obj.msg())
-}
-
-type GetMetricsResponse_StatusCode200 interface {
-	msg() *snappipb.GetMetricsResponse_StatusCode200
-	ToYaml() string
-	ToJson() string
-	FromYaml(value string) error
-	FromJson(value string) error
-}
-
-type getStateMetricsResponseStatusCode200 struct {
-	obj *snappipb.GetStateMetricsResponse_StatusCode200
-}
-
-func (obj *getStateMetricsResponseStatusCode200) msg() *snappipb.GetStateMetricsResponse_StatusCode200 {
-	return obj.obj
-}
-
-func (obj *getStateMetricsResponseStatusCode200) ToYaml() string {
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(obj.msg())
-	data, err = yaml.JSONToYAML(data)
-	if err != nil {
-		panic(err)
-	}
-	return string(data)
-}
-
-func (obj *getStateMetricsResponseStatusCode200) FromYaml(value string) error {
-	data, err := yaml.YAMLToJSON([]byte(value))
-	if err != nil {
-		return err
-	}
-	opts := protojson.UnmarshalOptions{
-		AllowPartial:   true,
-		DiscardUnknown: true,
-	}
-	return opts.Unmarshal([]byte(data), obj.msg())
-}
-
-func (obj *getStateMetricsResponseStatusCode200) ToJson() string {
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-		Indent:          "  ",
-	}
-	data, err := opts.Marshal(obj.msg())
-	if err != nil {
-		panic(err)
-	}
-	return string(data)
-}
-
-func (obj *getStateMetricsResponseStatusCode200) FromJson(value string) error {
-	opts := protojson.UnmarshalOptions{
-		AllowPartial:   true,
-		DiscardUnknown: true,
-	}
-	return opts.Unmarshal([]byte(value), obj.msg())
-}
-
-type GetStateMetricsResponse_StatusCode200 interface {
-	msg() *snappipb.GetStateMetricsResponse_StatusCode200
-	ToYaml() string
-	ToJson() string
-	FromYaml(value string) error
-	FromJson(value string) error
-}
-
-type getCaptureResponseStatusCode200 struct {
-	obj *snappipb.GetCaptureResponse_StatusCode200
-}
-
-func (obj *getCaptureResponseStatusCode200) msg() *snappipb.GetCaptureResponse_StatusCode200 {
-	return obj.obj
-}
-
-func (obj *getCaptureResponseStatusCode200) ToYaml() string {
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(obj.msg())
-	data, err = yaml.JSONToYAML(data)
-	if err != nil {
-		panic(err)
-	}
-	return string(data)
-}
-
-func (obj *getCaptureResponseStatusCode200) FromYaml(value string) error {
-	data, err := yaml.YAMLToJSON([]byte(value))
-	if err != nil {
-		return err
-	}
-	opts := protojson.UnmarshalOptions{
-		AllowPartial:   true,
-		DiscardUnknown: true,
-	}
-	return opts.Unmarshal([]byte(data), obj.msg())
-}
-
-func (obj *getCaptureResponseStatusCode200) ToJson() string {
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-		Indent:          "  ",
-	}
-	data, err := opts.Marshal(obj.msg())
-	if err != nil {
-		panic(err)
-	}
-	return string(data)
-}
-
-func (obj *getCaptureResponseStatusCode200) FromJson(value string) error {
-	opts := protojson.UnmarshalOptions{
-		AllowPartial:   true,
-		DiscardUnknown: true,
-	}
-	return opts.Unmarshal([]byte(value), obj.msg())
-}
-
-type GetCaptureResponse_StatusCode200 interface {
-	msg() *snappipb.GetCaptureResponse_StatusCode200
-	ToYaml() string
-	ToJson() string
-	FromYaml(value string) error
-	FromJson(value string) error
 }
