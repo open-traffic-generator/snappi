@@ -33,8 +33,10 @@ func TestGrpcApi(t *testing.T) {
 	port := config.Ports().Add()
 	port.SetName("port1")
 	port.SetLocation("location1")
-	config.Flows().Add().SetName("f1")
-	config.Flows().Add().SetName("f2")
+	f1 := config.Flows().Add().SetName("f1")
+	f2 := config.Flows().Add().SetName("f2")
+	f1.Metrics().SetEnable(true)
+	f2.Metrics().SetEnable(true)
 	d1 := config.Devices().Add().SetName("d1")
 	eth1 := d1.Ethernet().SetName("Ethernet1")
 	ip1 := eth1.Ipv4().SetName("IPv41")
@@ -57,10 +59,6 @@ func TestHttpApi(t *testing.T) {
 	port.SetLocation("location1")
 	config.Flows().Add().SetName("f1")
 	config.Flows().Add().SetName("f2")
-	d1 := config.Devices().Add().SetName("d1")
-	eth1 := d1.Ethernet().SetName("Ethernet1")
-	ip1 := eth1.Ipv4().SetName("IPv41")
-	ip1.Bgpv4().SetName("BGP-1")
 	state, err := api.SetConfig(config)
 	assert.NotNil(t, state)
 	assert.Nil(t, err)
@@ -103,7 +101,25 @@ func TestHttpGetMetricsFlowResponse(t *testing.T) {
 	assert.Equal(t, resp.FlowMetrics().Items()[1].BytesRx(), int32(1000))
 }
 
-func TestGetMetricsFlowResponseError(t *testing.T) {
+func TestSetConfig(t *testing.T) {
+	api := gosnappi.NewApi()
+	grpc := api.NewGrpcTransport()
+	grpc.SetLocation(mockGrpcServerLocation).SetRequestTimeout(10000)
+	config := api.NewConfig()
+	port := config.Ports().Add()
+	port.SetName("port1")
+	port.SetLocation("location1")
+	config.Flows().Add().SetName("f1")
+	config.Flows().Add().SetName("f2")
+	d1 := config.Devices().Add().SetName("d1")
+	eth1 := d1.Ethernet().SetName("Ethernet1")
+	ip1 := eth1.Ipv4().SetName("IPv41")
+	bgp1 := ip1.Bgpv4().SetName("BGP-1")
+	bgp1.Bgpv4Routes().Add().SetName("RR-1")
+	api.SetConfig(config)
+}
+
+func TestGetMetrics500FlowResponseError(t *testing.T) {
 	// Send Get Metrics request with flow name f3 which is not available in
 	// the config, validate the err is not nil
 	api := gosnappi.NewApi()
@@ -111,6 +127,19 @@ func TestGetMetricsFlowResponseError(t *testing.T) {
 	req := api.NewMetricsRequest()
 	flow_req := req.Flow()
 	flow_req.SetFlowNames([]string{"f3"})
+	_, err := api.GetMetrics(req)
+	log.Print(err)
+	assert.NotNil(t, err)
+}
+
+func TestGetMetrics400FlowResponseError(t *testing.T) {
+	// Send Get Metrics request with flow name f3 which is not available in
+	// the config, validate the err is not nil
+	api := gosnappi.NewApi()
+	api.NewGrpcTransport().SetLocation(mockGrpcServerLocation)
+	req := api.NewMetricsRequest()
+	flow_req := req.Flow()
+	flow_req.SetFlowNames([]string{"f1"})
 	_, err := api.GetMetrics(req)
 	log.Print(err)
 	assert.NotNil(t, err)
