@@ -9,8 +9,8 @@ import shutil
 
 pkg_name = "snappi"
 go_pkg_name = "gosnappi"
-version = "0.4.38"
-models_version = "0.4.15"
+version = "0.5.1"
+models_version = "0.5.3"
 
 # read long description from readme.md
 base_dir = os.path.abspath(os.path.dirname(__file__))
