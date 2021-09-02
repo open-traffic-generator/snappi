@@ -100,23 +100,72 @@ func getBgpPeerNames(cfg *snappipb.Config) []string {
 	return names
 }
 
+func getFlowNames(cfg *snappipb.Config) []string {
+	names := []string{}
+	for _, flow := range mockConfig.Flows {
+		names = append(names, flow.Name)
+	}
+
+	return names
+}
+
+func getPortNames(cfg *snappipb.Config) []string {
+	names := []string{}
+	for _, port := range mockConfig.Ports {
+		names = append(names, port.Name)
+	}
+
+	return names
+}
+
+func getRouteNames(cfg *snappipb.Config) []string {
+	names := []string{}
+	for _, d := range cfg.Devices {
+		if d == nil || d.Ethernet == nil || d.Ethernet.Ipv4 == nil || d.Ethernet.Ipv4.Bgpv4 == nil {
+			continue
+		}
+		for _, r := range d.Ethernet.Ipv4.Bgpv4.Bgpv4Routes {
+			names = append(names, r.Name)
+		}
+	}
+	return names
+}
+
+func isFlowMetricsDisabled(cfg *snappipb.Config) []string {
+	names := []string{}
+	for _, flow := range mockConfig.Flows {
+		if flow.Metrics == nil {
+			names = append(names, flow.Name)
+		}
+	}
+	return names
+}
+
 func (s *server) GetMetrics(ctx context.Context, req *snappipb.GetMetricsRequest) (*snappipb.GetMetricsResponse, error) {
 	var resp *snappipb.GetMetricsResponse
 	var tx int32 = 100
+	metricsDisabledFlows := isFlowMetricsDisabled(mockConfig)
 	if req.MetricsRequest.Flow != nil {
 		f := &snappipb.FlowMetric{FramesTx: &tx}
-		flowNames := []string{}
-		for _, flow := range mockConfig.Flows {
-			flowNames = append(flowNames, flow.Name)
-		}
+		flowNames := getFlowNames(mockConfig)
 		for _, req_flow := range req.MetricsRequest.Flow.FlowNames {
 			res := contains(flowNames, req_flow)
-			if res == false {
+			if !res {
+				resp = &snappipb.GetMetricsResponse{
+					StatusCode_500: &snappipb.GetMetricsResponse_StatusCode500{
+						InternalServerError: &snappipb.InternalServerError{
+							ResponseError: &snappipb.ResponseError{
+								Errors: []string{"requested flow is not available in configured flows"},
+							},
+						},
+					},
+				}
+			} else if len(metricsDisabledFlows) > 0 {
 				resp = &snappipb.GetMetricsResponse{
 					StatusCode_400: &snappipb.GetMetricsResponse_StatusCode400{
 						BadRequest: &snappipb.BadRequest{
 							ResponseError: &snappipb.ResponseError{
-								Errors: []string{"requested flow is not available in configured flows"},
+								Errors: []string{"metrics not enabled for all the flows"},
 							},
 						},
 					},
@@ -133,13 +182,10 @@ func (s *server) GetMetrics(ctx context.Context, req *snappipb.GetMetricsRequest
 		}
 	} else if req.MetricsRequest.Port != nil {
 		p := &snappipb.PortMetric{FramesTx: &tx}
-		portNames := []string{}
-		for _, port := range mockConfig.Ports {
-			portNames = append(portNames, port.Name)
-		}
+		portNames := getPortNames(mockConfig)
 		for _, req_port := range req.MetricsRequest.Port.PortNames {
 			res := contains(portNames, req_port)
-			if res == false {
+			if !res {
 				resp = &snappipb.GetMetricsResponse{
 					StatusCode_400: &snappipb.GetMetricsResponse_StatusCode400{
 						BadRequest: &snappipb.BadRequest{
@@ -200,6 +246,110 @@ func (s *server) GetMetrics(ctx context.Context, req *snappipb.GetMetricsRequest
 					Bgpv4Metrics: metrics,
 				},
 			},
+		}
+	}
+	return resp, nil
+}
+
+func (s *server) SetTransmitState(ctx context.Context, req *snappipb.SetTransmitStateRequest) (*snappipb.SetTransmitStateResponse, error) {
+	var resp *snappipb.SetTransmitStateResponse
+	flowNames := getFlowNames(mockConfig)
+	for _, req_flow := range req.TransmitState.FlowNames {
+		res := contains(flowNames, req_flow)
+		if !res {
+			resp = &snappipb.SetTransmitStateResponse{
+				StatusCode_400: &snappipb.SetTransmitStateResponse_StatusCode400{
+					BadRequest: &snappipb.BadRequest{
+						ResponseError: &snappipb.ResponseError{
+							Errors: []string{"requested flow is not available in configured flows to start"},
+						},
+					},
+				},
+			}
+		} else {
+			resp = &snappipb.SetTransmitStateResponse{
+				StatusCode_200: &snappipb.SetTransmitStateResponse_StatusCode200{
+					Success: &snappipb.Success{},
+				},
+			}
+		}
+	}
+	return resp, nil
+}
+
+func (s *server) SetLinkState(ctx context.Context, req *snappipb.SetLinkStateRequest) (*snappipb.SetLinkStateResponse, error) {
+	var resp *snappipb.SetLinkStateResponse
+	portNames := getPortNames(mockConfig)
+	for _, req_port := range req.LinkState.PortNames {
+		res := contains(portNames, req_port)
+		if !res {
+			resp = &snappipb.SetLinkStateResponse{
+				StatusCode_400: &snappipb.SetLinkStateResponse_StatusCode400{
+					BadRequest: &snappipb.BadRequest{
+						ResponseError: &snappipb.ResponseError{
+							Errors: []string{"requested port is not available in configured ports to do link down"},
+						},
+					},
+				},
+			}
+		} else {
+			resp = &snappipb.SetLinkStateResponse{
+				StatusCode_200: &snappipb.SetLinkStateResponse_StatusCode200{
+					Success: &snappipb.Success{},
+				},
+			}
+		}
+	}
+	return resp, nil
+}
+
+func (s *server) SetCaptureState(ctx context.Context, req *snappipb.SetCaptureStateRequest) (*snappipb.SetCaptureStateResponse, error) {
+	var resp *snappipb.SetCaptureStateResponse
+	portNames := getPortNames(mockConfig)
+	for _, req_port := range req.CaptureState.PortNames {
+		res := contains(portNames, req_port)
+		if !res {
+			resp = &snappipb.SetCaptureStateResponse{
+				StatusCode_400: &snappipb.SetCaptureStateResponse_StatusCode400{
+					BadRequest: &snappipb.BadRequest{
+						ResponseError: &snappipb.ResponseError{
+							Errors: []string{"requested port is not available in configured ports to start capture"},
+						},
+					},
+				},
+			}
+		} else {
+			resp = &snappipb.SetCaptureStateResponse{
+				StatusCode_200: &snappipb.SetCaptureStateResponse_StatusCode200{
+					Success: &snappipb.Success{},
+				},
+			}
+		}
+	}
+	return resp, nil
+}
+
+func (s *server) SetRouteState(ctx context.Context, req *snappipb.SetRouteStateRequest) (*snappipb.SetRouteStateResponse, error) {
+	var resp *snappipb.SetRouteStateResponse
+	routeNames := getRouteNames(mockConfig)
+	for _, req_route := range req.RouteState.Names {
+		res := contains(routeNames, req_route)
+		if !res {
+			resp = &snappipb.SetRouteStateResponse{
+				StatusCode_400: &snappipb.SetRouteStateResponse_StatusCode400{
+					BadRequest: &snappipb.BadRequest{
+						ResponseError: &snappipb.ResponseError{
+							Errors: []string{"requested route is not available in configured routes to advertise"},
+						},
+					},
+				},
+			}
+		} else {
+			resp = &snappipb.SetRouteStateResponse{
+				StatusCode_200: &snappipb.SetRouteStateResponse_StatusCode200{
+					Success: &snappipb.Success{},
+				},
+			}
 		}
 	}
 	return resp, nil

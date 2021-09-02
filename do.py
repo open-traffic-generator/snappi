@@ -147,9 +147,7 @@ def test():
     try:
         run([
             "go test ./... -v -coverprofile coverage.txt | tee coverage.out"
-        ])
-    except Exception as e:
-        print("Exception occurred while running go tests \n {}".format(e))
+        ], raise_exception=True, msg="Exception occured while running the tests")
     finally:
         os.chdir("..")
 
@@ -295,7 +293,7 @@ def py():
         return py.path
 
 
-def run(commands):
+def run(commands, raise_exception=False, msg=None):
     """
     Executes a list of commands in a native shell and raises exception upon
     failure.
@@ -307,6 +305,8 @@ def run(commands):
                 cmd = cmd.encode("utf-8", errors="ignore")
             subprocess.check_call(cmd, shell=True)
     except Exception as e:
+        if raise_exception:
+            raise Exception(msg)
         print(e)
         sys.exit(1)
 
