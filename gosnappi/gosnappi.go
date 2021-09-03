@@ -1,4 +1,4 @@
-// Open Traffic Generator API 0.5.3
+// Open Traffic Generator API 0.5.4
 // License: MIT
 
 package gosnappi
@@ -104,7 +104,7 @@ type Api interface {
 // NewGrpcTransport sets the underlying transport of the Api as grpc
 func (api *api) NewGrpcTransport() GrpcTransport {
 	api.grpc = &grpcTransport{
-		location:       "127.0.0.1:5050",
+		location:       "localhost:5050",
 		requestTimeout: 10 * time.Second,
 	}
 	api.http = nil
@@ -119,7 +119,7 @@ func (api *api) hasGrpcTransport() bool {
 // NewHttpTransport sets the underlying transport of the Api as http
 func (api *api) NewHttpTransport() HttpTransport {
 	api.http = &httpTransport{
-		location: "https://127.0.0.1:443",
+		location: "https://localhost:443",
 		verify:   false,
 	}
 	api.grpc = nil
@@ -223,43 +223,23 @@ type GosnappiApi interface {
 	NewRouteState() RouteState
 	NewMetricsRequest() MetricsRequest
 	NewCaptureRequest() CaptureRequest
-	NewSetConfigResponse_StatusCode200() SetConfigResponse_StatusCode200
-	NewSetConfigResponse_StatusCode400() SetConfigResponse_StatusCode400
-	NewSetConfigResponse_StatusCode500() SetConfigResponse_StatusCode500
-	NewGetConfigResponse_StatusCode200() GetConfigResponse_StatusCode200
-	NewGetConfigResponse_StatusCode400() GetConfigResponse_StatusCode400
-	NewGetConfigResponse_StatusCode500() GetConfigResponse_StatusCode500
-	NewSetTransmitStateResponse_StatusCode200() SetTransmitStateResponse_StatusCode200
-	NewSetTransmitStateResponse_StatusCode400() SetTransmitStateResponse_StatusCode400
-	NewSetTransmitStateResponse_StatusCode500() SetTransmitStateResponse_StatusCode500
-	NewSetLinkStateResponse_StatusCode200() SetLinkStateResponse_StatusCode200
-	NewSetLinkStateResponse_StatusCode400() SetLinkStateResponse_StatusCode400
-	NewSetLinkStateResponse_StatusCode500() SetLinkStateResponse_StatusCode500
-	NewSetCaptureStateResponse_StatusCode200() SetCaptureStateResponse_StatusCode200
-	NewSetCaptureStateResponse_StatusCode400() SetCaptureStateResponse_StatusCode400
-	NewSetCaptureStateResponse_StatusCode500() SetCaptureStateResponse_StatusCode500
-	NewUpdateFlowsResponse_StatusCode200() UpdateFlowsResponse_StatusCode200
-	NewUpdateFlowsResponse_StatusCode400() UpdateFlowsResponse_StatusCode400
-	NewUpdateFlowsResponse_StatusCode500() UpdateFlowsResponse_StatusCode500
-	NewSetRouteStateResponse_StatusCode200() SetRouteStateResponse_StatusCode200
-	NewSetRouteStateResponse_StatusCode400() SetRouteStateResponse_StatusCode400
-	NewSetRouteStateResponse_StatusCode500() SetRouteStateResponse_StatusCode500
-	NewGetMetricsResponse_StatusCode200() GetMetricsResponse_StatusCode200
-	NewGetMetricsResponse_StatusCode400() GetMetricsResponse_StatusCode400
-	NewGetMetricsResponse_StatusCode500() GetMetricsResponse_StatusCode500
-	NewGetStateMetricsResponse_StatusCode200() GetStateMetricsResponse_StatusCode200
-	NewGetStateMetricsResponse_StatusCode400() GetStateMetricsResponse_StatusCode400
-	NewGetStateMetricsResponse_StatusCode500() GetStateMetricsResponse_StatusCode500
-	NewGetCaptureResponse_StatusCode200() GetCaptureResponse_StatusCode200
-	NewGetCaptureResponse_StatusCode400() GetCaptureResponse_StatusCode400
-	NewGetCaptureResponse_StatusCode500() GetCaptureResponse_StatusCode500
-	SetConfig(config Config) (Success, error)
+	NewSetConfigResponse() SetConfigResponse
+	NewGetConfigResponse() GetConfigResponse
+	NewSetTransmitStateResponse() SetTransmitStateResponse
+	NewSetLinkStateResponse() SetLinkStateResponse
+	NewSetCaptureStateResponse() SetCaptureStateResponse
+	NewUpdateFlowsResponse() UpdateFlowsResponse
+	NewSetRouteStateResponse() SetRouteStateResponse
+	NewGetMetricsResponse() GetMetricsResponse
+	NewGetStateMetricsResponse() GetStateMetricsResponse
+	NewGetCaptureResponse() GetCaptureResponse
+	SetConfig(config Config) (ResponseWarning, error)
 	GetConfig() (Config, error)
-	SetTransmitState(transmitState TransmitState) (Success, error)
-	SetLinkState(linkState LinkState) (Success, error)
-	SetCaptureState(captureState CaptureState) (Success, error)
+	SetTransmitState(transmitState TransmitState) (ResponseWarning, error)
+	SetLinkState(linkState LinkState) (ResponseWarning, error)
+	SetCaptureState(captureState CaptureState) (ResponseWarning, error)
 	UpdateFlows(flowsUpdate FlowsUpdate) (Config, error)
-	SetRouteState(routeState RouteState) (Success, error)
+	SetRouteState(routeState RouteState) (ResponseWarning, error)
 	GetMetrics(metricsRequest MetricsRequest) (MetricsResponse, error)
 	GetStateMetrics() (StateMetrics, error)
 	GetCapture(captureRequest CaptureRequest) ([]byte, error)
@@ -297,127 +277,47 @@ func (api *gosnappiApi) NewCaptureRequest() CaptureRequest {
 	return &captureRequest{obj: &snappipb.CaptureRequest{}}
 }
 
-func (api *gosnappiApi) NewSetConfigResponse_StatusCode200() SetConfigResponse_StatusCode200 {
-	return &setConfigResponse_StatusCode200{obj: &snappipb.SetConfigResponse_StatusCode200{}}
+func (api *gosnappiApi) NewSetConfigResponse() SetConfigResponse {
+	return &setConfigResponse{obj: &snappipb.SetConfigResponse{}}
 }
 
-func (api *gosnappiApi) NewSetConfigResponse_StatusCode400() SetConfigResponse_StatusCode400 {
-	return &setConfigResponse_StatusCode400{obj: &snappipb.SetConfigResponse_StatusCode400{}}
+func (api *gosnappiApi) NewGetConfigResponse() GetConfigResponse {
+	return &getConfigResponse{obj: &snappipb.GetConfigResponse{}}
 }
 
-func (api *gosnappiApi) NewSetConfigResponse_StatusCode500() SetConfigResponse_StatusCode500 {
-	return &setConfigResponse_StatusCode500{obj: &snappipb.SetConfigResponse_StatusCode500{}}
+func (api *gosnappiApi) NewSetTransmitStateResponse() SetTransmitStateResponse {
+	return &setTransmitStateResponse{obj: &snappipb.SetTransmitStateResponse{}}
 }
 
-func (api *gosnappiApi) NewGetConfigResponse_StatusCode200() GetConfigResponse_StatusCode200 {
-	return &getConfigResponse_StatusCode200{obj: &snappipb.GetConfigResponse_StatusCode200{}}
+func (api *gosnappiApi) NewSetLinkStateResponse() SetLinkStateResponse {
+	return &setLinkStateResponse{obj: &snappipb.SetLinkStateResponse{}}
 }
 
-func (api *gosnappiApi) NewGetConfigResponse_StatusCode400() GetConfigResponse_StatusCode400 {
-	return &getConfigResponse_StatusCode400{obj: &snappipb.GetConfigResponse_StatusCode400{}}
+func (api *gosnappiApi) NewSetCaptureStateResponse() SetCaptureStateResponse {
+	return &setCaptureStateResponse{obj: &snappipb.SetCaptureStateResponse{}}
 }
 
-func (api *gosnappiApi) NewGetConfigResponse_StatusCode500() GetConfigResponse_StatusCode500 {
-	return &getConfigResponse_StatusCode500{obj: &snappipb.GetConfigResponse_StatusCode500{}}
+func (api *gosnappiApi) NewUpdateFlowsResponse() UpdateFlowsResponse {
+	return &updateFlowsResponse{obj: &snappipb.UpdateFlowsResponse{}}
 }
 
-func (api *gosnappiApi) NewSetTransmitStateResponse_StatusCode200() SetTransmitStateResponse_StatusCode200 {
-	return &setTransmitStateResponse_StatusCode200{obj: &snappipb.SetTransmitStateResponse_StatusCode200{}}
+func (api *gosnappiApi) NewSetRouteStateResponse() SetRouteStateResponse {
+	return &setRouteStateResponse{obj: &snappipb.SetRouteStateResponse{}}
 }
 
-func (api *gosnappiApi) NewSetTransmitStateResponse_StatusCode400() SetTransmitStateResponse_StatusCode400 {
-	return &setTransmitStateResponse_StatusCode400{obj: &snappipb.SetTransmitStateResponse_StatusCode400{}}
+func (api *gosnappiApi) NewGetMetricsResponse() GetMetricsResponse {
+	return &getMetricsResponse{obj: &snappipb.GetMetricsResponse{}}
 }
 
-func (api *gosnappiApi) NewSetTransmitStateResponse_StatusCode500() SetTransmitStateResponse_StatusCode500 {
-	return &setTransmitStateResponse_StatusCode500{obj: &snappipb.SetTransmitStateResponse_StatusCode500{}}
+func (api *gosnappiApi) NewGetStateMetricsResponse() GetStateMetricsResponse {
+	return &getStateMetricsResponse{obj: &snappipb.GetStateMetricsResponse{}}
 }
 
-func (api *gosnappiApi) NewSetLinkStateResponse_StatusCode200() SetLinkStateResponse_StatusCode200 {
-	return &setLinkStateResponse_StatusCode200{obj: &snappipb.SetLinkStateResponse_StatusCode200{}}
+func (api *gosnappiApi) NewGetCaptureResponse() GetCaptureResponse {
+	return &getCaptureResponse{obj: &snappipb.GetCaptureResponse{}}
 }
 
-func (api *gosnappiApi) NewSetLinkStateResponse_StatusCode400() SetLinkStateResponse_StatusCode400 {
-	return &setLinkStateResponse_StatusCode400{obj: &snappipb.SetLinkStateResponse_StatusCode400{}}
-}
-
-func (api *gosnappiApi) NewSetLinkStateResponse_StatusCode500() SetLinkStateResponse_StatusCode500 {
-	return &setLinkStateResponse_StatusCode500{obj: &snappipb.SetLinkStateResponse_StatusCode500{}}
-}
-
-func (api *gosnappiApi) NewSetCaptureStateResponse_StatusCode200() SetCaptureStateResponse_StatusCode200 {
-	return &setCaptureStateResponse_StatusCode200{obj: &snappipb.SetCaptureStateResponse_StatusCode200{}}
-}
-
-func (api *gosnappiApi) NewSetCaptureStateResponse_StatusCode400() SetCaptureStateResponse_StatusCode400 {
-	return &setCaptureStateResponse_StatusCode400{obj: &snappipb.SetCaptureStateResponse_StatusCode400{}}
-}
-
-func (api *gosnappiApi) NewSetCaptureStateResponse_StatusCode500() SetCaptureStateResponse_StatusCode500 {
-	return &setCaptureStateResponse_StatusCode500{obj: &snappipb.SetCaptureStateResponse_StatusCode500{}}
-}
-
-func (api *gosnappiApi) NewUpdateFlowsResponse_StatusCode200() UpdateFlowsResponse_StatusCode200 {
-	return &updateFlowsResponse_StatusCode200{obj: &snappipb.UpdateFlowsResponse_StatusCode200{}}
-}
-
-func (api *gosnappiApi) NewUpdateFlowsResponse_StatusCode400() UpdateFlowsResponse_StatusCode400 {
-	return &updateFlowsResponse_StatusCode400{obj: &snappipb.UpdateFlowsResponse_StatusCode400{}}
-}
-
-func (api *gosnappiApi) NewUpdateFlowsResponse_StatusCode500() UpdateFlowsResponse_StatusCode500 {
-	return &updateFlowsResponse_StatusCode500{obj: &snappipb.UpdateFlowsResponse_StatusCode500{}}
-}
-
-func (api *gosnappiApi) NewSetRouteStateResponse_StatusCode200() SetRouteStateResponse_StatusCode200 {
-	return &setRouteStateResponse_StatusCode200{obj: &snappipb.SetRouteStateResponse_StatusCode200{}}
-}
-
-func (api *gosnappiApi) NewSetRouteStateResponse_StatusCode400() SetRouteStateResponse_StatusCode400 {
-	return &setRouteStateResponse_StatusCode400{obj: &snappipb.SetRouteStateResponse_StatusCode400{}}
-}
-
-func (api *gosnappiApi) NewSetRouteStateResponse_StatusCode500() SetRouteStateResponse_StatusCode500 {
-	return &setRouteStateResponse_StatusCode500{obj: &snappipb.SetRouteStateResponse_StatusCode500{}}
-}
-
-func (api *gosnappiApi) NewGetMetricsResponse_StatusCode200() GetMetricsResponse_StatusCode200 {
-	return &getMetricsResponse_StatusCode200{obj: &snappipb.GetMetricsResponse_StatusCode200{}}
-}
-
-func (api *gosnappiApi) NewGetMetricsResponse_StatusCode400() GetMetricsResponse_StatusCode400 {
-	return &getMetricsResponse_StatusCode400{obj: &snappipb.GetMetricsResponse_StatusCode400{}}
-}
-
-func (api *gosnappiApi) NewGetMetricsResponse_StatusCode500() GetMetricsResponse_StatusCode500 {
-	return &getMetricsResponse_StatusCode500{obj: &snappipb.GetMetricsResponse_StatusCode500{}}
-}
-
-func (api *gosnappiApi) NewGetStateMetricsResponse_StatusCode200() GetStateMetricsResponse_StatusCode200 {
-	return &getStateMetricsResponse_StatusCode200{obj: &snappipb.GetStateMetricsResponse_StatusCode200{}}
-}
-
-func (api *gosnappiApi) NewGetStateMetricsResponse_StatusCode400() GetStateMetricsResponse_StatusCode400 {
-	return &getStateMetricsResponse_StatusCode400{obj: &snappipb.GetStateMetricsResponse_StatusCode400{}}
-}
-
-func (api *gosnappiApi) NewGetStateMetricsResponse_StatusCode500() GetStateMetricsResponse_StatusCode500 {
-	return &getStateMetricsResponse_StatusCode500{obj: &snappipb.GetStateMetricsResponse_StatusCode500{}}
-}
-
-func (api *gosnappiApi) NewGetCaptureResponse_StatusCode200() GetCaptureResponse_StatusCode200 {
-	return &getCaptureResponse_StatusCode200{obj: &snappipb.GetCaptureResponse_StatusCode200{}}
-}
-
-func (api *gosnappiApi) NewGetCaptureResponse_StatusCode400() GetCaptureResponse_StatusCode400 {
-	return &getCaptureResponse_StatusCode400{obj: &snappipb.GetCaptureResponse_StatusCode400{}}
-}
-
-func (api *gosnappiApi) NewGetCaptureResponse_StatusCode500() GetCaptureResponse_StatusCode500 {
-	return &getCaptureResponse_StatusCode500{obj: &snappipb.GetCaptureResponse_StatusCode500{}}
-}
-
-func (api *gosnappiApi) SetConfig(config Config) (Success, error) {
+func (api *gosnappiApi) SetConfig(config Config) (ResponseWarning, error) {
 	if api.hasHttpTransport() {
 		return api.httpSetConfig(config)
 	}
@@ -433,14 +333,14 @@ func (api *gosnappiApi) SetConfig(config Config) (Success, error) {
 		return nil, err
 	}
 	if resp.GetStatusCode_200() != nil {
-		return &success{obj: resp.GetStatusCode_200().Success}, nil
+		return &responseWarning{obj: resp.GetStatusCode_200()}, nil
 	}
 	if resp.GetStatusCode_400() != nil {
 		data, _ := yaml.Marshal(resp.GetStatusCode_400())
 		return nil, fmt.Errorf(string(data))
 	}
 	if resp.GetStatusCode_500() != nil {
-		data, _ := yaml.Marshal(resp.GetStatusCode_400())
+		data, _ := yaml.Marshal(resp.GetStatusCode_500())
 		return nil, fmt.Errorf(string(data))
 	}
 	return nil, fmt.Errorf("response not implemented")
@@ -462,20 +362,20 @@ func (api *gosnappiApi) GetConfig() (Config, error) {
 		return nil, err
 	}
 	if resp.GetStatusCode_200() != nil {
-		return &config{obj: resp.GetStatusCode_200().Config}, nil
+		return &config{obj: resp.GetStatusCode_200()}, nil
 	}
 	if resp.GetStatusCode_400() != nil {
 		data, _ := yaml.Marshal(resp.GetStatusCode_400())
 		return nil, fmt.Errorf(string(data))
 	}
 	if resp.GetStatusCode_500() != nil {
-		data, _ := yaml.Marshal(resp.GetStatusCode_400())
+		data, _ := yaml.Marshal(resp.GetStatusCode_500())
 		return nil, fmt.Errorf(string(data))
 	}
 	return nil, fmt.Errorf("response not implemented")
 }
 
-func (api *gosnappiApi) SetTransmitState(transmitState TransmitState) (Success, error) {
+func (api *gosnappiApi) SetTransmitState(transmitState TransmitState) (ResponseWarning, error) {
 	if api.hasHttpTransport() {
 		return api.httpSetTransmitState(transmitState)
 	}
@@ -491,20 +391,20 @@ func (api *gosnappiApi) SetTransmitState(transmitState TransmitState) (Success, 
 		return nil, err
 	}
 	if resp.GetStatusCode_200() != nil {
-		return &success{obj: resp.GetStatusCode_200().Success}, nil
+		return &responseWarning{obj: resp.GetStatusCode_200()}, nil
 	}
 	if resp.GetStatusCode_400() != nil {
 		data, _ := yaml.Marshal(resp.GetStatusCode_400())
 		return nil, fmt.Errorf(string(data))
 	}
 	if resp.GetStatusCode_500() != nil {
-		data, _ := yaml.Marshal(resp.GetStatusCode_400())
+		data, _ := yaml.Marshal(resp.GetStatusCode_500())
 		return nil, fmt.Errorf(string(data))
 	}
 	return nil, fmt.Errorf("response not implemented")
 }
 
-func (api *gosnappiApi) SetLinkState(linkState LinkState) (Success, error) {
+func (api *gosnappiApi) SetLinkState(linkState LinkState) (ResponseWarning, error) {
 	if api.hasHttpTransport() {
 		return api.httpSetLinkState(linkState)
 	}
@@ -520,20 +420,20 @@ func (api *gosnappiApi) SetLinkState(linkState LinkState) (Success, error) {
 		return nil, err
 	}
 	if resp.GetStatusCode_200() != nil {
-		return &success{obj: resp.GetStatusCode_200().Success}, nil
+		return &responseWarning{obj: resp.GetStatusCode_200()}, nil
 	}
 	if resp.GetStatusCode_400() != nil {
 		data, _ := yaml.Marshal(resp.GetStatusCode_400())
 		return nil, fmt.Errorf(string(data))
 	}
 	if resp.GetStatusCode_500() != nil {
-		data, _ := yaml.Marshal(resp.GetStatusCode_400())
+		data, _ := yaml.Marshal(resp.GetStatusCode_500())
 		return nil, fmt.Errorf(string(data))
 	}
 	return nil, fmt.Errorf("response not implemented")
 }
 
-func (api *gosnappiApi) SetCaptureState(captureState CaptureState) (Success, error) {
+func (api *gosnappiApi) SetCaptureState(captureState CaptureState) (ResponseWarning, error) {
 	if api.hasHttpTransport() {
 		return api.httpSetCaptureState(captureState)
 	}
@@ -549,14 +449,14 @@ func (api *gosnappiApi) SetCaptureState(captureState CaptureState) (Success, err
 		return nil, err
 	}
 	if resp.GetStatusCode_200() != nil {
-		return &success{obj: resp.GetStatusCode_200().Success}, nil
+		return &responseWarning{obj: resp.GetStatusCode_200()}, nil
 	}
 	if resp.GetStatusCode_400() != nil {
 		data, _ := yaml.Marshal(resp.GetStatusCode_400())
 		return nil, fmt.Errorf(string(data))
 	}
 	if resp.GetStatusCode_500() != nil {
-		data, _ := yaml.Marshal(resp.GetStatusCode_400())
+		data, _ := yaml.Marshal(resp.GetStatusCode_500())
 		return nil, fmt.Errorf(string(data))
 	}
 	return nil, fmt.Errorf("response not implemented")
@@ -578,20 +478,20 @@ func (api *gosnappiApi) UpdateFlows(flowsUpdate FlowsUpdate) (Config, error) {
 		return nil, err
 	}
 	if resp.GetStatusCode_200() != nil {
-		return &config{obj: resp.GetStatusCode_200().Config}, nil
+		return &config{obj: resp.GetStatusCode_200()}, nil
 	}
 	if resp.GetStatusCode_400() != nil {
 		data, _ := yaml.Marshal(resp.GetStatusCode_400())
 		return nil, fmt.Errorf(string(data))
 	}
 	if resp.GetStatusCode_500() != nil {
-		data, _ := yaml.Marshal(resp.GetStatusCode_400())
+		data, _ := yaml.Marshal(resp.GetStatusCode_500())
 		return nil, fmt.Errorf(string(data))
 	}
 	return nil, fmt.Errorf("response not implemented")
 }
 
-func (api *gosnappiApi) SetRouteState(routeState RouteState) (Success, error) {
+func (api *gosnappiApi) SetRouteState(routeState RouteState) (ResponseWarning, error) {
 	if api.hasHttpTransport() {
 		return api.httpSetRouteState(routeState)
 	}
@@ -607,14 +507,14 @@ func (api *gosnappiApi) SetRouteState(routeState RouteState) (Success, error) {
 		return nil, err
 	}
 	if resp.GetStatusCode_200() != nil {
-		return &success{obj: resp.GetStatusCode_200().Success}, nil
+		return &responseWarning{obj: resp.GetStatusCode_200()}, nil
 	}
 	if resp.GetStatusCode_400() != nil {
 		data, _ := yaml.Marshal(resp.GetStatusCode_400())
 		return nil, fmt.Errorf(string(data))
 	}
 	if resp.GetStatusCode_500() != nil {
-		data, _ := yaml.Marshal(resp.GetStatusCode_400())
+		data, _ := yaml.Marshal(resp.GetStatusCode_500())
 		return nil, fmt.Errorf(string(data))
 	}
 	return nil, fmt.Errorf("response not implemented")
@@ -636,14 +536,14 @@ func (api *gosnappiApi) GetMetrics(metricsRequest MetricsRequest) (MetricsRespon
 		return nil, err
 	}
 	if resp.GetStatusCode_200() != nil {
-		return &metricsResponse{obj: resp.GetStatusCode_200().MetricsResponse}, nil
+		return &metricsResponse{obj: resp.GetStatusCode_200()}, nil
 	}
 	if resp.GetStatusCode_400() != nil {
 		data, _ := yaml.Marshal(resp.GetStatusCode_400())
 		return nil, fmt.Errorf(string(data))
 	}
 	if resp.GetStatusCode_500() != nil {
-		data, _ := yaml.Marshal(resp.GetStatusCode_400())
+		data, _ := yaml.Marshal(resp.GetStatusCode_500())
 		return nil, fmt.Errorf(string(data))
 	}
 	return nil, fmt.Errorf("response not implemented")
@@ -665,14 +565,14 @@ func (api *gosnappiApi) GetStateMetrics() (StateMetrics, error) {
 		return nil, err
 	}
 	if resp.GetStatusCode_200() != nil {
-		return &stateMetrics{obj: resp.GetStatusCode_200().StateMetrics}, nil
+		return &stateMetrics{obj: resp.GetStatusCode_200()}, nil
 	}
 	if resp.GetStatusCode_400() != nil {
 		data, _ := yaml.Marshal(resp.GetStatusCode_400())
 		return nil, fmt.Errorf(string(data))
 	}
 	if resp.GetStatusCode_500() != nil {
-		data, _ := yaml.Marshal(resp.GetStatusCode_400())
+		data, _ := yaml.Marshal(resp.GetStatusCode_500())
 		return nil, fmt.Errorf(string(data))
 	}
 	return nil, fmt.Errorf("response not implemented")
@@ -694,279 +594,300 @@ func (api *gosnappiApi) GetCapture(captureRequest CaptureRequest) ([]byte, error
 		return nil, err
 	}
 	if resp.GetStatusCode_200() != nil {
-		return resp.GetStatusCode_200().Bytes, nil
+		return resp.GetStatusCode_200(), nil
 	}
 	if resp.GetStatusCode_400() != nil {
 		data, _ := yaml.Marshal(resp.GetStatusCode_400())
 		return nil, fmt.Errorf(string(data))
 	}
 	if resp.GetStatusCode_500() != nil {
-		data, _ := yaml.Marshal(resp.GetStatusCode_400())
+		data, _ := yaml.Marshal(resp.GetStatusCode_500())
 		return nil, fmt.Errorf(string(data))
 	}
 	return nil, fmt.Errorf("response not implemented")
 }
 
-func (api *gosnappiApi) httpSetConfig(config Config) (Success, error) {
-	rsp, err := api.httpSendRecv("config", config.ToJson(), "POST")
+func (api *gosnappiApi) httpSetConfig(config Config) (ResponseWarning, error) {
+	resp, err := api.httpSendRecv("config", config.ToJson(), "POST")
 	if err != nil {
 		return nil, err
 	}
-	bodyBytes, err := ioutil.ReadAll(rsp.Body)
-	defer rsp.Body.Close()
+	bodyBytes, err := ioutil.ReadAll(resp.Body)
+	defer resp.Body.Close()
 	if err != nil {
 		return nil, err
 	}
-	if rsp.StatusCode == 200 {
-		value := snappipb.Success{}
-		dest := success{obj: &value}
-		if err := dest.FromJson(string(bodyBytes)); err != nil {
+	if resp.StatusCode == 200 {
+		obj := api.NewSetConfigResponse()
+		if err := obj.StatusCode200().FromJson(string(bodyBytes)); err != nil {
 			return nil, err
 		}
-		return &dest, nil
+		return obj.StatusCode200(), nil
 	}
-	if rsp.StatusCode == 400 {
+	if resp.StatusCode == 200 {
 		return nil, fmt.Errorf(string(bodyBytes))
 	}
-	if rsp.StatusCode == 500 {
+	if resp.StatusCode == 400 {
+		return nil, fmt.Errorf(string(bodyBytes))
+	}
+	if resp.StatusCode == 500 {
 		return nil, fmt.Errorf(string(bodyBytes))
 	}
 	return nil, fmt.Errorf("response not implemented")
 }
 
 func (api *gosnappiApi) httpGetConfig() (Config, error) {
-	rsp, err := api.httpSendRecv("config", "", "GET")
+	resp, err := api.httpSendRecv("config", "", "GET")
 	if err != nil {
 		return nil, err
 	}
-	bodyBytes, err := ioutil.ReadAll(rsp.Body)
-	defer rsp.Body.Close()
+	bodyBytes, err := ioutil.ReadAll(resp.Body)
+	defer resp.Body.Close()
 	if err != nil {
 		return nil, err
 	}
-	if rsp.StatusCode == 200 {
-		value := snappipb.Config{}
-		dest := config{obj: &value}
-		if err := dest.FromJson(string(bodyBytes)); err != nil {
+	if resp.StatusCode == 200 {
+		obj := api.NewGetConfigResponse()
+		if err := obj.StatusCode200().FromJson(string(bodyBytes)); err != nil {
 			return nil, err
 		}
-		return &dest, nil
+		return obj.StatusCode200(), nil
 	}
-	if rsp.StatusCode == 400 {
+	if resp.StatusCode == 200 {
 		return nil, fmt.Errorf(string(bodyBytes))
 	}
-	if rsp.StatusCode == 500 {
+	if resp.StatusCode == 400 {
+		return nil, fmt.Errorf(string(bodyBytes))
+	}
+	if resp.StatusCode == 500 {
 		return nil, fmt.Errorf(string(bodyBytes))
 	}
 	return nil, fmt.Errorf("response not implemented")
 }
 
-func (api *gosnappiApi) httpSetTransmitState(transmitState TransmitState) (Success, error) {
-	rsp, err := api.httpSendRecv("control/transmit", transmitState.ToJson(), "POST")
+func (api *gosnappiApi) httpSetTransmitState(transmitState TransmitState) (ResponseWarning, error) {
+	resp, err := api.httpSendRecv("control/transmit", transmitState.ToJson(), "POST")
 	if err != nil {
 		return nil, err
 	}
-	bodyBytes, err := ioutil.ReadAll(rsp.Body)
-	defer rsp.Body.Close()
+	bodyBytes, err := ioutil.ReadAll(resp.Body)
+	defer resp.Body.Close()
 	if err != nil {
 		return nil, err
 	}
-	if rsp.StatusCode == 200 {
-		value := snappipb.Success{}
-		dest := success{obj: &value}
-		if err := dest.FromJson(string(bodyBytes)); err != nil {
+	if resp.StatusCode == 200 {
+		obj := api.NewSetTransmitStateResponse()
+		if err := obj.StatusCode200().FromJson(string(bodyBytes)); err != nil {
 			return nil, err
 		}
-		return &dest, nil
+		return obj.StatusCode200(), nil
 	}
-	if rsp.StatusCode == 400 {
+	if resp.StatusCode == 200 {
 		return nil, fmt.Errorf(string(bodyBytes))
 	}
-	if rsp.StatusCode == 500 {
+	if resp.StatusCode == 400 {
+		return nil, fmt.Errorf(string(bodyBytes))
+	}
+	if resp.StatusCode == 500 {
 		return nil, fmt.Errorf(string(bodyBytes))
 	}
 	return nil, fmt.Errorf("response not implemented")
 }
 
-func (api *gosnappiApi) httpSetLinkState(linkState LinkState) (Success, error) {
-	rsp, err := api.httpSendRecv("control/link", linkState.ToJson(), "POST")
+func (api *gosnappiApi) httpSetLinkState(linkState LinkState) (ResponseWarning, error) {
+	resp, err := api.httpSendRecv("control/link", linkState.ToJson(), "POST")
 	if err != nil {
 		return nil, err
 	}
-	bodyBytes, err := ioutil.ReadAll(rsp.Body)
-	defer rsp.Body.Close()
+	bodyBytes, err := ioutil.ReadAll(resp.Body)
+	defer resp.Body.Close()
 	if err != nil {
 		return nil, err
 	}
-	if rsp.StatusCode == 200 {
-		value := snappipb.Success{}
-		dest := success{obj: &value}
-		if err := dest.FromJson(string(bodyBytes)); err != nil {
+	if resp.StatusCode == 200 {
+		obj := api.NewSetLinkStateResponse()
+		if err := obj.StatusCode200().FromJson(string(bodyBytes)); err != nil {
 			return nil, err
 		}
-		return &dest, nil
+		return obj.StatusCode200(), nil
 	}
-	if rsp.StatusCode == 400 {
+	if resp.StatusCode == 200 {
 		return nil, fmt.Errorf(string(bodyBytes))
 	}
-	if rsp.StatusCode == 500 {
+	if resp.StatusCode == 400 {
+		return nil, fmt.Errorf(string(bodyBytes))
+	}
+	if resp.StatusCode == 500 {
 		return nil, fmt.Errorf(string(bodyBytes))
 	}
 	return nil, fmt.Errorf("response not implemented")
 }
 
-func (api *gosnappiApi) httpSetCaptureState(captureState CaptureState) (Success, error) {
-	rsp, err := api.httpSendRecv("control/capture", captureState.ToJson(), "POST")
+func (api *gosnappiApi) httpSetCaptureState(captureState CaptureState) (ResponseWarning, error) {
+	resp, err := api.httpSendRecv("control/capture", captureState.ToJson(), "POST")
 	if err != nil {
 		return nil, err
 	}
-	bodyBytes, err := ioutil.ReadAll(rsp.Body)
-	defer rsp.Body.Close()
+	bodyBytes, err := ioutil.ReadAll(resp.Body)
+	defer resp.Body.Close()
 	if err != nil {
 		return nil, err
 	}
-	if rsp.StatusCode == 200 {
-		value := snappipb.Success{}
-		dest := success{obj: &value}
-		if err := dest.FromJson(string(bodyBytes)); err != nil {
+	if resp.StatusCode == 200 {
+		obj := api.NewSetCaptureStateResponse()
+		if err := obj.StatusCode200().FromJson(string(bodyBytes)); err != nil {
 			return nil, err
 		}
-		return &dest, nil
+		return obj.StatusCode200(), nil
 	}
-	if rsp.StatusCode == 400 {
+	if resp.StatusCode == 200 {
 		return nil, fmt.Errorf(string(bodyBytes))
 	}
-	if rsp.StatusCode == 500 {
+	if resp.StatusCode == 400 {
+		return nil, fmt.Errorf(string(bodyBytes))
+	}
+	if resp.StatusCode == 500 {
 		return nil, fmt.Errorf(string(bodyBytes))
 	}
 	return nil, fmt.Errorf("response not implemented")
 }
 
 func (api *gosnappiApi) httpUpdateFlows(flowsUpdate FlowsUpdate) (Config, error) {
-	rsp, err := api.httpSendRecv("control/flows", flowsUpdate.ToJson(), "POST")
+	resp, err := api.httpSendRecv("control/flows", flowsUpdate.ToJson(), "POST")
 	if err != nil {
 		return nil, err
 	}
-	bodyBytes, err := ioutil.ReadAll(rsp.Body)
-	defer rsp.Body.Close()
+	bodyBytes, err := ioutil.ReadAll(resp.Body)
+	defer resp.Body.Close()
 	if err != nil {
 		return nil, err
 	}
-	if rsp.StatusCode == 200 {
-		value := snappipb.Config{}
-		dest := config{obj: &value}
-		if err := dest.FromJson(string(bodyBytes)); err != nil {
+	if resp.StatusCode == 200 {
+		obj := api.NewUpdateFlowsResponse()
+		if err := obj.StatusCode200().FromJson(string(bodyBytes)); err != nil {
 			return nil, err
 		}
-		return &dest, nil
+		return obj.StatusCode200(), nil
 	}
-	if rsp.StatusCode == 400 {
+	if resp.StatusCode == 200 {
 		return nil, fmt.Errorf(string(bodyBytes))
 	}
-	if rsp.StatusCode == 500 {
+	if resp.StatusCode == 400 {
+		return nil, fmt.Errorf(string(bodyBytes))
+	}
+	if resp.StatusCode == 500 {
 		return nil, fmt.Errorf(string(bodyBytes))
 	}
 	return nil, fmt.Errorf("response not implemented")
 }
 
-func (api *gosnappiApi) httpSetRouteState(routeState RouteState) (Success, error) {
-	rsp, err := api.httpSendRecv("control/routes", routeState.ToJson(), "POST")
+func (api *gosnappiApi) httpSetRouteState(routeState RouteState) (ResponseWarning, error) {
+	resp, err := api.httpSendRecv("control/routes", routeState.ToJson(), "POST")
 	if err != nil {
 		return nil, err
 	}
-	bodyBytes, err := ioutil.ReadAll(rsp.Body)
-	defer rsp.Body.Close()
+	bodyBytes, err := ioutil.ReadAll(resp.Body)
+	defer resp.Body.Close()
 	if err != nil {
 		return nil, err
 	}
-	if rsp.StatusCode == 200 {
-		value := snappipb.Success{}
-		dest := success{obj: &value}
-		if err := dest.FromJson(string(bodyBytes)); err != nil {
+	if resp.StatusCode == 200 {
+		obj := api.NewSetRouteStateResponse()
+		if err := obj.StatusCode200().FromJson(string(bodyBytes)); err != nil {
 			return nil, err
 		}
-		return &dest, nil
+		return obj.StatusCode200(), nil
 	}
-	if rsp.StatusCode == 400 {
+	if resp.StatusCode == 200 {
 		return nil, fmt.Errorf(string(bodyBytes))
 	}
-	if rsp.StatusCode == 500 {
+	if resp.StatusCode == 400 {
+		return nil, fmt.Errorf(string(bodyBytes))
+	}
+	if resp.StatusCode == 500 {
 		return nil, fmt.Errorf(string(bodyBytes))
 	}
 	return nil, fmt.Errorf("response not implemented")
 }
 
 func (api *gosnappiApi) httpGetMetrics(metricsRequest MetricsRequest) (MetricsResponse, error) {
-	rsp, err := api.httpSendRecv("results/metrics", metricsRequest.ToJson(), "POST")
+	resp, err := api.httpSendRecv("results/metrics", metricsRequest.ToJson(), "POST")
 	if err != nil {
 		return nil, err
 	}
-	bodyBytes, err := ioutil.ReadAll(rsp.Body)
-	defer rsp.Body.Close()
+	bodyBytes, err := ioutil.ReadAll(resp.Body)
+	defer resp.Body.Close()
 	if err != nil {
 		return nil, err
 	}
-	if rsp.StatusCode == 200 {
-		value := snappipb.MetricsResponse{}
-		dest := metricsResponse{obj: &value}
-		if err := dest.FromJson(string(bodyBytes)); err != nil {
+	if resp.StatusCode == 200 {
+		obj := api.NewGetMetricsResponse()
+		if err := obj.StatusCode200().FromJson(string(bodyBytes)); err != nil {
 			return nil, err
 		}
-		return &dest, nil
+		return obj.StatusCode200(), nil
 	}
-	if rsp.StatusCode == 400 {
+	if resp.StatusCode == 200 {
 		return nil, fmt.Errorf(string(bodyBytes))
 	}
-	if rsp.StatusCode == 500 {
+	if resp.StatusCode == 400 {
+		return nil, fmt.Errorf(string(bodyBytes))
+	}
+	if resp.StatusCode == 500 {
 		return nil, fmt.Errorf(string(bodyBytes))
 	}
 	return nil, fmt.Errorf("response not implemented")
 }
 
 func (api *gosnappiApi) httpGetStateMetrics() (StateMetrics, error) {
-	rsp, err := api.httpSendRecv("/results/state", "", "POST")
+	resp, err := api.httpSendRecv("/results/state", "", "POST")
 	if err != nil {
 		return nil, err
 	}
-	bodyBytes, err := ioutil.ReadAll(rsp.Body)
-	defer rsp.Body.Close()
+	bodyBytes, err := ioutil.ReadAll(resp.Body)
+	defer resp.Body.Close()
 	if err != nil {
 		return nil, err
 	}
-	if rsp.StatusCode == 200 {
-		value := snappipb.StateMetrics{}
-		dest := stateMetrics{obj: &value}
-		if err := dest.FromJson(string(bodyBytes)); err != nil {
+	if resp.StatusCode == 200 {
+		obj := api.NewGetStateMetricsResponse()
+		if err := obj.StatusCode200().FromJson(string(bodyBytes)); err != nil {
 			return nil, err
 		}
-		return &dest, nil
+		return obj.StatusCode200(), nil
 	}
-	if rsp.StatusCode == 400 {
+	if resp.StatusCode == 200 {
 		return nil, fmt.Errorf(string(bodyBytes))
 	}
-	if rsp.StatusCode == 500 {
+	if resp.StatusCode == 400 {
+		return nil, fmt.Errorf(string(bodyBytes))
+	}
+	if resp.StatusCode == 500 {
 		return nil, fmt.Errorf(string(bodyBytes))
 	}
 	return nil, fmt.Errorf("response not implemented")
 }
 
 func (api *gosnappiApi) httpGetCapture(captureRequest CaptureRequest) ([]byte, error) {
-	rsp, err := api.httpSendRecv("results/capture", captureRequest.ToJson(), "POST")
+	resp, err := api.httpSendRecv("results/capture", captureRequest.ToJson(), "POST")
 	if err != nil {
 		return nil, err
 	}
-	bodyBytes, err := ioutil.ReadAll(rsp.Body)
-	defer rsp.Body.Close()
+	bodyBytes, err := ioutil.ReadAll(resp.Body)
+	defer resp.Body.Close()
 	if err != nil {
 		return nil, err
 	}
-	if rsp.StatusCode == 200 {
+	if resp.StatusCode == 200 {
 		return bodyBytes, nil
 	}
-	if rsp.StatusCode == 400 {
+	if resp.StatusCode == 200 {
 		return nil, fmt.Errorf(string(bodyBytes))
 	}
-	if rsp.StatusCode == 500 {
+	if resp.StatusCode == 400 {
+		return nil, fmt.Errorf(string(bodyBytes))
+	}
+	if resp.StatusCode == 500 {
 		return nil, fmt.Errorf(string(bodyBytes))
 	}
 	return nil, fmt.Errorf("response not implemented")
@@ -1009,7 +930,7 @@ func (obj *config) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -1031,7 +952,7 @@ func (obj *config) ToJson() string {
 func (obj *config) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -1303,7 +1224,7 @@ func (obj *transmitState) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -1325,7 +1246,7 @@ func (obj *transmitState) ToJson() string {
 func (obj *transmitState) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -1441,7 +1362,7 @@ func (obj *linkState) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -1463,7 +1384,7 @@ func (obj *linkState) ToJson() string {
 func (obj *linkState) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -1577,7 +1498,7 @@ func (obj *captureState) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -1599,7 +1520,7 @@ func (obj *captureState) ToJson() string {
 func (obj *captureState) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -1713,7 +1634,7 @@ func (obj *flowsUpdate) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -1735,7 +1656,7 @@ func (obj *flowsUpdate) ToJson() string {
 func (obj *flowsUpdate) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -1853,7 +1774,7 @@ func (obj *routeState) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -1875,7 +1796,7 @@ func (obj *routeState) ToJson() string {
 func (obj *routeState) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -1993,7 +1914,7 @@ func (obj *metricsRequest) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -2015,7 +1936,7 @@ func (obj *metricsRequest) ToJson() string {
 func (obj *metricsRequest) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -2138,7 +2059,7 @@ func (obj *captureRequest) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -2160,7 +2081,7 @@ func (obj *captureRequest) ToJson() string {
 func (obj *captureRequest) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -2207,23 +2128,23 @@ func (obj *captureRequest) SetPortName(value string) CaptureRequest {
 	return obj
 }
 
-type setConfigResponse_StatusCode200 struct {
-	obj *snappipb.SetConfigResponse_StatusCode200
+type setConfigResponse struct {
+	obj *snappipb.SetConfigResponse
 }
 
-func (obj *setConfigResponse_StatusCode200) msg() *snappipb.SetConfigResponse_StatusCode200 {
+func (obj *setConfigResponse) msg() *snappipb.SetConfigResponse {
 	return obj.obj
 }
 
-func (obj *setConfigResponse_StatusCode200) ToPbText() string {
+func (obj *setConfigResponse) ToPbText() string {
 	return proto.MarshalTextString(obj.msg())
 }
 
-func (obj *setConfigResponse_StatusCode200) FromPbText(value string) error {
+func (obj *setConfigResponse) FromPbText(value string) error {
 	return proto.UnmarshalText(value, obj.msg())
 }
 
-func (obj *setConfigResponse_StatusCode200) ToYaml() string {
+func (obj *setConfigResponse) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
 		AllowPartial:    true,
@@ -2237,19 +2158,19 @@ func (obj *setConfigResponse_StatusCode200) ToYaml() string {
 	return string(data)
 }
 
-func (obj *setConfigResponse_StatusCode200) FromYaml(value string) error {
+func (obj *setConfigResponse) FromYaml(value string) error {
 	data, err := yaml.YAMLToJSON([]byte(value))
 	if err != nil {
 		return err
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
 
-func (obj *setConfigResponse_StatusCode200) ToJson() string {
+func (obj *setConfigResponse) ToJson() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
 		AllowPartial:    true,
@@ -2263,52 +2184,74 @@ func (obj *setConfigResponse_StatusCode200) ToJson() string {
 	return string(data)
 }
 
-func (obj *setConfigResponse_StatusCode200) FromJson(value string) error {
+func (obj *setConfigResponse) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
 
-type SetConfigResponse_StatusCode200 interface {
-	msg() *snappipb.SetConfigResponse_StatusCode200
+type SetConfigResponse interface {
+	msg() *snappipb.SetConfigResponse
 	ToPbText() string
 	ToYaml() string
 	ToJson() string
 	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
-	Success() Success
+	StatusCode200() ResponseWarning
+	StatusCode400() ResponseError
+	StatusCode500() ResponseError
 }
 
-// Success returns a Success
+// StatusCode200 returns a ResponseWarning
 //  description is TBD
-func (obj *setConfigResponse_StatusCode200) Success() Success {
-	if obj.obj.Success == nil {
-		obj.obj.Success = &snappipb.Success{}
+func (obj *setConfigResponse) StatusCode200() ResponseWarning {
+	if obj.obj.StatusCode_200 == nil {
+		obj.obj.StatusCode_200 = &snappipb.ResponseWarning{}
 	}
 
-	return &success{obj: obj.obj.Success}
+	return &responseWarning{obj: obj.obj.StatusCode_200}
 }
 
-type setConfigResponse_StatusCode400 struct {
-	obj *snappipb.SetConfigResponse_StatusCode400
+// StatusCode400 returns a ResponseError
+//  description is TBD
+func (obj *setConfigResponse) StatusCode400() ResponseError {
+	if obj.obj.StatusCode_400 == nil {
+		obj.obj.StatusCode_400 = &snappipb.ResponseError{}
+	}
+
+	return &responseError{obj: obj.obj.StatusCode_400}
 }
 
-func (obj *setConfigResponse_StatusCode400) msg() *snappipb.SetConfigResponse_StatusCode400 {
+// StatusCode500 returns a ResponseError
+//  description is TBD
+func (obj *setConfigResponse) StatusCode500() ResponseError {
+	if obj.obj.StatusCode_500 == nil {
+		obj.obj.StatusCode_500 = &snappipb.ResponseError{}
+	}
+
+	return &responseError{obj: obj.obj.StatusCode_500}
+}
+
+type getConfigResponse struct {
+	obj *snappipb.GetConfigResponse
+}
+
+func (obj *getConfigResponse) msg() *snappipb.GetConfigResponse {
 	return obj.obj
 }
 
-func (obj *setConfigResponse_StatusCode400) ToPbText() string {
+func (obj *getConfigResponse) ToPbText() string {
 	return proto.MarshalTextString(obj.msg())
 }
 
-func (obj *setConfigResponse_StatusCode400) FromPbText(value string) error {
+func (obj *getConfigResponse) FromPbText(value string) error {
 	return proto.UnmarshalText(value, obj.msg())
 }
 
-func (obj *setConfigResponse_StatusCode400) ToYaml() string {
+func (obj *getConfigResponse) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
 		AllowPartial:    true,
@@ -2322,19 +2265,19 @@ func (obj *setConfigResponse_StatusCode400) ToYaml() string {
 	return string(data)
 }
 
-func (obj *setConfigResponse_StatusCode400) FromYaml(value string) error {
+func (obj *getConfigResponse) FromYaml(value string) error {
 	data, err := yaml.YAMLToJSON([]byte(value))
 	if err != nil {
 		return err
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
 
-func (obj *setConfigResponse_StatusCode400) ToJson() string {
+func (obj *getConfigResponse) ToJson() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
 		AllowPartial:    true,
@@ -2348,52 +2291,74 @@ func (obj *setConfigResponse_StatusCode400) ToJson() string {
 	return string(data)
 }
 
-func (obj *setConfigResponse_StatusCode400) FromJson(value string) error {
+func (obj *getConfigResponse) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
 
-type SetConfigResponse_StatusCode400 interface {
-	msg() *snappipb.SetConfigResponse_StatusCode400
+type GetConfigResponse interface {
+	msg() *snappipb.GetConfigResponse
 	ToPbText() string
 	ToYaml() string
 	ToJson() string
 	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
-	BadRequest() BadRequest
+	StatusCode200() Config
+	StatusCode400() ResponseError
+	StatusCode500() ResponseError
 }
 
-// BadRequest returns a BadRequest
+// StatusCode200 returns a Config
 //  description is TBD
-func (obj *setConfigResponse_StatusCode400) BadRequest() BadRequest {
-	if obj.obj.BadRequest == nil {
-		obj.obj.BadRequest = &snappipb.BadRequest{}
+func (obj *getConfigResponse) StatusCode200() Config {
+	if obj.obj.StatusCode_200 == nil {
+		obj.obj.StatusCode_200 = &snappipb.Config{}
 	}
 
-	return &badRequest{obj: obj.obj.BadRequest}
+	return &config{obj: obj.obj.StatusCode_200}
 }
 
-type setConfigResponse_StatusCode500 struct {
-	obj *snappipb.SetConfigResponse_StatusCode500
+// StatusCode400 returns a ResponseError
+//  description is TBD
+func (obj *getConfigResponse) StatusCode400() ResponseError {
+	if obj.obj.StatusCode_400 == nil {
+		obj.obj.StatusCode_400 = &snappipb.ResponseError{}
+	}
+
+	return &responseError{obj: obj.obj.StatusCode_400}
 }
 
-func (obj *setConfigResponse_StatusCode500) msg() *snappipb.SetConfigResponse_StatusCode500 {
+// StatusCode500 returns a ResponseError
+//  description is TBD
+func (obj *getConfigResponse) StatusCode500() ResponseError {
+	if obj.obj.StatusCode_500 == nil {
+		obj.obj.StatusCode_500 = &snappipb.ResponseError{}
+	}
+
+	return &responseError{obj: obj.obj.StatusCode_500}
+}
+
+type setTransmitStateResponse struct {
+	obj *snappipb.SetTransmitStateResponse
+}
+
+func (obj *setTransmitStateResponse) msg() *snappipb.SetTransmitStateResponse {
 	return obj.obj
 }
 
-func (obj *setConfigResponse_StatusCode500) ToPbText() string {
+func (obj *setTransmitStateResponse) ToPbText() string {
 	return proto.MarshalTextString(obj.msg())
 }
 
-func (obj *setConfigResponse_StatusCode500) FromPbText(value string) error {
+func (obj *setTransmitStateResponse) FromPbText(value string) error {
 	return proto.UnmarshalText(value, obj.msg())
 }
 
-func (obj *setConfigResponse_StatusCode500) ToYaml() string {
+func (obj *setTransmitStateResponse) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
 		AllowPartial:    true,
@@ -2407,19 +2372,19 @@ func (obj *setConfigResponse_StatusCode500) ToYaml() string {
 	return string(data)
 }
 
-func (obj *setConfigResponse_StatusCode500) FromYaml(value string) error {
+func (obj *setTransmitStateResponse) FromYaml(value string) error {
 	data, err := yaml.YAMLToJSON([]byte(value))
 	if err != nil {
 		return err
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
 
-func (obj *setConfigResponse_StatusCode500) ToJson() string {
+func (obj *setTransmitStateResponse) ToJson() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
 		AllowPartial:    true,
@@ -2433,52 +2398,74 @@ func (obj *setConfigResponse_StatusCode500) ToJson() string {
 	return string(data)
 }
 
-func (obj *setConfigResponse_StatusCode500) FromJson(value string) error {
+func (obj *setTransmitStateResponse) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
 
-type SetConfigResponse_StatusCode500 interface {
-	msg() *snappipb.SetConfigResponse_StatusCode500
+type SetTransmitStateResponse interface {
+	msg() *snappipb.SetTransmitStateResponse
 	ToPbText() string
 	ToYaml() string
 	ToJson() string
 	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
-	InternalServerError() InternalServerError
+	StatusCode200() ResponseWarning
+	StatusCode400() ResponseError
+	StatusCode500() ResponseError
 }
 
-// InternalServerError returns a InternalServerError
+// StatusCode200 returns a ResponseWarning
 //  description is TBD
-func (obj *setConfigResponse_StatusCode500) InternalServerError() InternalServerError {
-	if obj.obj.InternalServerError == nil {
-		obj.obj.InternalServerError = &snappipb.InternalServerError{}
+func (obj *setTransmitStateResponse) StatusCode200() ResponseWarning {
+	if obj.obj.StatusCode_200 == nil {
+		obj.obj.StatusCode_200 = &snappipb.ResponseWarning{}
 	}
 
-	return &internalServerError{obj: obj.obj.InternalServerError}
+	return &responseWarning{obj: obj.obj.StatusCode_200}
 }
 
-type getConfigResponse_StatusCode200 struct {
-	obj *snappipb.GetConfigResponse_StatusCode200
+// StatusCode400 returns a ResponseError
+//  description is TBD
+func (obj *setTransmitStateResponse) StatusCode400() ResponseError {
+	if obj.obj.StatusCode_400 == nil {
+		obj.obj.StatusCode_400 = &snappipb.ResponseError{}
+	}
+
+	return &responseError{obj: obj.obj.StatusCode_400}
 }
 
-func (obj *getConfigResponse_StatusCode200) msg() *snappipb.GetConfigResponse_StatusCode200 {
+// StatusCode500 returns a ResponseError
+//  description is TBD
+func (obj *setTransmitStateResponse) StatusCode500() ResponseError {
+	if obj.obj.StatusCode_500 == nil {
+		obj.obj.StatusCode_500 = &snappipb.ResponseError{}
+	}
+
+	return &responseError{obj: obj.obj.StatusCode_500}
+}
+
+type setLinkStateResponse struct {
+	obj *snappipb.SetLinkStateResponse
+}
+
+func (obj *setLinkStateResponse) msg() *snappipb.SetLinkStateResponse {
 	return obj.obj
 }
 
-func (obj *getConfigResponse_StatusCode200) ToPbText() string {
+func (obj *setLinkStateResponse) ToPbText() string {
 	return proto.MarshalTextString(obj.msg())
 }
 
-func (obj *getConfigResponse_StatusCode200) FromPbText(value string) error {
+func (obj *setLinkStateResponse) FromPbText(value string) error {
 	return proto.UnmarshalText(value, obj.msg())
 }
 
-func (obj *getConfigResponse_StatusCode200) ToYaml() string {
+func (obj *setLinkStateResponse) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
 		AllowPartial:    true,
@@ -2492,19 +2479,19 @@ func (obj *getConfigResponse_StatusCode200) ToYaml() string {
 	return string(data)
 }
 
-func (obj *getConfigResponse_StatusCode200) FromYaml(value string) error {
+func (obj *setLinkStateResponse) FromYaml(value string) error {
 	data, err := yaml.YAMLToJSON([]byte(value))
 	if err != nil {
 		return err
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
 
-func (obj *getConfigResponse_StatusCode200) ToJson() string {
+func (obj *setLinkStateResponse) ToJson() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
 		AllowPartial:    true,
@@ -2518,52 +2505,74 @@ func (obj *getConfigResponse_StatusCode200) ToJson() string {
 	return string(data)
 }
 
-func (obj *getConfigResponse_StatusCode200) FromJson(value string) error {
+func (obj *setLinkStateResponse) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
 
-type GetConfigResponse_StatusCode200 interface {
-	msg() *snappipb.GetConfigResponse_StatusCode200
+type SetLinkStateResponse interface {
+	msg() *snappipb.SetLinkStateResponse
 	ToPbText() string
 	ToYaml() string
 	ToJson() string
 	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
-	Config() Config
+	StatusCode200() ResponseWarning
+	StatusCode400() ResponseError
+	StatusCode500() ResponseError
 }
 
-// Config returns a Config
+// StatusCode200 returns a ResponseWarning
 //  description is TBD
-func (obj *getConfigResponse_StatusCode200) Config() Config {
-	if obj.obj.Config == nil {
-		obj.obj.Config = &snappipb.Config{}
+func (obj *setLinkStateResponse) StatusCode200() ResponseWarning {
+	if obj.obj.StatusCode_200 == nil {
+		obj.obj.StatusCode_200 = &snappipb.ResponseWarning{}
 	}
 
-	return &config{obj: obj.obj.Config}
+	return &responseWarning{obj: obj.obj.StatusCode_200}
 }
 
-type getConfigResponse_StatusCode400 struct {
-	obj *snappipb.GetConfigResponse_StatusCode400
+// StatusCode400 returns a ResponseError
+//  description is TBD
+func (obj *setLinkStateResponse) StatusCode400() ResponseError {
+	if obj.obj.StatusCode_400 == nil {
+		obj.obj.StatusCode_400 = &snappipb.ResponseError{}
+	}
+
+	return &responseError{obj: obj.obj.StatusCode_400}
 }
 
-func (obj *getConfigResponse_StatusCode400) msg() *snappipb.GetConfigResponse_StatusCode400 {
+// StatusCode500 returns a ResponseError
+//  description is TBD
+func (obj *setLinkStateResponse) StatusCode500() ResponseError {
+	if obj.obj.StatusCode_500 == nil {
+		obj.obj.StatusCode_500 = &snappipb.ResponseError{}
+	}
+
+	return &responseError{obj: obj.obj.StatusCode_500}
+}
+
+type setCaptureStateResponse struct {
+	obj *snappipb.SetCaptureStateResponse
+}
+
+func (obj *setCaptureStateResponse) msg() *snappipb.SetCaptureStateResponse {
 	return obj.obj
 }
 
-func (obj *getConfigResponse_StatusCode400) ToPbText() string {
+func (obj *setCaptureStateResponse) ToPbText() string {
 	return proto.MarshalTextString(obj.msg())
 }
 
-func (obj *getConfigResponse_StatusCode400) FromPbText(value string) error {
+func (obj *setCaptureStateResponse) FromPbText(value string) error {
 	return proto.UnmarshalText(value, obj.msg())
 }
 
-func (obj *getConfigResponse_StatusCode400) ToYaml() string {
+func (obj *setCaptureStateResponse) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
 		AllowPartial:    true,
@@ -2577,19 +2586,19 @@ func (obj *getConfigResponse_StatusCode400) ToYaml() string {
 	return string(data)
 }
 
-func (obj *getConfigResponse_StatusCode400) FromYaml(value string) error {
+func (obj *setCaptureStateResponse) FromYaml(value string) error {
 	data, err := yaml.YAMLToJSON([]byte(value))
 	if err != nil {
 		return err
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
 
-func (obj *getConfigResponse_StatusCode400) ToJson() string {
+func (obj *setCaptureStateResponse) ToJson() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
 		AllowPartial:    true,
@@ -2603,52 +2612,74 @@ func (obj *getConfigResponse_StatusCode400) ToJson() string {
 	return string(data)
 }
 
-func (obj *getConfigResponse_StatusCode400) FromJson(value string) error {
+func (obj *setCaptureStateResponse) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
 
-type GetConfigResponse_StatusCode400 interface {
-	msg() *snappipb.GetConfigResponse_StatusCode400
+type SetCaptureStateResponse interface {
+	msg() *snappipb.SetCaptureStateResponse
 	ToPbText() string
 	ToYaml() string
 	ToJson() string
 	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
-	BadRequest() BadRequest
+	StatusCode200() ResponseWarning
+	StatusCode400() ResponseError
+	StatusCode500() ResponseError
 }
 
-// BadRequest returns a BadRequest
+// StatusCode200 returns a ResponseWarning
 //  description is TBD
-func (obj *getConfigResponse_StatusCode400) BadRequest() BadRequest {
-	if obj.obj.BadRequest == nil {
-		obj.obj.BadRequest = &snappipb.BadRequest{}
+func (obj *setCaptureStateResponse) StatusCode200() ResponseWarning {
+	if obj.obj.StatusCode_200 == nil {
+		obj.obj.StatusCode_200 = &snappipb.ResponseWarning{}
 	}
 
-	return &badRequest{obj: obj.obj.BadRequest}
+	return &responseWarning{obj: obj.obj.StatusCode_200}
 }
 
-type getConfigResponse_StatusCode500 struct {
-	obj *snappipb.GetConfigResponse_StatusCode500
+// StatusCode400 returns a ResponseError
+//  description is TBD
+func (obj *setCaptureStateResponse) StatusCode400() ResponseError {
+	if obj.obj.StatusCode_400 == nil {
+		obj.obj.StatusCode_400 = &snappipb.ResponseError{}
+	}
+
+	return &responseError{obj: obj.obj.StatusCode_400}
 }
 
-func (obj *getConfigResponse_StatusCode500) msg() *snappipb.GetConfigResponse_StatusCode500 {
+// StatusCode500 returns a ResponseError
+//  description is TBD
+func (obj *setCaptureStateResponse) StatusCode500() ResponseError {
+	if obj.obj.StatusCode_500 == nil {
+		obj.obj.StatusCode_500 = &snappipb.ResponseError{}
+	}
+
+	return &responseError{obj: obj.obj.StatusCode_500}
+}
+
+type updateFlowsResponse struct {
+	obj *snappipb.UpdateFlowsResponse
+}
+
+func (obj *updateFlowsResponse) msg() *snappipb.UpdateFlowsResponse {
 	return obj.obj
 }
 
-func (obj *getConfigResponse_StatusCode500) ToPbText() string {
+func (obj *updateFlowsResponse) ToPbText() string {
 	return proto.MarshalTextString(obj.msg())
 }
 
-func (obj *getConfigResponse_StatusCode500) FromPbText(value string) error {
+func (obj *updateFlowsResponse) FromPbText(value string) error {
 	return proto.UnmarshalText(value, obj.msg())
 }
 
-func (obj *getConfigResponse_StatusCode500) ToYaml() string {
+func (obj *updateFlowsResponse) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
 		AllowPartial:    true,
@@ -2662,19 +2693,19 @@ func (obj *getConfigResponse_StatusCode500) ToYaml() string {
 	return string(data)
 }
 
-func (obj *getConfigResponse_StatusCode500) FromYaml(value string) error {
+func (obj *updateFlowsResponse) FromYaml(value string) error {
 	data, err := yaml.YAMLToJSON([]byte(value))
 	if err != nil {
 		return err
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
 
-func (obj *getConfigResponse_StatusCode500) ToJson() string {
+func (obj *updateFlowsResponse) ToJson() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
 		AllowPartial:    true,
@@ -2688,52 +2719,74 @@ func (obj *getConfigResponse_StatusCode500) ToJson() string {
 	return string(data)
 }
 
-func (obj *getConfigResponse_StatusCode500) FromJson(value string) error {
+func (obj *updateFlowsResponse) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
 
-type GetConfigResponse_StatusCode500 interface {
-	msg() *snappipb.GetConfigResponse_StatusCode500
+type UpdateFlowsResponse interface {
+	msg() *snappipb.UpdateFlowsResponse
 	ToPbText() string
 	ToYaml() string
 	ToJson() string
 	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
-	InternalServerError() InternalServerError
+	StatusCode200() Config
+	StatusCode400() ResponseError
+	StatusCode500() ResponseError
 }
 
-// InternalServerError returns a InternalServerError
+// StatusCode200 returns a Config
 //  description is TBD
-func (obj *getConfigResponse_StatusCode500) InternalServerError() InternalServerError {
-	if obj.obj.InternalServerError == nil {
-		obj.obj.InternalServerError = &snappipb.InternalServerError{}
+func (obj *updateFlowsResponse) StatusCode200() Config {
+	if obj.obj.StatusCode_200 == nil {
+		obj.obj.StatusCode_200 = &snappipb.Config{}
 	}
 
-	return &internalServerError{obj: obj.obj.InternalServerError}
+	return &config{obj: obj.obj.StatusCode_200}
 }
 
-type setTransmitStateResponse_StatusCode200 struct {
-	obj *snappipb.SetTransmitStateResponse_StatusCode200
+// StatusCode400 returns a ResponseError
+//  description is TBD
+func (obj *updateFlowsResponse) StatusCode400() ResponseError {
+	if obj.obj.StatusCode_400 == nil {
+		obj.obj.StatusCode_400 = &snappipb.ResponseError{}
+	}
+
+	return &responseError{obj: obj.obj.StatusCode_400}
 }
 
-func (obj *setTransmitStateResponse_StatusCode200) msg() *snappipb.SetTransmitStateResponse_StatusCode200 {
+// StatusCode500 returns a ResponseError
+//  description is TBD
+func (obj *updateFlowsResponse) StatusCode500() ResponseError {
+	if obj.obj.StatusCode_500 == nil {
+		obj.obj.StatusCode_500 = &snappipb.ResponseError{}
+	}
+
+	return &responseError{obj: obj.obj.StatusCode_500}
+}
+
+type setRouteStateResponse struct {
+	obj *snappipb.SetRouteStateResponse
+}
+
+func (obj *setRouteStateResponse) msg() *snappipb.SetRouteStateResponse {
 	return obj.obj
 }
 
-func (obj *setTransmitStateResponse_StatusCode200) ToPbText() string {
+func (obj *setRouteStateResponse) ToPbText() string {
 	return proto.MarshalTextString(obj.msg())
 }
 
-func (obj *setTransmitStateResponse_StatusCode200) FromPbText(value string) error {
+func (obj *setRouteStateResponse) FromPbText(value string) error {
 	return proto.UnmarshalText(value, obj.msg())
 }
 
-func (obj *setTransmitStateResponse_StatusCode200) ToYaml() string {
+func (obj *setRouteStateResponse) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
 		AllowPartial:    true,
@@ -2747,19 +2800,19 @@ func (obj *setTransmitStateResponse_StatusCode200) ToYaml() string {
 	return string(data)
 }
 
-func (obj *setTransmitStateResponse_StatusCode200) FromYaml(value string) error {
+func (obj *setRouteStateResponse) FromYaml(value string) error {
 	data, err := yaml.YAMLToJSON([]byte(value))
 	if err != nil {
 		return err
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
 
-func (obj *setTransmitStateResponse_StatusCode200) ToJson() string {
+func (obj *setRouteStateResponse) ToJson() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
 		AllowPartial:    true,
@@ -2773,52 +2826,74 @@ func (obj *setTransmitStateResponse_StatusCode200) ToJson() string {
 	return string(data)
 }
 
-func (obj *setTransmitStateResponse_StatusCode200) FromJson(value string) error {
+func (obj *setRouteStateResponse) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
 
-type SetTransmitStateResponse_StatusCode200 interface {
-	msg() *snappipb.SetTransmitStateResponse_StatusCode200
+type SetRouteStateResponse interface {
+	msg() *snappipb.SetRouteStateResponse
 	ToPbText() string
 	ToYaml() string
 	ToJson() string
 	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
-	Success() Success
+	StatusCode200() ResponseWarning
+	StatusCode400() ResponseError
+	StatusCode500() ResponseError
 }
 
-// Success returns a Success
+// StatusCode200 returns a ResponseWarning
 //  description is TBD
-func (obj *setTransmitStateResponse_StatusCode200) Success() Success {
-	if obj.obj.Success == nil {
-		obj.obj.Success = &snappipb.Success{}
+func (obj *setRouteStateResponse) StatusCode200() ResponseWarning {
+	if obj.obj.StatusCode_200 == nil {
+		obj.obj.StatusCode_200 = &snappipb.ResponseWarning{}
 	}
 
-	return &success{obj: obj.obj.Success}
+	return &responseWarning{obj: obj.obj.StatusCode_200}
 }
 
-type setTransmitStateResponse_StatusCode400 struct {
-	obj *snappipb.SetTransmitStateResponse_StatusCode400
+// StatusCode400 returns a ResponseError
+//  description is TBD
+func (obj *setRouteStateResponse) StatusCode400() ResponseError {
+	if obj.obj.StatusCode_400 == nil {
+		obj.obj.StatusCode_400 = &snappipb.ResponseError{}
+	}
+
+	return &responseError{obj: obj.obj.StatusCode_400}
 }
 
-func (obj *setTransmitStateResponse_StatusCode400) msg() *snappipb.SetTransmitStateResponse_StatusCode400 {
+// StatusCode500 returns a ResponseError
+//  description is TBD
+func (obj *setRouteStateResponse) StatusCode500() ResponseError {
+	if obj.obj.StatusCode_500 == nil {
+		obj.obj.StatusCode_500 = &snappipb.ResponseError{}
+	}
+
+	return &responseError{obj: obj.obj.StatusCode_500}
+}
+
+type getMetricsResponse struct {
+	obj *snappipb.GetMetricsResponse
+}
+
+func (obj *getMetricsResponse) msg() *snappipb.GetMetricsResponse {
 	return obj.obj
 }
 
-func (obj *setTransmitStateResponse_StatusCode400) ToPbText() string {
+func (obj *getMetricsResponse) ToPbText() string {
 	return proto.MarshalTextString(obj.msg())
 }
 
-func (obj *setTransmitStateResponse_StatusCode400) FromPbText(value string) error {
+func (obj *getMetricsResponse) FromPbText(value string) error {
 	return proto.UnmarshalText(value, obj.msg())
 }
 
-func (obj *setTransmitStateResponse_StatusCode400) ToYaml() string {
+func (obj *getMetricsResponse) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
 		AllowPartial:    true,
@@ -2832,19 +2907,19 @@ func (obj *setTransmitStateResponse_StatusCode400) ToYaml() string {
 	return string(data)
 }
 
-func (obj *setTransmitStateResponse_StatusCode400) FromYaml(value string) error {
+func (obj *getMetricsResponse) FromYaml(value string) error {
 	data, err := yaml.YAMLToJSON([]byte(value))
 	if err != nil {
 		return err
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
 
-func (obj *setTransmitStateResponse_StatusCode400) ToJson() string {
+func (obj *getMetricsResponse) ToJson() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
 		AllowPartial:    true,
@@ -2858,52 +2933,74 @@ func (obj *setTransmitStateResponse_StatusCode400) ToJson() string {
 	return string(data)
 }
 
-func (obj *setTransmitStateResponse_StatusCode400) FromJson(value string) error {
+func (obj *getMetricsResponse) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
 
-type SetTransmitStateResponse_StatusCode400 interface {
-	msg() *snappipb.SetTransmitStateResponse_StatusCode400
+type GetMetricsResponse interface {
+	msg() *snappipb.GetMetricsResponse
 	ToPbText() string
 	ToYaml() string
 	ToJson() string
 	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
-	BadRequest() BadRequest
+	StatusCode200() MetricsResponse
+	StatusCode400() ResponseError
+	StatusCode500() ResponseError
 }
 
-// BadRequest returns a BadRequest
+// StatusCode200 returns a MetricsResponse
 //  description is TBD
-func (obj *setTransmitStateResponse_StatusCode400) BadRequest() BadRequest {
-	if obj.obj.BadRequest == nil {
-		obj.obj.BadRequest = &snappipb.BadRequest{}
+func (obj *getMetricsResponse) StatusCode200() MetricsResponse {
+	if obj.obj.StatusCode_200 == nil {
+		obj.obj.StatusCode_200 = &snappipb.MetricsResponse{}
 	}
 
-	return &badRequest{obj: obj.obj.BadRequest}
+	return &metricsResponse{obj: obj.obj.StatusCode_200}
 }
 
-type setTransmitStateResponse_StatusCode500 struct {
-	obj *snappipb.SetTransmitStateResponse_StatusCode500
+// StatusCode400 returns a ResponseError
+//  description is TBD
+func (obj *getMetricsResponse) StatusCode400() ResponseError {
+	if obj.obj.StatusCode_400 == nil {
+		obj.obj.StatusCode_400 = &snappipb.ResponseError{}
+	}
+
+	return &responseError{obj: obj.obj.StatusCode_400}
 }
 
-func (obj *setTransmitStateResponse_StatusCode500) msg() *snappipb.SetTransmitStateResponse_StatusCode500 {
+// StatusCode500 returns a ResponseError
+//  description is TBD
+func (obj *getMetricsResponse) StatusCode500() ResponseError {
+	if obj.obj.StatusCode_500 == nil {
+		obj.obj.StatusCode_500 = &snappipb.ResponseError{}
+	}
+
+	return &responseError{obj: obj.obj.StatusCode_500}
+}
+
+type getStateMetricsResponse struct {
+	obj *snappipb.GetStateMetricsResponse
+}
+
+func (obj *getStateMetricsResponse) msg() *snappipb.GetStateMetricsResponse {
 	return obj.obj
 }
 
-func (obj *setTransmitStateResponse_StatusCode500) ToPbText() string {
+func (obj *getStateMetricsResponse) ToPbText() string {
 	return proto.MarshalTextString(obj.msg())
 }
 
-func (obj *setTransmitStateResponse_StatusCode500) FromPbText(value string) error {
+func (obj *getStateMetricsResponse) FromPbText(value string) error {
 	return proto.UnmarshalText(value, obj.msg())
 }
 
-func (obj *setTransmitStateResponse_StatusCode500) ToYaml() string {
+func (obj *getStateMetricsResponse) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
 		AllowPartial:    true,
@@ -2917,19 +3014,19 @@ func (obj *setTransmitStateResponse_StatusCode500) ToYaml() string {
 	return string(data)
 }
 
-func (obj *setTransmitStateResponse_StatusCode500) FromYaml(value string) error {
+func (obj *getStateMetricsResponse) FromYaml(value string) error {
 	data, err := yaml.YAMLToJSON([]byte(value))
 	if err != nil {
 		return err
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
 
-func (obj *setTransmitStateResponse_StatusCode500) ToJson() string {
+func (obj *getStateMetricsResponse) ToJson() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
 		AllowPartial:    true,
@@ -2943,52 +3040,74 @@ func (obj *setTransmitStateResponse_StatusCode500) ToJson() string {
 	return string(data)
 }
 
-func (obj *setTransmitStateResponse_StatusCode500) FromJson(value string) error {
+func (obj *getStateMetricsResponse) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
 
-type SetTransmitStateResponse_StatusCode500 interface {
-	msg() *snappipb.SetTransmitStateResponse_StatusCode500
+type GetStateMetricsResponse interface {
+	msg() *snappipb.GetStateMetricsResponse
 	ToPbText() string
 	ToYaml() string
 	ToJson() string
 	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
-	InternalServerError() InternalServerError
+	StatusCode200() StateMetrics
+	StatusCode400() ResponseError
+	StatusCode500() ResponseError
 }
 
-// InternalServerError returns a InternalServerError
+// StatusCode200 returns a StateMetrics
 //  description is TBD
-func (obj *setTransmitStateResponse_StatusCode500) InternalServerError() InternalServerError {
-	if obj.obj.InternalServerError == nil {
-		obj.obj.InternalServerError = &snappipb.InternalServerError{}
+func (obj *getStateMetricsResponse) StatusCode200() StateMetrics {
+	if obj.obj.StatusCode_200 == nil {
+		obj.obj.StatusCode_200 = &snappipb.StateMetrics{}
 	}
 
-	return &internalServerError{obj: obj.obj.InternalServerError}
+	return &stateMetrics{obj: obj.obj.StatusCode_200}
 }
 
-type setLinkStateResponse_StatusCode200 struct {
-	obj *snappipb.SetLinkStateResponse_StatusCode200
+// StatusCode400 returns a ResponseError
+//  description is TBD
+func (obj *getStateMetricsResponse) StatusCode400() ResponseError {
+	if obj.obj.StatusCode_400 == nil {
+		obj.obj.StatusCode_400 = &snappipb.ResponseError{}
+	}
+
+	return &responseError{obj: obj.obj.StatusCode_400}
 }
 
-func (obj *setLinkStateResponse_StatusCode200) msg() *snappipb.SetLinkStateResponse_StatusCode200 {
+// StatusCode500 returns a ResponseError
+//  description is TBD
+func (obj *getStateMetricsResponse) StatusCode500() ResponseError {
+	if obj.obj.StatusCode_500 == nil {
+		obj.obj.StatusCode_500 = &snappipb.ResponseError{}
+	}
+
+	return &responseError{obj: obj.obj.StatusCode_500}
+}
+
+type getCaptureResponse struct {
+	obj *snappipb.GetCaptureResponse
+}
+
+func (obj *getCaptureResponse) msg() *snappipb.GetCaptureResponse {
 	return obj.obj
 }
 
-func (obj *setLinkStateResponse_StatusCode200) ToPbText() string {
+func (obj *getCaptureResponse) ToPbText() string {
 	return proto.MarshalTextString(obj.msg())
 }
 
-func (obj *setLinkStateResponse_StatusCode200) FromPbText(value string) error {
+func (obj *getCaptureResponse) FromPbText(value string) error {
 	return proto.UnmarshalText(value, obj.msg())
 }
 
-func (obj *setLinkStateResponse_StatusCode200) ToYaml() string {
+func (obj *getCaptureResponse) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
 		AllowPartial:    true,
@@ -3002,19 +3121,19 @@ func (obj *setLinkStateResponse_StatusCode200) ToYaml() string {
 	return string(data)
 }
 
-func (obj *setLinkStateResponse_StatusCode200) FromYaml(value string) error {
+func (obj *getCaptureResponse) FromYaml(value string) error {
 	data, err := yaml.YAMLToJSON([]byte(value))
 	if err != nil {
 		return err
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
 
-func (obj *setLinkStateResponse_StatusCode200) ToJson() string {
+func (obj *getCaptureResponse) ToJson() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
 		AllowPartial:    true,
@@ -3028,1738 +3147,60 @@ func (obj *setLinkStateResponse_StatusCode200) ToJson() string {
 	return string(data)
 }
 
-func (obj *setLinkStateResponse_StatusCode200) FromJson(value string) error {
+func (obj *getCaptureResponse) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
 
-type SetLinkStateResponse_StatusCode200 interface {
-	msg() *snappipb.SetLinkStateResponse_StatusCode200
+type GetCaptureResponse interface {
+	msg() *snappipb.GetCaptureResponse
 	ToPbText() string
 	ToYaml() string
 	ToJson() string
 	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
-	Success() Success
+	StatusCode200() []byte
+	SetStatusCode200(value []byte) GetCaptureResponse
+	StatusCode400() ResponseError
+	StatusCode500() ResponseError
 }
 
-// Success returns a Success
+// StatusCode200 returns a []byte
 //  description is TBD
-func (obj *setLinkStateResponse_StatusCode200) Success() Success {
-	if obj.obj.Success == nil {
-		obj.obj.Success = &snappipb.Success{}
-	}
-
-	return &success{obj: obj.obj.Success}
+func (obj *getCaptureResponse) StatusCode200() []byte {
+	return obj.obj.StatusCode_200
 }
 
-type setLinkStateResponse_StatusCode400 struct {
-	obj *snappipb.SetLinkStateResponse_StatusCode400
-}
-
-func (obj *setLinkStateResponse_StatusCode400) msg() *snappipb.SetLinkStateResponse_StatusCode400 {
-	return obj.obj
-}
-
-func (obj *setLinkStateResponse_StatusCode400) ToPbText() string {
-	return proto.MarshalTextString(obj.msg())
-}
-
-func (obj *setLinkStateResponse_StatusCode400) FromPbText(value string) error {
-	return proto.UnmarshalText(value, obj.msg())
-}
-
-func (obj *setLinkStateResponse_StatusCode400) ToYaml() string {
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(obj.msg())
-	data, err = yaml.JSONToYAML(data)
-	if err != nil {
-		panic(err)
-	}
-	return string(data)
-}
-
-func (obj *setLinkStateResponse_StatusCode400) FromYaml(value string) error {
-	data, err := yaml.YAMLToJSON([]byte(value))
-	if err != nil {
-		return err
-	}
-	opts := protojson.UnmarshalOptions{
-		AllowPartial:   true,
-		DiscardUnknown: true,
-	}
-	return opts.Unmarshal([]byte(data), obj.msg())
-}
-
-func (obj *setLinkStateResponse_StatusCode400) ToJson() string {
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-		Indent:          "  ",
-	}
-	data, err := opts.Marshal(obj.msg())
-	if err != nil {
-		panic(err)
-	}
-	return string(data)
-}
-
-func (obj *setLinkStateResponse_StatusCode400) FromJson(value string) error {
-	opts := protojson.UnmarshalOptions{
-		AllowPartial:   true,
-		DiscardUnknown: true,
-	}
-	return opts.Unmarshal([]byte(value), obj.msg())
-}
-
-type SetLinkStateResponse_StatusCode400 interface {
-	msg() *snappipb.SetLinkStateResponse_StatusCode400
-	ToPbText() string
-	ToYaml() string
-	ToJson() string
-	FromPbText(value string) error
-	FromYaml(value string) error
-	FromJson(value string) error
-	BadRequest() BadRequest
-}
-
-// BadRequest returns a BadRequest
+// SetStatusCode200 sets the []byte value in the GetCaptureResponse object
 //  description is TBD
-func (obj *setLinkStateResponse_StatusCode400) BadRequest() BadRequest {
-	if obj.obj.BadRequest == nil {
-		obj.obj.BadRequest = &snappipb.BadRequest{}
-	}
-
-	return &badRequest{obj: obj.obj.BadRequest}
-}
-
-type setLinkStateResponse_StatusCode500 struct {
-	obj *snappipb.SetLinkStateResponse_StatusCode500
-}
-
-func (obj *setLinkStateResponse_StatusCode500) msg() *snappipb.SetLinkStateResponse_StatusCode500 {
-	return obj.obj
-}
-
-func (obj *setLinkStateResponse_StatusCode500) ToPbText() string {
-	return proto.MarshalTextString(obj.msg())
-}
-
-func (obj *setLinkStateResponse_StatusCode500) FromPbText(value string) error {
-	return proto.UnmarshalText(value, obj.msg())
-}
-
-func (obj *setLinkStateResponse_StatusCode500) ToYaml() string {
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(obj.msg())
-	data, err = yaml.JSONToYAML(data)
-	if err != nil {
-		panic(err)
-	}
-	return string(data)
-}
-
-func (obj *setLinkStateResponse_StatusCode500) FromYaml(value string) error {
-	data, err := yaml.YAMLToJSON([]byte(value))
-	if err != nil {
-		return err
-	}
-	opts := protojson.UnmarshalOptions{
-		AllowPartial:   true,
-		DiscardUnknown: true,
-	}
-	return opts.Unmarshal([]byte(data), obj.msg())
-}
-
-func (obj *setLinkStateResponse_StatusCode500) ToJson() string {
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-		Indent:          "  ",
-	}
-	data, err := opts.Marshal(obj.msg())
-	if err != nil {
-		panic(err)
-	}
-	return string(data)
-}
-
-func (obj *setLinkStateResponse_StatusCode500) FromJson(value string) error {
-	opts := protojson.UnmarshalOptions{
-		AllowPartial:   true,
-		DiscardUnknown: true,
-	}
-	return opts.Unmarshal([]byte(value), obj.msg())
-}
-
-type SetLinkStateResponse_StatusCode500 interface {
-	msg() *snappipb.SetLinkStateResponse_StatusCode500
-	ToPbText() string
-	ToYaml() string
-	ToJson() string
-	FromPbText(value string) error
-	FromYaml(value string) error
-	FromJson(value string) error
-	InternalServerError() InternalServerError
-}
-
-// InternalServerError returns a InternalServerError
-//  description is TBD
-func (obj *setLinkStateResponse_StatusCode500) InternalServerError() InternalServerError {
-	if obj.obj.InternalServerError == nil {
-		obj.obj.InternalServerError = &snappipb.InternalServerError{}
-	}
-
-	return &internalServerError{obj: obj.obj.InternalServerError}
-}
-
-type setCaptureStateResponse_StatusCode200 struct {
-	obj *snappipb.SetCaptureStateResponse_StatusCode200
-}
-
-func (obj *setCaptureStateResponse_StatusCode200) msg() *snappipb.SetCaptureStateResponse_StatusCode200 {
-	return obj.obj
-}
-
-func (obj *setCaptureStateResponse_StatusCode200) ToPbText() string {
-	return proto.MarshalTextString(obj.msg())
-}
-
-func (obj *setCaptureStateResponse_StatusCode200) FromPbText(value string) error {
-	return proto.UnmarshalText(value, obj.msg())
-}
-
-func (obj *setCaptureStateResponse_StatusCode200) ToYaml() string {
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(obj.msg())
-	data, err = yaml.JSONToYAML(data)
-	if err != nil {
-		panic(err)
-	}
-	return string(data)
-}
-
-func (obj *setCaptureStateResponse_StatusCode200) FromYaml(value string) error {
-	data, err := yaml.YAMLToJSON([]byte(value))
-	if err != nil {
-		return err
-	}
-	opts := protojson.UnmarshalOptions{
-		AllowPartial:   true,
-		DiscardUnknown: true,
-	}
-	return opts.Unmarshal([]byte(data), obj.msg())
-}
-
-func (obj *setCaptureStateResponse_StatusCode200) ToJson() string {
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-		Indent:          "  ",
-	}
-	data, err := opts.Marshal(obj.msg())
-	if err != nil {
-		panic(err)
-	}
-	return string(data)
-}
-
-func (obj *setCaptureStateResponse_StatusCode200) FromJson(value string) error {
-	opts := protojson.UnmarshalOptions{
-		AllowPartial:   true,
-		DiscardUnknown: true,
-	}
-	return opts.Unmarshal([]byte(value), obj.msg())
-}
-
-type SetCaptureStateResponse_StatusCode200 interface {
-	msg() *snappipb.SetCaptureStateResponse_StatusCode200
-	ToPbText() string
-	ToYaml() string
-	ToJson() string
-	FromPbText(value string) error
-	FromYaml(value string) error
-	FromJson(value string) error
-	Success() Success
-}
-
-// Success returns a Success
-//  description is TBD
-func (obj *setCaptureStateResponse_StatusCode200) Success() Success {
-	if obj.obj.Success == nil {
-		obj.obj.Success = &snappipb.Success{}
-	}
-
-	return &success{obj: obj.obj.Success}
-}
-
-type setCaptureStateResponse_StatusCode400 struct {
-	obj *snappipb.SetCaptureStateResponse_StatusCode400
-}
-
-func (obj *setCaptureStateResponse_StatusCode400) msg() *snappipb.SetCaptureStateResponse_StatusCode400 {
-	return obj.obj
-}
-
-func (obj *setCaptureStateResponse_StatusCode400) ToPbText() string {
-	return proto.MarshalTextString(obj.msg())
-}
-
-func (obj *setCaptureStateResponse_StatusCode400) FromPbText(value string) error {
-	return proto.UnmarshalText(value, obj.msg())
-}
-
-func (obj *setCaptureStateResponse_StatusCode400) ToYaml() string {
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(obj.msg())
-	data, err = yaml.JSONToYAML(data)
-	if err != nil {
-		panic(err)
-	}
-	return string(data)
-}
-
-func (obj *setCaptureStateResponse_StatusCode400) FromYaml(value string) error {
-	data, err := yaml.YAMLToJSON([]byte(value))
-	if err != nil {
-		return err
-	}
-	opts := protojson.UnmarshalOptions{
-		AllowPartial:   true,
-		DiscardUnknown: true,
-	}
-	return opts.Unmarshal([]byte(data), obj.msg())
-}
-
-func (obj *setCaptureStateResponse_StatusCode400) ToJson() string {
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-		Indent:          "  ",
-	}
-	data, err := opts.Marshal(obj.msg())
-	if err != nil {
-		panic(err)
-	}
-	return string(data)
-}
-
-func (obj *setCaptureStateResponse_StatusCode400) FromJson(value string) error {
-	opts := protojson.UnmarshalOptions{
-		AllowPartial:   true,
-		DiscardUnknown: true,
-	}
-	return opts.Unmarshal([]byte(value), obj.msg())
-}
-
-type SetCaptureStateResponse_StatusCode400 interface {
-	msg() *snappipb.SetCaptureStateResponse_StatusCode400
-	ToPbText() string
-	ToYaml() string
-	ToJson() string
-	FromPbText(value string) error
-	FromYaml(value string) error
-	FromJson(value string) error
-	BadRequest() BadRequest
-}
-
-// BadRequest returns a BadRequest
-//  description is TBD
-func (obj *setCaptureStateResponse_StatusCode400) BadRequest() BadRequest {
-	if obj.obj.BadRequest == nil {
-		obj.obj.BadRequest = &snappipb.BadRequest{}
-	}
-
-	return &badRequest{obj: obj.obj.BadRequest}
-}
-
-type setCaptureStateResponse_StatusCode500 struct {
-	obj *snappipb.SetCaptureStateResponse_StatusCode500
-}
-
-func (obj *setCaptureStateResponse_StatusCode500) msg() *snappipb.SetCaptureStateResponse_StatusCode500 {
-	return obj.obj
-}
-
-func (obj *setCaptureStateResponse_StatusCode500) ToPbText() string {
-	return proto.MarshalTextString(obj.msg())
-}
-
-func (obj *setCaptureStateResponse_StatusCode500) FromPbText(value string) error {
-	return proto.UnmarshalText(value, obj.msg())
-}
-
-func (obj *setCaptureStateResponse_StatusCode500) ToYaml() string {
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(obj.msg())
-	data, err = yaml.JSONToYAML(data)
-	if err != nil {
-		panic(err)
-	}
-	return string(data)
-}
-
-func (obj *setCaptureStateResponse_StatusCode500) FromYaml(value string) error {
-	data, err := yaml.YAMLToJSON([]byte(value))
-	if err != nil {
-		return err
-	}
-	opts := protojson.UnmarshalOptions{
-		AllowPartial:   true,
-		DiscardUnknown: true,
-	}
-	return opts.Unmarshal([]byte(data), obj.msg())
-}
-
-func (obj *setCaptureStateResponse_StatusCode500) ToJson() string {
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-		Indent:          "  ",
-	}
-	data, err := opts.Marshal(obj.msg())
-	if err != nil {
-		panic(err)
-	}
-	return string(data)
-}
-
-func (obj *setCaptureStateResponse_StatusCode500) FromJson(value string) error {
-	opts := protojson.UnmarshalOptions{
-		AllowPartial:   true,
-		DiscardUnknown: true,
-	}
-	return opts.Unmarshal([]byte(value), obj.msg())
-}
-
-type SetCaptureStateResponse_StatusCode500 interface {
-	msg() *snappipb.SetCaptureStateResponse_StatusCode500
-	ToPbText() string
-	ToYaml() string
-	ToJson() string
-	FromPbText(value string) error
-	FromYaml(value string) error
-	FromJson(value string) error
-	InternalServerError() InternalServerError
-}
-
-// InternalServerError returns a InternalServerError
-//  description is TBD
-func (obj *setCaptureStateResponse_StatusCode500) InternalServerError() InternalServerError {
-	if obj.obj.InternalServerError == nil {
-		obj.obj.InternalServerError = &snappipb.InternalServerError{}
-	}
-
-	return &internalServerError{obj: obj.obj.InternalServerError}
-}
-
-type updateFlowsResponse_StatusCode200 struct {
-	obj *snappipb.UpdateFlowsResponse_StatusCode200
-}
-
-func (obj *updateFlowsResponse_StatusCode200) msg() *snappipb.UpdateFlowsResponse_StatusCode200 {
-	return obj.obj
-}
-
-func (obj *updateFlowsResponse_StatusCode200) ToPbText() string {
-	return proto.MarshalTextString(obj.msg())
-}
-
-func (obj *updateFlowsResponse_StatusCode200) FromPbText(value string) error {
-	return proto.UnmarshalText(value, obj.msg())
-}
-
-func (obj *updateFlowsResponse_StatusCode200) ToYaml() string {
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(obj.msg())
-	data, err = yaml.JSONToYAML(data)
-	if err != nil {
-		panic(err)
-	}
-	return string(data)
-}
-
-func (obj *updateFlowsResponse_StatusCode200) FromYaml(value string) error {
-	data, err := yaml.YAMLToJSON([]byte(value))
-	if err != nil {
-		return err
-	}
-	opts := protojson.UnmarshalOptions{
-		AllowPartial:   true,
-		DiscardUnknown: true,
-	}
-	return opts.Unmarshal([]byte(data), obj.msg())
-}
-
-func (obj *updateFlowsResponse_StatusCode200) ToJson() string {
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-		Indent:          "  ",
-	}
-	data, err := opts.Marshal(obj.msg())
-	if err != nil {
-		panic(err)
-	}
-	return string(data)
-}
-
-func (obj *updateFlowsResponse_StatusCode200) FromJson(value string) error {
-	opts := protojson.UnmarshalOptions{
-		AllowPartial:   true,
-		DiscardUnknown: true,
-	}
-	return opts.Unmarshal([]byte(value), obj.msg())
-}
-
-type UpdateFlowsResponse_StatusCode200 interface {
-	msg() *snappipb.UpdateFlowsResponse_StatusCode200
-	ToPbText() string
-	ToYaml() string
-	ToJson() string
-	FromPbText(value string) error
-	FromYaml(value string) error
-	FromJson(value string) error
-	Config() Config
-}
-
-// Config returns a Config
-//  description is TBD
-func (obj *updateFlowsResponse_StatusCode200) Config() Config {
-	if obj.obj.Config == nil {
-		obj.obj.Config = &snappipb.Config{}
-	}
-
-	return &config{obj: obj.obj.Config}
-}
-
-type updateFlowsResponse_StatusCode400 struct {
-	obj *snappipb.UpdateFlowsResponse_StatusCode400
-}
-
-func (obj *updateFlowsResponse_StatusCode400) msg() *snappipb.UpdateFlowsResponse_StatusCode400 {
-	return obj.obj
-}
-
-func (obj *updateFlowsResponse_StatusCode400) ToPbText() string {
-	return proto.MarshalTextString(obj.msg())
-}
-
-func (obj *updateFlowsResponse_StatusCode400) FromPbText(value string) error {
-	return proto.UnmarshalText(value, obj.msg())
-}
-
-func (obj *updateFlowsResponse_StatusCode400) ToYaml() string {
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(obj.msg())
-	data, err = yaml.JSONToYAML(data)
-	if err != nil {
-		panic(err)
-	}
-	return string(data)
-}
-
-func (obj *updateFlowsResponse_StatusCode400) FromYaml(value string) error {
-	data, err := yaml.YAMLToJSON([]byte(value))
-	if err != nil {
-		return err
-	}
-	opts := protojson.UnmarshalOptions{
-		AllowPartial:   true,
-		DiscardUnknown: true,
-	}
-	return opts.Unmarshal([]byte(data), obj.msg())
-}
-
-func (obj *updateFlowsResponse_StatusCode400) ToJson() string {
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-		Indent:          "  ",
-	}
-	data, err := opts.Marshal(obj.msg())
-	if err != nil {
-		panic(err)
-	}
-	return string(data)
-}
-
-func (obj *updateFlowsResponse_StatusCode400) FromJson(value string) error {
-	opts := protojson.UnmarshalOptions{
-		AllowPartial:   true,
-		DiscardUnknown: true,
-	}
-	return opts.Unmarshal([]byte(value), obj.msg())
-}
-
-type UpdateFlowsResponse_StatusCode400 interface {
-	msg() *snappipb.UpdateFlowsResponse_StatusCode400
-	ToPbText() string
-	ToYaml() string
-	ToJson() string
-	FromPbText(value string) error
-	FromYaml(value string) error
-	FromJson(value string) error
-	BadRequest() BadRequest
-}
-
-// BadRequest returns a BadRequest
-//  description is TBD
-func (obj *updateFlowsResponse_StatusCode400) BadRequest() BadRequest {
-	if obj.obj.BadRequest == nil {
-		obj.obj.BadRequest = &snappipb.BadRequest{}
-	}
-
-	return &badRequest{obj: obj.obj.BadRequest}
-}
-
-type updateFlowsResponse_StatusCode500 struct {
-	obj *snappipb.UpdateFlowsResponse_StatusCode500
-}
-
-func (obj *updateFlowsResponse_StatusCode500) msg() *snappipb.UpdateFlowsResponse_StatusCode500 {
-	return obj.obj
-}
-
-func (obj *updateFlowsResponse_StatusCode500) ToPbText() string {
-	return proto.MarshalTextString(obj.msg())
-}
-
-func (obj *updateFlowsResponse_StatusCode500) FromPbText(value string) error {
-	return proto.UnmarshalText(value, obj.msg())
-}
-
-func (obj *updateFlowsResponse_StatusCode500) ToYaml() string {
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(obj.msg())
-	data, err = yaml.JSONToYAML(data)
-	if err != nil {
-		panic(err)
-	}
-	return string(data)
-}
-
-func (obj *updateFlowsResponse_StatusCode500) FromYaml(value string) error {
-	data, err := yaml.YAMLToJSON([]byte(value))
-	if err != nil {
-		return err
-	}
-	opts := protojson.UnmarshalOptions{
-		AllowPartial:   true,
-		DiscardUnknown: true,
-	}
-	return opts.Unmarshal([]byte(data), obj.msg())
-}
-
-func (obj *updateFlowsResponse_StatusCode500) ToJson() string {
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-		Indent:          "  ",
-	}
-	data, err := opts.Marshal(obj.msg())
-	if err != nil {
-		panic(err)
-	}
-	return string(data)
-}
-
-func (obj *updateFlowsResponse_StatusCode500) FromJson(value string) error {
-	opts := protojson.UnmarshalOptions{
-		AllowPartial:   true,
-		DiscardUnknown: true,
-	}
-	return opts.Unmarshal([]byte(value), obj.msg())
-}
-
-type UpdateFlowsResponse_StatusCode500 interface {
-	msg() *snappipb.UpdateFlowsResponse_StatusCode500
-	ToPbText() string
-	ToYaml() string
-	ToJson() string
-	FromPbText(value string) error
-	FromYaml(value string) error
-	FromJson(value string) error
-	InternalServerError() InternalServerError
-}
-
-// InternalServerError returns a InternalServerError
-//  description is TBD
-func (obj *updateFlowsResponse_StatusCode500) InternalServerError() InternalServerError {
-	if obj.obj.InternalServerError == nil {
-		obj.obj.InternalServerError = &snappipb.InternalServerError{}
-	}
-
-	return &internalServerError{obj: obj.obj.InternalServerError}
-}
-
-type setRouteStateResponse_StatusCode200 struct {
-	obj *snappipb.SetRouteStateResponse_StatusCode200
-}
-
-func (obj *setRouteStateResponse_StatusCode200) msg() *snappipb.SetRouteStateResponse_StatusCode200 {
-	return obj.obj
-}
-
-func (obj *setRouteStateResponse_StatusCode200) ToPbText() string {
-	return proto.MarshalTextString(obj.msg())
-}
-
-func (obj *setRouteStateResponse_StatusCode200) FromPbText(value string) error {
-	return proto.UnmarshalText(value, obj.msg())
-}
-
-func (obj *setRouteStateResponse_StatusCode200) ToYaml() string {
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(obj.msg())
-	data, err = yaml.JSONToYAML(data)
-	if err != nil {
-		panic(err)
-	}
-	return string(data)
-}
-
-func (obj *setRouteStateResponse_StatusCode200) FromYaml(value string) error {
-	data, err := yaml.YAMLToJSON([]byte(value))
-	if err != nil {
-		return err
-	}
-	opts := protojson.UnmarshalOptions{
-		AllowPartial:   true,
-		DiscardUnknown: true,
-	}
-	return opts.Unmarshal([]byte(data), obj.msg())
-}
-
-func (obj *setRouteStateResponse_StatusCode200) ToJson() string {
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-		Indent:          "  ",
-	}
-	data, err := opts.Marshal(obj.msg())
-	if err != nil {
-		panic(err)
-	}
-	return string(data)
-}
-
-func (obj *setRouteStateResponse_StatusCode200) FromJson(value string) error {
-	opts := protojson.UnmarshalOptions{
-		AllowPartial:   true,
-		DiscardUnknown: true,
-	}
-	return opts.Unmarshal([]byte(value), obj.msg())
-}
-
-type SetRouteStateResponse_StatusCode200 interface {
-	msg() *snappipb.SetRouteStateResponse_StatusCode200
-	ToPbText() string
-	ToYaml() string
-	ToJson() string
-	FromPbText(value string) error
-	FromYaml(value string) error
-	FromJson(value string) error
-	Success() Success
-}
-
-// Success returns a Success
-//  description is TBD
-func (obj *setRouteStateResponse_StatusCode200) Success() Success {
-	if obj.obj.Success == nil {
-		obj.obj.Success = &snappipb.Success{}
-	}
-
-	return &success{obj: obj.obj.Success}
-}
-
-type setRouteStateResponse_StatusCode400 struct {
-	obj *snappipb.SetRouteStateResponse_StatusCode400
-}
-
-func (obj *setRouteStateResponse_StatusCode400) msg() *snappipb.SetRouteStateResponse_StatusCode400 {
-	return obj.obj
-}
-
-func (obj *setRouteStateResponse_StatusCode400) ToPbText() string {
-	return proto.MarshalTextString(obj.msg())
-}
-
-func (obj *setRouteStateResponse_StatusCode400) FromPbText(value string) error {
-	return proto.UnmarshalText(value, obj.msg())
-}
-
-func (obj *setRouteStateResponse_StatusCode400) ToYaml() string {
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(obj.msg())
-	data, err = yaml.JSONToYAML(data)
-	if err != nil {
-		panic(err)
-	}
-	return string(data)
-}
-
-func (obj *setRouteStateResponse_StatusCode400) FromYaml(value string) error {
-	data, err := yaml.YAMLToJSON([]byte(value))
-	if err != nil {
-		return err
-	}
-	opts := protojson.UnmarshalOptions{
-		AllowPartial:   true,
-		DiscardUnknown: true,
-	}
-	return opts.Unmarshal([]byte(data), obj.msg())
-}
-
-func (obj *setRouteStateResponse_StatusCode400) ToJson() string {
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-		Indent:          "  ",
-	}
-	data, err := opts.Marshal(obj.msg())
-	if err != nil {
-		panic(err)
-	}
-	return string(data)
-}
-
-func (obj *setRouteStateResponse_StatusCode400) FromJson(value string) error {
-	opts := protojson.UnmarshalOptions{
-		AllowPartial:   true,
-		DiscardUnknown: true,
-	}
-	return opts.Unmarshal([]byte(value), obj.msg())
-}
-
-type SetRouteStateResponse_StatusCode400 interface {
-	msg() *snappipb.SetRouteStateResponse_StatusCode400
-	ToPbText() string
-	ToYaml() string
-	ToJson() string
-	FromPbText(value string) error
-	FromYaml(value string) error
-	FromJson(value string) error
-	BadRequest() BadRequest
-}
-
-// BadRequest returns a BadRequest
-//  description is TBD
-func (obj *setRouteStateResponse_StatusCode400) BadRequest() BadRequest {
-	if obj.obj.BadRequest == nil {
-		obj.obj.BadRequest = &snappipb.BadRequest{}
-	}
-
-	return &badRequest{obj: obj.obj.BadRequest}
-}
-
-type setRouteStateResponse_StatusCode500 struct {
-	obj *snappipb.SetRouteStateResponse_StatusCode500
-}
-
-func (obj *setRouteStateResponse_StatusCode500) msg() *snappipb.SetRouteStateResponse_StatusCode500 {
-	return obj.obj
-}
-
-func (obj *setRouteStateResponse_StatusCode500) ToPbText() string {
-	return proto.MarshalTextString(obj.msg())
-}
-
-func (obj *setRouteStateResponse_StatusCode500) FromPbText(value string) error {
-	return proto.UnmarshalText(value, obj.msg())
-}
-
-func (obj *setRouteStateResponse_StatusCode500) ToYaml() string {
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(obj.msg())
-	data, err = yaml.JSONToYAML(data)
-	if err != nil {
-		panic(err)
-	}
-	return string(data)
-}
-
-func (obj *setRouteStateResponse_StatusCode500) FromYaml(value string) error {
-	data, err := yaml.YAMLToJSON([]byte(value))
-	if err != nil {
-		return err
-	}
-	opts := protojson.UnmarshalOptions{
-		AllowPartial:   true,
-		DiscardUnknown: true,
-	}
-	return opts.Unmarshal([]byte(data), obj.msg())
-}
-
-func (obj *setRouteStateResponse_StatusCode500) ToJson() string {
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-		Indent:          "  ",
-	}
-	data, err := opts.Marshal(obj.msg())
-	if err != nil {
-		panic(err)
-	}
-	return string(data)
-}
-
-func (obj *setRouteStateResponse_StatusCode500) FromJson(value string) error {
-	opts := protojson.UnmarshalOptions{
-		AllowPartial:   true,
-		DiscardUnknown: true,
-	}
-	return opts.Unmarshal([]byte(value), obj.msg())
-}
-
-type SetRouteStateResponse_StatusCode500 interface {
-	msg() *snappipb.SetRouteStateResponse_StatusCode500
-	ToPbText() string
-	ToYaml() string
-	ToJson() string
-	FromPbText(value string) error
-	FromYaml(value string) error
-	FromJson(value string) error
-	InternalServerError() InternalServerError
-}
-
-// InternalServerError returns a InternalServerError
-//  description is TBD
-func (obj *setRouteStateResponse_StatusCode500) InternalServerError() InternalServerError {
-	if obj.obj.InternalServerError == nil {
-		obj.obj.InternalServerError = &snappipb.InternalServerError{}
-	}
-
-	return &internalServerError{obj: obj.obj.InternalServerError}
-}
-
-type getMetricsResponse_StatusCode200 struct {
-	obj *snappipb.GetMetricsResponse_StatusCode200
-}
-
-func (obj *getMetricsResponse_StatusCode200) msg() *snappipb.GetMetricsResponse_StatusCode200 {
-	return obj.obj
-}
-
-func (obj *getMetricsResponse_StatusCode200) ToPbText() string {
-	return proto.MarshalTextString(obj.msg())
-}
-
-func (obj *getMetricsResponse_StatusCode200) FromPbText(value string) error {
-	return proto.UnmarshalText(value, obj.msg())
-}
-
-func (obj *getMetricsResponse_StatusCode200) ToYaml() string {
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(obj.msg())
-	data, err = yaml.JSONToYAML(data)
-	if err != nil {
-		panic(err)
-	}
-	return string(data)
-}
-
-func (obj *getMetricsResponse_StatusCode200) FromYaml(value string) error {
-	data, err := yaml.YAMLToJSON([]byte(value))
-	if err != nil {
-		return err
-	}
-	opts := protojson.UnmarshalOptions{
-		AllowPartial:   true,
-		DiscardUnknown: true,
-	}
-	return opts.Unmarshal([]byte(data), obj.msg())
-}
-
-func (obj *getMetricsResponse_StatusCode200) ToJson() string {
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-		Indent:          "  ",
-	}
-	data, err := opts.Marshal(obj.msg())
-	if err != nil {
-		panic(err)
-	}
-	return string(data)
-}
-
-func (obj *getMetricsResponse_StatusCode200) FromJson(value string) error {
-	opts := protojson.UnmarshalOptions{
-		AllowPartial:   true,
-		DiscardUnknown: true,
-	}
-	return opts.Unmarshal([]byte(value), obj.msg())
-}
-
-type GetMetricsResponse_StatusCode200 interface {
-	msg() *snappipb.GetMetricsResponse_StatusCode200
-	ToPbText() string
-	ToYaml() string
-	ToJson() string
-	FromPbText(value string) error
-	FromYaml(value string) error
-	FromJson(value string) error
-	MetricsResponse() MetricsResponse
-}
-
-// MetricsResponse returns a MetricsResponse
-//  description is TBD
-func (obj *getMetricsResponse_StatusCode200) MetricsResponse() MetricsResponse {
-	if obj.obj.MetricsResponse == nil {
-		obj.obj.MetricsResponse = &snappipb.MetricsResponse{}
-	}
-
-	return &metricsResponse{obj: obj.obj.MetricsResponse}
-}
-
-type getMetricsResponse_StatusCode400 struct {
-	obj *snappipb.GetMetricsResponse_StatusCode400
-}
-
-func (obj *getMetricsResponse_StatusCode400) msg() *snappipb.GetMetricsResponse_StatusCode400 {
-	return obj.obj
-}
-
-func (obj *getMetricsResponse_StatusCode400) ToPbText() string {
-	return proto.MarshalTextString(obj.msg())
-}
-
-func (obj *getMetricsResponse_StatusCode400) FromPbText(value string) error {
-	return proto.UnmarshalText(value, obj.msg())
-}
-
-func (obj *getMetricsResponse_StatusCode400) ToYaml() string {
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(obj.msg())
-	data, err = yaml.JSONToYAML(data)
-	if err != nil {
-		panic(err)
-	}
-	return string(data)
-}
-
-func (obj *getMetricsResponse_StatusCode400) FromYaml(value string) error {
-	data, err := yaml.YAMLToJSON([]byte(value))
-	if err != nil {
-		return err
-	}
-	opts := protojson.UnmarshalOptions{
-		AllowPartial:   true,
-		DiscardUnknown: true,
-	}
-	return opts.Unmarshal([]byte(data), obj.msg())
-}
-
-func (obj *getMetricsResponse_StatusCode400) ToJson() string {
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-		Indent:          "  ",
-	}
-	data, err := opts.Marshal(obj.msg())
-	if err != nil {
-		panic(err)
-	}
-	return string(data)
-}
-
-func (obj *getMetricsResponse_StatusCode400) FromJson(value string) error {
-	opts := protojson.UnmarshalOptions{
-		AllowPartial:   true,
-		DiscardUnknown: true,
-	}
-	return opts.Unmarshal([]byte(value), obj.msg())
-}
-
-type GetMetricsResponse_StatusCode400 interface {
-	msg() *snappipb.GetMetricsResponse_StatusCode400
-	ToPbText() string
-	ToYaml() string
-	ToJson() string
-	FromPbText(value string) error
-	FromYaml(value string) error
-	FromJson(value string) error
-	BadRequest() BadRequest
-}
-
-// BadRequest returns a BadRequest
-//  description is TBD
-func (obj *getMetricsResponse_StatusCode400) BadRequest() BadRequest {
-	if obj.obj.BadRequest == nil {
-		obj.obj.BadRequest = &snappipb.BadRequest{}
-	}
-
-	return &badRequest{obj: obj.obj.BadRequest}
-}
-
-type getMetricsResponse_StatusCode500 struct {
-	obj *snappipb.GetMetricsResponse_StatusCode500
-}
-
-func (obj *getMetricsResponse_StatusCode500) msg() *snappipb.GetMetricsResponse_StatusCode500 {
-	return obj.obj
-}
-
-func (obj *getMetricsResponse_StatusCode500) ToPbText() string {
-	return proto.MarshalTextString(obj.msg())
-}
-
-func (obj *getMetricsResponse_StatusCode500) FromPbText(value string) error {
-	return proto.UnmarshalText(value, obj.msg())
-}
-
-func (obj *getMetricsResponse_StatusCode500) ToYaml() string {
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(obj.msg())
-	data, err = yaml.JSONToYAML(data)
-	if err != nil {
-		panic(err)
-	}
-	return string(data)
-}
-
-func (obj *getMetricsResponse_StatusCode500) FromYaml(value string) error {
-	data, err := yaml.YAMLToJSON([]byte(value))
-	if err != nil {
-		return err
-	}
-	opts := protojson.UnmarshalOptions{
-		AllowPartial:   true,
-		DiscardUnknown: true,
-	}
-	return opts.Unmarshal([]byte(data), obj.msg())
-}
-
-func (obj *getMetricsResponse_StatusCode500) ToJson() string {
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-		Indent:          "  ",
-	}
-	data, err := opts.Marshal(obj.msg())
-	if err != nil {
-		panic(err)
-	}
-	return string(data)
-}
-
-func (obj *getMetricsResponse_StatusCode500) FromJson(value string) error {
-	opts := protojson.UnmarshalOptions{
-		AllowPartial:   true,
-		DiscardUnknown: true,
-	}
-	return opts.Unmarshal([]byte(value), obj.msg())
-}
-
-type GetMetricsResponse_StatusCode500 interface {
-	msg() *snappipb.GetMetricsResponse_StatusCode500
-	ToPbText() string
-	ToYaml() string
-	ToJson() string
-	FromPbText(value string) error
-	FromYaml(value string) error
-	FromJson(value string) error
-	InternalServerError() InternalServerError
-}
-
-// InternalServerError returns a InternalServerError
-//  description is TBD
-func (obj *getMetricsResponse_StatusCode500) InternalServerError() InternalServerError {
-	if obj.obj.InternalServerError == nil {
-		obj.obj.InternalServerError = &snappipb.InternalServerError{}
-	}
-
-	return &internalServerError{obj: obj.obj.InternalServerError}
-}
-
-type getStateMetricsResponse_StatusCode200 struct {
-	obj *snappipb.GetStateMetricsResponse_StatusCode200
-}
-
-func (obj *getStateMetricsResponse_StatusCode200) msg() *snappipb.GetStateMetricsResponse_StatusCode200 {
-	return obj.obj
-}
-
-func (obj *getStateMetricsResponse_StatusCode200) ToPbText() string {
-	return proto.MarshalTextString(obj.msg())
-}
-
-func (obj *getStateMetricsResponse_StatusCode200) FromPbText(value string) error {
-	return proto.UnmarshalText(value, obj.msg())
-}
-
-func (obj *getStateMetricsResponse_StatusCode200) ToYaml() string {
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(obj.msg())
-	data, err = yaml.JSONToYAML(data)
-	if err != nil {
-		panic(err)
-	}
-	return string(data)
-}
-
-func (obj *getStateMetricsResponse_StatusCode200) FromYaml(value string) error {
-	data, err := yaml.YAMLToJSON([]byte(value))
-	if err != nil {
-		return err
-	}
-	opts := protojson.UnmarshalOptions{
-		AllowPartial:   true,
-		DiscardUnknown: true,
-	}
-	return opts.Unmarshal([]byte(data), obj.msg())
-}
-
-func (obj *getStateMetricsResponse_StatusCode200) ToJson() string {
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-		Indent:          "  ",
-	}
-	data, err := opts.Marshal(obj.msg())
-	if err != nil {
-		panic(err)
-	}
-	return string(data)
-}
-
-func (obj *getStateMetricsResponse_StatusCode200) FromJson(value string) error {
-	opts := protojson.UnmarshalOptions{
-		AllowPartial:   true,
-		DiscardUnknown: true,
-	}
-	return opts.Unmarshal([]byte(value), obj.msg())
-}
-
-type GetStateMetricsResponse_StatusCode200 interface {
-	msg() *snappipb.GetStateMetricsResponse_StatusCode200
-	ToPbText() string
-	ToYaml() string
-	ToJson() string
-	FromPbText(value string) error
-	FromYaml(value string) error
-	FromJson(value string) error
-	StateMetrics() StateMetrics
-}
-
-// StateMetrics returns a StateMetrics
-//  description is TBD
-func (obj *getStateMetricsResponse_StatusCode200) StateMetrics() StateMetrics {
-	if obj.obj.StateMetrics == nil {
-		obj.obj.StateMetrics = &snappipb.StateMetrics{}
-	}
-
-	return &stateMetrics{obj: obj.obj.StateMetrics}
-}
-
-type getStateMetricsResponse_StatusCode400 struct {
-	obj *snappipb.GetStateMetricsResponse_StatusCode400
-}
-
-func (obj *getStateMetricsResponse_StatusCode400) msg() *snappipb.GetStateMetricsResponse_StatusCode400 {
-	return obj.obj
-}
-
-func (obj *getStateMetricsResponse_StatusCode400) ToPbText() string {
-	return proto.MarshalTextString(obj.msg())
-}
-
-func (obj *getStateMetricsResponse_StatusCode400) FromPbText(value string) error {
-	return proto.UnmarshalText(value, obj.msg())
-}
-
-func (obj *getStateMetricsResponse_StatusCode400) ToYaml() string {
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(obj.msg())
-	data, err = yaml.JSONToYAML(data)
-	if err != nil {
-		panic(err)
-	}
-	return string(data)
-}
-
-func (obj *getStateMetricsResponse_StatusCode400) FromYaml(value string) error {
-	data, err := yaml.YAMLToJSON([]byte(value))
-	if err != nil {
-		return err
-	}
-	opts := protojson.UnmarshalOptions{
-		AllowPartial:   true,
-		DiscardUnknown: true,
-	}
-	return opts.Unmarshal([]byte(data), obj.msg())
-}
-
-func (obj *getStateMetricsResponse_StatusCode400) ToJson() string {
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-		Indent:          "  ",
-	}
-	data, err := opts.Marshal(obj.msg())
-	if err != nil {
-		panic(err)
-	}
-	return string(data)
-}
-
-func (obj *getStateMetricsResponse_StatusCode400) FromJson(value string) error {
-	opts := protojson.UnmarshalOptions{
-		AllowPartial:   true,
-		DiscardUnknown: true,
-	}
-	return opts.Unmarshal([]byte(value), obj.msg())
-}
-
-type GetStateMetricsResponse_StatusCode400 interface {
-	msg() *snappipb.GetStateMetricsResponse_StatusCode400
-	ToPbText() string
-	ToYaml() string
-	ToJson() string
-	FromPbText(value string) error
-	FromYaml(value string) error
-	FromJson(value string) error
-	BadRequest() BadRequest
-}
-
-// BadRequest returns a BadRequest
-//  description is TBD
-func (obj *getStateMetricsResponse_StatusCode400) BadRequest() BadRequest {
-	if obj.obj.BadRequest == nil {
-		obj.obj.BadRequest = &snappipb.BadRequest{}
-	}
-
-	return &badRequest{obj: obj.obj.BadRequest}
-}
-
-type getStateMetricsResponse_StatusCode500 struct {
-	obj *snappipb.GetStateMetricsResponse_StatusCode500
-}
-
-func (obj *getStateMetricsResponse_StatusCode500) msg() *snappipb.GetStateMetricsResponse_StatusCode500 {
-	return obj.obj
-}
-
-func (obj *getStateMetricsResponse_StatusCode500) ToPbText() string {
-	return proto.MarshalTextString(obj.msg())
-}
-
-func (obj *getStateMetricsResponse_StatusCode500) FromPbText(value string) error {
-	return proto.UnmarshalText(value, obj.msg())
-}
-
-func (obj *getStateMetricsResponse_StatusCode500) ToYaml() string {
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(obj.msg())
-	data, err = yaml.JSONToYAML(data)
-	if err != nil {
-		panic(err)
-	}
-	return string(data)
-}
-
-func (obj *getStateMetricsResponse_StatusCode500) FromYaml(value string) error {
-	data, err := yaml.YAMLToJSON([]byte(value))
-	if err != nil {
-		return err
-	}
-	opts := protojson.UnmarshalOptions{
-		AllowPartial:   true,
-		DiscardUnknown: true,
-	}
-	return opts.Unmarshal([]byte(data), obj.msg())
-}
-
-func (obj *getStateMetricsResponse_StatusCode500) ToJson() string {
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-		Indent:          "  ",
-	}
-	data, err := opts.Marshal(obj.msg())
-	if err != nil {
-		panic(err)
-	}
-	return string(data)
-}
-
-func (obj *getStateMetricsResponse_StatusCode500) FromJson(value string) error {
-	opts := protojson.UnmarshalOptions{
-		AllowPartial:   true,
-		DiscardUnknown: true,
-	}
-	return opts.Unmarshal([]byte(value), obj.msg())
-}
-
-type GetStateMetricsResponse_StatusCode500 interface {
-	msg() *snappipb.GetStateMetricsResponse_StatusCode500
-	ToPbText() string
-	ToYaml() string
-	ToJson() string
-	FromPbText(value string) error
-	FromYaml(value string) error
-	FromJson(value string) error
-	InternalServerError() InternalServerError
-}
-
-// InternalServerError returns a InternalServerError
-//  description is TBD
-func (obj *getStateMetricsResponse_StatusCode500) InternalServerError() InternalServerError {
-	if obj.obj.InternalServerError == nil {
-		obj.obj.InternalServerError = &snappipb.InternalServerError{}
-	}
-
-	return &internalServerError{obj: obj.obj.InternalServerError}
-}
-
-type getCaptureResponse_StatusCode200 struct {
-	obj *snappipb.GetCaptureResponse_StatusCode200
-}
-
-func (obj *getCaptureResponse_StatusCode200) msg() *snappipb.GetCaptureResponse_StatusCode200 {
-	return obj.obj
-}
-
-func (obj *getCaptureResponse_StatusCode200) ToPbText() string {
-	return proto.MarshalTextString(obj.msg())
-}
-
-func (obj *getCaptureResponse_StatusCode200) FromPbText(value string) error {
-	return proto.UnmarshalText(value, obj.msg())
-}
-
-func (obj *getCaptureResponse_StatusCode200) ToYaml() string {
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(obj.msg())
-	data, err = yaml.JSONToYAML(data)
-	if err != nil {
-		panic(err)
-	}
-	return string(data)
-}
-
-func (obj *getCaptureResponse_StatusCode200) FromYaml(value string) error {
-	data, err := yaml.YAMLToJSON([]byte(value))
-	if err != nil {
-		return err
-	}
-	opts := protojson.UnmarshalOptions{
-		AllowPartial:   true,
-		DiscardUnknown: true,
-	}
-	return opts.Unmarshal([]byte(data), obj.msg())
-}
-
-func (obj *getCaptureResponse_StatusCode200) ToJson() string {
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-		Indent:          "  ",
-	}
-	data, err := opts.Marshal(obj.msg())
-	if err != nil {
-		panic(err)
-	}
-	return string(data)
-}
-
-func (obj *getCaptureResponse_StatusCode200) FromJson(value string) error {
-	opts := protojson.UnmarshalOptions{
-		AllowPartial:   true,
-		DiscardUnknown: true,
-	}
-	return opts.Unmarshal([]byte(value), obj.msg())
-}
-
-type GetCaptureResponse_StatusCode200 interface {
-	msg() *snappipb.GetCaptureResponse_StatusCode200
-	ToPbText() string
-	ToYaml() string
-	ToJson() string
-	FromPbText(value string) error
-	FromYaml(value string) error
-	FromJson(value string) error
-	Bytes() []byte
-	SetBytes(value []byte) GetCaptureResponse_StatusCode200
-}
-
-// Bytes returns a []byte
-//  description is TBD
-func (obj *getCaptureResponse_StatusCode200) Bytes() []byte {
-	return obj.obj.Bytes
-}
-
-// SetBytes sets the []byte value in the GetCaptureResponse_StatusCode200 object
-//  description is TBD
-func (obj *getCaptureResponse_StatusCode200) SetBytes(value []byte) GetCaptureResponse_StatusCode200 {
-	obj.obj.Bytes = value
+func (obj *getCaptureResponse) SetStatusCode200(value []byte) GetCaptureResponse {
+	obj.obj.StatusCode_200 = value
 
 	return obj
 }
 
-type getCaptureResponse_StatusCode400 struct {
-	obj *snappipb.GetCaptureResponse_StatusCode400
-}
-
-func (obj *getCaptureResponse_StatusCode400) msg() *snappipb.GetCaptureResponse_StatusCode400 {
-	return obj.obj
-}
-
-func (obj *getCaptureResponse_StatusCode400) ToPbText() string {
-	return proto.MarshalTextString(obj.msg())
-}
-
-func (obj *getCaptureResponse_StatusCode400) FromPbText(value string) error {
-	return proto.UnmarshalText(value, obj.msg())
-}
-
-func (obj *getCaptureResponse_StatusCode400) ToYaml() string {
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(obj.msg())
-	data, err = yaml.JSONToYAML(data)
-	if err != nil {
-		panic(err)
-	}
-	return string(data)
-}
-
-func (obj *getCaptureResponse_StatusCode400) FromYaml(value string) error {
-	data, err := yaml.YAMLToJSON([]byte(value))
-	if err != nil {
-		return err
-	}
-	opts := protojson.UnmarshalOptions{
-		AllowPartial:   true,
-		DiscardUnknown: true,
-	}
-	return opts.Unmarshal([]byte(data), obj.msg())
-}
-
-func (obj *getCaptureResponse_StatusCode400) ToJson() string {
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-		Indent:          "  ",
-	}
-	data, err := opts.Marshal(obj.msg())
-	if err != nil {
-		panic(err)
-	}
-	return string(data)
-}
-
-func (obj *getCaptureResponse_StatusCode400) FromJson(value string) error {
-	opts := protojson.UnmarshalOptions{
-		AllowPartial:   true,
-		DiscardUnknown: true,
-	}
-	return opts.Unmarshal([]byte(value), obj.msg())
-}
-
-type GetCaptureResponse_StatusCode400 interface {
-	msg() *snappipb.GetCaptureResponse_StatusCode400
-	ToPbText() string
-	ToYaml() string
-	ToJson() string
-	FromPbText(value string) error
-	FromYaml(value string) error
-	FromJson(value string) error
-	BadRequest() BadRequest
-}
-
-// BadRequest returns a BadRequest
+// StatusCode400 returns a ResponseError
 //  description is TBD
-func (obj *getCaptureResponse_StatusCode400) BadRequest() BadRequest {
-	if obj.obj.BadRequest == nil {
-		obj.obj.BadRequest = &snappipb.BadRequest{}
+func (obj *getCaptureResponse) StatusCode400() ResponseError {
+	if obj.obj.StatusCode_400 == nil {
+		obj.obj.StatusCode_400 = &snappipb.ResponseError{}
 	}
 
-	return &badRequest{obj: obj.obj.BadRequest}
+	return &responseError{obj: obj.obj.StatusCode_400}
 }
 
-type getCaptureResponse_StatusCode500 struct {
-	obj *snappipb.GetCaptureResponse_StatusCode500
-}
-
-func (obj *getCaptureResponse_StatusCode500) msg() *snappipb.GetCaptureResponse_StatusCode500 {
-	return obj.obj
-}
-
-func (obj *getCaptureResponse_StatusCode500) ToPbText() string {
-	return proto.MarshalTextString(obj.msg())
-}
-
-func (obj *getCaptureResponse_StatusCode500) FromPbText(value string) error {
-	return proto.UnmarshalText(value, obj.msg())
-}
-
-func (obj *getCaptureResponse_StatusCode500) ToYaml() string {
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(obj.msg())
-	data, err = yaml.JSONToYAML(data)
-	if err != nil {
-		panic(err)
-	}
-	return string(data)
-}
-
-func (obj *getCaptureResponse_StatusCode500) FromYaml(value string) error {
-	data, err := yaml.YAMLToJSON([]byte(value))
-	if err != nil {
-		return err
-	}
-	opts := protojson.UnmarshalOptions{
-		AllowPartial:   true,
-		DiscardUnknown: true,
-	}
-	return opts.Unmarshal([]byte(data), obj.msg())
-}
-
-func (obj *getCaptureResponse_StatusCode500) ToJson() string {
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-		Indent:          "  ",
-	}
-	data, err := opts.Marshal(obj.msg())
-	if err != nil {
-		panic(err)
-	}
-	return string(data)
-}
-
-func (obj *getCaptureResponse_StatusCode500) FromJson(value string) error {
-	opts := protojson.UnmarshalOptions{
-		AllowPartial:   true,
-		DiscardUnknown: true,
-	}
-	return opts.Unmarshal([]byte(value), obj.msg())
-}
-
-type GetCaptureResponse_StatusCode500 interface {
-	msg() *snappipb.GetCaptureResponse_StatusCode500
-	ToPbText() string
-	ToYaml() string
-	ToJson() string
-	FromPbText(value string) error
-	FromYaml(value string) error
-	FromJson(value string) error
-	InternalServerError() InternalServerError
-}
-
-// InternalServerError returns a InternalServerError
+// StatusCode500 returns a ResponseError
 //  description is TBD
-func (obj *getCaptureResponse_StatusCode500) InternalServerError() InternalServerError {
-	if obj.obj.InternalServerError == nil {
-		obj.obj.InternalServerError = &snappipb.InternalServerError{}
+func (obj *getCaptureResponse) StatusCode500() ResponseError {
+	if obj.obj.StatusCode_500 == nil {
+		obj.obj.StatusCode_500 = &snappipb.ResponseError{}
 	}
 
-	return &internalServerError{obj: obj.obj.InternalServerError}
+	return &responseError{obj: obj.obj.StatusCode_500}
 }
 
 type port struct {
@@ -4799,7 +3240,7 @@ func (obj *port) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -4821,7 +3262,7 @@ func (obj *port) ToJson() string {
 func (obj *port) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -4921,7 +3362,7 @@ func (obj *lag) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -4943,7 +3384,7 @@ func (obj *lag) ToJson() string {
 func (obj *lag) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -5044,7 +3485,7 @@ func (obj *layer1) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -5066,7 +3507,7 @@ func (obj *layer1) ToJson() string {
 func (obj *layer1) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -5330,7 +3771,7 @@ func (obj *capture) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -5352,7 +3793,7 @@ func (obj *capture) ToJson() string {
 func (obj *capture) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -5549,7 +3990,7 @@ func (obj *device) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -5571,7 +4012,7 @@ func (obj *device) ToJson() string {
 func (obj *device) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -5686,7 +4127,7 @@ func (obj *flow) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -5708,7 +4149,7 @@ func (obj *flow) ToJson() string {
 func (obj *flow) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -5875,7 +4316,7 @@ func (obj *event) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -5897,7 +4338,7 @@ func (obj *event) ToJson() string {
 func (obj *event) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -6002,7 +4443,7 @@ func (obj *configOptions) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -6024,7 +4465,7 @@ func (obj *configOptions) ToJson() string {
 func (obj *configOptions) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -6087,7 +4528,7 @@ func (obj *portMetricsRequest) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -6109,7 +4550,7 @@ func (obj *portMetricsRequest) ToJson() string {
 func (obj *portMetricsRequest) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -6254,7 +4695,7 @@ func (obj *flowMetricsRequest) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -6276,7 +4717,7 @@ func (obj *flowMetricsRequest) ToJson() string {
 func (obj *flowMetricsRequest) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -6424,7 +4865,7 @@ func (obj *bgpv4MetricsRequest) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -6446,7 +4887,7 @@ func (obj *bgpv4MetricsRequest) ToJson() string {
 func (obj *bgpv4MetricsRequest) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -6595,7 +5036,7 @@ func (obj *bgpv6MetricsRequest) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -6617,7 +5058,7 @@ func (obj *bgpv6MetricsRequest) ToJson() string {
 func (obj *bgpv6MetricsRequest) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -6729,23 +5170,23 @@ func (obj *bgpv6MetricsRequest) SetColumnNames(value []Bgpv6MetricsRequestColumn
 	return obj
 }
 
-type success struct {
-	obj *snappipb.Success
+type responseWarning struct {
+	obj *snappipb.ResponseWarning
 }
 
-func (obj *success) msg() *snappipb.Success {
+func (obj *responseWarning) msg() *snappipb.ResponseWarning {
 	return obj.obj
 }
 
-func (obj *success) ToPbText() string {
+func (obj *responseWarning) ToPbText() string {
 	return proto.MarshalTextString(obj.msg())
 }
 
-func (obj *success) FromPbText(value string) error {
+func (obj *responseWarning) FromPbText(value string) error {
 	return proto.UnmarshalText(value, obj.msg())
 }
 
-func (obj *success) ToYaml() string {
+func (obj *responseWarning) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
 		AllowPartial:    true,
@@ -6759,19 +5200,19 @@ func (obj *success) ToYaml() string {
 	return string(data)
 }
 
-func (obj *success) FromYaml(value string) error {
+func (obj *responseWarning) FromYaml(value string) error {
 	data, err := yaml.YAMLToJSON([]byte(value))
 	if err != nil {
 		return err
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
 
-func (obj *success) ToJson() string {
+func (obj *responseWarning) ToJson() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
 		AllowPartial:    true,
@@ -6785,41 +5226,67 @@ func (obj *success) ToJson() string {
 	return string(data)
 }
 
-func (obj *success) FromJson(value string) error {
+func (obj *responseWarning) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
 
-type Success interface {
-	msg() *snappipb.Success
+type ResponseWarning interface {
+	msg() *snappipb.ResponseWarning
 	ToPbText() string
 	ToYaml() string
 	ToJson() string
 	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
+	Warnings() []string
+	SetWarnings(value []string) ResponseWarning
 }
 
-type badRequest struct {
-	obj *snappipb.BadRequest
+// Warnings returns a []string
+//  A list of any system specific warnings that have occurred while
+//  executing the request.
+func (obj *responseWarning) Warnings() []string {
+	if obj.obj.Warnings == nil {
+		obj.obj.Warnings = make([]string, 0)
+	}
+	return obj.obj.Warnings
 }
 
-func (obj *badRequest) msg() *snappipb.BadRequest {
+// SetWarnings sets the []string value in the ResponseWarning object
+//  A list of any system specific warnings that have occurred while
+//  executing the request.
+func (obj *responseWarning) SetWarnings(value []string) ResponseWarning {
+	if obj.obj.Warnings == nil {
+		obj.obj.Warnings = make([]string, 0)
+	}
+	for _, item := range value {
+		obj.obj.Warnings = append(obj.obj.Warnings, item)
+	}
+
+	return obj
+}
+
+type responseError struct {
+	obj *snappipb.ResponseError
+}
+
+func (obj *responseError) msg() *snappipb.ResponseError {
 	return obj.obj
 }
 
-func (obj *badRequest) ToPbText() string {
+func (obj *responseError) ToPbText() string {
 	return proto.MarshalTextString(obj.msg())
 }
 
-func (obj *badRequest) FromPbText(value string) error {
+func (obj *responseError) FromPbText(value string) error {
 	return proto.UnmarshalText(value, obj.msg())
 }
 
-func (obj *badRequest) ToYaml() string {
+func (obj *responseError) ToYaml() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
 		AllowPartial:    true,
@@ -6833,19 +5300,19 @@ func (obj *badRequest) ToYaml() string {
 	return string(data)
 }
 
-func (obj *badRequest) FromYaml(value string) error {
+func (obj *responseError) FromYaml(value string) error {
 	data, err := yaml.YAMLToJSON([]byte(value))
 	if err != nil {
 		return err
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
 
-func (obj *badRequest) ToJson() string {
+func (obj *responseError) ToJson() string {
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
 		AllowPartial:    true,
@@ -6859,96 +5326,48 @@ func (obj *badRequest) ToJson() string {
 	return string(data)
 }
 
-func (obj *badRequest) FromJson(value string) error {
+func (obj *responseError) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
 
-type BadRequest interface {
-	msg() *snappipb.BadRequest
+type ResponseError interface {
+	msg() *snappipb.ResponseError
 	ToPbText() string
 	ToYaml() string
 	ToJson() string
 	FromPbText(value string) error
 	FromYaml(value string) error
 	FromJson(value string) error
+	Errors() []string
+	SetErrors(value []string) ResponseError
 }
 
-type internalServerError struct {
-	obj *snappipb.InternalServerError
-}
-
-func (obj *internalServerError) msg() *snappipb.InternalServerError {
-	return obj.obj
-}
-
-func (obj *internalServerError) ToPbText() string {
-	return proto.MarshalTextString(obj.msg())
-}
-
-func (obj *internalServerError) FromPbText(value string) error {
-	return proto.UnmarshalText(value, obj.msg())
-}
-
-func (obj *internalServerError) ToYaml() string {
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
+// Errors returns a []string
+//  A list of any system specific errors that have occurred while
+//  executing the request.
+func (obj *responseError) Errors() []string {
+	if obj.obj.Errors == nil {
+		obj.obj.Errors = make([]string, 0)
 	}
-	data, err := opts.Marshal(obj.msg())
-	data, err = yaml.JSONToYAML(data)
-	if err != nil {
-		panic(err)
-	}
-	return string(data)
+	return obj.obj.Errors
 }
 
-func (obj *internalServerError) FromYaml(value string) error {
-	data, err := yaml.YAMLToJSON([]byte(value))
-	if err != nil {
-		return err
+// SetErrors sets the []string value in the ResponseError object
+//  A list of any system specific errors that have occurred while
+//  executing the request.
+func (obj *responseError) SetErrors(value []string) ResponseError {
+	if obj.obj.Errors == nil {
+		obj.obj.Errors = make([]string, 0)
 	}
-	opts := protojson.UnmarshalOptions{
-		AllowPartial:   true,
-		DiscardUnknown: true,
+	for _, item := range value {
+		obj.obj.Errors = append(obj.obj.Errors, item)
 	}
-	return opts.Unmarshal([]byte(data), obj.msg())
-}
 
-func (obj *internalServerError) ToJson() string {
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-		Indent:          "  ",
-	}
-	data, err := opts.Marshal(obj.msg())
-	if err != nil {
-		panic(err)
-	}
-	return string(data)
-}
-
-func (obj *internalServerError) FromJson(value string) error {
-	opts := protojson.UnmarshalOptions{
-		AllowPartial:   true,
-		DiscardUnknown: true,
-	}
-	return opts.Unmarshal([]byte(value), obj.msg())
-}
-
-type InternalServerError interface {
-	msg() *snappipb.InternalServerError
-	ToPbText() string
-	ToYaml() string
-	ToJson() string
-	FromPbText(value string) error
-	FromYaml(value string) error
-	FromJson(value string) error
+	return obj
 }
 
 type metricsResponse struct {
@@ -6988,7 +5407,7 @@ func (obj *metricsResponse) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -7010,7 +5429,7 @@ func (obj *metricsResponse) ToJson() string {
 func (obj *metricsResponse) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -7221,7 +5640,7 @@ func (obj *stateMetrics) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -7243,7 +5662,7 @@ func (obj *stateMetrics) ToJson() string {
 func (obj *stateMetrics) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -7361,7 +5780,7 @@ func (obj *lagPort) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -7383,7 +5802,7 @@ func (obj *lagPort) ToJson() string {
 func (obj *lagPort) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -7489,7 +5908,7 @@ func (obj *layer1AutoNegotiation) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -7511,7 +5930,7 @@ func (obj *layer1AutoNegotiation) ToJson() string {
 func (obj *layer1AutoNegotiation) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -7685,7 +6104,7 @@ func (obj *layer1FlowControl) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -7707,7 +6126,7 @@ func (obj *layer1FlowControl) ToJson() string {
 func (obj *layer1FlowControl) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -7822,7 +6241,7 @@ func (obj *captureFilter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -7844,7 +6263,7 @@ func (obj *captureFilter) ToJson() string {
 func (obj *captureFilter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -7980,7 +6399,7 @@ func (obj *deviceEthernet) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -8002,7 +6421,7 @@ func (obj *deviceEthernet) ToJson() string {
 func (obj *deviceEthernet) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -8157,7 +6576,7 @@ func (obj *flowTxRx) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -8179,7 +6598,7 @@ func (obj *flowTxRx) ToJson() string {
 func (obj *flowTxRx) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -8276,7 +6695,7 @@ func (obj *flowHeader) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -8298,7 +6717,7 @@ func (obj *flowHeader) ToJson() string {
 func (obj *flowHeader) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -8603,7 +7022,7 @@ func (obj *flowSize) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -8625,7 +7044,7 @@ func (obj *flowSize) ToJson() string {
 func (obj *flowSize) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -8740,7 +7159,7 @@ func (obj *flowRate) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -8762,7 +7181,7 @@ func (obj *flowRate) ToJson() string {
 func (obj *flowRate) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -8941,7 +7360,7 @@ func (obj *flowDuration) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -8963,7 +7382,7 @@ func (obj *flowDuration) ToJson() string {
 func (obj *flowDuration) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -9086,7 +7505,7 @@ func (obj *flowMetrics) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -9108,7 +7527,7 @@ func (obj *flowMetrics) ToJson() string {
 func (obj *flowMetrics) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -9223,7 +7642,7 @@ func (obj *eventLink) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -9245,7 +7664,7 @@ func (obj *eventLink) ToJson() string {
 func (obj *eventLink) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -9313,7 +7732,7 @@ func (obj *eventRxRateThreshold) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -9335,7 +7754,7 @@ func (obj *eventRxRateThreshold) ToJson() string {
 func (obj *eventRxRateThreshold) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -9425,7 +7844,7 @@ func (obj *eventRouteAdvertiseWithdraw) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -9447,7 +7866,7 @@ func (obj *eventRouteAdvertiseWithdraw) ToJson() string {
 func (obj *eventRouteAdvertiseWithdraw) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -9517,7 +7936,7 @@ func (obj *portOptions) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -9539,7 +7958,7 @@ func (obj *portOptions) ToJson() string {
 func (obj *portOptions) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -9607,7 +8026,7 @@ func (obj *flowMetricGroupRequest) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -9629,7 +8048,7 @@ func (obj *flowMetricGroupRequest) ToJson() string {
 func (obj *flowMetricGroupRequest) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -9788,7 +8207,7 @@ func (obj *portMetric) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -9810,7 +8229,7 @@ func (obj *portMetric) ToJson() string {
 func (obj *portMetric) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -10084,7 +8503,7 @@ func (obj *flowMetric) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -10106,7 +8525,7 @@ func (obj *flowMetric) ToJson() string {
 func (obj *flowMetric) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -10398,7 +8817,7 @@ func (obj *bgpv4Metric) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -10420,7 +8839,7 @@ func (obj *bgpv4Metric) ToJson() string {
 func (obj *bgpv4Metric) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -10719,7 +9138,7 @@ func (obj *bgpv6Metric) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -10741,7 +9160,7 @@ func (obj *bgpv6Metric) ToJson() string {
 func (obj *bgpv6Metric) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -11040,7 +9459,7 @@ func (obj *portState) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -11062,7 +9481,7 @@ func (obj *portState) ToJson() string {
 func (obj *portState) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -11176,7 +9595,7 @@ func (obj *flowState) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -11198,7 +9617,7 @@ func (obj *flowState) ToJson() string {
 func (obj *flowState) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -11291,7 +9710,7 @@ func (obj *lagProtocol) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -11313,7 +9732,7 @@ func (obj *lagProtocol) ToJson() string {
 func (obj *lagProtocol) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -11410,7 +9829,7 @@ func (obj *deviceEthernetBase) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -11432,7 +9851,7 @@ func (obj *deviceEthernetBase) ToJson() string {
 func (obj *deviceEthernetBase) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -11565,7 +9984,7 @@ func (obj *layer1Ieee8021Qbb) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -11587,7 +10006,7 @@ func (obj *layer1Ieee8021Qbb) ToJson() string {
 func (obj *layer1Ieee8021Qbb) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -11803,7 +10222,7 @@ func (obj *layer1Ieee8023X) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -11825,7 +10244,7 @@ func (obj *layer1Ieee8023X) ToJson() string {
 func (obj *layer1Ieee8023X) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -11877,7 +10296,7 @@ func (obj *captureCustom) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -11899,7 +10318,7 @@ func (obj *captureCustom) ToJson() string {
 func (obj *captureCustom) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -12031,7 +10450,7 @@ func (obj *captureEthernet) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -12053,7 +10472,7 @@ func (obj *captureEthernet) ToJson() string {
 func (obj *captureEthernet) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -12149,7 +10568,7 @@ func (obj *captureVlan) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -12171,7 +10590,7 @@ func (obj *captureVlan) ToJson() string {
 func (obj *captureVlan) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -12267,7 +10686,7 @@ func (obj *captureIpv4) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -12289,7 +10708,7 @@ func (obj *captureIpv4) ToJson() string {
 func (obj *captureIpv4) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -12495,7 +10914,7 @@ func (obj *captureIpv6) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -12517,7 +10936,7 @@ func (obj *captureIpv6) ToJson() string {
 func (obj *captureIpv6) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -12657,7 +11076,7 @@ func (obj *deviceIpv4) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -12679,7 +11098,7 @@ func (obj *deviceIpv4) ToJson() string {
 func (obj *deviceIpv4) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -12806,7 +11225,7 @@ func (obj *deviceIpv6) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -12828,7 +11247,7 @@ func (obj *deviceIpv6) ToJson() string {
 func (obj *deviceIpv6) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -12955,7 +11374,7 @@ func (obj *deviceVlan) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -12977,7 +11396,7 @@ func (obj *deviceVlan) ToJson() string {
 func (obj *deviceVlan) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -13106,7 +11525,7 @@ func (obj *flowPort) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -13128,7 +11547,7 @@ func (obj *flowPort) ToJson() string {
 func (obj *flowPort) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -13252,7 +11671,7 @@ func (obj *flowDevice) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -13274,7 +11693,7 @@ func (obj *flowDevice) ToJson() string {
 func (obj *flowDevice) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -13461,7 +11880,7 @@ func (obj *flowCustom) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -13483,7 +11902,7 @@ func (obj *flowCustom) ToJson() string {
 func (obj *flowCustom) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -13551,7 +11970,7 @@ func (obj *flowEthernet) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -13573,7 +11992,7 @@ func (obj *flowEthernet) ToJson() string {
 func (obj *flowEthernet) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -13669,7 +12088,7 @@ func (obj *flowVlan) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -13691,7 +12110,7 @@ func (obj *flowVlan) ToJson() string {
 func (obj *flowVlan) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -13787,7 +12206,7 @@ func (obj *flowVxlan) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -13809,7 +12228,7 @@ func (obj *flowVxlan) ToJson() string {
 func (obj *flowVxlan) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -13905,7 +12324,7 @@ func (obj *flowIpv4) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -13927,7 +12346,7 @@ func (obj *flowIpv4) ToJson() string {
 func (obj *flowIpv4) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -14133,7 +12552,7 @@ func (obj *flowIpv6) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -14155,7 +12574,7 @@ func (obj *flowIpv6) ToJson() string {
 func (obj *flowIpv6) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -14295,7 +12714,7 @@ func (obj *flowPfcPause) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -14317,7 +12736,7 @@ func (obj *flowPfcPause) ToJson() string {
 func (obj *flowPfcPause) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -14512,7 +12931,7 @@ func (obj *flowEthernetPause) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -14534,7 +12953,7 @@ func (obj *flowEthernetPause) ToJson() string {
 func (obj *flowEthernetPause) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -14641,7 +13060,7 @@ func (obj *flowTcp) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -14663,7 +13082,7 @@ func (obj *flowTcp) ToJson() string {
 func (obj *flowTcp) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -14880,7 +13299,7 @@ func (obj *flowUdp) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -14902,7 +13321,7 @@ func (obj *flowUdp) ToJson() string {
 func (obj *flowUdp) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -14998,7 +13417,7 @@ func (obj *flowGre) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -15020,7 +13439,7 @@ func (obj *flowGre) ToJson() string {
 func (obj *flowGre) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -15138,7 +13557,7 @@ func (obj *flowGtpv1) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -15160,7 +13579,7 @@ func (obj *flowGtpv1) ToJson() string {
 func (obj *flowGtpv1) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -15377,7 +13796,7 @@ func (obj *flowGtpv2) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -15399,7 +13818,7 @@ func (obj *flowGtpv2) ToJson() string {
 func (obj *flowGtpv2) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -15550,7 +13969,7 @@ func (obj *flowArp) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -15572,7 +13991,7 @@ func (obj *flowArp) ToJson() string {
 func (obj *flowArp) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -15723,7 +14142,7 @@ func (obj *flowIcmp) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -15745,7 +14164,7 @@ func (obj *flowIcmp) ToJson() string {
 func (obj *flowIcmp) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -15829,7 +14248,7 @@ func (obj *flowIcmpv6) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -15851,7 +14270,7 @@ func (obj *flowIcmpv6) ToJson() string {
 func (obj *flowIcmpv6) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -15935,7 +14354,7 @@ func (obj *flowPpp) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -15957,7 +14376,7 @@ func (obj *flowPpp) ToJson() string {
 func (obj *flowPpp) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -16042,7 +14461,7 @@ func (obj *flowIgmpv1) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -16064,7 +14483,7 @@ func (obj *flowIgmpv1) ToJson() string {
 func (obj *flowIgmpv1) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -16171,7 +14590,7 @@ func (obj *flowSizeIncrement) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -16193,7 +14612,7 @@ func (obj *flowSizeIncrement) ToJson() string {
 func (obj *flowSizeIncrement) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -16293,7 +14712,7 @@ func (obj *flowSizeRandom) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -16315,7 +14734,7 @@ func (obj *flowSizeRandom) ToJson() string {
 func (obj *flowSizeRandom) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -16399,7 +14818,7 @@ func (obj *flowFixedPackets) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -16421,7 +14840,7 @@ func (obj *flowFixedPackets) ToJson() string {
 func (obj *flowFixedPackets) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -16516,7 +14935,7 @@ func (obj *flowFixedSeconds) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -16538,7 +14957,7 @@ func (obj *flowFixedSeconds) ToJson() string {
 func (obj *flowFixedSeconds) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -16633,7 +15052,7 @@ func (obj *flowBurst) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -16655,7 +15074,7 @@ func (obj *flowBurst) ToJson() string {
 func (obj *flowBurst) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -16768,7 +15187,7 @@ func (obj *flowContinuous) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -16790,7 +15209,7 @@ func (obj *flowContinuous) ToJson() string {
 func (obj *flowContinuous) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -16869,7 +15288,7 @@ func (obj *flowLatencyMetrics) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -16891,7 +15310,7 @@ func (obj *flowLatencyMetrics) ToJson() string {
 func (obj *flowLatencyMetrics) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -16988,7 +15407,7 @@ func (obj *flowMetricGroup) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -17010,7 +15429,7 @@ func (obj *flowMetricGroup) ToJson() string {
 func (obj *flowMetricGroup) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -17094,7 +15513,7 @@ func (obj *metricTimestamp) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -17116,7 +15535,7 @@ func (obj *metricTimestamp) ToJson() string {
 func (obj *metricTimestamp) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -17200,7 +15619,7 @@ func (obj *metricLatency) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -17222,7 +15641,7 @@ func (obj *metricLatency) ToJson() string {
 func (obj *metricLatency) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -17322,7 +15741,7 @@ func (obj *lagLacp) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -17344,7 +15763,7 @@ func (obj *lagLacp) ToJson() string {
 func (obj *lagLacp) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -17531,7 +15950,7 @@ func (obj *lagStatic) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -17553,7 +15972,7 @@ func (obj *lagStatic) ToJson() string {
 func (obj *lagStatic) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -17621,7 +16040,7 @@ func (obj *captureField) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -17643,7 +16062,7 @@ func (obj *captureField) ToJson() string {
 func (obj *captureField) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -17743,7 +16162,7 @@ func (obj *deviceBgpv4) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -17765,7 +16184,7 @@ func (obj *deviceBgpv4) ToJson() string {
 func (obj *deviceBgpv4) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -18110,7 +16529,7 @@ func (obj *deviceBgpv6) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -18132,7 +16551,7 @@ func (obj *deviceBgpv6) ToJson() string {
 func (obj *deviceBgpv6) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -18488,7 +16907,7 @@ func (obj *patternFlowEthernetDst) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -18510,7 +16929,7 @@ func (obj *patternFlowEthernetDst) ToJson() string {
 func (obj *patternFlowEthernetDst) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -18667,7 +17086,7 @@ func (obj *patternFlowEthernetSrc) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -18689,7 +17108,7 @@ func (obj *patternFlowEthernetSrc) ToJson() string {
 func (obj *patternFlowEthernetSrc) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -18846,7 +17265,7 @@ func (obj *patternFlowEthernetEtherType) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -18868,7 +17287,7 @@ func (obj *patternFlowEthernetEtherType) ToJson() string {
 func (obj *patternFlowEthernetEtherType) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -19048,7 +17467,7 @@ func (obj *patternFlowEthernetPfcQueue) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -19070,7 +17489,7 @@ func (obj *patternFlowEthernetPfcQueue) ToJson() string {
 func (obj *patternFlowEthernetPfcQueue) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -19227,7 +17646,7 @@ func (obj *patternFlowVlanPriority) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -19249,7 +17668,7 @@ func (obj *patternFlowVlanPriority) ToJson() string {
 func (obj *patternFlowVlanPriority) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -19406,7 +17825,7 @@ func (obj *patternFlowVlanCfi) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -19428,7 +17847,7 @@ func (obj *patternFlowVlanCfi) ToJson() string {
 func (obj *patternFlowVlanCfi) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -19585,7 +18004,7 @@ func (obj *patternFlowVlanId) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -19607,7 +18026,7 @@ func (obj *patternFlowVlanId) ToJson() string {
 func (obj *patternFlowVlanId) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -19764,7 +18183,7 @@ func (obj *patternFlowVlanTpid) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -19786,7 +18205,7 @@ func (obj *patternFlowVlanTpid) ToJson() string {
 func (obj *patternFlowVlanTpid) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -19943,7 +18362,7 @@ func (obj *patternFlowVxlanFlags) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -19965,7 +18384,7 @@ func (obj *patternFlowVxlanFlags) ToJson() string {
 func (obj *patternFlowVxlanFlags) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -20122,7 +18541,7 @@ func (obj *patternFlowVxlanReserved0) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -20144,7 +18563,7 @@ func (obj *patternFlowVxlanReserved0) ToJson() string {
 func (obj *patternFlowVxlanReserved0) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -20301,7 +18720,7 @@ func (obj *patternFlowVxlanVni) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -20323,7 +18742,7 @@ func (obj *patternFlowVxlanVni) ToJson() string {
 func (obj *patternFlowVxlanVni) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -20480,7 +18899,7 @@ func (obj *patternFlowVxlanReserved1) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -20502,7 +18921,7 @@ func (obj *patternFlowVxlanReserved1) ToJson() string {
 func (obj *patternFlowVxlanReserved1) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -20659,7 +19078,7 @@ func (obj *patternFlowIpv4Version) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -20681,7 +19100,7 @@ func (obj *patternFlowIpv4Version) ToJson() string {
 func (obj *patternFlowIpv4Version) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -20838,7 +19257,7 @@ func (obj *patternFlowIpv4HeaderLength) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -20860,7 +19279,7 @@ func (obj *patternFlowIpv4HeaderLength) ToJson() string {
 func (obj *patternFlowIpv4HeaderLength) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -21040,7 +19459,7 @@ func (obj *flowIpv4Priority) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -21062,7 +19481,7 @@ func (obj *flowIpv4Priority) ToJson() string {
 func (obj *flowIpv4Priority) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -21172,7 +19591,7 @@ func (obj *patternFlowIpv4TotalLength) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -21194,7 +19613,7 @@ func (obj *patternFlowIpv4TotalLength) ToJson() string {
 func (obj *patternFlowIpv4TotalLength) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -21374,7 +19793,7 @@ func (obj *patternFlowIpv4Identification) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -21396,7 +19815,7 @@ func (obj *patternFlowIpv4Identification) ToJson() string {
 func (obj *patternFlowIpv4Identification) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -21553,7 +19972,7 @@ func (obj *patternFlowIpv4Reserved) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -21575,7 +19994,7 @@ func (obj *patternFlowIpv4Reserved) ToJson() string {
 func (obj *patternFlowIpv4Reserved) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -21732,7 +20151,7 @@ func (obj *patternFlowIpv4DontFragment) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -21754,7 +20173,7 @@ func (obj *patternFlowIpv4DontFragment) ToJson() string {
 func (obj *patternFlowIpv4DontFragment) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -21911,7 +20330,7 @@ func (obj *patternFlowIpv4MoreFragments) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -21933,7 +20352,7 @@ func (obj *patternFlowIpv4MoreFragments) ToJson() string {
 func (obj *patternFlowIpv4MoreFragments) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -22090,7 +20509,7 @@ func (obj *patternFlowIpv4FragmentOffset) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -22112,7 +20531,7 @@ func (obj *patternFlowIpv4FragmentOffset) ToJson() string {
 func (obj *patternFlowIpv4FragmentOffset) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -22269,7 +20688,7 @@ func (obj *patternFlowIpv4TimeToLive) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -22291,7 +20710,7 @@ func (obj *patternFlowIpv4TimeToLive) ToJson() string {
 func (obj *patternFlowIpv4TimeToLive) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -22448,7 +20867,7 @@ func (obj *patternFlowIpv4Protocol) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -22470,7 +20889,7 @@ func (obj *patternFlowIpv4Protocol) ToJson() string {
 func (obj *patternFlowIpv4Protocol) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -22627,7 +21046,7 @@ func (obj *patternFlowIpv4HeaderChecksum) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -22649,7 +21068,7 @@ func (obj *patternFlowIpv4HeaderChecksum) ToJson() string {
 func (obj *patternFlowIpv4HeaderChecksum) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -22762,7 +21181,7 @@ func (obj *patternFlowIpv4Src) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -22784,7 +21203,7 @@ func (obj *patternFlowIpv4Src) ToJson() string {
 func (obj *patternFlowIpv4Src) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -22941,7 +21360,7 @@ func (obj *patternFlowIpv4Dst) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -22963,7 +21382,7 @@ func (obj *patternFlowIpv4Dst) ToJson() string {
 func (obj *patternFlowIpv4Dst) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -23120,7 +21539,7 @@ func (obj *patternFlowIpv6Version) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -23142,7 +21561,7 @@ func (obj *patternFlowIpv6Version) ToJson() string {
 func (obj *patternFlowIpv6Version) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -23299,7 +21718,7 @@ func (obj *patternFlowIpv6TrafficClass) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -23321,7 +21740,7 @@ func (obj *patternFlowIpv6TrafficClass) ToJson() string {
 func (obj *patternFlowIpv6TrafficClass) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -23478,7 +21897,7 @@ func (obj *patternFlowIpv6FlowLabel) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -23500,7 +21919,7 @@ func (obj *patternFlowIpv6FlowLabel) ToJson() string {
 func (obj *patternFlowIpv6FlowLabel) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -23657,7 +22076,7 @@ func (obj *patternFlowIpv6PayloadLength) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -23679,7 +22098,7 @@ func (obj *patternFlowIpv6PayloadLength) ToJson() string {
 func (obj *patternFlowIpv6PayloadLength) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -23859,7 +22278,7 @@ func (obj *patternFlowIpv6NextHeader) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -23881,7 +22300,7 @@ func (obj *patternFlowIpv6NextHeader) ToJson() string {
 func (obj *patternFlowIpv6NextHeader) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -24038,7 +22457,7 @@ func (obj *patternFlowIpv6HopLimit) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -24060,7 +22479,7 @@ func (obj *patternFlowIpv6HopLimit) ToJson() string {
 func (obj *patternFlowIpv6HopLimit) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -24217,7 +22636,7 @@ func (obj *patternFlowIpv6Src) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -24239,7 +22658,7 @@ func (obj *patternFlowIpv6Src) ToJson() string {
 func (obj *patternFlowIpv6Src) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -24396,7 +22815,7 @@ func (obj *patternFlowIpv6Dst) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -24418,7 +22837,7 @@ func (obj *patternFlowIpv6Dst) ToJson() string {
 func (obj *patternFlowIpv6Dst) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -24575,7 +22994,7 @@ func (obj *patternFlowPfcPauseDst) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -24597,7 +23016,7 @@ func (obj *patternFlowPfcPauseDst) ToJson() string {
 func (obj *patternFlowPfcPauseDst) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -24754,7 +23173,7 @@ func (obj *patternFlowPfcPauseSrc) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -24776,7 +23195,7 @@ func (obj *patternFlowPfcPauseSrc) ToJson() string {
 func (obj *patternFlowPfcPauseSrc) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -24933,7 +23352,7 @@ func (obj *patternFlowPfcPauseEtherType) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -24955,7 +23374,7 @@ func (obj *patternFlowPfcPauseEtherType) ToJson() string {
 func (obj *patternFlowPfcPauseEtherType) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -25112,7 +23531,7 @@ func (obj *patternFlowPfcPauseControlOpCode) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -25134,7 +23553,7 @@ func (obj *patternFlowPfcPauseControlOpCode) ToJson() string {
 func (obj *patternFlowPfcPauseControlOpCode) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -25291,7 +23710,7 @@ func (obj *patternFlowPfcPauseClassEnableVector) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -25313,7 +23732,7 @@ func (obj *patternFlowPfcPauseClassEnableVector) ToJson() string {
 func (obj *patternFlowPfcPauseClassEnableVector) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -25470,7 +23889,7 @@ func (obj *patternFlowPfcPausePauseClass0) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -25492,7 +23911,7 @@ func (obj *patternFlowPfcPausePauseClass0) ToJson() string {
 func (obj *patternFlowPfcPausePauseClass0) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -25649,7 +24068,7 @@ func (obj *patternFlowPfcPausePauseClass1) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -25671,7 +24090,7 @@ func (obj *patternFlowPfcPausePauseClass1) ToJson() string {
 func (obj *patternFlowPfcPausePauseClass1) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -25828,7 +24247,7 @@ func (obj *patternFlowPfcPausePauseClass2) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -25850,7 +24269,7 @@ func (obj *patternFlowPfcPausePauseClass2) ToJson() string {
 func (obj *patternFlowPfcPausePauseClass2) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -26007,7 +24426,7 @@ func (obj *patternFlowPfcPausePauseClass3) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -26029,7 +24448,7 @@ func (obj *patternFlowPfcPausePauseClass3) ToJson() string {
 func (obj *patternFlowPfcPausePauseClass3) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -26186,7 +24605,7 @@ func (obj *patternFlowPfcPausePauseClass4) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -26208,7 +24627,7 @@ func (obj *patternFlowPfcPausePauseClass4) ToJson() string {
 func (obj *patternFlowPfcPausePauseClass4) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -26365,7 +24784,7 @@ func (obj *patternFlowPfcPausePauseClass5) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -26387,7 +24806,7 @@ func (obj *patternFlowPfcPausePauseClass5) ToJson() string {
 func (obj *patternFlowPfcPausePauseClass5) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -26544,7 +24963,7 @@ func (obj *patternFlowPfcPausePauseClass6) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -26566,7 +24985,7 @@ func (obj *patternFlowPfcPausePauseClass6) ToJson() string {
 func (obj *patternFlowPfcPausePauseClass6) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -26723,7 +25142,7 @@ func (obj *patternFlowPfcPausePauseClass7) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -26745,7 +25164,7 @@ func (obj *patternFlowPfcPausePauseClass7) ToJson() string {
 func (obj *patternFlowPfcPausePauseClass7) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -26902,7 +25321,7 @@ func (obj *patternFlowEthernetPauseDst) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -26924,7 +25343,7 @@ func (obj *patternFlowEthernetPauseDst) ToJson() string {
 func (obj *patternFlowEthernetPauseDst) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -27081,7 +25500,7 @@ func (obj *patternFlowEthernetPauseSrc) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -27103,7 +25522,7 @@ func (obj *patternFlowEthernetPauseSrc) ToJson() string {
 func (obj *patternFlowEthernetPauseSrc) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -27260,7 +25679,7 @@ func (obj *patternFlowEthernetPauseEtherType) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -27282,7 +25701,7 @@ func (obj *patternFlowEthernetPauseEtherType) ToJson() string {
 func (obj *patternFlowEthernetPauseEtherType) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -27439,7 +25858,7 @@ func (obj *patternFlowEthernetPauseControlOpCode) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -27461,7 +25880,7 @@ func (obj *patternFlowEthernetPauseControlOpCode) ToJson() string {
 func (obj *patternFlowEthernetPauseControlOpCode) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -27618,7 +26037,7 @@ func (obj *patternFlowEthernetPauseTime) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -27640,7 +26059,7 @@ func (obj *patternFlowEthernetPauseTime) ToJson() string {
 func (obj *patternFlowEthernetPauseTime) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -27797,7 +26216,7 @@ func (obj *patternFlowTcpSrcPort) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -27819,7 +26238,7 @@ func (obj *patternFlowTcpSrcPort) ToJson() string {
 func (obj *patternFlowTcpSrcPort) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -27976,7 +26395,7 @@ func (obj *patternFlowTcpDstPort) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -27998,7 +26417,7 @@ func (obj *patternFlowTcpDstPort) ToJson() string {
 func (obj *patternFlowTcpDstPort) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -28155,7 +26574,7 @@ func (obj *patternFlowTcpSeqNum) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -28177,7 +26596,7 @@ func (obj *patternFlowTcpSeqNum) ToJson() string {
 func (obj *patternFlowTcpSeqNum) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -28334,7 +26753,7 @@ func (obj *patternFlowTcpAckNum) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -28356,7 +26775,7 @@ func (obj *patternFlowTcpAckNum) ToJson() string {
 func (obj *patternFlowTcpAckNum) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -28513,7 +26932,7 @@ func (obj *patternFlowTcpDataOffset) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -28535,7 +26954,7 @@ func (obj *patternFlowTcpDataOffset) ToJson() string {
 func (obj *patternFlowTcpDataOffset) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -28692,7 +27111,7 @@ func (obj *patternFlowTcpEcnNs) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -28714,7 +27133,7 @@ func (obj *patternFlowTcpEcnNs) ToJson() string {
 func (obj *patternFlowTcpEcnNs) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -28871,7 +27290,7 @@ func (obj *patternFlowTcpEcnCwr) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -28893,7 +27312,7 @@ func (obj *patternFlowTcpEcnCwr) ToJson() string {
 func (obj *patternFlowTcpEcnCwr) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -29050,7 +27469,7 @@ func (obj *patternFlowTcpEcnEcho) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -29072,7 +27491,7 @@ func (obj *patternFlowTcpEcnEcho) ToJson() string {
 func (obj *patternFlowTcpEcnEcho) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -29229,7 +27648,7 @@ func (obj *patternFlowTcpCtlUrg) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -29251,7 +27670,7 @@ func (obj *patternFlowTcpCtlUrg) ToJson() string {
 func (obj *patternFlowTcpCtlUrg) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -29408,7 +27827,7 @@ func (obj *patternFlowTcpCtlAck) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -29430,7 +27849,7 @@ func (obj *patternFlowTcpCtlAck) ToJson() string {
 func (obj *patternFlowTcpCtlAck) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -29587,7 +28006,7 @@ func (obj *patternFlowTcpCtlPsh) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -29609,7 +28028,7 @@ func (obj *patternFlowTcpCtlPsh) ToJson() string {
 func (obj *patternFlowTcpCtlPsh) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -29766,7 +28185,7 @@ func (obj *patternFlowTcpCtlRst) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -29788,7 +28207,7 @@ func (obj *patternFlowTcpCtlRst) ToJson() string {
 func (obj *patternFlowTcpCtlRst) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -29945,7 +28364,7 @@ func (obj *patternFlowTcpCtlSyn) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -29967,7 +28386,7 @@ func (obj *patternFlowTcpCtlSyn) ToJson() string {
 func (obj *patternFlowTcpCtlSyn) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -30124,7 +28543,7 @@ func (obj *patternFlowTcpCtlFin) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -30146,7 +28565,7 @@ func (obj *patternFlowTcpCtlFin) ToJson() string {
 func (obj *patternFlowTcpCtlFin) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -30303,7 +28722,7 @@ func (obj *patternFlowTcpWindow) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -30325,7 +28744,7 @@ func (obj *patternFlowTcpWindow) ToJson() string {
 func (obj *patternFlowTcpWindow) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -30482,7 +28901,7 @@ func (obj *patternFlowUdpSrcPort) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -30504,7 +28923,7 @@ func (obj *patternFlowUdpSrcPort) ToJson() string {
 func (obj *patternFlowUdpSrcPort) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -30661,7 +29080,7 @@ func (obj *patternFlowUdpDstPort) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -30683,7 +29102,7 @@ func (obj *patternFlowUdpDstPort) ToJson() string {
 func (obj *patternFlowUdpDstPort) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -30840,7 +29259,7 @@ func (obj *patternFlowUdpLength) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -30862,7 +29281,7 @@ func (obj *patternFlowUdpLength) ToJson() string {
 func (obj *patternFlowUdpLength) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -31019,7 +29438,7 @@ func (obj *patternFlowUdpChecksum) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -31041,7 +29460,7 @@ func (obj *patternFlowUdpChecksum) ToJson() string {
 func (obj *patternFlowUdpChecksum) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -31154,7 +29573,7 @@ func (obj *patternFlowGreChecksumPresent) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -31176,7 +29595,7 @@ func (obj *patternFlowGreChecksumPresent) ToJson() string {
 func (obj *patternFlowGreChecksumPresent) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -31333,7 +29752,7 @@ func (obj *patternFlowGreReserved0) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -31355,7 +29774,7 @@ func (obj *patternFlowGreReserved0) ToJson() string {
 func (obj *patternFlowGreReserved0) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -31512,7 +29931,7 @@ func (obj *patternFlowGreVersion) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -31534,7 +29953,7 @@ func (obj *patternFlowGreVersion) ToJson() string {
 func (obj *patternFlowGreVersion) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -31691,7 +30110,7 @@ func (obj *patternFlowGreProtocol) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -31713,7 +30132,7 @@ func (obj *patternFlowGreProtocol) ToJson() string {
 func (obj *patternFlowGreProtocol) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -31870,7 +30289,7 @@ func (obj *patternFlowGreChecksum) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -31892,7 +30311,7 @@ func (obj *patternFlowGreChecksum) ToJson() string {
 func (obj *patternFlowGreChecksum) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -32005,7 +30424,7 @@ func (obj *patternFlowGreReserved1) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -32027,7 +30446,7 @@ func (obj *patternFlowGreReserved1) ToJson() string {
 func (obj *patternFlowGreReserved1) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -32184,7 +30603,7 @@ func (obj *patternFlowGtpv1Version) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -32206,7 +30625,7 @@ func (obj *patternFlowGtpv1Version) ToJson() string {
 func (obj *patternFlowGtpv1Version) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -32363,7 +30782,7 @@ func (obj *patternFlowGtpv1ProtocolType) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -32385,7 +30804,7 @@ func (obj *patternFlowGtpv1ProtocolType) ToJson() string {
 func (obj *patternFlowGtpv1ProtocolType) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -32542,7 +30961,7 @@ func (obj *patternFlowGtpv1Reserved) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -32564,7 +30983,7 @@ func (obj *patternFlowGtpv1Reserved) ToJson() string {
 func (obj *patternFlowGtpv1Reserved) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -32721,7 +31140,7 @@ func (obj *patternFlowGtpv1EFlag) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -32743,7 +31162,7 @@ func (obj *patternFlowGtpv1EFlag) ToJson() string {
 func (obj *patternFlowGtpv1EFlag) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -32900,7 +31319,7 @@ func (obj *patternFlowGtpv1SFlag) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -32922,7 +31341,7 @@ func (obj *patternFlowGtpv1SFlag) ToJson() string {
 func (obj *patternFlowGtpv1SFlag) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -33079,7 +31498,7 @@ func (obj *patternFlowGtpv1PnFlag) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -33101,7 +31520,7 @@ func (obj *patternFlowGtpv1PnFlag) ToJson() string {
 func (obj *patternFlowGtpv1PnFlag) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -33258,7 +31677,7 @@ func (obj *patternFlowGtpv1MessageType) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -33280,7 +31699,7 @@ func (obj *patternFlowGtpv1MessageType) ToJson() string {
 func (obj *patternFlowGtpv1MessageType) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -33437,7 +31856,7 @@ func (obj *patternFlowGtpv1MessageLength) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -33459,7 +31878,7 @@ func (obj *patternFlowGtpv1MessageLength) ToJson() string {
 func (obj *patternFlowGtpv1MessageLength) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -33616,7 +32035,7 @@ func (obj *patternFlowGtpv1Teid) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -33638,7 +32057,7 @@ func (obj *patternFlowGtpv1Teid) ToJson() string {
 func (obj *patternFlowGtpv1Teid) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -33795,7 +32214,7 @@ func (obj *patternFlowGtpv1SquenceNumber) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -33817,7 +32236,7 @@ func (obj *patternFlowGtpv1SquenceNumber) ToJson() string {
 func (obj *patternFlowGtpv1SquenceNumber) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -33974,7 +32393,7 @@ func (obj *patternFlowGtpv1NPduNumber) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -33996,7 +32415,7 @@ func (obj *patternFlowGtpv1NPduNumber) ToJson() string {
 func (obj *patternFlowGtpv1NPduNumber) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -34153,7 +32572,7 @@ func (obj *patternFlowGtpv1NextExtensionHeaderType) FromYaml(value string) error
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -34175,7 +32594,7 @@ func (obj *patternFlowGtpv1NextExtensionHeaderType) ToJson() string {
 func (obj *patternFlowGtpv1NextExtensionHeaderType) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -34332,7 +32751,7 @@ func (obj *flowGtpExtension) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -34354,7 +32773,7 @@ func (obj *flowGtpExtension) ToJson() string {
 func (obj *flowGtpExtension) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -34439,7 +32858,7 @@ func (obj *patternFlowGtpv2Version) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -34461,7 +32880,7 @@ func (obj *patternFlowGtpv2Version) ToJson() string {
 func (obj *patternFlowGtpv2Version) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -34618,7 +33037,7 @@ func (obj *patternFlowGtpv2PiggybackingFlag) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -34640,7 +33059,7 @@ func (obj *patternFlowGtpv2PiggybackingFlag) ToJson() string {
 func (obj *patternFlowGtpv2PiggybackingFlag) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -34797,7 +33216,7 @@ func (obj *patternFlowGtpv2TeidFlag) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -34819,7 +33238,7 @@ func (obj *patternFlowGtpv2TeidFlag) ToJson() string {
 func (obj *patternFlowGtpv2TeidFlag) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -34976,7 +33395,7 @@ func (obj *patternFlowGtpv2Spare1) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -34998,7 +33417,7 @@ func (obj *patternFlowGtpv2Spare1) ToJson() string {
 func (obj *patternFlowGtpv2Spare1) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -35155,7 +33574,7 @@ func (obj *patternFlowGtpv2MessageType) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -35177,7 +33596,7 @@ func (obj *patternFlowGtpv2MessageType) ToJson() string {
 func (obj *patternFlowGtpv2MessageType) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -35334,7 +33753,7 @@ func (obj *patternFlowGtpv2MessageLength) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -35356,7 +33775,7 @@ func (obj *patternFlowGtpv2MessageLength) ToJson() string {
 func (obj *patternFlowGtpv2MessageLength) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -35513,7 +33932,7 @@ func (obj *patternFlowGtpv2Teid) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -35535,7 +33954,7 @@ func (obj *patternFlowGtpv2Teid) ToJson() string {
 func (obj *patternFlowGtpv2Teid) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -35692,7 +34111,7 @@ func (obj *patternFlowGtpv2SequenceNumber) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -35714,7 +34133,7 @@ func (obj *patternFlowGtpv2SequenceNumber) ToJson() string {
 func (obj *patternFlowGtpv2SequenceNumber) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -35871,7 +34290,7 @@ func (obj *patternFlowGtpv2Spare2) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -35893,7 +34312,7 @@ func (obj *patternFlowGtpv2Spare2) ToJson() string {
 func (obj *patternFlowGtpv2Spare2) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -36050,7 +34469,7 @@ func (obj *patternFlowArpHardwareType) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -36072,7 +34491,7 @@ func (obj *patternFlowArpHardwareType) ToJson() string {
 func (obj *patternFlowArpHardwareType) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -36229,7 +34648,7 @@ func (obj *patternFlowArpProtocolType) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -36251,7 +34670,7 @@ func (obj *patternFlowArpProtocolType) ToJson() string {
 func (obj *patternFlowArpProtocolType) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -36408,7 +34827,7 @@ func (obj *patternFlowArpHardwareLength) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -36430,7 +34849,7 @@ func (obj *patternFlowArpHardwareLength) ToJson() string {
 func (obj *patternFlowArpHardwareLength) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -36587,7 +35006,7 @@ func (obj *patternFlowArpProtocolLength) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -36609,7 +35028,7 @@ func (obj *patternFlowArpProtocolLength) ToJson() string {
 func (obj *patternFlowArpProtocolLength) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -36766,7 +35185,7 @@ func (obj *patternFlowArpOperation) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -36788,7 +35207,7 @@ func (obj *patternFlowArpOperation) ToJson() string {
 func (obj *patternFlowArpOperation) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -36945,7 +35364,7 @@ func (obj *patternFlowArpSenderHardwareAddr) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -36967,7 +35386,7 @@ func (obj *patternFlowArpSenderHardwareAddr) ToJson() string {
 func (obj *patternFlowArpSenderHardwareAddr) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -37124,7 +35543,7 @@ func (obj *patternFlowArpSenderProtocolAddr) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -37146,7 +35565,7 @@ func (obj *patternFlowArpSenderProtocolAddr) ToJson() string {
 func (obj *patternFlowArpSenderProtocolAddr) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -37303,7 +35722,7 @@ func (obj *patternFlowArpTargetHardwareAddr) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -37325,7 +35744,7 @@ func (obj *patternFlowArpTargetHardwareAddr) ToJson() string {
 func (obj *patternFlowArpTargetHardwareAddr) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -37482,7 +35901,7 @@ func (obj *patternFlowArpTargetProtocolAddr) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -37504,7 +35923,7 @@ func (obj *patternFlowArpTargetProtocolAddr) ToJson() string {
 func (obj *patternFlowArpTargetProtocolAddr) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -37661,7 +36080,7 @@ func (obj *flowIcmpEcho) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -37683,7 +36102,7 @@ func (obj *flowIcmpEcho) ToJson() string {
 func (obj *flowIcmpEcho) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -37790,7 +36209,7 @@ func (obj *flowIcmpv6Echo) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -37812,7 +36231,7 @@ func (obj *flowIcmpv6Echo) ToJson() string {
 func (obj *flowIcmpv6Echo) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -37919,7 +36338,7 @@ func (obj *patternFlowPppAddress) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -37941,7 +36360,7 @@ func (obj *patternFlowPppAddress) ToJson() string {
 func (obj *patternFlowPppAddress) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -38098,7 +36517,7 @@ func (obj *patternFlowPppControl) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -38120,7 +36539,7 @@ func (obj *patternFlowPppControl) ToJson() string {
 func (obj *patternFlowPppControl) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -38277,7 +36696,7 @@ func (obj *patternFlowPppProtocolType) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -38299,7 +36718,7 @@ func (obj *patternFlowPppProtocolType) ToJson() string {
 func (obj *patternFlowPppProtocolType) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -38479,7 +36898,7 @@ func (obj *patternFlowIgmpv1Version) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -38501,7 +36920,7 @@ func (obj *patternFlowIgmpv1Version) ToJson() string {
 func (obj *patternFlowIgmpv1Version) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -38658,7 +37077,7 @@ func (obj *patternFlowIgmpv1Type) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -38680,7 +37099,7 @@ func (obj *patternFlowIgmpv1Type) ToJson() string {
 func (obj *patternFlowIgmpv1Type) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -38837,7 +37256,7 @@ func (obj *patternFlowIgmpv1Unused) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -38859,7 +37278,7 @@ func (obj *patternFlowIgmpv1Unused) ToJson() string {
 func (obj *patternFlowIgmpv1Unused) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -39016,7 +37435,7 @@ func (obj *patternFlowIgmpv1Checksum) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -39038,7 +37457,7 @@ func (obj *patternFlowIgmpv1Checksum) ToJson() string {
 func (obj *patternFlowIgmpv1Checksum) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -39151,7 +37570,7 @@ func (obj *patternFlowIgmpv1GroupAddress) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -39173,7 +37592,7 @@ func (obj *patternFlowIgmpv1GroupAddress) ToJson() string {
 func (obj *patternFlowIgmpv1GroupAddress) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -39330,7 +37749,7 @@ func (obj *flowDelay) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -39352,7 +37771,7 @@ func (obj *flowDelay) ToJson() string {
 func (obj *flowDelay) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -39483,7 +37902,7 @@ func (obj *flowDurationInterBurstGap) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -39505,7 +37924,7 @@ func (obj *flowDurationInterBurstGap) ToJson() string {
 func (obj *flowDurationInterBurstGap) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -39636,7 +38055,7 @@ func (obj *deviceBgpAdvanced) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -39658,7 +38077,7 @@ func (obj *deviceBgpAdvanced) ToJson() string {
 func (obj *deviceBgpAdvanced) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -39790,7 +38209,7 @@ func (obj *deviceBgpCapability) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -39812,7 +38231,7 @@ func (obj *deviceBgpCapability) ToJson() string {
 func (obj *deviceBgpCapability) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -40264,7 +38683,7 @@ func (obj *deviceBgpSrTePolicy) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -40286,7 +38705,7 @@ func (obj *deviceBgpSrTePolicy) ToJson() string {
 func (obj *deviceBgpSrTePolicy) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -40524,7 +38943,7 @@ func (obj *deviceBgpv4Route) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -40546,7 +38965,7 @@ func (obj *deviceBgpv4Route) ToJson() string {
 func (obj *deviceBgpv4Route) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -40729,7 +39148,7 @@ func (obj *deviceBgpv6Route) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -40751,7 +39170,7 @@ func (obj *deviceBgpv6Route) ToJson() string {
 func (obj *deviceBgpv6Route) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -40934,7 +39353,7 @@ func (obj *deviceBgpv6SegmentRouting) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -40956,7 +39375,7 @@ func (obj *deviceBgpv6SegmentRouting) ToJson() string {
 func (obj *deviceBgpv6SegmentRouting) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -41136,7 +39555,7 @@ func (obj *patternFlowEthernetDstCounter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -41158,7 +39577,7 @@ func (obj *patternFlowEthernetDstCounter) ToJson() string {
 func (obj *patternFlowEthernetDstCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -41258,7 +39677,7 @@ func (obj *patternFlowEthernetSrcCounter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -41280,7 +39699,7 @@ func (obj *patternFlowEthernetSrcCounter) ToJson() string {
 func (obj *patternFlowEthernetSrcCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -41380,7 +39799,7 @@ func (obj *patternFlowEthernetEtherTypeCounter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -41402,7 +39821,7 @@ func (obj *patternFlowEthernetEtherTypeCounter) ToJson() string {
 func (obj *patternFlowEthernetEtherTypeCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -41502,7 +39921,7 @@ func (obj *patternFlowEthernetPfcQueueCounter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -41524,7 +39943,7 @@ func (obj *patternFlowEthernetPfcQueueCounter) ToJson() string {
 func (obj *patternFlowEthernetPfcQueueCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -41624,7 +40043,7 @@ func (obj *patternFlowVlanPriorityCounter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -41646,7 +40065,7 @@ func (obj *patternFlowVlanPriorityCounter) ToJson() string {
 func (obj *patternFlowVlanPriorityCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -41746,7 +40165,7 @@ func (obj *patternFlowVlanCfiCounter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -41768,7 +40187,7 @@ func (obj *patternFlowVlanCfiCounter) ToJson() string {
 func (obj *patternFlowVlanCfiCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -41868,7 +40287,7 @@ func (obj *patternFlowVlanIdCounter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -41890,7 +40309,7 @@ func (obj *patternFlowVlanIdCounter) ToJson() string {
 func (obj *patternFlowVlanIdCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -41990,7 +40409,7 @@ func (obj *patternFlowVlanTpidCounter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -42012,7 +40431,7 @@ func (obj *patternFlowVlanTpidCounter) ToJson() string {
 func (obj *patternFlowVlanTpidCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -42112,7 +40531,7 @@ func (obj *patternFlowVxlanFlagsCounter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -42134,7 +40553,7 @@ func (obj *patternFlowVxlanFlagsCounter) ToJson() string {
 func (obj *patternFlowVxlanFlagsCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -42234,7 +40653,7 @@ func (obj *patternFlowVxlanReserved0Counter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -42256,7 +40675,7 @@ func (obj *patternFlowVxlanReserved0Counter) ToJson() string {
 func (obj *patternFlowVxlanReserved0Counter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -42356,7 +40775,7 @@ func (obj *patternFlowVxlanVniCounter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -42378,7 +40797,7 @@ func (obj *patternFlowVxlanVniCounter) ToJson() string {
 func (obj *patternFlowVxlanVniCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -42478,7 +40897,7 @@ func (obj *patternFlowVxlanReserved1Counter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -42500,7 +40919,7 @@ func (obj *patternFlowVxlanReserved1Counter) ToJson() string {
 func (obj *patternFlowVxlanReserved1Counter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -42600,7 +41019,7 @@ func (obj *patternFlowIpv4VersionCounter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -42622,7 +41041,7 @@ func (obj *patternFlowIpv4VersionCounter) ToJson() string {
 func (obj *patternFlowIpv4VersionCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -42722,7 +41141,7 @@ func (obj *patternFlowIpv4HeaderLengthCounter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -42744,7 +41163,7 @@ func (obj *patternFlowIpv4HeaderLengthCounter) ToJson() string {
 func (obj *patternFlowIpv4HeaderLengthCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -42844,7 +41263,7 @@ func (obj *patternFlowIpv4PriorityRaw) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -42866,7 +41285,7 @@ func (obj *patternFlowIpv4PriorityRaw) ToJson() string {
 func (obj *patternFlowIpv4PriorityRaw) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -43023,7 +41442,7 @@ func (obj *flowIpv4Tos) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -43045,7 +41464,7 @@ func (obj *flowIpv4Tos) ToJson() string {
 func (obj *flowIpv4Tos) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -43163,7 +41582,7 @@ func (obj *flowIpv4Dscp) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -43185,7 +41604,7 @@ func (obj *flowIpv4Dscp) ToJson() string {
 func (obj *flowIpv4Dscp) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -43259,7 +41678,7 @@ func (obj *patternFlowIpv4TotalLengthCounter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -43281,7 +41700,7 @@ func (obj *patternFlowIpv4TotalLengthCounter) ToJson() string {
 func (obj *patternFlowIpv4TotalLengthCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -43381,7 +41800,7 @@ func (obj *patternFlowIpv4IdentificationCounter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -43403,7 +41822,7 @@ func (obj *patternFlowIpv4IdentificationCounter) ToJson() string {
 func (obj *patternFlowIpv4IdentificationCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -43503,7 +41922,7 @@ func (obj *patternFlowIpv4ReservedCounter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -43525,7 +41944,7 @@ func (obj *patternFlowIpv4ReservedCounter) ToJson() string {
 func (obj *patternFlowIpv4ReservedCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -43625,7 +42044,7 @@ func (obj *patternFlowIpv4DontFragmentCounter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -43647,7 +42066,7 @@ func (obj *patternFlowIpv4DontFragmentCounter) ToJson() string {
 func (obj *patternFlowIpv4DontFragmentCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -43747,7 +42166,7 @@ func (obj *patternFlowIpv4MoreFragmentsCounter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -43769,7 +42188,7 @@ func (obj *patternFlowIpv4MoreFragmentsCounter) ToJson() string {
 func (obj *patternFlowIpv4MoreFragmentsCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -43869,7 +42288,7 @@ func (obj *patternFlowIpv4FragmentOffsetCounter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -43891,7 +42310,7 @@ func (obj *patternFlowIpv4FragmentOffsetCounter) ToJson() string {
 func (obj *patternFlowIpv4FragmentOffsetCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -43991,7 +42410,7 @@ func (obj *patternFlowIpv4TimeToLiveCounter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -44013,7 +42432,7 @@ func (obj *patternFlowIpv4TimeToLiveCounter) ToJson() string {
 func (obj *patternFlowIpv4TimeToLiveCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -44113,7 +42532,7 @@ func (obj *patternFlowIpv4ProtocolCounter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -44135,7 +42554,7 @@ func (obj *patternFlowIpv4ProtocolCounter) ToJson() string {
 func (obj *patternFlowIpv4ProtocolCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -44235,7 +42654,7 @@ func (obj *patternFlowIpv4SrcCounter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -44257,7 +42676,7 @@ func (obj *patternFlowIpv4SrcCounter) ToJson() string {
 func (obj *patternFlowIpv4SrcCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -44357,7 +42776,7 @@ func (obj *patternFlowIpv4DstCounter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -44379,7 +42798,7 @@ func (obj *patternFlowIpv4DstCounter) ToJson() string {
 func (obj *patternFlowIpv4DstCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -44479,7 +42898,7 @@ func (obj *patternFlowIpv6VersionCounter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -44501,7 +42920,7 @@ func (obj *patternFlowIpv6VersionCounter) ToJson() string {
 func (obj *patternFlowIpv6VersionCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -44601,7 +43020,7 @@ func (obj *patternFlowIpv6TrafficClassCounter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -44623,7 +43042,7 @@ func (obj *patternFlowIpv6TrafficClassCounter) ToJson() string {
 func (obj *patternFlowIpv6TrafficClassCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -44723,7 +43142,7 @@ func (obj *patternFlowIpv6FlowLabelCounter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -44745,7 +43164,7 @@ func (obj *patternFlowIpv6FlowLabelCounter) ToJson() string {
 func (obj *patternFlowIpv6FlowLabelCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -44845,7 +43264,7 @@ func (obj *patternFlowIpv6PayloadLengthCounter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -44867,7 +43286,7 @@ func (obj *patternFlowIpv6PayloadLengthCounter) ToJson() string {
 func (obj *patternFlowIpv6PayloadLengthCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -44967,7 +43386,7 @@ func (obj *patternFlowIpv6NextHeaderCounter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -44989,7 +43408,7 @@ func (obj *patternFlowIpv6NextHeaderCounter) ToJson() string {
 func (obj *patternFlowIpv6NextHeaderCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -45089,7 +43508,7 @@ func (obj *patternFlowIpv6HopLimitCounter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -45111,7 +43530,7 @@ func (obj *patternFlowIpv6HopLimitCounter) ToJson() string {
 func (obj *patternFlowIpv6HopLimitCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -45211,7 +43630,7 @@ func (obj *patternFlowIpv6SrcCounter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -45233,7 +43652,7 @@ func (obj *patternFlowIpv6SrcCounter) ToJson() string {
 func (obj *patternFlowIpv6SrcCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -45333,7 +43752,7 @@ func (obj *patternFlowIpv6DstCounter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -45355,7 +43774,7 @@ func (obj *patternFlowIpv6DstCounter) ToJson() string {
 func (obj *patternFlowIpv6DstCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -45455,7 +43874,7 @@ func (obj *patternFlowPfcPauseDstCounter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -45477,7 +43896,7 @@ func (obj *patternFlowPfcPauseDstCounter) ToJson() string {
 func (obj *patternFlowPfcPauseDstCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -45577,7 +43996,7 @@ func (obj *patternFlowPfcPauseSrcCounter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -45599,7 +44018,7 @@ func (obj *patternFlowPfcPauseSrcCounter) ToJson() string {
 func (obj *patternFlowPfcPauseSrcCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -45699,7 +44118,7 @@ func (obj *patternFlowPfcPauseEtherTypeCounter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -45721,7 +44140,7 @@ func (obj *patternFlowPfcPauseEtherTypeCounter) ToJson() string {
 func (obj *patternFlowPfcPauseEtherTypeCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -45821,7 +44240,7 @@ func (obj *patternFlowPfcPauseControlOpCodeCounter) FromYaml(value string) error
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -45843,7 +44262,7 @@ func (obj *patternFlowPfcPauseControlOpCodeCounter) ToJson() string {
 func (obj *patternFlowPfcPauseControlOpCodeCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -45943,7 +44362,7 @@ func (obj *patternFlowPfcPauseClassEnableVectorCounter) FromYaml(value string) e
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -45965,7 +44384,7 @@ func (obj *patternFlowPfcPauseClassEnableVectorCounter) ToJson() string {
 func (obj *patternFlowPfcPauseClassEnableVectorCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -46065,7 +44484,7 @@ func (obj *patternFlowPfcPausePauseClass0Counter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -46087,7 +44506,7 @@ func (obj *patternFlowPfcPausePauseClass0Counter) ToJson() string {
 func (obj *patternFlowPfcPausePauseClass0Counter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -46187,7 +44606,7 @@ func (obj *patternFlowPfcPausePauseClass1Counter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -46209,7 +44628,7 @@ func (obj *patternFlowPfcPausePauseClass1Counter) ToJson() string {
 func (obj *patternFlowPfcPausePauseClass1Counter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -46309,7 +44728,7 @@ func (obj *patternFlowPfcPausePauseClass2Counter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -46331,7 +44750,7 @@ func (obj *patternFlowPfcPausePauseClass2Counter) ToJson() string {
 func (obj *patternFlowPfcPausePauseClass2Counter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -46431,7 +44850,7 @@ func (obj *patternFlowPfcPausePauseClass3Counter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -46453,7 +44872,7 @@ func (obj *patternFlowPfcPausePauseClass3Counter) ToJson() string {
 func (obj *patternFlowPfcPausePauseClass3Counter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -46553,7 +44972,7 @@ func (obj *patternFlowPfcPausePauseClass4Counter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -46575,7 +44994,7 @@ func (obj *patternFlowPfcPausePauseClass4Counter) ToJson() string {
 func (obj *patternFlowPfcPausePauseClass4Counter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -46675,7 +45094,7 @@ func (obj *patternFlowPfcPausePauseClass5Counter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -46697,7 +45116,7 @@ func (obj *patternFlowPfcPausePauseClass5Counter) ToJson() string {
 func (obj *patternFlowPfcPausePauseClass5Counter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -46797,7 +45216,7 @@ func (obj *patternFlowPfcPausePauseClass6Counter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -46819,7 +45238,7 @@ func (obj *patternFlowPfcPausePauseClass6Counter) ToJson() string {
 func (obj *patternFlowPfcPausePauseClass6Counter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -46919,7 +45338,7 @@ func (obj *patternFlowPfcPausePauseClass7Counter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -46941,7 +45360,7 @@ func (obj *patternFlowPfcPausePauseClass7Counter) ToJson() string {
 func (obj *patternFlowPfcPausePauseClass7Counter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -47041,7 +45460,7 @@ func (obj *patternFlowEthernetPauseDstCounter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -47063,7 +45482,7 @@ func (obj *patternFlowEthernetPauseDstCounter) ToJson() string {
 func (obj *patternFlowEthernetPauseDstCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -47163,7 +45582,7 @@ func (obj *patternFlowEthernetPauseSrcCounter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -47185,7 +45604,7 @@ func (obj *patternFlowEthernetPauseSrcCounter) ToJson() string {
 func (obj *patternFlowEthernetPauseSrcCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -47285,7 +45704,7 @@ func (obj *patternFlowEthernetPauseEtherTypeCounter) FromYaml(value string) erro
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -47307,7 +45726,7 @@ func (obj *patternFlowEthernetPauseEtherTypeCounter) ToJson() string {
 func (obj *patternFlowEthernetPauseEtherTypeCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -47407,7 +45826,7 @@ func (obj *patternFlowEthernetPauseControlOpCodeCounter) FromYaml(value string) 
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -47429,7 +45848,7 @@ func (obj *patternFlowEthernetPauseControlOpCodeCounter) ToJson() string {
 func (obj *patternFlowEthernetPauseControlOpCodeCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -47529,7 +45948,7 @@ func (obj *patternFlowEthernetPauseTimeCounter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -47551,7 +45970,7 @@ func (obj *patternFlowEthernetPauseTimeCounter) ToJson() string {
 func (obj *patternFlowEthernetPauseTimeCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -47651,7 +46070,7 @@ func (obj *patternFlowTcpSrcPortCounter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -47673,7 +46092,7 @@ func (obj *patternFlowTcpSrcPortCounter) ToJson() string {
 func (obj *patternFlowTcpSrcPortCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -47773,7 +46192,7 @@ func (obj *patternFlowTcpDstPortCounter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -47795,7 +46214,7 @@ func (obj *patternFlowTcpDstPortCounter) ToJson() string {
 func (obj *patternFlowTcpDstPortCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -47895,7 +46314,7 @@ func (obj *patternFlowTcpSeqNumCounter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -47917,7 +46336,7 @@ func (obj *patternFlowTcpSeqNumCounter) ToJson() string {
 func (obj *patternFlowTcpSeqNumCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -48017,7 +46436,7 @@ func (obj *patternFlowTcpAckNumCounter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -48039,7 +46458,7 @@ func (obj *patternFlowTcpAckNumCounter) ToJson() string {
 func (obj *patternFlowTcpAckNumCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -48139,7 +46558,7 @@ func (obj *patternFlowTcpDataOffsetCounter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -48161,7 +46580,7 @@ func (obj *patternFlowTcpDataOffsetCounter) ToJson() string {
 func (obj *patternFlowTcpDataOffsetCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -48261,7 +46680,7 @@ func (obj *patternFlowTcpEcnNsCounter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -48283,7 +46702,7 @@ func (obj *patternFlowTcpEcnNsCounter) ToJson() string {
 func (obj *patternFlowTcpEcnNsCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -48383,7 +46802,7 @@ func (obj *patternFlowTcpEcnCwrCounter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -48405,7 +46824,7 @@ func (obj *patternFlowTcpEcnCwrCounter) ToJson() string {
 func (obj *patternFlowTcpEcnCwrCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -48505,7 +46924,7 @@ func (obj *patternFlowTcpEcnEchoCounter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -48527,7 +46946,7 @@ func (obj *patternFlowTcpEcnEchoCounter) ToJson() string {
 func (obj *patternFlowTcpEcnEchoCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -48627,7 +47046,7 @@ func (obj *patternFlowTcpCtlUrgCounter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -48649,7 +47068,7 @@ func (obj *patternFlowTcpCtlUrgCounter) ToJson() string {
 func (obj *patternFlowTcpCtlUrgCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -48749,7 +47168,7 @@ func (obj *patternFlowTcpCtlAckCounter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -48771,7 +47190,7 @@ func (obj *patternFlowTcpCtlAckCounter) ToJson() string {
 func (obj *patternFlowTcpCtlAckCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -48871,7 +47290,7 @@ func (obj *patternFlowTcpCtlPshCounter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -48893,7 +47312,7 @@ func (obj *patternFlowTcpCtlPshCounter) ToJson() string {
 func (obj *patternFlowTcpCtlPshCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -48993,7 +47412,7 @@ func (obj *patternFlowTcpCtlRstCounter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -49015,7 +47434,7 @@ func (obj *patternFlowTcpCtlRstCounter) ToJson() string {
 func (obj *patternFlowTcpCtlRstCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -49115,7 +47534,7 @@ func (obj *patternFlowTcpCtlSynCounter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -49137,7 +47556,7 @@ func (obj *patternFlowTcpCtlSynCounter) ToJson() string {
 func (obj *patternFlowTcpCtlSynCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -49237,7 +47656,7 @@ func (obj *patternFlowTcpCtlFinCounter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -49259,7 +47678,7 @@ func (obj *patternFlowTcpCtlFinCounter) ToJson() string {
 func (obj *patternFlowTcpCtlFinCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -49359,7 +47778,7 @@ func (obj *patternFlowTcpWindowCounter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -49381,7 +47800,7 @@ func (obj *patternFlowTcpWindowCounter) ToJson() string {
 func (obj *patternFlowTcpWindowCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -49481,7 +47900,7 @@ func (obj *patternFlowUdpSrcPortCounter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -49503,7 +47922,7 @@ func (obj *patternFlowUdpSrcPortCounter) ToJson() string {
 func (obj *patternFlowUdpSrcPortCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -49603,7 +48022,7 @@ func (obj *patternFlowUdpDstPortCounter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -49625,7 +48044,7 @@ func (obj *patternFlowUdpDstPortCounter) ToJson() string {
 func (obj *patternFlowUdpDstPortCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -49725,7 +48144,7 @@ func (obj *patternFlowUdpLengthCounter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -49747,7 +48166,7 @@ func (obj *patternFlowUdpLengthCounter) ToJson() string {
 func (obj *patternFlowUdpLengthCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -49847,7 +48266,7 @@ func (obj *patternFlowGreChecksumPresentCounter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -49869,7 +48288,7 @@ func (obj *patternFlowGreChecksumPresentCounter) ToJson() string {
 func (obj *patternFlowGreChecksumPresentCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -49969,7 +48388,7 @@ func (obj *patternFlowGreReserved0Counter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -49991,7 +48410,7 @@ func (obj *patternFlowGreReserved0Counter) ToJson() string {
 func (obj *patternFlowGreReserved0Counter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -50091,7 +48510,7 @@ func (obj *patternFlowGreVersionCounter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -50113,7 +48532,7 @@ func (obj *patternFlowGreVersionCounter) ToJson() string {
 func (obj *patternFlowGreVersionCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -50213,7 +48632,7 @@ func (obj *patternFlowGreProtocolCounter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -50235,7 +48654,7 @@ func (obj *patternFlowGreProtocolCounter) ToJson() string {
 func (obj *patternFlowGreProtocolCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -50335,7 +48754,7 @@ func (obj *patternFlowGreReserved1Counter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -50357,7 +48776,7 @@ func (obj *patternFlowGreReserved1Counter) ToJson() string {
 func (obj *patternFlowGreReserved1Counter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -50457,7 +48876,7 @@ func (obj *patternFlowGtpv1VersionCounter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -50479,7 +48898,7 @@ func (obj *patternFlowGtpv1VersionCounter) ToJson() string {
 func (obj *patternFlowGtpv1VersionCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -50579,7 +48998,7 @@ func (obj *patternFlowGtpv1ProtocolTypeCounter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -50601,7 +49020,7 @@ func (obj *patternFlowGtpv1ProtocolTypeCounter) ToJson() string {
 func (obj *patternFlowGtpv1ProtocolTypeCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -50701,7 +49120,7 @@ func (obj *patternFlowGtpv1ReservedCounter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -50723,7 +49142,7 @@ func (obj *patternFlowGtpv1ReservedCounter) ToJson() string {
 func (obj *patternFlowGtpv1ReservedCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -50823,7 +49242,7 @@ func (obj *patternFlowGtpv1EFlagCounter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -50845,7 +49264,7 @@ func (obj *patternFlowGtpv1EFlagCounter) ToJson() string {
 func (obj *patternFlowGtpv1EFlagCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -50945,7 +49364,7 @@ func (obj *patternFlowGtpv1SFlagCounter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -50967,7 +49386,7 @@ func (obj *patternFlowGtpv1SFlagCounter) ToJson() string {
 func (obj *patternFlowGtpv1SFlagCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -51067,7 +49486,7 @@ func (obj *patternFlowGtpv1PnFlagCounter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -51089,7 +49508,7 @@ func (obj *patternFlowGtpv1PnFlagCounter) ToJson() string {
 func (obj *patternFlowGtpv1PnFlagCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -51189,7 +49608,7 @@ func (obj *patternFlowGtpv1MessageTypeCounter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -51211,7 +49630,7 @@ func (obj *patternFlowGtpv1MessageTypeCounter) ToJson() string {
 func (obj *patternFlowGtpv1MessageTypeCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -51311,7 +49730,7 @@ func (obj *patternFlowGtpv1MessageLengthCounter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -51333,7 +49752,7 @@ func (obj *patternFlowGtpv1MessageLengthCounter) ToJson() string {
 func (obj *patternFlowGtpv1MessageLengthCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -51433,7 +49852,7 @@ func (obj *patternFlowGtpv1TeidCounter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -51455,7 +49874,7 @@ func (obj *patternFlowGtpv1TeidCounter) ToJson() string {
 func (obj *patternFlowGtpv1TeidCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -51555,7 +49974,7 @@ func (obj *patternFlowGtpv1SquenceNumberCounter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -51577,7 +49996,7 @@ func (obj *patternFlowGtpv1SquenceNumberCounter) ToJson() string {
 func (obj *patternFlowGtpv1SquenceNumberCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -51677,7 +50096,7 @@ func (obj *patternFlowGtpv1NPduNumberCounter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -51699,7 +50118,7 @@ func (obj *patternFlowGtpv1NPduNumberCounter) ToJson() string {
 func (obj *patternFlowGtpv1NPduNumberCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -51799,7 +50218,7 @@ func (obj *patternFlowGtpv1NextExtensionHeaderTypeCounter) FromYaml(value string
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -51821,7 +50240,7 @@ func (obj *patternFlowGtpv1NextExtensionHeaderTypeCounter) ToJson() string {
 func (obj *patternFlowGtpv1NextExtensionHeaderTypeCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -51921,7 +50340,7 @@ func (obj *patternFlowGtpExtensionExtensionLength) FromYaml(value string) error 
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -51943,7 +50362,7 @@ func (obj *patternFlowGtpExtensionExtensionLength) ToJson() string {
 func (obj *patternFlowGtpExtensionExtensionLength) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -52100,7 +50519,7 @@ func (obj *patternFlowGtpExtensionContents) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -52122,7 +50541,7 @@ func (obj *patternFlowGtpExtensionContents) ToJson() string {
 func (obj *patternFlowGtpExtensionContents) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -52279,7 +50698,7 @@ func (obj *patternFlowGtpExtensionNextExtensionHeader) FromYaml(value string) er
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -52301,7 +50720,7 @@ func (obj *patternFlowGtpExtensionNextExtensionHeader) ToJson() string {
 func (obj *patternFlowGtpExtensionNextExtensionHeader) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -52458,7 +50877,7 @@ func (obj *patternFlowGtpv2VersionCounter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -52480,7 +50899,7 @@ func (obj *patternFlowGtpv2VersionCounter) ToJson() string {
 func (obj *patternFlowGtpv2VersionCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -52580,7 +50999,7 @@ func (obj *patternFlowGtpv2PiggybackingFlagCounter) FromYaml(value string) error
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -52602,7 +51021,7 @@ func (obj *patternFlowGtpv2PiggybackingFlagCounter) ToJson() string {
 func (obj *patternFlowGtpv2PiggybackingFlagCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -52702,7 +51121,7 @@ func (obj *patternFlowGtpv2TeidFlagCounter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -52724,7 +51143,7 @@ func (obj *patternFlowGtpv2TeidFlagCounter) ToJson() string {
 func (obj *patternFlowGtpv2TeidFlagCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -52824,7 +51243,7 @@ func (obj *patternFlowGtpv2Spare1Counter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -52846,7 +51265,7 @@ func (obj *patternFlowGtpv2Spare1Counter) ToJson() string {
 func (obj *patternFlowGtpv2Spare1Counter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -52946,7 +51365,7 @@ func (obj *patternFlowGtpv2MessageTypeCounter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -52968,7 +51387,7 @@ func (obj *patternFlowGtpv2MessageTypeCounter) ToJson() string {
 func (obj *patternFlowGtpv2MessageTypeCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -53068,7 +51487,7 @@ func (obj *patternFlowGtpv2MessageLengthCounter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -53090,7 +51509,7 @@ func (obj *patternFlowGtpv2MessageLengthCounter) ToJson() string {
 func (obj *patternFlowGtpv2MessageLengthCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -53190,7 +51609,7 @@ func (obj *patternFlowGtpv2TeidCounter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -53212,7 +51631,7 @@ func (obj *patternFlowGtpv2TeidCounter) ToJson() string {
 func (obj *patternFlowGtpv2TeidCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -53312,7 +51731,7 @@ func (obj *patternFlowGtpv2SequenceNumberCounter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -53334,7 +51753,7 @@ func (obj *patternFlowGtpv2SequenceNumberCounter) ToJson() string {
 func (obj *patternFlowGtpv2SequenceNumberCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -53434,7 +51853,7 @@ func (obj *patternFlowGtpv2Spare2Counter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -53456,7 +51875,7 @@ func (obj *patternFlowGtpv2Spare2Counter) ToJson() string {
 func (obj *patternFlowGtpv2Spare2Counter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -53556,7 +51975,7 @@ func (obj *patternFlowArpHardwareTypeCounter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -53578,7 +51997,7 @@ func (obj *patternFlowArpHardwareTypeCounter) ToJson() string {
 func (obj *patternFlowArpHardwareTypeCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -53678,7 +52097,7 @@ func (obj *patternFlowArpProtocolTypeCounter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -53700,7 +52119,7 @@ func (obj *patternFlowArpProtocolTypeCounter) ToJson() string {
 func (obj *patternFlowArpProtocolTypeCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -53800,7 +52219,7 @@ func (obj *patternFlowArpHardwareLengthCounter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -53822,7 +52241,7 @@ func (obj *patternFlowArpHardwareLengthCounter) ToJson() string {
 func (obj *patternFlowArpHardwareLengthCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -53922,7 +52341,7 @@ func (obj *patternFlowArpProtocolLengthCounter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -53944,7 +52363,7 @@ func (obj *patternFlowArpProtocolLengthCounter) ToJson() string {
 func (obj *patternFlowArpProtocolLengthCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -54044,7 +52463,7 @@ func (obj *patternFlowArpOperationCounter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -54066,7 +52485,7 @@ func (obj *patternFlowArpOperationCounter) ToJson() string {
 func (obj *patternFlowArpOperationCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -54166,7 +52585,7 @@ func (obj *patternFlowArpSenderHardwareAddrCounter) FromYaml(value string) error
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -54188,7 +52607,7 @@ func (obj *patternFlowArpSenderHardwareAddrCounter) ToJson() string {
 func (obj *patternFlowArpSenderHardwareAddrCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -54288,7 +52707,7 @@ func (obj *patternFlowArpSenderProtocolAddrCounter) FromYaml(value string) error
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -54310,7 +52729,7 @@ func (obj *patternFlowArpSenderProtocolAddrCounter) ToJson() string {
 func (obj *patternFlowArpSenderProtocolAddrCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -54410,7 +52829,7 @@ func (obj *patternFlowArpTargetHardwareAddrCounter) FromYaml(value string) error
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -54432,7 +52851,7 @@ func (obj *patternFlowArpTargetHardwareAddrCounter) ToJson() string {
 func (obj *patternFlowArpTargetHardwareAddrCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -54532,7 +52951,7 @@ func (obj *patternFlowArpTargetProtocolAddrCounter) FromYaml(value string) error
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -54554,7 +52973,7 @@ func (obj *patternFlowArpTargetProtocolAddrCounter) ToJson() string {
 func (obj *patternFlowArpTargetProtocolAddrCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -54654,7 +53073,7 @@ func (obj *patternFlowIcmpEchoType) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -54676,7 +53095,7 @@ func (obj *patternFlowIcmpEchoType) ToJson() string {
 func (obj *patternFlowIcmpEchoType) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -54833,7 +53252,7 @@ func (obj *patternFlowIcmpEchoCode) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -54855,7 +53274,7 @@ func (obj *patternFlowIcmpEchoCode) ToJson() string {
 func (obj *patternFlowIcmpEchoCode) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -55012,7 +53431,7 @@ func (obj *patternFlowIcmpEchoChecksum) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -55034,7 +53453,7 @@ func (obj *patternFlowIcmpEchoChecksum) ToJson() string {
 func (obj *patternFlowIcmpEchoChecksum) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -55147,7 +53566,7 @@ func (obj *patternFlowIcmpEchoIdentifier) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -55169,7 +53588,7 @@ func (obj *patternFlowIcmpEchoIdentifier) ToJson() string {
 func (obj *patternFlowIcmpEchoIdentifier) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -55326,7 +53745,7 @@ func (obj *patternFlowIcmpEchoSequenceNumber) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -55348,7 +53767,7 @@ func (obj *patternFlowIcmpEchoSequenceNumber) ToJson() string {
 func (obj *patternFlowIcmpEchoSequenceNumber) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -55505,7 +53924,7 @@ func (obj *patternFlowIcmpv6EchoType) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -55527,7 +53946,7 @@ func (obj *patternFlowIcmpv6EchoType) ToJson() string {
 func (obj *patternFlowIcmpv6EchoType) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -55684,7 +54103,7 @@ func (obj *patternFlowIcmpv6EchoCode) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -55706,7 +54125,7 @@ func (obj *patternFlowIcmpv6EchoCode) ToJson() string {
 func (obj *patternFlowIcmpv6EchoCode) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -55863,7 +54282,7 @@ func (obj *patternFlowIcmpv6EchoIdentifier) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -55885,7 +54304,7 @@ func (obj *patternFlowIcmpv6EchoIdentifier) ToJson() string {
 func (obj *patternFlowIcmpv6EchoIdentifier) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -56042,7 +54461,7 @@ func (obj *patternFlowIcmpv6EchoSequenceNumber) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -56064,7 +54483,7 @@ func (obj *patternFlowIcmpv6EchoSequenceNumber) ToJson() string {
 func (obj *patternFlowIcmpv6EchoSequenceNumber) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -56221,7 +54640,7 @@ func (obj *patternFlowIcmpv6EchoChecksum) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -56243,7 +54662,7 @@ func (obj *patternFlowIcmpv6EchoChecksum) ToJson() string {
 func (obj *patternFlowIcmpv6EchoChecksum) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -56356,7 +54775,7 @@ func (obj *patternFlowPppAddressCounter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -56378,7 +54797,7 @@ func (obj *patternFlowPppAddressCounter) ToJson() string {
 func (obj *patternFlowPppAddressCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -56478,7 +54897,7 @@ func (obj *patternFlowPppControlCounter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -56500,7 +54919,7 @@ func (obj *patternFlowPppControlCounter) ToJson() string {
 func (obj *patternFlowPppControlCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -56600,7 +55019,7 @@ func (obj *patternFlowPppProtocolTypeCounter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -56622,7 +55041,7 @@ func (obj *patternFlowPppProtocolTypeCounter) ToJson() string {
 func (obj *patternFlowPppProtocolTypeCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -56722,7 +55141,7 @@ func (obj *patternFlowIgmpv1VersionCounter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -56744,7 +55163,7 @@ func (obj *patternFlowIgmpv1VersionCounter) ToJson() string {
 func (obj *patternFlowIgmpv1VersionCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -56844,7 +55263,7 @@ func (obj *patternFlowIgmpv1TypeCounter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -56866,7 +55285,7 @@ func (obj *patternFlowIgmpv1TypeCounter) ToJson() string {
 func (obj *patternFlowIgmpv1TypeCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -56966,7 +55385,7 @@ func (obj *patternFlowIgmpv1UnusedCounter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -56988,7 +55407,7 @@ func (obj *patternFlowIgmpv1UnusedCounter) ToJson() string {
 func (obj *patternFlowIgmpv1UnusedCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -57088,7 +55507,7 @@ func (obj *patternFlowIgmpv1GroupAddressCounter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -57110,7 +55529,7 @@ func (obj *patternFlowIgmpv1GroupAddressCounter) ToJson() string {
 func (obj *patternFlowIgmpv1GroupAddressCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -57210,7 +55629,7 @@ func (obj *deviceBgpSrTePolicyNextHop) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -57232,7 +55651,7 @@ func (obj *deviceBgpSrTePolicyNextHop) ToJson() string {
 func (obj *deviceBgpSrTePolicyNextHop) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -57362,7 +55781,7 @@ func (obj *deviceBgpAddPath) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -57384,7 +55803,7 @@ func (obj *deviceBgpAddPath) ToJson() string {
 func (obj *deviceBgpAddPath) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -57452,7 +55871,7 @@ func (obj *deviceBgpAsPath) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -57474,7 +55893,7 @@ func (obj *deviceBgpAsPath) ToJson() string {
 func (obj *deviceBgpAsPath) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -57606,7 +56025,7 @@ func (obj *deviceBgpTunnelTlv) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -57628,7 +56047,7 @@ func (obj *deviceBgpTunnelTlv) ToJson() string {
 func (obj *deviceBgpTunnelTlv) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -57773,7 +56192,7 @@ func (obj *deviceBgpCommunity) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -57795,7 +56214,7 @@ func (obj *deviceBgpCommunity) ToJson() string {
 func (obj *deviceBgpCommunity) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -57910,7 +56329,7 @@ func (obj *deviceBgpv4RouteAddress) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -57932,7 +56351,7 @@ func (obj *deviceBgpv4RouteAddress) ToJson() string {
 func (obj *deviceBgpv4RouteAddress) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -58048,7 +56467,7 @@ func (obj *deviceBgpRouteAdvanced) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -58070,7 +56489,7 @@ func (obj *deviceBgpRouteAdvanced) ToJson() string {
 func (obj *deviceBgpRouteAdvanced) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -58161,7 +56580,7 @@ func (obj *deviceBgpv6RouteAddress) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -58183,7 +56602,7 @@ func (obj *deviceBgpv6RouteAddress) ToJson() string {
 func (obj *deviceBgpv6RouteAddress) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -58299,7 +56718,7 @@ func (obj *patternFlowIpv4PriorityRawCounter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -58321,7 +56740,7 @@ func (obj *patternFlowIpv4PriorityRawCounter) ToJson() string {
 func (obj *patternFlowIpv4PriorityRawCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -58421,7 +56840,7 @@ func (obj *patternFlowIpv4TosPrecedence) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -58443,7 +56862,7 @@ func (obj *patternFlowIpv4TosPrecedence) ToJson() string {
 func (obj *patternFlowIpv4TosPrecedence) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -58600,7 +57019,7 @@ func (obj *patternFlowIpv4TosDelay) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -58622,7 +57041,7 @@ func (obj *patternFlowIpv4TosDelay) ToJson() string {
 func (obj *patternFlowIpv4TosDelay) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -58779,7 +57198,7 @@ func (obj *patternFlowIpv4TosThroughput) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -58801,7 +57220,7 @@ func (obj *patternFlowIpv4TosThroughput) ToJson() string {
 func (obj *patternFlowIpv4TosThroughput) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -58958,7 +57377,7 @@ func (obj *patternFlowIpv4TosReliability) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -58980,7 +57399,7 @@ func (obj *patternFlowIpv4TosReliability) ToJson() string {
 func (obj *patternFlowIpv4TosReliability) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -59137,7 +57556,7 @@ func (obj *patternFlowIpv4TosMonetary) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -59159,7 +57578,7 @@ func (obj *patternFlowIpv4TosMonetary) ToJson() string {
 func (obj *patternFlowIpv4TosMonetary) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -59316,7 +57735,7 @@ func (obj *patternFlowIpv4TosUnused) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -59338,7 +57757,7 @@ func (obj *patternFlowIpv4TosUnused) ToJson() string {
 func (obj *patternFlowIpv4TosUnused) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -59495,7 +57914,7 @@ func (obj *patternFlowIpv4DscpPhb) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -59517,7 +57936,7 @@ func (obj *patternFlowIpv4DscpPhb) ToJson() string {
 func (obj *patternFlowIpv4DscpPhb) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -59674,7 +58093,7 @@ func (obj *patternFlowIpv4DscpEcn) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -59696,7 +58115,7 @@ func (obj *patternFlowIpv4DscpEcn) ToJson() string {
 func (obj *patternFlowIpv4DscpEcn) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -59853,7 +58272,7 @@ func (obj *patternFlowGtpExtensionExtensionLengthCounter) FromYaml(value string)
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -59875,7 +58294,7 @@ func (obj *patternFlowGtpExtensionExtensionLengthCounter) ToJson() string {
 func (obj *patternFlowGtpExtensionExtensionLengthCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -59975,7 +58394,7 @@ func (obj *patternFlowGtpExtensionContentsCounter) FromYaml(value string) error 
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -59997,7 +58416,7 @@ func (obj *patternFlowGtpExtensionContentsCounter) ToJson() string {
 func (obj *patternFlowGtpExtensionContentsCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -60097,7 +58516,7 @@ func (obj *patternFlowGtpExtensionNextExtensionHeaderCounter) FromYaml(value str
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -60119,7 +58538,7 @@ func (obj *patternFlowGtpExtensionNextExtensionHeaderCounter) ToJson() string {
 func (obj *patternFlowGtpExtensionNextExtensionHeaderCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -60219,7 +58638,7 @@ func (obj *patternFlowIcmpEchoTypeCounter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -60241,7 +58660,7 @@ func (obj *patternFlowIcmpEchoTypeCounter) ToJson() string {
 func (obj *patternFlowIcmpEchoTypeCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -60341,7 +58760,7 @@ func (obj *patternFlowIcmpEchoCodeCounter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -60363,7 +58782,7 @@ func (obj *patternFlowIcmpEchoCodeCounter) ToJson() string {
 func (obj *patternFlowIcmpEchoCodeCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -60463,7 +58882,7 @@ func (obj *patternFlowIcmpEchoIdentifierCounter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -60485,7 +58904,7 @@ func (obj *patternFlowIcmpEchoIdentifierCounter) ToJson() string {
 func (obj *patternFlowIcmpEchoIdentifierCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -60585,7 +59004,7 @@ func (obj *patternFlowIcmpEchoSequenceNumberCounter) FromYaml(value string) erro
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -60607,7 +59026,7 @@ func (obj *patternFlowIcmpEchoSequenceNumberCounter) ToJson() string {
 func (obj *patternFlowIcmpEchoSequenceNumberCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -60707,7 +59126,7 @@ func (obj *patternFlowIcmpv6EchoTypeCounter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -60729,7 +59148,7 @@ func (obj *patternFlowIcmpv6EchoTypeCounter) ToJson() string {
 func (obj *patternFlowIcmpv6EchoTypeCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -60829,7 +59248,7 @@ func (obj *patternFlowIcmpv6EchoCodeCounter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -60851,7 +59270,7 @@ func (obj *patternFlowIcmpv6EchoCodeCounter) ToJson() string {
 func (obj *patternFlowIcmpv6EchoCodeCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -60951,7 +59370,7 @@ func (obj *patternFlowIcmpv6EchoIdentifierCounter) FromYaml(value string) error 
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -60973,7 +59392,7 @@ func (obj *patternFlowIcmpv6EchoIdentifierCounter) ToJson() string {
 func (obj *patternFlowIcmpv6EchoIdentifierCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -61073,7 +59492,7 @@ func (obj *patternFlowIcmpv6EchoSequenceNumberCounter) FromYaml(value string) er
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -61095,7 +59514,7 @@ func (obj *patternFlowIcmpv6EchoSequenceNumberCounter) ToJson() string {
 func (obj *patternFlowIcmpv6EchoSequenceNumberCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -61195,7 +59614,7 @@ func (obj *deviceBgpAsPathSegment) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -61217,7 +59636,7 @@ func (obj *deviceBgpAsPathSegment) ToJson() string {
 func (obj *deviceBgpAsPathSegment) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -61320,7 +59739,7 @@ func (obj *deviceBgpSegmentList) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -61342,7 +59761,7 @@ func (obj *deviceBgpSegmentList) ToJson() string {
 func (obj *deviceBgpSegmentList) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -61459,7 +59878,7 @@ func (obj *deviceBgpRemoteEndpointSubTlv) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -61481,7 +59900,7 @@ func (obj *deviceBgpRemoteEndpointSubTlv) ToJson() string {
 func (obj *deviceBgpRemoteEndpointSubTlv) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -61604,7 +60023,7 @@ func (obj *deviceBgpPreferenceSubTlv) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -61626,7 +60045,7 @@ func (obj *deviceBgpPreferenceSubTlv) ToJson() string {
 func (obj *deviceBgpPreferenceSubTlv) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -61694,7 +60113,7 @@ func (obj *deviceBgpBindingSubTlv) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -61716,7 +60135,7 @@ func (obj *deviceBgpBindingSubTlv) ToJson() string {
 func (obj *deviceBgpBindingSubTlv) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -61889,7 +60308,7 @@ func (obj *deviceBgpExplicitNullLabelPolicySubTlv) FromYaml(value string) error 
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -61911,7 +60330,7 @@ func (obj *deviceBgpExplicitNullLabelPolicySubTlv) ToJson() string {
 func (obj *deviceBgpExplicitNullLabelPolicySubTlv) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -61992,7 +60411,7 @@ func (obj *patternFlowIpv4TosPrecedenceCounter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -62014,7 +60433,7 @@ func (obj *patternFlowIpv4TosPrecedenceCounter) ToJson() string {
 func (obj *patternFlowIpv4TosPrecedenceCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -62114,7 +60533,7 @@ func (obj *patternFlowIpv4TosDelayCounter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -62136,7 +60555,7 @@ func (obj *patternFlowIpv4TosDelayCounter) ToJson() string {
 func (obj *patternFlowIpv4TosDelayCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -62236,7 +60655,7 @@ func (obj *patternFlowIpv4TosThroughputCounter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -62258,7 +60677,7 @@ func (obj *patternFlowIpv4TosThroughputCounter) ToJson() string {
 func (obj *patternFlowIpv4TosThroughputCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -62358,7 +60777,7 @@ func (obj *patternFlowIpv4TosReliabilityCounter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -62380,7 +60799,7 @@ func (obj *patternFlowIpv4TosReliabilityCounter) ToJson() string {
 func (obj *patternFlowIpv4TosReliabilityCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -62480,7 +60899,7 @@ func (obj *patternFlowIpv4TosMonetaryCounter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -62502,7 +60921,7 @@ func (obj *patternFlowIpv4TosMonetaryCounter) ToJson() string {
 func (obj *patternFlowIpv4TosMonetaryCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -62602,7 +61021,7 @@ func (obj *patternFlowIpv4TosUnusedCounter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -62624,7 +61043,7 @@ func (obj *patternFlowIpv4TosUnusedCounter) ToJson() string {
 func (obj *patternFlowIpv4TosUnusedCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -62724,7 +61143,7 @@ func (obj *patternFlowIpv4DscpPhbCounter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -62746,7 +61165,7 @@ func (obj *patternFlowIpv4DscpPhbCounter) ToJson() string {
 func (obj *patternFlowIpv4DscpPhbCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -62846,7 +61265,7 @@ func (obj *patternFlowIpv4DscpEcnCounter) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -62868,7 +61287,7 @@ func (obj *patternFlowIpv4DscpEcnCounter) ToJson() string {
 func (obj *patternFlowIpv4DscpEcnCounter) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }
@@ -62968,7 +61387,7 @@ func (obj *deviceBgpSegment) FromYaml(value string) error {
 	}
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(data), obj.msg())
 }
@@ -62990,7 +61409,7 @@ func (obj *deviceBgpSegment) ToJson() string {
 func (obj *deviceBgpSegment) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
-		DiscardUnknown: true,
+		DiscardUnknown: false,
 	}
 	return opts.Unmarshal([]byte(value), obj.msg())
 }

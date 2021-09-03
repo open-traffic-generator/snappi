@@ -149,8 +149,7 @@ func TestGetMetrics500FlowResponseError(t *testing.T) {
 	_, err := api.GetMetrics(req)
 	result := strings.Contains(err.Error(), "requested flow is not available in configured flows")
 	log.Print(result)
-	// TODO: uncomment this once 500 response is working
-	// assert.Equal(t, result, true)
+	assert.Equal(t, result, true)
 }
 
 func TestGrpcGetMetricsPortResponse(t *testing.T) {

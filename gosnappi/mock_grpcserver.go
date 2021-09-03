@@ -59,19 +59,15 @@ func (s *server) SetConfig(ctx context.Context, req *snappipb.SetConfigRequest) 
 	var resp *snappipb.SetConfigResponse
 	if reflect.TypeOf(req.Config) != reflect.TypeOf(mockConfig) {
 		resp = &snappipb.SetConfigResponse{
-			StatusCode_400: &snappipb.SetConfigResponse_StatusCode400{
-				BadRequest: &snappipb.BadRequest{
-					ResponseError: &snappipb.ResponseError{
-						Errors: []string{"Invalid Config object received"},
-					},
-				},
+			StatusCode_400: &snappipb.ResponseError{
+				Errors: []string{"Invalid Config object received"},
 			},
 		}
 	} else {
 		mockConfig = req.Config
 		resp = &snappipb.SetConfigResponse{
-			StatusCode_200: &snappipb.SetConfigResponse_StatusCode200{
-				Success: &snappipb.Success{},
+			StatusCode_200: &snappipb.ResponseWarning{
+				Warnings: []string{},
 			},
 		}
 	}
@@ -81,9 +77,7 @@ func (s *server) SetConfig(ctx context.Context, req *snappipb.SetConfigRequest) 
 
 func (s *server) GetConfig(ctx context.Context, in *emptypb.Empty) (*snappipb.GetConfigResponse, error) {
 	resp := &snappipb.GetConfigResponse{
-		StatusCode_200: &snappipb.GetConfigResponse_StatusCode200{
-			Config: mockConfig,
-		},
+		StatusCode_200: mockConfig,
 	}
 	return resp, nil
 }
@@ -152,30 +146,20 @@ func (s *server) GetMetrics(ctx context.Context, req *snappipb.GetMetricsRequest
 			res := contains(flowNames, req_flow)
 			if !res {
 				resp = &snappipb.GetMetricsResponse{
-					StatusCode_500: &snappipb.GetMetricsResponse_StatusCode500{
-						InternalServerError: &snappipb.InternalServerError{
-							ResponseError: &snappipb.ResponseError{
-								Errors: []string{"requested flow is not available in configured flows"},
-							},
-						},
+					StatusCode_500: &snappipb.ResponseError{
+						Errors: []string{"requested flow is not available in configured flows"},
 					},
 				}
 			} else if len(metricsDisabledFlows) > 0 {
 				resp = &snappipb.GetMetricsResponse{
-					StatusCode_400: &snappipb.GetMetricsResponse_StatusCode400{
-						BadRequest: &snappipb.BadRequest{
-							ResponseError: &snappipb.ResponseError{
-								Errors: []string{"metrics not enabled for all the flows"},
-							},
-						},
+					StatusCode_400: &snappipb.ResponseError{
+						Errors: []string{"metrics not enabled for all the flows"},
 					},
 				}
 			} else {
 				resp = &snappipb.GetMetricsResponse{
-					StatusCode_200: &snappipb.GetMetricsResponse_StatusCode200{
-						MetricsResponse: &snappipb.MetricsResponse{
-							FlowMetrics: []*snappipb.FlowMetric{f},
-						},
+					StatusCode_200: &snappipb.MetricsResponse{
+						FlowMetrics: []*snappipb.FlowMetric{f},
 					},
 				}
 			}
@@ -187,20 +171,14 @@ func (s *server) GetMetrics(ctx context.Context, req *snappipb.GetMetricsRequest
 			res := contains(portNames, req_port)
 			if !res {
 				resp = &snappipb.GetMetricsResponse{
-					StatusCode_400: &snappipb.GetMetricsResponse_StatusCode400{
-						BadRequest: &snappipb.BadRequest{
-							ResponseError: &snappipb.ResponseError{
-								Errors: []string{"requested port is not available in configured ports"},
-							},
-						},
+					StatusCode_400: &snappipb.ResponseError{
+						Errors: []string{"requested port is not available in configured ports"},
 					},
 				}
 			} else {
 				resp = &snappipb.GetMetricsResponse{
-					StatusCode_200: &snappipb.GetMetricsResponse_StatusCode200{
-						MetricsResponse: &snappipb.MetricsResponse{
-							PortMetrics: []*snappipb.PortMetric{p},
-						},
+					StatusCode_200: &snappipb.MetricsResponse{
+						PortMetrics: []*snappipb.PortMetric{p},
 					},
 				}
 			}
@@ -214,12 +192,8 @@ func (s *server) GetMetrics(ctx context.Context, req *snappipb.GetMetricsRequest
 			for _, name := range someNames {
 				if !contains(allNames, name) {
 					return &snappipb.GetMetricsResponse{
-						StatusCode_400: &snappipb.GetMetricsResponse_StatusCode400{
-							BadRequest: &snappipb.BadRequest{
-								ResponseError: &snappipb.ResponseError{
-									Errors: []string{name + " is not a valid BGPv4 device"},
-								},
-							},
+						StatusCode_400: &snappipb.ResponseError{
+							Errors: []string{name + " is not a valid BGPv4 device"},
 						},
 					}, nil
 				}
@@ -241,10 +215,8 @@ func (s *server) GetMetrics(ctx context.Context, req *snappipb.GetMetricsRequest
 		}
 
 		resp = &snappipb.GetMetricsResponse{
-			StatusCode_200: &snappipb.GetMetricsResponse_StatusCode200{
-				MetricsResponse: &snappipb.MetricsResponse{
-					Bgpv4Metrics: metrics,
-				},
+			StatusCode_200: &snappipb.MetricsResponse{
+				Bgpv4Metrics: metrics,
 			},
 		}
 	}
@@ -258,18 +230,14 @@ func (s *server) SetTransmitState(ctx context.Context, req *snappipb.SetTransmit
 		res := contains(flowNames, req_flow)
 		if !res {
 			resp = &snappipb.SetTransmitStateResponse{
-				StatusCode_400: &snappipb.SetTransmitStateResponse_StatusCode400{
-					BadRequest: &snappipb.BadRequest{
-						ResponseError: &snappipb.ResponseError{
-							Errors: []string{"requested flow is not available in configured flows to start"},
-						},
-					},
+				StatusCode_400: &snappipb.ResponseError{
+					Errors: []string{"requested flow is not available in configured flows to start"},
 				},
 			}
 		} else {
 			resp = &snappipb.SetTransmitStateResponse{
-				StatusCode_200: &snappipb.SetTransmitStateResponse_StatusCode200{
-					Success: &snappipb.Success{},
+				StatusCode_200: &snappipb.ResponseWarning{
+					Warnings: []string{},
 				},
 			}
 		}
@@ -284,18 +252,14 @@ func (s *server) SetLinkState(ctx context.Context, req *snappipb.SetLinkStateReq
 		res := contains(portNames, req_port)
 		if !res {
 			resp = &snappipb.SetLinkStateResponse{
-				StatusCode_400: &snappipb.SetLinkStateResponse_StatusCode400{
-					BadRequest: &snappipb.BadRequest{
-						ResponseError: &snappipb.ResponseError{
-							Errors: []string{"requested port is not available in configured ports to do link down"},
-						},
-					},
+				StatusCode_400: &snappipb.ResponseError{
+					Errors: []string{"requested port is not available in configured ports to do link down"},
 				},
 			}
 		} else {
 			resp = &snappipb.SetLinkStateResponse{
-				StatusCode_200: &snappipb.SetLinkStateResponse_StatusCode200{
-					Success: &snappipb.Success{},
+				StatusCode_200: &snappipb.ResponseWarning{
+					Warnings: []string{},
 				},
 			}
 		}
@@ -310,18 +274,14 @@ func (s *server) SetCaptureState(ctx context.Context, req *snappipb.SetCaptureSt
 		res := contains(portNames, req_port)
 		if !res {
 			resp = &snappipb.SetCaptureStateResponse{
-				StatusCode_400: &snappipb.SetCaptureStateResponse_StatusCode400{
-					BadRequest: &snappipb.BadRequest{
-						ResponseError: &snappipb.ResponseError{
-							Errors: []string{"requested port is not available in configured ports to start capture"},
-						},
-					},
+				StatusCode_400: &snappipb.ResponseError{
+					Errors: []string{"requested port is not available in configured ports to start capture"},
 				},
 			}
 		} else {
 			resp = &snappipb.SetCaptureStateResponse{
-				StatusCode_200: &snappipb.SetCaptureStateResponse_StatusCode200{
-					Success: &snappipb.Success{},
+				StatusCode_200: &snappipb.ResponseWarning{
+					Warnings: []string{},
 				},
 			}
 		}
@@ -336,18 +296,14 @@ func (s *server) SetRouteState(ctx context.Context, req *snappipb.SetRouteStateR
 		res := contains(routeNames, req_route)
 		if !res {
 			resp = &snappipb.SetRouteStateResponse{
-				StatusCode_400: &snappipb.SetRouteStateResponse_StatusCode400{
-					BadRequest: &snappipb.BadRequest{
-						ResponseError: &snappipb.ResponseError{
-							Errors: []string{"requested route is not available in configured routes to advertise"},
-						},
-					},
+				StatusCode_400: &snappipb.ResponseError{
+					Errors: []string{"requested route is not available in configured routes to advertise"},
 				},
 			}
 		} else {
 			resp = &snappipb.SetRouteStateResponse{
-				StatusCode_200: &snappipb.SetRouteStateResponse_StatusCode200{
-					Success: &snappipb.Success{},
+				StatusCode_200: &snappipb.ResponseWarning{
+					Warnings: []string{},
 				},
 			}
 		}
