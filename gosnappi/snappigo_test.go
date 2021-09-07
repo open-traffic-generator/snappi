@@ -90,8 +90,9 @@ func TestGrpcGetMetricsFlowResponse(t *testing.T) {
 	req := api.NewMetricsRequest()
 	flow_req := req.Flow()
 	flow_req.SetFlowNames([]string{"f1", "f2"})
+	log.Print(flow_req.ToJson(), flow_req.ToYaml())
 	resp, err := api.GetMetrics(req)
-	fmt.Println("grpc flow response :", resp.ToYaml())
+	log.Print("grpc flow response :", resp.ToYaml())
 	assert.NotNil(t, resp)
 	assert.Nil(t, err)
 }
@@ -160,6 +161,7 @@ func TestGrpcGetMetricsPortResponse(t *testing.T) {
 	req := api.NewMetricsRequest()
 	flow_req := req.Port()
 	flow_req.SetPortNames([]string{"port1"})
+	log.Print(flow_req.ToJson(), flow_req.ToYaml())
 	resp, err := api.GetMetrics(req)
 	assert.NotNil(t, resp)
 	assert.Nil(t, err)
@@ -204,6 +206,7 @@ func TestGrpcGetMetricsBgpv4Response(t *testing.T) {
 	req.Bgpv4()
 	flow_req := req.Bgpv4()
 	flow_req.SetPeerNames([]string{"BGP-1"})
+	log.Print(flow_req.ToJson(), flow_req.ToYaml())
 	resp, err := api.GetMetrics(req)
 	assert.NotNil(t, resp)
 	assert.Nil(t, err)
@@ -218,7 +221,7 @@ func TestHttpGetMetricsBgpv4Response(t *testing.T) {
 	flow_req := req.Bgpv4()
 	flow_req.SetPeerNames([]string{"BGP-1"})
 	resp, err := api.GetMetrics(req)
-	fmt.Println(resp.ToJson())
+	log.Print(resp.ToJson())
 	assert.NotNil(t, resp)
 	assert.Nil(t, err)
 	assert.Equal(t, resp.Bgpv4Metrics().Items()[0].Name(), string("BGP-1"))
@@ -247,6 +250,7 @@ func TestSetTransmitStateResponse(t *testing.T) {
 	req.SetFlowNames([]string{"f1", "f2"})
 	req.SetState(gosnappi.TransmitStateState.START)
 	assert.Equal(t, flow_names, req.FlowNames())
+	log.Print(req.ToJson(), req.ToYaml())
 	resp, _ := api.SetTransmitState(req)
 	assert.NotNil(t, resp)
 }
@@ -270,6 +274,7 @@ func TestSetLinkStateResponse(t *testing.T) {
 	req := api.NewLinkState()
 	req.SetPortNames([]string{"port1"})
 	req.SetState(gosnappi.LinkStateState.DOWN)
+	log.Print(req.ToJson(), req.ToYaml())
 	assert.Equal(t, port_names, req.PortNames())
 	resp, _ := api.SetLinkState(req)
 	assert.NotNil(t, resp)
@@ -294,6 +299,7 @@ func TestSetCaptureStateResponse(t *testing.T) {
 	req := api.NewCaptureState()
 	req.SetPortNames([]string{"port1"})
 	req.SetState(gosnappi.CaptureStateState.START)
+	log.Print(req.ToJson(), req.ToYaml())
 	assert.Equal(t, port_names, req.PortNames())
 	resp, _ := api.SetCaptureState(req)
 	assert.NotNil(t, resp)
@@ -318,6 +324,7 @@ func TestSetRouteStateResponse(t *testing.T) {
 	req := api.NewRouteState()
 	req.SetNames([]string{"RR-1"})
 	req.SetState(gosnappi.RouteStateState.ADVERTISE)
+	log.Print(req.ToJson(), req.ToYaml())
 	assert.Equal(t, route_names, req.Names())
 	resp, _ := api.SetRouteState(req)
 	assert.NotNil(t, resp)
@@ -520,4 +527,53 @@ func TestDevices(t *testing.T) {
 	// TODO: Add validation on Json and Yaml
 	cap6.ToJson()
 	cap6.ToYaml()
+}
+
+func TestFlows(t *testing.T) {
+	flow_names := []string{"f1", "f2"}
+	port_names := []string{"p1", "p2"}
+	api := gosnappi.NewApi()
+	config := api.NewConfig()
+	port1 := config.Ports().Add().SetName("p1")
+	port2 := config.Ports().Add().SetName("p2")
+	flow1 := config.Flows().Add().SetName("f1")
+	flow2 := config.Flows().Add().SetName("f2")
+	flow1.TxRx().Port().SetTxName(port1.Name()).SetRxName(port2.Name())
+	flow2.TxRx().Port().SetTxName(port1.Name()).SetRxName(port2.Name())
+	for i, P := range config.Ports().Items() {
+		assert.Equal(t, port_names[i], P.Name())
+	}
+	for i, F := range config.Flows().Items() {
+		assert.Equal(t, flow_names[i], F.Name())
+		assert.Equal(t, port_names[0], F.TxRx().Port().TxName())
+		assert.Equal(t, port_names[1], F.TxRx().Port().RxName())
+	}
+
+	eth := flow1.Packet().Add().Ethernet()
+	eth.Src().SetValue("a2:71:d4:59:b3:b8")
+	eth.Dst().SetValue("6e:d2:47:65:aa:69")
+	assert.Equal(t, "a2:71:d4:59:b3:b8", eth.Src().Value())
+	assert.Equal(t, "6e:d2:47:65:aa:69", eth.Dst().Value())
+
+	ipv4 := flow1.Packet().Add().Ipv4()
+	ipv4.Src().SetValue("10.10.10.1")
+	ipv4.Dst().SetValue("10.10.10.2")
+	assert.Equal(t, "10.10.10.1", ipv4.Src().Value())
+	assert.Equal(t, "10.10.10.2", ipv4.Dst().Value())
+
+	udp := flow1.Packet().Add().Udp()
+	udp.SrcPort().SetValue(3000)
+	udp.DstPort().SetValue(4000)
+	udp.Checksum().SetCustom(1)
+	assert.Equal(t, int32(3000), udp.SrcPort().Value())
+	assert.Equal(t, int32(4000), udp.DstPort().Value())
+	assert.Equal(t, int32(1), udp.Checksum().Custom())
+
+	flow1.Duration().FixedPackets().SetPackets(10000).SetGap(2).Delay().SetBytes(8)
+	flow1.Rate().SetPps(1000)
+	assert.Equal(t, int32(10000), flow1.Duration().FixedPackets().Packets())
+	assert.Equal(t, int32(2), flow1.Duration().FixedPackets().Gap())
+	assert.Equal(t, float32(8), flow1.Duration().FixedPackets().Delay().Bytes())
+	assert.Equal(t, int32(1000), flow1.Rate().Pps())
+	log.Print(config.ToYaml())
 }
