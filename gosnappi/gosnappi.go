@@ -624,9 +624,6 @@ func (api *gosnappiApi) httpSetConfig(config Config) (ResponseWarning, error) {
 		}
 		return obj.StatusCode200(), nil
 	}
-	if resp.StatusCode == 200 {
-		return nil, fmt.Errorf(string(bodyBytes))
-	}
 	if resp.StatusCode == 400 {
 		return nil, fmt.Errorf(string(bodyBytes))
 	}
@@ -652,9 +649,6 @@ func (api *gosnappiApi) httpGetConfig() (Config, error) {
 			return nil, err
 		}
 		return obj.StatusCode200(), nil
-	}
-	if resp.StatusCode == 200 {
-		return nil, fmt.Errorf(string(bodyBytes))
 	}
 	if resp.StatusCode == 400 {
 		return nil, fmt.Errorf(string(bodyBytes))
@@ -682,9 +676,6 @@ func (api *gosnappiApi) httpSetTransmitState(transmitState TransmitState) (Respo
 		}
 		return obj.StatusCode200(), nil
 	}
-	if resp.StatusCode == 200 {
-		return nil, fmt.Errorf(string(bodyBytes))
-	}
 	if resp.StatusCode == 400 {
 		return nil, fmt.Errorf(string(bodyBytes))
 	}
@@ -710,9 +701,6 @@ func (api *gosnappiApi) httpSetLinkState(linkState LinkState) (ResponseWarning, 
 			return nil, err
 		}
 		return obj.StatusCode200(), nil
-	}
-	if resp.StatusCode == 200 {
-		return nil, fmt.Errorf(string(bodyBytes))
 	}
 	if resp.StatusCode == 400 {
 		return nil, fmt.Errorf(string(bodyBytes))
@@ -740,9 +728,6 @@ func (api *gosnappiApi) httpSetCaptureState(captureState CaptureState) (Response
 		}
 		return obj.StatusCode200(), nil
 	}
-	if resp.StatusCode == 200 {
-		return nil, fmt.Errorf(string(bodyBytes))
-	}
 	if resp.StatusCode == 400 {
 		return nil, fmt.Errorf(string(bodyBytes))
 	}
@@ -768,9 +753,6 @@ func (api *gosnappiApi) httpUpdateFlows(flowsUpdate FlowsUpdate) (Config, error)
 			return nil, err
 		}
 		return obj.StatusCode200(), nil
-	}
-	if resp.StatusCode == 200 {
-		return nil, fmt.Errorf(string(bodyBytes))
 	}
 	if resp.StatusCode == 400 {
 		return nil, fmt.Errorf(string(bodyBytes))
@@ -798,9 +780,6 @@ func (api *gosnappiApi) httpSetRouteState(routeState RouteState) (ResponseWarnin
 		}
 		return obj.StatusCode200(), nil
 	}
-	if resp.StatusCode == 200 {
-		return nil, fmt.Errorf(string(bodyBytes))
-	}
 	if resp.StatusCode == 400 {
 		return nil, fmt.Errorf(string(bodyBytes))
 	}
@@ -826,9 +805,6 @@ func (api *gosnappiApi) httpGetMetrics(metricsRequest MetricsRequest) (MetricsRe
 			return nil, err
 		}
 		return obj.StatusCode200(), nil
-	}
-	if resp.StatusCode == 200 {
-		return nil, fmt.Errorf(string(bodyBytes))
 	}
 	if resp.StatusCode == 400 {
 		return nil, fmt.Errorf(string(bodyBytes))
@@ -856,9 +832,6 @@ func (api *gosnappiApi) httpGetStateMetrics() (StateMetrics, error) {
 		}
 		return obj.StatusCode200(), nil
 	}
-	if resp.StatusCode == 200 {
-		return nil, fmt.Errorf(string(bodyBytes))
-	}
 	if resp.StatusCode == 400 {
 		return nil, fmt.Errorf(string(bodyBytes))
 	}
@@ -880,9 +853,6 @@ func (api *gosnappiApi) httpGetCapture(captureRequest CaptureRequest) ([]byte, e
 	}
 	if resp.StatusCode == 200 {
 		return bodyBytes, nil
-	}
-	if resp.StatusCode == 200 {
-		return nil, fmt.Errorf(string(bodyBytes))
 	}
 	if resp.StatusCode == 400 {
 		return nil, fmt.Errorf(string(bodyBytes))
