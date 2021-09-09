@@ -9,7 +9,7 @@ import shutil
 
 pkg_name = "snappi"
 go_pkg_name = "gosnappi"
-version = "0.5.4"
+version = "0.5.5"
 models_version = "0.5.4"
 
 # read long description from readme.md
