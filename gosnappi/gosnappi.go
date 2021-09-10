@@ -1,4 +1,4 @@
-// Open Traffic Generator API 0.5.4
+// Open Traffic Generator API 0.5.5
 // License: MIT
 
 package gosnappi
