@@ -1,4 +1,4 @@
-// Open Traffic Generator API 0.5.6
+// Open Traffic Generator API 0.5.7
 // License: MIT
 
 package gosnappi
@@ -221,6 +221,7 @@ type GosnappiApi interface {
 	NewCaptureState() CaptureState
 	NewFlowsUpdate() FlowsUpdate
 	NewRouteState() RouteState
+	NewPingRequest() PingRequest
 	NewMetricsRequest() MetricsRequest
 	NewCaptureRequest() CaptureRequest
 	NewSetConfigResponse() SetConfigResponse
@@ -230,6 +231,7 @@ type GosnappiApi interface {
 	NewSetCaptureStateResponse() SetCaptureStateResponse
 	NewUpdateFlowsResponse() UpdateFlowsResponse
 	NewSetRouteStateResponse() SetRouteStateResponse
+	NewSendPingResponse() SendPingResponse
 	NewGetMetricsResponse() GetMetricsResponse
 	NewGetStateMetricsResponse() GetStateMetricsResponse
 	NewGetCaptureResponse() GetCaptureResponse
@@ -240,6 +242,7 @@ type GosnappiApi interface {
 	SetCaptureState(captureState CaptureState) (ResponseWarning, error)
 	UpdateFlows(flowsUpdate FlowsUpdate) (Config, error)
 	SetRouteState(routeState RouteState) (ResponseWarning, error)
+	SendPing(pingRequest PingRequest) (PingResponse, error)
 	GetMetrics(metricsRequest MetricsRequest) (MetricsResponse, error)
 	GetStateMetrics() (StateMetrics, error)
 	GetCapture(captureRequest CaptureRequest) ([]byte, error)
@@ -267,6 +270,10 @@ func (api *gosnappiApi) NewFlowsUpdate() FlowsUpdate {
 
 func (api *gosnappiApi) NewRouteState() RouteState {
 	return &routeState{obj: &snappipb.RouteState{}}
+}
+
+func (api *gosnappiApi) NewPingRequest() PingRequest {
+	return &pingRequest{obj: &snappipb.PingRequest{}}
 }
 
 func (api *gosnappiApi) NewMetricsRequest() MetricsRequest {
@@ -303,6 +310,10 @@ func (api *gosnappiApi) NewUpdateFlowsResponse() UpdateFlowsResponse {
 
 func (api *gosnappiApi) NewSetRouteStateResponse() SetRouteStateResponse {
 	return &setRouteStateResponse{obj: &snappipb.SetRouteStateResponse{}}
+}
+
+func (api *gosnappiApi) NewSendPingResponse() SendPingResponse {
+	return &sendPingResponse{obj: &snappipb.SendPingResponse{}}
 }
 
 func (api *gosnappiApi) NewGetMetricsResponse() GetMetricsResponse {
@@ -508,6 +519,35 @@ func (api *gosnappiApi) SetRouteState(routeState RouteState) (ResponseWarning, e
 	}
 	if resp.GetStatusCode_200() != nil {
 		return &responseWarning{obj: resp.GetStatusCode_200()}, nil
+	}
+	if resp.GetStatusCode_400() != nil {
+		data, _ := yaml.Marshal(resp.GetStatusCode_400())
+		return nil, fmt.Errorf(string(data))
+	}
+	if resp.GetStatusCode_500() != nil {
+		data, _ := yaml.Marshal(resp.GetStatusCode_500())
+		return nil, fmt.Errorf(string(data))
+	}
+	return nil, fmt.Errorf("response not implemented")
+}
+
+func (api *gosnappiApi) SendPing(pingRequest PingRequest) (PingResponse, error) {
+	if api.hasHttpTransport() {
+		return api.httpSendPing(pingRequest)
+	}
+
+	if err := api.grpcConnect(); err != nil {
+		return nil, err
+	}
+	request := snappipb.SendPingRequest{PingRequest: pingRequest.msg()}
+	ctx, cancelFunc := context.WithTimeout(context.Background(), api.grpc.requestTimeout)
+	defer cancelFunc()
+	resp, err := api.grpcClient.SendPing(ctx, &request)
+	if err != nil {
+		return nil, err
+	}
+	if resp.GetStatusCode_200() != nil {
+		return &pingResponse{obj: resp.GetStatusCode_200()}, nil
 	}
 	if resp.GetStatusCode_400() != nil {
 		data, _ := yaml.Marshal(resp.GetStatusCode_400())
@@ -775,6 +815,32 @@ func (api *gosnappiApi) httpSetRouteState(routeState RouteState) (ResponseWarnin
 	}
 	if resp.StatusCode == 200 {
 		obj := api.NewSetRouteStateResponse()
+		if err := obj.StatusCode200().FromJson(string(bodyBytes)); err != nil {
+			return nil, err
+		}
+		return obj.StatusCode200(), nil
+	}
+	if resp.StatusCode == 400 {
+		return nil, fmt.Errorf(string(bodyBytes))
+	}
+	if resp.StatusCode == 500 {
+		return nil, fmt.Errorf(string(bodyBytes))
+	}
+	return nil, fmt.Errorf("response not implemented")
+}
+
+func (api *gosnappiApi) httpSendPing(pingRequest PingRequest) (PingResponse, error) {
+	resp, err := api.httpSendRecv("control/ping", pingRequest.ToJson(), "POST")
+	if err != nil {
+		return nil, err
+	}
+	bodyBytes, err := ioutil.ReadAll(resp.Body)
+	defer resp.Body.Close()
+	if err != nil {
+		return nil, err
+	}
+	if resp.StatusCode == 200 {
+		obj := api.NewSendPingResponse()
 		if err := obj.StatusCode200().FromJson(string(bodyBytes)); err != nil {
 			return nil, err
 		}
@@ -1847,6 +1913,113 @@ func (obj *routeState) SetState(value RouteStateStateEnum) RouteState {
 	return obj
 }
 
+type pingRequest struct {
+	obj *snappipb.PingRequest
+}
+
+func (obj *pingRequest) msg() *snappipb.PingRequest {
+	return obj.obj
+}
+
+func (obj *pingRequest) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *pingRequest) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
+func (obj *pingRequest) ToYaml() string {
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(obj.msg())
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *pingRequest) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: false,
+	}
+	return opts.Unmarshal([]byte(data), obj.msg())
+}
+
+func (obj *pingRequest) ToJson() string {
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+		Indent:          "  ",
+	}
+	data, err := opts.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *pingRequest) FromJson(value string) error {
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: false,
+	}
+	return opts.Unmarshal([]byte(value), obj.msg())
+}
+
+type PingRequest interface {
+	msg() *snappipb.PingRequest
+	ToPbText() string
+	ToYaml() string
+	ToJson() string
+	FromPbText(value string) error
+	FromYaml(value string) error
+	FromJson(value string) error
+	Endpoints() PingRequestPingIter
+}
+
+// Endpoints returns a []Ping
+//  Array of ping requests
+func (obj *pingRequest) Endpoints() PingRequestPingIter {
+	if obj.obj.Endpoints == nil {
+		obj.obj.Endpoints = []*snappipb.Ping{}
+	}
+	return &pingRequestPingIter{obj: obj}
+}
+
+type pingRequestPingIter struct {
+	obj *pingRequest
+}
+
+type PingRequestPingIter interface {
+	Add() Ping
+	Items() []Ping
+}
+
+func (obj *pingRequestPingIter) Add() Ping {
+	newObj := &snappipb.Ping{}
+	obj.obj.obj.Endpoints = append(obj.obj.obj.Endpoints, newObj)
+	return &ping{obj: newObj}
+}
+
+func (obj *pingRequestPingIter) Items() []Ping {
+	slice := []Ping{}
+	for _, item := range obj.obj.obj.Endpoints {
+		slice = append(slice, &ping{obj: item})
+	}
+	return slice
+}
+
 type metricsRequest struct {
 	obj *snappipb.MetricsRequest
 }
@@ -2840,6 +3013,113 @@ func (obj *setRouteStateResponse) StatusCode400() ResponseError {
 // StatusCode500 returns a ResponseError
 //  description is TBD
 func (obj *setRouteStateResponse) StatusCode500() ResponseError {
+	if obj.obj.StatusCode_500 == nil {
+		obj.obj.StatusCode_500 = &snappipb.ResponseError{}
+	}
+
+	return &responseError{obj: obj.obj.StatusCode_500}
+}
+
+type sendPingResponse struct {
+	obj *snappipb.SendPingResponse
+}
+
+func (obj *sendPingResponse) msg() *snappipb.SendPingResponse {
+	return obj.obj
+}
+
+func (obj *sendPingResponse) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *sendPingResponse) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
+func (obj *sendPingResponse) ToYaml() string {
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(obj.msg())
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *sendPingResponse) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: false,
+	}
+	return opts.Unmarshal([]byte(data), obj.msg())
+}
+
+func (obj *sendPingResponse) ToJson() string {
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+		Indent:          "  ",
+	}
+	data, err := opts.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *sendPingResponse) FromJson(value string) error {
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: false,
+	}
+	return opts.Unmarshal([]byte(value), obj.msg())
+}
+
+type SendPingResponse interface {
+	msg() *snappipb.SendPingResponse
+	ToPbText() string
+	ToYaml() string
+	ToJson() string
+	FromPbText(value string) error
+	FromYaml(value string) error
+	FromJson(value string) error
+	StatusCode200() PingResponse
+	StatusCode400() ResponseError
+	StatusCode500() ResponseError
+}
+
+// StatusCode200 returns a PingResponse
+//  description is TBD
+func (obj *sendPingResponse) StatusCode200() PingResponse {
+	if obj.obj.StatusCode_200 == nil {
+		obj.obj.StatusCode_200 = &snappipb.PingResponse{}
+	}
+
+	return &pingResponse{obj: obj.obj.StatusCode_200}
+}
+
+// StatusCode400 returns a ResponseError
+//  description is TBD
+func (obj *sendPingResponse) StatusCode400() ResponseError {
+	if obj.obj.StatusCode_400 == nil {
+		obj.obj.StatusCode_400 = &snappipb.ResponseError{}
+	}
+
+	return &responseError{obj: obj.obj.StatusCode_400}
+}
+
+// StatusCode500 returns a ResponseError
+//  description is TBD
+func (obj *sendPingResponse) StatusCode500() ResponseError {
 	if obj.obj.StatusCode_500 == nil {
 		obj.obj.StatusCode_500 = &snappipb.ResponseError{}
 	}
@@ -4461,6 +4741,125 @@ func (obj *configOptions) PortOptions() PortOptions {
 	return &portOptions{obj: obj.obj.PortOptions}
 }
 
+type ping struct {
+	obj *snappipb.Ping
+}
+
+func (obj *ping) msg() *snappipb.Ping {
+	return obj.obj
+}
+
+func (obj *ping) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *ping) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
+func (obj *ping) ToYaml() string {
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(obj.msg())
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *ping) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: false,
+	}
+	return opts.Unmarshal([]byte(data), obj.msg())
+}
+
+func (obj *ping) ToJson() string {
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+		Indent:          "  ",
+	}
+	data, err := opts.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *ping) FromJson(value string) error {
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: false,
+	}
+	return opts.Unmarshal([]byte(value), obj.msg())
+}
+
+type Ping interface {
+	msg() *snappipb.Ping
+	ToPbText() string
+	ToYaml() string
+	ToJson() string
+	FromPbText(value string) error
+	FromYaml(value string) error
+	FromJson(value string) error
+	Choice() PingChoiceEnum
+	SetChoice(value PingChoiceEnum) Ping
+	Ipv4() PingIpv4
+	Ipv6() PingIpv6
+}
+
+type PingChoiceEnum string
+
+var PingChoice = struct {
+	IPV4 PingChoiceEnum
+	IPV6 PingChoiceEnum
+}{
+	IPV4: PingChoiceEnum("ipv4"),
+	IPV6: PingChoiceEnum("ipv6"),
+}
+
+func (obj *ping) Choice() PingChoiceEnum {
+	return PingChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+func (obj *ping) SetChoice(value PingChoiceEnum) Ping {
+	intValue := snappipb.Ping_Choice_Enum_value[string(value)]
+	enumValue := snappipb.Ping_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	return obj
+}
+
+// Ipv4 returns a PingIpv4
+//  description is TBD
+func (obj *ping) Ipv4() PingIpv4 {
+	if obj.obj.Ipv4 == nil {
+		obj.obj.Ipv4 = &snappipb.PingIpv4{}
+	}
+	obj.SetChoice(PingChoice.IPV4)
+	return &pingIpv4{obj: obj.obj.Ipv4}
+}
+
+// Ipv6 returns a PingIpv6
+//  description is TBD
+func (obj *ping) Ipv6() PingIpv6 {
+	if obj.obj.Ipv6 == nil {
+		obj.obj.Ipv6 = &snappipb.PingIpv6{}
+	}
+	obj.SetChoice(PingChoice.IPV6)
+	return &pingIpv6{obj: obj.obj.Ipv6}
+}
+
 type portMetricsRequest struct {
 	obj *snappipb.PortMetricsRequest
 }
@@ -5338,6 +5737,113 @@ func (obj *responseError) SetErrors(value []string) ResponseError {
 	}
 
 	return obj
+}
+
+type pingResponse struct {
+	obj *snappipb.PingResponse
+}
+
+func (obj *pingResponse) msg() *snappipb.PingResponse {
+	return obj.obj
+}
+
+func (obj *pingResponse) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *pingResponse) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
+func (obj *pingResponse) ToYaml() string {
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(obj.msg())
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *pingResponse) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: false,
+	}
+	return opts.Unmarshal([]byte(data), obj.msg())
+}
+
+func (obj *pingResponse) ToJson() string {
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+		Indent:          "  ",
+	}
+	data, err := opts.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *pingResponse) FromJson(value string) error {
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: false,
+	}
+	return opts.Unmarshal([]byte(value), obj.msg())
+}
+
+type PingResponse interface {
+	msg() *snappipb.PingResponse
+	ToPbText() string
+	ToYaml() string
+	ToJson() string
+	FromPbText(value string) error
+	FromYaml(value string) error
+	FromJson(value string) error
+	Responses() PingResponseResponseIter
+}
+
+// Responses returns a []Response
+//  description is TBD
+func (obj *pingResponse) Responses() PingResponseResponseIter {
+	if obj.obj.Responses == nil {
+		obj.obj.Responses = []*snappipb.Response{}
+	}
+	return &pingResponseResponseIter{obj: obj}
+}
+
+type pingResponseResponseIter struct {
+	obj *pingResponse
+}
+
+type PingResponseResponseIter interface {
+	Add() Response
+	Items() []Response
+}
+
+func (obj *pingResponseResponseIter) Add() Response {
+	newObj := &snappipb.Response{}
+	obj.obj.obj.Responses = append(obj.obj.obj.Responses, newObj)
+	return &response{obj: newObj}
+}
+
+func (obj *pingResponseResponseIter) Items() []Response {
+	slice := []Response{}
+	for _, item := range obj.obj.obj.Responses {
+		slice = append(slice, &response{obj: item})
+	}
+	return slice
 }
 
 type metricsResponse struct {
@@ -7959,6 +8465,250 @@ func (obj *portOptions) SetLocationPreemption(value bool) PortOptions {
 	return obj
 }
 
+type pingIpv4 struct {
+	obj *snappipb.PingIpv4
+}
+
+func (obj *pingIpv4) msg() *snappipb.PingIpv4 {
+	return obj.obj
+}
+
+func (obj *pingIpv4) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *pingIpv4) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
+func (obj *pingIpv4) ToYaml() string {
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(obj.msg())
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *pingIpv4) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: false,
+	}
+	return opts.Unmarshal([]byte(data), obj.msg())
+}
+
+func (obj *pingIpv4) ToJson() string {
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+		Indent:          "  ",
+	}
+	data, err := opts.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *pingIpv4) FromJson(value string) error {
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: false,
+	}
+	return opts.Unmarshal([]byte(value), obj.msg())
+}
+
+type PingIpv4 interface {
+	msg() *snappipb.PingIpv4
+	ToPbText() string
+	ToYaml() string
+	ToJson() string
+	FromPbText(value string) error
+	FromYaml(value string) error
+	FromJson(value string) error
+	SrcName() string
+	SetSrcName(value string) PingIpv4
+	DstIp() string
+	SetDstIp(value string) PingIpv4
+}
+
+// SrcName returns a string
+//  A base IPv4 interface
+//
+//  x-constraint:
+//  - /components/schemas/Device.Ipv4Base/properties/name
+//
+//
+//  x-constraint:
+//  - /components/schemas/Device.Ipv4Base/properties/name
+//
+func (obj *pingIpv4) SrcName() string {
+	return *obj.obj.SrcName
+}
+
+// SetSrcName sets the string value in the PingIpv4 object
+//  A base IPv4 interface
+//
+//  x-constraint:
+//  - /components/schemas/Device.Ipv4Base/properties/name
+//
+//
+//  x-constraint:
+//  - /components/schemas/Device.Ipv4Base/properties/name
+//
+func (obj *pingIpv4) SetSrcName(value string) PingIpv4 {
+	obj.obj.SrcName = &value
+
+	return obj
+}
+
+// DstIp returns a string
+//  IPv4 address to ping
+func (obj *pingIpv4) DstIp() string {
+	return *obj.obj.DstIp
+}
+
+// SetDstIp sets the string value in the PingIpv4 object
+//  IPv4 address to ping
+func (obj *pingIpv4) SetDstIp(value string) PingIpv4 {
+	obj.obj.DstIp = &value
+
+	return obj
+}
+
+type pingIpv6 struct {
+	obj *snappipb.PingIpv6
+}
+
+func (obj *pingIpv6) msg() *snappipb.PingIpv6 {
+	return obj.obj
+}
+
+func (obj *pingIpv6) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *pingIpv6) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
+func (obj *pingIpv6) ToYaml() string {
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(obj.msg())
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *pingIpv6) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: false,
+	}
+	return opts.Unmarshal([]byte(data), obj.msg())
+}
+
+func (obj *pingIpv6) ToJson() string {
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+		Indent:          "  ",
+	}
+	data, err := opts.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *pingIpv6) FromJson(value string) error {
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: false,
+	}
+	return opts.Unmarshal([]byte(value), obj.msg())
+}
+
+type PingIpv6 interface {
+	msg() *snappipb.PingIpv6
+	ToPbText() string
+	ToYaml() string
+	ToJson() string
+	FromPbText(value string) error
+	FromYaml(value string) error
+	FromJson(value string) error
+	SrcName() string
+	SetSrcName(value string) PingIpv6
+	DstIp() string
+	SetDstIp(value string) PingIpv6
+}
+
+// SrcName returns a string
+//  A base IPv6 interface
+//
+//  x-constraint:
+//  - /components/schemas/Device.Ipv6Base/properties/name
+//
+//
+//  x-constraint:
+//  - /components/schemas/Device.Ipv6Base/properties/name
+//
+func (obj *pingIpv6) SrcName() string {
+	return *obj.obj.SrcName
+}
+
+// SetSrcName sets the string value in the PingIpv6 object
+//  A base IPv6 interface
+//
+//  x-constraint:
+//  - /components/schemas/Device.Ipv6Base/properties/name
+//
+//
+//  x-constraint:
+//  - /components/schemas/Device.Ipv6Base/properties/name
+//
+func (obj *pingIpv6) SetSrcName(value string) PingIpv6 {
+	obj.obj.SrcName = &value
+
+	return obj
+}
+
+// DstIp returns a string
+//  IPv6 addresses to ping.
+func (obj *pingIpv6) DstIp() string {
+	return *obj.obj.DstIp
+}
+
+// SetDstIp sets the string value in the PingIpv6 object
+//  IPv6 addresses to ping.
+func (obj *pingIpv6) SetDstIp(value string) PingIpv6 {
+	obj.obj.DstIp = &value
+
+	return obj
+}
+
 type flowMetricGroupRequest struct {
 	obj *snappipb.FlowMetricGroupRequest
 }
@@ -8137,6 +8887,155 @@ func (obj *flowMetricGroupRequest) SetEgress(value []string) FlowMetricGroupRequ
 		obj.obj.Egress = append(obj.obj.Egress, item)
 	}
 	obj.SetChoice(FlowMetricGroupRequestChoice.EGRESS)
+	return obj
+}
+
+type response struct {
+	obj *snappipb.Response
+}
+
+func (obj *response) msg() *snappipb.Response {
+	return obj.obj
+}
+
+func (obj *response) ToPbText() string {
+	return proto.MarshalTextString(obj.msg())
+}
+
+func (obj *response) FromPbText(value string) error {
+	return proto.UnmarshalText(value, obj.msg())
+}
+
+func (obj *response) ToYaml() string {
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(obj.msg())
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *response) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: false,
+	}
+	return opts.Unmarshal([]byte(data), obj.msg())
+}
+
+func (obj *response) ToJson() string {
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+		Indent:          "  ",
+	}
+	data, err := opts.Marshal(obj.msg())
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *response) FromJson(value string) error {
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: false,
+	}
+	return opts.Unmarshal([]byte(value), obj.msg())
+}
+
+type Response interface {
+	msg() *snappipb.Response
+	ToPbText() string
+	ToYaml() string
+	ToJson() string
+	FromPbText(value string) error
+	FromYaml(value string) error
+	FromJson(value string) error
+	SrcName() string
+	SetSrcName(value string) Response
+	DstIp() string
+	SetDstIp(value string) Response
+	Result() ResponseResultEnum
+	SetResult(value ResponseResultEnum) Response
+}
+
+// SrcName returns a string
+//  The name of the source IPv4 or IPv6 interface from which ping was sent.
+//
+//  x-constraint:
+//  - /components/schemas/Device.Ipv4Base/properties/name
+//  - /components/schemas/Device.Ipv6Base/properties/name
+//
+//
+//  x-constraint:
+//  - /components/schemas/Device.Ipv4Base/properties/name
+//  - /components/schemas/Device.Ipv6Base/properties/name
+//
+func (obj *response) SrcName() string {
+	return *obj.obj.SrcName
+}
+
+// SetSrcName sets the string value in the Response object
+//  The name of the source IPv4 or IPv6 interface from which ping was sent.
+//
+//  x-constraint:
+//  - /components/schemas/Device.Ipv4Base/properties/name
+//  - /components/schemas/Device.Ipv6Base/properties/name
+//
+//
+//  x-constraint:
+//  - /components/schemas/Device.Ipv4Base/properties/name
+//  - /components/schemas/Device.Ipv6Base/properties/name
+//
+func (obj *response) SetSrcName(value string) Response {
+	obj.obj.SrcName = &value
+
+	return obj
+}
+
+// DstIp returns a string
+//  Destination address.
+func (obj *response) DstIp() string {
+	return *obj.obj.DstIp
+}
+
+// SetDstIp sets the string value in the Response object
+//  Destination address.
+func (obj *response) SetDstIp(value string) Response {
+	obj.obj.DstIp = &value
+
+	return obj
+}
+
+type ResponseResultEnum string
+
+var ResponseResult = struct {
+	SUCCESS ResponseResultEnum
+	FAILURE ResponseResultEnum
+}{
+	SUCCESS: ResponseResultEnum("success"),
+	FAILURE: ResponseResultEnum("failure"),
+}
+
+func (obj *response) Result() ResponseResultEnum {
+	return ResponseResultEnum(obj.obj.Result.Enum().String())
+}
+
+func (obj *response) SetResult(value ResponseResultEnum) Response {
+	intValue := snappipb.Response_Result_Enum_value[string(value)]
+	enumValue := snappipb.Response_Result_Enum(intValue)
+	obj.obj.Result = &enumValue
 	return obj
 }
 
