@@ -6,7 +6,7 @@ import (
 	net "net"
 	"reflect"
 
-	snappipb "github.com/open-traffic-generator/snappi/gosnappi/snappipb"
+	snappipb "../gosnappi/snappipb"
 	grpc "google.golang.org/grpc"
 	"google.golang.org/protobuf/types/known/emptypb"
 )
@@ -85,10 +85,10 @@ func (s *server) GetConfig(ctx context.Context, in *emptypb.Empty) (*snappipb.Ge
 func getBgpPeerNames(cfg *snappipb.Config) []string {
 	names := []string{}
 	for _, d := range cfg.Devices {
-		if d == nil || d.Ethernet == nil || d.Ethernet.Ipv4 == nil || d.Ethernet.Ipv4.Bgpv4 == nil {
+		if d == nil || d.Bgp == nil {
 			continue
 		}
-		names = append(names, d.Ethernet.Ipv4.Bgpv4.Name)
+		names = append(names, d.Bgp.Ipv4Interfaces[0].Peers[0].GetName())
 	}
 
 	return names
@@ -115,10 +115,10 @@ func getPortNames(cfg *snappipb.Config) []string {
 func getRouteNames(cfg *snappipb.Config) []string {
 	names := []string{}
 	for _, d := range cfg.Devices {
-		if d == nil || d.Ethernet == nil || d.Ethernet.Ipv4 == nil || d.Ethernet.Ipv4.Bgpv4 == nil {
+		if d == nil || d.Bgp == nil {
 			continue
 		}
-		for _, r := range d.Ethernet.Ipv4.Bgpv4.Bgpv4Routes {
+		for _, r := range d.Bgp.Ipv4Interfaces[0].Peers[0].GetV4Routes() {
 			names = append(names, r.Name)
 		}
 	}

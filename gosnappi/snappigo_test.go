@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/open-traffic-generator/snappi/gosnappi"
+	"../gosnappi"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -26,11 +26,16 @@ func init() {
 
 func config1(api gosnappi.GosnappiApi) gosnappi.Config {
 	config := api.NewConfig()
-	port := config.Ports().Add()
-	port.SetName("port1")
-	port.SetLocation("location1")
+	port1 := config.Ports().Add()
+	port1.SetName("port1")
+	port1.SetLocation("location1")
+	port2 := config.Ports().Add()
+	port2.SetName("port2")
+	port2.SetLocation("location2")
 	f1 := config.Flows().Add().SetName("f1")
+	f1.TxRx().Port().SetTxName("port1").SetRxName("port2")
 	f2 := config.Flows().Add().SetName("f2")
+	f2.TxRx().Port().SetTxName("port1").SetRxName("port2")
 	f1.Metrics().SetEnable(true)
 	f2.Metrics().SetEnable(true)
 	return config
@@ -38,16 +43,34 @@ func config1(api gosnappi.GosnappiApi) gosnappi.Config {
 
 func config2(api gosnappi.GosnappiApi) gosnappi.Config {
 	config := api.NewConfig()
-	port := config.Ports().Add()
-	port.SetName("port1")
-	port.SetLocation("location1")
-	config.Flows().Add().SetName("f1")
-	config.Flows().Add().SetName("f2")
+	port1 := config.Ports().Add()
+	port1.SetName("port1")
+	port1.SetLocation("location1")
+	port2 := config.Ports().Add()
+	port2.SetName("port2")
+	port2.SetLocation("location2")
+	f1 := config.Flows().Add().SetName("f1")
+	f1.TxRx().Port().SetTxName("port1").SetRxName("port2")
+	f2 := config.Flows().Add().SetName("f2")
+	f2.TxRx().Port().SetTxName("port1").SetRxName("port2")
 	d1 := config.Devices().Add().SetName("d1")
-	eth1 := d1.Ethernet().SetName("Ethernet1")
-	ip1 := eth1.Ipv4().SetName("IPv41")
-	bgp1 := ip1.Bgpv4().SetName("BGP-1")
-	bgp1.Bgpv4Routes().Add().SetName("RR-1")
+	eth1 := d1.Ethernets().Add().
+		SetName("Ethernet1").
+		SetPortName("port1").
+		SetMac("00:11:01:00:00:03")
+	eth1.Ipv4Addresses().Add().
+		SetName("IPv41").
+		SetAddress("10.10.0.1").
+		SetGateway("10.10.0.2")
+	bgp_iP_inf := d1.Bgp().SetRouterId("1.1.1.1").
+		Ipv4Interfaces().Add().
+		SetIpv4Name("IPv41")
+	bgp_peer := bgp_iP_inf.Peers().Add().
+		SetPeerAddress("2.2.2.2").
+		SetAsType(gosnappi.BgpV4PeerAsType.IBGP).
+		SetName("BGP-1").
+		SetAsNumber(3)
+	bgp_peer.V4Routes().Add().SetName("RR-1")
 	return config
 }
 
@@ -68,12 +91,7 @@ func TestGrpcApi(t *testing.T) {
 func TestHttpApi(t *testing.T) {
 	api := gosnappi.NewApi()
 	api.NewHttpTransport().SetLocation(mockHttpServerLocation)
-	config := api.NewConfig()
-	port := config.Ports().Add()
-	port.SetName("port1")
-	port.SetLocation("location1")
-	config.Flows().Add().SetName("f1")
-	config.Flows().Add().SetName("f2")
+	config := config1(api)
 	state, err := api.SetConfig(config)
 	assert.NotNil(t, state)
 	assert.Nil(t, err)
@@ -123,7 +141,9 @@ func TestSetNewConfig(t *testing.T) {
 	api := gosnappi.NewApi()
 	api.NewGrpcTransport().SetLocation(mockGrpcServerLocation)
 	config := config2(api)
-	api.SetConfig(config)
+	state, err := api.SetConfig(config)
+	assert.NotNil(t, state)
+	assert.Nil(t, err)
 }
 
 func TestGetMetrics400FlowResponseError(t *testing.T) {
@@ -191,7 +211,7 @@ func TestGetMetricsPortResponseError(t *testing.T) {
 	api.NewGrpcTransport().SetLocation(mockGrpcServerLocation)
 	req := api.NewMetricsRequest()
 	flow_req := req.Port()
-	flow_req.SetPortNames([]string{"port2"})
+	flow_req.SetPortNames([]string{"port3"})
 	_, err := api.GetMetrics(req)
 	result := strings.Contains(err.Error(), "requested port is not available in configured ports")
 	assert.Equal(t, result, true)
@@ -206,7 +226,6 @@ func TestGrpcGetMetricsBgpv4Response(t *testing.T) {
 	req.Bgpv4()
 	flow_req := req.Bgpv4()
 	flow_req.SetPeerNames([]string{"BGP-1"})
-	log.Print(flow_req.ToJson(), flow_req.ToYaml())
 	resp, err := api.GetMetrics(req)
 	assert.NotNil(t, resp)
 	assert.Nil(t, err)
@@ -364,24 +383,27 @@ func TestDevices(t *testing.T) {
 
 	api := gosnappi.NewApi()
 	config := api.NewConfig()
-	device := config.Devices().Add().SetName("d1").SetContainerName("p1")
+	device := config.Devices().Add().SetName("d1")
 	assert.Equal(t, device.Name(), "d1")
-	assert.Equal(t, device.ContainerName(), "p1")
 	// TODO: Add validation on Json and Yaml
 	device.ToJson()
 	device.ToYaml()
+	device.ToPbText()
 
-	eth := device.Ethernet().
+	eth := device.Ethernets().Add().
+		SetPortName("p1").
 		SetName("Eth").
 		SetMac("00:00:11:11:00:00").
 		SetMtu(1500)
 
+	assert.Equal(t, eth.PortName(), "p1")
 	assert.Equal(t, eth.Name(), "Eth")
 	assert.Equal(t, eth.Mac(), "00:00:11:11:00:00")
 	assert.Equal(t, eth.Mtu(), int32(1500))
 	// TODO: Add validation on Json and Yaml
 	eth.ToJson()
 	eth.ToYaml()
+	eth.ToPbText()
 
 	vlan := eth.Vlans().Add().SetName("vlan1").SetId(1).SetPriority(1)
 	assert.Equal(t, vlan.Name(), "vlan1")
@@ -390,50 +412,92 @@ func TestDevices(t *testing.T) {
 	// TODO: Add validation on Json and Yaml
 	vlan.ToJson()
 	vlan.ToYaml()
+	vlan.ToPbText()
 
-	ip := eth.Ipv4().SetName("ip").SetAddress("10.1.1.1").SetGateway("10.1.1.2").SetPrefix(24)
-	assert.Equal(t, ip.Name(), "ip")
+	ip := eth.Ipv4Addresses().Add().
+		SetName("ipv4").
+		SetAddress("10.1.1.1").
+		SetGateway("10.1.1.2").
+		SetPrefix(24)
+	assert.Equal(t, ip.Name(), "ipv4")
 	assert.Equal(t, ip.Address(), "10.1.1.1")
 	assert.Equal(t, ip.Gateway(), "10.1.1.2")
 	assert.Equal(t, ip.Prefix(), int32(24))
 	// TODO: Add validation on Json and Yaml
 	ip.ToJson()
 	ip.ToYaml()
+	ip.ToPbText()
 
-	ip6 := eth.Ipv6().SetName("ip").SetAddress("2000::1").SetGateway("2000::2").SetPrefix(64)
-	assert.Equal(t, ip6.Name(), "ip")
+	ip6 := eth.Ipv6Addresses().Add().
+		SetName("ipv6").
+		SetAddress("2000::1").
+		SetGateway("2000::2").
+		SetPrefix(64)
+	assert.Equal(t, ip6.Name(), "ipv6")
 	assert.Equal(t, ip6.Address(), "2000::1")
 	assert.Equal(t, ip6.Gateway(), "2000::2")
 	assert.Equal(t, ip6.Prefix(), int32(64))
 	// TODO: Add validation on Json and Yaml
 	ip6.ToJson()
 	ip6.ToYaml()
+	ip6.ToPbText()
 
-	bgpv4 := ip.Bgpv4().SetName("bgp").SetRouterId("192.12.0.1").SetLocalAddress("10.1.1.1").SetDutAddress("10.2.2.2").
-		SetAsNumber(2).SetActive(true)
-	assert.Equal(t, "bgp", bgpv4.Name())
-	assert.Equal(t, "192.12.0.1", bgpv4.RouterId())
-	assert.Equal(t, "10.1.1.1", bgpv4.LocalAddress())
-	assert.Equal(t, "10.2.2.2", bgpv4.DutAddress())
-	assert.Equal(t, int32(2), bgpv4.AsNumber())
-	assert.Equal(t, true, bgpv4.Active())
+	bgp := device.Bgp().SetRouterId("192.12.0.1")
+	assert.Equal(t, bgp.RouterId(), "192.12.0.1")
 	// TODO: Add validation on Json and Yaml
-	bgpv4.ToJson()
-	bgpv4.ToYaml()
+	bgp.ToJson()
+	bgp.ToYaml()
+	bgp.ToPbText()
 
-	bgpv6 := ip6.Bgpv6().SetName("bgp").SetRouterId("6000::").SetLocalAddress("2000::1").SetDutAddress("2000::2").
-		SetAsNumber(2).SetActive(true)
-	assert.Equal(t, "bgp", bgpv6.Name())
-	assert.Equal(t, "6000::", bgpv6.RouterId())
-	assert.Equal(t, "2000::1", bgpv6.LocalAddress())
-	assert.Equal(t, "2000::2", bgpv6.DutAddress())
-	assert.Equal(t, int32(2), bgpv6.AsNumber())
-	assert.Equal(t, true, bgpv6.Active())
-	// TODO: Add validation on Json and Yaml
-	bgpv6.ToJson()
-	bgpv6.ToYaml()
+	bgpv4Int := bgp.Ipv4Interfaces().Add().
+		SetIpv4Name("bgpv4Int")
+	assert.Equal(t, bgpv4Int.Ipv4Name(), "bgpv4Int")
+	bgpv4Int.ToJson()
+	bgpv4Int.ToYaml()
+	bgpv4Int.ToPbText()
 
-	adv := bgpv4.Advanced().SetHoldTimeInterval(10).SetKeepAliveInterval(10).SetMd5Key("abc").SetTimeToLive(10).
+	bgpv4Peer := bgpv4Int.Peers().Add().
+		SetName("bgpv4Peer").
+		SetAsNumber(3).
+		SetAsNumberWidth(gosnappi.BgpV4PeerAsNumberWidth.TWO).
+		SetAsType(gosnappi.BgpV4PeerAsType.EBGP).
+		SetPeerAddress("10.2.2.2")
+	assert.Equal(t, bgpv4Peer.Name(), "bgpv4Peer")
+	assert.Equal(t, bgpv4Peer.AsNumber(), int32(3))
+	assert.Equal(t, bgpv4Peer.AsNumberWidth(), gosnappi.BgpV4PeerAsNumberWidth.TWO)
+	assert.Equal(t, bgpv4Peer.AsType(), gosnappi.BgpV4PeerAsType.EBGP)
+	assert.Equal(t, bgpv4Peer.PeerAddress(), "10.2.2.2")
+	bgpv4Peer.ToJson()
+	bgpv4Peer.ToYaml()
+	bgpv4Peer.ToPbText()
+
+	bgpv6Int := bgp.Ipv6Interfaces().Add().
+		SetIpv6Name("bgpv6Int")
+	assert.Equal(t, bgpv6Int.Ipv6Name(), "bgpv6Int")
+	bgpv6Int.ToJson()
+	bgpv6Int.ToYaml()
+	bgpv6Int.ToPbText()
+
+	bgpv6Peer := bgpv6Int.Peers().Add().
+		SetName("bgpv6Peer").
+		SetAsNumber(3).
+		SetAsNumberWidth(gosnappi.BgpV6PeerAsNumberWidth.FOUR).
+		SetAsType(gosnappi.BgpV6PeerAsType.IBGP).
+		SetPeerAddress("2000::1")
+	assert.Equal(t, bgpv6Peer.Name(), "bgpv6Peer")
+	assert.Equal(t, bgpv6Peer.AsNumber(), int32(3))
+	assert.Equal(t, bgpv6Peer.AsNumberWidth(), gosnappi.BgpV6PeerAsNumberWidth.FOUR)
+	assert.Equal(t, bgpv6Peer.AsType(), gosnappi.BgpV6PeerAsType.IBGP)
+	assert.Equal(t, bgpv6Peer.PeerAddress(), "2000::1")
+	bgpv6Peer.ToJson()
+	bgpv6Peer.ToYaml()
+	bgpv6Peer.ToPbText()
+
+	adv := bgpv4Peer.Advanced().
+		SetHoldTimeInterval(10).
+		SetKeepAliveInterval(10).
+		SetMd5Key("abc").
+		SetTimeToLive(10).
 		SetUpdateInterval(10)
 	assert.Equal(t, adv.HoldTimeInterval(), int32(10))
 	assert.Equal(t, adv.KeepAliveInterval(), int32(10))
@@ -443,8 +507,13 @@ func TestDevices(t *testing.T) {
 	// TODO: Add validation on Json and Yaml
 	adv.ToJson()
 	adv.ToYaml()
+	adv.ToPbText()
 
-	adv6 := bgpv6.Advanced().SetHoldTimeInterval(10).SetKeepAliveInterval(10).SetMd5Key("abc").SetTimeToLive(10).
+	adv6 := bgpv6Peer.Advanced().
+		SetHoldTimeInterval(10).
+		SetKeepAliveInterval(10).
+		SetMd5Key("abc").
+		SetTimeToLive(10).
 		SetUpdateInterval(10)
 	assert.Equal(t, adv6.HoldTimeInterval(), int32(10))
 	assert.Equal(t, adv6.KeepAliveInterval(), int32(10))
@@ -454,8 +523,9 @@ func TestDevices(t *testing.T) {
 	// TODO: Add validation on Json and Yaml
 	adv6.ToJson()
 	adv6.ToYaml()
+	adv6.ToPbText()
 
-	cap := bgpv4.Capability().SetEvpn(true).SetExtendedNextHopEncoding(true).SetIpv4Mdt(true).SetIpv4MplsVpn(true).
+	cap := bgpv4Peer.Capability().SetEvpn(true).SetExtendedNextHopEncoding(true).SetIpv4Mdt(true).SetIpv4MplsVpn(true).
 		SetIpv4Multicast(true).SetIpv4MulticastMplsVpn(true).SetIpv4MulticastVpn(true).SetIpv4SrTePolicy(true).
 		SetIpv4Unicast(true).SetIpv4UnicastAddPath(true).SetIpv4UnicastFlowSpec(true).SetIpv6Mdt(true).
 		SetIpv6MplsVpn(true).SetIpv6Multicast(true).SetIpv6MulticastMplsVpn(true).SetIpv6MulticastVpn(true).
@@ -490,8 +560,9 @@ func TestDevices(t *testing.T) {
 	// TODO: Add validation on Json and Yaml
 	cap.ToJson()
 	cap.ToYaml()
+	cap.ToPbText()
 
-	cap6 := bgpv6.Capability().SetEvpn(true).SetExtendedNextHopEncoding(true).SetIpv4Mdt(true).SetIpv4MplsVpn(true).
+	cap6 := bgpv6Peer.Capability().SetEvpn(true).SetExtendedNextHopEncoding(true).SetIpv4Mdt(true).SetIpv4MplsVpn(true).
 		SetIpv4Multicast(true).SetIpv4MulticastMplsVpn(true).SetIpv4MulticastVpn(true).SetIpv4SrTePolicy(true).
 		SetIpv4Unicast(true).SetIpv4UnicastAddPath(true).SetIpv4UnicastFlowSpec(true).SetIpv6Mdt(true).
 		SetIpv6MplsVpn(true).SetIpv6Multicast(true).SetIpv6MulticastMplsVpn(true).SetIpv6MulticastVpn(true).
@@ -527,6 +598,7 @@ func TestDevices(t *testing.T) {
 	// TODO: Add validation on Json and Yaml
 	cap6.ToJson()
 	cap6.ToYaml()
+	cap6.ToPbText()
 }
 
 func TestFlows(t *testing.T) {
@@ -574,6 +646,6 @@ func TestFlows(t *testing.T) {
 	assert.Equal(t, int32(10000), flow1.Duration().FixedPackets().Packets())
 	assert.Equal(t, int32(2), flow1.Duration().FixedPackets().Gap())
 	assert.Equal(t, float32(8), flow1.Duration().FixedPackets().Delay().Bytes())
-	assert.Equal(t, int32(1000), flow1.Rate().Pps())
+	assert.Equal(t, int64(1000), flow1.Rate().Pps())
 	log.Print(config.ToYaml())
 }
