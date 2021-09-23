@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	"../gosnappi"
+	"github.com/open-traffic-generator/snappi/gosnappi"
 
 	"github.com/stretchr/testify/assert"
 )
