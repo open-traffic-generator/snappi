@@ -52,7 +52,8 @@ def test_types_and_formats():
 
     # integer validation
     d = config.devices.device()[-1]
-    eth = d.ethernet
+    eth = d.ethernets.ethernet()[-1]
+    eth.port_name = "p1"
     eth.name = 'eth'
     eth.mac = '00:00:00:00:00:00'
     eth.mtu = '1500'

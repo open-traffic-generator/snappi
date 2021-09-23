@@ -9,14 +9,13 @@ def test_device_factory_methods(api):
     config = api.config()
 
     param = ('name', 'container name')
-    device = config.devices.device(name=param[0],
-                                   container_name=param[1])[-1]
+    device = config.devices.device(name=param[0])[-1]
     assert (device.name == param[0])
-    assert (device.container_name == param[1])
 
     name = 'eth name'
-    eth = device.ethernet
+    eth = device.ethernets.ethernet()[-1]
     eth.name = name
+    eth.port_name = "p1"
     assert (eth.name == name)
     eth.mac = '00:00:00:00:00:00'
 

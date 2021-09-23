@@ -75,16 +75,3 @@ def test_required_deserialize(api):
         {}
     ]
     validate_deserialize(l.ports, lp, snappi.LagPort._REQUIRED)
-
-    lp = [
-        {
-            'port_name': 'abcd',
-            'protocol': {
-                'choice': 'static'
-            },
-            'ethernet': {
-                'name': None
-            }
-        }
-    ]
-    validate_deserialize(l.ports, lp, snappi.DeviceEthernetBase._REQUIRED)

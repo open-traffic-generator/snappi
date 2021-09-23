@@ -18,26 +18,34 @@ def b2b_config(api):
     transmit and receive.
     """
     config = api.config()
+    import snappi
+    config = snappi.Api().config()
     config.options.port_options.location_preemption = True
     
     tx_port, rx_port = config.ports \
         .port(name='Tx Port', location='10.36.74.26;02;13') \
         .port(name='Rx Port', location='10.36.74.26;02;14')
 
-    tx_device, rx_device = config.devices \
-        .device(name='Tx Devices', container_name=tx_port.name) \
-        .device(name='Rx Devices', container_name=tx_port.name)
-    tx_device.ethernet.name = 'Tx Eth'
-    tx_device.ethernet.mac = '00:00:01:00:00:01'
-    tx_device.ethernet.ipv4.name = 'Tx Ipv4'
-    tx_device.ethernet.ipv4.address = '1.1.1.1'
-    tx_device.ethernet.ipv4.gateway = '1.1.2.1'
-    tx_device.ethernet.ipv4.prefix = 16
-    vlan1, vlan2 = tx_device.ethernet.vlans.vlan(name='v1').vlan(name='v2')
+    tx_device, rx_device = (config.devices \
+        .device(name='Tx Devices')
+        .device(name='Rx Devices')
+    )
+
+    tx_device.ethernets.ethernet(port_name=tx_port.name)
+    rx_device.ethernets.ethernet(port_name=rx_port.name)
+
+    tx_device.ethernets[-1].name = 'Tx Eth'
+    tx_device.ethernets[-1].mac = '00:00:01:00:00:01'
+    tx_device.ethernets[-1].ipv4_addresses.ipv4()
+    tx_device.ethernets[-1].ipv4_addresses[-1].name = 'Tx Ipv4'
+    tx_device.ethernets[-1].ipv4_addresses[-1].address = '1.1.1.1'
+    tx_device.ethernets[-1].ipv4_addresses[-1].gateway = '1.1.2.1'
+    tx_device.ethernets[-1].ipv4_addresses[-1].prefix = 16
+    vlan1, vlan2 = tx_device.ethernets[-1].vlans.vlan(name='v1').vlan(name='v2')
     vlan1.id = 1
     vlan2.id = 2
-    rx_device.ethernet.name = 'Rx Eth'
-    rx_device.ethernet.mac = '00:00:01:00:00:02'
+    rx_device.ethernets[-1].name = 'Rx Eth'
+    rx_device.ethernets[-1].mac = '00:00:01:00:00:02'
 
     flow = config.flows.flow(name='Tx -> Rx Flow')[0]
     flow.tx_rx.port.tx_name = tx_port.name

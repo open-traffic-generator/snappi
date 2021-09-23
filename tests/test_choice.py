@@ -12,18 +12,20 @@ def test_choice(api):
     """
     config = api.config()
     p1, p2 = config.ports.port(name='p1').port(name='p2')
-    d1, d2 = config.devices.device(name='d1').device(name='d2')
-    d1.container_name, d2.container_name = 'p1', 'p2'
-    d1.ethernet.name, d2.ethernet.name = 'eth1', 'eth2'
-    d1.ethernet.mac, d2.ethernet.mac = '00:00:00:00:00:aa', '00:00:00:00:00:bb'
+    d1 = config.devices.device(name='d1')[-1]
+    eth1, eth2 = d1.ethernets.ethernet().ethernet()
+    eth1.port_name = p1.name
+    eth2.port_name = p2.name
+    eth1.name, eth2.name = 'eth1', 'eth2'
+    eth1.mac, eth2.mac = '00:00:00:00:00:aa', '00:00:00:00:00:bb'
     flow = config.flows.flow(name='f')[-1]
 
     flow.tx_rx.port.tx_name = p1.name
     flow.tx_rx.port.rx_name = p2.name
     assert (flow.tx_rx.choice == 'port')
 
-    flow.tx_rx.device.tx_names = [config.devices[0].name]
-    flow.tx_rx.device.rx_names = [config.devices[1].name]
+    flow.tx_rx.device.tx_names = [eth1.name]
+    flow.tx_rx.device.rx_names = [eth2.name]
     flow.tx_rx.device.mode = flow.tx_rx.device.ONE_TO_ONE
 
     assert (flow.tx_rx.choice == 'device')
