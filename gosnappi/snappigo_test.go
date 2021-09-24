@@ -27,32 +27,26 @@ func init() {
 func config1(api gosnappi.GosnappiApi) gosnappi.Config {
 	config := api.NewConfig()
 	port1 := config.Ports().Add()
+	port2 := config.Ports().Add()
 	port1.SetName("port1")
 	port1.SetLocation("location1")
-	port2 := config.Ports().Add()
 	port2.SetName("port2")
 	port2.SetLocation("location2")
 	f1 := config.Flows().Add().SetName("f1")
-	f1.TxRx().Port().SetTxName("port1").SetRxName("port2")
 	f2 := config.Flows().Add().SetName("f2")
-	f2.TxRx().Port().SetTxName("port1").SetRxName("port2")
+	f1.TxRx().Port().SetTxName(port1.Name())
+	f1.TxRx().Port().SetRxName(port2.Name())
 	f1.Metrics().SetEnable(true)
+	f2.TxRx().Port().SetTxName(port1.Name())
+	f2.TxRx().Port().SetTxName(port2.Name())
 	f2.Metrics().SetEnable(true)
+	f1.Rate()
+	fmt.Println(config.ToJson())
 	return config
 }
 
 func config2(api gosnappi.GosnappiApi) gosnappi.Config {
-	config := api.NewConfig()
-	port1 := config.Ports().Add()
-	port1.SetName("port1")
-	port1.SetLocation("location1")
-	port2 := config.Ports().Add()
-	port2.SetName("port2")
-	port2.SetLocation("location2")
-	f1 := config.Flows().Add().SetName("f1")
-	f1.TxRx().Port().SetTxName("port1").SetRxName("port2")
-	f2 := config.Flows().Add().SetName("f2")
-	f2.TxRx().Port().SetTxName("port1").SetRxName("port2")
+	config := config1(api)
 	d1 := config.Devices().Add().SetName("d1")
 	eth1 := d1.Ethernets().Add().
 		SetName("Ethernet1").
@@ -151,12 +145,14 @@ func TestGetMetrics400FlowResponseError(t *testing.T) {
 	// the config, validate the err as expected
 	api := gosnappi.NewApi()
 	api.NewGrpcTransport().SetLocation(mockGrpcServerLocation)
+	config := config1(api)
+	config.Flows().Items()[0].Metrics().SetEnable(false)
+	api.SetConfig(config)
 	req := api.NewMetricsRequest()
 	flow_req := req.Flow()
 	flow_req.SetFlowNames([]string{"f1"})
 	_, err := api.GetMetrics(req)
-	result := strings.Contains(err.Error(), "metrics not enabled for all the flows")
-	assert.Equal(t, result, true)
+	assert.Contains(t, err.Error(), "metrics not enabled for all the flows")
 }
 
 func TestGetMetrics500FlowResponseError(t *testing.T) {
@@ -209,6 +205,9 @@ func TestGetMetricsPortResponseError(t *testing.T) {
 	// the config, validate the err is not nil
 	api := gosnappi.NewApi()
 	api.NewGrpcTransport().SetLocation(mockGrpcServerLocation)
+	config := config1(api)
+	config.Flows().Items()[0].Metrics().SetEnable(false)
+	api.SetConfig(config)
 	req := api.NewMetricsRequest()
 	flow_req := req.Port()
 	flow_req.SetPortNames([]string{"port3"})
@@ -222,6 +221,9 @@ func TestGrpcGetMetricsBgpv4Response(t *testing.T) {
 	// the config, validate the response is not nil
 	api := gosnappi.NewApi()
 	api.NewGrpcTransport().SetLocation(mockGrpcServerLocation)
+	config := config2(api)
+	_, err := api.SetConfig(config)
+	assert.Nil(t, err)
 	req := api.NewMetricsRequest()
 	req.Bgpv4()
 	flow_req := req.Bgpv4()
@@ -340,6 +342,9 @@ func TestSetRouteStateResponse(t *testing.T) {
 	route_names := []string{"RR-1"}
 	api := gosnappi.NewApi()
 	api.NewGrpcTransport().SetLocation(mockGrpcServerLocation)
+	config := config2(api)
+	_, err := api.SetConfig(config)
+	assert.Nil(t, err)
 	req := api.NewRouteState()
 	req.SetNames([]string{"RR-1"})
 	req.SetState(gosnappi.RouteStateState.ADVERTISE)
@@ -648,4 +653,57 @@ func TestFlows(t *testing.T) {
 	assert.Equal(t, float32(8), flow1.Duration().FixedPackets().Delay().Bytes())
 	assert.Equal(t, int64(1000), flow1.Rate().Pps())
 	log.Print(config.ToYaml())
+}
+
+func TestValidation(t *testing.T) {
+	api := gosnappi.NewApi()
+	config := api.NewConfig()
+	// To Validate required field
+	p := config.Ports().Add()
+	err1 := p.Validate()
+	assert.Contains(t, err1.Error(), "Name is required")
+	d := config.Devices().Add().SetName("d1")
+
+	// To Validate Formats
+	//
+	// Mac address Validation
+	eth := d.Ethernets().Add().SetName("Eth1")
+	eth.SetMac("10.1.1.1")
+	err3 := eth.Validate()
+	fmt.Println(err3.Error())
+	assert.Contains(t, strings.ToLower(err3.Error()), "invalid mac address")
+
+	// Ipv4 address Validation
+	ipv4 := eth.Ipv4Addresses().Add().SetName("ipv4").SetGateway("20.1.1.1").SetAddress("ff.1.1.1")
+	assert.Contains(t, strings.ToLower(ipv4.Validate().Error()), "invalid ipv4 address")
+
+	// Ipv6 address Validation
+	ipv6 := eth.Ipv6Addresses().Add().SetName("ipv6").SetGateway("10.1.1.1").SetAddress("abcd:::abcd")
+	assert.Contains(t, strings.ToLower(ipv6.Validate().Error()), "invalid ipv6 address")
+
+	f := config.Flows().Add().SetName("f1")
+	f.TxRx().Port().SetRxName("rx").SetTxName("tx")
+	floweth := f.Packet().Add().Ethernet()
+	// Mac address slice validation
+	floweth.Src().SetValues([]string{"abcd:abcd", "ab:ab:ab:ab:ac:ff"})
+	f_err := floweth.Src().Validate()
+	fmt.Println(f_err.Error())
+	assert.Contains(t, strings.ToLower(f_err.Error()), "invalid mac addresses at")
+
+	// Ipv4 address slice validation
+	flowV4 := f.Packet().Add().Ipv4()
+	flowV4.Src().SetValues([]string{"1111", "1.1.1.1"})
+	v4_err := flowV4.Validate()
+	fmt.Println(v4_err)
+	assert.Contains(t, strings.ToLower(v4_err.Error()), "invalid ipv4 addresses at")
+
+	// Ipv6 address slice validation
+	flowV6 := f.Packet().Add().Ipv6()
+	flowV6.Dst().SetValues([]string{"abcd:abcd::1234", "::", "10.1.1.1"})
+	v6_err := flowV6.Validate()
+	assert.Contains(t, strings.ToLower(v6_err.Error()), "invalid ipv6 addresses at")
+
+	err := config.Validate()
+	fmt.Println(err)
+	assert.Contains(t, err.Error(), "validation errors")
 }

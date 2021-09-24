@@ -127,8 +127,8 @@ func getRouteNames(cfg *snappipb.Config) []string {
 
 func isFlowMetricsDisabled(cfg *snappipb.Config) []string {
 	names := []string{}
-	for _, flow := range mockConfig.Flows {
-		if flow.Metrics == nil {
+	for _, flow := range cfg.Flows {
+		if flow.Metrics == nil || !*flow.Metrics.Enable {
 			names = append(names, flow.Name)
 		}
 	}
