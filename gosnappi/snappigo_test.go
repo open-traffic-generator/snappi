@@ -10,6 +10,7 @@ import (
 	"github.com/open-traffic-generator/snappi/gosnappi"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 var mockGrpcServerLocation = "127.0.0.1:50001"
@@ -385,7 +386,6 @@ func TestPorts(t *testing.T) {
 }
 
 func TestDevices(t *testing.T) {
-
 	api := gosnappi.NewApi()
 	config := api.NewConfig()
 	device := config.Devices().Add().SetName("d1")
@@ -706,4 +706,328 @@ func TestValidation(t *testing.T) {
 	err := config.Validate()
 	fmt.Println(err)
 	assert.Contains(t, err.Error(), "validation errors")
+}
+
+var expected_device_json = `{
+	"devices":  [
+		{
+		"ethernets":  [
+			{
+			"port_name":  "p1",
+			"ipv4_addresses":  [
+				{
+				"gateway":  "10.1.1.2",
+				"address":  "10.1.1.1",
+				"prefix":  24,
+				"name":  "ipv4"
+				}
+			],
+			"ipv6_addresses":  [
+				{
+				"gateway":  "2000::2",
+				"address":  "2000::1",
+				"prefix":  64,
+				"name":  "ipv6"
+				}
+			],
+			"mac":  "00:00:11:11:00:00",
+			"mtu":  1500,
+			"vlans":  [
+				{
+				"tpid":  "x8100",
+				"priority":  0,
+				"id":  1,
+				"name":  "vlan1"
+				}
+			],
+			"name":  "Eth"
+			}
+		],
+		"ipv4_loopbacks":  [
+			{
+			"eth_name":  "Eth",
+			"address":  "0.0.0.0",
+			"name":  "IPv4loopback"
+			}
+		],
+		"ipv6_loopbacks":  [
+			{
+			"eth_name":  "Eth",
+			"address":  "::0",
+			"name":  "IPv6loopback"
+			}
+		],
+		"bgp":  {
+			"router_id":  "192.12.0.1",
+			"ipv4_interfaces":  [
+			{
+				"ipv4_name":  "bgpv4Int",
+				"peers":  [
+				{
+					"peer_address":  "10.2.2.2",
+					"as_type":  "ebgp",
+					"as_number":  3,
+					"as_number_width":  "four",
+					"advanced":  {
+					"hold_time_interval":  90,
+					"keep_alive_interval":  30,
+					"update_interval":  0,
+					"time_to_live":  64
+					},
+					"capability":  {
+					"ipv4_unicast":  true,
+					"ipv4_multicast":  false,
+					"ipv6_unicast":  true,
+					"ipv6_multicast":  false,
+					"vpls":  false,
+					"route_refresh":  true,
+					"route_constraint":  false,
+					"link_state_non_vpn":  false,
+					"link_state_vpn":  false,
+					"evpn":  false,
+					"extended_next_hop_encoding":  false,
+					"ipv4_multicast_vpn":  false,
+					"ipv4_mpls_vpn":  false,
+					"ipv4_mdt":  false,
+					"ipv4_multicast_mpls_vpn":  false,
+					"ipv4_unicast_flow_spec":  false,
+					"ipv4_sr_te_policy":  false,
+					"ipv4_unicast_add_path":  false,
+					"ipv6_multicast_vpn":  false,
+					"ipv6_mpls_vpn":  false,
+					"ipv6_mdt":  false,
+					"ipv6_multicast_mpls_vpn":  false,
+					"ipv6_unicast_flow_spec":  false,
+					"ipv6_sr_te_policy":  false,
+					"ipv6_unicast_add_path":  false
+					},
+					"name":  "bgpv4Peer"
+				}
+				]
+			}
+			]
+		},
+		"name":  "d1"
+		}
+	]}`
+
+func TestDefaultsDevice(t *testing.T) {
+	api := gosnappi.NewApi()
+	config := api.NewConfig()
+	device := config.Devices().Add().SetName("d1")
+	eth := device.Ethernets().Add().
+		SetPortName("p1").SetName("Eth").SetMac("00:00:11:11:00:00")
+	eth.Vlans().Add().SetName("vlan1")
+	eth.Ipv4Addresses().Add().
+		SetName("ipv4").SetAddress("10.1.1.1").SetGateway("10.1.1.2")
+	eth.Ipv6Addresses().Add().
+		SetName("ipv6").SetAddress("2000::1").SetGateway("2000::2")
+
+	device.Ipv4Loopbacks().Add().
+		SetEthName("Eth").SetName("IPv4loopback")
+	device.Ipv6Loopbacks().Add().
+		SetEthName("Eth").SetName("IPv6loopback")
+
+	bgp := device.Bgp().SetRouterId("192.12.0.1")
+	bgpv4Int := bgp.Ipv4Interfaces().Add().
+		SetIpv4Name("bgpv4Int")
+	bgpv4peer := bgpv4Int.Peers().Add().
+		SetName("bgpv4Peer").
+		SetAsNumber(3).SetAsType(gosnappi.BgpV4PeerAsType.EBGP).
+		SetPeerAddress("10.2.2.2")
+	bgpv4peer.Advanced()
+	bgpv4peer.Capability()
+
+	expected_result := config.ToJson()
+	require.JSONEq(t, expected_device_json, expected_result)
+}
+
+func TestDefaultsDeviceFromJson(t *testing.T) {
+	input_str := `{
+		"devices":  [
+			{
+			"ethernets":  [
+				{
+				"port_name":  "p1",
+				"ipv4_addresses":  [
+					{
+					"gateway":  "10.1.1.2",
+					"address":  "10.1.1.1",
+					"name":  "ipv4"
+					}
+				],
+				"ipv6_addresses":  [
+					{
+					"gateway":  "2000::2",
+					"address":  "2000::1",
+					"name":  "ipv6"
+					}
+				],
+				"mac":  "00:00:11:11:00:00",
+				"vlans":  [
+					{
+					"name":  "vlan1"
+					}
+				],
+				"name":  "Eth"
+				}
+			],
+			"ipv4_loopbacks":  [
+				{
+				"eth_name":  "Eth",
+				"name":  "IPv4loopback"
+				}
+			],
+			"ipv6_loopbacks":  [
+				{
+				"eth_name":  "Eth",
+				"name":  "IPv6loopback"
+				}
+			],
+			"bgp":  {
+				"router_id":  "192.12.0.1",
+				"ipv4_interfaces":  [
+				{
+					"ipv4_name":  "bgpv4Int",
+					"peers":  [
+					{
+						"peer_address":  "10.2.2.2",
+						"as_type":  "ebgp",
+						"as_number":  3,
+						"advanced":  {
+						},
+						"capability":  {
+						},
+						"name":  "bgpv4Peer"
+					}
+					]
+				}
+				]
+			},
+			"name":  "d1"
+			}
+		]}`
+	api := gosnappi.NewApi()
+	config := api.NewConfig()
+	config.FromJson(input_str)
+	expected_result := config.ToJson()
+	require.JSONEq(t, expected_device_json, expected_result)
+}
+
+var expected_flow_json = `{
+	"ports":  [
+		{
+		"name":  "p1"
+		},
+		{
+		"name":  "p2"
+		}
+	],
+	"flows":  [
+		{
+		"tx_rx":  {
+			"choice":  "port",
+			"port":  {
+			"tx_name":  "p1",
+			"rx_name":  "p2"
+			}
+		},
+		"packet":  [
+			{
+			"choice":  "ethernet",
+			"ethernet":  {
+				"dst":  {
+				"choice":  "value",
+				"value":  "00:00:00:00:00:00"
+				},
+				"src":  {
+				"choice":  "value",
+				"value":  "00:00:00:00:00:00"
+				},
+				"ether_type":  {
+				"choice":  "auto",
+				"auto":  "auto"
+				}
+			}
+			},
+			{
+			"choice":  "ipv4",
+			"ipv4":  {
+				"version":  {
+				"choice":  "value",
+				"value":  4
+				},
+				"priority":  {
+				"choice":  "dscp"
+				},
+				"src":  {
+				"choice":  "value",
+				"value":  "0.0.0.0"
+				},
+				"dst":  {
+				"choice":  "value",
+				"value":  "0.0.0.0"
+				}
+			}
+			},
+			{
+			"choice":  "udp",
+			"udp":  {
+				"src_port":  {
+				"choice":  "value",
+				"value":  0
+				},
+				"dst_port":  {
+				"choice":  "value",
+				"value":  0
+				},
+				"checksum":  {
+				"choice":  "generated",
+				"generated":  "good"
+				}
+			}
+			}
+		],
+		"rate":  {
+			"choice":  "pps",
+			"pps":  "1000"
+		},
+		"duration":  {
+			"choice":  "continuous",
+			"continuous":  {
+			"gap":  12
+			}
+		},
+		"name":  "f1"
+		}
+	]}`
+
+func TestDefaultsFlow(t *testing.T) {
+	api := gosnappi.NewApi()
+	config := api.NewConfig()
+	port1 := config.Ports().Add().SetName("p1")
+	port2 := config.Ports().Add().SetName("p2")
+	flow1 := config.Flows().Add().SetName("f1")
+	flow1.TxRx().Port().SetTxName(port1.Name()).SetRxName(port2.Name())
+
+	eth := flow1.Packet().Add().Ethernet()
+	eth.Src()
+	eth.Dst()
+	eth.EtherType()
+
+	ipv4 := flow1.Packet().Add().Ipv4()
+	ipv4.Src()
+	ipv4.Dst()
+	ipv4.Version()
+	ipv4.Priority()
+
+	udp := flow1.Packet().Add().Udp()
+	udp.SrcPort()
+	udp.DstPort()
+	udp.Checksum()
+
+	flow1.Duration().Continuous()
+	flow1.Rate()
+	expected_result := config.ToJson()
+	require.JSONEq(t, expected_flow_json, expected_result)
 }
