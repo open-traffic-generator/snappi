@@ -1,6 +1,7 @@
 import pytest
 
 
+@pytest.mark.skip("SRTE is still need to update")
 def test_bgp_sr_te_policy(api):
     """Test BGP SR TE Policy functionality
     """
@@ -10,28 +11,28 @@ def test_bgp_sr_te_policy(api):
     p1 = config.ports.port(name='p1')[-1]
 
     # setup device container
-    d = config.devices.device(name='d', container_name=p1.name)[-1]
+    d = config.devices.device(name='d')[-1]
 
     # setup ethernet
-    eth = d.ethernet
+    eth = d.ethernets.ethernet(port_name=p1.name)[-1]
     eth.name = 'e'
     eth.mac = '00:01:00:00:00:01'
 
     # setup ipv6
-    ip = eth.ipv6
+    ip = eth.ipv6_addresses.ipv6()[-1]
     ip.name = 'i6'
     ip.address = '2a00:1450:f013:c03:8402:0:0:2'
     ip.gateway = '2a00:1450:f013:c03:0:0:0:1'
     ip.prefix = 64
 
     # setup bgp basic
-    bgp = ip.bgpv6
-    bgp.name = 'b6'
-    bgp.router_id = '193.0.0.1'
+    bgp_dev = d.bgp
+    bgp_dev.router_id = '193.0.0.1'
+    bgp_intf = bgp_dev.ipv6_interfaces.v6interface(ipv6_name=ip.name)[-1]
+    bgp = bgp_intf.peers.v6peer()[-1]
     bgp.as_number = 65511
-    bgp.as_number_set_mode = bgp.DO_NOT_INCLUDE_AS
-    bgp.local_address = '2a00:1450:f013:c03:8402:0:0:2'
-    bgp.dut_address = '2001:4860:0:0:0:1c:4001:ec2'
+    bgp.as_type = bgp.IBGP
+    bgp.peer_address = '2001:4860:0:0:0:1c:4001:ec2'
 
     # setup bgp advanced
     bgp.advanced.hold_time_interval = 90
@@ -39,6 +40,7 @@ def test_bgp_sr_te_policy(api):
 
     # setup bgp sr te policy
     for i in range(1, 501):
+        policy = bgp.segment_routing.advertise_sr_te_policy
         policy = bgp.sr_te_policies.bgpsrtepolicy()[-1]
         policy.policy_type = policy.IPV4
         policy.distinguisher = 1

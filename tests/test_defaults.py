@@ -71,9 +71,6 @@ def test_defaults(api):
                                 'lacpdu_timeout': 0
                             }
                         },
-                        'ethernet': {
-                            'mac': '00:00:00:00:00:00', 'mtu': 1500, 'name': 'test'
-                        }
                     }
                 ]
             }
@@ -115,8 +112,6 @@ def test_defaults(api):
     p = l.ports.port()[-1]
     p.port_name = "lagport"
     p.protocol
-    p.ethernet.name = "test"
-    p.ethernet.mac = "00:00:00:00:00:00"
     f = config.flows.flow()[-1]
     f.name = "f1"
     f.size.fixed

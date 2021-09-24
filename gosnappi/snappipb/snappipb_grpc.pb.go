@@ -27,6 +27,7 @@ type OpenapiClient interface {
 	UpdateFlows(ctx context.Context, in *UpdateFlowsRequest, opts ...grpc.CallOption) (*UpdateFlowsResponse, error)
 	SetRouteState(ctx context.Context, in *SetRouteStateRequest, opts ...grpc.CallOption) (*SetRouteStateResponse, error)
 	SendPing(ctx context.Context, in *SendPingRequest, opts ...grpc.CallOption) (*SendPingResponse, error)
+	SetProtocolState(ctx context.Context, in *SetProtocolStateRequest, opts ...grpc.CallOption) (*SetProtocolStateResponse, error)
 	GetMetrics(ctx context.Context, in *GetMetricsRequest, opts ...grpc.CallOption) (*GetMetricsResponse, error)
 	GetStateMetrics(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*GetStateMetricsResponse, error)
 	GetCapture(ctx context.Context, in *GetCaptureRequest, opts ...grpc.CallOption) (*GetCaptureResponse, error)
@@ -112,6 +113,15 @@ func (c *openapiClient) SendPing(ctx context.Context, in *SendPingRequest, opts 
 	return out, nil
 }
 
+func (c *openapiClient) SetProtocolState(ctx context.Context, in *SetProtocolStateRequest, opts ...grpc.CallOption) (*SetProtocolStateResponse, error) {
+	out := new(SetProtocolStateResponse)
+	err := c.cc.Invoke(ctx, "/snappipb.Openapi/SetProtocolState", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *openapiClient) GetMetrics(ctx context.Context, in *GetMetricsRequest, opts ...grpc.CallOption) (*GetMetricsResponse, error) {
 	out := new(GetMetricsResponse)
 	err := c.cc.Invoke(ctx, "/snappipb.Openapi/GetMetrics", in, out, opts...)
@@ -151,6 +161,7 @@ type OpenapiServer interface {
 	UpdateFlows(context.Context, *UpdateFlowsRequest) (*UpdateFlowsResponse, error)
 	SetRouteState(context.Context, *SetRouteStateRequest) (*SetRouteStateResponse, error)
 	SendPing(context.Context, *SendPingRequest) (*SendPingResponse, error)
+	SetProtocolState(context.Context, *SetProtocolStateRequest) (*SetProtocolStateResponse, error)
 	GetMetrics(context.Context, *GetMetricsRequest) (*GetMetricsResponse, error)
 	GetStateMetrics(context.Context, *emptypb.Empty) (*GetStateMetricsResponse, error)
 	GetCapture(context.Context, *GetCaptureRequest) (*GetCaptureResponse, error)
@@ -184,6 +195,9 @@ func (UnimplementedOpenapiServer) SetRouteState(context.Context, *SetRouteStateR
 }
 func (UnimplementedOpenapiServer) SendPing(context.Context, *SendPingRequest) (*SendPingResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SendPing not implemented")
+}
+func (UnimplementedOpenapiServer) SetProtocolState(context.Context, *SetProtocolStateRequest) (*SetProtocolStateResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SetProtocolState not implemented")
 }
 func (UnimplementedOpenapiServer) GetMetrics(context.Context, *GetMetricsRequest) (*GetMetricsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetMetrics not implemented")
@@ -351,6 +365,24 @@ func _Openapi_SendPing_Handler(srv interface{}, ctx context.Context, dec func(in
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Openapi_SetProtocolState_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SetProtocolStateRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(OpenapiServer).SetProtocolState(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/snappipb.Openapi/SetProtocolState",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(OpenapiServer).SetProtocolState(ctx, req.(*SetProtocolStateRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Openapi_GetMetrics_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetMetricsRequest)
 	if err := dec(in); err != nil {
@@ -443,6 +475,10 @@ var Openapi_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "SendPing",
 			Handler:    _Openapi_SendPing_Handler,
+		},
+		{
+			MethodName: "SetProtocolState",
+			Handler:    _Openapi_SetProtocolState_Handler,
 		},
 		{
 			MethodName: "GetMetrics",
