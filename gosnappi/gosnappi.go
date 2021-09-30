@@ -1,4 +1,4 @@
-// Open Traffic Generator API 0.6.1
+// Open Traffic Generator API 0.6.3
 // License: MIT
 
 package gosnappi
@@ -44673,6 +44673,9 @@ type PatternFlowIpv4Protocol interface {
 	HasValue() bool
 	Values() []int32
 	SetValues(value []int32) PatternFlowIpv4Protocol
+	Auto() PatternFlowIpv4ProtocolAutoEnum
+	SetAuto(value PatternFlowIpv4ProtocolAutoEnum) PatternFlowIpv4Protocol
+	HasAuto() bool
 	MetricGroup() string
 	SetMetricGroup(value string) PatternFlowIpv4Protocol
 	HasMetricGroup() bool
@@ -44687,11 +44690,13 @@ type PatternFlowIpv4ProtocolChoiceEnum string
 var PatternFlowIpv4ProtocolChoice = struct {
 	VALUE     PatternFlowIpv4ProtocolChoiceEnum
 	VALUES    PatternFlowIpv4ProtocolChoiceEnum
+	AUTO      PatternFlowIpv4ProtocolChoiceEnum
 	INCREMENT PatternFlowIpv4ProtocolChoiceEnum
 	DECREMENT PatternFlowIpv4ProtocolChoiceEnum
 }{
 	VALUE:     PatternFlowIpv4ProtocolChoiceEnum("value"),
 	VALUES:    PatternFlowIpv4ProtocolChoiceEnum("values"),
+	AUTO:      PatternFlowIpv4ProtocolChoiceEnum("auto"),
 	INCREMENT: PatternFlowIpv4ProtocolChoiceEnum("increment"),
 	DECREMENT: PatternFlowIpv4ProtocolChoiceEnum("decrement"),
 }
@@ -44756,6 +44761,36 @@ func (obj *patternFlowIpv4Protocol) SetValues(value []int32) PatternFlowIpv4Prot
 	obj.obj.Values = value
 
 	obj.SetChoice(PatternFlowIpv4ProtocolChoice.VALUES)
+	return obj
+}
+
+type PatternFlowIpv4ProtocolAutoEnum string
+
+var PatternFlowIpv4ProtocolAuto = struct {
+	AUTO PatternFlowIpv4ProtocolAutoEnum
+}{
+	AUTO: PatternFlowIpv4ProtocolAutoEnum("auto"),
+}
+
+func (obj *patternFlowIpv4Protocol) Auto() PatternFlowIpv4ProtocolAutoEnum {
+	return PatternFlowIpv4ProtocolAutoEnum(obj.obj.Auto.Enum().String())
+}
+
+// Auto returns a string
+//  description is TBD
+func (obj *patternFlowIpv4Protocol) HasAuto() bool {
+	return obj.obj.Auto != nil
+}
+
+func (obj *patternFlowIpv4Protocol) SetAuto(value PatternFlowIpv4ProtocolAutoEnum) PatternFlowIpv4Protocol {
+	intValue, ok := snappipb.PatternFlowIpv4Protocol_Auto_Enum_value[string(value)]
+	if !ok {
+		validation = append(validation, fmt.Sprintf(
+			"%s is not a valid choice on PatternFlowIpv4ProtocolAutoEnum", string(value)))
+		return obj
+	}
+	enumValue := snappipb.PatternFlowIpv4Protocol_Auto_Enum(intValue)
+	obj.obj.Auto = &enumValue
 	return obj
 }
 
@@ -44848,11 +44883,11 @@ func (obj *patternFlowIpv4Protocol) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowIpv4Protocol) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(61)
+	if obj.obj.Auto == nil {
+		obj.SetAuto(PatternFlowIpv4ProtocolAuto.AUTO)
 	}
 	if obj.obj.Choice == nil {
-		obj.SetChoice(PatternFlowIpv4ProtocolChoice.VALUE)
+		obj.SetChoice(PatternFlowIpv4ProtocolChoice.AUTO)
 	}
 
 }
