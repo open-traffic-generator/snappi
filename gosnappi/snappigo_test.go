@@ -10,6 +10,7 @@ import (
 	"github.com/open-traffic-generator/snappi/gosnappi"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 var mockGrpcServerLocation = "127.0.0.1:50001"
@@ -27,32 +28,26 @@ func init() {
 func config1(api gosnappi.GosnappiApi) gosnappi.Config {
 	config := api.NewConfig()
 	port1 := config.Ports().Add()
+	port2 := config.Ports().Add()
 	port1.SetName("port1")
 	port1.SetLocation("location1")
-	port2 := config.Ports().Add()
 	port2.SetName("port2")
 	port2.SetLocation("location2")
 	f1 := config.Flows().Add().SetName("f1")
-	f1.TxRx().Port().SetTxName("port1").SetRxName("port2")
 	f2 := config.Flows().Add().SetName("f2")
-	f2.TxRx().Port().SetTxName("port1").SetRxName("port2")
+	f1.TxRx().Port().SetTxName(port1.Name())
+	f1.TxRx().Port().SetRxName(port2.Name())
 	f1.Metrics().SetEnable(true)
+	f2.TxRx().Port().SetTxName(port1.Name())
+	f2.TxRx().Port().SetTxName(port2.Name())
 	f2.Metrics().SetEnable(true)
+	f1.Rate()
+	fmt.Println(config.ToJson())
 	return config
 }
 
 func config2(api gosnappi.GosnappiApi) gosnappi.Config {
-	config := api.NewConfig()
-	port1 := config.Ports().Add()
-	port1.SetName("port1")
-	port1.SetLocation("location1")
-	port2 := config.Ports().Add()
-	port2.SetName("port2")
-	port2.SetLocation("location2")
-	f1 := config.Flows().Add().SetName("f1")
-	f1.TxRx().Port().SetTxName("port1").SetRxName("port2")
-	f2 := config.Flows().Add().SetName("f2")
-	f2.TxRx().Port().SetTxName("port1").SetRxName("port2")
+	config := config1(api)
 	d1 := config.Devices().Add().SetName("d1")
 	eth1 := d1.Ethernets().Add().
 		SetName("Ethernet1").
@@ -151,12 +146,14 @@ func TestGetMetrics400FlowResponseError(t *testing.T) {
 	// the config, validate the err as expected
 	api := gosnappi.NewApi()
 	api.NewGrpcTransport().SetLocation(mockGrpcServerLocation)
+	config := config1(api)
+	config.Flows().Items()[0].Metrics().SetEnable(false)
+	api.SetConfig(config)
 	req := api.NewMetricsRequest()
 	flow_req := req.Flow()
 	flow_req.SetFlowNames([]string{"f1"})
 	_, err := api.GetMetrics(req)
-	result := strings.Contains(err.Error(), "metrics not enabled for all the flows")
-	assert.Equal(t, result, true)
+	assert.Contains(t, err.Error(), "metrics not enabled for all the flows")
 }
 
 func TestGetMetrics500FlowResponseError(t *testing.T) {
@@ -209,6 +206,9 @@ func TestGetMetricsPortResponseError(t *testing.T) {
 	// the config, validate the err is not nil
 	api := gosnappi.NewApi()
 	api.NewGrpcTransport().SetLocation(mockGrpcServerLocation)
+	config := config1(api)
+	config.Flows().Items()[0].Metrics().SetEnable(false)
+	api.SetConfig(config)
 	req := api.NewMetricsRequest()
 	flow_req := req.Port()
 	flow_req.SetPortNames([]string{"port3"})
@@ -222,6 +222,9 @@ func TestGrpcGetMetricsBgpv4Response(t *testing.T) {
 	// the config, validate the response is not nil
 	api := gosnappi.NewApi()
 	api.NewGrpcTransport().SetLocation(mockGrpcServerLocation)
+	config := config2(api)
+	_, err := api.SetConfig(config)
+	assert.Nil(t, err)
 	req := api.NewMetricsRequest()
 	req.Bgpv4()
 	flow_req := req.Bgpv4()
@@ -340,6 +343,9 @@ func TestSetRouteStateResponse(t *testing.T) {
 	route_names := []string{"RR-1"}
 	api := gosnappi.NewApi()
 	api.NewGrpcTransport().SetLocation(mockGrpcServerLocation)
+	config := config2(api)
+	_, err := api.SetConfig(config)
+	assert.Nil(t, err)
 	req := api.NewRouteState()
 	req.SetNames([]string{"RR-1"})
 	req.SetState(gosnappi.RouteStateState.ADVERTISE)
@@ -380,7 +386,6 @@ func TestPorts(t *testing.T) {
 }
 
 func TestDevices(t *testing.T) {
-
 	api := gosnappi.NewApi()
 	config := api.NewConfig()
 	device := config.Devices().Add().SetName("d1")
@@ -648,4 +653,381 @@ func TestFlows(t *testing.T) {
 	assert.Equal(t, float32(8), flow1.Duration().FixedPackets().Delay().Bytes())
 	assert.Equal(t, int64(1000), flow1.Rate().Pps())
 	log.Print(config.ToYaml())
+}
+
+func TestValidation(t *testing.T) {
+	api := gosnappi.NewApi()
+	config := api.NewConfig()
+	// To Validate required field
+	p := config.Ports().Add()
+	err1 := p.Validate()
+	assert.Contains(t, err1.Error(), "Name is required")
+	d := config.Devices().Add().SetName("d1")
+
+	// To Validate Formats
+	//
+	// Mac address Validation
+	eth := d.Ethernets().Add().SetName("Eth1")
+	eth.SetMac("10.1.1.1")
+	err3 := eth.Validate()
+	fmt.Println(err3.Error())
+	assert.Contains(t, strings.ToLower(err3.Error()), "invalid mac address")
+
+	// Ipv4 address Validation
+	ipv4 := eth.Ipv4Addresses().Add().SetName("ipv4").SetGateway("20.1.1.1").SetAddress("ff.1.1.1")
+	assert.Contains(t, strings.ToLower(ipv4.Validate().Error()), "invalid ipv4 address")
+
+	// Ipv6 address Validation
+	ipv6 := eth.Ipv6Addresses().Add().SetName("ipv6").SetGateway("10.1.1.1").SetAddress("abcd:::abcd")
+	assert.Contains(t, strings.ToLower(ipv6.Validate().Error()), "invalid ipv6 address")
+
+	f := config.Flows().Add().SetName("f1")
+	f.TxRx().Port().SetRxName("rx").SetTxName("tx")
+	floweth := f.Packet().Add().Ethernet()
+	// Mac address slice validation
+	floweth.Src().SetValues([]string{"abcd:abcd", "ab:ab:ab:ab:ac:ff"})
+	f_err := floweth.Src().Validate()
+	fmt.Println(f_err.Error())
+	assert.Contains(t, strings.ToLower(f_err.Error()), "invalid mac addresses at")
+
+	// Ipv4 address slice validation
+	flowV4 := f.Packet().Add().Ipv4()
+	flowV4.Src().SetValues([]string{"1111", "1.1.1.1"})
+	v4_err := flowV4.Validate()
+	fmt.Println(v4_err)
+	assert.Contains(t, strings.ToLower(v4_err.Error()), "invalid ipv4 addresses at")
+
+	// Ipv6 address slice validation
+	flowV6 := f.Packet().Add().Ipv6()
+	flowV6.Dst().SetValues([]string{"abcd:abcd::1234", "::", "10.1.1.1"})
+	v6_err := flowV6.Validate()
+	assert.Contains(t, strings.ToLower(v6_err.Error()), "invalid ipv6 addresses at")
+
+	err := config.Validate()
+	fmt.Println(err)
+	assert.Contains(t, err.Error(), "validation errors")
+}
+
+var expected_device_json = `{
+	"devices":  [
+		{
+		"ethernets":  [
+			{
+			"port_name":  "p1",
+			"ipv4_addresses":  [
+				{
+				"gateway":  "10.1.1.2",
+				"address":  "10.1.1.1",
+				"prefix":  24,
+				"name":  "ipv4"
+				}
+			],
+			"ipv6_addresses":  [
+				{
+				"gateway":  "2000::2",
+				"address":  "2000::1",
+				"prefix":  64,
+				"name":  "ipv6"
+				}
+			],
+			"mac":  "00:00:11:11:00:00",
+			"mtu":  1500,
+			"vlans":  [
+				{
+				"tpid":  "x8100",
+				"priority":  0,
+				"id":  1,
+				"name":  "vlan1"
+				}
+			],
+			"name":  "Eth"
+			}
+		],
+		"ipv4_loopbacks":  [
+			{
+			"eth_name":  "Eth",
+			"address":  "0.0.0.0",
+			"name":  "IPv4loopback"
+			}
+		],
+		"ipv6_loopbacks":  [
+			{
+			"eth_name":  "Eth",
+			"address":  "::0",
+			"name":  "IPv6loopback"
+			}
+		],
+		"bgp":  {
+			"router_id":  "192.12.0.1",
+			"ipv4_interfaces":  [
+			{
+				"ipv4_name":  "bgpv4Int",
+				"peers":  [
+				{
+					"peer_address":  "10.2.2.2",
+					"as_type":  "ebgp",
+					"as_number":  3,
+					"as_number_width":  "four",
+					"advanced":  {
+					"hold_time_interval":  90,
+					"keep_alive_interval":  30,
+					"update_interval":  0,
+					"time_to_live":  64
+					},
+					"capability":  {
+					"ipv4_unicast":  true,
+					"ipv4_multicast":  false,
+					"ipv6_unicast":  true,
+					"ipv6_multicast":  false,
+					"vpls":  false,
+					"route_refresh":  true,
+					"route_constraint":  false,
+					"link_state_non_vpn":  false,
+					"link_state_vpn":  false,
+					"evpn":  false,
+					"extended_next_hop_encoding":  false,
+					"ipv4_multicast_vpn":  false,
+					"ipv4_mpls_vpn":  false,
+					"ipv4_mdt":  false,
+					"ipv4_multicast_mpls_vpn":  false,
+					"ipv4_unicast_flow_spec":  false,
+					"ipv4_sr_te_policy":  false,
+					"ipv4_unicast_add_path":  false,
+					"ipv6_multicast_vpn":  false,
+					"ipv6_mpls_vpn":  false,
+					"ipv6_mdt":  false,
+					"ipv6_multicast_mpls_vpn":  false,
+					"ipv6_unicast_flow_spec":  false,
+					"ipv6_sr_te_policy":  false,
+					"ipv6_unicast_add_path":  false
+					},
+					"name":  "bgpv4Peer"
+				}
+				]
+			}
+			]
+		},
+		"name":  "d1"
+		}
+	]}`
+
+func TestDefaultsDevice(t *testing.T) {
+	api := gosnappi.NewApi()
+	config := api.NewConfig()
+	device := config.Devices().Add().SetName("d1")
+	eth := device.Ethernets().Add().
+		SetPortName("p1").SetName("Eth").SetMac("00:00:11:11:00:00")
+	eth.Vlans().Add().SetName("vlan1")
+	eth.Ipv4Addresses().Add().
+		SetName("ipv4").SetAddress("10.1.1.1").SetGateway("10.1.1.2")
+	eth.Ipv6Addresses().Add().
+		SetName("ipv6").SetAddress("2000::1").SetGateway("2000::2")
+
+	device.Ipv4Loopbacks().Add().
+		SetEthName("Eth").SetName("IPv4loopback")
+	device.Ipv6Loopbacks().Add().
+		SetEthName("Eth").SetName("IPv6loopback")
+
+	bgp := device.Bgp().SetRouterId("192.12.0.1")
+	bgpv4Int := bgp.Ipv4Interfaces().Add().
+		SetIpv4Name("bgpv4Int")
+	bgpv4peer := bgpv4Int.Peers().Add().
+		SetName("bgpv4Peer").
+		SetAsNumber(3).SetAsType(gosnappi.BgpV4PeerAsType.EBGP).
+		SetPeerAddress("10.2.2.2")
+	bgpv4peer.Advanced()
+	bgpv4peer.Capability()
+
+	expected_result := config.ToJson()
+	require.JSONEq(t, expected_device_json, expected_result)
+}
+
+func TestDefaultsDeviceFromJson(t *testing.T) {
+	input_str := `{
+		"devices":  [
+			{
+			"ethernets":  [
+				{
+				"port_name":  "p1",
+				"ipv4_addresses":  [
+					{
+					"gateway":  "10.1.1.2",
+					"address":  "10.1.1.1",
+					"name":  "ipv4"
+					}
+				],
+				"ipv6_addresses":  [
+					{
+					"gateway":  "2000::2",
+					"address":  "2000::1",
+					"name":  "ipv6"
+					}
+				],
+				"mac":  "00:00:11:11:00:00",
+				"vlans":  [
+					{
+					"name":  "vlan1"
+					}
+				],
+				"name":  "Eth"
+				}
+			],
+			"ipv4_loopbacks":  [
+				{
+				"eth_name":  "Eth",
+				"name":  "IPv4loopback"
+				}
+			],
+			"ipv6_loopbacks":  [
+				{
+				"eth_name":  "Eth",
+				"name":  "IPv6loopback"
+				}
+			],
+			"bgp":  {
+				"router_id":  "192.12.0.1",
+				"ipv4_interfaces":  [
+				{
+					"ipv4_name":  "bgpv4Int",
+					"peers":  [
+					{
+						"peer_address":  "10.2.2.2",
+						"as_type":  "ebgp",
+						"as_number":  3,
+						"advanced":  {
+						},
+						"capability":  {
+						},
+						"name":  "bgpv4Peer"
+					}
+					]
+				}
+				]
+			},
+			"name":  "d1"
+			}
+		]}`
+	api := gosnappi.NewApi()
+	config := api.NewConfig()
+	config.FromJson(input_str)
+	expected_result := config.ToJson()
+	require.JSONEq(t, expected_device_json, expected_result)
+}
+
+var expected_flow_json = `{
+	"ports":  [
+		{
+		"name":  "p1"
+		},
+		{
+		"name":  "p2"
+		}
+	],
+	"flows":  [
+		{
+		"tx_rx":  {
+			"choice":  "port",
+			"port":  {
+			"tx_name":  "p1",
+			"rx_name":  "p2"
+			}
+		},
+		"packet":  [
+			{
+			"choice":  "ethernet",
+			"ethernet":  {
+				"dst":  {
+				"choice":  "value",
+				"value":  "00:00:00:00:00:00"
+				},
+				"src":  {
+				"choice":  "value",
+				"value":  "00:00:00:00:00:00"
+				},
+				"ether_type":  {
+				"choice":  "auto",
+				"auto":  "auto"
+				}
+			}
+			},
+			{
+			"choice":  "ipv4",
+			"ipv4":  {
+				"version":  {
+				"choice":  "value",
+				"value":  4
+				},
+				"priority":  {
+				"choice":  "dscp"
+				},
+				"src":  {
+				"choice":  "value",
+				"value":  "0.0.0.0"
+				},
+				"dst":  {
+				"choice":  "value",
+				"value":  "0.0.0.0"
+				}
+			}
+			},
+			{
+			"choice":  "udp",
+			"udp":  {
+				"src_port":  {
+				"choice":  "value",
+				"value":  0
+				},
+				"dst_port":  {
+				"choice":  "value",
+				"value":  0
+				},
+				"checksum":  {
+				"choice":  "generated",
+				"generated":  "good"
+				}
+			}
+			}
+		],
+		"rate":  {
+			"choice":  "pps",
+			"pps":  "1000"
+		},
+		"duration":  {
+			"choice":  "continuous",
+			"continuous":  {
+			"gap":  12
+			}
+		},
+		"name":  "f1"
+		}
+	]}`
+
+func TestDefaultsFlow(t *testing.T) {
+	api := gosnappi.NewApi()
+	config := api.NewConfig()
+	port1 := config.Ports().Add().SetName("p1")
+	port2 := config.Ports().Add().SetName("p2")
+	flow1 := config.Flows().Add().SetName("f1")
+	flow1.TxRx().Port().SetTxName(port1.Name()).SetRxName(port2.Name())
+
+	eth := flow1.Packet().Add().Ethernet()
+	eth.Src()
+	eth.Dst()
+	eth.EtherType()
+
+	ipv4 := flow1.Packet().Add().Ipv4()
+	ipv4.Src()
+	ipv4.Dst()
+	ipv4.Version()
+	ipv4.Priority()
+
+	udp := flow1.Packet().Add().Udp()
+	udp.SrcPort()
+	udp.DstPort()
+	udp.Checksum()
+
+	flow1.Duration().Continuous()
+	flow1.Rate()
+	expected_result := config.ToJson()
+	require.JSONEq(t, expected_flow_json, expected_result)
 }
