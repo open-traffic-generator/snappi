@@ -15,7 +15,7 @@ def test_defaults(api):
                 },
                 'rate': {
                     'choice': 'pps', # default choice is pps
-                    'pps': 1000
+                    'pps': "1000"
                 },
                 'packet': [
                     {
