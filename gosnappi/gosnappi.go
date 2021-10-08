@@ -1,4 +1,4 @@
-// Open Traffic Generator API 0.6.3
+// Open Traffic Generator API 0.6.5
 // License: MIT
 
 package gosnappi
@@ -10606,6 +10606,7 @@ type LagPort interface {
 	PortName() string
 	SetPortName(value string) LagPort
 	Protocol() LagProtocol
+	Ethernet() DeviceEthernetBase
 }
 
 // PortName returns a string
@@ -10651,6 +10652,19 @@ func (obj *lagPort) Protocol() LagProtocol {
 	return &lagProtocol{obj: obj.obj.Protocol}
 }
 
+// Ethernet returns a DeviceEthernetBase
+//  description is TBD
+func (obj *lagPort) Ethernet() DeviceEthernetBase {
+
+	if obj.obj.Ethernet == nil {
+		obj.obj.Ethernet = &snappipb.DeviceEthernetBase{}
+		newObj := &deviceEthernetBase{obj: obj.obj.Ethernet}
+		newObj.setDefault()
+		return newObj
+	}
+	return &deviceEthernetBase{obj: obj.obj.Ethernet}
+}
+
 func (obj *lagPort) validateObj(set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -10665,6 +10679,12 @@ func (obj *lagPort) validateObj(set_default bool) {
 		obj.Protocol().validateObj(set_default)
 	} else {
 		validation = append(validation, "Protocol is required field on interface LagPort")
+	}
+
+	if obj.obj.Ethernet != nil {
+		obj.Ethernet().validateObj(set_default)
+	} else {
+		validation = append(validation, "Ethernet is required field on interface LagPort")
 	}
 
 }
@@ -19439,6 +19459,269 @@ func (obj *lagProtocol) validateObj(set_default bool) {
 func (obj *lagProtocol) setDefault() {
 	if obj.obj.Choice == nil {
 		obj.SetChoice(LagProtocolChoice.LACP)
+	}
+
+}
+
+type deviceEthernetBase struct {
+	obj *snappipb.DeviceEthernetBase
+}
+
+func (obj *deviceEthernetBase) Msg() *snappipb.DeviceEthernetBase {
+	return obj.obj
+}
+
+func (obj *deviceEthernetBase) SetMsg(msg *snappipb.DeviceEthernetBase) DeviceEthernetBase {
+	obj.obj = msg
+	return obj
+}
+
+func (obj *deviceEthernetBase) ToPbText() string {
+	vErr := obj.Validate()
+	if vErr != nil {
+		panic(vErr)
+	}
+	return proto.MarshalTextString(obj.Msg())
+}
+
+func (obj *deviceEthernetBase) FromPbText(value string) error {
+	retObj := proto.UnmarshalText(value, obj.Msg())
+	if retObj != nil {
+		return retObj
+	}
+	vErr := obj.Validate(true)
+	if vErr != nil {
+		return vErr
+	}
+	return retObj
+}
+
+func (obj *deviceEthernetBase) ToYaml() string {
+	vErr := obj.Validate()
+	if vErr != nil {
+		panic(vErr)
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(obj.Msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *deviceEthernetBase) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: false,
+	}
+	retObj := opts.Unmarshal([]byte(data), obj.Msg())
+	if retObj != nil {
+		return retObj
+	}
+	vErr := obj.Validate(true)
+	if vErr != nil {
+		return vErr
+	}
+	return retObj
+}
+
+func (obj *deviceEthernetBase) ToJson() string {
+	vErr := obj.Validate()
+	if vErr != nil {
+		panic(vErr)
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+		Indent:          "  ",
+	}
+	data, err := opts.Marshal(obj.Msg())
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *deviceEthernetBase) FromJson(value string) error {
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: false,
+	}
+	retObj := opts.Unmarshal([]byte(value), obj.Msg())
+	if retObj != nil {
+		return retObj
+	}
+	err := obj.Validate(true)
+	if err != nil {
+		return err
+	}
+	return retObj
+}
+
+func (obj *deviceEthernetBase) Validate(defaults ...bool) error {
+	var set_default bool = false
+	if len(defaults) > 0 {
+		set_default = defaults[0]
+	}
+	obj.validateObj(set_default)
+	return validationResult()
+}
+
+type DeviceEthernetBase interface {
+	Msg() *snappipb.DeviceEthernetBase
+	SetMsg(*snappipb.DeviceEthernetBase) DeviceEthernetBase
+	ToPbText() string
+	ToYaml() string
+	ToJson() string
+	FromPbText(value string) error
+	FromYaml(value string) error
+	FromJson(value string) error
+	Validate(defaults ...bool) error
+	validateObj(set_default bool)
+	setDefault()
+	Mac() string
+	SetMac(value string) DeviceEthernetBase
+	Mtu() int32
+	SetMtu(value int32) DeviceEthernetBase
+	HasMtu() bool
+	Vlans() DeviceEthernetBaseDeviceVlanIter
+	Name() string
+	SetName(value string) DeviceEthernetBase
+}
+
+// Mac returns a string
+//  Media Access Control address.
+func (obj *deviceEthernetBase) Mac() string {
+	return obj.obj.Mac
+}
+
+// SetMac sets the string value in the DeviceEthernetBase object
+//  Media Access Control address.
+func (obj *deviceEthernetBase) SetMac(value string) DeviceEthernetBase {
+	obj.obj.Mac = value
+
+	return obj
+}
+
+// Mtu returns a int32
+//  Maximum Transmission Unit.
+func (obj *deviceEthernetBase) Mtu() int32 {
+	return *obj.obj.Mtu
+}
+
+// Mtu returns a int32
+//  Maximum Transmission Unit.
+func (obj *deviceEthernetBase) HasMtu() bool {
+	return obj.obj.Mtu != nil
+}
+
+// SetMtu sets the int32 value in the DeviceEthernetBase object
+//  Maximum Transmission Unit.
+func (obj *deviceEthernetBase) SetMtu(value int32) DeviceEthernetBase {
+	obj.obj.Mtu = &value
+
+	return obj
+}
+
+// Vlans returns a []DeviceVlan
+//  List of VLANs
+func (obj *deviceEthernetBase) Vlans() DeviceEthernetBaseDeviceVlanIter {
+	if obj.obj.Vlans == nil {
+		obj.obj.Vlans = []*snappipb.DeviceVlan{}
+	}
+	return &deviceEthernetBaseDeviceVlanIter{obj: obj}
+}
+
+type deviceEthernetBaseDeviceVlanIter struct {
+	obj *deviceEthernetBase
+}
+
+type DeviceEthernetBaseDeviceVlanIter interface {
+	Add() DeviceVlan
+	Items() []DeviceVlan
+}
+
+func (obj *deviceEthernetBaseDeviceVlanIter) Add() DeviceVlan {
+	newObj := &snappipb.DeviceVlan{}
+	obj.obj.obj.Vlans = append(obj.obj.obj.Vlans, newObj)
+	newLibObj := &deviceVlan{obj: newObj}
+	newLibObj.setDefault()
+	return newLibObj
+}
+
+func (obj *deviceEthernetBaseDeviceVlanIter) Items() []DeviceVlan {
+	slice := []DeviceVlan{}
+	for _, item := range obj.obj.obj.Vlans {
+		slice = append(slice, &deviceVlan{obj: item})
+	}
+	return slice
+}
+
+// Name returns a string
+//  Globally unique name of an object. It also serves as the primary key for arrays of objects.
+func (obj *deviceEthernetBase) Name() string {
+	return obj.obj.Name
+}
+
+// SetName sets the string value in the DeviceEthernetBase object
+//  Globally unique name of an object. It also serves as the primary key for arrays of objects.
+func (obj *deviceEthernetBase) SetName(value string) DeviceEthernetBase {
+	obj.obj.Name = value
+
+	return obj
+}
+
+func (obj *deviceEthernetBase) validateObj(set_default bool) {
+	if set_default {
+		obj.setDefault()
+	}
+
+	// Mac required
+	if obj.obj.Mac == "" {
+		validation = append(validation, "Mac is required field on interface DeviceEthernetBase")
+	} else {
+		err := validateMac(obj.Mac())
+		if err != nil {
+			validation = append(validation, fmt.Sprintf("%s %s", err.Error(), "on Mac DeviceEthernetBase"))
+		}
+	}
+
+	if obj.obj.Mtu != nil {
+		if *obj.obj.Mtu < 0 || *obj.obj.Mtu > 65535 {
+			validation = append(
+				validation, fmt.Sprintf("0 <= DeviceEthernetBase.Mtu <= 65535 but Got %d", *obj.obj.Mtu))
+		}
+
+	}
+
+	if obj.obj.Vlans != nil {
+		for _, item := range obj.Vlans().Items() {
+			item.validateObj(set_default)
+		}
+	}
+
+	// Name required
+	if obj.obj.Name == "" {
+		validation = append(validation, "Name is required field on interface DeviceEthernetBase")
+	}
+}
+
+func (obj *deviceEthernetBase) setDefault() {
+	if obj.obj.Mtu == nil {
+		obj.SetMtu(1500)
 	}
 
 }
@@ -36745,6 +37028,8 @@ type BgpV4Peer interface {
 	HasCapability() bool
 	V4Routes() BgpV4PeerBgpV4RouteRangeIter
 	V6Routes() BgpV4PeerBgpV6RouteRangeIter
+	V4SrtePolicies() BgpV4PeerBgpSrteV4PolicyIter
+	V6SrtePolicies() BgpV4PeerBgpSrteV6PolicyIter
 	Name() string
 	SetName(value string) BgpV4Peer
 }
@@ -36940,6 +37225,74 @@ func (obj *bgpV4PeerBgpV6RouteRangeIter) Items() []BgpV6RouteRange {
 	return slice
 }
 
+// V4SrtePolicies returns a []BgpSrteV4Policy
+//  Segment Routing Traffic Engineering (SR TE) Policies for IPv4 Address Family Identifier (AFI).
+func (obj *bgpV4Peer) V4SrtePolicies() BgpV4PeerBgpSrteV4PolicyIter {
+	if obj.obj.V4SrtePolicies == nil {
+		obj.obj.V4SrtePolicies = []*snappipb.BgpSrteV4Policy{}
+	}
+	return &bgpV4PeerBgpSrteV4PolicyIter{obj: obj}
+}
+
+type bgpV4PeerBgpSrteV4PolicyIter struct {
+	obj *bgpV4Peer
+}
+
+type BgpV4PeerBgpSrteV4PolicyIter interface {
+	Add() BgpSrteV4Policy
+	Items() []BgpSrteV4Policy
+}
+
+func (obj *bgpV4PeerBgpSrteV4PolicyIter) Add() BgpSrteV4Policy {
+	newObj := &snappipb.BgpSrteV4Policy{}
+	obj.obj.obj.V4SrtePolicies = append(obj.obj.obj.V4SrtePolicies, newObj)
+	newLibObj := &bgpSrteV4Policy{obj: newObj}
+	newLibObj.setDefault()
+	return newLibObj
+}
+
+func (obj *bgpV4PeerBgpSrteV4PolicyIter) Items() []BgpSrteV4Policy {
+	slice := []BgpSrteV4Policy{}
+	for _, item := range obj.obj.obj.V4SrtePolicies {
+		slice = append(slice, &bgpSrteV4Policy{obj: item})
+	}
+	return slice
+}
+
+// V6SrtePolicies returns a []BgpSrteV6Policy
+//  Segment Routing Traffic Engineering (SR TE) Policies for IPv6 Address Family Identifier (AFI).
+func (obj *bgpV4Peer) V6SrtePolicies() BgpV4PeerBgpSrteV6PolicyIter {
+	if obj.obj.V6SrtePolicies == nil {
+		obj.obj.V6SrtePolicies = []*snappipb.BgpSrteV6Policy{}
+	}
+	return &bgpV4PeerBgpSrteV6PolicyIter{obj: obj}
+}
+
+type bgpV4PeerBgpSrteV6PolicyIter struct {
+	obj *bgpV4Peer
+}
+
+type BgpV4PeerBgpSrteV6PolicyIter interface {
+	Add() BgpSrteV6Policy
+	Items() []BgpSrteV6Policy
+}
+
+func (obj *bgpV4PeerBgpSrteV6PolicyIter) Add() BgpSrteV6Policy {
+	newObj := &snappipb.BgpSrteV6Policy{}
+	obj.obj.obj.V6SrtePolicies = append(obj.obj.obj.V6SrtePolicies, newObj)
+	newLibObj := &bgpSrteV6Policy{obj: newObj}
+	newLibObj.setDefault()
+	return newLibObj
+}
+
+func (obj *bgpV4PeerBgpSrteV6PolicyIter) Items() []BgpSrteV6Policy {
+	slice := []BgpSrteV6Policy{}
+	for _, item := range obj.obj.obj.V6SrtePolicies {
+		slice = append(slice, &bgpSrteV6Policy{obj: item})
+	}
+	return slice
+}
+
 // Name returns a string
 //  Globally unique name of an object. It also serves as the primary key for arrays of objects.
 func (obj *bgpV4Peer) Name() string {
@@ -36990,6 +37343,18 @@ func (obj *bgpV4Peer) validateObj(set_default bool) {
 
 	if obj.obj.V6Routes != nil {
 		for _, item := range obj.V6Routes().Items() {
+			item.validateObj(set_default)
+		}
+	}
+
+	if obj.obj.V4SrtePolicies != nil {
+		for _, item := range obj.V4SrtePolicies().Items() {
+			item.validateObj(set_default)
+		}
+	}
+
+	if obj.obj.V6SrtePolicies != nil {
+		for _, item := range obj.V6SrtePolicies().Items() {
 			item.validateObj(set_default)
 		}
 	}
@@ -37153,6 +37518,8 @@ type BgpV6Peer interface {
 	HasCapability() bool
 	V4Routes() BgpV6PeerBgpV4RouteRangeIter
 	V6Routes() BgpV6PeerBgpV6RouteRangeIter
+	V4SrtePolicies() BgpV6PeerBgpSrteV4PolicyIter
+	V6SrtePolicies() BgpV6PeerBgpSrteV6PolicyIter
 	Name() string
 	SetName(value string) BgpV6Peer
 }
@@ -37367,6 +37734,74 @@ func (obj *bgpV6PeerBgpV6RouteRangeIter) Items() []BgpV6RouteRange {
 	return slice
 }
 
+// V4SrtePolicies returns a []BgpSrteV4Policy
+//  Segment Routing Traffic Engineering (SR TE) Policies for IPv4 Address Family Identifier (AFI).
+func (obj *bgpV6Peer) V4SrtePolicies() BgpV6PeerBgpSrteV4PolicyIter {
+	if obj.obj.V4SrtePolicies == nil {
+		obj.obj.V4SrtePolicies = []*snappipb.BgpSrteV4Policy{}
+	}
+	return &bgpV6PeerBgpSrteV4PolicyIter{obj: obj}
+}
+
+type bgpV6PeerBgpSrteV4PolicyIter struct {
+	obj *bgpV6Peer
+}
+
+type BgpV6PeerBgpSrteV4PolicyIter interface {
+	Add() BgpSrteV4Policy
+	Items() []BgpSrteV4Policy
+}
+
+func (obj *bgpV6PeerBgpSrteV4PolicyIter) Add() BgpSrteV4Policy {
+	newObj := &snappipb.BgpSrteV4Policy{}
+	obj.obj.obj.V4SrtePolicies = append(obj.obj.obj.V4SrtePolicies, newObj)
+	newLibObj := &bgpSrteV4Policy{obj: newObj}
+	newLibObj.setDefault()
+	return newLibObj
+}
+
+func (obj *bgpV6PeerBgpSrteV4PolicyIter) Items() []BgpSrteV4Policy {
+	slice := []BgpSrteV4Policy{}
+	for _, item := range obj.obj.obj.V4SrtePolicies {
+		slice = append(slice, &bgpSrteV4Policy{obj: item})
+	}
+	return slice
+}
+
+// V6SrtePolicies returns a []BgpSrteV6Policy
+//  Segment Routing Traffic Engineering (SR TE) Policies for IPv6 Address Family Identifier (AFI).
+func (obj *bgpV6Peer) V6SrtePolicies() BgpV6PeerBgpSrteV6PolicyIter {
+	if obj.obj.V6SrtePolicies == nil {
+		obj.obj.V6SrtePolicies = []*snappipb.BgpSrteV6Policy{}
+	}
+	return &bgpV6PeerBgpSrteV6PolicyIter{obj: obj}
+}
+
+type bgpV6PeerBgpSrteV6PolicyIter struct {
+	obj *bgpV6Peer
+}
+
+type BgpV6PeerBgpSrteV6PolicyIter interface {
+	Add() BgpSrteV6Policy
+	Items() []BgpSrteV6Policy
+}
+
+func (obj *bgpV6PeerBgpSrteV6PolicyIter) Add() BgpSrteV6Policy {
+	newObj := &snappipb.BgpSrteV6Policy{}
+	obj.obj.obj.V6SrtePolicies = append(obj.obj.obj.V6SrtePolicies, newObj)
+	newLibObj := &bgpSrteV6Policy{obj: newObj}
+	newLibObj.setDefault()
+	return newLibObj
+}
+
+func (obj *bgpV6PeerBgpSrteV6PolicyIter) Items() []BgpSrteV6Policy {
+	slice := []BgpSrteV6Policy{}
+	for _, item := range obj.obj.obj.V6SrtePolicies {
+		slice = append(slice, &bgpSrteV6Policy{obj: item})
+	}
+	return slice
+}
+
 // Name returns a string
 //  Globally unique name of an object. It also serves as the primary key for arrays of objects.
 func (obj *bgpV6Peer) Name() string {
@@ -37421,6 +37856,18 @@ func (obj *bgpV6Peer) validateObj(set_default bool) {
 
 	if obj.obj.V6Routes != nil {
 		for _, item := range obj.V6Routes().Items() {
+			item.validateObj(set_default)
+		}
+	}
+
+	if obj.obj.V4SrtePolicies != nil {
+		for _, item := range obj.V4SrtePolicies().Items() {
+			item.validateObj(set_default)
+		}
+	}
+
+	if obj.obj.V6SrtePolicies != nil {
+		for _, item := range obj.V6SrtePolicies().Items() {
 			item.validateObj(set_default)
 		}
 	}
@@ -77857,6 +78304,1242 @@ func (obj *bgpV6RouteRange) setDefault() {
 
 }
 
+type bgpSrteV4Policy struct {
+	obj *snappipb.BgpSrteV4Policy
+}
+
+func (obj *bgpSrteV4Policy) Msg() *snappipb.BgpSrteV4Policy {
+	return obj.obj
+}
+
+func (obj *bgpSrteV4Policy) SetMsg(msg *snappipb.BgpSrteV4Policy) BgpSrteV4Policy {
+	obj.obj = msg
+	return obj
+}
+
+func (obj *bgpSrteV4Policy) ToPbText() string {
+	vErr := obj.Validate()
+	if vErr != nil {
+		panic(vErr)
+	}
+	return proto.MarshalTextString(obj.Msg())
+}
+
+func (obj *bgpSrteV4Policy) FromPbText(value string) error {
+	retObj := proto.UnmarshalText(value, obj.Msg())
+	if retObj != nil {
+		return retObj
+	}
+	vErr := obj.Validate(true)
+	if vErr != nil {
+		return vErr
+	}
+	return retObj
+}
+
+func (obj *bgpSrteV4Policy) ToYaml() string {
+	vErr := obj.Validate()
+	if vErr != nil {
+		panic(vErr)
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(obj.Msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *bgpSrteV4Policy) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: false,
+	}
+	retObj := opts.Unmarshal([]byte(data), obj.Msg())
+	if retObj != nil {
+		return retObj
+	}
+	vErr := obj.Validate(true)
+	if vErr != nil {
+		return vErr
+	}
+	return retObj
+}
+
+func (obj *bgpSrteV4Policy) ToJson() string {
+	vErr := obj.Validate()
+	if vErr != nil {
+		panic(vErr)
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+		Indent:          "  ",
+	}
+	data, err := opts.Marshal(obj.Msg())
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *bgpSrteV4Policy) FromJson(value string) error {
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: false,
+	}
+	retObj := opts.Unmarshal([]byte(value), obj.Msg())
+	if retObj != nil {
+		return retObj
+	}
+	err := obj.Validate(true)
+	if err != nil {
+		return err
+	}
+	return retObj
+}
+
+func (obj *bgpSrteV4Policy) Validate(defaults ...bool) error {
+	var set_default bool = false
+	if len(defaults) > 0 {
+		set_default = defaults[0]
+	}
+	obj.validateObj(set_default)
+	return validationResult()
+}
+
+type BgpSrteV4Policy interface {
+	Msg() *snappipb.BgpSrteV4Policy
+	SetMsg(*snappipb.BgpSrteV4Policy) BgpSrteV4Policy
+	ToPbText() string
+	ToYaml() string
+	ToJson() string
+	FromPbText(value string) error
+	FromYaml(value string) error
+	FromJson(value string) error
+	Validate(defaults ...bool) error
+	validateObj(set_default bool)
+	setDefault()
+	Distinguisher() int64
+	SetDistinguisher(value int64) BgpSrteV4Policy
+	HasDistinguisher() bool
+	Color() int64
+	SetColor(value int64) BgpSrteV4Policy
+	HasColor() bool
+	Ipv4Endpoint() string
+	SetIpv4Endpoint(value string) BgpSrteV4Policy
+	NextHopMode() BgpSrteV4PolicyNextHopModeEnum
+	SetNextHopMode(value BgpSrteV4PolicyNextHopModeEnum) BgpSrteV4Policy
+	HasNextHopMode() bool
+	NextHopAddressType() BgpSrteV4PolicyNextHopAddressTypeEnum
+	SetNextHopAddressType(value BgpSrteV4PolicyNextHopAddressTypeEnum) BgpSrteV4Policy
+	HasNextHopAddressType() bool
+	NextHopIpv4Address() string
+	SetNextHopIpv4Address(value string) BgpSrteV4Policy
+	HasNextHopIpv4Address() bool
+	NextHopIpv6Address() string
+	SetNextHopIpv6Address(value string) BgpSrteV4Policy
+	HasNextHopIpv6Address() bool
+	Advanced() BgpRouteAdvanced
+	HasAdvanced() bool
+	AddPath() BgpAddPath
+	HasAddPath() bool
+	AsPath() BgpAsPath
+	HasAsPath() bool
+	Communities() BgpSrteV4PolicyBgpCommunityIter
+	ExtCommunities() BgpSrteV4PolicyBgpExtCommunityIter
+	TunnelTlvs() BgpSrteV4PolicyBgpSrteV4TunnelTlvIter
+	Name() string
+	SetName(value string) BgpSrteV4Policy
+	Active() bool
+	SetActive(value bool) BgpSrteV4Policy
+	HasActive() bool
+}
+
+// Distinguisher returns a int64
+//  4-octet value uniquely identifying the policy in the context of (color, endpoint) tuple. It is used by the SR Policy originator to make unique (from an NLRI perspective)  both for multiple candidate  paths of the same SR Policy as well as candidate paths  of different SR Policies (i.e. with different segment list) with the same Color  and Endpoint but meant for different head-ends.
+func (obj *bgpSrteV4Policy) Distinguisher() int64 {
+	return *obj.obj.Distinguisher
+}
+
+// Distinguisher returns a int64
+//  4-octet value uniquely identifying the policy in the context of (color, endpoint) tuple. It is used by the SR Policy originator to make unique (from an NLRI perspective)  both for multiple candidate  paths of the same SR Policy as well as candidate paths  of different SR Policies (i.e. with different segment list) with the same Color  and Endpoint but meant for different head-ends.
+func (obj *bgpSrteV4Policy) HasDistinguisher() bool {
+	return obj.obj.Distinguisher != nil
+}
+
+// SetDistinguisher sets the int64 value in the BgpSrteV4Policy object
+//  4-octet value uniquely identifying the policy in the context of (color, endpoint) tuple. It is used by the SR Policy originator to make unique (from an NLRI perspective)  both for multiple candidate  paths of the same SR Policy as well as candidate paths  of different SR Policies (i.e. with different segment list) with the same Color  and Endpoint but meant for different head-ends.
+func (obj *bgpSrteV4Policy) SetDistinguisher(value int64) BgpSrteV4Policy {
+	obj.obj.Distinguisher = &value
+
+	return obj
+}
+
+// Color returns a int64
+//  Policy color is used to match the color of the destination prefixes to steer traffic into the SR Policy.
+func (obj *bgpSrteV4Policy) Color() int64 {
+	return *obj.obj.Color
+}
+
+// Color returns a int64
+//  Policy color is used to match the color of the destination prefixes to steer traffic into the SR Policy.
+func (obj *bgpSrteV4Policy) HasColor() bool {
+	return obj.obj.Color != nil
+}
+
+// SetColor sets the int64 value in the BgpSrteV4Policy object
+//  Policy color is used to match the color of the destination prefixes to steer traffic into the SR Policy.
+func (obj *bgpSrteV4Policy) SetColor(value int64) BgpSrteV4Policy {
+	obj.obj.Color = &value
+
+	return obj
+}
+
+// Ipv4Endpoint returns a string
+//  Specifies a single node or a set of nodes (e.g. an anycast address). It is selected on the basis of the SR Policy type (AFI).
+func (obj *bgpSrteV4Policy) Ipv4Endpoint() string {
+	return obj.obj.Ipv4Endpoint
+}
+
+// SetIpv4Endpoint sets the string value in the BgpSrteV4Policy object
+//  Specifies a single node or a set of nodes (e.g. an anycast address). It is selected on the basis of the SR Policy type (AFI).
+func (obj *bgpSrteV4Policy) SetIpv4Endpoint(value string) BgpSrteV4Policy {
+	obj.obj.Ipv4Endpoint = value
+
+	return obj
+}
+
+type BgpSrteV4PolicyNextHopModeEnum string
+
+var BgpSrteV4PolicyNextHopMode = struct {
+	LOCAL_IP BgpSrteV4PolicyNextHopModeEnum
+	MANUAL   BgpSrteV4PolicyNextHopModeEnum
+}{
+	LOCAL_IP: BgpSrteV4PolicyNextHopModeEnum("local_ip"),
+	MANUAL:   BgpSrteV4PolicyNextHopModeEnum("manual"),
+}
+
+func (obj *bgpSrteV4Policy) NextHopMode() BgpSrteV4PolicyNextHopModeEnum {
+	return BgpSrteV4PolicyNextHopModeEnum(obj.obj.NextHopMode.Enum().String())
+}
+
+// NextHopMode returns a string
+//  Mode for choosing the NextHop in MP REACH NLRI. Available modes are : Local IP: Automatically fills the Nexthop with the Local IP of the BGP peer. For IPv6 BGP peer the Nexthop Encoding capability should be enabled. Manual: Override the Nexthop with any arbitrary IPv4/IPv6 address.
+func (obj *bgpSrteV4Policy) HasNextHopMode() bool {
+	return obj.obj.NextHopMode != nil
+}
+
+func (obj *bgpSrteV4Policy) SetNextHopMode(value BgpSrteV4PolicyNextHopModeEnum) BgpSrteV4Policy {
+	intValue, ok := snappipb.BgpSrteV4Policy_NextHopMode_Enum_value[string(value)]
+	if !ok {
+		validation = append(validation, fmt.Sprintf(
+			"%s is not a valid choice on BgpSrteV4PolicyNextHopModeEnum", string(value)))
+		return obj
+	}
+	enumValue := snappipb.BgpSrteV4Policy_NextHopMode_Enum(intValue)
+	obj.obj.NextHopMode = &enumValue
+	return obj
+}
+
+type BgpSrteV4PolicyNextHopAddressTypeEnum string
+
+var BgpSrteV4PolicyNextHopAddressType = struct {
+	IPV4 BgpSrteV4PolicyNextHopAddressTypeEnum
+	IPV6 BgpSrteV4PolicyNextHopAddressTypeEnum
+}{
+	IPV4: BgpSrteV4PolicyNextHopAddressTypeEnum("ipv4"),
+	IPV6: BgpSrteV4PolicyNextHopAddressTypeEnum("ipv6"),
+}
+
+func (obj *bgpSrteV4Policy) NextHopAddressType() BgpSrteV4PolicyNextHopAddressTypeEnum {
+	return BgpSrteV4PolicyNextHopAddressTypeEnum(obj.obj.NextHopAddressType.Enum().String())
+}
+
+// NextHopAddressType returns a string
+//  Type of next hop IP address to be used when 'next_hop_mode' is set to 'manual'.
+func (obj *bgpSrteV4Policy) HasNextHopAddressType() bool {
+	return obj.obj.NextHopAddressType != nil
+}
+
+func (obj *bgpSrteV4Policy) SetNextHopAddressType(value BgpSrteV4PolicyNextHopAddressTypeEnum) BgpSrteV4Policy {
+	intValue, ok := snappipb.BgpSrteV4Policy_NextHopAddressType_Enum_value[string(value)]
+	if !ok {
+		validation = append(validation, fmt.Sprintf(
+			"%s is not a valid choice on BgpSrteV4PolicyNextHopAddressTypeEnum", string(value)))
+		return obj
+	}
+	enumValue := snappipb.BgpSrteV4Policy_NextHopAddressType_Enum(intValue)
+	obj.obj.NextHopAddressType = &enumValue
+	return obj
+}
+
+// NextHopIpv4Address returns a string
+//  The IPv4 address of the next hop if the Nexthop type 'next_hop_mode' is 'manual' and the Nexthop type 'next_hop_address_type' is IPv4. If BGP peer is of type IPv6, Nexthop Encoding capability extended_next_hop_encoding should be enabled.
+func (obj *bgpSrteV4Policy) NextHopIpv4Address() string {
+	return *obj.obj.NextHopIpv4Address
+}
+
+// NextHopIpv4Address returns a string
+//  The IPv4 address of the next hop if the Nexthop type 'next_hop_mode' is 'manual' and the Nexthop type 'next_hop_address_type' is IPv4. If BGP peer is of type IPv6, Nexthop Encoding capability extended_next_hop_encoding should be enabled.
+func (obj *bgpSrteV4Policy) HasNextHopIpv4Address() bool {
+	return obj.obj.NextHopIpv4Address != nil
+}
+
+// SetNextHopIpv4Address sets the string value in the BgpSrteV4Policy object
+//  The IPv4 address of the next hop if the Nexthop type 'next_hop_mode' is 'manual' and the Nexthop type 'next_hop_address_type' is IPv4. If BGP peer is of type IPv6, Nexthop Encoding capability extended_next_hop_encoding should be enabled.
+func (obj *bgpSrteV4Policy) SetNextHopIpv4Address(value string) BgpSrteV4Policy {
+	obj.obj.NextHopIpv4Address = &value
+
+	return obj
+}
+
+// NextHopIpv6Address returns a string
+//  The IPv6 address of the next hop if the Nexthop Mode 'next_hop_address_type' is 'manual' and the Nexthop type 'next_hop_address_type' is IPv6.
+func (obj *bgpSrteV4Policy) NextHopIpv6Address() string {
+	return *obj.obj.NextHopIpv6Address
+}
+
+// NextHopIpv6Address returns a string
+//  The IPv6 address of the next hop if the Nexthop Mode 'next_hop_address_type' is 'manual' and the Nexthop type 'next_hop_address_type' is IPv6.
+func (obj *bgpSrteV4Policy) HasNextHopIpv6Address() bool {
+	return obj.obj.NextHopIpv6Address != nil
+}
+
+// SetNextHopIpv6Address sets the string value in the BgpSrteV4Policy object
+//  The IPv6 address of the next hop if the Nexthop Mode 'next_hop_address_type' is 'manual' and the Nexthop type 'next_hop_address_type' is IPv6.
+func (obj *bgpSrteV4Policy) SetNextHopIpv6Address(value string) BgpSrteV4Policy {
+	obj.obj.NextHopIpv6Address = &value
+
+	return obj
+}
+
+// Advanced returns a BgpRouteAdvanced
+//  description is TBD
+func (obj *bgpSrteV4Policy) Advanced() BgpRouteAdvanced {
+
+	if obj.obj.Advanced == nil {
+		obj.obj.Advanced = &snappipb.BgpRouteAdvanced{}
+		newObj := &bgpRouteAdvanced{obj: obj.obj.Advanced}
+		newObj.setDefault()
+		return newObj
+	}
+	return &bgpRouteAdvanced{obj: obj.obj.Advanced}
+}
+
+// Advanced returns a BgpRouteAdvanced
+//  description is TBD
+func (obj *bgpSrteV4Policy) HasAdvanced() bool {
+	return obj.obj.Advanced != nil
+}
+
+// AddPath returns a BgpAddPath
+//  description is TBD
+func (obj *bgpSrteV4Policy) AddPath() BgpAddPath {
+
+	if obj.obj.AddPath == nil {
+		obj.obj.AddPath = &snappipb.BgpAddPath{}
+		newObj := &bgpAddPath{obj: obj.obj.AddPath}
+		newObj.setDefault()
+		return newObj
+	}
+	return &bgpAddPath{obj: obj.obj.AddPath}
+}
+
+// AddPath returns a BgpAddPath
+//  description is TBD
+func (obj *bgpSrteV4Policy) HasAddPath() bool {
+	return obj.obj.AddPath != nil
+}
+
+// AsPath returns a BgpAsPath
+//  description is TBD
+func (obj *bgpSrteV4Policy) AsPath() BgpAsPath {
+
+	if obj.obj.AsPath == nil {
+		obj.obj.AsPath = &snappipb.BgpAsPath{}
+		newObj := &bgpAsPath{obj: obj.obj.AsPath}
+		newObj.setDefault()
+		return newObj
+	}
+	return &bgpAsPath{obj: obj.obj.AsPath}
+}
+
+// AsPath returns a BgpAsPath
+//  description is TBD
+func (obj *bgpSrteV4Policy) HasAsPath() bool {
+	return obj.obj.AsPath != nil
+}
+
+// Communities returns a []BgpCommunity
+//  Optional Community settings.
+func (obj *bgpSrteV4Policy) Communities() BgpSrteV4PolicyBgpCommunityIter {
+	if obj.obj.Communities == nil {
+		obj.obj.Communities = []*snappipb.BgpCommunity{}
+	}
+	return &bgpSrteV4PolicyBgpCommunityIter{obj: obj}
+}
+
+type bgpSrteV4PolicyBgpCommunityIter struct {
+	obj *bgpSrteV4Policy
+}
+
+type BgpSrteV4PolicyBgpCommunityIter interface {
+	Add() BgpCommunity
+	Items() []BgpCommunity
+}
+
+func (obj *bgpSrteV4PolicyBgpCommunityIter) Add() BgpCommunity {
+	newObj := &snappipb.BgpCommunity{}
+	obj.obj.obj.Communities = append(obj.obj.obj.Communities, newObj)
+	newLibObj := &bgpCommunity{obj: newObj}
+	newLibObj.setDefault()
+	return newLibObj
+}
+
+func (obj *bgpSrteV4PolicyBgpCommunityIter) Items() []BgpCommunity {
+	slice := []BgpCommunity{}
+	for _, item := range obj.obj.obj.Communities {
+		slice = append(slice, &bgpCommunity{obj: item})
+	}
+	return slice
+}
+
+// ExtCommunities returns a []BgpExtCommunity
+//  Optional Extended Community settings.
+func (obj *bgpSrteV4Policy) ExtCommunities() BgpSrteV4PolicyBgpExtCommunityIter {
+	if obj.obj.ExtCommunities == nil {
+		obj.obj.ExtCommunities = []*snappipb.BgpExtCommunity{}
+	}
+	return &bgpSrteV4PolicyBgpExtCommunityIter{obj: obj}
+}
+
+type bgpSrteV4PolicyBgpExtCommunityIter struct {
+	obj *bgpSrteV4Policy
+}
+
+type BgpSrteV4PolicyBgpExtCommunityIter interface {
+	Add() BgpExtCommunity
+	Items() []BgpExtCommunity
+}
+
+func (obj *bgpSrteV4PolicyBgpExtCommunityIter) Add() BgpExtCommunity {
+	newObj := &snappipb.BgpExtCommunity{}
+	obj.obj.obj.ExtCommunities = append(obj.obj.obj.ExtCommunities, newObj)
+	newLibObj := &bgpExtCommunity{obj: newObj}
+	newLibObj.setDefault()
+	return newLibObj
+}
+
+func (obj *bgpSrteV4PolicyBgpExtCommunityIter) Items() []BgpExtCommunity {
+	slice := []BgpExtCommunity{}
+	for _, item := range obj.obj.obj.ExtCommunities {
+		slice = append(slice, &bgpExtCommunity{obj: item})
+	}
+	return slice
+}
+
+// TunnelTlvs returns a []BgpSrteV4TunnelTlv
+//  List Tunnel Encapsulation Attributes.
+func (obj *bgpSrteV4Policy) TunnelTlvs() BgpSrteV4PolicyBgpSrteV4TunnelTlvIter {
+	if obj.obj.TunnelTlvs == nil {
+		obj.obj.TunnelTlvs = []*snappipb.BgpSrteV4TunnelTlv{}
+	}
+	return &bgpSrteV4PolicyBgpSrteV4TunnelTlvIter{obj: obj}
+}
+
+type bgpSrteV4PolicyBgpSrteV4TunnelTlvIter struct {
+	obj *bgpSrteV4Policy
+}
+
+type BgpSrteV4PolicyBgpSrteV4TunnelTlvIter interface {
+	Add() BgpSrteV4TunnelTlv
+	Items() []BgpSrteV4TunnelTlv
+}
+
+func (obj *bgpSrteV4PolicyBgpSrteV4TunnelTlvIter) Add() BgpSrteV4TunnelTlv {
+	newObj := &snappipb.BgpSrteV4TunnelTlv{}
+	obj.obj.obj.TunnelTlvs = append(obj.obj.obj.TunnelTlvs, newObj)
+	newLibObj := &bgpSrteV4TunnelTlv{obj: newObj}
+	newLibObj.setDefault()
+	return newLibObj
+}
+
+func (obj *bgpSrteV4PolicyBgpSrteV4TunnelTlvIter) Items() []BgpSrteV4TunnelTlv {
+	slice := []BgpSrteV4TunnelTlv{}
+	for _, item := range obj.obj.obj.TunnelTlvs {
+		slice = append(slice, &bgpSrteV4TunnelTlv{obj: item})
+	}
+	return slice
+}
+
+// Name returns a string
+//  Globally unique name of an object. It also serves as the primary key for arrays of objects.
+func (obj *bgpSrteV4Policy) Name() string {
+	return obj.obj.Name
+}
+
+// SetName sets the string value in the BgpSrteV4Policy object
+//  Globally unique name of an object. It also serves as the primary key for arrays of objects.
+func (obj *bgpSrteV4Policy) SetName(value string) BgpSrteV4Policy {
+	obj.obj.Name = value
+
+	return obj
+}
+
+// Active returns a bool
+//  If enabled means that this part of the configuration including any active 'children' nodes will be advertised to peer.  If disabled, this means that though config is present, it is not taking any part of the test but can be activated at run-time to advertise just this part of the configuration to the peer.
+func (obj *bgpSrteV4Policy) Active() bool {
+	return *obj.obj.Active
+}
+
+// Active returns a bool
+//  If enabled means that this part of the configuration including any active 'children' nodes will be advertised to peer.  If disabled, this means that though config is present, it is not taking any part of the test but can be activated at run-time to advertise just this part of the configuration to the peer.
+func (obj *bgpSrteV4Policy) HasActive() bool {
+	return obj.obj.Active != nil
+}
+
+// SetActive sets the bool value in the BgpSrteV4Policy object
+//  If enabled means that this part of the configuration including any active 'children' nodes will be advertised to peer.  If disabled, this means that though config is present, it is not taking any part of the test but can be activated at run-time to advertise just this part of the configuration to the peer.
+func (obj *bgpSrteV4Policy) SetActive(value bool) BgpSrteV4Policy {
+	obj.obj.Active = &value
+
+	return obj
+}
+
+func (obj *bgpSrteV4Policy) validateObj(set_default bool) {
+	if set_default {
+		obj.setDefault()
+	}
+
+	if obj.obj.Distinguisher != nil {
+		if *obj.obj.Distinguisher < 0 || *obj.obj.Distinguisher > 4294967295 {
+			validation = append(
+				validation, fmt.Sprintf("0 <= BgpSrteV4Policy.Distinguisher <= 4294967295 but Got %d", *obj.obj.Distinguisher))
+		}
+
+	}
+
+	if obj.obj.Color != nil {
+		if *obj.obj.Color < 0 || *obj.obj.Color > 4294967295 {
+			validation = append(
+				validation, fmt.Sprintf("0 <= BgpSrteV4Policy.Color <= 4294967295 but Got %d", *obj.obj.Color))
+		}
+
+	}
+
+	// Ipv4Endpoint required
+	if obj.obj.Ipv4Endpoint == "" {
+		validation = append(validation, "Ipv4Endpoint is required field on interface BgpSrteV4Policy")
+	} else {
+		err := validateIpv4(obj.Ipv4Endpoint())
+		if err != nil {
+			validation = append(validation, fmt.Sprintf("%s %s", err.Error(), "on Ipv4Endpoint BgpSrteV4Policy"))
+		}
+	}
+
+	if obj.obj.NextHopIpv4Address != nil {
+		err := validateIpv4(obj.NextHopIpv4Address())
+		if err != nil {
+			validation = append(validation, fmt.Sprintf("%s %s", err.Error(), "on NextHopIpv4Address BgpSrteV4Policy"))
+		}
+	}
+
+	if obj.obj.NextHopIpv6Address != nil {
+		err := validateIpv6(obj.NextHopIpv6Address())
+		if err != nil {
+			validation = append(validation, fmt.Sprintf("%s %s", err.Error(), "on NextHopIpv6Address BgpSrteV4Policy"))
+		}
+	}
+
+	if obj.obj.Advanced != nil {
+		obj.Advanced().validateObj(set_default)
+	}
+
+	if obj.obj.AddPath != nil {
+		obj.AddPath().validateObj(set_default)
+	}
+
+	if obj.obj.AsPath != nil {
+		obj.AsPath().validateObj(set_default)
+	}
+	if obj.obj.Communities != nil {
+		for _, item := range obj.Communities().Items() {
+			item.validateObj(set_default)
+		}
+	}
+
+	if obj.obj.ExtCommunities != nil {
+		for _, item := range obj.ExtCommunities().Items() {
+			item.validateObj(set_default)
+		}
+	}
+
+	if obj.obj.TunnelTlvs != nil {
+		for _, item := range obj.TunnelTlvs().Items() {
+			item.validateObj(set_default)
+		}
+	}
+
+	// Name required
+	if obj.obj.Name == "" {
+		validation = append(validation, "Name is required field on interface BgpSrteV4Policy")
+	}
+}
+
+func (obj *bgpSrteV4Policy) setDefault() {
+	if obj.obj.Distinguisher == nil {
+		obj.SetDistinguisher(1)
+	}
+	if obj.obj.Color == nil {
+		obj.SetColor(100)
+	}
+	if obj.obj.NextHopMode == nil {
+		obj.SetNextHopMode(BgpSrteV4PolicyNextHopMode.LOCAL_IP)
+	}
+	if obj.obj.NextHopAddressType == nil {
+		obj.SetNextHopAddressType(BgpSrteV4PolicyNextHopAddressType.IPV4)
+	}
+	if obj.obj.Active == nil {
+		obj.SetActive(true)
+	}
+
+}
+
+type bgpSrteV6Policy struct {
+	obj *snappipb.BgpSrteV6Policy
+}
+
+func (obj *bgpSrteV6Policy) Msg() *snappipb.BgpSrteV6Policy {
+	return obj.obj
+}
+
+func (obj *bgpSrteV6Policy) SetMsg(msg *snappipb.BgpSrteV6Policy) BgpSrteV6Policy {
+	obj.obj = msg
+	return obj
+}
+
+func (obj *bgpSrteV6Policy) ToPbText() string {
+	vErr := obj.Validate()
+	if vErr != nil {
+		panic(vErr)
+	}
+	return proto.MarshalTextString(obj.Msg())
+}
+
+func (obj *bgpSrteV6Policy) FromPbText(value string) error {
+	retObj := proto.UnmarshalText(value, obj.Msg())
+	if retObj != nil {
+		return retObj
+	}
+	vErr := obj.Validate(true)
+	if vErr != nil {
+		return vErr
+	}
+	return retObj
+}
+
+func (obj *bgpSrteV6Policy) ToYaml() string {
+	vErr := obj.Validate()
+	if vErr != nil {
+		panic(vErr)
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(obj.Msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *bgpSrteV6Policy) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: false,
+	}
+	retObj := opts.Unmarshal([]byte(data), obj.Msg())
+	if retObj != nil {
+		return retObj
+	}
+	vErr := obj.Validate(true)
+	if vErr != nil {
+		return vErr
+	}
+	return retObj
+}
+
+func (obj *bgpSrteV6Policy) ToJson() string {
+	vErr := obj.Validate()
+	if vErr != nil {
+		panic(vErr)
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+		Indent:          "  ",
+	}
+	data, err := opts.Marshal(obj.Msg())
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *bgpSrteV6Policy) FromJson(value string) error {
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: false,
+	}
+	retObj := opts.Unmarshal([]byte(value), obj.Msg())
+	if retObj != nil {
+		return retObj
+	}
+	err := obj.Validate(true)
+	if err != nil {
+		return err
+	}
+	return retObj
+}
+
+func (obj *bgpSrteV6Policy) Validate(defaults ...bool) error {
+	var set_default bool = false
+	if len(defaults) > 0 {
+		set_default = defaults[0]
+	}
+	obj.validateObj(set_default)
+	return validationResult()
+}
+
+type BgpSrteV6Policy interface {
+	Msg() *snappipb.BgpSrteV6Policy
+	SetMsg(*snappipb.BgpSrteV6Policy) BgpSrteV6Policy
+	ToPbText() string
+	ToYaml() string
+	ToJson() string
+	FromPbText(value string) error
+	FromYaml(value string) error
+	FromJson(value string) error
+	Validate(defaults ...bool) error
+	validateObj(set_default bool)
+	setDefault()
+	Distinguisher() int64
+	SetDistinguisher(value int64) BgpSrteV6Policy
+	HasDistinguisher() bool
+	Color() int64
+	SetColor(value int64) BgpSrteV6Policy
+	HasColor() bool
+	Ipv6Endpoint() string
+	SetIpv6Endpoint(value string) BgpSrteV6Policy
+	NextHopMode() BgpSrteV6PolicyNextHopModeEnum
+	SetNextHopMode(value BgpSrteV6PolicyNextHopModeEnum) BgpSrteV6Policy
+	HasNextHopMode() bool
+	NextHopAddressType() BgpSrteV6PolicyNextHopAddressTypeEnum
+	SetNextHopAddressType(value BgpSrteV6PolicyNextHopAddressTypeEnum) BgpSrteV6Policy
+	HasNextHopAddressType() bool
+	NextHopIpv4Address() string
+	SetNextHopIpv4Address(value string) BgpSrteV6Policy
+	HasNextHopIpv4Address() bool
+	NextHopIpv6Address() string
+	SetNextHopIpv6Address(value string) BgpSrteV6Policy
+	HasNextHopIpv6Address() bool
+	Advanced() BgpRouteAdvanced
+	HasAdvanced() bool
+	AddPath() BgpAddPath
+	HasAddPath() bool
+	AsPath() BgpAsPath
+	HasAsPath() bool
+	Communities() BgpSrteV6PolicyBgpCommunityIter
+	Extcommunities() BgpSrteV6PolicyBgpExtCommunityIter
+	TunnelTlvs() BgpSrteV6PolicyBgpSrteV6TunnelTlvIter
+	Name() string
+	SetName(value string) BgpSrteV6Policy
+	Active() bool
+	SetActive(value bool) BgpSrteV6Policy
+	HasActive() bool
+}
+
+// Distinguisher returns a int64
+//  Identifies the policy in the context of (color and endpoint) tuple.  It is used by the SR Policy originator to make unique multiple  occurrences of the same SR Policy.
+func (obj *bgpSrteV6Policy) Distinguisher() int64 {
+	return *obj.obj.Distinguisher
+}
+
+// Distinguisher returns a int64
+//  Identifies the policy in the context of (color and endpoint) tuple.  It is used by the SR Policy originator to make unique multiple  occurrences of the same SR Policy.
+func (obj *bgpSrteV6Policy) HasDistinguisher() bool {
+	return obj.obj.Distinguisher != nil
+}
+
+// SetDistinguisher sets the int64 value in the BgpSrteV6Policy object
+//  Identifies the policy in the context of (color and endpoint) tuple.  It is used by the SR Policy originator to make unique multiple  occurrences of the same SR Policy.
+func (obj *bgpSrteV6Policy) SetDistinguisher(value int64) BgpSrteV6Policy {
+	obj.obj.Distinguisher = &value
+
+	return obj
+}
+
+// Color returns a int64
+//  Identifies the policy. It is used to match the color of the  destination prefixes to steer traffic into the SR Policy.
+func (obj *bgpSrteV6Policy) Color() int64 {
+	return *obj.obj.Color
+}
+
+// Color returns a int64
+//  Identifies the policy. It is used to match the color of the  destination prefixes to steer traffic into the SR Policy.
+func (obj *bgpSrteV6Policy) HasColor() bool {
+	return obj.obj.Color != nil
+}
+
+// SetColor sets the int64 value in the BgpSrteV6Policy object
+//  Identifies the policy. It is used to match the color of the  destination prefixes to steer traffic into the SR Policy.
+func (obj *bgpSrteV6Policy) SetColor(value int64) BgpSrteV6Policy {
+	obj.obj.Color = &value
+
+	return obj
+}
+
+// Ipv6Endpoint returns a string
+//  Specifies a single node or a set of nodes (e.g., an anycast address). It is selected on the basis of the SR Policy type (AFI).
+func (obj *bgpSrteV6Policy) Ipv6Endpoint() string {
+	return obj.obj.Ipv6Endpoint
+}
+
+// SetIpv6Endpoint sets the string value in the BgpSrteV6Policy object
+//  Specifies a single node or a set of nodes (e.g., an anycast address). It is selected on the basis of the SR Policy type (AFI).
+func (obj *bgpSrteV6Policy) SetIpv6Endpoint(value string) BgpSrteV6Policy {
+	obj.obj.Ipv6Endpoint = value
+
+	return obj
+}
+
+type BgpSrteV6PolicyNextHopModeEnum string
+
+var BgpSrteV6PolicyNextHopMode = struct {
+	LOCAL_IP BgpSrteV6PolicyNextHopModeEnum
+	MANUAL   BgpSrteV6PolicyNextHopModeEnum
+}{
+	LOCAL_IP: BgpSrteV6PolicyNextHopModeEnum("local_ip"),
+	MANUAL:   BgpSrteV6PolicyNextHopModeEnum("manual"),
+}
+
+func (obj *bgpSrteV6Policy) NextHopMode() BgpSrteV6PolicyNextHopModeEnum {
+	return BgpSrteV6PolicyNextHopModeEnum(obj.obj.NextHopMode.Enum().String())
+}
+
+// NextHopMode returns a string
+//  Mode for choosing the NextHop in MP REACH NLRI. Available modes are : Local IP: Automatically fills the Nexthop with the Local IP of the BGP peer. For IPv6 BGP peer the Nexthop Encoding capability should be enabled. Manual: Override the Nexthop with any arbitrary IPv4/IPv6 address.
+func (obj *bgpSrteV6Policy) HasNextHopMode() bool {
+	return obj.obj.NextHopMode != nil
+}
+
+func (obj *bgpSrteV6Policy) SetNextHopMode(value BgpSrteV6PolicyNextHopModeEnum) BgpSrteV6Policy {
+	intValue, ok := snappipb.BgpSrteV6Policy_NextHopMode_Enum_value[string(value)]
+	if !ok {
+		validation = append(validation, fmt.Sprintf(
+			"%s is not a valid choice on BgpSrteV6PolicyNextHopModeEnum", string(value)))
+		return obj
+	}
+	enumValue := snappipb.BgpSrteV6Policy_NextHopMode_Enum(intValue)
+	obj.obj.NextHopMode = &enumValue
+	return obj
+}
+
+type BgpSrteV6PolicyNextHopAddressTypeEnum string
+
+var BgpSrteV6PolicyNextHopAddressType = struct {
+	IPV4 BgpSrteV6PolicyNextHopAddressTypeEnum
+	IPV6 BgpSrteV6PolicyNextHopAddressTypeEnum
+}{
+	IPV4: BgpSrteV6PolicyNextHopAddressTypeEnum("ipv4"),
+	IPV6: BgpSrteV6PolicyNextHopAddressTypeEnum("ipv6"),
+}
+
+func (obj *bgpSrteV6Policy) NextHopAddressType() BgpSrteV6PolicyNextHopAddressTypeEnum {
+	return BgpSrteV6PolicyNextHopAddressTypeEnum(obj.obj.NextHopAddressType.Enum().String())
+}
+
+// NextHopAddressType returns a string
+//  Type of next hop IP address to be used when 'next_hop_mode' is set to 'manual'.
+func (obj *bgpSrteV6Policy) HasNextHopAddressType() bool {
+	return obj.obj.NextHopAddressType != nil
+}
+
+func (obj *bgpSrteV6Policy) SetNextHopAddressType(value BgpSrteV6PolicyNextHopAddressTypeEnum) BgpSrteV6Policy {
+	intValue, ok := snappipb.BgpSrteV6Policy_NextHopAddressType_Enum_value[string(value)]
+	if !ok {
+		validation = append(validation, fmt.Sprintf(
+			"%s is not a valid choice on BgpSrteV6PolicyNextHopAddressTypeEnum", string(value)))
+		return obj
+	}
+	enumValue := snappipb.BgpSrteV6Policy_NextHopAddressType_Enum(intValue)
+	obj.obj.NextHopAddressType = &enumValue
+	return obj
+}
+
+// NextHopIpv4Address returns a string
+//  The IPv4 address of the Nexthop if the 'next_hop_mode' is 'manual' and the Nexthop type 'next_hop_address_type' is IPv4. If BGP peer is of type IPv6, Nexthop Encoding capability extended_next_hop_encoding should be enabled.
+func (obj *bgpSrteV6Policy) NextHopIpv4Address() string {
+	return *obj.obj.NextHopIpv4Address
+}
+
+// NextHopIpv4Address returns a string
+//  The IPv4 address of the Nexthop if the 'next_hop_mode' is 'manual' and the Nexthop type 'next_hop_address_type' is IPv4. If BGP peer is of type IPv6, Nexthop Encoding capability extended_next_hop_encoding should be enabled.
+func (obj *bgpSrteV6Policy) HasNextHopIpv4Address() bool {
+	return obj.obj.NextHopIpv4Address != nil
+}
+
+// SetNextHopIpv4Address sets the string value in the BgpSrteV6Policy object
+//  The IPv4 address of the Nexthop if the 'next_hop_mode' is 'manual' and the Nexthop type 'next_hop_address_type' is IPv4. If BGP peer is of type IPv6, Nexthop Encoding capability extended_next_hop_encoding should be enabled.
+func (obj *bgpSrteV6Policy) SetNextHopIpv4Address(value string) BgpSrteV6Policy {
+	obj.obj.NextHopIpv4Address = &value
+
+	return obj
+}
+
+// NextHopIpv6Address returns a string
+//  The IPv6 address of the next hop if the Nexthop Mode 'next_hop_address_type' is 'manual' and the Nexthop type 'next_hop_address_type' is IPv6.
+func (obj *bgpSrteV6Policy) NextHopIpv6Address() string {
+	return *obj.obj.NextHopIpv6Address
+}
+
+// NextHopIpv6Address returns a string
+//  The IPv6 address of the next hop if the Nexthop Mode 'next_hop_address_type' is 'manual' and the Nexthop type 'next_hop_address_type' is IPv6.
+func (obj *bgpSrteV6Policy) HasNextHopIpv6Address() bool {
+	return obj.obj.NextHopIpv6Address != nil
+}
+
+// SetNextHopIpv6Address sets the string value in the BgpSrteV6Policy object
+//  The IPv6 address of the next hop if the Nexthop Mode 'next_hop_address_type' is 'manual' and the Nexthop type 'next_hop_address_type' is IPv6.
+func (obj *bgpSrteV6Policy) SetNextHopIpv6Address(value string) BgpSrteV6Policy {
+	obj.obj.NextHopIpv6Address = &value
+
+	return obj
+}
+
+// Advanced returns a BgpRouteAdvanced
+//  description is TBD
+func (obj *bgpSrteV6Policy) Advanced() BgpRouteAdvanced {
+
+	if obj.obj.Advanced == nil {
+		obj.obj.Advanced = &snappipb.BgpRouteAdvanced{}
+		newObj := &bgpRouteAdvanced{obj: obj.obj.Advanced}
+		newObj.setDefault()
+		return newObj
+	}
+	return &bgpRouteAdvanced{obj: obj.obj.Advanced}
+}
+
+// Advanced returns a BgpRouteAdvanced
+//  description is TBD
+func (obj *bgpSrteV6Policy) HasAdvanced() bool {
+	return obj.obj.Advanced != nil
+}
+
+// AddPath returns a BgpAddPath
+//  description is TBD
+func (obj *bgpSrteV6Policy) AddPath() BgpAddPath {
+
+	if obj.obj.AddPath == nil {
+		obj.obj.AddPath = &snappipb.BgpAddPath{}
+		newObj := &bgpAddPath{obj: obj.obj.AddPath}
+		newObj.setDefault()
+		return newObj
+	}
+	return &bgpAddPath{obj: obj.obj.AddPath}
+}
+
+// AddPath returns a BgpAddPath
+//  description is TBD
+func (obj *bgpSrteV6Policy) HasAddPath() bool {
+	return obj.obj.AddPath != nil
+}
+
+// AsPath returns a BgpAsPath
+//  description is TBD
+func (obj *bgpSrteV6Policy) AsPath() BgpAsPath {
+
+	if obj.obj.AsPath == nil {
+		obj.obj.AsPath = &snappipb.BgpAsPath{}
+		newObj := &bgpAsPath{obj: obj.obj.AsPath}
+		newObj.setDefault()
+		return newObj
+	}
+	return &bgpAsPath{obj: obj.obj.AsPath}
+}
+
+// AsPath returns a BgpAsPath
+//  description is TBD
+func (obj *bgpSrteV6Policy) HasAsPath() bool {
+	return obj.obj.AsPath != nil
+}
+
+// Communities returns a []BgpCommunity
+//  Optional community settings.
+func (obj *bgpSrteV6Policy) Communities() BgpSrteV6PolicyBgpCommunityIter {
+	if obj.obj.Communities == nil {
+		obj.obj.Communities = []*snappipb.BgpCommunity{}
+	}
+	return &bgpSrteV6PolicyBgpCommunityIter{obj: obj}
+}
+
+type bgpSrteV6PolicyBgpCommunityIter struct {
+	obj *bgpSrteV6Policy
+}
+
+type BgpSrteV6PolicyBgpCommunityIter interface {
+	Add() BgpCommunity
+	Items() []BgpCommunity
+}
+
+func (obj *bgpSrteV6PolicyBgpCommunityIter) Add() BgpCommunity {
+	newObj := &snappipb.BgpCommunity{}
+	obj.obj.obj.Communities = append(obj.obj.obj.Communities, newObj)
+	newLibObj := &bgpCommunity{obj: newObj}
+	newLibObj.setDefault()
+	return newLibObj
+}
+
+func (obj *bgpSrteV6PolicyBgpCommunityIter) Items() []BgpCommunity {
+	slice := []BgpCommunity{}
+	for _, item := range obj.obj.obj.Communities {
+		slice = append(slice, &bgpCommunity{obj: item})
+	}
+	return slice
+}
+
+// Extcommunities returns a []BgpExtCommunity
+//  Optional Extended Community settings.
+func (obj *bgpSrteV6Policy) Extcommunities() BgpSrteV6PolicyBgpExtCommunityIter {
+	if obj.obj.Extcommunities == nil {
+		obj.obj.Extcommunities = []*snappipb.BgpExtCommunity{}
+	}
+	return &bgpSrteV6PolicyBgpExtCommunityIter{obj: obj}
+}
+
+type bgpSrteV6PolicyBgpExtCommunityIter struct {
+	obj *bgpSrteV6Policy
+}
+
+type BgpSrteV6PolicyBgpExtCommunityIter interface {
+	Add() BgpExtCommunity
+	Items() []BgpExtCommunity
+}
+
+func (obj *bgpSrteV6PolicyBgpExtCommunityIter) Add() BgpExtCommunity {
+	newObj := &snappipb.BgpExtCommunity{}
+	obj.obj.obj.Extcommunities = append(obj.obj.obj.Extcommunities, newObj)
+	newLibObj := &bgpExtCommunity{obj: newObj}
+	newLibObj.setDefault()
+	return newLibObj
+}
+
+func (obj *bgpSrteV6PolicyBgpExtCommunityIter) Items() []BgpExtCommunity {
+	slice := []BgpExtCommunity{}
+	for _, item := range obj.obj.obj.Extcommunities {
+		slice = append(slice, &bgpExtCommunity{obj: item})
+	}
+	return slice
+}
+
+// TunnelTlvs returns a []BgpSrteV6TunnelTlv
+//  List of optional tunnel TLV settings.
+func (obj *bgpSrteV6Policy) TunnelTlvs() BgpSrteV6PolicyBgpSrteV6TunnelTlvIter {
+	if obj.obj.TunnelTlvs == nil {
+		obj.obj.TunnelTlvs = []*snappipb.BgpSrteV6TunnelTlv{}
+	}
+	return &bgpSrteV6PolicyBgpSrteV6TunnelTlvIter{obj: obj}
+}
+
+type bgpSrteV6PolicyBgpSrteV6TunnelTlvIter struct {
+	obj *bgpSrteV6Policy
+}
+
+type BgpSrteV6PolicyBgpSrteV6TunnelTlvIter interface {
+	Add() BgpSrteV6TunnelTlv
+	Items() []BgpSrteV6TunnelTlv
+}
+
+func (obj *bgpSrteV6PolicyBgpSrteV6TunnelTlvIter) Add() BgpSrteV6TunnelTlv {
+	newObj := &snappipb.BgpSrteV6TunnelTlv{}
+	obj.obj.obj.TunnelTlvs = append(obj.obj.obj.TunnelTlvs, newObj)
+	newLibObj := &bgpSrteV6TunnelTlv{obj: newObj}
+	newLibObj.setDefault()
+	return newLibObj
+}
+
+func (obj *bgpSrteV6PolicyBgpSrteV6TunnelTlvIter) Items() []BgpSrteV6TunnelTlv {
+	slice := []BgpSrteV6TunnelTlv{}
+	for _, item := range obj.obj.obj.TunnelTlvs {
+		slice = append(slice, &bgpSrteV6TunnelTlv{obj: item})
+	}
+	return slice
+}
+
+// Name returns a string
+//  Globally unique name of an object. It also serves as the primary key for arrays of objects.
+func (obj *bgpSrteV6Policy) Name() string {
+	return obj.obj.Name
+}
+
+// SetName sets the string value in the BgpSrteV6Policy object
+//  Globally unique name of an object. It also serves as the primary key for arrays of objects.
+func (obj *bgpSrteV6Policy) SetName(value string) BgpSrteV6Policy {
+	obj.obj.Name = value
+
+	return obj
+}
+
+// Active returns a bool
+//  If enabled means that this part of the configuration including any active 'children' nodes will be advertised to peer.  If disabled, this means that though config is present, it is not taking any part of the test but can be activated at run-time to advertise just this part of the configuration to the peer.
+func (obj *bgpSrteV6Policy) Active() bool {
+	return *obj.obj.Active
+}
+
+// Active returns a bool
+//  If enabled means that this part of the configuration including any active 'children' nodes will be advertised to peer.  If disabled, this means that though config is present, it is not taking any part of the test but can be activated at run-time to advertise just this part of the configuration to the peer.
+func (obj *bgpSrteV6Policy) HasActive() bool {
+	return obj.obj.Active != nil
+}
+
+// SetActive sets the bool value in the BgpSrteV6Policy object
+//  If enabled means that this part of the configuration including any active 'children' nodes will be advertised to peer.  If disabled, this means that though config is present, it is not taking any part of the test but can be activated at run-time to advertise just this part of the configuration to the peer.
+func (obj *bgpSrteV6Policy) SetActive(value bool) BgpSrteV6Policy {
+	obj.obj.Active = &value
+
+	return obj
+}
+
+func (obj *bgpSrteV6Policy) validateObj(set_default bool) {
+	if set_default {
+		obj.setDefault()
+	}
+
+	if obj.obj.Distinguisher != nil {
+		if *obj.obj.Distinguisher < 0 || *obj.obj.Distinguisher > 4294967295 {
+			validation = append(
+				validation, fmt.Sprintf("0 <= BgpSrteV6Policy.Distinguisher <= 4294967295 but Got %d", *obj.obj.Distinguisher))
+		}
+
+	}
+
+	if obj.obj.Color != nil {
+		if *obj.obj.Color < 0 || *obj.obj.Color > 4294967295 {
+			validation = append(
+				validation, fmt.Sprintf("0 <= BgpSrteV6Policy.Color <= 4294967295 but Got %d", *obj.obj.Color))
+		}
+
+	}
+
+	// Ipv6Endpoint required
+	if obj.obj.Ipv6Endpoint == "" {
+		validation = append(validation, "Ipv6Endpoint is required field on interface BgpSrteV6Policy")
+	} else {
+		err := validateIpv6(obj.Ipv6Endpoint())
+		if err != nil {
+			validation = append(validation, fmt.Sprintf("%s %s", err.Error(), "on Ipv6Endpoint BgpSrteV6Policy"))
+		}
+	}
+
+	if obj.obj.NextHopIpv4Address != nil {
+		err := validateIpv4(obj.NextHopIpv4Address())
+		if err != nil {
+			validation = append(validation, fmt.Sprintf("%s %s", err.Error(), "on NextHopIpv4Address BgpSrteV6Policy"))
+		}
+	}
+
+	if obj.obj.NextHopIpv6Address != nil {
+		err := validateIpv6(obj.NextHopIpv6Address())
+		if err != nil {
+			validation = append(validation, fmt.Sprintf("%s %s", err.Error(), "on NextHopIpv6Address BgpSrteV6Policy"))
+		}
+	}
+
+	if obj.obj.Advanced != nil {
+		obj.Advanced().validateObj(set_default)
+	}
+
+	if obj.obj.AddPath != nil {
+		obj.AddPath().validateObj(set_default)
+	}
+
+	if obj.obj.AsPath != nil {
+		obj.AsPath().validateObj(set_default)
+	}
+	if obj.obj.Communities != nil {
+		for _, item := range obj.Communities().Items() {
+			item.validateObj(set_default)
+		}
+	}
+
+	if obj.obj.Extcommunities != nil {
+		for _, item := range obj.Extcommunities().Items() {
+			item.validateObj(set_default)
+		}
+	}
+
+	if obj.obj.TunnelTlvs != nil {
+		for _, item := range obj.TunnelTlvs().Items() {
+			item.validateObj(set_default)
+		}
+	}
+
+	// Name required
+	if obj.obj.Name == "" {
+		validation = append(validation, "Name is required field on interface BgpSrteV6Policy")
+	}
+}
+
+func (obj *bgpSrteV6Policy) setDefault() {
+	if obj.obj.Distinguisher == nil {
+		obj.SetDistinguisher(1)
+	}
+	if obj.obj.Color == nil {
+		obj.SetColor(100)
+	}
+	if obj.obj.NextHopMode == nil {
+		obj.SetNextHopMode(BgpSrteV6PolicyNextHopMode.LOCAL_IP)
+	}
+	if obj.obj.NextHopAddressType == nil {
+		obj.SetNextHopAddressType(BgpSrteV6PolicyNextHopAddressType.IPV6)
+	}
+	if obj.obj.NextHopIpv4Address == nil {
+		obj.SetNextHopIpv4Address("0.0.0.0")
+	}
+	if obj.obj.NextHopIpv6Address == nil {
+		obj.SetNextHopIpv6Address("::0")
+	}
+	if obj.obj.Active == nil {
+		obj.SetActive(true)
+	}
+
+}
+
 type bgpV6SegmentRouting struct {
 	obj *snappipb.BgpV6SegmentRouting
 }
@@ -109811,6 +111494,1082 @@ func (obj *bgpAddPath) setDefault() {
 
 }
 
+type bgpExtCommunity struct {
+	obj *snappipb.BgpExtCommunity
+}
+
+func (obj *bgpExtCommunity) Msg() *snappipb.BgpExtCommunity {
+	return obj.obj
+}
+
+func (obj *bgpExtCommunity) SetMsg(msg *snappipb.BgpExtCommunity) BgpExtCommunity {
+	obj.obj = msg
+	return obj
+}
+
+func (obj *bgpExtCommunity) ToPbText() string {
+	vErr := obj.Validate()
+	if vErr != nil {
+		panic(vErr)
+	}
+	return proto.MarshalTextString(obj.Msg())
+}
+
+func (obj *bgpExtCommunity) FromPbText(value string) error {
+	retObj := proto.UnmarshalText(value, obj.Msg())
+	if retObj != nil {
+		return retObj
+	}
+	vErr := obj.Validate(true)
+	if vErr != nil {
+		return vErr
+	}
+	return retObj
+}
+
+func (obj *bgpExtCommunity) ToYaml() string {
+	vErr := obj.Validate()
+	if vErr != nil {
+		panic(vErr)
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(obj.Msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *bgpExtCommunity) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: false,
+	}
+	retObj := opts.Unmarshal([]byte(data), obj.Msg())
+	if retObj != nil {
+		return retObj
+	}
+	vErr := obj.Validate(true)
+	if vErr != nil {
+		return vErr
+	}
+	return retObj
+}
+
+func (obj *bgpExtCommunity) ToJson() string {
+	vErr := obj.Validate()
+	if vErr != nil {
+		panic(vErr)
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+		Indent:          "  ",
+	}
+	data, err := opts.Marshal(obj.Msg())
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *bgpExtCommunity) FromJson(value string) error {
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: false,
+	}
+	retObj := opts.Unmarshal([]byte(value), obj.Msg())
+	if retObj != nil {
+		return retObj
+	}
+	err := obj.Validate(true)
+	if err != nil {
+		return err
+	}
+	return retObj
+}
+
+func (obj *bgpExtCommunity) Validate(defaults ...bool) error {
+	var set_default bool = false
+	if len(defaults) > 0 {
+		set_default = defaults[0]
+	}
+	obj.validateObj(set_default)
+	return validationResult()
+}
+
+type BgpExtCommunity interface {
+	Msg() *snappipb.BgpExtCommunity
+	SetMsg(*snappipb.BgpExtCommunity) BgpExtCommunity
+	ToPbText() string
+	ToYaml() string
+	ToJson() string
+	FromPbText(value string) error
+	FromYaml(value string) error
+	FromJson(value string) error
+	Validate(defaults ...bool) error
+	validateObj(set_default bool)
+	setDefault()
+	Type() BgpExtCommunityTypeEnum
+	SetType(value BgpExtCommunityTypeEnum) BgpExtCommunity
+	HasType() bool
+	Subtype() BgpExtCommunitySubtypeEnum
+	SetSubtype(value BgpExtCommunitySubtypeEnum) BgpExtCommunity
+	HasSubtype() bool
+	Value() string
+	SetValue(value string) BgpExtCommunity
+	HasValue() bool
+}
+
+type BgpExtCommunityTypeEnum string
+
+var BgpExtCommunityType = struct {
+	ADMINISTRATOR_AS_2OCTET                BgpExtCommunityTypeEnum
+	ADMINISTRATOR_IPV4_ADDRESS             BgpExtCommunityTypeEnum
+	ADMINISTRATOR_AS_4OCTET                BgpExtCommunityTypeEnum
+	OPAQUE                                 BgpExtCommunityTypeEnum
+	EVPN                                   BgpExtCommunityTypeEnum
+	ADMINISTRATOR_AS_2OCTET_LINK_BANDWIDTH BgpExtCommunityTypeEnum
+}{
+	ADMINISTRATOR_AS_2OCTET:                BgpExtCommunityTypeEnum("administrator_as_2octet"),
+	ADMINISTRATOR_IPV4_ADDRESS:             BgpExtCommunityTypeEnum("administrator_ipv4_address"),
+	ADMINISTRATOR_AS_4OCTET:                BgpExtCommunityTypeEnum("administrator_as_4octet"),
+	OPAQUE:                                 BgpExtCommunityTypeEnum("opaque"),
+	EVPN:                                   BgpExtCommunityTypeEnum("evpn"),
+	ADMINISTRATOR_AS_2OCTET_LINK_BANDWIDTH: BgpExtCommunityTypeEnum("administrator_as_2octet_link_bandwidth"),
+}
+
+func (obj *bgpExtCommunity) Type() BgpExtCommunityTypeEnum {
+	return BgpExtCommunityTypeEnum(obj.obj.Type.Enum().String())
+}
+
+// Type returns a string
+//  Extended Community Type field of 1 Byte.
+//  - administrator_as_2octet: Two-Octet AS Specific Extended Community (RFC 4360).
+//  - administrator_ipv4_address: IPv4 Address Specific Extended Community (RFC 4360).
+//  - administrator_as_4octet:  4-Octet AS Specific Extended Community (RFC 5668).
+//  - opaque: Opaque Extended Community (RFC 7432).
+//  - evpn: EVPN Extended Community (RFC 7153).
+//  - administrator_as_2octet_link_bandwidth : Link Bandwidth Extended Community (RFC 7153).
+func (obj *bgpExtCommunity) HasType() bool {
+	return obj.obj.Type != nil
+}
+
+func (obj *bgpExtCommunity) SetType(value BgpExtCommunityTypeEnum) BgpExtCommunity {
+	intValue, ok := snappipb.BgpExtCommunity_Type_Enum_value[string(value)]
+	if !ok {
+		validation = append(validation, fmt.Sprintf(
+			"%s is not a valid choice on BgpExtCommunityTypeEnum", string(value)))
+		return obj
+	}
+	enumValue := snappipb.BgpExtCommunity_Type_Enum(intValue)
+	obj.obj.Type = &enumValue
+	return obj
+}
+
+type BgpExtCommunitySubtypeEnum string
+
+var BgpExtCommunitySubtype = struct {
+	ROUTE_TARGET       BgpExtCommunitySubtypeEnum
+	ORIGIN             BgpExtCommunitySubtypeEnum
+	EXTENDED_BANDWIDTH BgpExtCommunitySubtypeEnum
+	COLOR              BgpExtCommunitySubtypeEnum
+	ENCAPSULATION      BgpExtCommunitySubtypeEnum
+	MAC_ADDRESS        BgpExtCommunitySubtypeEnum
+}{
+	ROUTE_TARGET:       BgpExtCommunitySubtypeEnum("route_target"),
+	ORIGIN:             BgpExtCommunitySubtypeEnum("origin"),
+	EXTENDED_BANDWIDTH: BgpExtCommunitySubtypeEnum("extended_bandwidth"),
+	COLOR:              BgpExtCommunitySubtypeEnum("color"),
+	ENCAPSULATION:      BgpExtCommunitySubtypeEnum("encapsulation"),
+	MAC_ADDRESS:        BgpExtCommunitySubtypeEnum("mac_address"),
+}
+
+func (obj *bgpExtCommunity) Subtype() BgpExtCommunitySubtypeEnum {
+	return BgpExtCommunitySubtypeEnum(obj.obj.Subtype.Enum().String())
+}
+
+// Subtype returns a string
+//  Extended Community Sub Type field of 1 Byte.
+//  - route_target: Route Target.
+//  - origin: Origin.
+//  - extended_bandwidth: Specifies the link bandwidth.
+//  - color: Specifies the color value.
+//  - encapsulation: Specifies the Encapsulation Extended Community.
+//  - mac_address: Specifies the Extended community MAC address.
+func (obj *bgpExtCommunity) HasSubtype() bool {
+	return obj.obj.Subtype != nil
+}
+
+func (obj *bgpExtCommunity) SetSubtype(value BgpExtCommunitySubtypeEnum) BgpExtCommunity {
+	intValue, ok := snappipb.BgpExtCommunity_Subtype_Enum_value[string(value)]
+	if !ok {
+		validation = append(validation, fmt.Sprintf(
+			"%s is not a valid choice on BgpExtCommunitySubtypeEnum", string(value)))
+		return obj
+	}
+	enumValue := snappipb.BgpExtCommunity_Subtype_Enum(intValue)
+	obj.obj.Subtype = &enumValue
+	return obj
+}
+
+// Value returns a string
+//  Extended Community value of 6 Bytes. Example - for the Opaque type and Color subtype value can be '0000000000c8'  for the color value 200.
+func (obj *bgpExtCommunity) Value() string {
+	return *obj.obj.Value
+}
+
+// Value returns a string
+//  Extended Community value of 6 Bytes. Example - for the Opaque type and Color subtype value can be '0000000000c8'  for the color value 200.
+func (obj *bgpExtCommunity) HasValue() bool {
+	return obj.obj.Value != nil
+}
+
+// SetValue sets the string value in the BgpExtCommunity object
+//  Extended Community value of 6 Bytes. Example - for the Opaque type and Color subtype value can be '0000000000c8'  for the color value 200.
+func (obj *bgpExtCommunity) SetValue(value string) BgpExtCommunity {
+	obj.obj.Value = &value
+
+	return obj
+}
+
+func (obj *bgpExtCommunity) validateObj(set_default bool) {
+	if set_default {
+		obj.setDefault()
+	}
+
+	if obj.obj.Value != nil {
+		err := validateHex(obj.Value())
+		if err != nil {
+			validation = append(validation, fmt.Sprintf("%s %s", err.Error(), "on Value BgpExtCommunity"))
+		}
+	}
+
+}
+
+func (obj *bgpExtCommunity) setDefault() {
+
+}
+
+type bgpSrteV4TunnelTlv struct {
+	obj *snappipb.BgpSrteV4TunnelTlv
+}
+
+func (obj *bgpSrteV4TunnelTlv) Msg() *snappipb.BgpSrteV4TunnelTlv {
+	return obj.obj
+}
+
+func (obj *bgpSrteV4TunnelTlv) SetMsg(msg *snappipb.BgpSrteV4TunnelTlv) BgpSrteV4TunnelTlv {
+	obj.obj = msg
+	return obj
+}
+
+func (obj *bgpSrteV4TunnelTlv) ToPbText() string {
+	vErr := obj.Validate()
+	if vErr != nil {
+		panic(vErr)
+	}
+	return proto.MarshalTextString(obj.Msg())
+}
+
+func (obj *bgpSrteV4TunnelTlv) FromPbText(value string) error {
+	retObj := proto.UnmarshalText(value, obj.Msg())
+	if retObj != nil {
+		return retObj
+	}
+	vErr := obj.Validate(true)
+	if vErr != nil {
+		return vErr
+	}
+	return retObj
+}
+
+func (obj *bgpSrteV4TunnelTlv) ToYaml() string {
+	vErr := obj.Validate()
+	if vErr != nil {
+		panic(vErr)
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(obj.Msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *bgpSrteV4TunnelTlv) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: false,
+	}
+	retObj := opts.Unmarshal([]byte(data), obj.Msg())
+	if retObj != nil {
+		return retObj
+	}
+	vErr := obj.Validate(true)
+	if vErr != nil {
+		return vErr
+	}
+	return retObj
+}
+
+func (obj *bgpSrteV4TunnelTlv) ToJson() string {
+	vErr := obj.Validate()
+	if vErr != nil {
+		panic(vErr)
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+		Indent:          "  ",
+	}
+	data, err := opts.Marshal(obj.Msg())
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *bgpSrteV4TunnelTlv) FromJson(value string) error {
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: false,
+	}
+	retObj := opts.Unmarshal([]byte(value), obj.Msg())
+	if retObj != nil {
+		return retObj
+	}
+	err := obj.Validate(true)
+	if err != nil {
+		return err
+	}
+	return retObj
+}
+
+func (obj *bgpSrteV4TunnelTlv) Validate(defaults ...bool) error {
+	var set_default bool = false
+	if len(defaults) > 0 {
+		set_default = defaults[0]
+	}
+	obj.validateObj(set_default)
+	return validationResult()
+}
+
+type BgpSrteV4TunnelTlv interface {
+	Msg() *snappipb.BgpSrteV4TunnelTlv
+	SetMsg(*snappipb.BgpSrteV4TunnelTlv) BgpSrteV4TunnelTlv
+	ToPbText() string
+	ToYaml() string
+	ToJson() string
+	FromPbText(value string) error
+	FromYaml(value string) error
+	FromJson(value string) error
+	Validate(defaults ...bool) error
+	validateObj(set_default bool)
+	setDefault()
+	RemoteEndpointSubTlv() BgpSrteRemoteEndpointSubTlv
+	HasRemoteEndpointSubTlv() bool
+	ColorSubTlv() BgpSrteColorSubTlv
+	HasColorSubTlv() bool
+	BindingSubTlv() BgpSrteBindingSubTlv
+	HasBindingSubTlv() bool
+	PreferenceSubTlv() BgpSrtePreferenceSubTlv
+	HasPreferenceSubTlv() bool
+	PolicyPrioritySubTlv() BgpSrtePolicyPrioritySubTlv
+	HasPolicyPrioritySubTlv() bool
+	PolicyNameSubTlv() BgpSrtePolicyNameSubTlv
+	HasPolicyNameSubTlv() bool
+	ExplicitNullLabelPolicySubTlv() BgpSrteExplicitNullLabelPolicySubTlv
+	HasExplicitNullLabelPolicySubTlv() bool
+	SegmentLists() BgpSrteV4TunnelTlvBgpSrteSegmentListIter
+	Name() string
+	SetName(value string) BgpSrteV4TunnelTlv
+	Active() bool
+	SetActive(value bool) BgpSrteV4TunnelTlv
+	HasActive() bool
+}
+
+// RemoteEndpointSubTlv returns a BgpSrteRemoteEndpointSubTlv
+//  description is TBD
+func (obj *bgpSrteV4TunnelTlv) RemoteEndpointSubTlv() BgpSrteRemoteEndpointSubTlv {
+
+	if obj.obj.RemoteEndpointSubTlv == nil {
+		obj.obj.RemoteEndpointSubTlv = &snappipb.BgpSrteRemoteEndpointSubTlv{}
+		newObj := &bgpSrteRemoteEndpointSubTlv{obj: obj.obj.RemoteEndpointSubTlv}
+		newObj.setDefault()
+		return newObj
+	}
+	return &bgpSrteRemoteEndpointSubTlv{obj: obj.obj.RemoteEndpointSubTlv}
+}
+
+// RemoteEndpointSubTlv returns a BgpSrteRemoteEndpointSubTlv
+//  description is TBD
+func (obj *bgpSrteV4TunnelTlv) HasRemoteEndpointSubTlv() bool {
+	return obj.obj.RemoteEndpointSubTlv != nil
+}
+
+// ColorSubTlv returns a BgpSrteColorSubTlv
+//  description is TBD
+func (obj *bgpSrteV4TunnelTlv) ColorSubTlv() BgpSrteColorSubTlv {
+
+	if obj.obj.ColorSubTlv == nil {
+		obj.obj.ColorSubTlv = &snappipb.BgpSrteColorSubTlv{}
+		newObj := &bgpSrteColorSubTlv{obj: obj.obj.ColorSubTlv}
+		newObj.setDefault()
+		return newObj
+	}
+	return &bgpSrteColorSubTlv{obj: obj.obj.ColorSubTlv}
+}
+
+// ColorSubTlv returns a BgpSrteColorSubTlv
+//  description is TBD
+func (obj *bgpSrteV4TunnelTlv) HasColorSubTlv() bool {
+	return obj.obj.ColorSubTlv != nil
+}
+
+// BindingSubTlv returns a BgpSrteBindingSubTlv
+//  description is TBD
+func (obj *bgpSrteV4TunnelTlv) BindingSubTlv() BgpSrteBindingSubTlv {
+
+	if obj.obj.BindingSubTlv == nil {
+		obj.obj.BindingSubTlv = &snappipb.BgpSrteBindingSubTlv{}
+		newObj := &bgpSrteBindingSubTlv{obj: obj.obj.BindingSubTlv}
+		newObj.setDefault()
+		return newObj
+	}
+	return &bgpSrteBindingSubTlv{obj: obj.obj.BindingSubTlv}
+}
+
+// BindingSubTlv returns a BgpSrteBindingSubTlv
+//  description is TBD
+func (obj *bgpSrteV4TunnelTlv) HasBindingSubTlv() bool {
+	return obj.obj.BindingSubTlv != nil
+}
+
+// PreferenceSubTlv returns a BgpSrtePreferenceSubTlv
+//  description is TBD
+func (obj *bgpSrteV4TunnelTlv) PreferenceSubTlv() BgpSrtePreferenceSubTlv {
+
+	if obj.obj.PreferenceSubTlv == nil {
+		obj.obj.PreferenceSubTlv = &snappipb.BgpSrtePreferenceSubTlv{}
+		newObj := &bgpSrtePreferenceSubTlv{obj: obj.obj.PreferenceSubTlv}
+		newObj.setDefault()
+		return newObj
+	}
+	return &bgpSrtePreferenceSubTlv{obj: obj.obj.PreferenceSubTlv}
+}
+
+// PreferenceSubTlv returns a BgpSrtePreferenceSubTlv
+//  description is TBD
+func (obj *bgpSrteV4TunnelTlv) HasPreferenceSubTlv() bool {
+	return obj.obj.PreferenceSubTlv != nil
+}
+
+// PolicyPrioritySubTlv returns a BgpSrtePolicyPrioritySubTlv
+//  description is TBD
+func (obj *bgpSrteV4TunnelTlv) PolicyPrioritySubTlv() BgpSrtePolicyPrioritySubTlv {
+
+	if obj.obj.PolicyPrioritySubTlv == nil {
+		obj.obj.PolicyPrioritySubTlv = &snappipb.BgpSrtePolicyPrioritySubTlv{}
+		newObj := &bgpSrtePolicyPrioritySubTlv{obj: obj.obj.PolicyPrioritySubTlv}
+		newObj.setDefault()
+		return newObj
+	}
+	return &bgpSrtePolicyPrioritySubTlv{obj: obj.obj.PolicyPrioritySubTlv}
+}
+
+// PolicyPrioritySubTlv returns a BgpSrtePolicyPrioritySubTlv
+//  description is TBD
+func (obj *bgpSrteV4TunnelTlv) HasPolicyPrioritySubTlv() bool {
+	return obj.obj.PolicyPrioritySubTlv != nil
+}
+
+// PolicyNameSubTlv returns a BgpSrtePolicyNameSubTlv
+//  description is TBD
+func (obj *bgpSrteV4TunnelTlv) PolicyNameSubTlv() BgpSrtePolicyNameSubTlv {
+
+	if obj.obj.PolicyNameSubTlv == nil {
+		obj.obj.PolicyNameSubTlv = &snappipb.BgpSrtePolicyNameSubTlv{}
+		newObj := &bgpSrtePolicyNameSubTlv{obj: obj.obj.PolicyNameSubTlv}
+		newObj.setDefault()
+		return newObj
+	}
+	return &bgpSrtePolicyNameSubTlv{obj: obj.obj.PolicyNameSubTlv}
+}
+
+// PolicyNameSubTlv returns a BgpSrtePolicyNameSubTlv
+//  description is TBD
+func (obj *bgpSrteV4TunnelTlv) HasPolicyNameSubTlv() bool {
+	return obj.obj.PolicyNameSubTlv != nil
+}
+
+// ExplicitNullLabelPolicySubTlv returns a BgpSrteExplicitNullLabelPolicySubTlv
+//  description is TBD
+func (obj *bgpSrteV4TunnelTlv) ExplicitNullLabelPolicySubTlv() BgpSrteExplicitNullLabelPolicySubTlv {
+
+	if obj.obj.ExplicitNullLabelPolicySubTlv == nil {
+		obj.obj.ExplicitNullLabelPolicySubTlv = &snappipb.BgpSrteExplicitNullLabelPolicySubTlv{}
+		newObj := &bgpSrteExplicitNullLabelPolicySubTlv{obj: obj.obj.ExplicitNullLabelPolicySubTlv}
+		newObj.setDefault()
+		return newObj
+	}
+	return &bgpSrteExplicitNullLabelPolicySubTlv{obj: obj.obj.ExplicitNullLabelPolicySubTlv}
+}
+
+// ExplicitNullLabelPolicySubTlv returns a BgpSrteExplicitNullLabelPolicySubTlv
+//  description is TBD
+func (obj *bgpSrteV4TunnelTlv) HasExplicitNullLabelPolicySubTlv() bool {
+	return obj.obj.ExplicitNullLabelPolicySubTlv != nil
+}
+
+// SegmentLists returns a []BgpSrteSegmentList
+//  description is TBD
+func (obj *bgpSrteV4TunnelTlv) SegmentLists() BgpSrteV4TunnelTlvBgpSrteSegmentListIter {
+	if obj.obj.SegmentLists == nil {
+		obj.obj.SegmentLists = []*snappipb.BgpSrteSegmentList{}
+	}
+	return &bgpSrteV4TunnelTlvBgpSrteSegmentListIter{obj: obj}
+}
+
+type bgpSrteV4TunnelTlvBgpSrteSegmentListIter struct {
+	obj *bgpSrteV4TunnelTlv
+}
+
+type BgpSrteV4TunnelTlvBgpSrteSegmentListIter interface {
+	Add() BgpSrteSegmentList
+	Items() []BgpSrteSegmentList
+}
+
+func (obj *bgpSrteV4TunnelTlvBgpSrteSegmentListIter) Add() BgpSrteSegmentList {
+	newObj := &snappipb.BgpSrteSegmentList{}
+	obj.obj.obj.SegmentLists = append(obj.obj.obj.SegmentLists, newObj)
+	newLibObj := &bgpSrteSegmentList{obj: newObj}
+	newLibObj.setDefault()
+	return newLibObj
+}
+
+func (obj *bgpSrteV4TunnelTlvBgpSrteSegmentListIter) Items() []BgpSrteSegmentList {
+	slice := []BgpSrteSegmentList{}
+	for _, item := range obj.obj.obj.SegmentLists {
+		slice = append(slice, &bgpSrteSegmentList{obj: item})
+	}
+	return slice
+}
+
+// Name returns a string
+//  Globally unique name of an object. It also serves as the primary key for arrays of objects.
+func (obj *bgpSrteV4TunnelTlv) Name() string {
+	return obj.obj.Name
+}
+
+// SetName sets the string value in the BgpSrteV4TunnelTlv object
+//  Globally unique name of an object. It also serves as the primary key for arrays of objects.
+func (obj *bgpSrteV4TunnelTlv) SetName(value string) BgpSrteV4TunnelTlv {
+	obj.obj.Name = value
+
+	return obj
+}
+
+// Active returns a bool
+//  If enabled means that this part of the configuration including any active 'children' nodes will be advertised to peer.  If disabled, this means that though config is present, it is not taking any part of the test but can be activated at run-time to advertise just this part of the configuration to the peer.
+func (obj *bgpSrteV4TunnelTlv) Active() bool {
+	return *obj.obj.Active
+}
+
+// Active returns a bool
+//  If enabled means that this part of the configuration including any active 'children' nodes will be advertised to peer.  If disabled, this means that though config is present, it is not taking any part of the test but can be activated at run-time to advertise just this part of the configuration to the peer.
+func (obj *bgpSrteV4TunnelTlv) HasActive() bool {
+	return obj.obj.Active != nil
+}
+
+// SetActive sets the bool value in the BgpSrteV4TunnelTlv object
+//  If enabled means that this part of the configuration including any active 'children' nodes will be advertised to peer.  If disabled, this means that though config is present, it is not taking any part of the test but can be activated at run-time to advertise just this part of the configuration to the peer.
+func (obj *bgpSrteV4TunnelTlv) SetActive(value bool) BgpSrteV4TunnelTlv {
+	obj.obj.Active = &value
+
+	return obj
+}
+
+func (obj *bgpSrteV4TunnelTlv) validateObj(set_default bool) {
+	if set_default {
+		obj.setDefault()
+	}
+
+	if obj.obj.RemoteEndpointSubTlv != nil {
+		obj.RemoteEndpointSubTlv().validateObj(set_default)
+	}
+
+	if obj.obj.ColorSubTlv != nil {
+		obj.ColorSubTlv().validateObj(set_default)
+	}
+
+	if obj.obj.BindingSubTlv != nil {
+		obj.BindingSubTlv().validateObj(set_default)
+	}
+
+	if obj.obj.PreferenceSubTlv != nil {
+		obj.PreferenceSubTlv().validateObj(set_default)
+	}
+
+	if obj.obj.PolicyPrioritySubTlv != nil {
+		obj.PolicyPrioritySubTlv().validateObj(set_default)
+	}
+
+	if obj.obj.PolicyNameSubTlv != nil {
+		obj.PolicyNameSubTlv().validateObj(set_default)
+	}
+
+	if obj.obj.ExplicitNullLabelPolicySubTlv != nil {
+		obj.ExplicitNullLabelPolicySubTlv().validateObj(set_default)
+	}
+	if obj.obj.SegmentLists != nil {
+		for _, item := range obj.SegmentLists().Items() {
+			item.validateObj(set_default)
+		}
+	}
+
+	// Name required
+	if obj.obj.Name == "" {
+		validation = append(validation, "Name is required field on interface BgpSrteV4TunnelTlv")
+	}
+}
+
+func (obj *bgpSrteV4TunnelTlv) setDefault() {
+	if obj.obj.Active == nil {
+		obj.SetActive(true)
+	}
+
+}
+
+type bgpSrteV6TunnelTlv struct {
+	obj *snappipb.BgpSrteV6TunnelTlv
+}
+
+func (obj *bgpSrteV6TunnelTlv) Msg() *snappipb.BgpSrteV6TunnelTlv {
+	return obj.obj
+}
+
+func (obj *bgpSrteV6TunnelTlv) SetMsg(msg *snappipb.BgpSrteV6TunnelTlv) BgpSrteV6TunnelTlv {
+	obj.obj = msg
+	return obj
+}
+
+func (obj *bgpSrteV6TunnelTlv) ToPbText() string {
+	vErr := obj.Validate()
+	if vErr != nil {
+		panic(vErr)
+	}
+	return proto.MarshalTextString(obj.Msg())
+}
+
+func (obj *bgpSrteV6TunnelTlv) FromPbText(value string) error {
+	retObj := proto.UnmarshalText(value, obj.Msg())
+	if retObj != nil {
+		return retObj
+	}
+	vErr := obj.Validate(true)
+	if vErr != nil {
+		return vErr
+	}
+	return retObj
+}
+
+func (obj *bgpSrteV6TunnelTlv) ToYaml() string {
+	vErr := obj.Validate()
+	if vErr != nil {
+		panic(vErr)
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(obj.Msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *bgpSrteV6TunnelTlv) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: false,
+	}
+	retObj := opts.Unmarshal([]byte(data), obj.Msg())
+	if retObj != nil {
+		return retObj
+	}
+	vErr := obj.Validate(true)
+	if vErr != nil {
+		return vErr
+	}
+	return retObj
+}
+
+func (obj *bgpSrteV6TunnelTlv) ToJson() string {
+	vErr := obj.Validate()
+	if vErr != nil {
+		panic(vErr)
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+		Indent:          "  ",
+	}
+	data, err := opts.Marshal(obj.Msg())
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *bgpSrteV6TunnelTlv) FromJson(value string) error {
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: false,
+	}
+	retObj := opts.Unmarshal([]byte(value), obj.Msg())
+	if retObj != nil {
+		return retObj
+	}
+	err := obj.Validate(true)
+	if err != nil {
+		return err
+	}
+	return retObj
+}
+
+func (obj *bgpSrteV6TunnelTlv) Validate(defaults ...bool) error {
+	var set_default bool = false
+	if len(defaults) > 0 {
+		set_default = defaults[0]
+	}
+	obj.validateObj(set_default)
+	return validationResult()
+}
+
+type BgpSrteV6TunnelTlv interface {
+	Msg() *snappipb.BgpSrteV6TunnelTlv
+	SetMsg(*snappipb.BgpSrteV6TunnelTlv) BgpSrteV6TunnelTlv
+	ToPbText() string
+	ToYaml() string
+	ToJson() string
+	FromPbText(value string) error
+	FromYaml(value string) error
+	FromJson(value string) error
+	Validate(defaults ...bool) error
+	validateObj(set_default bool)
+	setDefault()
+	RemoteEndpointSubTlv() BgpSrteRemoteEndpointSubTlv
+	HasRemoteEndpointSubTlv() bool
+	ColorSubTlv() BgpSrteColorSubTlv
+	HasColorSubTlv() bool
+	BindingSubTlv() BgpSrteBindingSubTlv
+	HasBindingSubTlv() bool
+	PreferenceSubTlv() BgpSrtePreferenceSubTlv
+	HasPreferenceSubTlv() bool
+	PolicyPrioritySubTlv() BgpSrtePolicyPrioritySubTlv
+	HasPolicyPrioritySubTlv() bool
+	PolicyNameSubTlv() BgpSrtePolicyNameSubTlv
+	HasPolicyNameSubTlv() bool
+	ExplicitNullLabelPolicySubTlv() BgpSrteExplicitNullLabelPolicySubTlv
+	HasExplicitNullLabelPolicySubTlv() bool
+	SegmentLists() BgpSrteV6TunnelTlvBgpSrteSegmentListIter
+	Name() string
+	SetName(value string) BgpSrteV6TunnelTlv
+	Active() bool
+	SetActive(value bool) BgpSrteV6TunnelTlv
+	HasActive() bool
+}
+
+// RemoteEndpointSubTlv returns a BgpSrteRemoteEndpointSubTlv
+//  description is TBD
+func (obj *bgpSrteV6TunnelTlv) RemoteEndpointSubTlv() BgpSrteRemoteEndpointSubTlv {
+
+	if obj.obj.RemoteEndpointSubTlv == nil {
+		obj.obj.RemoteEndpointSubTlv = &snappipb.BgpSrteRemoteEndpointSubTlv{}
+		newObj := &bgpSrteRemoteEndpointSubTlv{obj: obj.obj.RemoteEndpointSubTlv}
+		newObj.setDefault()
+		return newObj
+	}
+	return &bgpSrteRemoteEndpointSubTlv{obj: obj.obj.RemoteEndpointSubTlv}
+}
+
+// RemoteEndpointSubTlv returns a BgpSrteRemoteEndpointSubTlv
+//  description is TBD
+func (obj *bgpSrteV6TunnelTlv) HasRemoteEndpointSubTlv() bool {
+	return obj.obj.RemoteEndpointSubTlv != nil
+}
+
+// ColorSubTlv returns a BgpSrteColorSubTlv
+//  description is TBD
+func (obj *bgpSrteV6TunnelTlv) ColorSubTlv() BgpSrteColorSubTlv {
+
+	if obj.obj.ColorSubTlv == nil {
+		obj.obj.ColorSubTlv = &snappipb.BgpSrteColorSubTlv{}
+		newObj := &bgpSrteColorSubTlv{obj: obj.obj.ColorSubTlv}
+		newObj.setDefault()
+		return newObj
+	}
+	return &bgpSrteColorSubTlv{obj: obj.obj.ColorSubTlv}
+}
+
+// ColorSubTlv returns a BgpSrteColorSubTlv
+//  description is TBD
+func (obj *bgpSrteV6TunnelTlv) HasColorSubTlv() bool {
+	return obj.obj.ColorSubTlv != nil
+}
+
+// BindingSubTlv returns a BgpSrteBindingSubTlv
+//  description is TBD
+func (obj *bgpSrteV6TunnelTlv) BindingSubTlv() BgpSrteBindingSubTlv {
+
+	if obj.obj.BindingSubTlv == nil {
+		obj.obj.BindingSubTlv = &snappipb.BgpSrteBindingSubTlv{}
+		newObj := &bgpSrteBindingSubTlv{obj: obj.obj.BindingSubTlv}
+		newObj.setDefault()
+		return newObj
+	}
+	return &bgpSrteBindingSubTlv{obj: obj.obj.BindingSubTlv}
+}
+
+// BindingSubTlv returns a BgpSrteBindingSubTlv
+//  description is TBD
+func (obj *bgpSrteV6TunnelTlv) HasBindingSubTlv() bool {
+	return obj.obj.BindingSubTlv != nil
+}
+
+// PreferenceSubTlv returns a BgpSrtePreferenceSubTlv
+//  description is TBD
+func (obj *bgpSrteV6TunnelTlv) PreferenceSubTlv() BgpSrtePreferenceSubTlv {
+
+	if obj.obj.PreferenceSubTlv == nil {
+		obj.obj.PreferenceSubTlv = &snappipb.BgpSrtePreferenceSubTlv{}
+		newObj := &bgpSrtePreferenceSubTlv{obj: obj.obj.PreferenceSubTlv}
+		newObj.setDefault()
+		return newObj
+	}
+	return &bgpSrtePreferenceSubTlv{obj: obj.obj.PreferenceSubTlv}
+}
+
+// PreferenceSubTlv returns a BgpSrtePreferenceSubTlv
+//  description is TBD
+func (obj *bgpSrteV6TunnelTlv) HasPreferenceSubTlv() bool {
+	return obj.obj.PreferenceSubTlv != nil
+}
+
+// PolicyPrioritySubTlv returns a BgpSrtePolicyPrioritySubTlv
+//  description is TBD
+func (obj *bgpSrteV6TunnelTlv) PolicyPrioritySubTlv() BgpSrtePolicyPrioritySubTlv {
+
+	if obj.obj.PolicyPrioritySubTlv == nil {
+		obj.obj.PolicyPrioritySubTlv = &snappipb.BgpSrtePolicyPrioritySubTlv{}
+		newObj := &bgpSrtePolicyPrioritySubTlv{obj: obj.obj.PolicyPrioritySubTlv}
+		newObj.setDefault()
+		return newObj
+	}
+	return &bgpSrtePolicyPrioritySubTlv{obj: obj.obj.PolicyPrioritySubTlv}
+}
+
+// PolicyPrioritySubTlv returns a BgpSrtePolicyPrioritySubTlv
+//  description is TBD
+func (obj *bgpSrteV6TunnelTlv) HasPolicyPrioritySubTlv() bool {
+	return obj.obj.PolicyPrioritySubTlv != nil
+}
+
+// PolicyNameSubTlv returns a BgpSrtePolicyNameSubTlv
+//  description is TBD
+func (obj *bgpSrteV6TunnelTlv) PolicyNameSubTlv() BgpSrtePolicyNameSubTlv {
+
+	if obj.obj.PolicyNameSubTlv == nil {
+		obj.obj.PolicyNameSubTlv = &snappipb.BgpSrtePolicyNameSubTlv{}
+		newObj := &bgpSrtePolicyNameSubTlv{obj: obj.obj.PolicyNameSubTlv}
+		newObj.setDefault()
+		return newObj
+	}
+	return &bgpSrtePolicyNameSubTlv{obj: obj.obj.PolicyNameSubTlv}
+}
+
+// PolicyNameSubTlv returns a BgpSrtePolicyNameSubTlv
+//  description is TBD
+func (obj *bgpSrteV6TunnelTlv) HasPolicyNameSubTlv() bool {
+	return obj.obj.PolicyNameSubTlv != nil
+}
+
+// ExplicitNullLabelPolicySubTlv returns a BgpSrteExplicitNullLabelPolicySubTlv
+//  description is TBD
+func (obj *bgpSrteV6TunnelTlv) ExplicitNullLabelPolicySubTlv() BgpSrteExplicitNullLabelPolicySubTlv {
+
+	if obj.obj.ExplicitNullLabelPolicySubTlv == nil {
+		obj.obj.ExplicitNullLabelPolicySubTlv = &snappipb.BgpSrteExplicitNullLabelPolicySubTlv{}
+		newObj := &bgpSrteExplicitNullLabelPolicySubTlv{obj: obj.obj.ExplicitNullLabelPolicySubTlv}
+		newObj.setDefault()
+		return newObj
+	}
+	return &bgpSrteExplicitNullLabelPolicySubTlv{obj: obj.obj.ExplicitNullLabelPolicySubTlv}
+}
+
+// ExplicitNullLabelPolicySubTlv returns a BgpSrteExplicitNullLabelPolicySubTlv
+//  description is TBD
+func (obj *bgpSrteV6TunnelTlv) HasExplicitNullLabelPolicySubTlv() bool {
+	return obj.obj.ExplicitNullLabelPolicySubTlv != nil
+}
+
+// SegmentLists returns a []BgpSrteSegmentList
+//  description is TBD
+func (obj *bgpSrteV6TunnelTlv) SegmentLists() BgpSrteV6TunnelTlvBgpSrteSegmentListIter {
+	if obj.obj.SegmentLists == nil {
+		obj.obj.SegmentLists = []*snappipb.BgpSrteSegmentList{}
+	}
+	return &bgpSrteV6TunnelTlvBgpSrteSegmentListIter{obj: obj}
+}
+
+type bgpSrteV6TunnelTlvBgpSrteSegmentListIter struct {
+	obj *bgpSrteV6TunnelTlv
+}
+
+type BgpSrteV6TunnelTlvBgpSrteSegmentListIter interface {
+	Add() BgpSrteSegmentList
+	Items() []BgpSrteSegmentList
+}
+
+func (obj *bgpSrteV6TunnelTlvBgpSrteSegmentListIter) Add() BgpSrteSegmentList {
+	newObj := &snappipb.BgpSrteSegmentList{}
+	obj.obj.obj.SegmentLists = append(obj.obj.obj.SegmentLists, newObj)
+	newLibObj := &bgpSrteSegmentList{obj: newObj}
+	newLibObj.setDefault()
+	return newLibObj
+}
+
+func (obj *bgpSrteV6TunnelTlvBgpSrteSegmentListIter) Items() []BgpSrteSegmentList {
+	slice := []BgpSrteSegmentList{}
+	for _, item := range obj.obj.obj.SegmentLists {
+		slice = append(slice, &bgpSrteSegmentList{obj: item})
+	}
+	return slice
+}
+
+// Name returns a string
+//  Globally unique name of an object. It also serves as the primary key for arrays of objects.
+func (obj *bgpSrteV6TunnelTlv) Name() string {
+	return obj.obj.Name
+}
+
+// SetName sets the string value in the BgpSrteV6TunnelTlv object
+//  Globally unique name of an object. It also serves as the primary key for arrays of objects.
+func (obj *bgpSrteV6TunnelTlv) SetName(value string) BgpSrteV6TunnelTlv {
+	obj.obj.Name = value
+
+	return obj
+}
+
+// Active returns a bool
+//  If enabled means that this part of the configuration including any active 'children' nodes will be advertised to peer.  If disabled, this means that though config is present, it is not taking any part of the test but can be activated at run-time to advertise just this part of the configuration to the peer.
+func (obj *bgpSrteV6TunnelTlv) Active() bool {
+	return *obj.obj.Active
+}
+
+// Active returns a bool
+//  If enabled means that this part of the configuration including any active 'children' nodes will be advertised to peer.  If disabled, this means that though config is present, it is not taking any part of the test but can be activated at run-time to advertise just this part of the configuration to the peer.
+func (obj *bgpSrteV6TunnelTlv) HasActive() bool {
+	return obj.obj.Active != nil
+}
+
+// SetActive sets the bool value in the BgpSrteV6TunnelTlv object
+//  If enabled means that this part of the configuration including any active 'children' nodes will be advertised to peer.  If disabled, this means that though config is present, it is not taking any part of the test but can be activated at run-time to advertise just this part of the configuration to the peer.
+func (obj *bgpSrteV6TunnelTlv) SetActive(value bool) BgpSrteV6TunnelTlv {
+	obj.obj.Active = &value
+
+	return obj
+}
+
+func (obj *bgpSrteV6TunnelTlv) validateObj(set_default bool) {
+	if set_default {
+		obj.setDefault()
+	}
+
+	if obj.obj.RemoteEndpointSubTlv != nil {
+		obj.RemoteEndpointSubTlv().validateObj(set_default)
+	}
+
+	if obj.obj.ColorSubTlv != nil {
+		obj.ColorSubTlv().validateObj(set_default)
+	}
+
+	if obj.obj.BindingSubTlv != nil {
+		obj.BindingSubTlv().validateObj(set_default)
+	}
+
+	if obj.obj.PreferenceSubTlv != nil {
+		obj.PreferenceSubTlv().validateObj(set_default)
+	}
+
+	if obj.obj.PolicyPrioritySubTlv != nil {
+		obj.PolicyPrioritySubTlv().validateObj(set_default)
+	}
+
+	if obj.obj.PolicyNameSubTlv != nil {
+		obj.PolicyNameSubTlv().validateObj(set_default)
+	}
+
+	if obj.obj.ExplicitNullLabelPolicySubTlv != nil {
+		obj.ExplicitNullLabelPolicySubTlv().validateObj(set_default)
+	}
+	if obj.obj.SegmentLists != nil {
+		for _, item := range obj.SegmentLists().Items() {
+			item.validateObj(set_default)
+		}
+	}
+
+	// Name required
+	if obj.obj.Name == "" {
+		validation = append(validation, "Name is required field on interface BgpSrteV6TunnelTlv")
+	}
+}
+
+func (obj *bgpSrteV6TunnelTlv) setDefault() {
+	if obj.obj.Active == nil {
+		obj.SetActive(true)
+	}
+
+}
+
 type patternFlowIpv4PriorityRawCounter struct {
 	obj *snappipb.PatternFlowIpv4PriorityRawCounter
 }
@@ -115418,6 +118177,1708 @@ func (obj *bgpAsPathSegment) setDefault() {
 
 }
 
+type bgpSrteRemoteEndpointSubTlv struct {
+	obj *snappipb.BgpSrteRemoteEndpointSubTlv
+}
+
+func (obj *bgpSrteRemoteEndpointSubTlv) Msg() *snappipb.BgpSrteRemoteEndpointSubTlv {
+	return obj.obj
+}
+
+func (obj *bgpSrteRemoteEndpointSubTlv) SetMsg(msg *snappipb.BgpSrteRemoteEndpointSubTlv) BgpSrteRemoteEndpointSubTlv {
+	obj.obj = msg
+	return obj
+}
+
+func (obj *bgpSrteRemoteEndpointSubTlv) ToPbText() string {
+	vErr := obj.Validate()
+	if vErr != nil {
+		panic(vErr)
+	}
+	return proto.MarshalTextString(obj.Msg())
+}
+
+func (obj *bgpSrteRemoteEndpointSubTlv) FromPbText(value string) error {
+	retObj := proto.UnmarshalText(value, obj.Msg())
+	if retObj != nil {
+		return retObj
+	}
+	vErr := obj.Validate(true)
+	if vErr != nil {
+		return vErr
+	}
+	return retObj
+}
+
+func (obj *bgpSrteRemoteEndpointSubTlv) ToYaml() string {
+	vErr := obj.Validate()
+	if vErr != nil {
+		panic(vErr)
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(obj.Msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *bgpSrteRemoteEndpointSubTlv) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: false,
+	}
+	retObj := opts.Unmarshal([]byte(data), obj.Msg())
+	if retObj != nil {
+		return retObj
+	}
+	vErr := obj.Validate(true)
+	if vErr != nil {
+		return vErr
+	}
+	return retObj
+}
+
+func (obj *bgpSrteRemoteEndpointSubTlv) ToJson() string {
+	vErr := obj.Validate()
+	if vErr != nil {
+		panic(vErr)
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+		Indent:          "  ",
+	}
+	data, err := opts.Marshal(obj.Msg())
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *bgpSrteRemoteEndpointSubTlv) FromJson(value string) error {
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: false,
+	}
+	retObj := opts.Unmarshal([]byte(value), obj.Msg())
+	if retObj != nil {
+		return retObj
+	}
+	err := obj.Validate(true)
+	if err != nil {
+		return err
+	}
+	return retObj
+}
+
+func (obj *bgpSrteRemoteEndpointSubTlv) Validate(defaults ...bool) error {
+	var set_default bool = false
+	if len(defaults) > 0 {
+		set_default = defaults[0]
+	}
+	obj.validateObj(set_default)
+	return validationResult()
+}
+
+type BgpSrteRemoteEndpointSubTlv interface {
+	Msg() *snappipb.BgpSrteRemoteEndpointSubTlv
+	SetMsg(*snappipb.BgpSrteRemoteEndpointSubTlv) BgpSrteRemoteEndpointSubTlv
+	ToPbText() string
+	ToYaml() string
+	ToJson() string
+	FromPbText(value string) error
+	FromYaml(value string) error
+	FromJson(value string) error
+	Validate(defaults ...bool) error
+	validateObj(set_default bool)
+	setDefault()
+	AsNumber() int64
+	SetAsNumber(value int64) BgpSrteRemoteEndpointSubTlv
+	HasAsNumber() bool
+	AddressFamily() BgpSrteRemoteEndpointSubTlvAddressFamilyEnum
+	SetAddressFamily(value BgpSrteRemoteEndpointSubTlvAddressFamilyEnum) BgpSrteRemoteEndpointSubTlv
+	HasAddressFamily() bool
+	Ipv4Address() string
+	SetIpv4Address(value string) BgpSrteRemoteEndpointSubTlv
+	HasIpv4Address() bool
+	Ipv6Address() string
+	SetIpv6Address(value string) BgpSrteRemoteEndpointSubTlv
+	HasIpv6Address() bool
+}
+
+// AsNumber returns a int64
+//  Autonomous system (AS) number
+func (obj *bgpSrteRemoteEndpointSubTlv) AsNumber() int64 {
+	return *obj.obj.AsNumber
+}
+
+// AsNumber returns a int64
+//  Autonomous system (AS) number
+func (obj *bgpSrteRemoteEndpointSubTlv) HasAsNumber() bool {
+	return obj.obj.AsNumber != nil
+}
+
+// SetAsNumber sets the int64 value in the BgpSrteRemoteEndpointSubTlv object
+//  Autonomous system (AS) number
+func (obj *bgpSrteRemoteEndpointSubTlv) SetAsNumber(value int64) BgpSrteRemoteEndpointSubTlv {
+	obj.obj.AsNumber = &value
+
+	return obj
+}
+
+type BgpSrteRemoteEndpointSubTlvAddressFamilyEnum string
+
+var BgpSrteRemoteEndpointSubTlvAddressFamily = struct {
+	IPV4 BgpSrteRemoteEndpointSubTlvAddressFamilyEnum
+	IPV6 BgpSrteRemoteEndpointSubTlvAddressFamilyEnum
+}{
+	IPV4: BgpSrteRemoteEndpointSubTlvAddressFamilyEnum("ipv4"),
+	IPV6: BgpSrteRemoteEndpointSubTlvAddressFamilyEnum("ipv6"),
+}
+
+func (obj *bgpSrteRemoteEndpointSubTlv) AddressFamily() BgpSrteRemoteEndpointSubTlvAddressFamilyEnum {
+	return BgpSrteRemoteEndpointSubTlvAddressFamilyEnum(obj.obj.AddressFamily.Enum().String())
+}
+
+// AddressFamily returns a string
+//  Determines the address type
+func (obj *bgpSrteRemoteEndpointSubTlv) HasAddressFamily() bool {
+	return obj.obj.AddressFamily != nil
+}
+
+func (obj *bgpSrteRemoteEndpointSubTlv) SetAddressFamily(value BgpSrteRemoteEndpointSubTlvAddressFamilyEnum) BgpSrteRemoteEndpointSubTlv {
+	intValue, ok := snappipb.BgpSrteRemoteEndpointSubTlv_AddressFamily_Enum_value[string(value)]
+	if !ok {
+		validation = append(validation, fmt.Sprintf(
+			"%s is not a valid choice on BgpSrteRemoteEndpointSubTlvAddressFamilyEnum", string(value)))
+		return obj
+	}
+	enumValue := snappipb.BgpSrteRemoteEndpointSubTlv_AddressFamily_Enum(intValue)
+	obj.obj.AddressFamily = &enumValue
+	return obj
+}
+
+// Ipv4Address returns a string
+//  The IPv4 address of the Remote Endpoint.
+func (obj *bgpSrteRemoteEndpointSubTlv) Ipv4Address() string {
+	return *obj.obj.Ipv4Address
+}
+
+// Ipv4Address returns a string
+//  The IPv4 address of the Remote Endpoint.
+func (obj *bgpSrteRemoteEndpointSubTlv) HasIpv4Address() bool {
+	return obj.obj.Ipv4Address != nil
+}
+
+// SetIpv4Address sets the string value in the BgpSrteRemoteEndpointSubTlv object
+//  The IPv4 address of the Remote Endpoint.
+func (obj *bgpSrteRemoteEndpointSubTlv) SetIpv4Address(value string) BgpSrteRemoteEndpointSubTlv {
+	obj.obj.Ipv4Address = &value
+
+	return obj
+}
+
+// Ipv6Address returns a string
+//  The IPv6 address of the Remote Endpoint.
+func (obj *bgpSrteRemoteEndpointSubTlv) Ipv6Address() string {
+	return *obj.obj.Ipv6Address
+}
+
+// Ipv6Address returns a string
+//  The IPv6 address of the Remote Endpoint.
+func (obj *bgpSrteRemoteEndpointSubTlv) HasIpv6Address() bool {
+	return obj.obj.Ipv6Address != nil
+}
+
+// SetIpv6Address sets the string value in the BgpSrteRemoteEndpointSubTlv object
+//  The IPv6 address of the Remote Endpoint.
+func (obj *bgpSrteRemoteEndpointSubTlv) SetIpv6Address(value string) BgpSrteRemoteEndpointSubTlv {
+	obj.obj.Ipv6Address = &value
+
+	return obj
+}
+
+func (obj *bgpSrteRemoteEndpointSubTlv) validateObj(set_default bool) {
+	if set_default {
+		obj.setDefault()
+	}
+
+	if obj.obj.AsNumber != nil {
+		if *obj.obj.AsNumber < 0 || *obj.obj.AsNumber > 4294967295 {
+			validation = append(
+				validation, fmt.Sprintf("0 <= BgpSrteRemoteEndpointSubTlv.AsNumber <= 4294967295 but Got %d", *obj.obj.AsNumber))
+		}
+
+	}
+
+	if obj.obj.Ipv4Address != nil {
+		err := validateIpv4(obj.Ipv4Address())
+		if err != nil {
+			validation = append(validation, fmt.Sprintf("%s %s", err.Error(), "on Ipv4Address BgpSrteRemoteEndpointSubTlv"))
+		}
+	}
+
+	if obj.obj.Ipv6Address != nil {
+		err := validateIpv6(obj.Ipv6Address())
+		if err != nil {
+			validation = append(validation, fmt.Sprintf("%s %s", err.Error(), "on Ipv6Address BgpSrteRemoteEndpointSubTlv"))
+		}
+	}
+
+}
+
+func (obj *bgpSrteRemoteEndpointSubTlv) setDefault() {
+	if obj.obj.AsNumber == nil {
+		obj.SetAsNumber(0)
+	}
+	if obj.obj.AddressFamily == nil {
+		obj.SetAddressFamily(BgpSrteRemoteEndpointSubTlvAddressFamily.IPV4)
+	}
+	if obj.obj.Ipv4Address == nil {
+		obj.SetIpv4Address("0.0.0.0")
+	}
+	if obj.obj.Ipv6Address == nil {
+		obj.SetIpv6Address("::0")
+	}
+
+}
+
+type bgpSrteColorSubTlv struct {
+	obj *snappipb.BgpSrteColorSubTlv
+}
+
+func (obj *bgpSrteColorSubTlv) Msg() *snappipb.BgpSrteColorSubTlv {
+	return obj.obj
+}
+
+func (obj *bgpSrteColorSubTlv) SetMsg(msg *snappipb.BgpSrteColorSubTlv) BgpSrteColorSubTlv {
+	obj.obj = msg
+	return obj
+}
+
+func (obj *bgpSrteColorSubTlv) ToPbText() string {
+	vErr := obj.Validate()
+	if vErr != nil {
+		panic(vErr)
+	}
+	return proto.MarshalTextString(obj.Msg())
+}
+
+func (obj *bgpSrteColorSubTlv) FromPbText(value string) error {
+	retObj := proto.UnmarshalText(value, obj.Msg())
+	if retObj != nil {
+		return retObj
+	}
+	vErr := obj.Validate(true)
+	if vErr != nil {
+		return vErr
+	}
+	return retObj
+}
+
+func (obj *bgpSrteColorSubTlv) ToYaml() string {
+	vErr := obj.Validate()
+	if vErr != nil {
+		panic(vErr)
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(obj.Msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *bgpSrteColorSubTlv) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: false,
+	}
+	retObj := opts.Unmarshal([]byte(data), obj.Msg())
+	if retObj != nil {
+		return retObj
+	}
+	vErr := obj.Validate(true)
+	if vErr != nil {
+		return vErr
+	}
+	return retObj
+}
+
+func (obj *bgpSrteColorSubTlv) ToJson() string {
+	vErr := obj.Validate()
+	if vErr != nil {
+		panic(vErr)
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+		Indent:          "  ",
+	}
+	data, err := opts.Marshal(obj.Msg())
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *bgpSrteColorSubTlv) FromJson(value string) error {
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: false,
+	}
+	retObj := opts.Unmarshal([]byte(value), obj.Msg())
+	if retObj != nil {
+		return retObj
+	}
+	err := obj.Validate(true)
+	if err != nil {
+		return err
+	}
+	return retObj
+}
+
+func (obj *bgpSrteColorSubTlv) Validate(defaults ...bool) error {
+	var set_default bool = false
+	if len(defaults) > 0 {
+		set_default = defaults[0]
+	}
+	obj.validateObj(set_default)
+	return validationResult()
+}
+
+type BgpSrteColorSubTlv interface {
+	Msg() *snappipb.BgpSrteColorSubTlv
+	SetMsg(*snappipb.BgpSrteColorSubTlv) BgpSrteColorSubTlv
+	ToPbText() string
+	ToYaml() string
+	ToJson() string
+	FromPbText(value string) error
+	FromYaml(value string) error
+	FromJson(value string) error
+	Validate(defaults ...bool) error
+	validateObj(set_default bool)
+	setDefault()
+	Color() string
+	SetColor(value string) BgpSrteColorSubTlv
+	HasColor() bool
+}
+
+// Color returns a string
+//  Six octet values. Example: 000000000064 for color value 100.
+func (obj *bgpSrteColorSubTlv) Color() string {
+	return *obj.obj.Color
+}
+
+// Color returns a string
+//  Six octet values. Example: 000000000064 for color value 100.
+func (obj *bgpSrteColorSubTlv) HasColor() bool {
+	return obj.obj.Color != nil
+}
+
+// SetColor sets the string value in the BgpSrteColorSubTlv object
+//  Six octet values. Example: 000000000064 for color value 100.
+func (obj *bgpSrteColorSubTlv) SetColor(value string) BgpSrteColorSubTlv {
+	obj.obj.Color = &value
+
+	return obj
+}
+
+func (obj *bgpSrteColorSubTlv) validateObj(set_default bool) {
+	if set_default {
+		obj.setDefault()
+	}
+
+	if obj.obj.Color != nil {
+		err := validateHex(obj.Color())
+		if err != nil {
+			validation = append(validation, fmt.Sprintf("%s %s", err.Error(), "on Color BgpSrteColorSubTlv"))
+		}
+	}
+
+}
+
+func (obj *bgpSrteColorSubTlv) setDefault() {
+
+}
+
+type bgpSrteBindingSubTlv struct {
+	obj *snappipb.BgpSrteBindingSubTlv
+}
+
+func (obj *bgpSrteBindingSubTlv) Msg() *snappipb.BgpSrteBindingSubTlv {
+	return obj.obj
+}
+
+func (obj *bgpSrteBindingSubTlv) SetMsg(msg *snappipb.BgpSrteBindingSubTlv) BgpSrteBindingSubTlv {
+	obj.obj = msg
+	return obj
+}
+
+func (obj *bgpSrteBindingSubTlv) ToPbText() string {
+	vErr := obj.Validate()
+	if vErr != nil {
+		panic(vErr)
+	}
+	return proto.MarshalTextString(obj.Msg())
+}
+
+func (obj *bgpSrteBindingSubTlv) FromPbText(value string) error {
+	retObj := proto.UnmarshalText(value, obj.Msg())
+	if retObj != nil {
+		return retObj
+	}
+	vErr := obj.Validate(true)
+	if vErr != nil {
+		return vErr
+	}
+	return retObj
+}
+
+func (obj *bgpSrteBindingSubTlv) ToYaml() string {
+	vErr := obj.Validate()
+	if vErr != nil {
+		panic(vErr)
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(obj.Msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *bgpSrteBindingSubTlv) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: false,
+	}
+	retObj := opts.Unmarshal([]byte(data), obj.Msg())
+	if retObj != nil {
+		return retObj
+	}
+	vErr := obj.Validate(true)
+	if vErr != nil {
+		return vErr
+	}
+	return retObj
+}
+
+func (obj *bgpSrteBindingSubTlv) ToJson() string {
+	vErr := obj.Validate()
+	if vErr != nil {
+		panic(vErr)
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+		Indent:          "  ",
+	}
+	data, err := opts.Marshal(obj.Msg())
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *bgpSrteBindingSubTlv) FromJson(value string) error {
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: false,
+	}
+	retObj := opts.Unmarshal([]byte(value), obj.Msg())
+	if retObj != nil {
+		return retObj
+	}
+	err := obj.Validate(true)
+	if err != nil {
+		return err
+	}
+	return retObj
+}
+
+func (obj *bgpSrteBindingSubTlv) Validate(defaults ...bool) error {
+	var set_default bool = false
+	if len(defaults) > 0 {
+		set_default = defaults[0]
+	}
+	obj.validateObj(set_default)
+	return validationResult()
+}
+
+type BgpSrteBindingSubTlv interface {
+	Msg() *snappipb.BgpSrteBindingSubTlv
+	SetMsg(*snappipb.BgpSrteBindingSubTlv) BgpSrteBindingSubTlv
+	ToPbText() string
+	ToYaml() string
+	ToJson() string
+	FromPbText(value string) error
+	FromYaml(value string) error
+	FromJson(value string) error
+	Validate(defaults ...bool) error
+	validateObj(set_default bool)
+	setDefault()
+	BindingSidType() BgpSrteBindingSubTlvBindingSidTypeEnum
+	SetBindingSidType(value BgpSrteBindingSubTlvBindingSidTypeEnum) BgpSrteBindingSubTlv
+	HasBindingSidType() bool
+	FourOctetSid() int32
+	SetFourOctetSid(value int32) BgpSrteBindingSubTlv
+	HasFourOctetSid() bool
+	Ipv6Sid() string
+	SetIpv6Sid(value string) BgpSrteBindingSubTlv
+	HasIpv6Sid() bool
+	SFlag() bool
+	SetSFlag(value bool) BgpSrteBindingSubTlv
+	HasSFlag() bool
+	IFlag() bool
+	SetIFlag(value bool) BgpSrteBindingSubTlv
+	HasIFlag() bool
+}
+
+type BgpSrteBindingSubTlvBindingSidTypeEnum string
+
+var BgpSrteBindingSubTlvBindingSidType = struct {
+	NO_BINDING     BgpSrteBindingSubTlvBindingSidTypeEnum
+	FOUR_OCTET_SID BgpSrteBindingSubTlvBindingSidTypeEnum
+	IPV6_SID       BgpSrteBindingSubTlvBindingSidTypeEnum
+}{
+	NO_BINDING:     BgpSrteBindingSubTlvBindingSidTypeEnum("no_binding"),
+	FOUR_OCTET_SID: BgpSrteBindingSubTlvBindingSidTypeEnum("four_octet_sid"),
+	IPV6_SID:       BgpSrteBindingSubTlvBindingSidTypeEnum("ipv6_sid"),
+}
+
+func (obj *bgpSrteBindingSubTlv) BindingSidType() BgpSrteBindingSubTlvBindingSidTypeEnum {
+	return BgpSrteBindingSubTlvBindingSidTypeEnum(obj.obj.BindingSidType.Enum().String())
+}
+
+// BindingSidType returns a string
+//  Type of the binding SID.  Supported types are "No Binding SID" or "Four Octets Sid" or "IPv6 SID".
+func (obj *bgpSrteBindingSubTlv) HasBindingSidType() bool {
+	return obj.obj.BindingSidType != nil
+}
+
+func (obj *bgpSrteBindingSubTlv) SetBindingSidType(value BgpSrteBindingSubTlvBindingSidTypeEnum) BgpSrteBindingSubTlv {
+	intValue, ok := snappipb.BgpSrteBindingSubTlv_BindingSidType_Enum_value[string(value)]
+	if !ok {
+		validation = append(validation, fmt.Sprintf(
+			"%s is not a valid choice on BgpSrteBindingSubTlvBindingSidTypeEnum", string(value)))
+		return obj
+	}
+	enumValue := snappipb.BgpSrteBindingSubTlv_BindingSidType_Enum(intValue)
+	obj.obj.BindingSidType = &enumValue
+	return obj
+}
+
+// FourOctetSid returns a int32
+//  Binding SID is encoded in 4 octets.
+func (obj *bgpSrteBindingSubTlv) FourOctetSid() int32 {
+	return *obj.obj.FourOctetSid
+}
+
+// FourOctetSid returns a int32
+//  Binding SID is encoded in 4 octets.
+func (obj *bgpSrteBindingSubTlv) HasFourOctetSid() bool {
+	return obj.obj.FourOctetSid != nil
+}
+
+// SetFourOctetSid sets the int32 value in the BgpSrteBindingSubTlv object
+//  Binding SID is encoded in 4 octets.
+func (obj *bgpSrteBindingSubTlv) SetFourOctetSid(value int32) BgpSrteBindingSubTlv {
+	obj.obj.FourOctetSid = &value
+
+	return obj
+}
+
+// Ipv6Sid returns a string
+//  IPv6 SID value.
+func (obj *bgpSrteBindingSubTlv) Ipv6Sid() string {
+	return *obj.obj.Ipv6Sid
+}
+
+// Ipv6Sid returns a string
+//  IPv6 SID value.
+func (obj *bgpSrteBindingSubTlv) HasIpv6Sid() bool {
+	return obj.obj.Ipv6Sid != nil
+}
+
+// SetIpv6Sid sets the string value in the BgpSrteBindingSubTlv object
+//  IPv6 SID value.
+func (obj *bgpSrteBindingSubTlv) SetIpv6Sid(value string) BgpSrteBindingSubTlv {
+	obj.obj.Ipv6Sid = &value
+
+	return obj
+}
+
+// SFlag returns a bool
+//  S-Flag encodes the "Specified-BSID-only" behavior.
+func (obj *bgpSrteBindingSubTlv) SFlag() bool {
+	return *obj.obj.SFlag
+}
+
+// SFlag returns a bool
+//  S-Flag encodes the "Specified-BSID-only" behavior.
+func (obj *bgpSrteBindingSubTlv) HasSFlag() bool {
+	return obj.obj.SFlag != nil
+}
+
+// SetSFlag sets the bool value in the BgpSrteBindingSubTlv object
+//  S-Flag encodes the "Specified-BSID-only" behavior.
+func (obj *bgpSrteBindingSubTlv) SetSFlag(value bool) BgpSrteBindingSubTlv {
+	obj.obj.SFlag = &value
+
+	return obj
+}
+
+// IFlag returns a bool
+//  I-Flag encodes the "Drop Upon Invalid" behavior.
+func (obj *bgpSrteBindingSubTlv) IFlag() bool {
+	return *obj.obj.IFlag
+}
+
+// IFlag returns a bool
+//  I-Flag encodes the "Drop Upon Invalid" behavior.
+func (obj *bgpSrteBindingSubTlv) HasIFlag() bool {
+	return obj.obj.IFlag != nil
+}
+
+// SetIFlag sets the bool value in the BgpSrteBindingSubTlv object
+//  I-Flag encodes the "Drop Upon Invalid" behavior.
+func (obj *bgpSrteBindingSubTlv) SetIFlag(value bool) BgpSrteBindingSubTlv {
+	obj.obj.IFlag = &value
+
+	return obj
+}
+
+func (obj *bgpSrteBindingSubTlv) validateObj(set_default bool) {
+	if set_default {
+		obj.setDefault()
+	}
+
+	if obj.obj.Ipv6Sid != nil {
+		err := validateIpv6(obj.Ipv6Sid())
+		if err != nil {
+			validation = append(validation, fmt.Sprintf("%s %s", err.Error(), "on Ipv6Sid BgpSrteBindingSubTlv"))
+		}
+	}
+
+}
+
+func (obj *bgpSrteBindingSubTlv) setDefault() {
+	if obj.obj.BindingSidType == nil {
+		obj.SetBindingSidType(BgpSrteBindingSubTlvBindingSidType.NO_BINDING)
+	}
+	if obj.obj.SFlag == nil {
+		obj.SetSFlag(false)
+	}
+	if obj.obj.IFlag == nil {
+		obj.SetIFlag(false)
+	}
+
+}
+
+type bgpSrtePreferenceSubTlv struct {
+	obj *snappipb.BgpSrtePreferenceSubTlv
+}
+
+func (obj *bgpSrtePreferenceSubTlv) Msg() *snappipb.BgpSrtePreferenceSubTlv {
+	return obj.obj
+}
+
+func (obj *bgpSrtePreferenceSubTlv) SetMsg(msg *snappipb.BgpSrtePreferenceSubTlv) BgpSrtePreferenceSubTlv {
+	obj.obj = msg
+	return obj
+}
+
+func (obj *bgpSrtePreferenceSubTlv) ToPbText() string {
+	vErr := obj.Validate()
+	if vErr != nil {
+		panic(vErr)
+	}
+	return proto.MarshalTextString(obj.Msg())
+}
+
+func (obj *bgpSrtePreferenceSubTlv) FromPbText(value string) error {
+	retObj := proto.UnmarshalText(value, obj.Msg())
+	if retObj != nil {
+		return retObj
+	}
+	vErr := obj.Validate(true)
+	if vErr != nil {
+		return vErr
+	}
+	return retObj
+}
+
+func (obj *bgpSrtePreferenceSubTlv) ToYaml() string {
+	vErr := obj.Validate()
+	if vErr != nil {
+		panic(vErr)
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(obj.Msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *bgpSrtePreferenceSubTlv) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: false,
+	}
+	retObj := opts.Unmarshal([]byte(data), obj.Msg())
+	if retObj != nil {
+		return retObj
+	}
+	vErr := obj.Validate(true)
+	if vErr != nil {
+		return vErr
+	}
+	return retObj
+}
+
+func (obj *bgpSrtePreferenceSubTlv) ToJson() string {
+	vErr := obj.Validate()
+	if vErr != nil {
+		panic(vErr)
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+		Indent:          "  ",
+	}
+	data, err := opts.Marshal(obj.Msg())
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *bgpSrtePreferenceSubTlv) FromJson(value string) error {
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: false,
+	}
+	retObj := opts.Unmarshal([]byte(value), obj.Msg())
+	if retObj != nil {
+		return retObj
+	}
+	err := obj.Validate(true)
+	if err != nil {
+		return err
+	}
+	return retObj
+}
+
+func (obj *bgpSrtePreferenceSubTlv) Validate(defaults ...bool) error {
+	var set_default bool = false
+	if len(defaults) > 0 {
+		set_default = defaults[0]
+	}
+	obj.validateObj(set_default)
+	return validationResult()
+}
+
+type BgpSrtePreferenceSubTlv interface {
+	Msg() *snappipb.BgpSrtePreferenceSubTlv
+	SetMsg(*snappipb.BgpSrtePreferenceSubTlv) BgpSrtePreferenceSubTlv
+	ToPbText() string
+	ToYaml() string
+	ToJson() string
+	FromPbText(value string) error
+	FromYaml(value string) error
+	FromJson(value string) error
+	Validate(defaults ...bool) error
+	validateObj(set_default bool)
+	setDefault()
+	Preference() int64
+	SetPreference(value int64) BgpSrtePreferenceSubTlv
+	HasPreference() bool
+}
+
+// Preference returns a int64
+//  The preference value of the SR Policy candidate path.
+func (obj *bgpSrtePreferenceSubTlv) Preference() int64 {
+	return *obj.obj.Preference
+}
+
+// Preference returns a int64
+//  The preference value of the SR Policy candidate path.
+func (obj *bgpSrtePreferenceSubTlv) HasPreference() bool {
+	return obj.obj.Preference != nil
+}
+
+// SetPreference sets the int64 value in the BgpSrtePreferenceSubTlv object
+//  The preference value of the SR Policy candidate path.
+func (obj *bgpSrtePreferenceSubTlv) SetPreference(value int64) BgpSrtePreferenceSubTlv {
+	obj.obj.Preference = &value
+
+	return obj
+}
+
+func (obj *bgpSrtePreferenceSubTlv) validateObj(set_default bool) {
+	if set_default {
+		obj.setDefault()
+	}
+
+	if obj.obj.Preference != nil {
+		if *obj.obj.Preference < 0 || *obj.obj.Preference > 4294967295 {
+			validation = append(
+				validation, fmt.Sprintf("0 <= BgpSrtePreferenceSubTlv.Preference <= 4294967295 but Got %d", *obj.obj.Preference))
+		}
+
+	}
+
+}
+
+func (obj *bgpSrtePreferenceSubTlv) setDefault() {
+	if obj.obj.Preference == nil {
+		obj.SetPreference(0)
+	}
+
+}
+
+type bgpSrtePolicyPrioritySubTlv struct {
+	obj *snappipb.BgpSrtePolicyPrioritySubTlv
+}
+
+func (obj *bgpSrtePolicyPrioritySubTlv) Msg() *snappipb.BgpSrtePolicyPrioritySubTlv {
+	return obj.obj
+}
+
+func (obj *bgpSrtePolicyPrioritySubTlv) SetMsg(msg *snappipb.BgpSrtePolicyPrioritySubTlv) BgpSrtePolicyPrioritySubTlv {
+	obj.obj = msg
+	return obj
+}
+
+func (obj *bgpSrtePolicyPrioritySubTlv) ToPbText() string {
+	vErr := obj.Validate()
+	if vErr != nil {
+		panic(vErr)
+	}
+	return proto.MarshalTextString(obj.Msg())
+}
+
+func (obj *bgpSrtePolicyPrioritySubTlv) FromPbText(value string) error {
+	retObj := proto.UnmarshalText(value, obj.Msg())
+	if retObj != nil {
+		return retObj
+	}
+	vErr := obj.Validate(true)
+	if vErr != nil {
+		return vErr
+	}
+	return retObj
+}
+
+func (obj *bgpSrtePolicyPrioritySubTlv) ToYaml() string {
+	vErr := obj.Validate()
+	if vErr != nil {
+		panic(vErr)
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(obj.Msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *bgpSrtePolicyPrioritySubTlv) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: false,
+	}
+	retObj := opts.Unmarshal([]byte(data), obj.Msg())
+	if retObj != nil {
+		return retObj
+	}
+	vErr := obj.Validate(true)
+	if vErr != nil {
+		return vErr
+	}
+	return retObj
+}
+
+func (obj *bgpSrtePolicyPrioritySubTlv) ToJson() string {
+	vErr := obj.Validate()
+	if vErr != nil {
+		panic(vErr)
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+		Indent:          "  ",
+	}
+	data, err := opts.Marshal(obj.Msg())
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *bgpSrtePolicyPrioritySubTlv) FromJson(value string) error {
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: false,
+	}
+	retObj := opts.Unmarshal([]byte(value), obj.Msg())
+	if retObj != nil {
+		return retObj
+	}
+	err := obj.Validate(true)
+	if err != nil {
+		return err
+	}
+	return retObj
+}
+
+func (obj *bgpSrtePolicyPrioritySubTlv) Validate(defaults ...bool) error {
+	var set_default bool = false
+	if len(defaults) > 0 {
+		set_default = defaults[0]
+	}
+	obj.validateObj(set_default)
+	return validationResult()
+}
+
+type BgpSrtePolicyPrioritySubTlv interface {
+	Msg() *snappipb.BgpSrtePolicyPrioritySubTlv
+	SetMsg(*snappipb.BgpSrtePolicyPrioritySubTlv) BgpSrtePolicyPrioritySubTlv
+	ToPbText() string
+	ToYaml() string
+	ToJson() string
+	FromPbText(value string) error
+	FromYaml(value string) error
+	FromJson(value string) error
+	Validate(defaults ...bool) error
+	validateObj(set_default bool)
+	setDefault()
+	PolicyPriority() int32
+	SetPolicyPriority(value int32) BgpSrtePolicyPrioritySubTlv
+	HasPolicyPriority() bool
+}
+
+// PolicyPriority returns a int32
+//  One-octet Priority value.
+func (obj *bgpSrtePolicyPrioritySubTlv) PolicyPriority() int32 {
+	return *obj.obj.PolicyPriority
+}
+
+// PolicyPriority returns a int32
+//  One-octet Priority value.
+func (obj *bgpSrtePolicyPrioritySubTlv) HasPolicyPriority() bool {
+	return obj.obj.PolicyPriority != nil
+}
+
+// SetPolicyPriority sets the int32 value in the BgpSrtePolicyPrioritySubTlv object
+//  One-octet Priority value.
+func (obj *bgpSrtePolicyPrioritySubTlv) SetPolicyPriority(value int32) BgpSrtePolicyPrioritySubTlv {
+	obj.obj.PolicyPriority = &value
+
+	return obj
+}
+
+func (obj *bgpSrtePolicyPrioritySubTlv) validateObj(set_default bool) {
+	if set_default {
+		obj.setDefault()
+	}
+
+	if obj.obj.PolicyPriority != nil {
+		if *obj.obj.PolicyPriority < 0 || *obj.obj.PolicyPriority > 255 {
+			validation = append(
+				validation, fmt.Sprintf("0 <= BgpSrtePolicyPrioritySubTlv.PolicyPriority <= 255 but Got %d", *obj.obj.PolicyPriority))
+		}
+
+	}
+
+}
+
+func (obj *bgpSrtePolicyPrioritySubTlv) setDefault() {
+
+}
+
+type bgpSrtePolicyNameSubTlv struct {
+	obj *snappipb.BgpSrtePolicyNameSubTlv
+}
+
+func (obj *bgpSrtePolicyNameSubTlv) Msg() *snappipb.BgpSrtePolicyNameSubTlv {
+	return obj.obj
+}
+
+func (obj *bgpSrtePolicyNameSubTlv) SetMsg(msg *snappipb.BgpSrtePolicyNameSubTlv) BgpSrtePolicyNameSubTlv {
+	obj.obj = msg
+	return obj
+}
+
+func (obj *bgpSrtePolicyNameSubTlv) ToPbText() string {
+	vErr := obj.Validate()
+	if vErr != nil {
+		panic(vErr)
+	}
+	return proto.MarshalTextString(obj.Msg())
+}
+
+func (obj *bgpSrtePolicyNameSubTlv) FromPbText(value string) error {
+	retObj := proto.UnmarshalText(value, obj.Msg())
+	if retObj != nil {
+		return retObj
+	}
+	vErr := obj.Validate(true)
+	if vErr != nil {
+		return vErr
+	}
+	return retObj
+}
+
+func (obj *bgpSrtePolicyNameSubTlv) ToYaml() string {
+	vErr := obj.Validate()
+	if vErr != nil {
+		panic(vErr)
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(obj.Msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *bgpSrtePolicyNameSubTlv) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: false,
+	}
+	retObj := opts.Unmarshal([]byte(data), obj.Msg())
+	if retObj != nil {
+		return retObj
+	}
+	vErr := obj.Validate(true)
+	if vErr != nil {
+		return vErr
+	}
+	return retObj
+}
+
+func (obj *bgpSrtePolicyNameSubTlv) ToJson() string {
+	vErr := obj.Validate()
+	if vErr != nil {
+		panic(vErr)
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+		Indent:          "  ",
+	}
+	data, err := opts.Marshal(obj.Msg())
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *bgpSrtePolicyNameSubTlv) FromJson(value string) error {
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: false,
+	}
+	retObj := opts.Unmarshal([]byte(value), obj.Msg())
+	if retObj != nil {
+		return retObj
+	}
+	err := obj.Validate(true)
+	if err != nil {
+		return err
+	}
+	return retObj
+}
+
+func (obj *bgpSrtePolicyNameSubTlv) Validate(defaults ...bool) error {
+	var set_default bool = false
+	if len(defaults) > 0 {
+		set_default = defaults[0]
+	}
+	obj.validateObj(set_default)
+	return validationResult()
+}
+
+type BgpSrtePolicyNameSubTlv interface {
+	Msg() *snappipb.BgpSrtePolicyNameSubTlv
+	SetMsg(*snappipb.BgpSrtePolicyNameSubTlv) BgpSrtePolicyNameSubTlv
+	ToPbText() string
+	ToYaml() string
+	ToJson() string
+	FromPbText(value string) error
+	FromYaml(value string) error
+	FromJson(value string) error
+	Validate(defaults ...bool) error
+	validateObj(set_default bool)
+	setDefault()
+	PolicyName() string
+	SetPolicyName(value string) BgpSrtePolicyNameSubTlv
+	HasPolicyName() bool
+}
+
+// PolicyName returns a string
+//  Symbolic name for the policy that should be a string of printable ASCII characters, without a NULL terminator.
+func (obj *bgpSrtePolicyNameSubTlv) PolicyName() string {
+	return *obj.obj.PolicyName
+}
+
+// PolicyName returns a string
+//  Symbolic name for the policy that should be a string of printable ASCII characters, without a NULL terminator.
+func (obj *bgpSrtePolicyNameSubTlv) HasPolicyName() bool {
+	return obj.obj.PolicyName != nil
+}
+
+// SetPolicyName sets the string value in the BgpSrtePolicyNameSubTlv object
+//  Symbolic name for the policy that should be a string of printable ASCII characters, without a NULL terminator.
+func (obj *bgpSrtePolicyNameSubTlv) SetPolicyName(value string) BgpSrtePolicyNameSubTlv {
+	obj.obj.PolicyName = &value
+
+	return obj
+}
+
+func (obj *bgpSrtePolicyNameSubTlv) validateObj(set_default bool) {
+	if set_default {
+		obj.setDefault()
+	}
+
+}
+
+func (obj *bgpSrtePolicyNameSubTlv) setDefault() {
+
+}
+
+type bgpSrteExplicitNullLabelPolicySubTlv struct {
+	obj *snappipb.BgpSrteExplicitNullLabelPolicySubTlv
+}
+
+func (obj *bgpSrteExplicitNullLabelPolicySubTlv) Msg() *snappipb.BgpSrteExplicitNullLabelPolicySubTlv {
+	return obj.obj
+}
+
+func (obj *bgpSrteExplicitNullLabelPolicySubTlv) SetMsg(msg *snappipb.BgpSrteExplicitNullLabelPolicySubTlv) BgpSrteExplicitNullLabelPolicySubTlv {
+	obj.obj = msg
+	return obj
+}
+
+func (obj *bgpSrteExplicitNullLabelPolicySubTlv) ToPbText() string {
+	vErr := obj.Validate()
+	if vErr != nil {
+		panic(vErr)
+	}
+	return proto.MarshalTextString(obj.Msg())
+}
+
+func (obj *bgpSrteExplicitNullLabelPolicySubTlv) FromPbText(value string) error {
+	retObj := proto.UnmarshalText(value, obj.Msg())
+	if retObj != nil {
+		return retObj
+	}
+	vErr := obj.Validate(true)
+	if vErr != nil {
+		return vErr
+	}
+	return retObj
+}
+
+func (obj *bgpSrteExplicitNullLabelPolicySubTlv) ToYaml() string {
+	vErr := obj.Validate()
+	if vErr != nil {
+		panic(vErr)
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(obj.Msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *bgpSrteExplicitNullLabelPolicySubTlv) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: false,
+	}
+	retObj := opts.Unmarshal([]byte(data), obj.Msg())
+	if retObj != nil {
+		return retObj
+	}
+	vErr := obj.Validate(true)
+	if vErr != nil {
+		return vErr
+	}
+	return retObj
+}
+
+func (obj *bgpSrteExplicitNullLabelPolicySubTlv) ToJson() string {
+	vErr := obj.Validate()
+	if vErr != nil {
+		panic(vErr)
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+		Indent:          "  ",
+	}
+	data, err := opts.Marshal(obj.Msg())
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *bgpSrteExplicitNullLabelPolicySubTlv) FromJson(value string) error {
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: false,
+	}
+	retObj := opts.Unmarshal([]byte(value), obj.Msg())
+	if retObj != nil {
+		return retObj
+	}
+	err := obj.Validate(true)
+	if err != nil {
+		return err
+	}
+	return retObj
+}
+
+func (obj *bgpSrteExplicitNullLabelPolicySubTlv) Validate(defaults ...bool) error {
+	var set_default bool = false
+	if len(defaults) > 0 {
+		set_default = defaults[0]
+	}
+	obj.validateObj(set_default)
+	return validationResult()
+}
+
+type BgpSrteExplicitNullLabelPolicySubTlv interface {
+	Msg() *snappipb.BgpSrteExplicitNullLabelPolicySubTlv
+	SetMsg(*snappipb.BgpSrteExplicitNullLabelPolicySubTlv) BgpSrteExplicitNullLabelPolicySubTlv
+	ToPbText() string
+	ToYaml() string
+	ToJson() string
+	FromPbText(value string) error
+	FromYaml(value string) error
+	FromJson(value string) error
+	Validate(defaults ...bool) error
+	validateObj(set_default bool)
+	setDefault()
+	ExplicitNullLabelPolicy() BgpSrteExplicitNullLabelPolicySubTlvExplicitNullLabelPolicyEnum
+	SetExplicitNullLabelPolicy(value BgpSrteExplicitNullLabelPolicySubTlvExplicitNullLabelPolicyEnum) BgpSrteExplicitNullLabelPolicySubTlv
+	HasExplicitNullLabelPolicy() bool
+}
+
+type BgpSrteExplicitNullLabelPolicySubTlvExplicitNullLabelPolicyEnum string
+
+var BgpSrteExplicitNullLabelPolicySubTlvExplicitNullLabelPolicy = struct {
+	RESERVED_ENLP       BgpSrteExplicitNullLabelPolicySubTlvExplicitNullLabelPolicyEnum
+	PUSH_IPV4_ENLP      BgpSrteExplicitNullLabelPolicySubTlvExplicitNullLabelPolicyEnum
+	PUSH_IPV6_ENLP      BgpSrteExplicitNullLabelPolicySubTlvExplicitNullLabelPolicyEnum
+	PUSH_IPV4_IPV6_ENLP BgpSrteExplicitNullLabelPolicySubTlvExplicitNullLabelPolicyEnum
+	DO_NOT_PUSH_ENLP    BgpSrteExplicitNullLabelPolicySubTlvExplicitNullLabelPolicyEnum
+}{
+	RESERVED_ENLP:       BgpSrteExplicitNullLabelPolicySubTlvExplicitNullLabelPolicyEnum("reserved_enlp"),
+	PUSH_IPV4_ENLP:      BgpSrteExplicitNullLabelPolicySubTlvExplicitNullLabelPolicyEnum("push_ipv4_enlp"),
+	PUSH_IPV6_ENLP:      BgpSrteExplicitNullLabelPolicySubTlvExplicitNullLabelPolicyEnum("push_ipv6_enlp"),
+	PUSH_IPV4_IPV6_ENLP: BgpSrteExplicitNullLabelPolicySubTlvExplicitNullLabelPolicyEnum("push_ipv4_ipv6_enlp"),
+	DO_NOT_PUSH_ENLP:    BgpSrteExplicitNullLabelPolicySubTlvExplicitNullLabelPolicyEnum("do_not_push_enlp"),
+}
+
+func (obj *bgpSrteExplicitNullLabelPolicySubTlv) ExplicitNullLabelPolicy() BgpSrteExplicitNullLabelPolicySubTlvExplicitNullLabelPolicyEnum {
+	return BgpSrteExplicitNullLabelPolicySubTlvExplicitNullLabelPolicyEnum(obj.obj.ExplicitNullLabelPolicy.Enum().String())
+}
+
+// ExplicitNullLabelPolicy returns a string
+//  The value of the explicit null label policy
+func (obj *bgpSrteExplicitNullLabelPolicySubTlv) HasExplicitNullLabelPolicy() bool {
+	return obj.obj.ExplicitNullLabelPolicy != nil
+}
+
+func (obj *bgpSrteExplicitNullLabelPolicySubTlv) SetExplicitNullLabelPolicy(value BgpSrteExplicitNullLabelPolicySubTlvExplicitNullLabelPolicyEnum) BgpSrteExplicitNullLabelPolicySubTlv {
+	intValue, ok := snappipb.BgpSrteExplicitNullLabelPolicySubTlv_ExplicitNullLabelPolicy_Enum_value[string(value)]
+	if !ok {
+		validation = append(validation, fmt.Sprintf(
+			"%s is not a valid choice on BgpSrteExplicitNullLabelPolicySubTlvExplicitNullLabelPolicyEnum", string(value)))
+		return obj
+	}
+	enumValue := snappipb.BgpSrteExplicitNullLabelPolicySubTlv_ExplicitNullLabelPolicy_Enum(intValue)
+	obj.obj.ExplicitNullLabelPolicy = &enumValue
+	return obj
+}
+
+func (obj *bgpSrteExplicitNullLabelPolicySubTlv) validateObj(set_default bool) {
+	if set_default {
+		obj.setDefault()
+	}
+
+}
+
+func (obj *bgpSrteExplicitNullLabelPolicySubTlv) setDefault() {
+	if obj.obj.ExplicitNullLabelPolicy == nil {
+		obj.SetExplicitNullLabelPolicy(BgpSrteExplicitNullLabelPolicySubTlvExplicitNullLabelPolicy.DO_NOT_PUSH_ENLP)
+	}
+
+}
+
+type bgpSrteSegmentList struct {
+	obj *snappipb.BgpSrteSegmentList
+}
+
+func (obj *bgpSrteSegmentList) Msg() *snappipb.BgpSrteSegmentList {
+	return obj.obj
+}
+
+func (obj *bgpSrteSegmentList) SetMsg(msg *snappipb.BgpSrteSegmentList) BgpSrteSegmentList {
+	obj.obj = msg
+	return obj
+}
+
+func (obj *bgpSrteSegmentList) ToPbText() string {
+	vErr := obj.Validate()
+	if vErr != nil {
+		panic(vErr)
+	}
+	return proto.MarshalTextString(obj.Msg())
+}
+
+func (obj *bgpSrteSegmentList) FromPbText(value string) error {
+	retObj := proto.UnmarshalText(value, obj.Msg())
+	if retObj != nil {
+		return retObj
+	}
+	vErr := obj.Validate(true)
+	if vErr != nil {
+		return vErr
+	}
+	return retObj
+}
+
+func (obj *bgpSrteSegmentList) ToYaml() string {
+	vErr := obj.Validate()
+	if vErr != nil {
+		panic(vErr)
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(obj.Msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *bgpSrteSegmentList) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: false,
+	}
+	retObj := opts.Unmarshal([]byte(data), obj.Msg())
+	if retObj != nil {
+		return retObj
+	}
+	vErr := obj.Validate(true)
+	if vErr != nil {
+		return vErr
+	}
+	return retObj
+}
+
+func (obj *bgpSrteSegmentList) ToJson() string {
+	vErr := obj.Validate()
+	if vErr != nil {
+		panic(vErr)
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+		Indent:          "  ",
+	}
+	data, err := opts.Marshal(obj.Msg())
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *bgpSrteSegmentList) FromJson(value string) error {
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: false,
+	}
+	retObj := opts.Unmarshal([]byte(value), obj.Msg())
+	if retObj != nil {
+		return retObj
+	}
+	err := obj.Validate(true)
+	if err != nil {
+		return err
+	}
+	return retObj
+}
+
+func (obj *bgpSrteSegmentList) Validate(defaults ...bool) error {
+	var set_default bool = false
+	if len(defaults) > 0 {
+		set_default = defaults[0]
+	}
+	obj.validateObj(set_default)
+	return validationResult()
+}
+
+type BgpSrteSegmentList interface {
+	Msg() *snappipb.BgpSrteSegmentList
+	SetMsg(*snappipb.BgpSrteSegmentList) BgpSrteSegmentList
+	ToPbText() string
+	ToYaml() string
+	ToJson() string
+	FromPbText(value string) error
+	FromYaml(value string) error
+	FromJson(value string) error
+	Validate(defaults ...bool) error
+	validateObj(set_default bool)
+	setDefault()
+	Weight() int64
+	SetWeight(value int64) BgpSrteSegmentList
+	HasWeight() bool
+	Segments() BgpSrteSegmentListBgpSrteSegmentIter
+	Name() string
+	SetName(value string) BgpSrteSegmentList
+	Active() bool
+	SetActive(value bool) BgpSrteSegmentList
+	HasActive() bool
+}
+
+// Weight returns a int64
+//  The Weight associated with a given path and the sub-TLV is optional.
+func (obj *bgpSrteSegmentList) Weight() int64 {
+	return *obj.obj.Weight
+}
+
+// Weight returns a int64
+//  The Weight associated with a given path and the sub-TLV is optional.
+func (obj *bgpSrteSegmentList) HasWeight() bool {
+	return obj.obj.Weight != nil
+}
+
+// SetWeight sets the int64 value in the BgpSrteSegmentList object
+//  The Weight associated with a given path and the sub-TLV is optional.
+func (obj *bgpSrteSegmentList) SetWeight(value int64) BgpSrteSegmentList {
+	obj.obj.Weight = &value
+
+	return obj
+}
+
+// Segments returns a []BgpSrteSegment
+//  description is TBD
+func (obj *bgpSrteSegmentList) Segments() BgpSrteSegmentListBgpSrteSegmentIter {
+	if obj.obj.Segments == nil {
+		obj.obj.Segments = []*snappipb.BgpSrteSegment{}
+	}
+	return &bgpSrteSegmentListBgpSrteSegmentIter{obj: obj}
+}
+
+type bgpSrteSegmentListBgpSrteSegmentIter struct {
+	obj *bgpSrteSegmentList
+}
+
+type BgpSrteSegmentListBgpSrteSegmentIter interface {
+	Add() BgpSrteSegment
+	Items() []BgpSrteSegment
+}
+
+func (obj *bgpSrteSegmentListBgpSrteSegmentIter) Add() BgpSrteSegment {
+	newObj := &snappipb.BgpSrteSegment{}
+	obj.obj.obj.Segments = append(obj.obj.obj.Segments, newObj)
+	newLibObj := &bgpSrteSegment{obj: newObj}
+	newLibObj.setDefault()
+	return newLibObj
+}
+
+func (obj *bgpSrteSegmentListBgpSrteSegmentIter) Items() []BgpSrteSegment {
+	slice := []BgpSrteSegment{}
+	for _, item := range obj.obj.obj.Segments {
+		slice = append(slice, &bgpSrteSegment{obj: item})
+	}
+	return slice
+}
+
+// Name returns a string
+//  Globally unique name of an object. It also serves as the primary key for arrays of objects.
+func (obj *bgpSrteSegmentList) Name() string {
+	return obj.obj.Name
+}
+
+// SetName sets the string value in the BgpSrteSegmentList object
+//  Globally unique name of an object. It also serves as the primary key for arrays of objects.
+func (obj *bgpSrteSegmentList) SetName(value string) BgpSrteSegmentList {
+	obj.obj.Name = value
+
+	return obj
+}
+
+// Active returns a bool
+//  If enabled means that this part of the configuration including any active 'children' nodes will be advertised to peer.  If disabled, this means that though config is present, it is not taking any part of the test but can be activated at run-time to advertise just this part of the configuration to the peer.
+func (obj *bgpSrteSegmentList) Active() bool {
+	return *obj.obj.Active
+}
+
+// Active returns a bool
+//  If enabled means that this part of the configuration including any active 'children' nodes will be advertised to peer.  If disabled, this means that though config is present, it is not taking any part of the test but can be activated at run-time to advertise just this part of the configuration to the peer.
+func (obj *bgpSrteSegmentList) HasActive() bool {
+	return obj.obj.Active != nil
+}
+
+// SetActive sets the bool value in the BgpSrteSegmentList object
+//  If enabled means that this part of the configuration including any active 'children' nodes will be advertised to peer.  If disabled, this means that though config is present, it is not taking any part of the test but can be activated at run-time to advertise just this part of the configuration to the peer.
+func (obj *bgpSrteSegmentList) SetActive(value bool) BgpSrteSegmentList {
+	obj.obj.Active = &value
+
+	return obj
+}
+
+func (obj *bgpSrteSegmentList) validateObj(set_default bool) {
+	if set_default {
+		obj.setDefault()
+	}
+
+	if obj.obj.Weight != nil {
+		if *obj.obj.Weight < 0 || *obj.obj.Weight > 4294967295 {
+			validation = append(
+				validation, fmt.Sprintf("0 <= BgpSrteSegmentList.Weight <= 4294967295 but Got %d", *obj.obj.Weight))
+		}
+
+	}
+
+	if obj.obj.Segments != nil {
+		for _, item := range obj.Segments().Items() {
+			item.validateObj(set_default)
+		}
+	}
+
+	// Name required
+	if obj.obj.Name == "" {
+		validation = append(validation, "Name is required field on interface BgpSrteSegmentList")
+	}
+}
+
+func (obj *bgpSrteSegmentList) setDefault() {
+	if obj.obj.Weight == nil {
+		obj.SetWeight(0)
+	}
+	if obj.obj.Active == nil {
+		obj.SetActive(true)
+	}
+
+}
+
 type patternFlowIpv4TosPrecedenceCounter struct {
 	obj *snappipb.PatternFlowIpv4TosPrecedenceCounter
 }
@@ -117303,5 +121764,4089 @@ func (obj *patternFlowIpv4DscpEcnCounter) setDefault() {
 	if obj.obj.Count == nil {
 		obj.SetCount(1)
 	}
+
+}
+
+type bgpSrteSegment struct {
+	obj *snappipb.BgpSrteSegment
+}
+
+func (obj *bgpSrteSegment) Msg() *snappipb.BgpSrteSegment {
+	return obj.obj
+}
+
+func (obj *bgpSrteSegment) SetMsg(msg *snappipb.BgpSrteSegment) BgpSrteSegment {
+	obj.obj = msg
+	return obj
+}
+
+func (obj *bgpSrteSegment) ToPbText() string {
+	vErr := obj.Validate()
+	if vErr != nil {
+		panic(vErr)
+	}
+	return proto.MarshalTextString(obj.Msg())
+}
+
+func (obj *bgpSrteSegment) FromPbText(value string) error {
+	retObj := proto.UnmarshalText(value, obj.Msg())
+	if retObj != nil {
+		return retObj
+	}
+	vErr := obj.Validate(true)
+	if vErr != nil {
+		return vErr
+	}
+	return retObj
+}
+
+func (obj *bgpSrteSegment) ToYaml() string {
+	vErr := obj.Validate()
+	if vErr != nil {
+		panic(vErr)
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(obj.Msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *bgpSrteSegment) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: false,
+	}
+	retObj := opts.Unmarshal([]byte(data), obj.Msg())
+	if retObj != nil {
+		return retObj
+	}
+	vErr := obj.Validate(true)
+	if vErr != nil {
+		return vErr
+	}
+	return retObj
+}
+
+func (obj *bgpSrteSegment) ToJson() string {
+	vErr := obj.Validate()
+	if vErr != nil {
+		panic(vErr)
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+		Indent:          "  ",
+	}
+	data, err := opts.Marshal(obj.Msg())
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *bgpSrteSegment) FromJson(value string) error {
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: false,
+	}
+	retObj := opts.Unmarshal([]byte(value), obj.Msg())
+	if retObj != nil {
+		return retObj
+	}
+	err := obj.Validate(true)
+	if err != nil {
+		return err
+	}
+	return retObj
+}
+
+func (obj *bgpSrteSegment) Validate(defaults ...bool) error {
+	var set_default bool = false
+	if len(defaults) > 0 {
+		set_default = defaults[0]
+	}
+	obj.validateObj(set_default)
+	return validationResult()
+}
+
+type BgpSrteSegment interface {
+	Msg() *snappipb.BgpSrteSegment
+	SetMsg(*snappipb.BgpSrteSegment) BgpSrteSegment
+	ToPbText() string
+	ToYaml() string
+	ToJson() string
+	FromPbText(value string) error
+	FromYaml(value string) error
+	FromJson(value string) error
+	Validate(defaults ...bool) error
+	validateObj(set_default bool)
+	setDefault()
+	SegmentType() BgpSrteSegmentSegmentTypeEnum
+	SetSegmentType(value BgpSrteSegmentSegmentTypeEnum) BgpSrteSegment
+	TypeA() BgpSrteSegmentATypeSubTlv
+	HasTypeA() bool
+	TypeB() BgpSrteSegmentBTypeSubTlv
+	HasTypeB() bool
+	TypeC() BgpSrteSegmentCTypeSubTlv
+	HasTypeC() bool
+	TypeD() BgpSrteSegmentDTypeSubTlv
+	HasTypeD() bool
+	TypeE() BgpSrteSegmentETypeSubTlv
+	HasTypeE() bool
+	TypeF() BgpSrteSegmentFTypeSubTlv
+	HasTypeF() bool
+	TypeG() BgpSrteSegmentGTypeSubTlv
+	HasTypeG() bool
+	TypeH() BgpSrteSegmentHTypeSubTlv
+	HasTypeH() bool
+	TypeI() BgpSrteSegmentITypeSubTlv
+	HasTypeI() bool
+	TypeJ() BgpSrteSegmentJTypeSubTlv
+	HasTypeJ() bool
+	TypeK() BgpSrteSegmentKTypeSubTlv
+	HasTypeK() bool
+	Name() string
+	SetName(value string) BgpSrteSegment
+	Active() bool
+	SetActive(value bool) BgpSrteSegment
+	HasActive() bool
+}
+
+type BgpSrteSegmentSegmentTypeEnum string
+
+var BgpSrteSegmentSegmentType = struct {
+	TYPE_A BgpSrteSegmentSegmentTypeEnum
+	TYPE_B BgpSrteSegmentSegmentTypeEnum
+	TYPE_C BgpSrteSegmentSegmentTypeEnum
+	TYPE_D BgpSrteSegmentSegmentTypeEnum
+	TYPE_E BgpSrteSegmentSegmentTypeEnum
+	TYPE_F BgpSrteSegmentSegmentTypeEnum
+	TYPE_G BgpSrteSegmentSegmentTypeEnum
+	TYPE_H BgpSrteSegmentSegmentTypeEnum
+	TYPE_I BgpSrteSegmentSegmentTypeEnum
+	TYPE_J BgpSrteSegmentSegmentTypeEnum
+	TYPE_K BgpSrteSegmentSegmentTypeEnum
+}{
+	TYPE_A: BgpSrteSegmentSegmentTypeEnum("type_a"),
+	TYPE_B: BgpSrteSegmentSegmentTypeEnum("type_b"),
+	TYPE_C: BgpSrteSegmentSegmentTypeEnum("type_c"),
+	TYPE_D: BgpSrteSegmentSegmentTypeEnum("type_d"),
+	TYPE_E: BgpSrteSegmentSegmentTypeEnum("type_e"),
+	TYPE_F: BgpSrteSegmentSegmentTypeEnum("type_f"),
+	TYPE_G: BgpSrteSegmentSegmentTypeEnum("type_g"),
+	TYPE_H: BgpSrteSegmentSegmentTypeEnum("type_h"),
+	TYPE_I: BgpSrteSegmentSegmentTypeEnum("type_i"),
+	TYPE_J: BgpSrteSegmentSegmentTypeEnum("type_j"),
+	TYPE_K: BgpSrteSegmentSegmentTypeEnum("type_k"),
+}
+
+func (obj *bgpSrteSegment) SegmentType() BgpSrteSegmentSegmentTypeEnum {
+	return BgpSrteSegmentSegmentTypeEnum(obj.obj.SegmentType.Enum().String())
+}
+
+func (obj *bgpSrteSegment) SetSegmentType(value BgpSrteSegmentSegmentTypeEnum) BgpSrteSegment {
+	intValue, ok := snappipb.BgpSrteSegment_SegmentType_Enum_value[string(value)]
+	if !ok {
+		validation = append(validation, fmt.Sprintf(
+			"%s is not a valid choice on BgpSrteSegmentSegmentTypeEnum", string(value)))
+		return obj
+	}
+	obj.obj.SegmentType = snappipb.BgpSrteSegment_SegmentType_Enum(intValue)
+	return obj
+}
+
+// TypeA returns a BgpSrteSegmentATypeSubTlv
+//  description is TBD
+func (obj *bgpSrteSegment) TypeA() BgpSrteSegmentATypeSubTlv {
+
+	if obj.obj.TypeA == nil {
+		obj.obj.TypeA = &snappipb.BgpSrteSegmentATypeSubTlv{}
+		newObj := &bgpSrteSegmentATypeSubTlv{obj: obj.obj.TypeA}
+		newObj.setDefault()
+		return newObj
+	}
+	return &bgpSrteSegmentATypeSubTlv{obj: obj.obj.TypeA}
+}
+
+// TypeA returns a BgpSrteSegmentATypeSubTlv
+//  description is TBD
+func (obj *bgpSrteSegment) HasTypeA() bool {
+	return obj.obj.TypeA != nil
+}
+
+// TypeB returns a BgpSrteSegmentBTypeSubTlv
+//  description is TBD
+func (obj *bgpSrteSegment) TypeB() BgpSrteSegmentBTypeSubTlv {
+
+	if obj.obj.TypeB == nil {
+		obj.obj.TypeB = &snappipb.BgpSrteSegmentBTypeSubTlv{}
+		newObj := &bgpSrteSegmentBTypeSubTlv{obj: obj.obj.TypeB}
+		newObj.setDefault()
+		return newObj
+	}
+	return &bgpSrteSegmentBTypeSubTlv{obj: obj.obj.TypeB}
+}
+
+// TypeB returns a BgpSrteSegmentBTypeSubTlv
+//  description is TBD
+func (obj *bgpSrteSegment) HasTypeB() bool {
+	return obj.obj.TypeB != nil
+}
+
+// TypeC returns a BgpSrteSegmentCTypeSubTlv
+//  description is TBD
+func (obj *bgpSrteSegment) TypeC() BgpSrteSegmentCTypeSubTlv {
+
+	if obj.obj.TypeC == nil {
+		obj.obj.TypeC = &snappipb.BgpSrteSegmentCTypeSubTlv{}
+		newObj := &bgpSrteSegmentCTypeSubTlv{obj: obj.obj.TypeC}
+		newObj.setDefault()
+		return newObj
+	}
+	return &bgpSrteSegmentCTypeSubTlv{obj: obj.obj.TypeC}
+}
+
+// TypeC returns a BgpSrteSegmentCTypeSubTlv
+//  description is TBD
+func (obj *bgpSrteSegment) HasTypeC() bool {
+	return obj.obj.TypeC != nil
+}
+
+// TypeD returns a BgpSrteSegmentDTypeSubTlv
+//  description is TBD
+func (obj *bgpSrteSegment) TypeD() BgpSrteSegmentDTypeSubTlv {
+
+	if obj.obj.TypeD == nil {
+		obj.obj.TypeD = &snappipb.BgpSrteSegmentDTypeSubTlv{}
+		newObj := &bgpSrteSegmentDTypeSubTlv{obj: obj.obj.TypeD}
+		newObj.setDefault()
+		return newObj
+	}
+	return &bgpSrteSegmentDTypeSubTlv{obj: obj.obj.TypeD}
+}
+
+// TypeD returns a BgpSrteSegmentDTypeSubTlv
+//  description is TBD
+func (obj *bgpSrteSegment) HasTypeD() bool {
+	return obj.obj.TypeD != nil
+}
+
+// TypeE returns a BgpSrteSegmentETypeSubTlv
+//  description is TBD
+func (obj *bgpSrteSegment) TypeE() BgpSrteSegmentETypeSubTlv {
+
+	if obj.obj.TypeE == nil {
+		obj.obj.TypeE = &snappipb.BgpSrteSegmentETypeSubTlv{}
+		newObj := &bgpSrteSegmentETypeSubTlv{obj: obj.obj.TypeE}
+		newObj.setDefault()
+		return newObj
+	}
+	return &bgpSrteSegmentETypeSubTlv{obj: obj.obj.TypeE}
+}
+
+// TypeE returns a BgpSrteSegmentETypeSubTlv
+//  description is TBD
+func (obj *bgpSrteSegment) HasTypeE() bool {
+	return obj.obj.TypeE != nil
+}
+
+// TypeF returns a BgpSrteSegmentFTypeSubTlv
+//  description is TBD
+func (obj *bgpSrteSegment) TypeF() BgpSrteSegmentFTypeSubTlv {
+
+	if obj.obj.TypeF == nil {
+		obj.obj.TypeF = &snappipb.BgpSrteSegmentFTypeSubTlv{}
+		newObj := &bgpSrteSegmentFTypeSubTlv{obj: obj.obj.TypeF}
+		newObj.setDefault()
+		return newObj
+	}
+	return &bgpSrteSegmentFTypeSubTlv{obj: obj.obj.TypeF}
+}
+
+// TypeF returns a BgpSrteSegmentFTypeSubTlv
+//  description is TBD
+func (obj *bgpSrteSegment) HasTypeF() bool {
+	return obj.obj.TypeF != nil
+}
+
+// TypeG returns a BgpSrteSegmentGTypeSubTlv
+//  description is TBD
+func (obj *bgpSrteSegment) TypeG() BgpSrteSegmentGTypeSubTlv {
+
+	if obj.obj.TypeG == nil {
+		obj.obj.TypeG = &snappipb.BgpSrteSegmentGTypeSubTlv{}
+		newObj := &bgpSrteSegmentGTypeSubTlv{obj: obj.obj.TypeG}
+		newObj.setDefault()
+		return newObj
+	}
+	return &bgpSrteSegmentGTypeSubTlv{obj: obj.obj.TypeG}
+}
+
+// TypeG returns a BgpSrteSegmentGTypeSubTlv
+//  description is TBD
+func (obj *bgpSrteSegment) HasTypeG() bool {
+	return obj.obj.TypeG != nil
+}
+
+// TypeH returns a BgpSrteSegmentHTypeSubTlv
+//  description is TBD
+func (obj *bgpSrteSegment) TypeH() BgpSrteSegmentHTypeSubTlv {
+
+	if obj.obj.TypeH == nil {
+		obj.obj.TypeH = &snappipb.BgpSrteSegmentHTypeSubTlv{}
+		newObj := &bgpSrteSegmentHTypeSubTlv{obj: obj.obj.TypeH}
+		newObj.setDefault()
+		return newObj
+	}
+	return &bgpSrteSegmentHTypeSubTlv{obj: obj.obj.TypeH}
+}
+
+// TypeH returns a BgpSrteSegmentHTypeSubTlv
+//  description is TBD
+func (obj *bgpSrteSegment) HasTypeH() bool {
+	return obj.obj.TypeH != nil
+}
+
+// TypeI returns a BgpSrteSegmentITypeSubTlv
+//  description is TBD
+func (obj *bgpSrteSegment) TypeI() BgpSrteSegmentITypeSubTlv {
+
+	if obj.obj.TypeI == nil {
+		obj.obj.TypeI = &snappipb.BgpSrteSegmentITypeSubTlv{}
+		newObj := &bgpSrteSegmentITypeSubTlv{obj: obj.obj.TypeI}
+		newObj.setDefault()
+		return newObj
+	}
+	return &bgpSrteSegmentITypeSubTlv{obj: obj.obj.TypeI}
+}
+
+// TypeI returns a BgpSrteSegmentITypeSubTlv
+//  description is TBD
+func (obj *bgpSrteSegment) HasTypeI() bool {
+	return obj.obj.TypeI != nil
+}
+
+// TypeJ returns a BgpSrteSegmentJTypeSubTlv
+//  description is TBD
+func (obj *bgpSrteSegment) TypeJ() BgpSrteSegmentJTypeSubTlv {
+
+	if obj.obj.TypeJ == nil {
+		obj.obj.TypeJ = &snappipb.BgpSrteSegmentJTypeSubTlv{}
+		newObj := &bgpSrteSegmentJTypeSubTlv{obj: obj.obj.TypeJ}
+		newObj.setDefault()
+		return newObj
+	}
+	return &bgpSrteSegmentJTypeSubTlv{obj: obj.obj.TypeJ}
+}
+
+// TypeJ returns a BgpSrteSegmentJTypeSubTlv
+//  description is TBD
+func (obj *bgpSrteSegment) HasTypeJ() bool {
+	return obj.obj.TypeJ != nil
+}
+
+// TypeK returns a BgpSrteSegmentKTypeSubTlv
+//  description is TBD
+func (obj *bgpSrteSegment) TypeK() BgpSrteSegmentKTypeSubTlv {
+
+	if obj.obj.TypeK == nil {
+		obj.obj.TypeK = &snappipb.BgpSrteSegmentKTypeSubTlv{}
+		newObj := &bgpSrteSegmentKTypeSubTlv{obj: obj.obj.TypeK}
+		newObj.setDefault()
+		return newObj
+	}
+	return &bgpSrteSegmentKTypeSubTlv{obj: obj.obj.TypeK}
+}
+
+// TypeK returns a BgpSrteSegmentKTypeSubTlv
+//  description is TBD
+func (obj *bgpSrteSegment) HasTypeK() bool {
+	return obj.obj.TypeK != nil
+}
+
+// Name returns a string
+//  Globally unique name of an object. It also serves as the primary key for arrays of objects.
+func (obj *bgpSrteSegment) Name() string {
+	return obj.obj.Name
+}
+
+// SetName sets the string value in the BgpSrteSegment object
+//  Globally unique name of an object. It also serves as the primary key for arrays of objects.
+func (obj *bgpSrteSegment) SetName(value string) BgpSrteSegment {
+	obj.obj.Name = value
+
+	return obj
+}
+
+// Active returns a bool
+//  If enabled means that this part of the configuration including any active 'children' nodes will be advertised to peer.  If disabled, this means that though config is present, it is not taking any part of the test but can be activated at run-time to advertise just this part of the configuration to the peer.
+func (obj *bgpSrteSegment) Active() bool {
+	return *obj.obj.Active
+}
+
+// Active returns a bool
+//  If enabled means that this part of the configuration including any active 'children' nodes will be advertised to peer.  If disabled, this means that though config is present, it is not taking any part of the test but can be activated at run-time to advertise just this part of the configuration to the peer.
+func (obj *bgpSrteSegment) HasActive() bool {
+	return obj.obj.Active != nil
+}
+
+// SetActive sets the bool value in the BgpSrteSegment object
+//  If enabled means that this part of the configuration including any active 'children' nodes will be advertised to peer.  If disabled, this means that though config is present, it is not taking any part of the test but can be activated at run-time to advertise just this part of the configuration to the peer.
+func (obj *bgpSrteSegment) SetActive(value bool) BgpSrteSegment {
+	obj.obj.Active = &value
+
+	return obj
+}
+
+func (obj *bgpSrteSegment) validateObj(set_default bool) {
+	if set_default {
+		obj.setDefault()
+	}
+
+	// SegmentType required
+	if obj.obj.SegmentType.Number() == 0 {
+		validation = append(
+			validation, fmt.Sprintf("SegmentType is required field on BgpSrteSegment and got value %s", obj.obj.SegmentType.String()))
+	}
+
+	if obj.obj.TypeA != nil {
+		obj.TypeA().validateObj(set_default)
+	}
+
+	if obj.obj.TypeB != nil {
+		obj.TypeB().validateObj(set_default)
+	}
+
+	if obj.obj.TypeC != nil {
+		obj.TypeC().validateObj(set_default)
+	}
+
+	if obj.obj.TypeD != nil {
+		obj.TypeD().validateObj(set_default)
+	}
+
+	if obj.obj.TypeE != nil {
+		obj.TypeE().validateObj(set_default)
+	}
+
+	if obj.obj.TypeF != nil {
+		obj.TypeF().validateObj(set_default)
+	}
+
+	if obj.obj.TypeG != nil {
+		obj.TypeG().validateObj(set_default)
+	}
+
+	if obj.obj.TypeH != nil {
+		obj.TypeH().validateObj(set_default)
+	}
+
+	if obj.obj.TypeI != nil {
+		obj.TypeI().validateObj(set_default)
+	}
+
+	if obj.obj.TypeJ != nil {
+		obj.TypeJ().validateObj(set_default)
+	}
+
+	if obj.obj.TypeK != nil {
+		obj.TypeK().validateObj(set_default)
+	}
+
+	// Name required
+	if obj.obj.Name == "" {
+		validation = append(validation, "Name is required field on interface BgpSrteSegment")
+	}
+}
+
+func (obj *bgpSrteSegment) setDefault() {
+	if obj.obj.Active == nil {
+		obj.SetActive(true)
+	}
+
+}
+
+type bgpSrteSegmentATypeSubTlv struct {
+	obj *snappipb.BgpSrteSegmentATypeSubTlv
+}
+
+func (obj *bgpSrteSegmentATypeSubTlv) Msg() *snappipb.BgpSrteSegmentATypeSubTlv {
+	return obj.obj
+}
+
+func (obj *bgpSrteSegmentATypeSubTlv) SetMsg(msg *snappipb.BgpSrteSegmentATypeSubTlv) BgpSrteSegmentATypeSubTlv {
+	obj.obj = msg
+	return obj
+}
+
+func (obj *bgpSrteSegmentATypeSubTlv) ToPbText() string {
+	vErr := obj.Validate()
+	if vErr != nil {
+		panic(vErr)
+	}
+	return proto.MarshalTextString(obj.Msg())
+}
+
+func (obj *bgpSrteSegmentATypeSubTlv) FromPbText(value string) error {
+	retObj := proto.UnmarshalText(value, obj.Msg())
+	if retObj != nil {
+		return retObj
+	}
+	vErr := obj.Validate(true)
+	if vErr != nil {
+		return vErr
+	}
+	return retObj
+}
+
+func (obj *bgpSrteSegmentATypeSubTlv) ToYaml() string {
+	vErr := obj.Validate()
+	if vErr != nil {
+		panic(vErr)
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(obj.Msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *bgpSrteSegmentATypeSubTlv) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: false,
+	}
+	retObj := opts.Unmarshal([]byte(data), obj.Msg())
+	if retObj != nil {
+		return retObj
+	}
+	vErr := obj.Validate(true)
+	if vErr != nil {
+		return vErr
+	}
+	return retObj
+}
+
+func (obj *bgpSrteSegmentATypeSubTlv) ToJson() string {
+	vErr := obj.Validate()
+	if vErr != nil {
+		panic(vErr)
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+		Indent:          "  ",
+	}
+	data, err := opts.Marshal(obj.Msg())
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *bgpSrteSegmentATypeSubTlv) FromJson(value string) error {
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: false,
+	}
+	retObj := opts.Unmarshal([]byte(value), obj.Msg())
+	if retObj != nil {
+		return retObj
+	}
+	err := obj.Validate(true)
+	if err != nil {
+		return err
+	}
+	return retObj
+}
+
+func (obj *bgpSrteSegmentATypeSubTlv) Validate(defaults ...bool) error {
+	var set_default bool = false
+	if len(defaults) > 0 {
+		set_default = defaults[0]
+	}
+	obj.validateObj(set_default)
+	return validationResult()
+}
+
+type BgpSrteSegmentATypeSubTlv interface {
+	Msg() *snappipb.BgpSrteSegmentATypeSubTlv
+	SetMsg(*snappipb.BgpSrteSegmentATypeSubTlv) BgpSrteSegmentATypeSubTlv
+	ToPbText() string
+	ToYaml() string
+	ToJson() string
+	FromPbText(value string) error
+	FromYaml(value string) error
+	FromJson(value string) error
+	Validate(defaults ...bool) error
+	validateObj(set_default bool)
+	setDefault()
+	Flags() string
+	SetFlags(value string) BgpSrteSegmentATypeSubTlv
+	HasFlags() bool
+	Label() int32
+	SetLabel(value int32) BgpSrteSegmentATypeSubTlv
+	HasLabel() bool
+	Tc() int32
+	SetTc(value int32) BgpSrteSegmentATypeSubTlv
+	HasTc() bool
+	SBit() bool
+	SetSBit(value bool) BgpSrteSegmentATypeSubTlv
+	HasSBit() bool
+	Ttl() int32
+	SetTtl(value int32) BgpSrteSegmentATypeSubTlv
+	HasTtl() bool
+}
+
+// Flags returns a string
+//  One octet bitmap for flags including V-Flag, A-Flag, S-Flag, B-Flag etc. as defined in https://datatracker.ietf.org/doc/html/draft-ietf-idr-segment-routing-te-policy-13#section-2.4.4.2.12
+func (obj *bgpSrteSegmentATypeSubTlv) Flags() string {
+	return *obj.obj.Flags
+}
+
+// Flags returns a string
+//  One octet bitmap for flags including V-Flag, A-Flag, S-Flag, B-Flag etc. as defined in https://datatracker.ietf.org/doc/html/draft-ietf-idr-segment-routing-te-policy-13#section-2.4.4.2.12
+func (obj *bgpSrteSegmentATypeSubTlv) HasFlags() bool {
+	return obj.obj.Flags != nil
+}
+
+// SetFlags sets the string value in the BgpSrteSegmentATypeSubTlv object
+//  One octet bitmap for flags including V-Flag, A-Flag, S-Flag, B-Flag etc. as defined in https://datatracker.ietf.org/doc/html/draft-ietf-idr-segment-routing-te-policy-13#section-2.4.4.2.12
+func (obj *bgpSrteSegmentATypeSubTlv) SetFlags(value string) BgpSrteSegmentATypeSubTlv {
+	obj.obj.Flags = &value
+
+	return obj
+}
+
+// Label returns a int32
+//  Label value in [0, 2^20 -1].
+func (obj *bgpSrteSegmentATypeSubTlv) Label() int32 {
+	return *obj.obj.Label
+}
+
+// Label returns a int32
+//  Label value in [0, 2^20 -1].
+func (obj *bgpSrteSegmentATypeSubTlv) HasLabel() bool {
+	return obj.obj.Label != nil
+}
+
+// SetLabel sets the int32 value in the BgpSrteSegmentATypeSubTlv object
+//  Label value in [0, 2^20 -1].
+func (obj *bgpSrteSegmentATypeSubTlv) SetLabel(value int32) BgpSrteSegmentATypeSubTlv {
+	obj.obj.Label = &value
+
+	return obj
+}
+
+// Tc returns a int32
+//  Traffic class in bits.
+func (obj *bgpSrteSegmentATypeSubTlv) Tc() int32 {
+	return *obj.obj.Tc
+}
+
+// Tc returns a int32
+//  Traffic class in bits.
+func (obj *bgpSrteSegmentATypeSubTlv) HasTc() bool {
+	return obj.obj.Tc != nil
+}
+
+// SetTc sets the int32 value in the BgpSrteSegmentATypeSubTlv object
+//  Traffic class in bits.
+func (obj *bgpSrteSegmentATypeSubTlv) SetTc(value int32) BgpSrteSegmentATypeSubTlv {
+	obj.obj.Tc = &value
+
+	return obj
+}
+
+// SBit returns a bool
+//  Bottom-of-Stack bit.
+func (obj *bgpSrteSegmentATypeSubTlv) SBit() bool {
+	return *obj.obj.SBit
+}
+
+// SBit returns a bool
+//  Bottom-of-Stack bit.
+func (obj *bgpSrteSegmentATypeSubTlv) HasSBit() bool {
+	return obj.obj.SBit != nil
+}
+
+// SetSBit sets the bool value in the BgpSrteSegmentATypeSubTlv object
+//  Bottom-of-Stack bit.
+func (obj *bgpSrteSegmentATypeSubTlv) SetSBit(value bool) BgpSrteSegmentATypeSubTlv {
+	obj.obj.SBit = &value
+
+	return obj
+}
+
+// Ttl returns a int32
+//  Time To Live.
+func (obj *bgpSrteSegmentATypeSubTlv) Ttl() int32 {
+	return *obj.obj.Ttl
+}
+
+// Ttl returns a int32
+//  Time To Live.
+func (obj *bgpSrteSegmentATypeSubTlv) HasTtl() bool {
+	return obj.obj.Ttl != nil
+}
+
+// SetTtl sets the int32 value in the BgpSrteSegmentATypeSubTlv object
+//  Time To Live.
+func (obj *bgpSrteSegmentATypeSubTlv) SetTtl(value int32) BgpSrteSegmentATypeSubTlv {
+	obj.obj.Ttl = &value
+
+	return obj
+}
+
+func (obj *bgpSrteSegmentATypeSubTlv) validateObj(set_default bool) {
+	if set_default {
+		obj.setDefault()
+	}
+
+	if obj.obj.Flags != nil {
+		err := validateHex(obj.Flags())
+		if err != nil {
+			validation = append(validation, fmt.Sprintf("%s %s", err.Error(), "on Flags BgpSrteSegmentATypeSubTlv"))
+		}
+	}
+
+	if obj.obj.Label != nil {
+		if *obj.obj.Label < 0 || *obj.obj.Label > 1048575 {
+			validation = append(
+				validation, fmt.Sprintf("0 <= BgpSrteSegmentATypeSubTlv.Label <= 1048575 but Got %d", *obj.obj.Label))
+		}
+
+	}
+
+	if obj.obj.Tc != nil {
+		if *obj.obj.Tc < 0 || *obj.obj.Tc > 7 {
+			validation = append(
+				validation, fmt.Sprintf("0 <= BgpSrteSegmentATypeSubTlv.Tc <= 7 but Got %d", *obj.obj.Tc))
+		}
+
+	}
+
+	if obj.obj.Ttl != nil {
+		if *obj.obj.Ttl < 0 || *obj.obj.Ttl > 255 {
+			validation = append(
+				validation, fmt.Sprintf("0 <= BgpSrteSegmentATypeSubTlv.Ttl <= 255 but Got %d", *obj.obj.Ttl))
+		}
+
+	}
+
+}
+
+func (obj *bgpSrteSegmentATypeSubTlv) setDefault() {
+
+}
+
+type bgpSrteSegmentBTypeSubTlv struct {
+	obj *snappipb.BgpSrteSegmentBTypeSubTlv
+}
+
+func (obj *bgpSrteSegmentBTypeSubTlv) Msg() *snappipb.BgpSrteSegmentBTypeSubTlv {
+	return obj.obj
+}
+
+func (obj *bgpSrteSegmentBTypeSubTlv) SetMsg(msg *snappipb.BgpSrteSegmentBTypeSubTlv) BgpSrteSegmentBTypeSubTlv {
+	obj.obj = msg
+	return obj
+}
+
+func (obj *bgpSrteSegmentBTypeSubTlv) ToPbText() string {
+	vErr := obj.Validate()
+	if vErr != nil {
+		panic(vErr)
+	}
+	return proto.MarshalTextString(obj.Msg())
+}
+
+func (obj *bgpSrteSegmentBTypeSubTlv) FromPbText(value string) error {
+	retObj := proto.UnmarshalText(value, obj.Msg())
+	if retObj != nil {
+		return retObj
+	}
+	vErr := obj.Validate(true)
+	if vErr != nil {
+		return vErr
+	}
+	return retObj
+}
+
+func (obj *bgpSrteSegmentBTypeSubTlv) ToYaml() string {
+	vErr := obj.Validate()
+	if vErr != nil {
+		panic(vErr)
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(obj.Msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *bgpSrteSegmentBTypeSubTlv) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: false,
+	}
+	retObj := opts.Unmarshal([]byte(data), obj.Msg())
+	if retObj != nil {
+		return retObj
+	}
+	vErr := obj.Validate(true)
+	if vErr != nil {
+		return vErr
+	}
+	return retObj
+}
+
+func (obj *bgpSrteSegmentBTypeSubTlv) ToJson() string {
+	vErr := obj.Validate()
+	if vErr != nil {
+		panic(vErr)
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+		Indent:          "  ",
+	}
+	data, err := opts.Marshal(obj.Msg())
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *bgpSrteSegmentBTypeSubTlv) FromJson(value string) error {
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: false,
+	}
+	retObj := opts.Unmarshal([]byte(value), obj.Msg())
+	if retObj != nil {
+		return retObj
+	}
+	err := obj.Validate(true)
+	if err != nil {
+		return err
+	}
+	return retObj
+}
+
+func (obj *bgpSrteSegmentBTypeSubTlv) Validate(defaults ...bool) error {
+	var set_default bool = false
+	if len(defaults) > 0 {
+		set_default = defaults[0]
+	}
+	obj.validateObj(set_default)
+	return validationResult()
+}
+
+type BgpSrteSegmentBTypeSubTlv interface {
+	Msg() *snappipb.BgpSrteSegmentBTypeSubTlv
+	SetMsg(*snappipb.BgpSrteSegmentBTypeSubTlv) BgpSrteSegmentBTypeSubTlv
+	ToPbText() string
+	ToYaml() string
+	ToJson() string
+	FromPbText(value string) error
+	FromYaml(value string) error
+	FromJson(value string) error
+	Validate(defaults ...bool) error
+	validateObj(set_default bool)
+	setDefault()
+	Flags() string
+	SetFlags(value string) BgpSrteSegmentBTypeSubTlv
+	HasFlags() bool
+	Srv6Sid() string
+	SetSrv6Sid(value string) BgpSrteSegmentBTypeSubTlv
+	Srv6SidEndpointBehavior() BgpSrteSRv6SIDEndpointBehaviorAndStructure
+	HasSrv6SidEndpointBehavior() bool
+}
+
+// Flags returns a string
+//  One octet bitmap for flags including V-Flag, A-Flag, S-Flag, B-Flag etc. as defined in https://datatracker.ietf.org/doc/html/draft-ietf-idr-segment-routing-te-policy-13#section-2.4.4.2.12
+func (obj *bgpSrteSegmentBTypeSubTlv) Flags() string {
+	return *obj.obj.Flags
+}
+
+// Flags returns a string
+//  One octet bitmap for flags including V-Flag, A-Flag, S-Flag, B-Flag etc. as defined in https://datatracker.ietf.org/doc/html/draft-ietf-idr-segment-routing-te-policy-13#section-2.4.4.2.12
+func (obj *bgpSrteSegmentBTypeSubTlv) HasFlags() bool {
+	return obj.obj.Flags != nil
+}
+
+// SetFlags sets the string value in the BgpSrteSegmentBTypeSubTlv object
+//  One octet bitmap for flags including V-Flag, A-Flag, S-Flag, B-Flag etc. as defined in https://datatracker.ietf.org/doc/html/draft-ietf-idr-segment-routing-te-policy-13#section-2.4.4.2.12
+func (obj *bgpSrteSegmentBTypeSubTlv) SetFlags(value string) BgpSrteSegmentBTypeSubTlv {
+	obj.obj.Flags = &value
+
+	return obj
+}
+
+// Srv6Sid returns a string
+//  SRv6 SID.
+func (obj *bgpSrteSegmentBTypeSubTlv) Srv6Sid() string {
+	return obj.obj.Srv6Sid
+}
+
+// SetSrv6Sid sets the string value in the BgpSrteSegmentBTypeSubTlv object
+//  SRv6 SID.
+func (obj *bgpSrteSegmentBTypeSubTlv) SetSrv6Sid(value string) BgpSrteSegmentBTypeSubTlv {
+	obj.obj.Srv6Sid = value
+
+	return obj
+}
+
+// Srv6SidEndpointBehavior returns a BgpSrteSRv6SIDEndpointBehaviorAndStructure
+//  Optional SRv6 Endpoint Behavior and SID Structure.
+func (obj *bgpSrteSegmentBTypeSubTlv) Srv6SidEndpointBehavior() BgpSrteSRv6SIDEndpointBehaviorAndStructure {
+
+	if obj.obj.Srv6SidEndpointBehavior == nil {
+		obj.obj.Srv6SidEndpointBehavior = &snappipb.BgpSrteSRv6SIDEndpointBehaviorAndStructure{}
+		newObj := &bgpSrteSRv6SIDEndpointBehaviorAndStructure{obj: obj.obj.Srv6SidEndpointBehavior}
+		newObj.setDefault()
+		return newObj
+	}
+	return &bgpSrteSRv6SIDEndpointBehaviorAndStructure{obj: obj.obj.Srv6SidEndpointBehavior}
+}
+
+// Srv6SidEndpointBehavior returns a BgpSrteSRv6SIDEndpointBehaviorAndStructure
+//  Optional SRv6 Endpoint Behavior and SID Structure.
+func (obj *bgpSrteSegmentBTypeSubTlv) HasSrv6SidEndpointBehavior() bool {
+	return obj.obj.Srv6SidEndpointBehavior != nil
+}
+
+func (obj *bgpSrteSegmentBTypeSubTlv) validateObj(set_default bool) {
+	if set_default {
+		obj.setDefault()
+	}
+
+	if obj.obj.Flags != nil {
+		err := validateHex(obj.Flags())
+		if err != nil {
+			validation = append(validation, fmt.Sprintf("%s %s", err.Error(), "on Flags BgpSrteSegmentBTypeSubTlv"))
+		}
+	}
+
+	// Srv6Sid required
+	if obj.obj.Srv6Sid == "" {
+		validation = append(validation, "Srv6Sid is required field on interface BgpSrteSegmentBTypeSubTlv")
+	} else {
+		err := validateIpv6(obj.Srv6Sid())
+		if err != nil {
+			validation = append(validation, fmt.Sprintf("%s %s", err.Error(), "on Srv6Sid BgpSrteSegmentBTypeSubTlv"))
+		}
+	}
+
+	if obj.obj.Srv6SidEndpointBehavior != nil {
+		obj.Srv6SidEndpointBehavior().validateObj(set_default)
+	}
+}
+
+func (obj *bgpSrteSegmentBTypeSubTlv) setDefault() {
+
+}
+
+type bgpSrteSegmentCTypeSubTlv struct {
+	obj *snappipb.BgpSrteSegmentCTypeSubTlv
+}
+
+func (obj *bgpSrteSegmentCTypeSubTlv) Msg() *snappipb.BgpSrteSegmentCTypeSubTlv {
+	return obj.obj
+}
+
+func (obj *bgpSrteSegmentCTypeSubTlv) SetMsg(msg *snappipb.BgpSrteSegmentCTypeSubTlv) BgpSrteSegmentCTypeSubTlv {
+	obj.obj = msg
+	return obj
+}
+
+func (obj *bgpSrteSegmentCTypeSubTlv) ToPbText() string {
+	vErr := obj.Validate()
+	if vErr != nil {
+		panic(vErr)
+	}
+	return proto.MarshalTextString(obj.Msg())
+}
+
+func (obj *bgpSrteSegmentCTypeSubTlv) FromPbText(value string) error {
+	retObj := proto.UnmarshalText(value, obj.Msg())
+	if retObj != nil {
+		return retObj
+	}
+	vErr := obj.Validate(true)
+	if vErr != nil {
+		return vErr
+	}
+	return retObj
+}
+
+func (obj *bgpSrteSegmentCTypeSubTlv) ToYaml() string {
+	vErr := obj.Validate()
+	if vErr != nil {
+		panic(vErr)
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(obj.Msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *bgpSrteSegmentCTypeSubTlv) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: false,
+	}
+	retObj := opts.Unmarshal([]byte(data), obj.Msg())
+	if retObj != nil {
+		return retObj
+	}
+	vErr := obj.Validate(true)
+	if vErr != nil {
+		return vErr
+	}
+	return retObj
+}
+
+func (obj *bgpSrteSegmentCTypeSubTlv) ToJson() string {
+	vErr := obj.Validate()
+	if vErr != nil {
+		panic(vErr)
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+		Indent:          "  ",
+	}
+	data, err := opts.Marshal(obj.Msg())
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *bgpSrteSegmentCTypeSubTlv) FromJson(value string) error {
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: false,
+	}
+	retObj := opts.Unmarshal([]byte(value), obj.Msg())
+	if retObj != nil {
+		return retObj
+	}
+	err := obj.Validate(true)
+	if err != nil {
+		return err
+	}
+	return retObj
+}
+
+func (obj *bgpSrteSegmentCTypeSubTlv) Validate(defaults ...bool) error {
+	var set_default bool = false
+	if len(defaults) > 0 {
+		set_default = defaults[0]
+	}
+	obj.validateObj(set_default)
+	return validationResult()
+}
+
+type BgpSrteSegmentCTypeSubTlv interface {
+	Msg() *snappipb.BgpSrteSegmentCTypeSubTlv
+	SetMsg(*snappipb.BgpSrteSegmentCTypeSubTlv) BgpSrteSegmentCTypeSubTlv
+	ToPbText() string
+	ToYaml() string
+	ToJson() string
+	FromPbText(value string) error
+	FromYaml(value string) error
+	FromJson(value string) error
+	Validate(defaults ...bool) error
+	validateObj(set_default bool)
+	setDefault()
+	Flags() string
+	SetFlags(value string) BgpSrteSegmentCTypeSubTlv
+	HasFlags() bool
+	SrAlgorithm() int32
+	SetSrAlgorithm(value int32) BgpSrteSegmentCTypeSubTlv
+	HasSrAlgorithm() bool
+	Ipv4NodeAddress() string
+	SetIpv4NodeAddress(value string) BgpSrteSegmentCTypeSubTlv
+	SrMplsSid() BgpSrteSrMplsSid
+	HasSrMplsSid() bool
+}
+
+// Flags returns a string
+//  One octet bitmap for flags including V-Flag, A-Flag, S-Flag, B-Flag etc. as defined in https://datatracker.ietf.org/doc/html/draft-ietf-idr-segment-routing-te-policy-13#section-2.4.4.2.12
+func (obj *bgpSrteSegmentCTypeSubTlv) Flags() string {
+	return *obj.obj.Flags
+}
+
+// Flags returns a string
+//  One octet bitmap for flags including V-Flag, A-Flag, S-Flag, B-Flag etc. as defined in https://datatracker.ietf.org/doc/html/draft-ietf-idr-segment-routing-te-policy-13#section-2.4.4.2.12
+func (obj *bgpSrteSegmentCTypeSubTlv) HasFlags() bool {
+	return obj.obj.Flags != nil
+}
+
+// SetFlags sets the string value in the BgpSrteSegmentCTypeSubTlv object
+//  One octet bitmap for flags including V-Flag, A-Flag, S-Flag, B-Flag etc. as defined in https://datatracker.ietf.org/doc/html/draft-ietf-idr-segment-routing-te-policy-13#section-2.4.4.2.12
+func (obj *bgpSrteSegmentCTypeSubTlv) SetFlags(value string) BgpSrteSegmentCTypeSubTlv {
+	obj.obj.Flags = &value
+
+	return obj
+}
+
+// SrAlgorithm returns a int32
+//  SR Algorithm identifier when A-Flag in on.
+func (obj *bgpSrteSegmentCTypeSubTlv) SrAlgorithm() int32 {
+	return *obj.obj.SrAlgorithm
+}
+
+// SrAlgorithm returns a int32
+//  SR Algorithm identifier when A-Flag in on.
+func (obj *bgpSrteSegmentCTypeSubTlv) HasSrAlgorithm() bool {
+	return obj.obj.SrAlgorithm != nil
+}
+
+// SetSrAlgorithm sets the int32 value in the BgpSrteSegmentCTypeSubTlv object
+//  SR Algorithm identifier when A-Flag in on.
+func (obj *bgpSrteSegmentCTypeSubTlv) SetSrAlgorithm(value int32) BgpSrteSegmentCTypeSubTlv {
+	obj.obj.SrAlgorithm = &value
+
+	return obj
+}
+
+// Ipv4NodeAddress returns a string
+//  IPv4 address representing a node.
+func (obj *bgpSrteSegmentCTypeSubTlv) Ipv4NodeAddress() string {
+	return obj.obj.Ipv4NodeAddress
+}
+
+// SetIpv4NodeAddress sets the string value in the BgpSrteSegmentCTypeSubTlv object
+//  IPv4 address representing a node.
+func (obj *bgpSrteSegmentCTypeSubTlv) SetIpv4NodeAddress(value string) BgpSrteSegmentCTypeSubTlv {
+	obj.obj.Ipv4NodeAddress = value
+
+	return obj
+}
+
+// SrMplsSid returns a BgpSrteSrMplsSid
+//  Optional SR-MPLS SID.
+func (obj *bgpSrteSegmentCTypeSubTlv) SrMplsSid() BgpSrteSrMplsSid {
+
+	if obj.obj.SrMplsSid == nil {
+		obj.obj.SrMplsSid = &snappipb.BgpSrteSrMplsSid{}
+		newObj := &bgpSrteSrMplsSid{obj: obj.obj.SrMplsSid}
+		newObj.setDefault()
+		return newObj
+	}
+	return &bgpSrteSrMplsSid{obj: obj.obj.SrMplsSid}
+}
+
+// SrMplsSid returns a BgpSrteSrMplsSid
+//  Optional SR-MPLS SID.
+func (obj *bgpSrteSegmentCTypeSubTlv) HasSrMplsSid() bool {
+	return obj.obj.SrMplsSid != nil
+}
+
+func (obj *bgpSrteSegmentCTypeSubTlv) validateObj(set_default bool) {
+	if set_default {
+		obj.setDefault()
+	}
+
+	if obj.obj.Flags != nil {
+		err := validateHex(obj.Flags())
+		if err != nil {
+			validation = append(validation, fmt.Sprintf("%s %s", err.Error(), "on Flags BgpSrteSegmentCTypeSubTlv"))
+		}
+	}
+
+	if obj.obj.SrAlgorithm != nil {
+		if *obj.obj.SrAlgorithm < 0 || *obj.obj.SrAlgorithm > 255 {
+			validation = append(
+				validation, fmt.Sprintf("0 <= BgpSrteSegmentCTypeSubTlv.SrAlgorithm <= 255 but Got %d", *obj.obj.SrAlgorithm))
+		}
+
+	}
+
+	// Ipv4NodeAddress required
+	if obj.obj.Ipv4NodeAddress == "" {
+		validation = append(validation, "Ipv4NodeAddress is required field on interface BgpSrteSegmentCTypeSubTlv")
+	} else {
+		err := validateIpv4(obj.Ipv4NodeAddress())
+		if err != nil {
+			validation = append(validation, fmt.Sprintf("%s %s", err.Error(), "on Ipv4NodeAddress BgpSrteSegmentCTypeSubTlv"))
+		}
+	}
+
+	if obj.obj.SrMplsSid != nil {
+		obj.SrMplsSid().validateObj(set_default)
+	}
+}
+
+func (obj *bgpSrteSegmentCTypeSubTlv) setDefault() {
+	if obj.obj.SrAlgorithm == nil {
+		obj.SetSrAlgorithm(0)
+	}
+
+}
+
+type bgpSrteSegmentDTypeSubTlv struct {
+	obj *snappipb.BgpSrteSegmentDTypeSubTlv
+}
+
+func (obj *bgpSrteSegmentDTypeSubTlv) Msg() *snappipb.BgpSrteSegmentDTypeSubTlv {
+	return obj.obj
+}
+
+func (obj *bgpSrteSegmentDTypeSubTlv) SetMsg(msg *snappipb.BgpSrteSegmentDTypeSubTlv) BgpSrteSegmentDTypeSubTlv {
+	obj.obj = msg
+	return obj
+}
+
+func (obj *bgpSrteSegmentDTypeSubTlv) ToPbText() string {
+	vErr := obj.Validate()
+	if vErr != nil {
+		panic(vErr)
+	}
+	return proto.MarshalTextString(obj.Msg())
+}
+
+func (obj *bgpSrteSegmentDTypeSubTlv) FromPbText(value string) error {
+	retObj := proto.UnmarshalText(value, obj.Msg())
+	if retObj != nil {
+		return retObj
+	}
+	vErr := obj.Validate(true)
+	if vErr != nil {
+		return vErr
+	}
+	return retObj
+}
+
+func (obj *bgpSrteSegmentDTypeSubTlv) ToYaml() string {
+	vErr := obj.Validate()
+	if vErr != nil {
+		panic(vErr)
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(obj.Msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *bgpSrteSegmentDTypeSubTlv) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: false,
+	}
+	retObj := opts.Unmarshal([]byte(data), obj.Msg())
+	if retObj != nil {
+		return retObj
+	}
+	vErr := obj.Validate(true)
+	if vErr != nil {
+		return vErr
+	}
+	return retObj
+}
+
+func (obj *bgpSrteSegmentDTypeSubTlv) ToJson() string {
+	vErr := obj.Validate()
+	if vErr != nil {
+		panic(vErr)
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+		Indent:          "  ",
+	}
+	data, err := opts.Marshal(obj.Msg())
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *bgpSrteSegmentDTypeSubTlv) FromJson(value string) error {
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: false,
+	}
+	retObj := opts.Unmarshal([]byte(value), obj.Msg())
+	if retObj != nil {
+		return retObj
+	}
+	err := obj.Validate(true)
+	if err != nil {
+		return err
+	}
+	return retObj
+}
+
+func (obj *bgpSrteSegmentDTypeSubTlv) Validate(defaults ...bool) error {
+	var set_default bool = false
+	if len(defaults) > 0 {
+		set_default = defaults[0]
+	}
+	obj.validateObj(set_default)
+	return validationResult()
+}
+
+type BgpSrteSegmentDTypeSubTlv interface {
+	Msg() *snappipb.BgpSrteSegmentDTypeSubTlv
+	SetMsg(*snappipb.BgpSrteSegmentDTypeSubTlv) BgpSrteSegmentDTypeSubTlv
+	ToPbText() string
+	ToYaml() string
+	ToJson() string
+	FromPbText(value string) error
+	FromYaml(value string) error
+	FromJson(value string) error
+	Validate(defaults ...bool) error
+	validateObj(set_default bool)
+	setDefault()
+	Flags() string
+	SetFlags(value string) BgpSrteSegmentDTypeSubTlv
+	HasFlags() bool
+	SrAlgorithm() int32
+	SetSrAlgorithm(value int32) BgpSrteSegmentDTypeSubTlv
+	HasSrAlgorithm() bool
+	Ipv6NodeAddress() string
+	SetIpv6NodeAddress(value string) BgpSrteSegmentDTypeSubTlv
+	SrMplsSid() BgpSrteSrMplsSid
+	HasSrMplsSid() bool
+}
+
+// Flags returns a string
+//  One octet bitmap for flags including V-Flag, A-Flag, S-Flag, B-Flag etc. as defined in https://datatracker.ietf.org/doc/html/draft-ietf-idr-segment-routing-te-policy-13#section-2.4.4.2.12
+func (obj *bgpSrteSegmentDTypeSubTlv) Flags() string {
+	return *obj.obj.Flags
+}
+
+// Flags returns a string
+//  One octet bitmap for flags including V-Flag, A-Flag, S-Flag, B-Flag etc. as defined in https://datatracker.ietf.org/doc/html/draft-ietf-idr-segment-routing-te-policy-13#section-2.4.4.2.12
+func (obj *bgpSrteSegmentDTypeSubTlv) HasFlags() bool {
+	return obj.obj.Flags != nil
+}
+
+// SetFlags sets the string value in the BgpSrteSegmentDTypeSubTlv object
+//  One octet bitmap for flags including V-Flag, A-Flag, S-Flag, B-Flag etc. as defined in https://datatracker.ietf.org/doc/html/draft-ietf-idr-segment-routing-te-policy-13#section-2.4.4.2.12
+func (obj *bgpSrteSegmentDTypeSubTlv) SetFlags(value string) BgpSrteSegmentDTypeSubTlv {
+	obj.obj.Flags = &value
+
+	return obj
+}
+
+// SrAlgorithm returns a int32
+//  specifying SR Algorithm when when A-Flag as defined in above flags.
+func (obj *bgpSrteSegmentDTypeSubTlv) SrAlgorithm() int32 {
+	return *obj.obj.SrAlgorithm
+}
+
+// SrAlgorithm returns a int32
+//  specifying SR Algorithm when when A-Flag as defined in above flags.
+func (obj *bgpSrteSegmentDTypeSubTlv) HasSrAlgorithm() bool {
+	return obj.obj.SrAlgorithm != nil
+}
+
+// SetSrAlgorithm sets the int32 value in the BgpSrteSegmentDTypeSubTlv object
+//  specifying SR Algorithm when when A-Flag as defined in above flags.
+func (obj *bgpSrteSegmentDTypeSubTlv) SetSrAlgorithm(value int32) BgpSrteSegmentDTypeSubTlv {
+	obj.obj.SrAlgorithm = &value
+
+	return obj
+}
+
+// Ipv6NodeAddress returns a string
+//  IPv6 address representing a node.
+func (obj *bgpSrteSegmentDTypeSubTlv) Ipv6NodeAddress() string {
+	return obj.obj.Ipv6NodeAddress
+}
+
+// SetIpv6NodeAddress sets the string value in the BgpSrteSegmentDTypeSubTlv object
+//  IPv6 address representing a node.
+func (obj *bgpSrteSegmentDTypeSubTlv) SetIpv6NodeAddress(value string) BgpSrteSegmentDTypeSubTlv {
+	obj.obj.Ipv6NodeAddress = value
+
+	return obj
+}
+
+// SrMplsSid returns a BgpSrteSrMplsSid
+//  Optional SR-MPLS SID.
+func (obj *bgpSrteSegmentDTypeSubTlv) SrMplsSid() BgpSrteSrMplsSid {
+
+	if obj.obj.SrMplsSid == nil {
+		obj.obj.SrMplsSid = &snappipb.BgpSrteSrMplsSid{}
+		newObj := &bgpSrteSrMplsSid{obj: obj.obj.SrMplsSid}
+		newObj.setDefault()
+		return newObj
+	}
+	return &bgpSrteSrMplsSid{obj: obj.obj.SrMplsSid}
+}
+
+// SrMplsSid returns a BgpSrteSrMplsSid
+//  Optional SR-MPLS SID.
+func (obj *bgpSrteSegmentDTypeSubTlv) HasSrMplsSid() bool {
+	return obj.obj.SrMplsSid != nil
+}
+
+func (obj *bgpSrteSegmentDTypeSubTlv) validateObj(set_default bool) {
+	if set_default {
+		obj.setDefault()
+	}
+
+	if obj.obj.Flags != nil {
+		err := validateHex(obj.Flags())
+		if err != nil {
+			validation = append(validation, fmt.Sprintf("%s %s", err.Error(), "on Flags BgpSrteSegmentDTypeSubTlv"))
+		}
+	}
+
+	if obj.obj.SrAlgorithm != nil {
+		if *obj.obj.SrAlgorithm < 0 || *obj.obj.SrAlgorithm > 255 {
+			validation = append(
+				validation, fmt.Sprintf("0 <= BgpSrteSegmentDTypeSubTlv.SrAlgorithm <= 255 but Got %d", *obj.obj.SrAlgorithm))
+		}
+
+	}
+
+	// Ipv6NodeAddress required
+	if obj.obj.Ipv6NodeAddress == "" {
+		validation = append(validation, "Ipv6NodeAddress is required field on interface BgpSrteSegmentDTypeSubTlv")
+	} else {
+		err := validateIpv6(obj.Ipv6NodeAddress())
+		if err != nil {
+			validation = append(validation, fmt.Sprintf("%s %s", err.Error(), "on Ipv6NodeAddress BgpSrteSegmentDTypeSubTlv"))
+		}
+	}
+
+	if obj.obj.SrMplsSid != nil {
+		obj.SrMplsSid().validateObj(set_default)
+	}
+}
+
+func (obj *bgpSrteSegmentDTypeSubTlv) setDefault() {
+	if obj.obj.SrAlgorithm == nil {
+		obj.SetSrAlgorithm(0)
+	}
+
+}
+
+type bgpSrteSegmentETypeSubTlv struct {
+	obj *snappipb.BgpSrteSegmentETypeSubTlv
+}
+
+func (obj *bgpSrteSegmentETypeSubTlv) Msg() *snappipb.BgpSrteSegmentETypeSubTlv {
+	return obj.obj
+}
+
+func (obj *bgpSrteSegmentETypeSubTlv) SetMsg(msg *snappipb.BgpSrteSegmentETypeSubTlv) BgpSrteSegmentETypeSubTlv {
+	obj.obj = msg
+	return obj
+}
+
+func (obj *bgpSrteSegmentETypeSubTlv) ToPbText() string {
+	vErr := obj.Validate()
+	if vErr != nil {
+		panic(vErr)
+	}
+	return proto.MarshalTextString(obj.Msg())
+}
+
+func (obj *bgpSrteSegmentETypeSubTlv) FromPbText(value string) error {
+	retObj := proto.UnmarshalText(value, obj.Msg())
+	if retObj != nil {
+		return retObj
+	}
+	vErr := obj.Validate(true)
+	if vErr != nil {
+		return vErr
+	}
+	return retObj
+}
+
+func (obj *bgpSrteSegmentETypeSubTlv) ToYaml() string {
+	vErr := obj.Validate()
+	if vErr != nil {
+		panic(vErr)
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(obj.Msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *bgpSrteSegmentETypeSubTlv) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: false,
+	}
+	retObj := opts.Unmarshal([]byte(data), obj.Msg())
+	if retObj != nil {
+		return retObj
+	}
+	vErr := obj.Validate(true)
+	if vErr != nil {
+		return vErr
+	}
+	return retObj
+}
+
+func (obj *bgpSrteSegmentETypeSubTlv) ToJson() string {
+	vErr := obj.Validate()
+	if vErr != nil {
+		panic(vErr)
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+		Indent:          "  ",
+	}
+	data, err := opts.Marshal(obj.Msg())
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *bgpSrteSegmentETypeSubTlv) FromJson(value string) error {
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: false,
+	}
+	retObj := opts.Unmarshal([]byte(value), obj.Msg())
+	if retObj != nil {
+		return retObj
+	}
+	err := obj.Validate(true)
+	if err != nil {
+		return err
+	}
+	return retObj
+}
+
+func (obj *bgpSrteSegmentETypeSubTlv) Validate(defaults ...bool) error {
+	var set_default bool = false
+	if len(defaults) > 0 {
+		set_default = defaults[0]
+	}
+	obj.validateObj(set_default)
+	return validationResult()
+}
+
+type BgpSrteSegmentETypeSubTlv interface {
+	Msg() *snappipb.BgpSrteSegmentETypeSubTlv
+	SetMsg(*snappipb.BgpSrteSegmentETypeSubTlv) BgpSrteSegmentETypeSubTlv
+	ToPbText() string
+	ToYaml() string
+	ToJson() string
+	FromPbText(value string) error
+	FromYaml(value string) error
+	FromJson(value string) error
+	Validate(defaults ...bool) error
+	validateObj(set_default bool)
+	setDefault()
+	Flags() string
+	SetFlags(value string) BgpSrteSegmentETypeSubTlv
+	HasFlags() bool
+	LocalInterfaceId() int32
+	SetLocalInterfaceId(value int32) BgpSrteSegmentETypeSubTlv
+	HasLocalInterfaceId() bool
+	Ipv4NodeAddress() string
+	SetIpv4NodeAddress(value string) BgpSrteSegmentETypeSubTlv
+	SrMplsSid() BgpSrteSrMplsSid
+	HasSrMplsSid() bool
+}
+
+// Flags returns a string
+//  One octet bitmap for flags including V-Flag, A-Flag, S-Flag, B-Flag etc. as defined in https://datatracker.ietf.org/doc/html/draft-ietf-idr-segment-routing-te-policy-13#section-2.4.4.2.12
+func (obj *bgpSrteSegmentETypeSubTlv) Flags() string {
+	return *obj.obj.Flags
+}
+
+// Flags returns a string
+//  One octet bitmap for flags including V-Flag, A-Flag, S-Flag, B-Flag etc. as defined in https://datatracker.ietf.org/doc/html/draft-ietf-idr-segment-routing-te-policy-13#section-2.4.4.2.12
+func (obj *bgpSrteSegmentETypeSubTlv) HasFlags() bool {
+	return obj.obj.Flags != nil
+}
+
+// SetFlags sets the string value in the BgpSrteSegmentETypeSubTlv object
+//  One octet bitmap for flags including V-Flag, A-Flag, S-Flag, B-Flag etc. as defined in https://datatracker.ietf.org/doc/html/draft-ietf-idr-segment-routing-te-policy-13#section-2.4.4.2.12
+func (obj *bgpSrteSegmentETypeSubTlv) SetFlags(value string) BgpSrteSegmentETypeSubTlv {
+	obj.obj.Flags = &value
+
+	return obj
+}
+
+// LocalInterfaceId returns a int32
+//  Local Interface ID: The Interface Index as defined in [RFC8664].
+func (obj *bgpSrteSegmentETypeSubTlv) LocalInterfaceId() int32 {
+	return *obj.obj.LocalInterfaceId
+}
+
+// LocalInterfaceId returns a int32
+//  Local Interface ID: The Interface Index as defined in [RFC8664].
+func (obj *bgpSrteSegmentETypeSubTlv) HasLocalInterfaceId() bool {
+	return obj.obj.LocalInterfaceId != nil
+}
+
+// SetLocalInterfaceId sets the int32 value in the BgpSrteSegmentETypeSubTlv object
+//  Local Interface ID: The Interface Index as defined in [RFC8664].
+func (obj *bgpSrteSegmentETypeSubTlv) SetLocalInterfaceId(value int32) BgpSrteSegmentETypeSubTlv {
+	obj.obj.LocalInterfaceId = &value
+
+	return obj
+}
+
+// Ipv4NodeAddress returns a string
+//  IPv4 address representing a node.
+func (obj *bgpSrteSegmentETypeSubTlv) Ipv4NodeAddress() string {
+	return obj.obj.Ipv4NodeAddress
+}
+
+// SetIpv4NodeAddress sets the string value in the BgpSrteSegmentETypeSubTlv object
+//  IPv4 address representing a node.
+func (obj *bgpSrteSegmentETypeSubTlv) SetIpv4NodeAddress(value string) BgpSrteSegmentETypeSubTlv {
+	obj.obj.Ipv4NodeAddress = value
+
+	return obj
+}
+
+// SrMplsSid returns a BgpSrteSrMplsSid
+//  Optional SR-MPLS SID.
+func (obj *bgpSrteSegmentETypeSubTlv) SrMplsSid() BgpSrteSrMplsSid {
+
+	if obj.obj.SrMplsSid == nil {
+		obj.obj.SrMplsSid = &snappipb.BgpSrteSrMplsSid{}
+		newObj := &bgpSrteSrMplsSid{obj: obj.obj.SrMplsSid}
+		newObj.setDefault()
+		return newObj
+	}
+	return &bgpSrteSrMplsSid{obj: obj.obj.SrMplsSid}
+}
+
+// SrMplsSid returns a BgpSrteSrMplsSid
+//  Optional SR-MPLS SID.
+func (obj *bgpSrteSegmentETypeSubTlv) HasSrMplsSid() bool {
+	return obj.obj.SrMplsSid != nil
+}
+
+func (obj *bgpSrteSegmentETypeSubTlv) validateObj(set_default bool) {
+	if set_default {
+		obj.setDefault()
+	}
+
+	if obj.obj.Flags != nil {
+		err := validateHex(obj.Flags())
+		if err != nil {
+			validation = append(validation, fmt.Sprintf("%s %s", err.Error(), "on Flags BgpSrteSegmentETypeSubTlv"))
+		}
+	}
+
+	if obj.obj.LocalInterfaceId != nil {
+		if *obj.obj.LocalInterfaceId < 0 || *obj.obj.LocalInterfaceId > 2147483647 {
+			validation = append(
+				validation, fmt.Sprintf("0 <= BgpSrteSegmentETypeSubTlv.LocalInterfaceId <= 2147483647 but Got %d", *obj.obj.LocalInterfaceId))
+		}
+
+	}
+
+	// Ipv4NodeAddress required
+	if obj.obj.Ipv4NodeAddress == "" {
+		validation = append(validation, "Ipv4NodeAddress is required field on interface BgpSrteSegmentETypeSubTlv")
+	} else {
+		err := validateIpv4(obj.Ipv4NodeAddress())
+		if err != nil {
+			validation = append(validation, fmt.Sprintf("%s %s", err.Error(), "on Ipv4NodeAddress BgpSrteSegmentETypeSubTlv"))
+		}
+	}
+
+	if obj.obj.SrMplsSid != nil {
+		obj.SrMplsSid().validateObj(set_default)
+	}
+}
+
+func (obj *bgpSrteSegmentETypeSubTlv) setDefault() {
+	if obj.obj.LocalInterfaceId == nil {
+		obj.SetLocalInterfaceId(0)
+	}
+
+}
+
+type bgpSrteSegmentFTypeSubTlv struct {
+	obj *snappipb.BgpSrteSegmentFTypeSubTlv
+}
+
+func (obj *bgpSrteSegmentFTypeSubTlv) Msg() *snappipb.BgpSrteSegmentFTypeSubTlv {
+	return obj.obj
+}
+
+func (obj *bgpSrteSegmentFTypeSubTlv) SetMsg(msg *snappipb.BgpSrteSegmentFTypeSubTlv) BgpSrteSegmentFTypeSubTlv {
+	obj.obj = msg
+	return obj
+}
+
+func (obj *bgpSrteSegmentFTypeSubTlv) ToPbText() string {
+	vErr := obj.Validate()
+	if vErr != nil {
+		panic(vErr)
+	}
+	return proto.MarshalTextString(obj.Msg())
+}
+
+func (obj *bgpSrteSegmentFTypeSubTlv) FromPbText(value string) error {
+	retObj := proto.UnmarshalText(value, obj.Msg())
+	if retObj != nil {
+		return retObj
+	}
+	vErr := obj.Validate(true)
+	if vErr != nil {
+		return vErr
+	}
+	return retObj
+}
+
+func (obj *bgpSrteSegmentFTypeSubTlv) ToYaml() string {
+	vErr := obj.Validate()
+	if vErr != nil {
+		panic(vErr)
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(obj.Msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *bgpSrteSegmentFTypeSubTlv) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: false,
+	}
+	retObj := opts.Unmarshal([]byte(data), obj.Msg())
+	if retObj != nil {
+		return retObj
+	}
+	vErr := obj.Validate(true)
+	if vErr != nil {
+		return vErr
+	}
+	return retObj
+}
+
+func (obj *bgpSrteSegmentFTypeSubTlv) ToJson() string {
+	vErr := obj.Validate()
+	if vErr != nil {
+		panic(vErr)
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+		Indent:          "  ",
+	}
+	data, err := opts.Marshal(obj.Msg())
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *bgpSrteSegmentFTypeSubTlv) FromJson(value string) error {
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: false,
+	}
+	retObj := opts.Unmarshal([]byte(value), obj.Msg())
+	if retObj != nil {
+		return retObj
+	}
+	err := obj.Validate(true)
+	if err != nil {
+		return err
+	}
+	return retObj
+}
+
+func (obj *bgpSrteSegmentFTypeSubTlv) Validate(defaults ...bool) error {
+	var set_default bool = false
+	if len(defaults) > 0 {
+		set_default = defaults[0]
+	}
+	obj.validateObj(set_default)
+	return validationResult()
+}
+
+type BgpSrteSegmentFTypeSubTlv interface {
+	Msg() *snappipb.BgpSrteSegmentFTypeSubTlv
+	SetMsg(*snappipb.BgpSrteSegmentFTypeSubTlv) BgpSrteSegmentFTypeSubTlv
+	ToPbText() string
+	ToYaml() string
+	ToJson() string
+	FromPbText(value string) error
+	FromYaml(value string) error
+	FromJson(value string) error
+	Validate(defaults ...bool) error
+	validateObj(set_default bool)
+	setDefault()
+	Flags() string
+	SetFlags(value string) BgpSrteSegmentFTypeSubTlv
+	HasFlags() bool
+	LocalIpv4Address() string
+	SetLocalIpv4Address(value string) BgpSrteSegmentFTypeSubTlv
+	RemoteIpv4Address() string
+	SetRemoteIpv4Address(value string) BgpSrteSegmentFTypeSubTlv
+	SrMplsSid() BgpSrteSrMplsSid
+	HasSrMplsSid() bool
+}
+
+// Flags returns a string
+//  One octet bitmap for flags including V-Flag, A-Flag, S-Flag, B-Flag etc. as defined in https://datatracker.ietf.org/doc/html/draft-ietf-idr-segment-routing-te-policy-13#section-2.4.4.2.12
+func (obj *bgpSrteSegmentFTypeSubTlv) Flags() string {
+	return *obj.obj.Flags
+}
+
+// Flags returns a string
+//  One octet bitmap for flags including V-Flag, A-Flag, S-Flag, B-Flag etc. as defined in https://datatracker.ietf.org/doc/html/draft-ietf-idr-segment-routing-te-policy-13#section-2.4.4.2.12
+func (obj *bgpSrteSegmentFTypeSubTlv) HasFlags() bool {
+	return obj.obj.Flags != nil
+}
+
+// SetFlags sets the string value in the BgpSrteSegmentFTypeSubTlv object
+//  One octet bitmap for flags including V-Flag, A-Flag, S-Flag, B-Flag etc. as defined in https://datatracker.ietf.org/doc/html/draft-ietf-idr-segment-routing-te-policy-13#section-2.4.4.2.12
+func (obj *bgpSrteSegmentFTypeSubTlv) SetFlags(value string) BgpSrteSegmentFTypeSubTlv {
+	obj.obj.Flags = &value
+
+	return obj
+}
+
+// LocalIpv4Address returns a string
+//  Local IPv4 Address.
+func (obj *bgpSrteSegmentFTypeSubTlv) LocalIpv4Address() string {
+	return obj.obj.LocalIpv4Address
+}
+
+// SetLocalIpv4Address sets the string value in the BgpSrteSegmentFTypeSubTlv object
+//  Local IPv4 Address.
+func (obj *bgpSrteSegmentFTypeSubTlv) SetLocalIpv4Address(value string) BgpSrteSegmentFTypeSubTlv {
+	obj.obj.LocalIpv4Address = value
+
+	return obj
+}
+
+// RemoteIpv4Address returns a string
+//  Remote IPv4 Address.
+func (obj *bgpSrteSegmentFTypeSubTlv) RemoteIpv4Address() string {
+	return obj.obj.RemoteIpv4Address
+}
+
+// SetRemoteIpv4Address sets the string value in the BgpSrteSegmentFTypeSubTlv object
+//  Remote IPv4 Address.
+func (obj *bgpSrteSegmentFTypeSubTlv) SetRemoteIpv4Address(value string) BgpSrteSegmentFTypeSubTlv {
+	obj.obj.RemoteIpv4Address = value
+
+	return obj
+}
+
+// SrMplsSid returns a BgpSrteSrMplsSid
+//  Optional SR-MPLS SID.
+func (obj *bgpSrteSegmentFTypeSubTlv) SrMplsSid() BgpSrteSrMplsSid {
+
+	if obj.obj.SrMplsSid == nil {
+		obj.obj.SrMplsSid = &snappipb.BgpSrteSrMplsSid{}
+		newObj := &bgpSrteSrMplsSid{obj: obj.obj.SrMplsSid}
+		newObj.setDefault()
+		return newObj
+	}
+	return &bgpSrteSrMplsSid{obj: obj.obj.SrMplsSid}
+}
+
+// SrMplsSid returns a BgpSrteSrMplsSid
+//  Optional SR-MPLS SID.
+func (obj *bgpSrteSegmentFTypeSubTlv) HasSrMplsSid() bool {
+	return obj.obj.SrMplsSid != nil
+}
+
+func (obj *bgpSrteSegmentFTypeSubTlv) validateObj(set_default bool) {
+	if set_default {
+		obj.setDefault()
+	}
+
+	if obj.obj.Flags != nil {
+		err := validateHex(obj.Flags())
+		if err != nil {
+			validation = append(validation, fmt.Sprintf("%s %s", err.Error(), "on Flags BgpSrteSegmentFTypeSubTlv"))
+		}
+	}
+
+	// LocalIpv4Address required
+	if obj.obj.LocalIpv4Address == "" {
+		validation = append(validation, "LocalIpv4Address is required field on interface BgpSrteSegmentFTypeSubTlv")
+	} else {
+		err := validateIpv4(obj.LocalIpv4Address())
+		if err != nil {
+			validation = append(validation, fmt.Sprintf("%s %s", err.Error(), "on LocalIpv4Address BgpSrteSegmentFTypeSubTlv"))
+		}
+	}
+
+	// RemoteIpv4Address required
+	if obj.obj.RemoteIpv4Address == "" {
+		validation = append(validation, "RemoteIpv4Address is required field on interface BgpSrteSegmentFTypeSubTlv")
+	} else {
+		err := validateIpv4(obj.RemoteIpv4Address())
+		if err != nil {
+			validation = append(validation, fmt.Sprintf("%s %s", err.Error(), "on RemoteIpv4Address BgpSrteSegmentFTypeSubTlv"))
+		}
+	}
+
+	if obj.obj.SrMplsSid != nil {
+		obj.SrMplsSid().validateObj(set_default)
+	}
+}
+
+func (obj *bgpSrteSegmentFTypeSubTlv) setDefault() {
+
+}
+
+type bgpSrteSegmentGTypeSubTlv struct {
+	obj *snappipb.BgpSrteSegmentGTypeSubTlv
+}
+
+func (obj *bgpSrteSegmentGTypeSubTlv) Msg() *snappipb.BgpSrteSegmentGTypeSubTlv {
+	return obj.obj
+}
+
+func (obj *bgpSrteSegmentGTypeSubTlv) SetMsg(msg *snappipb.BgpSrteSegmentGTypeSubTlv) BgpSrteSegmentGTypeSubTlv {
+	obj.obj = msg
+	return obj
+}
+
+func (obj *bgpSrteSegmentGTypeSubTlv) ToPbText() string {
+	vErr := obj.Validate()
+	if vErr != nil {
+		panic(vErr)
+	}
+	return proto.MarshalTextString(obj.Msg())
+}
+
+func (obj *bgpSrteSegmentGTypeSubTlv) FromPbText(value string) error {
+	retObj := proto.UnmarshalText(value, obj.Msg())
+	if retObj != nil {
+		return retObj
+	}
+	vErr := obj.Validate(true)
+	if vErr != nil {
+		return vErr
+	}
+	return retObj
+}
+
+func (obj *bgpSrteSegmentGTypeSubTlv) ToYaml() string {
+	vErr := obj.Validate()
+	if vErr != nil {
+		panic(vErr)
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(obj.Msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *bgpSrteSegmentGTypeSubTlv) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: false,
+	}
+	retObj := opts.Unmarshal([]byte(data), obj.Msg())
+	if retObj != nil {
+		return retObj
+	}
+	vErr := obj.Validate(true)
+	if vErr != nil {
+		return vErr
+	}
+	return retObj
+}
+
+func (obj *bgpSrteSegmentGTypeSubTlv) ToJson() string {
+	vErr := obj.Validate()
+	if vErr != nil {
+		panic(vErr)
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+		Indent:          "  ",
+	}
+	data, err := opts.Marshal(obj.Msg())
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *bgpSrteSegmentGTypeSubTlv) FromJson(value string) error {
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: false,
+	}
+	retObj := opts.Unmarshal([]byte(value), obj.Msg())
+	if retObj != nil {
+		return retObj
+	}
+	err := obj.Validate(true)
+	if err != nil {
+		return err
+	}
+	return retObj
+}
+
+func (obj *bgpSrteSegmentGTypeSubTlv) Validate(defaults ...bool) error {
+	var set_default bool = false
+	if len(defaults) > 0 {
+		set_default = defaults[0]
+	}
+	obj.validateObj(set_default)
+	return validationResult()
+}
+
+type BgpSrteSegmentGTypeSubTlv interface {
+	Msg() *snappipb.BgpSrteSegmentGTypeSubTlv
+	SetMsg(*snappipb.BgpSrteSegmentGTypeSubTlv) BgpSrteSegmentGTypeSubTlv
+	ToPbText() string
+	ToYaml() string
+	ToJson() string
+	FromPbText(value string) error
+	FromYaml(value string) error
+	FromJson(value string) error
+	Validate(defaults ...bool) error
+	validateObj(set_default bool)
+	setDefault()
+	Flags() string
+	SetFlags(value string) BgpSrteSegmentGTypeSubTlv
+	HasFlags() bool
+	LocalInterfaceId() int32
+	SetLocalInterfaceId(value int32) BgpSrteSegmentGTypeSubTlv
+	HasLocalInterfaceId() bool
+	LocalIpv6NodeAddress() string
+	SetLocalIpv6NodeAddress(value string) BgpSrteSegmentGTypeSubTlv
+	RemoteInterfaceId() int32
+	SetRemoteInterfaceId(value int32) BgpSrteSegmentGTypeSubTlv
+	HasRemoteInterfaceId() bool
+	RemoteIpv6NodeAddress() string
+	SetRemoteIpv6NodeAddress(value string) BgpSrteSegmentGTypeSubTlv
+	SrMplsSid() BgpSrteSrMplsSid
+	HasSrMplsSid() bool
+}
+
+// Flags returns a string
+//  One octet bitmap for flags including V-Flag, A-Flag, S-Flag, B-Flag etc. as defined in https://datatracker.ietf.org/doc/html/draft-ietf-idr-segment-routing-te-policy-13#section-2.4.4.2.12
+func (obj *bgpSrteSegmentGTypeSubTlv) Flags() string {
+	return *obj.obj.Flags
+}
+
+// Flags returns a string
+//  One octet bitmap for flags including V-Flag, A-Flag, S-Flag, B-Flag etc. as defined in https://datatracker.ietf.org/doc/html/draft-ietf-idr-segment-routing-te-policy-13#section-2.4.4.2.12
+func (obj *bgpSrteSegmentGTypeSubTlv) HasFlags() bool {
+	return obj.obj.Flags != nil
+}
+
+// SetFlags sets the string value in the BgpSrteSegmentGTypeSubTlv object
+//  One octet bitmap for flags including V-Flag, A-Flag, S-Flag, B-Flag etc. as defined in https://datatracker.ietf.org/doc/html/draft-ietf-idr-segment-routing-te-policy-13#section-2.4.4.2.12
+func (obj *bgpSrteSegmentGTypeSubTlv) SetFlags(value string) BgpSrteSegmentGTypeSubTlv {
+	obj.obj.Flags = &value
+
+	return obj
+}
+
+// LocalInterfaceId returns a int32
+//  Local Interface ID: The Interface Index as defined in [RFC8664].
+func (obj *bgpSrteSegmentGTypeSubTlv) LocalInterfaceId() int32 {
+	return *obj.obj.LocalInterfaceId
+}
+
+// LocalInterfaceId returns a int32
+//  Local Interface ID: The Interface Index as defined in [RFC8664].
+func (obj *bgpSrteSegmentGTypeSubTlv) HasLocalInterfaceId() bool {
+	return obj.obj.LocalInterfaceId != nil
+}
+
+// SetLocalInterfaceId sets the int32 value in the BgpSrteSegmentGTypeSubTlv object
+//  Local Interface ID: The Interface Index as defined in [RFC8664].
+func (obj *bgpSrteSegmentGTypeSubTlv) SetLocalInterfaceId(value int32) BgpSrteSegmentGTypeSubTlv {
+	obj.obj.LocalInterfaceId = &value
+
+	return obj
+}
+
+// LocalIpv6NodeAddress returns a string
+//  IPv6 address representing a node.
+func (obj *bgpSrteSegmentGTypeSubTlv) LocalIpv6NodeAddress() string {
+	return obj.obj.LocalIpv6NodeAddress
+}
+
+// SetLocalIpv6NodeAddress sets the string value in the BgpSrteSegmentGTypeSubTlv object
+//  IPv6 address representing a node.
+func (obj *bgpSrteSegmentGTypeSubTlv) SetLocalIpv6NodeAddress(value string) BgpSrteSegmentGTypeSubTlv {
+	obj.obj.LocalIpv6NodeAddress = value
+
+	return obj
+}
+
+// RemoteInterfaceId returns a int32
+//  Local Interface ID: The Interface Index as defined in [RFC8664].
+func (obj *bgpSrteSegmentGTypeSubTlv) RemoteInterfaceId() int32 {
+	return *obj.obj.RemoteInterfaceId
+}
+
+// RemoteInterfaceId returns a int32
+//  Local Interface ID: The Interface Index as defined in [RFC8664].
+func (obj *bgpSrteSegmentGTypeSubTlv) HasRemoteInterfaceId() bool {
+	return obj.obj.RemoteInterfaceId != nil
+}
+
+// SetRemoteInterfaceId sets the int32 value in the BgpSrteSegmentGTypeSubTlv object
+//  Local Interface ID: The Interface Index as defined in [RFC8664].
+func (obj *bgpSrteSegmentGTypeSubTlv) SetRemoteInterfaceId(value int32) BgpSrteSegmentGTypeSubTlv {
+	obj.obj.RemoteInterfaceId = &value
+
+	return obj
+}
+
+// RemoteIpv6NodeAddress returns a string
+//  IPv6 address representing a node.
+func (obj *bgpSrteSegmentGTypeSubTlv) RemoteIpv6NodeAddress() string {
+	return obj.obj.RemoteIpv6NodeAddress
+}
+
+// SetRemoteIpv6NodeAddress sets the string value in the BgpSrteSegmentGTypeSubTlv object
+//  IPv6 address representing a node.
+func (obj *bgpSrteSegmentGTypeSubTlv) SetRemoteIpv6NodeAddress(value string) BgpSrteSegmentGTypeSubTlv {
+	obj.obj.RemoteIpv6NodeAddress = value
+
+	return obj
+}
+
+// SrMplsSid returns a BgpSrteSrMplsSid
+//  Optional SR-MPLS SID.
+func (obj *bgpSrteSegmentGTypeSubTlv) SrMplsSid() BgpSrteSrMplsSid {
+
+	if obj.obj.SrMplsSid == nil {
+		obj.obj.SrMplsSid = &snappipb.BgpSrteSrMplsSid{}
+		newObj := &bgpSrteSrMplsSid{obj: obj.obj.SrMplsSid}
+		newObj.setDefault()
+		return newObj
+	}
+	return &bgpSrteSrMplsSid{obj: obj.obj.SrMplsSid}
+}
+
+// SrMplsSid returns a BgpSrteSrMplsSid
+//  Optional SR-MPLS SID.
+func (obj *bgpSrteSegmentGTypeSubTlv) HasSrMplsSid() bool {
+	return obj.obj.SrMplsSid != nil
+}
+
+func (obj *bgpSrteSegmentGTypeSubTlv) validateObj(set_default bool) {
+	if set_default {
+		obj.setDefault()
+	}
+
+	if obj.obj.Flags != nil {
+		err := validateHex(obj.Flags())
+		if err != nil {
+			validation = append(validation, fmt.Sprintf("%s %s", err.Error(), "on Flags BgpSrteSegmentGTypeSubTlv"))
+		}
+	}
+
+	if obj.obj.LocalInterfaceId != nil {
+		if *obj.obj.LocalInterfaceId < 0 || *obj.obj.LocalInterfaceId > 2147483647 {
+			validation = append(
+				validation, fmt.Sprintf("0 <= BgpSrteSegmentGTypeSubTlv.LocalInterfaceId <= 2147483647 but Got %d", *obj.obj.LocalInterfaceId))
+		}
+
+	}
+
+	// LocalIpv6NodeAddress required
+	if obj.obj.LocalIpv6NodeAddress == "" {
+		validation = append(validation, "LocalIpv6NodeAddress is required field on interface BgpSrteSegmentGTypeSubTlv")
+	} else {
+		err := validateIpv6(obj.LocalIpv6NodeAddress())
+		if err != nil {
+			validation = append(validation, fmt.Sprintf("%s %s", err.Error(), "on LocalIpv6NodeAddress BgpSrteSegmentGTypeSubTlv"))
+		}
+	}
+
+	if obj.obj.RemoteInterfaceId != nil {
+		if *obj.obj.RemoteInterfaceId < 0 || *obj.obj.RemoteInterfaceId > 2147483647 {
+			validation = append(
+				validation, fmt.Sprintf("0 <= BgpSrteSegmentGTypeSubTlv.RemoteInterfaceId <= 2147483647 but Got %d", *obj.obj.RemoteInterfaceId))
+		}
+
+	}
+
+	// RemoteIpv6NodeAddress required
+	if obj.obj.RemoteIpv6NodeAddress == "" {
+		validation = append(validation, "RemoteIpv6NodeAddress is required field on interface BgpSrteSegmentGTypeSubTlv")
+	} else {
+		err := validateIpv6(obj.RemoteIpv6NodeAddress())
+		if err != nil {
+			validation = append(validation, fmt.Sprintf("%s %s", err.Error(), "on RemoteIpv6NodeAddress BgpSrteSegmentGTypeSubTlv"))
+		}
+	}
+
+	if obj.obj.SrMplsSid != nil {
+		obj.SrMplsSid().validateObj(set_default)
+	}
+}
+
+func (obj *bgpSrteSegmentGTypeSubTlv) setDefault() {
+	if obj.obj.LocalInterfaceId == nil {
+		obj.SetLocalInterfaceId(0)
+	}
+	if obj.obj.RemoteInterfaceId == nil {
+		obj.SetRemoteInterfaceId(0)
+	}
+
+}
+
+type bgpSrteSegmentHTypeSubTlv struct {
+	obj *snappipb.BgpSrteSegmentHTypeSubTlv
+}
+
+func (obj *bgpSrteSegmentHTypeSubTlv) Msg() *snappipb.BgpSrteSegmentHTypeSubTlv {
+	return obj.obj
+}
+
+func (obj *bgpSrteSegmentHTypeSubTlv) SetMsg(msg *snappipb.BgpSrteSegmentHTypeSubTlv) BgpSrteSegmentHTypeSubTlv {
+	obj.obj = msg
+	return obj
+}
+
+func (obj *bgpSrteSegmentHTypeSubTlv) ToPbText() string {
+	vErr := obj.Validate()
+	if vErr != nil {
+		panic(vErr)
+	}
+	return proto.MarshalTextString(obj.Msg())
+}
+
+func (obj *bgpSrteSegmentHTypeSubTlv) FromPbText(value string) error {
+	retObj := proto.UnmarshalText(value, obj.Msg())
+	if retObj != nil {
+		return retObj
+	}
+	vErr := obj.Validate(true)
+	if vErr != nil {
+		return vErr
+	}
+	return retObj
+}
+
+func (obj *bgpSrteSegmentHTypeSubTlv) ToYaml() string {
+	vErr := obj.Validate()
+	if vErr != nil {
+		panic(vErr)
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(obj.Msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *bgpSrteSegmentHTypeSubTlv) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: false,
+	}
+	retObj := opts.Unmarshal([]byte(data), obj.Msg())
+	if retObj != nil {
+		return retObj
+	}
+	vErr := obj.Validate(true)
+	if vErr != nil {
+		return vErr
+	}
+	return retObj
+}
+
+func (obj *bgpSrteSegmentHTypeSubTlv) ToJson() string {
+	vErr := obj.Validate()
+	if vErr != nil {
+		panic(vErr)
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+		Indent:          "  ",
+	}
+	data, err := opts.Marshal(obj.Msg())
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *bgpSrteSegmentHTypeSubTlv) FromJson(value string) error {
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: false,
+	}
+	retObj := opts.Unmarshal([]byte(value), obj.Msg())
+	if retObj != nil {
+		return retObj
+	}
+	err := obj.Validate(true)
+	if err != nil {
+		return err
+	}
+	return retObj
+}
+
+func (obj *bgpSrteSegmentHTypeSubTlv) Validate(defaults ...bool) error {
+	var set_default bool = false
+	if len(defaults) > 0 {
+		set_default = defaults[0]
+	}
+	obj.validateObj(set_default)
+	return validationResult()
+}
+
+type BgpSrteSegmentHTypeSubTlv interface {
+	Msg() *snappipb.BgpSrteSegmentHTypeSubTlv
+	SetMsg(*snappipb.BgpSrteSegmentHTypeSubTlv) BgpSrteSegmentHTypeSubTlv
+	ToPbText() string
+	ToYaml() string
+	ToJson() string
+	FromPbText(value string) error
+	FromYaml(value string) error
+	FromJson(value string) error
+	Validate(defaults ...bool) error
+	validateObj(set_default bool)
+	setDefault()
+	Flags() string
+	SetFlags(value string) BgpSrteSegmentHTypeSubTlv
+	HasFlags() bool
+	LocalIpv6Address() string
+	SetLocalIpv6Address(value string) BgpSrteSegmentHTypeSubTlv
+	RemoteIpv6Address() string
+	SetRemoteIpv6Address(value string) BgpSrteSegmentHTypeSubTlv
+	SrMplsSid() BgpSrteSrMplsSid
+	HasSrMplsSid() bool
+}
+
+// Flags returns a string
+//  One octet bitmap for flags including V-Flag, A-Flag, S-Flag, B-Flag etc. as defined in https://datatracker.ietf.org/doc/html/draft-ietf-idr-segment-routing-te-policy-13#section-2.4.4.2.12
+func (obj *bgpSrteSegmentHTypeSubTlv) Flags() string {
+	return *obj.obj.Flags
+}
+
+// Flags returns a string
+//  One octet bitmap for flags including V-Flag, A-Flag, S-Flag, B-Flag etc. as defined in https://datatracker.ietf.org/doc/html/draft-ietf-idr-segment-routing-te-policy-13#section-2.4.4.2.12
+func (obj *bgpSrteSegmentHTypeSubTlv) HasFlags() bool {
+	return obj.obj.Flags != nil
+}
+
+// SetFlags sets the string value in the BgpSrteSegmentHTypeSubTlv object
+//  One octet bitmap for flags including V-Flag, A-Flag, S-Flag, B-Flag etc. as defined in https://datatracker.ietf.org/doc/html/draft-ietf-idr-segment-routing-te-policy-13#section-2.4.4.2.12
+func (obj *bgpSrteSegmentHTypeSubTlv) SetFlags(value string) BgpSrteSegmentHTypeSubTlv {
+	obj.obj.Flags = &value
+
+	return obj
+}
+
+// LocalIpv6Address returns a string
+//  Local IPv6 Address.
+func (obj *bgpSrteSegmentHTypeSubTlv) LocalIpv6Address() string {
+	return obj.obj.LocalIpv6Address
+}
+
+// SetLocalIpv6Address sets the string value in the BgpSrteSegmentHTypeSubTlv object
+//  Local IPv6 Address.
+func (obj *bgpSrteSegmentHTypeSubTlv) SetLocalIpv6Address(value string) BgpSrteSegmentHTypeSubTlv {
+	obj.obj.LocalIpv6Address = value
+
+	return obj
+}
+
+// RemoteIpv6Address returns a string
+//  Remote IPv6 Address.
+func (obj *bgpSrteSegmentHTypeSubTlv) RemoteIpv6Address() string {
+	return obj.obj.RemoteIpv6Address
+}
+
+// SetRemoteIpv6Address sets the string value in the BgpSrteSegmentHTypeSubTlv object
+//  Remote IPv6 Address.
+func (obj *bgpSrteSegmentHTypeSubTlv) SetRemoteIpv6Address(value string) BgpSrteSegmentHTypeSubTlv {
+	obj.obj.RemoteIpv6Address = value
+
+	return obj
+}
+
+// SrMplsSid returns a BgpSrteSrMplsSid
+//  Optional SR-MPLS SID.
+func (obj *bgpSrteSegmentHTypeSubTlv) SrMplsSid() BgpSrteSrMplsSid {
+
+	if obj.obj.SrMplsSid == nil {
+		obj.obj.SrMplsSid = &snappipb.BgpSrteSrMplsSid{}
+		newObj := &bgpSrteSrMplsSid{obj: obj.obj.SrMplsSid}
+		newObj.setDefault()
+		return newObj
+	}
+	return &bgpSrteSrMplsSid{obj: obj.obj.SrMplsSid}
+}
+
+// SrMplsSid returns a BgpSrteSrMplsSid
+//  Optional SR-MPLS SID.
+func (obj *bgpSrteSegmentHTypeSubTlv) HasSrMplsSid() bool {
+	return obj.obj.SrMplsSid != nil
+}
+
+func (obj *bgpSrteSegmentHTypeSubTlv) validateObj(set_default bool) {
+	if set_default {
+		obj.setDefault()
+	}
+
+	if obj.obj.Flags != nil {
+		err := validateHex(obj.Flags())
+		if err != nil {
+			validation = append(validation, fmt.Sprintf("%s %s", err.Error(), "on Flags BgpSrteSegmentHTypeSubTlv"))
+		}
+	}
+
+	// LocalIpv6Address required
+	if obj.obj.LocalIpv6Address == "" {
+		validation = append(validation, "LocalIpv6Address is required field on interface BgpSrteSegmentHTypeSubTlv")
+	} else {
+		err := validateIpv6(obj.LocalIpv6Address())
+		if err != nil {
+			validation = append(validation, fmt.Sprintf("%s %s", err.Error(), "on LocalIpv6Address BgpSrteSegmentHTypeSubTlv"))
+		}
+	}
+
+	// RemoteIpv6Address required
+	if obj.obj.RemoteIpv6Address == "" {
+		validation = append(validation, "RemoteIpv6Address is required field on interface BgpSrteSegmentHTypeSubTlv")
+	} else {
+		err := validateIpv6(obj.RemoteIpv6Address())
+		if err != nil {
+			validation = append(validation, fmt.Sprintf("%s %s", err.Error(), "on RemoteIpv6Address BgpSrteSegmentHTypeSubTlv"))
+		}
+	}
+
+	if obj.obj.SrMplsSid != nil {
+		obj.SrMplsSid().validateObj(set_default)
+	}
+}
+
+func (obj *bgpSrteSegmentHTypeSubTlv) setDefault() {
+
+}
+
+type bgpSrteSegmentITypeSubTlv struct {
+	obj *snappipb.BgpSrteSegmentITypeSubTlv
+}
+
+func (obj *bgpSrteSegmentITypeSubTlv) Msg() *snappipb.BgpSrteSegmentITypeSubTlv {
+	return obj.obj
+}
+
+func (obj *bgpSrteSegmentITypeSubTlv) SetMsg(msg *snappipb.BgpSrteSegmentITypeSubTlv) BgpSrteSegmentITypeSubTlv {
+	obj.obj = msg
+	return obj
+}
+
+func (obj *bgpSrteSegmentITypeSubTlv) ToPbText() string {
+	vErr := obj.Validate()
+	if vErr != nil {
+		panic(vErr)
+	}
+	return proto.MarshalTextString(obj.Msg())
+}
+
+func (obj *bgpSrteSegmentITypeSubTlv) FromPbText(value string) error {
+	retObj := proto.UnmarshalText(value, obj.Msg())
+	if retObj != nil {
+		return retObj
+	}
+	vErr := obj.Validate(true)
+	if vErr != nil {
+		return vErr
+	}
+	return retObj
+}
+
+func (obj *bgpSrteSegmentITypeSubTlv) ToYaml() string {
+	vErr := obj.Validate()
+	if vErr != nil {
+		panic(vErr)
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(obj.Msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *bgpSrteSegmentITypeSubTlv) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: false,
+	}
+	retObj := opts.Unmarshal([]byte(data), obj.Msg())
+	if retObj != nil {
+		return retObj
+	}
+	vErr := obj.Validate(true)
+	if vErr != nil {
+		return vErr
+	}
+	return retObj
+}
+
+func (obj *bgpSrteSegmentITypeSubTlv) ToJson() string {
+	vErr := obj.Validate()
+	if vErr != nil {
+		panic(vErr)
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+		Indent:          "  ",
+	}
+	data, err := opts.Marshal(obj.Msg())
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *bgpSrteSegmentITypeSubTlv) FromJson(value string) error {
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: false,
+	}
+	retObj := opts.Unmarshal([]byte(value), obj.Msg())
+	if retObj != nil {
+		return retObj
+	}
+	err := obj.Validate(true)
+	if err != nil {
+		return err
+	}
+	return retObj
+}
+
+func (obj *bgpSrteSegmentITypeSubTlv) Validate(defaults ...bool) error {
+	var set_default bool = false
+	if len(defaults) > 0 {
+		set_default = defaults[0]
+	}
+	obj.validateObj(set_default)
+	return validationResult()
+}
+
+type BgpSrteSegmentITypeSubTlv interface {
+	Msg() *snappipb.BgpSrteSegmentITypeSubTlv
+	SetMsg(*snappipb.BgpSrteSegmentITypeSubTlv) BgpSrteSegmentITypeSubTlv
+	ToPbText() string
+	ToYaml() string
+	ToJson() string
+	FromPbText(value string) error
+	FromYaml(value string) error
+	FromJson(value string) error
+	Validate(defaults ...bool) error
+	validateObj(set_default bool)
+	setDefault()
+	Flags() string
+	SetFlags(value string) BgpSrteSegmentITypeSubTlv
+	HasFlags() bool
+	Ipv6NodeAddress() string
+	SetIpv6NodeAddress(value string) BgpSrteSegmentITypeSubTlv
+	Srv6Sid() string
+	SetSrv6Sid(value string) BgpSrteSegmentITypeSubTlv
+	HasSrv6Sid() bool
+	Srv6SidEndpointBehavior() BgpSrteSRv6SIDEndpointBehaviorAndStructure
+	HasSrv6SidEndpointBehavior() bool
+}
+
+// Flags returns a string
+//  One octet bitmap for flags including V-Flag, A-Flag, S-Flag, B-Flag etc. as defined in https://datatracker.ietf.org/doc/html/draft-ietf-idr-segment-routing-te-policy-13#section-2.4.4.2.12
+func (obj *bgpSrteSegmentITypeSubTlv) Flags() string {
+	return *obj.obj.Flags
+}
+
+// Flags returns a string
+//  One octet bitmap for flags including V-Flag, A-Flag, S-Flag, B-Flag etc. as defined in https://datatracker.ietf.org/doc/html/draft-ietf-idr-segment-routing-te-policy-13#section-2.4.4.2.12
+func (obj *bgpSrteSegmentITypeSubTlv) HasFlags() bool {
+	return obj.obj.Flags != nil
+}
+
+// SetFlags sets the string value in the BgpSrteSegmentITypeSubTlv object
+//  One octet bitmap for flags including V-Flag, A-Flag, S-Flag, B-Flag etc. as defined in https://datatracker.ietf.org/doc/html/draft-ietf-idr-segment-routing-te-policy-13#section-2.4.4.2.12
+func (obj *bgpSrteSegmentITypeSubTlv) SetFlags(value string) BgpSrteSegmentITypeSubTlv {
+	obj.obj.Flags = &value
+
+	return obj
+}
+
+// Ipv6NodeAddress returns a string
+//  IPv6 address representing a node.
+func (obj *bgpSrteSegmentITypeSubTlv) Ipv6NodeAddress() string {
+	return obj.obj.Ipv6NodeAddress
+}
+
+// SetIpv6NodeAddress sets the string value in the BgpSrteSegmentITypeSubTlv object
+//  IPv6 address representing a node.
+func (obj *bgpSrteSegmentITypeSubTlv) SetIpv6NodeAddress(value string) BgpSrteSegmentITypeSubTlv {
+	obj.obj.Ipv6NodeAddress = value
+
+	return obj
+}
+
+// Srv6Sid returns a string
+//  Optional SRv6 SID.
+func (obj *bgpSrteSegmentITypeSubTlv) Srv6Sid() string {
+	return *obj.obj.Srv6Sid
+}
+
+// Srv6Sid returns a string
+//  Optional SRv6 SID.
+func (obj *bgpSrteSegmentITypeSubTlv) HasSrv6Sid() bool {
+	return obj.obj.Srv6Sid != nil
+}
+
+// SetSrv6Sid sets the string value in the BgpSrteSegmentITypeSubTlv object
+//  Optional SRv6 SID.
+func (obj *bgpSrteSegmentITypeSubTlv) SetSrv6Sid(value string) BgpSrteSegmentITypeSubTlv {
+	obj.obj.Srv6Sid = &value
+
+	return obj
+}
+
+// Srv6SidEndpointBehavior returns a BgpSrteSRv6SIDEndpointBehaviorAndStructure
+//  Optional SRv6 Endpoint Behavior and SID Structure.
+func (obj *bgpSrteSegmentITypeSubTlv) Srv6SidEndpointBehavior() BgpSrteSRv6SIDEndpointBehaviorAndStructure {
+
+	if obj.obj.Srv6SidEndpointBehavior == nil {
+		obj.obj.Srv6SidEndpointBehavior = &snappipb.BgpSrteSRv6SIDEndpointBehaviorAndStructure{}
+		newObj := &bgpSrteSRv6SIDEndpointBehaviorAndStructure{obj: obj.obj.Srv6SidEndpointBehavior}
+		newObj.setDefault()
+		return newObj
+	}
+	return &bgpSrteSRv6SIDEndpointBehaviorAndStructure{obj: obj.obj.Srv6SidEndpointBehavior}
+}
+
+// Srv6SidEndpointBehavior returns a BgpSrteSRv6SIDEndpointBehaviorAndStructure
+//  Optional SRv6 Endpoint Behavior and SID Structure.
+func (obj *bgpSrteSegmentITypeSubTlv) HasSrv6SidEndpointBehavior() bool {
+	return obj.obj.Srv6SidEndpointBehavior != nil
+}
+
+func (obj *bgpSrteSegmentITypeSubTlv) validateObj(set_default bool) {
+	if set_default {
+		obj.setDefault()
+	}
+
+	if obj.obj.Flags != nil {
+		err := validateHex(obj.Flags())
+		if err != nil {
+			validation = append(validation, fmt.Sprintf("%s %s", err.Error(), "on Flags BgpSrteSegmentITypeSubTlv"))
+		}
+	}
+
+	// Ipv6NodeAddress required
+	if obj.obj.Ipv6NodeAddress == "" {
+		validation = append(validation, "Ipv6NodeAddress is required field on interface BgpSrteSegmentITypeSubTlv")
+	} else {
+		err := validateIpv6(obj.Ipv6NodeAddress())
+		if err != nil {
+			validation = append(validation, fmt.Sprintf("%s %s", err.Error(), "on Ipv6NodeAddress BgpSrteSegmentITypeSubTlv"))
+		}
+	}
+
+	if obj.obj.Srv6Sid != nil {
+		err := validateIpv6(obj.Srv6Sid())
+		if err != nil {
+			validation = append(validation, fmt.Sprintf("%s %s", err.Error(), "on Srv6Sid BgpSrteSegmentITypeSubTlv"))
+		}
+	}
+
+	if obj.obj.Srv6SidEndpointBehavior != nil {
+		obj.Srv6SidEndpointBehavior().validateObj(set_default)
+	}
+}
+
+func (obj *bgpSrteSegmentITypeSubTlv) setDefault() {
+
+}
+
+type bgpSrteSegmentJTypeSubTlv struct {
+	obj *snappipb.BgpSrteSegmentJTypeSubTlv
+}
+
+func (obj *bgpSrteSegmentJTypeSubTlv) Msg() *snappipb.BgpSrteSegmentJTypeSubTlv {
+	return obj.obj
+}
+
+func (obj *bgpSrteSegmentJTypeSubTlv) SetMsg(msg *snappipb.BgpSrteSegmentJTypeSubTlv) BgpSrteSegmentJTypeSubTlv {
+	obj.obj = msg
+	return obj
+}
+
+func (obj *bgpSrteSegmentJTypeSubTlv) ToPbText() string {
+	vErr := obj.Validate()
+	if vErr != nil {
+		panic(vErr)
+	}
+	return proto.MarshalTextString(obj.Msg())
+}
+
+func (obj *bgpSrteSegmentJTypeSubTlv) FromPbText(value string) error {
+	retObj := proto.UnmarshalText(value, obj.Msg())
+	if retObj != nil {
+		return retObj
+	}
+	vErr := obj.Validate(true)
+	if vErr != nil {
+		return vErr
+	}
+	return retObj
+}
+
+func (obj *bgpSrteSegmentJTypeSubTlv) ToYaml() string {
+	vErr := obj.Validate()
+	if vErr != nil {
+		panic(vErr)
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(obj.Msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *bgpSrteSegmentJTypeSubTlv) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: false,
+	}
+	retObj := opts.Unmarshal([]byte(data), obj.Msg())
+	if retObj != nil {
+		return retObj
+	}
+	vErr := obj.Validate(true)
+	if vErr != nil {
+		return vErr
+	}
+	return retObj
+}
+
+func (obj *bgpSrteSegmentJTypeSubTlv) ToJson() string {
+	vErr := obj.Validate()
+	if vErr != nil {
+		panic(vErr)
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+		Indent:          "  ",
+	}
+	data, err := opts.Marshal(obj.Msg())
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *bgpSrteSegmentJTypeSubTlv) FromJson(value string) error {
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: false,
+	}
+	retObj := opts.Unmarshal([]byte(value), obj.Msg())
+	if retObj != nil {
+		return retObj
+	}
+	err := obj.Validate(true)
+	if err != nil {
+		return err
+	}
+	return retObj
+}
+
+func (obj *bgpSrteSegmentJTypeSubTlv) Validate(defaults ...bool) error {
+	var set_default bool = false
+	if len(defaults) > 0 {
+		set_default = defaults[0]
+	}
+	obj.validateObj(set_default)
+	return validationResult()
+}
+
+type BgpSrteSegmentJTypeSubTlv interface {
+	Msg() *snappipb.BgpSrteSegmentJTypeSubTlv
+	SetMsg(*snappipb.BgpSrteSegmentJTypeSubTlv) BgpSrteSegmentJTypeSubTlv
+	ToPbText() string
+	ToYaml() string
+	ToJson() string
+	FromPbText(value string) error
+	FromYaml(value string) error
+	FromJson(value string) error
+	Validate(defaults ...bool) error
+	validateObj(set_default bool)
+	setDefault()
+	Flags() string
+	SetFlags(value string) BgpSrteSegmentJTypeSubTlv
+	HasFlags() bool
+	SrAlgorithm() int32
+	SetSrAlgorithm(value int32) BgpSrteSegmentJTypeSubTlv
+	HasSrAlgorithm() bool
+	LocalInterfaceId() int32
+	SetLocalInterfaceId(value int32) BgpSrteSegmentJTypeSubTlv
+	HasLocalInterfaceId() bool
+	LocalIpv6NodeAddress() string
+	SetLocalIpv6NodeAddress(value string) BgpSrteSegmentJTypeSubTlv
+	RemoteInterfaceId() int32
+	SetRemoteInterfaceId(value int32) BgpSrteSegmentJTypeSubTlv
+	HasRemoteInterfaceId() bool
+	RemoteIpv6NodeAddress() string
+	SetRemoteIpv6NodeAddress(value string) BgpSrteSegmentJTypeSubTlv
+	Srv6Sid() string
+	SetSrv6Sid(value string) BgpSrteSegmentJTypeSubTlv
+	HasSrv6Sid() bool
+	Srv6SidEndpointBehavior() BgpSrteSRv6SIDEndpointBehaviorAndStructure
+	HasSrv6SidEndpointBehavior() bool
+}
+
+// Flags returns a string
+//  One octet bitmap for flags including V-Flag, A-Flag, S-Flag, B-Flag etc. as defined in https://datatracker.ietf.org/doc/html/draft-ietf-idr-segment-routing-te-policy-13#section-2.4.4.2.12
+func (obj *bgpSrteSegmentJTypeSubTlv) Flags() string {
+	return *obj.obj.Flags
+}
+
+// Flags returns a string
+//  One octet bitmap for flags including V-Flag, A-Flag, S-Flag, B-Flag etc. as defined in https://datatracker.ietf.org/doc/html/draft-ietf-idr-segment-routing-te-policy-13#section-2.4.4.2.12
+func (obj *bgpSrteSegmentJTypeSubTlv) HasFlags() bool {
+	return obj.obj.Flags != nil
+}
+
+// SetFlags sets the string value in the BgpSrteSegmentJTypeSubTlv object
+//  One octet bitmap for flags including V-Flag, A-Flag, S-Flag, B-Flag etc. as defined in https://datatracker.ietf.org/doc/html/draft-ietf-idr-segment-routing-te-policy-13#section-2.4.4.2.12
+func (obj *bgpSrteSegmentJTypeSubTlv) SetFlags(value string) BgpSrteSegmentJTypeSubTlv {
+	obj.obj.Flags = &value
+
+	return obj
+}
+
+// SrAlgorithm returns a int32
+//  SR Algorithm identifier when A-Flag in on.
+func (obj *bgpSrteSegmentJTypeSubTlv) SrAlgorithm() int32 {
+	return *obj.obj.SrAlgorithm
+}
+
+// SrAlgorithm returns a int32
+//  SR Algorithm identifier when A-Flag in on.
+func (obj *bgpSrteSegmentJTypeSubTlv) HasSrAlgorithm() bool {
+	return obj.obj.SrAlgorithm != nil
+}
+
+// SetSrAlgorithm sets the int32 value in the BgpSrteSegmentJTypeSubTlv object
+//  SR Algorithm identifier when A-Flag in on.
+func (obj *bgpSrteSegmentJTypeSubTlv) SetSrAlgorithm(value int32) BgpSrteSegmentJTypeSubTlv {
+	obj.obj.SrAlgorithm = &value
+
+	return obj
+}
+
+// LocalInterfaceId returns a int32
+//  Local Interface ID: The Interface Index as defined in [RFC8664].
+func (obj *bgpSrteSegmentJTypeSubTlv) LocalInterfaceId() int32 {
+	return *obj.obj.LocalInterfaceId
+}
+
+// LocalInterfaceId returns a int32
+//  Local Interface ID: The Interface Index as defined in [RFC8664].
+func (obj *bgpSrteSegmentJTypeSubTlv) HasLocalInterfaceId() bool {
+	return obj.obj.LocalInterfaceId != nil
+}
+
+// SetLocalInterfaceId sets the int32 value in the BgpSrteSegmentJTypeSubTlv object
+//  Local Interface ID: The Interface Index as defined in [RFC8664].
+func (obj *bgpSrteSegmentJTypeSubTlv) SetLocalInterfaceId(value int32) BgpSrteSegmentJTypeSubTlv {
+	obj.obj.LocalInterfaceId = &value
+
+	return obj
+}
+
+// LocalIpv6NodeAddress returns a string
+//  IPv6 address representing a node.
+func (obj *bgpSrteSegmentJTypeSubTlv) LocalIpv6NodeAddress() string {
+	return obj.obj.LocalIpv6NodeAddress
+}
+
+// SetLocalIpv6NodeAddress sets the string value in the BgpSrteSegmentJTypeSubTlv object
+//  IPv6 address representing a node.
+func (obj *bgpSrteSegmentJTypeSubTlv) SetLocalIpv6NodeAddress(value string) BgpSrteSegmentJTypeSubTlv {
+	obj.obj.LocalIpv6NodeAddress = value
+
+	return obj
+}
+
+// RemoteInterfaceId returns a int32
+//  Local Interface ID: The Interface Index as defined in [RFC8664].
+func (obj *bgpSrteSegmentJTypeSubTlv) RemoteInterfaceId() int32 {
+	return *obj.obj.RemoteInterfaceId
+}
+
+// RemoteInterfaceId returns a int32
+//  Local Interface ID: The Interface Index as defined in [RFC8664].
+func (obj *bgpSrteSegmentJTypeSubTlv) HasRemoteInterfaceId() bool {
+	return obj.obj.RemoteInterfaceId != nil
+}
+
+// SetRemoteInterfaceId sets the int32 value in the BgpSrteSegmentJTypeSubTlv object
+//  Local Interface ID: The Interface Index as defined in [RFC8664].
+func (obj *bgpSrteSegmentJTypeSubTlv) SetRemoteInterfaceId(value int32) BgpSrteSegmentJTypeSubTlv {
+	obj.obj.RemoteInterfaceId = &value
+
+	return obj
+}
+
+// RemoteIpv6NodeAddress returns a string
+//  IPv6 address representing a node.
+func (obj *bgpSrteSegmentJTypeSubTlv) RemoteIpv6NodeAddress() string {
+	return obj.obj.RemoteIpv6NodeAddress
+}
+
+// SetRemoteIpv6NodeAddress sets the string value in the BgpSrteSegmentJTypeSubTlv object
+//  IPv6 address representing a node.
+func (obj *bgpSrteSegmentJTypeSubTlv) SetRemoteIpv6NodeAddress(value string) BgpSrteSegmentJTypeSubTlv {
+	obj.obj.RemoteIpv6NodeAddress = value
+
+	return obj
+}
+
+// Srv6Sid returns a string
+//  Optional SRv6 SID.
+func (obj *bgpSrteSegmentJTypeSubTlv) Srv6Sid() string {
+	return *obj.obj.Srv6Sid
+}
+
+// Srv6Sid returns a string
+//  Optional SRv6 SID.
+func (obj *bgpSrteSegmentJTypeSubTlv) HasSrv6Sid() bool {
+	return obj.obj.Srv6Sid != nil
+}
+
+// SetSrv6Sid sets the string value in the BgpSrteSegmentJTypeSubTlv object
+//  Optional SRv6 SID.
+func (obj *bgpSrteSegmentJTypeSubTlv) SetSrv6Sid(value string) BgpSrteSegmentJTypeSubTlv {
+	obj.obj.Srv6Sid = &value
+
+	return obj
+}
+
+// Srv6SidEndpointBehavior returns a BgpSrteSRv6SIDEndpointBehaviorAndStructure
+//  Optional SRv6 Endpoint Behavior and SID Structure.
+func (obj *bgpSrteSegmentJTypeSubTlv) Srv6SidEndpointBehavior() BgpSrteSRv6SIDEndpointBehaviorAndStructure {
+
+	if obj.obj.Srv6SidEndpointBehavior == nil {
+		obj.obj.Srv6SidEndpointBehavior = &snappipb.BgpSrteSRv6SIDEndpointBehaviorAndStructure{}
+		newObj := &bgpSrteSRv6SIDEndpointBehaviorAndStructure{obj: obj.obj.Srv6SidEndpointBehavior}
+		newObj.setDefault()
+		return newObj
+	}
+	return &bgpSrteSRv6SIDEndpointBehaviorAndStructure{obj: obj.obj.Srv6SidEndpointBehavior}
+}
+
+// Srv6SidEndpointBehavior returns a BgpSrteSRv6SIDEndpointBehaviorAndStructure
+//  Optional SRv6 Endpoint Behavior and SID Structure.
+func (obj *bgpSrteSegmentJTypeSubTlv) HasSrv6SidEndpointBehavior() bool {
+	return obj.obj.Srv6SidEndpointBehavior != nil
+}
+
+func (obj *bgpSrteSegmentJTypeSubTlv) validateObj(set_default bool) {
+	if set_default {
+		obj.setDefault()
+	}
+
+	if obj.obj.Flags != nil {
+		err := validateHex(obj.Flags())
+		if err != nil {
+			validation = append(validation, fmt.Sprintf("%s %s", err.Error(), "on Flags BgpSrteSegmentJTypeSubTlv"))
+		}
+	}
+
+	if obj.obj.SrAlgorithm != nil {
+		if *obj.obj.SrAlgorithm < 0 || *obj.obj.SrAlgorithm > 255 {
+			validation = append(
+				validation, fmt.Sprintf("0 <= BgpSrteSegmentJTypeSubTlv.SrAlgorithm <= 255 but Got %d", *obj.obj.SrAlgorithm))
+		}
+
+	}
+
+	if obj.obj.LocalInterfaceId != nil {
+		if *obj.obj.LocalInterfaceId < 0 || *obj.obj.LocalInterfaceId > 2147483647 {
+			validation = append(
+				validation, fmt.Sprintf("0 <= BgpSrteSegmentJTypeSubTlv.LocalInterfaceId <= 2147483647 but Got %d", *obj.obj.LocalInterfaceId))
+		}
+
+	}
+
+	// LocalIpv6NodeAddress required
+	if obj.obj.LocalIpv6NodeAddress == "" {
+		validation = append(validation, "LocalIpv6NodeAddress is required field on interface BgpSrteSegmentJTypeSubTlv")
+	} else {
+		err := validateIpv6(obj.LocalIpv6NodeAddress())
+		if err != nil {
+			validation = append(validation, fmt.Sprintf("%s %s", err.Error(), "on LocalIpv6NodeAddress BgpSrteSegmentJTypeSubTlv"))
+		}
+	}
+
+	if obj.obj.RemoteInterfaceId != nil {
+		if *obj.obj.RemoteInterfaceId < 0 || *obj.obj.RemoteInterfaceId > 2147483647 {
+			validation = append(
+				validation, fmt.Sprintf("0 <= BgpSrteSegmentJTypeSubTlv.RemoteInterfaceId <= 2147483647 but Got %d", *obj.obj.RemoteInterfaceId))
+		}
+
+	}
+
+	// RemoteIpv6NodeAddress required
+	if obj.obj.RemoteIpv6NodeAddress == "" {
+		validation = append(validation, "RemoteIpv6NodeAddress is required field on interface BgpSrteSegmentJTypeSubTlv")
+	} else {
+		err := validateIpv6(obj.RemoteIpv6NodeAddress())
+		if err != nil {
+			validation = append(validation, fmt.Sprintf("%s %s", err.Error(), "on RemoteIpv6NodeAddress BgpSrteSegmentJTypeSubTlv"))
+		}
+	}
+
+	if obj.obj.Srv6Sid != nil {
+		err := validateIpv6(obj.Srv6Sid())
+		if err != nil {
+			validation = append(validation, fmt.Sprintf("%s %s", err.Error(), "on Srv6Sid BgpSrteSegmentJTypeSubTlv"))
+		}
+	}
+
+	if obj.obj.Srv6SidEndpointBehavior != nil {
+		obj.Srv6SidEndpointBehavior().validateObj(set_default)
+	}
+}
+
+func (obj *bgpSrteSegmentJTypeSubTlv) setDefault() {
+	if obj.obj.SrAlgorithm == nil {
+		obj.SetSrAlgorithm(0)
+	}
+	if obj.obj.LocalInterfaceId == nil {
+		obj.SetLocalInterfaceId(0)
+	}
+	if obj.obj.RemoteInterfaceId == nil {
+		obj.SetRemoteInterfaceId(0)
+	}
+
+}
+
+type bgpSrteSegmentKTypeSubTlv struct {
+	obj *snappipb.BgpSrteSegmentKTypeSubTlv
+}
+
+func (obj *bgpSrteSegmentKTypeSubTlv) Msg() *snappipb.BgpSrteSegmentKTypeSubTlv {
+	return obj.obj
+}
+
+func (obj *bgpSrteSegmentKTypeSubTlv) SetMsg(msg *snappipb.BgpSrteSegmentKTypeSubTlv) BgpSrteSegmentKTypeSubTlv {
+	obj.obj = msg
+	return obj
+}
+
+func (obj *bgpSrteSegmentKTypeSubTlv) ToPbText() string {
+	vErr := obj.Validate()
+	if vErr != nil {
+		panic(vErr)
+	}
+	return proto.MarshalTextString(obj.Msg())
+}
+
+func (obj *bgpSrteSegmentKTypeSubTlv) FromPbText(value string) error {
+	retObj := proto.UnmarshalText(value, obj.Msg())
+	if retObj != nil {
+		return retObj
+	}
+	vErr := obj.Validate(true)
+	if vErr != nil {
+		return vErr
+	}
+	return retObj
+}
+
+func (obj *bgpSrteSegmentKTypeSubTlv) ToYaml() string {
+	vErr := obj.Validate()
+	if vErr != nil {
+		panic(vErr)
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(obj.Msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *bgpSrteSegmentKTypeSubTlv) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: false,
+	}
+	retObj := opts.Unmarshal([]byte(data), obj.Msg())
+	if retObj != nil {
+		return retObj
+	}
+	vErr := obj.Validate(true)
+	if vErr != nil {
+		return vErr
+	}
+	return retObj
+}
+
+func (obj *bgpSrteSegmentKTypeSubTlv) ToJson() string {
+	vErr := obj.Validate()
+	if vErr != nil {
+		panic(vErr)
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+		Indent:          "  ",
+	}
+	data, err := opts.Marshal(obj.Msg())
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *bgpSrteSegmentKTypeSubTlv) FromJson(value string) error {
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: false,
+	}
+	retObj := opts.Unmarshal([]byte(value), obj.Msg())
+	if retObj != nil {
+		return retObj
+	}
+	err := obj.Validate(true)
+	if err != nil {
+		return err
+	}
+	return retObj
+}
+
+func (obj *bgpSrteSegmentKTypeSubTlv) Validate(defaults ...bool) error {
+	var set_default bool = false
+	if len(defaults) > 0 {
+		set_default = defaults[0]
+	}
+	obj.validateObj(set_default)
+	return validationResult()
+}
+
+type BgpSrteSegmentKTypeSubTlv interface {
+	Msg() *snappipb.BgpSrteSegmentKTypeSubTlv
+	SetMsg(*snappipb.BgpSrteSegmentKTypeSubTlv) BgpSrteSegmentKTypeSubTlv
+	ToPbText() string
+	ToYaml() string
+	ToJson() string
+	FromPbText(value string) error
+	FromYaml(value string) error
+	FromJson(value string) error
+	Validate(defaults ...bool) error
+	validateObj(set_default bool)
+	setDefault()
+	Flags() string
+	SetFlags(value string) BgpSrteSegmentKTypeSubTlv
+	HasFlags() bool
+	SrAlgorithm() int32
+	SetSrAlgorithm(value int32) BgpSrteSegmentKTypeSubTlv
+	HasSrAlgorithm() bool
+	LocalIpv6Address() string
+	SetLocalIpv6Address(value string) BgpSrteSegmentKTypeSubTlv
+	RemoteIpv6Address() string
+	SetRemoteIpv6Address(value string) BgpSrteSegmentKTypeSubTlv
+	Srv6Sid() string
+	SetSrv6Sid(value string) BgpSrteSegmentKTypeSubTlv
+	HasSrv6Sid() bool
+	Srv6SidEndpointBehavior() BgpSrteSRv6SIDEndpointBehaviorAndStructure
+	HasSrv6SidEndpointBehavior() bool
+}
+
+// Flags returns a string
+//  One octet bitmap for flags including V-Flag, A-Flag, S-Flag, B-Flag etc. as defined in https://datatracker.ietf.org/doc/html/draft-ietf-idr-segment-routing-te-policy-13#section-2.4.4.2.12
+func (obj *bgpSrteSegmentKTypeSubTlv) Flags() string {
+	return *obj.obj.Flags
+}
+
+// Flags returns a string
+//  One octet bitmap for flags including V-Flag, A-Flag, S-Flag, B-Flag etc. as defined in https://datatracker.ietf.org/doc/html/draft-ietf-idr-segment-routing-te-policy-13#section-2.4.4.2.12
+func (obj *bgpSrteSegmentKTypeSubTlv) HasFlags() bool {
+	return obj.obj.Flags != nil
+}
+
+// SetFlags sets the string value in the BgpSrteSegmentKTypeSubTlv object
+//  One octet bitmap for flags including V-Flag, A-Flag, S-Flag, B-Flag etc. as defined in https://datatracker.ietf.org/doc/html/draft-ietf-idr-segment-routing-te-policy-13#section-2.4.4.2.12
+func (obj *bgpSrteSegmentKTypeSubTlv) SetFlags(value string) BgpSrteSegmentKTypeSubTlv {
+	obj.obj.Flags = &value
+
+	return obj
+}
+
+// SrAlgorithm returns a int32
+//  SR Algorithm identifier when A-Flag in on.
+func (obj *bgpSrteSegmentKTypeSubTlv) SrAlgorithm() int32 {
+	return *obj.obj.SrAlgorithm
+}
+
+// SrAlgorithm returns a int32
+//  SR Algorithm identifier when A-Flag in on.
+func (obj *bgpSrteSegmentKTypeSubTlv) HasSrAlgorithm() bool {
+	return obj.obj.SrAlgorithm != nil
+}
+
+// SetSrAlgorithm sets the int32 value in the BgpSrteSegmentKTypeSubTlv object
+//  SR Algorithm identifier when A-Flag in on.
+func (obj *bgpSrteSegmentKTypeSubTlv) SetSrAlgorithm(value int32) BgpSrteSegmentKTypeSubTlv {
+	obj.obj.SrAlgorithm = &value
+
+	return obj
+}
+
+// LocalIpv6Address returns a string
+//  IPv6 address representing a node.
+func (obj *bgpSrteSegmentKTypeSubTlv) LocalIpv6Address() string {
+	return obj.obj.LocalIpv6Address
+}
+
+// SetLocalIpv6Address sets the string value in the BgpSrteSegmentKTypeSubTlv object
+//  IPv6 address representing a node.
+func (obj *bgpSrteSegmentKTypeSubTlv) SetLocalIpv6Address(value string) BgpSrteSegmentKTypeSubTlv {
+	obj.obj.LocalIpv6Address = value
+
+	return obj
+}
+
+// RemoteIpv6Address returns a string
+//  IPv6 address representing a node.
+func (obj *bgpSrteSegmentKTypeSubTlv) RemoteIpv6Address() string {
+	return obj.obj.RemoteIpv6Address
+}
+
+// SetRemoteIpv6Address sets the string value in the BgpSrteSegmentKTypeSubTlv object
+//  IPv6 address representing a node.
+func (obj *bgpSrteSegmentKTypeSubTlv) SetRemoteIpv6Address(value string) BgpSrteSegmentKTypeSubTlv {
+	obj.obj.RemoteIpv6Address = value
+
+	return obj
+}
+
+// Srv6Sid returns a string
+//  Optional SRv6 SID.
+func (obj *bgpSrteSegmentKTypeSubTlv) Srv6Sid() string {
+	return *obj.obj.Srv6Sid
+}
+
+// Srv6Sid returns a string
+//  Optional SRv6 SID.
+func (obj *bgpSrteSegmentKTypeSubTlv) HasSrv6Sid() bool {
+	return obj.obj.Srv6Sid != nil
+}
+
+// SetSrv6Sid sets the string value in the BgpSrteSegmentKTypeSubTlv object
+//  Optional SRv6 SID.
+func (obj *bgpSrteSegmentKTypeSubTlv) SetSrv6Sid(value string) BgpSrteSegmentKTypeSubTlv {
+	obj.obj.Srv6Sid = &value
+
+	return obj
+}
+
+// Srv6SidEndpointBehavior returns a BgpSrteSRv6SIDEndpointBehaviorAndStructure
+//  Optional SRv6 Endpoint Behavior and SID Structure.
+func (obj *bgpSrteSegmentKTypeSubTlv) Srv6SidEndpointBehavior() BgpSrteSRv6SIDEndpointBehaviorAndStructure {
+
+	if obj.obj.Srv6SidEndpointBehavior == nil {
+		obj.obj.Srv6SidEndpointBehavior = &snappipb.BgpSrteSRv6SIDEndpointBehaviorAndStructure{}
+		newObj := &bgpSrteSRv6SIDEndpointBehaviorAndStructure{obj: obj.obj.Srv6SidEndpointBehavior}
+		newObj.setDefault()
+		return newObj
+	}
+	return &bgpSrteSRv6SIDEndpointBehaviorAndStructure{obj: obj.obj.Srv6SidEndpointBehavior}
+}
+
+// Srv6SidEndpointBehavior returns a BgpSrteSRv6SIDEndpointBehaviorAndStructure
+//  Optional SRv6 Endpoint Behavior and SID Structure.
+func (obj *bgpSrteSegmentKTypeSubTlv) HasSrv6SidEndpointBehavior() bool {
+	return obj.obj.Srv6SidEndpointBehavior != nil
+}
+
+func (obj *bgpSrteSegmentKTypeSubTlv) validateObj(set_default bool) {
+	if set_default {
+		obj.setDefault()
+	}
+
+	if obj.obj.Flags != nil {
+		err := validateHex(obj.Flags())
+		if err != nil {
+			validation = append(validation, fmt.Sprintf("%s %s", err.Error(), "on Flags BgpSrteSegmentKTypeSubTlv"))
+		}
+	}
+
+	if obj.obj.SrAlgorithm != nil {
+		if *obj.obj.SrAlgorithm < 0 || *obj.obj.SrAlgorithm > 255 {
+			validation = append(
+				validation, fmt.Sprintf("0 <= BgpSrteSegmentKTypeSubTlv.SrAlgorithm <= 255 but Got %d", *obj.obj.SrAlgorithm))
+		}
+
+	}
+
+	// LocalIpv6Address required
+	if obj.obj.LocalIpv6Address == "" {
+		validation = append(validation, "LocalIpv6Address is required field on interface BgpSrteSegmentKTypeSubTlv")
+	} else {
+		err := validateIpv6(obj.LocalIpv6Address())
+		if err != nil {
+			validation = append(validation, fmt.Sprintf("%s %s", err.Error(), "on LocalIpv6Address BgpSrteSegmentKTypeSubTlv"))
+		}
+	}
+
+	// RemoteIpv6Address required
+	if obj.obj.RemoteIpv6Address == "" {
+		validation = append(validation, "RemoteIpv6Address is required field on interface BgpSrteSegmentKTypeSubTlv")
+	} else {
+		err := validateIpv6(obj.RemoteIpv6Address())
+		if err != nil {
+			validation = append(validation, fmt.Sprintf("%s %s", err.Error(), "on RemoteIpv6Address BgpSrteSegmentKTypeSubTlv"))
+		}
+	}
+
+	if obj.obj.Srv6Sid != nil {
+		err := validateIpv6(obj.Srv6Sid())
+		if err != nil {
+			validation = append(validation, fmt.Sprintf("%s %s", err.Error(), "on Srv6Sid BgpSrteSegmentKTypeSubTlv"))
+		}
+	}
+
+	if obj.obj.Srv6SidEndpointBehavior != nil {
+		obj.Srv6SidEndpointBehavior().validateObj(set_default)
+	}
+}
+
+func (obj *bgpSrteSegmentKTypeSubTlv) setDefault() {
+	if obj.obj.SrAlgorithm == nil {
+		obj.SetSrAlgorithm(0)
+	}
+
+}
+
+type bgpSrteSRv6SIDEndpointBehaviorAndStructure struct {
+	obj *snappipb.BgpSrteSRv6SIDEndpointBehaviorAndStructure
+}
+
+func (obj *bgpSrteSRv6SIDEndpointBehaviorAndStructure) Msg() *snappipb.BgpSrteSRv6SIDEndpointBehaviorAndStructure {
+	return obj.obj
+}
+
+func (obj *bgpSrteSRv6SIDEndpointBehaviorAndStructure) SetMsg(msg *snappipb.BgpSrteSRv6SIDEndpointBehaviorAndStructure) BgpSrteSRv6SIDEndpointBehaviorAndStructure {
+	obj.obj = msg
+	return obj
+}
+
+func (obj *bgpSrteSRv6SIDEndpointBehaviorAndStructure) ToPbText() string {
+	vErr := obj.Validate()
+	if vErr != nil {
+		panic(vErr)
+	}
+	return proto.MarshalTextString(obj.Msg())
+}
+
+func (obj *bgpSrteSRv6SIDEndpointBehaviorAndStructure) FromPbText(value string) error {
+	retObj := proto.UnmarshalText(value, obj.Msg())
+	if retObj != nil {
+		return retObj
+	}
+	vErr := obj.Validate(true)
+	if vErr != nil {
+		return vErr
+	}
+	return retObj
+}
+
+func (obj *bgpSrteSRv6SIDEndpointBehaviorAndStructure) ToYaml() string {
+	vErr := obj.Validate()
+	if vErr != nil {
+		panic(vErr)
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(obj.Msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *bgpSrteSRv6SIDEndpointBehaviorAndStructure) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: false,
+	}
+	retObj := opts.Unmarshal([]byte(data), obj.Msg())
+	if retObj != nil {
+		return retObj
+	}
+	vErr := obj.Validate(true)
+	if vErr != nil {
+		return vErr
+	}
+	return retObj
+}
+
+func (obj *bgpSrteSRv6SIDEndpointBehaviorAndStructure) ToJson() string {
+	vErr := obj.Validate()
+	if vErr != nil {
+		panic(vErr)
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+		Indent:          "  ",
+	}
+	data, err := opts.Marshal(obj.Msg())
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *bgpSrteSRv6SIDEndpointBehaviorAndStructure) FromJson(value string) error {
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: false,
+	}
+	retObj := opts.Unmarshal([]byte(value), obj.Msg())
+	if retObj != nil {
+		return retObj
+	}
+	err := obj.Validate(true)
+	if err != nil {
+		return err
+	}
+	return retObj
+}
+
+func (obj *bgpSrteSRv6SIDEndpointBehaviorAndStructure) Validate(defaults ...bool) error {
+	var set_default bool = false
+	if len(defaults) > 0 {
+		set_default = defaults[0]
+	}
+	obj.validateObj(set_default)
+	return validationResult()
+}
+
+type BgpSrteSRv6SIDEndpointBehaviorAndStructure interface {
+	Msg() *snappipb.BgpSrteSRv6SIDEndpointBehaviorAndStructure
+	SetMsg(*snappipb.BgpSrteSRv6SIDEndpointBehaviorAndStructure) BgpSrteSRv6SIDEndpointBehaviorAndStructure
+	ToPbText() string
+	ToYaml() string
+	ToJson() string
+	FromPbText(value string) error
+	FromYaml(value string) error
+	FromJson(value string) error
+	Validate(defaults ...bool) error
+	validateObj(set_default bool)
+	setDefault()
+	LbLength() int32
+	SetLbLength(value int32) BgpSrteSRv6SIDEndpointBehaviorAndStructure
+	HasLbLength() bool
+	LnLength() int32
+	SetLnLength(value int32) BgpSrteSRv6SIDEndpointBehaviorAndStructure
+	HasLnLength() bool
+	FuncLength() int32
+	SetFuncLength(value int32) BgpSrteSRv6SIDEndpointBehaviorAndStructure
+	HasFuncLength() bool
+	ArgLength() int32
+	SetArgLength(value int32) BgpSrteSRv6SIDEndpointBehaviorAndStructure
+	HasArgLength() bool
+}
+
+// LbLength returns a int32
+//  SRv6 SID Locator Block length in bits.
+func (obj *bgpSrteSRv6SIDEndpointBehaviorAndStructure) LbLength() int32 {
+	return *obj.obj.LbLength
+}
+
+// LbLength returns a int32
+//  SRv6 SID Locator Block length in bits.
+func (obj *bgpSrteSRv6SIDEndpointBehaviorAndStructure) HasLbLength() bool {
+	return obj.obj.LbLength != nil
+}
+
+// SetLbLength sets the int32 value in the BgpSrteSRv6SIDEndpointBehaviorAndStructure object
+//  SRv6 SID Locator Block length in bits.
+func (obj *bgpSrteSRv6SIDEndpointBehaviorAndStructure) SetLbLength(value int32) BgpSrteSRv6SIDEndpointBehaviorAndStructure {
+	obj.obj.LbLength = &value
+
+	return obj
+}
+
+// LnLength returns a int32
+//  SRv6 SID Locator Node length in bits.
+func (obj *bgpSrteSRv6SIDEndpointBehaviorAndStructure) LnLength() int32 {
+	return *obj.obj.LnLength
+}
+
+// LnLength returns a int32
+//  SRv6 SID Locator Node length in bits.
+func (obj *bgpSrteSRv6SIDEndpointBehaviorAndStructure) HasLnLength() bool {
+	return obj.obj.LnLength != nil
+}
+
+// SetLnLength sets the int32 value in the BgpSrteSRv6SIDEndpointBehaviorAndStructure object
+//  SRv6 SID Locator Node length in bits.
+func (obj *bgpSrteSRv6SIDEndpointBehaviorAndStructure) SetLnLength(value int32) BgpSrteSRv6SIDEndpointBehaviorAndStructure {
+	obj.obj.LnLength = &value
+
+	return obj
+}
+
+// FuncLength returns a int32
+//  SRv6 SID Function length in bits.
+func (obj *bgpSrteSRv6SIDEndpointBehaviorAndStructure) FuncLength() int32 {
+	return *obj.obj.FuncLength
+}
+
+// FuncLength returns a int32
+//  SRv6 SID Function length in bits.
+func (obj *bgpSrteSRv6SIDEndpointBehaviorAndStructure) HasFuncLength() bool {
+	return obj.obj.FuncLength != nil
+}
+
+// SetFuncLength sets the int32 value in the BgpSrteSRv6SIDEndpointBehaviorAndStructure object
+//  SRv6 SID Function length in bits.
+func (obj *bgpSrteSRv6SIDEndpointBehaviorAndStructure) SetFuncLength(value int32) BgpSrteSRv6SIDEndpointBehaviorAndStructure {
+	obj.obj.FuncLength = &value
+
+	return obj
+}
+
+// ArgLength returns a int32
+//  SRv6 SID Arguments length in bits.
+func (obj *bgpSrteSRv6SIDEndpointBehaviorAndStructure) ArgLength() int32 {
+	return *obj.obj.ArgLength
+}
+
+// ArgLength returns a int32
+//  SRv6 SID Arguments length in bits.
+func (obj *bgpSrteSRv6SIDEndpointBehaviorAndStructure) HasArgLength() bool {
+	return obj.obj.ArgLength != nil
+}
+
+// SetArgLength sets the int32 value in the BgpSrteSRv6SIDEndpointBehaviorAndStructure object
+//  SRv6 SID Arguments length in bits.
+func (obj *bgpSrteSRv6SIDEndpointBehaviorAndStructure) SetArgLength(value int32) BgpSrteSRv6SIDEndpointBehaviorAndStructure {
+	obj.obj.ArgLength = &value
+
+	return obj
+}
+
+func (obj *bgpSrteSRv6SIDEndpointBehaviorAndStructure) validateObj(set_default bool) {
+	if set_default {
+		obj.setDefault()
+	}
+
+	if obj.obj.LbLength != nil {
+		if *obj.obj.LbLength < 0 || *obj.obj.LbLength > 128 {
+			validation = append(
+				validation, fmt.Sprintf("0 <= BgpSrteSRv6SIDEndpointBehaviorAndStructure.LbLength <= 128 but Got %d", *obj.obj.LbLength))
+		}
+
+	}
+
+	if obj.obj.LnLength != nil {
+		if *obj.obj.LnLength < 0 || *obj.obj.LnLength > 128 {
+			validation = append(
+				validation, fmt.Sprintf("0 <= BgpSrteSRv6SIDEndpointBehaviorAndStructure.LnLength <= 128 but Got %d", *obj.obj.LnLength))
+		}
+
+	}
+
+	if obj.obj.FuncLength != nil {
+		if *obj.obj.FuncLength < 0 || *obj.obj.FuncLength > 128 {
+			validation = append(
+				validation, fmt.Sprintf("0 <= BgpSrteSRv6SIDEndpointBehaviorAndStructure.FuncLength <= 128 but Got %d", *obj.obj.FuncLength))
+		}
+
+	}
+
+	if obj.obj.ArgLength != nil {
+		if *obj.obj.ArgLength < 0 || *obj.obj.ArgLength > 128 {
+			validation = append(
+				validation, fmt.Sprintf("0 <= BgpSrteSRv6SIDEndpointBehaviorAndStructure.ArgLength <= 128 but Got %d", *obj.obj.ArgLength))
+		}
+
+	}
+
+}
+
+func (obj *bgpSrteSRv6SIDEndpointBehaviorAndStructure) setDefault() {
+	if obj.obj.LbLength == nil {
+		obj.SetLbLength(0)
+	}
+	if obj.obj.LnLength == nil {
+		obj.SetLnLength(0)
+	}
+	if obj.obj.FuncLength == nil {
+		obj.SetFuncLength(0)
+	}
+	if obj.obj.ArgLength == nil {
+		obj.SetArgLength(0)
+	}
+
+}
+
+type bgpSrteSrMplsSid struct {
+	obj *snappipb.BgpSrteSrMplsSid
+}
+
+func (obj *bgpSrteSrMplsSid) Msg() *snappipb.BgpSrteSrMplsSid {
+	return obj.obj
+}
+
+func (obj *bgpSrteSrMplsSid) SetMsg(msg *snappipb.BgpSrteSrMplsSid) BgpSrteSrMplsSid {
+	obj.obj = msg
+	return obj
+}
+
+func (obj *bgpSrteSrMplsSid) ToPbText() string {
+	vErr := obj.Validate()
+	if vErr != nil {
+		panic(vErr)
+	}
+	return proto.MarshalTextString(obj.Msg())
+}
+
+func (obj *bgpSrteSrMplsSid) FromPbText(value string) error {
+	retObj := proto.UnmarshalText(value, obj.Msg())
+	if retObj != nil {
+		return retObj
+	}
+	vErr := obj.Validate(true)
+	if vErr != nil {
+		return vErr
+	}
+	return retObj
+}
+
+func (obj *bgpSrteSrMplsSid) ToYaml() string {
+	vErr := obj.Validate()
+	if vErr != nil {
+		panic(vErr)
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(obj.Msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *bgpSrteSrMplsSid) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: false,
+	}
+	retObj := opts.Unmarshal([]byte(data), obj.Msg())
+	if retObj != nil {
+		return retObj
+	}
+	vErr := obj.Validate(true)
+	if vErr != nil {
+		return vErr
+	}
+	return retObj
+}
+
+func (obj *bgpSrteSrMplsSid) ToJson() string {
+	vErr := obj.Validate()
+	if vErr != nil {
+		panic(vErr)
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+		Indent:          "  ",
+	}
+	data, err := opts.Marshal(obj.Msg())
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *bgpSrteSrMplsSid) FromJson(value string) error {
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: false,
+	}
+	retObj := opts.Unmarshal([]byte(value), obj.Msg())
+	if retObj != nil {
+		return retObj
+	}
+	err := obj.Validate(true)
+	if err != nil {
+		return err
+	}
+	return retObj
+}
+
+func (obj *bgpSrteSrMplsSid) Validate(defaults ...bool) error {
+	var set_default bool = false
+	if len(defaults) > 0 {
+		set_default = defaults[0]
+	}
+	obj.validateObj(set_default)
+	return validationResult()
+}
+
+type BgpSrteSrMplsSid interface {
+	Msg() *snappipb.BgpSrteSrMplsSid
+	SetMsg(*snappipb.BgpSrteSrMplsSid) BgpSrteSrMplsSid
+	ToPbText() string
+	ToYaml() string
+	ToJson() string
+	FromPbText(value string) error
+	FromYaml(value string) error
+	FromJson(value string) error
+	Validate(defaults ...bool) error
+	validateObj(set_default bool)
+	setDefault()
+	Label() int32
+	SetLabel(value int32) BgpSrteSrMplsSid
+	HasLabel() bool
+	Tc() int32
+	SetTc(value int32) BgpSrteSrMplsSid
+	HasTc() bool
+	SBit() bool
+	SetSBit(value bool) BgpSrteSrMplsSid
+	HasSBit() bool
+	Ttl() int32
+	SetTtl(value int32) BgpSrteSrMplsSid
+	HasTtl() bool
+}
+
+// Label returns a int32
+//  Label value in [0, 2^20 -1].
+func (obj *bgpSrteSrMplsSid) Label() int32 {
+	return *obj.obj.Label
+}
+
+// Label returns a int32
+//  Label value in [0, 2^20 -1].
+func (obj *bgpSrteSrMplsSid) HasLabel() bool {
+	return obj.obj.Label != nil
+}
+
+// SetLabel sets the int32 value in the BgpSrteSrMplsSid object
+//  Label value in [0, 2^20 -1].
+func (obj *bgpSrteSrMplsSid) SetLabel(value int32) BgpSrteSrMplsSid {
+	obj.obj.Label = &value
+
+	return obj
+}
+
+// Tc returns a int32
+//  Traffic class in bits.
+func (obj *bgpSrteSrMplsSid) Tc() int32 {
+	return *obj.obj.Tc
+}
+
+// Tc returns a int32
+//  Traffic class in bits.
+func (obj *bgpSrteSrMplsSid) HasTc() bool {
+	return obj.obj.Tc != nil
+}
+
+// SetTc sets the int32 value in the BgpSrteSrMplsSid object
+//  Traffic class in bits.
+func (obj *bgpSrteSrMplsSid) SetTc(value int32) BgpSrteSrMplsSid {
+	obj.obj.Tc = &value
+
+	return obj
+}
+
+// SBit returns a bool
+//  Bottom-of-Stack bit.
+func (obj *bgpSrteSrMplsSid) SBit() bool {
+	return *obj.obj.SBit
+}
+
+// SBit returns a bool
+//  Bottom-of-Stack bit.
+func (obj *bgpSrteSrMplsSid) HasSBit() bool {
+	return obj.obj.SBit != nil
+}
+
+// SetSBit sets the bool value in the BgpSrteSrMplsSid object
+//  Bottom-of-Stack bit.
+func (obj *bgpSrteSrMplsSid) SetSBit(value bool) BgpSrteSrMplsSid {
+	obj.obj.SBit = &value
+
+	return obj
+}
+
+// Ttl returns a int32
+//  Time To Live.
+func (obj *bgpSrteSrMplsSid) Ttl() int32 {
+	return *obj.obj.Ttl
+}
+
+// Ttl returns a int32
+//  Time To Live.
+func (obj *bgpSrteSrMplsSid) HasTtl() bool {
+	return obj.obj.Ttl != nil
+}
+
+// SetTtl sets the int32 value in the BgpSrteSrMplsSid object
+//  Time To Live.
+func (obj *bgpSrteSrMplsSid) SetTtl(value int32) BgpSrteSrMplsSid {
+	obj.obj.Ttl = &value
+
+	return obj
+}
+
+func (obj *bgpSrteSrMplsSid) validateObj(set_default bool) {
+	if set_default {
+		obj.setDefault()
+	}
+
+	if obj.obj.Label != nil {
+		if *obj.obj.Label < 0 || *obj.obj.Label > 1048575 {
+			validation = append(
+				validation, fmt.Sprintf("0 <= BgpSrteSrMplsSid.Label <= 1048575 but Got %d", *obj.obj.Label))
+		}
+
+	}
+
+	if obj.obj.Tc != nil {
+		if *obj.obj.Tc < 0 || *obj.obj.Tc > 7 {
+			validation = append(
+				validation, fmt.Sprintf("0 <= BgpSrteSrMplsSid.Tc <= 7 but Got %d", *obj.obj.Tc))
+		}
+
+	}
+
+	if obj.obj.Ttl != nil {
+		if *obj.obj.Ttl < 0 || *obj.obj.Ttl > 255 {
+			validation = append(
+				validation, fmt.Sprintf("0 <= BgpSrteSrMplsSid.Ttl <= 255 but Got %d", *obj.obj.Ttl))
+		}
+
+	}
+
+}
+
+func (obj *bgpSrteSrMplsSid) setDefault() {
 
 }
