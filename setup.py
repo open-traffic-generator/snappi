@@ -18,7 +18,9 @@ with open(os.path.join(base_dir, "readme.md")) as fd:
     long_description = fd.read()
 
 # download openapi.yaml
-openapi_url = "https://github.com/open-traffic-generator/models/releases/download/v{version}/openapi.yaml".format(version=models_version)
+openapi_url = "https://github.com/open-traffic-generator/models/releases/download/v{version}/openapi.yaml".format(
+    version=models_version
+)
 response = requests.request("GET", openapi_url, allow_redirects=True)
 assert response.status_code == 200
 with open(os.path.join("openapi.yaml"), "wb") as fp:
@@ -29,11 +31,8 @@ openapiart.OpenApiArt(
     protobuf_name=pkg_name + "pb",
     artifact_dir="artifacts",
     extension_prefix=pkg_name,
-).GeneratePythonSdk(
-    package_name=pkg_name
-).GenerateGoSdk(
-    package_dir="github.com/open-traffic-generator/snappi/%s" % go_pkg_name,
-    package_name=go_pkg_name
+).GeneratePythonSdk(package_name=pkg_name).GenerateGoSdk(
+    package_dir="github.com/open-traffic-generator/snappi/%s" % go_pkg_name, package_name=go_pkg_name
 )
 
 if os.path.exists(pkg_name):
@@ -78,10 +77,16 @@ setuptools.setup(
     include_package_data=True,
     packages=[pkg_name],
     python_requires=">=2.7, <4",
-    install_requires=["requests", "pyyaml", "jsonpath-ng", "typing"],
+    install_requires=[
+        "requests",
+        "pyyaml",
+        "jsonpath-ng",
+        "typing",
+        "typing-extensions",
+    ],
     extras_require={
         "ixnetwork": ["snappi_ixnetwork==0.5.4"],
-        'trex': ['snappi_trex'],
+        "trex": ["snappi_trex"],
         "convergence": ["snappi_convergence==0.1.1"],
         "testing": ["pytest", "flask"],
     },

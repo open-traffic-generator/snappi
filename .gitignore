@@ -20,3 +20,4 @@ cov_report/
 gosnappi/coverage.out
 gosnappi/coverage.txt
 .local
+.vscode
