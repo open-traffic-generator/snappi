@@ -1015,12 +1015,18 @@ type config struct {
 	obj *snappipb.Config
 }
 
+func NewConfig() Config {
+	obj := config{obj: &snappipb.Config{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *config) Msg() *snappipb.Config {
 	return obj.obj
 }
 
 func (obj *config) SetMsg(msg *snappipb.Config) Config {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -1147,8 +1153,10 @@ type Config interface {
 	Devices() ConfigDeviceIter
 	Flows() ConfigFlowIter
 	Events() Event
+	SetEvents(value Event) Config
 	HasEvents() bool
 	Options() ConfigOptions
+	SetOptions(value ConfigOptions) Config
 	HasOptions() bool
 }
 
@@ -1361,12 +1369,8 @@ func (obj *configFlowIter) Items() []Flow {
 // Events returns a Event
 //  description is TBD
 func (obj *config) Events() Event {
-
 	if obj.obj.Events == nil {
-		obj.obj.Events = &snappipb.Event{}
-		newObj := &event{obj: obj.obj.Events}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Events = NewEvent().Msg()
 	}
 	return &event{obj: obj.obj.Events}
 }
@@ -1377,15 +1381,19 @@ func (obj *config) HasEvents() bool {
 	return obj.obj.Events != nil
 }
 
+// SetEvents sets the Event value in the Config object
+//  description is TBD
+func (obj *config) SetEvents(value Event) Config {
+	obj.Events().SetMsg(value.Msg())
+
+	return obj
+}
+
 // Options returns a ConfigOptions
 //  description is TBD
 func (obj *config) Options() ConfigOptions {
-
 	if obj.obj.Options == nil {
-		obj.obj.Options = &snappipb.ConfigOptions{}
-		newObj := &configOptions{obj: obj.obj.Options}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Options = NewConfigOptions().Msg()
 	}
 	return &configOptions{obj: obj.obj.Options}
 }
@@ -1394,6 +1402,14 @@ func (obj *config) Options() ConfigOptions {
 //  description is TBD
 func (obj *config) HasOptions() bool {
 	return obj.obj.Options != nil
+}
+
+// SetOptions sets the ConfigOptions value in the Config object
+//  description is TBD
+func (obj *config) SetOptions(value ConfigOptions) Config {
+	obj.Options().SetMsg(value.Msg())
+
+	return obj
 }
 
 func (obj *config) validateObj(set_default bool) {
@@ -1446,6 +1462,24 @@ func (obj *config) validateObj(set_default bool) {
 }
 
 func (obj *config) setDefault() {
+	if obj.obj.Ports == nil {
+		obj.Ports()
+	}
+	if obj.obj.Lags == nil {
+		obj.Lags()
+	}
+	if obj.obj.Layer1 == nil {
+		obj.Layer1()
+	}
+	if obj.obj.Captures == nil {
+		obj.Captures()
+	}
+	if obj.obj.Devices == nil {
+		obj.Devices()
+	}
+	if obj.obj.Flows == nil {
+		obj.Flows()
+	}
 
 }
 
@@ -1453,12 +1487,18 @@ type transmitState struct {
 	obj *snappipb.TransmitState
 }
 
+func NewTransmitState() TransmitState {
+	obj := transmitState{obj: &snappipb.TransmitState{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *transmitState) Msg() *snappipb.TransmitState {
 	return obj.obj
 }
 
 func (obj *transmitState) SetMsg(msg *snappipb.TransmitState) TransmitState {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -1671,12 +1711,18 @@ type linkState struct {
 	obj *snappipb.LinkState
 }
 
+func NewLinkState() LinkState {
+	obj := linkState{obj: &snappipb.LinkState{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *linkState) Msg() *snappipb.LinkState {
 	return obj.obj
 }
 
 func (obj *linkState) SetMsg(msg *snappipb.LinkState) LinkState {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -1884,12 +1930,18 @@ type captureState struct {
 	obj *snappipb.CaptureState
 }
 
+func NewCaptureState() CaptureState {
+	obj := captureState{obj: &snappipb.CaptureState{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *captureState) Msg() *snappipb.CaptureState {
 	return obj.obj
 }
 
 func (obj *captureState) SetMsg(msg *snappipb.CaptureState) CaptureState {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -2097,12 +2149,18 @@ type flowsUpdate struct {
 	obj *snappipb.FlowsUpdate
 }
 
+func NewFlowsUpdate() FlowsUpdate {
+	obj := flowsUpdate{obj: &snappipb.FlowsUpdate{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *flowsUpdate) Msg() *snappipb.FlowsUpdate {
 	return obj.obj
 }
 
 func (obj *flowsUpdate) SetMsg(msg *snappipb.FlowsUpdate) FlowsUpdate {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -2311,6 +2369,9 @@ func (obj *flowsUpdate) validateObj(set_default bool) {
 }
 
 func (obj *flowsUpdate) setDefault() {
+	if obj.obj.Flows == nil {
+		obj.Flows()
+	}
 
 }
 
@@ -2318,12 +2379,18 @@ type routeState struct {
 	obj *snappipb.RouteState
 }
 
+func NewRouteState() RouteState {
+	obj := routeState{obj: &snappipb.RouteState{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *routeState) Msg() *snappipb.RouteState {
 	return obj.obj
 }
 
 func (obj *routeState) SetMsg(msg *snappipb.RouteState) RouteState {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -2535,12 +2602,18 @@ type pingRequest struct {
 	obj *snappipb.PingRequest
 }
 
+func NewPingRequest() PingRequest {
+	obj := pingRequest{obj: &snappipb.PingRequest{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *pingRequest) Msg() *snappipb.PingRequest {
 	return obj.obj
 }
 
 func (obj *pingRequest) SetMsg(msg *snappipb.PingRequest) PingRequest {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -2710,6 +2783,9 @@ func (obj *pingRequest) validateObj(set_default bool) {
 }
 
 func (obj *pingRequest) setDefault() {
+	if obj.obj.Endpoints == nil {
+		obj.Endpoints()
+	}
 
 }
 
@@ -2717,12 +2793,18 @@ type protocolState struct {
 	obj *snappipb.ProtocolState
 }
 
+func NewProtocolState() ProtocolState {
+	obj := protocolState{obj: &snappipb.ProtocolState{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *protocolState) Msg() *snappipb.ProtocolState {
 	return obj.obj
 }
 
 func (obj *protocolState) SetMsg(msg *snappipb.ProtocolState) ProtocolState {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -2892,12 +2974,18 @@ type metricsRequest struct {
 	obj *snappipb.MetricsRequest
 }
 
+func NewMetricsRequest() MetricsRequest {
+	obj := metricsRequest{obj: &snappipb.MetricsRequest{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *metricsRequest) Msg() *snappipb.MetricsRequest {
 	return obj.obj
 }
 
 func (obj *metricsRequest) SetMsg(msg *snappipb.MetricsRequest) MetricsRequest {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -3021,12 +3109,16 @@ type MetricsRequest interface {
 	SetChoice(value MetricsRequestChoiceEnum) MetricsRequest
 	HasChoice() bool
 	Port() PortMetricsRequest
+	SetPort(value PortMetricsRequest) MetricsRequest
 	HasPort() bool
 	Flow() FlowMetricsRequest
+	SetFlow(value FlowMetricsRequest) MetricsRequest
 	HasFlow() bool
 	Bgpv4() Bgpv4MetricsRequest
+	SetBgpv4(value Bgpv4MetricsRequest) MetricsRequest
 	HasBgpv4() bool
 	Bgpv6() Bgpv6MetricsRequest
+	SetBgpv6(value Bgpv6MetricsRequest) MetricsRequest
 	HasBgpv6() bool
 }
 
@@ -3071,10 +3163,7 @@ func (obj *metricsRequest) SetChoice(value MetricsRequestChoiceEnum) MetricsRequ
 func (obj *metricsRequest) Port() PortMetricsRequest {
 	obj.SetChoice(MetricsRequestChoice.PORT)
 	if obj.obj.Port == nil {
-		obj.obj.Port = &snappipb.PortMetricsRequest{}
-		newObj := &portMetricsRequest{obj: obj.obj.Port}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Port = NewPortMetricsRequest().Msg()
 	}
 	return &portMetricsRequest{obj: obj.obj.Port}
 }
@@ -3085,15 +3174,20 @@ func (obj *metricsRequest) HasPort() bool {
 	return obj.obj.Port != nil
 }
 
+// SetPort sets the PortMetricsRequest value in the MetricsRequest object
+//  description is TBD
+func (obj *metricsRequest) SetPort(value PortMetricsRequest) MetricsRequest {
+	obj.Port().SetMsg(value.Msg())
+	obj.SetChoice(MetricsRequestChoice.PORT)
+	return obj
+}
+
 // Flow returns a FlowMetricsRequest
 //  description is TBD
 func (obj *metricsRequest) Flow() FlowMetricsRequest {
 	obj.SetChoice(MetricsRequestChoice.FLOW)
 	if obj.obj.Flow == nil {
-		obj.obj.Flow = &snappipb.FlowMetricsRequest{}
-		newObj := &flowMetricsRequest{obj: obj.obj.Flow}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Flow = NewFlowMetricsRequest().Msg()
 	}
 	return &flowMetricsRequest{obj: obj.obj.Flow}
 }
@@ -3104,15 +3198,20 @@ func (obj *metricsRequest) HasFlow() bool {
 	return obj.obj.Flow != nil
 }
 
+// SetFlow sets the FlowMetricsRequest value in the MetricsRequest object
+//  description is TBD
+func (obj *metricsRequest) SetFlow(value FlowMetricsRequest) MetricsRequest {
+	obj.Flow().SetMsg(value.Msg())
+	obj.SetChoice(MetricsRequestChoice.FLOW)
+	return obj
+}
+
 // Bgpv4 returns a Bgpv4MetricsRequest
 //  description is TBD
 func (obj *metricsRequest) Bgpv4() Bgpv4MetricsRequest {
 	obj.SetChoice(MetricsRequestChoice.BGPV4)
 	if obj.obj.Bgpv4 == nil {
-		obj.obj.Bgpv4 = &snappipb.Bgpv4MetricsRequest{}
-		newObj := &bgpv4MetricsRequest{obj: obj.obj.Bgpv4}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Bgpv4 = NewBgpv4MetricsRequest().Msg()
 	}
 	return &bgpv4MetricsRequest{obj: obj.obj.Bgpv4}
 }
@@ -3123,15 +3222,20 @@ func (obj *metricsRequest) HasBgpv4() bool {
 	return obj.obj.Bgpv4 != nil
 }
 
+// SetBgpv4 sets the Bgpv4MetricsRequest value in the MetricsRequest object
+//  description is TBD
+func (obj *metricsRequest) SetBgpv4(value Bgpv4MetricsRequest) MetricsRequest {
+	obj.Bgpv4().SetMsg(value.Msg())
+	obj.SetChoice(MetricsRequestChoice.BGPV4)
+	return obj
+}
+
 // Bgpv6 returns a Bgpv6MetricsRequest
 //  description is TBD
 func (obj *metricsRequest) Bgpv6() Bgpv6MetricsRequest {
 	obj.SetChoice(MetricsRequestChoice.BGPV6)
 	if obj.obj.Bgpv6 == nil {
-		obj.obj.Bgpv6 = &snappipb.Bgpv6MetricsRequest{}
-		newObj := &bgpv6MetricsRequest{obj: obj.obj.Bgpv6}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Bgpv6 = NewBgpv6MetricsRequest().Msg()
 	}
 	return &bgpv6MetricsRequest{obj: obj.obj.Bgpv6}
 }
@@ -3140,6 +3244,14 @@ func (obj *metricsRequest) Bgpv6() Bgpv6MetricsRequest {
 //  description is TBD
 func (obj *metricsRequest) HasBgpv6() bool {
 	return obj.obj.Bgpv6 != nil
+}
+
+// SetBgpv6 sets the Bgpv6MetricsRequest value in the MetricsRequest object
+//  description is TBD
+func (obj *metricsRequest) SetBgpv6(value Bgpv6MetricsRequest) MetricsRequest {
+	obj.Bgpv6().SetMsg(value.Msg())
+	obj.SetChoice(MetricsRequestChoice.BGPV6)
+	return obj
 }
 
 func (obj *metricsRequest) validateObj(set_default bool) {
@@ -3175,12 +3287,18 @@ type captureRequest struct {
 	obj *snappipb.CaptureRequest
 }
 
+func NewCaptureRequest() CaptureRequest {
+	obj := captureRequest{obj: &snappipb.CaptureRequest{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *captureRequest) Msg() *snappipb.CaptureRequest {
 	return obj.obj
 }
 
 func (obj *captureRequest) SetMsg(msg *snappipb.CaptureRequest) CaptureRequest {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -3353,12 +3471,18 @@ type setConfigResponse struct {
 	obj *snappipb.SetConfigResponse
 }
 
+func NewSetConfigResponse() SetConfigResponse {
+	obj := setConfigResponse{obj: &snappipb.SetConfigResponse{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *setConfigResponse) Msg() *snappipb.SetConfigResponse {
 	return obj.obj
 }
 
 func (obj *setConfigResponse) SetMsg(msg *snappipb.SetConfigResponse) SetConfigResponse {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -3479,22 +3603,21 @@ type SetConfigResponse interface {
 	validateObj(set_default bool)
 	setDefault()
 	StatusCode200() ResponseWarning
+	SetStatusCode200(value ResponseWarning) SetConfigResponse
 	HasStatusCode200() bool
 	StatusCode400() ResponseError
+	SetStatusCode400(value ResponseError) SetConfigResponse
 	HasStatusCode400() bool
 	StatusCode500() ResponseError
+	SetStatusCode500(value ResponseError) SetConfigResponse
 	HasStatusCode500() bool
 }
 
 // StatusCode200 returns a ResponseWarning
 //  description is TBD
 func (obj *setConfigResponse) StatusCode200() ResponseWarning {
-
 	if obj.obj.StatusCode_200 == nil {
-		obj.obj.StatusCode_200 = &snappipb.ResponseWarning{}
-		newObj := &responseWarning{obj: obj.obj.StatusCode_200}
-		newObj.setDefault()
-		return newObj
+		obj.obj.StatusCode_200 = NewResponseWarning().Msg()
 	}
 	return &responseWarning{obj: obj.obj.StatusCode_200}
 }
@@ -3505,15 +3628,19 @@ func (obj *setConfigResponse) HasStatusCode200() bool {
 	return obj.obj.StatusCode_200 != nil
 }
 
+// SetStatusCode200 sets the ResponseWarning value in the SetConfigResponse object
+//  description is TBD
+func (obj *setConfigResponse) SetStatusCode200(value ResponseWarning) SetConfigResponse {
+	obj.StatusCode200().SetMsg(value.Msg())
+
+	return obj
+}
+
 // StatusCode400 returns a ResponseError
 //  description is TBD
 func (obj *setConfigResponse) StatusCode400() ResponseError {
-
 	if obj.obj.StatusCode_400 == nil {
-		obj.obj.StatusCode_400 = &snappipb.ResponseError{}
-		newObj := &responseError{obj: obj.obj.StatusCode_400}
-		newObj.setDefault()
-		return newObj
+		obj.obj.StatusCode_400 = NewResponseError().Msg()
 	}
 	return &responseError{obj: obj.obj.StatusCode_400}
 }
@@ -3524,15 +3651,19 @@ func (obj *setConfigResponse) HasStatusCode400() bool {
 	return obj.obj.StatusCode_400 != nil
 }
 
+// SetStatusCode400 sets the ResponseError value in the SetConfigResponse object
+//  description is TBD
+func (obj *setConfigResponse) SetStatusCode400(value ResponseError) SetConfigResponse {
+	obj.StatusCode400().SetMsg(value.Msg())
+
+	return obj
+}
+
 // StatusCode500 returns a ResponseError
 //  description is TBD
 func (obj *setConfigResponse) StatusCode500() ResponseError {
-
 	if obj.obj.StatusCode_500 == nil {
-		obj.obj.StatusCode_500 = &snappipb.ResponseError{}
-		newObj := &responseError{obj: obj.obj.StatusCode_500}
-		newObj.setDefault()
-		return newObj
+		obj.obj.StatusCode_500 = NewResponseError().Msg()
 	}
 	return &responseError{obj: obj.obj.StatusCode_500}
 }
@@ -3541,6 +3672,14 @@ func (obj *setConfigResponse) StatusCode500() ResponseError {
 //  description is TBD
 func (obj *setConfigResponse) HasStatusCode500() bool {
 	return obj.obj.StatusCode_500 != nil
+}
+
+// SetStatusCode500 sets the ResponseError value in the SetConfigResponse object
+//  description is TBD
+func (obj *setConfigResponse) SetStatusCode500(value ResponseError) SetConfigResponse {
+	obj.StatusCode500().SetMsg(value.Msg())
+
+	return obj
 }
 
 func (obj *setConfigResponse) validateObj(set_default bool) {
@@ -3569,12 +3708,18 @@ type getConfigResponse struct {
 	obj *snappipb.GetConfigResponse
 }
 
+func NewGetConfigResponse() GetConfigResponse {
+	obj := getConfigResponse{obj: &snappipb.GetConfigResponse{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *getConfigResponse) Msg() *snappipb.GetConfigResponse {
 	return obj.obj
 }
 
 func (obj *getConfigResponse) SetMsg(msg *snappipb.GetConfigResponse) GetConfigResponse {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -3695,22 +3840,21 @@ type GetConfigResponse interface {
 	validateObj(set_default bool)
 	setDefault()
 	StatusCode200() Config
+	SetStatusCode200(value Config) GetConfigResponse
 	HasStatusCode200() bool
 	StatusCode400() ResponseError
+	SetStatusCode400(value ResponseError) GetConfigResponse
 	HasStatusCode400() bool
 	StatusCode500() ResponseError
+	SetStatusCode500(value ResponseError) GetConfigResponse
 	HasStatusCode500() bool
 }
 
 // StatusCode200 returns a Config
 //  description is TBD
 func (obj *getConfigResponse) StatusCode200() Config {
-
 	if obj.obj.StatusCode_200 == nil {
-		obj.obj.StatusCode_200 = &snappipb.Config{}
-		newObj := &config{obj: obj.obj.StatusCode_200}
-		newObj.setDefault()
-		return newObj
+		obj.obj.StatusCode_200 = NewConfig().Msg()
 	}
 	return &config{obj: obj.obj.StatusCode_200}
 }
@@ -3721,15 +3865,19 @@ func (obj *getConfigResponse) HasStatusCode200() bool {
 	return obj.obj.StatusCode_200 != nil
 }
 
+// SetStatusCode200 sets the Config value in the GetConfigResponse object
+//  description is TBD
+func (obj *getConfigResponse) SetStatusCode200(value Config) GetConfigResponse {
+	obj.StatusCode200().SetMsg(value.Msg())
+
+	return obj
+}
+
 // StatusCode400 returns a ResponseError
 //  description is TBD
 func (obj *getConfigResponse) StatusCode400() ResponseError {
-
 	if obj.obj.StatusCode_400 == nil {
-		obj.obj.StatusCode_400 = &snappipb.ResponseError{}
-		newObj := &responseError{obj: obj.obj.StatusCode_400}
-		newObj.setDefault()
-		return newObj
+		obj.obj.StatusCode_400 = NewResponseError().Msg()
 	}
 	return &responseError{obj: obj.obj.StatusCode_400}
 }
@@ -3740,15 +3888,19 @@ func (obj *getConfigResponse) HasStatusCode400() bool {
 	return obj.obj.StatusCode_400 != nil
 }
 
+// SetStatusCode400 sets the ResponseError value in the GetConfigResponse object
+//  description is TBD
+func (obj *getConfigResponse) SetStatusCode400(value ResponseError) GetConfigResponse {
+	obj.StatusCode400().SetMsg(value.Msg())
+
+	return obj
+}
+
 // StatusCode500 returns a ResponseError
 //  description is TBD
 func (obj *getConfigResponse) StatusCode500() ResponseError {
-
 	if obj.obj.StatusCode_500 == nil {
-		obj.obj.StatusCode_500 = &snappipb.ResponseError{}
-		newObj := &responseError{obj: obj.obj.StatusCode_500}
-		newObj.setDefault()
-		return newObj
+		obj.obj.StatusCode_500 = NewResponseError().Msg()
 	}
 	return &responseError{obj: obj.obj.StatusCode_500}
 }
@@ -3757,6 +3909,14 @@ func (obj *getConfigResponse) StatusCode500() ResponseError {
 //  description is TBD
 func (obj *getConfigResponse) HasStatusCode500() bool {
 	return obj.obj.StatusCode_500 != nil
+}
+
+// SetStatusCode500 sets the ResponseError value in the GetConfigResponse object
+//  description is TBD
+func (obj *getConfigResponse) SetStatusCode500(value ResponseError) GetConfigResponse {
+	obj.StatusCode500().SetMsg(value.Msg())
+
+	return obj
 }
 
 func (obj *getConfigResponse) validateObj(set_default bool) {
@@ -3785,12 +3945,18 @@ type setTransmitStateResponse struct {
 	obj *snappipb.SetTransmitStateResponse
 }
 
+func NewSetTransmitStateResponse() SetTransmitStateResponse {
+	obj := setTransmitStateResponse{obj: &snappipb.SetTransmitStateResponse{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *setTransmitStateResponse) Msg() *snappipb.SetTransmitStateResponse {
 	return obj.obj
 }
 
 func (obj *setTransmitStateResponse) SetMsg(msg *snappipb.SetTransmitStateResponse) SetTransmitStateResponse {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -3911,22 +4077,21 @@ type SetTransmitStateResponse interface {
 	validateObj(set_default bool)
 	setDefault()
 	StatusCode200() ResponseWarning
+	SetStatusCode200(value ResponseWarning) SetTransmitStateResponse
 	HasStatusCode200() bool
 	StatusCode400() ResponseError
+	SetStatusCode400(value ResponseError) SetTransmitStateResponse
 	HasStatusCode400() bool
 	StatusCode500() ResponseError
+	SetStatusCode500(value ResponseError) SetTransmitStateResponse
 	HasStatusCode500() bool
 }
 
 // StatusCode200 returns a ResponseWarning
 //  description is TBD
 func (obj *setTransmitStateResponse) StatusCode200() ResponseWarning {
-
 	if obj.obj.StatusCode_200 == nil {
-		obj.obj.StatusCode_200 = &snappipb.ResponseWarning{}
-		newObj := &responseWarning{obj: obj.obj.StatusCode_200}
-		newObj.setDefault()
-		return newObj
+		obj.obj.StatusCode_200 = NewResponseWarning().Msg()
 	}
 	return &responseWarning{obj: obj.obj.StatusCode_200}
 }
@@ -3937,15 +4102,19 @@ func (obj *setTransmitStateResponse) HasStatusCode200() bool {
 	return obj.obj.StatusCode_200 != nil
 }
 
+// SetStatusCode200 sets the ResponseWarning value in the SetTransmitStateResponse object
+//  description is TBD
+func (obj *setTransmitStateResponse) SetStatusCode200(value ResponseWarning) SetTransmitStateResponse {
+	obj.StatusCode200().SetMsg(value.Msg())
+
+	return obj
+}
+
 // StatusCode400 returns a ResponseError
 //  description is TBD
 func (obj *setTransmitStateResponse) StatusCode400() ResponseError {
-
 	if obj.obj.StatusCode_400 == nil {
-		obj.obj.StatusCode_400 = &snappipb.ResponseError{}
-		newObj := &responseError{obj: obj.obj.StatusCode_400}
-		newObj.setDefault()
-		return newObj
+		obj.obj.StatusCode_400 = NewResponseError().Msg()
 	}
 	return &responseError{obj: obj.obj.StatusCode_400}
 }
@@ -3956,15 +4125,19 @@ func (obj *setTransmitStateResponse) HasStatusCode400() bool {
 	return obj.obj.StatusCode_400 != nil
 }
 
+// SetStatusCode400 sets the ResponseError value in the SetTransmitStateResponse object
+//  description is TBD
+func (obj *setTransmitStateResponse) SetStatusCode400(value ResponseError) SetTransmitStateResponse {
+	obj.StatusCode400().SetMsg(value.Msg())
+
+	return obj
+}
+
 // StatusCode500 returns a ResponseError
 //  description is TBD
 func (obj *setTransmitStateResponse) StatusCode500() ResponseError {
-
 	if obj.obj.StatusCode_500 == nil {
-		obj.obj.StatusCode_500 = &snappipb.ResponseError{}
-		newObj := &responseError{obj: obj.obj.StatusCode_500}
-		newObj.setDefault()
-		return newObj
+		obj.obj.StatusCode_500 = NewResponseError().Msg()
 	}
 	return &responseError{obj: obj.obj.StatusCode_500}
 }
@@ -3973,6 +4146,14 @@ func (obj *setTransmitStateResponse) StatusCode500() ResponseError {
 //  description is TBD
 func (obj *setTransmitStateResponse) HasStatusCode500() bool {
 	return obj.obj.StatusCode_500 != nil
+}
+
+// SetStatusCode500 sets the ResponseError value in the SetTransmitStateResponse object
+//  description is TBD
+func (obj *setTransmitStateResponse) SetStatusCode500(value ResponseError) SetTransmitStateResponse {
+	obj.StatusCode500().SetMsg(value.Msg())
+
+	return obj
 }
 
 func (obj *setTransmitStateResponse) validateObj(set_default bool) {
@@ -4001,12 +4182,18 @@ type setLinkStateResponse struct {
 	obj *snappipb.SetLinkStateResponse
 }
 
+func NewSetLinkStateResponse() SetLinkStateResponse {
+	obj := setLinkStateResponse{obj: &snappipb.SetLinkStateResponse{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *setLinkStateResponse) Msg() *snappipb.SetLinkStateResponse {
 	return obj.obj
 }
 
 func (obj *setLinkStateResponse) SetMsg(msg *snappipb.SetLinkStateResponse) SetLinkStateResponse {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -4127,22 +4314,21 @@ type SetLinkStateResponse interface {
 	validateObj(set_default bool)
 	setDefault()
 	StatusCode200() ResponseWarning
+	SetStatusCode200(value ResponseWarning) SetLinkStateResponse
 	HasStatusCode200() bool
 	StatusCode400() ResponseError
+	SetStatusCode400(value ResponseError) SetLinkStateResponse
 	HasStatusCode400() bool
 	StatusCode500() ResponseError
+	SetStatusCode500(value ResponseError) SetLinkStateResponse
 	HasStatusCode500() bool
 }
 
 // StatusCode200 returns a ResponseWarning
 //  description is TBD
 func (obj *setLinkStateResponse) StatusCode200() ResponseWarning {
-
 	if obj.obj.StatusCode_200 == nil {
-		obj.obj.StatusCode_200 = &snappipb.ResponseWarning{}
-		newObj := &responseWarning{obj: obj.obj.StatusCode_200}
-		newObj.setDefault()
-		return newObj
+		obj.obj.StatusCode_200 = NewResponseWarning().Msg()
 	}
 	return &responseWarning{obj: obj.obj.StatusCode_200}
 }
@@ -4153,15 +4339,19 @@ func (obj *setLinkStateResponse) HasStatusCode200() bool {
 	return obj.obj.StatusCode_200 != nil
 }
 
+// SetStatusCode200 sets the ResponseWarning value in the SetLinkStateResponse object
+//  description is TBD
+func (obj *setLinkStateResponse) SetStatusCode200(value ResponseWarning) SetLinkStateResponse {
+	obj.StatusCode200().SetMsg(value.Msg())
+
+	return obj
+}
+
 // StatusCode400 returns a ResponseError
 //  description is TBD
 func (obj *setLinkStateResponse) StatusCode400() ResponseError {
-
 	if obj.obj.StatusCode_400 == nil {
-		obj.obj.StatusCode_400 = &snappipb.ResponseError{}
-		newObj := &responseError{obj: obj.obj.StatusCode_400}
-		newObj.setDefault()
-		return newObj
+		obj.obj.StatusCode_400 = NewResponseError().Msg()
 	}
 	return &responseError{obj: obj.obj.StatusCode_400}
 }
@@ -4172,15 +4362,19 @@ func (obj *setLinkStateResponse) HasStatusCode400() bool {
 	return obj.obj.StatusCode_400 != nil
 }
 
+// SetStatusCode400 sets the ResponseError value in the SetLinkStateResponse object
+//  description is TBD
+func (obj *setLinkStateResponse) SetStatusCode400(value ResponseError) SetLinkStateResponse {
+	obj.StatusCode400().SetMsg(value.Msg())
+
+	return obj
+}
+
 // StatusCode500 returns a ResponseError
 //  description is TBD
 func (obj *setLinkStateResponse) StatusCode500() ResponseError {
-
 	if obj.obj.StatusCode_500 == nil {
-		obj.obj.StatusCode_500 = &snappipb.ResponseError{}
-		newObj := &responseError{obj: obj.obj.StatusCode_500}
-		newObj.setDefault()
-		return newObj
+		obj.obj.StatusCode_500 = NewResponseError().Msg()
 	}
 	return &responseError{obj: obj.obj.StatusCode_500}
 }
@@ -4189,6 +4383,14 @@ func (obj *setLinkStateResponse) StatusCode500() ResponseError {
 //  description is TBD
 func (obj *setLinkStateResponse) HasStatusCode500() bool {
 	return obj.obj.StatusCode_500 != nil
+}
+
+// SetStatusCode500 sets the ResponseError value in the SetLinkStateResponse object
+//  description is TBD
+func (obj *setLinkStateResponse) SetStatusCode500(value ResponseError) SetLinkStateResponse {
+	obj.StatusCode500().SetMsg(value.Msg())
+
+	return obj
 }
 
 func (obj *setLinkStateResponse) validateObj(set_default bool) {
@@ -4217,12 +4419,18 @@ type setCaptureStateResponse struct {
 	obj *snappipb.SetCaptureStateResponse
 }
 
+func NewSetCaptureStateResponse() SetCaptureStateResponse {
+	obj := setCaptureStateResponse{obj: &snappipb.SetCaptureStateResponse{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *setCaptureStateResponse) Msg() *snappipb.SetCaptureStateResponse {
 	return obj.obj
 }
 
 func (obj *setCaptureStateResponse) SetMsg(msg *snappipb.SetCaptureStateResponse) SetCaptureStateResponse {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -4343,22 +4551,21 @@ type SetCaptureStateResponse interface {
 	validateObj(set_default bool)
 	setDefault()
 	StatusCode200() ResponseWarning
+	SetStatusCode200(value ResponseWarning) SetCaptureStateResponse
 	HasStatusCode200() bool
 	StatusCode400() ResponseError
+	SetStatusCode400(value ResponseError) SetCaptureStateResponse
 	HasStatusCode400() bool
 	StatusCode500() ResponseError
+	SetStatusCode500(value ResponseError) SetCaptureStateResponse
 	HasStatusCode500() bool
 }
 
 // StatusCode200 returns a ResponseWarning
 //  description is TBD
 func (obj *setCaptureStateResponse) StatusCode200() ResponseWarning {
-
 	if obj.obj.StatusCode_200 == nil {
-		obj.obj.StatusCode_200 = &snappipb.ResponseWarning{}
-		newObj := &responseWarning{obj: obj.obj.StatusCode_200}
-		newObj.setDefault()
-		return newObj
+		obj.obj.StatusCode_200 = NewResponseWarning().Msg()
 	}
 	return &responseWarning{obj: obj.obj.StatusCode_200}
 }
@@ -4369,15 +4576,19 @@ func (obj *setCaptureStateResponse) HasStatusCode200() bool {
 	return obj.obj.StatusCode_200 != nil
 }
 
+// SetStatusCode200 sets the ResponseWarning value in the SetCaptureStateResponse object
+//  description is TBD
+func (obj *setCaptureStateResponse) SetStatusCode200(value ResponseWarning) SetCaptureStateResponse {
+	obj.StatusCode200().SetMsg(value.Msg())
+
+	return obj
+}
+
 // StatusCode400 returns a ResponseError
 //  description is TBD
 func (obj *setCaptureStateResponse) StatusCode400() ResponseError {
-
 	if obj.obj.StatusCode_400 == nil {
-		obj.obj.StatusCode_400 = &snappipb.ResponseError{}
-		newObj := &responseError{obj: obj.obj.StatusCode_400}
-		newObj.setDefault()
-		return newObj
+		obj.obj.StatusCode_400 = NewResponseError().Msg()
 	}
 	return &responseError{obj: obj.obj.StatusCode_400}
 }
@@ -4388,15 +4599,19 @@ func (obj *setCaptureStateResponse) HasStatusCode400() bool {
 	return obj.obj.StatusCode_400 != nil
 }
 
+// SetStatusCode400 sets the ResponseError value in the SetCaptureStateResponse object
+//  description is TBD
+func (obj *setCaptureStateResponse) SetStatusCode400(value ResponseError) SetCaptureStateResponse {
+	obj.StatusCode400().SetMsg(value.Msg())
+
+	return obj
+}
+
 // StatusCode500 returns a ResponseError
 //  description is TBD
 func (obj *setCaptureStateResponse) StatusCode500() ResponseError {
-
 	if obj.obj.StatusCode_500 == nil {
-		obj.obj.StatusCode_500 = &snappipb.ResponseError{}
-		newObj := &responseError{obj: obj.obj.StatusCode_500}
-		newObj.setDefault()
-		return newObj
+		obj.obj.StatusCode_500 = NewResponseError().Msg()
 	}
 	return &responseError{obj: obj.obj.StatusCode_500}
 }
@@ -4405,6 +4620,14 @@ func (obj *setCaptureStateResponse) StatusCode500() ResponseError {
 //  description is TBD
 func (obj *setCaptureStateResponse) HasStatusCode500() bool {
 	return obj.obj.StatusCode_500 != nil
+}
+
+// SetStatusCode500 sets the ResponseError value in the SetCaptureStateResponse object
+//  description is TBD
+func (obj *setCaptureStateResponse) SetStatusCode500(value ResponseError) SetCaptureStateResponse {
+	obj.StatusCode500().SetMsg(value.Msg())
+
+	return obj
 }
 
 func (obj *setCaptureStateResponse) validateObj(set_default bool) {
@@ -4433,12 +4656,18 @@ type updateFlowsResponse struct {
 	obj *snappipb.UpdateFlowsResponse
 }
 
+func NewUpdateFlowsResponse() UpdateFlowsResponse {
+	obj := updateFlowsResponse{obj: &snappipb.UpdateFlowsResponse{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *updateFlowsResponse) Msg() *snappipb.UpdateFlowsResponse {
 	return obj.obj
 }
 
 func (obj *updateFlowsResponse) SetMsg(msg *snappipb.UpdateFlowsResponse) UpdateFlowsResponse {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -4559,22 +4788,21 @@ type UpdateFlowsResponse interface {
 	validateObj(set_default bool)
 	setDefault()
 	StatusCode200() Config
+	SetStatusCode200(value Config) UpdateFlowsResponse
 	HasStatusCode200() bool
 	StatusCode400() ResponseError
+	SetStatusCode400(value ResponseError) UpdateFlowsResponse
 	HasStatusCode400() bool
 	StatusCode500() ResponseError
+	SetStatusCode500(value ResponseError) UpdateFlowsResponse
 	HasStatusCode500() bool
 }
 
 // StatusCode200 returns a Config
 //  description is TBD
 func (obj *updateFlowsResponse) StatusCode200() Config {
-
 	if obj.obj.StatusCode_200 == nil {
-		obj.obj.StatusCode_200 = &snappipb.Config{}
-		newObj := &config{obj: obj.obj.StatusCode_200}
-		newObj.setDefault()
-		return newObj
+		obj.obj.StatusCode_200 = NewConfig().Msg()
 	}
 	return &config{obj: obj.obj.StatusCode_200}
 }
@@ -4585,15 +4813,19 @@ func (obj *updateFlowsResponse) HasStatusCode200() bool {
 	return obj.obj.StatusCode_200 != nil
 }
 
+// SetStatusCode200 sets the Config value in the UpdateFlowsResponse object
+//  description is TBD
+func (obj *updateFlowsResponse) SetStatusCode200(value Config) UpdateFlowsResponse {
+	obj.StatusCode200().SetMsg(value.Msg())
+
+	return obj
+}
+
 // StatusCode400 returns a ResponseError
 //  description is TBD
 func (obj *updateFlowsResponse) StatusCode400() ResponseError {
-
 	if obj.obj.StatusCode_400 == nil {
-		obj.obj.StatusCode_400 = &snappipb.ResponseError{}
-		newObj := &responseError{obj: obj.obj.StatusCode_400}
-		newObj.setDefault()
-		return newObj
+		obj.obj.StatusCode_400 = NewResponseError().Msg()
 	}
 	return &responseError{obj: obj.obj.StatusCode_400}
 }
@@ -4604,15 +4836,19 @@ func (obj *updateFlowsResponse) HasStatusCode400() bool {
 	return obj.obj.StatusCode_400 != nil
 }
 
+// SetStatusCode400 sets the ResponseError value in the UpdateFlowsResponse object
+//  description is TBD
+func (obj *updateFlowsResponse) SetStatusCode400(value ResponseError) UpdateFlowsResponse {
+	obj.StatusCode400().SetMsg(value.Msg())
+
+	return obj
+}
+
 // StatusCode500 returns a ResponseError
 //  description is TBD
 func (obj *updateFlowsResponse) StatusCode500() ResponseError {
-
 	if obj.obj.StatusCode_500 == nil {
-		obj.obj.StatusCode_500 = &snappipb.ResponseError{}
-		newObj := &responseError{obj: obj.obj.StatusCode_500}
-		newObj.setDefault()
-		return newObj
+		obj.obj.StatusCode_500 = NewResponseError().Msg()
 	}
 	return &responseError{obj: obj.obj.StatusCode_500}
 }
@@ -4621,6 +4857,14 @@ func (obj *updateFlowsResponse) StatusCode500() ResponseError {
 //  description is TBD
 func (obj *updateFlowsResponse) HasStatusCode500() bool {
 	return obj.obj.StatusCode_500 != nil
+}
+
+// SetStatusCode500 sets the ResponseError value in the UpdateFlowsResponse object
+//  description is TBD
+func (obj *updateFlowsResponse) SetStatusCode500(value ResponseError) UpdateFlowsResponse {
+	obj.StatusCode500().SetMsg(value.Msg())
+
+	return obj
 }
 
 func (obj *updateFlowsResponse) validateObj(set_default bool) {
@@ -4649,12 +4893,18 @@ type setRouteStateResponse struct {
 	obj *snappipb.SetRouteStateResponse
 }
 
+func NewSetRouteStateResponse() SetRouteStateResponse {
+	obj := setRouteStateResponse{obj: &snappipb.SetRouteStateResponse{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *setRouteStateResponse) Msg() *snappipb.SetRouteStateResponse {
 	return obj.obj
 }
 
 func (obj *setRouteStateResponse) SetMsg(msg *snappipb.SetRouteStateResponse) SetRouteStateResponse {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -4775,22 +5025,21 @@ type SetRouteStateResponse interface {
 	validateObj(set_default bool)
 	setDefault()
 	StatusCode200() ResponseWarning
+	SetStatusCode200(value ResponseWarning) SetRouteStateResponse
 	HasStatusCode200() bool
 	StatusCode400() ResponseError
+	SetStatusCode400(value ResponseError) SetRouteStateResponse
 	HasStatusCode400() bool
 	StatusCode500() ResponseError
+	SetStatusCode500(value ResponseError) SetRouteStateResponse
 	HasStatusCode500() bool
 }
 
 // StatusCode200 returns a ResponseWarning
 //  description is TBD
 func (obj *setRouteStateResponse) StatusCode200() ResponseWarning {
-
 	if obj.obj.StatusCode_200 == nil {
-		obj.obj.StatusCode_200 = &snappipb.ResponseWarning{}
-		newObj := &responseWarning{obj: obj.obj.StatusCode_200}
-		newObj.setDefault()
-		return newObj
+		obj.obj.StatusCode_200 = NewResponseWarning().Msg()
 	}
 	return &responseWarning{obj: obj.obj.StatusCode_200}
 }
@@ -4801,15 +5050,19 @@ func (obj *setRouteStateResponse) HasStatusCode200() bool {
 	return obj.obj.StatusCode_200 != nil
 }
 
+// SetStatusCode200 sets the ResponseWarning value in the SetRouteStateResponse object
+//  description is TBD
+func (obj *setRouteStateResponse) SetStatusCode200(value ResponseWarning) SetRouteStateResponse {
+	obj.StatusCode200().SetMsg(value.Msg())
+
+	return obj
+}
+
 // StatusCode400 returns a ResponseError
 //  description is TBD
 func (obj *setRouteStateResponse) StatusCode400() ResponseError {
-
 	if obj.obj.StatusCode_400 == nil {
-		obj.obj.StatusCode_400 = &snappipb.ResponseError{}
-		newObj := &responseError{obj: obj.obj.StatusCode_400}
-		newObj.setDefault()
-		return newObj
+		obj.obj.StatusCode_400 = NewResponseError().Msg()
 	}
 	return &responseError{obj: obj.obj.StatusCode_400}
 }
@@ -4820,15 +5073,19 @@ func (obj *setRouteStateResponse) HasStatusCode400() bool {
 	return obj.obj.StatusCode_400 != nil
 }
 
+// SetStatusCode400 sets the ResponseError value in the SetRouteStateResponse object
+//  description is TBD
+func (obj *setRouteStateResponse) SetStatusCode400(value ResponseError) SetRouteStateResponse {
+	obj.StatusCode400().SetMsg(value.Msg())
+
+	return obj
+}
+
 // StatusCode500 returns a ResponseError
 //  description is TBD
 func (obj *setRouteStateResponse) StatusCode500() ResponseError {
-
 	if obj.obj.StatusCode_500 == nil {
-		obj.obj.StatusCode_500 = &snappipb.ResponseError{}
-		newObj := &responseError{obj: obj.obj.StatusCode_500}
-		newObj.setDefault()
-		return newObj
+		obj.obj.StatusCode_500 = NewResponseError().Msg()
 	}
 	return &responseError{obj: obj.obj.StatusCode_500}
 }
@@ -4837,6 +5094,14 @@ func (obj *setRouteStateResponse) StatusCode500() ResponseError {
 //  description is TBD
 func (obj *setRouteStateResponse) HasStatusCode500() bool {
 	return obj.obj.StatusCode_500 != nil
+}
+
+// SetStatusCode500 sets the ResponseError value in the SetRouteStateResponse object
+//  description is TBD
+func (obj *setRouteStateResponse) SetStatusCode500(value ResponseError) SetRouteStateResponse {
+	obj.StatusCode500().SetMsg(value.Msg())
+
+	return obj
 }
 
 func (obj *setRouteStateResponse) validateObj(set_default bool) {
@@ -4865,12 +5130,18 @@ type sendPingResponse struct {
 	obj *snappipb.SendPingResponse
 }
 
+func NewSendPingResponse() SendPingResponse {
+	obj := sendPingResponse{obj: &snappipb.SendPingResponse{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *sendPingResponse) Msg() *snappipb.SendPingResponse {
 	return obj.obj
 }
 
 func (obj *sendPingResponse) SetMsg(msg *snappipb.SendPingResponse) SendPingResponse {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -4991,22 +5262,21 @@ type SendPingResponse interface {
 	validateObj(set_default bool)
 	setDefault()
 	StatusCode200() PingResponse
+	SetStatusCode200(value PingResponse) SendPingResponse
 	HasStatusCode200() bool
 	StatusCode400() ResponseError
+	SetStatusCode400(value ResponseError) SendPingResponse
 	HasStatusCode400() bool
 	StatusCode500() ResponseError
+	SetStatusCode500(value ResponseError) SendPingResponse
 	HasStatusCode500() bool
 }
 
 // StatusCode200 returns a PingResponse
 //  description is TBD
 func (obj *sendPingResponse) StatusCode200() PingResponse {
-
 	if obj.obj.StatusCode_200 == nil {
-		obj.obj.StatusCode_200 = &snappipb.PingResponse{}
-		newObj := &pingResponse{obj: obj.obj.StatusCode_200}
-		newObj.setDefault()
-		return newObj
+		obj.obj.StatusCode_200 = NewPingResponse().Msg()
 	}
 	return &pingResponse{obj: obj.obj.StatusCode_200}
 }
@@ -5017,15 +5287,19 @@ func (obj *sendPingResponse) HasStatusCode200() bool {
 	return obj.obj.StatusCode_200 != nil
 }
 
+// SetStatusCode200 sets the PingResponse value in the SendPingResponse object
+//  description is TBD
+func (obj *sendPingResponse) SetStatusCode200(value PingResponse) SendPingResponse {
+	obj.StatusCode200().SetMsg(value.Msg())
+
+	return obj
+}
+
 // StatusCode400 returns a ResponseError
 //  description is TBD
 func (obj *sendPingResponse) StatusCode400() ResponseError {
-
 	if obj.obj.StatusCode_400 == nil {
-		obj.obj.StatusCode_400 = &snappipb.ResponseError{}
-		newObj := &responseError{obj: obj.obj.StatusCode_400}
-		newObj.setDefault()
-		return newObj
+		obj.obj.StatusCode_400 = NewResponseError().Msg()
 	}
 	return &responseError{obj: obj.obj.StatusCode_400}
 }
@@ -5036,15 +5310,19 @@ func (obj *sendPingResponse) HasStatusCode400() bool {
 	return obj.obj.StatusCode_400 != nil
 }
 
+// SetStatusCode400 sets the ResponseError value in the SendPingResponse object
+//  description is TBD
+func (obj *sendPingResponse) SetStatusCode400(value ResponseError) SendPingResponse {
+	obj.StatusCode400().SetMsg(value.Msg())
+
+	return obj
+}
+
 // StatusCode500 returns a ResponseError
 //  description is TBD
 func (obj *sendPingResponse) StatusCode500() ResponseError {
-
 	if obj.obj.StatusCode_500 == nil {
-		obj.obj.StatusCode_500 = &snappipb.ResponseError{}
-		newObj := &responseError{obj: obj.obj.StatusCode_500}
-		newObj.setDefault()
-		return newObj
+		obj.obj.StatusCode_500 = NewResponseError().Msg()
 	}
 	return &responseError{obj: obj.obj.StatusCode_500}
 }
@@ -5053,6 +5331,14 @@ func (obj *sendPingResponse) StatusCode500() ResponseError {
 //  description is TBD
 func (obj *sendPingResponse) HasStatusCode500() bool {
 	return obj.obj.StatusCode_500 != nil
+}
+
+// SetStatusCode500 sets the ResponseError value in the SendPingResponse object
+//  description is TBD
+func (obj *sendPingResponse) SetStatusCode500(value ResponseError) SendPingResponse {
+	obj.StatusCode500().SetMsg(value.Msg())
+
+	return obj
 }
 
 func (obj *sendPingResponse) validateObj(set_default bool) {
@@ -5081,12 +5367,18 @@ type setProtocolStateResponse struct {
 	obj *snappipb.SetProtocolStateResponse
 }
 
+func NewSetProtocolStateResponse() SetProtocolStateResponse {
+	obj := setProtocolStateResponse{obj: &snappipb.SetProtocolStateResponse{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *setProtocolStateResponse) Msg() *snappipb.SetProtocolStateResponse {
 	return obj.obj
 }
 
 func (obj *setProtocolStateResponse) SetMsg(msg *snappipb.SetProtocolStateResponse) SetProtocolStateResponse {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -5207,22 +5499,21 @@ type SetProtocolStateResponse interface {
 	validateObj(set_default bool)
 	setDefault()
 	StatusCode200() ResponseWarning
+	SetStatusCode200(value ResponseWarning) SetProtocolStateResponse
 	HasStatusCode200() bool
 	StatusCode400() ResponseError
+	SetStatusCode400(value ResponseError) SetProtocolStateResponse
 	HasStatusCode400() bool
 	StatusCode500() ResponseError
+	SetStatusCode500(value ResponseError) SetProtocolStateResponse
 	HasStatusCode500() bool
 }
 
 // StatusCode200 returns a ResponseWarning
 //  description is TBD
 func (obj *setProtocolStateResponse) StatusCode200() ResponseWarning {
-
 	if obj.obj.StatusCode_200 == nil {
-		obj.obj.StatusCode_200 = &snappipb.ResponseWarning{}
-		newObj := &responseWarning{obj: obj.obj.StatusCode_200}
-		newObj.setDefault()
-		return newObj
+		obj.obj.StatusCode_200 = NewResponseWarning().Msg()
 	}
 	return &responseWarning{obj: obj.obj.StatusCode_200}
 }
@@ -5233,15 +5524,19 @@ func (obj *setProtocolStateResponse) HasStatusCode200() bool {
 	return obj.obj.StatusCode_200 != nil
 }
 
+// SetStatusCode200 sets the ResponseWarning value in the SetProtocolStateResponse object
+//  description is TBD
+func (obj *setProtocolStateResponse) SetStatusCode200(value ResponseWarning) SetProtocolStateResponse {
+	obj.StatusCode200().SetMsg(value.Msg())
+
+	return obj
+}
+
 // StatusCode400 returns a ResponseError
 //  description is TBD
 func (obj *setProtocolStateResponse) StatusCode400() ResponseError {
-
 	if obj.obj.StatusCode_400 == nil {
-		obj.obj.StatusCode_400 = &snappipb.ResponseError{}
-		newObj := &responseError{obj: obj.obj.StatusCode_400}
-		newObj.setDefault()
-		return newObj
+		obj.obj.StatusCode_400 = NewResponseError().Msg()
 	}
 	return &responseError{obj: obj.obj.StatusCode_400}
 }
@@ -5252,15 +5547,19 @@ func (obj *setProtocolStateResponse) HasStatusCode400() bool {
 	return obj.obj.StatusCode_400 != nil
 }
 
+// SetStatusCode400 sets the ResponseError value in the SetProtocolStateResponse object
+//  description is TBD
+func (obj *setProtocolStateResponse) SetStatusCode400(value ResponseError) SetProtocolStateResponse {
+	obj.StatusCode400().SetMsg(value.Msg())
+
+	return obj
+}
+
 // StatusCode500 returns a ResponseError
 //  description is TBD
 func (obj *setProtocolStateResponse) StatusCode500() ResponseError {
-
 	if obj.obj.StatusCode_500 == nil {
-		obj.obj.StatusCode_500 = &snappipb.ResponseError{}
-		newObj := &responseError{obj: obj.obj.StatusCode_500}
-		newObj.setDefault()
-		return newObj
+		obj.obj.StatusCode_500 = NewResponseError().Msg()
 	}
 	return &responseError{obj: obj.obj.StatusCode_500}
 }
@@ -5269,6 +5568,14 @@ func (obj *setProtocolStateResponse) StatusCode500() ResponseError {
 //  description is TBD
 func (obj *setProtocolStateResponse) HasStatusCode500() bool {
 	return obj.obj.StatusCode_500 != nil
+}
+
+// SetStatusCode500 sets the ResponseError value in the SetProtocolStateResponse object
+//  description is TBD
+func (obj *setProtocolStateResponse) SetStatusCode500(value ResponseError) SetProtocolStateResponse {
+	obj.StatusCode500().SetMsg(value.Msg())
+
+	return obj
 }
 
 func (obj *setProtocolStateResponse) validateObj(set_default bool) {
@@ -5297,12 +5604,18 @@ type getMetricsResponse struct {
 	obj *snappipb.GetMetricsResponse
 }
 
+func NewGetMetricsResponse() GetMetricsResponse {
+	obj := getMetricsResponse{obj: &snappipb.GetMetricsResponse{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *getMetricsResponse) Msg() *snappipb.GetMetricsResponse {
 	return obj.obj
 }
 
 func (obj *getMetricsResponse) SetMsg(msg *snappipb.GetMetricsResponse) GetMetricsResponse {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -5423,22 +5736,21 @@ type GetMetricsResponse interface {
 	validateObj(set_default bool)
 	setDefault()
 	StatusCode200() MetricsResponse
+	SetStatusCode200(value MetricsResponse) GetMetricsResponse
 	HasStatusCode200() bool
 	StatusCode400() ResponseError
+	SetStatusCode400(value ResponseError) GetMetricsResponse
 	HasStatusCode400() bool
 	StatusCode500() ResponseError
+	SetStatusCode500(value ResponseError) GetMetricsResponse
 	HasStatusCode500() bool
 }
 
 // StatusCode200 returns a MetricsResponse
 //  description is TBD
 func (obj *getMetricsResponse) StatusCode200() MetricsResponse {
-
 	if obj.obj.StatusCode_200 == nil {
-		obj.obj.StatusCode_200 = &snappipb.MetricsResponse{}
-		newObj := &metricsResponse{obj: obj.obj.StatusCode_200}
-		newObj.setDefault()
-		return newObj
+		obj.obj.StatusCode_200 = NewMetricsResponse().Msg()
 	}
 	return &metricsResponse{obj: obj.obj.StatusCode_200}
 }
@@ -5449,15 +5761,19 @@ func (obj *getMetricsResponse) HasStatusCode200() bool {
 	return obj.obj.StatusCode_200 != nil
 }
 
+// SetStatusCode200 sets the MetricsResponse value in the GetMetricsResponse object
+//  description is TBD
+func (obj *getMetricsResponse) SetStatusCode200(value MetricsResponse) GetMetricsResponse {
+	obj.StatusCode200().SetMsg(value.Msg())
+
+	return obj
+}
+
 // StatusCode400 returns a ResponseError
 //  description is TBD
 func (obj *getMetricsResponse) StatusCode400() ResponseError {
-
 	if obj.obj.StatusCode_400 == nil {
-		obj.obj.StatusCode_400 = &snappipb.ResponseError{}
-		newObj := &responseError{obj: obj.obj.StatusCode_400}
-		newObj.setDefault()
-		return newObj
+		obj.obj.StatusCode_400 = NewResponseError().Msg()
 	}
 	return &responseError{obj: obj.obj.StatusCode_400}
 }
@@ -5468,15 +5784,19 @@ func (obj *getMetricsResponse) HasStatusCode400() bool {
 	return obj.obj.StatusCode_400 != nil
 }
 
+// SetStatusCode400 sets the ResponseError value in the GetMetricsResponse object
+//  description is TBD
+func (obj *getMetricsResponse) SetStatusCode400(value ResponseError) GetMetricsResponse {
+	obj.StatusCode400().SetMsg(value.Msg())
+
+	return obj
+}
+
 // StatusCode500 returns a ResponseError
 //  description is TBD
 func (obj *getMetricsResponse) StatusCode500() ResponseError {
-
 	if obj.obj.StatusCode_500 == nil {
-		obj.obj.StatusCode_500 = &snappipb.ResponseError{}
-		newObj := &responseError{obj: obj.obj.StatusCode_500}
-		newObj.setDefault()
-		return newObj
+		obj.obj.StatusCode_500 = NewResponseError().Msg()
 	}
 	return &responseError{obj: obj.obj.StatusCode_500}
 }
@@ -5485,6 +5805,14 @@ func (obj *getMetricsResponse) StatusCode500() ResponseError {
 //  description is TBD
 func (obj *getMetricsResponse) HasStatusCode500() bool {
 	return obj.obj.StatusCode_500 != nil
+}
+
+// SetStatusCode500 sets the ResponseError value in the GetMetricsResponse object
+//  description is TBD
+func (obj *getMetricsResponse) SetStatusCode500(value ResponseError) GetMetricsResponse {
+	obj.StatusCode500().SetMsg(value.Msg())
+
+	return obj
 }
 
 func (obj *getMetricsResponse) validateObj(set_default bool) {
@@ -5513,12 +5841,18 @@ type getStateMetricsResponse struct {
 	obj *snappipb.GetStateMetricsResponse
 }
 
+func NewGetStateMetricsResponse() GetStateMetricsResponse {
+	obj := getStateMetricsResponse{obj: &snappipb.GetStateMetricsResponse{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *getStateMetricsResponse) Msg() *snappipb.GetStateMetricsResponse {
 	return obj.obj
 }
 
 func (obj *getStateMetricsResponse) SetMsg(msg *snappipb.GetStateMetricsResponse) GetStateMetricsResponse {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -5639,22 +5973,21 @@ type GetStateMetricsResponse interface {
 	validateObj(set_default bool)
 	setDefault()
 	StatusCode200() StateMetrics
+	SetStatusCode200(value StateMetrics) GetStateMetricsResponse
 	HasStatusCode200() bool
 	StatusCode400() ResponseError
+	SetStatusCode400(value ResponseError) GetStateMetricsResponse
 	HasStatusCode400() bool
 	StatusCode500() ResponseError
+	SetStatusCode500(value ResponseError) GetStateMetricsResponse
 	HasStatusCode500() bool
 }
 
 // StatusCode200 returns a StateMetrics
 //  description is TBD
 func (obj *getStateMetricsResponse) StatusCode200() StateMetrics {
-
 	if obj.obj.StatusCode_200 == nil {
-		obj.obj.StatusCode_200 = &snappipb.StateMetrics{}
-		newObj := &stateMetrics{obj: obj.obj.StatusCode_200}
-		newObj.setDefault()
-		return newObj
+		obj.obj.StatusCode_200 = NewStateMetrics().Msg()
 	}
 	return &stateMetrics{obj: obj.obj.StatusCode_200}
 }
@@ -5665,15 +5998,19 @@ func (obj *getStateMetricsResponse) HasStatusCode200() bool {
 	return obj.obj.StatusCode_200 != nil
 }
 
+// SetStatusCode200 sets the StateMetrics value in the GetStateMetricsResponse object
+//  description is TBD
+func (obj *getStateMetricsResponse) SetStatusCode200(value StateMetrics) GetStateMetricsResponse {
+	obj.StatusCode200().SetMsg(value.Msg())
+
+	return obj
+}
+
 // StatusCode400 returns a ResponseError
 //  description is TBD
 func (obj *getStateMetricsResponse) StatusCode400() ResponseError {
-
 	if obj.obj.StatusCode_400 == nil {
-		obj.obj.StatusCode_400 = &snappipb.ResponseError{}
-		newObj := &responseError{obj: obj.obj.StatusCode_400}
-		newObj.setDefault()
-		return newObj
+		obj.obj.StatusCode_400 = NewResponseError().Msg()
 	}
 	return &responseError{obj: obj.obj.StatusCode_400}
 }
@@ -5684,15 +6021,19 @@ func (obj *getStateMetricsResponse) HasStatusCode400() bool {
 	return obj.obj.StatusCode_400 != nil
 }
 
+// SetStatusCode400 sets the ResponseError value in the GetStateMetricsResponse object
+//  description is TBD
+func (obj *getStateMetricsResponse) SetStatusCode400(value ResponseError) GetStateMetricsResponse {
+	obj.StatusCode400().SetMsg(value.Msg())
+
+	return obj
+}
+
 // StatusCode500 returns a ResponseError
 //  description is TBD
 func (obj *getStateMetricsResponse) StatusCode500() ResponseError {
-
 	if obj.obj.StatusCode_500 == nil {
-		obj.obj.StatusCode_500 = &snappipb.ResponseError{}
-		newObj := &responseError{obj: obj.obj.StatusCode_500}
-		newObj.setDefault()
-		return newObj
+		obj.obj.StatusCode_500 = NewResponseError().Msg()
 	}
 	return &responseError{obj: obj.obj.StatusCode_500}
 }
@@ -5701,6 +6042,14 @@ func (obj *getStateMetricsResponse) StatusCode500() ResponseError {
 //  description is TBD
 func (obj *getStateMetricsResponse) HasStatusCode500() bool {
 	return obj.obj.StatusCode_500 != nil
+}
+
+// SetStatusCode500 sets the ResponseError value in the GetStateMetricsResponse object
+//  description is TBD
+func (obj *getStateMetricsResponse) SetStatusCode500(value ResponseError) GetStateMetricsResponse {
+	obj.StatusCode500().SetMsg(value.Msg())
+
+	return obj
 }
 
 func (obj *getStateMetricsResponse) validateObj(set_default bool) {
@@ -5729,12 +6078,18 @@ type getCaptureResponse struct {
 	obj *snappipb.GetCaptureResponse
 }
 
+func NewGetCaptureResponse() GetCaptureResponse {
+	obj := getCaptureResponse{obj: &snappipb.GetCaptureResponse{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *getCaptureResponse) Msg() *snappipb.GetCaptureResponse {
 	return obj.obj
 }
 
 func (obj *getCaptureResponse) SetMsg(msg *snappipb.GetCaptureResponse) GetCaptureResponse {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -5857,8 +6212,10 @@ type GetCaptureResponse interface {
 	StatusCode200() []byte
 	SetStatusCode200(value []byte) GetCaptureResponse
 	StatusCode400() ResponseError
+	SetStatusCode400(value ResponseError) GetCaptureResponse
 	HasStatusCode400() bool
 	StatusCode500() ResponseError
+	SetStatusCode500(value ResponseError) GetCaptureResponse
 	HasStatusCode500() bool
 }
 
@@ -5879,12 +6236,8 @@ func (obj *getCaptureResponse) SetStatusCode200(value []byte) GetCaptureResponse
 // StatusCode400 returns a ResponseError
 //  description is TBD
 func (obj *getCaptureResponse) StatusCode400() ResponseError {
-
 	if obj.obj.StatusCode_400 == nil {
-		obj.obj.StatusCode_400 = &snappipb.ResponseError{}
-		newObj := &responseError{obj: obj.obj.StatusCode_400}
-		newObj.setDefault()
-		return newObj
+		obj.obj.StatusCode_400 = NewResponseError().Msg()
 	}
 	return &responseError{obj: obj.obj.StatusCode_400}
 }
@@ -5895,15 +6248,19 @@ func (obj *getCaptureResponse) HasStatusCode400() bool {
 	return obj.obj.StatusCode_400 != nil
 }
 
+// SetStatusCode400 sets the ResponseError value in the GetCaptureResponse object
+//  description is TBD
+func (obj *getCaptureResponse) SetStatusCode400(value ResponseError) GetCaptureResponse {
+	obj.StatusCode400().SetMsg(value.Msg())
+
+	return obj
+}
+
 // StatusCode500 returns a ResponseError
 //  description is TBD
 func (obj *getCaptureResponse) StatusCode500() ResponseError {
-
 	if obj.obj.StatusCode_500 == nil {
-		obj.obj.StatusCode_500 = &snappipb.ResponseError{}
-		newObj := &responseError{obj: obj.obj.StatusCode_500}
-		newObj.setDefault()
-		return newObj
+		obj.obj.StatusCode_500 = NewResponseError().Msg()
 	}
 	return &responseError{obj: obj.obj.StatusCode_500}
 }
@@ -5912,6 +6269,14 @@ func (obj *getCaptureResponse) StatusCode500() ResponseError {
 //  description is TBD
 func (obj *getCaptureResponse) HasStatusCode500() bool {
 	return obj.obj.StatusCode_500 != nil
+}
+
+// SetStatusCode500 sets the ResponseError value in the GetCaptureResponse object
+//  description is TBD
+func (obj *getCaptureResponse) SetStatusCode500(value ResponseError) GetCaptureResponse {
+	obj.StatusCode500().SetMsg(value.Msg())
+
+	return obj
 }
 
 func (obj *getCaptureResponse) validateObj(set_default bool) {
@@ -5936,12 +6301,18 @@ type port struct {
 	obj *snappipb.Port
 }
 
+func NewPort() Port {
+	obj := port{obj: &snappipb.Port{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *port) Msg() *snappipb.Port {
 	return obj.obj
 }
 
 func (obj *port) SetMsg(msg *snappipb.Port) Port {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -6145,12 +6516,18 @@ type lag struct {
 	obj *snappipb.Lag
 }
 
+func NewLag() Lag {
+	obj := lag{obj: &snappipb.Lag{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *lag) Msg() *snappipb.Lag {
 	return obj.obj
 }
 
 func (obj *lag) SetMsg(msg *snappipb.Lag) Lag {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -6340,6 +6717,9 @@ func (obj *lag) validateObj(set_default bool) {
 }
 
 func (obj *lag) setDefault() {
+	if obj.obj.Ports == nil {
+		obj.Ports()
+	}
 
 }
 
@@ -6347,12 +6727,18 @@ type layer1 struct {
 	obj *snappipb.Layer1
 }
 
+func NewLayer1() Layer1 {
+	obj := layer1{obj: &snappipb.Layer1{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *layer1) Msg() *snappipb.Layer1 {
 	return obj.obj
 }
 
 func (obj *layer1) SetMsg(msg *snappipb.Layer1) Layer1 {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -6493,8 +6879,10 @@ type Layer1 interface {
 	SetAutoNegotiate(value bool) Layer1
 	HasAutoNegotiate() bool
 	AutoNegotiation() Layer1AutoNegotiation
+	SetAutoNegotiation(value Layer1AutoNegotiation) Layer1
 	HasAutoNegotiation() bool
 	FlowControl() Layer1FlowControl
+	SetFlowControl(value Layer1FlowControl) Layer1
 	HasFlowControl() bool
 	Name() string
 	SetName(value string) Layer1
@@ -6708,12 +7096,8 @@ func (obj *layer1) SetAutoNegotiate(value bool) Layer1 {
 // AutoNegotiation returns a Layer1AutoNegotiation
 //  description is TBD
 func (obj *layer1) AutoNegotiation() Layer1AutoNegotiation {
-
 	if obj.obj.AutoNegotiation == nil {
-		obj.obj.AutoNegotiation = &snappipb.Layer1AutoNegotiation{}
-		newObj := &layer1AutoNegotiation{obj: obj.obj.AutoNegotiation}
-		newObj.setDefault()
-		return newObj
+		obj.obj.AutoNegotiation = NewLayer1AutoNegotiation().Msg()
 	}
 	return &layer1AutoNegotiation{obj: obj.obj.AutoNegotiation}
 }
@@ -6724,15 +7108,19 @@ func (obj *layer1) HasAutoNegotiation() bool {
 	return obj.obj.AutoNegotiation != nil
 }
 
+// SetAutoNegotiation sets the Layer1AutoNegotiation value in the Layer1 object
+//  description is TBD
+func (obj *layer1) SetAutoNegotiation(value Layer1AutoNegotiation) Layer1 {
+	obj.AutoNegotiation().SetMsg(value.Msg())
+
+	return obj
+}
+
 // FlowControl returns a Layer1FlowControl
 //  description is TBD
 func (obj *layer1) FlowControl() Layer1FlowControl {
-
 	if obj.obj.FlowControl == nil {
-		obj.obj.FlowControl = &snappipb.Layer1FlowControl{}
-		newObj := &layer1FlowControl{obj: obj.obj.FlowControl}
-		newObj.setDefault()
-		return newObj
+		obj.obj.FlowControl = NewLayer1FlowControl().Msg()
 	}
 	return &layer1FlowControl{obj: obj.obj.FlowControl}
 }
@@ -6741,6 +7129,14 @@ func (obj *layer1) FlowControl() Layer1FlowControl {
 //  description is TBD
 func (obj *layer1) HasFlowControl() bool {
 	return obj.obj.FlowControl != nil
+}
+
+// SetFlowControl sets the Layer1FlowControl value in the Layer1 object
+//  description is TBD
+func (obj *layer1) SetFlowControl(value Layer1FlowControl) Layer1 {
+	obj.FlowControl().SetMsg(value.Msg())
+
+	return obj
 }
 
 // Name returns a string
@@ -6799,12 +7195,18 @@ type capture struct {
 	obj *snappipb.Capture
 }
 
+func NewCapture() Capture {
+	obj := capture{obj: &snappipb.Capture{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *capture) Msg() *snappipb.Capture {
 	return obj.obj
 }
 
 func (obj *capture) SetMsg(msg *snappipb.Capture) Capture {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -7114,6 +7516,9 @@ func (obj *capture) validateObj(set_default bool) {
 }
 
 func (obj *capture) setDefault() {
+	if obj.obj.Filters == nil {
+		obj.Filters()
+	}
 	if obj.obj.Overwrite == nil {
 		obj.SetOverwrite(true)
 	}
@@ -7127,12 +7532,18 @@ type device struct {
 	obj *snappipb.Device
 }
 
+func NewDevice() Device {
+	obj := device{obj: &snappipb.Device{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *device) Msg() *snappipb.Device {
 	return obj.obj
 }
 
 func (obj *device) SetMsg(msg *snappipb.Device) Device {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -7256,8 +7667,10 @@ type Device interface {
 	Ipv4Loopbacks() DeviceDeviceIpv4LoopbackIter
 	Ipv6Loopbacks() DeviceDeviceIpv6LoopbackIter
 	Isis() DeviceIsisRouter
+	SetIsis(value DeviceIsisRouter) Device
 	HasIsis() bool
 	Bgp() DeviceBgpRouter
+	SetBgp(value DeviceBgpRouter) Device
 	HasBgp() bool
 	Name() string
 	SetName(value string) Device
@@ -7368,12 +7781,8 @@ func (obj *deviceDeviceIpv6LoopbackIter) Items() []DeviceIpv6Loopback {
 // Isis returns a DeviceIsisRouter
 //  The properties of an IS-IS router and its children,  such as IS-IS interfaces and route ranges.
 func (obj *device) Isis() DeviceIsisRouter {
-
 	if obj.obj.Isis == nil {
-		obj.obj.Isis = &snappipb.DeviceIsisRouter{}
-		newObj := &deviceIsisRouter{obj: obj.obj.Isis}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Isis = NewDeviceIsisRouter().Msg()
 	}
 	return &deviceIsisRouter{obj: obj.obj.Isis}
 }
@@ -7384,15 +7793,19 @@ func (obj *device) HasIsis() bool {
 	return obj.obj.Isis != nil
 }
 
+// SetIsis sets the DeviceIsisRouter value in the Device object
+//  The properties of an IS-IS router and its children,  such as IS-IS interfaces and route ranges.
+func (obj *device) SetIsis(value DeviceIsisRouter) Device {
+	obj.Isis().SetMsg(value.Msg())
+
+	return obj
+}
+
 // Bgp returns a DeviceBgpRouter
 //  The properties of BGP router and its children,  such as BGPv4, BGPv6 peers and their route ranges.
 func (obj *device) Bgp() DeviceBgpRouter {
-
 	if obj.obj.Bgp == nil {
-		obj.obj.Bgp = &snappipb.DeviceBgpRouter{}
-		newObj := &deviceBgpRouter{obj: obj.obj.Bgp}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Bgp = NewDeviceBgpRouter().Msg()
 	}
 	return &deviceBgpRouter{obj: obj.obj.Bgp}
 }
@@ -7401,6 +7814,14 @@ func (obj *device) Bgp() DeviceBgpRouter {
 //  The properties of BGP router and its children,  such as BGPv4, BGPv6 peers and their route ranges.
 func (obj *device) HasBgp() bool {
 	return obj.obj.Bgp != nil
+}
+
+// SetBgp sets the DeviceBgpRouter value in the Device object
+//  The properties of BGP router and its children,  such as BGPv4, BGPv6 peers and their route ranges.
+func (obj *device) SetBgp(value DeviceBgpRouter) Device {
+	obj.Bgp().SetMsg(value.Msg())
+
+	return obj
 }
 
 // Name returns a string
@@ -7454,6 +7875,15 @@ func (obj *device) validateObj(set_default bool) {
 }
 
 func (obj *device) setDefault() {
+	if obj.obj.Ethernets == nil {
+		obj.Ethernets()
+	}
+	if obj.obj.Ipv4Loopbacks == nil {
+		obj.Ipv4Loopbacks()
+	}
+	if obj.obj.Ipv6Loopbacks == nil {
+		obj.Ipv6Loopbacks()
+	}
 
 }
 
@@ -7461,12 +7891,18 @@ type flow struct {
 	obj *snappipb.Flow
 }
 
+func NewFlow() Flow {
+	obj := flow{obj: &snappipb.Flow{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *flow) Msg() *snappipb.Flow {
 	return obj.obj
 }
 
 func (obj *flow) SetMsg(msg *snappipb.Flow) Flow {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -7587,14 +8023,19 @@ type Flow interface {
 	validateObj(set_default bool)
 	setDefault()
 	TxRx() FlowTxRx
+	SetTxRx(value FlowTxRx) Flow
 	Packet() FlowFlowHeaderIter
 	Size() FlowSize
+	SetSize(value FlowSize) Flow
 	HasSize() bool
 	Rate() FlowRate
+	SetRate(value FlowRate) Flow
 	HasRate() bool
 	Duration() FlowDuration
+	SetDuration(value FlowDuration) Flow
 	HasDuration() bool
 	Metrics() FlowMetrics
+	SetMetrics(value FlowMetrics) Flow
 	HasMetrics() bool
 	Name() string
 	SetName(value string) Flow
@@ -7603,14 +8044,18 @@ type Flow interface {
 // TxRx returns a FlowTxRx
 //  The transmit and receive endpoints.
 func (obj *flow) TxRx() FlowTxRx {
-
 	if obj.obj.TxRx == nil {
-		obj.obj.TxRx = &snappipb.FlowTxRx{}
-		newObj := &flowTxRx{obj: obj.obj.TxRx}
-		newObj.setDefault()
-		return newObj
+		obj.obj.TxRx = NewFlowTxRx().Msg()
 	}
 	return &flowTxRx{obj: obj.obj.TxRx}
+}
+
+// SetTxRx sets the FlowTxRx value in the Flow object
+//  The transmit and receive endpoints.
+func (obj *flow) SetTxRx(value FlowTxRx) Flow {
+	obj.TxRx().SetMsg(value.Msg())
+
+	return obj
 }
 
 // Packet returns a []FlowHeader
@@ -7661,12 +8106,8 @@ func (obj *flowFlowHeaderIter) Items() []FlowHeader {
 // Size returns a FlowSize
 //  The size of the packets.
 func (obj *flow) Size() FlowSize {
-
 	if obj.obj.Size == nil {
-		obj.obj.Size = &snappipb.FlowSize{}
-		newObj := &flowSize{obj: obj.obj.Size}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Size = NewFlowSize().Msg()
 	}
 	return &flowSize{obj: obj.obj.Size}
 }
@@ -7677,15 +8118,19 @@ func (obj *flow) HasSize() bool {
 	return obj.obj.Size != nil
 }
 
+// SetSize sets the FlowSize value in the Flow object
+//  The size of the packets.
+func (obj *flow) SetSize(value FlowSize) Flow {
+	obj.Size().SetMsg(value.Msg())
+
+	return obj
+}
+
 // Rate returns a FlowRate
 //  The transmit rate of the packets.
 func (obj *flow) Rate() FlowRate {
-
 	if obj.obj.Rate == nil {
-		obj.obj.Rate = &snappipb.FlowRate{}
-		newObj := &flowRate{obj: obj.obj.Rate}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Rate = NewFlowRate().Msg()
 	}
 	return &flowRate{obj: obj.obj.Rate}
 }
@@ -7696,15 +8141,19 @@ func (obj *flow) HasRate() bool {
 	return obj.obj.Rate != nil
 }
 
+// SetRate sets the FlowRate value in the Flow object
+//  The transmit rate of the packets.
+func (obj *flow) SetRate(value FlowRate) Flow {
+	obj.Rate().SetMsg(value.Msg())
+
+	return obj
+}
+
 // Duration returns a FlowDuration
 //  The transmit duration of the packets.
 func (obj *flow) Duration() FlowDuration {
-
 	if obj.obj.Duration == nil {
-		obj.obj.Duration = &snappipb.FlowDuration{}
-		newObj := &flowDuration{obj: obj.obj.Duration}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Duration = NewFlowDuration().Msg()
 	}
 	return &flowDuration{obj: obj.obj.Duration}
 }
@@ -7715,15 +8164,19 @@ func (obj *flow) HasDuration() bool {
 	return obj.obj.Duration != nil
 }
 
+// SetDuration sets the FlowDuration value in the Flow object
+//  The transmit duration of the packets.
+func (obj *flow) SetDuration(value FlowDuration) Flow {
+	obj.Duration().SetMsg(value.Msg())
+
+	return obj
+}
+
 // Metrics returns a FlowMetrics
 //  Flow metrics.
 func (obj *flow) Metrics() FlowMetrics {
-
 	if obj.obj.Metrics == nil {
-		obj.obj.Metrics = &snappipb.FlowMetrics{}
-		newObj := &flowMetrics{obj: obj.obj.Metrics}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Metrics = NewFlowMetrics().Msg()
 	}
 	return &flowMetrics{obj: obj.obj.Metrics}
 }
@@ -7732,6 +8185,14 @@ func (obj *flow) Metrics() FlowMetrics {
 //  Flow metrics.
 func (obj *flow) HasMetrics() bool {
 	return obj.obj.Metrics != nil
+}
+
+// SetMetrics sets the FlowMetrics value in the Flow object
+//  Flow metrics.
+func (obj *flow) SetMetrics(value FlowMetrics) Flow {
+	obj.Metrics().SetMsg(value.Msg())
+
+	return obj
 }
 
 // Name returns a string
@@ -7788,6 +8249,12 @@ func (obj *flow) validateObj(set_default bool) {
 }
 
 func (obj *flow) setDefault() {
+	if obj.obj.TxRx == nil {
+		obj.TxRx()
+	}
+	if obj.obj.Packet == nil {
+		obj.Packet()
+	}
 
 }
 
@@ -7795,12 +8262,18 @@ type event struct {
 	obj *snappipb.Event
 }
 
+func NewEvent() Event {
+	obj := event{obj: &snappipb.Event{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *event) Msg() *snappipb.Event {
 	return obj.obj
 }
 
 func (obj *event) SetMsg(msg *snappipb.Event) Event {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -7924,10 +8397,13 @@ type Event interface {
 	SetEnable(value bool) Event
 	HasEnable() bool
 	Link() EventLink
+	SetLink(value EventLink) Event
 	HasLink() bool
 	RxRateThreshold() EventRxRateThreshold
+	SetRxRateThreshold(value EventRxRateThreshold) Event
 	HasRxRateThreshold() bool
 	RouteAdvertiseWithdraw() EventRouteAdvertiseWithdraw
+	SetRouteAdvertiseWithdraw(value EventRouteAdvertiseWithdraw) Event
 	HasRouteAdvertiseWithdraw() bool
 }
 
@@ -7960,12 +8436,8 @@ func (obj *event) SetEnable(value bool) Event {
 // Link returns a EventLink
 //  description is TBD
 func (obj *event) Link() EventLink {
-
 	if obj.obj.Link == nil {
-		obj.obj.Link = &snappipb.EventLink{}
-		newObj := &eventLink{obj: obj.obj.Link}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Link = NewEventLink().Msg()
 	}
 	return &eventLink{obj: obj.obj.Link}
 }
@@ -7976,15 +8448,19 @@ func (obj *event) HasLink() bool {
 	return obj.obj.Link != nil
 }
 
+// SetLink sets the EventLink value in the Event object
+//  description is TBD
+func (obj *event) SetLink(value EventLink) Event {
+	obj.Link().SetMsg(value.Msg())
+
+	return obj
+}
+
 // RxRateThreshold returns a EventRxRateThreshold
 //  description is TBD
 func (obj *event) RxRateThreshold() EventRxRateThreshold {
-
 	if obj.obj.RxRateThreshold == nil {
-		obj.obj.RxRateThreshold = &snappipb.EventRxRateThreshold{}
-		newObj := &eventRxRateThreshold{obj: obj.obj.RxRateThreshold}
-		newObj.setDefault()
-		return newObj
+		obj.obj.RxRateThreshold = NewEventRxRateThreshold().Msg()
 	}
 	return &eventRxRateThreshold{obj: obj.obj.RxRateThreshold}
 }
@@ -7995,15 +8471,19 @@ func (obj *event) HasRxRateThreshold() bool {
 	return obj.obj.RxRateThreshold != nil
 }
 
+// SetRxRateThreshold sets the EventRxRateThreshold value in the Event object
+//  description is TBD
+func (obj *event) SetRxRateThreshold(value EventRxRateThreshold) Event {
+	obj.RxRateThreshold().SetMsg(value.Msg())
+
+	return obj
+}
+
 // RouteAdvertiseWithdraw returns a EventRouteAdvertiseWithdraw
 //  description is TBD
 func (obj *event) RouteAdvertiseWithdraw() EventRouteAdvertiseWithdraw {
-
 	if obj.obj.RouteAdvertiseWithdraw == nil {
-		obj.obj.RouteAdvertiseWithdraw = &snappipb.EventRouteAdvertiseWithdraw{}
-		newObj := &eventRouteAdvertiseWithdraw{obj: obj.obj.RouteAdvertiseWithdraw}
-		newObj.setDefault()
-		return newObj
+		obj.obj.RouteAdvertiseWithdraw = NewEventRouteAdvertiseWithdraw().Msg()
 	}
 	return &eventRouteAdvertiseWithdraw{obj: obj.obj.RouteAdvertiseWithdraw}
 }
@@ -8012,6 +8492,14 @@ func (obj *event) RouteAdvertiseWithdraw() EventRouteAdvertiseWithdraw {
 //  description is TBD
 func (obj *event) HasRouteAdvertiseWithdraw() bool {
 	return obj.obj.RouteAdvertiseWithdraw != nil
+}
+
+// SetRouteAdvertiseWithdraw sets the EventRouteAdvertiseWithdraw value in the Event object
+//  description is TBD
+func (obj *event) SetRouteAdvertiseWithdraw(value EventRouteAdvertiseWithdraw) Event {
+	obj.RouteAdvertiseWithdraw().SetMsg(value.Msg())
+
+	return obj
 }
 
 func (obj *event) validateObj(set_default bool) {
@@ -8043,12 +8531,18 @@ type configOptions struct {
 	obj *snappipb.ConfigOptions
 }
 
+func NewConfigOptions() ConfigOptions {
+	obj := configOptions{obj: &snappipb.ConfigOptions{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *configOptions) Msg() *snappipb.ConfigOptions {
 	return obj.obj
 }
 
 func (obj *configOptions) SetMsg(msg *snappipb.ConfigOptions) ConfigOptions {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -8169,18 +8663,15 @@ type ConfigOptions interface {
 	validateObj(set_default bool)
 	setDefault()
 	PortOptions() PortOptions
+	SetPortOptions(value PortOptions) ConfigOptions
 	HasPortOptions() bool
 }
 
 // PortOptions returns a PortOptions
 //  description is TBD
 func (obj *configOptions) PortOptions() PortOptions {
-
 	if obj.obj.PortOptions == nil {
-		obj.obj.PortOptions = &snappipb.PortOptions{}
-		newObj := &portOptions{obj: obj.obj.PortOptions}
-		newObj.setDefault()
-		return newObj
+		obj.obj.PortOptions = NewPortOptions().Msg()
 	}
 	return &portOptions{obj: obj.obj.PortOptions}
 }
@@ -8189,6 +8680,14 @@ func (obj *configOptions) PortOptions() PortOptions {
 //  description is TBD
 func (obj *configOptions) HasPortOptions() bool {
 	return obj.obj.PortOptions != nil
+}
+
+// SetPortOptions sets the PortOptions value in the ConfigOptions object
+//  description is TBD
+func (obj *configOptions) SetPortOptions(value PortOptions) ConfigOptions {
+	obj.PortOptions().SetMsg(value.Msg())
+
+	return obj
 }
 
 func (obj *configOptions) validateObj(set_default bool) {
@@ -8209,12 +8708,18 @@ type ping struct {
 	obj *snappipb.Ping
 }
 
+func NewPing() Ping {
+	obj := ping{obj: &snappipb.Ping{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *ping) Msg() *snappipb.Ping {
 	return obj.obj
 }
 
 func (obj *ping) SetMsg(msg *snappipb.Ping) Ping {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -8338,8 +8843,10 @@ type Ping interface {
 	SetChoice(value PingChoiceEnum) Ping
 	HasChoice() bool
 	Ipv4() PingIpv4
+	SetIpv4(value PingIpv4) Ping
 	HasIpv4() bool
 	Ipv6() PingIpv6
+	SetIpv6(value PingIpv6) Ping
 	HasIpv6() bool
 }
 
@@ -8380,10 +8887,7 @@ func (obj *ping) SetChoice(value PingChoiceEnum) Ping {
 func (obj *ping) Ipv4() PingIpv4 {
 	obj.SetChoice(PingChoice.IPV4)
 	if obj.obj.Ipv4 == nil {
-		obj.obj.Ipv4 = &snappipb.PingIpv4{}
-		newObj := &pingIpv4{obj: obj.obj.Ipv4}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Ipv4 = NewPingIpv4().Msg()
 	}
 	return &pingIpv4{obj: obj.obj.Ipv4}
 }
@@ -8394,15 +8898,20 @@ func (obj *ping) HasIpv4() bool {
 	return obj.obj.Ipv4 != nil
 }
 
+// SetIpv4 sets the PingIpv4 value in the Ping object
+//  description is TBD
+func (obj *ping) SetIpv4(value PingIpv4) Ping {
+	obj.Ipv4().SetMsg(value.Msg())
+	obj.SetChoice(PingChoice.IPV4)
+	return obj
+}
+
 // Ipv6 returns a PingIpv6
 //  description is TBD
 func (obj *ping) Ipv6() PingIpv6 {
 	obj.SetChoice(PingChoice.IPV6)
 	if obj.obj.Ipv6 == nil {
-		obj.obj.Ipv6 = &snappipb.PingIpv6{}
-		newObj := &pingIpv6{obj: obj.obj.Ipv6}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Ipv6 = NewPingIpv6().Msg()
 	}
 	return &pingIpv6{obj: obj.obj.Ipv6}
 }
@@ -8411,6 +8920,14 @@ func (obj *ping) Ipv6() PingIpv6 {
 //  description is TBD
 func (obj *ping) HasIpv6() bool {
 	return obj.obj.Ipv6 != nil
+}
+
+// SetIpv6 sets the PingIpv6 value in the Ping object
+//  description is TBD
+func (obj *ping) SetIpv6(value PingIpv6) Ping {
+	obj.Ipv6().SetMsg(value.Msg())
+	obj.SetChoice(PingChoice.IPV6)
+	return obj
 }
 
 func (obj *ping) validateObj(set_default bool) {
@@ -8438,12 +8955,18 @@ type portMetricsRequest struct {
 	obj *snappipb.PortMetricsRequest
 }
 
+func NewPortMetricsRequest() PortMetricsRequest {
+	obj := portMetricsRequest{obj: &snappipb.PortMetricsRequest{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *portMetricsRequest) Msg() *snappipb.PortMetricsRequest {
 	return obj.obj
 }
 
 func (obj *portMetricsRequest) SetMsg(msg *snappipb.PortMetricsRequest) PortMetricsRequest {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -8671,12 +9194,18 @@ type flowMetricsRequest struct {
 	obj *snappipb.FlowMetricsRequest
 }
 
+func NewFlowMetricsRequest() FlowMetricsRequest {
+	obj := flowMetricsRequest{obj: &snappipb.FlowMetricsRequest{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *flowMetricsRequest) Msg() *snappipb.FlowMetricsRequest {
 	return obj.obj
 }
 
 func (obj *flowMetricsRequest) SetMsg(msg *snappipb.FlowMetricsRequest) FlowMetricsRequest {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -8799,6 +9328,7 @@ type FlowMetricsRequest interface {
 	FlowNames() []string
 	SetFlowNames(value []string) FlowMetricsRequest
 	MetricGroups() FlowMetricGroupRequest
+	SetMetricGroups(value FlowMetricGroupRequest) FlowMetricsRequest
 	HasMetricGroups() bool
 	MetricNames() []FlowMetricsRequestMetricNamesEnum
 	SetMetricNames(value []FlowMetricsRequestMetricNamesEnum) FlowMetricsRequest
@@ -8845,12 +9375,8 @@ func (obj *flowMetricsRequest) SetFlowNames(value []string) FlowMetricsRequest {
 // MetricGroups returns a FlowMetricGroupRequest
 //  A list of metric groups used to disaggregate flows. A metric group that does not exist for a flow group MUST return an error.
 func (obj *flowMetricsRequest) MetricGroups() FlowMetricGroupRequest {
-
 	if obj.obj.MetricGroups == nil {
-		obj.obj.MetricGroups = &snappipb.FlowMetricGroupRequest{}
-		newObj := &flowMetricGroupRequest{obj: obj.obj.MetricGroups}
-		newObj.setDefault()
-		return newObj
+		obj.obj.MetricGroups = NewFlowMetricGroupRequest().Msg()
 	}
 	return &flowMetricGroupRequest{obj: obj.obj.MetricGroups}
 }
@@ -8859,6 +9385,14 @@ func (obj *flowMetricsRequest) MetricGroups() FlowMetricGroupRequest {
 //  A list of metric groups used to disaggregate flows. A metric group that does not exist for a flow group MUST return an error.
 func (obj *flowMetricsRequest) HasMetricGroups() bool {
 	return obj.obj.MetricGroups != nil
+}
+
+// SetMetricGroups sets the FlowMetricGroupRequest value in the FlowMetricsRequest object
+//  A list of metric groups used to disaggregate flows. A metric group that does not exist for a flow group MUST return an error.
+func (obj *flowMetricsRequest) SetMetricGroups(value FlowMetricGroupRequest) FlowMetricsRequest {
+	obj.MetricGroups().SetMsg(value.Msg())
+
+	return obj
 }
 
 type FlowMetricsRequestMetricNamesEnum string
@@ -8920,12 +9454,18 @@ type bgpv4MetricsRequest struct {
 	obj *snappipb.Bgpv4MetricsRequest
 }
 
+func NewBgpv4MetricsRequest() Bgpv4MetricsRequest {
+	obj := bgpv4MetricsRequest{obj: &snappipb.Bgpv4MetricsRequest{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *bgpv4MetricsRequest) Msg() *snappipb.Bgpv4MetricsRequest {
 	return obj.obj
 }
 
 func (obj *bgpv4MetricsRequest) SetMsg(msg *snappipb.Bgpv4MetricsRequest) Bgpv4MetricsRequest {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -9157,12 +9697,18 @@ type bgpv6MetricsRequest struct {
 	obj *snappipb.Bgpv6MetricsRequest
 }
 
+func NewBgpv6MetricsRequest() Bgpv6MetricsRequest {
+	obj := bgpv6MetricsRequest{obj: &snappipb.Bgpv6MetricsRequest{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *bgpv6MetricsRequest) Msg() *snappipb.Bgpv6MetricsRequest {
 	return obj.obj
 }
 
 func (obj *bgpv6MetricsRequest) SetMsg(msg *snappipb.Bgpv6MetricsRequest) Bgpv6MetricsRequest {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -9394,12 +9940,18 @@ type responseWarning struct {
 	obj *snappipb.ResponseWarning
 }
 
+func NewResponseWarning() ResponseWarning {
+	obj := responseWarning{obj: &snappipb.ResponseWarning{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *responseWarning) Msg() *snappipb.ResponseWarning {
 	return obj.obj
 }
 
 func (obj *responseWarning) SetMsg(msg *snappipb.ResponseWarning) ResponseWarning {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -9560,12 +10112,18 @@ type responseError struct {
 	obj *snappipb.ResponseError
 }
 
+func NewResponseError() ResponseError {
+	obj := responseError{obj: &snappipb.ResponseError{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *responseError) Msg() *snappipb.ResponseError {
 	return obj.obj
 }
 
 func (obj *responseError) SetMsg(msg *snappipb.ResponseError) ResponseError {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -9726,12 +10284,18 @@ type pingResponse struct {
 	obj *snappipb.PingResponse
 }
 
+func NewPingResponse() PingResponse {
+	obj := pingResponse{obj: &snappipb.PingResponse{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *pingResponse) Msg() *snappipb.PingResponse {
 	return obj.obj
 }
 
 func (obj *pingResponse) SetMsg(msg *snappipb.PingResponse) PingResponse {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -9901,6 +10465,9 @@ func (obj *pingResponse) validateObj(set_default bool) {
 }
 
 func (obj *pingResponse) setDefault() {
+	if obj.obj.Responses == nil {
+		obj.Responses()
+	}
 
 }
 
@@ -9908,12 +10475,18 @@ type metricsResponse struct {
 	obj *snappipb.MetricsResponse
 }
 
+func NewMetricsResponse() MetricsResponse {
+	obj := metricsResponse{obj: &snappipb.MetricsResponse{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *metricsResponse) Msg() *snappipb.MetricsResponse {
 	return obj.obj
 }
 
 func (obj *metricsResponse) SetMsg(msg *snappipb.MetricsResponse) MetricsResponse {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -10245,6 +10818,9 @@ func (obj *metricsResponse) validateObj(set_default bool) {
 }
 
 func (obj *metricsResponse) setDefault() {
+	if obj.obj.PortMetrics == nil {
+		obj.PortMetrics()
+	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(MetricsResponseChoice.PORT_METRICS)
 	}
@@ -10255,12 +10831,18 @@ type stateMetrics struct {
 	obj *snappipb.StateMetrics
 }
 
+func NewStateMetrics() StateMetrics {
+	obj := stateMetrics{obj: &snappipb.StateMetrics{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *stateMetrics) Msg() *snappipb.StateMetrics {
 	return obj.obj
 }
 
 func (obj *stateMetrics) SetMsg(msg *snappipb.StateMetrics) StateMetrics {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -10471,6 +11053,12 @@ func (obj *stateMetrics) validateObj(set_default bool) {
 }
 
 func (obj *stateMetrics) setDefault() {
+	if obj.obj.PortState == nil {
+		obj.PortState()
+	}
+	if obj.obj.FlowState == nil {
+		obj.FlowState()
+	}
 
 }
 
@@ -10478,12 +11066,18 @@ type lagPort struct {
 	obj *snappipb.LagPort
 }
 
+func NewLagPort() LagPort {
+	obj := lagPort{obj: &snappipb.LagPort{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *lagPort) Msg() *snappipb.LagPort {
 	return obj.obj
 }
 
 func (obj *lagPort) SetMsg(msg *snappipb.LagPort) LagPort {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -10606,7 +11200,9 @@ type LagPort interface {
 	PortName() string
 	SetPortName(value string) LagPort
 	Protocol() LagProtocol
+	SetProtocol(value LagProtocol) LagPort
 	Ethernet() DeviceEthernetBase
+	SetEthernet(value DeviceEthernetBase) LagPort
 }
 
 // PortName returns a string
@@ -10642,27 +11238,35 @@ func (obj *lagPort) SetPortName(value string) LagPort {
 // Protocol returns a LagProtocol
 //  description is TBD
 func (obj *lagPort) Protocol() LagProtocol {
-
 	if obj.obj.Protocol == nil {
-		obj.obj.Protocol = &snappipb.LagProtocol{}
-		newObj := &lagProtocol{obj: obj.obj.Protocol}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Protocol = NewLagProtocol().Msg()
 	}
 	return &lagProtocol{obj: obj.obj.Protocol}
+}
+
+// SetProtocol sets the LagProtocol value in the LagPort object
+//  description is TBD
+func (obj *lagPort) SetProtocol(value LagProtocol) LagPort {
+	obj.Protocol().SetMsg(value.Msg())
+
+	return obj
 }
 
 // Ethernet returns a DeviceEthernetBase
 //  description is TBD
 func (obj *lagPort) Ethernet() DeviceEthernetBase {
-
 	if obj.obj.Ethernet == nil {
-		obj.obj.Ethernet = &snappipb.DeviceEthernetBase{}
-		newObj := &deviceEthernetBase{obj: obj.obj.Ethernet}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Ethernet = NewDeviceEthernetBase().Msg()
 	}
 	return &deviceEthernetBase{obj: obj.obj.Ethernet}
+}
+
+// SetEthernet sets the DeviceEthernetBase value in the LagPort object
+//  description is TBD
+func (obj *lagPort) SetEthernet(value DeviceEthernetBase) LagPort {
+	obj.Ethernet().SetMsg(value.Msg())
+
+	return obj
 }
 
 func (obj *lagPort) validateObj(set_default bool) {
@@ -10690,6 +11294,12 @@ func (obj *lagPort) validateObj(set_default bool) {
 }
 
 func (obj *lagPort) setDefault() {
+	if obj.obj.Protocol == nil {
+		obj.Protocol()
+	}
+	if obj.obj.Ethernet == nil {
+		obj.Ethernet()
+	}
 
 }
 
@@ -10697,12 +11307,18 @@ type layer1AutoNegotiation struct {
 	obj *snappipb.Layer1AutoNegotiation
 }
 
+func NewLayer1AutoNegotiation() Layer1AutoNegotiation {
+	obj := layer1AutoNegotiation{obj: &snappipb.Layer1AutoNegotiation{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *layer1AutoNegotiation) Msg() *snappipb.Layer1AutoNegotiation {
 	return obj.obj
 }
 
 func (obj *layer1AutoNegotiation) SetMsg(msg *snappipb.Layer1AutoNegotiation) Layer1AutoNegotiation {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -11036,12 +11652,18 @@ type layer1FlowControl struct {
 	obj *snappipb.Layer1FlowControl
 }
 
+func NewLayer1FlowControl() Layer1FlowControl {
+	obj := layer1FlowControl{obj: &snappipb.Layer1FlowControl{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *layer1FlowControl) Msg() *snappipb.Layer1FlowControl {
 	return obj.obj
 }
 
 func (obj *layer1FlowControl) SetMsg(msg *snappipb.Layer1FlowControl) Layer1FlowControl {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -11168,8 +11790,10 @@ type Layer1FlowControl interface {
 	SetChoice(value Layer1FlowControlChoiceEnum) Layer1FlowControl
 	HasChoice() bool
 	Ieee8021Qbb() Layer1Ieee8021Qbb
+	SetIeee8021Qbb(value Layer1Ieee8021Qbb) Layer1FlowControl
 	HasIeee8021Qbb() bool
 	Ieee8023X() Layer1Ieee8023X
+	SetIeee8023X(value Layer1Ieee8023X) Layer1FlowControl
 	HasIeee8023X() bool
 }
 
@@ -11233,10 +11857,7 @@ func (obj *layer1FlowControl) SetChoice(value Layer1FlowControlChoiceEnum) Layer
 func (obj *layer1FlowControl) Ieee8021Qbb() Layer1Ieee8021Qbb {
 	obj.SetChoice(Layer1FlowControlChoice.IEEE_802_1QBB)
 	if obj.obj.Ieee_802_1Qbb == nil {
-		obj.obj.Ieee_802_1Qbb = &snappipb.Layer1Ieee8021Qbb{}
-		newObj := &layer1Ieee8021Qbb{obj: obj.obj.Ieee_802_1Qbb}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Ieee_802_1Qbb = NewLayer1Ieee8021Qbb().Msg()
 	}
 	return &layer1Ieee8021Qbb{obj: obj.obj.Ieee_802_1Qbb}
 }
@@ -11247,15 +11868,20 @@ func (obj *layer1FlowControl) HasIeee8021Qbb() bool {
 	return obj.obj.Ieee_802_1Qbb != nil
 }
 
+// SetIeee8021Qbb sets the Layer1Ieee8021Qbb value in the Layer1FlowControl object
+//  description is TBD
+func (obj *layer1FlowControl) SetIeee8021Qbb(value Layer1Ieee8021Qbb) Layer1FlowControl {
+	obj.Ieee8021Qbb().SetMsg(value.Msg())
+	obj.SetChoice(Layer1FlowControlChoice.IEEE_802_1QBB)
+	return obj
+}
+
 // Ieee8023X returns a Layer1Ieee8023X
 //  description is TBD
 func (obj *layer1FlowControl) Ieee8023X() Layer1Ieee8023X {
 	obj.SetChoice(Layer1FlowControlChoice.IEEE_802_3X)
 	if obj.obj.Ieee_802_3X == nil {
-		obj.obj.Ieee_802_3X = &snappipb.Layer1Ieee8023X{}
-		newObj := &layer1Ieee8023X{obj: obj.obj.Ieee_802_3X}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Ieee_802_3X = NewLayer1Ieee8023X().Msg()
 	}
 	return &layer1Ieee8023X{obj: obj.obj.Ieee_802_3X}
 }
@@ -11264,6 +11890,14 @@ func (obj *layer1FlowControl) Ieee8023X() Layer1Ieee8023X {
 //  description is TBD
 func (obj *layer1FlowControl) HasIeee8023X() bool {
 	return obj.obj.Ieee_802_3X != nil
+}
+
+// SetIeee8023X sets the Layer1Ieee8023X value in the Layer1FlowControl object
+//  description is TBD
+func (obj *layer1FlowControl) SetIeee8023X(value Layer1Ieee8023X) Layer1FlowControl {
+	obj.Ieee8023X().SetMsg(value.Msg())
+	obj.SetChoice(Layer1FlowControlChoice.IEEE_802_3X)
+	return obj
 }
 
 func (obj *layer1FlowControl) validateObj(set_default bool) {
@@ -11298,12 +11932,18 @@ type captureFilter struct {
 	obj *snappipb.CaptureFilter
 }
 
+func NewCaptureFilter() CaptureFilter {
+	obj := captureFilter{obj: &snappipb.CaptureFilter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *captureFilter) Msg() *snappipb.CaptureFilter {
 	return obj.obj
 }
 
 func (obj *captureFilter) SetMsg(msg *snappipb.CaptureFilter) CaptureFilter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -11427,14 +12067,19 @@ type CaptureFilter interface {
 	SetChoice(value CaptureFilterChoiceEnum) CaptureFilter
 	HasChoice() bool
 	Custom() CaptureCustom
+	SetCustom(value CaptureCustom) CaptureFilter
 	HasCustom() bool
 	Ethernet() CaptureEthernet
+	SetEthernet(value CaptureEthernet) CaptureFilter
 	HasEthernet() bool
 	Vlan() CaptureVlan
+	SetVlan(value CaptureVlan) CaptureFilter
 	HasVlan() bool
 	Ipv4() CaptureIpv4
+	SetIpv4(value CaptureIpv4) CaptureFilter
 	HasIpv4() bool
 	Ipv6() CaptureIpv6
+	SetIpv6(value CaptureIpv6) CaptureFilter
 	HasIpv6() bool
 }
 
@@ -11481,10 +12126,7 @@ func (obj *captureFilter) SetChoice(value CaptureFilterChoiceEnum) CaptureFilter
 func (obj *captureFilter) Custom() CaptureCustom {
 	obj.SetChoice(CaptureFilterChoice.CUSTOM)
 	if obj.obj.Custom == nil {
-		obj.obj.Custom = &snappipb.CaptureCustom{}
-		newObj := &captureCustom{obj: obj.obj.Custom}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Custom = NewCaptureCustom().Msg()
 	}
 	return &captureCustom{obj: obj.obj.Custom}
 }
@@ -11495,15 +12137,20 @@ func (obj *captureFilter) HasCustom() bool {
 	return obj.obj.Custom != nil
 }
 
+// SetCustom sets the CaptureCustom value in the CaptureFilter object
+//  Offset from last filter in the list. If no filters are present it is offset from position 0. Multiple custom filters can be present, the length of each custom filter is the length of the value being filtered.
+func (obj *captureFilter) SetCustom(value CaptureCustom) CaptureFilter {
+	obj.Custom().SetMsg(value.Msg())
+	obj.SetChoice(CaptureFilterChoice.CUSTOM)
+	return obj
+}
+
 // Ethernet returns a CaptureEthernet
 //  description is TBD
 func (obj *captureFilter) Ethernet() CaptureEthernet {
 	obj.SetChoice(CaptureFilterChoice.ETHERNET)
 	if obj.obj.Ethernet == nil {
-		obj.obj.Ethernet = &snappipb.CaptureEthernet{}
-		newObj := &captureEthernet{obj: obj.obj.Ethernet}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Ethernet = NewCaptureEthernet().Msg()
 	}
 	return &captureEthernet{obj: obj.obj.Ethernet}
 }
@@ -11514,15 +12161,20 @@ func (obj *captureFilter) HasEthernet() bool {
 	return obj.obj.Ethernet != nil
 }
 
+// SetEthernet sets the CaptureEthernet value in the CaptureFilter object
+//  description is TBD
+func (obj *captureFilter) SetEthernet(value CaptureEthernet) CaptureFilter {
+	obj.Ethernet().SetMsg(value.Msg())
+	obj.SetChoice(CaptureFilterChoice.ETHERNET)
+	return obj
+}
+
 // Vlan returns a CaptureVlan
 //  description is TBD
 func (obj *captureFilter) Vlan() CaptureVlan {
 	obj.SetChoice(CaptureFilterChoice.VLAN)
 	if obj.obj.Vlan == nil {
-		obj.obj.Vlan = &snappipb.CaptureVlan{}
-		newObj := &captureVlan{obj: obj.obj.Vlan}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Vlan = NewCaptureVlan().Msg()
 	}
 	return &captureVlan{obj: obj.obj.Vlan}
 }
@@ -11533,15 +12185,20 @@ func (obj *captureFilter) HasVlan() bool {
 	return obj.obj.Vlan != nil
 }
 
+// SetVlan sets the CaptureVlan value in the CaptureFilter object
+//  description is TBD
+func (obj *captureFilter) SetVlan(value CaptureVlan) CaptureFilter {
+	obj.Vlan().SetMsg(value.Msg())
+	obj.SetChoice(CaptureFilterChoice.VLAN)
+	return obj
+}
+
 // Ipv4 returns a CaptureIpv4
 //  description is TBD
 func (obj *captureFilter) Ipv4() CaptureIpv4 {
 	obj.SetChoice(CaptureFilterChoice.IPV4)
 	if obj.obj.Ipv4 == nil {
-		obj.obj.Ipv4 = &snappipb.CaptureIpv4{}
-		newObj := &captureIpv4{obj: obj.obj.Ipv4}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Ipv4 = NewCaptureIpv4().Msg()
 	}
 	return &captureIpv4{obj: obj.obj.Ipv4}
 }
@@ -11552,15 +12209,20 @@ func (obj *captureFilter) HasIpv4() bool {
 	return obj.obj.Ipv4 != nil
 }
 
+// SetIpv4 sets the CaptureIpv4 value in the CaptureFilter object
+//  description is TBD
+func (obj *captureFilter) SetIpv4(value CaptureIpv4) CaptureFilter {
+	obj.Ipv4().SetMsg(value.Msg())
+	obj.SetChoice(CaptureFilterChoice.IPV4)
+	return obj
+}
+
 // Ipv6 returns a CaptureIpv6
 //  description is TBD
 func (obj *captureFilter) Ipv6() CaptureIpv6 {
 	obj.SetChoice(CaptureFilterChoice.IPV6)
 	if obj.obj.Ipv6 == nil {
-		obj.obj.Ipv6 = &snappipb.CaptureIpv6{}
-		newObj := &captureIpv6{obj: obj.obj.Ipv6}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Ipv6 = NewCaptureIpv6().Msg()
 	}
 	return &captureIpv6{obj: obj.obj.Ipv6}
 }
@@ -11569,6 +12231,14 @@ func (obj *captureFilter) Ipv6() CaptureIpv6 {
 //  description is TBD
 func (obj *captureFilter) HasIpv6() bool {
 	return obj.obj.Ipv6 != nil
+}
+
+// SetIpv6 sets the CaptureIpv6 value in the CaptureFilter object
+//  description is TBD
+func (obj *captureFilter) SetIpv6(value CaptureIpv6) CaptureFilter {
+	obj.Ipv6().SetMsg(value.Msg())
+	obj.SetChoice(CaptureFilterChoice.IPV6)
+	return obj
 }
 
 func (obj *captureFilter) validateObj(set_default bool) {
@@ -11608,12 +12278,18 @@ type deviceEthernet struct {
 	obj *snappipb.DeviceEthernet
 }
 
+func NewDeviceEthernet() DeviceEthernet {
+	obj := deviceEthernet{obj: &snappipb.DeviceEthernet{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *deviceEthernet) Msg() *snappipb.DeviceEthernet {
 	return obj.obj
 }
 
 func (obj *deviceEthernet) SetMsg(msg *snappipb.DeviceEthernet) DeviceEthernet {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -11984,8 +12660,17 @@ func (obj *deviceEthernet) validateObj(set_default bool) {
 }
 
 func (obj *deviceEthernet) setDefault() {
+	if obj.obj.Ipv4Addresses == nil {
+		obj.Ipv4Addresses()
+	}
+	if obj.obj.Ipv6Addresses == nil {
+		obj.Ipv6Addresses()
+	}
 	if obj.obj.Mtu == nil {
 		obj.SetMtu(1500)
+	}
+	if obj.obj.Vlans == nil {
+		obj.Vlans()
 	}
 
 }
@@ -11994,12 +12679,18 @@ type deviceIpv4Loopback struct {
 	obj *snappipb.DeviceIpv4Loopback
 }
 
+func NewDeviceIpv4Loopback() DeviceIpv4Loopback {
+	obj := deviceIpv4Loopback{obj: &snappipb.DeviceIpv4Loopback{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *deviceIpv4Loopback) Msg() *snappipb.DeviceIpv4Loopback {
 	return obj.obj
 }
 
 func (obj *deviceIpv4Loopback) SetMsg(msg *snappipb.DeviceIpv4Loopback) DeviceIpv4Loopback {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -12226,12 +12917,18 @@ type deviceIpv6Loopback struct {
 	obj *snappipb.DeviceIpv6Loopback
 }
 
+func NewDeviceIpv6Loopback() DeviceIpv6Loopback {
+	obj := deviceIpv6Loopback{obj: &snappipb.DeviceIpv6Loopback{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *deviceIpv6Loopback) Msg() *snappipb.DeviceIpv6Loopback {
 	return obj.obj
 }
 
 func (obj *deviceIpv6Loopback) SetMsg(msg *snappipb.DeviceIpv6Loopback) DeviceIpv6Loopback {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -12460,12 +13157,18 @@ type deviceIsisRouter struct {
 	obj *snappipb.DeviceIsisRouter
 }
 
+func NewDeviceIsisRouter() DeviceIsisRouter {
+	obj := deviceIsisRouter{obj: &snappipb.DeviceIsisRouter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *deviceIsisRouter) Msg() *snappipb.DeviceIsisRouter {
 	return obj.obj
 }
 
 func (obj *deviceIsisRouter) SetMsg(msg *snappipb.DeviceIsisRouter) DeviceIsisRouter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -12586,15 +13289,19 @@ type DeviceIsisRouter interface {
 	validateObj(set_default bool)
 	setDefault()
 	Instance() DeviceIsisMultiInstance
+	SetInstance(value DeviceIsisMultiInstance) DeviceIsisRouter
 	HasInstance() bool
 	SystemId() string
 	SetSystemId(value string) DeviceIsisRouter
 	Interfaces() DeviceIsisRouterIsisInterfaceIter
 	Basic() IsisBasic
+	SetBasic(value IsisBasic) DeviceIsisRouter
 	HasBasic() bool
 	Advanced() IsisAdvanced
+	SetAdvanced(value IsisAdvanced) DeviceIsisRouter
 	HasAdvanced() bool
 	RouterAuth() IsisAuthentication
+	SetRouterAuth(value IsisAuthentication) DeviceIsisRouter
 	HasRouterAuth() bool
 	V4Routes() DeviceIsisRouterIsisV4RouteRangeIter
 	V6Routes() DeviceIsisRouterIsisV6RouteRangeIter
@@ -12605,12 +13312,8 @@ type DeviceIsisRouter interface {
 // Instance returns a DeviceIsisMultiInstance
 //  This contains the properties of a Multi-Instance-capable routers or MI-RTR. Each router can emulate one ISIS instance at a time.
 func (obj *deviceIsisRouter) Instance() DeviceIsisMultiInstance {
-
 	if obj.obj.Instance == nil {
-		obj.obj.Instance = &snappipb.DeviceIsisMultiInstance{}
-		newObj := &deviceIsisMultiInstance{obj: obj.obj.Instance}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Instance = NewDeviceIsisMultiInstance().Msg()
 	}
 	return &deviceIsisMultiInstance{obj: obj.obj.Instance}
 }
@@ -12619,6 +13322,14 @@ func (obj *deviceIsisRouter) Instance() DeviceIsisMultiInstance {
 //  This contains the properties of a Multi-Instance-capable routers or MI-RTR. Each router can emulate one ISIS instance at a time.
 func (obj *deviceIsisRouter) HasInstance() bool {
 	return obj.obj.Instance != nil
+}
+
+// SetInstance sets the DeviceIsisMultiInstance value in the DeviceIsisRouter object
+//  This contains the properties of a Multi-Instance-capable routers or MI-RTR. Each router can emulate one ISIS instance at a time.
+func (obj *deviceIsisRouter) SetInstance(value DeviceIsisMultiInstance) DeviceIsisRouter {
+	obj.Instance().SetMsg(value.Msg())
+
+	return obj
 }
 
 // SystemId returns a string
@@ -12672,12 +13383,8 @@ func (obj *deviceIsisRouterIsisInterfaceIter) Items() []IsisInterface {
 // Basic returns a IsisBasic
 //  Contains basic properties of an ISIS Router.
 func (obj *deviceIsisRouter) Basic() IsisBasic {
-
 	if obj.obj.Basic == nil {
-		obj.obj.Basic = &snappipb.IsisBasic{}
-		newObj := &isisBasic{obj: obj.obj.Basic}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Basic = NewIsisBasic().Msg()
 	}
 	return &isisBasic{obj: obj.obj.Basic}
 }
@@ -12688,15 +13395,19 @@ func (obj *deviceIsisRouter) HasBasic() bool {
 	return obj.obj.Basic != nil
 }
 
+// SetBasic sets the IsisBasic value in the DeviceIsisRouter object
+//  Contains basic properties of an ISIS Router.
+func (obj *deviceIsisRouter) SetBasic(value IsisBasic) DeviceIsisRouter {
+	obj.Basic().SetMsg(value.Msg())
+
+	return obj
+}
+
 // Advanced returns a IsisAdvanced
 //  Contains advance properties of an ISIS Router..
 func (obj *deviceIsisRouter) Advanced() IsisAdvanced {
-
 	if obj.obj.Advanced == nil {
-		obj.obj.Advanced = &snappipb.IsisAdvanced{}
-		newObj := &isisAdvanced{obj: obj.obj.Advanced}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Advanced = NewIsisAdvanced().Msg()
 	}
 	return &isisAdvanced{obj: obj.obj.Advanced}
 }
@@ -12707,15 +13418,19 @@ func (obj *deviceIsisRouter) HasAdvanced() bool {
 	return obj.obj.Advanced != nil
 }
 
+// SetAdvanced sets the IsisAdvanced value in the DeviceIsisRouter object
+//  Contains advance properties of an ISIS Router..
+func (obj *deviceIsisRouter) SetAdvanced(value IsisAdvanced) DeviceIsisRouter {
+	obj.Advanced().SetMsg(value.Msg())
+
+	return obj
+}
+
 // RouterAuth returns a IsisAuthentication
 //  ISIS Router authentication properties.
 func (obj *deviceIsisRouter) RouterAuth() IsisAuthentication {
-
 	if obj.obj.RouterAuth == nil {
-		obj.obj.RouterAuth = &snappipb.IsisAuthentication{}
-		newObj := &isisAuthentication{obj: obj.obj.RouterAuth}
-		newObj.setDefault()
-		return newObj
+		obj.obj.RouterAuth = NewIsisAuthentication().Msg()
 	}
 	return &isisAuthentication{obj: obj.obj.RouterAuth}
 }
@@ -12724,6 +13439,14 @@ func (obj *deviceIsisRouter) RouterAuth() IsisAuthentication {
 //  ISIS Router authentication properties.
 func (obj *deviceIsisRouter) HasRouterAuth() bool {
 	return obj.obj.RouterAuth != nil
+}
+
+// SetRouterAuth sets the IsisAuthentication value in the DeviceIsisRouter object
+//  ISIS Router authentication properties.
+func (obj *deviceIsisRouter) SetRouterAuth(value IsisAuthentication) DeviceIsisRouter {
+	obj.RouterAuth().SetMsg(value.Msg())
+
+	return obj
 }
 
 // V4Routes returns a []IsisV4RouteRange
@@ -12863,6 +13586,15 @@ func (obj *deviceIsisRouter) validateObj(set_default bool) {
 }
 
 func (obj *deviceIsisRouter) setDefault() {
+	if obj.obj.Interfaces == nil {
+		obj.Interfaces()
+	}
+	if obj.obj.V4Routes == nil {
+		obj.V4Routes()
+	}
+	if obj.obj.V6Routes == nil {
+		obj.V6Routes()
+	}
 
 }
 
@@ -12870,12 +13602,18 @@ type deviceBgpRouter struct {
 	obj *snappipb.DeviceBgpRouter
 }
 
+func NewDeviceBgpRouter() DeviceBgpRouter {
+	obj := deviceBgpRouter{obj: &snappipb.DeviceBgpRouter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *deviceBgpRouter) Msg() *snappipb.DeviceBgpRouter {
 	return obj.obj
 }
 
 func (obj *deviceBgpRouter) SetMsg(msg *snappipb.DeviceBgpRouter) DeviceBgpRouter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -13113,6 +13851,12 @@ func (obj *deviceBgpRouter) validateObj(set_default bool) {
 }
 
 func (obj *deviceBgpRouter) setDefault() {
+	if obj.obj.Ipv4Interfaces == nil {
+		obj.Ipv4Interfaces()
+	}
+	if obj.obj.Ipv6Interfaces == nil {
+		obj.Ipv6Interfaces()
+	}
 
 }
 
@@ -13120,12 +13864,18 @@ type flowTxRx struct {
 	obj *snappipb.FlowTxRx
 }
 
+func NewFlowTxRx() FlowTxRx {
+	obj := flowTxRx{obj: &snappipb.FlowTxRx{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *flowTxRx) Msg() *snappipb.FlowTxRx {
 	return obj.obj
 }
 
 func (obj *flowTxRx) SetMsg(msg *snappipb.FlowTxRx) FlowTxRx {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -13249,8 +13999,10 @@ type FlowTxRx interface {
 	SetChoice(value FlowTxRxChoiceEnum) FlowTxRx
 	HasChoice() bool
 	Port() FlowPort
+	SetPort(value FlowPort) FlowTxRx
 	HasPort() bool
 	Device() FlowRouter
+	SetDevice(value FlowRouter) FlowTxRx
 	HasDevice() bool
 }
 
@@ -13291,10 +14043,7 @@ func (obj *flowTxRx) SetChoice(value FlowTxRxChoiceEnum) FlowTxRx {
 func (obj *flowTxRx) Port() FlowPort {
 	obj.SetChoice(FlowTxRxChoice.PORT)
 	if obj.obj.Port == nil {
-		obj.obj.Port = &snappipb.FlowPort{}
-		newObj := &flowPort{obj: obj.obj.Port}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Port = NewFlowPort().Msg()
 	}
 	return &flowPort{obj: obj.obj.Port}
 }
@@ -13305,15 +14054,20 @@ func (obj *flowTxRx) HasPort() bool {
 	return obj.obj.Port != nil
 }
 
+// SetPort sets the FlowPort value in the FlowTxRx object
+//  description is TBD
+func (obj *flowTxRx) SetPort(value FlowPort) FlowTxRx {
+	obj.Port().SetMsg(value.Msg())
+	obj.SetChoice(FlowTxRxChoice.PORT)
+	return obj
+}
+
 // Device returns a FlowRouter
 //  description is TBD
 func (obj *flowTxRx) Device() FlowRouter {
 	obj.SetChoice(FlowTxRxChoice.DEVICE)
 	if obj.obj.Device == nil {
-		obj.obj.Device = &snappipb.FlowRouter{}
-		newObj := &flowRouter{obj: obj.obj.Device}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Device = NewFlowRouter().Msg()
 	}
 	return &flowRouter{obj: obj.obj.Device}
 }
@@ -13322,6 +14076,14 @@ func (obj *flowTxRx) Device() FlowRouter {
 //  description is TBD
 func (obj *flowTxRx) HasDevice() bool {
 	return obj.obj.Device != nil
+}
+
+// SetDevice sets the FlowRouter value in the FlowTxRx object
+//  description is TBD
+func (obj *flowTxRx) SetDevice(value FlowRouter) FlowTxRx {
+	obj.Device().SetMsg(value.Msg())
+	obj.SetChoice(FlowTxRxChoice.DEVICE)
+	return obj
 }
 
 func (obj *flowTxRx) validateObj(set_default bool) {
@@ -13349,12 +14111,18 @@ type flowHeader struct {
 	obj *snappipb.FlowHeader
 }
 
+func NewFlowHeader() FlowHeader {
+	obj := flowHeader{obj: &snappipb.FlowHeader{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *flowHeader) Msg() *snappipb.FlowHeader {
 	return obj.obj
 }
 
 func (obj *flowHeader) SetMsg(msg *snappipb.FlowHeader) FlowHeader {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -13478,40 +14246,58 @@ type FlowHeader interface {
 	SetChoice(value FlowHeaderChoiceEnum) FlowHeader
 	HasChoice() bool
 	Custom() FlowCustom
+	SetCustom(value FlowCustom) FlowHeader
 	HasCustom() bool
 	Ethernet() FlowEthernet
+	SetEthernet(value FlowEthernet) FlowHeader
 	HasEthernet() bool
 	Vlan() FlowVlan
+	SetVlan(value FlowVlan) FlowHeader
 	HasVlan() bool
 	Vxlan() FlowVxlan
+	SetVxlan(value FlowVxlan) FlowHeader
 	HasVxlan() bool
 	Ipv4() FlowIpv4
+	SetIpv4(value FlowIpv4) FlowHeader
 	HasIpv4() bool
 	Ipv6() FlowIpv6
+	SetIpv6(value FlowIpv6) FlowHeader
 	HasIpv6() bool
 	Pfcpause() FlowPfcPause
+	SetPfcpause(value FlowPfcPause) FlowHeader
 	HasPfcpause() bool
 	Ethernetpause() FlowEthernetPause
+	SetEthernetpause(value FlowEthernetPause) FlowHeader
 	HasEthernetpause() bool
 	Tcp() FlowTcp
+	SetTcp(value FlowTcp) FlowHeader
 	HasTcp() bool
 	Udp() FlowUdp
+	SetUdp(value FlowUdp) FlowHeader
 	HasUdp() bool
 	Gre() FlowGre
+	SetGre(value FlowGre) FlowHeader
 	HasGre() bool
 	Gtpv1() FlowGtpv1
+	SetGtpv1(value FlowGtpv1) FlowHeader
 	HasGtpv1() bool
 	Gtpv2() FlowGtpv2
+	SetGtpv2(value FlowGtpv2) FlowHeader
 	HasGtpv2() bool
 	Arp() FlowArp
+	SetArp(value FlowArp) FlowHeader
 	HasArp() bool
 	Icmp() FlowIcmp
+	SetIcmp(value FlowIcmp) FlowHeader
 	HasIcmp() bool
 	Icmpv6() FlowIcmpv6
+	SetIcmpv6(value FlowIcmpv6) FlowHeader
 	HasIcmpv6() bool
 	Ppp() FlowPpp
+	SetPpp(value FlowPpp) FlowHeader
 	HasPpp() bool
 	Igmpv1() FlowIgmpv1
+	SetIgmpv1(value FlowIgmpv1) FlowHeader
 	HasIgmpv1() bool
 }
 
@@ -13585,10 +14371,7 @@ func (obj *flowHeader) SetChoice(value FlowHeaderChoiceEnum) FlowHeader {
 func (obj *flowHeader) Custom() FlowCustom {
 	obj.SetChoice(FlowHeaderChoice.CUSTOM)
 	if obj.obj.Custom == nil {
-		obj.obj.Custom = &snappipb.FlowCustom{}
-		newObj := &flowCustom{obj: obj.obj.Custom}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Custom = NewFlowCustom().Msg()
 	}
 	return &flowCustom{obj: obj.obj.Custom}
 }
@@ -13599,15 +14382,20 @@ func (obj *flowHeader) HasCustom() bool {
 	return obj.obj.Custom != nil
 }
 
+// SetCustom sets the FlowCustom value in the FlowHeader object
+//  description is TBD
+func (obj *flowHeader) SetCustom(value FlowCustom) FlowHeader {
+	obj.Custom().SetMsg(value.Msg())
+	obj.SetChoice(FlowHeaderChoice.CUSTOM)
+	return obj
+}
+
 // Ethernet returns a FlowEthernet
 //  description is TBD
 func (obj *flowHeader) Ethernet() FlowEthernet {
 	obj.SetChoice(FlowHeaderChoice.ETHERNET)
 	if obj.obj.Ethernet == nil {
-		obj.obj.Ethernet = &snappipb.FlowEthernet{}
-		newObj := &flowEthernet{obj: obj.obj.Ethernet}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Ethernet = NewFlowEthernet().Msg()
 	}
 	return &flowEthernet{obj: obj.obj.Ethernet}
 }
@@ -13618,15 +14406,20 @@ func (obj *flowHeader) HasEthernet() bool {
 	return obj.obj.Ethernet != nil
 }
 
+// SetEthernet sets the FlowEthernet value in the FlowHeader object
+//  description is TBD
+func (obj *flowHeader) SetEthernet(value FlowEthernet) FlowHeader {
+	obj.Ethernet().SetMsg(value.Msg())
+	obj.SetChoice(FlowHeaderChoice.ETHERNET)
+	return obj
+}
+
 // Vlan returns a FlowVlan
 //  description is TBD
 func (obj *flowHeader) Vlan() FlowVlan {
 	obj.SetChoice(FlowHeaderChoice.VLAN)
 	if obj.obj.Vlan == nil {
-		obj.obj.Vlan = &snappipb.FlowVlan{}
-		newObj := &flowVlan{obj: obj.obj.Vlan}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Vlan = NewFlowVlan().Msg()
 	}
 	return &flowVlan{obj: obj.obj.Vlan}
 }
@@ -13637,15 +14430,20 @@ func (obj *flowHeader) HasVlan() bool {
 	return obj.obj.Vlan != nil
 }
 
+// SetVlan sets the FlowVlan value in the FlowHeader object
+//  description is TBD
+func (obj *flowHeader) SetVlan(value FlowVlan) FlowHeader {
+	obj.Vlan().SetMsg(value.Msg())
+	obj.SetChoice(FlowHeaderChoice.VLAN)
+	return obj
+}
+
 // Vxlan returns a FlowVxlan
 //  description is TBD
 func (obj *flowHeader) Vxlan() FlowVxlan {
 	obj.SetChoice(FlowHeaderChoice.VXLAN)
 	if obj.obj.Vxlan == nil {
-		obj.obj.Vxlan = &snappipb.FlowVxlan{}
-		newObj := &flowVxlan{obj: obj.obj.Vxlan}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Vxlan = NewFlowVxlan().Msg()
 	}
 	return &flowVxlan{obj: obj.obj.Vxlan}
 }
@@ -13656,15 +14454,20 @@ func (obj *flowHeader) HasVxlan() bool {
 	return obj.obj.Vxlan != nil
 }
 
+// SetVxlan sets the FlowVxlan value in the FlowHeader object
+//  description is TBD
+func (obj *flowHeader) SetVxlan(value FlowVxlan) FlowHeader {
+	obj.Vxlan().SetMsg(value.Msg())
+	obj.SetChoice(FlowHeaderChoice.VXLAN)
+	return obj
+}
+
 // Ipv4 returns a FlowIpv4
 //  description is TBD
 func (obj *flowHeader) Ipv4() FlowIpv4 {
 	obj.SetChoice(FlowHeaderChoice.IPV4)
 	if obj.obj.Ipv4 == nil {
-		obj.obj.Ipv4 = &snappipb.FlowIpv4{}
-		newObj := &flowIpv4{obj: obj.obj.Ipv4}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Ipv4 = NewFlowIpv4().Msg()
 	}
 	return &flowIpv4{obj: obj.obj.Ipv4}
 }
@@ -13675,15 +14478,20 @@ func (obj *flowHeader) HasIpv4() bool {
 	return obj.obj.Ipv4 != nil
 }
 
+// SetIpv4 sets the FlowIpv4 value in the FlowHeader object
+//  description is TBD
+func (obj *flowHeader) SetIpv4(value FlowIpv4) FlowHeader {
+	obj.Ipv4().SetMsg(value.Msg())
+	obj.SetChoice(FlowHeaderChoice.IPV4)
+	return obj
+}
+
 // Ipv6 returns a FlowIpv6
 //  description is TBD
 func (obj *flowHeader) Ipv6() FlowIpv6 {
 	obj.SetChoice(FlowHeaderChoice.IPV6)
 	if obj.obj.Ipv6 == nil {
-		obj.obj.Ipv6 = &snappipb.FlowIpv6{}
-		newObj := &flowIpv6{obj: obj.obj.Ipv6}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Ipv6 = NewFlowIpv6().Msg()
 	}
 	return &flowIpv6{obj: obj.obj.Ipv6}
 }
@@ -13694,15 +14502,20 @@ func (obj *flowHeader) HasIpv6() bool {
 	return obj.obj.Ipv6 != nil
 }
 
+// SetIpv6 sets the FlowIpv6 value in the FlowHeader object
+//  description is TBD
+func (obj *flowHeader) SetIpv6(value FlowIpv6) FlowHeader {
+	obj.Ipv6().SetMsg(value.Msg())
+	obj.SetChoice(FlowHeaderChoice.IPV6)
+	return obj
+}
+
 // Pfcpause returns a FlowPfcPause
 //  description is TBD
 func (obj *flowHeader) Pfcpause() FlowPfcPause {
 	obj.SetChoice(FlowHeaderChoice.PFCPAUSE)
 	if obj.obj.Pfcpause == nil {
-		obj.obj.Pfcpause = &snappipb.FlowPfcPause{}
-		newObj := &flowPfcPause{obj: obj.obj.Pfcpause}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Pfcpause = NewFlowPfcPause().Msg()
 	}
 	return &flowPfcPause{obj: obj.obj.Pfcpause}
 }
@@ -13713,15 +14526,20 @@ func (obj *flowHeader) HasPfcpause() bool {
 	return obj.obj.Pfcpause != nil
 }
 
+// SetPfcpause sets the FlowPfcPause value in the FlowHeader object
+//  description is TBD
+func (obj *flowHeader) SetPfcpause(value FlowPfcPause) FlowHeader {
+	obj.Pfcpause().SetMsg(value.Msg())
+	obj.SetChoice(FlowHeaderChoice.PFCPAUSE)
+	return obj
+}
+
 // Ethernetpause returns a FlowEthernetPause
 //  description is TBD
 func (obj *flowHeader) Ethernetpause() FlowEthernetPause {
 	obj.SetChoice(FlowHeaderChoice.ETHERNETPAUSE)
 	if obj.obj.Ethernetpause == nil {
-		obj.obj.Ethernetpause = &snappipb.FlowEthernetPause{}
-		newObj := &flowEthernetPause{obj: obj.obj.Ethernetpause}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Ethernetpause = NewFlowEthernetPause().Msg()
 	}
 	return &flowEthernetPause{obj: obj.obj.Ethernetpause}
 }
@@ -13732,15 +14550,20 @@ func (obj *flowHeader) HasEthernetpause() bool {
 	return obj.obj.Ethernetpause != nil
 }
 
+// SetEthernetpause sets the FlowEthernetPause value in the FlowHeader object
+//  description is TBD
+func (obj *flowHeader) SetEthernetpause(value FlowEthernetPause) FlowHeader {
+	obj.Ethernetpause().SetMsg(value.Msg())
+	obj.SetChoice(FlowHeaderChoice.ETHERNETPAUSE)
+	return obj
+}
+
 // Tcp returns a FlowTcp
 //  description is TBD
 func (obj *flowHeader) Tcp() FlowTcp {
 	obj.SetChoice(FlowHeaderChoice.TCP)
 	if obj.obj.Tcp == nil {
-		obj.obj.Tcp = &snappipb.FlowTcp{}
-		newObj := &flowTcp{obj: obj.obj.Tcp}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Tcp = NewFlowTcp().Msg()
 	}
 	return &flowTcp{obj: obj.obj.Tcp}
 }
@@ -13751,15 +14574,20 @@ func (obj *flowHeader) HasTcp() bool {
 	return obj.obj.Tcp != nil
 }
 
+// SetTcp sets the FlowTcp value in the FlowHeader object
+//  description is TBD
+func (obj *flowHeader) SetTcp(value FlowTcp) FlowHeader {
+	obj.Tcp().SetMsg(value.Msg())
+	obj.SetChoice(FlowHeaderChoice.TCP)
+	return obj
+}
+
 // Udp returns a FlowUdp
 //  description is TBD
 func (obj *flowHeader) Udp() FlowUdp {
 	obj.SetChoice(FlowHeaderChoice.UDP)
 	if obj.obj.Udp == nil {
-		obj.obj.Udp = &snappipb.FlowUdp{}
-		newObj := &flowUdp{obj: obj.obj.Udp}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Udp = NewFlowUdp().Msg()
 	}
 	return &flowUdp{obj: obj.obj.Udp}
 }
@@ -13770,15 +14598,20 @@ func (obj *flowHeader) HasUdp() bool {
 	return obj.obj.Udp != nil
 }
 
+// SetUdp sets the FlowUdp value in the FlowHeader object
+//  description is TBD
+func (obj *flowHeader) SetUdp(value FlowUdp) FlowHeader {
+	obj.Udp().SetMsg(value.Msg())
+	obj.SetChoice(FlowHeaderChoice.UDP)
+	return obj
+}
+
 // Gre returns a FlowGre
 //  description is TBD
 func (obj *flowHeader) Gre() FlowGre {
 	obj.SetChoice(FlowHeaderChoice.GRE)
 	if obj.obj.Gre == nil {
-		obj.obj.Gre = &snappipb.FlowGre{}
-		newObj := &flowGre{obj: obj.obj.Gre}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Gre = NewFlowGre().Msg()
 	}
 	return &flowGre{obj: obj.obj.Gre}
 }
@@ -13789,15 +14622,20 @@ func (obj *flowHeader) HasGre() bool {
 	return obj.obj.Gre != nil
 }
 
+// SetGre sets the FlowGre value in the FlowHeader object
+//  description is TBD
+func (obj *flowHeader) SetGre(value FlowGre) FlowHeader {
+	obj.Gre().SetMsg(value.Msg())
+	obj.SetChoice(FlowHeaderChoice.GRE)
+	return obj
+}
+
 // Gtpv1 returns a FlowGtpv1
 //  description is TBD
 func (obj *flowHeader) Gtpv1() FlowGtpv1 {
 	obj.SetChoice(FlowHeaderChoice.GTPV1)
 	if obj.obj.Gtpv1 == nil {
-		obj.obj.Gtpv1 = &snappipb.FlowGtpv1{}
-		newObj := &flowGtpv1{obj: obj.obj.Gtpv1}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Gtpv1 = NewFlowGtpv1().Msg()
 	}
 	return &flowGtpv1{obj: obj.obj.Gtpv1}
 }
@@ -13808,15 +14646,20 @@ func (obj *flowHeader) HasGtpv1() bool {
 	return obj.obj.Gtpv1 != nil
 }
 
+// SetGtpv1 sets the FlowGtpv1 value in the FlowHeader object
+//  description is TBD
+func (obj *flowHeader) SetGtpv1(value FlowGtpv1) FlowHeader {
+	obj.Gtpv1().SetMsg(value.Msg())
+	obj.SetChoice(FlowHeaderChoice.GTPV1)
+	return obj
+}
+
 // Gtpv2 returns a FlowGtpv2
 //  description is TBD
 func (obj *flowHeader) Gtpv2() FlowGtpv2 {
 	obj.SetChoice(FlowHeaderChoice.GTPV2)
 	if obj.obj.Gtpv2 == nil {
-		obj.obj.Gtpv2 = &snappipb.FlowGtpv2{}
-		newObj := &flowGtpv2{obj: obj.obj.Gtpv2}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Gtpv2 = NewFlowGtpv2().Msg()
 	}
 	return &flowGtpv2{obj: obj.obj.Gtpv2}
 }
@@ -13827,15 +14670,20 @@ func (obj *flowHeader) HasGtpv2() bool {
 	return obj.obj.Gtpv2 != nil
 }
 
+// SetGtpv2 sets the FlowGtpv2 value in the FlowHeader object
+//  description is TBD
+func (obj *flowHeader) SetGtpv2(value FlowGtpv2) FlowHeader {
+	obj.Gtpv2().SetMsg(value.Msg())
+	obj.SetChoice(FlowHeaderChoice.GTPV2)
+	return obj
+}
+
 // Arp returns a FlowArp
 //  description is TBD
 func (obj *flowHeader) Arp() FlowArp {
 	obj.SetChoice(FlowHeaderChoice.ARP)
 	if obj.obj.Arp == nil {
-		obj.obj.Arp = &snappipb.FlowArp{}
-		newObj := &flowArp{obj: obj.obj.Arp}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Arp = NewFlowArp().Msg()
 	}
 	return &flowArp{obj: obj.obj.Arp}
 }
@@ -13846,15 +14694,20 @@ func (obj *flowHeader) HasArp() bool {
 	return obj.obj.Arp != nil
 }
 
+// SetArp sets the FlowArp value in the FlowHeader object
+//  description is TBD
+func (obj *flowHeader) SetArp(value FlowArp) FlowHeader {
+	obj.Arp().SetMsg(value.Msg())
+	obj.SetChoice(FlowHeaderChoice.ARP)
+	return obj
+}
+
 // Icmp returns a FlowIcmp
 //  description is TBD
 func (obj *flowHeader) Icmp() FlowIcmp {
 	obj.SetChoice(FlowHeaderChoice.ICMP)
 	if obj.obj.Icmp == nil {
-		obj.obj.Icmp = &snappipb.FlowIcmp{}
-		newObj := &flowIcmp{obj: obj.obj.Icmp}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Icmp = NewFlowIcmp().Msg()
 	}
 	return &flowIcmp{obj: obj.obj.Icmp}
 }
@@ -13865,15 +14718,20 @@ func (obj *flowHeader) HasIcmp() bool {
 	return obj.obj.Icmp != nil
 }
 
+// SetIcmp sets the FlowIcmp value in the FlowHeader object
+//  description is TBD
+func (obj *flowHeader) SetIcmp(value FlowIcmp) FlowHeader {
+	obj.Icmp().SetMsg(value.Msg())
+	obj.SetChoice(FlowHeaderChoice.ICMP)
+	return obj
+}
+
 // Icmpv6 returns a FlowIcmpv6
 //  description is TBD
 func (obj *flowHeader) Icmpv6() FlowIcmpv6 {
 	obj.SetChoice(FlowHeaderChoice.ICMPV6)
 	if obj.obj.Icmpv6 == nil {
-		obj.obj.Icmpv6 = &snappipb.FlowIcmpv6{}
-		newObj := &flowIcmpv6{obj: obj.obj.Icmpv6}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Icmpv6 = NewFlowIcmpv6().Msg()
 	}
 	return &flowIcmpv6{obj: obj.obj.Icmpv6}
 }
@@ -13884,15 +14742,20 @@ func (obj *flowHeader) HasIcmpv6() bool {
 	return obj.obj.Icmpv6 != nil
 }
 
+// SetIcmpv6 sets the FlowIcmpv6 value in the FlowHeader object
+//  description is TBD
+func (obj *flowHeader) SetIcmpv6(value FlowIcmpv6) FlowHeader {
+	obj.Icmpv6().SetMsg(value.Msg())
+	obj.SetChoice(FlowHeaderChoice.ICMPV6)
+	return obj
+}
+
 // Ppp returns a FlowPpp
 //  description is TBD
 func (obj *flowHeader) Ppp() FlowPpp {
 	obj.SetChoice(FlowHeaderChoice.PPP)
 	if obj.obj.Ppp == nil {
-		obj.obj.Ppp = &snappipb.FlowPpp{}
-		newObj := &flowPpp{obj: obj.obj.Ppp}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Ppp = NewFlowPpp().Msg()
 	}
 	return &flowPpp{obj: obj.obj.Ppp}
 }
@@ -13903,15 +14766,20 @@ func (obj *flowHeader) HasPpp() bool {
 	return obj.obj.Ppp != nil
 }
 
+// SetPpp sets the FlowPpp value in the FlowHeader object
+//  description is TBD
+func (obj *flowHeader) SetPpp(value FlowPpp) FlowHeader {
+	obj.Ppp().SetMsg(value.Msg())
+	obj.SetChoice(FlowHeaderChoice.PPP)
+	return obj
+}
+
 // Igmpv1 returns a FlowIgmpv1
 //  description is TBD
 func (obj *flowHeader) Igmpv1() FlowIgmpv1 {
 	obj.SetChoice(FlowHeaderChoice.IGMPV1)
 	if obj.obj.Igmpv1 == nil {
-		obj.obj.Igmpv1 = &snappipb.FlowIgmpv1{}
-		newObj := &flowIgmpv1{obj: obj.obj.Igmpv1}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Igmpv1 = NewFlowIgmpv1().Msg()
 	}
 	return &flowIgmpv1{obj: obj.obj.Igmpv1}
 }
@@ -13920,6 +14788,14 @@ func (obj *flowHeader) Igmpv1() FlowIgmpv1 {
 //  description is TBD
 func (obj *flowHeader) HasIgmpv1() bool {
 	return obj.obj.Igmpv1 != nil
+}
+
+// SetIgmpv1 sets the FlowIgmpv1 value in the FlowHeader object
+//  description is TBD
+func (obj *flowHeader) SetIgmpv1(value FlowIgmpv1) FlowHeader {
+	obj.Igmpv1().SetMsg(value.Msg())
+	obj.SetChoice(FlowHeaderChoice.IGMPV1)
+	return obj
 }
 
 func (obj *flowHeader) validateObj(set_default bool) {
@@ -14011,12 +14887,18 @@ type flowSize struct {
 	obj *snappipb.FlowSize
 }
 
+func NewFlowSize() FlowSize {
+	obj := flowSize{obj: &snappipb.FlowSize{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *flowSize) Msg() *snappipb.FlowSize {
 	return obj.obj
 }
 
 func (obj *flowSize) SetMsg(msg *snappipb.FlowSize) FlowSize {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -14143,8 +15025,10 @@ type FlowSize interface {
 	SetFixed(value int32) FlowSize
 	HasFixed() bool
 	Increment() FlowSizeIncrement
+	SetIncrement(value FlowSizeIncrement) FlowSize
 	HasIncrement() bool
 	Random() FlowSizeRandom
+	SetRandom(value FlowSizeRandom) FlowSize
 	HasRandom() bool
 }
 
@@ -14207,10 +15091,7 @@ func (obj *flowSize) SetFixed(value int32) FlowSize {
 func (obj *flowSize) Increment() FlowSizeIncrement {
 	obj.SetChoice(FlowSizeChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.FlowSizeIncrement{}
-		newObj := &flowSizeIncrement{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewFlowSizeIncrement().Msg()
 	}
 	return &flowSizeIncrement{obj: obj.obj.Increment}
 }
@@ -14221,15 +15102,20 @@ func (obj *flowSize) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the FlowSizeIncrement value in the FlowSize object
+//  description is TBD
+func (obj *flowSize) SetIncrement(value FlowSizeIncrement) FlowSize {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(FlowSizeChoice.INCREMENT)
+	return obj
+}
+
 // Random returns a FlowSizeRandom
 //  description is TBD
 func (obj *flowSize) Random() FlowSizeRandom {
 	obj.SetChoice(FlowSizeChoice.RANDOM)
 	if obj.obj.Random == nil {
-		obj.obj.Random = &snappipb.FlowSizeRandom{}
-		newObj := &flowSizeRandom{obj: obj.obj.Random}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Random = NewFlowSizeRandom().Msg()
 	}
 	return &flowSizeRandom{obj: obj.obj.Random}
 }
@@ -14238,6 +15124,14 @@ func (obj *flowSize) Random() FlowSizeRandom {
 //  description is TBD
 func (obj *flowSize) HasRandom() bool {
 	return obj.obj.Random != nil
+}
+
+// SetRandom sets the FlowSizeRandom value in the FlowSize object
+//  description is TBD
+func (obj *flowSize) SetRandom(value FlowSizeRandom) FlowSize {
+	obj.Random().SetMsg(value.Msg())
+	obj.SetChoice(FlowSizeChoice.RANDOM)
+	return obj
 }
 
 func (obj *flowSize) validateObj(set_default bool) {
@@ -14268,12 +15162,18 @@ type flowRate struct {
 	obj *snappipb.FlowRate
 }
 
+func NewFlowRate() FlowRate {
+	obj := flowRate{obj: &snappipb.FlowRate{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *flowRate) Msg() *snappipb.FlowRate {
 	return obj.obj
 }
 
 func (obj *flowRate) SetMsg(msg *snappipb.FlowRate) FlowRate {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -14637,12 +15537,18 @@ type flowDuration struct {
 	obj *snappipb.FlowDuration
 }
 
+func NewFlowDuration() FlowDuration {
+	obj := flowDuration{obj: &snappipb.FlowDuration{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *flowDuration) Msg() *snappipb.FlowDuration {
 	return obj.obj
 }
 
 func (obj *flowDuration) SetMsg(msg *snappipb.FlowDuration) FlowDuration {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -14766,12 +15672,16 @@ type FlowDuration interface {
 	SetChoice(value FlowDurationChoiceEnum) FlowDuration
 	HasChoice() bool
 	FixedPackets() FlowFixedPackets
+	SetFixedPackets(value FlowFixedPackets) FlowDuration
 	HasFixedPackets() bool
 	FixedSeconds() FlowFixedSeconds
+	SetFixedSeconds(value FlowFixedSeconds) FlowDuration
 	HasFixedSeconds() bool
 	Burst() FlowBurst
+	SetBurst(value FlowBurst) FlowDuration
 	HasBurst() bool
 	Continuous() FlowContinuous
+	SetContinuous(value FlowContinuous) FlowDuration
 	HasContinuous() bool
 }
 
@@ -14816,10 +15726,7 @@ func (obj *flowDuration) SetChoice(value FlowDurationChoiceEnum) FlowDuration {
 func (obj *flowDuration) FixedPackets() FlowFixedPackets {
 	obj.SetChoice(FlowDurationChoice.FIXED_PACKETS)
 	if obj.obj.FixedPackets == nil {
-		obj.obj.FixedPackets = &snappipb.FlowFixedPackets{}
-		newObj := &flowFixedPackets{obj: obj.obj.FixedPackets}
-		newObj.setDefault()
-		return newObj
+		obj.obj.FixedPackets = NewFlowFixedPackets().Msg()
 	}
 	return &flowFixedPackets{obj: obj.obj.FixedPackets}
 }
@@ -14830,15 +15737,20 @@ func (obj *flowDuration) HasFixedPackets() bool {
 	return obj.obj.FixedPackets != nil
 }
 
+// SetFixedPackets sets the FlowFixedPackets value in the FlowDuration object
+//  description is TBD
+func (obj *flowDuration) SetFixedPackets(value FlowFixedPackets) FlowDuration {
+	obj.FixedPackets().SetMsg(value.Msg())
+	obj.SetChoice(FlowDurationChoice.FIXED_PACKETS)
+	return obj
+}
+
 // FixedSeconds returns a FlowFixedSeconds
 //  description is TBD
 func (obj *flowDuration) FixedSeconds() FlowFixedSeconds {
 	obj.SetChoice(FlowDurationChoice.FIXED_SECONDS)
 	if obj.obj.FixedSeconds == nil {
-		obj.obj.FixedSeconds = &snappipb.FlowFixedSeconds{}
-		newObj := &flowFixedSeconds{obj: obj.obj.FixedSeconds}
-		newObj.setDefault()
-		return newObj
+		obj.obj.FixedSeconds = NewFlowFixedSeconds().Msg()
 	}
 	return &flowFixedSeconds{obj: obj.obj.FixedSeconds}
 }
@@ -14849,15 +15761,20 @@ func (obj *flowDuration) HasFixedSeconds() bool {
 	return obj.obj.FixedSeconds != nil
 }
 
+// SetFixedSeconds sets the FlowFixedSeconds value in the FlowDuration object
+//  description is TBD
+func (obj *flowDuration) SetFixedSeconds(value FlowFixedSeconds) FlowDuration {
+	obj.FixedSeconds().SetMsg(value.Msg())
+	obj.SetChoice(FlowDurationChoice.FIXED_SECONDS)
+	return obj
+}
+
 // Burst returns a FlowBurst
 //  description is TBD
 func (obj *flowDuration) Burst() FlowBurst {
 	obj.SetChoice(FlowDurationChoice.BURST)
 	if obj.obj.Burst == nil {
-		obj.obj.Burst = &snappipb.FlowBurst{}
-		newObj := &flowBurst{obj: obj.obj.Burst}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Burst = NewFlowBurst().Msg()
 	}
 	return &flowBurst{obj: obj.obj.Burst}
 }
@@ -14868,15 +15785,20 @@ func (obj *flowDuration) HasBurst() bool {
 	return obj.obj.Burst != nil
 }
 
+// SetBurst sets the FlowBurst value in the FlowDuration object
+//  description is TBD
+func (obj *flowDuration) SetBurst(value FlowBurst) FlowDuration {
+	obj.Burst().SetMsg(value.Msg())
+	obj.SetChoice(FlowDurationChoice.BURST)
+	return obj
+}
+
 // Continuous returns a FlowContinuous
 //  description is TBD
 func (obj *flowDuration) Continuous() FlowContinuous {
 	obj.SetChoice(FlowDurationChoice.CONTINUOUS)
 	if obj.obj.Continuous == nil {
-		obj.obj.Continuous = &snappipb.FlowContinuous{}
-		newObj := &flowContinuous{obj: obj.obj.Continuous}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Continuous = NewFlowContinuous().Msg()
 	}
 	return &flowContinuous{obj: obj.obj.Continuous}
 }
@@ -14885,6 +15807,14 @@ func (obj *flowDuration) Continuous() FlowContinuous {
 //  description is TBD
 func (obj *flowDuration) HasContinuous() bool {
 	return obj.obj.Continuous != nil
+}
+
+// SetContinuous sets the FlowContinuous value in the FlowDuration object
+//  description is TBD
+func (obj *flowDuration) SetContinuous(value FlowContinuous) FlowDuration {
+	obj.Continuous().SetMsg(value.Msg())
+	obj.SetChoice(FlowDurationChoice.CONTINUOUS)
+	return obj
 }
 
 func (obj *flowDuration) validateObj(set_default bool) {
@@ -14920,12 +15850,18 @@ type flowMetrics struct {
 	obj *snappipb.FlowMetrics
 }
 
+func NewFlowMetrics() FlowMetrics {
+	obj := flowMetrics{obj: &snappipb.FlowMetrics{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *flowMetrics) Msg() *snappipb.FlowMetrics {
 	return obj.obj
 }
 
 func (obj *flowMetrics) SetMsg(msg *snappipb.FlowMetrics) FlowMetrics {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -15055,6 +15991,7 @@ type FlowMetrics interface {
 	SetTimestamps(value bool) FlowMetrics
 	HasTimestamps() bool
 	Latency() FlowLatencyMetrics
+	SetLatency(value FlowLatencyMetrics) FlowMetrics
 	HasLatency() bool
 }
 
@@ -15127,12 +16064,8 @@ func (obj *flowMetrics) SetTimestamps(value bool) FlowMetrics {
 // Latency returns a FlowLatencyMetrics
 //  Latency metrics.
 func (obj *flowMetrics) Latency() FlowLatencyMetrics {
-
 	if obj.obj.Latency == nil {
-		obj.obj.Latency = &snappipb.FlowLatencyMetrics{}
-		newObj := &flowLatencyMetrics{obj: obj.obj.Latency}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Latency = NewFlowLatencyMetrics().Msg()
 	}
 	return &flowLatencyMetrics{obj: obj.obj.Latency}
 }
@@ -15141,6 +16074,14 @@ func (obj *flowMetrics) Latency() FlowLatencyMetrics {
 //  Latency metrics.
 func (obj *flowMetrics) HasLatency() bool {
 	return obj.obj.Latency != nil
+}
+
+// SetLatency sets the FlowLatencyMetrics value in the FlowMetrics object
+//  Latency metrics.
+func (obj *flowMetrics) SetLatency(value FlowLatencyMetrics) FlowMetrics {
+	obj.Latency().SetMsg(value.Msg())
+
+	return obj
 }
 
 func (obj *flowMetrics) validateObj(set_default bool) {
@@ -15170,12 +16111,18 @@ type eventLink struct {
 	obj *snappipb.EventLink
 }
 
+func NewEventLink() EventLink {
+	obj := eventLink{obj: &snappipb.EventLink{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *eventLink) Msg() *snappipb.EventLink {
 	return obj.obj
 }
 
 func (obj *eventLink) SetMsg(msg *snappipb.EventLink) EventLink {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -15338,12 +16285,18 @@ type eventRxRateThreshold struct {
 	obj *snappipb.EventRxRateThreshold
 }
 
+func NewEventRxRateThreshold() EventRxRateThreshold {
+	obj := eventRxRateThreshold{obj: &snappipb.EventRxRateThreshold{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *eventRxRateThreshold) Msg() *snappipb.EventRxRateThreshold {
 	return obj.obj
 }
 
 func (obj *eventRxRateThreshold) SetMsg(msg *snappipb.EventRxRateThreshold) EventRxRateThreshold {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -15541,12 +16494,18 @@ type eventRouteAdvertiseWithdraw struct {
 	obj *snappipb.EventRouteAdvertiseWithdraw
 }
 
+func NewEventRouteAdvertiseWithdraw() EventRouteAdvertiseWithdraw {
+	obj := eventRouteAdvertiseWithdraw{obj: &snappipb.EventRouteAdvertiseWithdraw{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *eventRouteAdvertiseWithdraw) Msg() *snappipb.EventRouteAdvertiseWithdraw {
 	return obj.obj
 }
 
 func (obj *eventRouteAdvertiseWithdraw) SetMsg(msg *snappipb.EventRouteAdvertiseWithdraw) EventRouteAdvertiseWithdraw {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -15712,12 +16671,18 @@ type portOptions struct {
 	obj *snappipb.PortOptions
 }
 
+func NewPortOptions() PortOptions {
+	obj := portOptions{obj: &snappipb.PortOptions{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *portOptions) Msg() *snappipb.PortOptions {
 	return obj.obj
 }
 
 func (obj *portOptions) SetMsg(msg *snappipb.PortOptions) PortOptions {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -15880,12 +16845,18 @@ type pingIpv4 struct {
 	obj *snappipb.PingIpv4
 }
 
+func NewPingIpv4() PingIpv4 {
+	obj := pingIpv4{obj: &snappipb.PingIpv4{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *pingIpv4) Msg() *snappipb.PingIpv4 {
 	return obj.obj
 }
 
 func (obj *pingIpv4) SetMsg(msg *snappipb.PingIpv4) PingIpv4 {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -16099,12 +17070,18 @@ type pingIpv6 struct {
 	obj *snappipb.PingIpv6
 }
 
+func NewPingIpv6() PingIpv6 {
+	obj := pingIpv6{obj: &snappipb.PingIpv6{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *pingIpv6) Msg() *snappipb.PingIpv6 {
 	return obj.obj
 }
 
 func (obj *pingIpv6) SetMsg(msg *snappipb.PingIpv6) PingIpv6 {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -16318,12 +17295,18 @@ type flowMetricGroupRequest struct {
 	obj *snappipb.FlowMetricGroupRequest
 }
 
+func NewFlowMetricGroupRequest() FlowMetricGroupRequest {
+	obj := flowMetricGroupRequest{obj: &snappipb.FlowMetricGroupRequest{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *flowMetricGroupRequest) Msg() *snappipb.FlowMetricGroupRequest {
 	return obj.obj
 }
 
 func (obj *flowMetricGroupRequest) SetMsg(msg *snappipb.FlowMetricGroupRequest) FlowMetricGroupRequest {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -16583,12 +17566,18 @@ type response struct {
 	obj *snappipb.Response
 }
 
+func NewResponse() Response {
+	obj := response{obj: &snappipb.Response{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *response) Msg() *snappipb.Response {
 	return obj.obj
 }
 
 func (obj *response) SetMsg(msg *snappipb.Response) Response {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -16839,12 +17828,18 @@ type portMetric struct {
 	obj *snappipb.PortMetric
 }
 
+func NewPortMetric() PortMetric {
+	obj := portMetric{obj: &snappipb.PortMetric{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *portMetric) Msg() *snappipb.PortMetric {
 	return obj.obj
 }
 
 func (obj *portMetric) SetMsg(msg *snappipb.PortMetric) PortMetric {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -17305,12 +18300,18 @@ type flowMetric struct {
 	obj *snappipb.FlowMetric
 }
 
+func NewFlowMetric() FlowMetric {
+	obj := flowMetric{obj: &snappipb.FlowMetric{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *flowMetric) Msg() *snappipb.FlowMetric {
 	return obj.obj
 }
 
 func (obj *flowMetric) SetMsg(msg *snappipb.FlowMetric) FlowMetric {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -17465,8 +18466,10 @@ type FlowMetric interface {
 	SetLoss(value float32) FlowMetric
 	HasLoss() bool
 	Timestamps() MetricTimestamp
+	SetTimestamps(value MetricTimestamp) FlowMetric
 	HasTimestamps() bool
 	Latency() MetricLatency
+	SetLatency(value MetricLatency) FlowMetric
 	HasLatency() bool
 }
 
@@ -17741,12 +18744,8 @@ func (obj *flowMetric) SetLoss(value float32) FlowMetric {
 // Timestamps returns a MetricTimestamp
 //  description is TBD
 func (obj *flowMetric) Timestamps() MetricTimestamp {
-
 	if obj.obj.Timestamps == nil {
-		obj.obj.Timestamps = &snappipb.MetricTimestamp{}
-		newObj := &metricTimestamp{obj: obj.obj.Timestamps}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Timestamps = NewMetricTimestamp().Msg()
 	}
 	return &metricTimestamp{obj: obj.obj.Timestamps}
 }
@@ -17757,15 +18756,19 @@ func (obj *flowMetric) HasTimestamps() bool {
 	return obj.obj.Timestamps != nil
 }
 
+// SetTimestamps sets the MetricTimestamp value in the FlowMetric object
+//  description is TBD
+func (obj *flowMetric) SetTimestamps(value MetricTimestamp) FlowMetric {
+	obj.Timestamps().SetMsg(value.Msg())
+
+	return obj
+}
+
 // Latency returns a MetricLatency
 //  description is TBD
 func (obj *flowMetric) Latency() MetricLatency {
-
 	if obj.obj.Latency == nil {
-		obj.obj.Latency = &snappipb.MetricLatency{}
-		newObj := &metricLatency{obj: obj.obj.Latency}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Latency = NewMetricLatency().Msg()
 	}
 	return &metricLatency{obj: obj.obj.Latency}
 }
@@ -17774,6 +18777,14 @@ func (obj *flowMetric) Latency() MetricLatency {
 //  description is TBD
 func (obj *flowMetric) HasLatency() bool {
 	return obj.obj.Latency != nil
+}
+
+// SetLatency sets the MetricLatency value in the FlowMetric object
+//  description is TBD
+func (obj *flowMetric) SetLatency(value MetricLatency) FlowMetric {
+	obj.Latency().SetMsg(value.Msg())
+
+	return obj
 }
 
 func (obj *flowMetric) validateObj(set_default bool) {
@@ -17796,6 +18807,9 @@ func (obj *flowMetric) validateObj(set_default bool) {
 }
 
 func (obj *flowMetric) setDefault() {
+	if obj.obj.MetricGroups == nil {
+		obj.MetricGroups()
+	}
 
 }
 
@@ -17803,12 +18817,18 @@ type bgpv4Metric struct {
 	obj *snappipb.Bgpv4Metric
 }
 
+func NewBgpv4Metric() Bgpv4Metric {
+	obj := bgpv4Metric{obj: &snappipb.Bgpv4Metric{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *bgpv4Metric) Msg() *snappipb.Bgpv4Metric {
 	return obj.obj
 }
 
 func (obj *bgpv4Metric) SetMsg(msg *snappipb.Bgpv4Metric) Bgpv4Metric {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -18302,12 +19322,18 @@ type bgpv6Metric struct {
 	obj *snappipb.Bgpv6Metric
 }
 
+func NewBgpv6Metric() Bgpv6Metric {
+	obj := bgpv6Metric{obj: &snappipb.Bgpv6Metric{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *bgpv6Metric) Msg() *snappipb.Bgpv6Metric {
 	return obj.obj
 }
 
 func (obj *bgpv6Metric) SetMsg(msg *snappipb.Bgpv6Metric) Bgpv6Metric {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -18801,12 +19827,18 @@ type portState struct {
 	obj *snappipb.PortState
 }
 
+func NewPortState() PortState {
+	obj := portState{obj: &snappipb.PortState{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *portState) Msg() *snappipb.PortState {
 	return obj.obj
 }
 
 func (obj *portState) SetMsg(msg *snappipb.PortState) PortState {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -19036,12 +20068,18 @@ type flowState struct {
 	obj *snappipb.FlowState
 }
 
+func NewFlowState() FlowState {
+	obj := flowState{obj: &snappipb.FlowState{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *flowState) Msg() *snappipb.FlowState {
 	return obj.obj
 }
 
 func (obj *flowState) SetMsg(msg *snappipb.FlowState) FlowState {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -19238,12 +20276,18 @@ type lagProtocol struct {
 	obj *snappipb.LagProtocol
 }
 
+func NewLagProtocol() LagProtocol {
+	obj := lagProtocol{obj: &snappipb.LagProtocol{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *lagProtocol) Msg() *snappipb.LagProtocol {
 	return obj.obj
 }
 
 func (obj *lagProtocol) SetMsg(msg *snappipb.LagProtocol) LagProtocol {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -19367,8 +20411,10 @@ type LagProtocol interface {
 	SetChoice(value LagProtocolChoiceEnum) LagProtocol
 	HasChoice() bool
 	Lacp() LagLacp
+	SetLacp(value LagLacp) LagProtocol
 	HasLacp() bool
 	Static() LagStatic
+	SetStatic(value LagStatic) LagProtocol
 	HasStatic() bool
 }
 
@@ -19409,10 +20455,7 @@ func (obj *lagProtocol) SetChoice(value LagProtocolChoiceEnum) LagProtocol {
 func (obj *lagProtocol) Lacp() LagLacp {
 	obj.SetChoice(LagProtocolChoice.LACP)
 	if obj.obj.Lacp == nil {
-		obj.obj.Lacp = &snappipb.LagLacp{}
-		newObj := &lagLacp{obj: obj.obj.Lacp}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Lacp = NewLagLacp().Msg()
 	}
 	return &lagLacp{obj: obj.obj.Lacp}
 }
@@ -19423,15 +20466,20 @@ func (obj *lagProtocol) HasLacp() bool {
 	return obj.obj.Lacp != nil
 }
 
+// SetLacp sets the LagLacp value in the LagProtocol object
+//  description is TBD
+func (obj *lagProtocol) SetLacp(value LagLacp) LagProtocol {
+	obj.Lacp().SetMsg(value.Msg())
+	obj.SetChoice(LagProtocolChoice.LACP)
+	return obj
+}
+
 // Static returns a LagStatic
 //  description is TBD
 func (obj *lagProtocol) Static() LagStatic {
 	obj.SetChoice(LagProtocolChoice.STATIC)
 	if obj.obj.Static == nil {
-		obj.obj.Static = &snappipb.LagStatic{}
-		newObj := &lagStatic{obj: obj.obj.Static}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Static = NewLagStatic().Msg()
 	}
 	return &lagStatic{obj: obj.obj.Static}
 }
@@ -19440,6 +20488,14 @@ func (obj *lagProtocol) Static() LagStatic {
 //  description is TBD
 func (obj *lagProtocol) HasStatic() bool {
 	return obj.obj.Static != nil
+}
+
+// SetStatic sets the LagStatic value in the LagProtocol object
+//  description is TBD
+func (obj *lagProtocol) SetStatic(value LagStatic) LagProtocol {
+	obj.Static().SetMsg(value.Msg())
+	obj.SetChoice(LagProtocolChoice.STATIC)
+	return obj
 }
 
 func (obj *lagProtocol) validateObj(set_default bool) {
@@ -19467,12 +20523,18 @@ type deviceEthernetBase struct {
 	obj *snappipb.DeviceEthernetBase
 }
 
+func NewDeviceEthernetBase() DeviceEthernetBase {
+	obj := deviceEthernetBase{obj: &snappipb.DeviceEthernetBase{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *deviceEthernetBase) Msg() *snappipb.DeviceEthernetBase {
 	return obj.obj
 }
 
 func (obj *deviceEthernetBase) SetMsg(msg *snappipb.DeviceEthernetBase) DeviceEthernetBase {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -19723,6 +20785,9 @@ func (obj *deviceEthernetBase) setDefault() {
 	if obj.obj.Mtu == nil {
 		obj.SetMtu(1500)
 	}
+	if obj.obj.Vlans == nil {
+		obj.Vlans()
+	}
 
 }
 
@@ -19730,12 +20795,18 @@ type layer1Ieee8021Qbb struct {
 	obj *snappipb.Layer1Ieee8021Qbb
 }
 
+func NewLayer1Ieee8021Qbb() Layer1Ieee8021Qbb {
+	obj := layer1Ieee8021Qbb{obj: &snappipb.Layer1Ieee8021Qbb{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *layer1Ieee8021Qbb) Msg() *snappipb.Layer1Ieee8021Qbb {
 	return obj.obj
 }
 
 func (obj *layer1Ieee8021Qbb) SetMsg(msg *snappipb.Layer1Ieee8021Qbb) Layer1Ieee8021Qbb {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -20136,12 +21207,18 @@ type layer1Ieee8023X struct {
 	obj *snappipb.Layer1Ieee8023X
 }
 
+func NewLayer1Ieee8023X() Layer1Ieee8023X {
+	obj := layer1Ieee8023X{obj: &snappipb.Layer1Ieee8023X{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *layer1Ieee8023X) Msg() *snappipb.Layer1Ieee8023X {
 	return obj.obj
 }
 
 func (obj *layer1Ieee8023X) SetMsg(msg *snappipb.Layer1Ieee8023X) Layer1Ieee8023X {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -20278,12 +21355,18 @@ type captureCustom struct {
 	obj *snappipb.CaptureCustom
 }
 
+func NewCaptureCustom() CaptureCustom {
+	obj := captureCustom{obj: &snappipb.CaptureCustom{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *captureCustom) Msg() *snappipb.CaptureCustom {
 	return obj.obj
 }
 
 func (obj *captureCustom) SetMsg(msg *snappipb.CaptureCustom) CaptureCustom {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -20564,12 +21647,18 @@ type captureEthernet struct {
 	obj *snappipb.CaptureEthernet
 }
 
+func NewCaptureEthernet() CaptureEthernet {
+	obj := captureEthernet{obj: &snappipb.CaptureEthernet{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *captureEthernet) Msg() *snappipb.CaptureEthernet {
 	return obj.obj
 }
 
 func (obj *captureEthernet) SetMsg(msg *snappipb.CaptureEthernet) CaptureEthernet {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -20690,24 +21779,24 @@ type CaptureEthernet interface {
 	validateObj(set_default bool)
 	setDefault()
 	Src() CaptureField
+	SetSrc(value CaptureField) CaptureEthernet
 	HasSrc() bool
 	Dst() CaptureField
+	SetDst(value CaptureField) CaptureEthernet
 	HasDst() bool
 	EtherType() CaptureField
+	SetEtherType(value CaptureField) CaptureEthernet
 	HasEtherType() bool
 	PfcQueue() CaptureField
+	SetPfcQueue(value CaptureField) CaptureEthernet
 	HasPfcQueue() bool
 }
 
 // Src returns a CaptureField
 //  description is TBD
 func (obj *captureEthernet) Src() CaptureField {
-
 	if obj.obj.Src == nil {
-		obj.obj.Src = &snappipb.CaptureField{}
-		newObj := &captureField{obj: obj.obj.Src}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Src = NewCaptureField().Msg()
 	}
 	return &captureField{obj: obj.obj.Src}
 }
@@ -20718,15 +21807,19 @@ func (obj *captureEthernet) HasSrc() bool {
 	return obj.obj.Src != nil
 }
 
+// SetSrc sets the CaptureField value in the CaptureEthernet object
+//  description is TBD
+func (obj *captureEthernet) SetSrc(value CaptureField) CaptureEthernet {
+	obj.Src().SetMsg(value.Msg())
+
+	return obj
+}
+
 // Dst returns a CaptureField
 //  description is TBD
 func (obj *captureEthernet) Dst() CaptureField {
-
 	if obj.obj.Dst == nil {
-		obj.obj.Dst = &snappipb.CaptureField{}
-		newObj := &captureField{obj: obj.obj.Dst}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Dst = NewCaptureField().Msg()
 	}
 	return &captureField{obj: obj.obj.Dst}
 }
@@ -20737,15 +21830,19 @@ func (obj *captureEthernet) HasDst() bool {
 	return obj.obj.Dst != nil
 }
 
+// SetDst sets the CaptureField value in the CaptureEthernet object
+//  description is TBD
+func (obj *captureEthernet) SetDst(value CaptureField) CaptureEthernet {
+	obj.Dst().SetMsg(value.Msg())
+
+	return obj
+}
+
 // EtherType returns a CaptureField
 //  description is TBD
 func (obj *captureEthernet) EtherType() CaptureField {
-
 	if obj.obj.EtherType == nil {
-		obj.obj.EtherType = &snappipb.CaptureField{}
-		newObj := &captureField{obj: obj.obj.EtherType}
-		newObj.setDefault()
-		return newObj
+		obj.obj.EtherType = NewCaptureField().Msg()
 	}
 	return &captureField{obj: obj.obj.EtherType}
 }
@@ -20756,15 +21853,19 @@ func (obj *captureEthernet) HasEtherType() bool {
 	return obj.obj.EtherType != nil
 }
 
+// SetEtherType sets the CaptureField value in the CaptureEthernet object
+//  description is TBD
+func (obj *captureEthernet) SetEtherType(value CaptureField) CaptureEthernet {
+	obj.EtherType().SetMsg(value.Msg())
+
+	return obj
+}
+
 // PfcQueue returns a CaptureField
 //  description is TBD
 func (obj *captureEthernet) PfcQueue() CaptureField {
-
 	if obj.obj.PfcQueue == nil {
-		obj.obj.PfcQueue = &snappipb.CaptureField{}
-		newObj := &captureField{obj: obj.obj.PfcQueue}
-		newObj.setDefault()
-		return newObj
+		obj.obj.PfcQueue = NewCaptureField().Msg()
 	}
 	return &captureField{obj: obj.obj.PfcQueue}
 }
@@ -20773,6 +21874,14 @@ func (obj *captureEthernet) PfcQueue() CaptureField {
 //  description is TBD
 func (obj *captureEthernet) HasPfcQueue() bool {
 	return obj.obj.PfcQueue != nil
+}
+
+// SetPfcQueue sets the CaptureField value in the CaptureEthernet object
+//  description is TBD
+func (obj *captureEthernet) SetPfcQueue(value CaptureField) CaptureEthernet {
+	obj.PfcQueue().SetMsg(value.Msg())
+
+	return obj
 }
 
 func (obj *captureEthernet) validateObj(set_default bool) {
@@ -20805,12 +21914,18 @@ type captureVlan struct {
 	obj *snappipb.CaptureVlan
 }
 
+func NewCaptureVlan() CaptureVlan {
+	obj := captureVlan{obj: &snappipb.CaptureVlan{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *captureVlan) Msg() *snappipb.CaptureVlan {
 	return obj.obj
 }
 
 func (obj *captureVlan) SetMsg(msg *snappipb.CaptureVlan) CaptureVlan {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -20931,24 +22046,24 @@ type CaptureVlan interface {
 	validateObj(set_default bool)
 	setDefault()
 	Priority() CaptureField
+	SetPriority(value CaptureField) CaptureVlan
 	HasPriority() bool
 	Cfi() CaptureField
+	SetCfi(value CaptureField) CaptureVlan
 	HasCfi() bool
 	Id() CaptureField
+	SetId(value CaptureField) CaptureVlan
 	HasId() bool
 	Protocol() CaptureField
+	SetProtocol(value CaptureField) CaptureVlan
 	HasProtocol() bool
 }
 
 // Priority returns a CaptureField
 //  description is TBD
 func (obj *captureVlan) Priority() CaptureField {
-
 	if obj.obj.Priority == nil {
-		obj.obj.Priority = &snappipb.CaptureField{}
-		newObj := &captureField{obj: obj.obj.Priority}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Priority = NewCaptureField().Msg()
 	}
 	return &captureField{obj: obj.obj.Priority}
 }
@@ -20959,15 +22074,19 @@ func (obj *captureVlan) HasPriority() bool {
 	return obj.obj.Priority != nil
 }
 
+// SetPriority sets the CaptureField value in the CaptureVlan object
+//  description is TBD
+func (obj *captureVlan) SetPriority(value CaptureField) CaptureVlan {
+	obj.Priority().SetMsg(value.Msg())
+
+	return obj
+}
+
 // Cfi returns a CaptureField
 //  description is TBD
 func (obj *captureVlan) Cfi() CaptureField {
-
 	if obj.obj.Cfi == nil {
-		obj.obj.Cfi = &snappipb.CaptureField{}
-		newObj := &captureField{obj: obj.obj.Cfi}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Cfi = NewCaptureField().Msg()
 	}
 	return &captureField{obj: obj.obj.Cfi}
 }
@@ -20978,15 +22097,19 @@ func (obj *captureVlan) HasCfi() bool {
 	return obj.obj.Cfi != nil
 }
 
+// SetCfi sets the CaptureField value in the CaptureVlan object
+//  description is TBD
+func (obj *captureVlan) SetCfi(value CaptureField) CaptureVlan {
+	obj.Cfi().SetMsg(value.Msg())
+
+	return obj
+}
+
 // Id returns a CaptureField
 //  description is TBD
 func (obj *captureVlan) Id() CaptureField {
-
 	if obj.obj.Id == nil {
-		obj.obj.Id = &snappipb.CaptureField{}
-		newObj := &captureField{obj: obj.obj.Id}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Id = NewCaptureField().Msg()
 	}
 	return &captureField{obj: obj.obj.Id}
 }
@@ -20997,15 +22120,19 @@ func (obj *captureVlan) HasId() bool {
 	return obj.obj.Id != nil
 }
 
+// SetId sets the CaptureField value in the CaptureVlan object
+//  description is TBD
+func (obj *captureVlan) SetId(value CaptureField) CaptureVlan {
+	obj.Id().SetMsg(value.Msg())
+
+	return obj
+}
+
 // Protocol returns a CaptureField
 //  description is TBD
 func (obj *captureVlan) Protocol() CaptureField {
-
 	if obj.obj.Protocol == nil {
-		obj.obj.Protocol = &snappipb.CaptureField{}
-		newObj := &captureField{obj: obj.obj.Protocol}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Protocol = NewCaptureField().Msg()
 	}
 	return &captureField{obj: obj.obj.Protocol}
 }
@@ -21014,6 +22141,14 @@ func (obj *captureVlan) Protocol() CaptureField {
 //  description is TBD
 func (obj *captureVlan) HasProtocol() bool {
 	return obj.obj.Protocol != nil
+}
+
+// SetProtocol sets the CaptureField value in the CaptureVlan object
+//  description is TBD
+func (obj *captureVlan) SetProtocol(value CaptureField) CaptureVlan {
+	obj.Protocol().SetMsg(value.Msg())
+
+	return obj
 }
 
 func (obj *captureVlan) validateObj(set_default bool) {
@@ -21046,12 +22181,18 @@ type captureIpv4 struct {
 	obj *snappipb.CaptureIpv4
 }
 
+func NewCaptureIpv4() CaptureIpv4 {
+	obj := captureIpv4{obj: &snappipb.CaptureIpv4{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *captureIpv4) Msg() *snappipb.CaptureIpv4 {
 	return obj.obj
 }
 
 func (obj *captureIpv4) SetMsg(msg *snappipb.CaptureIpv4) CaptureIpv4 {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -21172,44 +22313,54 @@ type CaptureIpv4 interface {
 	validateObj(set_default bool)
 	setDefault()
 	Version() CaptureField
+	SetVersion(value CaptureField) CaptureIpv4
 	HasVersion() bool
 	HeaderLength() CaptureField
+	SetHeaderLength(value CaptureField) CaptureIpv4
 	HasHeaderLength() bool
 	Priority() CaptureField
+	SetPriority(value CaptureField) CaptureIpv4
 	HasPriority() bool
 	TotalLength() CaptureField
+	SetTotalLength(value CaptureField) CaptureIpv4
 	HasTotalLength() bool
 	Identification() CaptureField
+	SetIdentification(value CaptureField) CaptureIpv4
 	HasIdentification() bool
 	Reserved() CaptureField
+	SetReserved(value CaptureField) CaptureIpv4
 	HasReserved() bool
 	DontFragment() CaptureField
+	SetDontFragment(value CaptureField) CaptureIpv4
 	HasDontFragment() bool
 	MoreFragments() CaptureField
+	SetMoreFragments(value CaptureField) CaptureIpv4
 	HasMoreFragments() bool
 	FragmentOffset() CaptureField
+	SetFragmentOffset(value CaptureField) CaptureIpv4
 	HasFragmentOffset() bool
 	TimeToLive() CaptureField
+	SetTimeToLive(value CaptureField) CaptureIpv4
 	HasTimeToLive() bool
 	Protocol() CaptureField
+	SetProtocol(value CaptureField) CaptureIpv4
 	HasProtocol() bool
 	HeaderChecksum() CaptureField
+	SetHeaderChecksum(value CaptureField) CaptureIpv4
 	HasHeaderChecksum() bool
 	Src() CaptureField
+	SetSrc(value CaptureField) CaptureIpv4
 	HasSrc() bool
 	Dst() CaptureField
+	SetDst(value CaptureField) CaptureIpv4
 	HasDst() bool
 }
 
 // Version returns a CaptureField
 //  description is TBD
 func (obj *captureIpv4) Version() CaptureField {
-
 	if obj.obj.Version == nil {
-		obj.obj.Version = &snappipb.CaptureField{}
-		newObj := &captureField{obj: obj.obj.Version}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Version = NewCaptureField().Msg()
 	}
 	return &captureField{obj: obj.obj.Version}
 }
@@ -21220,15 +22371,19 @@ func (obj *captureIpv4) HasVersion() bool {
 	return obj.obj.Version != nil
 }
 
+// SetVersion sets the CaptureField value in the CaptureIpv4 object
+//  description is TBD
+func (obj *captureIpv4) SetVersion(value CaptureField) CaptureIpv4 {
+	obj.Version().SetMsg(value.Msg())
+
+	return obj
+}
+
 // HeaderLength returns a CaptureField
 //  description is TBD
 func (obj *captureIpv4) HeaderLength() CaptureField {
-
 	if obj.obj.HeaderLength == nil {
-		obj.obj.HeaderLength = &snappipb.CaptureField{}
-		newObj := &captureField{obj: obj.obj.HeaderLength}
-		newObj.setDefault()
-		return newObj
+		obj.obj.HeaderLength = NewCaptureField().Msg()
 	}
 	return &captureField{obj: obj.obj.HeaderLength}
 }
@@ -21239,15 +22394,19 @@ func (obj *captureIpv4) HasHeaderLength() bool {
 	return obj.obj.HeaderLength != nil
 }
 
+// SetHeaderLength sets the CaptureField value in the CaptureIpv4 object
+//  description is TBD
+func (obj *captureIpv4) SetHeaderLength(value CaptureField) CaptureIpv4 {
+	obj.HeaderLength().SetMsg(value.Msg())
+
+	return obj
+}
+
 // Priority returns a CaptureField
 //  description is TBD
 func (obj *captureIpv4) Priority() CaptureField {
-
 	if obj.obj.Priority == nil {
-		obj.obj.Priority = &snappipb.CaptureField{}
-		newObj := &captureField{obj: obj.obj.Priority}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Priority = NewCaptureField().Msg()
 	}
 	return &captureField{obj: obj.obj.Priority}
 }
@@ -21258,15 +22417,19 @@ func (obj *captureIpv4) HasPriority() bool {
 	return obj.obj.Priority != nil
 }
 
+// SetPriority sets the CaptureField value in the CaptureIpv4 object
+//  description is TBD
+func (obj *captureIpv4) SetPriority(value CaptureField) CaptureIpv4 {
+	obj.Priority().SetMsg(value.Msg())
+
+	return obj
+}
+
 // TotalLength returns a CaptureField
 //  description is TBD
 func (obj *captureIpv4) TotalLength() CaptureField {
-
 	if obj.obj.TotalLength == nil {
-		obj.obj.TotalLength = &snappipb.CaptureField{}
-		newObj := &captureField{obj: obj.obj.TotalLength}
-		newObj.setDefault()
-		return newObj
+		obj.obj.TotalLength = NewCaptureField().Msg()
 	}
 	return &captureField{obj: obj.obj.TotalLength}
 }
@@ -21277,15 +22440,19 @@ func (obj *captureIpv4) HasTotalLength() bool {
 	return obj.obj.TotalLength != nil
 }
 
+// SetTotalLength sets the CaptureField value in the CaptureIpv4 object
+//  description is TBD
+func (obj *captureIpv4) SetTotalLength(value CaptureField) CaptureIpv4 {
+	obj.TotalLength().SetMsg(value.Msg())
+
+	return obj
+}
+
 // Identification returns a CaptureField
 //  description is TBD
 func (obj *captureIpv4) Identification() CaptureField {
-
 	if obj.obj.Identification == nil {
-		obj.obj.Identification = &snappipb.CaptureField{}
-		newObj := &captureField{obj: obj.obj.Identification}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Identification = NewCaptureField().Msg()
 	}
 	return &captureField{obj: obj.obj.Identification}
 }
@@ -21296,15 +22463,19 @@ func (obj *captureIpv4) HasIdentification() bool {
 	return obj.obj.Identification != nil
 }
 
+// SetIdentification sets the CaptureField value in the CaptureIpv4 object
+//  description is TBD
+func (obj *captureIpv4) SetIdentification(value CaptureField) CaptureIpv4 {
+	obj.Identification().SetMsg(value.Msg())
+
+	return obj
+}
+
 // Reserved returns a CaptureField
 //  description is TBD
 func (obj *captureIpv4) Reserved() CaptureField {
-
 	if obj.obj.Reserved == nil {
-		obj.obj.Reserved = &snappipb.CaptureField{}
-		newObj := &captureField{obj: obj.obj.Reserved}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Reserved = NewCaptureField().Msg()
 	}
 	return &captureField{obj: obj.obj.Reserved}
 }
@@ -21315,15 +22486,19 @@ func (obj *captureIpv4) HasReserved() bool {
 	return obj.obj.Reserved != nil
 }
 
+// SetReserved sets the CaptureField value in the CaptureIpv4 object
+//  description is TBD
+func (obj *captureIpv4) SetReserved(value CaptureField) CaptureIpv4 {
+	obj.Reserved().SetMsg(value.Msg())
+
+	return obj
+}
+
 // DontFragment returns a CaptureField
 //  description is TBD
 func (obj *captureIpv4) DontFragment() CaptureField {
-
 	if obj.obj.DontFragment == nil {
-		obj.obj.DontFragment = &snappipb.CaptureField{}
-		newObj := &captureField{obj: obj.obj.DontFragment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.DontFragment = NewCaptureField().Msg()
 	}
 	return &captureField{obj: obj.obj.DontFragment}
 }
@@ -21334,15 +22509,19 @@ func (obj *captureIpv4) HasDontFragment() bool {
 	return obj.obj.DontFragment != nil
 }
 
+// SetDontFragment sets the CaptureField value in the CaptureIpv4 object
+//  description is TBD
+func (obj *captureIpv4) SetDontFragment(value CaptureField) CaptureIpv4 {
+	obj.DontFragment().SetMsg(value.Msg())
+
+	return obj
+}
+
 // MoreFragments returns a CaptureField
 //  description is TBD
 func (obj *captureIpv4) MoreFragments() CaptureField {
-
 	if obj.obj.MoreFragments == nil {
-		obj.obj.MoreFragments = &snappipb.CaptureField{}
-		newObj := &captureField{obj: obj.obj.MoreFragments}
-		newObj.setDefault()
-		return newObj
+		obj.obj.MoreFragments = NewCaptureField().Msg()
 	}
 	return &captureField{obj: obj.obj.MoreFragments}
 }
@@ -21353,15 +22532,19 @@ func (obj *captureIpv4) HasMoreFragments() bool {
 	return obj.obj.MoreFragments != nil
 }
 
+// SetMoreFragments sets the CaptureField value in the CaptureIpv4 object
+//  description is TBD
+func (obj *captureIpv4) SetMoreFragments(value CaptureField) CaptureIpv4 {
+	obj.MoreFragments().SetMsg(value.Msg())
+
+	return obj
+}
+
 // FragmentOffset returns a CaptureField
 //  description is TBD
 func (obj *captureIpv4) FragmentOffset() CaptureField {
-
 	if obj.obj.FragmentOffset == nil {
-		obj.obj.FragmentOffset = &snappipb.CaptureField{}
-		newObj := &captureField{obj: obj.obj.FragmentOffset}
-		newObj.setDefault()
-		return newObj
+		obj.obj.FragmentOffset = NewCaptureField().Msg()
 	}
 	return &captureField{obj: obj.obj.FragmentOffset}
 }
@@ -21372,15 +22555,19 @@ func (obj *captureIpv4) HasFragmentOffset() bool {
 	return obj.obj.FragmentOffset != nil
 }
 
+// SetFragmentOffset sets the CaptureField value in the CaptureIpv4 object
+//  description is TBD
+func (obj *captureIpv4) SetFragmentOffset(value CaptureField) CaptureIpv4 {
+	obj.FragmentOffset().SetMsg(value.Msg())
+
+	return obj
+}
+
 // TimeToLive returns a CaptureField
 //  description is TBD
 func (obj *captureIpv4) TimeToLive() CaptureField {
-
 	if obj.obj.TimeToLive == nil {
-		obj.obj.TimeToLive = &snappipb.CaptureField{}
-		newObj := &captureField{obj: obj.obj.TimeToLive}
-		newObj.setDefault()
-		return newObj
+		obj.obj.TimeToLive = NewCaptureField().Msg()
 	}
 	return &captureField{obj: obj.obj.TimeToLive}
 }
@@ -21391,15 +22578,19 @@ func (obj *captureIpv4) HasTimeToLive() bool {
 	return obj.obj.TimeToLive != nil
 }
 
+// SetTimeToLive sets the CaptureField value in the CaptureIpv4 object
+//  description is TBD
+func (obj *captureIpv4) SetTimeToLive(value CaptureField) CaptureIpv4 {
+	obj.TimeToLive().SetMsg(value.Msg())
+
+	return obj
+}
+
 // Protocol returns a CaptureField
 //  description is TBD
 func (obj *captureIpv4) Protocol() CaptureField {
-
 	if obj.obj.Protocol == nil {
-		obj.obj.Protocol = &snappipb.CaptureField{}
-		newObj := &captureField{obj: obj.obj.Protocol}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Protocol = NewCaptureField().Msg()
 	}
 	return &captureField{obj: obj.obj.Protocol}
 }
@@ -21410,15 +22601,19 @@ func (obj *captureIpv4) HasProtocol() bool {
 	return obj.obj.Protocol != nil
 }
 
+// SetProtocol sets the CaptureField value in the CaptureIpv4 object
+//  description is TBD
+func (obj *captureIpv4) SetProtocol(value CaptureField) CaptureIpv4 {
+	obj.Protocol().SetMsg(value.Msg())
+
+	return obj
+}
+
 // HeaderChecksum returns a CaptureField
 //  description is TBD
 func (obj *captureIpv4) HeaderChecksum() CaptureField {
-
 	if obj.obj.HeaderChecksum == nil {
-		obj.obj.HeaderChecksum = &snappipb.CaptureField{}
-		newObj := &captureField{obj: obj.obj.HeaderChecksum}
-		newObj.setDefault()
-		return newObj
+		obj.obj.HeaderChecksum = NewCaptureField().Msg()
 	}
 	return &captureField{obj: obj.obj.HeaderChecksum}
 }
@@ -21429,15 +22624,19 @@ func (obj *captureIpv4) HasHeaderChecksum() bool {
 	return obj.obj.HeaderChecksum != nil
 }
 
+// SetHeaderChecksum sets the CaptureField value in the CaptureIpv4 object
+//  description is TBD
+func (obj *captureIpv4) SetHeaderChecksum(value CaptureField) CaptureIpv4 {
+	obj.HeaderChecksum().SetMsg(value.Msg())
+
+	return obj
+}
+
 // Src returns a CaptureField
 //  description is TBD
 func (obj *captureIpv4) Src() CaptureField {
-
 	if obj.obj.Src == nil {
-		obj.obj.Src = &snappipb.CaptureField{}
-		newObj := &captureField{obj: obj.obj.Src}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Src = NewCaptureField().Msg()
 	}
 	return &captureField{obj: obj.obj.Src}
 }
@@ -21448,15 +22647,19 @@ func (obj *captureIpv4) HasSrc() bool {
 	return obj.obj.Src != nil
 }
 
+// SetSrc sets the CaptureField value in the CaptureIpv4 object
+//  description is TBD
+func (obj *captureIpv4) SetSrc(value CaptureField) CaptureIpv4 {
+	obj.Src().SetMsg(value.Msg())
+
+	return obj
+}
+
 // Dst returns a CaptureField
 //  description is TBD
 func (obj *captureIpv4) Dst() CaptureField {
-
 	if obj.obj.Dst == nil {
-		obj.obj.Dst = &snappipb.CaptureField{}
-		newObj := &captureField{obj: obj.obj.Dst}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Dst = NewCaptureField().Msg()
 	}
 	return &captureField{obj: obj.obj.Dst}
 }
@@ -21465,6 +22668,14 @@ func (obj *captureIpv4) Dst() CaptureField {
 //  description is TBD
 func (obj *captureIpv4) HasDst() bool {
 	return obj.obj.Dst != nil
+}
+
+// SetDst sets the CaptureField value in the CaptureIpv4 object
+//  description is TBD
+func (obj *captureIpv4) SetDst(value CaptureField) CaptureIpv4 {
+	obj.Dst().SetMsg(value.Msg())
+
+	return obj
 }
 
 func (obj *captureIpv4) validateObj(set_default bool) {
@@ -21537,12 +22748,18 @@ type captureIpv6 struct {
 	obj *snappipb.CaptureIpv6
 }
 
+func NewCaptureIpv6() CaptureIpv6 {
+	obj := captureIpv6{obj: &snappipb.CaptureIpv6{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *captureIpv6) Msg() *snappipb.CaptureIpv6 {
 	return obj.obj
 }
 
 func (obj *captureIpv6) SetMsg(msg *snappipb.CaptureIpv6) CaptureIpv6 {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -21663,32 +22880,36 @@ type CaptureIpv6 interface {
 	validateObj(set_default bool)
 	setDefault()
 	Version() CaptureField
+	SetVersion(value CaptureField) CaptureIpv6
 	HasVersion() bool
 	TrafficClass() CaptureField
+	SetTrafficClass(value CaptureField) CaptureIpv6
 	HasTrafficClass() bool
 	FlowLabel() CaptureField
+	SetFlowLabel(value CaptureField) CaptureIpv6
 	HasFlowLabel() bool
 	PayloadLength() CaptureField
+	SetPayloadLength(value CaptureField) CaptureIpv6
 	HasPayloadLength() bool
 	NextHeader() CaptureField
+	SetNextHeader(value CaptureField) CaptureIpv6
 	HasNextHeader() bool
 	HopLimit() CaptureField
+	SetHopLimit(value CaptureField) CaptureIpv6
 	HasHopLimit() bool
 	Src() CaptureField
+	SetSrc(value CaptureField) CaptureIpv6
 	HasSrc() bool
 	Dst() CaptureField
+	SetDst(value CaptureField) CaptureIpv6
 	HasDst() bool
 }
 
 // Version returns a CaptureField
 //  description is TBD
 func (obj *captureIpv6) Version() CaptureField {
-
 	if obj.obj.Version == nil {
-		obj.obj.Version = &snappipb.CaptureField{}
-		newObj := &captureField{obj: obj.obj.Version}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Version = NewCaptureField().Msg()
 	}
 	return &captureField{obj: obj.obj.Version}
 }
@@ -21699,15 +22920,19 @@ func (obj *captureIpv6) HasVersion() bool {
 	return obj.obj.Version != nil
 }
 
+// SetVersion sets the CaptureField value in the CaptureIpv6 object
+//  description is TBD
+func (obj *captureIpv6) SetVersion(value CaptureField) CaptureIpv6 {
+	obj.Version().SetMsg(value.Msg())
+
+	return obj
+}
+
 // TrafficClass returns a CaptureField
 //  description is TBD
 func (obj *captureIpv6) TrafficClass() CaptureField {
-
 	if obj.obj.TrafficClass == nil {
-		obj.obj.TrafficClass = &snappipb.CaptureField{}
-		newObj := &captureField{obj: obj.obj.TrafficClass}
-		newObj.setDefault()
-		return newObj
+		obj.obj.TrafficClass = NewCaptureField().Msg()
 	}
 	return &captureField{obj: obj.obj.TrafficClass}
 }
@@ -21718,15 +22943,19 @@ func (obj *captureIpv6) HasTrafficClass() bool {
 	return obj.obj.TrafficClass != nil
 }
 
+// SetTrafficClass sets the CaptureField value in the CaptureIpv6 object
+//  description is TBD
+func (obj *captureIpv6) SetTrafficClass(value CaptureField) CaptureIpv6 {
+	obj.TrafficClass().SetMsg(value.Msg())
+
+	return obj
+}
+
 // FlowLabel returns a CaptureField
 //  description is TBD
 func (obj *captureIpv6) FlowLabel() CaptureField {
-
 	if obj.obj.FlowLabel == nil {
-		obj.obj.FlowLabel = &snappipb.CaptureField{}
-		newObj := &captureField{obj: obj.obj.FlowLabel}
-		newObj.setDefault()
-		return newObj
+		obj.obj.FlowLabel = NewCaptureField().Msg()
 	}
 	return &captureField{obj: obj.obj.FlowLabel}
 }
@@ -21737,15 +22966,19 @@ func (obj *captureIpv6) HasFlowLabel() bool {
 	return obj.obj.FlowLabel != nil
 }
 
+// SetFlowLabel sets the CaptureField value in the CaptureIpv6 object
+//  description is TBD
+func (obj *captureIpv6) SetFlowLabel(value CaptureField) CaptureIpv6 {
+	obj.FlowLabel().SetMsg(value.Msg())
+
+	return obj
+}
+
 // PayloadLength returns a CaptureField
 //  description is TBD
 func (obj *captureIpv6) PayloadLength() CaptureField {
-
 	if obj.obj.PayloadLength == nil {
-		obj.obj.PayloadLength = &snappipb.CaptureField{}
-		newObj := &captureField{obj: obj.obj.PayloadLength}
-		newObj.setDefault()
-		return newObj
+		obj.obj.PayloadLength = NewCaptureField().Msg()
 	}
 	return &captureField{obj: obj.obj.PayloadLength}
 }
@@ -21756,15 +22989,19 @@ func (obj *captureIpv6) HasPayloadLength() bool {
 	return obj.obj.PayloadLength != nil
 }
 
+// SetPayloadLength sets the CaptureField value in the CaptureIpv6 object
+//  description is TBD
+func (obj *captureIpv6) SetPayloadLength(value CaptureField) CaptureIpv6 {
+	obj.PayloadLength().SetMsg(value.Msg())
+
+	return obj
+}
+
 // NextHeader returns a CaptureField
 //  description is TBD
 func (obj *captureIpv6) NextHeader() CaptureField {
-
 	if obj.obj.NextHeader == nil {
-		obj.obj.NextHeader = &snappipb.CaptureField{}
-		newObj := &captureField{obj: obj.obj.NextHeader}
-		newObj.setDefault()
-		return newObj
+		obj.obj.NextHeader = NewCaptureField().Msg()
 	}
 	return &captureField{obj: obj.obj.NextHeader}
 }
@@ -21775,15 +23012,19 @@ func (obj *captureIpv6) HasNextHeader() bool {
 	return obj.obj.NextHeader != nil
 }
 
+// SetNextHeader sets the CaptureField value in the CaptureIpv6 object
+//  description is TBD
+func (obj *captureIpv6) SetNextHeader(value CaptureField) CaptureIpv6 {
+	obj.NextHeader().SetMsg(value.Msg())
+
+	return obj
+}
+
 // HopLimit returns a CaptureField
 //  description is TBD
 func (obj *captureIpv6) HopLimit() CaptureField {
-
 	if obj.obj.HopLimit == nil {
-		obj.obj.HopLimit = &snappipb.CaptureField{}
-		newObj := &captureField{obj: obj.obj.HopLimit}
-		newObj.setDefault()
-		return newObj
+		obj.obj.HopLimit = NewCaptureField().Msg()
 	}
 	return &captureField{obj: obj.obj.HopLimit}
 }
@@ -21794,15 +23035,19 @@ func (obj *captureIpv6) HasHopLimit() bool {
 	return obj.obj.HopLimit != nil
 }
 
+// SetHopLimit sets the CaptureField value in the CaptureIpv6 object
+//  description is TBD
+func (obj *captureIpv6) SetHopLimit(value CaptureField) CaptureIpv6 {
+	obj.HopLimit().SetMsg(value.Msg())
+
+	return obj
+}
+
 // Src returns a CaptureField
 //  description is TBD
 func (obj *captureIpv6) Src() CaptureField {
-
 	if obj.obj.Src == nil {
-		obj.obj.Src = &snappipb.CaptureField{}
-		newObj := &captureField{obj: obj.obj.Src}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Src = NewCaptureField().Msg()
 	}
 	return &captureField{obj: obj.obj.Src}
 }
@@ -21813,15 +23058,19 @@ func (obj *captureIpv6) HasSrc() bool {
 	return obj.obj.Src != nil
 }
 
+// SetSrc sets the CaptureField value in the CaptureIpv6 object
+//  description is TBD
+func (obj *captureIpv6) SetSrc(value CaptureField) CaptureIpv6 {
+	obj.Src().SetMsg(value.Msg())
+
+	return obj
+}
+
 // Dst returns a CaptureField
 //  description is TBD
 func (obj *captureIpv6) Dst() CaptureField {
-
 	if obj.obj.Dst == nil {
-		obj.obj.Dst = &snappipb.CaptureField{}
-		newObj := &captureField{obj: obj.obj.Dst}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Dst = NewCaptureField().Msg()
 	}
 	return &captureField{obj: obj.obj.Dst}
 }
@@ -21830,6 +23079,14 @@ func (obj *captureIpv6) Dst() CaptureField {
 //  description is TBD
 func (obj *captureIpv6) HasDst() bool {
 	return obj.obj.Dst != nil
+}
+
+// SetDst sets the CaptureField value in the CaptureIpv6 object
+//  description is TBD
+func (obj *captureIpv6) SetDst(value CaptureField) CaptureIpv6 {
+	obj.Dst().SetMsg(value.Msg())
+
+	return obj
 }
 
 func (obj *captureIpv6) validateObj(set_default bool) {
@@ -21878,12 +23135,18 @@ type deviceIpv4 struct {
 	obj *snappipb.DeviceIpv4
 }
 
+func NewDeviceIpv4() DeviceIpv4 {
+	obj := deviceIpv4{obj: &snappipb.DeviceIpv4{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *deviceIpv4) Msg() *snappipb.DeviceIpv4 {
 	return obj.obj
 }
 
 func (obj *deviceIpv4) SetMsg(msg *snappipb.DeviceIpv4) DeviceIpv4 {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -22126,12 +23389,18 @@ type deviceIpv6 struct {
 	obj *snappipb.DeviceIpv6
 }
 
+func NewDeviceIpv6() DeviceIpv6 {
+	obj := deviceIpv6{obj: &snappipb.DeviceIpv6{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *deviceIpv6) Msg() *snappipb.DeviceIpv6 {
 	return obj.obj
 }
 
 func (obj *deviceIpv6) SetMsg(msg *snappipb.DeviceIpv6) DeviceIpv6 {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -22377,12 +23646,18 @@ type deviceVlan struct {
 	obj *snappipb.DeviceVlan
 }
 
+func NewDeviceVlan() DeviceVlan {
+	obj := deviceVlan{obj: &snappipb.DeviceVlan{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *deviceVlan) Msg() *snappipb.DeviceVlan {
 	return obj.obj
 }
 
 func (obj *deviceVlan) SetMsg(msg *snappipb.DeviceVlan) DeviceVlan {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -22651,12 +23926,18 @@ type deviceIsisMultiInstance struct {
 	obj *snappipb.DeviceIsisMultiInstance
 }
 
+func NewDeviceIsisMultiInstance() DeviceIsisMultiInstance {
+	obj := deviceIsisMultiInstance{obj: &snappipb.DeviceIsisMultiInstance{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *deviceIsisMultiInstance) Msg() *snappipb.DeviceIsisMultiInstance {
 	return obj.obj
 }
 
 func (obj *deviceIsisMultiInstance) SetMsg(msg *snappipb.DeviceIsisMultiInstance) DeviceIsisMultiInstance {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -22849,12 +24130,18 @@ type isisInterface struct {
 	obj *snappipb.IsisInterface
 }
 
+func NewIsisInterface() IsisInterface {
+	obj := isisInterface{obj: &snappipb.IsisInterface{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *isisInterface) Msg() *snappipb.IsisInterface {
 	return obj.obj
 }
 
 func (obj *isisInterface) SetMsg(msg *snappipb.IsisInterface) IsisInterface {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -22986,16 +24273,21 @@ type IsisInterface interface {
 	SetLevelType(value IsisInterfaceLevelTypeEnum) IsisInterface
 	HasLevelType() bool
 	L1Settings() IsisInterfaceLevel
+	SetL1Settings(value IsisInterfaceLevel) IsisInterface
 	HasL1Settings() bool
 	L2Settings() IsisInterfaceLevel
+	SetL2Settings(value IsisInterfaceLevel) IsisInterface
 	HasL2Settings() bool
 	MultiTopologyIds() IsisInterfaceIsisMTIter
 	TrafficEngineering() IsisInterfaceLinkStateTEIter
 	Authentication() IsisInterfaceAuthentication
+	SetAuthentication(value IsisInterfaceAuthentication) IsisInterface
 	HasAuthentication() bool
 	Advanced() IsisInterfaceAdvanced
+	SetAdvanced(value IsisInterfaceAdvanced) IsisInterface
 	HasAdvanced() bool
 	LinkProtection() IsisInterfaceLinkProtection
+	SetLinkProtection(value IsisInterfaceLinkProtection) IsisInterface
 	HasLinkProtection() bool
 	SrlgValues() []int32
 	SetSrlgValues(value []int32) IsisInterface
@@ -23121,12 +24413,8 @@ func (obj *isisInterface) SetLevelType(value IsisInterfaceLevelTypeEnum) IsisInt
 // L1Settings returns a IsisInterfaceLevel
 //  Settings of Level 1 Hello.
 func (obj *isisInterface) L1Settings() IsisInterfaceLevel {
-
 	if obj.obj.L1Settings == nil {
-		obj.obj.L1Settings = &snappipb.IsisInterfaceLevel{}
-		newObj := &isisInterfaceLevel{obj: obj.obj.L1Settings}
-		newObj.setDefault()
-		return newObj
+		obj.obj.L1Settings = NewIsisInterfaceLevel().Msg()
 	}
 	return &isisInterfaceLevel{obj: obj.obj.L1Settings}
 }
@@ -23137,15 +24425,19 @@ func (obj *isisInterface) HasL1Settings() bool {
 	return obj.obj.L1Settings != nil
 }
 
+// SetL1Settings sets the IsisInterfaceLevel value in the IsisInterface object
+//  Settings of Level 1 Hello.
+func (obj *isisInterface) SetL1Settings(value IsisInterfaceLevel) IsisInterface {
+	obj.L1Settings().SetMsg(value.Msg())
+
+	return obj
+}
+
 // L2Settings returns a IsisInterfaceLevel
 //  Settings of Level 2 Hello.
 func (obj *isisInterface) L2Settings() IsisInterfaceLevel {
-
 	if obj.obj.L2Settings == nil {
-		obj.obj.L2Settings = &snappipb.IsisInterfaceLevel{}
-		newObj := &isisInterfaceLevel{obj: obj.obj.L2Settings}
-		newObj.setDefault()
-		return newObj
+		obj.obj.L2Settings = NewIsisInterfaceLevel().Msg()
 	}
 	return &isisInterfaceLevel{obj: obj.obj.L2Settings}
 }
@@ -23154,6 +24446,14 @@ func (obj *isisInterface) L2Settings() IsisInterfaceLevel {
 //  Settings of Level 2 Hello.
 func (obj *isisInterface) HasL2Settings() bool {
 	return obj.obj.L2Settings != nil
+}
+
+// SetL2Settings sets the IsisInterfaceLevel value in the IsisInterface object
+//  Settings of Level 2 Hello.
+func (obj *isisInterface) SetL2Settings(value IsisInterfaceLevel) IsisInterface {
+	obj.L2Settings().SetMsg(value.Msg())
+
+	return obj
 }
 
 // MultiTopologyIds returns a []IsisMT
@@ -23227,12 +24527,8 @@ func (obj *isisInterfaceLinkStateTEIter) Items() []LinkStateTE {
 // Authentication returns a IsisInterfaceAuthentication
 //  The Circuit authentication method used for the interfaces on this emulated ISIS v4/v6 router.
 func (obj *isisInterface) Authentication() IsisInterfaceAuthentication {
-
 	if obj.obj.Authentication == nil {
-		obj.obj.Authentication = &snappipb.IsisInterfaceAuthentication{}
-		newObj := &isisInterfaceAuthentication{obj: obj.obj.Authentication}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Authentication = NewIsisInterfaceAuthentication().Msg()
 	}
 	return &isisInterfaceAuthentication{obj: obj.obj.Authentication}
 }
@@ -23243,15 +24539,19 @@ func (obj *isisInterface) HasAuthentication() bool {
 	return obj.obj.Authentication != nil
 }
 
+// SetAuthentication sets the IsisInterfaceAuthentication value in the IsisInterface object
+//  The Circuit authentication method used for the interfaces on this emulated ISIS v4/v6 router.
+func (obj *isisInterface) SetAuthentication(value IsisInterfaceAuthentication) IsisInterface {
+	obj.Authentication().SetMsg(value.Msg())
+
+	return obj
+}
+
 // Advanced returns a IsisInterfaceAdvanced
 //  Optional container for advanced interface properties.
 func (obj *isisInterface) Advanced() IsisInterfaceAdvanced {
-
 	if obj.obj.Advanced == nil {
-		obj.obj.Advanced = &snappipb.IsisInterfaceAdvanced{}
-		newObj := &isisInterfaceAdvanced{obj: obj.obj.Advanced}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Advanced = NewIsisInterfaceAdvanced().Msg()
 	}
 	return &isisInterfaceAdvanced{obj: obj.obj.Advanced}
 }
@@ -23262,15 +24562,19 @@ func (obj *isisInterface) HasAdvanced() bool {
 	return obj.obj.Advanced != nil
 }
 
+// SetAdvanced sets the IsisInterfaceAdvanced value in the IsisInterface object
+//  Optional container for advanced interface properties.
+func (obj *isisInterface) SetAdvanced(value IsisInterfaceAdvanced) IsisInterface {
+	obj.Advanced().SetMsg(value.Msg())
+
+	return obj
+}
+
 // LinkProtection returns a IsisInterfaceLinkProtection
 //  Link protection on the ISIS link between two interfaces.
 func (obj *isisInterface) LinkProtection() IsisInterfaceLinkProtection {
-
 	if obj.obj.LinkProtection == nil {
-		obj.obj.LinkProtection = &snappipb.IsisInterfaceLinkProtection{}
-		newObj := &isisInterfaceLinkProtection{obj: obj.obj.LinkProtection}
-		newObj.setDefault()
-		return newObj
+		obj.obj.LinkProtection = NewIsisInterfaceLinkProtection().Msg()
 	}
 	return &isisInterfaceLinkProtection{obj: obj.obj.LinkProtection}
 }
@@ -23279,6 +24583,14 @@ func (obj *isisInterface) LinkProtection() IsisInterfaceLinkProtection {
 //  Link protection on the ISIS link between two interfaces.
 func (obj *isisInterface) HasLinkProtection() bool {
 	return obj.obj.LinkProtection != nil
+}
+
+// SetLinkProtection sets the IsisInterfaceLinkProtection value in the IsisInterface object
+//  Link protection on the ISIS link between two interfaces.
+func (obj *isisInterface) SetLinkProtection(value IsisInterfaceLinkProtection) IsisInterface {
+	obj.LinkProtection().SetMsg(value.Msg())
+
+	return obj
 }
 
 // SrlgValues returns a []int32
@@ -23353,6 +24665,12 @@ func (obj *isisInterface) setDefault() {
 	if obj.obj.LevelType == nil {
 		obj.SetLevelType(IsisInterfaceLevelType.LEVEL_2)
 	}
+	if obj.obj.MultiTopologyIds == nil {
+		obj.MultiTopologyIds()
+	}
+	if obj.obj.TrafficEngineering == nil {
+		obj.TrafficEngineering()
+	}
 
 }
 
@@ -23360,12 +24678,18 @@ type isisBasic struct {
 	obj *snappipb.IsisBasic
 }
 
+func NewIsisBasic() IsisBasic {
+	obj := isisBasic{obj: &snappipb.IsisBasic{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *isisBasic) Msg() *snappipb.IsisBasic {
 	return obj.obj
 }
 
 func (obj *isisBasic) SetMsg(msg *snappipb.IsisBasic) IsisBasic {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -23558,12 +24882,18 @@ type isisAdvanced struct {
 	obj *snappipb.IsisAdvanced
 }
 
+func NewIsisAdvanced() IsisAdvanced {
+	obj := isisAdvanced{obj: &snappipb.IsisAdvanced{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *isisAdvanced) Msg() *snappipb.IsisAdvanced {
 	return obj.obj
 }
 
 func (obj *isisAdvanced) SetMsg(msg *snappipb.IsisAdvanced) IsisAdvanced {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -23993,12 +25323,18 @@ type isisAuthentication struct {
 	obj *snappipb.IsisAuthentication
 }
 
+func NewIsisAuthentication() IsisAuthentication {
+	obj := isisAuthentication{obj: &snappipb.IsisAuthentication{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *isisAuthentication) Msg() *snappipb.IsisAuthentication {
 	return obj.obj
 }
 
 func (obj *isisAuthentication) SetMsg(msg *snappipb.IsisAuthentication) IsisAuthentication {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -24122,8 +25458,10 @@ type IsisAuthentication interface {
 	SetIgnoreReceiveMd5(value bool) IsisAuthentication
 	HasIgnoreReceiveMd5() bool
 	AreaAuthType() IsisAuthenticationBase
+	SetAreaAuthType(value IsisAuthenticationBase) IsisAuthentication
 	HasAreaAuthType() bool
 	DomainAuthType() IsisAuthenticationBase
+	SetDomainAuthType(value IsisAuthenticationBase) IsisAuthentication
 	HasDomainAuthType() bool
 }
 
@@ -24151,12 +25489,8 @@ func (obj *isisAuthentication) SetIgnoreReceiveMd5(value bool) IsisAuthenticatio
 //  The Area authentication method used for the emulated ISIS router.
 //  This is used for L1 LSPs.
 func (obj *isisAuthentication) AreaAuthType() IsisAuthenticationBase {
-
 	if obj.obj.AreaAuthType == nil {
-		obj.obj.AreaAuthType = &snappipb.IsisAuthenticationBase{}
-		newObj := &isisAuthenticationBase{obj: obj.obj.AreaAuthType}
-		newObj.setDefault()
-		return newObj
+		obj.obj.AreaAuthType = NewIsisAuthenticationBase().Msg()
 	}
 	return &isisAuthenticationBase{obj: obj.obj.AreaAuthType}
 }
@@ -24168,16 +25502,21 @@ func (obj *isisAuthentication) HasAreaAuthType() bool {
 	return obj.obj.AreaAuthType != nil
 }
 
+// SetAreaAuthType sets the IsisAuthenticationBase value in the IsisAuthentication object
+//  The Area authentication method used for the emulated ISIS router.
+//  This is used for L1 LSPs.
+func (obj *isisAuthentication) SetAreaAuthType(value IsisAuthenticationBase) IsisAuthentication {
+	obj.AreaAuthType().SetMsg(value.Msg())
+
+	return obj
+}
+
 // DomainAuthType returns a IsisAuthenticationBase
 //  The Domain authentication method used for the emulated ISIS router.
 //  This is used for L2 LSPs.
 func (obj *isisAuthentication) DomainAuthType() IsisAuthenticationBase {
-
 	if obj.obj.DomainAuthType == nil {
-		obj.obj.DomainAuthType = &snappipb.IsisAuthenticationBase{}
-		newObj := &isisAuthenticationBase{obj: obj.obj.DomainAuthType}
-		newObj.setDefault()
-		return newObj
+		obj.obj.DomainAuthType = NewIsisAuthenticationBase().Msg()
 	}
 	return &isisAuthenticationBase{obj: obj.obj.DomainAuthType}
 }
@@ -24187,6 +25526,15 @@ func (obj *isisAuthentication) DomainAuthType() IsisAuthenticationBase {
 //  This is used for L2 LSPs.
 func (obj *isisAuthentication) HasDomainAuthType() bool {
 	return obj.obj.DomainAuthType != nil
+}
+
+// SetDomainAuthType sets the IsisAuthenticationBase value in the IsisAuthentication object
+//  The Domain authentication method used for the emulated ISIS router.
+//  This is used for L2 LSPs.
+func (obj *isisAuthentication) SetDomainAuthType(value IsisAuthenticationBase) IsisAuthentication {
+	obj.DomainAuthType().SetMsg(value.Msg())
+
+	return obj
 }
 
 func (obj *isisAuthentication) validateObj(set_default bool) {
@@ -24214,12 +25562,18 @@ type isisV4RouteRange struct {
 	obj *snappipb.IsisV4RouteRange
 }
 
+func NewIsisV4RouteRange() IsisV4RouteRange {
+	obj := isisV4RouteRange{obj: &snappipb.IsisV4RouteRange{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *isisV4RouteRange) Msg() *snappipb.IsisV4RouteRange {
 	return obj.obj
 }
 
 func (obj *isisV4RouteRange) SetMsg(msg *snappipb.IsisV4RouteRange) IsisV4RouteRange {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -24585,6 +25939,9 @@ func (obj *isisV4RouteRange) validateObj(set_default bool) {
 }
 
 func (obj *isisV4RouteRange) setDefault() {
+	if obj.obj.Addresses == nil {
+		obj.Addresses()
+	}
 	if obj.obj.LinkMetric == nil {
 		obj.SetLinkMetric(0)
 	}
@@ -24610,12 +25967,18 @@ type isisV6RouteRange struct {
 	obj *snappipb.IsisV6RouteRange
 }
 
+func NewIsisV6RouteRange() IsisV6RouteRange {
+	obj := isisV6RouteRange{obj: &snappipb.IsisV6RouteRange{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *isisV6RouteRange) Msg() *snappipb.IsisV6RouteRange {
 	return obj.obj
 }
 
 func (obj *isisV6RouteRange) SetMsg(msg *snappipb.IsisV6RouteRange) IsisV6RouteRange {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -24981,6 +26344,9 @@ func (obj *isisV6RouteRange) validateObj(set_default bool) {
 }
 
 func (obj *isisV6RouteRange) setDefault() {
+	if obj.obj.Addresses == nil {
+		obj.Addresses()
+	}
 	if obj.obj.LinkMetric == nil {
 		obj.SetLinkMetric(0)
 	}
@@ -25006,12 +26372,18 @@ type bgpV4Interface struct {
 	obj *snappipb.BgpV4Interface
 }
 
+func NewBgpV4Interface() BgpV4Interface {
+	obj := bgpV4Interface{obj: &snappipb.BgpV4Interface{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *bgpV4Interface) Msg() *snappipb.BgpV4Interface {
 	return obj.obj
 }
 
 func (obj *bgpV4Interface) SetMsg(msg *snappipb.BgpV4Interface) BgpV4Interface {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -25222,6 +26594,9 @@ func (obj *bgpV4Interface) validateObj(set_default bool) {
 }
 
 func (obj *bgpV4Interface) setDefault() {
+	if obj.obj.Peers == nil {
+		obj.Peers()
+	}
 
 }
 
@@ -25229,12 +26604,18 @@ type bgpV6Interface struct {
 	obj *snappipb.BgpV6Interface
 }
 
+func NewBgpV6Interface() BgpV6Interface {
+	obj := bgpV6Interface{obj: &snappipb.BgpV6Interface{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *bgpV6Interface) Msg() *snappipb.BgpV6Interface {
 	return obj.obj
 }
 
 func (obj *bgpV6Interface) SetMsg(msg *snappipb.BgpV6Interface) BgpV6Interface {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -25445,6 +26826,9 @@ func (obj *bgpV6Interface) validateObj(set_default bool) {
 }
 
 func (obj *bgpV6Interface) setDefault() {
+	if obj.obj.Peers == nil {
+		obj.Peers()
+	}
 
 }
 
@@ -25452,12 +26836,18 @@ type flowPort struct {
 	obj *snappipb.FlowPort
 }
 
+func NewFlowPort() FlowPort {
+	obj := flowPort{obj: &snappipb.FlowPort{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *flowPort) Msg() *snappipb.FlowPort {
 	return obj.obj
 }
 
 func (obj *flowPort) SetMsg(msg *snappipb.FlowPort) FlowPort {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -25687,12 +27077,18 @@ type flowRouter struct {
 	obj *snappipb.FlowRouter
 }
 
+func NewFlowRouter() FlowRouter {
+	obj := flowRouter{obj: &snappipb.FlowRouter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *flowRouter) Msg() *snappipb.FlowRouter {
 	return obj.obj
 }
 
 func (obj *flowRouter) SetMsg(msg *snappipb.FlowRouter) FlowRouter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -25985,12 +27381,18 @@ type flowCustom struct {
 	obj *snappipb.FlowCustom
 }
 
+func NewFlowCustom() FlowCustom {
+	obj := flowCustom{obj: &snappipb.FlowCustom{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *flowCustom) Msg() *snappipb.FlowCustom {
 	return obj.obj
 }
 
 func (obj *flowCustom) SetMsg(msg *snappipb.FlowCustom) FlowCustom {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -26147,12 +27549,18 @@ type flowEthernet struct {
 	obj *snappipb.FlowEthernet
 }
 
+func NewFlowEthernet() FlowEthernet {
+	obj := flowEthernet{obj: &snappipb.FlowEthernet{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *flowEthernet) Msg() *snappipb.FlowEthernet {
 	return obj.obj
 }
 
 func (obj *flowEthernet) SetMsg(msg *snappipb.FlowEthernet) FlowEthernet {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -26273,24 +27681,24 @@ type FlowEthernet interface {
 	validateObj(set_default bool)
 	setDefault()
 	Dst() PatternFlowEthernetDst
+	SetDst(value PatternFlowEthernetDst) FlowEthernet
 	HasDst() bool
 	Src() PatternFlowEthernetSrc
+	SetSrc(value PatternFlowEthernetSrc) FlowEthernet
 	HasSrc() bool
 	EtherType() PatternFlowEthernetEtherType
+	SetEtherType(value PatternFlowEthernetEtherType) FlowEthernet
 	HasEtherType() bool
 	PfcQueue() PatternFlowEthernetPfcQueue
+	SetPfcQueue(value PatternFlowEthernetPfcQueue) FlowEthernet
 	HasPfcQueue() bool
 }
 
 // Dst returns a PatternFlowEthernetDst
 //  description is TBD
 func (obj *flowEthernet) Dst() PatternFlowEthernetDst {
-
 	if obj.obj.Dst == nil {
-		obj.obj.Dst = &snappipb.PatternFlowEthernetDst{}
-		newObj := &patternFlowEthernetDst{obj: obj.obj.Dst}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Dst = NewPatternFlowEthernetDst().Msg()
 	}
 	return &patternFlowEthernetDst{obj: obj.obj.Dst}
 }
@@ -26301,15 +27709,19 @@ func (obj *flowEthernet) HasDst() bool {
 	return obj.obj.Dst != nil
 }
 
+// SetDst sets the PatternFlowEthernetDst value in the FlowEthernet object
+//  description is TBD
+func (obj *flowEthernet) SetDst(value PatternFlowEthernetDst) FlowEthernet {
+	obj.Dst().SetMsg(value.Msg())
+
+	return obj
+}
+
 // Src returns a PatternFlowEthernetSrc
 //  description is TBD
 func (obj *flowEthernet) Src() PatternFlowEthernetSrc {
-
 	if obj.obj.Src == nil {
-		obj.obj.Src = &snappipb.PatternFlowEthernetSrc{}
-		newObj := &patternFlowEthernetSrc{obj: obj.obj.Src}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Src = NewPatternFlowEthernetSrc().Msg()
 	}
 	return &patternFlowEthernetSrc{obj: obj.obj.Src}
 }
@@ -26320,15 +27732,19 @@ func (obj *flowEthernet) HasSrc() bool {
 	return obj.obj.Src != nil
 }
 
+// SetSrc sets the PatternFlowEthernetSrc value in the FlowEthernet object
+//  description is TBD
+func (obj *flowEthernet) SetSrc(value PatternFlowEthernetSrc) FlowEthernet {
+	obj.Src().SetMsg(value.Msg())
+
+	return obj
+}
+
 // EtherType returns a PatternFlowEthernetEtherType
 //  description is TBD
 func (obj *flowEthernet) EtherType() PatternFlowEthernetEtherType {
-
 	if obj.obj.EtherType == nil {
-		obj.obj.EtherType = &snappipb.PatternFlowEthernetEtherType{}
-		newObj := &patternFlowEthernetEtherType{obj: obj.obj.EtherType}
-		newObj.setDefault()
-		return newObj
+		obj.obj.EtherType = NewPatternFlowEthernetEtherType().Msg()
 	}
 	return &patternFlowEthernetEtherType{obj: obj.obj.EtherType}
 }
@@ -26339,15 +27755,19 @@ func (obj *flowEthernet) HasEtherType() bool {
 	return obj.obj.EtherType != nil
 }
 
+// SetEtherType sets the PatternFlowEthernetEtherType value in the FlowEthernet object
+//  description is TBD
+func (obj *flowEthernet) SetEtherType(value PatternFlowEthernetEtherType) FlowEthernet {
+	obj.EtherType().SetMsg(value.Msg())
+
+	return obj
+}
+
 // PfcQueue returns a PatternFlowEthernetPfcQueue
 //  description is TBD
 func (obj *flowEthernet) PfcQueue() PatternFlowEthernetPfcQueue {
-
 	if obj.obj.PfcQueue == nil {
-		obj.obj.PfcQueue = &snappipb.PatternFlowEthernetPfcQueue{}
-		newObj := &patternFlowEthernetPfcQueue{obj: obj.obj.PfcQueue}
-		newObj.setDefault()
-		return newObj
+		obj.obj.PfcQueue = NewPatternFlowEthernetPfcQueue().Msg()
 	}
 	return &patternFlowEthernetPfcQueue{obj: obj.obj.PfcQueue}
 }
@@ -26356,6 +27776,14 @@ func (obj *flowEthernet) PfcQueue() PatternFlowEthernetPfcQueue {
 //  description is TBD
 func (obj *flowEthernet) HasPfcQueue() bool {
 	return obj.obj.PfcQueue != nil
+}
+
+// SetPfcQueue sets the PatternFlowEthernetPfcQueue value in the FlowEthernet object
+//  description is TBD
+func (obj *flowEthernet) SetPfcQueue(value PatternFlowEthernetPfcQueue) FlowEthernet {
+	obj.PfcQueue().SetMsg(value.Msg())
+
+	return obj
 }
 
 func (obj *flowEthernet) validateObj(set_default bool) {
@@ -26388,12 +27816,18 @@ type flowVlan struct {
 	obj *snappipb.FlowVlan
 }
 
+func NewFlowVlan() FlowVlan {
+	obj := flowVlan{obj: &snappipb.FlowVlan{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *flowVlan) Msg() *snappipb.FlowVlan {
 	return obj.obj
 }
 
 func (obj *flowVlan) SetMsg(msg *snappipb.FlowVlan) FlowVlan {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -26514,24 +27948,24 @@ type FlowVlan interface {
 	validateObj(set_default bool)
 	setDefault()
 	Priority() PatternFlowVlanPriority
+	SetPriority(value PatternFlowVlanPriority) FlowVlan
 	HasPriority() bool
 	Cfi() PatternFlowVlanCfi
+	SetCfi(value PatternFlowVlanCfi) FlowVlan
 	HasCfi() bool
 	Id() PatternFlowVlanId
+	SetId(value PatternFlowVlanId) FlowVlan
 	HasId() bool
 	Tpid() PatternFlowVlanTpid
+	SetTpid(value PatternFlowVlanTpid) FlowVlan
 	HasTpid() bool
 }
 
 // Priority returns a PatternFlowVlanPriority
 //  description is TBD
 func (obj *flowVlan) Priority() PatternFlowVlanPriority {
-
 	if obj.obj.Priority == nil {
-		obj.obj.Priority = &snappipb.PatternFlowVlanPriority{}
-		newObj := &patternFlowVlanPriority{obj: obj.obj.Priority}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Priority = NewPatternFlowVlanPriority().Msg()
 	}
 	return &patternFlowVlanPriority{obj: obj.obj.Priority}
 }
@@ -26542,15 +27976,19 @@ func (obj *flowVlan) HasPriority() bool {
 	return obj.obj.Priority != nil
 }
 
+// SetPriority sets the PatternFlowVlanPriority value in the FlowVlan object
+//  description is TBD
+func (obj *flowVlan) SetPriority(value PatternFlowVlanPriority) FlowVlan {
+	obj.Priority().SetMsg(value.Msg())
+
+	return obj
+}
+
 // Cfi returns a PatternFlowVlanCfi
 //  description is TBD
 func (obj *flowVlan) Cfi() PatternFlowVlanCfi {
-
 	if obj.obj.Cfi == nil {
-		obj.obj.Cfi = &snappipb.PatternFlowVlanCfi{}
-		newObj := &patternFlowVlanCfi{obj: obj.obj.Cfi}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Cfi = NewPatternFlowVlanCfi().Msg()
 	}
 	return &patternFlowVlanCfi{obj: obj.obj.Cfi}
 }
@@ -26561,15 +27999,19 @@ func (obj *flowVlan) HasCfi() bool {
 	return obj.obj.Cfi != nil
 }
 
+// SetCfi sets the PatternFlowVlanCfi value in the FlowVlan object
+//  description is TBD
+func (obj *flowVlan) SetCfi(value PatternFlowVlanCfi) FlowVlan {
+	obj.Cfi().SetMsg(value.Msg())
+
+	return obj
+}
+
 // Id returns a PatternFlowVlanId
 //  description is TBD
 func (obj *flowVlan) Id() PatternFlowVlanId {
-
 	if obj.obj.Id == nil {
-		obj.obj.Id = &snappipb.PatternFlowVlanId{}
-		newObj := &patternFlowVlanId{obj: obj.obj.Id}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Id = NewPatternFlowVlanId().Msg()
 	}
 	return &patternFlowVlanId{obj: obj.obj.Id}
 }
@@ -26580,15 +28022,19 @@ func (obj *flowVlan) HasId() bool {
 	return obj.obj.Id != nil
 }
 
+// SetId sets the PatternFlowVlanId value in the FlowVlan object
+//  description is TBD
+func (obj *flowVlan) SetId(value PatternFlowVlanId) FlowVlan {
+	obj.Id().SetMsg(value.Msg())
+
+	return obj
+}
+
 // Tpid returns a PatternFlowVlanTpid
 //  description is TBD
 func (obj *flowVlan) Tpid() PatternFlowVlanTpid {
-
 	if obj.obj.Tpid == nil {
-		obj.obj.Tpid = &snappipb.PatternFlowVlanTpid{}
-		newObj := &patternFlowVlanTpid{obj: obj.obj.Tpid}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Tpid = NewPatternFlowVlanTpid().Msg()
 	}
 	return &patternFlowVlanTpid{obj: obj.obj.Tpid}
 }
@@ -26597,6 +28043,14 @@ func (obj *flowVlan) Tpid() PatternFlowVlanTpid {
 //  description is TBD
 func (obj *flowVlan) HasTpid() bool {
 	return obj.obj.Tpid != nil
+}
+
+// SetTpid sets the PatternFlowVlanTpid value in the FlowVlan object
+//  description is TBD
+func (obj *flowVlan) SetTpid(value PatternFlowVlanTpid) FlowVlan {
+	obj.Tpid().SetMsg(value.Msg())
+
+	return obj
 }
 
 func (obj *flowVlan) validateObj(set_default bool) {
@@ -26629,12 +28083,18 @@ type flowVxlan struct {
 	obj *snappipb.FlowVxlan
 }
 
+func NewFlowVxlan() FlowVxlan {
+	obj := flowVxlan{obj: &snappipb.FlowVxlan{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *flowVxlan) Msg() *snappipb.FlowVxlan {
 	return obj.obj
 }
 
 func (obj *flowVxlan) SetMsg(msg *snappipb.FlowVxlan) FlowVxlan {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -26755,24 +28215,24 @@ type FlowVxlan interface {
 	validateObj(set_default bool)
 	setDefault()
 	Flags() PatternFlowVxlanFlags
+	SetFlags(value PatternFlowVxlanFlags) FlowVxlan
 	HasFlags() bool
 	Reserved0() PatternFlowVxlanReserved0
+	SetReserved0(value PatternFlowVxlanReserved0) FlowVxlan
 	HasReserved0() bool
 	Vni() PatternFlowVxlanVni
+	SetVni(value PatternFlowVxlanVni) FlowVxlan
 	HasVni() bool
 	Reserved1() PatternFlowVxlanReserved1
+	SetReserved1(value PatternFlowVxlanReserved1) FlowVxlan
 	HasReserved1() bool
 }
 
 // Flags returns a PatternFlowVxlanFlags
 //  description is TBD
 func (obj *flowVxlan) Flags() PatternFlowVxlanFlags {
-
 	if obj.obj.Flags == nil {
-		obj.obj.Flags = &snappipb.PatternFlowVxlanFlags{}
-		newObj := &patternFlowVxlanFlags{obj: obj.obj.Flags}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Flags = NewPatternFlowVxlanFlags().Msg()
 	}
 	return &patternFlowVxlanFlags{obj: obj.obj.Flags}
 }
@@ -26783,15 +28243,19 @@ func (obj *flowVxlan) HasFlags() bool {
 	return obj.obj.Flags != nil
 }
 
+// SetFlags sets the PatternFlowVxlanFlags value in the FlowVxlan object
+//  description is TBD
+func (obj *flowVxlan) SetFlags(value PatternFlowVxlanFlags) FlowVxlan {
+	obj.Flags().SetMsg(value.Msg())
+
+	return obj
+}
+
 // Reserved0 returns a PatternFlowVxlanReserved0
 //  description is TBD
 func (obj *flowVxlan) Reserved0() PatternFlowVxlanReserved0 {
-
 	if obj.obj.Reserved0 == nil {
-		obj.obj.Reserved0 = &snappipb.PatternFlowVxlanReserved0{}
-		newObj := &patternFlowVxlanReserved0{obj: obj.obj.Reserved0}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Reserved0 = NewPatternFlowVxlanReserved0().Msg()
 	}
 	return &patternFlowVxlanReserved0{obj: obj.obj.Reserved0}
 }
@@ -26802,15 +28266,19 @@ func (obj *flowVxlan) HasReserved0() bool {
 	return obj.obj.Reserved0 != nil
 }
 
+// SetReserved0 sets the PatternFlowVxlanReserved0 value in the FlowVxlan object
+//  description is TBD
+func (obj *flowVxlan) SetReserved0(value PatternFlowVxlanReserved0) FlowVxlan {
+	obj.Reserved0().SetMsg(value.Msg())
+
+	return obj
+}
+
 // Vni returns a PatternFlowVxlanVni
 //  description is TBD
 func (obj *flowVxlan) Vni() PatternFlowVxlanVni {
-
 	if obj.obj.Vni == nil {
-		obj.obj.Vni = &snappipb.PatternFlowVxlanVni{}
-		newObj := &patternFlowVxlanVni{obj: obj.obj.Vni}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Vni = NewPatternFlowVxlanVni().Msg()
 	}
 	return &patternFlowVxlanVni{obj: obj.obj.Vni}
 }
@@ -26821,15 +28289,19 @@ func (obj *flowVxlan) HasVni() bool {
 	return obj.obj.Vni != nil
 }
 
+// SetVni sets the PatternFlowVxlanVni value in the FlowVxlan object
+//  description is TBD
+func (obj *flowVxlan) SetVni(value PatternFlowVxlanVni) FlowVxlan {
+	obj.Vni().SetMsg(value.Msg())
+
+	return obj
+}
+
 // Reserved1 returns a PatternFlowVxlanReserved1
 //  description is TBD
 func (obj *flowVxlan) Reserved1() PatternFlowVxlanReserved1 {
-
 	if obj.obj.Reserved1 == nil {
-		obj.obj.Reserved1 = &snappipb.PatternFlowVxlanReserved1{}
-		newObj := &patternFlowVxlanReserved1{obj: obj.obj.Reserved1}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Reserved1 = NewPatternFlowVxlanReserved1().Msg()
 	}
 	return &patternFlowVxlanReserved1{obj: obj.obj.Reserved1}
 }
@@ -26838,6 +28310,14 @@ func (obj *flowVxlan) Reserved1() PatternFlowVxlanReserved1 {
 //  description is TBD
 func (obj *flowVxlan) HasReserved1() bool {
 	return obj.obj.Reserved1 != nil
+}
+
+// SetReserved1 sets the PatternFlowVxlanReserved1 value in the FlowVxlan object
+//  description is TBD
+func (obj *flowVxlan) SetReserved1(value PatternFlowVxlanReserved1) FlowVxlan {
+	obj.Reserved1().SetMsg(value.Msg())
+
+	return obj
 }
 
 func (obj *flowVxlan) validateObj(set_default bool) {
@@ -26870,12 +28350,18 @@ type flowIpv4 struct {
 	obj *snappipb.FlowIpv4
 }
 
+func NewFlowIpv4() FlowIpv4 {
+	obj := flowIpv4{obj: &snappipb.FlowIpv4{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *flowIpv4) Msg() *snappipb.FlowIpv4 {
 	return obj.obj
 }
 
 func (obj *flowIpv4) SetMsg(msg *snappipb.FlowIpv4) FlowIpv4 {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -26996,44 +28482,54 @@ type FlowIpv4 interface {
 	validateObj(set_default bool)
 	setDefault()
 	Version() PatternFlowIpv4Version
+	SetVersion(value PatternFlowIpv4Version) FlowIpv4
 	HasVersion() bool
 	HeaderLength() PatternFlowIpv4HeaderLength
+	SetHeaderLength(value PatternFlowIpv4HeaderLength) FlowIpv4
 	HasHeaderLength() bool
 	Priority() FlowIpv4Priority
+	SetPriority(value FlowIpv4Priority) FlowIpv4
 	HasPriority() bool
 	TotalLength() PatternFlowIpv4TotalLength
+	SetTotalLength(value PatternFlowIpv4TotalLength) FlowIpv4
 	HasTotalLength() bool
 	Identification() PatternFlowIpv4Identification
+	SetIdentification(value PatternFlowIpv4Identification) FlowIpv4
 	HasIdentification() bool
 	Reserved() PatternFlowIpv4Reserved
+	SetReserved(value PatternFlowIpv4Reserved) FlowIpv4
 	HasReserved() bool
 	DontFragment() PatternFlowIpv4DontFragment
+	SetDontFragment(value PatternFlowIpv4DontFragment) FlowIpv4
 	HasDontFragment() bool
 	MoreFragments() PatternFlowIpv4MoreFragments
+	SetMoreFragments(value PatternFlowIpv4MoreFragments) FlowIpv4
 	HasMoreFragments() bool
 	FragmentOffset() PatternFlowIpv4FragmentOffset
+	SetFragmentOffset(value PatternFlowIpv4FragmentOffset) FlowIpv4
 	HasFragmentOffset() bool
 	TimeToLive() PatternFlowIpv4TimeToLive
+	SetTimeToLive(value PatternFlowIpv4TimeToLive) FlowIpv4
 	HasTimeToLive() bool
 	Protocol() PatternFlowIpv4Protocol
+	SetProtocol(value PatternFlowIpv4Protocol) FlowIpv4
 	HasProtocol() bool
 	HeaderChecksum() PatternFlowIpv4HeaderChecksum
+	SetHeaderChecksum(value PatternFlowIpv4HeaderChecksum) FlowIpv4
 	HasHeaderChecksum() bool
 	Src() PatternFlowIpv4Src
+	SetSrc(value PatternFlowIpv4Src) FlowIpv4
 	HasSrc() bool
 	Dst() PatternFlowIpv4Dst
+	SetDst(value PatternFlowIpv4Dst) FlowIpv4
 	HasDst() bool
 }
 
 // Version returns a PatternFlowIpv4Version
 //  description is TBD
 func (obj *flowIpv4) Version() PatternFlowIpv4Version {
-
 	if obj.obj.Version == nil {
-		obj.obj.Version = &snappipb.PatternFlowIpv4Version{}
-		newObj := &patternFlowIpv4Version{obj: obj.obj.Version}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Version = NewPatternFlowIpv4Version().Msg()
 	}
 	return &patternFlowIpv4Version{obj: obj.obj.Version}
 }
@@ -27044,15 +28540,19 @@ func (obj *flowIpv4) HasVersion() bool {
 	return obj.obj.Version != nil
 }
 
+// SetVersion sets the PatternFlowIpv4Version value in the FlowIpv4 object
+//  description is TBD
+func (obj *flowIpv4) SetVersion(value PatternFlowIpv4Version) FlowIpv4 {
+	obj.Version().SetMsg(value.Msg())
+
+	return obj
+}
+
 // HeaderLength returns a PatternFlowIpv4HeaderLength
 //  description is TBD
 func (obj *flowIpv4) HeaderLength() PatternFlowIpv4HeaderLength {
-
 	if obj.obj.HeaderLength == nil {
-		obj.obj.HeaderLength = &snappipb.PatternFlowIpv4HeaderLength{}
-		newObj := &patternFlowIpv4HeaderLength{obj: obj.obj.HeaderLength}
-		newObj.setDefault()
-		return newObj
+		obj.obj.HeaderLength = NewPatternFlowIpv4HeaderLength().Msg()
 	}
 	return &patternFlowIpv4HeaderLength{obj: obj.obj.HeaderLength}
 }
@@ -27063,15 +28563,19 @@ func (obj *flowIpv4) HasHeaderLength() bool {
 	return obj.obj.HeaderLength != nil
 }
 
+// SetHeaderLength sets the PatternFlowIpv4HeaderLength value in the FlowIpv4 object
+//  description is TBD
+func (obj *flowIpv4) SetHeaderLength(value PatternFlowIpv4HeaderLength) FlowIpv4 {
+	obj.HeaderLength().SetMsg(value.Msg())
+
+	return obj
+}
+
 // Priority returns a FlowIpv4Priority
 //  description is TBD
 func (obj *flowIpv4) Priority() FlowIpv4Priority {
-
 	if obj.obj.Priority == nil {
-		obj.obj.Priority = &snappipb.FlowIpv4Priority{}
-		newObj := &flowIpv4Priority{obj: obj.obj.Priority}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Priority = NewFlowIpv4Priority().Msg()
 	}
 	return &flowIpv4Priority{obj: obj.obj.Priority}
 }
@@ -27082,15 +28586,19 @@ func (obj *flowIpv4) HasPriority() bool {
 	return obj.obj.Priority != nil
 }
 
+// SetPriority sets the FlowIpv4Priority value in the FlowIpv4 object
+//  description is TBD
+func (obj *flowIpv4) SetPriority(value FlowIpv4Priority) FlowIpv4 {
+	obj.Priority().SetMsg(value.Msg())
+
+	return obj
+}
+
 // TotalLength returns a PatternFlowIpv4TotalLength
 //  description is TBD
 func (obj *flowIpv4) TotalLength() PatternFlowIpv4TotalLength {
-
 	if obj.obj.TotalLength == nil {
-		obj.obj.TotalLength = &snappipb.PatternFlowIpv4TotalLength{}
-		newObj := &patternFlowIpv4TotalLength{obj: obj.obj.TotalLength}
-		newObj.setDefault()
-		return newObj
+		obj.obj.TotalLength = NewPatternFlowIpv4TotalLength().Msg()
 	}
 	return &patternFlowIpv4TotalLength{obj: obj.obj.TotalLength}
 }
@@ -27101,15 +28609,19 @@ func (obj *flowIpv4) HasTotalLength() bool {
 	return obj.obj.TotalLength != nil
 }
 
+// SetTotalLength sets the PatternFlowIpv4TotalLength value in the FlowIpv4 object
+//  description is TBD
+func (obj *flowIpv4) SetTotalLength(value PatternFlowIpv4TotalLength) FlowIpv4 {
+	obj.TotalLength().SetMsg(value.Msg())
+
+	return obj
+}
+
 // Identification returns a PatternFlowIpv4Identification
 //  description is TBD
 func (obj *flowIpv4) Identification() PatternFlowIpv4Identification {
-
 	if obj.obj.Identification == nil {
-		obj.obj.Identification = &snappipb.PatternFlowIpv4Identification{}
-		newObj := &patternFlowIpv4Identification{obj: obj.obj.Identification}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Identification = NewPatternFlowIpv4Identification().Msg()
 	}
 	return &patternFlowIpv4Identification{obj: obj.obj.Identification}
 }
@@ -27120,15 +28632,19 @@ func (obj *flowIpv4) HasIdentification() bool {
 	return obj.obj.Identification != nil
 }
 
+// SetIdentification sets the PatternFlowIpv4Identification value in the FlowIpv4 object
+//  description is TBD
+func (obj *flowIpv4) SetIdentification(value PatternFlowIpv4Identification) FlowIpv4 {
+	obj.Identification().SetMsg(value.Msg())
+
+	return obj
+}
+
 // Reserved returns a PatternFlowIpv4Reserved
 //  description is TBD
 func (obj *flowIpv4) Reserved() PatternFlowIpv4Reserved {
-
 	if obj.obj.Reserved == nil {
-		obj.obj.Reserved = &snappipb.PatternFlowIpv4Reserved{}
-		newObj := &patternFlowIpv4Reserved{obj: obj.obj.Reserved}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Reserved = NewPatternFlowIpv4Reserved().Msg()
 	}
 	return &patternFlowIpv4Reserved{obj: obj.obj.Reserved}
 }
@@ -27139,15 +28655,19 @@ func (obj *flowIpv4) HasReserved() bool {
 	return obj.obj.Reserved != nil
 }
 
+// SetReserved sets the PatternFlowIpv4Reserved value in the FlowIpv4 object
+//  description is TBD
+func (obj *flowIpv4) SetReserved(value PatternFlowIpv4Reserved) FlowIpv4 {
+	obj.Reserved().SetMsg(value.Msg())
+
+	return obj
+}
+
 // DontFragment returns a PatternFlowIpv4DontFragment
 //  description is TBD
 func (obj *flowIpv4) DontFragment() PatternFlowIpv4DontFragment {
-
 	if obj.obj.DontFragment == nil {
-		obj.obj.DontFragment = &snappipb.PatternFlowIpv4DontFragment{}
-		newObj := &patternFlowIpv4DontFragment{obj: obj.obj.DontFragment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.DontFragment = NewPatternFlowIpv4DontFragment().Msg()
 	}
 	return &patternFlowIpv4DontFragment{obj: obj.obj.DontFragment}
 }
@@ -27158,15 +28678,19 @@ func (obj *flowIpv4) HasDontFragment() bool {
 	return obj.obj.DontFragment != nil
 }
 
+// SetDontFragment sets the PatternFlowIpv4DontFragment value in the FlowIpv4 object
+//  description is TBD
+func (obj *flowIpv4) SetDontFragment(value PatternFlowIpv4DontFragment) FlowIpv4 {
+	obj.DontFragment().SetMsg(value.Msg())
+
+	return obj
+}
+
 // MoreFragments returns a PatternFlowIpv4MoreFragments
 //  description is TBD
 func (obj *flowIpv4) MoreFragments() PatternFlowIpv4MoreFragments {
-
 	if obj.obj.MoreFragments == nil {
-		obj.obj.MoreFragments = &snappipb.PatternFlowIpv4MoreFragments{}
-		newObj := &patternFlowIpv4MoreFragments{obj: obj.obj.MoreFragments}
-		newObj.setDefault()
-		return newObj
+		obj.obj.MoreFragments = NewPatternFlowIpv4MoreFragments().Msg()
 	}
 	return &patternFlowIpv4MoreFragments{obj: obj.obj.MoreFragments}
 }
@@ -27177,15 +28701,19 @@ func (obj *flowIpv4) HasMoreFragments() bool {
 	return obj.obj.MoreFragments != nil
 }
 
+// SetMoreFragments sets the PatternFlowIpv4MoreFragments value in the FlowIpv4 object
+//  description is TBD
+func (obj *flowIpv4) SetMoreFragments(value PatternFlowIpv4MoreFragments) FlowIpv4 {
+	obj.MoreFragments().SetMsg(value.Msg())
+
+	return obj
+}
+
 // FragmentOffset returns a PatternFlowIpv4FragmentOffset
 //  description is TBD
 func (obj *flowIpv4) FragmentOffset() PatternFlowIpv4FragmentOffset {
-
 	if obj.obj.FragmentOffset == nil {
-		obj.obj.FragmentOffset = &snappipb.PatternFlowIpv4FragmentOffset{}
-		newObj := &patternFlowIpv4FragmentOffset{obj: obj.obj.FragmentOffset}
-		newObj.setDefault()
-		return newObj
+		obj.obj.FragmentOffset = NewPatternFlowIpv4FragmentOffset().Msg()
 	}
 	return &patternFlowIpv4FragmentOffset{obj: obj.obj.FragmentOffset}
 }
@@ -27196,15 +28724,19 @@ func (obj *flowIpv4) HasFragmentOffset() bool {
 	return obj.obj.FragmentOffset != nil
 }
 
+// SetFragmentOffset sets the PatternFlowIpv4FragmentOffset value in the FlowIpv4 object
+//  description is TBD
+func (obj *flowIpv4) SetFragmentOffset(value PatternFlowIpv4FragmentOffset) FlowIpv4 {
+	obj.FragmentOffset().SetMsg(value.Msg())
+
+	return obj
+}
+
 // TimeToLive returns a PatternFlowIpv4TimeToLive
 //  description is TBD
 func (obj *flowIpv4) TimeToLive() PatternFlowIpv4TimeToLive {
-
 	if obj.obj.TimeToLive == nil {
-		obj.obj.TimeToLive = &snappipb.PatternFlowIpv4TimeToLive{}
-		newObj := &patternFlowIpv4TimeToLive{obj: obj.obj.TimeToLive}
-		newObj.setDefault()
-		return newObj
+		obj.obj.TimeToLive = NewPatternFlowIpv4TimeToLive().Msg()
 	}
 	return &patternFlowIpv4TimeToLive{obj: obj.obj.TimeToLive}
 }
@@ -27215,15 +28747,19 @@ func (obj *flowIpv4) HasTimeToLive() bool {
 	return obj.obj.TimeToLive != nil
 }
 
+// SetTimeToLive sets the PatternFlowIpv4TimeToLive value in the FlowIpv4 object
+//  description is TBD
+func (obj *flowIpv4) SetTimeToLive(value PatternFlowIpv4TimeToLive) FlowIpv4 {
+	obj.TimeToLive().SetMsg(value.Msg())
+
+	return obj
+}
+
 // Protocol returns a PatternFlowIpv4Protocol
 //  description is TBD
 func (obj *flowIpv4) Protocol() PatternFlowIpv4Protocol {
-
 	if obj.obj.Protocol == nil {
-		obj.obj.Protocol = &snappipb.PatternFlowIpv4Protocol{}
-		newObj := &patternFlowIpv4Protocol{obj: obj.obj.Protocol}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Protocol = NewPatternFlowIpv4Protocol().Msg()
 	}
 	return &patternFlowIpv4Protocol{obj: obj.obj.Protocol}
 }
@@ -27234,15 +28770,19 @@ func (obj *flowIpv4) HasProtocol() bool {
 	return obj.obj.Protocol != nil
 }
 
+// SetProtocol sets the PatternFlowIpv4Protocol value in the FlowIpv4 object
+//  description is TBD
+func (obj *flowIpv4) SetProtocol(value PatternFlowIpv4Protocol) FlowIpv4 {
+	obj.Protocol().SetMsg(value.Msg())
+
+	return obj
+}
+
 // HeaderChecksum returns a PatternFlowIpv4HeaderChecksum
 //  description is TBD
 func (obj *flowIpv4) HeaderChecksum() PatternFlowIpv4HeaderChecksum {
-
 	if obj.obj.HeaderChecksum == nil {
-		obj.obj.HeaderChecksum = &snappipb.PatternFlowIpv4HeaderChecksum{}
-		newObj := &patternFlowIpv4HeaderChecksum{obj: obj.obj.HeaderChecksum}
-		newObj.setDefault()
-		return newObj
+		obj.obj.HeaderChecksum = NewPatternFlowIpv4HeaderChecksum().Msg()
 	}
 	return &patternFlowIpv4HeaderChecksum{obj: obj.obj.HeaderChecksum}
 }
@@ -27253,15 +28793,19 @@ func (obj *flowIpv4) HasHeaderChecksum() bool {
 	return obj.obj.HeaderChecksum != nil
 }
 
+// SetHeaderChecksum sets the PatternFlowIpv4HeaderChecksum value in the FlowIpv4 object
+//  description is TBD
+func (obj *flowIpv4) SetHeaderChecksum(value PatternFlowIpv4HeaderChecksum) FlowIpv4 {
+	obj.HeaderChecksum().SetMsg(value.Msg())
+
+	return obj
+}
+
 // Src returns a PatternFlowIpv4Src
 //  description is TBD
 func (obj *flowIpv4) Src() PatternFlowIpv4Src {
-
 	if obj.obj.Src == nil {
-		obj.obj.Src = &snappipb.PatternFlowIpv4Src{}
-		newObj := &patternFlowIpv4Src{obj: obj.obj.Src}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Src = NewPatternFlowIpv4Src().Msg()
 	}
 	return &patternFlowIpv4Src{obj: obj.obj.Src}
 }
@@ -27272,15 +28816,19 @@ func (obj *flowIpv4) HasSrc() bool {
 	return obj.obj.Src != nil
 }
 
+// SetSrc sets the PatternFlowIpv4Src value in the FlowIpv4 object
+//  description is TBD
+func (obj *flowIpv4) SetSrc(value PatternFlowIpv4Src) FlowIpv4 {
+	obj.Src().SetMsg(value.Msg())
+
+	return obj
+}
+
 // Dst returns a PatternFlowIpv4Dst
 //  description is TBD
 func (obj *flowIpv4) Dst() PatternFlowIpv4Dst {
-
 	if obj.obj.Dst == nil {
-		obj.obj.Dst = &snappipb.PatternFlowIpv4Dst{}
-		newObj := &patternFlowIpv4Dst{obj: obj.obj.Dst}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Dst = NewPatternFlowIpv4Dst().Msg()
 	}
 	return &patternFlowIpv4Dst{obj: obj.obj.Dst}
 }
@@ -27289,6 +28837,14 @@ func (obj *flowIpv4) Dst() PatternFlowIpv4Dst {
 //  description is TBD
 func (obj *flowIpv4) HasDst() bool {
 	return obj.obj.Dst != nil
+}
+
+// SetDst sets the PatternFlowIpv4Dst value in the FlowIpv4 object
+//  description is TBD
+func (obj *flowIpv4) SetDst(value PatternFlowIpv4Dst) FlowIpv4 {
+	obj.Dst().SetMsg(value.Msg())
+
+	return obj
 }
 
 func (obj *flowIpv4) validateObj(set_default bool) {
@@ -27361,12 +28917,18 @@ type flowIpv6 struct {
 	obj *snappipb.FlowIpv6
 }
 
+func NewFlowIpv6() FlowIpv6 {
+	obj := flowIpv6{obj: &snappipb.FlowIpv6{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *flowIpv6) Msg() *snappipb.FlowIpv6 {
 	return obj.obj
 }
 
 func (obj *flowIpv6) SetMsg(msg *snappipb.FlowIpv6) FlowIpv6 {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -27487,32 +29049,36 @@ type FlowIpv6 interface {
 	validateObj(set_default bool)
 	setDefault()
 	Version() PatternFlowIpv6Version
+	SetVersion(value PatternFlowIpv6Version) FlowIpv6
 	HasVersion() bool
 	TrafficClass() PatternFlowIpv6TrafficClass
+	SetTrafficClass(value PatternFlowIpv6TrafficClass) FlowIpv6
 	HasTrafficClass() bool
 	FlowLabel() PatternFlowIpv6FlowLabel
+	SetFlowLabel(value PatternFlowIpv6FlowLabel) FlowIpv6
 	HasFlowLabel() bool
 	PayloadLength() PatternFlowIpv6PayloadLength
+	SetPayloadLength(value PatternFlowIpv6PayloadLength) FlowIpv6
 	HasPayloadLength() bool
 	NextHeader() PatternFlowIpv6NextHeader
+	SetNextHeader(value PatternFlowIpv6NextHeader) FlowIpv6
 	HasNextHeader() bool
 	HopLimit() PatternFlowIpv6HopLimit
+	SetHopLimit(value PatternFlowIpv6HopLimit) FlowIpv6
 	HasHopLimit() bool
 	Src() PatternFlowIpv6Src
+	SetSrc(value PatternFlowIpv6Src) FlowIpv6
 	HasSrc() bool
 	Dst() PatternFlowIpv6Dst
+	SetDst(value PatternFlowIpv6Dst) FlowIpv6
 	HasDst() bool
 }
 
 // Version returns a PatternFlowIpv6Version
 //  description is TBD
 func (obj *flowIpv6) Version() PatternFlowIpv6Version {
-
 	if obj.obj.Version == nil {
-		obj.obj.Version = &snappipb.PatternFlowIpv6Version{}
-		newObj := &patternFlowIpv6Version{obj: obj.obj.Version}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Version = NewPatternFlowIpv6Version().Msg()
 	}
 	return &patternFlowIpv6Version{obj: obj.obj.Version}
 }
@@ -27523,15 +29089,19 @@ func (obj *flowIpv6) HasVersion() bool {
 	return obj.obj.Version != nil
 }
 
+// SetVersion sets the PatternFlowIpv6Version value in the FlowIpv6 object
+//  description is TBD
+func (obj *flowIpv6) SetVersion(value PatternFlowIpv6Version) FlowIpv6 {
+	obj.Version().SetMsg(value.Msg())
+
+	return obj
+}
+
 // TrafficClass returns a PatternFlowIpv6TrafficClass
 //  description is TBD
 func (obj *flowIpv6) TrafficClass() PatternFlowIpv6TrafficClass {
-
 	if obj.obj.TrafficClass == nil {
-		obj.obj.TrafficClass = &snappipb.PatternFlowIpv6TrafficClass{}
-		newObj := &patternFlowIpv6TrafficClass{obj: obj.obj.TrafficClass}
-		newObj.setDefault()
-		return newObj
+		obj.obj.TrafficClass = NewPatternFlowIpv6TrafficClass().Msg()
 	}
 	return &patternFlowIpv6TrafficClass{obj: obj.obj.TrafficClass}
 }
@@ -27542,15 +29112,19 @@ func (obj *flowIpv6) HasTrafficClass() bool {
 	return obj.obj.TrafficClass != nil
 }
 
+// SetTrafficClass sets the PatternFlowIpv6TrafficClass value in the FlowIpv6 object
+//  description is TBD
+func (obj *flowIpv6) SetTrafficClass(value PatternFlowIpv6TrafficClass) FlowIpv6 {
+	obj.TrafficClass().SetMsg(value.Msg())
+
+	return obj
+}
+
 // FlowLabel returns a PatternFlowIpv6FlowLabel
 //  description is TBD
 func (obj *flowIpv6) FlowLabel() PatternFlowIpv6FlowLabel {
-
 	if obj.obj.FlowLabel == nil {
-		obj.obj.FlowLabel = &snappipb.PatternFlowIpv6FlowLabel{}
-		newObj := &patternFlowIpv6FlowLabel{obj: obj.obj.FlowLabel}
-		newObj.setDefault()
-		return newObj
+		obj.obj.FlowLabel = NewPatternFlowIpv6FlowLabel().Msg()
 	}
 	return &patternFlowIpv6FlowLabel{obj: obj.obj.FlowLabel}
 }
@@ -27561,15 +29135,19 @@ func (obj *flowIpv6) HasFlowLabel() bool {
 	return obj.obj.FlowLabel != nil
 }
 
+// SetFlowLabel sets the PatternFlowIpv6FlowLabel value in the FlowIpv6 object
+//  description is TBD
+func (obj *flowIpv6) SetFlowLabel(value PatternFlowIpv6FlowLabel) FlowIpv6 {
+	obj.FlowLabel().SetMsg(value.Msg())
+
+	return obj
+}
+
 // PayloadLength returns a PatternFlowIpv6PayloadLength
 //  description is TBD
 func (obj *flowIpv6) PayloadLength() PatternFlowIpv6PayloadLength {
-
 	if obj.obj.PayloadLength == nil {
-		obj.obj.PayloadLength = &snappipb.PatternFlowIpv6PayloadLength{}
-		newObj := &patternFlowIpv6PayloadLength{obj: obj.obj.PayloadLength}
-		newObj.setDefault()
-		return newObj
+		obj.obj.PayloadLength = NewPatternFlowIpv6PayloadLength().Msg()
 	}
 	return &patternFlowIpv6PayloadLength{obj: obj.obj.PayloadLength}
 }
@@ -27580,15 +29158,19 @@ func (obj *flowIpv6) HasPayloadLength() bool {
 	return obj.obj.PayloadLength != nil
 }
 
+// SetPayloadLength sets the PatternFlowIpv6PayloadLength value in the FlowIpv6 object
+//  description is TBD
+func (obj *flowIpv6) SetPayloadLength(value PatternFlowIpv6PayloadLength) FlowIpv6 {
+	obj.PayloadLength().SetMsg(value.Msg())
+
+	return obj
+}
+
 // NextHeader returns a PatternFlowIpv6NextHeader
 //  description is TBD
 func (obj *flowIpv6) NextHeader() PatternFlowIpv6NextHeader {
-
 	if obj.obj.NextHeader == nil {
-		obj.obj.NextHeader = &snappipb.PatternFlowIpv6NextHeader{}
-		newObj := &patternFlowIpv6NextHeader{obj: obj.obj.NextHeader}
-		newObj.setDefault()
-		return newObj
+		obj.obj.NextHeader = NewPatternFlowIpv6NextHeader().Msg()
 	}
 	return &patternFlowIpv6NextHeader{obj: obj.obj.NextHeader}
 }
@@ -27599,15 +29181,19 @@ func (obj *flowIpv6) HasNextHeader() bool {
 	return obj.obj.NextHeader != nil
 }
 
+// SetNextHeader sets the PatternFlowIpv6NextHeader value in the FlowIpv6 object
+//  description is TBD
+func (obj *flowIpv6) SetNextHeader(value PatternFlowIpv6NextHeader) FlowIpv6 {
+	obj.NextHeader().SetMsg(value.Msg())
+
+	return obj
+}
+
 // HopLimit returns a PatternFlowIpv6HopLimit
 //  description is TBD
 func (obj *flowIpv6) HopLimit() PatternFlowIpv6HopLimit {
-
 	if obj.obj.HopLimit == nil {
-		obj.obj.HopLimit = &snappipb.PatternFlowIpv6HopLimit{}
-		newObj := &patternFlowIpv6HopLimit{obj: obj.obj.HopLimit}
-		newObj.setDefault()
-		return newObj
+		obj.obj.HopLimit = NewPatternFlowIpv6HopLimit().Msg()
 	}
 	return &patternFlowIpv6HopLimit{obj: obj.obj.HopLimit}
 }
@@ -27618,15 +29204,19 @@ func (obj *flowIpv6) HasHopLimit() bool {
 	return obj.obj.HopLimit != nil
 }
 
+// SetHopLimit sets the PatternFlowIpv6HopLimit value in the FlowIpv6 object
+//  description is TBD
+func (obj *flowIpv6) SetHopLimit(value PatternFlowIpv6HopLimit) FlowIpv6 {
+	obj.HopLimit().SetMsg(value.Msg())
+
+	return obj
+}
+
 // Src returns a PatternFlowIpv6Src
 //  description is TBD
 func (obj *flowIpv6) Src() PatternFlowIpv6Src {
-
 	if obj.obj.Src == nil {
-		obj.obj.Src = &snappipb.PatternFlowIpv6Src{}
-		newObj := &patternFlowIpv6Src{obj: obj.obj.Src}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Src = NewPatternFlowIpv6Src().Msg()
 	}
 	return &patternFlowIpv6Src{obj: obj.obj.Src}
 }
@@ -27637,15 +29227,19 @@ func (obj *flowIpv6) HasSrc() bool {
 	return obj.obj.Src != nil
 }
 
+// SetSrc sets the PatternFlowIpv6Src value in the FlowIpv6 object
+//  description is TBD
+func (obj *flowIpv6) SetSrc(value PatternFlowIpv6Src) FlowIpv6 {
+	obj.Src().SetMsg(value.Msg())
+
+	return obj
+}
+
 // Dst returns a PatternFlowIpv6Dst
 //  description is TBD
 func (obj *flowIpv6) Dst() PatternFlowIpv6Dst {
-
 	if obj.obj.Dst == nil {
-		obj.obj.Dst = &snappipb.PatternFlowIpv6Dst{}
-		newObj := &patternFlowIpv6Dst{obj: obj.obj.Dst}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Dst = NewPatternFlowIpv6Dst().Msg()
 	}
 	return &patternFlowIpv6Dst{obj: obj.obj.Dst}
 }
@@ -27654,6 +29248,14 @@ func (obj *flowIpv6) Dst() PatternFlowIpv6Dst {
 //  description is TBD
 func (obj *flowIpv6) HasDst() bool {
 	return obj.obj.Dst != nil
+}
+
+// SetDst sets the PatternFlowIpv6Dst value in the FlowIpv6 object
+//  description is TBD
+func (obj *flowIpv6) SetDst(value PatternFlowIpv6Dst) FlowIpv6 {
+	obj.Dst().SetMsg(value.Msg())
+
+	return obj
 }
 
 func (obj *flowIpv6) validateObj(set_default bool) {
@@ -27702,12 +29304,18 @@ type flowPfcPause struct {
 	obj *snappipb.FlowPfcPause
 }
 
+func NewFlowPfcPause() FlowPfcPause {
+	obj := flowPfcPause{obj: &snappipb.FlowPfcPause{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *flowPfcPause) Msg() *snappipb.FlowPfcPause {
 	return obj.obj
 }
 
 func (obj *flowPfcPause) SetMsg(msg *snappipb.FlowPfcPause) FlowPfcPause {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -27828,42 +29436,51 @@ type FlowPfcPause interface {
 	validateObj(set_default bool)
 	setDefault()
 	Dst() PatternFlowPfcPauseDst
+	SetDst(value PatternFlowPfcPauseDst) FlowPfcPause
 	HasDst() bool
 	Src() PatternFlowPfcPauseSrc
+	SetSrc(value PatternFlowPfcPauseSrc) FlowPfcPause
 	HasSrc() bool
 	EtherType() PatternFlowPfcPauseEtherType
+	SetEtherType(value PatternFlowPfcPauseEtherType) FlowPfcPause
 	HasEtherType() bool
 	ControlOpCode() PatternFlowPfcPauseControlOpCode
+	SetControlOpCode(value PatternFlowPfcPauseControlOpCode) FlowPfcPause
 	HasControlOpCode() bool
 	ClassEnableVector() PatternFlowPfcPauseClassEnableVector
+	SetClassEnableVector(value PatternFlowPfcPauseClassEnableVector) FlowPfcPause
 	HasClassEnableVector() bool
 	PauseClass0() PatternFlowPfcPausePauseClass0
+	SetPauseClass0(value PatternFlowPfcPausePauseClass0) FlowPfcPause
 	HasPauseClass0() bool
 	PauseClass1() PatternFlowPfcPausePauseClass1
+	SetPauseClass1(value PatternFlowPfcPausePauseClass1) FlowPfcPause
 	HasPauseClass1() bool
 	PauseClass2() PatternFlowPfcPausePauseClass2
+	SetPauseClass2(value PatternFlowPfcPausePauseClass2) FlowPfcPause
 	HasPauseClass2() bool
 	PauseClass3() PatternFlowPfcPausePauseClass3
+	SetPauseClass3(value PatternFlowPfcPausePauseClass3) FlowPfcPause
 	HasPauseClass3() bool
 	PauseClass4() PatternFlowPfcPausePauseClass4
+	SetPauseClass4(value PatternFlowPfcPausePauseClass4) FlowPfcPause
 	HasPauseClass4() bool
 	PauseClass5() PatternFlowPfcPausePauseClass5
+	SetPauseClass5(value PatternFlowPfcPausePauseClass5) FlowPfcPause
 	HasPauseClass5() bool
 	PauseClass6() PatternFlowPfcPausePauseClass6
+	SetPauseClass6(value PatternFlowPfcPausePauseClass6) FlowPfcPause
 	HasPauseClass6() bool
 	PauseClass7() PatternFlowPfcPausePauseClass7
+	SetPauseClass7(value PatternFlowPfcPausePauseClass7) FlowPfcPause
 	HasPauseClass7() bool
 }
 
 // Dst returns a PatternFlowPfcPauseDst
 //  description is TBD
 func (obj *flowPfcPause) Dst() PatternFlowPfcPauseDst {
-
 	if obj.obj.Dst == nil {
-		obj.obj.Dst = &snappipb.PatternFlowPfcPauseDst{}
-		newObj := &patternFlowPfcPauseDst{obj: obj.obj.Dst}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Dst = NewPatternFlowPfcPauseDst().Msg()
 	}
 	return &patternFlowPfcPauseDst{obj: obj.obj.Dst}
 }
@@ -27874,15 +29491,19 @@ func (obj *flowPfcPause) HasDst() bool {
 	return obj.obj.Dst != nil
 }
 
+// SetDst sets the PatternFlowPfcPauseDst value in the FlowPfcPause object
+//  description is TBD
+func (obj *flowPfcPause) SetDst(value PatternFlowPfcPauseDst) FlowPfcPause {
+	obj.Dst().SetMsg(value.Msg())
+
+	return obj
+}
+
 // Src returns a PatternFlowPfcPauseSrc
 //  description is TBD
 func (obj *flowPfcPause) Src() PatternFlowPfcPauseSrc {
-
 	if obj.obj.Src == nil {
-		obj.obj.Src = &snappipb.PatternFlowPfcPauseSrc{}
-		newObj := &patternFlowPfcPauseSrc{obj: obj.obj.Src}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Src = NewPatternFlowPfcPauseSrc().Msg()
 	}
 	return &patternFlowPfcPauseSrc{obj: obj.obj.Src}
 }
@@ -27893,15 +29514,19 @@ func (obj *flowPfcPause) HasSrc() bool {
 	return obj.obj.Src != nil
 }
 
+// SetSrc sets the PatternFlowPfcPauseSrc value in the FlowPfcPause object
+//  description is TBD
+func (obj *flowPfcPause) SetSrc(value PatternFlowPfcPauseSrc) FlowPfcPause {
+	obj.Src().SetMsg(value.Msg())
+
+	return obj
+}
+
 // EtherType returns a PatternFlowPfcPauseEtherType
 //  description is TBD
 func (obj *flowPfcPause) EtherType() PatternFlowPfcPauseEtherType {
-
 	if obj.obj.EtherType == nil {
-		obj.obj.EtherType = &snappipb.PatternFlowPfcPauseEtherType{}
-		newObj := &patternFlowPfcPauseEtherType{obj: obj.obj.EtherType}
-		newObj.setDefault()
-		return newObj
+		obj.obj.EtherType = NewPatternFlowPfcPauseEtherType().Msg()
 	}
 	return &patternFlowPfcPauseEtherType{obj: obj.obj.EtherType}
 }
@@ -27912,15 +29537,19 @@ func (obj *flowPfcPause) HasEtherType() bool {
 	return obj.obj.EtherType != nil
 }
 
+// SetEtherType sets the PatternFlowPfcPauseEtherType value in the FlowPfcPause object
+//  description is TBD
+func (obj *flowPfcPause) SetEtherType(value PatternFlowPfcPauseEtherType) FlowPfcPause {
+	obj.EtherType().SetMsg(value.Msg())
+
+	return obj
+}
+
 // ControlOpCode returns a PatternFlowPfcPauseControlOpCode
 //  description is TBD
 func (obj *flowPfcPause) ControlOpCode() PatternFlowPfcPauseControlOpCode {
-
 	if obj.obj.ControlOpCode == nil {
-		obj.obj.ControlOpCode = &snappipb.PatternFlowPfcPauseControlOpCode{}
-		newObj := &patternFlowPfcPauseControlOpCode{obj: obj.obj.ControlOpCode}
-		newObj.setDefault()
-		return newObj
+		obj.obj.ControlOpCode = NewPatternFlowPfcPauseControlOpCode().Msg()
 	}
 	return &patternFlowPfcPauseControlOpCode{obj: obj.obj.ControlOpCode}
 }
@@ -27931,15 +29560,19 @@ func (obj *flowPfcPause) HasControlOpCode() bool {
 	return obj.obj.ControlOpCode != nil
 }
 
+// SetControlOpCode sets the PatternFlowPfcPauseControlOpCode value in the FlowPfcPause object
+//  description is TBD
+func (obj *flowPfcPause) SetControlOpCode(value PatternFlowPfcPauseControlOpCode) FlowPfcPause {
+	obj.ControlOpCode().SetMsg(value.Msg())
+
+	return obj
+}
+
 // ClassEnableVector returns a PatternFlowPfcPauseClassEnableVector
 //  description is TBD
 func (obj *flowPfcPause) ClassEnableVector() PatternFlowPfcPauseClassEnableVector {
-
 	if obj.obj.ClassEnableVector == nil {
-		obj.obj.ClassEnableVector = &snappipb.PatternFlowPfcPauseClassEnableVector{}
-		newObj := &patternFlowPfcPauseClassEnableVector{obj: obj.obj.ClassEnableVector}
-		newObj.setDefault()
-		return newObj
+		obj.obj.ClassEnableVector = NewPatternFlowPfcPauseClassEnableVector().Msg()
 	}
 	return &patternFlowPfcPauseClassEnableVector{obj: obj.obj.ClassEnableVector}
 }
@@ -27950,15 +29583,19 @@ func (obj *flowPfcPause) HasClassEnableVector() bool {
 	return obj.obj.ClassEnableVector != nil
 }
 
+// SetClassEnableVector sets the PatternFlowPfcPauseClassEnableVector value in the FlowPfcPause object
+//  description is TBD
+func (obj *flowPfcPause) SetClassEnableVector(value PatternFlowPfcPauseClassEnableVector) FlowPfcPause {
+	obj.ClassEnableVector().SetMsg(value.Msg())
+
+	return obj
+}
+
 // PauseClass0 returns a PatternFlowPfcPausePauseClass0
 //  description is TBD
 func (obj *flowPfcPause) PauseClass0() PatternFlowPfcPausePauseClass0 {
-
 	if obj.obj.PauseClass_0 == nil {
-		obj.obj.PauseClass_0 = &snappipb.PatternFlowPfcPausePauseClass0{}
-		newObj := &patternFlowPfcPausePauseClass0{obj: obj.obj.PauseClass_0}
-		newObj.setDefault()
-		return newObj
+		obj.obj.PauseClass_0 = NewPatternFlowPfcPausePauseClass0().Msg()
 	}
 	return &patternFlowPfcPausePauseClass0{obj: obj.obj.PauseClass_0}
 }
@@ -27969,15 +29606,19 @@ func (obj *flowPfcPause) HasPauseClass0() bool {
 	return obj.obj.PauseClass_0 != nil
 }
 
+// SetPauseClass0 sets the PatternFlowPfcPausePauseClass0 value in the FlowPfcPause object
+//  description is TBD
+func (obj *flowPfcPause) SetPauseClass0(value PatternFlowPfcPausePauseClass0) FlowPfcPause {
+	obj.PauseClass0().SetMsg(value.Msg())
+
+	return obj
+}
+
 // PauseClass1 returns a PatternFlowPfcPausePauseClass1
 //  description is TBD
 func (obj *flowPfcPause) PauseClass1() PatternFlowPfcPausePauseClass1 {
-
 	if obj.obj.PauseClass_1 == nil {
-		obj.obj.PauseClass_1 = &snappipb.PatternFlowPfcPausePauseClass1{}
-		newObj := &patternFlowPfcPausePauseClass1{obj: obj.obj.PauseClass_1}
-		newObj.setDefault()
-		return newObj
+		obj.obj.PauseClass_1 = NewPatternFlowPfcPausePauseClass1().Msg()
 	}
 	return &patternFlowPfcPausePauseClass1{obj: obj.obj.PauseClass_1}
 }
@@ -27988,15 +29629,19 @@ func (obj *flowPfcPause) HasPauseClass1() bool {
 	return obj.obj.PauseClass_1 != nil
 }
 
+// SetPauseClass1 sets the PatternFlowPfcPausePauseClass1 value in the FlowPfcPause object
+//  description is TBD
+func (obj *flowPfcPause) SetPauseClass1(value PatternFlowPfcPausePauseClass1) FlowPfcPause {
+	obj.PauseClass1().SetMsg(value.Msg())
+
+	return obj
+}
+
 // PauseClass2 returns a PatternFlowPfcPausePauseClass2
 //  description is TBD
 func (obj *flowPfcPause) PauseClass2() PatternFlowPfcPausePauseClass2 {
-
 	if obj.obj.PauseClass_2 == nil {
-		obj.obj.PauseClass_2 = &snappipb.PatternFlowPfcPausePauseClass2{}
-		newObj := &patternFlowPfcPausePauseClass2{obj: obj.obj.PauseClass_2}
-		newObj.setDefault()
-		return newObj
+		obj.obj.PauseClass_2 = NewPatternFlowPfcPausePauseClass2().Msg()
 	}
 	return &patternFlowPfcPausePauseClass2{obj: obj.obj.PauseClass_2}
 }
@@ -28007,15 +29652,19 @@ func (obj *flowPfcPause) HasPauseClass2() bool {
 	return obj.obj.PauseClass_2 != nil
 }
 
+// SetPauseClass2 sets the PatternFlowPfcPausePauseClass2 value in the FlowPfcPause object
+//  description is TBD
+func (obj *flowPfcPause) SetPauseClass2(value PatternFlowPfcPausePauseClass2) FlowPfcPause {
+	obj.PauseClass2().SetMsg(value.Msg())
+
+	return obj
+}
+
 // PauseClass3 returns a PatternFlowPfcPausePauseClass3
 //  description is TBD
 func (obj *flowPfcPause) PauseClass3() PatternFlowPfcPausePauseClass3 {
-
 	if obj.obj.PauseClass_3 == nil {
-		obj.obj.PauseClass_3 = &snappipb.PatternFlowPfcPausePauseClass3{}
-		newObj := &patternFlowPfcPausePauseClass3{obj: obj.obj.PauseClass_3}
-		newObj.setDefault()
-		return newObj
+		obj.obj.PauseClass_3 = NewPatternFlowPfcPausePauseClass3().Msg()
 	}
 	return &patternFlowPfcPausePauseClass3{obj: obj.obj.PauseClass_3}
 }
@@ -28026,15 +29675,19 @@ func (obj *flowPfcPause) HasPauseClass3() bool {
 	return obj.obj.PauseClass_3 != nil
 }
 
+// SetPauseClass3 sets the PatternFlowPfcPausePauseClass3 value in the FlowPfcPause object
+//  description is TBD
+func (obj *flowPfcPause) SetPauseClass3(value PatternFlowPfcPausePauseClass3) FlowPfcPause {
+	obj.PauseClass3().SetMsg(value.Msg())
+
+	return obj
+}
+
 // PauseClass4 returns a PatternFlowPfcPausePauseClass4
 //  description is TBD
 func (obj *flowPfcPause) PauseClass4() PatternFlowPfcPausePauseClass4 {
-
 	if obj.obj.PauseClass_4 == nil {
-		obj.obj.PauseClass_4 = &snappipb.PatternFlowPfcPausePauseClass4{}
-		newObj := &patternFlowPfcPausePauseClass4{obj: obj.obj.PauseClass_4}
-		newObj.setDefault()
-		return newObj
+		obj.obj.PauseClass_4 = NewPatternFlowPfcPausePauseClass4().Msg()
 	}
 	return &patternFlowPfcPausePauseClass4{obj: obj.obj.PauseClass_4}
 }
@@ -28045,15 +29698,19 @@ func (obj *flowPfcPause) HasPauseClass4() bool {
 	return obj.obj.PauseClass_4 != nil
 }
 
+// SetPauseClass4 sets the PatternFlowPfcPausePauseClass4 value in the FlowPfcPause object
+//  description is TBD
+func (obj *flowPfcPause) SetPauseClass4(value PatternFlowPfcPausePauseClass4) FlowPfcPause {
+	obj.PauseClass4().SetMsg(value.Msg())
+
+	return obj
+}
+
 // PauseClass5 returns a PatternFlowPfcPausePauseClass5
 //  description is TBD
 func (obj *flowPfcPause) PauseClass5() PatternFlowPfcPausePauseClass5 {
-
 	if obj.obj.PauseClass_5 == nil {
-		obj.obj.PauseClass_5 = &snappipb.PatternFlowPfcPausePauseClass5{}
-		newObj := &patternFlowPfcPausePauseClass5{obj: obj.obj.PauseClass_5}
-		newObj.setDefault()
-		return newObj
+		obj.obj.PauseClass_5 = NewPatternFlowPfcPausePauseClass5().Msg()
 	}
 	return &patternFlowPfcPausePauseClass5{obj: obj.obj.PauseClass_5}
 }
@@ -28064,15 +29721,19 @@ func (obj *flowPfcPause) HasPauseClass5() bool {
 	return obj.obj.PauseClass_5 != nil
 }
 
+// SetPauseClass5 sets the PatternFlowPfcPausePauseClass5 value in the FlowPfcPause object
+//  description is TBD
+func (obj *flowPfcPause) SetPauseClass5(value PatternFlowPfcPausePauseClass5) FlowPfcPause {
+	obj.PauseClass5().SetMsg(value.Msg())
+
+	return obj
+}
+
 // PauseClass6 returns a PatternFlowPfcPausePauseClass6
 //  description is TBD
 func (obj *flowPfcPause) PauseClass6() PatternFlowPfcPausePauseClass6 {
-
 	if obj.obj.PauseClass_6 == nil {
-		obj.obj.PauseClass_6 = &snappipb.PatternFlowPfcPausePauseClass6{}
-		newObj := &patternFlowPfcPausePauseClass6{obj: obj.obj.PauseClass_6}
-		newObj.setDefault()
-		return newObj
+		obj.obj.PauseClass_6 = NewPatternFlowPfcPausePauseClass6().Msg()
 	}
 	return &patternFlowPfcPausePauseClass6{obj: obj.obj.PauseClass_6}
 }
@@ -28083,15 +29744,19 @@ func (obj *flowPfcPause) HasPauseClass6() bool {
 	return obj.obj.PauseClass_6 != nil
 }
 
+// SetPauseClass6 sets the PatternFlowPfcPausePauseClass6 value in the FlowPfcPause object
+//  description is TBD
+func (obj *flowPfcPause) SetPauseClass6(value PatternFlowPfcPausePauseClass6) FlowPfcPause {
+	obj.PauseClass6().SetMsg(value.Msg())
+
+	return obj
+}
+
 // PauseClass7 returns a PatternFlowPfcPausePauseClass7
 //  description is TBD
 func (obj *flowPfcPause) PauseClass7() PatternFlowPfcPausePauseClass7 {
-
 	if obj.obj.PauseClass_7 == nil {
-		obj.obj.PauseClass_7 = &snappipb.PatternFlowPfcPausePauseClass7{}
-		newObj := &patternFlowPfcPausePauseClass7{obj: obj.obj.PauseClass_7}
-		newObj.setDefault()
-		return newObj
+		obj.obj.PauseClass_7 = NewPatternFlowPfcPausePauseClass7().Msg()
 	}
 	return &patternFlowPfcPausePauseClass7{obj: obj.obj.PauseClass_7}
 }
@@ -28100,6 +29765,14 @@ func (obj *flowPfcPause) PauseClass7() PatternFlowPfcPausePauseClass7 {
 //  description is TBD
 func (obj *flowPfcPause) HasPauseClass7() bool {
 	return obj.obj.PauseClass_7 != nil
+}
+
+// SetPauseClass7 sets the PatternFlowPfcPausePauseClass7 value in the FlowPfcPause object
+//  description is TBD
+func (obj *flowPfcPause) SetPauseClass7(value PatternFlowPfcPausePauseClass7) FlowPfcPause {
+	obj.PauseClass7().SetMsg(value.Msg())
+
+	return obj
 }
 
 func (obj *flowPfcPause) validateObj(set_default bool) {
@@ -28168,12 +29841,18 @@ type flowEthernetPause struct {
 	obj *snappipb.FlowEthernetPause
 }
 
+func NewFlowEthernetPause() FlowEthernetPause {
+	obj := flowEthernetPause{obj: &snappipb.FlowEthernetPause{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *flowEthernetPause) Msg() *snappipb.FlowEthernetPause {
 	return obj.obj
 }
 
 func (obj *flowEthernetPause) SetMsg(msg *snappipb.FlowEthernetPause) FlowEthernetPause {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -28294,26 +29973,27 @@ type FlowEthernetPause interface {
 	validateObj(set_default bool)
 	setDefault()
 	Dst() PatternFlowEthernetPauseDst
+	SetDst(value PatternFlowEthernetPauseDst) FlowEthernetPause
 	HasDst() bool
 	Src() PatternFlowEthernetPauseSrc
+	SetSrc(value PatternFlowEthernetPauseSrc) FlowEthernetPause
 	HasSrc() bool
 	EtherType() PatternFlowEthernetPauseEtherType
+	SetEtherType(value PatternFlowEthernetPauseEtherType) FlowEthernetPause
 	HasEtherType() bool
 	ControlOpCode() PatternFlowEthernetPauseControlOpCode
+	SetControlOpCode(value PatternFlowEthernetPauseControlOpCode) FlowEthernetPause
 	HasControlOpCode() bool
 	Time() PatternFlowEthernetPauseTime
+	SetTime(value PatternFlowEthernetPauseTime) FlowEthernetPause
 	HasTime() bool
 }
 
 // Dst returns a PatternFlowEthernetPauseDst
 //  description is TBD
 func (obj *flowEthernetPause) Dst() PatternFlowEthernetPauseDst {
-
 	if obj.obj.Dst == nil {
-		obj.obj.Dst = &snappipb.PatternFlowEthernetPauseDst{}
-		newObj := &patternFlowEthernetPauseDst{obj: obj.obj.Dst}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Dst = NewPatternFlowEthernetPauseDst().Msg()
 	}
 	return &patternFlowEthernetPauseDst{obj: obj.obj.Dst}
 }
@@ -28324,15 +30004,19 @@ func (obj *flowEthernetPause) HasDst() bool {
 	return obj.obj.Dst != nil
 }
 
+// SetDst sets the PatternFlowEthernetPauseDst value in the FlowEthernetPause object
+//  description is TBD
+func (obj *flowEthernetPause) SetDst(value PatternFlowEthernetPauseDst) FlowEthernetPause {
+	obj.Dst().SetMsg(value.Msg())
+
+	return obj
+}
+
 // Src returns a PatternFlowEthernetPauseSrc
 //  description is TBD
 func (obj *flowEthernetPause) Src() PatternFlowEthernetPauseSrc {
-
 	if obj.obj.Src == nil {
-		obj.obj.Src = &snappipb.PatternFlowEthernetPauseSrc{}
-		newObj := &patternFlowEthernetPauseSrc{obj: obj.obj.Src}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Src = NewPatternFlowEthernetPauseSrc().Msg()
 	}
 	return &patternFlowEthernetPauseSrc{obj: obj.obj.Src}
 }
@@ -28343,15 +30027,19 @@ func (obj *flowEthernetPause) HasSrc() bool {
 	return obj.obj.Src != nil
 }
 
+// SetSrc sets the PatternFlowEthernetPauseSrc value in the FlowEthernetPause object
+//  description is TBD
+func (obj *flowEthernetPause) SetSrc(value PatternFlowEthernetPauseSrc) FlowEthernetPause {
+	obj.Src().SetMsg(value.Msg())
+
+	return obj
+}
+
 // EtherType returns a PatternFlowEthernetPauseEtherType
 //  description is TBD
 func (obj *flowEthernetPause) EtherType() PatternFlowEthernetPauseEtherType {
-
 	if obj.obj.EtherType == nil {
-		obj.obj.EtherType = &snappipb.PatternFlowEthernetPauseEtherType{}
-		newObj := &patternFlowEthernetPauseEtherType{obj: obj.obj.EtherType}
-		newObj.setDefault()
-		return newObj
+		obj.obj.EtherType = NewPatternFlowEthernetPauseEtherType().Msg()
 	}
 	return &patternFlowEthernetPauseEtherType{obj: obj.obj.EtherType}
 }
@@ -28362,15 +30050,19 @@ func (obj *flowEthernetPause) HasEtherType() bool {
 	return obj.obj.EtherType != nil
 }
 
+// SetEtherType sets the PatternFlowEthernetPauseEtherType value in the FlowEthernetPause object
+//  description is TBD
+func (obj *flowEthernetPause) SetEtherType(value PatternFlowEthernetPauseEtherType) FlowEthernetPause {
+	obj.EtherType().SetMsg(value.Msg())
+
+	return obj
+}
+
 // ControlOpCode returns a PatternFlowEthernetPauseControlOpCode
 //  description is TBD
 func (obj *flowEthernetPause) ControlOpCode() PatternFlowEthernetPauseControlOpCode {
-
 	if obj.obj.ControlOpCode == nil {
-		obj.obj.ControlOpCode = &snappipb.PatternFlowEthernetPauseControlOpCode{}
-		newObj := &patternFlowEthernetPauseControlOpCode{obj: obj.obj.ControlOpCode}
-		newObj.setDefault()
-		return newObj
+		obj.obj.ControlOpCode = NewPatternFlowEthernetPauseControlOpCode().Msg()
 	}
 	return &patternFlowEthernetPauseControlOpCode{obj: obj.obj.ControlOpCode}
 }
@@ -28381,15 +30073,19 @@ func (obj *flowEthernetPause) HasControlOpCode() bool {
 	return obj.obj.ControlOpCode != nil
 }
 
+// SetControlOpCode sets the PatternFlowEthernetPauseControlOpCode value in the FlowEthernetPause object
+//  description is TBD
+func (obj *flowEthernetPause) SetControlOpCode(value PatternFlowEthernetPauseControlOpCode) FlowEthernetPause {
+	obj.ControlOpCode().SetMsg(value.Msg())
+
+	return obj
+}
+
 // Time returns a PatternFlowEthernetPauseTime
 //  description is TBD
 func (obj *flowEthernetPause) Time() PatternFlowEthernetPauseTime {
-
 	if obj.obj.Time == nil {
-		obj.obj.Time = &snappipb.PatternFlowEthernetPauseTime{}
-		newObj := &patternFlowEthernetPauseTime{obj: obj.obj.Time}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Time = NewPatternFlowEthernetPauseTime().Msg()
 	}
 	return &patternFlowEthernetPauseTime{obj: obj.obj.Time}
 }
@@ -28398,6 +30094,14 @@ func (obj *flowEthernetPause) Time() PatternFlowEthernetPauseTime {
 //  description is TBD
 func (obj *flowEthernetPause) HasTime() bool {
 	return obj.obj.Time != nil
+}
+
+// SetTime sets the PatternFlowEthernetPauseTime value in the FlowEthernetPause object
+//  description is TBD
+func (obj *flowEthernetPause) SetTime(value PatternFlowEthernetPauseTime) FlowEthernetPause {
+	obj.Time().SetMsg(value.Msg())
+
+	return obj
 }
 
 func (obj *flowEthernetPause) validateObj(set_default bool) {
@@ -28434,12 +30138,18 @@ type flowTcp struct {
 	obj *snappipb.FlowTcp
 }
 
+func NewFlowTcp() FlowTcp {
+	obj := flowTcp{obj: &snappipb.FlowTcp{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *flowTcp) Msg() *snappipb.FlowTcp {
 	return obj.obj
 }
 
 func (obj *flowTcp) SetMsg(msg *snappipb.FlowTcp) FlowTcp {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -28560,46 +30270,57 @@ type FlowTcp interface {
 	validateObj(set_default bool)
 	setDefault()
 	SrcPort() PatternFlowTcpSrcPort
+	SetSrcPort(value PatternFlowTcpSrcPort) FlowTcp
 	HasSrcPort() bool
 	DstPort() PatternFlowTcpDstPort
+	SetDstPort(value PatternFlowTcpDstPort) FlowTcp
 	HasDstPort() bool
 	SeqNum() PatternFlowTcpSeqNum
+	SetSeqNum(value PatternFlowTcpSeqNum) FlowTcp
 	HasSeqNum() bool
 	AckNum() PatternFlowTcpAckNum
+	SetAckNum(value PatternFlowTcpAckNum) FlowTcp
 	HasAckNum() bool
 	DataOffset() PatternFlowTcpDataOffset
+	SetDataOffset(value PatternFlowTcpDataOffset) FlowTcp
 	HasDataOffset() bool
 	EcnNs() PatternFlowTcpEcnNs
+	SetEcnNs(value PatternFlowTcpEcnNs) FlowTcp
 	HasEcnNs() bool
 	EcnCwr() PatternFlowTcpEcnCwr
+	SetEcnCwr(value PatternFlowTcpEcnCwr) FlowTcp
 	HasEcnCwr() bool
 	EcnEcho() PatternFlowTcpEcnEcho
+	SetEcnEcho(value PatternFlowTcpEcnEcho) FlowTcp
 	HasEcnEcho() bool
 	CtlUrg() PatternFlowTcpCtlUrg
+	SetCtlUrg(value PatternFlowTcpCtlUrg) FlowTcp
 	HasCtlUrg() bool
 	CtlAck() PatternFlowTcpCtlAck
+	SetCtlAck(value PatternFlowTcpCtlAck) FlowTcp
 	HasCtlAck() bool
 	CtlPsh() PatternFlowTcpCtlPsh
+	SetCtlPsh(value PatternFlowTcpCtlPsh) FlowTcp
 	HasCtlPsh() bool
 	CtlRst() PatternFlowTcpCtlRst
+	SetCtlRst(value PatternFlowTcpCtlRst) FlowTcp
 	HasCtlRst() bool
 	CtlSyn() PatternFlowTcpCtlSyn
+	SetCtlSyn(value PatternFlowTcpCtlSyn) FlowTcp
 	HasCtlSyn() bool
 	CtlFin() PatternFlowTcpCtlFin
+	SetCtlFin(value PatternFlowTcpCtlFin) FlowTcp
 	HasCtlFin() bool
 	Window() PatternFlowTcpWindow
+	SetWindow(value PatternFlowTcpWindow) FlowTcp
 	HasWindow() bool
 }
 
 // SrcPort returns a PatternFlowTcpSrcPort
 //  description is TBD
 func (obj *flowTcp) SrcPort() PatternFlowTcpSrcPort {
-
 	if obj.obj.SrcPort == nil {
-		obj.obj.SrcPort = &snappipb.PatternFlowTcpSrcPort{}
-		newObj := &patternFlowTcpSrcPort{obj: obj.obj.SrcPort}
-		newObj.setDefault()
-		return newObj
+		obj.obj.SrcPort = NewPatternFlowTcpSrcPort().Msg()
 	}
 	return &patternFlowTcpSrcPort{obj: obj.obj.SrcPort}
 }
@@ -28610,15 +30331,19 @@ func (obj *flowTcp) HasSrcPort() bool {
 	return obj.obj.SrcPort != nil
 }
 
+// SetSrcPort sets the PatternFlowTcpSrcPort value in the FlowTcp object
+//  description is TBD
+func (obj *flowTcp) SetSrcPort(value PatternFlowTcpSrcPort) FlowTcp {
+	obj.SrcPort().SetMsg(value.Msg())
+
+	return obj
+}
+
 // DstPort returns a PatternFlowTcpDstPort
 //  description is TBD
 func (obj *flowTcp) DstPort() PatternFlowTcpDstPort {
-
 	if obj.obj.DstPort == nil {
-		obj.obj.DstPort = &snappipb.PatternFlowTcpDstPort{}
-		newObj := &patternFlowTcpDstPort{obj: obj.obj.DstPort}
-		newObj.setDefault()
-		return newObj
+		obj.obj.DstPort = NewPatternFlowTcpDstPort().Msg()
 	}
 	return &patternFlowTcpDstPort{obj: obj.obj.DstPort}
 }
@@ -28629,15 +30354,19 @@ func (obj *flowTcp) HasDstPort() bool {
 	return obj.obj.DstPort != nil
 }
 
+// SetDstPort sets the PatternFlowTcpDstPort value in the FlowTcp object
+//  description is TBD
+func (obj *flowTcp) SetDstPort(value PatternFlowTcpDstPort) FlowTcp {
+	obj.DstPort().SetMsg(value.Msg())
+
+	return obj
+}
+
 // SeqNum returns a PatternFlowTcpSeqNum
 //  description is TBD
 func (obj *flowTcp) SeqNum() PatternFlowTcpSeqNum {
-
 	if obj.obj.SeqNum == nil {
-		obj.obj.SeqNum = &snappipb.PatternFlowTcpSeqNum{}
-		newObj := &patternFlowTcpSeqNum{obj: obj.obj.SeqNum}
-		newObj.setDefault()
-		return newObj
+		obj.obj.SeqNum = NewPatternFlowTcpSeqNum().Msg()
 	}
 	return &patternFlowTcpSeqNum{obj: obj.obj.SeqNum}
 }
@@ -28648,15 +30377,19 @@ func (obj *flowTcp) HasSeqNum() bool {
 	return obj.obj.SeqNum != nil
 }
 
+// SetSeqNum sets the PatternFlowTcpSeqNum value in the FlowTcp object
+//  description is TBD
+func (obj *flowTcp) SetSeqNum(value PatternFlowTcpSeqNum) FlowTcp {
+	obj.SeqNum().SetMsg(value.Msg())
+
+	return obj
+}
+
 // AckNum returns a PatternFlowTcpAckNum
 //  description is TBD
 func (obj *flowTcp) AckNum() PatternFlowTcpAckNum {
-
 	if obj.obj.AckNum == nil {
-		obj.obj.AckNum = &snappipb.PatternFlowTcpAckNum{}
-		newObj := &patternFlowTcpAckNum{obj: obj.obj.AckNum}
-		newObj.setDefault()
-		return newObj
+		obj.obj.AckNum = NewPatternFlowTcpAckNum().Msg()
 	}
 	return &patternFlowTcpAckNum{obj: obj.obj.AckNum}
 }
@@ -28667,15 +30400,19 @@ func (obj *flowTcp) HasAckNum() bool {
 	return obj.obj.AckNum != nil
 }
 
+// SetAckNum sets the PatternFlowTcpAckNum value in the FlowTcp object
+//  description is TBD
+func (obj *flowTcp) SetAckNum(value PatternFlowTcpAckNum) FlowTcp {
+	obj.AckNum().SetMsg(value.Msg())
+
+	return obj
+}
+
 // DataOffset returns a PatternFlowTcpDataOffset
 //  description is TBD
 func (obj *flowTcp) DataOffset() PatternFlowTcpDataOffset {
-
 	if obj.obj.DataOffset == nil {
-		obj.obj.DataOffset = &snappipb.PatternFlowTcpDataOffset{}
-		newObj := &patternFlowTcpDataOffset{obj: obj.obj.DataOffset}
-		newObj.setDefault()
-		return newObj
+		obj.obj.DataOffset = NewPatternFlowTcpDataOffset().Msg()
 	}
 	return &patternFlowTcpDataOffset{obj: obj.obj.DataOffset}
 }
@@ -28686,15 +30423,19 @@ func (obj *flowTcp) HasDataOffset() bool {
 	return obj.obj.DataOffset != nil
 }
 
+// SetDataOffset sets the PatternFlowTcpDataOffset value in the FlowTcp object
+//  description is TBD
+func (obj *flowTcp) SetDataOffset(value PatternFlowTcpDataOffset) FlowTcp {
+	obj.DataOffset().SetMsg(value.Msg())
+
+	return obj
+}
+
 // EcnNs returns a PatternFlowTcpEcnNs
 //  description is TBD
 func (obj *flowTcp) EcnNs() PatternFlowTcpEcnNs {
-
 	if obj.obj.EcnNs == nil {
-		obj.obj.EcnNs = &snappipb.PatternFlowTcpEcnNs{}
-		newObj := &patternFlowTcpEcnNs{obj: obj.obj.EcnNs}
-		newObj.setDefault()
-		return newObj
+		obj.obj.EcnNs = NewPatternFlowTcpEcnNs().Msg()
 	}
 	return &patternFlowTcpEcnNs{obj: obj.obj.EcnNs}
 }
@@ -28705,15 +30446,19 @@ func (obj *flowTcp) HasEcnNs() bool {
 	return obj.obj.EcnNs != nil
 }
 
+// SetEcnNs sets the PatternFlowTcpEcnNs value in the FlowTcp object
+//  description is TBD
+func (obj *flowTcp) SetEcnNs(value PatternFlowTcpEcnNs) FlowTcp {
+	obj.EcnNs().SetMsg(value.Msg())
+
+	return obj
+}
+
 // EcnCwr returns a PatternFlowTcpEcnCwr
 //  description is TBD
 func (obj *flowTcp) EcnCwr() PatternFlowTcpEcnCwr {
-
 	if obj.obj.EcnCwr == nil {
-		obj.obj.EcnCwr = &snappipb.PatternFlowTcpEcnCwr{}
-		newObj := &patternFlowTcpEcnCwr{obj: obj.obj.EcnCwr}
-		newObj.setDefault()
-		return newObj
+		obj.obj.EcnCwr = NewPatternFlowTcpEcnCwr().Msg()
 	}
 	return &patternFlowTcpEcnCwr{obj: obj.obj.EcnCwr}
 }
@@ -28724,15 +30469,19 @@ func (obj *flowTcp) HasEcnCwr() bool {
 	return obj.obj.EcnCwr != nil
 }
 
+// SetEcnCwr sets the PatternFlowTcpEcnCwr value in the FlowTcp object
+//  description is TBD
+func (obj *flowTcp) SetEcnCwr(value PatternFlowTcpEcnCwr) FlowTcp {
+	obj.EcnCwr().SetMsg(value.Msg())
+
+	return obj
+}
+
 // EcnEcho returns a PatternFlowTcpEcnEcho
 //  description is TBD
 func (obj *flowTcp) EcnEcho() PatternFlowTcpEcnEcho {
-
 	if obj.obj.EcnEcho == nil {
-		obj.obj.EcnEcho = &snappipb.PatternFlowTcpEcnEcho{}
-		newObj := &patternFlowTcpEcnEcho{obj: obj.obj.EcnEcho}
-		newObj.setDefault()
-		return newObj
+		obj.obj.EcnEcho = NewPatternFlowTcpEcnEcho().Msg()
 	}
 	return &patternFlowTcpEcnEcho{obj: obj.obj.EcnEcho}
 }
@@ -28743,15 +30492,19 @@ func (obj *flowTcp) HasEcnEcho() bool {
 	return obj.obj.EcnEcho != nil
 }
 
+// SetEcnEcho sets the PatternFlowTcpEcnEcho value in the FlowTcp object
+//  description is TBD
+func (obj *flowTcp) SetEcnEcho(value PatternFlowTcpEcnEcho) FlowTcp {
+	obj.EcnEcho().SetMsg(value.Msg())
+
+	return obj
+}
+
 // CtlUrg returns a PatternFlowTcpCtlUrg
 //  description is TBD
 func (obj *flowTcp) CtlUrg() PatternFlowTcpCtlUrg {
-
 	if obj.obj.CtlUrg == nil {
-		obj.obj.CtlUrg = &snappipb.PatternFlowTcpCtlUrg{}
-		newObj := &patternFlowTcpCtlUrg{obj: obj.obj.CtlUrg}
-		newObj.setDefault()
-		return newObj
+		obj.obj.CtlUrg = NewPatternFlowTcpCtlUrg().Msg()
 	}
 	return &patternFlowTcpCtlUrg{obj: obj.obj.CtlUrg}
 }
@@ -28762,15 +30515,19 @@ func (obj *flowTcp) HasCtlUrg() bool {
 	return obj.obj.CtlUrg != nil
 }
 
+// SetCtlUrg sets the PatternFlowTcpCtlUrg value in the FlowTcp object
+//  description is TBD
+func (obj *flowTcp) SetCtlUrg(value PatternFlowTcpCtlUrg) FlowTcp {
+	obj.CtlUrg().SetMsg(value.Msg())
+
+	return obj
+}
+
 // CtlAck returns a PatternFlowTcpCtlAck
 //  description is TBD
 func (obj *flowTcp) CtlAck() PatternFlowTcpCtlAck {
-
 	if obj.obj.CtlAck == nil {
-		obj.obj.CtlAck = &snappipb.PatternFlowTcpCtlAck{}
-		newObj := &patternFlowTcpCtlAck{obj: obj.obj.CtlAck}
-		newObj.setDefault()
-		return newObj
+		obj.obj.CtlAck = NewPatternFlowTcpCtlAck().Msg()
 	}
 	return &patternFlowTcpCtlAck{obj: obj.obj.CtlAck}
 }
@@ -28781,15 +30538,19 @@ func (obj *flowTcp) HasCtlAck() bool {
 	return obj.obj.CtlAck != nil
 }
 
+// SetCtlAck sets the PatternFlowTcpCtlAck value in the FlowTcp object
+//  description is TBD
+func (obj *flowTcp) SetCtlAck(value PatternFlowTcpCtlAck) FlowTcp {
+	obj.CtlAck().SetMsg(value.Msg())
+
+	return obj
+}
+
 // CtlPsh returns a PatternFlowTcpCtlPsh
 //  description is TBD
 func (obj *flowTcp) CtlPsh() PatternFlowTcpCtlPsh {
-
 	if obj.obj.CtlPsh == nil {
-		obj.obj.CtlPsh = &snappipb.PatternFlowTcpCtlPsh{}
-		newObj := &patternFlowTcpCtlPsh{obj: obj.obj.CtlPsh}
-		newObj.setDefault()
-		return newObj
+		obj.obj.CtlPsh = NewPatternFlowTcpCtlPsh().Msg()
 	}
 	return &patternFlowTcpCtlPsh{obj: obj.obj.CtlPsh}
 }
@@ -28800,15 +30561,19 @@ func (obj *flowTcp) HasCtlPsh() bool {
 	return obj.obj.CtlPsh != nil
 }
 
+// SetCtlPsh sets the PatternFlowTcpCtlPsh value in the FlowTcp object
+//  description is TBD
+func (obj *flowTcp) SetCtlPsh(value PatternFlowTcpCtlPsh) FlowTcp {
+	obj.CtlPsh().SetMsg(value.Msg())
+
+	return obj
+}
+
 // CtlRst returns a PatternFlowTcpCtlRst
 //  description is TBD
 func (obj *flowTcp) CtlRst() PatternFlowTcpCtlRst {
-
 	if obj.obj.CtlRst == nil {
-		obj.obj.CtlRst = &snappipb.PatternFlowTcpCtlRst{}
-		newObj := &patternFlowTcpCtlRst{obj: obj.obj.CtlRst}
-		newObj.setDefault()
-		return newObj
+		obj.obj.CtlRst = NewPatternFlowTcpCtlRst().Msg()
 	}
 	return &patternFlowTcpCtlRst{obj: obj.obj.CtlRst}
 }
@@ -28819,15 +30584,19 @@ func (obj *flowTcp) HasCtlRst() bool {
 	return obj.obj.CtlRst != nil
 }
 
+// SetCtlRst sets the PatternFlowTcpCtlRst value in the FlowTcp object
+//  description is TBD
+func (obj *flowTcp) SetCtlRst(value PatternFlowTcpCtlRst) FlowTcp {
+	obj.CtlRst().SetMsg(value.Msg())
+
+	return obj
+}
+
 // CtlSyn returns a PatternFlowTcpCtlSyn
 //  description is TBD
 func (obj *flowTcp) CtlSyn() PatternFlowTcpCtlSyn {
-
 	if obj.obj.CtlSyn == nil {
-		obj.obj.CtlSyn = &snappipb.PatternFlowTcpCtlSyn{}
-		newObj := &patternFlowTcpCtlSyn{obj: obj.obj.CtlSyn}
-		newObj.setDefault()
-		return newObj
+		obj.obj.CtlSyn = NewPatternFlowTcpCtlSyn().Msg()
 	}
 	return &patternFlowTcpCtlSyn{obj: obj.obj.CtlSyn}
 }
@@ -28838,15 +30607,19 @@ func (obj *flowTcp) HasCtlSyn() bool {
 	return obj.obj.CtlSyn != nil
 }
 
+// SetCtlSyn sets the PatternFlowTcpCtlSyn value in the FlowTcp object
+//  description is TBD
+func (obj *flowTcp) SetCtlSyn(value PatternFlowTcpCtlSyn) FlowTcp {
+	obj.CtlSyn().SetMsg(value.Msg())
+
+	return obj
+}
+
 // CtlFin returns a PatternFlowTcpCtlFin
 //  description is TBD
 func (obj *flowTcp) CtlFin() PatternFlowTcpCtlFin {
-
 	if obj.obj.CtlFin == nil {
-		obj.obj.CtlFin = &snappipb.PatternFlowTcpCtlFin{}
-		newObj := &patternFlowTcpCtlFin{obj: obj.obj.CtlFin}
-		newObj.setDefault()
-		return newObj
+		obj.obj.CtlFin = NewPatternFlowTcpCtlFin().Msg()
 	}
 	return &patternFlowTcpCtlFin{obj: obj.obj.CtlFin}
 }
@@ -28857,15 +30630,19 @@ func (obj *flowTcp) HasCtlFin() bool {
 	return obj.obj.CtlFin != nil
 }
 
+// SetCtlFin sets the PatternFlowTcpCtlFin value in the FlowTcp object
+//  description is TBD
+func (obj *flowTcp) SetCtlFin(value PatternFlowTcpCtlFin) FlowTcp {
+	obj.CtlFin().SetMsg(value.Msg())
+
+	return obj
+}
+
 // Window returns a PatternFlowTcpWindow
 //  description is TBD
 func (obj *flowTcp) Window() PatternFlowTcpWindow {
-
 	if obj.obj.Window == nil {
-		obj.obj.Window = &snappipb.PatternFlowTcpWindow{}
-		newObj := &patternFlowTcpWindow{obj: obj.obj.Window}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Window = NewPatternFlowTcpWindow().Msg()
 	}
 	return &patternFlowTcpWindow{obj: obj.obj.Window}
 }
@@ -28874,6 +30651,14 @@ func (obj *flowTcp) Window() PatternFlowTcpWindow {
 //  description is TBD
 func (obj *flowTcp) HasWindow() bool {
 	return obj.obj.Window != nil
+}
+
+// SetWindow sets the PatternFlowTcpWindow value in the FlowTcp object
+//  description is TBD
+func (obj *flowTcp) SetWindow(value PatternFlowTcpWindow) FlowTcp {
+	obj.Window().SetMsg(value.Msg())
+
+	return obj
 }
 
 func (obj *flowTcp) validateObj(set_default bool) {
@@ -28950,12 +30735,18 @@ type flowUdp struct {
 	obj *snappipb.FlowUdp
 }
 
+func NewFlowUdp() FlowUdp {
+	obj := flowUdp{obj: &snappipb.FlowUdp{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *flowUdp) Msg() *snappipb.FlowUdp {
 	return obj.obj
 }
 
 func (obj *flowUdp) SetMsg(msg *snappipb.FlowUdp) FlowUdp {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -29076,24 +30867,24 @@ type FlowUdp interface {
 	validateObj(set_default bool)
 	setDefault()
 	SrcPort() PatternFlowUdpSrcPort
+	SetSrcPort(value PatternFlowUdpSrcPort) FlowUdp
 	HasSrcPort() bool
 	DstPort() PatternFlowUdpDstPort
+	SetDstPort(value PatternFlowUdpDstPort) FlowUdp
 	HasDstPort() bool
 	Length() PatternFlowUdpLength
+	SetLength(value PatternFlowUdpLength) FlowUdp
 	HasLength() bool
 	Checksum() PatternFlowUdpChecksum
+	SetChecksum(value PatternFlowUdpChecksum) FlowUdp
 	HasChecksum() bool
 }
 
 // SrcPort returns a PatternFlowUdpSrcPort
 //  description is TBD
 func (obj *flowUdp) SrcPort() PatternFlowUdpSrcPort {
-
 	if obj.obj.SrcPort == nil {
-		obj.obj.SrcPort = &snappipb.PatternFlowUdpSrcPort{}
-		newObj := &patternFlowUdpSrcPort{obj: obj.obj.SrcPort}
-		newObj.setDefault()
-		return newObj
+		obj.obj.SrcPort = NewPatternFlowUdpSrcPort().Msg()
 	}
 	return &patternFlowUdpSrcPort{obj: obj.obj.SrcPort}
 }
@@ -29104,15 +30895,19 @@ func (obj *flowUdp) HasSrcPort() bool {
 	return obj.obj.SrcPort != nil
 }
 
+// SetSrcPort sets the PatternFlowUdpSrcPort value in the FlowUdp object
+//  description is TBD
+func (obj *flowUdp) SetSrcPort(value PatternFlowUdpSrcPort) FlowUdp {
+	obj.SrcPort().SetMsg(value.Msg())
+
+	return obj
+}
+
 // DstPort returns a PatternFlowUdpDstPort
 //  description is TBD
 func (obj *flowUdp) DstPort() PatternFlowUdpDstPort {
-
 	if obj.obj.DstPort == nil {
-		obj.obj.DstPort = &snappipb.PatternFlowUdpDstPort{}
-		newObj := &patternFlowUdpDstPort{obj: obj.obj.DstPort}
-		newObj.setDefault()
-		return newObj
+		obj.obj.DstPort = NewPatternFlowUdpDstPort().Msg()
 	}
 	return &patternFlowUdpDstPort{obj: obj.obj.DstPort}
 }
@@ -29123,15 +30918,19 @@ func (obj *flowUdp) HasDstPort() bool {
 	return obj.obj.DstPort != nil
 }
 
+// SetDstPort sets the PatternFlowUdpDstPort value in the FlowUdp object
+//  description is TBD
+func (obj *flowUdp) SetDstPort(value PatternFlowUdpDstPort) FlowUdp {
+	obj.DstPort().SetMsg(value.Msg())
+
+	return obj
+}
+
 // Length returns a PatternFlowUdpLength
 //  description is TBD
 func (obj *flowUdp) Length() PatternFlowUdpLength {
-
 	if obj.obj.Length == nil {
-		obj.obj.Length = &snappipb.PatternFlowUdpLength{}
-		newObj := &patternFlowUdpLength{obj: obj.obj.Length}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Length = NewPatternFlowUdpLength().Msg()
 	}
 	return &patternFlowUdpLength{obj: obj.obj.Length}
 }
@@ -29142,15 +30941,19 @@ func (obj *flowUdp) HasLength() bool {
 	return obj.obj.Length != nil
 }
 
+// SetLength sets the PatternFlowUdpLength value in the FlowUdp object
+//  description is TBD
+func (obj *flowUdp) SetLength(value PatternFlowUdpLength) FlowUdp {
+	obj.Length().SetMsg(value.Msg())
+
+	return obj
+}
+
 // Checksum returns a PatternFlowUdpChecksum
 //  description is TBD
 func (obj *flowUdp) Checksum() PatternFlowUdpChecksum {
-
 	if obj.obj.Checksum == nil {
-		obj.obj.Checksum = &snappipb.PatternFlowUdpChecksum{}
-		newObj := &patternFlowUdpChecksum{obj: obj.obj.Checksum}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Checksum = NewPatternFlowUdpChecksum().Msg()
 	}
 	return &patternFlowUdpChecksum{obj: obj.obj.Checksum}
 }
@@ -29159,6 +30962,14 @@ func (obj *flowUdp) Checksum() PatternFlowUdpChecksum {
 //  description is TBD
 func (obj *flowUdp) HasChecksum() bool {
 	return obj.obj.Checksum != nil
+}
+
+// SetChecksum sets the PatternFlowUdpChecksum value in the FlowUdp object
+//  description is TBD
+func (obj *flowUdp) SetChecksum(value PatternFlowUdpChecksum) FlowUdp {
+	obj.Checksum().SetMsg(value.Msg())
+
+	return obj
 }
 
 func (obj *flowUdp) validateObj(set_default bool) {
@@ -29191,12 +31002,18 @@ type flowGre struct {
 	obj *snappipb.FlowGre
 }
 
+func NewFlowGre() FlowGre {
+	obj := flowGre{obj: &snappipb.FlowGre{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *flowGre) Msg() *snappipb.FlowGre {
 	return obj.obj
 }
 
 func (obj *flowGre) SetMsg(msg *snappipb.FlowGre) FlowGre {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -29317,28 +31134,30 @@ type FlowGre interface {
 	validateObj(set_default bool)
 	setDefault()
 	ChecksumPresent() PatternFlowGreChecksumPresent
+	SetChecksumPresent(value PatternFlowGreChecksumPresent) FlowGre
 	HasChecksumPresent() bool
 	Reserved0() PatternFlowGreReserved0
+	SetReserved0(value PatternFlowGreReserved0) FlowGre
 	HasReserved0() bool
 	Version() PatternFlowGreVersion
+	SetVersion(value PatternFlowGreVersion) FlowGre
 	HasVersion() bool
 	Protocol() PatternFlowGreProtocol
+	SetProtocol(value PatternFlowGreProtocol) FlowGre
 	HasProtocol() bool
 	Checksum() PatternFlowGreChecksum
+	SetChecksum(value PatternFlowGreChecksum) FlowGre
 	HasChecksum() bool
 	Reserved1() PatternFlowGreReserved1
+	SetReserved1(value PatternFlowGreReserved1) FlowGre
 	HasReserved1() bool
 }
 
 // ChecksumPresent returns a PatternFlowGreChecksumPresent
 //  description is TBD
 func (obj *flowGre) ChecksumPresent() PatternFlowGreChecksumPresent {
-
 	if obj.obj.ChecksumPresent == nil {
-		obj.obj.ChecksumPresent = &snappipb.PatternFlowGreChecksumPresent{}
-		newObj := &patternFlowGreChecksumPresent{obj: obj.obj.ChecksumPresent}
-		newObj.setDefault()
-		return newObj
+		obj.obj.ChecksumPresent = NewPatternFlowGreChecksumPresent().Msg()
 	}
 	return &patternFlowGreChecksumPresent{obj: obj.obj.ChecksumPresent}
 }
@@ -29349,15 +31168,19 @@ func (obj *flowGre) HasChecksumPresent() bool {
 	return obj.obj.ChecksumPresent != nil
 }
 
+// SetChecksumPresent sets the PatternFlowGreChecksumPresent value in the FlowGre object
+//  description is TBD
+func (obj *flowGre) SetChecksumPresent(value PatternFlowGreChecksumPresent) FlowGre {
+	obj.ChecksumPresent().SetMsg(value.Msg())
+
+	return obj
+}
+
 // Reserved0 returns a PatternFlowGreReserved0
 //  description is TBD
 func (obj *flowGre) Reserved0() PatternFlowGreReserved0 {
-
 	if obj.obj.Reserved0 == nil {
-		obj.obj.Reserved0 = &snappipb.PatternFlowGreReserved0{}
-		newObj := &patternFlowGreReserved0{obj: obj.obj.Reserved0}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Reserved0 = NewPatternFlowGreReserved0().Msg()
 	}
 	return &patternFlowGreReserved0{obj: obj.obj.Reserved0}
 }
@@ -29368,15 +31191,19 @@ func (obj *flowGre) HasReserved0() bool {
 	return obj.obj.Reserved0 != nil
 }
 
+// SetReserved0 sets the PatternFlowGreReserved0 value in the FlowGre object
+//  description is TBD
+func (obj *flowGre) SetReserved0(value PatternFlowGreReserved0) FlowGre {
+	obj.Reserved0().SetMsg(value.Msg())
+
+	return obj
+}
+
 // Version returns a PatternFlowGreVersion
 //  description is TBD
 func (obj *flowGre) Version() PatternFlowGreVersion {
-
 	if obj.obj.Version == nil {
-		obj.obj.Version = &snappipb.PatternFlowGreVersion{}
-		newObj := &patternFlowGreVersion{obj: obj.obj.Version}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Version = NewPatternFlowGreVersion().Msg()
 	}
 	return &patternFlowGreVersion{obj: obj.obj.Version}
 }
@@ -29387,15 +31214,19 @@ func (obj *flowGre) HasVersion() bool {
 	return obj.obj.Version != nil
 }
 
+// SetVersion sets the PatternFlowGreVersion value in the FlowGre object
+//  description is TBD
+func (obj *flowGre) SetVersion(value PatternFlowGreVersion) FlowGre {
+	obj.Version().SetMsg(value.Msg())
+
+	return obj
+}
+
 // Protocol returns a PatternFlowGreProtocol
 //  description is TBD
 func (obj *flowGre) Protocol() PatternFlowGreProtocol {
-
 	if obj.obj.Protocol == nil {
-		obj.obj.Protocol = &snappipb.PatternFlowGreProtocol{}
-		newObj := &patternFlowGreProtocol{obj: obj.obj.Protocol}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Protocol = NewPatternFlowGreProtocol().Msg()
 	}
 	return &patternFlowGreProtocol{obj: obj.obj.Protocol}
 }
@@ -29406,15 +31237,19 @@ func (obj *flowGre) HasProtocol() bool {
 	return obj.obj.Protocol != nil
 }
 
+// SetProtocol sets the PatternFlowGreProtocol value in the FlowGre object
+//  description is TBD
+func (obj *flowGre) SetProtocol(value PatternFlowGreProtocol) FlowGre {
+	obj.Protocol().SetMsg(value.Msg())
+
+	return obj
+}
+
 // Checksum returns a PatternFlowGreChecksum
 //  description is TBD
 func (obj *flowGre) Checksum() PatternFlowGreChecksum {
-
 	if obj.obj.Checksum == nil {
-		obj.obj.Checksum = &snappipb.PatternFlowGreChecksum{}
-		newObj := &patternFlowGreChecksum{obj: obj.obj.Checksum}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Checksum = NewPatternFlowGreChecksum().Msg()
 	}
 	return &patternFlowGreChecksum{obj: obj.obj.Checksum}
 }
@@ -29425,15 +31260,19 @@ func (obj *flowGre) HasChecksum() bool {
 	return obj.obj.Checksum != nil
 }
 
+// SetChecksum sets the PatternFlowGreChecksum value in the FlowGre object
+//  description is TBD
+func (obj *flowGre) SetChecksum(value PatternFlowGreChecksum) FlowGre {
+	obj.Checksum().SetMsg(value.Msg())
+
+	return obj
+}
+
 // Reserved1 returns a PatternFlowGreReserved1
 //  description is TBD
 func (obj *flowGre) Reserved1() PatternFlowGreReserved1 {
-
 	if obj.obj.Reserved1 == nil {
-		obj.obj.Reserved1 = &snappipb.PatternFlowGreReserved1{}
-		newObj := &patternFlowGreReserved1{obj: obj.obj.Reserved1}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Reserved1 = NewPatternFlowGreReserved1().Msg()
 	}
 	return &patternFlowGreReserved1{obj: obj.obj.Reserved1}
 }
@@ -29442,6 +31281,14 @@ func (obj *flowGre) Reserved1() PatternFlowGreReserved1 {
 //  description is TBD
 func (obj *flowGre) HasReserved1() bool {
 	return obj.obj.Reserved1 != nil
+}
+
+// SetReserved1 sets the PatternFlowGreReserved1 value in the FlowGre object
+//  description is TBD
+func (obj *flowGre) SetReserved1(value PatternFlowGreReserved1) FlowGre {
+	obj.Reserved1().SetMsg(value.Msg())
+
+	return obj
 }
 
 func (obj *flowGre) validateObj(set_default bool) {
@@ -29482,12 +31329,18 @@ type flowGtpv1 struct {
 	obj *snappipb.FlowGtpv1
 }
 
+func NewFlowGtpv1() FlowGtpv1 {
+	obj := flowGtpv1{obj: &snappipb.FlowGtpv1{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *flowGtpv1) Msg() *snappipb.FlowGtpv1 {
 	return obj.obj
 }
 
 func (obj *flowGtpv1) SetMsg(msg *snappipb.FlowGtpv1) FlowGtpv1 {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -29608,28 +31461,40 @@ type FlowGtpv1 interface {
 	validateObj(set_default bool)
 	setDefault()
 	Version() PatternFlowGtpv1Version
+	SetVersion(value PatternFlowGtpv1Version) FlowGtpv1
 	HasVersion() bool
 	ProtocolType() PatternFlowGtpv1ProtocolType
+	SetProtocolType(value PatternFlowGtpv1ProtocolType) FlowGtpv1
 	HasProtocolType() bool
 	Reserved() PatternFlowGtpv1Reserved
+	SetReserved(value PatternFlowGtpv1Reserved) FlowGtpv1
 	HasReserved() bool
 	EFlag() PatternFlowGtpv1EFlag
+	SetEFlag(value PatternFlowGtpv1EFlag) FlowGtpv1
 	HasEFlag() bool
 	SFlag() PatternFlowGtpv1SFlag
+	SetSFlag(value PatternFlowGtpv1SFlag) FlowGtpv1
 	HasSFlag() bool
 	PnFlag() PatternFlowGtpv1PnFlag
+	SetPnFlag(value PatternFlowGtpv1PnFlag) FlowGtpv1
 	HasPnFlag() bool
 	MessageType() PatternFlowGtpv1MessageType
+	SetMessageType(value PatternFlowGtpv1MessageType) FlowGtpv1
 	HasMessageType() bool
 	MessageLength() PatternFlowGtpv1MessageLength
+	SetMessageLength(value PatternFlowGtpv1MessageLength) FlowGtpv1
 	HasMessageLength() bool
 	Teid() PatternFlowGtpv1Teid
+	SetTeid(value PatternFlowGtpv1Teid) FlowGtpv1
 	HasTeid() bool
 	SquenceNumber() PatternFlowGtpv1SquenceNumber
+	SetSquenceNumber(value PatternFlowGtpv1SquenceNumber) FlowGtpv1
 	HasSquenceNumber() bool
 	NPduNumber() PatternFlowGtpv1NPduNumber
+	SetNPduNumber(value PatternFlowGtpv1NPduNumber) FlowGtpv1
 	HasNPduNumber() bool
 	NextExtensionHeaderType() PatternFlowGtpv1NextExtensionHeaderType
+	SetNextExtensionHeaderType(value PatternFlowGtpv1NextExtensionHeaderType) FlowGtpv1
 	HasNextExtensionHeaderType() bool
 	ExtensionHeaders() FlowGtpv1FlowGtpExtensionIter
 }
@@ -29637,12 +31502,8 @@ type FlowGtpv1 interface {
 // Version returns a PatternFlowGtpv1Version
 //  description is TBD
 func (obj *flowGtpv1) Version() PatternFlowGtpv1Version {
-
 	if obj.obj.Version == nil {
-		obj.obj.Version = &snappipb.PatternFlowGtpv1Version{}
-		newObj := &patternFlowGtpv1Version{obj: obj.obj.Version}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Version = NewPatternFlowGtpv1Version().Msg()
 	}
 	return &patternFlowGtpv1Version{obj: obj.obj.Version}
 }
@@ -29653,15 +31514,19 @@ func (obj *flowGtpv1) HasVersion() bool {
 	return obj.obj.Version != nil
 }
 
+// SetVersion sets the PatternFlowGtpv1Version value in the FlowGtpv1 object
+//  description is TBD
+func (obj *flowGtpv1) SetVersion(value PatternFlowGtpv1Version) FlowGtpv1 {
+	obj.Version().SetMsg(value.Msg())
+
+	return obj
+}
+
 // ProtocolType returns a PatternFlowGtpv1ProtocolType
 //  description is TBD
 func (obj *flowGtpv1) ProtocolType() PatternFlowGtpv1ProtocolType {
-
 	if obj.obj.ProtocolType == nil {
-		obj.obj.ProtocolType = &snappipb.PatternFlowGtpv1ProtocolType{}
-		newObj := &patternFlowGtpv1ProtocolType{obj: obj.obj.ProtocolType}
-		newObj.setDefault()
-		return newObj
+		obj.obj.ProtocolType = NewPatternFlowGtpv1ProtocolType().Msg()
 	}
 	return &patternFlowGtpv1ProtocolType{obj: obj.obj.ProtocolType}
 }
@@ -29672,15 +31537,19 @@ func (obj *flowGtpv1) HasProtocolType() bool {
 	return obj.obj.ProtocolType != nil
 }
 
+// SetProtocolType sets the PatternFlowGtpv1ProtocolType value in the FlowGtpv1 object
+//  description is TBD
+func (obj *flowGtpv1) SetProtocolType(value PatternFlowGtpv1ProtocolType) FlowGtpv1 {
+	obj.ProtocolType().SetMsg(value.Msg())
+
+	return obj
+}
+
 // Reserved returns a PatternFlowGtpv1Reserved
 //  description is TBD
 func (obj *flowGtpv1) Reserved() PatternFlowGtpv1Reserved {
-
 	if obj.obj.Reserved == nil {
-		obj.obj.Reserved = &snappipb.PatternFlowGtpv1Reserved{}
-		newObj := &patternFlowGtpv1Reserved{obj: obj.obj.Reserved}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Reserved = NewPatternFlowGtpv1Reserved().Msg()
 	}
 	return &patternFlowGtpv1Reserved{obj: obj.obj.Reserved}
 }
@@ -29691,15 +31560,19 @@ func (obj *flowGtpv1) HasReserved() bool {
 	return obj.obj.Reserved != nil
 }
 
+// SetReserved sets the PatternFlowGtpv1Reserved value in the FlowGtpv1 object
+//  description is TBD
+func (obj *flowGtpv1) SetReserved(value PatternFlowGtpv1Reserved) FlowGtpv1 {
+	obj.Reserved().SetMsg(value.Msg())
+
+	return obj
+}
+
 // EFlag returns a PatternFlowGtpv1EFlag
 //  description is TBD
 func (obj *flowGtpv1) EFlag() PatternFlowGtpv1EFlag {
-
 	if obj.obj.EFlag == nil {
-		obj.obj.EFlag = &snappipb.PatternFlowGtpv1EFlag{}
-		newObj := &patternFlowGtpv1EFlag{obj: obj.obj.EFlag}
-		newObj.setDefault()
-		return newObj
+		obj.obj.EFlag = NewPatternFlowGtpv1EFlag().Msg()
 	}
 	return &patternFlowGtpv1EFlag{obj: obj.obj.EFlag}
 }
@@ -29710,15 +31583,19 @@ func (obj *flowGtpv1) HasEFlag() bool {
 	return obj.obj.EFlag != nil
 }
 
+// SetEFlag sets the PatternFlowGtpv1EFlag value in the FlowGtpv1 object
+//  description is TBD
+func (obj *flowGtpv1) SetEFlag(value PatternFlowGtpv1EFlag) FlowGtpv1 {
+	obj.EFlag().SetMsg(value.Msg())
+
+	return obj
+}
+
 // SFlag returns a PatternFlowGtpv1SFlag
 //  description is TBD
 func (obj *flowGtpv1) SFlag() PatternFlowGtpv1SFlag {
-
 	if obj.obj.SFlag == nil {
-		obj.obj.SFlag = &snappipb.PatternFlowGtpv1SFlag{}
-		newObj := &patternFlowGtpv1SFlag{obj: obj.obj.SFlag}
-		newObj.setDefault()
-		return newObj
+		obj.obj.SFlag = NewPatternFlowGtpv1SFlag().Msg()
 	}
 	return &patternFlowGtpv1SFlag{obj: obj.obj.SFlag}
 }
@@ -29729,15 +31606,19 @@ func (obj *flowGtpv1) HasSFlag() bool {
 	return obj.obj.SFlag != nil
 }
 
+// SetSFlag sets the PatternFlowGtpv1SFlag value in the FlowGtpv1 object
+//  description is TBD
+func (obj *flowGtpv1) SetSFlag(value PatternFlowGtpv1SFlag) FlowGtpv1 {
+	obj.SFlag().SetMsg(value.Msg())
+
+	return obj
+}
+
 // PnFlag returns a PatternFlowGtpv1PnFlag
 //  description is TBD
 func (obj *flowGtpv1) PnFlag() PatternFlowGtpv1PnFlag {
-
 	if obj.obj.PnFlag == nil {
-		obj.obj.PnFlag = &snappipb.PatternFlowGtpv1PnFlag{}
-		newObj := &patternFlowGtpv1PnFlag{obj: obj.obj.PnFlag}
-		newObj.setDefault()
-		return newObj
+		obj.obj.PnFlag = NewPatternFlowGtpv1PnFlag().Msg()
 	}
 	return &patternFlowGtpv1PnFlag{obj: obj.obj.PnFlag}
 }
@@ -29748,15 +31629,19 @@ func (obj *flowGtpv1) HasPnFlag() bool {
 	return obj.obj.PnFlag != nil
 }
 
+// SetPnFlag sets the PatternFlowGtpv1PnFlag value in the FlowGtpv1 object
+//  description is TBD
+func (obj *flowGtpv1) SetPnFlag(value PatternFlowGtpv1PnFlag) FlowGtpv1 {
+	obj.PnFlag().SetMsg(value.Msg())
+
+	return obj
+}
+
 // MessageType returns a PatternFlowGtpv1MessageType
 //  description is TBD
 func (obj *flowGtpv1) MessageType() PatternFlowGtpv1MessageType {
-
 	if obj.obj.MessageType == nil {
-		obj.obj.MessageType = &snappipb.PatternFlowGtpv1MessageType{}
-		newObj := &patternFlowGtpv1MessageType{obj: obj.obj.MessageType}
-		newObj.setDefault()
-		return newObj
+		obj.obj.MessageType = NewPatternFlowGtpv1MessageType().Msg()
 	}
 	return &patternFlowGtpv1MessageType{obj: obj.obj.MessageType}
 }
@@ -29767,15 +31652,19 @@ func (obj *flowGtpv1) HasMessageType() bool {
 	return obj.obj.MessageType != nil
 }
 
+// SetMessageType sets the PatternFlowGtpv1MessageType value in the FlowGtpv1 object
+//  description is TBD
+func (obj *flowGtpv1) SetMessageType(value PatternFlowGtpv1MessageType) FlowGtpv1 {
+	obj.MessageType().SetMsg(value.Msg())
+
+	return obj
+}
+
 // MessageLength returns a PatternFlowGtpv1MessageLength
 //  description is TBD
 func (obj *flowGtpv1) MessageLength() PatternFlowGtpv1MessageLength {
-
 	if obj.obj.MessageLength == nil {
-		obj.obj.MessageLength = &snappipb.PatternFlowGtpv1MessageLength{}
-		newObj := &patternFlowGtpv1MessageLength{obj: obj.obj.MessageLength}
-		newObj.setDefault()
-		return newObj
+		obj.obj.MessageLength = NewPatternFlowGtpv1MessageLength().Msg()
 	}
 	return &patternFlowGtpv1MessageLength{obj: obj.obj.MessageLength}
 }
@@ -29786,15 +31675,19 @@ func (obj *flowGtpv1) HasMessageLength() bool {
 	return obj.obj.MessageLength != nil
 }
 
+// SetMessageLength sets the PatternFlowGtpv1MessageLength value in the FlowGtpv1 object
+//  description is TBD
+func (obj *flowGtpv1) SetMessageLength(value PatternFlowGtpv1MessageLength) FlowGtpv1 {
+	obj.MessageLength().SetMsg(value.Msg())
+
+	return obj
+}
+
 // Teid returns a PatternFlowGtpv1Teid
 //  description is TBD
 func (obj *flowGtpv1) Teid() PatternFlowGtpv1Teid {
-
 	if obj.obj.Teid == nil {
-		obj.obj.Teid = &snappipb.PatternFlowGtpv1Teid{}
-		newObj := &patternFlowGtpv1Teid{obj: obj.obj.Teid}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Teid = NewPatternFlowGtpv1Teid().Msg()
 	}
 	return &patternFlowGtpv1Teid{obj: obj.obj.Teid}
 }
@@ -29805,15 +31698,19 @@ func (obj *flowGtpv1) HasTeid() bool {
 	return obj.obj.Teid != nil
 }
 
+// SetTeid sets the PatternFlowGtpv1Teid value in the FlowGtpv1 object
+//  description is TBD
+func (obj *flowGtpv1) SetTeid(value PatternFlowGtpv1Teid) FlowGtpv1 {
+	obj.Teid().SetMsg(value.Msg())
+
+	return obj
+}
+
 // SquenceNumber returns a PatternFlowGtpv1SquenceNumber
 //  description is TBD
 func (obj *flowGtpv1) SquenceNumber() PatternFlowGtpv1SquenceNumber {
-
 	if obj.obj.SquenceNumber == nil {
-		obj.obj.SquenceNumber = &snappipb.PatternFlowGtpv1SquenceNumber{}
-		newObj := &patternFlowGtpv1SquenceNumber{obj: obj.obj.SquenceNumber}
-		newObj.setDefault()
-		return newObj
+		obj.obj.SquenceNumber = NewPatternFlowGtpv1SquenceNumber().Msg()
 	}
 	return &patternFlowGtpv1SquenceNumber{obj: obj.obj.SquenceNumber}
 }
@@ -29824,15 +31721,19 @@ func (obj *flowGtpv1) HasSquenceNumber() bool {
 	return obj.obj.SquenceNumber != nil
 }
 
+// SetSquenceNumber sets the PatternFlowGtpv1SquenceNumber value in the FlowGtpv1 object
+//  description is TBD
+func (obj *flowGtpv1) SetSquenceNumber(value PatternFlowGtpv1SquenceNumber) FlowGtpv1 {
+	obj.SquenceNumber().SetMsg(value.Msg())
+
+	return obj
+}
+
 // NPduNumber returns a PatternFlowGtpv1NPduNumber
 //  description is TBD
 func (obj *flowGtpv1) NPduNumber() PatternFlowGtpv1NPduNumber {
-
 	if obj.obj.NPduNumber == nil {
-		obj.obj.NPduNumber = &snappipb.PatternFlowGtpv1NPduNumber{}
-		newObj := &patternFlowGtpv1NPduNumber{obj: obj.obj.NPduNumber}
-		newObj.setDefault()
-		return newObj
+		obj.obj.NPduNumber = NewPatternFlowGtpv1NPduNumber().Msg()
 	}
 	return &patternFlowGtpv1NPduNumber{obj: obj.obj.NPduNumber}
 }
@@ -29843,15 +31744,19 @@ func (obj *flowGtpv1) HasNPduNumber() bool {
 	return obj.obj.NPduNumber != nil
 }
 
+// SetNPduNumber sets the PatternFlowGtpv1NPduNumber value in the FlowGtpv1 object
+//  description is TBD
+func (obj *flowGtpv1) SetNPduNumber(value PatternFlowGtpv1NPduNumber) FlowGtpv1 {
+	obj.NPduNumber().SetMsg(value.Msg())
+
+	return obj
+}
+
 // NextExtensionHeaderType returns a PatternFlowGtpv1NextExtensionHeaderType
 //  description is TBD
 func (obj *flowGtpv1) NextExtensionHeaderType() PatternFlowGtpv1NextExtensionHeaderType {
-
 	if obj.obj.NextExtensionHeaderType == nil {
-		obj.obj.NextExtensionHeaderType = &snappipb.PatternFlowGtpv1NextExtensionHeaderType{}
-		newObj := &patternFlowGtpv1NextExtensionHeaderType{obj: obj.obj.NextExtensionHeaderType}
-		newObj.setDefault()
-		return newObj
+		obj.obj.NextExtensionHeaderType = NewPatternFlowGtpv1NextExtensionHeaderType().Msg()
 	}
 	return &patternFlowGtpv1NextExtensionHeaderType{obj: obj.obj.NextExtensionHeaderType}
 }
@@ -29860,6 +31765,14 @@ func (obj *flowGtpv1) NextExtensionHeaderType() PatternFlowGtpv1NextExtensionHea
 //  description is TBD
 func (obj *flowGtpv1) HasNextExtensionHeaderType() bool {
 	return obj.obj.NextExtensionHeaderType != nil
+}
+
+// SetNextExtensionHeaderType sets the PatternFlowGtpv1NextExtensionHeaderType value in the FlowGtpv1 object
+//  description is TBD
+func (obj *flowGtpv1) SetNextExtensionHeaderType(value PatternFlowGtpv1NextExtensionHeaderType) FlowGtpv1 {
+	obj.NextExtensionHeaderType().SetMsg(value.Msg())
+
+	return obj
 }
 
 // ExtensionHeaders returns a []FlowGtpExtension
@@ -29957,6 +31870,9 @@ func (obj *flowGtpv1) validateObj(set_default bool) {
 }
 
 func (obj *flowGtpv1) setDefault() {
+	if obj.obj.ExtensionHeaders == nil {
+		obj.ExtensionHeaders()
+	}
 
 }
 
@@ -29964,12 +31880,18 @@ type flowGtpv2 struct {
 	obj *snappipb.FlowGtpv2
 }
 
+func NewFlowGtpv2() FlowGtpv2 {
+	obj := flowGtpv2{obj: &snappipb.FlowGtpv2{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *flowGtpv2) Msg() *snappipb.FlowGtpv2 {
 	return obj.obj
 }
 
 func (obj *flowGtpv2) SetMsg(msg *snappipb.FlowGtpv2) FlowGtpv2 {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -30090,34 +32012,39 @@ type FlowGtpv2 interface {
 	validateObj(set_default bool)
 	setDefault()
 	Version() PatternFlowGtpv2Version
+	SetVersion(value PatternFlowGtpv2Version) FlowGtpv2
 	HasVersion() bool
 	PiggybackingFlag() PatternFlowGtpv2PiggybackingFlag
+	SetPiggybackingFlag(value PatternFlowGtpv2PiggybackingFlag) FlowGtpv2
 	HasPiggybackingFlag() bool
 	TeidFlag() PatternFlowGtpv2TeidFlag
+	SetTeidFlag(value PatternFlowGtpv2TeidFlag) FlowGtpv2
 	HasTeidFlag() bool
 	Spare1() PatternFlowGtpv2Spare1
+	SetSpare1(value PatternFlowGtpv2Spare1) FlowGtpv2
 	HasSpare1() bool
 	MessageType() PatternFlowGtpv2MessageType
+	SetMessageType(value PatternFlowGtpv2MessageType) FlowGtpv2
 	HasMessageType() bool
 	MessageLength() PatternFlowGtpv2MessageLength
+	SetMessageLength(value PatternFlowGtpv2MessageLength) FlowGtpv2
 	HasMessageLength() bool
 	Teid() PatternFlowGtpv2Teid
+	SetTeid(value PatternFlowGtpv2Teid) FlowGtpv2
 	HasTeid() bool
 	SequenceNumber() PatternFlowGtpv2SequenceNumber
+	SetSequenceNumber(value PatternFlowGtpv2SequenceNumber) FlowGtpv2
 	HasSequenceNumber() bool
 	Spare2() PatternFlowGtpv2Spare2
+	SetSpare2(value PatternFlowGtpv2Spare2) FlowGtpv2
 	HasSpare2() bool
 }
 
 // Version returns a PatternFlowGtpv2Version
 //  description is TBD
 func (obj *flowGtpv2) Version() PatternFlowGtpv2Version {
-
 	if obj.obj.Version == nil {
-		obj.obj.Version = &snappipb.PatternFlowGtpv2Version{}
-		newObj := &patternFlowGtpv2Version{obj: obj.obj.Version}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Version = NewPatternFlowGtpv2Version().Msg()
 	}
 	return &patternFlowGtpv2Version{obj: obj.obj.Version}
 }
@@ -30128,15 +32055,19 @@ func (obj *flowGtpv2) HasVersion() bool {
 	return obj.obj.Version != nil
 }
 
+// SetVersion sets the PatternFlowGtpv2Version value in the FlowGtpv2 object
+//  description is TBD
+func (obj *flowGtpv2) SetVersion(value PatternFlowGtpv2Version) FlowGtpv2 {
+	obj.Version().SetMsg(value.Msg())
+
+	return obj
+}
+
 // PiggybackingFlag returns a PatternFlowGtpv2PiggybackingFlag
 //  description is TBD
 func (obj *flowGtpv2) PiggybackingFlag() PatternFlowGtpv2PiggybackingFlag {
-
 	if obj.obj.PiggybackingFlag == nil {
-		obj.obj.PiggybackingFlag = &snappipb.PatternFlowGtpv2PiggybackingFlag{}
-		newObj := &patternFlowGtpv2PiggybackingFlag{obj: obj.obj.PiggybackingFlag}
-		newObj.setDefault()
-		return newObj
+		obj.obj.PiggybackingFlag = NewPatternFlowGtpv2PiggybackingFlag().Msg()
 	}
 	return &patternFlowGtpv2PiggybackingFlag{obj: obj.obj.PiggybackingFlag}
 }
@@ -30147,15 +32078,19 @@ func (obj *flowGtpv2) HasPiggybackingFlag() bool {
 	return obj.obj.PiggybackingFlag != nil
 }
 
+// SetPiggybackingFlag sets the PatternFlowGtpv2PiggybackingFlag value in the FlowGtpv2 object
+//  description is TBD
+func (obj *flowGtpv2) SetPiggybackingFlag(value PatternFlowGtpv2PiggybackingFlag) FlowGtpv2 {
+	obj.PiggybackingFlag().SetMsg(value.Msg())
+
+	return obj
+}
+
 // TeidFlag returns a PatternFlowGtpv2TeidFlag
 //  description is TBD
 func (obj *flowGtpv2) TeidFlag() PatternFlowGtpv2TeidFlag {
-
 	if obj.obj.TeidFlag == nil {
-		obj.obj.TeidFlag = &snappipb.PatternFlowGtpv2TeidFlag{}
-		newObj := &patternFlowGtpv2TeidFlag{obj: obj.obj.TeidFlag}
-		newObj.setDefault()
-		return newObj
+		obj.obj.TeidFlag = NewPatternFlowGtpv2TeidFlag().Msg()
 	}
 	return &patternFlowGtpv2TeidFlag{obj: obj.obj.TeidFlag}
 }
@@ -30166,15 +32101,19 @@ func (obj *flowGtpv2) HasTeidFlag() bool {
 	return obj.obj.TeidFlag != nil
 }
 
+// SetTeidFlag sets the PatternFlowGtpv2TeidFlag value in the FlowGtpv2 object
+//  description is TBD
+func (obj *flowGtpv2) SetTeidFlag(value PatternFlowGtpv2TeidFlag) FlowGtpv2 {
+	obj.TeidFlag().SetMsg(value.Msg())
+
+	return obj
+}
+
 // Spare1 returns a PatternFlowGtpv2Spare1
 //  description is TBD
 func (obj *flowGtpv2) Spare1() PatternFlowGtpv2Spare1 {
-
 	if obj.obj.Spare1 == nil {
-		obj.obj.Spare1 = &snappipb.PatternFlowGtpv2Spare1{}
-		newObj := &patternFlowGtpv2Spare1{obj: obj.obj.Spare1}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Spare1 = NewPatternFlowGtpv2Spare1().Msg()
 	}
 	return &patternFlowGtpv2Spare1{obj: obj.obj.Spare1}
 }
@@ -30185,15 +32124,19 @@ func (obj *flowGtpv2) HasSpare1() bool {
 	return obj.obj.Spare1 != nil
 }
 
+// SetSpare1 sets the PatternFlowGtpv2Spare1 value in the FlowGtpv2 object
+//  description is TBD
+func (obj *flowGtpv2) SetSpare1(value PatternFlowGtpv2Spare1) FlowGtpv2 {
+	obj.Spare1().SetMsg(value.Msg())
+
+	return obj
+}
+
 // MessageType returns a PatternFlowGtpv2MessageType
 //  description is TBD
 func (obj *flowGtpv2) MessageType() PatternFlowGtpv2MessageType {
-
 	if obj.obj.MessageType == nil {
-		obj.obj.MessageType = &snappipb.PatternFlowGtpv2MessageType{}
-		newObj := &patternFlowGtpv2MessageType{obj: obj.obj.MessageType}
-		newObj.setDefault()
-		return newObj
+		obj.obj.MessageType = NewPatternFlowGtpv2MessageType().Msg()
 	}
 	return &patternFlowGtpv2MessageType{obj: obj.obj.MessageType}
 }
@@ -30204,15 +32147,19 @@ func (obj *flowGtpv2) HasMessageType() bool {
 	return obj.obj.MessageType != nil
 }
 
+// SetMessageType sets the PatternFlowGtpv2MessageType value in the FlowGtpv2 object
+//  description is TBD
+func (obj *flowGtpv2) SetMessageType(value PatternFlowGtpv2MessageType) FlowGtpv2 {
+	obj.MessageType().SetMsg(value.Msg())
+
+	return obj
+}
+
 // MessageLength returns a PatternFlowGtpv2MessageLength
 //  description is TBD
 func (obj *flowGtpv2) MessageLength() PatternFlowGtpv2MessageLength {
-
 	if obj.obj.MessageLength == nil {
-		obj.obj.MessageLength = &snappipb.PatternFlowGtpv2MessageLength{}
-		newObj := &patternFlowGtpv2MessageLength{obj: obj.obj.MessageLength}
-		newObj.setDefault()
-		return newObj
+		obj.obj.MessageLength = NewPatternFlowGtpv2MessageLength().Msg()
 	}
 	return &patternFlowGtpv2MessageLength{obj: obj.obj.MessageLength}
 }
@@ -30223,15 +32170,19 @@ func (obj *flowGtpv2) HasMessageLength() bool {
 	return obj.obj.MessageLength != nil
 }
 
+// SetMessageLength sets the PatternFlowGtpv2MessageLength value in the FlowGtpv2 object
+//  description is TBD
+func (obj *flowGtpv2) SetMessageLength(value PatternFlowGtpv2MessageLength) FlowGtpv2 {
+	obj.MessageLength().SetMsg(value.Msg())
+
+	return obj
+}
+
 // Teid returns a PatternFlowGtpv2Teid
 //  description is TBD
 func (obj *flowGtpv2) Teid() PatternFlowGtpv2Teid {
-
 	if obj.obj.Teid == nil {
-		obj.obj.Teid = &snappipb.PatternFlowGtpv2Teid{}
-		newObj := &patternFlowGtpv2Teid{obj: obj.obj.Teid}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Teid = NewPatternFlowGtpv2Teid().Msg()
 	}
 	return &patternFlowGtpv2Teid{obj: obj.obj.Teid}
 }
@@ -30242,15 +32193,19 @@ func (obj *flowGtpv2) HasTeid() bool {
 	return obj.obj.Teid != nil
 }
 
+// SetTeid sets the PatternFlowGtpv2Teid value in the FlowGtpv2 object
+//  description is TBD
+func (obj *flowGtpv2) SetTeid(value PatternFlowGtpv2Teid) FlowGtpv2 {
+	obj.Teid().SetMsg(value.Msg())
+
+	return obj
+}
+
 // SequenceNumber returns a PatternFlowGtpv2SequenceNumber
 //  description is TBD
 func (obj *flowGtpv2) SequenceNumber() PatternFlowGtpv2SequenceNumber {
-
 	if obj.obj.SequenceNumber == nil {
-		obj.obj.SequenceNumber = &snappipb.PatternFlowGtpv2SequenceNumber{}
-		newObj := &patternFlowGtpv2SequenceNumber{obj: obj.obj.SequenceNumber}
-		newObj.setDefault()
-		return newObj
+		obj.obj.SequenceNumber = NewPatternFlowGtpv2SequenceNumber().Msg()
 	}
 	return &patternFlowGtpv2SequenceNumber{obj: obj.obj.SequenceNumber}
 }
@@ -30261,15 +32216,19 @@ func (obj *flowGtpv2) HasSequenceNumber() bool {
 	return obj.obj.SequenceNumber != nil
 }
 
+// SetSequenceNumber sets the PatternFlowGtpv2SequenceNumber value in the FlowGtpv2 object
+//  description is TBD
+func (obj *flowGtpv2) SetSequenceNumber(value PatternFlowGtpv2SequenceNumber) FlowGtpv2 {
+	obj.SequenceNumber().SetMsg(value.Msg())
+
+	return obj
+}
+
 // Spare2 returns a PatternFlowGtpv2Spare2
 //  description is TBD
 func (obj *flowGtpv2) Spare2() PatternFlowGtpv2Spare2 {
-
 	if obj.obj.Spare2 == nil {
-		obj.obj.Spare2 = &snappipb.PatternFlowGtpv2Spare2{}
-		newObj := &patternFlowGtpv2Spare2{obj: obj.obj.Spare2}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Spare2 = NewPatternFlowGtpv2Spare2().Msg()
 	}
 	return &patternFlowGtpv2Spare2{obj: obj.obj.Spare2}
 }
@@ -30278,6 +32237,14 @@ func (obj *flowGtpv2) Spare2() PatternFlowGtpv2Spare2 {
 //  description is TBD
 func (obj *flowGtpv2) HasSpare2() bool {
 	return obj.obj.Spare2 != nil
+}
+
+// SetSpare2 sets the PatternFlowGtpv2Spare2 value in the FlowGtpv2 object
+//  description is TBD
+func (obj *flowGtpv2) SetSpare2(value PatternFlowGtpv2Spare2) FlowGtpv2 {
+	obj.Spare2().SetMsg(value.Msg())
+
+	return obj
 }
 
 func (obj *flowGtpv2) validateObj(set_default bool) {
@@ -30330,12 +32297,18 @@ type flowArp struct {
 	obj *snappipb.FlowArp
 }
 
+func NewFlowArp() FlowArp {
+	obj := flowArp{obj: &snappipb.FlowArp{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *flowArp) Msg() *snappipb.FlowArp {
 	return obj.obj
 }
 
 func (obj *flowArp) SetMsg(msg *snappipb.FlowArp) FlowArp {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -30456,34 +32429,39 @@ type FlowArp interface {
 	validateObj(set_default bool)
 	setDefault()
 	HardwareType() PatternFlowArpHardwareType
+	SetHardwareType(value PatternFlowArpHardwareType) FlowArp
 	HasHardwareType() bool
 	ProtocolType() PatternFlowArpProtocolType
+	SetProtocolType(value PatternFlowArpProtocolType) FlowArp
 	HasProtocolType() bool
 	HardwareLength() PatternFlowArpHardwareLength
+	SetHardwareLength(value PatternFlowArpHardwareLength) FlowArp
 	HasHardwareLength() bool
 	ProtocolLength() PatternFlowArpProtocolLength
+	SetProtocolLength(value PatternFlowArpProtocolLength) FlowArp
 	HasProtocolLength() bool
 	Operation() PatternFlowArpOperation
+	SetOperation(value PatternFlowArpOperation) FlowArp
 	HasOperation() bool
 	SenderHardwareAddr() PatternFlowArpSenderHardwareAddr
+	SetSenderHardwareAddr(value PatternFlowArpSenderHardwareAddr) FlowArp
 	HasSenderHardwareAddr() bool
 	SenderProtocolAddr() PatternFlowArpSenderProtocolAddr
+	SetSenderProtocolAddr(value PatternFlowArpSenderProtocolAddr) FlowArp
 	HasSenderProtocolAddr() bool
 	TargetHardwareAddr() PatternFlowArpTargetHardwareAddr
+	SetTargetHardwareAddr(value PatternFlowArpTargetHardwareAddr) FlowArp
 	HasTargetHardwareAddr() bool
 	TargetProtocolAddr() PatternFlowArpTargetProtocolAddr
+	SetTargetProtocolAddr(value PatternFlowArpTargetProtocolAddr) FlowArp
 	HasTargetProtocolAddr() bool
 }
 
 // HardwareType returns a PatternFlowArpHardwareType
 //  description is TBD
 func (obj *flowArp) HardwareType() PatternFlowArpHardwareType {
-
 	if obj.obj.HardwareType == nil {
-		obj.obj.HardwareType = &snappipb.PatternFlowArpHardwareType{}
-		newObj := &patternFlowArpHardwareType{obj: obj.obj.HardwareType}
-		newObj.setDefault()
-		return newObj
+		obj.obj.HardwareType = NewPatternFlowArpHardwareType().Msg()
 	}
 	return &patternFlowArpHardwareType{obj: obj.obj.HardwareType}
 }
@@ -30494,15 +32472,19 @@ func (obj *flowArp) HasHardwareType() bool {
 	return obj.obj.HardwareType != nil
 }
 
+// SetHardwareType sets the PatternFlowArpHardwareType value in the FlowArp object
+//  description is TBD
+func (obj *flowArp) SetHardwareType(value PatternFlowArpHardwareType) FlowArp {
+	obj.HardwareType().SetMsg(value.Msg())
+
+	return obj
+}
+
 // ProtocolType returns a PatternFlowArpProtocolType
 //  description is TBD
 func (obj *flowArp) ProtocolType() PatternFlowArpProtocolType {
-
 	if obj.obj.ProtocolType == nil {
-		obj.obj.ProtocolType = &snappipb.PatternFlowArpProtocolType{}
-		newObj := &patternFlowArpProtocolType{obj: obj.obj.ProtocolType}
-		newObj.setDefault()
-		return newObj
+		obj.obj.ProtocolType = NewPatternFlowArpProtocolType().Msg()
 	}
 	return &patternFlowArpProtocolType{obj: obj.obj.ProtocolType}
 }
@@ -30513,15 +32495,19 @@ func (obj *flowArp) HasProtocolType() bool {
 	return obj.obj.ProtocolType != nil
 }
 
+// SetProtocolType sets the PatternFlowArpProtocolType value in the FlowArp object
+//  description is TBD
+func (obj *flowArp) SetProtocolType(value PatternFlowArpProtocolType) FlowArp {
+	obj.ProtocolType().SetMsg(value.Msg())
+
+	return obj
+}
+
 // HardwareLength returns a PatternFlowArpHardwareLength
 //  description is TBD
 func (obj *flowArp) HardwareLength() PatternFlowArpHardwareLength {
-
 	if obj.obj.HardwareLength == nil {
-		obj.obj.HardwareLength = &snappipb.PatternFlowArpHardwareLength{}
-		newObj := &patternFlowArpHardwareLength{obj: obj.obj.HardwareLength}
-		newObj.setDefault()
-		return newObj
+		obj.obj.HardwareLength = NewPatternFlowArpHardwareLength().Msg()
 	}
 	return &patternFlowArpHardwareLength{obj: obj.obj.HardwareLength}
 }
@@ -30532,15 +32518,19 @@ func (obj *flowArp) HasHardwareLength() bool {
 	return obj.obj.HardwareLength != nil
 }
 
+// SetHardwareLength sets the PatternFlowArpHardwareLength value in the FlowArp object
+//  description is TBD
+func (obj *flowArp) SetHardwareLength(value PatternFlowArpHardwareLength) FlowArp {
+	obj.HardwareLength().SetMsg(value.Msg())
+
+	return obj
+}
+
 // ProtocolLength returns a PatternFlowArpProtocolLength
 //  description is TBD
 func (obj *flowArp) ProtocolLength() PatternFlowArpProtocolLength {
-
 	if obj.obj.ProtocolLength == nil {
-		obj.obj.ProtocolLength = &snappipb.PatternFlowArpProtocolLength{}
-		newObj := &patternFlowArpProtocolLength{obj: obj.obj.ProtocolLength}
-		newObj.setDefault()
-		return newObj
+		obj.obj.ProtocolLength = NewPatternFlowArpProtocolLength().Msg()
 	}
 	return &patternFlowArpProtocolLength{obj: obj.obj.ProtocolLength}
 }
@@ -30551,15 +32541,19 @@ func (obj *flowArp) HasProtocolLength() bool {
 	return obj.obj.ProtocolLength != nil
 }
 
+// SetProtocolLength sets the PatternFlowArpProtocolLength value in the FlowArp object
+//  description is TBD
+func (obj *flowArp) SetProtocolLength(value PatternFlowArpProtocolLength) FlowArp {
+	obj.ProtocolLength().SetMsg(value.Msg())
+
+	return obj
+}
+
 // Operation returns a PatternFlowArpOperation
 //  description is TBD
 func (obj *flowArp) Operation() PatternFlowArpOperation {
-
 	if obj.obj.Operation == nil {
-		obj.obj.Operation = &snappipb.PatternFlowArpOperation{}
-		newObj := &patternFlowArpOperation{obj: obj.obj.Operation}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Operation = NewPatternFlowArpOperation().Msg()
 	}
 	return &patternFlowArpOperation{obj: obj.obj.Operation}
 }
@@ -30570,15 +32564,19 @@ func (obj *flowArp) HasOperation() bool {
 	return obj.obj.Operation != nil
 }
 
+// SetOperation sets the PatternFlowArpOperation value in the FlowArp object
+//  description is TBD
+func (obj *flowArp) SetOperation(value PatternFlowArpOperation) FlowArp {
+	obj.Operation().SetMsg(value.Msg())
+
+	return obj
+}
+
 // SenderHardwareAddr returns a PatternFlowArpSenderHardwareAddr
 //  description is TBD
 func (obj *flowArp) SenderHardwareAddr() PatternFlowArpSenderHardwareAddr {
-
 	if obj.obj.SenderHardwareAddr == nil {
-		obj.obj.SenderHardwareAddr = &snappipb.PatternFlowArpSenderHardwareAddr{}
-		newObj := &patternFlowArpSenderHardwareAddr{obj: obj.obj.SenderHardwareAddr}
-		newObj.setDefault()
-		return newObj
+		obj.obj.SenderHardwareAddr = NewPatternFlowArpSenderHardwareAddr().Msg()
 	}
 	return &patternFlowArpSenderHardwareAddr{obj: obj.obj.SenderHardwareAddr}
 }
@@ -30589,15 +32587,19 @@ func (obj *flowArp) HasSenderHardwareAddr() bool {
 	return obj.obj.SenderHardwareAddr != nil
 }
 
+// SetSenderHardwareAddr sets the PatternFlowArpSenderHardwareAddr value in the FlowArp object
+//  description is TBD
+func (obj *flowArp) SetSenderHardwareAddr(value PatternFlowArpSenderHardwareAddr) FlowArp {
+	obj.SenderHardwareAddr().SetMsg(value.Msg())
+
+	return obj
+}
+
 // SenderProtocolAddr returns a PatternFlowArpSenderProtocolAddr
 //  description is TBD
 func (obj *flowArp) SenderProtocolAddr() PatternFlowArpSenderProtocolAddr {
-
 	if obj.obj.SenderProtocolAddr == nil {
-		obj.obj.SenderProtocolAddr = &snappipb.PatternFlowArpSenderProtocolAddr{}
-		newObj := &patternFlowArpSenderProtocolAddr{obj: obj.obj.SenderProtocolAddr}
-		newObj.setDefault()
-		return newObj
+		obj.obj.SenderProtocolAddr = NewPatternFlowArpSenderProtocolAddr().Msg()
 	}
 	return &patternFlowArpSenderProtocolAddr{obj: obj.obj.SenderProtocolAddr}
 }
@@ -30608,15 +32610,19 @@ func (obj *flowArp) HasSenderProtocolAddr() bool {
 	return obj.obj.SenderProtocolAddr != nil
 }
 
+// SetSenderProtocolAddr sets the PatternFlowArpSenderProtocolAddr value in the FlowArp object
+//  description is TBD
+func (obj *flowArp) SetSenderProtocolAddr(value PatternFlowArpSenderProtocolAddr) FlowArp {
+	obj.SenderProtocolAddr().SetMsg(value.Msg())
+
+	return obj
+}
+
 // TargetHardwareAddr returns a PatternFlowArpTargetHardwareAddr
 //  description is TBD
 func (obj *flowArp) TargetHardwareAddr() PatternFlowArpTargetHardwareAddr {
-
 	if obj.obj.TargetHardwareAddr == nil {
-		obj.obj.TargetHardwareAddr = &snappipb.PatternFlowArpTargetHardwareAddr{}
-		newObj := &patternFlowArpTargetHardwareAddr{obj: obj.obj.TargetHardwareAddr}
-		newObj.setDefault()
-		return newObj
+		obj.obj.TargetHardwareAddr = NewPatternFlowArpTargetHardwareAddr().Msg()
 	}
 	return &patternFlowArpTargetHardwareAddr{obj: obj.obj.TargetHardwareAddr}
 }
@@ -30627,15 +32633,19 @@ func (obj *flowArp) HasTargetHardwareAddr() bool {
 	return obj.obj.TargetHardwareAddr != nil
 }
 
+// SetTargetHardwareAddr sets the PatternFlowArpTargetHardwareAddr value in the FlowArp object
+//  description is TBD
+func (obj *flowArp) SetTargetHardwareAddr(value PatternFlowArpTargetHardwareAddr) FlowArp {
+	obj.TargetHardwareAddr().SetMsg(value.Msg())
+
+	return obj
+}
+
 // TargetProtocolAddr returns a PatternFlowArpTargetProtocolAddr
 //  description is TBD
 func (obj *flowArp) TargetProtocolAddr() PatternFlowArpTargetProtocolAddr {
-
 	if obj.obj.TargetProtocolAddr == nil {
-		obj.obj.TargetProtocolAddr = &snappipb.PatternFlowArpTargetProtocolAddr{}
-		newObj := &patternFlowArpTargetProtocolAddr{obj: obj.obj.TargetProtocolAddr}
-		newObj.setDefault()
-		return newObj
+		obj.obj.TargetProtocolAddr = NewPatternFlowArpTargetProtocolAddr().Msg()
 	}
 	return &patternFlowArpTargetProtocolAddr{obj: obj.obj.TargetProtocolAddr}
 }
@@ -30644,6 +32654,14 @@ func (obj *flowArp) TargetProtocolAddr() PatternFlowArpTargetProtocolAddr {
 //  description is TBD
 func (obj *flowArp) HasTargetProtocolAddr() bool {
 	return obj.obj.TargetProtocolAddr != nil
+}
+
+// SetTargetProtocolAddr sets the PatternFlowArpTargetProtocolAddr value in the FlowArp object
+//  description is TBD
+func (obj *flowArp) SetTargetProtocolAddr(value PatternFlowArpTargetProtocolAddr) FlowArp {
+	obj.TargetProtocolAddr().SetMsg(value.Msg())
+
+	return obj
 }
 
 func (obj *flowArp) validateObj(set_default bool) {
@@ -30696,12 +32714,18 @@ type flowIcmp struct {
 	obj *snappipb.FlowIcmp
 }
 
+func NewFlowIcmp() FlowIcmp {
+	obj := flowIcmp{obj: &snappipb.FlowIcmp{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *flowIcmp) Msg() *snappipb.FlowIcmp {
 	return obj.obj
 }
 
 func (obj *flowIcmp) SetMsg(msg *snappipb.FlowIcmp) FlowIcmp {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -30825,6 +32849,7 @@ type FlowIcmp interface {
 	SetChoice(value FlowIcmpChoiceEnum) FlowIcmp
 	HasChoice() bool
 	Echo() FlowIcmpEcho
+	SetEcho(value FlowIcmpEcho) FlowIcmp
 	HasEcho() bool
 }
 
@@ -30863,10 +32888,7 @@ func (obj *flowIcmp) SetChoice(value FlowIcmpChoiceEnum) FlowIcmp {
 func (obj *flowIcmp) Echo() FlowIcmpEcho {
 	obj.SetChoice(FlowIcmpChoice.ECHO)
 	if obj.obj.Echo == nil {
-		obj.obj.Echo = &snappipb.FlowIcmpEcho{}
-		newObj := &flowIcmpEcho{obj: obj.obj.Echo}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Echo = NewFlowIcmpEcho().Msg()
 	}
 	return &flowIcmpEcho{obj: obj.obj.Echo}
 }
@@ -30875,6 +32897,14 @@ func (obj *flowIcmp) Echo() FlowIcmpEcho {
 //  description is TBD
 func (obj *flowIcmp) HasEcho() bool {
 	return obj.obj.Echo != nil
+}
+
+// SetEcho sets the FlowIcmpEcho value in the FlowIcmp object
+//  description is TBD
+func (obj *flowIcmp) SetEcho(value FlowIcmpEcho) FlowIcmp {
+	obj.Echo().SetMsg(value.Msg())
+	obj.SetChoice(FlowIcmpChoice.ECHO)
+	return obj
 }
 
 func (obj *flowIcmp) validateObj(set_default bool) {
@@ -30898,12 +32928,18 @@ type flowIcmpv6 struct {
 	obj *snappipb.FlowIcmpv6
 }
 
+func NewFlowIcmpv6() FlowIcmpv6 {
+	obj := flowIcmpv6{obj: &snappipb.FlowIcmpv6{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *flowIcmpv6) Msg() *snappipb.FlowIcmpv6 {
 	return obj.obj
 }
 
 func (obj *flowIcmpv6) SetMsg(msg *snappipb.FlowIcmpv6) FlowIcmpv6 {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -31027,6 +33063,7 @@ type FlowIcmpv6 interface {
 	SetChoice(value FlowIcmpv6ChoiceEnum) FlowIcmpv6
 	HasChoice() bool
 	Echo() FlowIcmpv6Echo
+	SetEcho(value FlowIcmpv6Echo) FlowIcmpv6
 	HasEcho() bool
 }
 
@@ -31065,10 +33102,7 @@ func (obj *flowIcmpv6) SetChoice(value FlowIcmpv6ChoiceEnum) FlowIcmpv6 {
 func (obj *flowIcmpv6) Echo() FlowIcmpv6Echo {
 	obj.SetChoice(FlowIcmpv6Choice.ECHO)
 	if obj.obj.Echo == nil {
-		obj.obj.Echo = &snappipb.FlowIcmpv6Echo{}
-		newObj := &flowIcmpv6Echo{obj: obj.obj.Echo}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Echo = NewFlowIcmpv6Echo().Msg()
 	}
 	return &flowIcmpv6Echo{obj: obj.obj.Echo}
 }
@@ -31077,6 +33111,14 @@ func (obj *flowIcmpv6) Echo() FlowIcmpv6Echo {
 //  description is TBD
 func (obj *flowIcmpv6) HasEcho() bool {
 	return obj.obj.Echo != nil
+}
+
+// SetEcho sets the FlowIcmpv6Echo value in the FlowIcmpv6 object
+//  description is TBD
+func (obj *flowIcmpv6) SetEcho(value FlowIcmpv6Echo) FlowIcmpv6 {
+	obj.Echo().SetMsg(value.Msg())
+	obj.SetChoice(FlowIcmpv6Choice.ECHO)
+	return obj
 }
 
 func (obj *flowIcmpv6) validateObj(set_default bool) {
@@ -31100,12 +33142,18 @@ type flowPpp struct {
 	obj *snappipb.FlowPpp
 }
 
+func NewFlowPpp() FlowPpp {
+	obj := flowPpp{obj: &snappipb.FlowPpp{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *flowPpp) Msg() *snappipb.FlowPpp {
 	return obj.obj
 }
 
 func (obj *flowPpp) SetMsg(msg *snappipb.FlowPpp) FlowPpp {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -31226,22 +33274,21 @@ type FlowPpp interface {
 	validateObj(set_default bool)
 	setDefault()
 	Address() PatternFlowPppAddress
+	SetAddress(value PatternFlowPppAddress) FlowPpp
 	HasAddress() bool
 	Control() PatternFlowPppControl
+	SetControl(value PatternFlowPppControl) FlowPpp
 	HasControl() bool
 	ProtocolType() PatternFlowPppProtocolType
+	SetProtocolType(value PatternFlowPppProtocolType) FlowPpp
 	HasProtocolType() bool
 }
 
 // Address returns a PatternFlowPppAddress
 //  description is TBD
 func (obj *flowPpp) Address() PatternFlowPppAddress {
-
 	if obj.obj.Address == nil {
-		obj.obj.Address = &snappipb.PatternFlowPppAddress{}
-		newObj := &patternFlowPppAddress{obj: obj.obj.Address}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Address = NewPatternFlowPppAddress().Msg()
 	}
 	return &patternFlowPppAddress{obj: obj.obj.Address}
 }
@@ -31252,15 +33299,19 @@ func (obj *flowPpp) HasAddress() bool {
 	return obj.obj.Address != nil
 }
 
+// SetAddress sets the PatternFlowPppAddress value in the FlowPpp object
+//  description is TBD
+func (obj *flowPpp) SetAddress(value PatternFlowPppAddress) FlowPpp {
+	obj.Address().SetMsg(value.Msg())
+
+	return obj
+}
+
 // Control returns a PatternFlowPppControl
 //  description is TBD
 func (obj *flowPpp) Control() PatternFlowPppControl {
-
 	if obj.obj.Control == nil {
-		obj.obj.Control = &snappipb.PatternFlowPppControl{}
-		newObj := &patternFlowPppControl{obj: obj.obj.Control}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Control = NewPatternFlowPppControl().Msg()
 	}
 	return &patternFlowPppControl{obj: obj.obj.Control}
 }
@@ -31271,15 +33322,19 @@ func (obj *flowPpp) HasControl() bool {
 	return obj.obj.Control != nil
 }
 
+// SetControl sets the PatternFlowPppControl value in the FlowPpp object
+//  description is TBD
+func (obj *flowPpp) SetControl(value PatternFlowPppControl) FlowPpp {
+	obj.Control().SetMsg(value.Msg())
+
+	return obj
+}
+
 // ProtocolType returns a PatternFlowPppProtocolType
 //  description is TBD
 func (obj *flowPpp) ProtocolType() PatternFlowPppProtocolType {
-
 	if obj.obj.ProtocolType == nil {
-		obj.obj.ProtocolType = &snappipb.PatternFlowPppProtocolType{}
-		newObj := &patternFlowPppProtocolType{obj: obj.obj.ProtocolType}
-		newObj.setDefault()
-		return newObj
+		obj.obj.ProtocolType = NewPatternFlowPppProtocolType().Msg()
 	}
 	return &patternFlowPppProtocolType{obj: obj.obj.ProtocolType}
 }
@@ -31288,6 +33343,14 @@ func (obj *flowPpp) ProtocolType() PatternFlowPppProtocolType {
 //  description is TBD
 func (obj *flowPpp) HasProtocolType() bool {
 	return obj.obj.ProtocolType != nil
+}
+
+// SetProtocolType sets the PatternFlowPppProtocolType value in the FlowPpp object
+//  description is TBD
+func (obj *flowPpp) SetProtocolType(value PatternFlowPppProtocolType) FlowPpp {
+	obj.ProtocolType().SetMsg(value.Msg())
+
+	return obj
 }
 
 func (obj *flowPpp) validateObj(set_default bool) {
@@ -31316,12 +33379,18 @@ type flowIgmpv1 struct {
 	obj *snappipb.FlowIgmpv1
 }
 
+func NewFlowIgmpv1() FlowIgmpv1 {
+	obj := flowIgmpv1{obj: &snappipb.FlowIgmpv1{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *flowIgmpv1) Msg() *snappipb.FlowIgmpv1 {
 	return obj.obj
 }
 
 func (obj *flowIgmpv1) SetMsg(msg *snappipb.FlowIgmpv1) FlowIgmpv1 {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -31442,26 +33511,27 @@ type FlowIgmpv1 interface {
 	validateObj(set_default bool)
 	setDefault()
 	Version() PatternFlowIgmpv1Version
+	SetVersion(value PatternFlowIgmpv1Version) FlowIgmpv1
 	HasVersion() bool
 	Type() PatternFlowIgmpv1Type
+	SetType(value PatternFlowIgmpv1Type) FlowIgmpv1
 	HasType() bool
 	Unused() PatternFlowIgmpv1Unused
+	SetUnused(value PatternFlowIgmpv1Unused) FlowIgmpv1
 	HasUnused() bool
 	Checksum() PatternFlowIgmpv1Checksum
+	SetChecksum(value PatternFlowIgmpv1Checksum) FlowIgmpv1
 	HasChecksum() bool
 	GroupAddress() PatternFlowIgmpv1GroupAddress
+	SetGroupAddress(value PatternFlowIgmpv1GroupAddress) FlowIgmpv1
 	HasGroupAddress() bool
 }
 
 // Version returns a PatternFlowIgmpv1Version
 //  description is TBD
 func (obj *flowIgmpv1) Version() PatternFlowIgmpv1Version {
-
 	if obj.obj.Version == nil {
-		obj.obj.Version = &snappipb.PatternFlowIgmpv1Version{}
-		newObj := &patternFlowIgmpv1Version{obj: obj.obj.Version}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Version = NewPatternFlowIgmpv1Version().Msg()
 	}
 	return &patternFlowIgmpv1Version{obj: obj.obj.Version}
 }
@@ -31472,15 +33542,19 @@ func (obj *flowIgmpv1) HasVersion() bool {
 	return obj.obj.Version != nil
 }
 
+// SetVersion sets the PatternFlowIgmpv1Version value in the FlowIgmpv1 object
+//  description is TBD
+func (obj *flowIgmpv1) SetVersion(value PatternFlowIgmpv1Version) FlowIgmpv1 {
+	obj.Version().SetMsg(value.Msg())
+
+	return obj
+}
+
 // Type returns a PatternFlowIgmpv1Type
 //  description is TBD
 func (obj *flowIgmpv1) Type() PatternFlowIgmpv1Type {
-
 	if obj.obj.Type == nil {
-		obj.obj.Type = &snappipb.PatternFlowIgmpv1Type{}
-		newObj := &patternFlowIgmpv1Type{obj: obj.obj.Type}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Type = NewPatternFlowIgmpv1Type().Msg()
 	}
 	return &patternFlowIgmpv1Type{obj: obj.obj.Type}
 }
@@ -31491,15 +33565,19 @@ func (obj *flowIgmpv1) HasType() bool {
 	return obj.obj.Type != nil
 }
 
+// SetType sets the PatternFlowIgmpv1Type value in the FlowIgmpv1 object
+//  description is TBD
+func (obj *flowIgmpv1) SetType(value PatternFlowIgmpv1Type) FlowIgmpv1 {
+	obj.Type().SetMsg(value.Msg())
+
+	return obj
+}
+
 // Unused returns a PatternFlowIgmpv1Unused
 //  description is TBD
 func (obj *flowIgmpv1) Unused() PatternFlowIgmpv1Unused {
-
 	if obj.obj.Unused == nil {
-		obj.obj.Unused = &snappipb.PatternFlowIgmpv1Unused{}
-		newObj := &patternFlowIgmpv1Unused{obj: obj.obj.Unused}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Unused = NewPatternFlowIgmpv1Unused().Msg()
 	}
 	return &patternFlowIgmpv1Unused{obj: obj.obj.Unused}
 }
@@ -31510,15 +33588,19 @@ func (obj *flowIgmpv1) HasUnused() bool {
 	return obj.obj.Unused != nil
 }
 
+// SetUnused sets the PatternFlowIgmpv1Unused value in the FlowIgmpv1 object
+//  description is TBD
+func (obj *flowIgmpv1) SetUnused(value PatternFlowIgmpv1Unused) FlowIgmpv1 {
+	obj.Unused().SetMsg(value.Msg())
+
+	return obj
+}
+
 // Checksum returns a PatternFlowIgmpv1Checksum
 //  description is TBD
 func (obj *flowIgmpv1) Checksum() PatternFlowIgmpv1Checksum {
-
 	if obj.obj.Checksum == nil {
-		obj.obj.Checksum = &snappipb.PatternFlowIgmpv1Checksum{}
-		newObj := &patternFlowIgmpv1Checksum{obj: obj.obj.Checksum}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Checksum = NewPatternFlowIgmpv1Checksum().Msg()
 	}
 	return &patternFlowIgmpv1Checksum{obj: obj.obj.Checksum}
 }
@@ -31529,15 +33611,19 @@ func (obj *flowIgmpv1) HasChecksum() bool {
 	return obj.obj.Checksum != nil
 }
 
+// SetChecksum sets the PatternFlowIgmpv1Checksum value in the FlowIgmpv1 object
+//  description is TBD
+func (obj *flowIgmpv1) SetChecksum(value PatternFlowIgmpv1Checksum) FlowIgmpv1 {
+	obj.Checksum().SetMsg(value.Msg())
+
+	return obj
+}
+
 // GroupAddress returns a PatternFlowIgmpv1GroupAddress
 //  description is TBD
 func (obj *flowIgmpv1) GroupAddress() PatternFlowIgmpv1GroupAddress {
-
 	if obj.obj.GroupAddress == nil {
-		obj.obj.GroupAddress = &snappipb.PatternFlowIgmpv1GroupAddress{}
-		newObj := &patternFlowIgmpv1GroupAddress{obj: obj.obj.GroupAddress}
-		newObj.setDefault()
-		return newObj
+		obj.obj.GroupAddress = NewPatternFlowIgmpv1GroupAddress().Msg()
 	}
 	return &patternFlowIgmpv1GroupAddress{obj: obj.obj.GroupAddress}
 }
@@ -31546,6 +33632,14 @@ func (obj *flowIgmpv1) GroupAddress() PatternFlowIgmpv1GroupAddress {
 //  description is TBD
 func (obj *flowIgmpv1) HasGroupAddress() bool {
 	return obj.obj.GroupAddress != nil
+}
+
+// SetGroupAddress sets the PatternFlowIgmpv1GroupAddress value in the FlowIgmpv1 object
+//  description is TBD
+func (obj *flowIgmpv1) SetGroupAddress(value PatternFlowIgmpv1GroupAddress) FlowIgmpv1 {
+	obj.GroupAddress().SetMsg(value.Msg())
+
+	return obj
 }
 
 func (obj *flowIgmpv1) validateObj(set_default bool) {
@@ -31582,12 +33676,18 @@ type flowSizeIncrement struct {
 	obj *snappipb.FlowSizeIncrement
 }
 
+func NewFlowSizeIncrement() FlowSizeIncrement {
+	obj := flowSizeIncrement{obj: &snappipb.FlowSizeIncrement{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *flowSizeIncrement) Msg() *snappipb.FlowSizeIncrement {
 	return obj.obj
 }
 
 func (obj *flowSizeIncrement) SetMsg(msg *snappipb.FlowSizeIncrement) FlowSizeIncrement {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -31818,12 +33918,18 @@ type flowSizeRandom struct {
 	obj *snappipb.FlowSizeRandom
 }
 
+func NewFlowSizeRandom() FlowSizeRandom {
+	obj := flowSizeRandom{obj: &snappipb.FlowSizeRandom{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *flowSizeRandom) Msg() *snappipb.FlowSizeRandom {
 	return obj.obj
 }
 
 func (obj *flowSizeRandom) SetMsg(msg *snappipb.FlowSizeRandom) FlowSizeRandom {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -32012,12 +34118,18 @@ type flowFixedPackets struct {
 	obj *snappipb.FlowFixedPackets
 }
 
+func NewFlowFixedPackets() FlowFixedPackets {
+	obj := flowFixedPackets{obj: &snappipb.FlowFixedPackets{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *flowFixedPackets) Msg() *snappipb.FlowFixedPackets {
 	return obj.obj
 }
 
 func (obj *flowFixedPackets) SetMsg(msg *snappipb.FlowFixedPackets) FlowFixedPackets {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -32144,6 +34256,7 @@ type FlowFixedPackets interface {
 	SetGap(value int32) FlowFixedPackets
 	HasGap() bool
 	Delay() FlowDelay
+	SetDelay(value FlowDelay) FlowFixedPackets
 	HasDelay() bool
 }
 
@@ -32190,12 +34303,8 @@ func (obj *flowFixedPackets) SetGap(value int32) FlowFixedPackets {
 // Delay returns a FlowDelay
 //  description is TBD
 func (obj *flowFixedPackets) Delay() FlowDelay {
-
 	if obj.obj.Delay == nil {
-		obj.obj.Delay = &snappipb.FlowDelay{}
-		newObj := &flowDelay{obj: obj.obj.Delay}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Delay = NewFlowDelay().Msg()
 	}
 	return &flowDelay{obj: obj.obj.Delay}
 }
@@ -32204,6 +34313,14 @@ func (obj *flowFixedPackets) Delay() FlowDelay {
 //  description is TBD
 func (obj *flowFixedPackets) HasDelay() bool {
 	return obj.obj.Delay != nil
+}
+
+// SetDelay sets the FlowDelay value in the FlowFixedPackets object
+//  description is TBD
+func (obj *flowFixedPackets) SetDelay(value FlowDelay) FlowFixedPackets {
+	obj.Delay().SetMsg(value.Msg())
+
+	return obj
 }
 
 func (obj *flowFixedPackets) validateObj(set_default bool) {
@@ -32230,12 +34347,18 @@ type flowFixedSeconds struct {
 	obj *snappipb.FlowFixedSeconds
 }
 
+func NewFlowFixedSeconds() FlowFixedSeconds {
+	obj := flowFixedSeconds{obj: &snappipb.FlowFixedSeconds{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *flowFixedSeconds) Msg() *snappipb.FlowFixedSeconds {
 	return obj.obj
 }
 
 func (obj *flowFixedSeconds) SetMsg(msg *snappipb.FlowFixedSeconds) FlowFixedSeconds {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -32362,6 +34485,7 @@ type FlowFixedSeconds interface {
 	SetGap(value int32) FlowFixedSeconds
 	HasGap() bool
 	Delay() FlowDelay
+	SetDelay(value FlowDelay) FlowFixedSeconds
 	HasDelay() bool
 }
 
@@ -32408,12 +34532,8 @@ func (obj *flowFixedSeconds) SetGap(value int32) FlowFixedSeconds {
 // Delay returns a FlowDelay
 //  description is TBD
 func (obj *flowFixedSeconds) Delay() FlowDelay {
-
 	if obj.obj.Delay == nil {
-		obj.obj.Delay = &snappipb.FlowDelay{}
-		newObj := &flowDelay{obj: obj.obj.Delay}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Delay = NewFlowDelay().Msg()
 	}
 	return &flowDelay{obj: obj.obj.Delay}
 }
@@ -32422,6 +34542,14 @@ func (obj *flowFixedSeconds) Delay() FlowDelay {
 //  description is TBD
 func (obj *flowFixedSeconds) HasDelay() bool {
 	return obj.obj.Delay != nil
+}
+
+// SetDelay sets the FlowDelay value in the FlowFixedSeconds object
+//  description is TBD
+func (obj *flowFixedSeconds) SetDelay(value FlowDelay) FlowFixedSeconds {
+	obj.Delay().SetMsg(value.Msg())
+
+	return obj
 }
 
 func (obj *flowFixedSeconds) validateObj(set_default bool) {
@@ -32448,12 +34576,18 @@ type flowBurst struct {
 	obj *snappipb.FlowBurst
 }
 
+func NewFlowBurst() FlowBurst {
+	obj := flowBurst{obj: &snappipb.FlowBurst{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *flowBurst) Msg() *snappipb.FlowBurst {
 	return obj.obj
 }
 
 func (obj *flowBurst) SetMsg(msg *snappipb.FlowBurst) FlowBurst {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -32583,6 +34717,7 @@ type FlowBurst interface {
 	SetGap(value int32) FlowBurst
 	HasGap() bool
 	InterBurstGap() FlowDurationInterBurstGap
+	SetInterBurstGap(value FlowDurationInterBurstGap) FlowBurst
 	HasInterBurstGap() bool
 }
 
@@ -32652,12 +34787,8 @@ func (obj *flowBurst) SetGap(value int32) FlowBurst {
 // InterBurstGap returns a FlowDurationInterBurstGap
 //  description is TBD
 func (obj *flowBurst) InterBurstGap() FlowDurationInterBurstGap {
-
 	if obj.obj.InterBurstGap == nil {
-		obj.obj.InterBurstGap = &snappipb.FlowDurationInterBurstGap{}
-		newObj := &flowDurationInterBurstGap{obj: obj.obj.InterBurstGap}
-		newObj.setDefault()
-		return newObj
+		obj.obj.InterBurstGap = NewFlowDurationInterBurstGap().Msg()
 	}
 	return &flowDurationInterBurstGap{obj: obj.obj.InterBurstGap}
 }
@@ -32666,6 +34797,14 @@ func (obj *flowBurst) InterBurstGap() FlowDurationInterBurstGap {
 //  description is TBD
 func (obj *flowBurst) HasInterBurstGap() bool {
 	return obj.obj.InterBurstGap != nil
+}
+
+// SetInterBurstGap sets the FlowDurationInterBurstGap value in the FlowBurst object
+//  description is TBD
+func (obj *flowBurst) SetInterBurstGap(value FlowDurationInterBurstGap) FlowBurst {
+	obj.InterBurstGap().SetMsg(value.Msg())
+
+	return obj
 }
 
 func (obj *flowBurst) validateObj(set_default bool) {
@@ -32700,12 +34839,18 @@ type flowContinuous struct {
 	obj *snappipb.FlowContinuous
 }
 
+func NewFlowContinuous() FlowContinuous {
+	obj := flowContinuous{obj: &snappipb.FlowContinuous{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *flowContinuous) Msg() *snappipb.FlowContinuous {
 	return obj.obj
 }
 
 func (obj *flowContinuous) SetMsg(msg *snappipb.FlowContinuous) FlowContinuous {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -32829,6 +34974,7 @@ type FlowContinuous interface {
 	SetGap(value int32) FlowContinuous
 	HasGap() bool
 	Delay() FlowDelay
+	SetDelay(value FlowDelay) FlowContinuous
 	HasDelay() bool
 }
 
@@ -32855,12 +35001,8 @@ func (obj *flowContinuous) SetGap(value int32) FlowContinuous {
 // Delay returns a FlowDelay
 //  description is TBD
 func (obj *flowContinuous) Delay() FlowDelay {
-
 	if obj.obj.Delay == nil {
-		obj.obj.Delay = &snappipb.FlowDelay{}
-		newObj := &flowDelay{obj: obj.obj.Delay}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Delay = NewFlowDelay().Msg()
 	}
 	return &flowDelay{obj: obj.obj.Delay}
 }
@@ -32869,6 +35011,14 @@ func (obj *flowContinuous) Delay() FlowDelay {
 //  description is TBD
 func (obj *flowContinuous) HasDelay() bool {
 	return obj.obj.Delay != nil
+}
+
+// SetDelay sets the FlowDelay value in the FlowContinuous object
+//  description is TBD
+func (obj *flowContinuous) SetDelay(value FlowDelay) FlowContinuous {
+	obj.Delay().SetMsg(value.Msg())
+
+	return obj
 }
 
 func (obj *flowContinuous) validateObj(set_default bool) {
@@ -32892,12 +35042,18 @@ type flowLatencyMetrics struct {
 	obj *snappipb.FlowLatencyMetrics
 }
 
+func NewFlowLatencyMetrics() FlowLatencyMetrics {
+	obj := flowLatencyMetrics{obj: &snappipb.FlowLatencyMetrics{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *flowLatencyMetrics) Msg() *snappipb.FlowLatencyMetrics {
 	return obj.obj
 }
 
 func (obj *flowLatencyMetrics) SetMsg(msg *snappipb.FlowLatencyMetrics) FlowLatencyMetrics {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -33121,12 +35277,18 @@ type flowMetricGroup struct {
 	obj *snappipb.FlowMetricGroup
 }
 
+func NewFlowMetricGroup() FlowMetricGroup {
+	obj := flowMetricGroup{obj: &snappipb.FlowMetricGroup{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *flowMetricGroup) Msg() *snappipb.FlowMetricGroup {
 	return obj.obj
 }
 
 func (obj *flowMetricGroup) SetMsg(msg *snappipb.FlowMetricGroup) FlowMetricGroup {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -33309,12 +35471,18 @@ type metricTimestamp struct {
 	obj *snappipb.MetricTimestamp
 }
 
+func NewMetricTimestamp() MetricTimestamp {
+	obj := metricTimestamp{obj: &snappipb.MetricTimestamp{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *metricTimestamp) Msg() *snappipb.MetricTimestamp {
 	return obj.obj
 }
 
 func (obj *metricTimestamp) SetMsg(msg *snappipb.MetricTimestamp) MetricTimestamp {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -33497,12 +35665,18 @@ type metricLatency struct {
 	obj *snappipb.MetricLatency
 }
 
+func NewMetricLatency() MetricLatency {
+	obj := metricLatency{obj: &snappipb.MetricLatency{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *metricLatency) Msg() *snappipb.MetricLatency {
 	return obj.obj
 }
 
 func (obj *metricLatency) SetMsg(msg *snappipb.MetricLatency) MetricLatency {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -33708,12 +35882,18 @@ type lagLacp struct {
 	obj *snappipb.LagLacp
 }
 
+func NewLagLacp() LagLacp {
+	obj := lagLacp{obj: &snappipb.LagLacp{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *lagLacp) Msg() *snappipb.LagLacp {
 	return obj.obj
 }
 
 func (obj *lagLacp) SetMsg(msg *snappipb.LagLacp) LagLacp {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -34127,12 +36307,18 @@ type lagStatic struct {
 	obj *snappipb.LagStatic
 }
 
+func NewLagStatic() LagStatic {
+	obj := lagStatic{obj: &snappipb.LagStatic{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *lagStatic) Msg() *snappipb.LagStatic {
 	return obj.obj
 }
 
 func (obj *lagStatic) SetMsg(msg *snappipb.LagStatic) LagStatic {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -34303,12 +36489,18 @@ type captureField struct {
 	obj *snappipb.CaptureField
 }
 
+func NewCaptureField() CaptureField {
+	obj := captureField{obj: &snappipb.CaptureField{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *captureField) Msg() *snappipb.CaptureField {
 	return obj.obj
 }
 
 func (obj *captureField) SetMsg(msg *snappipb.CaptureField) CaptureField {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -34537,12 +36729,18 @@ type isisInterfaceLevel struct {
 	obj *snappipb.IsisInterfaceLevel
 }
 
+func NewIsisInterfaceLevel() IsisInterfaceLevel {
+	obj := isisInterfaceLevel{obj: &snappipb.IsisInterfaceLevel{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *isisInterfaceLevel) Msg() *snappipb.IsisInterfaceLevel {
 	return obj.obj
 }
 
 func (obj *isisInterfaceLevel) SetMsg(msg *snappipb.IsisInterfaceLevel) IsisInterfaceLevel {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -34757,12 +36955,18 @@ type isisMT struct {
 	obj *snappipb.IsisMT
 }
 
+func NewIsisMT() IsisMT {
+	obj := isisMT{obj: &snappipb.IsisMT{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *isisMT) Msg() *snappipb.IsisMT {
 	return obj.obj
 }
 
 func (obj *isisMT) SetMsg(msg *snappipb.IsisMT) IsisMT {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -34967,12 +37171,18 @@ type linkStateTE struct {
 	obj *snappipb.LinkStateTE
 }
 
+func NewLinkStateTE() LinkStateTE {
+	obj := linkStateTE{obj: &snappipb.LinkStateTE{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *linkStateTE) Msg() *snappipb.LinkStateTE {
 	return obj.obj
 }
 
 func (obj *linkStateTE) SetMsg(msg *snappipb.LinkStateTE) LinkStateTE {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -35105,6 +37315,7 @@ type LinkStateTE interface {
 	SetMaxReservableBandwidth(value int64) LinkStateTE
 	HasMaxReservableBandwidth() bool
 	PriorityBandwidths07() LinkStatepriorityBandwidths
+	SetPriorityBandwidths07(value LinkStatepriorityBandwidths) LinkStateTE
 	HasPriorityBandwidths07() bool
 }
 
@@ -35212,12 +37423,8 @@ func (obj *linkStateTE) SetMaxReservableBandwidth(value int64) LinkStateTE {
 // PriorityBandwidths07 returns a LinkStatepriorityBandwidths
 //  Configuration of bandwidths of priority 0 through priority 7.
 func (obj *linkStateTE) PriorityBandwidths07() LinkStatepriorityBandwidths {
-
 	if obj.obj.PriorityBandwidths_0_7 == nil {
-		obj.obj.PriorityBandwidths_0_7 = &snappipb.LinkStatepriorityBandwidths{}
-		newObj := &linkStatepriorityBandwidths{obj: obj.obj.PriorityBandwidths_0_7}
-		newObj.setDefault()
-		return newObj
+		obj.obj.PriorityBandwidths_0_7 = NewLinkStatepriorityBandwidths().Msg()
 	}
 	return &linkStatepriorityBandwidths{obj: obj.obj.PriorityBandwidths_0_7}
 }
@@ -35226,6 +37433,14 @@ func (obj *linkStateTE) PriorityBandwidths07() LinkStatepriorityBandwidths {
 //  Configuration of bandwidths of priority 0 through priority 7.
 func (obj *linkStateTE) HasPriorityBandwidths07() bool {
 	return obj.obj.PriorityBandwidths_0_7 != nil
+}
+
+// SetPriorityBandwidths07 sets the LinkStatepriorityBandwidths value in the LinkStateTE object
+//  Configuration of bandwidths of priority 0 through priority 7.
+func (obj *linkStateTE) SetPriorityBandwidths07(value LinkStatepriorityBandwidths) LinkStateTE {
+	obj.PriorityBandwidths07().SetMsg(value.Msg())
+
+	return obj
 }
 
 func (obj *linkStateTE) validateObj(set_default bool) {
@@ -35289,12 +37504,18 @@ type isisInterfaceAuthentication struct {
 	obj *snappipb.IsisInterfaceAuthentication
 }
 
+func NewIsisInterfaceAuthentication() IsisInterfaceAuthentication {
+	obj := isisInterfaceAuthentication{obj: &snappipb.IsisInterfaceAuthentication{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *isisInterfaceAuthentication) Msg() *snappipb.IsisInterfaceAuthentication {
 	return obj.obj
 }
 
 func (obj *isisInterfaceAuthentication) SetMsg(msg *snappipb.IsisInterfaceAuthentication) IsisInterfaceAuthentication {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -35512,12 +37733,18 @@ type isisInterfaceAdvanced struct {
 	obj *snappipb.IsisInterfaceAdvanced
 }
 
+func NewIsisInterfaceAdvanced() IsisInterfaceAdvanced {
+	obj := isisInterfaceAdvanced{obj: &snappipb.IsisInterfaceAdvanced{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *isisInterfaceAdvanced) Msg() *snappipb.IsisInterfaceAdvanced {
 	return obj.obj
 }
 
 func (obj *isisInterfaceAdvanced) SetMsg(msg *snappipb.IsisInterfaceAdvanced) IsisInterfaceAdvanced {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -35750,12 +37977,18 @@ type isisInterfaceLinkProtection struct {
 	obj *snappipb.IsisInterfaceLinkProtection
 }
 
+func NewIsisInterfaceLinkProtection() IsisInterfaceLinkProtection {
+	obj := isisInterfaceLinkProtection{obj: &snappipb.IsisInterfaceLinkProtection{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *isisInterfaceLinkProtection) Msg() *snappipb.IsisInterfaceLinkProtection {
 	return obj.obj
 }
 
 func (obj *isisInterfaceLinkProtection) SetMsg(msg *snappipb.IsisInterfaceLinkProtection) IsisInterfaceLinkProtection {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -36127,12 +38360,18 @@ type isisAuthenticationBase struct {
 	obj *snappipb.IsisAuthenticationBase
 }
 
+func NewIsisAuthenticationBase() IsisAuthenticationBase {
+	obj := isisAuthenticationBase{obj: &snappipb.IsisAuthenticationBase{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *isisAuthenticationBase) Msg() *snappipb.IsisAuthenticationBase {
 	return obj.obj
 }
 
 func (obj *isisAuthenticationBase) SetMsg(msg *snappipb.IsisAuthenticationBase) IsisAuthenticationBase {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -36348,12 +38587,18 @@ type v4RouteAddress struct {
 	obj *snappipb.V4RouteAddress
 }
 
+func NewV4RouteAddress() V4RouteAddress {
+	obj := v4RouteAddress{obj: &snappipb.V4RouteAddress{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *v4RouteAddress) Msg() *snappipb.V4RouteAddress {
 	return obj.obj
 }
 
 func (obj *v4RouteAddress) SetMsg(msg *snappipb.V4RouteAddress) V4RouteAddress {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -36618,12 +38863,18 @@ type v6RouteAddress struct {
 	obj *snappipb.V6RouteAddress
 }
 
+func NewV6RouteAddress() V6RouteAddress {
+	obj := v6RouteAddress{obj: &snappipb.V6RouteAddress{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *v6RouteAddress) Msg() *snappipb.V6RouteAddress {
 	return obj.obj
 }
 
 func (obj *v6RouteAddress) SetMsg(msg *snappipb.V6RouteAddress) V6RouteAddress {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -36888,12 +39139,18 @@ type bgpV4Peer struct {
 	obj *snappipb.BgpV4Peer
 }
 
+func NewBgpV4Peer() BgpV4Peer {
+	obj := bgpV4Peer{obj: &snappipb.BgpV4Peer{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *bgpV4Peer) Msg() *snappipb.BgpV4Peer {
 	return obj.obj
 }
 
 func (obj *bgpV4Peer) SetMsg(msg *snappipb.BgpV4Peer) BgpV4Peer {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -37023,8 +39280,10 @@ type BgpV4Peer interface {
 	SetAsNumberWidth(value BgpV4PeerAsNumberWidthEnum) BgpV4Peer
 	HasAsNumberWidth() bool
 	Advanced() BgpAdvanced
+	SetAdvanced(value BgpAdvanced) BgpV4Peer
 	HasAdvanced() bool
 	Capability() BgpCapability
+	SetCapability(value BgpCapability) BgpV4Peer
 	HasCapability() bool
 	V4Routes() BgpV4PeerBgpV4RouteRangeIter
 	V6Routes() BgpV4PeerBgpV6RouteRangeIter
@@ -37122,12 +39381,8 @@ func (obj *bgpV4Peer) SetAsNumberWidth(value BgpV4PeerAsNumberWidthEnum) BgpV4Pe
 // Advanced returns a BgpAdvanced
 //  description is TBD
 func (obj *bgpV4Peer) Advanced() BgpAdvanced {
-
 	if obj.obj.Advanced == nil {
-		obj.obj.Advanced = &snappipb.BgpAdvanced{}
-		newObj := &bgpAdvanced{obj: obj.obj.Advanced}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Advanced = NewBgpAdvanced().Msg()
 	}
 	return &bgpAdvanced{obj: obj.obj.Advanced}
 }
@@ -37138,15 +39393,19 @@ func (obj *bgpV4Peer) HasAdvanced() bool {
 	return obj.obj.Advanced != nil
 }
 
+// SetAdvanced sets the BgpAdvanced value in the BgpV4Peer object
+//  description is TBD
+func (obj *bgpV4Peer) SetAdvanced(value BgpAdvanced) BgpV4Peer {
+	obj.Advanced().SetMsg(value.Msg())
+
+	return obj
+}
+
 // Capability returns a BgpCapability
 //  description is TBD
 func (obj *bgpV4Peer) Capability() BgpCapability {
-
 	if obj.obj.Capability == nil {
-		obj.obj.Capability = &snappipb.BgpCapability{}
-		newObj := &bgpCapability{obj: obj.obj.Capability}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Capability = NewBgpCapability().Msg()
 	}
 	return &bgpCapability{obj: obj.obj.Capability}
 }
@@ -37155,6 +39414,14 @@ func (obj *bgpV4Peer) Capability() BgpCapability {
 //  description is TBD
 func (obj *bgpV4Peer) HasCapability() bool {
 	return obj.obj.Capability != nil
+}
+
+// SetCapability sets the BgpCapability value in the BgpV4Peer object
+//  description is TBD
+func (obj *bgpV4Peer) SetCapability(value BgpCapability) BgpV4Peer {
+	obj.Capability().SetMsg(value.Msg())
+
+	return obj
 }
 
 // V4Routes returns a []BgpV4RouteRange
@@ -37369,6 +39636,18 @@ func (obj *bgpV4Peer) setDefault() {
 	if obj.obj.AsNumberWidth == nil {
 		obj.SetAsNumberWidth(BgpV4PeerAsNumberWidth.FOUR)
 	}
+	if obj.obj.V4Routes == nil {
+		obj.V4Routes()
+	}
+	if obj.obj.V6Routes == nil {
+		obj.V6Routes()
+	}
+	if obj.obj.V4SrtePolicies == nil {
+		obj.V4SrtePolicies()
+	}
+	if obj.obj.V6SrtePolicies == nil {
+		obj.V6SrtePolicies()
+	}
 
 }
 
@@ -37376,12 +39655,18 @@ type bgpV6Peer struct {
 	obj *snappipb.BgpV6Peer
 }
 
+func NewBgpV6Peer() BgpV6Peer {
+	obj := bgpV6Peer{obj: &snappipb.BgpV6Peer{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *bgpV6Peer) Msg() *snappipb.BgpV6Peer {
 	return obj.obj
 }
 
 func (obj *bgpV6Peer) SetMsg(msg *snappipb.BgpV6Peer) BgpV6Peer {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -37504,6 +39789,7 @@ type BgpV6Peer interface {
 	PeerAddress() string
 	SetPeerAddress(value string) BgpV6Peer
 	SegmentRouting() BgpV6SegmentRouting
+	SetSegmentRouting(value BgpV6SegmentRouting) BgpV6Peer
 	HasSegmentRouting() bool
 	AsType() BgpV6PeerAsTypeEnum
 	SetAsType(value BgpV6PeerAsTypeEnum) BgpV6Peer
@@ -37513,8 +39799,10 @@ type BgpV6Peer interface {
 	SetAsNumberWidth(value BgpV6PeerAsNumberWidthEnum) BgpV6Peer
 	HasAsNumberWidth() bool
 	Advanced() BgpAdvanced
+	SetAdvanced(value BgpAdvanced) BgpV6Peer
 	HasAdvanced() bool
 	Capability() BgpCapability
+	SetCapability(value BgpCapability) BgpV6Peer
 	HasCapability() bool
 	V4Routes() BgpV6PeerBgpV4RouteRangeIter
 	V6Routes() BgpV6PeerBgpV6RouteRangeIter
@@ -37541,12 +39829,8 @@ func (obj *bgpV6Peer) SetPeerAddress(value string) BgpV6Peer {
 // SegmentRouting returns a BgpV6SegmentRouting
 //  description is TBD
 func (obj *bgpV6Peer) SegmentRouting() BgpV6SegmentRouting {
-
 	if obj.obj.SegmentRouting == nil {
-		obj.obj.SegmentRouting = &snappipb.BgpV6SegmentRouting{}
-		newObj := &bgpV6SegmentRouting{obj: obj.obj.SegmentRouting}
-		newObj.setDefault()
-		return newObj
+		obj.obj.SegmentRouting = NewBgpV6SegmentRouting().Msg()
 	}
 	return &bgpV6SegmentRouting{obj: obj.obj.SegmentRouting}
 }
@@ -37555,6 +39839,14 @@ func (obj *bgpV6Peer) SegmentRouting() BgpV6SegmentRouting {
 //  description is TBD
 func (obj *bgpV6Peer) HasSegmentRouting() bool {
 	return obj.obj.SegmentRouting != nil
+}
+
+// SetSegmentRouting sets the BgpV6SegmentRouting value in the BgpV6Peer object
+//  description is TBD
+func (obj *bgpV6Peer) SetSegmentRouting(value BgpV6SegmentRouting) BgpV6Peer {
+	obj.SegmentRouting().SetMsg(value.Msg())
+
+	return obj
 }
 
 type BgpV6PeerAsTypeEnum string
@@ -37631,12 +39923,8 @@ func (obj *bgpV6Peer) SetAsNumberWidth(value BgpV6PeerAsNumberWidthEnum) BgpV6Pe
 // Advanced returns a BgpAdvanced
 //  description is TBD
 func (obj *bgpV6Peer) Advanced() BgpAdvanced {
-
 	if obj.obj.Advanced == nil {
-		obj.obj.Advanced = &snappipb.BgpAdvanced{}
-		newObj := &bgpAdvanced{obj: obj.obj.Advanced}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Advanced = NewBgpAdvanced().Msg()
 	}
 	return &bgpAdvanced{obj: obj.obj.Advanced}
 }
@@ -37647,15 +39935,19 @@ func (obj *bgpV6Peer) HasAdvanced() bool {
 	return obj.obj.Advanced != nil
 }
 
+// SetAdvanced sets the BgpAdvanced value in the BgpV6Peer object
+//  description is TBD
+func (obj *bgpV6Peer) SetAdvanced(value BgpAdvanced) BgpV6Peer {
+	obj.Advanced().SetMsg(value.Msg())
+
+	return obj
+}
+
 // Capability returns a BgpCapability
 //  description is TBD
 func (obj *bgpV6Peer) Capability() BgpCapability {
-
 	if obj.obj.Capability == nil {
-		obj.obj.Capability = &snappipb.BgpCapability{}
-		newObj := &bgpCapability{obj: obj.obj.Capability}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Capability = NewBgpCapability().Msg()
 	}
 	return &bgpCapability{obj: obj.obj.Capability}
 }
@@ -37664,6 +39956,14 @@ func (obj *bgpV6Peer) Capability() BgpCapability {
 //  description is TBD
 func (obj *bgpV6Peer) HasCapability() bool {
 	return obj.obj.Capability != nil
+}
+
+// SetCapability sets the BgpCapability value in the BgpV6Peer object
+//  description is TBD
+func (obj *bgpV6Peer) SetCapability(value BgpCapability) BgpV6Peer {
+	obj.Capability().SetMsg(value.Msg())
+
+	return obj
 }
 
 // V4Routes returns a []BgpV4RouteRange
@@ -37882,6 +40182,18 @@ func (obj *bgpV6Peer) setDefault() {
 	if obj.obj.AsNumberWidth == nil {
 		obj.SetAsNumberWidth(BgpV6PeerAsNumberWidth.FOUR)
 	}
+	if obj.obj.V4Routes == nil {
+		obj.V4Routes()
+	}
+	if obj.obj.V6Routes == nil {
+		obj.V6Routes()
+	}
+	if obj.obj.V4SrtePolicies == nil {
+		obj.V4SrtePolicies()
+	}
+	if obj.obj.V6SrtePolicies == nil {
+		obj.V6SrtePolicies()
+	}
 
 }
 
@@ -37889,12 +40201,18 @@ type patternFlowEthernetDst struct {
 	obj *snappipb.PatternFlowEthernetDst
 }
 
+func NewPatternFlowEthernetDst() PatternFlowEthernetDst {
+	obj := patternFlowEthernetDst{obj: &snappipb.PatternFlowEthernetDst{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowEthernetDst) Msg() *snappipb.PatternFlowEthernetDst {
 	return obj.obj
 }
 
 func (obj *patternFlowEthernetDst) SetMsg(msg *snappipb.PatternFlowEthernetDst) PatternFlowEthernetDst {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -38026,8 +40344,10 @@ type PatternFlowEthernetDst interface {
 	SetMetricGroup(value string) PatternFlowEthernetDst
 	HasMetricGroup() bool
 	Increment() PatternFlowEthernetDstCounter
+	SetIncrement(value PatternFlowEthernetDstCounter) PatternFlowEthernetDst
 	HasIncrement() bool
 	Decrement() PatternFlowEthernetDstCounter
+	SetDecrement(value PatternFlowEthernetDstCounter) PatternFlowEthernetDst
 	HasDecrement() bool
 }
 
@@ -38133,10 +40453,7 @@ func (obj *patternFlowEthernetDst) SetMetricGroup(value string) PatternFlowEther
 func (obj *patternFlowEthernetDst) Increment() PatternFlowEthernetDstCounter {
 	obj.SetChoice(PatternFlowEthernetDstChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowEthernetDstCounter{}
-		newObj := &patternFlowEthernetDstCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowEthernetDstCounter().Msg()
 	}
 	return &patternFlowEthernetDstCounter{obj: obj.obj.Increment}
 }
@@ -38147,15 +40464,20 @@ func (obj *patternFlowEthernetDst) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowEthernetDstCounter value in the PatternFlowEthernetDst object
+//  description is TBD
+func (obj *patternFlowEthernetDst) SetIncrement(value PatternFlowEthernetDstCounter) PatternFlowEthernetDst {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowEthernetDstChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowEthernetDstCounter
 //  description is TBD
 func (obj *patternFlowEthernetDst) Decrement() PatternFlowEthernetDstCounter {
 	obj.SetChoice(PatternFlowEthernetDstChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowEthernetDstCounter{}
-		newObj := &patternFlowEthernetDstCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowEthernetDstCounter().Msg()
 	}
 	return &patternFlowEthernetDstCounter{obj: obj.obj.Decrement}
 }
@@ -38164,6 +40486,14 @@ func (obj *patternFlowEthernetDst) Decrement() PatternFlowEthernetDstCounter {
 //  description is TBD
 func (obj *patternFlowEthernetDst) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowEthernetDstCounter value in the PatternFlowEthernetDst object
+//  description is TBD
+func (obj *patternFlowEthernetDst) SetDecrement(value PatternFlowEthernetDstCounter) PatternFlowEthernetDst {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowEthernetDstChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowEthernetDst) validateObj(set_default bool) {
@@ -38208,12 +40538,18 @@ type patternFlowEthernetSrc struct {
 	obj *snappipb.PatternFlowEthernetSrc
 }
 
+func NewPatternFlowEthernetSrc() PatternFlowEthernetSrc {
+	obj := patternFlowEthernetSrc{obj: &snappipb.PatternFlowEthernetSrc{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowEthernetSrc) Msg() *snappipb.PatternFlowEthernetSrc {
 	return obj.obj
 }
 
 func (obj *patternFlowEthernetSrc) SetMsg(msg *snappipb.PatternFlowEthernetSrc) PatternFlowEthernetSrc {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -38345,8 +40681,10 @@ type PatternFlowEthernetSrc interface {
 	SetMetricGroup(value string) PatternFlowEthernetSrc
 	HasMetricGroup() bool
 	Increment() PatternFlowEthernetSrcCounter
+	SetIncrement(value PatternFlowEthernetSrcCounter) PatternFlowEthernetSrc
 	HasIncrement() bool
 	Decrement() PatternFlowEthernetSrcCounter
+	SetDecrement(value PatternFlowEthernetSrcCounter) PatternFlowEthernetSrc
 	HasDecrement() bool
 }
 
@@ -38452,10 +40790,7 @@ func (obj *patternFlowEthernetSrc) SetMetricGroup(value string) PatternFlowEther
 func (obj *patternFlowEthernetSrc) Increment() PatternFlowEthernetSrcCounter {
 	obj.SetChoice(PatternFlowEthernetSrcChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowEthernetSrcCounter{}
-		newObj := &patternFlowEthernetSrcCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowEthernetSrcCounter().Msg()
 	}
 	return &patternFlowEthernetSrcCounter{obj: obj.obj.Increment}
 }
@@ -38466,15 +40801,20 @@ func (obj *patternFlowEthernetSrc) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowEthernetSrcCounter value in the PatternFlowEthernetSrc object
+//  description is TBD
+func (obj *patternFlowEthernetSrc) SetIncrement(value PatternFlowEthernetSrcCounter) PatternFlowEthernetSrc {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowEthernetSrcChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowEthernetSrcCounter
 //  description is TBD
 func (obj *patternFlowEthernetSrc) Decrement() PatternFlowEthernetSrcCounter {
 	obj.SetChoice(PatternFlowEthernetSrcChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowEthernetSrcCounter{}
-		newObj := &patternFlowEthernetSrcCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowEthernetSrcCounter().Msg()
 	}
 	return &patternFlowEthernetSrcCounter{obj: obj.obj.Decrement}
 }
@@ -38483,6 +40823,14 @@ func (obj *patternFlowEthernetSrc) Decrement() PatternFlowEthernetSrcCounter {
 //  description is TBD
 func (obj *patternFlowEthernetSrc) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowEthernetSrcCounter value in the PatternFlowEthernetSrc object
+//  description is TBD
+func (obj *patternFlowEthernetSrc) SetDecrement(value PatternFlowEthernetSrcCounter) PatternFlowEthernetSrc {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowEthernetSrcChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowEthernetSrc) validateObj(set_default bool) {
@@ -38527,12 +40875,18 @@ type patternFlowEthernetEtherType struct {
 	obj *snappipb.PatternFlowEthernetEtherType
 }
 
+func NewPatternFlowEthernetEtherType() PatternFlowEthernetEtherType {
+	obj := patternFlowEthernetEtherType{obj: &snappipb.PatternFlowEthernetEtherType{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowEthernetEtherType) Msg() *snappipb.PatternFlowEthernetEtherType {
 	return obj.obj
 }
 
 func (obj *patternFlowEthernetEtherType) SetMsg(msg *snappipb.PatternFlowEthernetEtherType) PatternFlowEthernetEtherType {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -38667,8 +41021,10 @@ type PatternFlowEthernetEtherType interface {
 	SetMetricGroup(value string) PatternFlowEthernetEtherType
 	HasMetricGroup() bool
 	Increment() PatternFlowEthernetEtherTypeCounter
+	SetIncrement(value PatternFlowEthernetEtherTypeCounter) PatternFlowEthernetEtherType
 	HasIncrement() bool
 	Decrement() PatternFlowEthernetEtherTypeCounter
+	SetDecrement(value PatternFlowEthernetEtherTypeCounter) PatternFlowEthernetEtherType
 	HasDecrement() bool
 }
 
@@ -38806,10 +41162,7 @@ func (obj *patternFlowEthernetEtherType) SetMetricGroup(value string) PatternFlo
 func (obj *patternFlowEthernetEtherType) Increment() PatternFlowEthernetEtherTypeCounter {
 	obj.SetChoice(PatternFlowEthernetEtherTypeChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowEthernetEtherTypeCounter{}
-		newObj := &patternFlowEthernetEtherTypeCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowEthernetEtherTypeCounter().Msg()
 	}
 	return &patternFlowEthernetEtherTypeCounter{obj: obj.obj.Increment}
 }
@@ -38820,15 +41173,20 @@ func (obj *patternFlowEthernetEtherType) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowEthernetEtherTypeCounter value in the PatternFlowEthernetEtherType object
+//  description is TBD
+func (obj *patternFlowEthernetEtherType) SetIncrement(value PatternFlowEthernetEtherTypeCounter) PatternFlowEthernetEtherType {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowEthernetEtherTypeChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowEthernetEtherTypeCounter
 //  description is TBD
 func (obj *patternFlowEthernetEtherType) Decrement() PatternFlowEthernetEtherTypeCounter {
 	obj.SetChoice(PatternFlowEthernetEtherTypeChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowEthernetEtherTypeCounter{}
-		newObj := &patternFlowEthernetEtherTypeCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowEthernetEtherTypeCounter().Msg()
 	}
 	return &patternFlowEthernetEtherTypeCounter{obj: obj.obj.Decrement}
 }
@@ -38837,6 +41195,14 @@ func (obj *patternFlowEthernetEtherType) Decrement() PatternFlowEthernetEtherTyp
 //  description is TBD
 func (obj *patternFlowEthernetEtherType) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowEthernetEtherTypeCounter value in the PatternFlowEthernetEtherType object
+//  description is TBD
+func (obj *patternFlowEthernetEtherType) SetDecrement(value PatternFlowEthernetEtherTypeCounter) PatternFlowEthernetEtherType {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowEthernetEtherTypeChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowEthernetEtherType) validateObj(set_default bool) {
@@ -38883,12 +41249,18 @@ type patternFlowEthernetPfcQueue struct {
 	obj *snappipb.PatternFlowEthernetPfcQueue
 }
 
+func NewPatternFlowEthernetPfcQueue() PatternFlowEthernetPfcQueue {
+	obj := patternFlowEthernetPfcQueue{obj: &snappipb.PatternFlowEthernetPfcQueue{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowEthernetPfcQueue) Msg() *snappipb.PatternFlowEthernetPfcQueue {
 	return obj.obj
 }
 
 func (obj *patternFlowEthernetPfcQueue) SetMsg(msg *snappipb.PatternFlowEthernetPfcQueue) PatternFlowEthernetPfcQueue {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -39020,8 +41392,10 @@ type PatternFlowEthernetPfcQueue interface {
 	SetMetricGroup(value string) PatternFlowEthernetPfcQueue
 	HasMetricGroup() bool
 	Increment() PatternFlowEthernetPfcQueueCounter
+	SetIncrement(value PatternFlowEthernetPfcQueueCounter) PatternFlowEthernetPfcQueue
 	HasIncrement() bool
 	Decrement() PatternFlowEthernetPfcQueueCounter
+	SetDecrement(value PatternFlowEthernetPfcQueueCounter) PatternFlowEthernetPfcQueue
 	HasDecrement() bool
 }
 
@@ -39127,10 +41501,7 @@ func (obj *patternFlowEthernetPfcQueue) SetMetricGroup(value string) PatternFlow
 func (obj *patternFlowEthernetPfcQueue) Increment() PatternFlowEthernetPfcQueueCounter {
 	obj.SetChoice(PatternFlowEthernetPfcQueueChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowEthernetPfcQueueCounter{}
-		newObj := &patternFlowEthernetPfcQueueCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowEthernetPfcQueueCounter().Msg()
 	}
 	return &patternFlowEthernetPfcQueueCounter{obj: obj.obj.Increment}
 }
@@ -39141,15 +41512,20 @@ func (obj *patternFlowEthernetPfcQueue) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowEthernetPfcQueueCounter value in the PatternFlowEthernetPfcQueue object
+//  description is TBD
+func (obj *patternFlowEthernetPfcQueue) SetIncrement(value PatternFlowEthernetPfcQueueCounter) PatternFlowEthernetPfcQueue {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowEthernetPfcQueueChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowEthernetPfcQueueCounter
 //  description is TBD
 func (obj *patternFlowEthernetPfcQueue) Decrement() PatternFlowEthernetPfcQueueCounter {
 	obj.SetChoice(PatternFlowEthernetPfcQueueChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowEthernetPfcQueueCounter{}
-		newObj := &patternFlowEthernetPfcQueueCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowEthernetPfcQueueCounter().Msg()
 	}
 	return &patternFlowEthernetPfcQueueCounter{obj: obj.obj.Decrement}
 }
@@ -39158,6 +41534,14 @@ func (obj *patternFlowEthernetPfcQueue) Decrement() PatternFlowEthernetPfcQueueC
 //  description is TBD
 func (obj *patternFlowEthernetPfcQueue) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowEthernetPfcQueueCounter value in the PatternFlowEthernetPfcQueue object
+//  description is TBD
+func (obj *patternFlowEthernetPfcQueue) SetDecrement(value PatternFlowEthernetPfcQueueCounter) PatternFlowEthernetPfcQueue {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowEthernetPfcQueueChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowEthernetPfcQueue) validateObj(set_default bool) {
@@ -39204,12 +41588,18 @@ type patternFlowVlanPriority struct {
 	obj *snappipb.PatternFlowVlanPriority
 }
 
+func NewPatternFlowVlanPriority() PatternFlowVlanPriority {
+	obj := patternFlowVlanPriority{obj: &snappipb.PatternFlowVlanPriority{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowVlanPriority) Msg() *snappipb.PatternFlowVlanPriority {
 	return obj.obj
 }
 
 func (obj *patternFlowVlanPriority) SetMsg(msg *snappipb.PatternFlowVlanPriority) PatternFlowVlanPriority {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -39341,8 +41731,10 @@ type PatternFlowVlanPriority interface {
 	SetMetricGroup(value string) PatternFlowVlanPriority
 	HasMetricGroup() bool
 	Increment() PatternFlowVlanPriorityCounter
+	SetIncrement(value PatternFlowVlanPriorityCounter) PatternFlowVlanPriority
 	HasIncrement() bool
 	Decrement() PatternFlowVlanPriorityCounter
+	SetDecrement(value PatternFlowVlanPriorityCounter) PatternFlowVlanPriority
 	HasDecrement() bool
 }
 
@@ -39448,10 +41840,7 @@ func (obj *patternFlowVlanPriority) SetMetricGroup(value string) PatternFlowVlan
 func (obj *patternFlowVlanPriority) Increment() PatternFlowVlanPriorityCounter {
 	obj.SetChoice(PatternFlowVlanPriorityChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowVlanPriorityCounter{}
-		newObj := &patternFlowVlanPriorityCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowVlanPriorityCounter().Msg()
 	}
 	return &patternFlowVlanPriorityCounter{obj: obj.obj.Increment}
 }
@@ -39462,15 +41851,20 @@ func (obj *patternFlowVlanPriority) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowVlanPriorityCounter value in the PatternFlowVlanPriority object
+//  description is TBD
+func (obj *patternFlowVlanPriority) SetIncrement(value PatternFlowVlanPriorityCounter) PatternFlowVlanPriority {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowVlanPriorityChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowVlanPriorityCounter
 //  description is TBD
 func (obj *patternFlowVlanPriority) Decrement() PatternFlowVlanPriorityCounter {
 	obj.SetChoice(PatternFlowVlanPriorityChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowVlanPriorityCounter{}
-		newObj := &patternFlowVlanPriorityCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowVlanPriorityCounter().Msg()
 	}
 	return &patternFlowVlanPriorityCounter{obj: obj.obj.Decrement}
 }
@@ -39479,6 +41873,14 @@ func (obj *patternFlowVlanPriority) Decrement() PatternFlowVlanPriorityCounter {
 //  description is TBD
 func (obj *patternFlowVlanPriority) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowVlanPriorityCounter value in the PatternFlowVlanPriority object
+//  description is TBD
+func (obj *patternFlowVlanPriority) SetDecrement(value PatternFlowVlanPriorityCounter) PatternFlowVlanPriority {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowVlanPriorityChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowVlanPriority) validateObj(set_default bool) {
@@ -39525,12 +41927,18 @@ type patternFlowVlanCfi struct {
 	obj *snappipb.PatternFlowVlanCfi
 }
 
+func NewPatternFlowVlanCfi() PatternFlowVlanCfi {
+	obj := patternFlowVlanCfi{obj: &snappipb.PatternFlowVlanCfi{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowVlanCfi) Msg() *snappipb.PatternFlowVlanCfi {
 	return obj.obj
 }
 
 func (obj *patternFlowVlanCfi) SetMsg(msg *snappipb.PatternFlowVlanCfi) PatternFlowVlanCfi {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -39662,8 +42070,10 @@ type PatternFlowVlanCfi interface {
 	SetMetricGroup(value string) PatternFlowVlanCfi
 	HasMetricGroup() bool
 	Increment() PatternFlowVlanCfiCounter
+	SetIncrement(value PatternFlowVlanCfiCounter) PatternFlowVlanCfi
 	HasIncrement() bool
 	Decrement() PatternFlowVlanCfiCounter
+	SetDecrement(value PatternFlowVlanCfiCounter) PatternFlowVlanCfi
 	HasDecrement() bool
 }
 
@@ -39769,10 +42179,7 @@ func (obj *patternFlowVlanCfi) SetMetricGroup(value string) PatternFlowVlanCfi {
 func (obj *patternFlowVlanCfi) Increment() PatternFlowVlanCfiCounter {
 	obj.SetChoice(PatternFlowVlanCfiChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowVlanCfiCounter{}
-		newObj := &patternFlowVlanCfiCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowVlanCfiCounter().Msg()
 	}
 	return &patternFlowVlanCfiCounter{obj: obj.obj.Increment}
 }
@@ -39783,15 +42190,20 @@ func (obj *patternFlowVlanCfi) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowVlanCfiCounter value in the PatternFlowVlanCfi object
+//  description is TBD
+func (obj *patternFlowVlanCfi) SetIncrement(value PatternFlowVlanCfiCounter) PatternFlowVlanCfi {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowVlanCfiChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowVlanCfiCounter
 //  description is TBD
 func (obj *patternFlowVlanCfi) Decrement() PatternFlowVlanCfiCounter {
 	obj.SetChoice(PatternFlowVlanCfiChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowVlanCfiCounter{}
-		newObj := &patternFlowVlanCfiCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowVlanCfiCounter().Msg()
 	}
 	return &patternFlowVlanCfiCounter{obj: obj.obj.Decrement}
 }
@@ -39800,6 +42212,14 @@ func (obj *patternFlowVlanCfi) Decrement() PatternFlowVlanCfiCounter {
 //  description is TBD
 func (obj *patternFlowVlanCfi) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowVlanCfiCounter value in the PatternFlowVlanCfi object
+//  description is TBD
+func (obj *patternFlowVlanCfi) SetDecrement(value PatternFlowVlanCfiCounter) PatternFlowVlanCfi {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowVlanCfiChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowVlanCfi) validateObj(set_default bool) {
@@ -39846,12 +42266,18 @@ type patternFlowVlanId struct {
 	obj *snappipb.PatternFlowVlanId
 }
 
+func NewPatternFlowVlanId() PatternFlowVlanId {
+	obj := patternFlowVlanId{obj: &snappipb.PatternFlowVlanId{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowVlanId) Msg() *snappipb.PatternFlowVlanId {
 	return obj.obj
 }
 
 func (obj *patternFlowVlanId) SetMsg(msg *snappipb.PatternFlowVlanId) PatternFlowVlanId {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -39983,8 +42409,10 @@ type PatternFlowVlanId interface {
 	SetMetricGroup(value string) PatternFlowVlanId
 	HasMetricGroup() bool
 	Increment() PatternFlowVlanIdCounter
+	SetIncrement(value PatternFlowVlanIdCounter) PatternFlowVlanId
 	HasIncrement() bool
 	Decrement() PatternFlowVlanIdCounter
+	SetDecrement(value PatternFlowVlanIdCounter) PatternFlowVlanId
 	HasDecrement() bool
 }
 
@@ -40090,10 +42518,7 @@ func (obj *patternFlowVlanId) SetMetricGroup(value string) PatternFlowVlanId {
 func (obj *patternFlowVlanId) Increment() PatternFlowVlanIdCounter {
 	obj.SetChoice(PatternFlowVlanIdChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowVlanIdCounter{}
-		newObj := &patternFlowVlanIdCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowVlanIdCounter().Msg()
 	}
 	return &patternFlowVlanIdCounter{obj: obj.obj.Increment}
 }
@@ -40104,15 +42529,20 @@ func (obj *patternFlowVlanId) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowVlanIdCounter value in the PatternFlowVlanId object
+//  description is TBD
+func (obj *patternFlowVlanId) SetIncrement(value PatternFlowVlanIdCounter) PatternFlowVlanId {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowVlanIdChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowVlanIdCounter
 //  description is TBD
 func (obj *patternFlowVlanId) Decrement() PatternFlowVlanIdCounter {
 	obj.SetChoice(PatternFlowVlanIdChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowVlanIdCounter{}
-		newObj := &patternFlowVlanIdCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowVlanIdCounter().Msg()
 	}
 	return &patternFlowVlanIdCounter{obj: obj.obj.Decrement}
 }
@@ -40121,6 +42551,14 @@ func (obj *patternFlowVlanId) Decrement() PatternFlowVlanIdCounter {
 //  description is TBD
 func (obj *patternFlowVlanId) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowVlanIdCounter value in the PatternFlowVlanId object
+//  description is TBD
+func (obj *patternFlowVlanId) SetDecrement(value PatternFlowVlanIdCounter) PatternFlowVlanId {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowVlanIdChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowVlanId) validateObj(set_default bool) {
@@ -40167,12 +42605,18 @@ type patternFlowVlanTpid struct {
 	obj *snappipb.PatternFlowVlanTpid
 }
 
+func NewPatternFlowVlanTpid() PatternFlowVlanTpid {
+	obj := patternFlowVlanTpid{obj: &snappipb.PatternFlowVlanTpid{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowVlanTpid) Msg() *snappipb.PatternFlowVlanTpid {
 	return obj.obj
 }
 
 func (obj *patternFlowVlanTpid) SetMsg(msg *snappipb.PatternFlowVlanTpid) PatternFlowVlanTpid {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -40304,8 +42748,10 @@ type PatternFlowVlanTpid interface {
 	SetMetricGroup(value string) PatternFlowVlanTpid
 	HasMetricGroup() bool
 	Increment() PatternFlowVlanTpidCounter
+	SetIncrement(value PatternFlowVlanTpidCounter) PatternFlowVlanTpid
 	HasIncrement() bool
 	Decrement() PatternFlowVlanTpidCounter
+	SetDecrement(value PatternFlowVlanTpidCounter) PatternFlowVlanTpid
 	HasDecrement() bool
 }
 
@@ -40411,10 +42857,7 @@ func (obj *patternFlowVlanTpid) SetMetricGroup(value string) PatternFlowVlanTpid
 func (obj *patternFlowVlanTpid) Increment() PatternFlowVlanTpidCounter {
 	obj.SetChoice(PatternFlowVlanTpidChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowVlanTpidCounter{}
-		newObj := &patternFlowVlanTpidCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowVlanTpidCounter().Msg()
 	}
 	return &patternFlowVlanTpidCounter{obj: obj.obj.Increment}
 }
@@ -40425,15 +42868,20 @@ func (obj *patternFlowVlanTpid) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowVlanTpidCounter value in the PatternFlowVlanTpid object
+//  description is TBD
+func (obj *patternFlowVlanTpid) SetIncrement(value PatternFlowVlanTpidCounter) PatternFlowVlanTpid {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowVlanTpidChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowVlanTpidCounter
 //  description is TBD
 func (obj *patternFlowVlanTpid) Decrement() PatternFlowVlanTpidCounter {
 	obj.SetChoice(PatternFlowVlanTpidChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowVlanTpidCounter{}
-		newObj := &patternFlowVlanTpidCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowVlanTpidCounter().Msg()
 	}
 	return &patternFlowVlanTpidCounter{obj: obj.obj.Decrement}
 }
@@ -40442,6 +42890,14 @@ func (obj *patternFlowVlanTpid) Decrement() PatternFlowVlanTpidCounter {
 //  description is TBD
 func (obj *patternFlowVlanTpid) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowVlanTpidCounter value in the PatternFlowVlanTpid object
+//  description is TBD
+func (obj *patternFlowVlanTpid) SetDecrement(value PatternFlowVlanTpidCounter) PatternFlowVlanTpid {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowVlanTpidChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowVlanTpid) validateObj(set_default bool) {
@@ -40488,12 +42944,18 @@ type patternFlowVxlanFlags struct {
 	obj *snappipb.PatternFlowVxlanFlags
 }
 
+func NewPatternFlowVxlanFlags() PatternFlowVxlanFlags {
+	obj := patternFlowVxlanFlags{obj: &snappipb.PatternFlowVxlanFlags{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowVxlanFlags) Msg() *snappipb.PatternFlowVxlanFlags {
 	return obj.obj
 }
 
 func (obj *patternFlowVxlanFlags) SetMsg(msg *snappipb.PatternFlowVxlanFlags) PatternFlowVxlanFlags {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -40625,8 +43087,10 @@ type PatternFlowVxlanFlags interface {
 	SetMetricGroup(value string) PatternFlowVxlanFlags
 	HasMetricGroup() bool
 	Increment() PatternFlowVxlanFlagsCounter
+	SetIncrement(value PatternFlowVxlanFlagsCounter) PatternFlowVxlanFlags
 	HasIncrement() bool
 	Decrement() PatternFlowVxlanFlagsCounter
+	SetDecrement(value PatternFlowVxlanFlagsCounter) PatternFlowVxlanFlags
 	HasDecrement() bool
 }
 
@@ -40732,10 +43196,7 @@ func (obj *patternFlowVxlanFlags) SetMetricGroup(value string) PatternFlowVxlanF
 func (obj *patternFlowVxlanFlags) Increment() PatternFlowVxlanFlagsCounter {
 	obj.SetChoice(PatternFlowVxlanFlagsChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowVxlanFlagsCounter{}
-		newObj := &patternFlowVxlanFlagsCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowVxlanFlagsCounter().Msg()
 	}
 	return &patternFlowVxlanFlagsCounter{obj: obj.obj.Increment}
 }
@@ -40746,15 +43207,20 @@ func (obj *patternFlowVxlanFlags) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowVxlanFlagsCounter value in the PatternFlowVxlanFlags object
+//  description is TBD
+func (obj *patternFlowVxlanFlags) SetIncrement(value PatternFlowVxlanFlagsCounter) PatternFlowVxlanFlags {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowVxlanFlagsChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowVxlanFlagsCounter
 //  description is TBD
 func (obj *patternFlowVxlanFlags) Decrement() PatternFlowVxlanFlagsCounter {
 	obj.SetChoice(PatternFlowVxlanFlagsChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowVxlanFlagsCounter{}
-		newObj := &patternFlowVxlanFlagsCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowVxlanFlagsCounter().Msg()
 	}
 	return &patternFlowVxlanFlagsCounter{obj: obj.obj.Decrement}
 }
@@ -40763,6 +43229,14 @@ func (obj *patternFlowVxlanFlags) Decrement() PatternFlowVxlanFlagsCounter {
 //  description is TBD
 func (obj *patternFlowVxlanFlags) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowVxlanFlagsCounter value in the PatternFlowVxlanFlags object
+//  description is TBD
+func (obj *patternFlowVxlanFlags) SetDecrement(value PatternFlowVxlanFlagsCounter) PatternFlowVxlanFlags {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowVxlanFlagsChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowVxlanFlags) validateObj(set_default bool) {
@@ -40809,12 +43283,18 @@ type patternFlowVxlanReserved0 struct {
 	obj *snappipb.PatternFlowVxlanReserved0
 }
 
+func NewPatternFlowVxlanReserved0() PatternFlowVxlanReserved0 {
+	obj := patternFlowVxlanReserved0{obj: &snappipb.PatternFlowVxlanReserved0{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowVxlanReserved0) Msg() *snappipb.PatternFlowVxlanReserved0 {
 	return obj.obj
 }
 
 func (obj *patternFlowVxlanReserved0) SetMsg(msg *snappipb.PatternFlowVxlanReserved0) PatternFlowVxlanReserved0 {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -40946,8 +43426,10 @@ type PatternFlowVxlanReserved0 interface {
 	SetMetricGroup(value string) PatternFlowVxlanReserved0
 	HasMetricGroup() bool
 	Increment() PatternFlowVxlanReserved0Counter
+	SetIncrement(value PatternFlowVxlanReserved0Counter) PatternFlowVxlanReserved0
 	HasIncrement() bool
 	Decrement() PatternFlowVxlanReserved0Counter
+	SetDecrement(value PatternFlowVxlanReserved0Counter) PatternFlowVxlanReserved0
 	HasDecrement() bool
 }
 
@@ -41053,10 +43535,7 @@ func (obj *patternFlowVxlanReserved0) SetMetricGroup(value string) PatternFlowVx
 func (obj *patternFlowVxlanReserved0) Increment() PatternFlowVxlanReserved0Counter {
 	obj.SetChoice(PatternFlowVxlanReserved0Choice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowVxlanReserved0Counter{}
-		newObj := &patternFlowVxlanReserved0Counter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowVxlanReserved0Counter().Msg()
 	}
 	return &patternFlowVxlanReserved0Counter{obj: obj.obj.Increment}
 }
@@ -41067,15 +43546,20 @@ func (obj *patternFlowVxlanReserved0) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowVxlanReserved0Counter value in the PatternFlowVxlanReserved0 object
+//  description is TBD
+func (obj *patternFlowVxlanReserved0) SetIncrement(value PatternFlowVxlanReserved0Counter) PatternFlowVxlanReserved0 {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowVxlanReserved0Choice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowVxlanReserved0Counter
 //  description is TBD
 func (obj *patternFlowVxlanReserved0) Decrement() PatternFlowVxlanReserved0Counter {
 	obj.SetChoice(PatternFlowVxlanReserved0Choice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowVxlanReserved0Counter{}
-		newObj := &patternFlowVxlanReserved0Counter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowVxlanReserved0Counter().Msg()
 	}
 	return &patternFlowVxlanReserved0Counter{obj: obj.obj.Decrement}
 }
@@ -41084,6 +43568,14 @@ func (obj *patternFlowVxlanReserved0) Decrement() PatternFlowVxlanReserved0Count
 //  description is TBD
 func (obj *patternFlowVxlanReserved0) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowVxlanReserved0Counter value in the PatternFlowVxlanReserved0 object
+//  description is TBD
+func (obj *patternFlowVxlanReserved0) SetDecrement(value PatternFlowVxlanReserved0Counter) PatternFlowVxlanReserved0 {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowVxlanReserved0Choice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowVxlanReserved0) validateObj(set_default bool) {
@@ -41130,12 +43622,18 @@ type patternFlowVxlanVni struct {
 	obj *snappipb.PatternFlowVxlanVni
 }
 
+func NewPatternFlowVxlanVni() PatternFlowVxlanVni {
+	obj := patternFlowVxlanVni{obj: &snappipb.PatternFlowVxlanVni{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowVxlanVni) Msg() *snappipb.PatternFlowVxlanVni {
 	return obj.obj
 }
 
 func (obj *patternFlowVxlanVni) SetMsg(msg *snappipb.PatternFlowVxlanVni) PatternFlowVxlanVni {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -41267,8 +43765,10 @@ type PatternFlowVxlanVni interface {
 	SetMetricGroup(value string) PatternFlowVxlanVni
 	HasMetricGroup() bool
 	Increment() PatternFlowVxlanVniCounter
+	SetIncrement(value PatternFlowVxlanVniCounter) PatternFlowVxlanVni
 	HasIncrement() bool
 	Decrement() PatternFlowVxlanVniCounter
+	SetDecrement(value PatternFlowVxlanVniCounter) PatternFlowVxlanVni
 	HasDecrement() bool
 }
 
@@ -41374,10 +43874,7 @@ func (obj *patternFlowVxlanVni) SetMetricGroup(value string) PatternFlowVxlanVni
 func (obj *patternFlowVxlanVni) Increment() PatternFlowVxlanVniCounter {
 	obj.SetChoice(PatternFlowVxlanVniChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowVxlanVniCounter{}
-		newObj := &patternFlowVxlanVniCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowVxlanVniCounter().Msg()
 	}
 	return &patternFlowVxlanVniCounter{obj: obj.obj.Increment}
 }
@@ -41388,15 +43885,20 @@ func (obj *patternFlowVxlanVni) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowVxlanVniCounter value in the PatternFlowVxlanVni object
+//  description is TBD
+func (obj *patternFlowVxlanVni) SetIncrement(value PatternFlowVxlanVniCounter) PatternFlowVxlanVni {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowVxlanVniChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowVxlanVniCounter
 //  description is TBD
 func (obj *patternFlowVxlanVni) Decrement() PatternFlowVxlanVniCounter {
 	obj.SetChoice(PatternFlowVxlanVniChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowVxlanVniCounter{}
-		newObj := &patternFlowVxlanVniCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowVxlanVniCounter().Msg()
 	}
 	return &patternFlowVxlanVniCounter{obj: obj.obj.Decrement}
 }
@@ -41405,6 +43907,14 @@ func (obj *patternFlowVxlanVni) Decrement() PatternFlowVxlanVniCounter {
 //  description is TBD
 func (obj *patternFlowVxlanVni) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowVxlanVniCounter value in the PatternFlowVxlanVni object
+//  description is TBD
+func (obj *patternFlowVxlanVni) SetDecrement(value PatternFlowVxlanVniCounter) PatternFlowVxlanVni {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowVxlanVniChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowVxlanVni) validateObj(set_default bool) {
@@ -41451,12 +43961,18 @@ type patternFlowVxlanReserved1 struct {
 	obj *snappipb.PatternFlowVxlanReserved1
 }
 
+func NewPatternFlowVxlanReserved1() PatternFlowVxlanReserved1 {
+	obj := patternFlowVxlanReserved1{obj: &snappipb.PatternFlowVxlanReserved1{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowVxlanReserved1) Msg() *snappipb.PatternFlowVxlanReserved1 {
 	return obj.obj
 }
 
 func (obj *patternFlowVxlanReserved1) SetMsg(msg *snappipb.PatternFlowVxlanReserved1) PatternFlowVxlanReserved1 {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -41588,8 +44104,10 @@ type PatternFlowVxlanReserved1 interface {
 	SetMetricGroup(value string) PatternFlowVxlanReserved1
 	HasMetricGroup() bool
 	Increment() PatternFlowVxlanReserved1Counter
+	SetIncrement(value PatternFlowVxlanReserved1Counter) PatternFlowVxlanReserved1
 	HasIncrement() bool
 	Decrement() PatternFlowVxlanReserved1Counter
+	SetDecrement(value PatternFlowVxlanReserved1Counter) PatternFlowVxlanReserved1
 	HasDecrement() bool
 }
 
@@ -41695,10 +44213,7 @@ func (obj *patternFlowVxlanReserved1) SetMetricGroup(value string) PatternFlowVx
 func (obj *patternFlowVxlanReserved1) Increment() PatternFlowVxlanReserved1Counter {
 	obj.SetChoice(PatternFlowVxlanReserved1Choice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowVxlanReserved1Counter{}
-		newObj := &patternFlowVxlanReserved1Counter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowVxlanReserved1Counter().Msg()
 	}
 	return &patternFlowVxlanReserved1Counter{obj: obj.obj.Increment}
 }
@@ -41709,15 +44224,20 @@ func (obj *patternFlowVxlanReserved1) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowVxlanReserved1Counter value in the PatternFlowVxlanReserved1 object
+//  description is TBD
+func (obj *patternFlowVxlanReserved1) SetIncrement(value PatternFlowVxlanReserved1Counter) PatternFlowVxlanReserved1 {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowVxlanReserved1Choice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowVxlanReserved1Counter
 //  description is TBD
 func (obj *patternFlowVxlanReserved1) Decrement() PatternFlowVxlanReserved1Counter {
 	obj.SetChoice(PatternFlowVxlanReserved1Choice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowVxlanReserved1Counter{}
-		newObj := &patternFlowVxlanReserved1Counter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowVxlanReserved1Counter().Msg()
 	}
 	return &patternFlowVxlanReserved1Counter{obj: obj.obj.Decrement}
 }
@@ -41726,6 +44246,14 @@ func (obj *patternFlowVxlanReserved1) Decrement() PatternFlowVxlanReserved1Count
 //  description is TBD
 func (obj *patternFlowVxlanReserved1) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowVxlanReserved1Counter value in the PatternFlowVxlanReserved1 object
+//  description is TBD
+func (obj *patternFlowVxlanReserved1) SetDecrement(value PatternFlowVxlanReserved1Counter) PatternFlowVxlanReserved1 {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowVxlanReserved1Choice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowVxlanReserved1) validateObj(set_default bool) {
@@ -41772,12 +44300,18 @@ type patternFlowIpv4Version struct {
 	obj *snappipb.PatternFlowIpv4Version
 }
 
+func NewPatternFlowIpv4Version() PatternFlowIpv4Version {
+	obj := patternFlowIpv4Version{obj: &snappipb.PatternFlowIpv4Version{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowIpv4Version) Msg() *snappipb.PatternFlowIpv4Version {
 	return obj.obj
 }
 
 func (obj *patternFlowIpv4Version) SetMsg(msg *snappipb.PatternFlowIpv4Version) PatternFlowIpv4Version {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -41909,8 +44443,10 @@ type PatternFlowIpv4Version interface {
 	SetMetricGroup(value string) PatternFlowIpv4Version
 	HasMetricGroup() bool
 	Increment() PatternFlowIpv4VersionCounter
+	SetIncrement(value PatternFlowIpv4VersionCounter) PatternFlowIpv4Version
 	HasIncrement() bool
 	Decrement() PatternFlowIpv4VersionCounter
+	SetDecrement(value PatternFlowIpv4VersionCounter) PatternFlowIpv4Version
 	HasDecrement() bool
 }
 
@@ -42016,10 +44552,7 @@ func (obj *patternFlowIpv4Version) SetMetricGroup(value string) PatternFlowIpv4V
 func (obj *patternFlowIpv4Version) Increment() PatternFlowIpv4VersionCounter {
 	obj.SetChoice(PatternFlowIpv4VersionChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowIpv4VersionCounter{}
-		newObj := &patternFlowIpv4VersionCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowIpv4VersionCounter().Msg()
 	}
 	return &patternFlowIpv4VersionCounter{obj: obj.obj.Increment}
 }
@@ -42030,15 +44563,20 @@ func (obj *patternFlowIpv4Version) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowIpv4VersionCounter value in the PatternFlowIpv4Version object
+//  description is TBD
+func (obj *patternFlowIpv4Version) SetIncrement(value PatternFlowIpv4VersionCounter) PatternFlowIpv4Version {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowIpv4VersionChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowIpv4VersionCounter
 //  description is TBD
 func (obj *patternFlowIpv4Version) Decrement() PatternFlowIpv4VersionCounter {
 	obj.SetChoice(PatternFlowIpv4VersionChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowIpv4VersionCounter{}
-		newObj := &patternFlowIpv4VersionCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowIpv4VersionCounter().Msg()
 	}
 	return &patternFlowIpv4VersionCounter{obj: obj.obj.Decrement}
 }
@@ -42047,6 +44585,14 @@ func (obj *patternFlowIpv4Version) Decrement() PatternFlowIpv4VersionCounter {
 //  description is TBD
 func (obj *patternFlowIpv4Version) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowIpv4VersionCounter value in the PatternFlowIpv4Version object
+//  description is TBD
+func (obj *patternFlowIpv4Version) SetDecrement(value PatternFlowIpv4VersionCounter) PatternFlowIpv4Version {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowIpv4VersionChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowIpv4Version) validateObj(set_default bool) {
@@ -42093,12 +44639,18 @@ type patternFlowIpv4HeaderLength struct {
 	obj *snappipb.PatternFlowIpv4HeaderLength
 }
 
+func NewPatternFlowIpv4HeaderLength() PatternFlowIpv4HeaderLength {
+	obj := patternFlowIpv4HeaderLength{obj: &snappipb.PatternFlowIpv4HeaderLength{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowIpv4HeaderLength) Msg() *snappipb.PatternFlowIpv4HeaderLength {
 	return obj.obj
 }
 
 func (obj *patternFlowIpv4HeaderLength) SetMsg(msg *snappipb.PatternFlowIpv4HeaderLength) PatternFlowIpv4HeaderLength {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -42233,8 +44785,10 @@ type PatternFlowIpv4HeaderLength interface {
 	SetMetricGroup(value string) PatternFlowIpv4HeaderLength
 	HasMetricGroup() bool
 	Increment() PatternFlowIpv4HeaderLengthCounter
+	SetIncrement(value PatternFlowIpv4HeaderLengthCounter) PatternFlowIpv4HeaderLength
 	HasIncrement() bool
 	Decrement() PatternFlowIpv4HeaderLengthCounter
+	SetDecrement(value PatternFlowIpv4HeaderLengthCounter) PatternFlowIpv4HeaderLength
 	HasDecrement() bool
 }
 
@@ -42372,10 +44926,7 @@ func (obj *patternFlowIpv4HeaderLength) SetMetricGroup(value string) PatternFlow
 func (obj *patternFlowIpv4HeaderLength) Increment() PatternFlowIpv4HeaderLengthCounter {
 	obj.SetChoice(PatternFlowIpv4HeaderLengthChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowIpv4HeaderLengthCounter{}
-		newObj := &patternFlowIpv4HeaderLengthCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowIpv4HeaderLengthCounter().Msg()
 	}
 	return &patternFlowIpv4HeaderLengthCounter{obj: obj.obj.Increment}
 }
@@ -42386,15 +44937,20 @@ func (obj *patternFlowIpv4HeaderLength) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowIpv4HeaderLengthCounter value in the PatternFlowIpv4HeaderLength object
+//  description is TBD
+func (obj *patternFlowIpv4HeaderLength) SetIncrement(value PatternFlowIpv4HeaderLengthCounter) PatternFlowIpv4HeaderLength {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowIpv4HeaderLengthChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowIpv4HeaderLengthCounter
 //  description is TBD
 func (obj *patternFlowIpv4HeaderLength) Decrement() PatternFlowIpv4HeaderLengthCounter {
 	obj.SetChoice(PatternFlowIpv4HeaderLengthChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowIpv4HeaderLengthCounter{}
-		newObj := &patternFlowIpv4HeaderLengthCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowIpv4HeaderLengthCounter().Msg()
 	}
 	return &patternFlowIpv4HeaderLengthCounter{obj: obj.obj.Decrement}
 }
@@ -42403,6 +44959,14 @@ func (obj *patternFlowIpv4HeaderLength) Decrement() PatternFlowIpv4HeaderLengthC
 //  description is TBD
 func (obj *patternFlowIpv4HeaderLength) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowIpv4HeaderLengthCounter value in the PatternFlowIpv4HeaderLength object
+//  description is TBD
+func (obj *patternFlowIpv4HeaderLength) SetDecrement(value PatternFlowIpv4HeaderLengthCounter) PatternFlowIpv4HeaderLength {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowIpv4HeaderLengthChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowIpv4HeaderLength) validateObj(set_default bool) {
@@ -42449,12 +45013,18 @@ type flowIpv4Priority struct {
 	obj *snappipb.FlowIpv4Priority
 }
 
+func NewFlowIpv4Priority() FlowIpv4Priority {
+	obj := flowIpv4Priority{obj: &snappipb.FlowIpv4Priority{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *flowIpv4Priority) Msg() *snappipb.FlowIpv4Priority {
 	return obj.obj
 }
 
 func (obj *flowIpv4Priority) SetMsg(msg *snappipb.FlowIpv4Priority) FlowIpv4Priority {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -42578,10 +45148,13 @@ type FlowIpv4Priority interface {
 	SetChoice(value FlowIpv4PriorityChoiceEnum) FlowIpv4Priority
 	HasChoice() bool
 	Raw() PatternFlowIpv4PriorityRaw
+	SetRaw(value PatternFlowIpv4PriorityRaw) FlowIpv4Priority
 	HasRaw() bool
 	Tos() FlowIpv4Tos
+	SetTos(value FlowIpv4Tos) FlowIpv4Priority
 	HasTos() bool
 	Dscp() FlowIpv4Dscp
+	SetDscp(value FlowIpv4Dscp) FlowIpv4Priority
 	HasDscp() bool
 }
 
@@ -42624,10 +45197,7 @@ func (obj *flowIpv4Priority) SetChoice(value FlowIpv4PriorityChoiceEnum) FlowIpv
 func (obj *flowIpv4Priority) Raw() PatternFlowIpv4PriorityRaw {
 	obj.SetChoice(FlowIpv4PriorityChoice.RAW)
 	if obj.obj.Raw == nil {
-		obj.obj.Raw = &snappipb.PatternFlowIpv4PriorityRaw{}
-		newObj := &patternFlowIpv4PriorityRaw{obj: obj.obj.Raw}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Raw = NewPatternFlowIpv4PriorityRaw().Msg()
 	}
 	return &patternFlowIpv4PriorityRaw{obj: obj.obj.Raw}
 }
@@ -42638,15 +45208,20 @@ func (obj *flowIpv4Priority) HasRaw() bool {
 	return obj.obj.Raw != nil
 }
 
+// SetRaw sets the PatternFlowIpv4PriorityRaw value in the FlowIpv4Priority object
+//  description is TBD
+func (obj *flowIpv4Priority) SetRaw(value PatternFlowIpv4PriorityRaw) FlowIpv4Priority {
+	obj.Raw().SetMsg(value.Msg())
+	obj.SetChoice(FlowIpv4PriorityChoice.RAW)
+	return obj
+}
+
 // Tos returns a FlowIpv4Tos
 //  description is TBD
 func (obj *flowIpv4Priority) Tos() FlowIpv4Tos {
 	obj.SetChoice(FlowIpv4PriorityChoice.TOS)
 	if obj.obj.Tos == nil {
-		obj.obj.Tos = &snappipb.FlowIpv4Tos{}
-		newObj := &flowIpv4Tos{obj: obj.obj.Tos}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Tos = NewFlowIpv4Tos().Msg()
 	}
 	return &flowIpv4Tos{obj: obj.obj.Tos}
 }
@@ -42657,15 +45232,20 @@ func (obj *flowIpv4Priority) HasTos() bool {
 	return obj.obj.Tos != nil
 }
 
+// SetTos sets the FlowIpv4Tos value in the FlowIpv4Priority object
+//  description is TBD
+func (obj *flowIpv4Priority) SetTos(value FlowIpv4Tos) FlowIpv4Priority {
+	obj.Tos().SetMsg(value.Msg())
+	obj.SetChoice(FlowIpv4PriorityChoice.TOS)
+	return obj
+}
+
 // Dscp returns a FlowIpv4Dscp
 //  description is TBD
 func (obj *flowIpv4Priority) Dscp() FlowIpv4Dscp {
 	obj.SetChoice(FlowIpv4PriorityChoice.DSCP)
 	if obj.obj.Dscp == nil {
-		obj.obj.Dscp = &snappipb.FlowIpv4Dscp{}
-		newObj := &flowIpv4Dscp{obj: obj.obj.Dscp}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Dscp = NewFlowIpv4Dscp().Msg()
 	}
 	return &flowIpv4Dscp{obj: obj.obj.Dscp}
 }
@@ -42674,6 +45254,14 @@ func (obj *flowIpv4Priority) Dscp() FlowIpv4Dscp {
 //  description is TBD
 func (obj *flowIpv4Priority) HasDscp() bool {
 	return obj.obj.Dscp != nil
+}
+
+// SetDscp sets the FlowIpv4Dscp value in the FlowIpv4Priority object
+//  description is TBD
+func (obj *flowIpv4Priority) SetDscp(value FlowIpv4Dscp) FlowIpv4Priority {
+	obj.Dscp().SetMsg(value.Msg())
+	obj.SetChoice(FlowIpv4PriorityChoice.DSCP)
+	return obj
 }
 
 func (obj *flowIpv4Priority) validateObj(set_default bool) {
@@ -42705,12 +45293,18 @@ type patternFlowIpv4TotalLength struct {
 	obj *snappipb.PatternFlowIpv4TotalLength
 }
 
+func NewPatternFlowIpv4TotalLength() PatternFlowIpv4TotalLength {
+	obj := patternFlowIpv4TotalLength{obj: &snappipb.PatternFlowIpv4TotalLength{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowIpv4TotalLength) Msg() *snappipb.PatternFlowIpv4TotalLength {
 	return obj.obj
 }
 
 func (obj *patternFlowIpv4TotalLength) SetMsg(msg *snappipb.PatternFlowIpv4TotalLength) PatternFlowIpv4TotalLength {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -42845,8 +45439,10 @@ type PatternFlowIpv4TotalLength interface {
 	SetMetricGroup(value string) PatternFlowIpv4TotalLength
 	HasMetricGroup() bool
 	Increment() PatternFlowIpv4TotalLengthCounter
+	SetIncrement(value PatternFlowIpv4TotalLengthCounter) PatternFlowIpv4TotalLength
 	HasIncrement() bool
 	Decrement() PatternFlowIpv4TotalLengthCounter
+	SetDecrement(value PatternFlowIpv4TotalLengthCounter) PatternFlowIpv4TotalLength
 	HasDecrement() bool
 }
 
@@ -42984,10 +45580,7 @@ func (obj *patternFlowIpv4TotalLength) SetMetricGroup(value string) PatternFlowI
 func (obj *patternFlowIpv4TotalLength) Increment() PatternFlowIpv4TotalLengthCounter {
 	obj.SetChoice(PatternFlowIpv4TotalLengthChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowIpv4TotalLengthCounter{}
-		newObj := &patternFlowIpv4TotalLengthCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowIpv4TotalLengthCounter().Msg()
 	}
 	return &patternFlowIpv4TotalLengthCounter{obj: obj.obj.Increment}
 }
@@ -42998,15 +45591,20 @@ func (obj *patternFlowIpv4TotalLength) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowIpv4TotalLengthCounter value in the PatternFlowIpv4TotalLength object
+//  description is TBD
+func (obj *patternFlowIpv4TotalLength) SetIncrement(value PatternFlowIpv4TotalLengthCounter) PatternFlowIpv4TotalLength {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowIpv4TotalLengthChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowIpv4TotalLengthCounter
 //  description is TBD
 func (obj *patternFlowIpv4TotalLength) Decrement() PatternFlowIpv4TotalLengthCounter {
 	obj.SetChoice(PatternFlowIpv4TotalLengthChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowIpv4TotalLengthCounter{}
-		newObj := &patternFlowIpv4TotalLengthCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowIpv4TotalLengthCounter().Msg()
 	}
 	return &patternFlowIpv4TotalLengthCounter{obj: obj.obj.Decrement}
 }
@@ -43015,6 +45613,14 @@ func (obj *patternFlowIpv4TotalLength) Decrement() PatternFlowIpv4TotalLengthCou
 //  description is TBD
 func (obj *patternFlowIpv4TotalLength) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowIpv4TotalLengthCounter value in the PatternFlowIpv4TotalLength object
+//  description is TBD
+func (obj *patternFlowIpv4TotalLength) SetDecrement(value PatternFlowIpv4TotalLengthCounter) PatternFlowIpv4TotalLength {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowIpv4TotalLengthChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowIpv4TotalLength) validateObj(set_default bool) {
@@ -43061,12 +45667,18 @@ type patternFlowIpv4Identification struct {
 	obj *snappipb.PatternFlowIpv4Identification
 }
 
+func NewPatternFlowIpv4Identification() PatternFlowIpv4Identification {
+	obj := patternFlowIpv4Identification{obj: &snappipb.PatternFlowIpv4Identification{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowIpv4Identification) Msg() *snappipb.PatternFlowIpv4Identification {
 	return obj.obj
 }
 
 func (obj *patternFlowIpv4Identification) SetMsg(msg *snappipb.PatternFlowIpv4Identification) PatternFlowIpv4Identification {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -43198,8 +45810,10 @@ type PatternFlowIpv4Identification interface {
 	SetMetricGroup(value string) PatternFlowIpv4Identification
 	HasMetricGroup() bool
 	Increment() PatternFlowIpv4IdentificationCounter
+	SetIncrement(value PatternFlowIpv4IdentificationCounter) PatternFlowIpv4Identification
 	HasIncrement() bool
 	Decrement() PatternFlowIpv4IdentificationCounter
+	SetDecrement(value PatternFlowIpv4IdentificationCounter) PatternFlowIpv4Identification
 	HasDecrement() bool
 }
 
@@ -43305,10 +45919,7 @@ func (obj *patternFlowIpv4Identification) SetMetricGroup(value string) PatternFl
 func (obj *patternFlowIpv4Identification) Increment() PatternFlowIpv4IdentificationCounter {
 	obj.SetChoice(PatternFlowIpv4IdentificationChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowIpv4IdentificationCounter{}
-		newObj := &patternFlowIpv4IdentificationCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowIpv4IdentificationCounter().Msg()
 	}
 	return &patternFlowIpv4IdentificationCounter{obj: obj.obj.Increment}
 }
@@ -43319,15 +45930,20 @@ func (obj *patternFlowIpv4Identification) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowIpv4IdentificationCounter value in the PatternFlowIpv4Identification object
+//  description is TBD
+func (obj *patternFlowIpv4Identification) SetIncrement(value PatternFlowIpv4IdentificationCounter) PatternFlowIpv4Identification {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowIpv4IdentificationChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowIpv4IdentificationCounter
 //  description is TBD
 func (obj *patternFlowIpv4Identification) Decrement() PatternFlowIpv4IdentificationCounter {
 	obj.SetChoice(PatternFlowIpv4IdentificationChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowIpv4IdentificationCounter{}
-		newObj := &patternFlowIpv4IdentificationCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowIpv4IdentificationCounter().Msg()
 	}
 	return &patternFlowIpv4IdentificationCounter{obj: obj.obj.Decrement}
 }
@@ -43336,6 +45952,14 @@ func (obj *patternFlowIpv4Identification) Decrement() PatternFlowIpv4Identificat
 //  description is TBD
 func (obj *patternFlowIpv4Identification) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowIpv4IdentificationCounter value in the PatternFlowIpv4Identification object
+//  description is TBD
+func (obj *patternFlowIpv4Identification) SetDecrement(value PatternFlowIpv4IdentificationCounter) PatternFlowIpv4Identification {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowIpv4IdentificationChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowIpv4Identification) validateObj(set_default bool) {
@@ -43382,12 +46006,18 @@ type patternFlowIpv4Reserved struct {
 	obj *snappipb.PatternFlowIpv4Reserved
 }
 
+func NewPatternFlowIpv4Reserved() PatternFlowIpv4Reserved {
+	obj := patternFlowIpv4Reserved{obj: &snappipb.PatternFlowIpv4Reserved{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowIpv4Reserved) Msg() *snappipb.PatternFlowIpv4Reserved {
 	return obj.obj
 }
 
 func (obj *patternFlowIpv4Reserved) SetMsg(msg *snappipb.PatternFlowIpv4Reserved) PatternFlowIpv4Reserved {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -43519,8 +46149,10 @@ type PatternFlowIpv4Reserved interface {
 	SetMetricGroup(value string) PatternFlowIpv4Reserved
 	HasMetricGroup() bool
 	Increment() PatternFlowIpv4ReservedCounter
+	SetIncrement(value PatternFlowIpv4ReservedCounter) PatternFlowIpv4Reserved
 	HasIncrement() bool
 	Decrement() PatternFlowIpv4ReservedCounter
+	SetDecrement(value PatternFlowIpv4ReservedCounter) PatternFlowIpv4Reserved
 	HasDecrement() bool
 }
 
@@ -43626,10 +46258,7 @@ func (obj *patternFlowIpv4Reserved) SetMetricGroup(value string) PatternFlowIpv4
 func (obj *patternFlowIpv4Reserved) Increment() PatternFlowIpv4ReservedCounter {
 	obj.SetChoice(PatternFlowIpv4ReservedChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowIpv4ReservedCounter{}
-		newObj := &patternFlowIpv4ReservedCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowIpv4ReservedCounter().Msg()
 	}
 	return &patternFlowIpv4ReservedCounter{obj: obj.obj.Increment}
 }
@@ -43640,15 +46269,20 @@ func (obj *patternFlowIpv4Reserved) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowIpv4ReservedCounter value in the PatternFlowIpv4Reserved object
+//  description is TBD
+func (obj *patternFlowIpv4Reserved) SetIncrement(value PatternFlowIpv4ReservedCounter) PatternFlowIpv4Reserved {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowIpv4ReservedChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowIpv4ReservedCounter
 //  description is TBD
 func (obj *patternFlowIpv4Reserved) Decrement() PatternFlowIpv4ReservedCounter {
 	obj.SetChoice(PatternFlowIpv4ReservedChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowIpv4ReservedCounter{}
-		newObj := &patternFlowIpv4ReservedCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowIpv4ReservedCounter().Msg()
 	}
 	return &patternFlowIpv4ReservedCounter{obj: obj.obj.Decrement}
 }
@@ -43657,6 +46291,14 @@ func (obj *patternFlowIpv4Reserved) Decrement() PatternFlowIpv4ReservedCounter {
 //  description is TBD
 func (obj *patternFlowIpv4Reserved) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowIpv4ReservedCounter value in the PatternFlowIpv4Reserved object
+//  description is TBD
+func (obj *patternFlowIpv4Reserved) SetDecrement(value PatternFlowIpv4ReservedCounter) PatternFlowIpv4Reserved {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowIpv4ReservedChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowIpv4Reserved) validateObj(set_default bool) {
@@ -43703,12 +46345,18 @@ type patternFlowIpv4DontFragment struct {
 	obj *snappipb.PatternFlowIpv4DontFragment
 }
 
+func NewPatternFlowIpv4DontFragment() PatternFlowIpv4DontFragment {
+	obj := patternFlowIpv4DontFragment{obj: &snappipb.PatternFlowIpv4DontFragment{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowIpv4DontFragment) Msg() *snappipb.PatternFlowIpv4DontFragment {
 	return obj.obj
 }
 
 func (obj *patternFlowIpv4DontFragment) SetMsg(msg *snappipb.PatternFlowIpv4DontFragment) PatternFlowIpv4DontFragment {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -43840,8 +46488,10 @@ type PatternFlowIpv4DontFragment interface {
 	SetMetricGroup(value string) PatternFlowIpv4DontFragment
 	HasMetricGroup() bool
 	Increment() PatternFlowIpv4DontFragmentCounter
+	SetIncrement(value PatternFlowIpv4DontFragmentCounter) PatternFlowIpv4DontFragment
 	HasIncrement() bool
 	Decrement() PatternFlowIpv4DontFragmentCounter
+	SetDecrement(value PatternFlowIpv4DontFragmentCounter) PatternFlowIpv4DontFragment
 	HasDecrement() bool
 }
 
@@ -43947,10 +46597,7 @@ func (obj *patternFlowIpv4DontFragment) SetMetricGroup(value string) PatternFlow
 func (obj *patternFlowIpv4DontFragment) Increment() PatternFlowIpv4DontFragmentCounter {
 	obj.SetChoice(PatternFlowIpv4DontFragmentChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowIpv4DontFragmentCounter{}
-		newObj := &patternFlowIpv4DontFragmentCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowIpv4DontFragmentCounter().Msg()
 	}
 	return &patternFlowIpv4DontFragmentCounter{obj: obj.obj.Increment}
 }
@@ -43961,15 +46608,20 @@ func (obj *patternFlowIpv4DontFragment) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowIpv4DontFragmentCounter value in the PatternFlowIpv4DontFragment object
+//  description is TBD
+func (obj *patternFlowIpv4DontFragment) SetIncrement(value PatternFlowIpv4DontFragmentCounter) PatternFlowIpv4DontFragment {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowIpv4DontFragmentChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowIpv4DontFragmentCounter
 //  description is TBD
 func (obj *patternFlowIpv4DontFragment) Decrement() PatternFlowIpv4DontFragmentCounter {
 	obj.SetChoice(PatternFlowIpv4DontFragmentChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowIpv4DontFragmentCounter{}
-		newObj := &patternFlowIpv4DontFragmentCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowIpv4DontFragmentCounter().Msg()
 	}
 	return &patternFlowIpv4DontFragmentCounter{obj: obj.obj.Decrement}
 }
@@ -43978,6 +46630,14 @@ func (obj *patternFlowIpv4DontFragment) Decrement() PatternFlowIpv4DontFragmentC
 //  description is TBD
 func (obj *patternFlowIpv4DontFragment) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowIpv4DontFragmentCounter value in the PatternFlowIpv4DontFragment object
+//  description is TBD
+func (obj *patternFlowIpv4DontFragment) SetDecrement(value PatternFlowIpv4DontFragmentCounter) PatternFlowIpv4DontFragment {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowIpv4DontFragmentChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowIpv4DontFragment) validateObj(set_default bool) {
@@ -44024,12 +46684,18 @@ type patternFlowIpv4MoreFragments struct {
 	obj *snappipb.PatternFlowIpv4MoreFragments
 }
 
+func NewPatternFlowIpv4MoreFragments() PatternFlowIpv4MoreFragments {
+	obj := patternFlowIpv4MoreFragments{obj: &snappipb.PatternFlowIpv4MoreFragments{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowIpv4MoreFragments) Msg() *snappipb.PatternFlowIpv4MoreFragments {
 	return obj.obj
 }
 
 func (obj *patternFlowIpv4MoreFragments) SetMsg(msg *snappipb.PatternFlowIpv4MoreFragments) PatternFlowIpv4MoreFragments {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -44161,8 +46827,10 @@ type PatternFlowIpv4MoreFragments interface {
 	SetMetricGroup(value string) PatternFlowIpv4MoreFragments
 	HasMetricGroup() bool
 	Increment() PatternFlowIpv4MoreFragmentsCounter
+	SetIncrement(value PatternFlowIpv4MoreFragmentsCounter) PatternFlowIpv4MoreFragments
 	HasIncrement() bool
 	Decrement() PatternFlowIpv4MoreFragmentsCounter
+	SetDecrement(value PatternFlowIpv4MoreFragmentsCounter) PatternFlowIpv4MoreFragments
 	HasDecrement() bool
 }
 
@@ -44268,10 +46936,7 @@ func (obj *patternFlowIpv4MoreFragments) SetMetricGroup(value string) PatternFlo
 func (obj *patternFlowIpv4MoreFragments) Increment() PatternFlowIpv4MoreFragmentsCounter {
 	obj.SetChoice(PatternFlowIpv4MoreFragmentsChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowIpv4MoreFragmentsCounter{}
-		newObj := &patternFlowIpv4MoreFragmentsCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowIpv4MoreFragmentsCounter().Msg()
 	}
 	return &patternFlowIpv4MoreFragmentsCounter{obj: obj.obj.Increment}
 }
@@ -44282,15 +46947,20 @@ func (obj *patternFlowIpv4MoreFragments) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowIpv4MoreFragmentsCounter value in the PatternFlowIpv4MoreFragments object
+//  description is TBD
+func (obj *patternFlowIpv4MoreFragments) SetIncrement(value PatternFlowIpv4MoreFragmentsCounter) PatternFlowIpv4MoreFragments {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowIpv4MoreFragmentsChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowIpv4MoreFragmentsCounter
 //  description is TBD
 func (obj *patternFlowIpv4MoreFragments) Decrement() PatternFlowIpv4MoreFragmentsCounter {
 	obj.SetChoice(PatternFlowIpv4MoreFragmentsChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowIpv4MoreFragmentsCounter{}
-		newObj := &patternFlowIpv4MoreFragmentsCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowIpv4MoreFragmentsCounter().Msg()
 	}
 	return &patternFlowIpv4MoreFragmentsCounter{obj: obj.obj.Decrement}
 }
@@ -44299,6 +46969,14 @@ func (obj *patternFlowIpv4MoreFragments) Decrement() PatternFlowIpv4MoreFragment
 //  description is TBD
 func (obj *patternFlowIpv4MoreFragments) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowIpv4MoreFragmentsCounter value in the PatternFlowIpv4MoreFragments object
+//  description is TBD
+func (obj *patternFlowIpv4MoreFragments) SetDecrement(value PatternFlowIpv4MoreFragmentsCounter) PatternFlowIpv4MoreFragments {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowIpv4MoreFragmentsChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowIpv4MoreFragments) validateObj(set_default bool) {
@@ -44345,12 +47023,18 @@ type patternFlowIpv4FragmentOffset struct {
 	obj *snappipb.PatternFlowIpv4FragmentOffset
 }
 
+func NewPatternFlowIpv4FragmentOffset() PatternFlowIpv4FragmentOffset {
+	obj := patternFlowIpv4FragmentOffset{obj: &snappipb.PatternFlowIpv4FragmentOffset{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowIpv4FragmentOffset) Msg() *snappipb.PatternFlowIpv4FragmentOffset {
 	return obj.obj
 }
 
 func (obj *patternFlowIpv4FragmentOffset) SetMsg(msg *snappipb.PatternFlowIpv4FragmentOffset) PatternFlowIpv4FragmentOffset {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -44482,8 +47166,10 @@ type PatternFlowIpv4FragmentOffset interface {
 	SetMetricGroup(value string) PatternFlowIpv4FragmentOffset
 	HasMetricGroup() bool
 	Increment() PatternFlowIpv4FragmentOffsetCounter
+	SetIncrement(value PatternFlowIpv4FragmentOffsetCounter) PatternFlowIpv4FragmentOffset
 	HasIncrement() bool
 	Decrement() PatternFlowIpv4FragmentOffsetCounter
+	SetDecrement(value PatternFlowIpv4FragmentOffsetCounter) PatternFlowIpv4FragmentOffset
 	HasDecrement() bool
 }
 
@@ -44589,10 +47275,7 @@ func (obj *patternFlowIpv4FragmentOffset) SetMetricGroup(value string) PatternFl
 func (obj *patternFlowIpv4FragmentOffset) Increment() PatternFlowIpv4FragmentOffsetCounter {
 	obj.SetChoice(PatternFlowIpv4FragmentOffsetChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowIpv4FragmentOffsetCounter{}
-		newObj := &patternFlowIpv4FragmentOffsetCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowIpv4FragmentOffsetCounter().Msg()
 	}
 	return &patternFlowIpv4FragmentOffsetCounter{obj: obj.obj.Increment}
 }
@@ -44603,15 +47286,20 @@ func (obj *patternFlowIpv4FragmentOffset) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowIpv4FragmentOffsetCounter value in the PatternFlowIpv4FragmentOffset object
+//  description is TBD
+func (obj *patternFlowIpv4FragmentOffset) SetIncrement(value PatternFlowIpv4FragmentOffsetCounter) PatternFlowIpv4FragmentOffset {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowIpv4FragmentOffsetChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowIpv4FragmentOffsetCounter
 //  description is TBD
 func (obj *patternFlowIpv4FragmentOffset) Decrement() PatternFlowIpv4FragmentOffsetCounter {
 	obj.SetChoice(PatternFlowIpv4FragmentOffsetChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowIpv4FragmentOffsetCounter{}
-		newObj := &patternFlowIpv4FragmentOffsetCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowIpv4FragmentOffsetCounter().Msg()
 	}
 	return &patternFlowIpv4FragmentOffsetCounter{obj: obj.obj.Decrement}
 }
@@ -44620,6 +47308,14 @@ func (obj *patternFlowIpv4FragmentOffset) Decrement() PatternFlowIpv4FragmentOff
 //  description is TBD
 func (obj *patternFlowIpv4FragmentOffset) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowIpv4FragmentOffsetCounter value in the PatternFlowIpv4FragmentOffset object
+//  description is TBD
+func (obj *patternFlowIpv4FragmentOffset) SetDecrement(value PatternFlowIpv4FragmentOffsetCounter) PatternFlowIpv4FragmentOffset {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowIpv4FragmentOffsetChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowIpv4FragmentOffset) validateObj(set_default bool) {
@@ -44666,12 +47362,18 @@ type patternFlowIpv4TimeToLive struct {
 	obj *snappipb.PatternFlowIpv4TimeToLive
 }
 
+func NewPatternFlowIpv4TimeToLive() PatternFlowIpv4TimeToLive {
+	obj := patternFlowIpv4TimeToLive{obj: &snappipb.PatternFlowIpv4TimeToLive{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowIpv4TimeToLive) Msg() *snappipb.PatternFlowIpv4TimeToLive {
 	return obj.obj
 }
 
 func (obj *patternFlowIpv4TimeToLive) SetMsg(msg *snappipb.PatternFlowIpv4TimeToLive) PatternFlowIpv4TimeToLive {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -44803,8 +47505,10 @@ type PatternFlowIpv4TimeToLive interface {
 	SetMetricGroup(value string) PatternFlowIpv4TimeToLive
 	HasMetricGroup() bool
 	Increment() PatternFlowIpv4TimeToLiveCounter
+	SetIncrement(value PatternFlowIpv4TimeToLiveCounter) PatternFlowIpv4TimeToLive
 	HasIncrement() bool
 	Decrement() PatternFlowIpv4TimeToLiveCounter
+	SetDecrement(value PatternFlowIpv4TimeToLiveCounter) PatternFlowIpv4TimeToLive
 	HasDecrement() bool
 }
 
@@ -44910,10 +47614,7 @@ func (obj *patternFlowIpv4TimeToLive) SetMetricGroup(value string) PatternFlowIp
 func (obj *patternFlowIpv4TimeToLive) Increment() PatternFlowIpv4TimeToLiveCounter {
 	obj.SetChoice(PatternFlowIpv4TimeToLiveChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowIpv4TimeToLiveCounter{}
-		newObj := &patternFlowIpv4TimeToLiveCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowIpv4TimeToLiveCounter().Msg()
 	}
 	return &patternFlowIpv4TimeToLiveCounter{obj: obj.obj.Increment}
 }
@@ -44924,15 +47625,20 @@ func (obj *patternFlowIpv4TimeToLive) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowIpv4TimeToLiveCounter value in the PatternFlowIpv4TimeToLive object
+//  description is TBD
+func (obj *patternFlowIpv4TimeToLive) SetIncrement(value PatternFlowIpv4TimeToLiveCounter) PatternFlowIpv4TimeToLive {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowIpv4TimeToLiveChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowIpv4TimeToLiveCounter
 //  description is TBD
 func (obj *patternFlowIpv4TimeToLive) Decrement() PatternFlowIpv4TimeToLiveCounter {
 	obj.SetChoice(PatternFlowIpv4TimeToLiveChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowIpv4TimeToLiveCounter{}
-		newObj := &patternFlowIpv4TimeToLiveCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowIpv4TimeToLiveCounter().Msg()
 	}
 	return &patternFlowIpv4TimeToLiveCounter{obj: obj.obj.Decrement}
 }
@@ -44941,6 +47647,14 @@ func (obj *patternFlowIpv4TimeToLive) Decrement() PatternFlowIpv4TimeToLiveCount
 //  description is TBD
 func (obj *patternFlowIpv4TimeToLive) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowIpv4TimeToLiveCounter value in the PatternFlowIpv4TimeToLive object
+//  description is TBD
+func (obj *patternFlowIpv4TimeToLive) SetDecrement(value PatternFlowIpv4TimeToLiveCounter) PatternFlowIpv4TimeToLive {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowIpv4TimeToLiveChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowIpv4TimeToLive) validateObj(set_default bool) {
@@ -44987,12 +47701,18 @@ type patternFlowIpv4Protocol struct {
 	obj *snappipb.PatternFlowIpv4Protocol
 }
 
+func NewPatternFlowIpv4Protocol() PatternFlowIpv4Protocol {
+	obj := patternFlowIpv4Protocol{obj: &snappipb.PatternFlowIpv4Protocol{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowIpv4Protocol) Msg() *snappipb.PatternFlowIpv4Protocol {
 	return obj.obj
 }
 
 func (obj *patternFlowIpv4Protocol) SetMsg(msg *snappipb.PatternFlowIpv4Protocol) PatternFlowIpv4Protocol {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -45127,8 +47847,10 @@ type PatternFlowIpv4Protocol interface {
 	SetMetricGroup(value string) PatternFlowIpv4Protocol
 	HasMetricGroup() bool
 	Increment() PatternFlowIpv4ProtocolCounter
+	SetIncrement(value PatternFlowIpv4ProtocolCounter) PatternFlowIpv4Protocol
 	HasIncrement() bool
 	Decrement() PatternFlowIpv4ProtocolCounter
+	SetDecrement(value PatternFlowIpv4ProtocolCounter) PatternFlowIpv4Protocol
 	HasDecrement() bool
 }
 
@@ -45266,10 +47988,7 @@ func (obj *patternFlowIpv4Protocol) SetMetricGroup(value string) PatternFlowIpv4
 func (obj *patternFlowIpv4Protocol) Increment() PatternFlowIpv4ProtocolCounter {
 	obj.SetChoice(PatternFlowIpv4ProtocolChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowIpv4ProtocolCounter{}
-		newObj := &patternFlowIpv4ProtocolCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowIpv4ProtocolCounter().Msg()
 	}
 	return &patternFlowIpv4ProtocolCounter{obj: obj.obj.Increment}
 }
@@ -45280,15 +47999,20 @@ func (obj *patternFlowIpv4Protocol) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowIpv4ProtocolCounter value in the PatternFlowIpv4Protocol object
+//  description is TBD
+func (obj *patternFlowIpv4Protocol) SetIncrement(value PatternFlowIpv4ProtocolCounter) PatternFlowIpv4Protocol {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowIpv4ProtocolChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowIpv4ProtocolCounter
 //  description is TBD
 func (obj *patternFlowIpv4Protocol) Decrement() PatternFlowIpv4ProtocolCounter {
 	obj.SetChoice(PatternFlowIpv4ProtocolChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowIpv4ProtocolCounter{}
-		newObj := &patternFlowIpv4ProtocolCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowIpv4ProtocolCounter().Msg()
 	}
 	return &patternFlowIpv4ProtocolCounter{obj: obj.obj.Decrement}
 }
@@ -45297,6 +48021,14 @@ func (obj *patternFlowIpv4Protocol) Decrement() PatternFlowIpv4ProtocolCounter {
 //  description is TBD
 func (obj *patternFlowIpv4Protocol) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowIpv4ProtocolCounter value in the PatternFlowIpv4Protocol object
+//  description is TBD
+func (obj *patternFlowIpv4Protocol) SetDecrement(value PatternFlowIpv4ProtocolCounter) PatternFlowIpv4Protocol {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowIpv4ProtocolChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowIpv4Protocol) validateObj(set_default bool) {
@@ -45343,12 +48075,18 @@ type patternFlowIpv4HeaderChecksum struct {
 	obj *snappipb.PatternFlowIpv4HeaderChecksum
 }
 
+func NewPatternFlowIpv4HeaderChecksum() PatternFlowIpv4HeaderChecksum {
+	obj := patternFlowIpv4HeaderChecksum{obj: &snappipb.PatternFlowIpv4HeaderChecksum{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowIpv4HeaderChecksum) Msg() *snappipb.PatternFlowIpv4HeaderChecksum {
 	return obj.obj
 }
 
 func (obj *patternFlowIpv4HeaderChecksum) SetMsg(msg *snappipb.PatternFlowIpv4HeaderChecksum) PatternFlowIpv4HeaderChecksum {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -45590,12 +48328,18 @@ type patternFlowIpv4Src struct {
 	obj *snappipb.PatternFlowIpv4Src
 }
 
+func NewPatternFlowIpv4Src() PatternFlowIpv4Src {
+	obj := patternFlowIpv4Src{obj: &snappipb.PatternFlowIpv4Src{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowIpv4Src) Msg() *snappipb.PatternFlowIpv4Src {
 	return obj.obj
 }
 
 func (obj *patternFlowIpv4Src) SetMsg(msg *snappipb.PatternFlowIpv4Src) PatternFlowIpv4Src {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -45727,8 +48471,10 @@ type PatternFlowIpv4Src interface {
 	SetMetricGroup(value string) PatternFlowIpv4Src
 	HasMetricGroup() bool
 	Increment() PatternFlowIpv4SrcCounter
+	SetIncrement(value PatternFlowIpv4SrcCounter) PatternFlowIpv4Src
 	HasIncrement() bool
 	Decrement() PatternFlowIpv4SrcCounter
+	SetDecrement(value PatternFlowIpv4SrcCounter) PatternFlowIpv4Src
 	HasDecrement() bool
 }
 
@@ -45834,10 +48580,7 @@ func (obj *patternFlowIpv4Src) SetMetricGroup(value string) PatternFlowIpv4Src {
 func (obj *patternFlowIpv4Src) Increment() PatternFlowIpv4SrcCounter {
 	obj.SetChoice(PatternFlowIpv4SrcChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowIpv4SrcCounter{}
-		newObj := &patternFlowIpv4SrcCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowIpv4SrcCounter().Msg()
 	}
 	return &patternFlowIpv4SrcCounter{obj: obj.obj.Increment}
 }
@@ -45848,15 +48591,20 @@ func (obj *patternFlowIpv4Src) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowIpv4SrcCounter value in the PatternFlowIpv4Src object
+//  description is TBD
+func (obj *patternFlowIpv4Src) SetIncrement(value PatternFlowIpv4SrcCounter) PatternFlowIpv4Src {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowIpv4SrcChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowIpv4SrcCounter
 //  description is TBD
 func (obj *patternFlowIpv4Src) Decrement() PatternFlowIpv4SrcCounter {
 	obj.SetChoice(PatternFlowIpv4SrcChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowIpv4SrcCounter{}
-		newObj := &patternFlowIpv4SrcCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowIpv4SrcCounter().Msg()
 	}
 	return &patternFlowIpv4SrcCounter{obj: obj.obj.Decrement}
 }
@@ -45865,6 +48613,14 @@ func (obj *patternFlowIpv4Src) Decrement() PatternFlowIpv4SrcCounter {
 //  description is TBD
 func (obj *patternFlowIpv4Src) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowIpv4SrcCounter value in the PatternFlowIpv4Src object
+//  description is TBD
+func (obj *patternFlowIpv4Src) SetDecrement(value PatternFlowIpv4SrcCounter) PatternFlowIpv4Src {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowIpv4SrcChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowIpv4Src) validateObj(set_default bool) {
@@ -45909,12 +48665,18 @@ type patternFlowIpv4Dst struct {
 	obj *snappipb.PatternFlowIpv4Dst
 }
 
+func NewPatternFlowIpv4Dst() PatternFlowIpv4Dst {
+	obj := patternFlowIpv4Dst{obj: &snappipb.PatternFlowIpv4Dst{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowIpv4Dst) Msg() *snappipb.PatternFlowIpv4Dst {
 	return obj.obj
 }
 
 func (obj *patternFlowIpv4Dst) SetMsg(msg *snappipb.PatternFlowIpv4Dst) PatternFlowIpv4Dst {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -46046,8 +48808,10 @@ type PatternFlowIpv4Dst interface {
 	SetMetricGroup(value string) PatternFlowIpv4Dst
 	HasMetricGroup() bool
 	Increment() PatternFlowIpv4DstCounter
+	SetIncrement(value PatternFlowIpv4DstCounter) PatternFlowIpv4Dst
 	HasIncrement() bool
 	Decrement() PatternFlowIpv4DstCounter
+	SetDecrement(value PatternFlowIpv4DstCounter) PatternFlowIpv4Dst
 	HasDecrement() bool
 }
 
@@ -46153,10 +48917,7 @@ func (obj *patternFlowIpv4Dst) SetMetricGroup(value string) PatternFlowIpv4Dst {
 func (obj *patternFlowIpv4Dst) Increment() PatternFlowIpv4DstCounter {
 	obj.SetChoice(PatternFlowIpv4DstChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowIpv4DstCounter{}
-		newObj := &patternFlowIpv4DstCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowIpv4DstCounter().Msg()
 	}
 	return &patternFlowIpv4DstCounter{obj: obj.obj.Increment}
 }
@@ -46167,15 +48928,20 @@ func (obj *patternFlowIpv4Dst) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowIpv4DstCounter value in the PatternFlowIpv4Dst object
+//  description is TBD
+func (obj *patternFlowIpv4Dst) SetIncrement(value PatternFlowIpv4DstCounter) PatternFlowIpv4Dst {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowIpv4DstChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowIpv4DstCounter
 //  description is TBD
 func (obj *patternFlowIpv4Dst) Decrement() PatternFlowIpv4DstCounter {
 	obj.SetChoice(PatternFlowIpv4DstChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowIpv4DstCounter{}
-		newObj := &patternFlowIpv4DstCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowIpv4DstCounter().Msg()
 	}
 	return &patternFlowIpv4DstCounter{obj: obj.obj.Decrement}
 }
@@ -46184,6 +48950,14 @@ func (obj *patternFlowIpv4Dst) Decrement() PatternFlowIpv4DstCounter {
 //  description is TBD
 func (obj *patternFlowIpv4Dst) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowIpv4DstCounter value in the PatternFlowIpv4Dst object
+//  description is TBD
+func (obj *patternFlowIpv4Dst) SetDecrement(value PatternFlowIpv4DstCounter) PatternFlowIpv4Dst {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowIpv4DstChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowIpv4Dst) validateObj(set_default bool) {
@@ -46228,12 +49002,18 @@ type patternFlowIpv6Version struct {
 	obj *snappipb.PatternFlowIpv6Version
 }
 
+func NewPatternFlowIpv6Version() PatternFlowIpv6Version {
+	obj := patternFlowIpv6Version{obj: &snappipb.PatternFlowIpv6Version{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowIpv6Version) Msg() *snappipb.PatternFlowIpv6Version {
 	return obj.obj
 }
 
 func (obj *patternFlowIpv6Version) SetMsg(msg *snappipb.PatternFlowIpv6Version) PatternFlowIpv6Version {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -46365,8 +49145,10 @@ type PatternFlowIpv6Version interface {
 	SetMetricGroup(value string) PatternFlowIpv6Version
 	HasMetricGroup() bool
 	Increment() PatternFlowIpv6VersionCounter
+	SetIncrement(value PatternFlowIpv6VersionCounter) PatternFlowIpv6Version
 	HasIncrement() bool
 	Decrement() PatternFlowIpv6VersionCounter
+	SetDecrement(value PatternFlowIpv6VersionCounter) PatternFlowIpv6Version
 	HasDecrement() bool
 }
 
@@ -46472,10 +49254,7 @@ func (obj *patternFlowIpv6Version) SetMetricGroup(value string) PatternFlowIpv6V
 func (obj *patternFlowIpv6Version) Increment() PatternFlowIpv6VersionCounter {
 	obj.SetChoice(PatternFlowIpv6VersionChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowIpv6VersionCounter{}
-		newObj := &patternFlowIpv6VersionCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowIpv6VersionCounter().Msg()
 	}
 	return &patternFlowIpv6VersionCounter{obj: obj.obj.Increment}
 }
@@ -46486,15 +49265,20 @@ func (obj *patternFlowIpv6Version) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowIpv6VersionCounter value in the PatternFlowIpv6Version object
+//  description is TBD
+func (obj *patternFlowIpv6Version) SetIncrement(value PatternFlowIpv6VersionCounter) PatternFlowIpv6Version {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowIpv6VersionChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowIpv6VersionCounter
 //  description is TBD
 func (obj *patternFlowIpv6Version) Decrement() PatternFlowIpv6VersionCounter {
 	obj.SetChoice(PatternFlowIpv6VersionChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowIpv6VersionCounter{}
-		newObj := &patternFlowIpv6VersionCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowIpv6VersionCounter().Msg()
 	}
 	return &patternFlowIpv6VersionCounter{obj: obj.obj.Decrement}
 }
@@ -46503,6 +49287,14 @@ func (obj *patternFlowIpv6Version) Decrement() PatternFlowIpv6VersionCounter {
 //  description is TBD
 func (obj *patternFlowIpv6Version) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowIpv6VersionCounter value in the PatternFlowIpv6Version object
+//  description is TBD
+func (obj *patternFlowIpv6Version) SetDecrement(value PatternFlowIpv6VersionCounter) PatternFlowIpv6Version {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowIpv6VersionChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowIpv6Version) validateObj(set_default bool) {
@@ -46549,12 +49341,18 @@ type patternFlowIpv6TrafficClass struct {
 	obj *snappipb.PatternFlowIpv6TrafficClass
 }
 
+func NewPatternFlowIpv6TrafficClass() PatternFlowIpv6TrafficClass {
+	obj := patternFlowIpv6TrafficClass{obj: &snappipb.PatternFlowIpv6TrafficClass{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowIpv6TrafficClass) Msg() *snappipb.PatternFlowIpv6TrafficClass {
 	return obj.obj
 }
 
 func (obj *patternFlowIpv6TrafficClass) SetMsg(msg *snappipb.PatternFlowIpv6TrafficClass) PatternFlowIpv6TrafficClass {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -46686,8 +49484,10 @@ type PatternFlowIpv6TrafficClass interface {
 	SetMetricGroup(value string) PatternFlowIpv6TrafficClass
 	HasMetricGroup() bool
 	Increment() PatternFlowIpv6TrafficClassCounter
+	SetIncrement(value PatternFlowIpv6TrafficClassCounter) PatternFlowIpv6TrafficClass
 	HasIncrement() bool
 	Decrement() PatternFlowIpv6TrafficClassCounter
+	SetDecrement(value PatternFlowIpv6TrafficClassCounter) PatternFlowIpv6TrafficClass
 	HasDecrement() bool
 }
 
@@ -46793,10 +49593,7 @@ func (obj *patternFlowIpv6TrafficClass) SetMetricGroup(value string) PatternFlow
 func (obj *patternFlowIpv6TrafficClass) Increment() PatternFlowIpv6TrafficClassCounter {
 	obj.SetChoice(PatternFlowIpv6TrafficClassChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowIpv6TrafficClassCounter{}
-		newObj := &patternFlowIpv6TrafficClassCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowIpv6TrafficClassCounter().Msg()
 	}
 	return &patternFlowIpv6TrafficClassCounter{obj: obj.obj.Increment}
 }
@@ -46807,15 +49604,20 @@ func (obj *patternFlowIpv6TrafficClass) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowIpv6TrafficClassCounter value in the PatternFlowIpv6TrafficClass object
+//  description is TBD
+func (obj *patternFlowIpv6TrafficClass) SetIncrement(value PatternFlowIpv6TrafficClassCounter) PatternFlowIpv6TrafficClass {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowIpv6TrafficClassChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowIpv6TrafficClassCounter
 //  description is TBD
 func (obj *patternFlowIpv6TrafficClass) Decrement() PatternFlowIpv6TrafficClassCounter {
 	obj.SetChoice(PatternFlowIpv6TrafficClassChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowIpv6TrafficClassCounter{}
-		newObj := &patternFlowIpv6TrafficClassCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowIpv6TrafficClassCounter().Msg()
 	}
 	return &patternFlowIpv6TrafficClassCounter{obj: obj.obj.Decrement}
 }
@@ -46824,6 +49626,14 @@ func (obj *patternFlowIpv6TrafficClass) Decrement() PatternFlowIpv6TrafficClassC
 //  description is TBD
 func (obj *patternFlowIpv6TrafficClass) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowIpv6TrafficClassCounter value in the PatternFlowIpv6TrafficClass object
+//  description is TBD
+func (obj *patternFlowIpv6TrafficClass) SetDecrement(value PatternFlowIpv6TrafficClassCounter) PatternFlowIpv6TrafficClass {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowIpv6TrafficClassChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowIpv6TrafficClass) validateObj(set_default bool) {
@@ -46870,12 +49680,18 @@ type patternFlowIpv6FlowLabel struct {
 	obj *snappipb.PatternFlowIpv6FlowLabel
 }
 
+func NewPatternFlowIpv6FlowLabel() PatternFlowIpv6FlowLabel {
+	obj := patternFlowIpv6FlowLabel{obj: &snappipb.PatternFlowIpv6FlowLabel{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowIpv6FlowLabel) Msg() *snappipb.PatternFlowIpv6FlowLabel {
 	return obj.obj
 }
 
 func (obj *patternFlowIpv6FlowLabel) SetMsg(msg *snappipb.PatternFlowIpv6FlowLabel) PatternFlowIpv6FlowLabel {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -47007,8 +49823,10 @@ type PatternFlowIpv6FlowLabel interface {
 	SetMetricGroup(value string) PatternFlowIpv6FlowLabel
 	HasMetricGroup() bool
 	Increment() PatternFlowIpv6FlowLabelCounter
+	SetIncrement(value PatternFlowIpv6FlowLabelCounter) PatternFlowIpv6FlowLabel
 	HasIncrement() bool
 	Decrement() PatternFlowIpv6FlowLabelCounter
+	SetDecrement(value PatternFlowIpv6FlowLabelCounter) PatternFlowIpv6FlowLabel
 	HasDecrement() bool
 }
 
@@ -47114,10 +49932,7 @@ func (obj *patternFlowIpv6FlowLabel) SetMetricGroup(value string) PatternFlowIpv
 func (obj *patternFlowIpv6FlowLabel) Increment() PatternFlowIpv6FlowLabelCounter {
 	obj.SetChoice(PatternFlowIpv6FlowLabelChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowIpv6FlowLabelCounter{}
-		newObj := &patternFlowIpv6FlowLabelCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowIpv6FlowLabelCounter().Msg()
 	}
 	return &patternFlowIpv6FlowLabelCounter{obj: obj.obj.Increment}
 }
@@ -47128,15 +49943,20 @@ func (obj *patternFlowIpv6FlowLabel) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowIpv6FlowLabelCounter value in the PatternFlowIpv6FlowLabel object
+//  description is TBD
+func (obj *patternFlowIpv6FlowLabel) SetIncrement(value PatternFlowIpv6FlowLabelCounter) PatternFlowIpv6FlowLabel {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowIpv6FlowLabelChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowIpv6FlowLabelCounter
 //  description is TBD
 func (obj *patternFlowIpv6FlowLabel) Decrement() PatternFlowIpv6FlowLabelCounter {
 	obj.SetChoice(PatternFlowIpv6FlowLabelChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowIpv6FlowLabelCounter{}
-		newObj := &patternFlowIpv6FlowLabelCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowIpv6FlowLabelCounter().Msg()
 	}
 	return &patternFlowIpv6FlowLabelCounter{obj: obj.obj.Decrement}
 }
@@ -47145,6 +49965,14 @@ func (obj *patternFlowIpv6FlowLabel) Decrement() PatternFlowIpv6FlowLabelCounter
 //  description is TBD
 func (obj *patternFlowIpv6FlowLabel) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowIpv6FlowLabelCounter value in the PatternFlowIpv6FlowLabel object
+//  description is TBD
+func (obj *patternFlowIpv6FlowLabel) SetDecrement(value PatternFlowIpv6FlowLabelCounter) PatternFlowIpv6FlowLabel {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowIpv6FlowLabelChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowIpv6FlowLabel) validateObj(set_default bool) {
@@ -47191,12 +50019,18 @@ type patternFlowIpv6PayloadLength struct {
 	obj *snappipb.PatternFlowIpv6PayloadLength
 }
 
+func NewPatternFlowIpv6PayloadLength() PatternFlowIpv6PayloadLength {
+	obj := patternFlowIpv6PayloadLength{obj: &snappipb.PatternFlowIpv6PayloadLength{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowIpv6PayloadLength) Msg() *snappipb.PatternFlowIpv6PayloadLength {
 	return obj.obj
 }
 
 func (obj *patternFlowIpv6PayloadLength) SetMsg(msg *snappipb.PatternFlowIpv6PayloadLength) PatternFlowIpv6PayloadLength {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -47331,8 +50165,10 @@ type PatternFlowIpv6PayloadLength interface {
 	SetMetricGroup(value string) PatternFlowIpv6PayloadLength
 	HasMetricGroup() bool
 	Increment() PatternFlowIpv6PayloadLengthCounter
+	SetIncrement(value PatternFlowIpv6PayloadLengthCounter) PatternFlowIpv6PayloadLength
 	HasIncrement() bool
 	Decrement() PatternFlowIpv6PayloadLengthCounter
+	SetDecrement(value PatternFlowIpv6PayloadLengthCounter) PatternFlowIpv6PayloadLength
 	HasDecrement() bool
 }
 
@@ -47470,10 +50306,7 @@ func (obj *patternFlowIpv6PayloadLength) SetMetricGroup(value string) PatternFlo
 func (obj *patternFlowIpv6PayloadLength) Increment() PatternFlowIpv6PayloadLengthCounter {
 	obj.SetChoice(PatternFlowIpv6PayloadLengthChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowIpv6PayloadLengthCounter{}
-		newObj := &patternFlowIpv6PayloadLengthCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowIpv6PayloadLengthCounter().Msg()
 	}
 	return &patternFlowIpv6PayloadLengthCounter{obj: obj.obj.Increment}
 }
@@ -47484,15 +50317,20 @@ func (obj *patternFlowIpv6PayloadLength) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowIpv6PayloadLengthCounter value in the PatternFlowIpv6PayloadLength object
+//  description is TBD
+func (obj *patternFlowIpv6PayloadLength) SetIncrement(value PatternFlowIpv6PayloadLengthCounter) PatternFlowIpv6PayloadLength {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowIpv6PayloadLengthChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowIpv6PayloadLengthCounter
 //  description is TBD
 func (obj *patternFlowIpv6PayloadLength) Decrement() PatternFlowIpv6PayloadLengthCounter {
 	obj.SetChoice(PatternFlowIpv6PayloadLengthChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowIpv6PayloadLengthCounter{}
-		newObj := &patternFlowIpv6PayloadLengthCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowIpv6PayloadLengthCounter().Msg()
 	}
 	return &patternFlowIpv6PayloadLengthCounter{obj: obj.obj.Decrement}
 }
@@ -47501,6 +50339,14 @@ func (obj *patternFlowIpv6PayloadLength) Decrement() PatternFlowIpv6PayloadLengt
 //  description is TBD
 func (obj *patternFlowIpv6PayloadLength) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowIpv6PayloadLengthCounter value in the PatternFlowIpv6PayloadLength object
+//  description is TBD
+func (obj *patternFlowIpv6PayloadLength) SetDecrement(value PatternFlowIpv6PayloadLengthCounter) PatternFlowIpv6PayloadLength {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowIpv6PayloadLengthChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowIpv6PayloadLength) validateObj(set_default bool) {
@@ -47547,12 +50393,18 @@ type patternFlowIpv6NextHeader struct {
 	obj *snappipb.PatternFlowIpv6NextHeader
 }
 
+func NewPatternFlowIpv6NextHeader() PatternFlowIpv6NextHeader {
+	obj := patternFlowIpv6NextHeader{obj: &snappipb.PatternFlowIpv6NextHeader{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowIpv6NextHeader) Msg() *snappipb.PatternFlowIpv6NextHeader {
 	return obj.obj
 }
 
 func (obj *patternFlowIpv6NextHeader) SetMsg(msg *snappipb.PatternFlowIpv6NextHeader) PatternFlowIpv6NextHeader {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -47684,8 +50536,10 @@ type PatternFlowIpv6NextHeader interface {
 	SetMetricGroup(value string) PatternFlowIpv6NextHeader
 	HasMetricGroup() bool
 	Increment() PatternFlowIpv6NextHeaderCounter
+	SetIncrement(value PatternFlowIpv6NextHeaderCounter) PatternFlowIpv6NextHeader
 	HasIncrement() bool
 	Decrement() PatternFlowIpv6NextHeaderCounter
+	SetDecrement(value PatternFlowIpv6NextHeaderCounter) PatternFlowIpv6NextHeader
 	HasDecrement() bool
 }
 
@@ -47791,10 +50645,7 @@ func (obj *patternFlowIpv6NextHeader) SetMetricGroup(value string) PatternFlowIp
 func (obj *patternFlowIpv6NextHeader) Increment() PatternFlowIpv6NextHeaderCounter {
 	obj.SetChoice(PatternFlowIpv6NextHeaderChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowIpv6NextHeaderCounter{}
-		newObj := &patternFlowIpv6NextHeaderCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowIpv6NextHeaderCounter().Msg()
 	}
 	return &patternFlowIpv6NextHeaderCounter{obj: obj.obj.Increment}
 }
@@ -47805,15 +50656,20 @@ func (obj *patternFlowIpv6NextHeader) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowIpv6NextHeaderCounter value in the PatternFlowIpv6NextHeader object
+//  description is TBD
+func (obj *patternFlowIpv6NextHeader) SetIncrement(value PatternFlowIpv6NextHeaderCounter) PatternFlowIpv6NextHeader {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowIpv6NextHeaderChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowIpv6NextHeaderCounter
 //  description is TBD
 func (obj *patternFlowIpv6NextHeader) Decrement() PatternFlowIpv6NextHeaderCounter {
 	obj.SetChoice(PatternFlowIpv6NextHeaderChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowIpv6NextHeaderCounter{}
-		newObj := &patternFlowIpv6NextHeaderCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowIpv6NextHeaderCounter().Msg()
 	}
 	return &patternFlowIpv6NextHeaderCounter{obj: obj.obj.Decrement}
 }
@@ -47822,6 +50678,14 @@ func (obj *patternFlowIpv6NextHeader) Decrement() PatternFlowIpv6NextHeaderCount
 //  description is TBD
 func (obj *patternFlowIpv6NextHeader) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowIpv6NextHeaderCounter value in the PatternFlowIpv6NextHeader object
+//  description is TBD
+func (obj *patternFlowIpv6NextHeader) SetDecrement(value PatternFlowIpv6NextHeaderCounter) PatternFlowIpv6NextHeader {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowIpv6NextHeaderChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowIpv6NextHeader) validateObj(set_default bool) {
@@ -47868,12 +50732,18 @@ type patternFlowIpv6HopLimit struct {
 	obj *snappipb.PatternFlowIpv6HopLimit
 }
 
+func NewPatternFlowIpv6HopLimit() PatternFlowIpv6HopLimit {
+	obj := patternFlowIpv6HopLimit{obj: &snappipb.PatternFlowIpv6HopLimit{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowIpv6HopLimit) Msg() *snappipb.PatternFlowIpv6HopLimit {
 	return obj.obj
 }
 
 func (obj *patternFlowIpv6HopLimit) SetMsg(msg *snappipb.PatternFlowIpv6HopLimit) PatternFlowIpv6HopLimit {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -48005,8 +50875,10 @@ type PatternFlowIpv6HopLimit interface {
 	SetMetricGroup(value string) PatternFlowIpv6HopLimit
 	HasMetricGroup() bool
 	Increment() PatternFlowIpv6HopLimitCounter
+	SetIncrement(value PatternFlowIpv6HopLimitCounter) PatternFlowIpv6HopLimit
 	HasIncrement() bool
 	Decrement() PatternFlowIpv6HopLimitCounter
+	SetDecrement(value PatternFlowIpv6HopLimitCounter) PatternFlowIpv6HopLimit
 	HasDecrement() bool
 }
 
@@ -48112,10 +50984,7 @@ func (obj *patternFlowIpv6HopLimit) SetMetricGroup(value string) PatternFlowIpv6
 func (obj *patternFlowIpv6HopLimit) Increment() PatternFlowIpv6HopLimitCounter {
 	obj.SetChoice(PatternFlowIpv6HopLimitChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowIpv6HopLimitCounter{}
-		newObj := &patternFlowIpv6HopLimitCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowIpv6HopLimitCounter().Msg()
 	}
 	return &patternFlowIpv6HopLimitCounter{obj: obj.obj.Increment}
 }
@@ -48126,15 +50995,20 @@ func (obj *patternFlowIpv6HopLimit) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowIpv6HopLimitCounter value in the PatternFlowIpv6HopLimit object
+//  description is TBD
+func (obj *patternFlowIpv6HopLimit) SetIncrement(value PatternFlowIpv6HopLimitCounter) PatternFlowIpv6HopLimit {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowIpv6HopLimitChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowIpv6HopLimitCounter
 //  description is TBD
 func (obj *patternFlowIpv6HopLimit) Decrement() PatternFlowIpv6HopLimitCounter {
 	obj.SetChoice(PatternFlowIpv6HopLimitChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowIpv6HopLimitCounter{}
-		newObj := &patternFlowIpv6HopLimitCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowIpv6HopLimitCounter().Msg()
 	}
 	return &patternFlowIpv6HopLimitCounter{obj: obj.obj.Decrement}
 }
@@ -48143,6 +51017,14 @@ func (obj *patternFlowIpv6HopLimit) Decrement() PatternFlowIpv6HopLimitCounter {
 //  description is TBD
 func (obj *patternFlowIpv6HopLimit) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowIpv6HopLimitCounter value in the PatternFlowIpv6HopLimit object
+//  description is TBD
+func (obj *patternFlowIpv6HopLimit) SetDecrement(value PatternFlowIpv6HopLimitCounter) PatternFlowIpv6HopLimit {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowIpv6HopLimitChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowIpv6HopLimit) validateObj(set_default bool) {
@@ -48189,12 +51071,18 @@ type patternFlowIpv6Src struct {
 	obj *snappipb.PatternFlowIpv6Src
 }
 
+func NewPatternFlowIpv6Src() PatternFlowIpv6Src {
+	obj := patternFlowIpv6Src{obj: &snappipb.PatternFlowIpv6Src{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowIpv6Src) Msg() *snappipb.PatternFlowIpv6Src {
 	return obj.obj
 }
 
 func (obj *patternFlowIpv6Src) SetMsg(msg *snappipb.PatternFlowIpv6Src) PatternFlowIpv6Src {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -48326,8 +51214,10 @@ type PatternFlowIpv6Src interface {
 	SetMetricGroup(value string) PatternFlowIpv6Src
 	HasMetricGroup() bool
 	Increment() PatternFlowIpv6SrcCounter
+	SetIncrement(value PatternFlowIpv6SrcCounter) PatternFlowIpv6Src
 	HasIncrement() bool
 	Decrement() PatternFlowIpv6SrcCounter
+	SetDecrement(value PatternFlowIpv6SrcCounter) PatternFlowIpv6Src
 	HasDecrement() bool
 }
 
@@ -48433,10 +51323,7 @@ func (obj *patternFlowIpv6Src) SetMetricGroup(value string) PatternFlowIpv6Src {
 func (obj *patternFlowIpv6Src) Increment() PatternFlowIpv6SrcCounter {
 	obj.SetChoice(PatternFlowIpv6SrcChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowIpv6SrcCounter{}
-		newObj := &patternFlowIpv6SrcCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowIpv6SrcCounter().Msg()
 	}
 	return &patternFlowIpv6SrcCounter{obj: obj.obj.Increment}
 }
@@ -48447,15 +51334,20 @@ func (obj *patternFlowIpv6Src) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowIpv6SrcCounter value in the PatternFlowIpv6Src object
+//  description is TBD
+func (obj *patternFlowIpv6Src) SetIncrement(value PatternFlowIpv6SrcCounter) PatternFlowIpv6Src {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowIpv6SrcChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowIpv6SrcCounter
 //  description is TBD
 func (obj *patternFlowIpv6Src) Decrement() PatternFlowIpv6SrcCounter {
 	obj.SetChoice(PatternFlowIpv6SrcChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowIpv6SrcCounter{}
-		newObj := &patternFlowIpv6SrcCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowIpv6SrcCounter().Msg()
 	}
 	return &patternFlowIpv6SrcCounter{obj: obj.obj.Decrement}
 }
@@ -48464,6 +51356,14 @@ func (obj *patternFlowIpv6Src) Decrement() PatternFlowIpv6SrcCounter {
 //  description is TBD
 func (obj *patternFlowIpv6Src) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowIpv6SrcCounter value in the PatternFlowIpv6Src object
+//  description is TBD
+func (obj *patternFlowIpv6Src) SetDecrement(value PatternFlowIpv6SrcCounter) PatternFlowIpv6Src {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowIpv6SrcChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowIpv6Src) validateObj(set_default bool) {
@@ -48508,12 +51408,18 @@ type patternFlowIpv6Dst struct {
 	obj *snappipb.PatternFlowIpv6Dst
 }
 
+func NewPatternFlowIpv6Dst() PatternFlowIpv6Dst {
+	obj := patternFlowIpv6Dst{obj: &snappipb.PatternFlowIpv6Dst{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowIpv6Dst) Msg() *snappipb.PatternFlowIpv6Dst {
 	return obj.obj
 }
 
 func (obj *patternFlowIpv6Dst) SetMsg(msg *snappipb.PatternFlowIpv6Dst) PatternFlowIpv6Dst {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -48645,8 +51551,10 @@ type PatternFlowIpv6Dst interface {
 	SetMetricGroup(value string) PatternFlowIpv6Dst
 	HasMetricGroup() bool
 	Increment() PatternFlowIpv6DstCounter
+	SetIncrement(value PatternFlowIpv6DstCounter) PatternFlowIpv6Dst
 	HasIncrement() bool
 	Decrement() PatternFlowIpv6DstCounter
+	SetDecrement(value PatternFlowIpv6DstCounter) PatternFlowIpv6Dst
 	HasDecrement() bool
 }
 
@@ -48752,10 +51660,7 @@ func (obj *patternFlowIpv6Dst) SetMetricGroup(value string) PatternFlowIpv6Dst {
 func (obj *patternFlowIpv6Dst) Increment() PatternFlowIpv6DstCounter {
 	obj.SetChoice(PatternFlowIpv6DstChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowIpv6DstCounter{}
-		newObj := &patternFlowIpv6DstCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowIpv6DstCounter().Msg()
 	}
 	return &patternFlowIpv6DstCounter{obj: obj.obj.Increment}
 }
@@ -48766,15 +51671,20 @@ func (obj *patternFlowIpv6Dst) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowIpv6DstCounter value in the PatternFlowIpv6Dst object
+//  description is TBD
+func (obj *patternFlowIpv6Dst) SetIncrement(value PatternFlowIpv6DstCounter) PatternFlowIpv6Dst {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowIpv6DstChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowIpv6DstCounter
 //  description is TBD
 func (obj *patternFlowIpv6Dst) Decrement() PatternFlowIpv6DstCounter {
 	obj.SetChoice(PatternFlowIpv6DstChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowIpv6DstCounter{}
-		newObj := &patternFlowIpv6DstCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowIpv6DstCounter().Msg()
 	}
 	return &patternFlowIpv6DstCounter{obj: obj.obj.Decrement}
 }
@@ -48783,6 +51693,14 @@ func (obj *patternFlowIpv6Dst) Decrement() PatternFlowIpv6DstCounter {
 //  description is TBD
 func (obj *patternFlowIpv6Dst) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowIpv6DstCounter value in the PatternFlowIpv6Dst object
+//  description is TBD
+func (obj *patternFlowIpv6Dst) SetDecrement(value PatternFlowIpv6DstCounter) PatternFlowIpv6Dst {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowIpv6DstChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowIpv6Dst) validateObj(set_default bool) {
@@ -48827,12 +51745,18 @@ type patternFlowPfcPauseDst struct {
 	obj *snappipb.PatternFlowPfcPauseDst
 }
 
+func NewPatternFlowPfcPauseDst() PatternFlowPfcPauseDst {
+	obj := patternFlowPfcPauseDst{obj: &snappipb.PatternFlowPfcPauseDst{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowPfcPauseDst) Msg() *snappipb.PatternFlowPfcPauseDst {
 	return obj.obj
 }
 
 func (obj *patternFlowPfcPauseDst) SetMsg(msg *snappipb.PatternFlowPfcPauseDst) PatternFlowPfcPauseDst {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -48964,8 +51888,10 @@ type PatternFlowPfcPauseDst interface {
 	SetMetricGroup(value string) PatternFlowPfcPauseDst
 	HasMetricGroup() bool
 	Increment() PatternFlowPfcPauseDstCounter
+	SetIncrement(value PatternFlowPfcPauseDstCounter) PatternFlowPfcPauseDst
 	HasIncrement() bool
 	Decrement() PatternFlowPfcPauseDstCounter
+	SetDecrement(value PatternFlowPfcPauseDstCounter) PatternFlowPfcPauseDst
 	HasDecrement() bool
 }
 
@@ -49071,10 +51997,7 @@ func (obj *patternFlowPfcPauseDst) SetMetricGroup(value string) PatternFlowPfcPa
 func (obj *patternFlowPfcPauseDst) Increment() PatternFlowPfcPauseDstCounter {
 	obj.SetChoice(PatternFlowPfcPauseDstChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowPfcPauseDstCounter{}
-		newObj := &patternFlowPfcPauseDstCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowPfcPauseDstCounter().Msg()
 	}
 	return &patternFlowPfcPauseDstCounter{obj: obj.obj.Increment}
 }
@@ -49085,15 +52008,20 @@ func (obj *patternFlowPfcPauseDst) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowPfcPauseDstCounter value in the PatternFlowPfcPauseDst object
+//  description is TBD
+func (obj *patternFlowPfcPauseDst) SetIncrement(value PatternFlowPfcPauseDstCounter) PatternFlowPfcPauseDst {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowPfcPauseDstChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowPfcPauseDstCounter
 //  description is TBD
 func (obj *patternFlowPfcPauseDst) Decrement() PatternFlowPfcPauseDstCounter {
 	obj.SetChoice(PatternFlowPfcPauseDstChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowPfcPauseDstCounter{}
-		newObj := &patternFlowPfcPauseDstCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowPfcPauseDstCounter().Msg()
 	}
 	return &patternFlowPfcPauseDstCounter{obj: obj.obj.Decrement}
 }
@@ -49102,6 +52030,14 @@ func (obj *patternFlowPfcPauseDst) Decrement() PatternFlowPfcPauseDstCounter {
 //  description is TBD
 func (obj *patternFlowPfcPauseDst) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowPfcPauseDstCounter value in the PatternFlowPfcPauseDst object
+//  description is TBD
+func (obj *patternFlowPfcPauseDst) SetDecrement(value PatternFlowPfcPauseDstCounter) PatternFlowPfcPauseDst {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowPfcPauseDstChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowPfcPauseDst) validateObj(set_default bool) {
@@ -49146,12 +52082,18 @@ type patternFlowPfcPauseSrc struct {
 	obj *snappipb.PatternFlowPfcPauseSrc
 }
 
+func NewPatternFlowPfcPauseSrc() PatternFlowPfcPauseSrc {
+	obj := patternFlowPfcPauseSrc{obj: &snappipb.PatternFlowPfcPauseSrc{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowPfcPauseSrc) Msg() *snappipb.PatternFlowPfcPauseSrc {
 	return obj.obj
 }
 
 func (obj *patternFlowPfcPauseSrc) SetMsg(msg *snappipb.PatternFlowPfcPauseSrc) PatternFlowPfcPauseSrc {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -49283,8 +52225,10 @@ type PatternFlowPfcPauseSrc interface {
 	SetMetricGroup(value string) PatternFlowPfcPauseSrc
 	HasMetricGroup() bool
 	Increment() PatternFlowPfcPauseSrcCounter
+	SetIncrement(value PatternFlowPfcPauseSrcCounter) PatternFlowPfcPauseSrc
 	HasIncrement() bool
 	Decrement() PatternFlowPfcPauseSrcCounter
+	SetDecrement(value PatternFlowPfcPauseSrcCounter) PatternFlowPfcPauseSrc
 	HasDecrement() bool
 }
 
@@ -49390,10 +52334,7 @@ func (obj *patternFlowPfcPauseSrc) SetMetricGroup(value string) PatternFlowPfcPa
 func (obj *patternFlowPfcPauseSrc) Increment() PatternFlowPfcPauseSrcCounter {
 	obj.SetChoice(PatternFlowPfcPauseSrcChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowPfcPauseSrcCounter{}
-		newObj := &patternFlowPfcPauseSrcCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowPfcPauseSrcCounter().Msg()
 	}
 	return &patternFlowPfcPauseSrcCounter{obj: obj.obj.Increment}
 }
@@ -49404,15 +52345,20 @@ func (obj *patternFlowPfcPauseSrc) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowPfcPauseSrcCounter value in the PatternFlowPfcPauseSrc object
+//  description is TBD
+func (obj *patternFlowPfcPauseSrc) SetIncrement(value PatternFlowPfcPauseSrcCounter) PatternFlowPfcPauseSrc {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowPfcPauseSrcChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowPfcPauseSrcCounter
 //  description is TBD
 func (obj *patternFlowPfcPauseSrc) Decrement() PatternFlowPfcPauseSrcCounter {
 	obj.SetChoice(PatternFlowPfcPauseSrcChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowPfcPauseSrcCounter{}
-		newObj := &patternFlowPfcPauseSrcCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowPfcPauseSrcCounter().Msg()
 	}
 	return &patternFlowPfcPauseSrcCounter{obj: obj.obj.Decrement}
 }
@@ -49421,6 +52367,14 @@ func (obj *patternFlowPfcPauseSrc) Decrement() PatternFlowPfcPauseSrcCounter {
 //  description is TBD
 func (obj *patternFlowPfcPauseSrc) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowPfcPauseSrcCounter value in the PatternFlowPfcPauseSrc object
+//  description is TBD
+func (obj *patternFlowPfcPauseSrc) SetDecrement(value PatternFlowPfcPauseSrcCounter) PatternFlowPfcPauseSrc {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowPfcPauseSrcChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowPfcPauseSrc) validateObj(set_default bool) {
@@ -49465,12 +52419,18 @@ type patternFlowPfcPauseEtherType struct {
 	obj *snappipb.PatternFlowPfcPauseEtherType
 }
 
+func NewPatternFlowPfcPauseEtherType() PatternFlowPfcPauseEtherType {
+	obj := patternFlowPfcPauseEtherType{obj: &snappipb.PatternFlowPfcPauseEtherType{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowPfcPauseEtherType) Msg() *snappipb.PatternFlowPfcPauseEtherType {
 	return obj.obj
 }
 
 func (obj *patternFlowPfcPauseEtherType) SetMsg(msg *snappipb.PatternFlowPfcPauseEtherType) PatternFlowPfcPauseEtherType {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -49602,8 +52562,10 @@ type PatternFlowPfcPauseEtherType interface {
 	SetMetricGroup(value string) PatternFlowPfcPauseEtherType
 	HasMetricGroup() bool
 	Increment() PatternFlowPfcPauseEtherTypeCounter
+	SetIncrement(value PatternFlowPfcPauseEtherTypeCounter) PatternFlowPfcPauseEtherType
 	HasIncrement() bool
 	Decrement() PatternFlowPfcPauseEtherTypeCounter
+	SetDecrement(value PatternFlowPfcPauseEtherTypeCounter) PatternFlowPfcPauseEtherType
 	HasDecrement() bool
 }
 
@@ -49709,10 +52671,7 @@ func (obj *patternFlowPfcPauseEtherType) SetMetricGroup(value string) PatternFlo
 func (obj *patternFlowPfcPauseEtherType) Increment() PatternFlowPfcPauseEtherTypeCounter {
 	obj.SetChoice(PatternFlowPfcPauseEtherTypeChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowPfcPauseEtherTypeCounter{}
-		newObj := &patternFlowPfcPauseEtherTypeCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowPfcPauseEtherTypeCounter().Msg()
 	}
 	return &patternFlowPfcPauseEtherTypeCounter{obj: obj.obj.Increment}
 }
@@ -49723,15 +52682,20 @@ func (obj *patternFlowPfcPauseEtherType) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowPfcPauseEtherTypeCounter value in the PatternFlowPfcPauseEtherType object
+//  description is TBD
+func (obj *patternFlowPfcPauseEtherType) SetIncrement(value PatternFlowPfcPauseEtherTypeCounter) PatternFlowPfcPauseEtherType {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowPfcPauseEtherTypeChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowPfcPauseEtherTypeCounter
 //  description is TBD
 func (obj *patternFlowPfcPauseEtherType) Decrement() PatternFlowPfcPauseEtherTypeCounter {
 	obj.SetChoice(PatternFlowPfcPauseEtherTypeChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowPfcPauseEtherTypeCounter{}
-		newObj := &patternFlowPfcPauseEtherTypeCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowPfcPauseEtherTypeCounter().Msg()
 	}
 	return &patternFlowPfcPauseEtherTypeCounter{obj: obj.obj.Decrement}
 }
@@ -49740,6 +52704,14 @@ func (obj *patternFlowPfcPauseEtherType) Decrement() PatternFlowPfcPauseEtherTyp
 //  description is TBD
 func (obj *patternFlowPfcPauseEtherType) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowPfcPauseEtherTypeCounter value in the PatternFlowPfcPauseEtherType object
+//  description is TBD
+func (obj *patternFlowPfcPauseEtherType) SetDecrement(value PatternFlowPfcPauseEtherTypeCounter) PatternFlowPfcPauseEtherType {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowPfcPauseEtherTypeChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowPfcPauseEtherType) validateObj(set_default bool) {
@@ -49786,12 +52758,18 @@ type patternFlowPfcPauseControlOpCode struct {
 	obj *snappipb.PatternFlowPfcPauseControlOpCode
 }
 
+func NewPatternFlowPfcPauseControlOpCode() PatternFlowPfcPauseControlOpCode {
+	obj := patternFlowPfcPauseControlOpCode{obj: &snappipb.PatternFlowPfcPauseControlOpCode{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowPfcPauseControlOpCode) Msg() *snappipb.PatternFlowPfcPauseControlOpCode {
 	return obj.obj
 }
 
 func (obj *patternFlowPfcPauseControlOpCode) SetMsg(msg *snappipb.PatternFlowPfcPauseControlOpCode) PatternFlowPfcPauseControlOpCode {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -49923,8 +52901,10 @@ type PatternFlowPfcPauseControlOpCode interface {
 	SetMetricGroup(value string) PatternFlowPfcPauseControlOpCode
 	HasMetricGroup() bool
 	Increment() PatternFlowPfcPauseControlOpCodeCounter
+	SetIncrement(value PatternFlowPfcPauseControlOpCodeCounter) PatternFlowPfcPauseControlOpCode
 	HasIncrement() bool
 	Decrement() PatternFlowPfcPauseControlOpCodeCounter
+	SetDecrement(value PatternFlowPfcPauseControlOpCodeCounter) PatternFlowPfcPauseControlOpCode
 	HasDecrement() bool
 }
 
@@ -50030,10 +53010,7 @@ func (obj *patternFlowPfcPauseControlOpCode) SetMetricGroup(value string) Patter
 func (obj *patternFlowPfcPauseControlOpCode) Increment() PatternFlowPfcPauseControlOpCodeCounter {
 	obj.SetChoice(PatternFlowPfcPauseControlOpCodeChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowPfcPauseControlOpCodeCounter{}
-		newObj := &patternFlowPfcPauseControlOpCodeCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowPfcPauseControlOpCodeCounter().Msg()
 	}
 	return &patternFlowPfcPauseControlOpCodeCounter{obj: obj.obj.Increment}
 }
@@ -50044,15 +53021,20 @@ func (obj *patternFlowPfcPauseControlOpCode) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowPfcPauseControlOpCodeCounter value in the PatternFlowPfcPauseControlOpCode object
+//  description is TBD
+func (obj *patternFlowPfcPauseControlOpCode) SetIncrement(value PatternFlowPfcPauseControlOpCodeCounter) PatternFlowPfcPauseControlOpCode {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowPfcPauseControlOpCodeChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowPfcPauseControlOpCodeCounter
 //  description is TBD
 func (obj *patternFlowPfcPauseControlOpCode) Decrement() PatternFlowPfcPauseControlOpCodeCounter {
 	obj.SetChoice(PatternFlowPfcPauseControlOpCodeChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowPfcPauseControlOpCodeCounter{}
-		newObj := &patternFlowPfcPauseControlOpCodeCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowPfcPauseControlOpCodeCounter().Msg()
 	}
 	return &patternFlowPfcPauseControlOpCodeCounter{obj: obj.obj.Decrement}
 }
@@ -50061,6 +53043,14 @@ func (obj *patternFlowPfcPauseControlOpCode) Decrement() PatternFlowPfcPauseCont
 //  description is TBD
 func (obj *patternFlowPfcPauseControlOpCode) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowPfcPauseControlOpCodeCounter value in the PatternFlowPfcPauseControlOpCode object
+//  description is TBD
+func (obj *patternFlowPfcPauseControlOpCode) SetDecrement(value PatternFlowPfcPauseControlOpCodeCounter) PatternFlowPfcPauseControlOpCode {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowPfcPauseControlOpCodeChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowPfcPauseControlOpCode) validateObj(set_default bool) {
@@ -50107,12 +53097,18 @@ type patternFlowPfcPauseClassEnableVector struct {
 	obj *snappipb.PatternFlowPfcPauseClassEnableVector
 }
 
+func NewPatternFlowPfcPauseClassEnableVector() PatternFlowPfcPauseClassEnableVector {
+	obj := patternFlowPfcPauseClassEnableVector{obj: &snappipb.PatternFlowPfcPauseClassEnableVector{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowPfcPauseClassEnableVector) Msg() *snappipb.PatternFlowPfcPauseClassEnableVector {
 	return obj.obj
 }
 
 func (obj *patternFlowPfcPauseClassEnableVector) SetMsg(msg *snappipb.PatternFlowPfcPauseClassEnableVector) PatternFlowPfcPauseClassEnableVector {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -50244,8 +53240,10 @@ type PatternFlowPfcPauseClassEnableVector interface {
 	SetMetricGroup(value string) PatternFlowPfcPauseClassEnableVector
 	HasMetricGroup() bool
 	Increment() PatternFlowPfcPauseClassEnableVectorCounter
+	SetIncrement(value PatternFlowPfcPauseClassEnableVectorCounter) PatternFlowPfcPauseClassEnableVector
 	HasIncrement() bool
 	Decrement() PatternFlowPfcPauseClassEnableVectorCounter
+	SetDecrement(value PatternFlowPfcPauseClassEnableVectorCounter) PatternFlowPfcPauseClassEnableVector
 	HasDecrement() bool
 }
 
@@ -50351,10 +53349,7 @@ func (obj *patternFlowPfcPauseClassEnableVector) SetMetricGroup(value string) Pa
 func (obj *patternFlowPfcPauseClassEnableVector) Increment() PatternFlowPfcPauseClassEnableVectorCounter {
 	obj.SetChoice(PatternFlowPfcPauseClassEnableVectorChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowPfcPauseClassEnableVectorCounter{}
-		newObj := &patternFlowPfcPauseClassEnableVectorCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowPfcPauseClassEnableVectorCounter().Msg()
 	}
 	return &patternFlowPfcPauseClassEnableVectorCounter{obj: obj.obj.Increment}
 }
@@ -50365,15 +53360,20 @@ func (obj *patternFlowPfcPauseClassEnableVector) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowPfcPauseClassEnableVectorCounter value in the PatternFlowPfcPauseClassEnableVector object
+//  description is TBD
+func (obj *patternFlowPfcPauseClassEnableVector) SetIncrement(value PatternFlowPfcPauseClassEnableVectorCounter) PatternFlowPfcPauseClassEnableVector {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowPfcPauseClassEnableVectorChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowPfcPauseClassEnableVectorCounter
 //  description is TBD
 func (obj *patternFlowPfcPauseClassEnableVector) Decrement() PatternFlowPfcPauseClassEnableVectorCounter {
 	obj.SetChoice(PatternFlowPfcPauseClassEnableVectorChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowPfcPauseClassEnableVectorCounter{}
-		newObj := &patternFlowPfcPauseClassEnableVectorCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowPfcPauseClassEnableVectorCounter().Msg()
 	}
 	return &patternFlowPfcPauseClassEnableVectorCounter{obj: obj.obj.Decrement}
 }
@@ -50382,6 +53382,14 @@ func (obj *patternFlowPfcPauseClassEnableVector) Decrement() PatternFlowPfcPause
 //  description is TBD
 func (obj *patternFlowPfcPauseClassEnableVector) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowPfcPauseClassEnableVectorCounter value in the PatternFlowPfcPauseClassEnableVector object
+//  description is TBD
+func (obj *patternFlowPfcPauseClassEnableVector) SetDecrement(value PatternFlowPfcPauseClassEnableVectorCounter) PatternFlowPfcPauseClassEnableVector {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowPfcPauseClassEnableVectorChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowPfcPauseClassEnableVector) validateObj(set_default bool) {
@@ -50428,12 +53436,18 @@ type patternFlowPfcPausePauseClass0 struct {
 	obj *snappipb.PatternFlowPfcPausePauseClass0
 }
 
+func NewPatternFlowPfcPausePauseClass0() PatternFlowPfcPausePauseClass0 {
+	obj := patternFlowPfcPausePauseClass0{obj: &snappipb.PatternFlowPfcPausePauseClass0{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowPfcPausePauseClass0) Msg() *snappipb.PatternFlowPfcPausePauseClass0 {
 	return obj.obj
 }
 
 func (obj *patternFlowPfcPausePauseClass0) SetMsg(msg *snappipb.PatternFlowPfcPausePauseClass0) PatternFlowPfcPausePauseClass0 {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -50565,8 +53579,10 @@ type PatternFlowPfcPausePauseClass0 interface {
 	SetMetricGroup(value string) PatternFlowPfcPausePauseClass0
 	HasMetricGroup() bool
 	Increment() PatternFlowPfcPausePauseClass0Counter
+	SetIncrement(value PatternFlowPfcPausePauseClass0Counter) PatternFlowPfcPausePauseClass0
 	HasIncrement() bool
 	Decrement() PatternFlowPfcPausePauseClass0Counter
+	SetDecrement(value PatternFlowPfcPausePauseClass0Counter) PatternFlowPfcPausePauseClass0
 	HasDecrement() bool
 }
 
@@ -50672,10 +53688,7 @@ func (obj *patternFlowPfcPausePauseClass0) SetMetricGroup(value string) PatternF
 func (obj *patternFlowPfcPausePauseClass0) Increment() PatternFlowPfcPausePauseClass0Counter {
 	obj.SetChoice(PatternFlowPfcPausePauseClass0Choice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowPfcPausePauseClass0Counter{}
-		newObj := &patternFlowPfcPausePauseClass0Counter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowPfcPausePauseClass0Counter().Msg()
 	}
 	return &patternFlowPfcPausePauseClass0Counter{obj: obj.obj.Increment}
 }
@@ -50686,15 +53699,20 @@ func (obj *patternFlowPfcPausePauseClass0) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowPfcPausePauseClass0Counter value in the PatternFlowPfcPausePauseClass0 object
+//  description is TBD
+func (obj *patternFlowPfcPausePauseClass0) SetIncrement(value PatternFlowPfcPausePauseClass0Counter) PatternFlowPfcPausePauseClass0 {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowPfcPausePauseClass0Choice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowPfcPausePauseClass0Counter
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass0) Decrement() PatternFlowPfcPausePauseClass0Counter {
 	obj.SetChoice(PatternFlowPfcPausePauseClass0Choice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowPfcPausePauseClass0Counter{}
-		newObj := &patternFlowPfcPausePauseClass0Counter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowPfcPausePauseClass0Counter().Msg()
 	}
 	return &patternFlowPfcPausePauseClass0Counter{obj: obj.obj.Decrement}
 }
@@ -50703,6 +53721,14 @@ func (obj *patternFlowPfcPausePauseClass0) Decrement() PatternFlowPfcPausePauseC
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass0) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowPfcPausePauseClass0Counter value in the PatternFlowPfcPausePauseClass0 object
+//  description is TBD
+func (obj *patternFlowPfcPausePauseClass0) SetDecrement(value PatternFlowPfcPausePauseClass0Counter) PatternFlowPfcPausePauseClass0 {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowPfcPausePauseClass0Choice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowPfcPausePauseClass0) validateObj(set_default bool) {
@@ -50749,12 +53775,18 @@ type patternFlowPfcPausePauseClass1 struct {
 	obj *snappipb.PatternFlowPfcPausePauseClass1
 }
 
+func NewPatternFlowPfcPausePauseClass1() PatternFlowPfcPausePauseClass1 {
+	obj := patternFlowPfcPausePauseClass1{obj: &snappipb.PatternFlowPfcPausePauseClass1{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowPfcPausePauseClass1) Msg() *snappipb.PatternFlowPfcPausePauseClass1 {
 	return obj.obj
 }
 
 func (obj *patternFlowPfcPausePauseClass1) SetMsg(msg *snappipb.PatternFlowPfcPausePauseClass1) PatternFlowPfcPausePauseClass1 {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -50886,8 +53918,10 @@ type PatternFlowPfcPausePauseClass1 interface {
 	SetMetricGroup(value string) PatternFlowPfcPausePauseClass1
 	HasMetricGroup() bool
 	Increment() PatternFlowPfcPausePauseClass1Counter
+	SetIncrement(value PatternFlowPfcPausePauseClass1Counter) PatternFlowPfcPausePauseClass1
 	HasIncrement() bool
 	Decrement() PatternFlowPfcPausePauseClass1Counter
+	SetDecrement(value PatternFlowPfcPausePauseClass1Counter) PatternFlowPfcPausePauseClass1
 	HasDecrement() bool
 }
 
@@ -50993,10 +54027,7 @@ func (obj *patternFlowPfcPausePauseClass1) SetMetricGroup(value string) PatternF
 func (obj *patternFlowPfcPausePauseClass1) Increment() PatternFlowPfcPausePauseClass1Counter {
 	obj.SetChoice(PatternFlowPfcPausePauseClass1Choice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowPfcPausePauseClass1Counter{}
-		newObj := &patternFlowPfcPausePauseClass1Counter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowPfcPausePauseClass1Counter().Msg()
 	}
 	return &patternFlowPfcPausePauseClass1Counter{obj: obj.obj.Increment}
 }
@@ -51007,15 +54038,20 @@ func (obj *patternFlowPfcPausePauseClass1) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowPfcPausePauseClass1Counter value in the PatternFlowPfcPausePauseClass1 object
+//  description is TBD
+func (obj *patternFlowPfcPausePauseClass1) SetIncrement(value PatternFlowPfcPausePauseClass1Counter) PatternFlowPfcPausePauseClass1 {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowPfcPausePauseClass1Choice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowPfcPausePauseClass1Counter
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass1) Decrement() PatternFlowPfcPausePauseClass1Counter {
 	obj.SetChoice(PatternFlowPfcPausePauseClass1Choice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowPfcPausePauseClass1Counter{}
-		newObj := &patternFlowPfcPausePauseClass1Counter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowPfcPausePauseClass1Counter().Msg()
 	}
 	return &patternFlowPfcPausePauseClass1Counter{obj: obj.obj.Decrement}
 }
@@ -51024,6 +54060,14 @@ func (obj *patternFlowPfcPausePauseClass1) Decrement() PatternFlowPfcPausePauseC
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass1) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowPfcPausePauseClass1Counter value in the PatternFlowPfcPausePauseClass1 object
+//  description is TBD
+func (obj *patternFlowPfcPausePauseClass1) SetDecrement(value PatternFlowPfcPausePauseClass1Counter) PatternFlowPfcPausePauseClass1 {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowPfcPausePauseClass1Choice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowPfcPausePauseClass1) validateObj(set_default bool) {
@@ -51070,12 +54114,18 @@ type patternFlowPfcPausePauseClass2 struct {
 	obj *snappipb.PatternFlowPfcPausePauseClass2
 }
 
+func NewPatternFlowPfcPausePauseClass2() PatternFlowPfcPausePauseClass2 {
+	obj := patternFlowPfcPausePauseClass2{obj: &snappipb.PatternFlowPfcPausePauseClass2{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowPfcPausePauseClass2) Msg() *snappipb.PatternFlowPfcPausePauseClass2 {
 	return obj.obj
 }
 
 func (obj *patternFlowPfcPausePauseClass2) SetMsg(msg *snappipb.PatternFlowPfcPausePauseClass2) PatternFlowPfcPausePauseClass2 {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -51207,8 +54257,10 @@ type PatternFlowPfcPausePauseClass2 interface {
 	SetMetricGroup(value string) PatternFlowPfcPausePauseClass2
 	HasMetricGroup() bool
 	Increment() PatternFlowPfcPausePauseClass2Counter
+	SetIncrement(value PatternFlowPfcPausePauseClass2Counter) PatternFlowPfcPausePauseClass2
 	HasIncrement() bool
 	Decrement() PatternFlowPfcPausePauseClass2Counter
+	SetDecrement(value PatternFlowPfcPausePauseClass2Counter) PatternFlowPfcPausePauseClass2
 	HasDecrement() bool
 }
 
@@ -51314,10 +54366,7 @@ func (obj *patternFlowPfcPausePauseClass2) SetMetricGroup(value string) PatternF
 func (obj *patternFlowPfcPausePauseClass2) Increment() PatternFlowPfcPausePauseClass2Counter {
 	obj.SetChoice(PatternFlowPfcPausePauseClass2Choice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowPfcPausePauseClass2Counter{}
-		newObj := &patternFlowPfcPausePauseClass2Counter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowPfcPausePauseClass2Counter().Msg()
 	}
 	return &patternFlowPfcPausePauseClass2Counter{obj: obj.obj.Increment}
 }
@@ -51328,15 +54377,20 @@ func (obj *patternFlowPfcPausePauseClass2) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowPfcPausePauseClass2Counter value in the PatternFlowPfcPausePauseClass2 object
+//  description is TBD
+func (obj *patternFlowPfcPausePauseClass2) SetIncrement(value PatternFlowPfcPausePauseClass2Counter) PatternFlowPfcPausePauseClass2 {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowPfcPausePauseClass2Choice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowPfcPausePauseClass2Counter
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass2) Decrement() PatternFlowPfcPausePauseClass2Counter {
 	obj.SetChoice(PatternFlowPfcPausePauseClass2Choice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowPfcPausePauseClass2Counter{}
-		newObj := &patternFlowPfcPausePauseClass2Counter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowPfcPausePauseClass2Counter().Msg()
 	}
 	return &patternFlowPfcPausePauseClass2Counter{obj: obj.obj.Decrement}
 }
@@ -51345,6 +54399,14 @@ func (obj *patternFlowPfcPausePauseClass2) Decrement() PatternFlowPfcPausePauseC
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass2) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowPfcPausePauseClass2Counter value in the PatternFlowPfcPausePauseClass2 object
+//  description is TBD
+func (obj *patternFlowPfcPausePauseClass2) SetDecrement(value PatternFlowPfcPausePauseClass2Counter) PatternFlowPfcPausePauseClass2 {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowPfcPausePauseClass2Choice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowPfcPausePauseClass2) validateObj(set_default bool) {
@@ -51391,12 +54453,18 @@ type patternFlowPfcPausePauseClass3 struct {
 	obj *snappipb.PatternFlowPfcPausePauseClass3
 }
 
+func NewPatternFlowPfcPausePauseClass3() PatternFlowPfcPausePauseClass3 {
+	obj := patternFlowPfcPausePauseClass3{obj: &snappipb.PatternFlowPfcPausePauseClass3{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowPfcPausePauseClass3) Msg() *snappipb.PatternFlowPfcPausePauseClass3 {
 	return obj.obj
 }
 
 func (obj *patternFlowPfcPausePauseClass3) SetMsg(msg *snappipb.PatternFlowPfcPausePauseClass3) PatternFlowPfcPausePauseClass3 {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -51528,8 +54596,10 @@ type PatternFlowPfcPausePauseClass3 interface {
 	SetMetricGroup(value string) PatternFlowPfcPausePauseClass3
 	HasMetricGroup() bool
 	Increment() PatternFlowPfcPausePauseClass3Counter
+	SetIncrement(value PatternFlowPfcPausePauseClass3Counter) PatternFlowPfcPausePauseClass3
 	HasIncrement() bool
 	Decrement() PatternFlowPfcPausePauseClass3Counter
+	SetDecrement(value PatternFlowPfcPausePauseClass3Counter) PatternFlowPfcPausePauseClass3
 	HasDecrement() bool
 }
 
@@ -51635,10 +54705,7 @@ func (obj *patternFlowPfcPausePauseClass3) SetMetricGroup(value string) PatternF
 func (obj *patternFlowPfcPausePauseClass3) Increment() PatternFlowPfcPausePauseClass3Counter {
 	obj.SetChoice(PatternFlowPfcPausePauseClass3Choice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowPfcPausePauseClass3Counter{}
-		newObj := &patternFlowPfcPausePauseClass3Counter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowPfcPausePauseClass3Counter().Msg()
 	}
 	return &patternFlowPfcPausePauseClass3Counter{obj: obj.obj.Increment}
 }
@@ -51649,15 +54716,20 @@ func (obj *patternFlowPfcPausePauseClass3) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowPfcPausePauseClass3Counter value in the PatternFlowPfcPausePauseClass3 object
+//  description is TBD
+func (obj *patternFlowPfcPausePauseClass3) SetIncrement(value PatternFlowPfcPausePauseClass3Counter) PatternFlowPfcPausePauseClass3 {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowPfcPausePauseClass3Choice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowPfcPausePauseClass3Counter
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass3) Decrement() PatternFlowPfcPausePauseClass3Counter {
 	obj.SetChoice(PatternFlowPfcPausePauseClass3Choice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowPfcPausePauseClass3Counter{}
-		newObj := &patternFlowPfcPausePauseClass3Counter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowPfcPausePauseClass3Counter().Msg()
 	}
 	return &patternFlowPfcPausePauseClass3Counter{obj: obj.obj.Decrement}
 }
@@ -51666,6 +54738,14 @@ func (obj *patternFlowPfcPausePauseClass3) Decrement() PatternFlowPfcPausePauseC
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass3) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowPfcPausePauseClass3Counter value in the PatternFlowPfcPausePauseClass3 object
+//  description is TBD
+func (obj *patternFlowPfcPausePauseClass3) SetDecrement(value PatternFlowPfcPausePauseClass3Counter) PatternFlowPfcPausePauseClass3 {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowPfcPausePauseClass3Choice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowPfcPausePauseClass3) validateObj(set_default bool) {
@@ -51712,12 +54792,18 @@ type patternFlowPfcPausePauseClass4 struct {
 	obj *snappipb.PatternFlowPfcPausePauseClass4
 }
 
+func NewPatternFlowPfcPausePauseClass4() PatternFlowPfcPausePauseClass4 {
+	obj := patternFlowPfcPausePauseClass4{obj: &snappipb.PatternFlowPfcPausePauseClass4{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowPfcPausePauseClass4) Msg() *snappipb.PatternFlowPfcPausePauseClass4 {
 	return obj.obj
 }
 
 func (obj *patternFlowPfcPausePauseClass4) SetMsg(msg *snappipb.PatternFlowPfcPausePauseClass4) PatternFlowPfcPausePauseClass4 {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -51849,8 +54935,10 @@ type PatternFlowPfcPausePauseClass4 interface {
 	SetMetricGroup(value string) PatternFlowPfcPausePauseClass4
 	HasMetricGroup() bool
 	Increment() PatternFlowPfcPausePauseClass4Counter
+	SetIncrement(value PatternFlowPfcPausePauseClass4Counter) PatternFlowPfcPausePauseClass4
 	HasIncrement() bool
 	Decrement() PatternFlowPfcPausePauseClass4Counter
+	SetDecrement(value PatternFlowPfcPausePauseClass4Counter) PatternFlowPfcPausePauseClass4
 	HasDecrement() bool
 }
 
@@ -51956,10 +55044,7 @@ func (obj *patternFlowPfcPausePauseClass4) SetMetricGroup(value string) PatternF
 func (obj *patternFlowPfcPausePauseClass4) Increment() PatternFlowPfcPausePauseClass4Counter {
 	obj.SetChoice(PatternFlowPfcPausePauseClass4Choice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowPfcPausePauseClass4Counter{}
-		newObj := &patternFlowPfcPausePauseClass4Counter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowPfcPausePauseClass4Counter().Msg()
 	}
 	return &patternFlowPfcPausePauseClass4Counter{obj: obj.obj.Increment}
 }
@@ -51970,15 +55055,20 @@ func (obj *patternFlowPfcPausePauseClass4) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowPfcPausePauseClass4Counter value in the PatternFlowPfcPausePauseClass4 object
+//  description is TBD
+func (obj *patternFlowPfcPausePauseClass4) SetIncrement(value PatternFlowPfcPausePauseClass4Counter) PatternFlowPfcPausePauseClass4 {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowPfcPausePauseClass4Choice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowPfcPausePauseClass4Counter
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass4) Decrement() PatternFlowPfcPausePauseClass4Counter {
 	obj.SetChoice(PatternFlowPfcPausePauseClass4Choice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowPfcPausePauseClass4Counter{}
-		newObj := &patternFlowPfcPausePauseClass4Counter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowPfcPausePauseClass4Counter().Msg()
 	}
 	return &patternFlowPfcPausePauseClass4Counter{obj: obj.obj.Decrement}
 }
@@ -51987,6 +55077,14 @@ func (obj *patternFlowPfcPausePauseClass4) Decrement() PatternFlowPfcPausePauseC
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass4) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowPfcPausePauseClass4Counter value in the PatternFlowPfcPausePauseClass4 object
+//  description is TBD
+func (obj *patternFlowPfcPausePauseClass4) SetDecrement(value PatternFlowPfcPausePauseClass4Counter) PatternFlowPfcPausePauseClass4 {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowPfcPausePauseClass4Choice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowPfcPausePauseClass4) validateObj(set_default bool) {
@@ -52033,12 +55131,18 @@ type patternFlowPfcPausePauseClass5 struct {
 	obj *snappipb.PatternFlowPfcPausePauseClass5
 }
 
+func NewPatternFlowPfcPausePauseClass5() PatternFlowPfcPausePauseClass5 {
+	obj := patternFlowPfcPausePauseClass5{obj: &snappipb.PatternFlowPfcPausePauseClass5{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowPfcPausePauseClass5) Msg() *snappipb.PatternFlowPfcPausePauseClass5 {
 	return obj.obj
 }
 
 func (obj *patternFlowPfcPausePauseClass5) SetMsg(msg *snappipb.PatternFlowPfcPausePauseClass5) PatternFlowPfcPausePauseClass5 {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -52170,8 +55274,10 @@ type PatternFlowPfcPausePauseClass5 interface {
 	SetMetricGroup(value string) PatternFlowPfcPausePauseClass5
 	HasMetricGroup() bool
 	Increment() PatternFlowPfcPausePauseClass5Counter
+	SetIncrement(value PatternFlowPfcPausePauseClass5Counter) PatternFlowPfcPausePauseClass5
 	HasIncrement() bool
 	Decrement() PatternFlowPfcPausePauseClass5Counter
+	SetDecrement(value PatternFlowPfcPausePauseClass5Counter) PatternFlowPfcPausePauseClass5
 	HasDecrement() bool
 }
 
@@ -52277,10 +55383,7 @@ func (obj *patternFlowPfcPausePauseClass5) SetMetricGroup(value string) PatternF
 func (obj *patternFlowPfcPausePauseClass5) Increment() PatternFlowPfcPausePauseClass5Counter {
 	obj.SetChoice(PatternFlowPfcPausePauseClass5Choice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowPfcPausePauseClass5Counter{}
-		newObj := &patternFlowPfcPausePauseClass5Counter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowPfcPausePauseClass5Counter().Msg()
 	}
 	return &patternFlowPfcPausePauseClass5Counter{obj: obj.obj.Increment}
 }
@@ -52291,15 +55394,20 @@ func (obj *patternFlowPfcPausePauseClass5) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowPfcPausePauseClass5Counter value in the PatternFlowPfcPausePauseClass5 object
+//  description is TBD
+func (obj *patternFlowPfcPausePauseClass5) SetIncrement(value PatternFlowPfcPausePauseClass5Counter) PatternFlowPfcPausePauseClass5 {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowPfcPausePauseClass5Choice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowPfcPausePauseClass5Counter
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass5) Decrement() PatternFlowPfcPausePauseClass5Counter {
 	obj.SetChoice(PatternFlowPfcPausePauseClass5Choice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowPfcPausePauseClass5Counter{}
-		newObj := &patternFlowPfcPausePauseClass5Counter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowPfcPausePauseClass5Counter().Msg()
 	}
 	return &patternFlowPfcPausePauseClass5Counter{obj: obj.obj.Decrement}
 }
@@ -52308,6 +55416,14 @@ func (obj *patternFlowPfcPausePauseClass5) Decrement() PatternFlowPfcPausePauseC
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass5) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowPfcPausePauseClass5Counter value in the PatternFlowPfcPausePauseClass5 object
+//  description is TBD
+func (obj *patternFlowPfcPausePauseClass5) SetDecrement(value PatternFlowPfcPausePauseClass5Counter) PatternFlowPfcPausePauseClass5 {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowPfcPausePauseClass5Choice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowPfcPausePauseClass5) validateObj(set_default bool) {
@@ -52354,12 +55470,18 @@ type patternFlowPfcPausePauseClass6 struct {
 	obj *snappipb.PatternFlowPfcPausePauseClass6
 }
 
+func NewPatternFlowPfcPausePauseClass6() PatternFlowPfcPausePauseClass6 {
+	obj := patternFlowPfcPausePauseClass6{obj: &snappipb.PatternFlowPfcPausePauseClass6{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowPfcPausePauseClass6) Msg() *snappipb.PatternFlowPfcPausePauseClass6 {
 	return obj.obj
 }
 
 func (obj *patternFlowPfcPausePauseClass6) SetMsg(msg *snappipb.PatternFlowPfcPausePauseClass6) PatternFlowPfcPausePauseClass6 {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -52491,8 +55613,10 @@ type PatternFlowPfcPausePauseClass6 interface {
 	SetMetricGroup(value string) PatternFlowPfcPausePauseClass6
 	HasMetricGroup() bool
 	Increment() PatternFlowPfcPausePauseClass6Counter
+	SetIncrement(value PatternFlowPfcPausePauseClass6Counter) PatternFlowPfcPausePauseClass6
 	HasIncrement() bool
 	Decrement() PatternFlowPfcPausePauseClass6Counter
+	SetDecrement(value PatternFlowPfcPausePauseClass6Counter) PatternFlowPfcPausePauseClass6
 	HasDecrement() bool
 }
 
@@ -52598,10 +55722,7 @@ func (obj *patternFlowPfcPausePauseClass6) SetMetricGroup(value string) PatternF
 func (obj *patternFlowPfcPausePauseClass6) Increment() PatternFlowPfcPausePauseClass6Counter {
 	obj.SetChoice(PatternFlowPfcPausePauseClass6Choice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowPfcPausePauseClass6Counter{}
-		newObj := &patternFlowPfcPausePauseClass6Counter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowPfcPausePauseClass6Counter().Msg()
 	}
 	return &patternFlowPfcPausePauseClass6Counter{obj: obj.obj.Increment}
 }
@@ -52612,15 +55733,20 @@ func (obj *patternFlowPfcPausePauseClass6) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowPfcPausePauseClass6Counter value in the PatternFlowPfcPausePauseClass6 object
+//  description is TBD
+func (obj *patternFlowPfcPausePauseClass6) SetIncrement(value PatternFlowPfcPausePauseClass6Counter) PatternFlowPfcPausePauseClass6 {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowPfcPausePauseClass6Choice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowPfcPausePauseClass6Counter
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass6) Decrement() PatternFlowPfcPausePauseClass6Counter {
 	obj.SetChoice(PatternFlowPfcPausePauseClass6Choice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowPfcPausePauseClass6Counter{}
-		newObj := &patternFlowPfcPausePauseClass6Counter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowPfcPausePauseClass6Counter().Msg()
 	}
 	return &patternFlowPfcPausePauseClass6Counter{obj: obj.obj.Decrement}
 }
@@ -52629,6 +55755,14 @@ func (obj *patternFlowPfcPausePauseClass6) Decrement() PatternFlowPfcPausePauseC
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass6) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowPfcPausePauseClass6Counter value in the PatternFlowPfcPausePauseClass6 object
+//  description is TBD
+func (obj *patternFlowPfcPausePauseClass6) SetDecrement(value PatternFlowPfcPausePauseClass6Counter) PatternFlowPfcPausePauseClass6 {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowPfcPausePauseClass6Choice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowPfcPausePauseClass6) validateObj(set_default bool) {
@@ -52675,12 +55809,18 @@ type patternFlowPfcPausePauseClass7 struct {
 	obj *snappipb.PatternFlowPfcPausePauseClass7
 }
 
+func NewPatternFlowPfcPausePauseClass7() PatternFlowPfcPausePauseClass7 {
+	obj := patternFlowPfcPausePauseClass7{obj: &snappipb.PatternFlowPfcPausePauseClass7{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowPfcPausePauseClass7) Msg() *snappipb.PatternFlowPfcPausePauseClass7 {
 	return obj.obj
 }
 
 func (obj *patternFlowPfcPausePauseClass7) SetMsg(msg *snappipb.PatternFlowPfcPausePauseClass7) PatternFlowPfcPausePauseClass7 {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -52812,8 +55952,10 @@ type PatternFlowPfcPausePauseClass7 interface {
 	SetMetricGroup(value string) PatternFlowPfcPausePauseClass7
 	HasMetricGroup() bool
 	Increment() PatternFlowPfcPausePauseClass7Counter
+	SetIncrement(value PatternFlowPfcPausePauseClass7Counter) PatternFlowPfcPausePauseClass7
 	HasIncrement() bool
 	Decrement() PatternFlowPfcPausePauseClass7Counter
+	SetDecrement(value PatternFlowPfcPausePauseClass7Counter) PatternFlowPfcPausePauseClass7
 	HasDecrement() bool
 }
 
@@ -52919,10 +56061,7 @@ func (obj *patternFlowPfcPausePauseClass7) SetMetricGroup(value string) PatternF
 func (obj *patternFlowPfcPausePauseClass7) Increment() PatternFlowPfcPausePauseClass7Counter {
 	obj.SetChoice(PatternFlowPfcPausePauseClass7Choice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowPfcPausePauseClass7Counter{}
-		newObj := &patternFlowPfcPausePauseClass7Counter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowPfcPausePauseClass7Counter().Msg()
 	}
 	return &patternFlowPfcPausePauseClass7Counter{obj: obj.obj.Increment}
 }
@@ -52933,15 +56072,20 @@ func (obj *patternFlowPfcPausePauseClass7) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowPfcPausePauseClass7Counter value in the PatternFlowPfcPausePauseClass7 object
+//  description is TBD
+func (obj *patternFlowPfcPausePauseClass7) SetIncrement(value PatternFlowPfcPausePauseClass7Counter) PatternFlowPfcPausePauseClass7 {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowPfcPausePauseClass7Choice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowPfcPausePauseClass7Counter
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass7) Decrement() PatternFlowPfcPausePauseClass7Counter {
 	obj.SetChoice(PatternFlowPfcPausePauseClass7Choice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowPfcPausePauseClass7Counter{}
-		newObj := &patternFlowPfcPausePauseClass7Counter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowPfcPausePauseClass7Counter().Msg()
 	}
 	return &patternFlowPfcPausePauseClass7Counter{obj: obj.obj.Decrement}
 }
@@ -52950,6 +56094,14 @@ func (obj *patternFlowPfcPausePauseClass7) Decrement() PatternFlowPfcPausePauseC
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass7) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowPfcPausePauseClass7Counter value in the PatternFlowPfcPausePauseClass7 object
+//  description is TBD
+func (obj *patternFlowPfcPausePauseClass7) SetDecrement(value PatternFlowPfcPausePauseClass7Counter) PatternFlowPfcPausePauseClass7 {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowPfcPausePauseClass7Choice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowPfcPausePauseClass7) validateObj(set_default bool) {
@@ -52996,12 +56148,18 @@ type patternFlowEthernetPauseDst struct {
 	obj *snappipb.PatternFlowEthernetPauseDst
 }
 
+func NewPatternFlowEthernetPauseDst() PatternFlowEthernetPauseDst {
+	obj := patternFlowEthernetPauseDst{obj: &snappipb.PatternFlowEthernetPauseDst{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowEthernetPauseDst) Msg() *snappipb.PatternFlowEthernetPauseDst {
 	return obj.obj
 }
 
 func (obj *patternFlowEthernetPauseDst) SetMsg(msg *snappipb.PatternFlowEthernetPauseDst) PatternFlowEthernetPauseDst {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -53133,8 +56291,10 @@ type PatternFlowEthernetPauseDst interface {
 	SetMetricGroup(value string) PatternFlowEthernetPauseDst
 	HasMetricGroup() bool
 	Increment() PatternFlowEthernetPauseDstCounter
+	SetIncrement(value PatternFlowEthernetPauseDstCounter) PatternFlowEthernetPauseDst
 	HasIncrement() bool
 	Decrement() PatternFlowEthernetPauseDstCounter
+	SetDecrement(value PatternFlowEthernetPauseDstCounter) PatternFlowEthernetPauseDst
 	HasDecrement() bool
 }
 
@@ -53240,10 +56400,7 @@ func (obj *patternFlowEthernetPauseDst) SetMetricGroup(value string) PatternFlow
 func (obj *patternFlowEthernetPauseDst) Increment() PatternFlowEthernetPauseDstCounter {
 	obj.SetChoice(PatternFlowEthernetPauseDstChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowEthernetPauseDstCounter{}
-		newObj := &patternFlowEthernetPauseDstCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowEthernetPauseDstCounter().Msg()
 	}
 	return &patternFlowEthernetPauseDstCounter{obj: obj.obj.Increment}
 }
@@ -53254,15 +56411,20 @@ func (obj *patternFlowEthernetPauseDst) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowEthernetPauseDstCounter value in the PatternFlowEthernetPauseDst object
+//  description is TBD
+func (obj *patternFlowEthernetPauseDst) SetIncrement(value PatternFlowEthernetPauseDstCounter) PatternFlowEthernetPauseDst {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowEthernetPauseDstChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowEthernetPauseDstCounter
 //  description is TBD
 func (obj *patternFlowEthernetPauseDst) Decrement() PatternFlowEthernetPauseDstCounter {
 	obj.SetChoice(PatternFlowEthernetPauseDstChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowEthernetPauseDstCounter{}
-		newObj := &patternFlowEthernetPauseDstCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowEthernetPauseDstCounter().Msg()
 	}
 	return &patternFlowEthernetPauseDstCounter{obj: obj.obj.Decrement}
 }
@@ -53271,6 +56433,14 @@ func (obj *patternFlowEthernetPauseDst) Decrement() PatternFlowEthernetPauseDstC
 //  description is TBD
 func (obj *patternFlowEthernetPauseDst) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowEthernetPauseDstCounter value in the PatternFlowEthernetPauseDst object
+//  description is TBD
+func (obj *patternFlowEthernetPauseDst) SetDecrement(value PatternFlowEthernetPauseDstCounter) PatternFlowEthernetPauseDst {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowEthernetPauseDstChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowEthernetPauseDst) validateObj(set_default bool) {
@@ -53315,12 +56485,18 @@ type patternFlowEthernetPauseSrc struct {
 	obj *snappipb.PatternFlowEthernetPauseSrc
 }
 
+func NewPatternFlowEthernetPauseSrc() PatternFlowEthernetPauseSrc {
+	obj := patternFlowEthernetPauseSrc{obj: &snappipb.PatternFlowEthernetPauseSrc{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowEthernetPauseSrc) Msg() *snappipb.PatternFlowEthernetPauseSrc {
 	return obj.obj
 }
 
 func (obj *patternFlowEthernetPauseSrc) SetMsg(msg *snappipb.PatternFlowEthernetPauseSrc) PatternFlowEthernetPauseSrc {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -53452,8 +56628,10 @@ type PatternFlowEthernetPauseSrc interface {
 	SetMetricGroup(value string) PatternFlowEthernetPauseSrc
 	HasMetricGroup() bool
 	Increment() PatternFlowEthernetPauseSrcCounter
+	SetIncrement(value PatternFlowEthernetPauseSrcCounter) PatternFlowEthernetPauseSrc
 	HasIncrement() bool
 	Decrement() PatternFlowEthernetPauseSrcCounter
+	SetDecrement(value PatternFlowEthernetPauseSrcCounter) PatternFlowEthernetPauseSrc
 	HasDecrement() bool
 }
 
@@ -53559,10 +56737,7 @@ func (obj *patternFlowEthernetPauseSrc) SetMetricGroup(value string) PatternFlow
 func (obj *patternFlowEthernetPauseSrc) Increment() PatternFlowEthernetPauseSrcCounter {
 	obj.SetChoice(PatternFlowEthernetPauseSrcChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowEthernetPauseSrcCounter{}
-		newObj := &patternFlowEthernetPauseSrcCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowEthernetPauseSrcCounter().Msg()
 	}
 	return &patternFlowEthernetPauseSrcCounter{obj: obj.obj.Increment}
 }
@@ -53573,15 +56748,20 @@ func (obj *patternFlowEthernetPauseSrc) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowEthernetPauseSrcCounter value in the PatternFlowEthernetPauseSrc object
+//  description is TBD
+func (obj *patternFlowEthernetPauseSrc) SetIncrement(value PatternFlowEthernetPauseSrcCounter) PatternFlowEthernetPauseSrc {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowEthernetPauseSrcChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowEthernetPauseSrcCounter
 //  description is TBD
 func (obj *patternFlowEthernetPauseSrc) Decrement() PatternFlowEthernetPauseSrcCounter {
 	obj.SetChoice(PatternFlowEthernetPauseSrcChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowEthernetPauseSrcCounter{}
-		newObj := &patternFlowEthernetPauseSrcCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowEthernetPauseSrcCounter().Msg()
 	}
 	return &patternFlowEthernetPauseSrcCounter{obj: obj.obj.Decrement}
 }
@@ -53590,6 +56770,14 @@ func (obj *patternFlowEthernetPauseSrc) Decrement() PatternFlowEthernetPauseSrcC
 //  description is TBD
 func (obj *patternFlowEthernetPauseSrc) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowEthernetPauseSrcCounter value in the PatternFlowEthernetPauseSrc object
+//  description is TBD
+func (obj *patternFlowEthernetPauseSrc) SetDecrement(value PatternFlowEthernetPauseSrcCounter) PatternFlowEthernetPauseSrc {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowEthernetPauseSrcChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowEthernetPauseSrc) validateObj(set_default bool) {
@@ -53634,12 +56822,18 @@ type patternFlowEthernetPauseEtherType struct {
 	obj *snappipb.PatternFlowEthernetPauseEtherType
 }
 
+func NewPatternFlowEthernetPauseEtherType() PatternFlowEthernetPauseEtherType {
+	obj := patternFlowEthernetPauseEtherType{obj: &snappipb.PatternFlowEthernetPauseEtherType{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowEthernetPauseEtherType) Msg() *snappipb.PatternFlowEthernetPauseEtherType {
 	return obj.obj
 }
 
 func (obj *patternFlowEthernetPauseEtherType) SetMsg(msg *snappipb.PatternFlowEthernetPauseEtherType) PatternFlowEthernetPauseEtherType {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -53771,8 +56965,10 @@ type PatternFlowEthernetPauseEtherType interface {
 	SetMetricGroup(value string) PatternFlowEthernetPauseEtherType
 	HasMetricGroup() bool
 	Increment() PatternFlowEthernetPauseEtherTypeCounter
+	SetIncrement(value PatternFlowEthernetPauseEtherTypeCounter) PatternFlowEthernetPauseEtherType
 	HasIncrement() bool
 	Decrement() PatternFlowEthernetPauseEtherTypeCounter
+	SetDecrement(value PatternFlowEthernetPauseEtherTypeCounter) PatternFlowEthernetPauseEtherType
 	HasDecrement() bool
 }
 
@@ -53878,10 +57074,7 @@ func (obj *patternFlowEthernetPauseEtherType) SetMetricGroup(value string) Patte
 func (obj *patternFlowEthernetPauseEtherType) Increment() PatternFlowEthernetPauseEtherTypeCounter {
 	obj.SetChoice(PatternFlowEthernetPauseEtherTypeChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowEthernetPauseEtherTypeCounter{}
-		newObj := &patternFlowEthernetPauseEtherTypeCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowEthernetPauseEtherTypeCounter().Msg()
 	}
 	return &patternFlowEthernetPauseEtherTypeCounter{obj: obj.obj.Increment}
 }
@@ -53892,15 +57085,20 @@ func (obj *patternFlowEthernetPauseEtherType) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowEthernetPauseEtherTypeCounter value in the PatternFlowEthernetPauseEtherType object
+//  description is TBD
+func (obj *patternFlowEthernetPauseEtherType) SetIncrement(value PatternFlowEthernetPauseEtherTypeCounter) PatternFlowEthernetPauseEtherType {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowEthernetPauseEtherTypeChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowEthernetPauseEtherTypeCounter
 //  description is TBD
 func (obj *patternFlowEthernetPauseEtherType) Decrement() PatternFlowEthernetPauseEtherTypeCounter {
 	obj.SetChoice(PatternFlowEthernetPauseEtherTypeChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowEthernetPauseEtherTypeCounter{}
-		newObj := &patternFlowEthernetPauseEtherTypeCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowEthernetPauseEtherTypeCounter().Msg()
 	}
 	return &patternFlowEthernetPauseEtherTypeCounter{obj: obj.obj.Decrement}
 }
@@ -53909,6 +57107,14 @@ func (obj *patternFlowEthernetPauseEtherType) Decrement() PatternFlowEthernetPau
 //  description is TBD
 func (obj *patternFlowEthernetPauseEtherType) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowEthernetPauseEtherTypeCounter value in the PatternFlowEthernetPauseEtherType object
+//  description is TBD
+func (obj *patternFlowEthernetPauseEtherType) SetDecrement(value PatternFlowEthernetPauseEtherTypeCounter) PatternFlowEthernetPauseEtherType {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowEthernetPauseEtherTypeChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowEthernetPauseEtherType) validateObj(set_default bool) {
@@ -53955,12 +57161,18 @@ type patternFlowEthernetPauseControlOpCode struct {
 	obj *snappipb.PatternFlowEthernetPauseControlOpCode
 }
 
+func NewPatternFlowEthernetPauseControlOpCode() PatternFlowEthernetPauseControlOpCode {
+	obj := patternFlowEthernetPauseControlOpCode{obj: &snappipb.PatternFlowEthernetPauseControlOpCode{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowEthernetPauseControlOpCode) Msg() *snappipb.PatternFlowEthernetPauseControlOpCode {
 	return obj.obj
 }
 
 func (obj *patternFlowEthernetPauseControlOpCode) SetMsg(msg *snappipb.PatternFlowEthernetPauseControlOpCode) PatternFlowEthernetPauseControlOpCode {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -54092,8 +57304,10 @@ type PatternFlowEthernetPauseControlOpCode interface {
 	SetMetricGroup(value string) PatternFlowEthernetPauseControlOpCode
 	HasMetricGroup() bool
 	Increment() PatternFlowEthernetPauseControlOpCodeCounter
+	SetIncrement(value PatternFlowEthernetPauseControlOpCodeCounter) PatternFlowEthernetPauseControlOpCode
 	HasIncrement() bool
 	Decrement() PatternFlowEthernetPauseControlOpCodeCounter
+	SetDecrement(value PatternFlowEthernetPauseControlOpCodeCounter) PatternFlowEthernetPauseControlOpCode
 	HasDecrement() bool
 }
 
@@ -54199,10 +57413,7 @@ func (obj *patternFlowEthernetPauseControlOpCode) SetMetricGroup(value string) P
 func (obj *patternFlowEthernetPauseControlOpCode) Increment() PatternFlowEthernetPauseControlOpCodeCounter {
 	obj.SetChoice(PatternFlowEthernetPauseControlOpCodeChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowEthernetPauseControlOpCodeCounter{}
-		newObj := &patternFlowEthernetPauseControlOpCodeCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowEthernetPauseControlOpCodeCounter().Msg()
 	}
 	return &patternFlowEthernetPauseControlOpCodeCounter{obj: obj.obj.Increment}
 }
@@ -54213,15 +57424,20 @@ func (obj *patternFlowEthernetPauseControlOpCode) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowEthernetPauseControlOpCodeCounter value in the PatternFlowEthernetPauseControlOpCode object
+//  description is TBD
+func (obj *patternFlowEthernetPauseControlOpCode) SetIncrement(value PatternFlowEthernetPauseControlOpCodeCounter) PatternFlowEthernetPauseControlOpCode {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowEthernetPauseControlOpCodeChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowEthernetPauseControlOpCodeCounter
 //  description is TBD
 func (obj *patternFlowEthernetPauseControlOpCode) Decrement() PatternFlowEthernetPauseControlOpCodeCounter {
 	obj.SetChoice(PatternFlowEthernetPauseControlOpCodeChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowEthernetPauseControlOpCodeCounter{}
-		newObj := &patternFlowEthernetPauseControlOpCodeCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowEthernetPauseControlOpCodeCounter().Msg()
 	}
 	return &patternFlowEthernetPauseControlOpCodeCounter{obj: obj.obj.Decrement}
 }
@@ -54230,6 +57446,14 @@ func (obj *patternFlowEthernetPauseControlOpCode) Decrement() PatternFlowEtherne
 //  description is TBD
 func (obj *patternFlowEthernetPauseControlOpCode) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowEthernetPauseControlOpCodeCounter value in the PatternFlowEthernetPauseControlOpCode object
+//  description is TBD
+func (obj *patternFlowEthernetPauseControlOpCode) SetDecrement(value PatternFlowEthernetPauseControlOpCodeCounter) PatternFlowEthernetPauseControlOpCode {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowEthernetPauseControlOpCodeChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowEthernetPauseControlOpCode) validateObj(set_default bool) {
@@ -54276,12 +57500,18 @@ type patternFlowEthernetPauseTime struct {
 	obj *snappipb.PatternFlowEthernetPauseTime
 }
 
+func NewPatternFlowEthernetPauseTime() PatternFlowEthernetPauseTime {
+	obj := patternFlowEthernetPauseTime{obj: &snappipb.PatternFlowEthernetPauseTime{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowEthernetPauseTime) Msg() *snappipb.PatternFlowEthernetPauseTime {
 	return obj.obj
 }
 
 func (obj *patternFlowEthernetPauseTime) SetMsg(msg *snappipb.PatternFlowEthernetPauseTime) PatternFlowEthernetPauseTime {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -54413,8 +57643,10 @@ type PatternFlowEthernetPauseTime interface {
 	SetMetricGroup(value string) PatternFlowEthernetPauseTime
 	HasMetricGroup() bool
 	Increment() PatternFlowEthernetPauseTimeCounter
+	SetIncrement(value PatternFlowEthernetPauseTimeCounter) PatternFlowEthernetPauseTime
 	HasIncrement() bool
 	Decrement() PatternFlowEthernetPauseTimeCounter
+	SetDecrement(value PatternFlowEthernetPauseTimeCounter) PatternFlowEthernetPauseTime
 	HasDecrement() bool
 }
 
@@ -54520,10 +57752,7 @@ func (obj *patternFlowEthernetPauseTime) SetMetricGroup(value string) PatternFlo
 func (obj *patternFlowEthernetPauseTime) Increment() PatternFlowEthernetPauseTimeCounter {
 	obj.SetChoice(PatternFlowEthernetPauseTimeChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowEthernetPauseTimeCounter{}
-		newObj := &patternFlowEthernetPauseTimeCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowEthernetPauseTimeCounter().Msg()
 	}
 	return &patternFlowEthernetPauseTimeCounter{obj: obj.obj.Increment}
 }
@@ -54534,15 +57763,20 @@ func (obj *patternFlowEthernetPauseTime) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowEthernetPauseTimeCounter value in the PatternFlowEthernetPauseTime object
+//  description is TBD
+func (obj *patternFlowEthernetPauseTime) SetIncrement(value PatternFlowEthernetPauseTimeCounter) PatternFlowEthernetPauseTime {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowEthernetPauseTimeChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowEthernetPauseTimeCounter
 //  description is TBD
 func (obj *patternFlowEthernetPauseTime) Decrement() PatternFlowEthernetPauseTimeCounter {
 	obj.SetChoice(PatternFlowEthernetPauseTimeChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowEthernetPauseTimeCounter{}
-		newObj := &patternFlowEthernetPauseTimeCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowEthernetPauseTimeCounter().Msg()
 	}
 	return &patternFlowEthernetPauseTimeCounter{obj: obj.obj.Decrement}
 }
@@ -54551,6 +57785,14 @@ func (obj *patternFlowEthernetPauseTime) Decrement() PatternFlowEthernetPauseTim
 //  description is TBD
 func (obj *patternFlowEthernetPauseTime) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowEthernetPauseTimeCounter value in the PatternFlowEthernetPauseTime object
+//  description is TBD
+func (obj *patternFlowEthernetPauseTime) SetDecrement(value PatternFlowEthernetPauseTimeCounter) PatternFlowEthernetPauseTime {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowEthernetPauseTimeChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowEthernetPauseTime) validateObj(set_default bool) {
@@ -54597,12 +57839,18 @@ type patternFlowTcpSrcPort struct {
 	obj *snappipb.PatternFlowTcpSrcPort
 }
 
+func NewPatternFlowTcpSrcPort() PatternFlowTcpSrcPort {
+	obj := patternFlowTcpSrcPort{obj: &snappipb.PatternFlowTcpSrcPort{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowTcpSrcPort) Msg() *snappipb.PatternFlowTcpSrcPort {
 	return obj.obj
 }
 
 func (obj *patternFlowTcpSrcPort) SetMsg(msg *snappipb.PatternFlowTcpSrcPort) PatternFlowTcpSrcPort {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -54734,8 +57982,10 @@ type PatternFlowTcpSrcPort interface {
 	SetMetricGroup(value string) PatternFlowTcpSrcPort
 	HasMetricGroup() bool
 	Increment() PatternFlowTcpSrcPortCounter
+	SetIncrement(value PatternFlowTcpSrcPortCounter) PatternFlowTcpSrcPort
 	HasIncrement() bool
 	Decrement() PatternFlowTcpSrcPortCounter
+	SetDecrement(value PatternFlowTcpSrcPortCounter) PatternFlowTcpSrcPort
 	HasDecrement() bool
 }
 
@@ -54841,10 +58091,7 @@ func (obj *patternFlowTcpSrcPort) SetMetricGroup(value string) PatternFlowTcpSrc
 func (obj *patternFlowTcpSrcPort) Increment() PatternFlowTcpSrcPortCounter {
 	obj.SetChoice(PatternFlowTcpSrcPortChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowTcpSrcPortCounter{}
-		newObj := &patternFlowTcpSrcPortCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowTcpSrcPortCounter().Msg()
 	}
 	return &patternFlowTcpSrcPortCounter{obj: obj.obj.Increment}
 }
@@ -54855,15 +58102,20 @@ func (obj *patternFlowTcpSrcPort) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowTcpSrcPortCounter value in the PatternFlowTcpSrcPort object
+//  description is TBD
+func (obj *patternFlowTcpSrcPort) SetIncrement(value PatternFlowTcpSrcPortCounter) PatternFlowTcpSrcPort {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowTcpSrcPortChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowTcpSrcPortCounter
 //  description is TBD
 func (obj *patternFlowTcpSrcPort) Decrement() PatternFlowTcpSrcPortCounter {
 	obj.SetChoice(PatternFlowTcpSrcPortChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowTcpSrcPortCounter{}
-		newObj := &patternFlowTcpSrcPortCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowTcpSrcPortCounter().Msg()
 	}
 	return &patternFlowTcpSrcPortCounter{obj: obj.obj.Decrement}
 }
@@ -54872,6 +58124,14 @@ func (obj *patternFlowTcpSrcPort) Decrement() PatternFlowTcpSrcPortCounter {
 //  description is TBD
 func (obj *patternFlowTcpSrcPort) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowTcpSrcPortCounter value in the PatternFlowTcpSrcPort object
+//  description is TBD
+func (obj *patternFlowTcpSrcPort) SetDecrement(value PatternFlowTcpSrcPortCounter) PatternFlowTcpSrcPort {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowTcpSrcPortChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowTcpSrcPort) validateObj(set_default bool) {
@@ -54918,12 +58178,18 @@ type patternFlowTcpDstPort struct {
 	obj *snappipb.PatternFlowTcpDstPort
 }
 
+func NewPatternFlowTcpDstPort() PatternFlowTcpDstPort {
+	obj := patternFlowTcpDstPort{obj: &snappipb.PatternFlowTcpDstPort{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowTcpDstPort) Msg() *snappipb.PatternFlowTcpDstPort {
 	return obj.obj
 }
 
 func (obj *patternFlowTcpDstPort) SetMsg(msg *snappipb.PatternFlowTcpDstPort) PatternFlowTcpDstPort {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -55055,8 +58321,10 @@ type PatternFlowTcpDstPort interface {
 	SetMetricGroup(value string) PatternFlowTcpDstPort
 	HasMetricGroup() bool
 	Increment() PatternFlowTcpDstPortCounter
+	SetIncrement(value PatternFlowTcpDstPortCounter) PatternFlowTcpDstPort
 	HasIncrement() bool
 	Decrement() PatternFlowTcpDstPortCounter
+	SetDecrement(value PatternFlowTcpDstPortCounter) PatternFlowTcpDstPort
 	HasDecrement() bool
 }
 
@@ -55162,10 +58430,7 @@ func (obj *patternFlowTcpDstPort) SetMetricGroup(value string) PatternFlowTcpDst
 func (obj *patternFlowTcpDstPort) Increment() PatternFlowTcpDstPortCounter {
 	obj.SetChoice(PatternFlowTcpDstPortChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowTcpDstPortCounter{}
-		newObj := &patternFlowTcpDstPortCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowTcpDstPortCounter().Msg()
 	}
 	return &patternFlowTcpDstPortCounter{obj: obj.obj.Increment}
 }
@@ -55176,15 +58441,20 @@ func (obj *patternFlowTcpDstPort) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowTcpDstPortCounter value in the PatternFlowTcpDstPort object
+//  description is TBD
+func (obj *patternFlowTcpDstPort) SetIncrement(value PatternFlowTcpDstPortCounter) PatternFlowTcpDstPort {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowTcpDstPortChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowTcpDstPortCounter
 //  description is TBD
 func (obj *patternFlowTcpDstPort) Decrement() PatternFlowTcpDstPortCounter {
 	obj.SetChoice(PatternFlowTcpDstPortChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowTcpDstPortCounter{}
-		newObj := &patternFlowTcpDstPortCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowTcpDstPortCounter().Msg()
 	}
 	return &patternFlowTcpDstPortCounter{obj: obj.obj.Decrement}
 }
@@ -55193,6 +58463,14 @@ func (obj *patternFlowTcpDstPort) Decrement() PatternFlowTcpDstPortCounter {
 //  description is TBD
 func (obj *patternFlowTcpDstPort) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowTcpDstPortCounter value in the PatternFlowTcpDstPort object
+//  description is TBD
+func (obj *patternFlowTcpDstPort) SetDecrement(value PatternFlowTcpDstPortCounter) PatternFlowTcpDstPort {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowTcpDstPortChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowTcpDstPort) validateObj(set_default bool) {
@@ -55239,12 +58517,18 @@ type patternFlowTcpSeqNum struct {
 	obj *snappipb.PatternFlowTcpSeqNum
 }
 
+func NewPatternFlowTcpSeqNum() PatternFlowTcpSeqNum {
+	obj := patternFlowTcpSeqNum{obj: &snappipb.PatternFlowTcpSeqNum{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowTcpSeqNum) Msg() *snappipb.PatternFlowTcpSeqNum {
 	return obj.obj
 }
 
 func (obj *patternFlowTcpSeqNum) SetMsg(msg *snappipb.PatternFlowTcpSeqNum) PatternFlowTcpSeqNum {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -55376,8 +58660,10 @@ type PatternFlowTcpSeqNum interface {
 	SetMetricGroup(value string) PatternFlowTcpSeqNum
 	HasMetricGroup() bool
 	Increment() PatternFlowTcpSeqNumCounter
+	SetIncrement(value PatternFlowTcpSeqNumCounter) PatternFlowTcpSeqNum
 	HasIncrement() bool
 	Decrement() PatternFlowTcpSeqNumCounter
+	SetDecrement(value PatternFlowTcpSeqNumCounter) PatternFlowTcpSeqNum
 	HasDecrement() bool
 }
 
@@ -55483,10 +58769,7 @@ func (obj *patternFlowTcpSeqNum) SetMetricGroup(value string) PatternFlowTcpSeqN
 func (obj *patternFlowTcpSeqNum) Increment() PatternFlowTcpSeqNumCounter {
 	obj.SetChoice(PatternFlowTcpSeqNumChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowTcpSeqNumCounter{}
-		newObj := &patternFlowTcpSeqNumCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowTcpSeqNumCounter().Msg()
 	}
 	return &patternFlowTcpSeqNumCounter{obj: obj.obj.Increment}
 }
@@ -55497,15 +58780,20 @@ func (obj *patternFlowTcpSeqNum) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowTcpSeqNumCounter value in the PatternFlowTcpSeqNum object
+//  description is TBD
+func (obj *patternFlowTcpSeqNum) SetIncrement(value PatternFlowTcpSeqNumCounter) PatternFlowTcpSeqNum {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowTcpSeqNumChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowTcpSeqNumCounter
 //  description is TBD
 func (obj *patternFlowTcpSeqNum) Decrement() PatternFlowTcpSeqNumCounter {
 	obj.SetChoice(PatternFlowTcpSeqNumChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowTcpSeqNumCounter{}
-		newObj := &patternFlowTcpSeqNumCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowTcpSeqNumCounter().Msg()
 	}
 	return &patternFlowTcpSeqNumCounter{obj: obj.obj.Decrement}
 }
@@ -55514,6 +58802,14 @@ func (obj *patternFlowTcpSeqNum) Decrement() PatternFlowTcpSeqNumCounter {
 //  description is TBD
 func (obj *patternFlowTcpSeqNum) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowTcpSeqNumCounter value in the PatternFlowTcpSeqNum object
+//  description is TBD
+func (obj *patternFlowTcpSeqNum) SetDecrement(value PatternFlowTcpSeqNumCounter) PatternFlowTcpSeqNum {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowTcpSeqNumChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowTcpSeqNum) validateObj(set_default bool) {
@@ -55560,12 +58856,18 @@ type patternFlowTcpAckNum struct {
 	obj *snappipb.PatternFlowTcpAckNum
 }
 
+func NewPatternFlowTcpAckNum() PatternFlowTcpAckNum {
+	obj := patternFlowTcpAckNum{obj: &snappipb.PatternFlowTcpAckNum{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowTcpAckNum) Msg() *snappipb.PatternFlowTcpAckNum {
 	return obj.obj
 }
 
 func (obj *patternFlowTcpAckNum) SetMsg(msg *snappipb.PatternFlowTcpAckNum) PatternFlowTcpAckNum {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -55697,8 +58999,10 @@ type PatternFlowTcpAckNum interface {
 	SetMetricGroup(value string) PatternFlowTcpAckNum
 	HasMetricGroup() bool
 	Increment() PatternFlowTcpAckNumCounter
+	SetIncrement(value PatternFlowTcpAckNumCounter) PatternFlowTcpAckNum
 	HasIncrement() bool
 	Decrement() PatternFlowTcpAckNumCounter
+	SetDecrement(value PatternFlowTcpAckNumCounter) PatternFlowTcpAckNum
 	HasDecrement() bool
 }
 
@@ -55804,10 +59108,7 @@ func (obj *patternFlowTcpAckNum) SetMetricGroup(value string) PatternFlowTcpAckN
 func (obj *patternFlowTcpAckNum) Increment() PatternFlowTcpAckNumCounter {
 	obj.SetChoice(PatternFlowTcpAckNumChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowTcpAckNumCounter{}
-		newObj := &patternFlowTcpAckNumCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowTcpAckNumCounter().Msg()
 	}
 	return &patternFlowTcpAckNumCounter{obj: obj.obj.Increment}
 }
@@ -55818,15 +59119,20 @@ func (obj *patternFlowTcpAckNum) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowTcpAckNumCounter value in the PatternFlowTcpAckNum object
+//  description is TBD
+func (obj *patternFlowTcpAckNum) SetIncrement(value PatternFlowTcpAckNumCounter) PatternFlowTcpAckNum {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowTcpAckNumChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowTcpAckNumCounter
 //  description is TBD
 func (obj *patternFlowTcpAckNum) Decrement() PatternFlowTcpAckNumCounter {
 	obj.SetChoice(PatternFlowTcpAckNumChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowTcpAckNumCounter{}
-		newObj := &patternFlowTcpAckNumCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowTcpAckNumCounter().Msg()
 	}
 	return &patternFlowTcpAckNumCounter{obj: obj.obj.Decrement}
 }
@@ -55835,6 +59141,14 @@ func (obj *patternFlowTcpAckNum) Decrement() PatternFlowTcpAckNumCounter {
 //  description is TBD
 func (obj *patternFlowTcpAckNum) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowTcpAckNumCounter value in the PatternFlowTcpAckNum object
+//  description is TBD
+func (obj *patternFlowTcpAckNum) SetDecrement(value PatternFlowTcpAckNumCounter) PatternFlowTcpAckNum {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowTcpAckNumChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowTcpAckNum) validateObj(set_default bool) {
@@ -55881,12 +59195,18 @@ type patternFlowTcpDataOffset struct {
 	obj *snappipb.PatternFlowTcpDataOffset
 }
 
+func NewPatternFlowTcpDataOffset() PatternFlowTcpDataOffset {
+	obj := patternFlowTcpDataOffset{obj: &snappipb.PatternFlowTcpDataOffset{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowTcpDataOffset) Msg() *snappipb.PatternFlowTcpDataOffset {
 	return obj.obj
 }
 
 func (obj *patternFlowTcpDataOffset) SetMsg(msg *snappipb.PatternFlowTcpDataOffset) PatternFlowTcpDataOffset {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -56018,8 +59338,10 @@ type PatternFlowTcpDataOffset interface {
 	SetMetricGroup(value string) PatternFlowTcpDataOffset
 	HasMetricGroup() bool
 	Increment() PatternFlowTcpDataOffsetCounter
+	SetIncrement(value PatternFlowTcpDataOffsetCounter) PatternFlowTcpDataOffset
 	HasIncrement() bool
 	Decrement() PatternFlowTcpDataOffsetCounter
+	SetDecrement(value PatternFlowTcpDataOffsetCounter) PatternFlowTcpDataOffset
 	HasDecrement() bool
 }
 
@@ -56125,10 +59447,7 @@ func (obj *patternFlowTcpDataOffset) SetMetricGroup(value string) PatternFlowTcp
 func (obj *patternFlowTcpDataOffset) Increment() PatternFlowTcpDataOffsetCounter {
 	obj.SetChoice(PatternFlowTcpDataOffsetChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowTcpDataOffsetCounter{}
-		newObj := &patternFlowTcpDataOffsetCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowTcpDataOffsetCounter().Msg()
 	}
 	return &patternFlowTcpDataOffsetCounter{obj: obj.obj.Increment}
 }
@@ -56139,15 +59458,20 @@ func (obj *patternFlowTcpDataOffset) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowTcpDataOffsetCounter value in the PatternFlowTcpDataOffset object
+//  description is TBD
+func (obj *patternFlowTcpDataOffset) SetIncrement(value PatternFlowTcpDataOffsetCounter) PatternFlowTcpDataOffset {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowTcpDataOffsetChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowTcpDataOffsetCounter
 //  description is TBD
 func (obj *patternFlowTcpDataOffset) Decrement() PatternFlowTcpDataOffsetCounter {
 	obj.SetChoice(PatternFlowTcpDataOffsetChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowTcpDataOffsetCounter{}
-		newObj := &patternFlowTcpDataOffsetCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowTcpDataOffsetCounter().Msg()
 	}
 	return &patternFlowTcpDataOffsetCounter{obj: obj.obj.Decrement}
 }
@@ -56156,6 +59480,14 @@ func (obj *patternFlowTcpDataOffset) Decrement() PatternFlowTcpDataOffsetCounter
 //  description is TBD
 func (obj *patternFlowTcpDataOffset) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowTcpDataOffsetCounter value in the PatternFlowTcpDataOffset object
+//  description is TBD
+func (obj *patternFlowTcpDataOffset) SetDecrement(value PatternFlowTcpDataOffsetCounter) PatternFlowTcpDataOffset {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowTcpDataOffsetChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowTcpDataOffset) validateObj(set_default bool) {
@@ -56202,12 +59534,18 @@ type patternFlowTcpEcnNs struct {
 	obj *snappipb.PatternFlowTcpEcnNs
 }
 
+func NewPatternFlowTcpEcnNs() PatternFlowTcpEcnNs {
+	obj := patternFlowTcpEcnNs{obj: &snappipb.PatternFlowTcpEcnNs{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowTcpEcnNs) Msg() *snappipb.PatternFlowTcpEcnNs {
 	return obj.obj
 }
 
 func (obj *patternFlowTcpEcnNs) SetMsg(msg *snappipb.PatternFlowTcpEcnNs) PatternFlowTcpEcnNs {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -56339,8 +59677,10 @@ type PatternFlowTcpEcnNs interface {
 	SetMetricGroup(value string) PatternFlowTcpEcnNs
 	HasMetricGroup() bool
 	Increment() PatternFlowTcpEcnNsCounter
+	SetIncrement(value PatternFlowTcpEcnNsCounter) PatternFlowTcpEcnNs
 	HasIncrement() bool
 	Decrement() PatternFlowTcpEcnNsCounter
+	SetDecrement(value PatternFlowTcpEcnNsCounter) PatternFlowTcpEcnNs
 	HasDecrement() bool
 }
 
@@ -56446,10 +59786,7 @@ func (obj *patternFlowTcpEcnNs) SetMetricGroup(value string) PatternFlowTcpEcnNs
 func (obj *patternFlowTcpEcnNs) Increment() PatternFlowTcpEcnNsCounter {
 	obj.SetChoice(PatternFlowTcpEcnNsChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowTcpEcnNsCounter{}
-		newObj := &patternFlowTcpEcnNsCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowTcpEcnNsCounter().Msg()
 	}
 	return &patternFlowTcpEcnNsCounter{obj: obj.obj.Increment}
 }
@@ -56460,15 +59797,20 @@ func (obj *patternFlowTcpEcnNs) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowTcpEcnNsCounter value in the PatternFlowTcpEcnNs object
+//  description is TBD
+func (obj *patternFlowTcpEcnNs) SetIncrement(value PatternFlowTcpEcnNsCounter) PatternFlowTcpEcnNs {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowTcpEcnNsChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowTcpEcnNsCounter
 //  description is TBD
 func (obj *patternFlowTcpEcnNs) Decrement() PatternFlowTcpEcnNsCounter {
 	obj.SetChoice(PatternFlowTcpEcnNsChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowTcpEcnNsCounter{}
-		newObj := &patternFlowTcpEcnNsCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowTcpEcnNsCounter().Msg()
 	}
 	return &patternFlowTcpEcnNsCounter{obj: obj.obj.Decrement}
 }
@@ -56477,6 +59819,14 @@ func (obj *patternFlowTcpEcnNs) Decrement() PatternFlowTcpEcnNsCounter {
 //  description is TBD
 func (obj *patternFlowTcpEcnNs) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowTcpEcnNsCounter value in the PatternFlowTcpEcnNs object
+//  description is TBD
+func (obj *patternFlowTcpEcnNs) SetDecrement(value PatternFlowTcpEcnNsCounter) PatternFlowTcpEcnNs {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowTcpEcnNsChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowTcpEcnNs) validateObj(set_default bool) {
@@ -56523,12 +59873,18 @@ type patternFlowTcpEcnCwr struct {
 	obj *snappipb.PatternFlowTcpEcnCwr
 }
 
+func NewPatternFlowTcpEcnCwr() PatternFlowTcpEcnCwr {
+	obj := patternFlowTcpEcnCwr{obj: &snappipb.PatternFlowTcpEcnCwr{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowTcpEcnCwr) Msg() *snappipb.PatternFlowTcpEcnCwr {
 	return obj.obj
 }
 
 func (obj *patternFlowTcpEcnCwr) SetMsg(msg *snappipb.PatternFlowTcpEcnCwr) PatternFlowTcpEcnCwr {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -56660,8 +60016,10 @@ type PatternFlowTcpEcnCwr interface {
 	SetMetricGroup(value string) PatternFlowTcpEcnCwr
 	HasMetricGroup() bool
 	Increment() PatternFlowTcpEcnCwrCounter
+	SetIncrement(value PatternFlowTcpEcnCwrCounter) PatternFlowTcpEcnCwr
 	HasIncrement() bool
 	Decrement() PatternFlowTcpEcnCwrCounter
+	SetDecrement(value PatternFlowTcpEcnCwrCounter) PatternFlowTcpEcnCwr
 	HasDecrement() bool
 }
 
@@ -56767,10 +60125,7 @@ func (obj *patternFlowTcpEcnCwr) SetMetricGroup(value string) PatternFlowTcpEcnC
 func (obj *patternFlowTcpEcnCwr) Increment() PatternFlowTcpEcnCwrCounter {
 	obj.SetChoice(PatternFlowTcpEcnCwrChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowTcpEcnCwrCounter{}
-		newObj := &patternFlowTcpEcnCwrCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowTcpEcnCwrCounter().Msg()
 	}
 	return &patternFlowTcpEcnCwrCounter{obj: obj.obj.Increment}
 }
@@ -56781,15 +60136,20 @@ func (obj *patternFlowTcpEcnCwr) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowTcpEcnCwrCounter value in the PatternFlowTcpEcnCwr object
+//  description is TBD
+func (obj *patternFlowTcpEcnCwr) SetIncrement(value PatternFlowTcpEcnCwrCounter) PatternFlowTcpEcnCwr {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowTcpEcnCwrChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowTcpEcnCwrCounter
 //  description is TBD
 func (obj *patternFlowTcpEcnCwr) Decrement() PatternFlowTcpEcnCwrCounter {
 	obj.SetChoice(PatternFlowTcpEcnCwrChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowTcpEcnCwrCounter{}
-		newObj := &patternFlowTcpEcnCwrCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowTcpEcnCwrCounter().Msg()
 	}
 	return &patternFlowTcpEcnCwrCounter{obj: obj.obj.Decrement}
 }
@@ -56798,6 +60158,14 @@ func (obj *patternFlowTcpEcnCwr) Decrement() PatternFlowTcpEcnCwrCounter {
 //  description is TBD
 func (obj *patternFlowTcpEcnCwr) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowTcpEcnCwrCounter value in the PatternFlowTcpEcnCwr object
+//  description is TBD
+func (obj *patternFlowTcpEcnCwr) SetDecrement(value PatternFlowTcpEcnCwrCounter) PatternFlowTcpEcnCwr {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowTcpEcnCwrChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowTcpEcnCwr) validateObj(set_default bool) {
@@ -56844,12 +60212,18 @@ type patternFlowTcpEcnEcho struct {
 	obj *snappipb.PatternFlowTcpEcnEcho
 }
 
+func NewPatternFlowTcpEcnEcho() PatternFlowTcpEcnEcho {
+	obj := patternFlowTcpEcnEcho{obj: &snappipb.PatternFlowTcpEcnEcho{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowTcpEcnEcho) Msg() *snappipb.PatternFlowTcpEcnEcho {
 	return obj.obj
 }
 
 func (obj *patternFlowTcpEcnEcho) SetMsg(msg *snappipb.PatternFlowTcpEcnEcho) PatternFlowTcpEcnEcho {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -56981,8 +60355,10 @@ type PatternFlowTcpEcnEcho interface {
 	SetMetricGroup(value string) PatternFlowTcpEcnEcho
 	HasMetricGroup() bool
 	Increment() PatternFlowTcpEcnEchoCounter
+	SetIncrement(value PatternFlowTcpEcnEchoCounter) PatternFlowTcpEcnEcho
 	HasIncrement() bool
 	Decrement() PatternFlowTcpEcnEchoCounter
+	SetDecrement(value PatternFlowTcpEcnEchoCounter) PatternFlowTcpEcnEcho
 	HasDecrement() bool
 }
 
@@ -57088,10 +60464,7 @@ func (obj *patternFlowTcpEcnEcho) SetMetricGroup(value string) PatternFlowTcpEcn
 func (obj *patternFlowTcpEcnEcho) Increment() PatternFlowTcpEcnEchoCounter {
 	obj.SetChoice(PatternFlowTcpEcnEchoChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowTcpEcnEchoCounter{}
-		newObj := &patternFlowTcpEcnEchoCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowTcpEcnEchoCounter().Msg()
 	}
 	return &patternFlowTcpEcnEchoCounter{obj: obj.obj.Increment}
 }
@@ -57102,15 +60475,20 @@ func (obj *patternFlowTcpEcnEcho) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowTcpEcnEchoCounter value in the PatternFlowTcpEcnEcho object
+//  description is TBD
+func (obj *patternFlowTcpEcnEcho) SetIncrement(value PatternFlowTcpEcnEchoCounter) PatternFlowTcpEcnEcho {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowTcpEcnEchoChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowTcpEcnEchoCounter
 //  description is TBD
 func (obj *patternFlowTcpEcnEcho) Decrement() PatternFlowTcpEcnEchoCounter {
 	obj.SetChoice(PatternFlowTcpEcnEchoChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowTcpEcnEchoCounter{}
-		newObj := &patternFlowTcpEcnEchoCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowTcpEcnEchoCounter().Msg()
 	}
 	return &patternFlowTcpEcnEchoCounter{obj: obj.obj.Decrement}
 }
@@ -57119,6 +60497,14 @@ func (obj *patternFlowTcpEcnEcho) Decrement() PatternFlowTcpEcnEchoCounter {
 //  description is TBD
 func (obj *patternFlowTcpEcnEcho) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowTcpEcnEchoCounter value in the PatternFlowTcpEcnEcho object
+//  description is TBD
+func (obj *patternFlowTcpEcnEcho) SetDecrement(value PatternFlowTcpEcnEchoCounter) PatternFlowTcpEcnEcho {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowTcpEcnEchoChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowTcpEcnEcho) validateObj(set_default bool) {
@@ -57165,12 +60551,18 @@ type patternFlowTcpCtlUrg struct {
 	obj *snappipb.PatternFlowTcpCtlUrg
 }
 
+func NewPatternFlowTcpCtlUrg() PatternFlowTcpCtlUrg {
+	obj := patternFlowTcpCtlUrg{obj: &snappipb.PatternFlowTcpCtlUrg{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowTcpCtlUrg) Msg() *snappipb.PatternFlowTcpCtlUrg {
 	return obj.obj
 }
 
 func (obj *patternFlowTcpCtlUrg) SetMsg(msg *snappipb.PatternFlowTcpCtlUrg) PatternFlowTcpCtlUrg {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -57302,8 +60694,10 @@ type PatternFlowTcpCtlUrg interface {
 	SetMetricGroup(value string) PatternFlowTcpCtlUrg
 	HasMetricGroup() bool
 	Increment() PatternFlowTcpCtlUrgCounter
+	SetIncrement(value PatternFlowTcpCtlUrgCounter) PatternFlowTcpCtlUrg
 	HasIncrement() bool
 	Decrement() PatternFlowTcpCtlUrgCounter
+	SetDecrement(value PatternFlowTcpCtlUrgCounter) PatternFlowTcpCtlUrg
 	HasDecrement() bool
 }
 
@@ -57409,10 +60803,7 @@ func (obj *patternFlowTcpCtlUrg) SetMetricGroup(value string) PatternFlowTcpCtlU
 func (obj *patternFlowTcpCtlUrg) Increment() PatternFlowTcpCtlUrgCounter {
 	obj.SetChoice(PatternFlowTcpCtlUrgChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowTcpCtlUrgCounter{}
-		newObj := &patternFlowTcpCtlUrgCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowTcpCtlUrgCounter().Msg()
 	}
 	return &patternFlowTcpCtlUrgCounter{obj: obj.obj.Increment}
 }
@@ -57423,15 +60814,20 @@ func (obj *patternFlowTcpCtlUrg) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowTcpCtlUrgCounter value in the PatternFlowTcpCtlUrg object
+//  description is TBD
+func (obj *patternFlowTcpCtlUrg) SetIncrement(value PatternFlowTcpCtlUrgCounter) PatternFlowTcpCtlUrg {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowTcpCtlUrgChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowTcpCtlUrgCounter
 //  description is TBD
 func (obj *patternFlowTcpCtlUrg) Decrement() PatternFlowTcpCtlUrgCounter {
 	obj.SetChoice(PatternFlowTcpCtlUrgChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowTcpCtlUrgCounter{}
-		newObj := &patternFlowTcpCtlUrgCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowTcpCtlUrgCounter().Msg()
 	}
 	return &patternFlowTcpCtlUrgCounter{obj: obj.obj.Decrement}
 }
@@ -57440,6 +60836,14 @@ func (obj *patternFlowTcpCtlUrg) Decrement() PatternFlowTcpCtlUrgCounter {
 //  description is TBD
 func (obj *patternFlowTcpCtlUrg) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowTcpCtlUrgCounter value in the PatternFlowTcpCtlUrg object
+//  description is TBD
+func (obj *patternFlowTcpCtlUrg) SetDecrement(value PatternFlowTcpCtlUrgCounter) PatternFlowTcpCtlUrg {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowTcpCtlUrgChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowTcpCtlUrg) validateObj(set_default bool) {
@@ -57486,12 +60890,18 @@ type patternFlowTcpCtlAck struct {
 	obj *snappipb.PatternFlowTcpCtlAck
 }
 
+func NewPatternFlowTcpCtlAck() PatternFlowTcpCtlAck {
+	obj := patternFlowTcpCtlAck{obj: &snappipb.PatternFlowTcpCtlAck{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowTcpCtlAck) Msg() *snappipb.PatternFlowTcpCtlAck {
 	return obj.obj
 }
 
 func (obj *patternFlowTcpCtlAck) SetMsg(msg *snappipb.PatternFlowTcpCtlAck) PatternFlowTcpCtlAck {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -57623,8 +61033,10 @@ type PatternFlowTcpCtlAck interface {
 	SetMetricGroup(value string) PatternFlowTcpCtlAck
 	HasMetricGroup() bool
 	Increment() PatternFlowTcpCtlAckCounter
+	SetIncrement(value PatternFlowTcpCtlAckCounter) PatternFlowTcpCtlAck
 	HasIncrement() bool
 	Decrement() PatternFlowTcpCtlAckCounter
+	SetDecrement(value PatternFlowTcpCtlAckCounter) PatternFlowTcpCtlAck
 	HasDecrement() bool
 }
 
@@ -57730,10 +61142,7 @@ func (obj *patternFlowTcpCtlAck) SetMetricGroup(value string) PatternFlowTcpCtlA
 func (obj *patternFlowTcpCtlAck) Increment() PatternFlowTcpCtlAckCounter {
 	obj.SetChoice(PatternFlowTcpCtlAckChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowTcpCtlAckCounter{}
-		newObj := &patternFlowTcpCtlAckCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowTcpCtlAckCounter().Msg()
 	}
 	return &patternFlowTcpCtlAckCounter{obj: obj.obj.Increment}
 }
@@ -57744,15 +61153,20 @@ func (obj *patternFlowTcpCtlAck) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowTcpCtlAckCounter value in the PatternFlowTcpCtlAck object
+//  description is TBD
+func (obj *patternFlowTcpCtlAck) SetIncrement(value PatternFlowTcpCtlAckCounter) PatternFlowTcpCtlAck {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowTcpCtlAckChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowTcpCtlAckCounter
 //  description is TBD
 func (obj *patternFlowTcpCtlAck) Decrement() PatternFlowTcpCtlAckCounter {
 	obj.SetChoice(PatternFlowTcpCtlAckChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowTcpCtlAckCounter{}
-		newObj := &patternFlowTcpCtlAckCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowTcpCtlAckCounter().Msg()
 	}
 	return &patternFlowTcpCtlAckCounter{obj: obj.obj.Decrement}
 }
@@ -57761,6 +61175,14 @@ func (obj *patternFlowTcpCtlAck) Decrement() PatternFlowTcpCtlAckCounter {
 //  description is TBD
 func (obj *patternFlowTcpCtlAck) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowTcpCtlAckCounter value in the PatternFlowTcpCtlAck object
+//  description is TBD
+func (obj *patternFlowTcpCtlAck) SetDecrement(value PatternFlowTcpCtlAckCounter) PatternFlowTcpCtlAck {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowTcpCtlAckChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowTcpCtlAck) validateObj(set_default bool) {
@@ -57807,12 +61229,18 @@ type patternFlowTcpCtlPsh struct {
 	obj *snappipb.PatternFlowTcpCtlPsh
 }
 
+func NewPatternFlowTcpCtlPsh() PatternFlowTcpCtlPsh {
+	obj := patternFlowTcpCtlPsh{obj: &snappipb.PatternFlowTcpCtlPsh{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowTcpCtlPsh) Msg() *snappipb.PatternFlowTcpCtlPsh {
 	return obj.obj
 }
 
 func (obj *patternFlowTcpCtlPsh) SetMsg(msg *snappipb.PatternFlowTcpCtlPsh) PatternFlowTcpCtlPsh {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -57944,8 +61372,10 @@ type PatternFlowTcpCtlPsh interface {
 	SetMetricGroup(value string) PatternFlowTcpCtlPsh
 	HasMetricGroup() bool
 	Increment() PatternFlowTcpCtlPshCounter
+	SetIncrement(value PatternFlowTcpCtlPshCounter) PatternFlowTcpCtlPsh
 	HasIncrement() bool
 	Decrement() PatternFlowTcpCtlPshCounter
+	SetDecrement(value PatternFlowTcpCtlPshCounter) PatternFlowTcpCtlPsh
 	HasDecrement() bool
 }
 
@@ -58051,10 +61481,7 @@ func (obj *patternFlowTcpCtlPsh) SetMetricGroup(value string) PatternFlowTcpCtlP
 func (obj *patternFlowTcpCtlPsh) Increment() PatternFlowTcpCtlPshCounter {
 	obj.SetChoice(PatternFlowTcpCtlPshChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowTcpCtlPshCounter{}
-		newObj := &patternFlowTcpCtlPshCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowTcpCtlPshCounter().Msg()
 	}
 	return &patternFlowTcpCtlPshCounter{obj: obj.obj.Increment}
 }
@@ -58065,15 +61492,20 @@ func (obj *patternFlowTcpCtlPsh) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowTcpCtlPshCounter value in the PatternFlowTcpCtlPsh object
+//  description is TBD
+func (obj *patternFlowTcpCtlPsh) SetIncrement(value PatternFlowTcpCtlPshCounter) PatternFlowTcpCtlPsh {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowTcpCtlPshChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowTcpCtlPshCounter
 //  description is TBD
 func (obj *patternFlowTcpCtlPsh) Decrement() PatternFlowTcpCtlPshCounter {
 	obj.SetChoice(PatternFlowTcpCtlPshChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowTcpCtlPshCounter{}
-		newObj := &patternFlowTcpCtlPshCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowTcpCtlPshCounter().Msg()
 	}
 	return &patternFlowTcpCtlPshCounter{obj: obj.obj.Decrement}
 }
@@ -58082,6 +61514,14 @@ func (obj *patternFlowTcpCtlPsh) Decrement() PatternFlowTcpCtlPshCounter {
 //  description is TBD
 func (obj *patternFlowTcpCtlPsh) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowTcpCtlPshCounter value in the PatternFlowTcpCtlPsh object
+//  description is TBD
+func (obj *patternFlowTcpCtlPsh) SetDecrement(value PatternFlowTcpCtlPshCounter) PatternFlowTcpCtlPsh {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowTcpCtlPshChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowTcpCtlPsh) validateObj(set_default bool) {
@@ -58128,12 +61568,18 @@ type patternFlowTcpCtlRst struct {
 	obj *snappipb.PatternFlowTcpCtlRst
 }
 
+func NewPatternFlowTcpCtlRst() PatternFlowTcpCtlRst {
+	obj := patternFlowTcpCtlRst{obj: &snappipb.PatternFlowTcpCtlRst{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowTcpCtlRst) Msg() *snappipb.PatternFlowTcpCtlRst {
 	return obj.obj
 }
 
 func (obj *patternFlowTcpCtlRst) SetMsg(msg *snappipb.PatternFlowTcpCtlRst) PatternFlowTcpCtlRst {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -58265,8 +61711,10 @@ type PatternFlowTcpCtlRst interface {
 	SetMetricGroup(value string) PatternFlowTcpCtlRst
 	HasMetricGroup() bool
 	Increment() PatternFlowTcpCtlRstCounter
+	SetIncrement(value PatternFlowTcpCtlRstCounter) PatternFlowTcpCtlRst
 	HasIncrement() bool
 	Decrement() PatternFlowTcpCtlRstCounter
+	SetDecrement(value PatternFlowTcpCtlRstCounter) PatternFlowTcpCtlRst
 	HasDecrement() bool
 }
 
@@ -58372,10 +61820,7 @@ func (obj *patternFlowTcpCtlRst) SetMetricGroup(value string) PatternFlowTcpCtlR
 func (obj *patternFlowTcpCtlRst) Increment() PatternFlowTcpCtlRstCounter {
 	obj.SetChoice(PatternFlowTcpCtlRstChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowTcpCtlRstCounter{}
-		newObj := &patternFlowTcpCtlRstCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowTcpCtlRstCounter().Msg()
 	}
 	return &patternFlowTcpCtlRstCounter{obj: obj.obj.Increment}
 }
@@ -58386,15 +61831,20 @@ func (obj *patternFlowTcpCtlRst) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowTcpCtlRstCounter value in the PatternFlowTcpCtlRst object
+//  description is TBD
+func (obj *patternFlowTcpCtlRst) SetIncrement(value PatternFlowTcpCtlRstCounter) PatternFlowTcpCtlRst {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowTcpCtlRstChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowTcpCtlRstCounter
 //  description is TBD
 func (obj *patternFlowTcpCtlRst) Decrement() PatternFlowTcpCtlRstCounter {
 	obj.SetChoice(PatternFlowTcpCtlRstChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowTcpCtlRstCounter{}
-		newObj := &patternFlowTcpCtlRstCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowTcpCtlRstCounter().Msg()
 	}
 	return &patternFlowTcpCtlRstCounter{obj: obj.obj.Decrement}
 }
@@ -58403,6 +61853,14 @@ func (obj *patternFlowTcpCtlRst) Decrement() PatternFlowTcpCtlRstCounter {
 //  description is TBD
 func (obj *patternFlowTcpCtlRst) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowTcpCtlRstCounter value in the PatternFlowTcpCtlRst object
+//  description is TBD
+func (obj *patternFlowTcpCtlRst) SetDecrement(value PatternFlowTcpCtlRstCounter) PatternFlowTcpCtlRst {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowTcpCtlRstChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowTcpCtlRst) validateObj(set_default bool) {
@@ -58449,12 +61907,18 @@ type patternFlowTcpCtlSyn struct {
 	obj *snappipb.PatternFlowTcpCtlSyn
 }
 
+func NewPatternFlowTcpCtlSyn() PatternFlowTcpCtlSyn {
+	obj := patternFlowTcpCtlSyn{obj: &snappipb.PatternFlowTcpCtlSyn{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowTcpCtlSyn) Msg() *snappipb.PatternFlowTcpCtlSyn {
 	return obj.obj
 }
 
 func (obj *patternFlowTcpCtlSyn) SetMsg(msg *snappipb.PatternFlowTcpCtlSyn) PatternFlowTcpCtlSyn {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -58586,8 +62050,10 @@ type PatternFlowTcpCtlSyn interface {
 	SetMetricGroup(value string) PatternFlowTcpCtlSyn
 	HasMetricGroup() bool
 	Increment() PatternFlowTcpCtlSynCounter
+	SetIncrement(value PatternFlowTcpCtlSynCounter) PatternFlowTcpCtlSyn
 	HasIncrement() bool
 	Decrement() PatternFlowTcpCtlSynCounter
+	SetDecrement(value PatternFlowTcpCtlSynCounter) PatternFlowTcpCtlSyn
 	HasDecrement() bool
 }
 
@@ -58693,10 +62159,7 @@ func (obj *patternFlowTcpCtlSyn) SetMetricGroup(value string) PatternFlowTcpCtlS
 func (obj *patternFlowTcpCtlSyn) Increment() PatternFlowTcpCtlSynCounter {
 	obj.SetChoice(PatternFlowTcpCtlSynChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowTcpCtlSynCounter{}
-		newObj := &patternFlowTcpCtlSynCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowTcpCtlSynCounter().Msg()
 	}
 	return &patternFlowTcpCtlSynCounter{obj: obj.obj.Increment}
 }
@@ -58707,15 +62170,20 @@ func (obj *patternFlowTcpCtlSyn) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowTcpCtlSynCounter value in the PatternFlowTcpCtlSyn object
+//  description is TBD
+func (obj *patternFlowTcpCtlSyn) SetIncrement(value PatternFlowTcpCtlSynCounter) PatternFlowTcpCtlSyn {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowTcpCtlSynChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowTcpCtlSynCounter
 //  description is TBD
 func (obj *patternFlowTcpCtlSyn) Decrement() PatternFlowTcpCtlSynCounter {
 	obj.SetChoice(PatternFlowTcpCtlSynChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowTcpCtlSynCounter{}
-		newObj := &patternFlowTcpCtlSynCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowTcpCtlSynCounter().Msg()
 	}
 	return &patternFlowTcpCtlSynCounter{obj: obj.obj.Decrement}
 }
@@ -58724,6 +62192,14 @@ func (obj *patternFlowTcpCtlSyn) Decrement() PatternFlowTcpCtlSynCounter {
 //  description is TBD
 func (obj *patternFlowTcpCtlSyn) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowTcpCtlSynCounter value in the PatternFlowTcpCtlSyn object
+//  description is TBD
+func (obj *patternFlowTcpCtlSyn) SetDecrement(value PatternFlowTcpCtlSynCounter) PatternFlowTcpCtlSyn {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowTcpCtlSynChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowTcpCtlSyn) validateObj(set_default bool) {
@@ -58770,12 +62246,18 @@ type patternFlowTcpCtlFin struct {
 	obj *snappipb.PatternFlowTcpCtlFin
 }
 
+func NewPatternFlowTcpCtlFin() PatternFlowTcpCtlFin {
+	obj := patternFlowTcpCtlFin{obj: &snappipb.PatternFlowTcpCtlFin{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowTcpCtlFin) Msg() *snappipb.PatternFlowTcpCtlFin {
 	return obj.obj
 }
 
 func (obj *patternFlowTcpCtlFin) SetMsg(msg *snappipb.PatternFlowTcpCtlFin) PatternFlowTcpCtlFin {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -58907,8 +62389,10 @@ type PatternFlowTcpCtlFin interface {
 	SetMetricGroup(value string) PatternFlowTcpCtlFin
 	HasMetricGroup() bool
 	Increment() PatternFlowTcpCtlFinCounter
+	SetIncrement(value PatternFlowTcpCtlFinCounter) PatternFlowTcpCtlFin
 	HasIncrement() bool
 	Decrement() PatternFlowTcpCtlFinCounter
+	SetDecrement(value PatternFlowTcpCtlFinCounter) PatternFlowTcpCtlFin
 	HasDecrement() bool
 }
 
@@ -59014,10 +62498,7 @@ func (obj *patternFlowTcpCtlFin) SetMetricGroup(value string) PatternFlowTcpCtlF
 func (obj *patternFlowTcpCtlFin) Increment() PatternFlowTcpCtlFinCounter {
 	obj.SetChoice(PatternFlowTcpCtlFinChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowTcpCtlFinCounter{}
-		newObj := &patternFlowTcpCtlFinCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowTcpCtlFinCounter().Msg()
 	}
 	return &patternFlowTcpCtlFinCounter{obj: obj.obj.Increment}
 }
@@ -59028,15 +62509,20 @@ func (obj *patternFlowTcpCtlFin) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowTcpCtlFinCounter value in the PatternFlowTcpCtlFin object
+//  description is TBD
+func (obj *patternFlowTcpCtlFin) SetIncrement(value PatternFlowTcpCtlFinCounter) PatternFlowTcpCtlFin {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowTcpCtlFinChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowTcpCtlFinCounter
 //  description is TBD
 func (obj *patternFlowTcpCtlFin) Decrement() PatternFlowTcpCtlFinCounter {
 	obj.SetChoice(PatternFlowTcpCtlFinChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowTcpCtlFinCounter{}
-		newObj := &patternFlowTcpCtlFinCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowTcpCtlFinCounter().Msg()
 	}
 	return &patternFlowTcpCtlFinCounter{obj: obj.obj.Decrement}
 }
@@ -59045,6 +62531,14 @@ func (obj *patternFlowTcpCtlFin) Decrement() PatternFlowTcpCtlFinCounter {
 //  description is TBD
 func (obj *patternFlowTcpCtlFin) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowTcpCtlFinCounter value in the PatternFlowTcpCtlFin object
+//  description is TBD
+func (obj *patternFlowTcpCtlFin) SetDecrement(value PatternFlowTcpCtlFinCounter) PatternFlowTcpCtlFin {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowTcpCtlFinChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowTcpCtlFin) validateObj(set_default bool) {
@@ -59091,12 +62585,18 @@ type patternFlowTcpWindow struct {
 	obj *snappipb.PatternFlowTcpWindow
 }
 
+func NewPatternFlowTcpWindow() PatternFlowTcpWindow {
+	obj := patternFlowTcpWindow{obj: &snappipb.PatternFlowTcpWindow{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowTcpWindow) Msg() *snappipb.PatternFlowTcpWindow {
 	return obj.obj
 }
 
 func (obj *patternFlowTcpWindow) SetMsg(msg *snappipb.PatternFlowTcpWindow) PatternFlowTcpWindow {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -59228,8 +62728,10 @@ type PatternFlowTcpWindow interface {
 	SetMetricGroup(value string) PatternFlowTcpWindow
 	HasMetricGroup() bool
 	Increment() PatternFlowTcpWindowCounter
+	SetIncrement(value PatternFlowTcpWindowCounter) PatternFlowTcpWindow
 	HasIncrement() bool
 	Decrement() PatternFlowTcpWindowCounter
+	SetDecrement(value PatternFlowTcpWindowCounter) PatternFlowTcpWindow
 	HasDecrement() bool
 }
 
@@ -59335,10 +62837,7 @@ func (obj *patternFlowTcpWindow) SetMetricGroup(value string) PatternFlowTcpWind
 func (obj *patternFlowTcpWindow) Increment() PatternFlowTcpWindowCounter {
 	obj.SetChoice(PatternFlowTcpWindowChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowTcpWindowCounter{}
-		newObj := &patternFlowTcpWindowCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowTcpWindowCounter().Msg()
 	}
 	return &patternFlowTcpWindowCounter{obj: obj.obj.Increment}
 }
@@ -59349,15 +62848,20 @@ func (obj *patternFlowTcpWindow) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowTcpWindowCounter value in the PatternFlowTcpWindow object
+//  description is TBD
+func (obj *patternFlowTcpWindow) SetIncrement(value PatternFlowTcpWindowCounter) PatternFlowTcpWindow {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowTcpWindowChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowTcpWindowCounter
 //  description is TBD
 func (obj *patternFlowTcpWindow) Decrement() PatternFlowTcpWindowCounter {
 	obj.SetChoice(PatternFlowTcpWindowChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowTcpWindowCounter{}
-		newObj := &patternFlowTcpWindowCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowTcpWindowCounter().Msg()
 	}
 	return &patternFlowTcpWindowCounter{obj: obj.obj.Decrement}
 }
@@ -59366,6 +62870,14 @@ func (obj *patternFlowTcpWindow) Decrement() PatternFlowTcpWindowCounter {
 //  description is TBD
 func (obj *patternFlowTcpWindow) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowTcpWindowCounter value in the PatternFlowTcpWindow object
+//  description is TBD
+func (obj *patternFlowTcpWindow) SetDecrement(value PatternFlowTcpWindowCounter) PatternFlowTcpWindow {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowTcpWindowChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowTcpWindow) validateObj(set_default bool) {
@@ -59412,12 +62924,18 @@ type patternFlowUdpSrcPort struct {
 	obj *snappipb.PatternFlowUdpSrcPort
 }
 
+func NewPatternFlowUdpSrcPort() PatternFlowUdpSrcPort {
+	obj := patternFlowUdpSrcPort{obj: &snappipb.PatternFlowUdpSrcPort{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowUdpSrcPort) Msg() *snappipb.PatternFlowUdpSrcPort {
 	return obj.obj
 }
 
 func (obj *patternFlowUdpSrcPort) SetMsg(msg *snappipb.PatternFlowUdpSrcPort) PatternFlowUdpSrcPort {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -59549,8 +63067,10 @@ type PatternFlowUdpSrcPort interface {
 	SetMetricGroup(value string) PatternFlowUdpSrcPort
 	HasMetricGroup() bool
 	Increment() PatternFlowUdpSrcPortCounter
+	SetIncrement(value PatternFlowUdpSrcPortCounter) PatternFlowUdpSrcPort
 	HasIncrement() bool
 	Decrement() PatternFlowUdpSrcPortCounter
+	SetDecrement(value PatternFlowUdpSrcPortCounter) PatternFlowUdpSrcPort
 	HasDecrement() bool
 }
 
@@ -59656,10 +63176,7 @@ func (obj *patternFlowUdpSrcPort) SetMetricGroup(value string) PatternFlowUdpSrc
 func (obj *patternFlowUdpSrcPort) Increment() PatternFlowUdpSrcPortCounter {
 	obj.SetChoice(PatternFlowUdpSrcPortChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowUdpSrcPortCounter{}
-		newObj := &patternFlowUdpSrcPortCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowUdpSrcPortCounter().Msg()
 	}
 	return &patternFlowUdpSrcPortCounter{obj: obj.obj.Increment}
 }
@@ -59670,15 +63187,20 @@ func (obj *patternFlowUdpSrcPort) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowUdpSrcPortCounter value in the PatternFlowUdpSrcPort object
+//  description is TBD
+func (obj *patternFlowUdpSrcPort) SetIncrement(value PatternFlowUdpSrcPortCounter) PatternFlowUdpSrcPort {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowUdpSrcPortChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowUdpSrcPortCounter
 //  description is TBD
 func (obj *patternFlowUdpSrcPort) Decrement() PatternFlowUdpSrcPortCounter {
 	obj.SetChoice(PatternFlowUdpSrcPortChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowUdpSrcPortCounter{}
-		newObj := &patternFlowUdpSrcPortCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowUdpSrcPortCounter().Msg()
 	}
 	return &patternFlowUdpSrcPortCounter{obj: obj.obj.Decrement}
 }
@@ -59687,6 +63209,14 @@ func (obj *patternFlowUdpSrcPort) Decrement() PatternFlowUdpSrcPortCounter {
 //  description is TBD
 func (obj *patternFlowUdpSrcPort) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowUdpSrcPortCounter value in the PatternFlowUdpSrcPort object
+//  description is TBD
+func (obj *patternFlowUdpSrcPort) SetDecrement(value PatternFlowUdpSrcPortCounter) PatternFlowUdpSrcPort {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowUdpSrcPortChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowUdpSrcPort) validateObj(set_default bool) {
@@ -59733,12 +63263,18 @@ type patternFlowUdpDstPort struct {
 	obj *snappipb.PatternFlowUdpDstPort
 }
 
+func NewPatternFlowUdpDstPort() PatternFlowUdpDstPort {
+	obj := patternFlowUdpDstPort{obj: &snappipb.PatternFlowUdpDstPort{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowUdpDstPort) Msg() *snappipb.PatternFlowUdpDstPort {
 	return obj.obj
 }
 
 func (obj *patternFlowUdpDstPort) SetMsg(msg *snappipb.PatternFlowUdpDstPort) PatternFlowUdpDstPort {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -59870,8 +63406,10 @@ type PatternFlowUdpDstPort interface {
 	SetMetricGroup(value string) PatternFlowUdpDstPort
 	HasMetricGroup() bool
 	Increment() PatternFlowUdpDstPortCounter
+	SetIncrement(value PatternFlowUdpDstPortCounter) PatternFlowUdpDstPort
 	HasIncrement() bool
 	Decrement() PatternFlowUdpDstPortCounter
+	SetDecrement(value PatternFlowUdpDstPortCounter) PatternFlowUdpDstPort
 	HasDecrement() bool
 }
 
@@ -59977,10 +63515,7 @@ func (obj *patternFlowUdpDstPort) SetMetricGroup(value string) PatternFlowUdpDst
 func (obj *patternFlowUdpDstPort) Increment() PatternFlowUdpDstPortCounter {
 	obj.SetChoice(PatternFlowUdpDstPortChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowUdpDstPortCounter{}
-		newObj := &patternFlowUdpDstPortCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowUdpDstPortCounter().Msg()
 	}
 	return &patternFlowUdpDstPortCounter{obj: obj.obj.Increment}
 }
@@ -59991,15 +63526,20 @@ func (obj *patternFlowUdpDstPort) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowUdpDstPortCounter value in the PatternFlowUdpDstPort object
+//  description is TBD
+func (obj *patternFlowUdpDstPort) SetIncrement(value PatternFlowUdpDstPortCounter) PatternFlowUdpDstPort {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowUdpDstPortChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowUdpDstPortCounter
 //  description is TBD
 func (obj *patternFlowUdpDstPort) Decrement() PatternFlowUdpDstPortCounter {
 	obj.SetChoice(PatternFlowUdpDstPortChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowUdpDstPortCounter{}
-		newObj := &patternFlowUdpDstPortCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowUdpDstPortCounter().Msg()
 	}
 	return &patternFlowUdpDstPortCounter{obj: obj.obj.Decrement}
 }
@@ -60008,6 +63548,14 @@ func (obj *patternFlowUdpDstPort) Decrement() PatternFlowUdpDstPortCounter {
 //  description is TBD
 func (obj *patternFlowUdpDstPort) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowUdpDstPortCounter value in the PatternFlowUdpDstPort object
+//  description is TBD
+func (obj *patternFlowUdpDstPort) SetDecrement(value PatternFlowUdpDstPortCounter) PatternFlowUdpDstPort {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowUdpDstPortChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowUdpDstPort) validateObj(set_default bool) {
@@ -60054,12 +63602,18 @@ type patternFlowUdpLength struct {
 	obj *snappipb.PatternFlowUdpLength
 }
 
+func NewPatternFlowUdpLength() PatternFlowUdpLength {
+	obj := patternFlowUdpLength{obj: &snappipb.PatternFlowUdpLength{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowUdpLength) Msg() *snappipb.PatternFlowUdpLength {
 	return obj.obj
 }
 
 func (obj *patternFlowUdpLength) SetMsg(msg *snappipb.PatternFlowUdpLength) PatternFlowUdpLength {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -60191,8 +63745,10 @@ type PatternFlowUdpLength interface {
 	SetMetricGroup(value string) PatternFlowUdpLength
 	HasMetricGroup() bool
 	Increment() PatternFlowUdpLengthCounter
+	SetIncrement(value PatternFlowUdpLengthCounter) PatternFlowUdpLength
 	HasIncrement() bool
 	Decrement() PatternFlowUdpLengthCounter
+	SetDecrement(value PatternFlowUdpLengthCounter) PatternFlowUdpLength
 	HasDecrement() bool
 }
 
@@ -60298,10 +63854,7 @@ func (obj *patternFlowUdpLength) SetMetricGroup(value string) PatternFlowUdpLeng
 func (obj *patternFlowUdpLength) Increment() PatternFlowUdpLengthCounter {
 	obj.SetChoice(PatternFlowUdpLengthChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowUdpLengthCounter{}
-		newObj := &patternFlowUdpLengthCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowUdpLengthCounter().Msg()
 	}
 	return &patternFlowUdpLengthCounter{obj: obj.obj.Increment}
 }
@@ -60312,15 +63865,20 @@ func (obj *patternFlowUdpLength) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowUdpLengthCounter value in the PatternFlowUdpLength object
+//  description is TBD
+func (obj *patternFlowUdpLength) SetIncrement(value PatternFlowUdpLengthCounter) PatternFlowUdpLength {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowUdpLengthChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowUdpLengthCounter
 //  description is TBD
 func (obj *patternFlowUdpLength) Decrement() PatternFlowUdpLengthCounter {
 	obj.SetChoice(PatternFlowUdpLengthChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowUdpLengthCounter{}
-		newObj := &patternFlowUdpLengthCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowUdpLengthCounter().Msg()
 	}
 	return &patternFlowUdpLengthCounter{obj: obj.obj.Decrement}
 }
@@ -60329,6 +63887,14 @@ func (obj *patternFlowUdpLength) Decrement() PatternFlowUdpLengthCounter {
 //  description is TBD
 func (obj *patternFlowUdpLength) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowUdpLengthCounter value in the PatternFlowUdpLength object
+//  description is TBD
+func (obj *patternFlowUdpLength) SetDecrement(value PatternFlowUdpLengthCounter) PatternFlowUdpLength {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowUdpLengthChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowUdpLength) validateObj(set_default bool) {
@@ -60375,12 +63941,18 @@ type patternFlowUdpChecksum struct {
 	obj *snappipb.PatternFlowUdpChecksum
 }
 
+func NewPatternFlowUdpChecksum() PatternFlowUdpChecksum {
+	obj := patternFlowUdpChecksum{obj: &snappipb.PatternFlowUdpChecksum{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowUdpChecksum) Msg() *snappipb.PatternFlowUdpChecksum {
 	return obj.obj
 }
 
 func (obj *patternFlowUdpChecksum) SetMsg(msg *snappipb.PatternFlowUdpChecksum) PatternFlowUdpChecksum {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -60622,12 +64194,18 @@ type patternFlowGreChecksumPresent struct {
 	obj *snappipb.PatternFlowGreChecksumPresent
 }
 
+func NewPatternFlowGreChecksumPresent() PatternFlowGreChecksumPresent {
+	obj := patternFlowGreChecksumPresent{obj: &snappipb.PatternFlowGreChecksumPresent{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowGreChecksumPresent) Msg() *snappipb.PatternFlowGreChecksumPresent {
 	return obj.obj
 }
 
 func (obj *patternFlowGreChecksumPresent) SetMsg(msg *snappipb.PatternFlowGreChecksumPresent) PatternFlowGreChecksumPresent {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -60759,8 +64337,10 @@ type PatternFlowGreChecksumPresent interface {
 	SetMetricGroup(value string) PatternFlowGreChecksumPresent
 	HasMetricGroup() bool
 	Increment() PatternFlowGreChecksumPresentCounter
+	SetIncrement(value PatternFlowGreChecksumPresentCounter) PatternFlowGreChecksumPresent
 	HasIncrement() bool
 	Decrement() PatternFlowGreChecksumPresentCounter
+	SetDecrement(value PatternFlowGreChecksumPresentCounter) PatternFlowGreChecksumPresent
 	HasDecrement() bool
 }
 
@@ -60866,10 +64446,7 @@ func (obj *patternFlowGreChecksumPresent) SetMetricGroup(value string) PatternFl
 func (obj *patternFlowGreChecksumPresent) Increment() PatternFlowGreChecksumPresentCounter {
 	obj.SetChoice(PatternFlowGreChecksumPresentChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowGreChecksumPresentCounter{}
-		newObj := &patternFlowGreChecksumPresentCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowGreChecksumPresentCounter().Msg()
 	}
 	return &patternFlowGreChecksumPresentCounter{obj: obj.obj.Increment}
 }
@@ -60880,15 +64457,20 @@ func (obj *patternFlowGreChecksumPresent) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowGreChecksumPresentCounter value in the PatternFlowGreChecksumPresent object
+//  description is TBD
+func (obj *patternFlowGreChecksumPresent) SetIncrement(value PatternFlowGreChecksumPresentCounter) PatternFlowGreChecksumPresent {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowGreChecksumPresentChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowGreChecksumPresentCounter
 //  description is TBD
 func (obj *patternFlowGreChecksumPresent) Decrement() PatternFlowGreChecksumPresentCounter {
 	obj.SetChoice(PatternFlowGreChecksumPresentChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowGreChecksumPresentCounter{}
-		newObj := &patternFlowGreChecksumPresentCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowGreChecksumPresentCounter().Msg()
 	}
 	return &patternFlowGreChecksumPresentCounter{obj: obj.obj.Decrement}
 }
@@ -60897,6 +64479,14 @@ func (obj *patternFlowGreChecksumPresent) Decrement() PatternFlowGreChecksumPres
 //  description is TBD
 func (obj *patternFlowGreChecksumPresent) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowGreChecksumPresentCounter value in the PatternFlowGreChecksumPresent object
+//  description is TBD
+func (obj *patternFlowGreChecksumPresent) SetDecrement(value PatternFlowGreChecksumPresentCounter) PatternFlowGreChecksumPresent {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowGreChecksumPresentChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowGreChecksumPresent) validateObj(set_default bool) {
@@ -60943,12 +64533,18 @@ type patternFlowGreReserved0 struct {
 	obj *snappipb.PatternFlowGreReserved0
 }
 
+func NewPatternFlowGreReserved0() PatternFlowGreReserved0 {
+	obj := patternFlowGreReserved0{obj: &snappipb.PatternFlowGreReserved0{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowGreReserved0) Msg() *snappipb.PatternFlowGreReserved0 {
 	return obj.obj
 }
 
 func (obj *patternFlowGreReserved0) SetMsg(msg *snappipb.PatternFlowGreReserved0) PatternFlowGreReserved0 {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -61080,8 +64676,10 @@ type PatternFlowGreReserved0 interface {
 	SetMetricGroup(value string) PatternFlowGreReserved0
 	HasMetricGroup() bool
 	Increment() PatternFlowGreReserved0Counter
+	SetIncrement(value PatternFlowGreReserved0Counter) PatternFlowGreReserved0
 	HasIncrement() bool
 	Decrement() PatternFlowGreReserved0Counter
+	SetDecrement(value PatternFlowGreReserved0Counter) PatternFlowGreReserved0
 	HasDecrement() bool
 }
 
@@ -61187,10 +64785,7 @@ func (obj *patternFlowGreReserved0) SetMetricGroup(value string) PatternFlowGreR
 func (obj *patternFlowGreReserved0) Increment() PatternFlowGreReserved0Counter {
 	obj.SetChoice(PatternFlowGreReserved0Choice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowGreReserved0Counter{}
-		newObj := &patternFlowGreReserved0Counter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowGreReserved0Counter().Msg()
 	}
 	return &patternFlowGreReserved0Counter{obj: obj.obj.Increment}
 }
@@ -61201,15 +64796,20 @@ func (obj *patternFlowGreReserved0) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowGreReserved0Counter value in the PatternFlowGreReserved0 object
+//  description is TBD
+func (obj *patternFlowGreReserved0) SetIncrement(value PatternFlowGreReserved0Counter) PatternFlowGreReserved0 {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowGreReserved0Choice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowGreReserved0Counter
 //  description is TBD
 func (obj *patternFlowGreReserved0) Decrement() PatternFlowGreReserved0Counter {
 	obj.SetChoice(PatternFlowGreReserved0Choice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowGreReserved0Counter{}
-		newObj := &patternFlowGreReserved0Counter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowGreReserved0Counter().Msg()
 	}
 	return &patternFlowGreReserved0Counter{obj: obj.obj.Decrement}
 }
@@ -61218,6 +64818,14 @@ func (obj *patternFlowGreReserved0) Decrement() PatternFlowGreReserved0Counter {
 //  description is TBD
 func (obj *patternFlowGreReserved0) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowGreReserved0Counter value in the PatternFlowGreReserved0 object
+//  description is TBD
+func (obj *patternFlowGreReserved0) SetDecrement(value PatternFlowGreReserved0Counter) PatternFlowGreReserved0 {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowGreReserved0Choice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowGreReserved0) validateObj(set_default bool) {
@@ -61264,12 +64872,18 @@ type patternFlowGreVersion struct {
 	obj *snappipb.PatternFlowGreVersion
 }
 
+func NewPatternFlowGreVersion() PatternFlowGreVersion {
+	obj := patternFlowGreVersion{obj: &snappipb.PatternFlowGreVersion{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowGreVersion) Msg() *snappipb.PatternFlowGreVersion {
 	return obj.obj
 }
 
 func (obj *patternFlowGreVersion) SetMsg(msg *snappipb.PatternFlowGreVersion) PatternFlowGreVersion {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -61401,8 +65015,10 @@ type PatternFlowGreVersion interface {
 	SetMetricGroup(value string) PatternFlowGreVersion
 	HasMetricGroup() bool
 	Increment() PatternFlowGreVersionCounter
+	SetIncrement(value PatternFlowGreVersionCounter) PatternFlowGreVersion
 	HasIncrement() bool
 	Decrement() PatternFlowGreVersionCounter
+	SetDecrement(value PatternFlowGreVersionCounter) PatternFlowGreVersion
 	HasDecrement() bool
 }
 
@@ -61508,10 +65124,7 @@ func (obj *patternFlowGreVersion) SetMetricGroup(value string) PatternFlowGreVer
 func (obj *patternFlowGreVersion) Increment() PatternFlowGreVersionCounter {
 	obj.SetChoice(PatternFlowGreVersionChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowGreVersionCounter{}
-		newObj := &patternFlowGreVersionCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowGreVersionCounter().Msg()
 	}
 	return &patternFlowGreVersionCounter{obj: obj.obj.Increment}
 }
@@ -61522,15 +65135,20 @@ func (obj *patternFlowGreVersion) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowGreVersionCounter value in the PatternFlowGreVersion object
+//  description is TBD
+func (obj *patternFlowGreVersion) SetIncrement(value PatternFlowGreVersionCounter) PatternFlowGreVersion {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowGreVersionChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowGreVersionCounter
 //  description is TBD
 func (obj *patternFlowGreVersion) Decrement() PatternFlowGreVersionCounter {
 	obj.SetChoice(PatternFlowGreVersionChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowGreVersionCounter{}
-		newObj := &patternFlowGreVersionCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowGreVersionCounter().Msg()
 	}
 	return &patternFlowGreVersionCounter{obj: obj.obj.Decrement}
 }
@@ -61539,6 +65157,14 @@ func (obj *patternFlowGreVersion) Decrement() PatternFlowGreVersionCounter {
 //  description is TBD
 func (obj *patternFlowGreVersion) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowGreVersionCounter value in the PatternFlowGreVersion object
+//  description is TBD
+func (obj *patternFlowGreVersion) SetDecrement(value PatternFlowGreVersionCounter) PatternFlowGreVersion {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowGreVersionChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowGreVersion) validateObj(set_default bool) {
@@ -61585,12 +65211,18 @@ type patternFlowGreProtocol struct {
 	obj *snappipb.PatternFlowGreProtocol
 }
 
+func NewPatternFlowGreProtocol() PatternFlowGreProtocol {
+	obj := patternFlowGreProtocol{obj: &snappipb.PatternFlowGreProtocol{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowGreProtocol) Msg() *snappipb.PatternFlowGreProtocol {
 	return obj.obj
 }
 
 func (obj *patternFlowGreProtocol) SetMsg(msg *snappipb.PatternFlowGreProtocol) PatternFlowGreProtocol {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -61722,8 +65354,10 @@ type PatternFlowGreProtocol interface {
 	SetMetricGroup(value string) PatternFlowGreProtocol
 	HasMetricGroup() bool
 	Increment() PatternFlowGreProtocolCounter
+	SetIncrement(value PatternFlowGreProtocolCounter) PatternFlowGreProtocol
 	HasIncrement() bool
 	Decrement() PatternFlowGreProtocolCounter
+	SetDecrement(value PatternFlowGreProtocolCounter) PatternFlowGreProtocol
 	HasDecrement() bool
 }
 
@@ -61829,10 +65463,7 @@ func (obj *patternFlowGreProtocol) SetMetricGroup(value string) PatternFlowGrePr
 func (obj *patternFlowGreProtocol) Increment() PatternFlowGreProtocolCounter {
 	obj.SetChoice(PatternFlowGreProtocolChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowGreProtocolCounter{}
-		newObj := &patternFlowGreProtocolCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowGreProtocolCounter().Msg()
 	}
 	return &patternFlowGreProtocolCounter{obj: obj.obj.Increment}
 }
@@ -61843,15 +65474,20 @@ func (obj *patternFlowGreProtocol) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowGreProtocolCounter value in the PatternFlowGreProtocol object
+//  description is TBD
+func (obj *patternFlowGreProtocol) SetIncrement(value PatternFlowGreProtocolCounter) PatternFlowGreProtocol {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowGreProtocolChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowGreProtocolCounter
 //  description is TBD
 func (obj *patternFlowGreProtocol) Decrement() PatternFlowGreProtocolCounter {
 	obj.SetChoice(PatternFlowGreProtocolChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowGreProtocolCounter{}
-		newObj := &patternFlowGreProtocolCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowGreProtocolCounter().Msg()
 	}
 	return &patternFlowGreProtocolCounter{obj: obj.obj.Decrement}
 }
@@ -61860,6 +65496,14 @@ func (obj *patternFlowGreProtocol) Decrement() PatternFlowGreProtocolCounter {
 //  description is TBD
 func (obj *patternFlowGreProtocol) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowGreProtocolCounter value in the PatternFlowGreProtocol object
+//  description is TBD
+func (obj *patternFlowGreProtocol) SetDecrement(value PatternFlowGreProtocolCounter) PatternFlowGreProtocol {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowGreProtocolChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowGreProtocol) validateObj(set_default bool) {
@@ -61906,12 +65550,18 @@ type patternFlowGreChecksum struct {
 	obj *snappipb.PatternFlowGreChecksum
 }
 
+func NewPatternFlowGreChecksum() PatternFlowGreChecksum {
+	obj := patternFlowGreChecksum{obj: &snappipb.PatternFlowGreChecksum{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowGreChecksum) Msg() *snappipb.PatternFlowGreChecksum {
 	return obj.obj
 }
 
 func (obj *patternFlowGreChecksum) SetMsg(msg *snappipb.PatternFlowGreChecksum) PatternFlowGreChecksum {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -62153,12 +65803,18 @@ type patternFlowGreReserved1 struct {
 	obj *snappipb.PatternFlowGreReserved1
 }
 
+func NewPatternFlowGreReserved1() PatternFlowGreReserved1 {
+	obj := patternFlowGreReserved1{obj: &snappipb.PatternFlowGreReserved1{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowGreReserved1) Msg() *snappipb.PatternFlowGreReserved1 {
 	return obj.obj
 }
 
 func (obj *patternFlowGreReserved1) SetMsg(msg *snappipb.PatternFlowGreReserved1) PatternFlowGreReserved1 {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -62290,8 +65946,10 @@ type PatternFlowGreReserved1 interface {
 	SetMetricGroup(value string) PatternFlowGreReserved1
 	HasMetricGroup() bool
 	Increment() PatternFlowGreReserved1Counter
+	SetIncrement(value PatternFlowGreReserved1Counter) PatternFlowGreReserved1
 	HasIncrement() bool
 	Decrement() PatternFlowGreReserved1Counter
+	SetDecrement(value PatternFlowGreReserved1Counter) PatternFlowGreReserved1
 	HasDecrement() bool
 }
 
@@ -62397,10 +66055,7 @@ func (obj *patternFlowGreReserved1) SetMetricGroup(value string) PatternFlowGreR
 func (obj *patternFlowGreReserved1) Increment() PatternFlowGreReserved1Counter {
 	obj.SetChoice(PatternFlowGreReserved1Choice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowGreReserved1Counter{}
-		newObj := &patternFlowGreReserved1Counter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowGreReserved1Counter().Msg()
 	}
 	return &patternFlowGreReserved1Counter{obj: obj.obj.Increment}
 }
@@ -62411,15 +66066,20 @@ func (obj *patternFlowGreReserved1) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowGreReserved1Counter value in the PatternFlowGreReserved1 object
+//  description is TBD
+func (obj *patternFlowGreReserved1) SetIncrement(value PatternFlowGreReserved1Counter) PatternFlowGreReserved1 {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowGreReserved1Choice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowGreReserved1Counter
 //  description is TBD
 func (obj *patternFlowGreReserved1) Decrement() PatternFlowGreReserved1Counter {
 	obj.SetChoice(PatternFlowGreReserved1Choice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowGreReserved1Counter{}
-		newObj := &patternFlowGreReserved1Counter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowGreReserved1Counter().Msg()
 	}
 	return &patternFlowGreReserved1Counter{obj: obj.obj.Decrement}
 }
@@ -62428,6 +66088,14 @@ func (obj *patternFlowGreReserved1) Decrement() PatternFlowGreReserved1Counter {
 //  description is TBD
 func (obj *patternFlowGreReserved1) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowGreReserved1Counter value in the PatternFlowGreReserved1 object
+//  description is TBD
+func (obj *patternFlowGreReserved1) SetDecrement(value PatternFlowGreReserved1Counter) PatternFlowGreReserved1 {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowGreReserved1Choice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowGreReserved1) validateObj(set_default bool) {
@@ -62474,12 +66142,18 @@ type patternFlowGtpv1Version struct {
 	obj *snappipb.PatternFlowGtpv1Version
 }
 
+func NewPatternFlowGtpv1Version() PatternFlowGtpv1Version {
+	obj := patternFlowGtpv1Version{obj: &snappipb.PatternFlowGtpv1Version{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowGtpv1Version) Msg() *snappipb.PatternFlowGtpv1Version {
 	return obj.obj
 }
 
 func (obj *patternFlowGtpv1Version) SetMsg(msg *snappipb.PatternFlowGtpv1Version) PatternFlowGtpv1Version {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -62611,8 +66285,10 @@ type PatternFlowGtpv1Version interface {
 	SetMetricGroup(value string) PatternFlowGtpv1Version
 	HasMetricGroup() bool
 	Increment() PatternFlowGtpv1VersionCounter
+	SetIncrement(value PatternFlowGtpv1VersionCounter) PatternFlowGtpv1Version
 	HasIncrement() bool
 	Decrement() PatternFlowGtpv1VersionCounter
+	SetDecrement(value PatternFlowGtpv1VersionCounter) PatternFlowGtpv1Version
 	HasDecrement() bool
 }
 
@@ -62718,10 +66394,7 @@ func (obj *patternFlowGtpv1Version) SetMetricGroup(value string) PatternFlowGtpv
 func (obj *patternFlowGtpv1Version) Increment() PatternFlowGtpv1VersionCounter {
 	obj.SetChoice(PatternFlowGtpv1VersionChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowGtpv1VersionCounter{}
-		newObj := &patternFlowGtpv1VersionCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowGtpv1VersionCounter().Msg()
 	}
 	return &patternFlowGtpv1VersionCounter{obj: obj.obj.Increment}
 }
@@ -62732,15 +66405,20 @@ func (obj *patternFlowGtpv1Version) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowGtpv1VersionCounter value in the PatternFlowGtpv1Version object
+//  description is TBD
+func (obj *patternFlowGtpv1Version) SetIncrement(value PatternFlowGtpv1VersionCounter) PatternFlowGtpv1Version {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowGtpv1VersionChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowGtpv1VersionCounter
 //  description is TBD
 func (obj *patternFlowGtpv1Version) Decrement() PatternFlowGtpv1VersionCounter {
 	obj.SetChoice(PatternFlowGtpv1VersionChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowGtpv1VersionCounter{}
-		newObj := &patternFlowGtpv1VersionCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowGtpv1VersionCounter().Msg()
 	}
 	return &patternFlowGtpv1VersionCounter{obj: obj.obj.Decrement}
 }
@@ -62749,6 +66427,14 @@ func (obj *patternFlowGtpv1Version) Decrement() PatternFlowGtpv1VersionCounter {
 //  description is TBD
 func (obj *patternFlowGtpv1Version) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowGtpv1VersionCounter value in the PatternFlowGtpv1Version object
+//  description is TBD
+func (obj *patternFlowGtpv1Version) SetDecrement(value PatternFlowGtpv1VersionCounter) PatternFlowGtpv1Version {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowGtpv1VersionChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowGtpv1Version) validateObj(set_default bool) {
@@ -62795,12 +66481,18 @@ type patternFlowGtpv1ProtocolType struct {
 	obj *snappipb.PatternFlowGtpv1ProtocolType
 }
 
+func NewPatternFlowGtpv1ProtocolType() PatternFlowGtpv1ProtocolType {
+	obj := patternFlowGtpv1ProtocolType{obj: &snappipb.PatternFlowGtpv1ProtocolType{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowGtpv1ProtocolType) Msg() *snappipb.PatternFlowGtpv1ProtocolType {
 	return obj.obj
 }
 
 func (obj *patternFlowGtpv1ProtocolType) SetMsg(msg *snappipb.PatternFlowGtpv1ProtocolType) PatternFlowGtpv1ProtocolType {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -62932,8 +66624,10 @@ type PatternFlowGtpv1ProtocolType interface {
 	SetMetricGroup(value string) PatternFlowGtpv1ProtocolType
 	HasMetricGroup() bool
 	Increment() PatternFlowGtpv1ProtocolTypeCounter
+	SetIncrement(value PatternFlowGtpv1ProtocolTypeCounter) PatternFlowGtpv1ProtocolType
 	HasIncrement() bool
 	Decrement() PatternFlowGtpv1ProtocolTypeCounter
+	SetDecrement(value PatternFlowGtpv1ProtocolTypeCounter) PatternFlowGtpv1ProtocolType
 	HasDecrement() bool
 }
 
@@ -63039,10 +66733,7 @@ func (obj *patternFlowGtpv1ProtocolType) SetMetricGroup(value string) PatternFlo
 func (obj *patternFlowGtpv1ProtocolType) Increment() PatternFlowGtpv1ProtocolTypeCounter {
 	obj.SetChoice(PatternFlowGtpv1ProtocolTypeChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowGtpv1ProtocolTypeCounter{}
-		newObj := &patternFlowGtpv1ProtocolTypeCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowGtpv1ProtocolTypeCounter().Msg()
 	}
 	return &patternFlowGtpv1ProtocolTypeCounter{obj: obj.obj.Increment}
 }
@@ -63053,15 +66744,20 @@ func (obj *patternFlowGtpv1ProtocolType) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowGtpv1ProtocolTypeCounter value in the PatternFlowGtpv1ProtocolType object
+//  description is TBD
+func (obj *patternFlowGtpv1ProtocolType) SetIncrement(value PatternFlowGtpv1ProtocolTypeCounter) PatternFlowGtpv1ProtocolType {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowGtpv1ProtocolTypeChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowGtpv1ProtocolTypeCounter
 //  description is TBD
 func (obj *patternFlowGtpv1ProtocolType) Decrement() PatternFlowGtpv1ProtocolTypeCounter {
 	obj.SetChoice(PatternFlowGtpv1ProtocolTypeChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowGtpv1ProtocolTypeCounter{}
-		newObj := &patternFlowGtpv1ProtocolTypeCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowGtpv1ProtocolTypeCounter().Msg()
 	}
 	return &patternFlowGtpv1ProtocolTypeCounter{obj: obj.obj.Decrement}
 }
@@ -63070,6 +66766,14 @@ func (obj *patternFlowGtpv1ProtocolType) Decrement() PatternFlowGtpv1ProtocolTyp
 //  description is TBD
 func (obj *patternFlowGtpv1ProtocolType) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowGtpv1ProtocolTypeCounter value in the PatternFlowGtpv1ProtocolType object
+//  description is TBD
+func (obj *patternFlowGtpv1ProtocolType) SetDecrement(value PatternFlowGtpv1ProtocolTypeCounter) PatternFlowGtpv1ProtocolType {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowGtpv1ProtocolTypeChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowGtpv1ProtocolType) validateObj(set_default bool) {
@@ -63116,12 +66820,18 @@ type patternFlowGtpv1Reserved struct {
 	obj *snappipb.PatternFlowGtpv1Reserved
 }
 
+func NewPatternFlowGtpv1Reserved() PatternFlowGtpv1Reserved {
+	obj := patternFlowGtpv1Reserved{obj: &snappipb.PatternFlowGtpv1Reserved{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowGtpv1Reserved) Msg() *snappipb.PatternFlowGtpv1Reserved {
 	return obj.obj
 }
 
 func (obj *patternFlowGtpv1Reserved) SetMsg(msg *snappipb.PatternFlowGtpv1Reserved) PatternFlowGtpv1Reserved {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -63253,8 +66963,10 @@ type PatternFlowGtpv1Reserved interface {
 	SetMetricGroup(value string) PatternFlowGtpv1Reserved
 	HasMetricGroup() bool
 	Increment() PatternFlowGtpv1ReservedCounter
+	SetIncrement(value PatternFlowGtpv1ReservedCounter) PatternFlowGtpv1Reserved
 	HasIncrement() bool
 	Decrement() PatternFlowGtpv1ReservedCounter
+	SetDecrement(value PatternFlowGtpv1ReservedCounter) PatternFlowGtpv1Reserved
 	HasDecrement() bool
 }
 
@@ -63360,10 +67072,7 @@ func (obj *patternFlowGtpv1Reserved) SetMetricGroup(value string) PatternFlowGtp
 func (obj *patternFlowGtpv1Reserved) Increment() PatternFlowGtpv1ReservedCounter {
 	obj.SetChoice(PatternFlowGtpv1ReservedChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowGtpv1ReservedCounter{}
-		newObj := &patternFlowGtpv1ReservedCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowGtpv1ReservedCounter().Msg()
 	}
 	return &patternFlowGtpv1ReservedCounter{obj: obj.obj.Increment}
 }
@@ -63374,15 +67083,20 @@ func (obj *patternFlowGtpv1Reserved) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowGtpv1ReservedCounter value in the PatternFlowGtpv1Reserved object
+//  description is TBD
+func (obj *patternFlowGtpv1Reserved) SetIncrement(value PatternFlowGtpv1ReservedCounter) PatternFlowGtpv1Reserved {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowGtpv1ReservedChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowGtpv1ReservedCounter
 //  description is TBD
 func (obj *patternFlowGtpv1Reserved) Decrement() PatternFlowGtpv1ReservedCounter {
 	obj.SetChoice(PatternFlowGtpv1ReservedChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowGtpv1ReservedCounter{}
-		newObj := &patternFlowGtpv1ReservedCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowGtpv1ReservedCounter().Msg()
 	}
 	return &patternFlowGtpv1ReservedCounter{obj: obj.obj.Decrement}
 }
@@ -63391,6 +67105,14 @@ func (obj *patternFlowGtpv1Reserved) Decrement() PatternFlowGtpv1ReservedCounter
 //  description is TBD
 func (obj *patternFlowGtpv1Reserved) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowGtpv1ReservedCounter value in the PatternFlowGtpv1Reserved object
+//  description is TBD
+func (obj *patternFlowGtpv1Reserved) SetDecrement(value PatternFlowGtpv1ReservedCounter) PatternFlowGtpv1Reserved {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowGtpv1ReservedChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowGtpv1Reserved) validateObj(set_default bool) {
@@ -63437,12 +67159,18 @@ type patternFlowGtpv1EFlag struct {
 	obj *snappipb.PatternFlowGtpv1EFlag
 }
 
+func NewPatternFlowGtpv1EFlag() PatternFlowGtpv1EFlag {
+	obj := patternFlowGtpv1EFlag{obj: &snappipb.PatternFlowGtpv1EFlag{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowGtpv1EFlag) Msg() *snappipb.PatternFlowGtpv1EFlag {
 	return obj.obj
 }
 
 func (obj *patternFlowGtpv1EFlag) SetMsg(msg *snappipb.PatternFlowGtpv1EFlag) PatternFlowGtpv1EFlag {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -63574,8 +67302,10 @@ type PatternFlowGtpv1EFlag interface {
 	SetMetricGroup(value string) PatternFlowGtpv1EFlag
 	HasMetricGroup() bool
 	Increment() PatternFlowGtpv1EFlagCounter
+	SetIncrement(value PatternFlowGtpv1EFlagCounter) PatternFlowGtpv1EFlag
 	HasIncrement() bool
 	Decrement() PatternFlowGtpv1EFlagCounter
+	SetDecrement(value PatternFlowGtpv1EFlagCounter) PatternFlowGtpv1EFlag
 	HasDecrement() bool
 }
 
@@ -63681,10 +67411,7 @@ func (obj *patternFlowGtpv1EFlag) SetMetricGroup(value string) PatternFlowGtpv1E
 func (obj *patternFlowGtpv1EFlag) Increment() PatternFlowGtpv1EFlagCounter {
 	obj.SetChoice(PatternFlowGtpv1EFlagChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowGtpv1EFlagCounter{}
-		newObj := &patternFlowGtpv1EFlagCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowGtpv1EFlagCounter().Msg()
 	}
 	return &patternFlowGtpv1EFlagCounter{obj: obj.obj.Increment}
 }
@@ -63695,15 +67422,20 @@ func (obj *patternFlowGtpv1EFlag) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowGtpv1EFlagCounter value in the PatternFlowGtpv1EFlag object
+//  description is TBD
+func (obj *patternFlowGtpv1EFlag) SetIncrement(value PatternFlowGtpv1EFlagCounter) PatternFlowGtpv1EFlag {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowGtpv1EFlagChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowGtpv1EFlagCounter
 //  description is TBD
 func (obj *patternFlowGtpv1EFlag) Decrement() PatternFlowGtpv1EFlagCounter {
 	obj.SetChoice(PatternFlowGtpv1EFlagChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowGtpv1EFlagCounter{}
-		newObj := &patternFlowGtpv1EFlagCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowGtpv1EFlagCounter().Msg()
 	}
 	return &patternFlowGtpv1EFlagCounter{obj: obj.obj.Decrement}
 }
@@ -63712,6 +67444,14 @@ func (obj *patternFlowGtpv1EFlag) Decrement() PatternFlowGtpv1EFlagCounter {
 //  description is TBD
 func (obj *patternFlowGtpv1EFlag) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowGtpv1EFlagCounter value in the PatternFlowGtpv1EFlag object
+//  description is TBD
+func (obj *patternFlowGtpv1EFlag) SetDecrement(value PatternFlowGtpv1EFlagCounter) PatternFlowGtpv1EFlag {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowGtpv1EFlagChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowGtpv1EFlag) validateObj(set_default bool) {
@@ -63758,12 +67498,18 @@ type patternFlowGtpv1SFlag struct {
 	obj *snappipb.PatternFlowGtpv1SFlag
 }
 
+func NewPatternFlowGtpv1SFlag() PatternFlowGtpv1SFlag {
+	obj := patternFlowGtpv1SFlag{obj: &snappipb.PatternFlowGtpv1SFlag{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowGtpv1SFlag) Msg() *snappipb.PatternFlowGtpv1SFlag {
 	return obj.obj
 }
 
 func (obj *patternFlowGtpv1SFlag) SetMsg(msg *snappipb.PatternFlowGtpv1SFlag) PatternFlowGtpv1SFlag {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -63895,8 +67641,10 @@ type PatternFlowGtpv1SFlag interface {
 	SetMetricGroup(value string) PatternFlowGtpv1SFlag
 	HasMetricGroup() bool
 	Increment() PatternFlowGtpv1SFlagCounter
+	SetIncrement(value PatternFlowGtpv1SFlagCounter) PatternFlowGtpv1SFlag
 	HasIncrement() bool
 	Decrement() PatternFlowGtpv1SFlagCounter
+	SetDecrement(value PatternFlowGtpv1SFlagCounter) PatternFlowGtpv1SFlag
 	HasDecrement() bool
 }
 
@@ -64002,10 +67750,7 @@ func (obj *patternFlowGtpv1SFlag) SetMetricGroup(value string) PatternFlowGtpv1S
 func (obj *patternFlowGtpv1SFlag) Increment() PatternFlowGtpv1SFlagCounter {
 	obj.SetChoice(PatternFlowGtpv1SFlagChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowGtpv1SFlagCounter{}
-		newObj := &patternFlowGtpv1SFlagCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowGtpv1SFlagCounter().Msg()
 	}
 	return &patternFlowGtpv1SFlagCounter{obj: obj.obj.Increment}
 }
@@ -64016,15 +67761,20 @@ func (obj *patternFlowGtpv1SFlag) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowGtpv1SFlagCounter value in the PatternFlowGtpv1SFlag object
+//  description is TBD
+func (obj *patternFlowGtpv1SFlag) SetIncrement(value PatternFlowGtpv1SFlagCounter) PatternFlowGtpv1SFlag {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowGtpv1SFlagChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowGtpv1SFlagCounter
 //  description is TBD
 func (obj *patternFlowGtpv1SFlag) Decrement() PatternFlowGtpv1SFlagCounter {
 	obj.SetChoice(PatternFlowGtpv1SFlagChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowGtpv1SFlagCounter{}
-		newObj := &patternFlowGtpv1SFlagCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowGtpv1SFlagCounter().Msg()
 	}
 	return &patternFlowGtpv1SFlagCounter{obj: obj.obj.Decrement}
 }
@@ -64033,6 +67783,14 @@ func (obj *patternFlowGtpv1SFlag) Decrement() PatternFlowGtpv1SFlagCounter {
 //  description is TBD
 func (obj *patternFlowGtpv1SFlag) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowGtpv1SFlagCounter value in the PatternFlowGtpv1SFlag object
+//  description is TBD
+func (obj *patternFlowGtpv1SFlag) SetDecrement(value PatternFlowGtpv1SFlagCounter) PatternFlowGtpv1SFlag {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowGtpv1SFlagChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowGtpv1SFlag) validateObj(set_default bool) {
@@ -64079,12 +67837,18 @@ type patternFlowGtpv1PnFlag struct {
 	obj *snappipb.PatternFlowGtpv1PnFlag
 }
 
+func NewPatternFlowGtpv1PnFlag() PatternFlowGtpv1PnFlag {
+	obj := patternFlowGtpv1PnFlag{obj: &snappipb.PatternFlowGtpv1PnFlag{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowGtpv1PnFlag) Msg() *snappipb.PatternFlowGtpv1PnFlag {
 	return obj.obj
 }
 
 func (obj *patternFlowGtpv1PnFlag) SetMsg(msg *snappipb.PatternFlowGtpv1PnFlag) PatternFlowGtpv1PnFlag {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -64216,8 +67980,10 @@ type PatternFlowGtpv1PnFlag interface {
 	SetMetricGroup(value string) PatternFlowGtpv1PnFlag
 	HasMetricGroup() bool
 	Increment() PatternFlowGtpv1PnFlagCounter
+	SetIncrement(value PatternFlowGtpv1PnFlagCounter) PatternFlowGtpv1PnFlag
 	HasIncrement() bool
 	Decrement() PatternFlowGtpv1PnFlagCounter
+	SetDecrement(value PatternFlowGtpv1PnFlagCounter) PatternFlowGtpv1PnFlag
 	HasDecrement() bool
 }
 
@@ -64323,10 +68089,7 @@ func (obj *patternFlowGtpv1PnFlag) SetMetricGroup(value string) PatternFlowGtpv1
 func (obj *patternFlowGtpv1PnFlag) Increment() PatternFlowGtpv1PnFlagCounter {
 	obj.SetChoice(PatternFlowGtpv1PnFlagChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowGtpv1PnFlagCounter{}
-		newObj := &patternFlowGtpv1PnFlagCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowGtpv1PnFlagCounter().Msg()
 	}
 	return &patternFlowGtpv1PnFlagCounter{obj: obj.obj.Increment}
 }
@@ -64337,15 +68100,20 @@ func (obj *patternFlowGtpv1PnFlag) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowGtpv1PnFlagCounter value in the PatternFlowGtpv1PnFlag object
+//  description is TBD
+func (obj *patternFlowGtpv1PnFlag) SetIncrement(value PatternFlowGtpv1PnFlagCounter) PatternFlowGtpv1PnFlag {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowGtpv1PnFlagChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowGtpv1PnFlagCounter
 //  description is TBD
 func (obj *patternFlowGtpv1PnFlag) Decrement() PatternFlowGtpv1PnFlagCounter {
 	obj.SetChoice(PatternFlowGtpv1PnFlagChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowGtpv1PnFlagCounter{}
-		newObj := &patternFlowGtpv1PnFlagCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowGtpv1PnFlagCounter().Msg()
 	}
 	return &patternFlowGtpv1PnFlagCounter{obj: obj.obj.Decrement}
 }
@@ -64354,6 +68122,14 @@ func (obj *patternFlowGtpv1PnFlag) Decrement() PatternFlowGtpv1PnFlagCounter {
 //  description is TBD
 func (obj *patternFlowGtpv1PnFlag) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowGtpv1PnFlagCounter value in the PatternFlowGtpv1PnFlag object
+//  description is TBD
+func (obj *patternFlowGtpv1PnFlag) SetDecrement(value PatternFlowGtpv1PnFlagCounter) PatternFlowGtpv1PnFlag {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowGtpv1PnFlagChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowGtpv1PnFlag) validateObj(set_default bool) {
@@ -64400,12 +68176,18 @@ type patternFlowGtpv1MessageType struct {
 	obj *snappipb.PatternFlowGtpv1MessageType
 }
 
+func NewPatternFlowGtpv1MessageType() PatternFlowGtpv1MessageType {
+	obj := patternFlowGtpv1MessageType{obj: &snappipb.PatternFlowGtpv1MessageType{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowGtpv1MessageType) Msg() *snappipb.PatternFlowGtpv1MessageType {
 	return obj.obj
 }
 
 func (obj *patternFlowGtpv1MessageType) SetMsg(msg *snappipb.PatternFlowGtpv1MessageType) PatternFlowGtpv1MessageType {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -64537,8 +68319,10 @@ type PatternFlowGtpv1MessageType interface {
 	SetMetricGroup(value string) PatternFlowGtpv1MessageType
 	HasMetricGroup() bool
 	Increment() PatternFlowGtpv1MessageTypeCounter
+	SetIncrement(value PatternFlowGtpv1MessageTypeCounter) PatternFlowGtpv1MessageType
 	HasIncrement() bool
 	Decrement() PatternFlowGtpv1MessageTypeCounter
+	SetDecrement(value PatternFlowGtpv1MessageTypeCounter) PatternFlowGtpv1MessageType
 	HasDecrement() bool
 }
 
@@ -64644,10 +68428,7 @@ func (obj *patternFlowGtpv1MessageType) SetMetricGroup(value string) PatternFlow
 func (obj *patternFlowGtpv1MessageType) Increment() PatternFlowGtpv1MessageTypeCounter {
 	obj.SetChoice(PatternFlowGtpv1MessageTypeChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowGtpv1MessageTypeCounter{}
-		newObj := &patternFlowGtpv1MessageTypeCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowGtpv1MessageTypeCounter().Msg()
 	}
 	return &patternFlowGtpv1MessageTypeCounter{obj: obj.obj.Increment}
 }
@@ -64658,15 +68439,20 @@ func (obj *patternFlowGtpv1MessageType) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowGtpv1MessageTypeCounter value in the PatternFlowGtpv1MessageType object
+//  description is TBD
+func (obj *patternFlowGtpv1MessageType) SetIncrement(value PatternFlowGtpv1MessageTypeCounter) PatternFlowGtpv1MessageType {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowGtpv1MessageTypeChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowGtpv1MessageTypeCounter
 //  description is TBD
 func (obj *patternFlowGtpv1MessageType) Decrement() PatternFlowGtpv1MessageTypeCounter {
 	obj.SetChoice(PatternFlowGtpv1MessageTypeChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowGtpv1MessageTypeCounter{}
-		newObj := &patternFlowGtpv1MessageTypeCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowGtpv1MessageTypeCounter().Msg()
 	}
 	return &patternFlowGtpv1MessageTypeCounter{obj: obj.obj.Decrement}
 }
@@ -64675,6 +68461,14 @@ func (obj *patternFlowGtpv1MessageType) Decrement() PatternFlowGtpv1MessageTypeC
 //  description is TBD
 func (obj *patternFlowGtpv1MessageType) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowGtpv1MessageTypeCounter value in the PatternFlowGtpv1MessageType object
+//  description is TBD
+func (obj *patternFlowGtpv1MessageType) SetDecrement(value PatternFlowGtpv1MessageTypeCounter) PatternFlowGtpv1MessageType {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowGtpv1MessageTypeChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowGtpv1MessageType) validateObj(set_default bool) {
@@ -64721,12 +68515,18 @@ type patternFlowGtpv1MessageLength struct {
 	obj *snappipb.PatternFlowGtpv1MessageLength
 }
 
+func NewPatternFlowGtpv1MessageLength() PatternFlowGtpv1MessageLength {
+	obj := patternFlowGtpv1MessageLength{obj: &snappipb.PatternFlowGtpv1MessageLength{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowGtpv1MessageLength) Msg() *snappipb.PatternFlowGtpv1MessageLength {
 	return obj.obj
 }
 
 func (obj *patternFlowGtpv1MessageLength) SetMsg(msg *snappipb.PatternFlowGtpv1MessageLength) PatternFlowGtpv1MessageLength {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -64858,8 +68658,10 @@ type PatternFlowGtpv1MessageLength interface {
 	SetMetricGroup(value string) PatternFlowGtpv1MessageLength
 	HasMetricGroup() bool
 	Increment() PatternFlowGtpv1MessageLengthCounter
+	SetIncrement(value PatternFlowGtpv1MessageLengthCounter) PatternFlowGtpv1MessageLength
 	HasIncrement() bool
 	Decrement() PatternFlowGtpv1MessageLengthCounter
+	SetDecrement(value PatternFlowGtpv1MessageLengthCounter) PatternFlowGtpv1MessageLength
 	HasDecrement() bool
 }
 
@@ -64965,10 +68767,7 @@ func (obj *patternFlowGtpv1MessageLength) SetMetricGroup(value string) PatternFl
 func (obj *patternFlowGtpv1MessageLength) Increment() PatternFlowGtpv1MessageLengthCounter {
 	obj.SetChoice(PatternFlowGtpv1MessageLengthChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowGtpv1MessageLengthCounter{}
-		newObj := &patternFlowGtpv1MessageLengthCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowGtpv1MessageLengthCounter().Msg()
 	}
 	return &patternFlowGtpv1MessageLengthCounter{obj: obj.obj.Increment}
 }
@@ -64979,15 +68778,20 @@ func (obj *patternFlowGtpv1MessageLength) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowGtpv1MessageLengthCounter value in the PatternFlowGtpv1MessageLength object
+//  description is TBD
+func (obj *patternFlowGtpv1MessageLength) SetIncrement(value PatternFlowGtpv1MessageLengthCounter) PatternFlowGtpv1MessageLength {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowGtpv1MessageLengthChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowGtpv1MessageLengthCounter
 //  description is TBD
 func (obj *patternFlowGtpv1MessageLength) Decrement() PatternFlowGtpv1MessageLengthCounter {
 	obj.SetChoice(PatternFlowGtpv1MessageLengthChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowGtpv1MessageLengthCounter{}
-		newObj := &patternFlowGtpv1MessageLengthCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowGtpv1MessageLengthCounter().Msg()
 	}
 	return &patternFlowGtpv1MessageLengthCounter{obj: obj.obj.Decrement}
 }
@@ -64996,6 +68800,14 @@ func (obj *patternFlowGtpv1MessageLength) Decrement() PatternFlowGtpv1MessageLen
 //  description is TBD
 func (obj *patternFlowGtpv1MessageLength) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowGtpv1MessageLengthCounter value in the PatternFlowGtpv1MessageLength object
+//  description is TBD
+func (obj *patternFlowGtpv1MessageLength) SetDecrement(value PatternFlowGtpv1MessageLengthCounter) PatternFlowGtpv1MessageLength {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowGtpv1MessageLengthChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowGtpv1MessageLength) validateObj(set_default bool) {
@@ -65042,12 +68854,18 @@ type patternFlowGtpv1Teid struct {
 	obj *snappipb.PatternFlowGtpv1Teid
 }
 
+func NewPatternFlowGtpv1Teid() PatternFlowGtpv1Teid {
+	obj := patternFlowGtpv1Teid{obj: &snappipb.PatternFlowGtpv1Teid{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowGtpv1Teid) Msg() *snappipb.PatternFlowGtpv1Teid {
 	return obj.obj
 }
 
 func (obj *patternFlowGtpv1Teid) SetMsg(msg *snappipb.PatternFlowGtpv1Teid) PatternFlowGtpv1Teid {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -65179,8 +68997,10 @@ type PatternFlowGtpv1Teid interface {
 	SetMetricGroup(value string) PatternFlowGtpv1Teid
 	HasMetricGroup() bool
 	Increment() PatternFlowGtpv1TeidCounter
+	SetIncrement(value PatternFlowGtpv1TeidCounter) PatternFlowGtpv1Teid
 	HasIncrement() bool
 	Decrement() PatternFlowGtpv1TeidCounter
+	SetDecrement(value PatternFlowGtpv1TeidCounter) PatternFlowGtpv1Teid
 	HasDecrement() bool
 }
 
@@ -65286,10 +69106,7 @@ func (obj *patternFlowGtpv1Teid) SetMetricGroup(value string) PatternFlowGtpv1Te
 func (obj *patternFlowGtpv1Teid) Increment() PatternFlowGtpv1TeidCounter {
 	obj.SetChoice(PatternFlowGtpv1TeidChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowGtpv1TeidCounter{}
-		newObj := &patternFlowGtpv1TeidCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowGtpv1TeidCounter().Msg()
 	}
 	return &patternFlowGtpv1TeidCounter{obj: obj.obj.Increment}
 }
@@ -65300,15 +69117,20 @@ func (obj *patternFlowGtpv1Teid) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowGtpv1TeidCounter value in the PatternFlowGtpv1Teid object
+//  description is TBD
+func (obj *patternFlowGtpv1Teid) SetIncrement(value PatternFlowGtpv1TeidCounter) PatternFlowGtpv1Teid {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowGtpv1TeidChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowGtpv1TeidCounter
 //  description is TBD
 func (obj *patternFlowGtpv1Teid) Decrement() PatternFlowGtpv1TeidCounter {
 	obj.SetChoice(PatternFlowGtpv1TeidChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowGtpv1TeidCounter{}
-		newObj := &patternFlowGtpv1TeidCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowGtpv1TeidCounter().Msg()
 	}
 	return &patternFlowGtpv1TeidCounter{obj: obj.obj.Decrement}
 }
@@ -65317,6 +69139,14 @@ func (obj *patternFlowGtpv1Teid) Decrement() PatternFlowGtpv1TeidCounter {
 //  description is TBD
 func (obj *patternFlowGtpv1Teid) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowGtpv1TeidCounter value in the PatternFlowGtpv1Teid object
+//  description is TBD
+func (obj *patternFlowGtpv1Teid) SetDecrement(value PatternFlowGtpv1TeidCounter) PatternFlowGtpv1Teid {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowGtpv1TeidChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowGtpv1Teid) validateObj(set_default bool) {
@@ -65363,12 +69193,18 @@ type patternFlowGtpv1SquenceNumber struct {
 	obj *snappipb.PatternFlowGtpv1SquenceNumber
 }
 
+func NewPatternFlowGtpv1SquenceNumber() PatternFlowGtpv1SquenceNumber {
+	obj := patternFlowGtpv1SquenceNumber{obj: &snappipb.PatternFlowGtpv1SquenceNumber{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowGtpv1SquenceNumber) Msg() *snappipb.PatternFlowGtpv1SquenceNumber {
 	return obj.obj
 }
 
 func (obj *patternFlowGtpv1SquenceNumber) SetMsg(msg *snappipb.PatternFlowGtpv1SquenceNumber) PatternFlowGtpv1SquenceNumber {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -65500,8 +69336,10 @@ type PatternFlowGtpv1SquenceNumber interface {
 	SetMetricGroup(value string) PatternFlowGtpv1SquenceNumber
 	HasMetricGroup() bool
 	Increment() PatternFlowGtpv1SquenceNumberCounter
+	SetIncrement(value PatternFlowGtpv1SquenceNumberCounter) PatternFlowGtpv1SquenceNumber
 	HasIncrement() bool
 	Decrement() PatternFlowGtpv1SquenceNumberCounter
+	SetDecrement(value PatternFlowGtpv1SquenceNumberCounter) PatternFlowGtpv1SquenceNumber
 	HasDecrement() bool
 }
 
@@ -65607,10 +69445,7 @@ func (obj *patternFlowGtpv1SquenceNumber) SetMetricGroup(value string) PatternFl
 func (obj *patternFlowGtpv1SquenceNumber) Increment() PatternFlowGtpv1SquenceNumberCounter {
 	obj.SetChoice(PatternFlowGtpv1SquenceNumberChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowGtpv1SquenceNumberCounter{}
-		newObj := &patternFlowGtpv1SquenceNumberCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowGtpv1SquenceNumberCounter().Msg()
 	}
 	return &patternFlowGtpv1SquenceNumberCounter{obj: obj.obj.Increment}
 }
@@ -65621,15 +69456,20 @@ func (obj *patternFlowGtpv1SquenceNumber) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowGtpv1SquenceNumberCounter value in the PatternFlowGtpv1SquenceNumber object
+//  description is TBD
+func (obj *patternFlowGtpv1SquenceNumber) SetIncrement(value PatternFlowGtpv1SquenceNumberCounter) PatternFlowGtpv1SquenceNumber {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowGtpv1SquenceNumberChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowGtpv1SquenceNumberCounter
 //  description is TBD
 func (obj *patternFlowGtpv1SquenceNumber) Decrement() PatternFlowGtpv1SquenceNumberCounter {
 	obj.SetChoice(PatternFlowGtpv1SquenceNumberChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowGtpv1SquenceNumberCounter{}
-		newObj := &patternFlowGtpv1SquenceNumberCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowGtpv1SquenceNumberCounter().Msg()
 	}
 	return &patternFlowGtpv1SquenceNumberCounter{obj: obj.obj.Decrement}
 }
@@ -65638,6 +69478,14 @@ func (obj *patternFlowGtpv1SquenceNumber) Decrement() PatternFlowGtpv1SquenceNum
 //  description is TBD
 func (obj *patternFlowGtpv1SquenceNumber) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowGtpv1SquenceNumberCounter value in the PatternFlowGtpv1SquenceNumber object
+//  description is TBD
+func (obj *patternFlowGtpv1SquenceNumber) SetDecrement(value PatternFlowGtpv1SquenceNumberCounter) PatternFlowGtpv1SquenceNumber {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowGtpv1SquenceNumberChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowGtpv1SquenceNumber) validateObj(set_default bool) {
@@ -65684,12 +69532,18 @@ type patternFlowGtpv1NPduNumber struct {
 	obj *snappipb.PatternFlowGtpv1NPduNumber
 }
 
+func NewPatternFlowGtpv1NPduNumber() PatternFlowGtpv1NPduNumber {
+	obj := patternFlowGtpv1NPduNumber{obj: &snappipb.PatternFlowGtpv1NPduNumber{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowGtpv1NPduNumber) Msg() *snappipb.PatternFlowGtpv1NPduNumber {
 	return obj.obj
 }
 
 func (obj *patternFlowGtpv1NPduNumber) SetMsg(msg *snappipb.PatternFlowGtpv1NPduNumber) PatternFlowGtpv1NPduNumber {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -65821,8 +69675,10 @@ type PatternFlowGtpv1NPduNumber interface {
 	SetMetricGroup(value string) PatternFlowGtpv1NPduNumber
 	HasMetricGroup() bool
 	Increment() PatternFlowGtpv1NPduNumberCounter
+	SetIncrement(value PatternFlowGtpv1NPduNumberCounter) PatternFlowGtpv1NPduNumber
 	HasIncrement() bool
 	Decrement() PatternFlowGtpv1NPduNumberCounter
+	SetDecrement(value PatternFlowGtpv1NPduNumberCounter) PatternFlowGtpv1NPduNumber
 	HasDecrement() bool
 }
 
@@ -65928,10 +69784,7 @@ func (obj *patternFlowGtpv1NPduNumber) SetMetricGroup(value string) PatternFlowG
 func (obj *patternFlowGtpv1NPduNumber) Increment() PatternFlowGtpv1NPduNumberCounter {
 	obj.SetChoice(PatternFlowGtpv1NPduNumberChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowGtpv1NPduNumberCounter{}
-		newObj := &patternFlowGtpv1NPduNumberCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowGtpv1NPduNumberCounter().Msg()
 	}
 	return &patternFlowGtpv1NPduNumberCounter{obj: obj.obj.Increment}
 }
@@ -65942,15 +69795,20 @@ func (obj *patternFlowGtpv1NPduNumber) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowGtpv1NPduNumberCounter value in the PatternFlowGtpv1NPduNumber object
+//  description is TBD
+func (obj *patternFlowGtpv1NPduNumber) SetIncrement(value PatternFlowGtpv1NPduNumberCounter) PatternFlowGtpv1NPduNumber {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowGtpv1NPduNumberChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowGtpv1NPduNumberCounter
 //  description is TBD
 func (obj *patternFlowGtpv1NPduNumber) Decrement() PatternFlowGtpv1NPduNumberCounter {
 	obj.SetChoice(PatternFlowGtpv1NPduNumberChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowGtpv1NPduNumberCounter{}
-		newObj := &patternFlowGtpv1NPduNumberCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowGtpv1NPduNumberCounter().Msg()
 	}
 	return &patternFlowGtpv1NPduNumberCounter{obj: obj.obj.Decrement}
 }
@@ -65959,6 +69817,14 @@ func (obj *patternFlowGtpv1NPduNumber) Decrement() PatternFlowGtpv1NPduNumberCou
 //  description is TBD
 func (obj *patternFlowGtpv1NPduNumber) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowGtpv1NPduNumberCounter value in the PatternFlowGtpv1NPduNumber object
+//  description is TBD
+func (obj *patternFlowGtpv1NPduNumber) SetDecrement(value PatternFlowGtpv1NPduNumberCounter) PatternFlowGtpv1NPduNumber {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowGtpv1NPduNumberChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowGtpv1NPduNumber) validateObj(set_default bool) {
@@ -66005,12 +69871,18 @@ type patternFlowGtpv1NextExtensionHeaderType struct {
 	obj *snappipb.PatternFlowGtpv1NextExtensionHeaderType
 }
 
+func NewPatternFlowGtpv1NextExtensionHeaderType() PatternFlowGtpv1NextExtensionHeaderType {
+	obj := patternFlowGtpv1NextExtensionHeaderType{obj: &snappipb.PatternFlowGtpv1NextExtensionHeaderType{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowGtpv1NextExtensionHeaderType) Msg() *snappipb.PatternFlowGtpv1NextExtensionHeaderType {
 	return obj.obj
 }
 
 func (obj *patternFlowGtpv1NextExtensionHeaderType) SetMsg(msg *snappipb.PatternFlowGtpv1NextExtensionHeaderType) PatternFlowGtpv1NextExtensionHeaderType {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -66142,8 +70014,10 @@ type PatternFlowGtpv1NextExtensionHeaderType interface {
 	SetMetricGroup(value string) PatternFlowGtpv1NextExtensionHeaderType
 	HasMetricGroup() bool
 	Increment() PatternFlowGtpv1NextExtensionHeaderTypeCounter
+	SetIncrement(value PatternFlowGtpv1NextExtensionHeaderTypeCounter) PatternFlowGtpv1NextExtensionHeaderType
 	HasIncrement() bool
 	Decrement() PatternFlowGtpv1NextExtensionHeaderTypeCounter
+	SetDecrement(value PatternFlowGtpv1NextExtensionHeaderTypeCounter) PatternFlowGtpv1NextExtensionHeaderType
 	HasDecrement() bool
 }
 
@@ -66249,10 +70123,7 @@ func (obj *patternFlowGtpv1NextExtensionHeaderType) SetMetricGroup(value string)
 func (obj *patternFlowGtpv1NextExtensionHeaderType) Increment() PatternFlowGtpv1NextExtensionHeaderTypeCounter {
 	obj.SetChoice(PatternFlowGtpv1NextExtensionHeaderTypeChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowGtpv1NextExtensionHeaderTypeCounter{}
-		newObj := &patternFlowGtpv1NextExtensionHeaderTypeCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowGtpv1NextExtensionHeaderTypeCounter().Msg()
 	}
 	return &patternFlowGtpv1NextExtensionHeaderTypeCounter{obj: obj.obj.Increment}
 }
@@ -66263,15 +70134,20 @@ func (obj *patternFlowGtpv1NextExtensionHeaderType) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowGtpv1NextExtensionHeaderTypeCounter value in the PatternFlowGtpv1NextExtensionHeaderType object
+//  description is TBD
+func (obj *patternFlowGtpv1NextExtensionHeaderType) SetIncrement(value PatternFlowGtpv1NextExtensionHeaderTypeCounter) PatternFlowGtpv1NextExtensionHeaderType {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowGtpv1NextExtensionHeaderTypeChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowGtpv1NextExtensionHeaderTypeCounter
 //  description is TBD
 func (obj *patternFlowGtpv1NextExtensionHeaderType) Decrement() PatternFlowGtpv1NextExtensionHeaderTypeCounter {
 	obj.SetChoice(PatternFlowGtpv1NextExtensionHeaderTypeChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowGtpv1NextExtensionHeaderTypeCounter{}
-		newObj := &patternFlowGtpv1NextExtensionHeaderTypeCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowGtpv1NextExtensionHeaderTypeCounter().Msg()
 	}
 	return &patternFlowGtpv1NextExtensionHeaderTypeCounter{obj: obj.obj.Decrement}
 }
@@ -66280,6 +70156,14 @@ func (obj *patternFlowGtpv1NextExtensionHeaderType) Decrement() PatternFlowGtpv1
 //  description is TBD
 func (obj *patternFlowGtpv1NextExtensionHeaderType) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowGtpv1NextExtensionHeaderTypeCounter value in the PatternFlowGtpv1NextExtensionHeaderType object
+//  description is TBD
+func (obj *patternFlowGtpv1NextExtensionHeaderType) SetDecrement(value PatternFlowGtpv1NextExtensionHeaderTypeCounter) PatternFlowGtpv1NextExtensionHeaderType {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowGtpv1NextExtensionHeaderTypeChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowGtpv1NextExtensionHeaderType) validateObj(set_default bool) {
@@ -66326,12 +70210,18 @@ type flowGtpExtension struct {
 	obj *snappipb.FlowGtpExtension
 }
 
+func NewFlowGtpExtension() FlowGtpExtension {
+	obj := flowGtpExtension{obj: &snappipb.FlowGtpExtension{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *flowGtpExtension) Msg() *snappipb.FlowGtpExtension {
 	return obj.obj
 }
 
 func (obj *flowGtpExtension) SetMsg(msg *snappipb.FlowGtpExtension) FlowGtpExtension {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -66452,22 +70342,21 @@ type FlowGtpExtension interface {
 	validateObj(set_default bool)
 	setDefault()
 	ExtensionLength() PatternFlowGtpExtensionExtensionLength
+	SetExtensionLength(value PatternFlowGtpExtensionExtensionLength) FlowGtpExtension
 	HasExtensionLength() bool
 	Contents() PatternFlowGtpExtensionContents
+	SetContents(value PatternFlowGtpExtensionContents) FlowGtpExtension
 	HasContents() bool
 	NextExtensionHeader() PatternFlowGtpExtensionNextExtensionHeader
+	SetNextExtensionHeader(value PatternFlowGtpExtensionNextExtensionHeader) FlowGtpExtension
 	HasNextExtensionHeader() bool
 }
 
 // ExtensionLength returns a PatternFlowGtpExtensionExtensionLength
 //  description is TBD
 func (obj *flowGtpExtension) ExtensionLength() PatternFlowGtpExtensionExtensionLength {
-
 	if obj.obj.ExtensionLength == nil {
-		obj.obj.ExtensionLength = &snappipb.PatternFlowGtpExtensionExtensionLength{}
-		newObj := &patternFlowGtpExtensionExtensionLength{obj: obj.obj.ExtensionLength}
-		newObj.setDefault()
-		return newObj
+		obj.obj.ExtensionLength = NewPatternFlowGtpExtensionExtensionLength().Msg()
 	}
 	return &patternFlowGtpExtensionExtensionLength{obj: obj.obj.ExtensionLength}
 }
@@ -66478,15 +70367,19 @@ func (obj *flowGtpExtension) HasExtensionLength() bool {
 	return obj.obj.ExtensionLength != nil
 }
 
+// SetExtensionLength sets the PatternFlowGtpExtensionExtensionLength value in the FlowGtpExtension object
+//  description is TBD
+func (obj *flowGtpExtension) SetExtensionLength(value PatternFlowGtpExtensionExtensionLength) FlowGtpExtension {
+	obj.ExtensionLength().SetMsg(value.Msg())
+
+	return obj
+}
+
 // Contents returns a PatternFlowGtpExtensionContents
 //  description is TBD
 func (obj *flowGtpExtension) Contents() PatternFlowGtpExtensionContents {
-
 	if obj.obj.Contents == nil {
-		obj.obj.Contents = &snappipb.PatternFlowGtpExtensionContents{}
-		newObj := &patternFlowGtpExtensionContents{obj: obj.obj.Contents}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Contents = NewPatternFlowGtpExtensionContents().Msg()
 	}
 	return &patternFlowGtpExtensionContents{obj: obj.obj.Contents}
 }
@@ -66497,15 +70390,19 @@ func (obj *flowGtpExtension) HasContents() bool {
 	return obj.obj.Contents != nil
 }
 
+// SetContents sets the PatternFlowGtpExtensionContents value in the FlowGtpExtension object
+//  description is TBD
+func (obj *flowGtpExtension) SetContents(value PatternFlowGtpExtensionContents) FlowGtpExtension {
+	obj.Contents().SetMsg(value.Msg())
+
+	return obj
+}
+
 // NextExtensionHeader returns a PatternFlowGtpExtensionNextExtensionHeader
 //  description is TBD
 func (obj *flowGtpExtension) NextExtensionHeader() PatternFlowGtpExtensionNextExtensionHeader {
-
 	if obj.obj.NextExtensionHeader == nil {
-		obj.obj.NextExtensionHeader = &snappipb.PatternFlowGtpExtensionNextExtensionHeader{}
-		newObj := &patternFlowGtpExtensionNextExtensionHeader{obj: obj.obj.NextExtensionHeader}
-		newObj.setDefault()
-		return newObj
+		obj.obj.NextExtensionHeader = NewPatternFlowGtpExtensionNextExtensionHeader().Msg()
 	}
 	return &patternFlowGtpExtensionNextExtensionHeader{obj: obj.obj.NextExtensionHeader}
 }
@@ -66514,6 +70411,14 @@ func (obj *flowGtpExtension) NextExtensionHeader() PatternFlowGtpExtensionNextEx
 //  description is TBD
 func (obj *flowGtpExtension) HasNextExtensionHeader() bool {
 	return obj.obj.NextExtensionHeader != nil
+}
+
+// SetNextExtensionHeader sets the PatternFlowGtpExtensionNextExtensionHeader value in the FlowGtpExtension object
+//  description is TBD
+func (obj *flowGtpExtension) SetNextExtensionHeader(value PatternFlowGtpExtensionNextExtensionHeader) FlowGtpExtension {
+	obj.NextExtensionHeader().SetMsg(value.Msg())
+
+	return obj
 }
 
 func (obj *flowGtpExtension) validateObj(set_default bool) {
@@ -66542,12 +70447,18 @@ type patternFlowGtpv2Version struct {
 	obj *snappipb.PatternFlowGtpv2Version
 }
 
+func NewPatternFlowGtpv2Version() PatternFlowGtpv2Version {
+	obj := patternFlowGtpv2Version{obj: &snappipb.PatternFlowGtpv2Version{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowGtpv2Version) Msg() *snappipb.PatternFlowGtpv2Version {
 	return obj.obj
 }
 
 func (obj *patternFlowGtpv2Version) SetMsg(msg *snappipb.PatternFlowGtpv2Version) PatternFlowGtpv2Version {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -66679,8 +70590,10 @@ type PatternFlowGtpv2Version interface {
 	SetMetricGroup(value string) PatternFlowGtpv2Version
 	HasMetricGroup() bool
 	Increment() PatternFlowGtpv2VersionCounter
+	SetIncrement(value PatternFlowGtpv2VersionCounter) PatternFlowGtpv2Version
 	HasIncrement() bool
 	Decrement() PatternFlowGtpv2VersionCounter
+	SetDecrement(value PatternFlowGtpv2VersionCounter) PatternFlowGtpv2Version
 	HasDecrement() bool
 }
 
@@ -66786,10 +70699,7 @@ func (obj *patternFlowGtpv2Version) SetMetricGroup(value string) PatternFlowGtpv
 func (obj *patternFlowGtpv2Version) Increment() PatternFlowGtpv2VersionCounter {
 	obj.SetChoice(PatternFlowGtpv2VersionChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowGtpv2VersionCounter{}
-		newObj := &patternFlowGtpv2VersionCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowGtpv2VersionCounter().Msg()
 	}
 	return &patternFlowGtpv2VersionCounter{obj: obj.obj.Increment}
 }
@@ -66800,15 +70710,20 @@ func (obj *patternFlowGtpv2Version) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowGtpv2VersionCounter value in the PatternFlowGtpv2Version object
+//  description is TBD
+func (obj *patternFlowGtpv2Version) SetIncrement(value PatternFlowGtpv2VersionCounter) PatternFlowGtpv2Version {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowGtpv2VersionChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowGtpv2VersionCounter
 //  description is TBD
 func (obj *patternFlowGtpv2Version) Decrement() PatternFlowGtpv2VersionCounter {
 	obj.SetChoice(PatternFlowGtpv2VersionChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowGtpv2VersionCounter{}
-		newObj := &patternFlowGtpv2VersionCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowGtpv2VersionCounter().Msg()
 	}
 	return &patternFlowGtpv2VersionCounter{obj: obj.obj.Decrement}
 }
@@ -66817,6 +70732,14 @@ func (obj *patternFlowGtpv2Version) Decrement() PatternFlowGtpv2VersionCounter {
 //  description is TBD
 func (obj *patternFlowGtpv2Version) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowGtpv2VersionCounter value in the PatternFlowGtpv2Version object
+//  description is TBD
+func (obj *patternFlowGtpv2Version) SetDecrement(value PatternFlowGtpv2VersionCounter) PatternFlowGtpv2Version {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowGtpv2VersionChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowGtpv2Version) validateObj(set_default bool) {
@@ -66863,12 +70786,18 @@ type patternFlowGtpv2PiggybackingFlag struct {
 	obj *snappipb.PatternFlowGtpv2PiggybackingFlag
 }
 
+func NewPatternFlowGtpv2PiggybackingFlag() PatternFlowGtpv2PiggybackingFlag {
+	obj := patternFlowGtpv2PiggybackingFlag{obj: &snappipb.PatternFlowGtpv2PiggybackingFlag{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowGtpv2PiggybackingFlag) Msg() *snappipb.PatternFlowGtpv2PiggybackingFlag {
 	return obj.obj
 }
 
 func (obj *patternFlowGtpv2PiggybackingFlag) SetMsg(msg *snappipb.PatternFlowGtpv2PiggybackingFlag) PatternFlowGtpv2PiggybackingFlag {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -67000,8 +70929,10 @@ type PatternFlowGtpv2PiggybackingFlag interface {
 	SetMetricGroup(value string) PatternFlowGtpv2PiggybackingFlag
 	HasMetricGroup() bool
 	Increment() PatternFlowGtpv2PiggybackingFlagCounter
+	SetIncrement(value PatternFlowGtpv2PiggybackingFlagCounter) PatternFlowGtpv2PiggybackingFlag
 	HasIncrement() bool
 	Decrement() PatternFlowGtpv2PiggybackingFlagCounter
+	SetDecrement(value PatternFlowGtpv2PiggybackingFlagCounter) PatternFlowGtpv2PiggybackingFlag
 	HasDecrement() bool
 }
 
@@ -67107,10 +71038,7 @@ func (obj *patternFlowGtpv2PiggybackingFlag) SetMetricGroup(value string) Patter
 func (obj *patternFlowGtpv2PiggybackingFlag) Increment() PatternFlowGtpv2PiggybackingFlagCounter {
 	obj.SetChoice(PatternFlowGtpv2PiggybackingFlagChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowGtpv2PiggybackingFlagCounter{}
-		newObj := &patternFlowGtpv2PiggybackingFlagCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowGtpv2PiggybackingFlagCounter().Msg()
 	}
 	return &patternFlowGtpv2PiggybackingFlagCounter{obj: obj.obj.Increment}
 }
@@ -67121,15 +71049,20 @@ func (obj *patternFlowGtpv2PiggybackingFlag) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowGtpv2PiggybackingFlagCounter value in the PatternFlowGtpv2PiggybackingFlag object
+//  description is TBD
+func (obj *patternFlowGtpv2PiggybackingFlag) SetIncrement(value PatternFlowGtpv2PiggybackingFlagCounter) PatternFlowGtpv2PiggybackingFlag {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowGtpv2PiggybackingFlagChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowGtpv2PiggybackingFlagCounter
 //  description is TBD
 func (obj *patternFlowGtpv2PiggybackingFlag) Decrement() PatternFlowGtpv2PiggybackingFlagCounter {
 	obj.SetChoice(PatternFlowGtpv2PiggybackingFlagChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowGtpv2PiggybackingFlagCounter{}
-		newObj := &patternFlowGtpv2PiggybackingFlagCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowGtpv2PiggybackingFlagCounter().Msg()
 	}
 	return &patternFlowGtpv2PiggybackingFlagCounter{obj: obj.obj.Decrement}
 }
@@ -67138,6 +71071,14 @@ func (obj *patternFlowGtpv2PiggybackingFlag) Decrement() PatternFlowGtpv2Piggyba
 //  description is TBD
 func (obj *patternFlowGtpv2PiggybackingFlag) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowGtpv2PiggybackingFlagCounter value in the PatternFlowGtpv2PiggybackingFlag object
+//  description is TBD
+func (obj *patternFlowGtpv2PiggybackingFlag) SetDecrement(value PatternFlowGtpv2PiggybackingFlagCounter) PatternFlowGtpv2PiggybackingFlag {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowGtpv2PiggybackingFlagChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowGtpv2PiggybackingFlag) validateObj(set_default bool) {
@@ -67184,12 +71125,18 @@ type patternFlowGtpv2TeidFlag struct {
 	obj *snappipb.PatternFlowGtpv2TeidFlag
 }
 
+func NewPatternFlowGtpv2TeidFlag() PatternFlowGtpv2TeidFlag {
+	obj := patternFlowGtpv2TeidFlag{obj: &snappipb.PatternFlowGtpv2TeidFlag{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowGtpv2TeidFlag) Msg() *snappipb.PatternFlowGtpv2TeidFlag {
 	return obj.obj
 }
 
 func (obj *patternFlowGtpv2TeidFlag) SetMsg(msg *snappipb.PatternFlowGtpv2TeidFlag) PatternFlowGtpv2TeidFlag {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -67321,8 +71268,10 @@ type PatternFlowGtpv2TeidFlag interface {
 	SetMetricGroup(value string) PatternFlowGtpv2TeidFlag
 	HasMetricGroup() bool
 	Increment() PatternFlowGtpv2TeidFlagCounter
+	SetIncrement(value PatternFlowGtpv2TeidFlagCounter) PatternFlowGtpv2TeidFlag
 	HasIncrement() bool
 	Decrement() PatternFlowGtpv2TeidFlagCounter
+	SetDecrement(value PatternFlowGtpv2TeidFlagCounter) PatternFlowGtpv2TeidFlag
 	HasDecrement() bool
 }
 
@@ -67428,10 +71377,7 @@ func (obj *patternFlowGtpv2TeidFlag) SetMetricGroup(value string) PatternFlowGtp
 func (obj *patternFlowGtpv2TeidFlag) Increment() PatternFlowGtpv2TeidFlagCounter {
 	obj.SetChoice(PatternFlowGtpv2TeidFlagChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowGtpv2TeidFlagCounter{}
-		newObj := &patternFlowGtpv2TeidFlagCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowGtpv2TeidFlagCounter().Msg()
 	}
 	return &patternFlowGtpv2TeidFlagCounter{obj: obj.obj.Increment}
 }
@@ -67442,15 +71388,20 @@ func (obj *patternFlowGtpv2TeidFlag) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowGtpv2TeidFlagCounter value in the PatternFlowGtpv2TeidFlag object
+//  description is TBD
+func (obj *patternFlowGtpv2TeidFlag) SetIncrement(value PatternFlowGtpv2TeidFlagCounter) PatternFlowGtpv2TeidFlag {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowGtpv2TeidFlagChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowGtpv2TeidFlagCounter
 //  description is TBD
 func (obj *patternFlowGtpv2TeidFlag) Decrement() PatternFlowGtpv2TeidFlagCounter {
 	obj.SetChoice(PatternFlowGtpv2TeidFlagChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowGtpv2TeidFlagCounter{}
-		newObj := &patternFlowGtpv2TeidFlagCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowGtpv2TeidFlagCounter().Msg()
 	}
 	return &patternFlowGtpv2TeidFlagCounter{obj: obj.obj.Decrement}
 }
@@ -67459,6 +71410,14 @@ func (obj *patternFlowGtpv2TeidFlag) Decrement() PatternFlowGtpv2TeidFlagCounter
 //  description is TBD
 func (obj *patternFlowGtpv2TeidFlag) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowGtpv2TeidFlagCounter value in the PatternFlowGtpv2TeidFlag object
+//  description is TBD
+func (obj *patternFlowGtpv2TeidFlag) SetDecrement(value PatternFlowGtpv2TeidFlagCounter) PatternFlowGtpv2TeidFlag {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowGtpv2TeidFlagChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowGtpv2TeidFlag) validateObj(set_default bool) {
@@ -67505,12 +71464,18 @@ type patternFlowGtpv2Spare1 struct {
 	obj *snappipb.PatternFlowGtpv2Spare1
 }
 
+func NewPatternFlowGtpv2Spare1() PatternFlowGtpv2Spare1 {
+	obj := patternFlowGtpv2Spare1{obj: &snappipb.PatternFlowGtpv2Spare1{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowGtpv2Spare1) Msg() *snappipb.PatternFlowGtpv2Spare1 {
 	return obj.obj
 }
 
 func (obj *patternFlowGtpv2Spare1) SetMsg(msg *snappipb.PatternFlowGtpv2Spare1) PatternFlowGtpv2Spare1 {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -67642,8 +71607,10 @@ type PatternFlowGtpv2Spare1 interface {
 	SetMetricGroup(value string) PatternFlowGtpv2Spare1
 	HasMetricGroup() bool
 	Increment() PatternFlowGtpv2Spare1Counter
+	SetIncrement(value PatternFlowGtpv2Spare1Counter) PatternFlowGtpv2Spare1
 	HasIncrement() bool
 	Decrement() PatternFlowGtpv2Spare1Counter
+	SetDecrement(value PatternFlowGtpv2Spare1Counter) PatternFlowGtpv2Spare1
 	HasDecrement() bool
 }
 
@@ -67749,10 +71716,7 @@ func (obj *patternFlowGtpv2Spare1) SetMetricGroup(value string) PatternFlowGtpv2
 func (obj *patternFlowGtpv2Spare1) Increment() PatternFlowGtpv2Spare1Counter {
 	obj.SetChoice(PatternFlowGtpv2Spare1Choice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowGtpv2Spare1Counter{}
-		newObj := &patternFlowGtpv2Spare1Counter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowGtpv2Spare1Counter().Msg()
 	}
 	return &patternFlowGtpv2Spare1Counter{obj: obj.obj.Increment}
 }
@@ -67763,15 +71727,20 @@ func (obj *patternFlowGtpv2Spare1) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowGtpv2Spare1Counter value in the PatternFlowGtpv2Spare1 object
+//  description is TBD
+func (obj *patternFlowGtpv2Spare1) SetIncrement(value PatternFlowGtpv2Spare1Counter) PatternFlowGtpv2Spare1 {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowGtpv2Spare1Choice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowGtpv2Spare1Counter
 //  description is TBD
 func (obj *patternFlowGtpv2Spare1) Decrement() PatternFlowGtpv2Spare1Counter {
 	obj.SetChoice(PatternFlowGtpv2Spare1Choice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowGtpv2Spare1Counter{}
-		newObj := &patternFlowGtpv2Spare1Counter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowGtpv2Spare1Counter().Msg()
 	}
 	return &patternFlowGtpv2Spare1Counter{obj: obj.obj.Decrement}
 }
@@ -67780,6 +71749,14 @@ func (obj *patternFlowGtpv2Spare1) Decrement() PatternFlowGtpv2Spare1Counter {
 //  description is TBD
 func (obj *patternFlowGtpv2Spare1) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowGtpv2Spare1Counter value in the PatternFlowGtpv2Spare1 object
+//  description is TBD
+func (obj *patternFlowGtpv2Spare1) SetDecrement(value PatternFlowGtpv2Spare1Counter) PatternFlowGtpv2Spare1 {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowGtpv2Spare1Choice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowGtpv2Spare1) validateObj(set_default bool) {
@@ -67826,12 +71803,18 @@ type patternFlowGtpv2MessageType struct {
 	obj *snappipb.PatternFlowGtpv2MessageType
 }
 
+func NewPatternFlowGtpv2MessageType() PatternFlowGtpv2MessageType {
+	obj := patternFlowGtpv2MessageType{obj: &snappipb.PatternFlowGtpv2MessageType{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowGtpv2MessageType) Msg() *snappipb.PatternFlowGtpv2MessageType {
 	return obj.obj
 }
 
 func (obj *patternFlowGtpv2MessageType) SetMsg(msg *snappipb.PatternFlowGtpv2MessageType) PatternFlowGtpv2MessageType {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -67963,8 +71946,10 @@ type PatternFlowGtpv2MessageType interface {
 	SetMetricGroup(value string) PatternFlowGtpv2MessageType
 	HasMetricGroup() bool
 	Increment() PatternFlowGtpv2MessageTypeCounter
+	SetIncrement(value PatternFlowGtpv2MessageTypeCounter) PatternFlowGtpv2MessageType
 	HasIncrement() bool
 	Decrement() PatternFlowGtpv2MessageTypeCounter
+	SetDecrement(value PatternFlowGtpv2MessageTypeCounter) PatternFlowGtpv2MessageType
 	HasDecrement() bool
 }
 
@@ -68070,10 +72055,7 @@ func (obj *patternFlowGtpv2MessageType) SetMetricGroup(value string) PatternFlow
 func (obj *patternFlowGtpv2MessageType) Increment() PatternFlowGtpv2MessageTypeCounter {
 	obj.SetChoice(PatternFlowGtpv2MessageTypeChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowGtpv2MessageTypeCounter{}
-		newObj := &patternFlowGtpv2MessageTypeCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowGtpv2MessageTypeCounter().Msg()
 	}
 	return &patternFlowGtpv2MessageTypeCounter{obj: obj.obj.Increment}
 }
@@ -68084,15 +72066,20 @@ func (obj *patternFlowGtpv2MessageType) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowGtpv2MessageTypeCounter value in the PatternFlowGtpv2MessageType object
+//  description is TBD
+func (obj *patternFlowGtpv2MessageType) SetIncrement(value PatternFlowGtpv2MessageTypeCounter) PatternFlowGtpv2MessageType {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowGtpv2MessageTypeChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowGtpv2MessageTypeCounter
 //  description is TBD
 func (obj *patternFlowGtpv2MessageType) Decrement() PatternFlowGtpv2MessageTypeCounter {
 	obj.SetChoice(PatternFlowGtpv2MessageTypeChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowGtpv2MessageTypeCounter{}
-		newObj := &patternFlowGtpv2MessageTypeCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowGtpv2MessageTypeCounter().Msg()
 	}
 	return &patternFlowGtpv2MessageTypeCounter{obj: obj.obj.Decrement}
 }
@@ -68101,6 +72088,14 @@ func (obj *patternFlowGtpv2MessageType) Decrement() PatternFlowGtpv2MessageTypeC
 //  description is TBD
 func (obj *patternFlowGtpv2MessageType) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowGtpv2MessageTypeCounter value in the PatternFlowGtpv2MessageType object
+//  description is TBD
+func (obj *patternFlowGtpv2MessageType) SetDecrement(value PatternFlowGtpv2MessageTypeCounter) PatternFlowGtpv2MessageType {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowGtpv2MessageTypeChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowGtpv2MessageType) validateObj(set_default bool) {
@@ -68147,12 +72142,18 @@ type patternFlowGtpv2MessageLength struct {
 	obj *snappipb.PatternFlowGtpv2MessageLength
 }
 
+func NewPatternFlowGtpv2MessageLength() PatternFlowGtpv2MessageLength {
+	obj := patternFlowGtpv2MessageLength{obj: &snappipb.PatternFlowGtpv2MessageLength{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowGtpv2MessageLength) Msg() *snappipb.PatternFlowGtpv2MessageLength {
 	return obj.obj
 }
 
 func (obj *patternFlowGtpv2MessageLength) SetMsg(msg *snappipb.PatternFlowGtpv2MessageLength) PatternFlowGtpv2MessageLength {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -68284,8 +72285,10 @@ type PatternFlowGtpv2MessageLength interface {
 	SetMetricGroup(value string) PatternFlowGtpv2MessageLength
 	HasMetricGroup() bool
 	Increment() PatternFlowGtpv2MessageLengthCounter
+	SetIncrement(value PatternFlowGtpv2MessageLengthCounter) PatternFlowGtpv2MessageLength
 	HasIncrement() bool
 	Decrement() PatternFlowGtpv2MessageLengthCounter
+	SetDecrement(value PatternFlowGtpv2MessageLengthCounter) PatternFlowGtpv2MessageLength
 	HasDecrement() bool
 }
 
@@ -68391,10 +72394,7 @@ func (obj *patternFlowGtpv2MessageLength) SetMetricGroup(value string) PatternFl
 func (obj *patternFlowGtpv2MessageLength) Increment() PatternFlowGtpv2MessageLengthCounter {
 	obj.SetChoice(PatternFlowGtpv2MessageLengthChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowGtpv2MessageLengthCounter{}
-		newObj := &patternFlowGtpv2MessageLengthCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowGtpv2MessageLengthCounter().Msg()
 	}
 	return &patternFlowGtpv2MessageLengthCounter{obj: obj.obj.Increment}
 }
@@ -68405,15 +72405,20 @@ func (obj *patternFlowGtpv2MessageLength) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowGtpv2MessageLengthCounter value in the PatternFlowGtpv2MessageLength object
+//  description is TBD
+func (obj *patternFlowGtpv2MessageLength) SetIncrement(value PatternFlowGtpv2MessageLengthCounter) PatternFlowGtpv2MessageLength {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowGtpv2MessageLengthChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowGtpv2MessageLengthCounter
 //  description is TBD
 func (obj *patternFlowGtpv2MessageLength) Decrement() PatternFlowGtpv2MessageLengthCounter {
 	obj.SetChoice(PatternFlowGtpv2MessageLengthChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowGtpv2MessageLengthCounter{}
-		newObj := &patternFlowGtpv2MessageLengthCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowGtpv2MessageLengthCounter().Msg()
 	}
 	return &patternFlowGtpv2MessageLengthCounter{obj: obj.obj.Decrement}
 }
@@ -68422,6 +72427,14 @@ func (obj *patternFlowGtpv2MessageLength) Decrement() PatternFlowGtpv2MessageLen
 //  description is TBD
 func (obj *patternFlowGtpv2MessageLength) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowGtpv2MessageLengthCounter value in the PatternFlowGtpv2MessageLength object
+//  description is TBD
+func (obj *patternFlowGtpv2MessageLength) SetDecrement(value PatternFlowGtpv2MessageLengthCounter) PatternFlowGtpv2MessageLength {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowGtpv2MessageLengthChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowGtpv2MessageLength) validateObj(set_default bool) {
@@ -68468,12 +72481,18 @@ type patternFlowGtpv2Teid struct {
 	obj *snappipb.PatternFlowGtpv2Teid
 }
 
+func NewPatternFlowGtpv2Teid() PatternFlowGtpv2Teid {
+	obj := patternFlowGtpv2Teid{obj: &snappipb.PatternFlowGtpv2Teid{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowGtpv2Teid) Msg() *snappipb.PatternFlowGtpv2Teid {
 	return obj.obj
 }
 
 func (obj *patternFlowGtpv2Teid) SetMsg(msg *snappipb.PatternFlowGtpv2Teid) PatternFlowGtpv2Teid {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -68605,8 +72624,10 @@ type PatternFlowGtpv2Teid interface {
 	SetMetricGroup(value string) PatternFlowGtpv2Teid
 	HasMetricGroup() bool
 	Increment() PatternFlowGtpv2TeidCounter
+	SetIncrement(value PatternFlowGtpv2TeidCounter) PatternFlowGtpv2Teid
 	HasIncrement() bool
 	Decrement() PatternFlowGtpv2TeidCounter
+	SetDecrement(value PatternFlowGtpv2TeidCounter) PatternFlowGtpv2Teid
 	HasDecrement() bool
 }
 
@@ -68712,10 +72733,7 @@ func (obj *patternFlowGtpv2Teid) SetMetricGroup(value string) PatternFlowGtpv2Te
 func (obj *patternFlowGtpv2Teid) Increment() PatternFlowGtpv2TeidCounter {
 	obj.SetChoice(PatternFlowGtpv2TeidChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowGtpv2TeidCounter{}
-		newObj := &patternFlowGtpv2TeidCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowGtpv2TeidCounter().Msg()
 	}
 	return &patternFlowGtpv2TeidCounter{obj: obj.obj.Increment}
 }
@@ -68726,15 +72744,20 @@ func (obj *patternFlowGtpv2Teid) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowGtpv2TeidCounter value in the PatternFlowGtpv2Teid object
+//  description is TBD
+func (obj *patternFlowGtpv2Teid) SetIncrement(value PatternFlowGtpv2TeidCounter) PatternFlowGtpv2Teid {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowGtpv2TeidChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowGtpv2TeidCounter
 //  description is TBD
 func (obj *patternFlowGtpv2Teid) Decrement() PatternFlowGtpv2TeidCounter {
 	obj.SetChoice(PatternFlowGtpv2TeidChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowGtpv2TeidCounter{}
-		newObj := &patternFlowGtpv2TeidCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowGtpv2TeidCounter().Msg()
 	}
 	return &patternFlowGtpv2TeidCounter{obj: obj.obj.Decrement}
 }
@@ -68743,6 +72766,14 @@ func (obj *patternFlowGtpv2Teid) Decrement() PatternFlowGtpv2TeidCounter {
 //  description is TBD
 func (obj *patternFlowGtpv2Teid) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowGtpv2TeidCounter value in the PatternFlowGtpv2Teid object
+//  description is TBD
+func (obj *patternFlowGtpv2Teid) SetDecrement(value PatternFlowGtpv2TeidCounter) PatternFlowGtpv2Teid {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowGtpv2TeidChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowGtpv2Teid) validateObj(set_default bool) {
@@ -68789,12 +72820,18 @@ type patternFlowGtpv2SequenceNumber struct {
 	obj *snappipb.PatternFlowGtpv2SequenceNumber
 }
 
+func NewPatternFlowGtpv2SequenceNumber() PatternFlowGtpv2SequenceNumber {
+	obj := patternFlowGtpv2SequenceNumber{obj: &snappipb.PatternFlowGtpv2SequenceNumber{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowGtpv2SequenceNumber) Msg() *snappipb.PatternFlowGtpv2SequenceNumber {
 	return obj.obj
 }
 
 func (obj *patternFlowGtpv2SequenceNumber) SetMsg(msg *snappipb.PatternFlowGtpv2SequenceNumber) PatternFlowGtpv2SequenceNumber {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -68926,8 +72963,10 @@ type PatternFlowGtpv2SequenceNumber interface {
 	SetMetricGroup(value string) PatternFlowGtpv2SequenceNumber
 	HasMetricGroup() bool
 	Increment() PatternFlowGtpv2SequenceNumberCounter
+	SetIncrement(value PatternFlowGtpv2SequenceNumberCounter) PatternFlowGtpv2SequenceNumber
 	HasIncrement() bool
 	Decrement() PatternFlowGtpv2SequenceNumberCounter
+	SetDecrement(value PatternFlowGtpv2SequenceNumberCounter) PatternFlowGtpv2SequenceNumber
 	HasDecrement() bool
 }
 
@@ -69033,10 +73072,7 @@ func (obj *patternFlowGtpv2SequenceNumber) SetMetricGroup(value string) PatternF
 func (obj *patternFlowGtpv2SequenceNumber) Increment() PatternFlowGtpv2SequenceNumberCounter {
 	obj.SetChoice(PatternFlowGtpv2SequenceNumberChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowGtpv2SequenceNumberCounter{}
-		newObj := &patternFlowGtpv2SequenceNumberCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowGtpv2SequenceNumberCounter().Msg()
 	}
 	return &patternFlowGtpv2SequenceNumberCounter{obj: obj.obj.Increment}
 }
@@ -69047,15 +73083,20 @@ func (obj *patternFlowGtpv2SequenceNumber) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowGtpv2SequenceNumberCounter value in the PatternFlowGtpv2SequenceNumber object
+//  description is TBD
+func (obj *patternFlowGtpv2SequenceNumber) SetIncrement(value PatternFlowGtpv2SequenceNumberCounter) PatternFlowGtpv2SequenceNumber {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowGtpv2SequenceNumberChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowGtpv2SequenceNumberCounter
 //  description is TBD
 func (obj *patternFlowGtpv2SequenceNumber) Decrement() PatternFlowGtpv2SequenceNumberCounter {
 	obj.SetChoice(PatternFlowGtpv2SequenceNumberChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowGtpv2SequenceNumberCounter{}
-		newObj := &patternFlowGtpv2SequenceNumberCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowGtpv2SequenceNumberCounter().Msg()
 	}
 	return &patternFlowGtpv2SequenceNumberCounter{obj: obj.obj.Decrement}
 }
@@ -69064,6 +73105,14 @@ func (obj *patternFlowGtpv2SequenceNumber) Decrement() PatternFlowGtpv2SequenceN
 //  description is TBD
 func (obj *patternFlowGtpv2SequenceNumber) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowGtpv2SequenceNumberCounter value in the PatternFlowGtpv2SequenceNumber object
+//  description is TBD
+func (obj *patternFlowGtpv2SequenceNumber) SetDecrement(value PatternFlowGtpv2SequenceNumberCounter) PatternFlowGtpv2SequenceNumber {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowGtpv2SequenceNumberChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowGtpv2SequenceNumber) validateObj(set_default bool) {
@@ -69110,12 +73159,18 @@ type patternFlowGtpv2Spare2 struct {
 	obj *snappipb.PatternFlowGtpv2Spare2
 }
 
+func NewPatternFlowGtpv2Spare2() PatternFlowGtpv2Spare2 {
+	obj := patternFlowGtpv2Spare2{obj: &snappipb.PatternFlowGtpv2Spare2{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowGtpv2Spare2) Msg() *snappipb.PatternFlowGtpv2Spare2 {
 	return obj.obj
 }
 
 func (obj *patternFlowGtpv2Spare2) SetMsg(msg *snappipb.PatternFlowGtpv2Spare2) PatternFlowGtpv2Spare2 {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -69247,8 +73302,10 @@ type PatternFlowGtpv2Spare2 interface {
 	SetMetricGroup(value string) PatternFlowGtpv2Spare2
 	HasMetricGroup() bool
 	Increment() PatternFlowGtpv2Spare2Counter
+	SetIncrement(value PatternFlowGtpv2Spare2Counter) PatternFlowGtpv2Spare2
 	HasIncrement() bool
 	Decrement() PatternFlowGtpv2Spare2Counter
+	SetDecrement(value PatternFlowGtpv2Spare2Counter) PatternFlowGtpv2Spare2
 	HasDecrement() bool
 }
 
@@ -69354,10 +73411,7 @@ func (obj *patternFlowGtpv2Spare2) SetMetricGroup(value string) PatternFlowGtpv2
 func (obj *patternFlowGtpv2Spare2) Increment() PatternFlowGtpv2Spare2Counter {
 	obj.SetChoice(PatternFlowGtpv2Spare2Choice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowGtpv2Spare2Counter{}
-		newObj := &patternFlowGtpv2Spare2Counter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowGtpv2Spare2Counter().Msg()
 	}
 	return &patternFlowGtpv2Spare2Counter{obj: obj.obj.Increment}
 }
@@ -69368,15 +73422,20 @@ func (obj *patternFlowGtpv2Spare2) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowGtpv2Spare2Counter value in the PatternFlowGtpv2Spare2 object
+//  description is TBD
+func (obj *patternFlowGtpv2Spare2) SetIncrement(value PatternFlowGtpv2Spare2Counter) PatternFlowGtpv2Spare2 {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowGtpv2Spare2Choice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowGtpv2Spare2Counter
 //  description is TBD
 func (obj *patternFlowGtpv2Spare2) Decrement() PatternFlowGtpv2Spare2Counter {
 	obj.SetChoice(PatternFlowGtpv2Spare2Choice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowGtpv2Spare2Counter{}
-		newObj := &patternFlowGtpv2Spare2Counter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowGtpv2Spare2Counter().Msg()
 	}
 	return &patternFlowGtpv2Spare2Counter{obj: obj.obj.Decrement}
 }
@@ -69385,6 +73444,14 @@ func (obj *patternFlowGtpv2Spare2) Decrement() PatternFlowGtpv2Spare2Counter {
 //  description is TBD
 func (obj *patternFlowGtpv2Spare2) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowGtpv2Spare2Counter value in the PatternFlowGtpv2Spare2 object
+//  description is TBD
+func (obj *patternFlowGtpv2Spare2) SetDecrement(value PatternFlowGtpv2Spare2Counter) PatternFlowGtpv2Spare2 {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowGtpv2Spare2Choice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowGtpv2Spare2) validateObj(set_default bool) {
@@ -69431,12 +73498,18 @@ type patternFlowArpHardwareType struct {
 	obj *snappipb.PatternFlowArpHardwareType
 }
 
+func NewPatternFlowArpHardwareType() PatternFlowArpHardwareType {
+	obj := patternFlowArpHardwareType{obj: &snappipb.PatternFlowArpHardwareType{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowArpHardwareType) Msg() *snappipb.PatternFlowArpHardwareType {
 	return obj.obj
 }
 
 func (obj *patternFlowArpHardwareType) SetMsg(msg *snappipb.PatternFlowArpHardwareType) PatternFlowArpHardwareType {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -69568,8 +73641,10 @@ type PatternFlowArpHardwareType interface {
 	SetMetricGroup(value string) PatternFlowArpHardwareType
 	HasMetricGroup() bool
 	Increment() PatternFlowArpHardwareTypeCounter
+	SetIncrement(value PatternFlowArpHardwareTypeCounter) PatternFlowArpHardwareType
 	HasIncrement() bool
 	Decrement() PatternFlowArpHardwareTypeCounter
+	SetDecrement(value PatternFlowArpHardwareTypeCounter) PatternFlowArpHardwareType
 	HasDecrement() bool
 }
 
@@ -69675,10 +73750,7 @@ func (obj *patternFlowArpHardwareType) SetMetricGroup(value string) PatternFlowA
 func (obj *patternFlowArpHardwareType) Increment() PatternFlowArpHardwareTypeCounter {
 	obj.SetChoice(PatternFlowArpHardwareTypeChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowArpHardwareTypeCounter{}
-		newObj := &patternFlowArpHardwareTypeCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowArpHardwareTypeCounter().Msg()
 	}
 	return &patternFlowArpHardwareTypeCounter{obj: obj.obj.Increment}
 }
@@ -69689,15 +73761,20 @@ func (obj *patternFlowArpHardwareType) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowArpHardwareTypeCounter value in the PatternFlowArpHardwareType object
+//  description is TBD
+func (obj *patternFlowArpHardwareType) SetIncrement(value PatternFlowArpHardwareTypeCounter) PatternFlowArpHardwareType {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowArpHardwareTypeChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowArpHardwareTypeCounter
 //  description is TBD
 func (obj *patternFlowArpHardwareType) Decrement() PatternFlowArpHardwareTypeCounter {
 	obj.SetChoice(PatternFlowArpHardwareTypeChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowArpHardwareTypeCounter{}
-		newObj := &patternFlowArpHardwareTypeCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowArpHardwareTypeCounter().Msg()
 	}
 	return &patternFlowArpHardwareTypeCounter{obj: obj.obj.Decrement}
 }
@@ -69706,6 +73783,14 @@ func (obj *patternFlowArpHardwareType) Decrement() PatternFlowArpHardwareTypeCou
 //  description is TBD
 func (obj *patternFlowArpHardwareType) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowArpHardwareTypeCounter value in the PatternFlowArpHardwareType object
+//  description is TBD
+func (obj *patternFlowArpHardwareType) SetDecrement(value PatternFlowArpHardwareTypeCounter) PatternFlowArpHardwareType {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowArpHardwareTypeChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowArpHardwareType) validateObj(set_default bool) {
@@ -69752,12 +73837,18 @@ type patternFlowArpProtocolType struct {
 	obj *snappipb.PatternFlowArpProtocolType
 }
 
+func NewPatternFlowArpProtocolType() PatternFlowArpProtocolType {
+	obj := patternFlowArpProtocolType{obj: &snappipb.PatternFlowArpProtocolType{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowArpProtocolType) Msg() *snappipb.PatternFlowArpProtocolType {
 	return obj.obj
 }
 
 func (obj *patternFlowArpProtocolType) SetMsg(msg *snappipb.PatternFlowArpProtocolType) PatternFlowArpProtocolType {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -69889,8 +73980,10 @@ type PatternFlowArpProtocolType interface {
 	SetMetricGroup(value string) PatternFlowArpProtocolType
 	HasMetricGroup() bool
 	Increment() PatternFlowArpProtocolTypeCounter
+	SetIncrement(value PatternFlowArpProtocolTypeCounter) PatternFlowArpProtocolType
 	HasIncrement() bool
 	Decrement() PatternFlowArpProtocolTypeCounter
+	SetDecrement(value PatternFlowArpProtocolTypeCounter) PatternFlowArpProtocolType
 	HasDecrement() bool
 }
 
@@ -69996,10 +74089,7 @@ func (obj *patternFlowArpProtocolType) SetMetricGroup(value string) PatternFlowA
 func (obj *patternFlowArpProtocolType) Increment() PatternFlowArpProtocolTypeCounter {
 	obj.SetChoice(PatternFlowArpProtocolTypeChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowArpProtocolTypeCounter{}
-		newObj := &patternFlowArpProtocolTypeCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowArpProtocolTypeCounter().Msg()
 	}
 	return &patternFlowArpProtocolTypeCounter{obj: obj.obj.Increment}
 }
@@ -70010,15 +74100,20 @@ func (obj *patternFlowArpProtocolType) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowArpProtocolTypeCounter value in the PatternFlowArpProtocolType object
+//  description is TBD
+func (obj *patternFlowArpProtocolType) SetIncrement(value PatternFlowArpProtocolTypeCounter) PatternFlowArpProtocolType {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowArpProtocolTypeChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowArpProtocolTypeCounter
 //  description is TBD
 func (obj *patternFlowArpProtocolType) Decrement() PatternFlowArpProtocolTypeCounter {
 	obj.SetChoice(PatternFlowArpProtocolTypeChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowArpProtocolTypeCounter{}
-		newObj := &patternFlowArpProtocolTypeCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowArpProtocolTypeCounter().Msg()
 	}
 	return &patternFlowArpProtocolTypeCounter{obj: obj.obj.Decrement}
 }
@@ -70027,6 +74122,14 @@ func (obj *patternFlowArpProtocolType) Decrement() PatternFlowArpProtocolTypeCou
 //  description is TBD
 func (obj *patternFlowArpProtocolType) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowArpProtocolTypeCounter value in the PatternFlowArpProtocolType object
+//  description is TBD
+func (obj *patternFlowArpProtocolType) SetDecrement(value PatternFlowArpProtocolTypeCounter) PatternFlowArpProtocolType {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowArpProtocolTypeChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowArpProtocolType) validateObj(set_default bool) {
@@ -70073,12 +74176,18 @@ type patternFlowArpHardwareLength struct {
 	obj *snappipb.PatternFlowArpHardwareLength
 }
 
+func NewPatternFlowArpHardwareLength() PatternFlowArpHardwareLength {
+	obj := patternFlowArpHardwareLength{obj: &snappipb.PatternFlowArpHardwareLength{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowArpHardwareLength) Msg() *snappipb.PatternFlowArpHardwareLength {
 	return obj.obj
 }
 
 func (obj *patternFlowArpHardwareLength) SetMsg(msg *snappipb.PatternFlowArpHardwareLength) PatternFlowArpHardwareLength {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -70210,8 +74319,10 @@ type PatternFlowArpHardwareLength interface {
 	SetMetricGroup(value string) PatternFlowArpHardwareLength
 	HasMetricGroup() bool
 	Increment() PatternFlowArpHardwareLengthCounter
+	SetIncrement(value PatternFlowArpHardwareLengthCounter) PatternFlowArpHardwareLength
 	HasIncrement() bool
 	Decrement() PatternFlowArpHardwareLengthCounter
+	SetDecrement(value PatternFlowArpHardwareLengthCounter) PatternFlowArpHardwareLength
 	HasDecrement() bool
 }
 
@@ -70317,10 +74428,7 @@ func (obj *patternFlowArpHardwareLength) SetMetricGroup(value string) PatternFlo
 func (obj *patternFlowArpHardwareLength) Increment() PatternFlowArpHardwareLengthCounter {
 	obj.SetChoice(PatternFlowArpHardwareLengthChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowArpHardwareLengthCounter{}
-		newObj := &patternFlowArpHardwareLengthCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowArpHardwareLengthCounter().Msg()
 	}
 	return &patternFlowArpHardwareLengthCounter{obj: obj.obj.Increment}
 }
@@ -70331,15 +74439,20 @@ func (obj *patternFlowArpHardwareLength) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowArpHardwareLengthCounter value in the PatternFlowArpHardwareLength object
+//  description is TBD
+func (obj *patternFlowArpHardwareLength) SetIncrement(value PatternFlowArpHardwareLengthCounter) PatternFlowArpHardwareLength {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowArpHardwareLengthChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowArpHardwareLengthCounter
 //  description is TBD
 func (obj *patternFlowArpHardwareLength) Decrement() PatternFlowArpHardwareLengthCounter {
 	obj.SetChoice(PatternFlowArpHardwareLengthChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowArpHardwareLengthCounter{}
-		newObj := &patternFlowArpHardwareLengthCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowArpHardwareLengthCounter().Msg()
 	}
 	return &patternFlowArpHardwareLengthCounter{obj: obj.obj.Decrement}
 }
@@ -70348,6 +74461,14 @@ func (obj *patternFlowArpHardwareLength) Decrement() PatternFlowArpHardwareLengt
 //  description is TBD
 func (obj *patternFlowArpHardwareLength) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowArpHardwareLengthCounter value in the PatternFlowArpHardwareLength object
+//  description is TBD
+func (obj *patternFlowArpHardwareLength) SetDecrement(value PatternFlowArpHardwareLengthCounter) PatternFlowArpHardwareLength {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowArpHardwareLengthChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowArpHardwareLength) validateObj(set_default bool) {
@@ -70394,12 +74515,18 @@ type patternFlowArpProtocolLength struct {
 	obj *snappipb.PatternFlowArpProtocolLength
 }
 
+func NewPatternFlowArpProtocolLength() PatternFlowArpProtocolLength {
+	obj := patternFlowArpProtocolLength{obj: &snappipb.PatternFlowArpProtocolLength{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowArpProtocolLength) Msg() *snappipb.PatternFlowArpProtocolLength {
 	return obj.obj
 }
 
 func (obj *patternFlowArpProtocolLength) SetMsg(msg *snappipb.PatternFlowArpProtocolLength) PatternFlowArpProtocolLength {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -70531,8 +74658,10 @@ type PatternFlowArpProtocolLength interface {
 	SetMetricGroup(value string) PatternFlowArpProtocolLength
 	HasMetricGroup() bool
 	Increment() PatternFlowArpProtocolLengthCounter
+	SetIncrement(value PatternFlowArpProtocolLengthCounter) PatternFlowArpProtocolLength
 	HasIncrement() bool
 	Decrement() PatternFlowArpProtocolLengthCounter
+	SetDecrement(value PatternFlowArpProtocolLengthCounter) PatternFlowArpProtocolLength
 	HasDecrement() bool
 }
 
@@ -70638,10 +74767,7 @@ func (obj *patternFlowArpProtocolLength) SetMetricGroup(value string) PatternFlo
 func (obj *patternFlowArpProtocolLength) Increment() PatternFlowArpProtocolLengthCounter {
 	obj.SetChoice(PatternFlowArpProtocolLengthChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowArpProtocolLengthCounter{}
-		newObj := &patternFlowArpProtocolLengthCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowArpProtocolLengthCounter().Msg()
 	}
 	return &patternFlowArpProtocolLengthCounter{obj: obj.obj.Increment}
 }
@@ -70652,15 +74778,20 @@ func (obj *patternFlowArpProtocolLength) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowArpProtocolLengthCounter value in the PatternFlowArpProtocolLength object
+//  description is TBD
+func (obj *patternFlowArpProtocolLength) SetIncrement(value PatternFlowArpProtocolLengthCounter) PatternFlowArpProtocolLength {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowArpProtocolLengthChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowArpProtocolLengthCounter
 //  description is TBD
 func (obj *patternFlowArpProtocolLength) Decrement() PatternFlowArpProtocolLengthCounter {
 	obj.SetChoice(PatternFlowArpProtocolLengthChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowArpProtocolLengthCounter{}
-		newObj := &patternFlowArpProtocolLengthCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowArpProtocolLengthCounter().Msg()
 	}
 	return &patternFlowArpProtocolLengthCounter{obj: obj.obj.Decrement}
 }
@@ -70669,6 +74800,14 @@ func (obj *patternFlowArpProtocolLength) Decrement() PatternFlowArpProtocolLengt
 //  description is TBD
 func (obj *patternFlowArpProtocolLength) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowArpProtocolLengthCounter value in the PatternFlowArpProtocolLength object
+//  description is TBD
+func (obj *patternFlowArpProtocolLength) SetDecrement(value PatternFlowArpProtocolLengthCounter) PatternFlowArpProtocolLength {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowArpProtocolLengthChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowArpProtocolLength) validateObj(set_default bool) {
@@ -70715,12 +74854,18 @@ type patternFlowArpOperation struct {
 	obj *snappipb.PatternFlowArpOperation
 }
 
+func NewPatternFlowArpOperation() PatternFlowArpOperation {
+	obj := patternFlowArpOperation{obj: &snappipb.PatternFlowArpOperation{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowArpOperation) Msg() *snappipb.PatternFlowArpOperation {
 	return obj.obj
 }
 
 func (obj *patternFlowArpOperation) SetMsg(msg *snappipb.PatternFlowArpOperation) PatternFlowArpOperation {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -70852,8 +74997,10 @@ type PatternFlowArpOperation interface {
 	SetMetricGroup(value string) PatternFlowArpOperation
 	HasMetricGroup() bool
 	Increment() PatternFlowArpOperationCounter
+	SetIncrement(value PatternFlowArpOperationCounter) PatternFlowArpOperation
 	HasIncrement() bool
 	Decrement() PatternFlowArpOperationCounter
+	SetDecrement(value PatternFlowArpOperationCounter) PatternFlowArpOperation
 	HasDecrement() bool
 }
 
@@ -70959,10 +75106,7 @@ func (obj *patternFlowArpOperation) SetMetricGroup(value string) PatternFlowArpO
 func (obj *patternFlowArpOperation) Increment() PatternFlowArpOperationCounter {
 	obj.SetChoice(PatternFlowArpOperationChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowArpOperationCounter{}
-		newObj := &patternFlowArpOperationCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowArpOperationCounter().Msg()
 	}
 	return &patternFlowArpOperationCounter{obj: obj.obj.Increment}
 }
@@ -70973,15 +75117,20 @@ func (obj *patternFlowArpOperation) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowArpOperationCounter value in the PatternFlowArpOperation object
+//  description is TBD
+func (obj *patternFlowArpOperation) SetIncrement(value PatternFlowArpOperationCounter) PatternFlowArpOperation {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowArpOperationChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowArpOperationCounter
 //  description is TBD
 func (obj *patternFlowArpOperation) Decrement() PatternFlowArpOperationCounter {
 	obj.SetChoice(PatternFlowArpOperationChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowArpOperationCounter{}
-		newObj := &patternFlowArpOperationCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowArpOperationCounter().Msg()
 	}
 	return &patternFlowArpOperationCounter{obj: obj.obj.Decrement}
 }
@@ -70990,6 +75139,14 @@ func (obj *patternFlowArpOperation) Decrement() PatternFlowArpOperationCounter {
 //  description is TBD
 func (obj *patternFlowArpOperation) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowArpOperationCounter value in the PatternFlowArpOperation object
+//  description is TBD
+func (obj *patternFlowArpOperation) SetDecrement(value PatternFlowArpOperationCounter) PatternFlowArpOperation {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowArpOperationChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowArpOperation) validateObj(set_default bool) {
@@ -71036,12 +75193,18 @@ type patternFlowArpSenderHardwareAddr struct {
 	obj *snappipb.PatternFlowArpSenderHardwareAddr
 }
 
+func NewPatternFlowArpSenderHardwareAddr() PatternFlowArpSenderHardwareAddr {
+	obj := patternFlowArpSenderHardwareAddr{obj: &snappipb.PatternFlowArpSenderHardwareAddr{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowArpSenderHardwareAddr) Msg() *snappipb.PatternFlowArpSenderHardwareAddr {
 	return obj.obj
 }
 
 func (obj *patternFlowArpSenderHardwareAddr) SetMsg(msg *snappipb.PatternFlowArpSenderHardwareAddr) PatternFlowArpSenderHardwareAddr {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -71173,8 +75336,10 @@ type PatternFlowArpSenderHardwareAddr interface {
 	SetMetricGroup(value string) PatternFlowArpSenderHardwareAddr
 	HasMetricGroup() bool
 	Increment() PatternFlowArpSenderHardwareAddrCounter
+	SetIncrement(value PatternFlowArpSenderHardwareAddrCounter) PatternFlowArpSenderHardwareAddr
 	HasIncrement() bool
 	Decrement() PatternFlowArpSenderHardwareAddrCounter
+	SetDecrement(value PatternFlowArpSenderHardwareAddrCounter) PatternFlowArpSenderHardwareAddr
 	HasDecrement() bool
 }
 
@@ -71280,10 +75445,7 @@ func (obj *patternFlowArpSenderHardwareAddr) SetMetricGroup(value string) Patter
 func (obj *patternFlowArpSenderHardwareAddr) Increment() PatternFlowArpSenderHardwareAddrCounter {
 	obj.SetChoice(PatternFlowArpSenderHardwareAddrChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowArpSenderHardwareAddrCounter{}
-		newObj := &patternFlowArpSenderHardwareAddrCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowArpSenderHardwareAddrCounter().Msg()
 	}
 	return &patternFlowArpSenderHardwareAddrCounter{obj: obj.obj.Increment}
 }
@@ -71294,15 +75456,20 @@ func (obj *patternFlowArpSenderHardwareAddr) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowArpSenderHardwareAddrCounter value in the PatternFlowArpSenderHardwareAddr object
+//  description is TBD
+func (obj *patternFlowArpSenderHardwareAddr) SetIncrement(value PatternFlowArpSenderHardwareAddrCounter) PatternFlowArpSenderHardwareAddr {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowArpSenderHardwareAddrChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowArpSenderHardwareAddrCounter
 //  description is TBD
 func (obj *patternFlowArpSenderHardwareAddr) Decrement() PatternFlowArpSenderHardwareAddrCounter {
 	obj.SetChoice(PatternFlowArpSenderHardwareAddrChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowArpSenderHardwareAddrCounter{}
-		newObj := &patternFlowArpSenderHardwareAddrCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowArpSenderHardwareAddrCounter().Msg()
 	}
 	return &patternFlowArpSenderHardwareAddrCounter{obj: obj.obj.Decrement}
 }
@@ -71311,6 +75478,14 @@ func (obj *patternFlowArpSenderHardwareAddr) Decrement() PatternFlowArpSenderHar
 //  description is TBD
 func (obj *patternFlowArpSenderHardwareAddr) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowArpSenderHardwareAddrCounter value in the PatternFlowArpSenderHardwareAddr object
+//  description is TBD
+func (obj *patternFlowArpSenderHardwareAddr) SetDecrement(value PatternFlowArpSenderHardwareAddrCounter) PatternFlowArpSenderHardwareAddr {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowArpSenderHardwareAddrChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowArpSenderHardwareAddr) validateObj(set_default bool) {
@@ -71355,12 +75530,18 @@ type patternFlowArpSenderProtocolAddr struct {
 	obj *snappipb.PatternFlowArpSenderProtocolAddr
 }
 
+func NewPatternFlowArpSenderProtocolAddr() PatternFlowArpSenderProtocolAddr {
+	obj := patternFlowArpSenderProtocolAddr{obj: &snappipb.PatternFlowArpSenderProtocolAddr{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowArpSenderProtocolAddr) Msg() *snappipb.PatternFlowArpSenderProtocolAddr {
 	return obj.obj
 }
 
 func (obj *patternFlowArpSenderProtocolAddr) SetMsg(msg *snappipb.PatternFlowArpSenderProtocolAddr) PatternFlowArpSenderProtocolAddr {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -71492,8 +75673,10 @@ type PatternFlowArpSenderProtocolAddr interface {
 	SetMetricGroup(value string) PatternFlowArpSenderProtocolAddr
 	HasMetricGroup() bool
 	Increment() PatternFlowArpSenderProtocolAddrCounter
+	SetIncrement(value PatternFlowArpSenderProtocolAddrCounter) PatternFlowArpSenderProtocolAddr
 	HasIncrement() bool
 	Decrement() PatternFlowArpSenderProtocolAddrCounter
+	SetDecrement(value PatternFlowArpSenderProtocolAddrCounter) PatternFlowArpSenderProtocolAddr
 	HasDecrement() bool
 }
 
@@ -71599,10 +75782,7 @@ func (obj *patternFlowArpSenderProtocolAddr) SetMetricGroup(value string) Patter
 func (obj *patternFlowArpSenderProtocolAddr) Increment() PatternFlowArpSenderProtocolAddrCounter {
 	obj.SetChoice(PatternFlowArpSenderProtocolAddrChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowArpSenderProtocolAddrCounter{}
-		newObj := &patternFlowArpSenderProtocolAddrCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowArpSenderProtocolAddrCounter().Msg()
 	}
 	return &patternFlowArpSenderProtocolAddrCounter{obj: obj.obj.Increment}
 }
@@ -71613,15 +75793,20 @@ func (obj *patternFlowArpSenderProtocolAddr) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowArpSenderProtocolAddrCounter value in the PatternFlowArpSenderProtocolAddr object
+//  description is TBD
+func (obj *patternFlowArpSenderProtocolAddr) SetIncrement(value PatternFlowArpSenderProtocolAddrCounter) PatternFlowArpSenderProtocolAddr {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowArpSenderProtocolAddrChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowArpSenderProtocolAddrCounter
 //  description is TBD
 func (obj *patternFlowArpSenderProtocolAddr) Decrement() PatternFlowArpSenderProtocolAddrCounter {
 	obj.SetChoice(PatternFlowArpSenderProtocolAddrChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowArpSenderProtocolAddrCounter{}
-		newObj := &patternFlowArpSenderProtocolAddrCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowArpSenderProtocolAddrCounter().Msg()
 	}
 	return &patternFlowArpSenderProtocolAddrCounter{obj: obj.obj.Decrement}
 }
@@ -71630,6 +75815,14 @@ func (obj *patternFlowArpSenderProtocolAddr) Decrement() PatternFlowArpSenderPro
 //  description is TBD
 func (obj *patternFlowArpSenderProtocolAddr) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowArpSenderProtocolAddrCounter value in the PatternFlowArpSenderProtocolAddr object
+//  description is TBD
+func (obj *patternFlowArpSenderProtocolAddr) SetDecrement(value PatternFlowArpSenderProtocolAddrCounter) PatternFlowArpSenderProtocolAddr {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowArpSenderProtocolAddrChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowArpSenderProtocolAddr) validateObj(set_default bool) {
@@ -71674,12 +75867,18 @@ type patternFlowArpTargetHardwareAddr struct {
 	obj *snappipb.PatternFlowArpTargetHardwareAddr
 }
 
+func NewPatternFlowArpTargetHardwareAddr() PatternFlowArpTargetHardwareAddr {
+	obj := patternFlowArpTargetHardwareAddr{obj: &snappipb.PatternFlowArpTargetHardwareAddr{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowArpTargetHardwareAddr) Msg() *snappipb.PatternFlowArpTargetHardwareAddr {
 	return obj.obj
 }
 
 func (obj *patternFlowArpTargetHardwareAddr) SetMsg(msg *snappipb.PatternFlowArpTargetHardwareAddr) PatternFlowArpTargetHardwareAddr {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -71811,8 +76010,10 @@ type PatternFlowArpTargetHardwareAddr interface {
 	SetMetricGroup(value string) PatternFlowArpTargetHardwareAddr
 	HasMetricGroup() bool
 	Increment() PatternFlowArpTargetHardwareAddrCounter
+	SetIncrement(value PatternFlowArpTargetHardwareAddrCounter) PatternFlowArpTargetHardwareAddr
 	HasIncrement() bool
 	Decrement() PatternFlowArpTargetHardwareAddrCounter
+	SetDecrement(value PatternFlowArpTargetHardwareAddrCounter) PatternFlowArpTargetHardwareAddr
 	HasDecrement() bool
 }
 
@@ -71918,10 +76119,7 @@ func (obj *patternFlowArpTargetHardwareAddr) SetMetricGroup(value string) Patter
 func (obj *patternFlowArpTargetHardwareAddr) Increment() PatternFlowArpTargetHardwareAddrCounter {
 	obj.SetChoice(PatternFlowArpTargetHardwareAddrChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowArpTargetHardwareAddrCounter{}
-		newObj := &patternFlowArpTargetHardwareAddrCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowArpTargetHardwareAddrCounter().Msg()
 	}
 	return &patternFlowArpTargetHardwareAddrCounter{obj: obj.obj.Increment}
 }
@@ -71932,15 +76130,20 @@ func (obj *patternFlowArpTargetHardwareAddr) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowArpTargetHardwareAddrCounter value in the PatternFlowArpTargetHardwareAddr object
+//  description is TBD
+func (obj *patternFlowArpTargetHardwareAddr) SetIncrement(value PatternFlowArpTargetHardwareAddrCounter) PatternFlowArpTargetHardwareAddr {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowArpTargetHardwareAddrChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowArpTargetHardwareAddrCounter
 //  description is TBD
 func (obj *patternFlowArpTargetHardwareAddr) Decrement() PatternFlowArpTargetHardwareAddrCounter {
 	obj.SetChoice(PatternFlowArpTargetHardwareAddrChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowArpTargetHardwareAddrCounter{}
-		newObj := &patternFlowArpTargetHardwareAddrCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowArpTargetHardwareAddrCounter().Msg()
 	}
 	return &patternFlowArpTargetHardwareAddrCounter{obj: obj.obj.Decrement}
 }
@@ -71949,6 +76152,14 @@ func (obj *patternFlowArpTargetHardwareAddr) Decrement() PatternFlowArpTargetHar
 //  description is TBD
 func (obj *patternFlowArpTargetHardwareAddr) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowArpTargetHardwareAddrCounter value in the PatternFlowArpTargetHardwareAddr object
+//  description is TBD
+func (obj *patternFlowArpTargetHardwareAddr) SetDecrement(value PatternFlowArpTargetHardwareAddrCounter) PatternFlowArpTargetHardwareAddr {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowArpTargetHardwareAddrChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowArpTargetHardwareAddr) validateObj(set_default bool) {
@@ -71993,12 +76204,18 @@ type patternFlowArpTargetProtocolAddr struct {
 	obj *snappipb.PatternFlowArpTargetProtocolAddr
 }
 
+func NewPatternFlowArpTargetProtocolAddr() PatternFlowArpTargetProtocolAddr {
+	obj := patternFlowArpTargetProtocolAddr{obj: &snappipb.PatternFlowArpTargetProtocolAddr{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowArpTargetProtocolAddr) Msg() *snappipb.PatternFlowArpTargetProtocolAddr {
 	return obj.obj
 }
 
 func (obj *patternFlowArpTargetProtocolAddr) SetMsg(msg *snappipb.PatternFlowArpTargetProtocolAddr) PatternFlowArpTargetProtocolAddr {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -72130,8 +76347,10 @@ type PatternFlowArpTargetProtocolAddr interface {
 	SetMetricGroup(value string) PatternFlowArpTargetProtocolAddr
 	HasMetricGroup() bool
 	Increment() PatternFlowArpTargetProtocolAddrCounter
+	SetIncrement(value PatternFlowArpTargetProtocolAddrCounter) PatternFlowArpTargetProtocolAddr
 	HasIncrement() bool
 	Decrement() PatternFlowArpTargetProtocolAddrCounter
+	SetDecrement(value PatternFlowArpTargetProtocolAddrCounter) PatternFlowArpTargetProtocolAddr
 	HasDecrement() bool
 }
 
@@ -72237,10 +76456,7 @@ func (obj *patternFlowArpTargetProtocolAddr) SetMetricGroup(value string) Patter
 func (obj *patternFlowArpTargetProtocolAddr) Increment() PatternFlowArpTargetProtocolAddrCounter {
 	obj.SetChoice(PatternFlowArpTargetProtocolAddrChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowArpTargetProtocolAddrCounter{}
-		newObj := &patternFlowArpTargetProtocolAddrCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowArpTargetProtocolAddrCounter().Msg()
 	}
 	return &patternFlowArpTargetProtocolAddrCounter{obj: obj.obj.Increment}
 }
@@ -72251,15 +76467,20 @@ func (obj *patternFlowArpTargetProtocolAddr) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowArpTargetProtocolAddrCounter value in the PatternFlowArpTargetProtocolAddr object
+//  description is TBD
+func (obj *patternFlowArpTargetProtocolAddr) SetIncrement(value PatternFlowArpTargetProtocolAddrCounter) PatternFlowArpTargetProtocolAddr {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowArpTargetProtocolAddrChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowArpTargetProtocolAddrCounter
 //  description is TBD
 func (obj *patternFlowArpTargetProtocolAddr) Decrement() PatternFlowArpTargetProtocolAddrCounter {
 	obj.SetChoice(PatternFlowArpTargetProtocolAddrChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowArpTargetProtocolAddrCounter{}
-		newObj := &patternFlowArpTargetProtocolAddrCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowArpTargetProtocolAddrCounter().Msg()
 	}
 	return &patternFlowArpTargetProtocolAddrCounter{obj: obj.obj.Decrement}
 }
@@ -72268,6 +76489,14 @@ func (obj *patternFlowArpTargetProtocolAddr) Decrement() PatternFlowArpTargetPro
 //  description is TBD
 func (obj *patternFlowArpTargetProtocolAddr) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowArpTargetProtocolAddrCounter value in the PatternFlowArpTargetProtocolAddr object
+//  description is TBD
+func (obj *patternFlowArpTargetProtocolAddr) SetDecrement(value PatternFlowArpTargetProtocolAddrCounter) PatternFlowArpTargetProtocolAddr {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowArpTargetProtocolAddrChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowArpTargetProtocolAddr) validateObj(set_default bool) {
@@ -72312,12 +76541,18 @@ type flowIcmpEcho struct {
 	obj *snappipb.FlowIcmpEcho
 }
 
+func NewFlowIcmpEcho() FlowIcmpEcho {
+	obj := flowIcmpEcho{obj: &snappipb.FlowIcmpEcho{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *flowIcmpEcho) Msg() *snappipb.FlowIcmpEcho {
 	return obj.obj
 }
 
 func (obj *flowIcmpEcho) SetMsg(msg *snappipb.FlowIcmpEcho) FlowIcmpEcho {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -72438,26 +76673,27 @@ type FlowIcmpEcho interface {
 	validateObj(set_default bool)
 	setDefault()
 	Type() PatternFlowIcmpEchoType
+	SetType(value PatternFlowIcmpEchoType) FlowIcmpEcho
 	HasType() bool
 	Code() PatternFlowIcmpEchoCode
+	SetCode(value PatternFlowIcmpEchoCode) FlowIcmpEcho
 	HasCode() bool
 	Checksum() PatternFlowIcmpEchoChecksum
+	SetChecksum(value PatternFlowIcmpEchoChecksum) FlowIcmpEcho
 	HasChecksum() bool
 	Identifier() PatternFlowIcmpEchoIdentifier
+	SetIdentifier(value PatternFlowIcmpEchoIdentifier) FlowIcmpEcho
 	HasIdentifier() bool
 	SequenceNumber() PatternFlowIcmpEchoSequenceNumber
+	SetSequenceNumber(value PatternFlowIcmpEchoSequenceNumber) FlowIcmpEcho
 	HasSequenceNumber() bool
 }
 
 // Type returns a PatternFlowIcmpEchoType
 //  description is TBD
 func (obj *flowIcmpEcho) Type() PatternFlowIcmpEchoType {
-
 	if obj.obj.Type == nil {
-		obj.obj.Type = &snappipb.PatternFlowIcmpEchoType{}
-		newObj := &patternFlowIcmpEchoType{obj: obj.obj.Type}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Type = NewPatternFlowIcmpEchoType().Msg()
 	}
 	return &patternFlowIcmpEchoType{obj: obj.obj.Type}
 }
@@ -72468,15 +76704,19 @@ func (obj *flowIcmpEcho) HasType() bool {
 	return obj.obj.Type != nil
 }
 
+// SetType sets the PatternFlowIcmpEchoType value in the FlowIcmpEcho object
+//  description is TBD
+func (obj *flowIcmpEcho) SetType(value PatternFlowIcmpEchoType) FlowIcmpEcho {
+	obj.Type().SetMsg(value.Msg())
+
+	return obj
+}
+
 // Code returns a PatternFlowIcmpEchoCode
 //  description is TBD
 func (obj *flowIcmpEcho) Code() PatternFlowIcmpEchoCode {
-
 	if obj.obj.Code == nil {
-		obj.obj.Code = &snappipb.PatternFlowIcmpEchoCode{}
-		newObj := &patternFlowIcmpEchoCode{obj: obj.obj.Code}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Code = NewPatternFlowIcmpEchoCode().Msg()
 	}
 	return &patternFlowIcmpEchoCode{obj: obj.obj.Code}
 }
@@ -72487,15 +76727,19 @@ func (obj *flowIcmpEcho) HasCode() bool {
 	return obj.obj.Code != nil
 }
 
+// SetCode sets the PatternFlowIcmpEchoCode value in the FlowIcmpEcho object
+//  description is TBD
+func (obj *flowIcmpEcho) SetCode(value PatternFlowIcmpEchoCode) FlowIcmpEcho {
+	obj.Code().SetMsg(value.Msg())
+
+	return obj
+}
+
 // Checksum returns a PatternFlowIcmpEchoChecksum
 //  description is TBD
 func (obj *flowIcmpEcho) Checksum() PatternFlowIcmpEchoChecksum {
-
 	if obj.obj.Checksum == nil {
-		obj.obj.Checksum = &snappipb.PatternFlowIcmpEchoChecksum{}
-		newObj := &patternFlowIcmpEchoChecksum{obj: obj.obj.Checksum}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Checksum = NewPatternFlowIcmpEchoChecksum().Msg()
 	}
 	return &patternFlowIcmpEchoChecksum{obj: obj.obj.Checksum}
 }
@@ -72506,15 +76750,19 @@ func (obj *flowIcmpEcho) HasChecksum() bool {
 	return obj.obj.Checksum != nil
 }
 
+// SetChecksum sets the PatternFlowIcmpEchoChecksum value in the FlowIcmpEcho object
+//  description is TBD
+func (obj *flowIcmpEcho) SetChecksum(value PatternFlowIcmpEchoChecksum) FlowIcmpEcho {
+	obj.Checksum().SetMsg(value.Msg())
+
+	return obj
+}
+
 // Identifier returns a PatternFlowIcmpEchoIdentifier
 //  description is TBD
 func (obj *flowIcmpEcho) Identifier() PatternFlowIcmpEchoIdentifier {
-
 	if obj.obj.Identifier == nil {
-		obj.obj.Identifier = &snappipb.PatternFlowIcmpEchoIdentifier{}
-		newObj := &patternFlowIcmpEchoIdentifier{obj: obj.obj.Identifier}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Identifier = NewPatternFlowIcmpEchoIdentifier().Msg()
 	}
 	return &patternFlowIcmpEchoIdentifier{obj: obj.obj.Identifier}
 }
@@ -72525,15 +76773,19 @@ func (obj *flowIcmpEcho) HasIdentifier() bool {
 	return obj.obj.Identifier != nil
 }
 
+// SetIdentifier sets the PatternFlowIcmpEchoIdentifier value in the FlowIcmpEcho object
+//  description is TBD
+func (obj *flowIcmpEcho) SetIdentifier(value PatternFlowIcmpEchoIdentifier) FlowIcmpEcho {
+	obj.Identifier().SetMsg(value.Msg())
+
+	return obj
+}
+
 // SequenceNumber returns a PatternFlowIcmpEchoSequenceNumber
 //  description is TBD
 func (obj *flowIcmpEcho) SequenceNumber() PatternFlowIcmpEchoSequenceNumber {
-
 	if obj.obj.SequenceNumber == nil {
-		obj.obj.SequenceNumber = &snappipb.PatternFlowIcmpEchoSequenceNumber{}
-		newObj := &patternFlowIcmpEchoSequenceNumber{obj: obj.obj.SequenceNumber}
-		newObj.setDefault()
-		return newObj
+		obj.obj.SequenceNumber = NewPatternFlowIcmpEchoSequenceNumber().Msg()
 	}
 	return &patternFlowIcmpEchoSequenceNumber{obj: obj.obj.SequenceNumber}
 }
@@ -72542,6 +76794,14 @@ func (obj *flowIcmpEcho) SequenceNumber() PatternFlowIcmpEchoSequenceNumber {
 //  description is TBD
 func (obj *flowIcmpEcho) HasSequenceNumber() bool {
 	return obj.obj.SequenceNumber != nil
+}
+
+// SetSequenceNumber sets the PatternFlowIcmpEchoSequenceNumber value in the FlowIcmpEcho object
+//  description is TBD
+func (obj *flowIcmpEcho) SetSequenceNumber(value PatternFlowIcmpEchoSequenceNumber) FlowIcmpEcho {
+	obj.SequenceNumber().SetMsg(value.Msg())
+
+	return obj
 }
 
 func (obj *flowIcmpEcho) validateObj(set_default bool) {
@@ -72578,12 +76838,18 @@ type flowIcmpv6Echo struct {
 	obj *snappipb.FlowIcmpv6Echo
 }
 
+func NewFlowIcmpv6Echo() FlowIcmpv6Echo {
+	obj := flowIcmpv6Echo{obj: &snappipb.FlowIcmpv6Echo{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *flowIcmpv6Echo) Msg() *snappipb.FlowIcmpv6Echo {
 	return obj.obj
 }
 
 func (obj *flowIcmpv6Echo) SetMsg(msg *snappipb.FlowIcmpv6Echo) FlowIcmpv6Echo {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -72704,26 +76970,27 @@ type FlowIcmpv6Echo interface {
 	validateObj(set_default bool)
 	setDefault()
 	Type() PatternFlowIcmpv6EchoType
+	SetType(value PatternFlowIcmpv6EchoType) FlowIcmpv6Echo
 	HasType() bool
 	Code() PatternFlowIcmpv6EchoCode
+	SetCode(value PatternFlowIcmpv6EchoCode) FlowIcmpv6Echo
 	HasCode() bool
 	Identifier() PatternFlowIcmpv6EchoIdentifier
+	SetIdentifier(value PatternFlowIcmpv6EchoIdentifier) FlowIcmpv6Echo
 	HasIdentifier() bool
 	SequenceNumber() PatternFlowIcmpv6EchoSequenceNumber
+	SetSequenceNumber(value PatternFlowIcmpv6EchoSequenceNumber) FlowIcmpv6Echo
 	HasSequenceNumber() bool
 	Checksum() PatternFlowIcmpv6EchoChecksum
+	SetChecksum(value PatternFlowIcmpv6EchoChecksum) FlowIcmpv6Echo
 	HasChecksum() bool
 }
 
 // Type returns a PatternFlowIcmpv6EchoType
 //  description is TBD
 func (obj *flowIcmpv6Echo) Type() PatternFlowIcmpv6EchoType {
-
 	if obj.obj.Type == nil {
-		obj.obj.Type = &snappipb.PatternFlowIcmpv6EchoType{}
-		newObj := &patternFlowIcmpv6EchoType{obj: obj.obj.Type}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Type = NewPatternFlowIcmpv6EchoType().Msg()
 	}
 	return &patternFlowIcmpv6EchoType{obj: obj.obj.Type}
 }
@@ -72734,15 +77001,19 @@ func (obj *flowIcmpv6Echo) HasType() bool {
 	return obj.obj.Type != nil
 }
 
+// SetType sets the PatternFlowIcmpv6EchoType value in the FlowIcmpv6Echo object
+//  description is TBD
+func (obj *flowIcmpv6Echo) SetType(value PatternFlowIcmpv6EchoType) FlowIcmpv6Echo {
+	obj.Type().SetMsg(value.Msg())
+
+	return obj
+}
+
 // Code returns a PatternFlowIcmpv6EchoCode
 //  description is TBD
 func (obj *flowIcmpv6Echo) Code() PatternFlowIcmpv6EchoCode {
-
 	if obj.obj.Code == nil {
-		obj.obj.Code = &snappipb.PatternFlowIcmpv6EchoCode{}
-		newObj := &patternFlowIcmpv6EchoCode{obj: obj.obj.Code}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Code = NewPatternFlowIcmpv6EchoCode().Msg()
 	}
 	return &patternFlowIcmpv6EchoCode{obj: obj.obj.Code}
 }
@@ -72753,15 +77024,19 @@ func (obj *flowIcmpv6Echo) HasCode() bool {
 	return obj.obj.Code != nil
 }
 
+// SetCode sets the PatternFlowIcmpv6EchoCode value in the FlowIcmpv6Echo object
+//  description is TBD
+func (obj *flowIcmpv6Echo) SetCode(value PatternFlowIcmpv6EchoCode) FlowIcmpv6Echo {
+	obj.Code().SetMsg(value.Msg())
+
+	return obj
+}
+
 // Identifier returns a PatternFlowIcmpv6EchoIdentifier
 //  description is TBD
 func (obj *flowIcmpv6Echo) Identifier() PatternFlowIcmpv6EchoIdentifier {
-
 	if obj.obj.Identifier == nil {
-		obj.obj.Identifier = &snappipb.PatternFlowIcmpv6EchoIdentifier{}
-		newObj := &patternFlowIcmpv6EchoIdentifier{obj: obj.obj.Identifier}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Identifier = NewPatternFlowIcmpv6EchoIdentifier().Msg()
 	}
 	return &patternFlowIcmpv6EchoIdentifier{obj: obj.obj.Identifier}
 }
@@ -72772,15 +77047,19 @@ func (obj *flowIcmpv6Echo) HasIdentifier() bool {
 	return obj.obj.Identifier != nil
 }
 
+// SetIdentifier sets the PatternFlowIcmpv6EchoIdentifier value in the FlowIcmpv6Echo object
+//  description is TBD
+func (obj *flowIcmpv6Echo) SetIdentifier(value PatternFlowIcmpv6EchoIdentifier) FlowIcmpv6Echo {
+	obj.Identifier().SetMsg(value.Msg())
+
+	return obj
+}
+
 // SequenceNumber returns a PatternFlowIcmpv6EchoSequenceNumber
 //  description is TBD
 func (obj *flowIcmpv6Echo) SequenceNumber() PatternFlowIcmpv6EchoSequenceNumber {
-
 	if obj.obj.SequenceNumber == nil {
-		obj.obj.SequenceNumber = &snappipb.PatternFlowIcmpv6EchoSequenceNumber{}
-		newObj := &patternFlowIcmpv6EchoSequenceNumber{obj: obj.obj.SequenceNumber}
-		newObj.setDefault()
-		return newObj
+		obj.obj.SequenceNumber = NewPatternFlowIcmpv6EchoSequenceNumber().Msg()
 	}
 	return &patternFlowIcmpv6EchoSequenceNumber{obj: obj.obj.SequenceNumber}
 }
@@ -72791,15 +77070,19 @@ func (obj *flowIcmpv6Echo) HasSequenceNumber() bool {
 	return obj.obj.SequenceNumber != nil
 }
 
+// SetSequenceNumber sets the PatternFlowIcmpv6EchoSequenceNumber value in the FlowIcmpv6Echo object
+//  description is TBD
+func (obj *flowIcmpv6Echo) SetSequenceNumber(value PatternFlowIcmpv6EchoSequenceNumber) FlowIcmpv6Echo {
+	obj.SequenceNumber().SetMsg(value.Msg())
+
+	return obj
+}
+
 // Checksum returns a PatternFlowIcmpv6EchoChecksum
 //  description is TBD
 func (obj *flowIcmpv6Echo) Checksum() PatternFlowIcmpv6EchoChecksum {
-
 	if obj.obj.Checksum == nil {
-		obj.obj.Checksum = &snappipb.PatternFlowIcmpv6EchoChecksum{}
-		newObj := &patternFlowIcmpv6EchoChecksum{obj: obj.obj.Checksum}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Checksum = NewPatternFlowIcmpv6EchoChecksum().Msg()
 	}
 	return &patternFlowIcmpv6EchoChecksum{obj: obj.obj.Checksum}
 }
@@ -72808,6 +77091,14 @@ func (obj *flowIcmpv6Echo) Checksum() PatternFlowIcmpv6EchoChecksum {
 //  description is TBD
 func (obj *flowIcmpv6Echo) HasChecksum() bool {
 	return obj.obj.Checksum != nil
+}
+
+// SetChecksum sets the PatternFlowIcmpv6EchoChecksum value in the FlowIcmpv6Echo object
+//  description is TBD
+func (obj *flowIcmpv6Echo) SetChecksum(value PatternFlowIcmpv6EchoChecksum) FlowIcmpv6Echo {
+	obj.Checksum().SetMsg(value.Msg())
+
+	return obj
 }
 
 func (obj *flowIcmpv6Echo) validateObj(set_default bool) {
@@ -72844,12 +77135,18 @@ type patternFlowPppAddress struct {
 	obj *snappipb.PatternFlowPppAddress
 }
 
+func NewPatternFlowPppAddress() PatternFlowPppAddress {
+	obj := patternFlowPppAddress{obj: &snappipb.PatternFlowPppAddress{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowPppAddress) Msg() *snappipb.PatternFlowPppAddress {
 	return obj.obj
 }
 
 func (obj *patternFlowPppAddress) SetMsg(msg *snappipb.PatternFlowPppAddress) PatternFlowPppAddress {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -72981,8 +77278,10 @@ type PatternFlowPppAddress interface {
 	SetMetricGroup(value string) PatternFlowPppAddress
 	HasMetricGroup() bool
 	Increment() PatternFlowPppAddressCounter
+	SetIncrement(value PatternFlowPppAddressCounter) PatternFlowPppAddress
 	HasIncrement() bool
 	Decrement() PatternFlowPppAddressCounter
+	SetDecrement(value PatternFlowPppAddressCounter) PatternFlowPppAddress
 	HasDecrement() bool
 }
 
@@ -73088,10 +77387,7 @@ func (obj *patternFlowPppAddress) SetMetricGroup(value string) PatternFlowPppAdd
 func (obj *patternFlowPppAddress) Increment() PatternFlowPppAddressCounter {
 	obj.SetChoice(PatternFlowPppAddressChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowPppAddressCounter{}
-		newObj := &patternFlowPppAddressCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowPppAddressCounter().Msg()
 	}
 	return &patternFlowPppAddressCounter{obj: obj.obj.Increment}
 }
@@ -73102,15 +77398,20 @@ func (obj *patternFlowPppAddress) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowPppAddressCounter value in the PatternFlowPppAddress object
+//  description is TBD
+func (obj *patternFlowPppAddress) SetIncrement(value PatternFlowPppAddressCounter) PatternFlowPppAddress {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowPppAddressChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowPppAddressCounter
 //  description is TBD
 func (obj *patternFlowPppAddress) Decrement() PatternFlowPppAddressCounter {
 	obj.SetChoice(PatternFlowPppAddressChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowPppAddressCounter{}
-		newObj := &patternFlowPppAddressCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowPppAddressCounter().Msg()
 	}
 	return &patternFlowPppAddressCounter{obj: obj.obj.Decrement}
 }
@@ -73119,6 +77420,14 @@ func (obj *patternFlowPppAddress) Decrement() PatternFlowPppAddressCounter {
 //  description is TBD
 func (obj *patternFlowPppAddress) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowPppAddressCounter value in the PatternFlowPppAddress object
+//  description is TBD
+func (obj *patternFlowPppAddress) SetDecrement(value PatternFlowPppAddressCounter) PatternFlowPppAddress {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowPppAddressChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowPppAddress) validateObj(set_default bool) {
@@ -73165,12 +77474,18 @@ type patternFlowPppControl struct {
 	obj *snappipb.PatternFlowPppControl
 }
 
+func NewPatternFlowPppControl() PatternFlowPppControl {
+	obj := patternFlowPppControl{obj: &snappipb.PatternFlowPppControl{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowPppControl) Msg() *snappipb.PatternFlowPppControl {
 	return obj.obj
 }
 
 func (obj *patternFlowPppControl) SetMsg(msg *snappipb.PatternFlowPppControl) PatternFlowPppControl {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -73302,8 +77617,10 @@ type PatternFlowPppControl interface {
 	SetMetricGroup(value string) PatternFlowPppControl
 	HasMetricGroup() bool
 	Increment() PatternFlowPppControlCounter
+	SetIncrement(value PatternFlowPppControlCounter) PatternFlowPppControl
 	HasIncrement() bool
 	Decrement() PatternFlowPppControlCounter
+	SetDecrement(value PatternFlowPppControlCounter) PatternFlowPppControl
 	HasDecrement() bool
 }
 
@@ -73409,10 +77726,7 @@ func (obj *patternFlowPppControl) SetMetricGroup(value string) PatternFlowPppCon
 func (obj *patternFlowPppControl) Increment() PatternFlowPppControlCounter {
 	obj.SetChoice(PatternFlowPppControlChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowPppControlCounter{}
-		newObj := &patternFlowPppControlCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowPppControlCounter().Msg()
 	}
 	return &patternFlowPppControlCounter{obj: obj.obj.Increment}
 }
@@ -73423,15 +77737,20 @@ func (obj *patternFlowPppControl) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowPppControlCounter value in the PatternFlowPppControl object
+//  description is TBD
+func (obj *patternFlowPppControl) SetIncrement(value PatternFlowPppControlCounter) PatternFlowPppControl {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowPppControlChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowPppControlCounter
 //  description is TBD
 func (obj *patternFlowPppControl) Decrement() PatternFlowPppControlCounter {
 	obj.SetChoice(PatternFlowPppControlChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowPppControlCounter{}
-		newObj := &patternFlowPppControlCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowPppControlCounter().Msg()
 	}
 	return &patternFlowPppControlCounter{obj: obj.obj.Decrement}
 }
@@ -73440,6 +77759,14 @@ func (obj *patternFlowPppControl) Decrement() PatternFlowPppControlCounter {
 //  description is TBD
 func (obj *patternFlowPppControl) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowPppControlCounter value in the PatternFlowPppControl object
+//  description is TBD
+func (obj *patternFlowPppControl) SetDecrement(value PatternFlowPppControlCounter) PatternFlowPppControl {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowPppControlChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowPppControl) validateObj(set_default bool) {
@@ -73486,12 +77813,18 @@ type patternFlowPppProtocolType struct {
 	obj *snappipb.PatternFlowPppProtocolType
 }
 
+func NewPatternFlowPppProtocolType() PatternFlowPppProtocolType {
+	obj := patternFlowPppProtocolType{obj: &snappipb.PatternFlowPppProtocolType{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowPppProtocolType) Msg() *snappipb.PatternFlowPppProtocolType {
 	return obj.obj
 }
 
 func (obj *patternFlowPppProtocolType) SetMsg(msg *snappipb.PatternFlowPppProtocolType) PatternFlowPppProtocolType {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -73626,8 +77959,10 @@ type PatternFlowPppProtocolType interface {
 	SetMetricGroup(value string) PatternFlowPppProtocolType
 	HasMetricGroup() bool
 	Increment() PatternFlowPppProtocolTypeCounter
+	SetIncrement(value PatternFlowPppProtocolTypeCounter) PatternFlowPppProtocolType
 	HasIncrement() bool
 	Decrement() PatternFlowPppProtocolTypeCounter
+	SetDecrement(value PatternFlowPppProtocolTypeCounter) PatternFlowPppProtocolType
 	HasDecrement() bool
 }
 
@@ -73765,10 +78100,7 @@ func (obj *patternFlowPppProtocolType) SetMetricGroup(value string) PatternFlowP
 func (obj *patternFlowPppProtocolType) Increment() PatternFlowPppProtocolTypeCounter {
 	obj.SetChoice(PatternFlowPppProtocolTypeChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowPppProtocolTypeCounter{}
-		newObj := &patternFlowPppProtocolTypeCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowPppProtocolTypeCounter().Msg()
 	}
 	return &patternFlowPppProtocolTypeCounter{obj: obj.obj.Increment}
 }
@@ -73779,15 +78111,20 @@ func (obj *patternFlowPppProtocolType) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowPppProtocolTypeCounter value in the PatternFlowPppProtocolType object
+//  description is TBD
+func (obj *patternFlowPppProtocolType) SetIncrement(value PatternFlowPppProtocolTypeCounter) PatternFlowPppProtocolType {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowPppProtocolTypeChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowPppProtocolTypeCounter
 //  description is TBD
 func (obj *patternFlowPppProtocolType) Decrement() PatternFlowPppProtocolTypeCounter {
 	obj.SetChoice(PatternFlowPppProtocolTypeChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowPppProtocolTypeCounter{}
-		newObj := &patternFlowPppProtocolTypeCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowPppProtocolTypeCounter().Msg()
 	}
 	return &patternFlowPppProtocolTypeCounter{obj: obj.obj.Decrement}
 }
@@ -73796,6 +78133,14 @@ func (obj *patternFlowPppProtocolType) Decrement() PatternFlowPppProtocolTypeCou
 //  description is TBD
 func (obj *patternFlowPppProtocolType) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowPppProtocolTypeCounter value in the PatternFlowPppProtocolType object
+//  description is TBD
+func (obj *patternFlowPppProtocolType) SetDecrement(value PatternFlowPppProtocolTypeCounter) PatternFlowPppProtocolType {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowPppProtocolTypeChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowPppProtocolType) validateObj(set_default bool) {
@@ -73842,12 +78187,18 @@ type patternFlowIgmpv1Version struct {
 	obj *snappipb.PatternFlowIgmpv1Version
 }
 
+func NewPatternFlowIgmpv1Version() PatternFlowIgmpv1Version {
+	obj := patternFlowIgmpv1Version{obj: &snappipb.PatternFlowIgmpv1Version{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowIgmpv1Version) Msg() *snappipb.PatternFlowIgmpv1Version {
 	return obj.obj
 }
 
 func (obj *patternFlowIgmpv1Version) SetMsg(msg *snappipb.PatternFlowIgmpv1Version) PatternFlowIgmpv1Version {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -73979,8 +78330,10 @@ type PatternFlowIgmpv1Version interface {
 	SetMetricGroup(value string) PatternFlowIgmpv1Version
 	HasMetricGroup() bool
 	Increment() PatternFlowIgmpv1VersionCounter
+	SetIncrement(value PatternFlowIgmpv1VersionCounter) PatternFlowIgmpv1Version
 	HasIncrement() bool
 	Decrement() PatternFlowIgmpv1VersionCounter
+	SetDecrement(value PatternFlowIgmpv1VersionCounter) PatternFlowIgmpv1Version
 	HasDecrement() bool
 }
 
@@ -74086,10 +78439,7 @@ func (obj *patternFlowIgmpv1Version) SetMetricGroup(value string) PatternFlowIgm
 func (obj *patternFlowIgmpv1Version) Increment() PatternFlowIgmpv1VersionCounter {
 	obj.SetChoice(PatternFlowIgmpv1VersionChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowIgmpv1VersionCounter{}
-		newObj := &patternFlowIgmpv1VersionCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowIgmpv1VersionCounter().Msg()
 	}
 	return &patternFlowIgmpv1VersionCounter{obj: obj.obj.Increment}
 }
@@ -74100,15 +78450,20 @@ func (obj *patternFlowIgmpv1Version) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowIgmpv1VersionCounter value in the PatternFlowIgmpv1Version object
+//  description is TBD
+func (obj *patternFlowIgmpv1Version) SetIncrement(value PatternFlowIgmpv1VersionCounter) PatternFlowIgmpv1Version {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowIgmpv1VersionChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowIgmpv1VersionCounter
 //  description is TBD
 func (obj *patternFlowIgmpv1Version) Decrement() PatternFlowIgmpv1VersionCounter {
 	obj.SetChoice(PatternFlowIgmpv1VersionChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowIgmpv1VersionCounter{}
-		newObj := &patternFlowIgmpv1VersionCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowIgmpv1VersionCounter().Msg()
 	}
 	return &patternFlowIgmpv1VersionCounter{obj: obj.obj.Decrement}
 }
@@ -74117,6 +78472,14 @@ func (obj *patternFlowIgmpv1Version) Decrement() PatternFlowIgmpv1VersionCounter
 //  description is TBD
 func (obj *patternFlowIgmpv1Version) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowIgmpv1VersionCounter value in the PatternFlowIgmpv1Version object
+//  description is TBD
+func (obj *patternFlowIgmpv1Version) SetDecrement(value PatternFlowIgmpv1VersionCounter) PatternFlowIgmpv1Version {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowIgmpv1VersionChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowIgmpv1Version) validateObj(set_default bool) {
@@ -74163,12 +78526,18 @@ type patternFlowIgmpv1Type struct {
 	obj *snappipb.PatternFlowIgmpv1Type
 }
 
+func NewPatternFlowIgmpv1Type() PatternFlowIgmpv1Type {
+	obj := patternFlowIgmpv1Type{obj: &snappipb.PatternFlowIgmpv1Type{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowIgmpv1Type) Msg() *snappipb.PatternFlowIgmpv1Type {
 	return obj.obj
 }
 
 func (obj *patternFlowIgmpv1Type) SetMsg(msg *snappipb.PatternFlowIgmpv1Type) PatternFlowIgmpv1Type {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -74300,8 +78669,10 @@ type PatternFlowIgmpv1Type interface {
 	SetMetricGroup(value string) PatternFlowIgmpv1Type
 	HasMetricGroup() bool
 	Increment() PatternFlowIgmpv1TypeCounter
+	SetIncrement(value PatternFlowIgmpv1TypeCounter) PatternFlowIgmpv1Type
 	HasIncrement() bool
 	Decrement() PatternFlowIgmpv1TypeCounter
+	SetDecrement(value PatternFlowIgmpv1TypeCounter) PatternFlowIgmpv1Type
 	HasDecrement() bool
 }
 
@@ -74407,10 +78778,7 @@ func (obj *patternFlowIgmpv1Type) SetMetricGroup(value string) PatternFlowIgmpv1
 func (obj *patternFlowIgmpv1Type) Increment() PatternFlowIgmpv1TypeCounter {
 	obj.SetChoice(PatternFlowIgmpv1TypeChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowIgmpv1TypeCounter{}
-		newObj := &patternFlowIgmpv1TypeCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowIgmpv1TypeCounter().Msg()
 	}
 	return &patternFlowIgmpv1TypeCounter{obj: obj.obj.Increment}
 }
@@ -74421,15 +78789,20 @@ func (obj *patternFlowIgmpv1Type) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowIgmpv1TypeCounter value in the PatternFlowIgmpv1Type object
+//  description is TBD
+func (obj *patternFlowIgmpv1Type) SetIncrement(value PatternFlowIgmpv1TypeCounter) PatternFlowIgmpv1Type {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowIgmpv1TypeChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowIgmpv1TypeCounter
 //  description is TBD
 func (obj *patternFlowIgmpv1Type) Decrement() PatternFlowIgmpv1TypeCounter {
 	obj.SetChoice(PatternFlowIgmpv1TypeChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowIgmpv1TypeCounter{}
-		newObj := &patternFlowIgmpv1TypeCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowIgmpv1TypeCounter().Msg()
 	}
 	return &patternFlowIgmpv1TypeCounter{obj: obj.obj.Decrement}
 }
@@ -74438,6 +78811,14 @@ func (obj *patternFlowIgmpv1Type) Decrement() PatternFlowIgmpv1TypeCounter {
 //  description is TBD
 func (obj *patternFlowIgmpv1Type) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowIgmpv1TypeCounter value in the PatternFlowIgmpv1Type object
+//  description is TBD
+func (obj *patternFlowIgmpv1Type) SetDecrement(value PatternFlowIgmpv1TypeCounter) PatternFlowIgmpv1Type {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowIgmpv1TypeChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowIgmpv1Type) validateObj(set_default bool) {
@@ -74484,12 +78865,18 @@ type patternFlowIgmpv1Unused struct {
 	obj *snappipb.PatternFlowIgmpv1Unused
 }
 
+func NewPatternFlowIgmpv1Unused() PatternFlowIgmpv1Unused {
+	obj := patternFlowIgmpv1Unused{obj: &snappipb.PatternFlowIgmpv1Unused{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowIgmpv1Unused) Msg() *snappipb.PatternFlowIgmpv1Unused {
 	return obj.obj
 }
 
 func (obj *patternFlowIgmpv1Unused) SetMsg(msg *snappipb.PatternFlowIgmpv1Unused) PatternFlowIgmpv1Unused {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -74621,8 +79008,10 @@ type PatternFlowIgmpv1Unused interface {
 	SetMetricGroup(value string) PatternFlowIgmpv1Unused
 	HasMetricGroup() bool
 	Increment() PatternFlowIgmpv1UnusedCounter
+	SetIncrement(value PatternFlowIgmpv1UnusedCounter) PatternFlowIgmpv1Unused
 	HasIncrement() bool
 	Decrement() PatternFlowIgmpv1UnusedCounter
+	SetDecrement(value PatternFlowIgmpv1UnusedCounter) PatternFlowIgmpv1Unused
 	HasDecrement() bool
 }
 
@@ -74728,10 +79117,7 @@ func (obj *patternFlowIgmpv1Unused) SetMetricGroup(value string) PatternFlowIgmp
 func (obj *patternFlowIgmpv1Unused) Increment() PatternFlowIgmpv1UnusedCounter {
 	obj.SetChoice(PatternFlowIgmpv1UnusedChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowIgmpv1UnusedCounter{}
-		newObj := &patternFlowIgmpv1UnusedCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowIgmpv1UnusedCounter().Msg()
 	}
 	return &patternFlowIgmpv1UnusedCounter{obj: obj.obj.Increment}
 }
@@ -74742,15 +79128,20 @@ func (obj *patternFlowIgmpv1Unused) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowIgmpv1UnusedCounter value in the PatternFlowIgmpv1Unused object
+//  description is TBD
+func (obj *patternFlowIgmpv1Unused) SetIncrement(value PatternFlowIgmpv1UnusedCounter) PatternFlowIgmpv1Unused {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowIgmpv1UnusedChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowIgmpv1UnusedCounter
 //  description is TBD
 func (obj *patternFlowIgmpv1Unused) Decrement() PatternFlowIgmpv1UnusedCounter {
 	obj.SetChoice(PatternFlowIgmpv1UnusedChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowIgmpv1UnusedCounter{}
-		newObj := &patternFlowIgmpv1UnusedCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowIgmpv1UnusedCounter().Msg()
 	}
 	return &patternFlowIgmpv1UnusedCounter{obj: obj.obj.Decrement}
 }
@@ -74759,6 +79150,14 @@ func (obj *patternFlowIgmpv1Unused) Decrement() PatternFlowIgmpv1UnusedCounter {
 //  description is TBD
 func (obj *patternFlowIgmpv1Unused) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowIgmpv1UnusedCounter value in the PatternFlowIgmpv1Unused object
+//  description is TBD
+func (obj *patternFlowIgmpv1Unused) SetDecrement(value PatternFlowIgmpv1UnusedCounter) PatternFlowIgmpv1Unused {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowIgmpv1UnusedChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowIgmpv1Unused) validateObj(set_default bool) {
@@ -74805,12 +79204,18 @@ type patternFlowIgmpv1Checksum struct {
 	obj *snappipb.PatternFlowIgmpv1Checksum
 }
 
+func NewPatternFlowIgmpv1Checksum() PatternFlowIgmpv1Checksum {
+	obj := patternFlowIgmpv1Checksum{obj: &snappipb.PatternFlowIgmpv1Checksum{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowIgmpv1Checksum) Msg() *snappipb.PatternFlowIgmpv1Checksum {
 	return obj.obj
 }
 
 func (obj *patternFlowIgmpv1Checksum) SetMsg(msg *snappipb.PatternFlowIgmpv1Checksum) PatternFlowIgmpv1Checksum {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -75052,12 +79457,18 @@ type patternFlowIgmpv1GroupAddress struct {
 	obj *snappipb.PatternFlowIgmpv1GroupAddress
 }
 
+func NewPatternFlowIgmpv1GroupAddress() PatternFlowIgmpv1GroupAddress {
+	obj := patternFlowIgmpv1GroupAddress{obj: &snappipb.PatternFlowIgmpv1GroupAddress{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowIgmpv1GroupAddress) Msg() *snappipb.PatternFlowIgmpv1GroupAddress {
 	return obj.obj
 }
 
 func (obj *patternFlowIgmpv1GroupAddress) SetMsg(msg *snappipb.PatternFlowIgmpv1GroupAddress) PatternFlowIgmpv1GroupAddress {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -75189,8 +79600,10 @@ type PatternFlowIgmpv1GroupAddress interface {
 	SetMetricGroup(value string) PatternFlowIgmpv1GroupAddress
 	HasMetricGroup() bool
 	Increment() PatternFlowIgmpv1GroupAddressCounter
+	SetIncrement(value PatternFlowIgmpv1GroupAddressCounter) PatternFlowIgmpv1GroupAddress
 	HasIncrement() bool
 	Decrement() PatternFlowIgmpv1GroupAddressCounter
+	SetDecrement(value PatternFlowIgmpv1GroupAddressCounter) PatternFlowIgmpv1GroupAddress
 	HasDecrement() bool
 }
 
@@ -75296,10 +79709,7 @@ func (obj *patternFlowIgmpv1GroupAddress) SetMetricGroup(value string) PatternFl
 func (obj *patternFlowIgmpv1GroupAddress) Increment() PatternFlowIgmpv1GroupAddressCounter {
 	obj.SetChoice(PatternFlowIgmpv1GroupAddressChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowIgmpv1GroupAddressCounter{}
-		newObj := &patternFlowIgmpv1GroupAddressCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowIgmpv1GroupAddressCounter().Msg()
 	}
 	return &patternFlowIgmpv1GroupAddressCounter{obj: obj.obj.Increment}
 }
@@ -75310,15 +79720,20 @@ func (obj *patternFlowIgmpv1GroupAddress) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowIgmpv1GroupAddressCounter value in the PatternFlowIgmpv1GroupAddress object
+//  description is TBD
+func (obj *patternFlowIgmpv1GroupAddress) SetIncrement(value PatternFlowIgmpv1GroupAddressCounter) PatternFlowIgmpv1GroupAddress {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowIgmpv1GroupAddressChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowIgmpv1GroupAddressCounter
 //  description is TBD
 func (obj *patternFlowIgmpv1GroupAddress) Decrement() PatternFlowIgmpv1GroupAddressCounter {
 	obj.SetChoice(PatternFlowIgmpv1GroupAddressChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowIgmpv1GroupAddressCounter{}
-		newObj := &patternFlowIgmpv1GroupAddressCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowIgmpv1GroupAddressCounter().Msg()
 	}
 	return &patternFlowIgmpv1GroupAddressCounter{obj: obj.obj.Decrement}
 }
@@ -75327,6 +79742,14 @@ func (obj *patternFlowIgmpv1GroupAddress) Decrement() PatternFlowIgmpv1GroupAddr
 //  description is TBD
 func (obj *patternFlowIgmpv1GroupAddress) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowIgmpv1GroupAddressCounter value in the PatternFlowIgmpv1GroupAddress object
+//  description is TBD
+func (obj *patternFlowIgmpv1GroupAddress) SetDecrement(value PatternFlowIgmpv1GroupAddressCounter) PatternFlowIgmpv1GroupAddress {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowIgmpv1GroupAddressChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowIgmpv1GroupAddress) validateObj(set_default bool) {
@@ -75371,12 +79794,18 @@ type flowDelay struct {
 	obj *snappipb.FlowDelay
 }
 
+func NewFlowDelay() FlowDelay {
+	obj := flowDelay{obj: &snappipb.FlowDelay{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *flowDelay) Msg() *snappipb.FlowDelay {
 	return obj.obj
 }
 
 func (obj *flowDelay) SetMsg(msg *snappipb.FlowDelay) FlowDelay {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -75634,12 +80063,18 @@ type flowDurationInterBurstGap struct {
 	obj *snappipb.FlowDurationInterBurstGap
 }
 
+func NewFlowDurationInterBurstGap() FlowDurationInterBurstGap {
+	obj := flowDurationInterBurstGap{obj: &snappipb.FlowDurationInterBurstGap{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *flowDurationInterBurstGap) Msg() *snappipb.FlowDurationInterBurstGap {
 	return obj.obj
 }
 
 func (obj *flowDurationInterBurstGap) SetMsg(msg *snappipb.FlowDurationInterBurstGap) FlowDurationInterBurstGap {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -75897,12 +80332,18 @@ type linkStatepriorityBandwidths struct {
 	obj *snappipb.LinkStatepriorityBandwidths
 }
 
+func NewLinkStatepriorityBandwidths() LinkStatepriorityBandwidths {
+	obj := linkStatepriorityBandwidths{obj: &snappipb.LinkStatepriorityBandwidths{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *linkStatepriorityBandwidths) Msg() *snappipb.LinkStatepriorityBandwidths {
 	return obj.obj
 }
 
 func (obj *linkStatepriorityBandwidths) SetMsg(msg *snappipb.LinkStatepriorityBandwidths) LinkStatepriorityBandwidths {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -76311,12 +80752,18 @@ type bgpAdvanced struct {
 	obj *snappipb.BgpAdvanced
 }
 
+func NewBgpAdvanced() BgpAdvanced {
+	obj := bgpAdvanced{obj: &snappipb.BgpAdvanced{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *bgpAdvanced) Msg() *snappipb.BgpAdvanced {
 	return obj.obj
 }
 
 func (obj *bgpAdvanced) SetMsg(msg *snappipb.BgpAdvanced) BgpAdvanced {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -76580,12 +81027,18 @@ type bgpCapability struct {
 	obj *snappipb.BgpCapability
 }
 
+func NewBgpCapability() BgpCapability {
+	obj := bgpCapability{obj: &snappipb.BgpCapability{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *bgpCapability) Msg() *snappipb.BgpCapability {
 	return obj.obj
 }
 
 func (obj *bgpCapability) SetMsg(msg *snappipb.BgpCapability) BgpCapability {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -77384,12 +81837,18 @@ type bgpV4RouteRange struct {
 	obj *snappipb.BgpV4RouteRange
 }
 
+func NewBgpV4RouteRange() BgpV4RouteRange {
+	obj := bgpV4RouteRange{obj: &snappipb.BgpV4RouteRange{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *bgpV4RouteRange) Msg() *snappipb.BgpV4RouteRange {
 	return obj.obj
 }
 
 func (obj *bgpV4RouteRange) SetMsg(msg *snappipb.BgpV4RouteRange) BgpV4RouteRange {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -77523,11 +81982,14 @@ type BgpV4RouteRange interface {
 	SetNextHopIpv6Address(value string) BgpV4RouteRange
 	HasNextHopIpv6Address() bool
 	Advanced() BgpRouteAdvanced
+	SetAdvanced(value BgpRouteAdvanced) BgpV4RouteRange
 	HasAdvanced() bool
 	Communities() BgpV4RouteRangeBgpCommunityIter
 	AsPath() BgpAsPath
+	SetAsPath(value BgpAsPath) BgpV4RouteRange
 	HasAsPath() bool
 	AddPath() BgpAddPath
+	SetAddPath(value BgpAddPath) BgpV4RouteRange
 	HasAddPath() bool
 	Name() string
 	SetName(value string) BgpV4RouteRange
@@ -77677,12 +82139,8 @@ func (obj *bgpV4RouteRange) SetNextHopIpv6Address(value string) BgpV4RouteRange 
 // Advanced returns a BgpRouteAdvanced
 //  description is TBD
 func (obj *bgpV4RouteRange) Advanced() BgpRouteAdvanced {
-
 	if obj.obj.Advanced == nil {
-		obj.obj.Advanced = &snappipb.BgpRouteAdvanced{}
-		newObj := &bgpRouteAdvanced{obj: obj.obj.Advanced}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Advanced = NewBgpRouteAdvanced().Msg()
 	}
 	return &bgpRouteAdvanced{obj: obj.obj.Advanced}
 }
@@ -77691,6 +82149,14 @@ func (obj *bgpV4RouteRange) Advanced() BgpRouteAdvanced {
 //  description is TBD
 func (obj *bgpV4RouteRange) HasAdvanced() bool {
 	return obj.obj.Advanced != nil
+}
+
+// SetAdvanced sets the BgpRouteAdvanced value in the BgpV4RouteRange object
+//  description is TBD
+func (obj *bgpV4RouteRange) SetAdvanced(value BgpRouteAdvanced) BgpV4RouteRange {
+	obj.Advanced().SetMsg(value.Msg())
+
+	return obj
 }
 
 // Communities returns a []BgpCommunity
@@ -77730,12 +82196,8 @@ func (obj *bgpV4RouteRangeBgpCommunityIter) Items() []BgpCommunity {
 // AsPath returns a BgpAsPath
 //  description is TBD
 func (obj *bgpV4RouteRange) AsPath() BgpAsPath {
-
 	if obj.obj.AsPath == nil {
-		obj.obj.AsPath = &snappipb.BgpAsPath{}
-		newObj := &bgpAsPath{obj: obj.obj.AsPath}
-		newObj.setDefault()
-		return newObj
+		obj.obj.AsPath = NewBgpAsPath().Msg()
 	}
 	return &bgpAsPath{obj: obj.obj.AsPath}
 }
@@ -77746,15 +82208,19 @@ func (obj *bgpV4RouteRange) HasAsPath() bool {
 	return obj.obj.AsPath != nil
 }
 
+// SetAsPath sets the BgpAsPath value in the BgpV4RouteRange object
+//  description is TBD
+func (obj *bgpV4RouteRange) SetAsPath(value BgpAsPath) BgpV4RouteRange {
+	obj.AsPath().SetMsg(value.Msg())
+
+	return obj
+}
+
 // AddPath returns a BgpAddPath
 //  description is TBD
 func (obj *bgpV4RouteRange) AddPath() BgpAddPath {
-
 	if obj.obj.AddPath == nil {
-		obj.obj.AddPath = &snappipb.BgpAddPath{}
-		newObj := &bgpAddPath{obj: obj.obj.AddPath}
-		newObj.setDefault()
-		return newObj
+		obj.obj.AddPath = NewBgpAddPath().Msg()
 	}
 	return &bgpAddPath{obj: obj.obj.AddPath}
 }
@@ -77763,6 +82229,14 @@ func (obj *bgpV4RouteRange) AddPath() BgpAddPath {
 //  description is TBD
 func (obj *bgpV4RouteRange) HasAddPath() bool {
 	return obj.obj.AddPath != nil
+}
+
+// SetAddPath sets the BgpAddPath value in the BgpV4RouteRange object
+//  description is TBD
+func (obj *bgpV4RouteRange) SetAddPath(value BgpAddPath) BgpV4RouteRange {
+	obj.AddPath().SetMsg(value.Msg())
+
+	return obj
 }
 
 // Name returns a string
@@ -77827,6 +82301,9 @@ func (obj *bgpV4RouteRange) validateObj(set_default bool) {
 }
 
 func (obj *bgpV4RouteRange) setDefault() {
+	if obj.obj.Addresses == nil {
+		obj.Addresses()
+	}
 	if obj.obj.NextHopMode == nil {
 		obj.SetNextHopMode(BgpV4RouteRangeNextHopMode.LOCAL_IP)
 	}
@@ -77839,6 +82316,9 @@ func (obj *bgpV4RouteRange) setDefault() {
 	if obj.obj.NextHopIpv6Address == nil {
 		obj.SetNextHopIpv6Address("::0")
 	}
+	if obj.obj.Communities == nil {
+		obj.Communities()
+	}
 
 }
 
@@ -77846,12 +82326,18 @@ type bgpV6RouteRange struct {
 	obj *snappipb.BgpV6RouteRange
 }
 
+func NewBgpV6RouteRange() BgpV6RouteRange {
+	obj := bgpV6RouteRange{obj: &snappipb.BgpV6RouteRange{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *bgpV6RouteRange) Msg() *snappipb.BgpV6RouteRange {
 	return obj.obj
 }
 
 func (obj *bgpV6RouteRange) SetMsg(msg *snappipb.BgpV6RouteRange) BgpV6RouteRange {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -77985,11 +82471,14 @@ type BgpV6RouteRange interface {
 	SetNextHopIpv6Address(value string) BgpV6RouteRange
 	HasNextHopIpv6Address() bool
 	Advanced() BgpRouteAdvanced
+	SetAdvanced(value BgpRouteAdvanced) BgpV6RouteRange
 	HasAdvanced() bool
 	Communities() BgpV6RouteRangeBgpCommunityIter
 	AsPath() BgpAsPath
+	SetAsPath(value BgpAsPath) BgpV6RouteRange
 	HasAsPath() bool
 	AddPath() BgpAddPath
+	SetAddPath(value BgpAddPath) BgpV6RouteRange
 	HasAddPath() bool
 	Name() string
 	SetName(value string) BgpV6RouteRange
@@ -78139,12 +82628,8 @@ func (obj *bgpV6RouteRange) SetNextHopIpv6Address(value string) BgpV6RouteRange 
 // Advanced returns a BgpRouteAdvanced
 //  description is TBD
 func (obj *bgpV6RouteRange) Advanced() BgpRouteAdvanced {
-
 	if obj.obj.Advanced == nil {
-		obj.obj.Advanced = &snappipb.BgpRouteAdvanced{}
-		newObj := &bgpRouteAdvanced{obj: obj.obj.Advanced}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Advanced = NewBgpRouteAdvanced().Msg()
 	}
 	return &bgpRouteAdvanced{obj: obj.obj.Advanced}
 }
@@ -78153,6 +82638,14 @@ func (obj *bgpV6RouteRange) Advanced() BgpRouteAdvanced {
 //  description is TBD
 func (obj *bgpV6RouteRange) HasAdvanced() bool {
 	return obj.obj.Advanced != nil
+}
+
+// SetAdvanced sets the BgpRouteAdvanced value in the BgpV6RouteRange object
+//  description is TBD
+func (obj *bgpV6RouteRange) SetAdvanced(value BgpRouteAdvanced) BgpV6RouteRange {
+	obj.Advanced().SetMsg(value.Msg())
+
+	return obj
 }
 
 // Communities returns a []BgpCommunity
@@ -78192,12 +82685,8 @@ func (obj *bgpV6RouteRangeBgpCommunityIter) Items() []BgpCommunity {
 // AsPath returns a BgpAsPath
 //  description is TBD
 func (obj *bgpV6RouteRange) AsPath() BgpAsPath {
-
 	if obj.obj.AsPath == nil {
-		obj.obj.AsPath = &snappipb.BgpAsPath{}
-		newObj := &bgpAsPath{obj: obj.obj.AsPath}
-		newObj.setDefault()
-		return newObj
+		obj.obj.AsPath = NewBgpAsPath().Msg()
 	}
 	return &bgpAsPath{obj: obj.obj.AsPath}
 }
@@ -78208,15 +82697,19 @@ func (obj *bgpV6RouteRange) HasAsPath() bool {
 	return obj.obj.AsPath != nil
 }
 
+// SetAsPath sets the BgpAsPath value in the BgpV6RouteRange object
+//  description is TBD
+func (obj *bgpV6RouteRange) SetAsPath(value BgpAsPath) BgpV6RouteRange {
+	obj.AsPath().SetMsg(value.Msg())
+
+	return obj
+}
+
 // AddPath returns a BgpAddPath
 //  description is TBD
 func (obj *bgpV6RouteRange) AddPath() BgpAddPath {
-
 	if obj.obj.AddPath == nil {
-		obj.obj.AddPath = &snappipb.BgpAddPath{}
-		newObj := &bgpAddPath{obj: obj.obj.AddPath}
-		newObj.setDefault()
-		return newObj
+		obj.obj.AddPath = NewBgpAddPath().Msg()
 	}
 	return &bgpAddPath{obj: obj.obj.AddPath}
 }
@@ -78225,6 +82718,14 @@ func (obj *bgpV6RouteRange) AddPath() BgpAddPath {
 //  description is TBD
 func (obj *bgpV6RouteRange) HasAddPath() bool {
 	return obj.obj.AddPath != nil
+}
+
+// SetAddPath sets the BgpAddPath value in the BgpV6RouteRange object
+//  description is TBD
+func (obj *bgpV6RouteRange) SetAddPath(value BgpAddPath) BgpV6RouteRange {
+	obj.AddPath().SetMsg(value.Msg())
+
+	return obj
 }
 
 // Name returns a string
@@ -78289,6 +82790,9 @@ func (obj *bgpV6RouteRange) validateObj(set_default bool) {
 }
 
 func (obj *bgpV6RouteRange) setDefault() {
+	if obj.obj.Addresses == nil {
+		obj.Addresses()
+	}
 	if obj.obj.NextHopMode == nil {
 		obj.SetNextHopMode(BgpV6RouteRangeNextHopMode.LOCAL_IP)
 	}
@@ -78301,6 +82805,9 @@ func (obj *bgpV6RouteRange) setDefault() {
 	if obj.obj.NextHopIpv6Address == nil {
 		obj.SetNextHopIpv6Address("::0")
 	}
+	if obj.obj.Communities == nil {
+		obj.Communities()
+	}
 
 }
 
@@ -78308,12 +82815,18 @@ type bgpSrteV4Policy struct {
 	obj *snappipb.BgpSrteV4Policy
 }
 
+func NewBgpSrteV4Policy() BgpSrteV4Policy {
+	obj := bgpSrteV4Policy{obj: &snappipb.BgpSrteV4Policy{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *bgpSrteV4Policy) Msg() *snappipb.BgpSrteV4Policy {
 	return obj.obj
 }
 
 func (obj *bgpSrteV4Policy) SetMsg(msg *snappipb.BgpSrteV4Policy) BgpSrteV4Policy {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -78454,10 +82967,13 @@ type BgpSrteV4Policy interface {
 	SetNextHopIpv6Address(value string) BgpSrteV4Policy
 	HasNextHopIpv6Address() bool
 	Advanced() BgpRouteAdvanced
+	SetAdvanced(value BgpRouteAdvanced) BgpSrteV4Policy
 	HasAdvanced() bool
 	AddPath() BgpAddPath
+	SetAddPath(value BgpAddPath) BgpSrteV4Policy
 	HasAddPath() bool
 	AsPath() BgpAsPath
+	SetAsPath(value BgpAsPath) BgpSrteV4Policy
 	HasAsPath() bool
 	Communities() BgpSrteV4PolicyBgpCommunityIter
 	ExtCommunities() BgpSrteV4PolicyBgpExtCommunityIter
@@ -78630,12 +83146,8 @@ func (obj *bgpSrteV4Policy) SetNextHopIpv6Address(value string) BgpSrteV4Policy 
 // Advanced returns a BgpRouteAdvanced
 //  description is TBD
 func (obj *bgpSrteV4Policy) Advanced() BgpRouteAdvanced {
-
 	if obj.obj.Advanced == nil {
-		obj.obj.Advanced = &snappipb.BgpRouteAdvanced{}
-		newObj := &bgpRouteAdvanced{obj: obj.obj.Advanced}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Advanced = NewBgpRouteAdvanced().Msg()
 	}
 	return &bgpRouteAdvanced{obj: obj.obj.Advanced}
 }
@@ -78646,15 +83158,19 @@ func (obj *bgpSrteV4Policy) HasAdvanced() bool {
 	return obj.obj.Advanced != nil
 }
 
+// SetAdvanced sets the BgpRouteAdvanced value in the BgpSrteV4Policy object
+//  description is TBD
+func (obj *bgpSrteV4Policy) SetAdvanced(value BgpRouteAdvanced) BgpSrteV4Policy {
+	obj.Advanced().SetMsg(value.Msg())
+
+	return obj
+}
+
 // AddPath returns a BgpAddPath
 //  description is TBD
 func (obj *bgpSrteV4Policy) AddPath() BgpAddPath {
-
 	if obj.obj.AddPath == nil {
-		obj.obj.AddPath = &snappipb.BgpAddPath{}
-		newObj := &bgpAddPath{obj: obj.obj.AddPath}
-		newObj.setDefault()
-		return newObj
+		obj.obj.AddPath = NewBgpAddPath().Msg()
 	}
 	return &bgpAddPath{obj: obj.obj.AddPath}
 }
@@ -78665,15 +83181,19 @@ func (obj *bgpSrteV4Policy) HasAddPath() bool {
 	return obj.obj.AddPath != nil
 }
 
+// SetAddPath sets the BgpAddPath value in the BgpSrteV4Policy object
+//  description is TBD
+func (obj *bgpSrteV4Policy) SetAddPath(value BgpAddPath) BgpSrteV4Policy {
+	obj.AddPath().SetMsg(value.Msg())
+
+	return obj
+}
+
 // AsPath returns a BgpAsPath
 //  description is TBD
 func (obj *bgpSrteV4Policy) AsPath() BgpAsPath {
-
 	if obj.obj.AsPath == nil {
-		obj.obj.AsPath = &snappipb.BgpAsPath{}
-		newObj := &bgpAsPath{obj: obj.obj.AsPath}
-		newObj.setDefault()
-		return newObj
+		obj.obj.AsPath = NewBgpAsPath().Msg()
 	}
 	return &bgpAsPath{obj: obj.obj.AsPath}
 }
@@ -78682,6 +83202,14 @@ func (obj *bgpSrteV4Policy) AsPath() BgpAsPath {
 //  description is TBD
 func (obj *bgpSrteV4Policy) HasAsPath() bool {
 	return obj.obj.AsPath != nil
+}
+
+// SetAsPath sets the BgpAsPath value in the BgpSrteV4Policy object
+//  description is TBD
+func (obj *bgpSrteV4Policy) SetAsPath(value BgpAsPath) BgpSrteV4Policy {
+	obj.AsPath().SetMsg(value.Msg())
+
+	return obj
 }
 
 // Communities returns a []BgpCommunity
@@ -78913,6 +83441,15 @@ func (obj *bgpSrteV4Policy) setDefault() {
 	if obj.obj.NextHopAddressType == nil {
 		obj.SetNextHopAddressType(BgpSrteV4PolicyNextHopAddressType.IPV4)
 	}
+	if obj.obj.Communities == nil {
+		obj.Communities()
+	}
+	if obj.obj.ExtCommunities == nil {
+		obj.ExtCommunities()
+	}
+	if obj.obj.TunnelTlvs == nil {
+		obj.TunnelTlvs()
+	}
 	if obj.obj.Active == nil {
 		obj.SetActive(true)
 	}
@@ -78923,12 +83460,18 @@ type bgpSrteV6Policy struct {
 	obj *snappipb.BgpSrteV6Policy
 }
 
+func NewBgpSrteV6Policy() BgpSrteV6Policy {
+	obj := bgpSrteV6Policy{obj: &snappipb.BgpSrteV6Policy{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *bgpSrteV6Policy) Msg() *snappipb.BgpSrteV6Policy {
 	return obj.obj
 }
 
 func (obj *bgpSrteV6Policy) SetMsg(msg *snappipb.BgpSrteV6Policy) BgpSrteV6Policy {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -79069,10 +83612,13 @@ type BgpSrteV6Policy interface {
 	SetNextHopIpv6Address(value string) BgpSrteV6Policy
 	HasNextHopIpv6Address() bool
 	Advanced() BgpRouteAdvanced
+	SetAdvanced(value BgpRouteAdvanced) BgpSrteV6Policy
 	HasAdvanced() bool
 	AddPath() BgpAddPath
+	SetAddPath(value BgpAddPath) BgpSrteV6Policy
 	HasAddPath() bool
 	AsPath() BgpAsPath
+	SetAsPath(value BgpAsPath) BgpSrteV6Policy
 	HasAsPath() bool
 	Communities() BgpSrteV6PolicyBgpCommunityIter
 	Extcommunities() BgpSrteV6PolicyBgpExtCommunityIter
@@ -79245,12 +83791,8 @@ func (obj *bgpSrteV6Policy) SetNextHopIpv6Address(value string) BgpSrteV6Policy 
 // Advanced returns a BgpRouteAdvanced
 //  description is TBD
 func (obj *bgpSrteV6Policy) Advanced() BgpRouteAdvanced {
-
 	if obj.obj.Advanced == nil {
-		obj.obj.Advanced = &snappipb.BgpRouteAdvanced{}
-		newObj := &bgpRouteAdvanced{obj: obj.obj.Advanced}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Advanced = NewBgpRouteAdvanced().Msg()
 	}
 	return &bgpRouteAdvanced{obj: obj.obj.Advanced}
 }
@@ -79261,15 +83803,19 @@ func (obj *bgpSrteV6Policy) HasAdvanced() bool {
 	return obj.obj.Advanced != nil
 }
 
+// SetAdvanced sets the BgpRouteAdvanced value in the BgpSrteV6Policy object
+//  description is TBD
+func (obj *bgpSrteV6Policy) SetAdvanced(value BgpRouteAdvanced) BgpSrteV6Policy {
+	obj.Advanced().SetMsg(value.Msg())
+
+	return obj
+}
+
 // AddPath returns a BgpAddPath
 //  description is TBD
 func (obj *bgpSrteV6Policy) AddPath() BgpAddPath {
-
 	if obj.obj.AddPath == nil {
-		obj.obj.AddPath = &snappipb.BgpAddPath{}
-		newObj := &bgpAddPath{obj: obj.obj.AddPath}
-		newObj.setDefault()
-		return newObj
+		obj.obj.AddPath = NewBgpAddPath().Msg()
 	}
 	return &bgpAddPath{obj: obj.obj.AddPath}
 }
@@ -79280,15 +83826,19 @@ func (obj *bgpSrteV6Policy) HasAddPath() bool {
 	return obj.obj.AddPath != nil
 }
 
+// SetAddPath sets the BgpAddPath value in the BgpSrteV6Policy object
+//  description is TBD
+func (obj *bgpSrteV6Policy) SetAddPath(value BgpAddPath) BgpSrteV6Policy {
+	obj.AddPath().SetMsg(value.Msg())
+
+	return obj
+}
+
 // AsPath returns a BgpAsPath
 //  description is TBD
 func (obj *bgpSrteV6Policy) AsPath() BgpAsPath {
-
 	if obj.obj.AsPath == nil {
-		obj.obj.AsPath = &snappipb.BgpAsPath{}
-		newObj := &bgpAsPath{obj: obj.obj.AsPath}
-		newObj.setDefault()
-		return newObj
+		obj.obj.AsPath = NewBgpAsPath().Msg()
 	}
 	return &bgpAsPath{obj: obj.obj.AsPath}
 }
@@ -79297,6 +83847,14 @@ func (obj *bgpSrteV6Policy) AsPath() BgpAsPath {
 //  description is TBD
 func (obj *bgpSrteV6Policy) HasAsPath() bool {
 	return obj.obj.AsPath != nil
+}
+
+// SetAsPath sets the BgpAsPath value in the BgpSrteV6Policy object
+//  description is TBD
+func (obj *bgpSrteV6Policy) SetAsPath(value BgpAsPath) BgpSrteV6Policy {
+	obj.AsPath().SetMsg(value.Msg())
+
+	return obj
 }
 
 // Communities returns a []BgpCommunity
@@ -79534,6 +84092,15 @@ func (obj *bgpSrteV6Policy) setDefault() {
 	if obj.obj.NextHopIpv6Address == nil {
 		obj.SetNextHopIpv6Address("::0")
 	}
+	if obj.obj.Communities == nil {
+		obj.Communities()
+	}
+	if obj.obj.Extcommunities == nil {
+		obj.Extcommunities()
+	}
+	if obj.obj.TunnelTlvs == nil {
+		obj.TunnelTlvs()
+	}
 	if obj.obj.Active == nil {
 		obj.SetActive(true)
 	}
@@ -79544,12 +84111,18 @@ type bgpV6SegmentRouting struct {
 	obj *snappipb.BgpV6SegmentRouting
 }
 
+func NewBgpV6SegmentRouting() BgpV6SegmentRouting {
+	obj := bgpV6SegmentRouting{obj: &snappipb.BgpV6SegmentRouting{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *bgpV6SegmentRouting) Msg() *snappipb.BgpV6SegmentRouting {
 	return obj.obj
 }
 
 func (obj *bgpV6SegmentRouting) SetMsg(msg *snappipb.BgpV6SegmentRouting) BgpV6SegmentRouting {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -79894,12 +84467,18 @@ type patternFlowEthernetDstCounter struct {
 	obj *snappipb.PatternFlowEthernetDstCounter
 }
 
+func NewPatternFlowEthernetDstCounter() PatternFlowEthernetDstCounter {
+	obj := patternFlowEthernetDstCounter{obj: &snappipb.PatternFlowEthernetDstCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowEthernetDstCounter) Msg() *snappipb.PatternFlowEthernetDstCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowEthernetDstCounter) SetMsg(msg *snappipb.PatternFlowEthernetDstCounter) PatternFlowEthernetDstCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -80128,12 +84707,18 @@ type patternFlowEthernetSrcCounter struct {
 	obj *snappipb.PatternFlowEthernetSrcCounter
 }
 
+func NewPatternFlowEthernetSrcCounter() PatternFlowEthernetSrcCounter {
+	obj := patternFlowEthernetSrcCounter{obj: &snappipb.PatternFlowEthernetSrcCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowEthernetSrcCounter) Msg() *snappipb.PatternFlowEthernetSrcCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowEthernetSrcCounter) SetMsg(msg *snappipb.PatternFlowEthernetSrcCounter) PatternFlowEthernetSrcCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -80362,12 +84947,18 @@ type patternFlowEthernetEtherTypeCounter struct {
 	obj *snappipb.PatternFlowEthernetEtherTypeCounter
 }
 
+func NewPatternFlowEthernetEtherTypeCounter() PatternFlowEthernetEtherTypeCounter {
+	obj := patternFlowEthernetEtherTypeCounter{obj: &snappipb.PatternFlowEthernetEtherTypeCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowEthernetEtherTypeCounter) Msg() *snappipb.PatternFlowEthernetEtherTypeCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowEthernetEtherTypeCounter) SetMsg(msg *snappipb.PatternFlowEthernetEtherTypeCounter) PatternFlowEthernetEtherTypeCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -80598,12 +85189,18 @@ type patternFlowEthernetPfcQueueCounter struct {
 	obj *snappipb.PatternFlowEthernetPfcQueueCounter
 }
 
+func NewPatternFlowEthernetPfcQueueCounter() PatternFlowEthernetPfcQueueCounter {
+	obj := patternFlowEthernetPfcQueueCounter{obj: &snappipb.PatternFlowEthernetPfcQueueCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowEthernetPfcQueueCounter) Msg() *snappipb.PatternFlowEthernetPfcQueueCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowEthernetPfcQueueCounter) SetMsg(msg *snappipb.PatternFlowEthernetPfcQueueCounter) PatternFlowEthernetPfcQueueCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -80834,12 +85431,18 @@ type patternFlowVlanPriorityCounter struct {
 	obj *snappipb.PatternFlowVlanPriorityCounter
 }
 
+func NewPatternFlowVlanPriorityCounter() PatternFlowVlanPriorityCounter {
+	obj := patternFlowVlanPriorityCounter{obj: &snappipb.PatternFlowVlanPriorityCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowVlanPriorityCounter) Msg() *snappipb.PatternFlowVlanPriorityCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowVlanPriorityCounter) SetMsg(msg *snappipb.PatternFlowVlanPriorityCounter) PatternFlowVlanPriorityCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -81070,12 +85673,18 @@ type patternFlowVlanCfiCounter struct {
 	obj *snappipb.PatternFlowVlanCfiCounter
 }
 
+func NewPatternFlowVlanCfiCounter() PatternFlowVlanCfiCounter {
+	obj := patternFlowVlanCfiCounter{obj: &snappipb.PatternFlowVlanCfiCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowVlanCfiCounter) Msg() *snappipb.PatternFlowVlanCfiCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowVlanCfiCounter) SetMsg(msg *snappipb.PatternFlowVlanCfiCounter) PatternFlowVlanCfiCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -81306,12 +85915,18 @@ type patternFlowVlanIdCounter struct {
 	obj *snappipb.PatternFlowVlanIdCounter
 }
 
+func NewPatternFlowVlanIdCounter() PatternFlowVlanIdCounter {
+	obj := patternFlowVlanIdCounter{obj: &snappipb.PatternFlowVlanIdCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowVlanIdCounter) Msg() *snappipb.PatternFlowVlanIdCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowVlanIdCounter) SetMsg(msg *snappipb.PatternFlowVlanIdCounter) PatternFlowVlanIdCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -81542,12 +86157,18 @@ type patternFlowVlanTpidCounter struct {
 	obj *snappipb.PatternFlowVlanTpidCounter
 }
 
+func NewPatternFlowVlanTpidCounter() PatternFlowVlanTpidCounter {
+	obj := patternFlowVlanTpidCounter{obj: &snappipb.PatternFlowVlanTpidCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowVlanTpidCounter) Msg() *snappipb.PatternFlowVlanTpidCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowVlanTpidCounter) SetMsg(msg *snappipb.PatternFlowVlanTpidCounter) PatternFlowVlanTpidCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -81778,12 +86399,18 @@ type patternFlowVxlanFlagsCounter struct {
 	obj *snappipb.PatternFlowVxlanFlagsCounter
 }
 
+func NewPatternFlowVxlanFlagsCounter() PatternFlowVxlanFlagsCounter {
+	obj := patternFlowVxlanFlagsCounter{obj: &snappipb.PatternFlowVxlanFlagsCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowVxlanFlagsCounter) Msg() *snappipb.PatternFlowVxlanFlagsCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowVxlanFlagsCounter) SetMsg(msg *snappipb.PatternFlowVxlanFlagsCounter) PatternFlowVxlanFlagsCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -82014,12 +86641,18 @@ type patternFlowVxlanReserved0Counter struct {
 	obj *snappipb.PatternFlowVxlanReserved0Counter
 }
 
+func NewPatternFlowVxlanReserved0Counter() PatternFlowVxlanReserved0Counter {
+	obj := patternFlowVxlanReserved0Counter{obj: &snappipb.PatternFlowVxlanReserved0Counter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowVxlanReserved0Counter) Msg() *snappipb.PatternFlowVxlanReserved0Counter {
 	return obj.obj
 }
 
 func (obj *patternFlowVxlanReserved0Counter) SetMsg(msg *snappipb.PatternFlowVxlanReserved0Counter) PatternFlowVxlanReserved0Counter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -82250,12 +86883,18 @@ type patternFlowVxlanVniCounter struct {
 	obj *snappipb.PatternFlowVxlanVniCounter
 }
 
+func NewPatternFlowVxlanVniCounter() PatternFlowVxlanVniCounter {
+	obj := patternFlowVxlanVniCounter{obj: &snappipb.PatternFlowVxlanVniCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowVxlanVniCounter) Msg() *snappipb.PatternFlowVxlanVniCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowVxlanVniCounter) SetMsg(msg *snappipb.PatternFlowVxlanVniCounter) PatternFlowVxlanVniCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -82486,12 +87125,18 @@ type patternFlowVxlanReserved1Counter struct {
 	obj *snappipb.PatternFlowVxlanReserved1Counter
 }
 
+func NewPatternFlowVxlanReserved1Counter() PatternFlowVxlanReserved1Counter {
+	obj := patternFlowVxlanReserved1Counter{obj: &snappipb.PatternFlowVxlanReserved1Counter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowVxlanReserved1Counter) Msg() *snappipb.PatternFlowVxlanReserved1Counter {
 	return obj.obj
 }
 
 func (obj *patternFlowVxlanReserved1Counter) SetMsg(msg *snappipb.PatternFlowVxlanReserved1Counter) PatternFlowVxlanReserved1Counter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -82722,12 +87367,18 @@ type patternFlowIpv4VersionCounter struct {
 	obj *snappipb.PatternFlowIpv4VersionCounter
 }
 
+func NewPatternFlowIpv4VersionCounter() PatternFlowIpv4VersionCounter {
+	obj := patternFlowIpv4VersionCounter{obj: &snappipb.PatternFlowIpv4VersionCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowIpv4VersionCounter) Msg() *snappipb.PatternFlowIpv4VersionCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowIpv4VersionCounter) SetMsg(msg *snappipb.PatternFlowIpv4VersionCounter) PatternFlowIpv4VersionCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -82958,12 +87609,18 @@ type patternFlowIpv4HeaderLengthCounter struct {
 	obj *snappipb.PatternFlowIpv4HeaderLengthCounter
 }
 
+func NewPatternFlowIpv4HeaderLengthCounter() PatternFlowIpv4HeaderLengthCounter {
+	obj := patternFlowIpv4HeaderLengthCounter{obj: &snappipb.PatternFlowIpv4HeaderLengthCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowIpv4HeaderLengthCounter) Msg() *snappipb.PatternFlowIpv4HeaderLengthCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowIpv4HeaderLengthCounter) SetMsg(msg *snappipb.PatternFlowIpv4HeaderLengthCounter) PatternFlowIpv4HeaderLengthCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -83194,12 +87851,18 @@ type patternFlowIpv4PriorityRaw struct {
 	obj *snappipb.PatternFlowIpv4PriorityRaw
 }
 
+func NewPatternFlowIpv4PriorityRaw() PatternFlowIpv4PriorityRaw {
+	obj := patternFlowIpv4PriorityRaw{obj: &snappipb.PatternFlowIpv4PriorityRaw{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowIpv4PriorityRaw) Msg() *snappipb.PatternFlowIpv4PriorityRaw {
 	return obj.obj
 }
 
 func (obj *patternFlowIpv4PriorityRaw) SetMsg(msg *snappipb.PatternFlowIpv4PriorityRaw) PatternFlowIpv4PriorityRaw {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -83331,8 +87994,10 @@ type PatternFlowIpv4PriorityRaw interface {
 	SetMetricGroup(value string) PatternFlowIpv4PriorityRaw
 	HasMetricGroup() bool
 	Increment() PatternFlowIpv4PriorityRawCounter
+	SetIncrement(value PatternFlowIpv4PriorityRawCounter) PatternFlowIpv4PriorityRaw
 	HasIncrement() bool
 	Decrement() PatternFlowIpv4PriorityRawCounter
+	SetDecrement(value PatternFlowIpv4PriorityRawCounter) PatternFlowIpv4PriorityRaw
 	HasDecrement() bool
 }
 
@@ -83438,10 +88103,7 @@ func (obj *patternFlowIpv4PriorityRaw) SetMetricGroup(value string) PatternFlowI
 func (obj *patternFlowIpv4PriorityRaw) Increment() PatternFlowIpv4PriorityRawCounter {
 	obj.SetChoice(PatternFlowIpv4PriorityRawChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowIpv4PriorityRawCounter{}
-		newObj := &patternFlowIpv4PriorityRawCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowIpv4PriorityRawCounter().Msg()
 	}
 	return &patternFlowIpv4PriorityRawCounter{obj: obj.obj.Increment}
 }
@@ -83452,15 +88114,20 @@ func (obj *patternFlowIpv4PriorityRaw) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowIpv4PriorityRawCounter value in the PatternFlowIpv4PriorityRaw object
+//  description is TBD
+func (obj *patternFlowIpv4PriorityRaw) SetIncrement(value PatternFlowIpv4PriorityRawCounter) PatternFlowIpv4PriorityRaw {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowIpv4PriorityRawChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowIpv4PriorityRawCounter
 //  description is TBD
 func (obj *patternFlowIpv4PriorityRaw) Decrement() PatternFlowIpv4PriorityRawCounter {
 	obj.SetChoice(PatternFlowIpv4PriorityRawChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowIpv4PriorityRawCounter{}
-		newObj := &patternFlowIpv4PriorityRawCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowIpv4PriorityRawCounter().Msg()
 	}
 	return &patternFlowIpv4PriorityRawCounter{obj: obj.obj.Decrement}
 }
@@ -83469,6 +88136,14 @@ func (obj *patternFlowIpv4PriorityRaw) Decrement() PatternFlowIpv4PriorityRawCou
 //  description is TBD
 func (obj *patternFlowIpv4PriorityRaw) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowIpv4PriorityRawCounter value in the PatternFlowIpv4PriorityRaw object
+//  description is TBD
+func (obj *patternFlowIpv4PriorityRaw) SetDecrement(value PatternFlowIpv4PriorityRawCounter) PatternFlowIpv4PriorityRaw {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowIpv4PriorityRawChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowIpv4PriorityRaw) validateObj(set_default bool) {
@@ -83515,12 +88190,18 @@ type flowIpv4Tos struct {
 	obj *snappipb.FlowIpv4Tos
 }
 
+func NewFlowIpv4Tos() FlowIpv4Tos {
+	obj := flowIpv4Tos{obj: &snappipb.FlowIpv4Tos{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *flowIpv4Tos) Msg() *snappipb.FlowIpv4Tos {
 	return obj.obj
 }
 
 func (obj *flowIpv4Tos) SetMsg(msg *snappipb.FlowIpv4Tos) FlowIpv4Tos {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -83641,28 +88322,30 @@ type FlowIpv4Tos interface {
 	validateObj(set_default bool)
 	setDefault()
 	Precedence() PatternFlowIpv4TosPrecedence
+	SetPrecedence(value PatternFlowIpv4TosPrecedence) FlowIpv4Tos
 	HasPrecedence() bool
 	Delay() PatternFlowIpv4TosDelay
+	SetDelay(value PatternFlowIpv4TosDelay) FlowIpv4Tos
 	HasDelay() bool
 	Throughput() PatternFlowIpv4TosThroughput
+	SetThroughput(value PatternFlowIpv4TosThroughput) FlowIpv4Tos
 	HasThroughput() bool
 	Reliability() PatternFlowIpv4TosReliability
+	SetReliability(value PatternFlowIpv4TosReliability) FlowIpv4Tos
 	HasReliability() bool
 	Monetary() PatternFlowIpv4TosMonetary
+	SetMonetary(value PatternFlowIpv4TosMonetary) FlowIpv4Tos
 	HasMonetary() bool
 	Unused() PatternFlowIpv4TosUnused
+	SetUnused(value PatternFlowIpv4TosUnused) FlowIpv4Tos
 	HasUnused() bool
 }
 
 // Precedence returns a PatternFlowIpv4TosPrecedence
 //  description is TBD
 func (obj *flowIpv4Tos) Precedence() PatternFlowIpv4TosPrecedence {
-
 	if obj.obj.Precedence == nil {
-		obj.obj.Precedence = &snappipb.PatternFlowIpv4TosPrecedence{}
-		newObj := &patternFlowIpv4TosPrecedence{obj: obj.obj.Precedence}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Precedence = NewPatternFlowIpv4TosPrecedence().Msg()
 	}
 	return &patternFlowIpv4TosPrecedence{obj: obj.obj.Precedence}
 }
@@ -83673,15 +88356,19 @@ func (obj *flowIpv4Tos) HasPrecedence() bool {
 	return obj.obj.Precedence != nil
 }
 
+// SetPrecedence sets the PatternFlowIpv4TosPrecedence value in the FlowIpv4Tos object
+//  description is TBD
+func (obj *flowIpv4Tos) SetPrecedence(value PatternFlowIpv4TosPrecedence) FlowIpv4Tos {
+	obj.Precedence().SetMsg(value.Msg())
+
+	return obj
+}
+
 // Delay returns a PatternFlowIpv4TosDelay
 //  description is TBD
 func (obj *flowIpv4Tos) Delay() PatternFlowIpv4TosDelay {
-
 	if obj.obj.Delay == nil {
-		obj.obj.Delay = &snappipb.PatternFlowIpv4TosDelay{}
-		newObj := &patternFlowIpv4TosDelay{obj: obj.obj.Delay}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Delay = NewPatternFlowIpv4TosDelay().Msg()
 	}
 	return &patternFlowIpv4TosDelay{obj: obj.obj.Delay}
 }
@@ -83692,15 +88379,19 @@ func (obj *flowIpv4Tos) HasDelay() bool {
 	return obj.obj.Delay != nil
 }
 
+// SetDelay sets the PatternFlowIpv4TosDelay value in the FlowIpv4Tos object
+//  description is TBD
+func (obj *flowIpv4Tos) SetDelay(value PatternFlowIpv4TosDelay) FlowIpv4Tos {
+	obj.Delay().SetMsg(value.Msg())
+
+	return obj
+}
+
 // Throughput returns a PatternFlowIpv4TosThroughput
 //  description is TBD
 func (obj *flowIpv4Tos) Throughput() PatternFlowIpv4TosThroughput {
-
 	if obj.obj.Throughput == nil {
-		obj.obj.Throughput = &snappipb.PatternFlowIpv4TosThroughput{}
-		newObj := &patternFlowIpv4TosThroughput{obj: obj.obj.Throughput}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Throughput = NewPatternFlowIpv4TosThroughput().Msg()
 	}
 	return &patternFlowIpv4TosThroughput{obj: obj.obj.Throughput}
 }
@@ -83711,15 +88402,19 @@ func (obj *flowIpv4Tos) HasThroughput() bool {
 	return obj.obj.Throughput != nil
 }
 
+// SetThroughput sets the PatternFlowIpv4TosThroughput value in the FlowIpv4Tos object
+//  description is TBD
+func (obj *flowIpv4Tos) SetThroughput(value PatternFlowIpv4TosThroughput) FlowIpv4Tos {
+	obj.Throughput().SetMsg(value.Msg())
+
+	return obj
+}
+
 // Reliability returns a PatternFlowIpv4TosReliability
 //  description is TBD
 func (obj *flowIpv4Tos) Reliability() PatternFlowIpv4TosReliability {
-
 	if obj.obj.Reliability == nil {
-		obj.obj.Reliability = &snappipb.PatternFlowIpv4TosReliability{}
-		newObj := &patternFlowIpv4TosReliability{obj: obj.obj.Reliability}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Reliability = NewPatternFlowIpv4TosReliability().Msg()
 	}
 	return &patternFlowIpv4TosReliability{obj: obj.obj.Reliability}
 }
@@ -83730,15 +88425,19 @@ func (obj *flowIpv4Tos) HasReliability() bool {
 	return obj.obj.Reliability != nil
 }
 
+// SetReliability sets the PatternFlowIpv4TosReliability value in the FlowIpv4Tos object
+//  description is TBD
+func (obj *flowIpv4Tos) SetReliability(value PatternFlowIpv4TosReliability) FlowIpv4Tos {
+	obj.Reliability().SetMsg(value.Msg())
+
+	return obj
+}
+
 // Monetary returns a PatternFlowIpv4TosMonetary
 //  description is TBD
 func (obj *flowIpv4Tos) Monetary() PatternFlowIpv4TosMonetary {
-
 	if obj.obj.Monetary == nil {
-		obj.obj.Monetary = &snappipb.PatternFlowIpv4TosMonetary{}
-		newObj := &patternFlowIpv4TosMonetary{obj: obj.obj.Monetary}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Monetary = NewPatternFlowIpv4TosMonetary().Msg()
 	}
 	return &patternFlowIpv4TosMonetary{obj: obj.obj.Monetary}
 }
@@ -83749,15 +88448,19 @@ func (obj *flowIpv4Tos) HasMonetary() bool {
 	return obj.obj.Monetary != nil
 }
 
+// SetMonetary sets the PatternFlowIpv4TosMonetary value in the FlowIpv4Tos object
+//  description is TBD
+func (obj *flowIpv4Tos) SetMonetary(value PatternFlowIpv4TosMonetary) FlowIpv4Tos {
+	obj.Monetary().SetMsg(value.Msg())
+
+	return obj
+}
+
 // Unused returns a PatternFlowIpv4TosUnused
 //  description is TBD
 func (obj *flowIpv4Tos) Unused() PatternFlowIpv4TosUnused {
-
 	if obj.obj.Unused == nil {
-		obj.obj.Unused = &snappipb.PatternFlowIpv4TosUnused{}
-		newObj := &patternFlowIpv4TosUnused{obj: obj.obj.Unused}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Unused = NewPatternFlowIpv4TosUnused().Msg()
 	}
 	return &patternFlowIpv4TosUnused{obj: obj.obj.Unused}
 }
@@ -83766,6 +88469,14 @@ func (obj *flowIpv4Tos) Unused() PatternFlowIpv4TosUnused {
 //  description is TBD
 func (obj *flowIpv4Tos) HasUnused() bool {
 	return obj.obj.Unused != nil
+}
+
+// SetUnused sets the PatternFlowIpv4TosUnused value in the FlowIpv4Tos object
+//  description is TBD
+func (obj *flowIpv4Tos) SetUnused(value PatternFlowIpv4TosUnused) FlowIpv4Tos {
+	obj.Unused().SetMsg(value.Msg())
+
+	return obj
 }
 
 func (obj *flowIpv4Tos) validateObj(set_default bool) {
@@ -83806,12 +88517,18 @@ type flowIpv4Dscp struct {
 	obj *snappipb.FlowIpv4Dscp
 }
 
+func NewFlowIpv4Dscp() FlowIpv4Dscp {
+	obj := flowIpv4Dscp{obj: &snappipb.FlowIpv4Dscp{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *flowIpv4Dscp) Msg() *snappipb.FlowIpv4Dscp {
 	return obj.obj
 }
 
 func (obj *flowIpv4Dscp) SetMsg(msg *snappipb.FlowIpv4Dscp) FlowIpv4Dscp {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -83932,20 +88649,18 @@ type FlowIpv4Dscp interface {
 	validateObj(set_default bool)
 	setDefault()
 	Phb() PatternFlowIpv4DscpPhb
+	SetPhb(value PatternFlowIpv4DscpPhb) FlowIpv4Dscp
 	HasPhb() bool
 	Ecn() PatternFlowIpv4DscpEcn
+	SetEcn(value PatternFlowIpv4DscpEcn) FlowIpv4Dscp
 	HasEcn() bool
 }
 
 // Phb returns a PatternFlowIpv4DscpPhb
 //  description is TBD
 func (obj *flowIpv4Dscp) Phb() PatternFlowIpv4DscpPhb {
-
 	if obj.obj.Phb == nil {
-		obj.obj.Phb = &snappipb.PatternFlowIpv4DscpPhb{}
-		newObj := &patternFlowIpv4DscpPhb{obj: obj.obj.Phb}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Phb = NewPatternFlowIpv4DscpPhb().Msg()
 	}
 	return &patternFlowIpv4DscpPhb{obj: obj.obj.Phb}
 }
@@ -83956,15 +88671,19 @@ func (obj *flowIpv4Dscp) HasPhb() bool {
 	return obj.obj.Phb != nil
 }
 
+// SetPhb sets the PatternFlowIpv4DscpPhb value in the FlowIpv4Dscp object
+//  description is TBD
+func (obj *flowIpv4Dscp) SetPhb(value PatternFlowIpv4DscpPhb) FlowIpv4Dscp {
+	obj.Phb().SetMsg(value.Msg())
+
+	return obj
+}
+
 // Ecn returns a PatternFlowIpv4DscpEcn
 //  description is TBD
 func (obj *flowIpv4Dscp) Ecn() PatternFlowIpv4DscpEcn {
-
 	if obj.obj.Ecn == nil {
-		obj.obj.Ecn = &snappipb.PatternFlowIpv4DscpEcn{}
-		newObj := &patternFlowIpv4DscpEcn{obj: obj.obj.Ecn}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Ecn = NewPatternFlowIpv4DscpEcn().Msg()
 	}
 	return &patternFlowIpv4DscpEcn{obj: obj.obj.Ecn}
 }
@@ -83973,6 +88692,14 @@ func (obj *flowIpv4Dscp) Ecn() PatternFlowIpv4DscpEcn {
 //  description is TBD
 func (obj *flowIpv4Dscp) HasEcn() bool {
 	return obj.obj.Ecn != nil
+}
+
+// SetEcn sets the PatternFlowIpv4DscpEcn value in the FlowIpv4Dscp object
+//  description is TBD
+func (obj *flowIpv4Dscp) SetEcn(value PatternFlowIpv4DscpEcn) FlowIpv4Dscp {
+	obj.Ecn().SetMsg(value.Msg())
+
+	return obj
 }
 
 func (obj *flowIpv4Dscp) validateObj(set_default bool) {
@@ -83997,12 +88724,18 @@ type patternFlowIpv4TotalLengthCounter struct {
 	obj *snappipb.PatternFlowIpv4TotalLengthCounter
 }
 
+func NewPatternFlowIpv4TotalLengthCounter() PatternFlowIpv4TotalLengthCounter {
+	obj := patternFlowIpv4TotalLengthCounter{obj: &snappipb.PatternFlowIpv4TotalLengthCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowIpv4TotalLengthCounter) Msg() *snappipb.PatternFlowIpv4TotalLengthCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowIpv4TotalLengthCounter) SetMsg(msg *snappipb.PatternFlowIpv4TotalLengthCounter) PatternFlowIpv4TotalLengthCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -84233,12 +88966,18 @@ type patternFlowIpv4IdentificationCounter struct {
 	obj *snappipb.PatternFlowIpv4IdentificationCounter
 }
 
+func NewPatternFlowIpv4IdentificationCounter() PatternFlowIpv4IdentificationCounter {
+	obj := patternFlowIpv4IdentificationCounter{obj: &snappipb.PatternFlowIpv4IdentificationCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowIpv4IdentificationCounter) Msg() *snappipb.PatternFlowIpv4IdentificationCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowIpv4IdentificationCounter) SetMsg(msg *snappipb.PatternFlowIpv4IdentificationCounter) PatternFlowIpv4IdentificationCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -84469,12 +89208,18 @@ type patternFlowIpv4ReservedCounter struct {
 	obj *snappipb.PatternFlowIpv4ReservedCounter
 }
 
+func NewPatternFlowIpv4ReservedCounter() PatternFlowIpv4ReservedCounter {
+	obj := patternFlowIpv4ReservedCounter{obj: &snappipb.PatternFlowIpv4ReservedCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowIpv4ReservedCounter) Msg() *snappipb.PatternFlowIpv4ReservedCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowIpv4ReservedCounter) SetMsg(msg *snappipb.PatternFlowIpv4ReservedCounter) PatternFlowIpv4ReservedCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -84705,12 +89450,18 @@ type patternFlowIpv4DontFragmentCounter struct {
 	obj *snappipb.PatternFlowIpv4DontFragmentCounter
 }
 
+func NewPatternFlowIpv4DontFragmentCounter() PatternFlowIpv4DontFragmentCounter {
+	obj := patternFlowIpv4DontFragmentCounter{obj: &snappipb.PatternFlowIpv4DontFragmentCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowIpv4DontFragmentCounter) Msg() *snappipb.PatternFlowIpv4DontFragmentCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowIpv4DontFragmentCounter) SetMsg(msg *snappipb.PatternFlowIpv4DontFragmentCounter) PatternFlowIpv4DontFragmentCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -84941,12 +89692,18 @@ type patternFlowIpv4MoreFragmentsCounter struct {
 	obj *snappipb.PatternFlowIpv4MoreFragmentsCounter
 }
 
+func NewPatternFlowIpv4MoreFragmentsCounter() PatternFlowIpv4MoreFragmentsCounter {
+	obj := patternFlowIpv4MoreFragmentsCounter{obj: &snappipb.PatternFlowIpv4MoreFragmentsCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowIpv4MoreFragmentsCounter) Msg() *snappipb.PatternFlowIpv4MoreFragmentsCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowIpv4MoreFragmentsCounter) SetMsg(msg *snappipb.PatternFlowIpv4MoreFragmentsCounter) PatternFlowIpv4MoreFragmentsCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -85177,12 +89934,18 @@ type patternFlowIpv4FragmentOffsetCounter struct {
 	obj *snappipb.PatternFlowIpv4FragmentOffsetCounter
 }
 
+func NewPatternFlowIpv4FragmentOffsetCounter() PatternFlowIpv4FragmentOffsetCounter {
+	obj := patternFlowIpv4FragmentOffsetCounter{obj: &snappipb.PatternFlowIpv4FragmentOffsetCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowIpv4FragmentOffsetCounter) Msg() *snappipb.PatternFlowIpv4FragmentOffsetCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowIpv4FragmentOffsetCounter) SetMsg(msg *snappipb.PatternFlowIpv4FragmentOffsetCounter) PatternFlowIpv4FragmentOffsetCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -85413,12 +90176,18 @@ type patternFlowIpv4TimeToLiveCounter struct {
 	obj *snappipb.PatternFlowIpv4TimeToLiveCounter
 }
 
+func NewPatternFlowIpv4TimeToLiveCounter() PatternFlowIpv4TimeToLiveCounter {
+	obj := patternFlowIpv4TimeToLiveCounter{obj: &snappipb.PatternFlowIpv4TimeToLiveCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowIpv4TimeToLiveCounter) Msg() *snappipb.PatternFlowIpv4TimeToLiveCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowIpv4TimeToLiveCounter) SetMsg(msg *snappipb.PatternFlowIpv4TimeToLiveCounter) PatternFlowIpv4TimeToLiveCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -85649,12 +90418,18 @@ type patternFlowIpv4ProtocolCounter struct {
 	obj *snappipb.PatternFlowIpv4ProtocolCounter
 }
 
+func NewPatternFlowIpv4ProtocolCounter() PatternFlowIpv4ProtocolCounter {
+	obj := patternFlowIpv4ProtocolCounter{obj: &snappipb.PatternFlowIpv4ProtocolCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowIpv4ProtocolCounter) Msg() *snappipb.PatternFlowIpv4ProtocolCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowIpv4ProtocolCounter) SetMsg(msg *snappipb.PatternFlowIpv4ProtocolCounter) PatternFlowIpv4ProtocolCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -85885,12 +90660,18 @@ type patternFlowIpv4SrcCounter struct {
 	obj *snappipb.PatternFlowIpv4SrcCounter
 }
 
+func NewPatternFlowIpv4SrcCounter() PatternFlowIpv4SrcCounter {
+	obj := patternFlowIpv4SrcCounter{obj: &snappipb.PatternFlowIpv4SrcCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowIpv4SrcCounter) Msg() *snappipb.PatternFlowIpv4SrcCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowIpv4SrcCounter) SetMsg(msg *snappipb.PatternFlowIpv4SrcCounter) PatternFlowIpv4SrcCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -86119,12 +90900,18 @@ type patternFlowIpv4DstCounter struct {
 	obj *snappipb.PatternFlowIpv4DstCounter
 }
 
+func NewPatternFlowIpv4DstCounter() PatternFlowIpv4DstCounter {
+	obj := patternFlowIpv4DstCounter{obj: &snappipb.PatternFlowIpv4DstCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowIpv4DstCounter) Msg() *snappipb.PatternFlowIpv4DstCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowIpv4DstCounter) SetMsg(msg *snappipb.PatternFlowIpv4DstCounter) PatternFlowIpv4DstCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -86353,12 +91140,18 @@ type patternFlowIpv6VersionCounter struct {
 	obj *snappipb.PatternFlowIpv6VersionCounter
 }
 
+func NewPatternFlowIpv6VersionCounter() PatternFlowIpv6VersionCounter {
+	obj := patternFlowIpv6VersionCounter{obj: &snappipb.PatternFlowIpv6VersionCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowIpv6VersionCounter) Msg() *snappipb.PatternFlowIpv6VersionCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowIpv6VersionCounter) SetMsg(msg *snappipb.PatternFlowIpv6VersionCounter) PatternFlowIpv6VersionCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -86589,12 +91382,18 @@ type patternFlowIpv6TrafficClassCounter struct {
 	obj *snappipb.PatternFlowIpv6TrafficClassCounter
 }
 
+func NewPatternFlowIpv6TrafficClassCounter() PatternFlowIpv6TrafficClassCounter {
+	obj := patternFlowIpv6TrafficClassCounter{obj: &snappipb.PatternFlowIpv6TrafficClassCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowIpv6TrafficClassCounter) Msg() *snappipb.PatternFlowIpv6TrafficClassCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowIpv6TrafficClassCounter) SetMsg(msg *snappipb.PatternFlowIpv6TrafficClassCounter) PatternFlowIpv6TrafficClassCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -86825,12 +91624,18 @@ type patternFlowIpv6FlowLabelCounter struct {
 	obj *snappipb.PatternFlowIpv6FlowLabelCounter
 }
 
+func NewPatternFlowIpv6FlowLabelCounter() PatternFlowIpv6FlowLabelCounter {
+	obj := patternFlowIpv6FlowLabelCounter{obj: &snappipb.PatternFlowIpv6FlowLabelCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowIpv6FlowLabelCounter) Msg() *snappipb.PatternFlowIpv6FlowLabelCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowIpv6FlowLabelCounter) SetMsg(msg *snappipb.PatternFlowIpv6FlowLabelCounter) PatternFlowIpv6FlowLabelCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -87061,12 +91866,18 @@ type patternFlowIpv6PayloadLengthCounter struct {
 	obj *snappipb.PatternFlowIpv6PayloadLengthCounter
 }
 
+func NewPatternFlowIpv6PayloadLengthCounter() PatternFlowIpv6PayloadLengthCounter {
+	obj := patternFlowIpv6PayloadLengthCounter{obj: &snappipb.PatternFlowIpv6PayloadLengthCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowIpv6PayloadLengthCounter) Msg() *snappipb.PatternFlowIpv6PayloadLengthCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowIpv6PayloadLengthCounter) SetMsg(msg *snappipb.PatternFlowIpv6PayloadLengthCounter) PatternFlowIpv6PayloadLengthCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -87297,12 +92108,18 @@ type patternFlowIpv6NextHeaderCounter struct {
 	obj *snappipb.PatternFlowIpv6NextHeaderCounter
 }
 
+func NewPatternFlowIpv6NextHeaderCounter() PatternFlowIpv6NextHeaderCounter {
+	obj := patternFlowIpv6NextHeaderCounter{obj: &snappipb.PatternFlowIpv6NextHeaderCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowIpv6NextHeaderCounter) Msg() *snappipb.PatternFlowIpv6NextHeaderCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowIpv6NextHeaderCounter) SetMsg(msg *snappipb.PatternFlowIpv6NextHeaderCounter) PatternFlowIpv6NextHeaderCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -87533,12 +92350,18 @@ type patternFlowIpv6HopLimitCounter struct {
 	obj *snappipb.PatternFlowIpv6HopLimitCounter
 }
 
+func NewPatternFlowIpv6HopLimitCounter() PatternFlowIpv6HopLimitCounter {
+	obj := patternFlowIpv6HopLimitCounter{obj: &snappipb.PatternFlowIpv6HopLimitCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowIpv6HopLimitCounter) Msg() *snappipb.PatternFlowIpv6HopLimitCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowIpv6HopLimitCounter) SetMsg(msg *snappipb.PatternFlowIpv6HopLimitCounter) PatternFlowIpv6HopLimitCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -87769,12 +92592,18 @@ type patternFlowIpv6SrcCounter struct {
 	obj *snappipb.PatternFlowIpv6SrcCounter
 }
 
+func NewPatternFlowIpv6SrcCounter() PatternFlowIpv6SrcCounter {
+	obj := patternFlowIpv6SrcCounter{obj: &snappipb.PatternFlowIpv6SrcCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowIpv6SrcCounter) Msg() *snappipb.PatternFlowIpv6SrcCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowIpv6SrcCounter) SetMsg(msg *snappipb.PatternFlowIpv6SrcCounter) PatternFlowIpv6SrcCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -88003,12 +92832,18 @@ type patternFlowIpv6DstCounter struct {
 	obj *snappipb.PatternFlowIpv6DstCounter
 }
 
+func NewPatternFlowIpv6DstCounter() PatternFlowIpv6DstCounter {
+	obj := patternFlowIpv6DstCounter{obj: &snappipb.PatternFlowIpv6DstCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowIpv6DstCounter) Msg() *snappipb.PatternFlowIpv6DstCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowIpv6DstCounter) SetMsg(msg *snappipb.PatternFlowIpv6DstCounter) PatternFlowIpv6DstCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -88237,12 +93072,18 @@ type patternFlowPfcPauseDstCounter struct {
 	obj *snappipb.PatternFlowPfcPauseDstCounter
 }
 
+func NewPatternFlowPfcPauseDstCounter() PatternFlowPfcPauseDstCounter {
+	obj := patternFlowPfcPauseDstCounter{obj: &snappipb.PatternFlowPfcPauseDstCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowPfcPauseDstCounter) Msg() *snappipb.PatternFlowPfcPauseDstCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowPfcPauseDstCounter) SetMsg(msg *snappipb.PatternFlowPfcPauseDstCounter) PatternFlowPfcPauseDstCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -88471,12 +93312,18 @@ type patternFlowPfcPauseSrcCounter struct {
 	obj *snappipb.PatternFlowPfcPauseSrcCounter
 }
 
+func NewPatternFlowPfcPauseSrcCounter() PatternFlowPfcPauseSrcCounter {
+	obj := patternFlowPfcPauseSrcCounter{obj: &snappipb.PatternFlowPfcPauseSrcCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowPfcPauseSrcCounter) Msg() *snappipb.PatternFlowPfcPauseSrcCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowPfcPauseSrcCounter) SetMsg(msg *snappipb.PatternFlowPfcPauseSrcCounter) PatternFlowPfcPauseSrcCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -88705,12 +93552,18 @@ type patternFlowPfcPauseEtherTypeCounter struct {
 	obj *snappipb.PatternFlowPfcPauseEtherTypeCounter
 }
 
+func NewPatternFlowPfcPauseEtherTypeCounter() PatternFlowPfcPauseEtherTypeCounter {
+	obj := patternFlowPfcPauseEtherTypeCounter{obj: &snappipb.PatternFlowPfcPauseEtherTypeCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowPfcPauseEtherTypeCounter) Msg() *snappipb.PatternFlowPfcPauseEtherTypeCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowPfcPauseEtherTypeCounter) SetMsg(msg *snappipb.PatternFlowPfcPauseEtherTypeCounter) PatternFlowPfcPauseEtherTypeCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -88941,12 +93794,18 @@ type patternFlowPfcPauseControlOpCodeCounter struct {
 	obj *snappipb.PatternFlowPfcPauseControlOpCodeCounter
 }
 
+func NewPatternFlowPfcPauseControlOpCodeCounter() PatternFlowPfcPauseControlOpCodeCounter {
+	obj := patternFlowPfcPauseControlOpCodeCounter{obj: &snappipb.PatternFlowPfcPauseControlOpCodeCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowPfcPauseControlOpCodeCounter) Msg() *snappipb.PatternFlowPfcPauseControlOpCodeCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowPfcPauseControlOpCodeCounter) SetMsg(msg *snappipb.PatternFlowPfcPauseControlOpCodeCounter) PatternFlowPfcPauseControlOpCodeCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -89177,12 +94036,18 @@ type patternFlowPfcPauseClassEnableVectorCounter struct {
 	obj *snappipb.PatternFlowPfcPauseClassEnableVectorCounter
 }
 
+func NewPatternFlowPfcPauseClassEnableVectorCounter() PatternFlowPfcPauseClassEnableVectorCounter {
+	obj := patternFlowPfcPauseClassEnableVectorCounter{obj: &snappipb.PatternFlowPfcPauseClassEnableVectorCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowPfcPauseClassEnableVectorCounter) Msg() *snappipb.PatternFlowPfcPauseClassEnableVectorCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowPfcPauseClassEnableVectorCounter) SetMsg(msg *snappipb.PatternFlowPfcPauseClassEnableVectorCounter) PatternFlowPfcPauseClassEnableVectorCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -89413,12 +94278,18 @@ type patternFlowPfcPausePauseClass0Counter struct {
 	obj *snappipb.PatternFlowPfcPausePauseClass0Counter
 }
 
+func NewPatternFlowPfcPausePauseClass0Counter() PatternFlowPfcPausePauseClass0Counter {
+	obj := patternFlowPfcPausePauseClass0Counter{obj: &snappipb.PatternFlowPfcPausePauseClass0Counter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowPfcPausePauseClass0Counter) Msg() *snappipb.PatternFlowPfcPausePauseClass0Counter {
 	return obj.obj
 }
 
 func (obj *patternFlowPfcPausePauseClass0Counter) SetMsg(msg *snappipb.PatternFlowPfcPausePauseClass0Counter) PatternFlowPfcPausePauseClass0Counter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -89649,12 +94520,18 @@ type patternFlowPfcPausePauseClass1Counter struct {
 	obj *snappipb.PatternFlowPfcPausePauseClass1Counter
 }
 
+func NewPatternFlowPfcPausePauseClass1Counter() PatternFlowPfcPausePauseClass1Counter {
+	obj := patternFlowPfcPausePauseClass1Counter{obj: &snappipb.PatternFlowPfcPausePauseClass1Counter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowPfcPausePauseClass1Counter) Msg() *snappipb.PatternFlowPfcPausePauseClass1Counter {
 	return obj.obj
 }
 
 func (obj *patternFlowPfcPausePauseClass1Counter) SetMsg(msg *snappipb.PatternFlowPfcPausePauseClass1Counter) PatternFlowPfcPausePauseClass1Counter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -89885,12 +94762,18 @@ type patternFlowPfcPausePauseClass2Counter struct {
 	obj *snappipb.PatternFlowPfcPausePauseClass2Counter
 }
 
+func NewPatternFlowPfcPausePauseClass2Counter() PatternFlowPfcPausePauseClass2Counter {
+	obj := patternFlowPfcPausePauseClass2Counter{obj: &snappipb.PatternFlowPfcPausePauseClass2Counter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowPfcPausePauseClass2Counter) Msg() *snappipb.PatternFlowPfcPausePauseClass2Counter {
 	return obj.obj
 }
 
 func (obj *patternFlowPfcPausePauseClass2Counter) SetMsg(msg *snappipb.PatternFlowPfcPausePauseClass2Counter) PatternFlowPfcPausePauseClass2Counter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -90121,12 +95004,18 @@ type patternFlowPfcPausePauseClass3Counter struct {
 	obj *snappipb.PatternFlowPfcPausePauseClass3Counter
 }
 
+func NewPatternFlowPfcPausePauseClass3Counter() PatternFlowPfcPausePauseClass3Counter {
+	obj := patternFlowPfcPausePauseClass3Counter{obj: &snappipb.PatternFlowPfcPausePauseClass3Counter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowPfcPausePauseClass3Counter) Msg() *snappipb.PatternFlowPfcPausePauseClass3Counter {
 	return obj.obj
 }
 
 func (obj *patternFlowPfcPausePauseClass3Counter) SetMsg(msg *snappipb.PatternFlowPfcPausePauseClass3Counter) PatternFlowPfcPausePauseClass3Counter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -90357,12 +95246,18 @@ type patternFlowPfcPausePauseClass4Counter struct {
 	obj *snappipb.PatternFlowPfcPausePauseClass4Counter
 }
 
+func NewPatternFlowPfcPausePauseClass4Counter() PatternFlowPfcPausePauseClass4Counter {
+	obj := patternFlowPfcPausePauseClass4Counter{obj: &snappipb.PatternFlowPfcPausePauseClass4Counter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowPfcPausePauseClass4Counter) Msg() *snappipb.PatternFlowPfcPausePauseClass4Counter {
 	return obj.obj
 }
 
 func (obj *patternFlowPfcPausePauseClass4Counter) SetMsg(msg *snappipb.PatternFlowPfcPausePauseClass4Counter) PatternFlowPfcPausePauseClass4Counter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -90593,12 +95488,18 @@ type patternFlowPfcPausePauseClass5Counter struct {
 	obj *snappipb.PatternFlowPfcPausePauseClass5Counter
 }
 
+func NewPatternFlowPfcPausePauseClass5Counter() PatternFlowPfcPausePauseClass5Counter {
+	obj := patternFlowPfcPausePauseClass5Counter{obj: &snappipb.PatternFlowPfcPausePauseClass5Counter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowPfcPausePauseClass5Counter) Msg() *snappipb.PatternFlowPfcPausePauseClass5Counter {
 	return obj.obj
 }
 
 func (obj *patternFlowPfcPausePauseClass5Counter) SetMsg(msg *snappipb.PatternFlowPfcPausePauseClass5Counter) PatternFlowPfcPausePauseClass5Counter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -90829,12 +95730,18 @@ type patternFlowPfcPausePauseClass6Counter struct {
 	obj *snappipb.PatternFlowPfcPausePauseClass6Counter
 }
 
+func NewPatternFlowPfcPausePauseClass6Counter() PatternFlowPfcPausePauseClass6Counter {
+	obj := patternFlowPfcPausePauseClass6Counter{obj: &snappipb.PatternFlowPfcPausePauseClass6Counter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowPfcPausePauseClass6Counter) Msg() *snappipb.PatternFlowPfcPausePauseClass6Counter {
 	return obj.obj
 }
 
 func (obj *patternFlowPfcPausePauseClass6Counter) SetMsg(msg *snappipb.PatternFlowPfcPausePauseClass6Counter) PatternFlowPfcPausePauseClass6Counter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -91065,12 +95972,18 @@ type patternFlowPfcPausePauseClass7Counter struct {
 	obj *snappipb.PatternFlowPfcPausePauseClass7Counter
 }
 
+func NewPatternFlowPfcPausePauseClass7Counter() PatternFlowPfcPausePauseClass7Counter {
+	obj := patternFlowPfcPausePauseClass7Counter{obj: &snappipb.PatternFlowPfcPausePauseClass7Counter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowPfcPausePauseClass7Counter) Msg() *snappipb.PatternFlowPfcPausePauseClass7Counter {
 	return obj.obj
 }
 
 func (obj *patternFlowPfcPausePauseClass7Counter) SetMsg(msg *snappipb.PatternFlowPfcPausePauseClass7Counter) PatternFlowPfcPausePauseClass7Counter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -91301,12 +96214,18 @@ type patternFlowEthernetPauseDstCounter struct {
 	obj *snappipb.PatternFlowEthernetPauseDstCounter
 }
 
+func NewPatternFlowEthernetPauseDstCounter() PatternFlowEthernetPauseDstCounter {
+	obj := patternFlowEthernetPauseDstCounter{obj: &snappipb.PatternFlowEthernetPauseDstCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowEthernetPauseDstCounter) Msg() *snappipb.PatternFlowEthernetPauseDstCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowEthernetPauseDstCounter) SetMsg(msg *snappipb.PatternFlowEthernetPauseDstCounter) PatternFlowEthernetPauseDstCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -91535,12 +96454,18 @@ type patternFlowEthernetPauseSrcCounter struct {
 	obj *snappipb.PatternFlowEthernetPauseSrcCounter
 }
 
+func NewPatternFlowEthernetPauseSrcCounter() PatternFlowEthernetPauseSrcCounter {
+	obj := patternFlowEthernetPauseSrcCounter{obj: &snappipb.PatternFlowEthernetPauseSrcCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowEthernetPauseSrcCounter) Msg() *snappipb.PatternFlowEthernetPauseSrcCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowEthernetPauseSrcCounter) SetMsg(msg *snappipb.PatternFlowEthernetPauseSrcCounter) PatternFlowEthernetPauseSrcCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -91769,12 +96694,18 @@ type patternFlowEthernetPauseEtherTypeCounter struct {
 	obj *snappipb.PatternFlowEthernetPauseEtherTypeCounter
 }
 
+func NewPatternFlowEthernetPauseEtherTypeCounter() PatternFlowEthernetPauseEtherTypeCounter {
+	obj := patternFlowEthernetPauseEtherTypeCounter{obj: &snappipb.PatternFlowEthernetPauseEtherTypeCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowEthernetPauseEtherTypeCounter) Msg() *snappipb.PatternFlowEthernetPauseEtherTypeCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowEthernetPauseEtherTypeCounter) SetMsg(msg *snappipb.PatternFlowEthernetPauseEtherTypeCounter) PatternFlowEthernetPauseEtherTypeCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -92005,12 +96936,18 @@ type patternFlowEthernetPauseControlOpCodeCounter struct {
 	obj *snappipb.PatternFlowEthernetPauseControlOpCodeCounter
 }
 
+func NewPatternFlowEthernetPauseControlOpCodeCounter() PatternFlowEthernetPauseControlOpCodeCounter {
+	obj := patternFlowEthernetPauseControlOpCodeCounter{obj: &snappipb.PatternFlowEthernetPauseControlOpCodeCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowEthernetPauseControlOpCodeCounter) Msg() *snappipb.PatternFlowEthernetPauseControlOpCodeCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowEthernetPauseControlOpCodeCounter) SetMsg(msg *snappipb.PatternFlowEthernetPauseControlOpCodeCounter) PatternFlowEthernetPauseControlOpCodeCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -92241,12 +97178,18 @@ type patternFlowEthernetPauseTimeCounter struct {
 	obj *snappipb.PatternFlowEthernetPauseTimeCounter
 }
 
+func NewPatternFlowEthernetPauseTimeCounter() PatternFlowEthernetPauseTimeCounter {
+	obj := patternFlowEthernetPauseTimeCounter{obj: &snappipb.PatternFlowEthernetPauseTimeCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowEthernetPauseTimeCounter) Msg() *snappipb.PatternFlowEthernetPauseTimeCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowEthernetPauseTimeCounter) SetMsg(msg *snappipb.PatternFlowEthernetPauseTimeCounter) PatternFlowEthernetPauseTimeCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -92477,12 +97420,18 @@ type patternFlowTcpSrcPortCounter struct {
 	obj *snappipb.PatternFlowTcpSrcPortCounter
 }
 
+func NewPatternFlowTcpSrcPortCounter() PatternFlowTcpSrcPortCounter {
+	obj := patternFlowTcpSrcPortCounter{obj: &snappipb.PatternFlowTcpSrcPortCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowTcpSrcPortCounter) Msg() *snappipb.PatternFlowTcpSrcPortCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowTcpSrcPortCounter) SetMsg(msg *snappipb.PatternFlowTcpSrcPortCounter) PatternFlowTcpSrcPortCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -92713,12 +97662,18 @@ type patternFlowTcpDstPortCounter struct {
 	obj *snappipb.PatternFlowTcpDstPortCounter
 }
 
+func NewPatternFlowTcpDstPortCounter() PatternFlowTcpDstPortCounter {
+	obj := patternFlowTcpDstPortCounter{obj: &snappipb.PatternFlowTcpDstPortCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowTcpDstPortCounter) Msg() *snappipb.PatternFlowTcpDstPortCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowTcpDstPortCounter) SetMsg(msg *snappipb.PatternFlowTcpDstPortCounter) PatternFlowTcpDstPortCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -92949,12 +97904,18 @@ type patternFlowTcpSeqNumCounter struct {
 	obj *snappipb.PatternFlowTcpSeqNumCounter
 }
 
+func NewPatternFlowTcpSeqNumCounter() PatternFlowTcpSeqNumCounter {
+	obj := patternFlowTcpSeqNumCounter{obj: &snappipb.PatternFlowTcpSeqNumCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowTcpSeqNumCounter) Msg() *snappipb.PatternFlowTcpSeqNumCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowTcpSeqNumCounter) SetMsg(msg *snappipb.PatternFlowTcpSeqNumCounter) PatternFlowTcpSeqNumCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -93185,12 +98146,18 @@ type patternFlowTcpAckNumCounter struct {
 	obj *snappipb.PatternFlowTcpAckNumCounter
 }
 
+func NewPatternFlowTcpAckNumCounter() PatternFlowTcpAckNumCounter {
+	obj := patternFlowTcpAckNumCounter{obj: &snappipb.PatternFlowTcpAckNumCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowTcpAckNumCounter) Msg() *snappipb.PatternFlowTcpAckNumCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowTcpAckNumCounter) SetMsg(msg *snappipb.PatternFlowTcpAckNumCounter) PatternFlowTcpAckNumCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -93421,12 +98388,18 @@ type patternFlowTcpDataOffsetCounter struct {
 	obj *snappipb.PatternFlowTcpDataOffsetCounter
 }
 
+func NewPatternFlowTcpDataOffsetCounter() PatternFlowTcpDataOffsetCounter {
+	obj := patternFlowTcpDataOffsetCounter{obj: &snappipb.PatternFlowTcpDataOffsetCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowTcpDataOffsetCounter) Msg() *snappipb.PatternFlowTcpDataOffsetCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowTcpDataOffsetCounter) SetMsg(msg *snappipb.PatternFlowTcpDataOffsetCounter) PatternFlowTcpDataOffsetCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -93657,12 +98630,18 @@ type patternFlowTcpEcnNsCounter struct {
 	obj *snappipb.PatternFlowTcpEcnNsCounter
 }
 
+func NewPatternFlowTcpEcnNsCounter() PatternFlowTcpEcnNsCounter {
+	obj := patternFlowTcpEcnNsCounter{obj: &snappipb.PatternFlowTcpEcnNsCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowTcpEcnNsCounter) Msg() *snappipb.PatternFlowTcpEcnNsCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowTcpEcnNsCounter) SetMsg(msg *snappipb.PatternFlowTcpEcnNsCounter) PatternFlowTcpEcnNsCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -93893,12 +98872,18 @@ type patternFlowTcpEcnCwrCounter struct {
 	obj *snappipb.PatternFlowTcpEcnCwrCounter
 }
 
+func NewPatternFlowTcpEcnCwrCounter() PatternFlowTcpEcnCwrCounter {
+	obj := patternFlowTcpEcnCwrCounter{obj: &snappipb.PatternFlowTcpEcnCwrCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowTcpEcnCwrCounter) Msg() *snappipb.PatternFlowTcpEcnCwrCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowTcpEcnCwrCounter) SetMsg(msg *snappipb.PatternFlowTcpEcnCwrCounter) PatternFlowTcpEcnCwrCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -94129,12 +99114,18 @@ type patternFlowTcpEcnEchoCounter struct {
 	obj *snappipb.PatternFlowTcpEcnEchoCounter
 }
 
+func NewPatternFlowTcpEcnEchoCounter() PatternFlowTcpEcnEchoCounter {
+	obj := patternFlowTcpEcnEchoCounter{obj: &snappipb.PatternFlowTcpEcnEchoCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowTcpEcnEchoCounter) Msg() *snappipb.PatternFlowTcpEcnEchoCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowTcpEcnEchoCounter) SetMsg(msg *snappipb.PatternFlowTcpEcnEchoCounter) PatternFlowTcpEcnEchoCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -94365,12 +99356,18 @@ type patternFlowTcpCtlUrgCounter struct {
 	obj *snappipb.PatternFlowTcpCtlUrgCounter
 }
 
+func NewPatternFlowTcpCtlUrgCounter() PatternFlowTcpCtlUrgCounter {
+	obj := patternFlowTcpCtlUrgCounter{obj: &snappipb.PatternFlowTcpCtlUrgCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowTcpCtlUrgCounter) Msg() *snappipb.PatternFlowTcpCtlUrgCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowTcpCtlUrgCounter) SetMsg(msg *snappipb.PatternFlowTcpCtlUrgCounter) PatternFlowTcpCtlUrgCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -94601,12 +99598,18 @@ type patternFlowTcpCtlAckCounter struct {
 	obj *snappipb.PatternFlowTcpCtlAckCounter
 }
 
+func NewPatternFlowTcpCtlAckCounter() PatternFlowTcpCtlAckCounter {
+	obj := patternFlowTcpCtlAckCounter{obj: &snappipb.PatternFlowTcpCtlAckCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowTcpCtlAckCounter) Msg() *snappipb.PatternFlowTcpCtlAckCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowTcpCtlAckCounter) SetMsg(msg *snappipb.PatternFlowTcpCtlAckCounter) PatternFlowTcpCtlAckCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -94837,12 +99840,18 @@ type patternFlowTcpCtlPshCounter struct {
 	obj *snappipb.PatternFlowTcpCtlPshCounter
 }
 
+func NewPatternFlowTcpCtlPshCounter() PatternFlowTcpCtlPshCounter {
+	obj := patternFlowTcpCtlPshCounter{obj: &snappipb.PatternFlowTcpCtlPshCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowTcpCtlPshCounter) Msg() *snappipb.PatternFlowTcpCtlPshCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowTcpCtlPshCounter) SetMsg(msg *snappipb.PatternFlowTcpCtlPshCounter) PatternFlowTcpCtlPshCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -95073,12 +100082,18 @@ type patternFlowTcpCtlRstCounter struct {
 	obj *snappipb.PatternFlowTcpCtlRstCounter
 }
 
+func NewPatternFlowTcpCtlRstCounter() PatternFlowTcpCtlRstCounter {
+	obj := patternFlowTcpCtlRstCounter{obj: &snappipb.PatternFlowTcpCtlRstCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowTcpCtlRstCounter) Msg() *snappipb.PatternFlowTcpCtlRstCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowTcpCtlRstCounter) SetMsg(msg *snappipb.PatternFlowTcpCtlRstCounter) PatternFlowTcpCtlRstCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -95309,12 +100324,18 @@ type patternFlowTcpCtlSynCounter struct {
 	obj *snappipb.PatternFlowTcpCtlSynCounter
 }
 
+func NewPatternFlowTcpCtlSynCounter() PatternFlowTcpCtlSynCounter {
+	obj := patternFlowTcpCtlSynCounter{obj: &snappipb.PatternFlowTcpCtlSynCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowTcpCtlSynCounter) Msg() *snappipb.PatternFlowTcpCtlSynCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowTcpCtlSynCounter) SetMsg(msg *snappipb.PatternFlowTcpCtlSynCounter) PatternFlowTcpCtlSynCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -95545,12 +100566,18 @@ type patternFlowTcpCtlFinCounter struct {
 	obj *snappipb.PatternFlowTcpCtlFinCounter
 }
 
+func NewPatternFlowTcpCtlFinCounter() PatternFlowTcpCtlFinCounter {
+	obj := patternFlowTcpCtlFinCounter{obj: &snappipb.PatternFlowTcpCtlFinCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowTcpCtlFinCounter) Msg() *snappipb.PatternFlowTcpCtlFinCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowTcpCtlFinCounter) SetMsg(msg *snappipb.PatternFlowTcpCtlFinCounter) PatternFlowTcpCtlFinCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -95781,12 +100808,18 @@ type patternFlowTcpWindowCounter struct {
 	obj *snappipb.PatternFlowTcpWindowCounter
 }
 
+func NewPatternFlowTcpWindowCounter() PatternFlowTcpWindowCounter {
+	obj := patternFlowTcpWindowCounter{obj: &snappipb.PatternFlowTcpWindowCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowTcpWindowCounter) Msg() *snappipb.PatternFlowTcpWindowCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowTcpWindowCounter) SetMsg(msg *snappipb.PatternFlowTcpWindowCounter) PatternFlowTcpWindowCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -96017,12 +101050,18 @@ type patternFlowUdpSrcPortCounter struct {
 	obj *snappipb.PatternFlowUdpSrcPortCounter
 }
 
+func NewPatternFlowUdpSrcPortCounter() PatternFlowUdpSrcPortCounter {
+	obj := patternFlowUdpSrcPortCounter{obj: &snappipb.PatternFlowUdpSrcPortCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowUdpSrcPortCounter) Msg() *snappipb.PatternFlowUdpSrcPortCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowUdpSrcPortCounter) SetMsg(msg *snappipb.PatternFlowUdpSrcPortCounter) PatternFlowUdpSrcPortCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -96253,12 +101292,18 @@ type patternFlowUdpDstPortCounter struct {
 	obj *snappipb.PatternFlowUdpDstPortCounter
 }
 
+func NewPatternFlowUdpDstPortCounter() PatternFlowUdpDstPortCounter {
+	obj := patternFlowUdpDstPortCounter{obj: &snappipb.PatternFlowUdpDstPortCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowUdpDstPortCounter) Msg() *snappipb.PatternFlowUdpDstPortCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowUdpDstPortCounter) SetMsg(msg *snappipb.PatternFlowUdpDstPortCounter) PatternFlowUdpDstPortCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -96489,12 +101534,18 @@ type patternFlowUdpLengthCounter struct {
 	obj *snappipb.PatternFlowUdpLengthCounter
 }
 
+func NewPatternFlowUdpLengthCounter() PatternFlowUdpLengthCounter {
+	obj := patternFlowUdpLengthCounter{obj: &snappipb.PatternFlowUdpLengthCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowUdpLengthCounter) Msg() *snappipb.PatternFlowUdpLengthCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowUdpLengthCounter) SetMsg(msg *snappipb.PatternFlowUdpLengthCounter) PatternFlowUdpLengthCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -96725,12 +101776,18 @@ type patternFlowGreChecksumPresentCounter struct {
 	obj *snappipb.PatternFlowGreChecksumPresentCounter
 }
 
+func NewPatternFlowGreChecksumPresentCounter() PatternFlowGreChecksumPresentCounter {
+	obj := patternFlowGreChecksumPresentCounter{obj: &snappipb.PatternFlowGreChecksumPresentCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowGreChecksumPresentCounter) Msg() *snappipb.PatternFlowGreChecksumPresentCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowGreChecksumPresentCounter) SetMsg(msg *snappipb.PatternFlowGreChecksumPresentCounter) PatternFlowGreChecksumPresentCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -96961,12 +102018,18 @@ type patternFlowGreReserved0Counter struct {
 	obj *snappipb.PatternFlowGreReserved0Counter
 }
 
+func NewPatternFlowGreReserved0Counter() PatternFlowGreReserved0Counter {
+	obj := patternFlowGreReserved0Counter{obj: &snappipb.PatternFlowGreReserved0Counter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowGreReserved0Counter) Msg() *snappipb.PatternFlowGreReserved0Counter {
 	return obj.obj
 }
 
 func (obj *patternFlowGreReserved0Counter) SetMsg(msg *snappipb.PatternFlowGreReserved0Counter) PatternFlowGreReserved0Counter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -97197,12 +102260,18 @@ type patternFlowGreVersionCounter struct {
 	obj *snappipb.PatternFlowGreVersionCounter
 }
 
+func NewPatternFlowGreVersionCounter() PatternFlowGreVersionCounter {
+	obj := patternFlowGreVersionCounter{obj: &snappipb.PatternFlowGreVersionCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowGreVersionCounter) Msg() *snappipb.PatternFlowGreVersionCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowGreVersionCounter) SetMsg(msg *snappipb.PatternFlowGreVersionCounter) PatternFlowGreVersionCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -97433,12 +102502,18 @@ type patternFlowGreProtocolCounter struct {
 	obj *snappipb.PatternFlowGreProtocolCounter
 }
 
+func NewPatternFlowGreProtocolCounter() PatternFlowGreProtocolCounter {
+	obj := patternFlowGreProtocolCounter{obj: &snappipb.PatternFlowGreProtocolCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowGreProtocolCounter) Msg() *snappipb.PatternFlowGreProtocolCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowGreProtocolCounter) SetMsg(msg *snappipb.PatternFlowGreProtocolCounter) PatternFlowGreProtocolCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -97669,12 +102744,18 @@ type patternFlowGreReserved1Counter struct {
 	obj *snappipb.PatternFlowGreReserved1Counter
 }
 
+func NewPatternFlowGreReserved1Counter() PatternFlowGreReserved1Counter {
+	obj := patternFlowGreReserved1Counter{obj: &snappipb.PatternFlowGreReserved1Counter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowGreReserved1Counter) Msg() *snappipb.PatternFlowGreReserved1Counter {
 	return obj.obj
 }
 
 func (obj *patternFlowGreReserved1Counter) SetMsg(msg *snappipb.PatternFlowGreReserved1Counter) PatternFlowGreReserved1Counter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -97905,12 +102986,18 @@ type patternFlowGtpv1VersionCounter struct {
 	obj *snappipb.PatternFlowGtpv1VersionCounter
 }
 
+func NewPatternFlowGtpv1VersionCounter() PatternFlowGtpv1VersionCounter {
+	obj := patternFlowGtpv1VersionCounter{obj: &snappipb.PatternFlowGtpv1VersionCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowGtpv1VersionCounter) Msg() *snappipb.PatternFlowGtpv1VersionCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowGtpv1VersionCounter) SetMsg(msg *snappipb.PatternFlowGtpv1VersionCounter) PatternFlowGtpv1VersionCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -98141,12 +103228,18 @@ type patternFlowGtpv1ProtocolTypeCounter struct {
 	obj *snappipb.PatternFlowGtpv1ProtocolTypeCounter
 }
 
+func NewPatternFlowGtpv1ProtocolTypeCounter() PatternFlowGtpv1ProtocolTypeCounter {
+	obj := patternFlowGtpv1ProtocolTypeCounter{obj: &snappipb.PatternFlowGtpv1ProtocolTypeCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowGtpv1ProtocolTypeCounter) Msg() *snappipb.PatternFlowGtpv1ProtocolTypeCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowGtpv1ProtocolTypeCounter) SetMsg(msg *snappipb.PatternFlowGtpv1ProtocolTypeCounter) PatternFlowGtpv1ProtocolTypeCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -98377,12 +103470,18 @@ type patternFlowGtpv1ReservedCounter struct {
 	obj *snappipb.PatternFlowGtpv1ReservedCounter
 }
 
+func NewPatternFlowGtpv1ReservedCounter() PatternFlowGtpv1ReservedCounter {
+	obj := patternFlowGtpv1ReservedCounter{obj: &snappipb.PatternFlowGtpv1ReservedCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowGtpv1ReservedCounter) Msg() *snappipb.PatternFlowGtpv1ReservedCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowGtpv1ReservedCounter) SetMsg(msg *snappipb.PatternFlowGtpv1ReservedCounter) PatternFlowGtpv1ReservedCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -98613,12 +103712,18 @@ type patternFlowGtpv1EFlagCounter struct {
 	obj *snappipb.PatternFlowGtpv1EFlagCounter
 }
 
+func NewPatternFlowGtpv1EFlagCounter() PatternFlowGtpv1EFlagCounter {
+	obj := patternFlowGtpv1EFlagCounter{obj: &snappipb.PatternFlowGtpv1EFlagCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowGtpv1EFlagCounter) Msg() *snappipb.PatternFlowGtpv1EFlagCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowGtpv1EFlagCounter) SetMsg(msg *snappipb.PatternFlowGtpv1EFlagCounter) PatternFlowGtpv1EFlagCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -98849,12 +103954,18 @@ type patternFlowGtpv1SFlagCounter struct {
 	obj *snappipb.PatternFlowGtpv1SFlagCounter
 }
 
+func NewPatternFlowGtpv1SFlagCounter() PatternFlowGtpv1SFlagCounter {
+	obj := patternFlowGtpv1SFlagCounter{obj: &snappipb.PatternFlowGtpv1SFlagCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowGtpv1SFlagCounter) Msg() *snappipb.PatternFlowGtpv1SFlagCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowGtpv1SFlagCounter) SetMsg(msg *snappipb.PatternFlowGtpv1SFlagCounter) PatternFlowGtpv1SFlagCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -99085,12 +104196,18 @@ type patternFlowGtpv1PnFlagCounter struct {
 	obj *snappipb.PatternFlowGtpv1PnFlagCounter
 }
 
+func NewPatternFlowGtpv1PnFlagCounter() PatternFlowGtpv1PnFlagCounter {
+	obj := patternFlowGtpv1PnFlagCounter{obj: &snappipb.PatternFlowGtpv1PnFlagCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowGtpv1PnFlagCounter) Msg() *snappipb.PatternFlowGtpv1PnFlagCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowGtpv1PnFlagCounter) SetMsg(msg *snappipb.PatternFlowGtpv1PnFlagCounter) PatternFlowGtpv1PnFlagCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -99321,12 +104438,18 @@ type patternFlowGtpv1MessageTypeCounter struct {
 	obj *snappipb.PatternFlowGtpv1MessageTypeCounter
 }
 
+func NewPatternFlowGtpv1MessageTypeCounter() PatternFlowGtpv1MessageTypeCounter {
+	obj := patternFlowGtpv1MessageTypeCounter{obj: &snappipb.PatternFlowGtpv1MessageTypeCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowGtpv1MessageTypeCounter) Msg() *snappipb.PatternFlowGtpv1MessageTypeCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowGtpv1MessageTypeCounter) SetMsg(msg *snappipb.PatternFlowGtpv1MessageTypeCounter) PatternFlowGtpv1MessageTypeCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -99557,12 +104680,18 @@ type patternFlowGtpv1MessageLengthCounter struct {
 	obj *snappipb.PatternFlowGtpv1MessageLengthCounter
 }
 
+func NewPatternFlowGtpv1MessageLengthCounter() PatternFlowGtpv1MessageLengthCounter {
+	obj := patternFlowGtpv1MessageLengthCounter{obj: &snappipb.PatternFlowGtpv1MessageLengthCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowGtpv1MessageLengthCounter) Msg() *snappipb.PatternFlowGtpv1MessageLengthCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowGtpv1MessageLengthCounter) SetMsg(msg *snappipb.PatternFlowGtpv1MessageLengthCounter) PatternFlowGtpv1MessageLengthCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -99793,12 +104922,18 @@ type patternFlowGtpv1TeidCounter struct {
 	obj *snappipb.PatternFlowGtpv1TeidCounter
 }
 
+func NewPatternFlowGtpv1TeidCounter() PatternFlowGtpv1TeidCounter {
+	obj := patternFlowGtpv1TeidCounter{obj: &snappipb.PatternFlowGtpv1TeidCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowGtpv1TeidCounter) Msg() *snappipb.PatternFlowGtpv1TeidCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowGtpv1TeidCounter) SetMsg(msg *snappipb.PatternFlowGtpv1TeidCounter) PatternFlowGtpv1TeidCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -100029,12 +105164,18 @@ type patternFlowGtpv1SquenceNumberCounter struct {
 	obj *snappipb.PatternFlowGtpv1SquenceNumberCounter
 }
 
+func NewPatternFlowGtpv1SquenceNumberCounter() PatternFlowGtpv1SquenceNumberCounter {
+	obj := patternFlowGtpv1SquenceNumberCounter{obj: &snappipb.PatternFlowGtpv1SquenceNumberCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowGtpv1SquenceNumberCounter) Msg() *snappipb.PatternFlowGtpv1SquenceNumberCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowGtpv1SquenceNumberCounter) SetMsg(msg *snappipb.PatternFlowGtpv1SquenceNumberCounter) PatternFlowGtpv1SquenceNumberCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -100265,12 +105406,18 @@ type patternFlowGtpv1NPduNumberCounter struct {
 	obj *snappipb.PatternFlowGtpv1NPduNumberCounter
 }
 
+func NewPatternFlowGtpv1NPduNumberCounter() PatternFlowGtpv1NPduNumberCounter {
+	obj := patternFlowGtpv1NPduNumberCounter{obj: &snappipb.PatternFlowGtpv1NPduNumberCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowGtpv1NPduNumberCounter) Msg() *snappipb.PatternFlowGtpv1NPduNumberCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowGtpv1NPduNumberCounter) SetMsg(msg *snappipb.PatternFlowGtpv1NPduNumberCounter) PatternFlowGtpv1NPduNumberCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -100501,12 +105648,18 @@ type patternFlowGtpv1NextExtensionHeaderTypeCounter struct {
 	obj *snappipb.PatternFlowGtpv1NextExtensionHeaderTypeCounter
 }
 
+func NewPatternFlowGtpv1NextExtensionHeaderTypeCounter() PatternFlowGtpv1NextExtensionHeaderTypeCounter {
+	obj := patternFlowGtpv1NextExtensionHeaderTypeCounter{obj: &snappipb.PatternFlowGtpv1NextExtensionHeaderTypeCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowGtpv1NextExtensionHeaderTypeCounter) Msg() *snappipb.PatternFlowGtpv1NextExtensionHeaderTypeCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowGtpv1NextExtensionHeaderTypeCounter) SetMsg(msg *snappipb.PatternFlowGtpv1NextExtensionHeaderTypeCounter) PatternFlowGtpv1NextExtensionHeaderTypeCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -100737,12 +105890,18 @@ type patternFlowGtpExtensionExtensionLength struct {
 	obj *snappipb.PatternFlowGtpExtensionExtensionLength
 }
 
+func NewPatternFlowGtpExtensionExtensionLength() PatternFlowGtpExtensionExtensionLength {
+	obj := patternFlowGtpExtensionExtensionLength{obj: &snappipb.PatternFlowGtpExtensionExtensionLength{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowGtpExtensionExtensionLength) Msg() *snappipb.PatternFlowGtpExtensionExtensionLength {
 	return obj.obj
 }
 
 func (obj *patternFlowGtpExtensionExtensionLength) SetMsg(msg *snappipb.PatternFlowGtpExtensionExtensionLength) PatternFlowGtpExtensionExtensionLength {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -100874,8 +106033,10 @@ type PatternFlowGtpExtensionExtensionLength interface {
 	SetMetricGroup(value string) PatternFlowGtpExtensionExtensionLength
 	HasMetricGroup() bool
 	Increment() PatternFlowGtpExtensionExtensionLengthCounter
+	SetIncrement(value PatternFlowGtpExtensionExtensionLengthCounter) PatternFlowGtpExtensionExtensionLength
 	HasIncrement() bool
 	Decrement() PatternFlowGtpExtensionExtensionLengthCounter
+	SetDecrement(value PatternFlowGtpExtensionExtensionLengthCounter) PatternFlowGtpExtensionExtensionLength
 	HasDecrement() bool
 }
 
@@ -100981,10 +106142,7 @@ func (obj *patternFlowGtpExtensionExtensionLength) SetMetricGroup(value string) 
 func (obj *patternFlowGtpExtensionExtensionLength) Increment() PatternFlowGtpExtensionExtensionLengthCounter {
 	obj.SetChoice(PatternFlowGtpExtensionExtensionLengthChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowGtpExtensionExtensionLengthCounter{}
-		newObj := &patternFlowGtpExtensionExtensionLengthCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowGtpExtensionExtensionLengthCounter().Msg()
 	}
 	return &patternFlowGtpExtensionExtensionLengthCounter{obj: obj.obj.Increment}
 }
@@ -100995,15 +106153,20 @@ func (obj *patternFlowGtpExtensionExtensionLength) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowGtpExtensionExtensionLengthCounter value in the PatternFlowGtpExtensionExtensionLength object
+//  description is TBD
+func (obj *patternFlowGtpExtensionExtensionLength) SetIncrement(value PatternFlowGtpExtensionExtensionLengthCounter) PatternFlowGtpExtensionExtensionLength {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowGtpExtensionExtensionLengthChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowGtpExtensionExtensionLengthCounter
 //  description is TBD
 func (obj *patternFlowGtpExtensionExtensionLength) Decrement() PatternFlowGtpExtensionExtensionLengthCounter {
 	obj.SetChoice(PatternFlowGtpExtensionExtensionLengthChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowGtpExtensionExtensionLengthCounter{}
-		newObj := &patternFlowGtpExtensionExtensionLengthCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowGtpExtensionExtensionLengthCounter().Msg()
 	}
 	return &patternFlowGtpExtensionExtensionLengthCounter{obj: obj.obj.Decrement}
 }
@@ -101012,6 +106175,14 @@ func (obj *patternFlowGtpExtensionExtensionLength) Decrement() PatternFlowGtpExt
 //  description is TBD
 func (obj *patternFlowGtpExtensionExtensionLength) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowGtpExtensionExtensionLengthCounter value in the PatternFlowGtpExtensionExtensionLength object
+//  description is TBD
+func (obj *patternFlowGtpExtensionExtensionLength) SetDecrement(value PatternFlowGtpExtensionExtensionLengthCounter) PatternFlowGtpExtensionExtensionLength {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowGtpExtensionExtensionLengthChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowGtpExtensionExtensionLength) validateObj(set_default bool) {
@@ -101058,12 +106229,18 @@ type patternFlowGtpExtensionContents struct {
 	obj *snappipb.PatternFlowGtpExtensionContents
 }
 
+func NewPatternFlowGtpExtensionContents() PatternFlowGtpExtensionContents {
+	obj := patternFlowGtpExtensionContents{obj: &snappipb.PatternFlowGtpExtensionContents{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowGtpExtensionContents) Msg() *snappipb.PatternFlowGtpExtensionContents {
 	return obj.obj
 }
 
 func (obj *patternFlowGtpExtensionContents) SetMsg(msg *snappipb.PatternFlowGtpExtensionContents) PatternFlowGtpExtensionContents {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -101195,8 +106372,10 @@ type PatternFlowGtpExtensionContents interface {
 	SetMetricGroup(value string) PatternFlowGtpExtensionContents
 	HasMetricGroup() bool
 	Increment() PatternFlowGtpExtensionContentsCounter
+	SetIncrement(value PatternFlowGtpExtensionContentsCounter) PatternFlowGtpExtensionContents
 	HasIncrement() bool
 	Decrement() PatternFlowGtpExtensionContentsCounter
+	SetDecrement(value PatternFlowGtpExtensionContentsCounter) PatternFlowGtpExtensionContents
 	HasDecrement() bool
 }
 
@@ -101302,10 +106481,7 @@ func (obj *patternFlowGtpExtensionContents) SetMetricGroup(value string) Pattern
 func (obj *patternFlowGtpExtensionContents) Increment() PatternFlowGtpExtensionContentsCounter {
 	obj.SetChoice(PatternFlowGtpExtensionContentsChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowGtpExtensionContentsCounter{}
-		newObj := &patternFlowGtpExtensionContentsCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowGtpExtensionContentsCounter().Msg()
 	}
 	return &patternFlowGtpExtensionContentsCounter{obj: obj.obj.Increment}
 }
@@ -101316,15 +106492,20 @@ func (obj *patternFlowGtpExtensionContents) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowGtpExtensionContentsCounter value in the PatternFlowGtpExtensionContents object
+//  description is TBD
+func (obj *patternFlowGtpExtensionContents) SetIncrement(value PatternFlowGtpExtensionContentsCounter) PatternFlowGtpExtensionContents {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowGtpExtensionContentsChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowGtpExtensionContentsCounter
 //  description is TBD
 func (obj *patternFlowGtpExtensionContents) Decrement() PatternFlowGtpExtensionContentsCounter {
 	obj.SetChoice(PatternFlowGtpExtensionContentsChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowGtpExtensionContentsCounter{}
-		newObj := &patternFlowGtpExtensionContentsCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowGtpExtensionContentsCounter().Msg()
 	}
 	return &patternFlowGtpExtensionContentsCounter{obj: obj.obj.Decrement}
 }
@@ -101333,6 +106514,14 @@ func (obj *patternFlowGtpExtensionContents) Decrement() PatternFlowGtpExtensionC
 //  description is TBD
 func (obj *patternFlowGtpExtensionContents) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowGtpExtensionContentsCounter value in the PatternFlowGtpExtensionContents object
+//  description is TBD
+func (obj *patternFlowGtpExtensionContents) SetDecrement(value PatternFlowGtpExtensionContentsCounter) PatternFlowGtpExtensionContents {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowGtpExtensionContentsChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowGtpExtensionContents) validateObj(set_default bool) {
@@ -101379,12 +106568,18 @@ type patternFlowGtpExtensionNextExtensionHeader struct {
 	obj *snappipb.PatternFlowGtpExtensionNextExtensionHeader
 }
 
+func NewPatternFlowGtpExtensionNextExtensionHeader() PatternFlowGtpExtensionNextExtensionHeader {
+	obj := patternFlowGtpExtensionNextExtensionHeader{obj: &snappipb.PatternFlowGtpExtensionNextExtensionHeader{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowGtpExtensionNextExtensionHeader) Msg() *snappipb.PatternFlowGtpExtensionNextExtensionHeader {
 	return obj.obj
 }
 
 func (obj *patternFlowGtpExtensionNextExtensionHeader) SetMsg(msg *snappipb.PatternFlowGtpExtensionNextExtensionHeader) PatternFlowGtpExtensionNextExtensionHeader {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -101516,8 +106711,10 @@ type PatternFlowGtpExtensionNextExtensionHeader interface {
 	SetMetricGroup(value string) PatternFlowGtpExtensionNextExtensionHeader
 	HasMetricGroup() bool
 	Increment() PatternFlowGtpExtensionNextExtensionHeaderCounter
+	SetIncrement(value PatternFlowGtpExtensionNextExtensionHeaderCounter) PatternFlowGtpExtensionNextExtensionHeader
 	HasIncrement() bool
 	Decrement() PatternFlowGtpExtensionNextExtensionHeaderCounter
+	SetDecrement(value PatternFlowGtpExtensionNextExtensionHeaderCounter) PatternFlowGtpExtensionNextExtensionHeader
 	HasDecrement() bool
 }
 
@@ -101623,10 +106820,7 @@ func (obj *patternFlowGtpExtensionNextExtensionHeader) SetMetricGroup(value stri
 func (obj *patternFlowGtpExtensionNextExtensionHeader) Increment() PatternFlowGtpExtensionNextExtensionHeaderCounter {
 	obj.SetChoice(PatternFlowGtpExtensionNextExtensionHeaderChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowGtpExtensionNextExtensionHeaderCounter{}
-		newObj := &patternFlowGtpExtensionNextExtensionHeaderCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowGtpExtensionNextExtensionHeaderCounter().Msg()
 	}
 	return &patternFlowGtpExtensionNextExtensionHeaderCounter{obj: obj.obj.Increment}
 }
@@ -101637,15 +106831,20 @@ func (obj *patternFlowGtpExtensionNextExtensionHeader) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowGtpExtensionNextExtensionHeaderCounter value in the PatternFlowGtpExtensionNextExtensionHeader object
+//  description is TBD
+func (obj *patternFlowGtpExtensionNextExtensionHeader) SetIncrement(value PatternFlowGtpExtensionNextExtensionHeaderCounter) PatternFlowGtpExtensionNextExtensionHeader {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowGtpExtensionNextExtensionHeaderChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowGtpExtensionNextExtensionHeaderCounter
 //  description is TBD
 func (obj *patternFlowGtpExtensionNextExtensionHeader) Decrement() PatternFlowGtpExtensionNextExtensionHeaderCounter {
 	obj.SetChoice(PatternFlowGtpExtensionNextExtensionHeaderChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowGtpExtensionNextExtensionHeaderCounter{}
-		newObj := &patternFlowGtpExtensionNextExtensionHeaderCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowGtpExtensionNextExtensionHeaderCounter().Msg()
 	}
 	return &patternFlowGtpExtensionNextExtensionHeaderCounter{obj: obj.obj.Decrement}
 }
@@ -101654,6 +106853,14 @@ func (obj *patternFlowGtpExtensionNextExtensionHeader) Decrement() PatternFlowGt
 //  description is TBD
 func (obj *patternFlowGtpExtensionNextExtensionHeader) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowGtpExtensionNextExtensionHeaderCounter value in the PatternFlowGtpExtensionNextExtensionHeader object
+//  description is TBD
+func (obj *patternFlowGtpExtensionNextExtensionHeader) SetDecrement(value PatternFlowGtpExtensionNextExtensionHeaderCounter) PatternFlowGtpExtensionNextExtensionHeader {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowGtpExtensionNextExtensionHeaderChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowGtpExtensionNextExtensionHeader) validateObj(set_default bool) {
@@ -101700,12 +106907,18 @@ type patternFlowGtpv2VersionCounter struct {
 	obj *snappipb.PatternFlowGtpv2VersionCounter
 }
 
+func NewPatternFlowGtpv2VersionCounter() PatternFlowGtpv2VersionCounter {
+	obj := patternFlowGtpv2VersionCounter{obj: &snappipb.PatternFlowGtpv2VersionCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowGtpv2VersionCounter) Msg() *snappipb.PatternFlowGtpv2VersionCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowGtpv2VersionCounter) SetMsg(msg *snappipb.PatternFlowGtpv2VersionCounter) PatternFlowGtpv2VersionCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -101936,12 +107149,18 @@ type patternFlowGtpv2PiggybackingFlagCounter struct {
 	obj *snappipb.PatternFlowGtpv2PiggybackingFlagCounter
 }
 
+func NewPatternFlowGtpv2PiggybackingFlagCounter() PatternFlowGtpv2PiggybackingFlagCounter {
+	obj := patternFlowGtpv2PiggybackingFlagCounter{obj: &snappipb.PatternFlowGtpv2PiggybackingFlagCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowGtpv2PiggybackingFlagCounter) Msg() *snappipb.PatternFlowGtpv2PiggybackingFlagCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowGtpv2PiggybackingFlagCounter) SetMsg(msg *snappipb.PatternFlowGtpv2PiggybackingFlagCounter) PatternFlowGtpv2PiggybackingFlagCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -102172,12 +107391,18 @@ type patternFlowGtpv2TeidFlagCounter struct {
 	obj *snappipb.PatternFlowGtpv2TeidFlagCounter
 }
 
+func NewPatternFlowGtpv2TeidFlagCounter() PatternFlowGtpv2TeidFlagCounter {
+	obj := patternFlowGtpv2TeidFlagCounter{obj: &snappipb.PatternFlowGtpv2TeidFlagCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowGtpv2TeidFlagCounter) Msg() *snappipb.PatternFlowGtpv2TeidFlagCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowGtpv2TeidFlagCounter) SetMsg(msg *snappipb.PatternFlowGtpv2TeidFlagCounter) PatternFlowGtpv2TeidFlagCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -102408,12 +107633,18 @@ type patternFlowGtpv2Spare1Counter struct {
 	obj *snappipb.PatternFlowGtpv2Spare1Counter
 }
 
+func NewPatternFlowGtpv2Spare1Counter() PatternFlowGtpv2Spare1Counter {
+	obj := patternFlowGtpv2Spare1Counter{obj: &snappipb.PatternFlowGtpv2Spare1Counter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowGtpv2Spare1Counter) Msg() *snappipb.PatternFlowGtpv2Spare1Counter {
 	return obj.obj
 }
 
 func (obj *patternFlowGtpv2Spare1Counter) SetMsg(msg *snappipb.PatternFlowGtpv2Spare1Counter) PatternFlowGtpv2Spare1Counter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -102644,12 +107875,18 @@ type patternFlowGtpv2MessageTypeCounter struct {
 	obj *snappipb.PatternFlowGtpv2MessageTypeCounter
 }
 
+func NewPatternFlowGtpv2MessageTypeCounter() PatternFlowGtpv2MessageTypeCounter {
+	obj := patternFlowGtpv2MessageTypeCounter{obj: &snappipb.PatternFlowGtpv2MessageTypeCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowGtpv2MessageTypeCounter) Msg() *snappipb.PatternFlowGtpv2MessageTypeCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowGtpv2MessageTypeCounter) SetMsg(msg *snappipb.PatternFlowGtpv2MessageTypeCounter) PatternFlowGtpv2MessageTypeCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -102880,12 +108117,18 @@ type patternFlowGtpv2MessageLengthCounter struct {
 	obj *snappipb.PatternFlowGtpv2MessageLengthCounter
 }
 
+func NewPatternFlowGtpv2MessageLengthCounter() PatternFlowGtpv2MessageLengthCounter {
+	obj := patternFlowGtpv2MessageLengthCounter{obj: &snappipb.PatternFlowGtpv2MessageLengthCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowGtpv2MessageLengthCounter) Msg() *snappipb.PatternFlowGtpv2MessageLengthCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowGtpv2MessageLengthCounter) SetMsg(msg *snappipb.PatternFlowGtpv2MessageLengthCounter) PatternFlowGtpv2MessageLengthCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -103116,12 +108359,18 @@ type patternFlowGtpv2TeidCounter struct {
 	obj *snappipb.PatternFlowGtpv2TeidCounter
 }
 
+func NewPatternFlowGtpv2TeidCounter() PatternFlowGtpv2TeidCounter {
+	obj := patternFlowGtpv2TeidCounter{obj: &snappipb.PatternFlowGtpv2TeidCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowGtpv2TeidCounter) Msg() *snappipb.PatternFlowGtpv2TeidCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowGtpv2TeidCounter) SetMsg(msg *snappipb.PatternFlowGtpv2TeidCounter) PatternFlowGtpv2TeidCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -103352,12 +108601,18 @@ type patternFlowGtpv2SequenceNumberCounter struct {
 	obj *snappipb.PatternFlowGtpv2SequenceNumberCounter
 }
 
+func NewPatternFlowGtpv2SequenceNumberCounter() PatternFlowGtpv2SequenceNumberCounter {
+	obj := patternFlowGtpv2SequenceNumberCounter{obj: &snappipb.PatternFlowGtpv2SequenceNumberCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowGtpv2SequenceNumberCounter) Msg() *snappipb.PatternFlowGtpv2SequenceNumberCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowGtpv2SequenceNumberCounter) SetMsg(msg *snappipb.PatternFlowGtpv2SequenceNumberCounter) PatternFlowGtpv2SequenceNumberCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -103588,12 +108843,18 @@ type patternFlowGtpv2Spare2Counter struct {
 	obj *snappipb.PatternFlowGtpv2Spare2Counter
 }
 
+func NewPatternFlowGtpv2Spare2Counter() PatternFlowGtpv2Spare2Counter {
+	obj := patternFlowGtpv2Spare2Counter{obj: &snappipb.PatternFlowGtpv2Spare2Counter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowGtpv2Spare2Counter) Msg() *snappipb.PatternFlowGtpv2Spare2Counter {
 	return obj.obj
 }
 
 func (obj *patternFlowGtpv2Spare2Counter) SetMsg(msg *snappipb.PatternFlowGtpv2Spare2Counter) PatternFlowGtpv2Spare2Counter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -103824,12 +109085,18 @@ type patternFlowArpHardwareTypeCounter struct {
 	obj *snappipb.PatternFlowArpHardwareTypeCounter
 }
 
+func NewPatternFlowArpHardwareTypeCounter() PatternFlowArpHardwareTypeCounter {
+	obj := patternFlowArpHardwareTypeCounter{obj: &snappipb.PatternFlowArpHardwareTypeCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowArpHardwareTypeCounter) Msg() *snappipb.PatternFlowArpHardwareTypeCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowArpHardwareTypeCounter) SetMsg(msg *snappipb.PatternFlowArpHardwareTypeCounter) PatternFlowArpHardwareTypeCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -104060,12 +109327,18 @@ type patternFlowArpProtocolTypeCounter struct {
 	obj *snappipb.PatternFlowArpProtocolTypeCounter
 }
 
+func NewPatternFlowArpProtocolTypeCounter() PatternFlowArpProtocolTypeCounter {
+	obj := patternFlowArpProtocolTypeCounter{obj: &snappipb.PatternFlowArpProtocolTypeCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowArpProtocolTypeCounter) Msg() *snappipb.PatternFlowArpProtocolTypeCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowArpProtocolTypeCounter) SetMsg(msg *snappipb.PatternFlowArpProtocolTypeCounter) PatternFlowArpProtocolTypeCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -104296,12 +109569,18 @@ type patternFlowArpHardwareLengthCounter struct {
 	obj *snappipb.PatternFlowArpHardwareLengthCounter
 }
 
+func NewPatternFlowArpHardwareLengthCounter() PatternFlowArpHardwareLengthCounter {
+	obj := patternFlowArpHardwareLengthCounter{obj: &snappipb.PatternFlowArpHardwareLengthCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowArpHardwareLengthCounter) Msg() *snappipb.PatternFlowArpHardwareLengthCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowArpHardwareLengthCounter) SetMsg(msg *snappipb.PatternFlowArpHardwareLengthCounter) PatternFlowArpHardwareLengthCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -104532,12 +109811,18 @@ type patternFlowArpProtocolLengthCounter struct {
 	obj *snappipb.PatternFlowArpProtocolLengthCounter
 }
 
+func NewPatternFlowArpProtocolLengthCounter() PatternFlowArpProtocolLengthCounter {
+	obj := patternFlowArpProtocolLengthCounter{obj: &snappipb.PatternFlowArpProtocolLengthCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowArpProtocolLengthCounter) Msg() *snappipb.PatternFlowArpProtocolLengthCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowArpProtocolLengthCounter) SetMsg(msg *snappipb.PatternFlowArpProtocolLengthCounter) PatternFlowArpProtocolLengthCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -104768,12 +110053,18 @@ type patternFlowArpOperationCounter struct {
 	obj *snappipb.PatternFlowArpOperationCounter
 }
 
+func NewPatternFlowArpOperationCounter() PatternFlowArpOperationCounter {
+	obj := patternFlowArpOperationCounter{obj: &snappipb.PatternFlowArpOperationCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowArpOperationCounter) Msg() *snappipb.PatternFlowArpOperationCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowArpOperationCounter) SetMsg(msg *snappipb.PatternFlowArpOperationCounter) PatternFlowArpOperationCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -105004,12 +110295,18 @@ type patternFlowArpSenderHardwareAddrCounter struct {
 	obj *snappipb.PatternFlowArpSenderHardwareAddrCounter
 }
 
+func NewPatternFlowArpSenderHardwareAddrCounter() PatternFlowArpSenderHardwareAddrCounter {
+	obj := patternFlowArpSenderHardwareAddrCounter{obj: &snappipb.PatternFlowArpSenderHardwareAddrCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowArpSenderHardwareAddrCounter) Msg() *snappipb.PatternFlowArpSenderHardwareAddrCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowArpSenderHardwareAddrCounter) SetMsg(msg *snappipb.PatternFlowArpSenderHardwareAddrCounter) PatternFlowArpSenderHardwareAddrCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -105238,12 +110535,18 @@ type patternFlowArpSenderProtocolAddrCounter struct {
 	obj *snappipb.PatternFlowArpSenderProtocolAddrCounter
 }
 
+func NewPatternFlowArpSenderProtocolAddrCounter() PatternFlowArpSenderProtocolAddrCounter {
+	obj := patternFlowArpSenderProtocolAddrCounter{obj: &snappipb.PatternFlowArpSenderProtocolAddrCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowArpSenderProtocolAddrCounter) Msg() *snappipb.PatternFlowArpSenderProtocolAddrCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowArpSenderProtocolAddrCounter) SetMsg(msg *snappipb.PatternFlowArpSenderProtocolAddrCounter) PatternFlowArpSenderProtocolAddrCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -105472,12 +110775,18 @@ type patternFlowArpTargetHardwareAddrCounter struct {
 	obj *snappipb.PatternFlowArpTargetHardwareAddrCounter
 }
 
+func NewPatternFlowArpTargetHardwareAddrCounter() PatternFlowArpTargetHardwareAddrCounter {
+	obj := patternFlowArpTargetHardwareAddrCounter{obj: &snappipb.PatternFlowArpTargetHardwareAddrCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowArpTargetHardwareAddrCounter) Msg() *snappipb.PatternFlowArpTargetHardwareAddrCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowArpTargetHardwareAddrCounter) SetMsg(msg *snappipb.PatternFlowArpTargetHardwareAddrCounter) PatternFlowArpTargetHardwareAddrCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -105706,12 +111015,18 @@ type patternFlowArpTargetProtocolAddrCounter struct {
 	obj *snappipb.PatternFlowArpTargetProtocolAddrCounter
 }
 
+func NewPatternFlowArpTargetProtocolAddrCounter() PatternFlowArpTargetProtocolAddrCounter {
+	obj := patternFlowArpTargetProtocolAddrCounter{obj: &snappipb.PatternFlowArpTargetProtocolAddrCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowArpTargetProtocolAddrCounter) Msg() *snappipb.PatternFlowArpTargetProtocolAddrCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowArpTargetProtocolAddrCounter) SetMsg(msg *snappipb.PatternFlowArpTargetProtocolAddrCounter) PatternFlowArpTargetProtocolAddrCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -105940,12 +111255,18 @@ type patternFlowIcmpEchoType struct {
 	obj *snappipb.PatternFlowIcmpEchoType
 }
 
+func NewPatternFlowIcmpEchoType() PatternFlowIcmpEchoType {
+	obj := patternFlowIcmpEchoType{obj: &snappipb.PatternFlowIcmpEchoType{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowIcmpEchoType) Msg() *snappipb.PatternFlowIcmpEchoType {
 	return obj.obj
 }
 
 func (obj *patternFlowIcmpEchoType) SetMsg(msg *snappipb.PatternFlowIcmpEchoType) PatternFlowIcmpEchoType {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -106077,8 +111398,10 @@ type PatternFlowIcmpEchoType interface {
 	SetMetricGroup(value string) PatternFlowIcmpEchoType
 	HasMetricGroup() bool
 	Increment() PatternFlowIcmpEchoTypeCounter
+	SetIncrement(value PatternFlowIcmpEchoTypeCounter) PatternFlowIcmpEchoType
 	HasIncrement() bool
 	Decrement() PatternFlowIcmpEchoTypeCounter
+	SetDecrement(value PatternFlowIcmpEchoTypeCounter) PatternFlowIcmpEchoType
 	HasDecrement() bool
 }
 
@@ -106184,10 +111507,7 @@ func (obj *patternFlowIcmpEchoType) SetMetricGroup(value string) PatternFlowIcmp
 func (obj *patternFlowIcmpEchoType) Increment() PatternFlowIcmpEchoTypeCounter {
 	obj.SetChoice(PatternFlowIcmpEchoTypeChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowIcmpEchoTypeCounter{}
-		newObj := &patternFlowIcmpEchoTypeCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowIcmpEchoTypeCounter().Msg()
 	}
 	return &patternFlowIcmpEchoTypeCounter{obj: obj.obj.Increment}
 }
@@ -106198,15 +111518,20 @@ func (obj *patternFlowIcmpEchoType) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowIcmpEchoTypeCounter value in the PatternFlowIcmpEchoType object
+//  description is TBD
+func (obj *patternFlowIcmpEchoType) SetIncrement(value PatternFlowIcmpEchoTypeCounter) PatternFlowIcmpEchoType {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowIcmpEchoTypeChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowIcmpEchoTypeCounter
 //  description is TBD
 func (obj *patternFlowIcmpEchoType) Decrement() PatternFlowIcmpEchoTypeCounter {
 	obj.SetChoice(PatternFlowIcmpEchoTypeChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowIcmpEchoTypeCounter{}
-		newObj := &patternFlowIcmpEchoTypeCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowIcmpEchoTypeCounter().Msg()
 	}
 	return &patternFlowIcmpEchoTypeCounter{obj: obj.obj.Decrement}
 }
@@ -106215,6 +111540,14 @@ func (obj *patternFlowIcmpEchoType) Decrement() PatternFlowIcmpEchoTypeCounter {
 //  description is TBD
 func (obj *patternFlowIcmpEchoType) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowIcmpEchoTypeCounter value in the PatternFlowIcmpEchoType object
+//  description is TBD
+func (obj *patternFlowIcmpEchoType) SetDecrement(value PatternFlowIcmpEchoTypeCounter) PatternFlowIcmpEchoType {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowIcmpEchoTypeChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowIcmpEchoType) validateObj(set_default bool) {
@@ -106261,12 +111594,18 @@ type patternFlowIcmpEchoCode struct {
 	obj *snappipb.PatternFlowIcmpEchoCode
 }
 
+func NewPatternFlowIcmpEchoCode() PatternFlowIcmpEchoCode {
+	obj := patternFlowIcmpEchoCode{obj: &snappipb.PatternFlowIcmpEchoCode{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowIcmpEchoCode) Msg() *snappipb.PatternFlowIcmpEchoCode {
 	return obj.obj
 }
 
 func (obj *patternFlowIcmpEchoCode) SetMsg(msg *snappipb.PatternFlowIcmpEchoCode) PatternFlowIcmpEchoCode {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -106398,8 +111737,10 @@ type PatternFlowIcmpEchoCode interface {
 	SetMetricGroup(value string) PatternFlowIcmpEchoCode
 	HasMetricGroup() bool
 	Increment() PatternFlowIcmpEchoCodeCounter
+	SetIncrement(value PatternFlowIcmpEchoCodeCounter) PatternFlowIcmpEchoCode
 	HasIncrement() bool
 	Decrement() PatternFlowIcmpEchoCodeCounter
+	SetDecrement(value PatternFlowIcmpEchoCodeCounter) PatternFlowIcmpEchoCode
 	HasDecrement() bool
 }
 
@@ -106505,10 +111846,7 @@ func (obj *patternFlowIcmpEchoCode) SetMetricGroup(value string) PatternFlowIcmp
 func (obj *patternFlowIcmpEchoCode) Increment() PatternFlowIcmpEchoCodeCounter {
 	obj.SetChoice(PatternFlowIcmpEchoCodeChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowIcmpEchoCodeCounter{}
-		newObj := &patternFlowIcmpEchoCodeCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowIcmpEchoCodeCounter().Msg()
 	}
 	return &patternFlowIcmpEchoCodeCounter{obj: obj.obj.Increment}
 }
@@ -106519,15 +111857,20 @@ func (obj *patternFlowIcmpEchoCode) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowIcmpEchoCodeCounter value in the PatternFlowIcmpEchoCode object
+//  description is TBD
+func (obj *patternFlowIcmpEchoCode) SetIncrement(value PatternFlowIcmpEchoCodeCounter) PatternFlowIcmpEchoCode {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowIcmpEchoCodeChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowIcmpEchoCodeCounter
 //  description is TBD
 func (obj *patternFlowIcmpEchoCode) Decrement() PatternFlowIcmpEchoCodeCounter {
 	obj.SetChoice(PatternFlowIcmpEchoCodeChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowIcmpEchoCodeCounter{}
-		newObj := &patternFlowIcmpEchoCodeCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowIcmpEchoCodeCounter().Msg()
 	}
 	return &patternFlowIcmpEchoCodeCounter{obj: obj.obj.Decrement}
 }
@@ -106536,6 +111879,14 @@ func (obj *patternFlowIcmpEchoCode) Decrement() PatternFlowIcmpEchoCodeCounter {
 //  description is TBD
 func (obj *patternFlowIcmpEchoCode) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowIcmpEchoCodeCounter value in the PatternFlowIcmpEchoCode object
+//  description is TBD
+func (obj *patternFlowIcmpEchoCode) SetDecrement(value PatternFlowIcmpEchoCodeCounter) PatternFlowIcmpEchoCode {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowIcmpEchoCodeChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowIcmpEchoCode) validateObj(set_default bool) {
@@ -106582,12 +111933,18 @@ type patternFlowIcmpEchoChecksum struct {
 	obj *snappipb.PatternFlowIcmpEchoChecksum
 }
 
+func NewPatternFlowIcmpEchoChecksum() PatternFlowIcmpEchoChecksum {
+	obj := patternFlowIcmpEchoChecksum{obj: &snappipb.PatternFlowIcmpEchoChecksum{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowIcmpEchoChecksum) Msg() *snappipb.PatternFlowIcmpEchoChecksum {
 	return obj.obj
 }
 
 func (obj *patternFlowIcmpEchoChecksum) SetMsg(msg *snappipb.PatternFlowIcmpEchoChecksum) PatternFlowIcmpEchoChecksum {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -106829,12 +112186,18 @@ type patternFlowIcmpEchoIdentifier struct {
 	obj *snappipb.PatternFlowIcmpEchoIdentifier
 }
 
+func NewPatternFlowIcmpEchoIdentifier() PatternFlowIcmpEchoIdentifier {
+	obj := patternFlowIcmpEchoIdentifier{obj: &snappipb.PatternFlowIcmpEchoIdentifier{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowIcmpEchoIdentifier) Msg() *snappipb.PatternFlowIcmpEchoIdentifier {
 	return obj.obj
 }
 
 func (obj *patternFlowIcmpEchoIdentifier) SetMsg(msg *snappipb.PatternFlowIcmpEchoIdentifier) PatternFlowIcmpEchoIdentifier {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -106966,8 +112329,10 @@ type PatternFlowIcmpEchoIdentifier interface {
 	SetMetricGroup(value string) PatternFlowIcmpEchoIdentifier
 	HasMetricGroup() bool
 	Increment() PatternFlowIcmpEchoIdentifierCounter
+	SetIncrement(value PatternFlowIcmpEchoIdentifierCounter) PatternFlowIcmpEchoIdentifier
 	HasIncrement() bool
 	Decrement() PatternFlowIcmpEchoIdentifierCounter
+	SetDecrement(value PatternFlowIcmpEchoIdentifierCounter) PatternFlowIcmpEchoIdentifier
 	HasDecrement() bool
 }
 
@@ -107073,10 +112438,7 @@ func (obj *patternFlowIcmpEchoIdentifier) SetMetricGroup(value string) PatternFl
 func (obj *patternFlowIcmpEchoIdentifier) Increment() PatternFlowIcmpEchoIdentifierCounter {
 	obj.SetChoice(PatternFlowIcmpEchoIdentifierChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowIcmpEchoIdentifierCounter{}
-		newObj := &patternFlowIcmpEchoIdentifierCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowIcmpEchoIdentifierCounter().Msg()
 	}
 	return &patternFlowIcmpEchoIdentifierCounter{obj: obj.obj.Increment}
 }
@@ -107087,15 +112449,20 @@ func (obj *patternFlowIcmpEchoIdentifier) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowIcmpEchoIdentifierCounter value in the PatternFlowIcmpEchoIdentifier object
+//  description is TBD
+func (obj *patternFlowIcmpEchoIdentifier) SetIncrement(value PatternFlowIcmpEchoIdentifierCounter) PatternFlowIcmpEchoIdentifier {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowIcmpEchoIdentifierChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowIcmpEchoIdentifierCounter
 //  description is TBD
 func (obj *patternFlowIcmpEchoIdentifier) Decrement() PatternFlowIcmpEchoIdentifierCounter {
 	obj.SetChoice(PatternFlowIcmpEchoIdentifierChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowIcmpEchoIdentifierCounter{}
-		newObj := &patternFlowIcmpEchoIdentifierCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowIcmpEchoIdentifierCounter().Msg()
 	}
 	return &patternFlowIcmpEchoIdentifierCounter{obj: obj.obj.Decrement}
 }
@@ -107104,6 +112471,14 @@ func (obj *patternFlowIcmpEchoIdentifier) Decrement() PatternFlowIcmpEchoIdentif
 //  description is TBD
 func (obj *patternFlowIcmpEchoIdentifier) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowIcmpEchoIdentifierCounter value in the PatternFlowIcmpEchoIdentifier object
+//  description is TBD
+func (obj *patternFlowIcmpEchoIdentifier) SetDecrement(value PatternFlowIcmpEchoIdentifierCounter) PatternFlowIcmpEchoIdentifier {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowIcmpEchoIdentifierChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowIcmpEchoIdentifier) validateObj(set_default bool) {
@@ -107150,12 +112525,18 @@ type patternFlowIcmpEchoSequenceNumber struct {
 	obj *snappipb.PatternFlowIcmpEchoSequenceNumber
 }
 
+func NewPatternFlowIcmpEchoSequenceNumber() PatternFlowIcmpEchoSequenceNumber {
+	obj := patternFlowIcmpEchoSequenceNumber{obj: &snappipb.PatternFlowIcmpEchoSequenceNumber{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowIcmpEchoSequenceNumber) Msg() *snappipb.PatternFlowIcmpEchoSequenceNumber {
 	return obj.obj
 }
 
 func (obj *patternFlowIcmpEchoSequenceNumber) SetMsg(msg *snappipb.PatternFlowIcmpEchoSequenceNumber) PatternFlowIcmpEchoSequenceNumber {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -107287,8 +112668,10 @@ type PatternFlowIcmpEchoSequenceNumber interface {
 	SetMetricGroup(value string) PatternFlowIcmpEchoSequenceNumber
 	HasMetricGroup() bool
 	Increment() PatternFlowIcmpEchoSequenceNumberCounter
+	SetIncrement(value PatternFlowIcmpEchoSequenceNumberCounter) PatternFlowIcmpEchoSequenceNumber
 	HasIncrement() bool
 	Decrement() PatternFlowIcmpEchoSequenceNumberCounter
+	SetDecrement(value PatternFlowIcmpEchoSequenceNumberCounter) PatternFlowIcmpEchoSequenceNumber
 	HasDecrement() bool
 }
 
@@ -107394,10 +112777,7 @@ func (obj *patternFlowIcmpEchoSequenceNumber) SetMetricGroup(value string) Patte
 func (obj *patternFlowIcmpEchoSequenceNumber) Increment() PatternFlowIcmpEchoSequenceNumberCounter {
 	obj.SetChoice(PatternFlowIcmpEchoSequenceNumberChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowIcmpEchoSequenceNumberCounter{}
-		newObj := &patternFlowIcmpEchoSequenceNumberCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowIcmpEchoSequenceNumberCounter().Msg()
 	}
 	return &patternFlowIcmpEchoSequenceNumberCounter{obj: obj.obj.Increment}
 }
@@ -107408,15 +112788,20 @@ func (obj *patternFlowIcmpEchoSequenceNumber) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowIcmpEchoSequenceNumberCounter value in the PatternFlowIcmpEchoSequenceNumber object
+//  description is TBD
+func (obj *patternFlowIcmpEchoSequenceNumber) SetIncrement(value PatternFlowIcmpEchoSequenceNumberCounter) PatternFlowIcmpEchoSequenceNumber {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowIcmpEchoSequenceNumberChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowIcmpEchoSequenceNumberCounter
 //  description is TBD
 func (obj *patternFlowIcmpEchoSequenceNumber) Decrement() PatternFlowIcmpEchoSequenceNumberCounter {
 	obj.SetChoice(PatternFlowIcmpEchoSequenceNumberChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowIcmpEchoSequenceNumberCounter{}
-		newObj := &patternFlowIcmpEchoSequenceNumberCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowIcmpEchoSequenceNumberCounter().Msg()
 	}
 	return &patternFlowIcmpEchoSequenceNumberCounter{obj: obj.obj.Decrement}
 }
@@ -107425,6 +112810,14 @@ func (obj *patternFlowIcmpEchoSequenceNumber) Decrement() PatternFlowIcmpEchoSeq
 //  description is TBD
 func (obj *patternFlowIcmpEchoSequenceNumber) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowIcmpEchoSequenceNumberCounter value in the PatternFlowIcmpEchoSequenceNumber object
+//  description is TBD
+func (obj *patternFlowIcmpEchoSequenceNumber) SetDecrement(value PatternFlowIcmpEchoSequenceNumberCounter) PatternFlowIcmpEchoSequenceNumber {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowIcmpEchoSequenceNumberChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowIcmpEchoSequenceNumber) validateObj(set_default bool) {
@@ -107471,12 +112864,18 @@ type patternFlowIcmpv6EchoType struct {
 	obj *snappipb.PatternFlowIcmpv6EchoType
 }
 
+func NewPatternFlowIcmpv6EchoType() PatternFlowIcmpv6EchoType {
+	obj := patternFlowIcmpv6EchoType{obj: &snappipb.PatternFlowIcmpv6EchoType{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowIcmpv6EchoType) Msg() *snappipb.PatternFlowIcmpv6EchoType {
 	return obj.obj
 }
 
 func (obj *patternFlowIcmpv6EchoType) SetMsg(msg *snappipb.PatternFlowIcmpv6EchoType) PatternFlowIcmpv6EchoType {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -107608,8 +113007,10 @@ type PatternFlowIcmpv6EchoType interface {
 	SetMetricGroup(value string) PatternFlowIcmpv6EchoType
 	HasMetricGroup() bool
 	Increment() PatternFlowIcmpv6EchoTypeCounter
+	SetIncrement(value PatternFlowIcmpv6EchoTypeCounter) PatternFlowIcmpv6EchoType
 	HasIncrement() bool
 	Decrement() PatternFlowIcmpv6EchoTypeCounter
+	SetDecrement(value PatternFlowIcmpv6EchoTypeCounter) PatternFlowIcmpv6EchoType
 	HasDecrement() bool
 }
 
@@ -107715,10 +113116,7 @@ func (obj *patternFlowIcmpv6EchoType) SetMetricGroup(value string) PatternFlowIc
 func (obj *patternFlowIcmpv6EchoType) Increment() PatternFlowIcmpv6EchoTypeCounter {
 	obj.SetChoice(PatternFlowIcmpv6EchoTypeChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowIcmpv6EchoTypeCounter{}
-		newObj := &patternFlowIcmpv6EchoTypeCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowIcmpv6EchoTypeCounter().Msg()
 	}
 	return &patternFlowIcmpv6EchoTypeCounter{obj: obj.obj.Increment}
 }
@@ -107729,15 +113127,20 @@ func (obj *patternFlowIcmpv6EchoType) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowIcmpv6EchoTypeCounter value in the PatternFlowIcmpv6EchoType object
+//  description is TBD
+func (obj *patternFlowIcmpv6EchoType) SetIncrement(value PatternFlowIcmpv6EchoTypeCounter) PatternFlowIcmpv6EchoType {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowIcmpv6EchoTypeChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowIcmpv6EchoTypeCounter
 //  description is TBD
 func (obj *patternFlowIcmpv6EchoType) Decrement() PatternFlowIcmpv6EchoTypeCounter {
 	obj.SetChoice(PatternFlowIcmpv6EchoTypeChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowIcmpv6EchoTypeCounter{}
-		newObj := &patternFlowIcmpv6EchoTypeCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowIcmpv6EchoTypeCounter().Msg()
 	}
 	return &patternFlowIcmpv6EchoTypeCounter{obj: obj.obj.Decrement}
 }
@@ -107746,6 +113149,14 @@ func (obj *patternFlowIcmpv6EchoType) Decrement() PatternFlowIcmpv6EchoTypeCount
 //  description is TBD
 func (obj *patternFlowIcmpv6EchoType) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowIcmpv6EchoTypeCounter value in the PatternFlowIcmpv6EchoType object
+//  description is TBD
+func (obj *patternFlowIcmpv6EchoType) SetDecrement(value PatternFlowIcmpv6EchoTypeCounter) PatternFlowIcmpv6EchoType {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowIcmpv6EchoTypeChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowIcmpv6EchoType) validateObj(set_default bool) {
@@ -107792,12 +113203,18 @@ type patternFlowIcmpv6EchoCode struct {
 	obj *snappipb.PatternFlowIcmpv6EchoCode
 }
 
+func NewPatternFlowIcmpv6EchoCode() PatternFlowIcmpv6EchoCode {
+	obj := patternFlowIcmpv6EchoCode{obj: &snappipb.PatternFlowIcmpv6EchoCode{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowIcmpv6EchoCode) Msg() *snappipb.PatternFlowIcmpv6EchoCode {
 	return obj.obj
 }
 
 func (obj *patternFlowIcmpv6EchoCode) SetMsg(msg *snappipb.PatternFlowIcmpv6EchoCode) PatternFlowIcmpv6EchoCode {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -107929,8 +113346,10 @@ type PatternFlowIcmpv6EchoCode interface {
 	SetMetricGroup(value string) PatternFlowIcmpv6EchoCode
 	HasMetricGroup() bool
 	Increment() PatternFlowIcmpv6EchoCodeCounter
+	SetIncrement(value PatternFlowIcmpv6EchoCodeCounter) PatternFlowIcmpv6EchoCode
 	HasIncrement() bool
 	Decrement() PatternFlowIcmpv6EchoCodeCounter
+	SetDecrement(value PatternFlowIcmpv6EchoCodeCounter) PatternFlowIcmpv6EchoCode
 	HasDecrement() bool
 }
 
@@ -108036,10 +113455,7 @@ func (obj *patternFlowIcmpv6EchoCode) SetMetricGroup(value string) PatternFlowIc
 func (obj *patternFlowIcmpv6EchoCode) Increment() PatternFlowIcmpv6EchoCodeCounter {
 	obj.SetChoice(PatternFlowIcmpv6EchoCodeChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowIcmpv6EchoCodeCounter{}
-		newObj := &patternFlowIcmpv6EchoCodeCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowIcmpv6EchoCodeCounter().Msg()
 	}
 	return &patternFlowIcmpv6EchoCodeCounter{obj: obj.obj.Increment}
 }
@@ -108050,15 +113466,20 @@ func (obj *patternFlowIcmpv6EchoCode) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowIcmpv6EchoCodeCounter value in the PatternFlowIcmpv6EchoCode object
+//  description is TBD
+func (obj *patternFlowIcmpv6EchoCode) SetIncrement(value PatternFlowIcmpv6EchoCodeCounter) PatternFlowIcmpv6EchoCode {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowIcmpv6EchoCodeChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowIcmpv6EchoCodeCounter
 //  description is TBD
 func (obj *patternFlowIcmpv6EchoCode) Decrement() PatternFlowIcmpv6EchoCodeCounter {
 	obj.SetChoice(PatternFlowIcmpv6EchoCodeChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowIcmpv6EchoCodeCounter{}
-		newObj := &patternFlowIcmpv6EchoCodeCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowIcmpv6EchoCodeCounter().Msg()
 	}
 	return &patternFlowIcmpv6EchoCodeCounter{obj: obj.obj.Decrement}
 }
@@ -108067,6 +113488,14 @@ func (obj *patternFlowIcmpv6EchoCode) Decrement() PatternFlowIcmpv6EchoCodeCount
 //  description is TBD
 func (obj *patternFlowIcmpv6EchoCode) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowIcmpv6EchoCodeCounter value in the PatternFlowIcmpv6EchoCode object
+//  description is TBD
+func (obj *patternFlowIcmpv6EchoCode) SetDecrement(value PatternFlowIcmpv6EchoCodeCounter) PatternFlowIcmpv6EchoCode {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowIcmpv6EchoCodeChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowIcmpv6EchoCode) validateObj(set_default bool) {
@@ -108113,12 +113542,18 @@ type patternFlowIcmpv6EchoIdentifier struct {
 	obj *snappipb.PatternFlowIcmpv6EchoIdentifier
 }
 
+func NewPatternFlowIcmpv6EchoIdentifier() PatternFlowIcmpv6EchoIdentifier {
+	obj := patternFlowIcmpv6EchoIdentifier{obj: &snappipb.PatternFlowIcmpv6EchoIdentifier{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowIcmpv6EchoIdentifier) Msg() *snappipb.PatternFlowIcmpv6EchoIdentifier {
 	return obj.obj
 }
 
 func (obj *patternFlowIcmpv6EchoIdentifier) SetMsg(msg *snappipb.PatternFlowIcmpv6EchoIdentifier) PatternFlowIcmpv6EchoIdentifier {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -108250,8 +113685,10 @@ type PatternFlowIcmpv6EchoIdentifier interface {
 	SetMetricGroup(value string) PatternFlowIcmpv6EchoIdentifier
 	HasMetricGroup() bool
 	Increment() PatternFlowIcmpv6EchoIdentifierCounter
+	SetIncrement(value PatternFlowIcmpv6EchoIdentifierCounter) PatternFlowIcmpv6EchoIdentifier
 	HasIncrement() bool
 	Decrement() PatternFlowIcmpv6EchoIdentifierCounter
+	SetDecrement(value PatternFlowIcmpv6EchoIdentifierCounter) PatternFlowIcmpv6EchoIdentifier
 	HasDecrement() bool
 }
 
@@ -108357,10 +113794,7 @@ func (obj *patternFlowIcmpv6EchoIdentifier) SetMetricGroup(value string) Pattern
 func (obj *patternFlowIcmpv6EchoIdentifier) Increment() PatternFlowIcmpv6EchoIdentifierCounter {
 	obj.SetChoice(PatternFlowIcmpv6EchoIdentifierChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowIcmpv6EchoIdentifierCounter{}
-		newObj := &patternFlowIcmpv6EchoIdentifierCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowIcmpv6EchoIdentifierCounter().Msg()
 	}
 	return &patternFlowIcmpv6EchoIdentifierCounter{obj: obj.obj.Increment}
 }
@@ -108371,15 +113805,20 @@ func (obj *patternFlowIcmpv6EchoIdentifier) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowIcmpv6EchoIdentifierCounter value in the PatternFlowIcmpv6EchoIdentifier object
+//  description is TBD
+func (obj *patternFlowIcmpv6EchoIdentifier) SetIncrement(value PatternFlowIcmpv6EchoIdentifierCounter) PatternFlowIcmpv6EchoIdentifier {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowIcmpv6EchoIdentifierChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowIcmpv6EchoIdentifierCounter
 //  description is TBD
 func (obj *patternFlowIcmpv6EchoIdentifier) Decrement() PatternFlowIcmpv6EchoIdentifierCounter {
 	obj.SetChoice(PatternFlowIcmpv6EchoIdentifierChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowIcmpv6EchoIdentifierCounter{}
-		newObj := &patternFlowIcmpv6EchoIdentifierCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowIcmpv6EchoIdentifierCounter().Msg()
 	}
 	return &patternFlowIcmpv6EchoIdentifierCounter{obj: obj.obj.Decrement}
 }
@@ -108388,6 +113827,14 @@ func (obj *patternFlowIcmpv6EchoIdentifier) Decrement() PatternFlowIcmpv6EchoIde
 //  description is TBD
 func (obj *patternFlowIcmpv6EchoIdentifier) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowIcmpv6EchoIdentifierCounter value in the PatternFlowIcmpv6EchoIdentifier object
+//  description is TBD
+func (obj *patternFlowIcmpv6EchoIdentifier) SetDecrement(value PatternFlowIcmpv6EchoIdentifierCounter) PatternFlowIcmpv6EchoIdentifier {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowIcmpv6EchoIdentifierChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowIcmpv6EchoIdentifier) validateObj(set_default bool) {
@@ -108434,12 +113881,18 @@ type patternFlowIcmpv6EchoSequenceNumber struct {
 	obj *snappipb.PatternFlowIcmpv6EchoSequenceNumber
 }
 
+func NewPatternFlowIcmpv6EchoSequenceNumber() PatternFlowIcmpv6EchoSequenceNumber {
+	obj := patternFlowIcmpv6EchoSequenceNumber{obj: &snappipb.PatternFlowIcmpv6EchoSequenceNumber{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowIcmpv6EchoSequenceNumber) Msg() *snappipb.PatternFlowIcmpv6EchoSequenceNumber {
 	return obj.obj
 }
 
 func (obj *patternFlowIcmpv6EchoSequenceNumber) SetMsg(msg *snappipb.PatternFlowIcmpv6EchoSequenceNumber) PatternFlowIcmpv6EchoSequenceNumber {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -108571,8 +114024,10 @@ type PatternFlowIcmpv6EchoSequenceNumber interface {
 	SetMetricGroup(value string) PatternFlowIcmpv6EchoSequenceNumber
 	HasMetricGroup() bool
 	Increment() PatternFlowIcmpv6EchoSequenceNumberCounter
+	SetIncrement(value PatternFlowIcmpv6EchoSequenceNumberCounter) PatternFlowIcmpv6EchoSequenceNumber
 	HasIncrement() bool
 	Decrement() PatternFlowIcmpv6EchoSequenceNumberCounter
+	SetDecrement(value PatternFlowIcmpv6EchoSequenceNumberCounter) PatternFlowIcmpv6EchoSequenceNumber
 	HasDecrement() bool
 }
 
@@ -108678,10 +114133,7 @@ func (obj *patternFlowIcmpv6EchoSequenceNumber) SetMetricGroup(value string) Pat
 func (obj *patternFlowIcmpv6EchoSequenceNumber) Increment() PatternFlowIcmpv6EchoSequenceNumberCounter {
 	obj.SetChoice(PatternFlowIcmpv6EchoSequenceNumberChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowIcmpv6EchoSequenceNumberCounter{}
-		newObj := &patternFlowIcmpv6EchoSequenceNumberCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowIcmpv6EchoSequenceNumberCounter().Msg()
 	}
 	return &patternFlowIcmpv6EchoSequenceNumberCounter{obj: obj.obj.Increment}
 }
@@ -108692,15 +114144,20 @@ func (obj *patternFlowIcmpv6EchoSequenceNumber) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowIcmpv6EchoSequenceNumberCounter value in the PatternFlowIcmpv6EchoSequenceNumber object
+//  description is TBD
+func (obj *patternFlowIcmpv6EchoSequenceNumber) SetIncrement(value PatternFlowIcmpv6EchoSequenceNumberCounter) PatternFlowIcmpv6EchoSequenceNumber {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowIcmpv6EchoSequenceNumberChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowIcmpv6EchoSequenceNumberCounter
 //  description is TBD
 func (obj *patternFlowIcmpv6EchoSequenceNumber) Decrement() PatternFlowIcmpv6EchoSequenceNumberCounter {
 	obj.SetChoice(PatternFlowIcmpv6EchoSequenceNumberChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowIcmpv6EchoSequenceNumberCounter{}
-		newObj := &patternFlowIcmpv6EchoSequenceNumberCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowIcmpv6EchoSequenceNumberCounter().Msg()
 	}
 	return &patternFlowIcmpv6EchoSequenceNumberCounter{obj: obj.obj.Decrement}
 }
@@ -108709,6 +114166,14 @@ func (obj *patternFlowIcmpv6EchoSequenceNumber) Decrement() PatternFlowIcmpv6Ech
 //  description is TBD
 func (obj *patternFlowIcmpv6EchoSequenceNumber) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowIcmpv6EchoSequenceNumberCounter value in the PatternFlowIcmpv6EchoSequenceNumber object
+//  description is TBD
+func (obj *patternFlowIcmpv6EchoSequenceNumber) SetDecrement(value PatternFlowIcmpv6EchoSequenceNumberCounter) PatternFlowIcmpv6EchoSequenceNumber {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowIcmpv6EchoSequenceNumberChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowIcmpv6EchoSequenceNumber) validateObj(set_default bool) {
@@ -108755,12 +114220,18 @@ type patternFlowIcmpv6EchoChecksum struct {
 	obj *snappipb.PatternFlowIcmpv6EchoChecksum
 }
 
+func NewPatternFlowIcmpv6EchoChecksum() PatternFlowIcmpv6EchoChecksum {
+	obj := patternFlowIcmpv6EchoChecksum{obj: &snappipb.PatternFlowIcmpv6EchoChecksum{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowIcmpv6EchoChecksum) Msg() *snappipb.PatternFlowIcmpv6EchoChecksum {
 	return obj.obj
 }
 
 func (obj *patternFlowIcmpv6EchoChecksum) SetMsg(msg *snappipb.PatternFlowIcmpv6EchoChecksum) PatternFlowIcmpv6EchoChecksum {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -109002,12 +114473,18 @@ type patternFlowPppAddressCounter struct {
 	obj *snappipb.PatternFlowPppAddressCounter
 }
 
+func NewPatternFlowPppAddressCounter() PatternFlowPppAddressCounter {
+	obj := patternFlowPppAddressCounter{obj: &snappipb.PatternFlowPppAddressCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowPppAddressCounter) Msg() *snappipb.PatternFlowPppAddressCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowPppAddressCounter) SetMsg(msg *snappipb.PatternFlowPppAddressCounter) PatternFlowPppAddressCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -109238,12 +114715,18 @@ type patternFlowPppControlCounter struct {
 	obj *snappipb.PatternFlowPppControlCounter
 }
 
+func NewPatternFlowPppControlCounter() PatternFlowPppControlCounter {
+	obj := patternFlowPppControlCounter{obj: &snappipb.PatternFlowPppControlCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowPppControlCounter) Msg() *snappipb.PatternFlowPppControlCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowPppControlCounter) SetMsg(msg *snappipb.PatternFlowPppControlCounter) PatternFlowPppControlCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -109474,12 +114957,18 @@ type patternFlowPppProtocolTypeCounter struct {
 	obj *snappipb.PatternFlowPppProtocolTypeCounter
 }
 
+func NewPatternFlowPppProtocolTypeCounter() PatternFlowPppProtocolTypeCounter {
+	obj := patternFlowPppProtocolTypeCounter{obj: &snappipb.PatternFlowPppProtocolTypeCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowPppProtocolTypeCounter) Msg() *snappipb.PatternFlowPppProtocolTypeCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowPppProtocolTypeCounter) SetMsg(msg *snappipb.PatternFlowPppProtocolTypeCounter) PatternFlowPppProtocolTypeCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -109704,12 +115193,18 @@ type patternFlowIgmpv1VersionCounter struct {
 	obj *snappipb.PatternFlowIgmpv1VersionCounter
 }
 
+func NewPatternFlowIgmpv1VersionCounter() PatternFlowIgmpv1VersionCounter {
+	obj := patternFlowIgmpv1VersionCounter{obj: &snappipb.PatternFlowIgmpv1VersionCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowIgmpv1VersionCounter) Msg() *snappipb.PatternFlowIgmpv1VersionCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowIgmpv1VersionCounter) SetMsg(msg *snappipb.PatternFlowIgmpv1VersionCounter) PatternFlowIgmpv1VersionCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -109940,12 +115435,18 @@ type patternFlowIgmpv1TypeCounter struct {
 	obj *snappipb.PatternFlowIgmpv1TypeCounter
 }
 
+func NewPatternFlowIgmpv1TypeCounter() PatternFlowIgmpv1TypeCounter {
+	obj := patternFlowIgmpv1TypeCounter{obj: &snappipb.PatternFlowIgmpv1TypeCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowIgmpv1TypeCounter) Msg() *snappipb.PatternFlowIgmpv1TypeCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowIgmpv1TypeCounter) SetMsg(msg *snappipb.PatternFlowIgmpv1TypeCounter) PatternFlowIgmpv1TypeCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -110176,12 +115677,18 @@ type patternFlowIgmpv1UnusedCounter struct {
 	obj *snappipb.PatternFlowIgmpv1UnusedCounter
 }
 
+func NewPatternFlowIgmpv1UnusedCounter() PatternFlowIgmpv1UnusedCounter {
+	obj := patternFlowIgmpv1UnusedCounter{obj: &snappipb.PatternFlowIgmpv1UnusedCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowIgmpv1UnusedCounter) Msg() *snappipb.PatternFlowIgmpv1UnusedCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowIgmpv1UnusedCounter) SetMsg(msg *snappipb.PatternFlowIgmpv1UnusedCounter) PatternFlowIgmpv1UnusedCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -110412,12 +115919,18 @@ type patternFlowIgmpv1GroupAddressCounter struct {
 	obj *snappipb.PatternFlowIgmpv1GroupAddressCounter
 }
 
+func NewPatternFlowIgmpv1GroupAddressCounter() PatternFlowIgmpv1GroupAddressCounter {
+	obj := patternFlowIgmpv1GroupAddressCounter{obj: &snappipb.PatternFlowIgmpv1GroupAddressCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowIgmpv1GroupAddressCounter) Msg() *snappipb.PatternFlowIgmpv1GroupAddressCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowIgmpv1GroupAddressCounter) SetMsg(msg *snappipb.PatternFlowIgmpv1GroupAddressCounter) PatternFlowIgmpv1GroupAddressCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -110646,12 +116159,18 @@ type bgpRouteAdvanced struct {
 	obj *snappipb.BgpRouteAdvanced
 }
 
+func NewBgpRouteAdvanced() BgpRouteAdvanced {
+	obj := bgpRouteAdvanced{obj: &snappipb.BgpRouteAdvanced{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *bgpRouteAdvanced) Msg() *snappipb.BgpRouteAdvanced {
 	return obj.obj
 }
 
 func (obj *bgpRouteAdvanced) SetMsg(msg *snappipb.BgpRouteAdvanced) BgpRouteAdvanced {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -110849,12 +116368,18 @@ type bgpCommunity struct {
 	obj *snappipb.BgpCommunity
 }
 
+func NewBgpCommunity() BgpCommunity {
+	obj := bgpCommunity{obj: &snappipb.BgpCommunity{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *bgpCommunity) Msg() *snappipb.BgpCommunity {
 	return obj.obj
 }
 
 func (obj *bgpCommunity) SetMsg(msg *snappipb.BgpCommunity) BgpCommunity {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -111102,12 +116627,18 @@ type bgpAsPath struct {
 	obj *snappipb.BgpAsPath
 }
 
+func NewBgpAsPath() BgpAsPath {
+	obj := bgpAsPath{obj: &snappipb.BgpAsPath{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *bgpAsPath) Msg() *snappipb.BgpAsPath {
 	return obj.obj
 }
 
 func (obj *bgpAsPath) SetMsg(msg *snappipb.BgpAsPath) BgpAsPath {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -111323,6 +116854,9 @@ func (obj *bgpAsPath) setDefault() {
 	if obj.obj.AsSetMode == nil {
 		obj.SetAsSetMode(BgpAsPathAsSetMode.DO_NOT_INCLUDE_LOCAL_AS)
 	}
+	if obj.obj.Segments == nil {
+		obj.Segments()
+	}
 
 }
 
@@ -111330,12 +116864,18 @@ type bgpAddPath struct {
 	obj *snappipb.BgpAddPath
 }
 
+func NewBgpAddPath() BgpAddPath {
+	obj := bgpAddPath{obj: &snappipb.BgpAddPath{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *bgpAddPath) Msg() *snappipb.BgpAddPath {
 	return obj.obj
 }
 
 func (obj *bgpAddPath) SetMsg(msg *snappipb.BgpAddPath) BgpAddPath {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -111498,12 +117038,18 @@ type bgpExtCommunity struct {
 	obj *snappipb.BgpExtCommunity
 }
 
+func NewBgpExtCommunity() BgpExtCommunity {
+	obj := bgpExtCommunity{obj: &snappipb.BgpExtCommunity{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *bgpExtCommunity) Msg() *snappipb.BgpExtCommunity {
 	return obj.obj
 }
 
 func (obj *bgpExtCommunity) SetMsg(msg *snappipb.BgpExtCommunity) BgpExtCommunity {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -111768,12 +117314,18 @@ type bgpSrteV4TunnelTlv struct {
 	obj *snappipb.BgpSrteV4TunnelTlv
 }
 
+func NewBgpSrteV4TunnelTlv() BgpSrteV4TunnelTlv {
+	obj := bgpSrteV4TunnelTlv{obj: &snappipb.BgpSrteV4TunnelTlv{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *bgpSrteV4TunnelTlv) Msg() *snappipb.BgpSrteV4TunnelTlv {
 	return obj.obj
 }
 
 func (obj *bgpSrteV4TunnelTlv) SetMsg(msg *snappipb.BgpSrteV4TunnelTlv) BgpSrteV4TunnelTlv {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -111894,18 +117446,25 @@ type BgpSrteV4TunnelTlv interface {
 	validateObj(set_default bool)
 	setDefault()
 	RemoteEndpointSubTlv() BgpSrteRemoteEndpointSubTlv
+	SetRemoteEndpointSubTlv(value BgpSrteRemoteEndpointSubTlv) BgpSrteV4TunnelTlv
 	HasRemoteEndpointSubTlv() bool
 	ColorSubTlv() BgpSrteColorSubTlv
+	SetColorSubTlv(value BgpSrteColorSubTlv) BgpSrteV4TunnelTlv
 	HasColorSubTlv() bool
 	BindingSubTlv() BgpSrteBindingSubTlv
+	SetBindingSubTlv(value BgpSrteBindingSubTlv) BgpSrteV4TunnelTlv
 	HasBindingSubTlv() bool
 	PreferenceSubTlv() BgpSrtePreferenceSubTlv
+	SetPreferenceSubTlv(value BgpSrtePreferenceSubTlv) BgpSrteV4TunnelTlv
 	HasPreferenceSubTlv() bool
 	PolicyPrioritySubTlv() BgpSrtePolicyPrioritySubTlv
+	SetPolicyPrioritySubTlv(value BgpSrtePolicyPrioritySubTlv) BgpSrteV4TunnelTlv
 	HasPolicyPrioritySubTlv() bool
 	PolicyNameSubTlv() BgpSrtePolicyNameSubTlv
+	SetPolicyNameSubTlv(value BgpSrtePolicyNameSubTlv) BgpSrteV4TunnelTlv
 	HasPolicyNameSubTlv() bool
 	ExplicitNullLabelPolicySubTlv() BgpSrteExplicitNullLabelPolicySubTlv
+	SetExplicitNullLabelPolicySubTlv(value BgpSrteExplicitNullLabelPolicySubTlv) BgpSrteV4TunnelTlv
 	HasExplicitNullLabelPolicySubTlv() bool
 	SegmentLists() BgpSrteV4TunnelTlvBgpSrteSegmentListIter
 	Name() string
@@ -111918,12 +117477,8 @@ type BgpSrteV4TunnelTlv interface {
 // RemoteEndpointSubTlv returns a BgpSrteRemoteEndpointSubTlv
 //  description is TBD
 func (obj *bgpSrteV4TunnelTlv) RemoteEndpointSubTlv() BgpSrteRemoteEndpointSubTlv {
-
 	if obj.obj.RemoteEndpointSubTlv == nil {
-		obj.obj.RemoteEndpointSubTlv = &snappipb.BgpSrteRemoteEndpointSubTlv{}
-		newObj := &bgpSrteRemoteEndpointSubTlv{obj: obj.obj.RemoteEndpointSubTlv}
-		newObj.setDefault()
-		return newObj
+		obj.obj.RemoteEndpointSubTlv = NewBgpSrteRemoteEndpointSubTlv().Msg()
 	}
 	return &bgpSrteRemoteEndpointSubTlv{obj: obj.obj.RemoteEndpointSubTlv}
 }
@@ -111934,15 +117489,19 @@ func (obj *bgpSrteV4TunnelTlv) HasRemoteEndpointSubTlv() bool {
 	return obj.obj.RemoteEndpointSubTlv != nil
 }
 
+// SetRemoteEndpointSubTlv sets the BgpSrteRemoteEndpointSubTlv value in the BgpSrteV4TunnelTlv object
+//  description is TBD
+func (obj *bgpSrteV4TunnelTlv) SetRemoteEndpointSubTlv(value BgpSrteRemoteEndpointSubTlv) BgpSrteV4TunnelTlv {
+	obj.RemoteEndpointSubTlv().SetMsg(value.Msg())
+
+	return obj
+}
+
 // ColorSubTlv returns a BgpSrteColorSubTlv
 //  description is TBD
 func (obj *bgpSrteV4TunnelTlv) ColorSubTlv() BgpSrteColorSubTlv {
-
 	if obj.obj.ColorSubTlv == nil {
-		obj.obj.ColorSubTlv = &snappipb.BgpSrteColorSubTlv{}
-		newObj := &bgpSrteColorSubTlv{obj: obj.obj.ColorSubTlv}
-		newObj.setDefault()
-		return newObj
+		obj.obj.ColorSubTlv = NewBgpSrteColorSubTlv().Msg()
 	}
 	return &bgpSrteColorSubTlv{obj: obj.obj.ColorSubTlv}
 }
@@ -111953,15 +117512,19 @@ func (obj *bgpSrteV4TunnelTlv) HasColorSubTlv() bool {
 	return obj.obj.ColorSubTlv != nil
 }
 
+// SetColorSubTlv sets the BgpSrteColorSubTlv value in the BgpSrteV4TunnelTlv object
+//  description is TBD
+func (obj *bgpSrteV4TunnelTlv) SetColorSubTlv(value BgpSrteColorSubTlv) BgpSrteV4TunnelTlv {
+	obj.ColorSubTlv().SetMsg(value.Msg())
+
+	return obj
+}
+
 // BindingSubTlv returns a BgpSrteBindingSubTlv
 //  description is TBD
 func (obj *bgpSrteV4TunnelTlv) BindingSubTlv() BgpSrteBindingSubTlv {
-
 	if obj.obj.BindingSubTlv == nil {
-		obj.obj.BindingSubTlv = &snappipb.BgpSrteBindingSubTlv{}
-		newObj := &bgpSrteBindingSubTlv{obj: obj.obj.BindingSubTlv}
-		newObj.setDefault()
-		return newObj
+		obj.obj.BindingSubTlv = NewBgpSrteBindingSubTlv().Msg()
 	}
 	return &bgpSrteBindingSubTlv{obj: obj.obj.BindingSubTlv}
 }
@@ -111972,15 +117535,19 @@ func (obj *bgpSrteV4TunnelTlv) HasBindingSubTlv() bool {
 	return obj.obj.BindingSubTlv != nil
 }
 
+// SetBindingSubTlv sets the BgpSrteBindingSubTlv value in the BgpSrteV4TunnelTlv object
+//  description is TBD
+func (obj *bgpSrteV4TunnelTlv) SetBindingSubTlv(value BgpSrteBindingSubTlv) BgpSrteV4TunnelTlv {
+	obj.BindingSubTlv().SetMsg(value.Msg())
+
+	return obj
+}
+
 // PreferenceSubTlv returns a BgpSrtePreferenceSubTlv
 //  description is TBD
 func (obj *bgpSrteV4TunnelTlv) PreferenceSubTlv() BgpSrtePreferenceSubTlv {
-
 	if obj.obj.PreferenceSubTlv == nil {
-		obj.obj.PreferenceSubTlv = &snappipb.BgpSrtePreferenceSubTlv{}
-		newObj := &bgpSrtePreferenceSubTlv{obj: obj.obj.PreferenceSubTlv}
-		newObj.setDefault()
-		return newObj
+		obj.obj.PreferenceSubTlv = NewBgpSrtePreferenceSubTlv().Msg()
 	}
 	return &bgpSrtePreferenceSubTlv{obj: obj.obj.PreferenceSubTlv}
 }
@@ -111991,15 +117558,19 @@ func (obj *bgpSrteV4TunnelTlv) HasPreferenceSubTlv() bool {
 	return obj.obj.PreferenceSubTlv != nil
 }
 
+// SetPreferenceSubTlv sets the BgpSrtePreferenceSubTlv value in the BgpSrteV4TunnelTlv object
+//  description is TBD
+func (obj *bgpSrteV4TunnelTlv) SetPreferenceSubTlv(value BgpSrtePreferenceSubTlv) BgpSrteV4TunnelTlv {
+	obj.PreferenceSubTlv().SetMsg(value.Msg())
+
+	return obj
+}
+
 // PolicyPrioritySubTlv returns a BgpSrtePolicyPrioritySubTlv
 //  description is TBD
 func (obj *bgpSrteV4TunnelTlv) PolicyPrioritySubTlv() BgpSrtePolicyPrioritySubTlv {
-
 	if obj.obj.PolicyPrioritySubTlv == nil {
-		obj.obj.PolicyPrioritySubTlv = &snappipb.BgpSrtePolicyPrioritySubTlv{}
-		newObj := &bgpSrtePolicyPrioritySubTlv{obj: obj.obj.PolicyPrioritySubTlv}
-		newObj.setDefault()
-		return newObj
+		obj.obj.PolicyPrioritySubTlv = NewBgpSrtePolicyPrioritySubTlv().Msg()
 	}
 	return &bgpSrtePolicyPrioritySubTlv{obj: obj.obj.PolicyPrioritySubTlv}
 }
@@ -112010,15 +117581,19 @@ func (obj *bgpSrteV4TunnelTlv) HasPolicyPrioritySubTlv() bool {
 	return obj.obj.PolicyPrioritySubTlv != nil
 }
 
+// SetPolicyPrioritySubTlv sets the BgpSrtePolicyPrioritySubTlv value in the BgpSrteV4TunnelTlv object
+//  description is TBD
+func (obj *bgpSrteV4TunnelTlv) SetPolicyPrioritySubTlv(value BgpSrtePolicyPrioritySubTlv) BgpSrteV4TunnelTlv {
+	obj.PolicyPrioritySubTlv().SetMsg(value.Msg())
+
+	return obj
+}
+
 // PolicyNameSubTlv returns a BgpSrtePolicyNameSubTlv
 //  description is TBD
 func (obj *bgpSrteV4TunnelTlv) PolicyNameSubTlv() BgpSrtePolicyNameSubTlv {
-
 	if obj.obj.PolicyNameSubTlv == nil {
-		obj.obj.PolicyNameSubTlv = &snappipb.BgpSrtePolicyNameSubTlv{}
-		newObj := &bgpSrtePolicyNameSubTlv{obj: obj.obj.PolicyNameSubTlv}
-		newObj.setDefault()
-		return newObj
+		obj.obj.PolicyNameSubTlv = NewBgpSrtePolicyNameSubTlv().Msg()
 	}
 	return &bgpSrtePolicyNameSubTlv{obj: obj.obj.PolicyNameSubTlv}
 }
@@ -112029,15 +117604,19 @@ func (obj *bgpSrteV4TunnelTlv) HasPolicyNameSubTlv() bool {
 	return obj.obj.PolicyNameSubTlv != nil
 }
 
+// SetPolicyNameSubTlv sets the BgpSrtePolicyNameSubTlv value in the BgpSrteV4TunnelTlv object
+//  description is TBD
+func (obj *bgpSrteV4TunnelTlv) SetPolicyNameSubTlv(value BgpSrtePolicyNameSubTlv) BgpSrteV4TunnelTlv {
+	obj.PolicyNameSubTlv().SetMsg(value.Msg())
+
+	return obj
+}
+
 // ExplicitNullLabelPolicySubTlv returns a BgpSrteExplicitNullLabelPolicySubTlv
 //  description is TBD
 func (obj *bgpSrteV4TunnelTlv) ExplicitNullLabelPolicySubTlv() BgpSrteExplicitNullLabelPolicySubTlv {
-
 	if obj.obj.ExplicitNullLabelPolicySubTlv == nil {
-		obj.obj.ExplicitNullLabelPolicySubTlv = &snappipb.BgpSrteExplicitNullLabelPolicySubTlv{}
-		newObj := &bgpSrteExplicitNullLabelPolicySubTlv{obj: obj.obj.ExplicitNullLabelPolicySubTlv}
-		newObj.setDefault()
-		return newObj
+		obj.obj.ExplicitNullLabelPolicySubTlv = NewBgpSrteExplicitNullLabelPolicySubTlv().Msg()
 	}
 	return &bgpSrteExplicitNullLabelPolicySubTlv{obj: obj.obj.ExplicitNullLabelPolicySubTlv}
 }
@@ -112046,6 +117625,14 @@ func (obj *bgpSrteV4TunnelTlv) ExplicitNullLabelPolicySubTlv() BgpSrteExplicitNu
 //  description is TBD
 func (obj *bgpSrteV4TunnelTlv) HasExplicitNullLabelPolicySubTlv() bool {
 	return obj.obj.ExplicitNullLabelPolicySubTlv != nil
+}
+
+// SetExplicitNullLabelPolicySubTlv sets the BgpSrteExplicitNullLabelPolicySubTlv value in the BgpSrteV4TunnelTlv object
+//  description is TBD
+func (obj *bgpSrteV4TunnelTlv) SetExplicitNullLabelPolicySubTlv(value BgpSrteExplicitNullLabelPolicySubTlv) BgpSrteV4TunnelTlv {
+	obj.ExplicitNullLabelPolicySubTlv().SetMsg(value.Msg())
+
+	return obj
 }
 
 // SegmentLists returns a []BgpSrteSegmentList
@@ -112161,6 +117748,9 @@ func (obj *bgpSrteV4TunnelTlv) validateObj(set_default bool) {
 }
 
 func (obj *bgpSrteV4TunnelTlv) setDefault() {
+	if obj.obj.SegmentLists == nil {
+		obj.SegmentLists()
+	}
 	if obj.obj.Active == nil {
 		obj.SetActive(true)
 	}
@@ -112171,12 +117761,18 @@ type bgpSrteV6TunnelTlv struct {
 	obj *snappipb.BgpSrteV6TunnelTlv
 }
 
+func NewBgpSrteV6TunnelTlv() BgpSrteV6TunnelTlv {
+	obj := bgpSrteV6TunnelTlv{obj: &snappipb.BgpSrteV6TunnelTlv{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *bgpSrteV6TunnelTlv) Msg() *snappipb.BgpSrteV6TunnelTlv {
 	return obj.obj
 }
 
 func (obj *bgpSrteV6TunnelTlv) SetMsg(msg *snappipb.BgpSrteV6TunnelTlv) BgpSrteV6TunnelTlv {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -112297,18 +117893,25 @@ type BgpSrteV6TunnelTlv interface {
 	validateObj(set_default bool)
 	setDefault()
 	RemoteEndpointSubTlv() BgpSrteRemoteEndpointSubTlv
+	SetRemoteEndpointSubTlv(value BgpSrteRemoteEndpointSubTlv) BgpSrteV6TunnelTlv
 	HasRemoteEndpointSubTlv() bool
 	ColorSubTlv() BgpSrteColorSubTlv
+	SetColorSubTlv(value BgpSrteColorSubTlv) BgpSrteV6TunnelTlv
 	HasColorSubTlv() bool
 	BindingSubTlv() BgpSrteBindingSubTlv
+	SetBindingSubTlv(value BgpSrteBindingSubTlv) BgpSrteV6TunnelTlv
 	HasBindingSubTlv() bool
 	PreferenceSubTlv() BgpSrtePreferenceSubTlv
+	SetPreferenceSubTlv(value BgpSrtePreferenceSubTlv) BgpSrteV6TunnelTlv
 	HasPreferenceSubTlv() bool
 	PolicyPrioritySubTlv() BgpSrtePolicyPrioritySubTlv
+	SetPolicyPrioritySubTlv(value BgpSrtePolicyPrioritySubTlv) BgpSrteV6TunnelTlv
 	HasPolicyPrioritySubTlv() bool
 	PolicyNameSubTlv() BgpSrtePolicyNameSubTlv
+	SetPolicyNameSubTlv(value BgpSrtePolicyNameSubTlv) BgpSrteV6TunnelTlv
 	HasPolicyNameSubTlv() bool
 	ExplicitNullLabelPolicySubTlv() BgpSrteExplicitNullLabelPolicySubTlv
+	SetExplicitNullLabelPolicySubTlv(value BgpSrteExplicitNullLabelPolicySubTlv) BgpSrteV6TunnelTlv
 	HasExplicitNullLabelPolicySubTlv() bool
 	SegmentLists() BgpSrteV6TunnelTlvBgpSrteSegmentListIter
 	Name() string
@@ -112321,12 +117924,8 @@ type BgpSrteV6TunnelTlv interface {
 // RemoteEndpointSubTlv returns a BgpSrteRemoteEndpointSubTlv
 //  description is TBD
 func (obj *bgpSrteV6TunnelTlv) RemoteEndpointSubTlv() BgpSrteRemoteEndpointSubTlv {
-
 	if obj.obj.RemoteEndpointSubTlv == nil {
-		obj.obj.RemoteEndpointSubTlv = &snappipb.BgpSrteRemoteEndpointSubTlv{}
-		newObj := &bgpSrteRemoteEndpointSubTlv{obj: obj.obj.RemoteEndpointSubTlv}
-		newObj.setDefault()
-		return newObj
+		obj.obj.RemoteEndpointSubTlv = NewBgpSrteRemoteEndpointSubTlv().Msg()
 	}
 	return &bgpSrteRemoteEndpointSubTlv{obj: obj.obj.RemoteEndpointSubTlv}
 }
@@ -112337,15 +117936,19 @@ func (obj *bgpSrteV6TunnelTlv) HasRemoteEndpointSubTlv() bool {
 	return obj.obj.RemoteEndpointSubTlv != nil
 }
 
+// SetRemoteEndpointSubTlv sets the BgpSrteRemoteEndpointSubTlv value in the BgpSrteV6TunnelTlv object
+//  description is TBD
+func (obj *bgpSrteV6TunnelTlv) SetRemoteEndpointSubTlv(value BgpSrteRemoteEndpointSubTlv) BgpSrteV6TunnelTlv {
+	obj.RemoteEndpointSubTlv().SetMsg(value.Msg())
+
+	return obj
+}
+
 // ColorSubTlv returns a BgpSrteColorSubTlv
 //  description is TBD
 func (obj *bgpSrteV6TunnelTlv) ColorSubTlv() BgpSrteColorSubTlv {
-
 	if obj.obj.ColorSubTlv == nil {
-		obj.obj.ColorSubTlv = &snappipb.BgpSrteColorSubTlv{}
-		newObj := &bgpSrteColorSubTlv{obj: obj.obj.ColorSubTlv}
-		newObj.setDefault()
-		return newObj
+		obj.obj.ColorSubTlv = NewBgpSrteColorSubTlv().Msg()
 	}
 	return &bgpSrteColorSubTlv{obj: obj.obj.ColorSubTlv}
 }
@@ -112356,15 +117959,19 @@ func (obj *bgpSrteV6TunnelTlv) HasColorSubTlv() bool {
 	return obj.obj.ColorSubTlv != nil
 }
 
+// SetColorSubTlv sets the BgpSrteColorSubTlv value in the BgpSrteV6TunnelTlv object
+//  description is TBD
+func (obj *bgpSrteV6TunnelTlv) SetColorSubTlv(value BgpSrteColorSubTlv) BgpSrteV6TunnelTlv {
+	obj.ColorSubTlv().SetMsg(value.Msg())
+
+	return obj
+}
+
 // BindingSubTlv returns a BgpSrteBindingSubTlv
 //  description is TBD
 func (obj *bgpSrteV6TunnelTlv) BindingSubTlv() BgpSrteBindingSubTlv {
-
 	if obj.obj.BindingSubTlv == nil {
-		obj.obj.BindingSubTlv = &snappipb.BgpSrteBindingSubTlv{}
-		newObj := &bgpSrteBindingSubTlv{obj: obj.obj.BindingSubTlv}
-		newObj.setDefault()
-		return newObj
+		obj.obj.BindingSubTlv = NewBgpSrteBindingSubTlv().Msg()
 	}
 	return &bgpSrteBindingSubTlv{obj: obj.obj.BindingSubTlv}
 }
@@ -112375,15 +117982,19 @@ func (obj *bgpSrteV6TunnelTlv) HasBindingSubTlv() bool {
 	return obj.obj.BindingSubTlv != nil
 }
 
+// SetBindingSubTlv sets the BgpSrteBindingSubTlv value in the BgpSrteV6TunnelTlv object
+//  description is TBD
+func (obj *bgpSrteV6TunnelTlv) SetBindingSubTlv(value BgpSrteBindingSubTlv) BgpSrteV6TunnelTlv {
+	obj.BindingSubTlv().SetMsg(value.Msg())
+
+	return obj
+}
+
 // PreferenceSubTlv returns a BgpSrtePreferenceSubTlv
 //  description is TBD
 func (obj *bgpSrteV6TunnelTlv) PreferenceSubTlv() BgpSrtePreferenceSubTlv {
-
 	if obj.obj.PreferenceSubTlv == nil {
-		obj.obj.PreferenceSubTlv = &snappipb.BgpSrtePreferenceSubTlv{}
-		newObj := &bgpSrtePreferenceSubTlv{obj: obj.obj.PreferenceSubTlv}
-		newObj.setDefault()
-		return newObj
+		obj.obj.PreferenceSubTlv = NewBgpSrtePreferenceSubTlv().Msg()
 	}
 	return &bgpSrtePreferenceSubTlv{obj: obj.obj.PreferenceSubTlv}
 }
@@ -112394,15 +118005,19 @@ func (obj *bgpSrteV6TunnelTlv) HasPreferenceSubTlv() bool {
 	return obj.obj.PreferenceSubTlv != nil
 }
 
+// SetPreferenceSubTlv sets the BgpSrtePreferenceSubTlv value in the BgpSrteV6TunnelTlv object
+//  description is TBD
+func (obj *bgpSrteV6TunnelTlv) SetPreferenceSubTlv(value BgpSrtePreferenceSubTlv) BgpSrteV6TunnelTlv {
+	obj.PreferenceSubTlv().SetMsg(value.Msg())
+
+	return obj
+}
+
 // PolicyPrioritySubTlv returns a BgpSrtePolicyPrioritySubTlv
 //  description is TBD
 func (obj *bgpSrteV6TunnelTlv) PolicyPrioritySubTlv() BgpSrtePolicyPrioritySubTlv {
-
 	if obj.obj.PolicyPrioritySubTlv == nil {
-		obj.obj.PolicyPrioritySubTlv = &snappipb.BgpSrtePolicyPrioritySubTlv{}
-		newObj := &bgpSrtePolicyPrioritySubTlv{obj: obj.obj.PolicyPrioritySubTlv}
-		newObj.setDefault()
-		return newObj
+		obj.obj.PolicyPrioritySubTlv = NewBgpSrtePolicyPrioritySubTlv().Msg()
 	}
 	return &bgpSrtePolicyPrioritySubTlv{obj: obj.obj.PolicyPrioritySubTlv}
 }
@@ -112413,15 +118028,19 @@ func (obj *bgpSrteV6TunnelTlv) HasPolicyPrioritySubTlv() bool {
 	return obj.obj.PolicyPrioritySubTlv != nil
 }
 
+// SetPolicyPrioritySubTlv sets the BgpSrtePolicyPrioritySubTlv value in the BgpSrteV6TunnelTlv object
+//  description is TBD
+func (obj *bgpSrteV6TunnelTlv) SetPolicyPrioritySubTlv(value BgpSrtePolicyPrioritySubTlv) BgpSrteV6TunnelTlv {
+	obj.PolicyPrioritySubTlv().SetMsg(value.Msg())
+
+	return obj
+}
+
 // PolicyNameSubTlv returns a BgpSrtePolicyNameSubTlv
 //  description is TBD
 func (obj *bgpSrteV6TunnelTlv) PolicyNameSubTlv() BgpSrtePolicyNameSubTlv {
-
 	if obj.obj.PolicyNameSubTlv == nil {
-		obj.obj.PolicyNameSubTlv = &snappipb.BgpSrtePolicyNameSubTlv{}
-		newObj := &bgpSrtePolicyNameSubTlv{obj: obj.obj.PolicyNameSubTlv}
-		newObj.setDefault()
-		return newObj
+		obj.obj.PolicyNameSubTlv = NewBgpSrtePolicyNameSubTlv().Msg()
 	}
 	return &bgpSrtePolicyNameSubTlv{obj: obj.obj.PolicyNameSubTlv}
 }
@@ -112432,15 +118051,19 @@ func (obj *bgpSrteV6TunnelTlv) HasPolicyNameSubTlv() bool {
 	return obj.obj.PolicyNameSubTlv != nil
 }
 
+// SetPolicyNameSubTlv sets the BgpSrtePolicyNameSubTlv value in the BgpSrteV6TunnelTlv object
+//  description is TBD
+func (obj *bgpSrteV6TunnelTlv) SetPolicyNameSubTlv(value BgpSrtePolicyNameSubTlv) BgpSrteV6TunnelTlv {
+	obj.PolicyNameSubTlv().SetMsg(value.Msg())
+
+	return obj
+}
+
 // ExplicitNullLabelPolicySubTlv returns a BgpSrteExplicitNullLabelPolicySubTlv
 //  description is TBD
 func (obj *bgpSrteV6TunnelTlv) ExplicitNullLabelPolicySubTlv() BgpSrteExplicitNullLabelPolicySubTlv {
-
 	if obj.obj.ExplicitNullLabelPolicySubTlv == nil {
-		obj.obj.ExplicitNullLabelPolicySubTlv = &snappipb.BgpSrteExplicitNullLabelPolicySubTlv{}
-		newObj := &bgpSrteExplicitNullLabelPolicySubTlv{obj: obj.obj.ExplicitNullLabelPolicySubTlv}
-		newObj.setDefault()
-		return newObj
+		obj.obj.ExplicitNullLabelPolicySubTlv = NewBgpSrteExplicitNullLabelPolicySubTlv().Msg()
 	}
 	return &bgpSrteExplicitNullLabelPolicySubTlv{obj: obj.obj.ExplicitNullLabelPolicySubTlv}
 }
@@ -112449,6 +118072,14 @@ func (obj *bgpSrteV6TunnelTlv) ExplicitNullLabelPolicySubTlv() BgpSrteExplicitNu
 //  description is TBD
 func (obj *bgpSrteV6TunnelTlv) HasExplicitNullLabelPolicySubTlv() bool {
 	return obj.obj.ExplicitNullLabelPolicySubTlv != nil
+}
+
+// SetExplicitNullLabelPolicySubTlv sets the BgpSrteExplicitNullLabelPolicySubTlv value in the BgpSrteV6TunnelTlv object
+//  description is TBD
+func (obj *bgpSrteV6TunnelTlv) SetExplicitNullLabelPolicySubTlv(value BgpSrteExplicitNullLabelPolicySubTlv) BgpSrteV6TunnelTlv {
+	obj.ExplicitNullLabelPolicySubTlv().SetMsg(value.Msg())
+
+	return obj
 }
 
 // SegmentLists returns a []BgpSrteSegmentList
@@ -112564,6 +118195,9 @@ func (obj *bgpSrteV6TunnelTlv) validateObj(set_default bool) {
 }
 
 func (obj *bgpSrteV6TunnelTlv) setDefault() {
+	if obj.obj.SegmentLists == nil {
+		obj.SegmentLists()
+	}
 	if obj.obj.Active == nil {
 		obj.SetActive(true)
 	}
@@ -112574,12 +118208,18 @@ type patternFlowIpv4PriorityRawCounter struct {
 	obj *snappipb.PatternFlowIpv4PriorityRawCounter
 }
 
+func NewPatternFlowIpv4PriorityRawCounter() PatternFlowIpv4PriorityRawCounter {
+	obj := patternFlowIpv4PriorityRawCounter{obj: &snappipb.PatternFlowIpv4PriorityRawCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowIpv4PriorityRawCounter) Msg() *snappipb.PatternFlowIpv4PriorityRawCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowIpv4PriorityRawCounter) SetMsg(msg *snappipb.PatternFlowIpv4PriorityRawCounter) PatternFlowIpv4PriorityRawCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -112810,12 +118450,18 @@ type patternFlowIpv4TosPrecedence struct {
 	obj *snappipb.PatternFlowIpv4TosPrecedence
 }
 
+func NewPatternFlowIpv4TosPrecedence() PatternFlowIpv4TosPrecedence {
+	obj := patternFlowIpv4TosPrecedence{obj: &snappipb.PatternFlowIpv4TosPrecedence{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowIpv4TosPrecedence) Msg() *snappipb.PatternFlowIpv4TosPrecedence {
 	return obj.obj
 }
 
 func (obj *patternFlowIpv4TosPrecedence) SetMsg(msg *snappipb.PatternFlowIpv4TosPrecedence) PatternFlowIpv4TosPrecedence {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -112947,8 +118593,10 @@ type PatternFlowIpv4TosPrecedence interface {
 	SetMetricGroup(value string) PatternFlowIpv4TosPrecedence
 	HasMetricGroup() bool
 	Increment() PatternFlowIpv4TosPrecedenceCounter
+	SetIncrement(value PatternFlowIpv4TosPrecedenceCounter) PatternFlowIpv4TosPrecedence
 	HasIncrement() bool
 	Decrement() PatternFlowIpv4TosPrecedenceCounter
+	SetDecrement(value PatternFlowIpv4TosPrecedenceCounter) PatternFlowIpv4TosPrecedence
 	HasDecrement() bool
 }
 
@@ -113054,10 +118702,7 @@ func (obj *patternFlowIpv4TosPrecedence) SetMetricGroup(value string) PatternFlo
 func (obj *patternFlowIpv4TosPrecedence) Increment() PatternFlowIpv4TosPrecedenceCounter {
 	obj.SetChoice(PatternFlowIpv4TosPrecedenceChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowIpv4TosPrecedenceCounter{}
-		newObj := &patternFlowIpv4TosPrecedenceCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowIpv4TosPrecedenceCounter().Msg()
 	}
 	return &patternFlowIpv4TosPrecedenceCounter{obj: obj.obj.Increment}
 }
@@ -113068,15 +118713,20 @@ func (obj *patternFlowIpv4TosPrecedence) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowIpv4TosPrecedenceCounter value in the PatternFlowIpv4TosPrecedence object
+//  description is TBD
+func (obj *patternFlowIpv4TosPrecedence) SetIncrement(value PatternFlowIpv4TosPrecedenceCounter) PatternFlowIpv4TosPrecedence {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowIpv4TosPrecedenceChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowIpv4TosPrecedenceCounter
 //  description is TBD
 func (obj *patternFlowIpv4TosPrecedence) Decrement() PatternFlowIpv4TosPrecedenceCounter {
 	obj.SetChoice(PatternFlowIpv4TosPrecedenceChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowIpv4TosPrecedenceCounter{}
-		newObj := &patternFlowIpv4TosPrecedenceCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowIpv4TosPrecedenceCounter().Msg()
 	}
 	return &patternFlowIpv4TosPrecedenceCounter{obj: obj.obj.Decrement}
 }
@@ -113085,6 +118735,14 @@ func (obj *patternFlowIpv4TosPrecedence) Decrement() PatternFlowIpv4TosPrecedenc
 //  description is TBD
 func (obj *patternFlowIpv4TosPrecedence) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowIpv4TosPrecedenceCounter value in the PatternFlowIpv4TosPrecedence object
+//  description is TBD
+func (obj *patternFlowIpv4TosPrecedence) SetDecrement(value PatternFlowIpv4TosPrecedenceCounter) PatternFlowIpv4TosPrecedence {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowIpv4TosPrecedenceChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowIpv4TosPrecedence) validateObj(set_default bool) {
@@ -113131,12 +118789,18 @@ type patternFlowIpv4TosDelay struct {
 	obj *snappipb.PatternFlowIpv4TosDelay
 }
 
+func NewPatternFlowIpv4TosDelay() PatternFlowIpv4TosDelay {
+	obj := patternFlowIpv4TosDelay{obj: &snappipb.PatternFlowIpv4TosDelay{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowIpv4TosDelay) Msg() *snappipb.PatternFlowIpv4TosDelay {
 	return obj.obj
 }
 
 func (obj *patternFlowIpv4TosDelay) SetMsg(msg *snappipb.PatternFlowIpv4TosDelay) PatternFlowIpv4TosDelay {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -113268,8 +118932,10 @@ type PatternFlowIpv4TosDelay interface {
 	SetMetricGroup(value string) PatternFlowIpv4TosDelay
 	HasMetricGroup() bool
 	Increment() PatternFlowIpv4TosDelayCounter
+	SetIncrement(value PatternFlowIpv4TosDelayCounter) PatternFlowIpv4TosDelay
 	HasIncrement() bool
 	Decrement() PatternFlowIpv4TosDelayCounter
+	SetDecrement(value PatternFlowIpv4TosDelayCounter) PatternFlowIpv4TosDelay
 	HasDecrement() bool
 }
 
@@ -113375,10 +119041,7 @@ func (obj *patternFlowIpv4TosDelay) SetMetricGroup(value string) PatternFlowIpv4
 func (obj *patternFlowIpv4TosDelay) Increment() PatternFlowIpv4TosDelayCounter {
 	obj.SetChoice(PatternFlowIpv4TosDelayChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowIpv4TosDelayCounter{}
-		newObj := &patternFlowIpv4TosDelayCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowIpv4TosDelayCounter().Msg()
 	}
 	return &patternFlowIpv4TosDelayCounter{obj: obj.obj.Increment}
 }
@@ -113389,15 +119052,20 @@ func (obj *patternFlowIpv4TosDelay) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowIpv4TosDelayCounter value in the PatternFlowIpv4TosDelay object
+//  description is TBD
+func (obj *patternFlowIpv4TosDelay) SetIncrement(value PatternFlowIpv4TosDelayCounter) PatternFlowIpv4TosDelay {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowIpv4TosDelayChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowIpv4TosDelayCounter
 //  description is TBD
 func (obj *patternFlowIpv4TosDelay) Decrement() PatternFlowIpv4TosDelayCounter {
 	obj.SetChoice(PatternFlowIpv4TosDelayChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowIpv4TosDelayCounter{}
-		newObj := &patternFlowIpv4TosDelayCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowIpv4TosDelayCounter().Msg()
 	}
 	return &patternFlowIpv4TosDelayCounter{obj: obj.obj.Decrement}
 }
@@ -113406,6 +119074,14 @@ func (obj *patternFlowIpv4TosDelay) Decrement() PatternFlowIpv4TosDelayCounter {
 //  description is TBD
 func (obj *patternFlowIpv4TosDelay) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowIpv4TosDelayCounter value in the PatternFlowIpv4TosDelay object
+//  description is TBD
+func (obj *patternFlowIpv4TosDelay) SetDecrement(value PatternFlowIpv4TosDelayCounter) PatternFlowIpv4TosDelay {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowIpv4TosDelayChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowIpv4TosDelay) validateObj(set_default bool) {
@@ -113452,12 +119128,18 @@ type patternFlowIpv4TosThroughput struct {
 	obj *snappipb.PatternFlowIpv4TosThroughput
 }
 
+func NewPatternFlowIpv4TosThroughput() PatternFlowIpv4TosThroughput {
+	obj := patternFlowIpv4TosThroughput{obj: &snappipb.PatternFlowIpv4TosThroughput{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowIpv4TosThroughput) Msg() *snappipb.PatternFlowIpv4TosThroughput {
 	return obj.obj
 }
 
 func (obj *patternFlowIpv4TosThroughput) SetMsg(msg *snappipb.PatternFlowIpv4TosThroughput) PatternFlowIpv4TosThroughput {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -113589,8 +119271,10 @@ type PatternFlowIpv4TosThroughput interface {
 	SetMetricGroup(value string) PatternFlowIpv4TosThroughput
 	HasMetricGroup() bool
 	Increment() PatternFlowIpv4TosThroughputCounter
+	SetIncrement(value PatternFlowIpv4TosThroughputCounter) PatternFlowIpv4TosThroughput
 	HasIncrement() bool
 	Decrement() PatternFlowIpv4TosThroughputCounter
+	SetDecrement(value PatternFlowIpv4TosThroughputCounter) PatternFlowIpv4TosThroughput
 	HasDecrement() bool
 }
 
@@ -113696,10 +119380,7 @@ func (obj *patternFlowIpv4TosThroughput) SetMetricGroup(value string) PatternFlo
 func (obj *patternFlowIpv4TosThroughput) Increment() PatternFlowIpv4TosThroughputCounter {
 	obj.SetChoice(PatternFlowIpv4TosThroughputChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowIpv4TosThroughputCounter{}
-		newObj := &patternFlowIpv4TosThroughputCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowIpv4TosThroughputCounter().Msg()
 	}
 	return &patternFlowIpv4TosThroughputCounter{obj: obj.obj.Increment}
 }
@@ -113710,15 +119391,20 @@ func (obj *patternFlowIpv4TosThroughput) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowIpv4TosThroughputCounter value in the PatternFlowIpv4TosThroughput object
+//  description is TBD
+func (obj *patternFlowIpv4TosThroughput) SetIncrement(value PatternFlowIpv4TosThroughputCounter) PatternFlowIpv4TosThroughput {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowIpv4TosThroughputChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowIpv4TosThroughputCounter
 //  description is TBD
 func (obj *patternFlowIpv4TosThroughput) Decrement() PatternFlowIpv4TosThroughputCounter {
 	obj.SetChoice(PatternFlowIpv4TosThroughputChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowIpv4TosThroughputCounter{}
-		newObj := &patternFlowIpv4TosThroughputCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowIpv4TosThroughputCounter().Msg()
 	}
 	return &patternFlowIpv4TosThroughputCounter{obj: obj.obj.Decrement}
 }
@@ -113727,6 +119413,14 @@ func (obj *patternFlowIpv4TosThroughput) Decrement() PatternFlowIpv4TosThroughpu
 //  description is TBD
 func (obj *patternFlowIpv4TosThroughput) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowIpv4TosThroughputCounter value in the PatternFlowIpv4TosThroughput object
+//  description is TBD
+func (obj *patternFlowIpv4TosThroughput) SetDecrement(value PatternFlowIpv4TosThroughputCounter) PatternFlowIpv4TosThroughput {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowIpv4TosThroughputChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowIpv4TosThroughput) validateObj(set_default bool) {
@@ -113773,12 +119467,18 @@ type patternFlowIpv4TosReliability struct {
 	obj *snappipb.PatternFlowIpv4TosReliability
 }
 
+func NewPatternFlowIpv4TosReliability() PatternFlowIpv4TosReliability {
+	obj := patternFlowIpv4TosReliability{obj: &snappipb.PatternFlowIpv4TosReliability{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowIpv4TosReliability) Msg() *snappipb.PatternFlowIpv4TosReliability {
 	return obj.obj
 }
 
 func (obj *patternFlowIpv4TosReliability) SetMsg(msg *snappipb.PatternFlowIpv4TosReliability) PatternFlowIpv4TosReliability {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -113910,8 +119610,10 @@ type PatternFlowIpv4TosReliability interface {
 	SetMetricGroup(value string) PatternFlowIpv4TosReliability
 	HasMetricGroup() bool
 	Increment() PatternFlowIpv4TosReliabilityCounter
+	SetIncrement(value PatternFlowIpv4TosReliabilityCounter) PatternFlowIpv4TosReliability
 	HasIncrement() bool
 	Decrement() PatternFlowIpv4TosReliabilityCounter
+	SetDecrement(value PatternFlowIpv4TosReliabilityCounter) PatternFlowIpv4TosReliability
 	HasDecrement() bool
 }
 
@@ -114017,10 +119719,7 @@ func (obj *patternFlowIpv4TosReliability) SetMetricGroup(value string) PatternFl
 func (obj *patternFlowIpv4TosReliability) Increment() PatternFlowIpv4TosReliabilityCounter {
 	obj.SetChoice(PatternFlowIpv4TosReliabilityChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowIpv4TosReliabilityCounter{}
-		newObj := &patternFlowIpv4TosReliabilityCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowIpv4TosReliabilityCounter().Msg()
 	}
 	return &patternFlowIpv4TosReliabilityCounter{obj: obj.obj.Increment}
 }
@@ -114031,15 +119730,20 @@ func (obj *patternFlowIpv4TosReliability) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowIpv4TosReliabilityCounter value in the PatternFlowIpv4TosReliability object
+//  description is TBD
+func (obj *patternFlowIpv4TosReliability) SetIncrement(value PatternFlowIpv4TosReliabilityCounter) PatternFlowIpv4TosReliability {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowIpv4TosReliabilityChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowIpv4TosReliabilityCounter
 //  description is TBD
 func (obj *patternFlowIpv4TosReliability) Decrement() PatternFlowIpv4TosReliabilityCounter {
 	obj.SetChoice(PatternFlowIpv4TosReliabilityChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowIpv4TosReliabilityCounter{}
-		newObj := &patternFlowIpv4TosReliabilityCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowIpv4TosReliabilityCounter().Msg()
 	}
 	return &patternFlowIpv4TosReliabilityCounter{obj: obj.obj.Decrement}
 }
@@ -114048,6 +119752,14 @@ func (obj *patternFlowIpv4TosReliability) Decrement() PatternFlowIpv4TosReliabil
 //  description is TBD
 func (obj *patternFlowIpv4TosReliability) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowIpv4TosReliabilityCounter value in the PatternFlowIpv4TosReliability object
+//  description is TBD
+func (obj *patternFlowIpv4TosReliability) SetDecrement(value PatternFlowIpv4TosReliabilityCounter) PatternFlowIpv4TosReliability {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowIpv4TosReliabilityChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowIpv4TosReliability) validateObj(set_default bool) {
@@ -114094,12 +119806,18 @@ type patternFlowIpv4TosMonetary struct {
 	obj *snappipb.PatternFlowIpv4TosMonetary
 }
 
+func NewPatternFlowIpv4TosMonetary() PatternFlowIpv4TosMonetary {
+	obj := patternFlowIpv4TosMonetary{obj: &snappipb.PatternFlowIpv4TosMonetary{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowIpv4TosMonetary) Msg() *snappipb.PatternFlowIpv4TosMonetary {
 	return obj.obj
 }
 
 func (obj *patternFlowIpv4TosMonetary) SetMsg(msg *snappipb.PatternFlowIpv4TosMonetary) PatternFlowIpv4TosMonetary {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -114231,8 +119949,10 @@ type PatternFlowIpv4TosMonetary interface {
 	SetMetricGroup(value string) PatternFlowIpv4TosMonetary
 	HasMetricGroup() bool
 	Increment() PatternFlowIpv4TosMonetaryCounter
+	SetIncrement(value PatternFlowIpv4TosMonetaryCounter) PatternFlowIpv4TosMonetary
 	HasIncrement() bool
 	Decrement() PatternFlowIpv4TosMonetaryCounter
+	SetDecrement(value PatternFlowIpv4TosMonetaryCounter) PatternFlowIpv4TosMonetary
 	HasDecrement() bool
 }
 
@@ -114338,10 +120058,7 @@ func (obj *patternFlowIpv4TosMonetary) SetMetricGroup(value string) PatternFlowI
 func (obj *patternFlowIpv4TosMonetary) Increment() PatternFlowIpv4TosMonetaryCounter {
 	obj.SetChoice(PatternFlowIpv4TosMonetaryChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowIpv4TosMonetaryCounter{}
-		newObj := &patternFlowIpv4TosMonetaryCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowIpv4TosMonetaryCounter().Msg()
 	}
 	return &patternFlowIpv4TosMonetaryCounter{obj: obj.obj.Increment}
 }
@@ -114352,15 +120069,20 @@ func (obj *patternFlowIpv4TosMonetary) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowIpv4TosMonetaryCounter value in the PatternFlowIpv4TosMonetary object
+//  description is TBD
+func (obj *patternFlowIpv4TosMonetary) SetIncrement(value PatternFlowIpv4TosMonetaryCounter) PatternFlowIpv4TosMonetary {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowIpv4TosMonetaryChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowIpv4TosMonetaryCounter
 //  description is TBD
 func (obj *patternFlowIpv4TosMonetary) Decrement() PatternFlowIpv4TosMonetaryCounter {
 	obj.SetChoice(PatternFlowIpv4TosMonetaryChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowIpv4TosMonetaryCounter{}
-		newObj := &patternFlowIpv4TosMonetaryCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowIpv4TosMonetaryCounter().Msg()
 	}
 	return &patternFlowIpv4TosMonetaryCounter{obj: obj.obj.Decrement}
 }
@@ -114369,6 +120091,14 @@ func (obj *patternFlowIpv4TosMonetary) Decrement() PatternFlowIpv4TosMonetaryCou
 //  description is TBD
 func (obj *patternFlowIpv4TosMonetary) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowIpv4TosMonetaryCounter value in the PatternFlowIpv4TosMonetary object
+//  description is TBD
+func (obj *patternFlowIpv4TosMonetary) SetDecrement(value PatternFlowIpv4TosMonetaryCounter) PatternFlowIpv4TosMonetary {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowIpv4TosMonetaryChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowIpv4TosMonetary) validateObj(set_default bool) {
@@ -114415,12 +120145,18 @@ type patternFlowIpv4TosUnused struct {
 	obj *snappipb.PatternFlowIpv4TosUnused
 }
 
+func NewPatternFlowIpv4TosUnused() PatternFlowIpv4TosUnused {
+	obj := patternFlowIpv4TosUnused{obj: &snappipb.PatternFlowIpv4TosUnused{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowIpv4TosUnused) Msg() *snappipb.PatternFlowIpv4TosUnused {
 	return obj.obj
 }
 
 func (obj *patternFlowIpv4TosUnused) SetMsg(msg *snappipb.PatternFlowIpv4TosUnused) PatternFlowIpv4TosUnused {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -114552,8 +120288,10 @@ type PatternFlowIpv4TosUnused interface {
 	SetMetricGroup(value string) PatternFlowIpv4TosUnused
 	HasMetricGroup() bool
 	Increment() PatternFlowIpv4TosUnusedCounter
+	SetIncrement(value PatternFlowIpv4TosUnusedCounter) PatternFlowIpv4TosUnused
 	HasIncrement() bool
 	Decrement() PatternFlowIpv4TosUnusedCounter
+	SetDecrement(value PatternFlowIpv4TosUnusedCounter) PatternFlowIpv4TosUnused
 	HasDecrement() bool
 }
 
@@ -114659,10 +120397,7 @@ func (obj *patternFlowIpv4TosUnused) SetMetricGroup(value string) PatternFlowIpv
 func (obj *patternFlowIpv4TosUnused) Increment() PatternFlowIpv4TosUnusedCounter {
 	obj.SetChoice(PatternFlowIpv4TosUnusedChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowIpv4TosUnusedCounter{}
-		newObj := &patternFlowIpv4TosUnusedCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowIpv4TosUnusedCounter().Msg()
 	}
 	return &patternFlowIpv4TosUnusedCounter{obj: obj.obj.Increment}
 }
@@ -114673,15 +120408,20 @@ func (obj *patternFlowIpv4TosUnused) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowIpv4TosUnusedCounter value in the PatternFlowIpv4TosUnused object
+//  description is TBD
+func (obj *patternFlowIpv4TosUnused) SetIncrement(value PatternFlowIpv4TosUnusedCounter) PatternFlowIpv4TosUnused {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowIpv4TosUnusedChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowIpv4TosUnusedCounter
 //  description is TBD
 func (obj *patternFlowIpv4TosUnused) Decrement() PatternFlowIpv4TosUnusedCounter {
 	obj.SetChoice(PatternFlowIpv4TosUnusedChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowIpv4TosUnusedCounter{}
-		newObj := &patternFlowIpv4TosUnusedCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowIpv4TosUnusedCounter().Msg()
 	}
 	return &patternFlowIpv4TosUnusedCounter{obj: obj.obj.Decrement}
 }
@@ -114690,6 +120430,14 @@ func (obj *patternFlowIpv4TosUnused) Decrement() PatternFlowIpv4TosUnusedCounter
 //  description is TBD
 func (obj *patternFlowIpv4TosUnused) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowIpv4TosUnusedCounter value in the PatternFlowIpv4TosUnused object
+//  description is TBD
+func (obj *patternFlowIpv4TosUnused) SetDecrement(value PatternFlowIpv4TosUnusedCounter) PatternFlowIpv4TosUnused {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowIpv4TosUnusedChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowIpv4TosUnused) validateObj(set_default bool) {
@@ -114736,12 +120484,18 @@ type patternFlowIpv4DscpPhb struct {
 	obj *snappipb.PatternFlowIpv4DscpPhb
 }
 
+func NewPatternFlowIpv4DscpPhb() PatternFlowIpv4DscpPhb {
+	obj := patternFlowIpv4DscpPhb{obj: &snappipb.PatternFlowIpv4DscpPhb{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowIpv4DscpPhb) Msg() *snappipb.PatternFlowIpv4DscpPhb {
 	return obj.obj
 }
 
 func (obj *patternFlowIpv4DscpPhb) SetMsg(msg *snappipb.PatternFlowIpv4DscpPhb) PatternFlowIpv4DscpPhb {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -114873,8 +120627,10 @@ type PatternFlowIpv4DscpPhb interface {
 	SetMetricGroup(value string) PatternFlowIpv4DscpPhb
 	HasMetricGroup() bool
 	Increment() PatternFlowIpv4DscpPhbCounter
+	SetIncrement(value PatternFlowIpv4DscpPhbCounter) PatternFlowIpv4DscpPhb
 	HasIncrement() bool
 	Decrement() PatternFlowIpv4DscpPhbCounter
+	SetDecrement(value PatternFlowIpv4DscpPhbCounter) PatternFlowIpv4DscpPhb
 	HasDecrement() bool
 }
 
@@ -114980,10 +120736,7 @@ func (obj *patternFlowIpv4DscpPhb) SetMetricGroup(value string) PatternFlowIpv4D
 func (obj *patternFlowIpv4DscpPhb) Increment() PatternFlowIpv4DscpPhbCounter {
 	obj.SetChoice(PatternFlowIpv4DscpPhbChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowIpv4DscpPhbCounter{}
-		newObj := &patternFlowIpv4DscpPhbCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowIpv4DscpPhbCounter().Msg()
 	}
 	return &patternFlowIpv4DscpPhbCounter{obj: obj.obj.Increment}
 }
@@ -114994,15 +120747,20 @@ func (obj *patternFlowIpv4DscpPhb) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowIpv4DscpPhbCounter value in the PatternFlowIpv4DscpPhb object
+//  description is TBD
+func (obj *patternFlowIpv4DscpPhb) SetIncrement(value PatternFlowIpv4DscpPhbCounter) PatternFlowIpv4DscpPhb {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowIpv4DscpPhbChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowIpv4DscpPhbCounter
 //  description is TBD
 func (obj *patternFlowIpv4DscpPhb) Decrement() PatternFlowIpv4DscpPhbCounter {
 	obj.SetChoice(PatternFlowIpv4DscpPhbChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowIpv4DscpPhbCounter{}
-		newObj := &patternFlowIpv4DscpPhbCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowIpv4DscpPhbCounter().Msg()
 	}
 	return &patternFlowIpv4DscpPhbCounter{obj: obj.obj.Decrement}
 }
@@ -115011,6 +120769,14 @@ func (obj *patternFlowIpv4DscpPhb) Decrement() PatternFlowIpv4DscpPhbCounter {
 //  description is TBD
 func (obj *patternFlowIpv4DscpPhb) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowIpv4DscpPhbCounter value in the PatternFlowIpv4DscpPhb object
+//  description is TBD
+func (obj *patternFlowIpv4DscpPhb) SetDecrement(value PatternFlowIpv4DscpPhbCounter) PatternFlowIpv4DscpPhb {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowIpv4DscpPhbChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowIpv4DscpPhb) validateObj(set_default bool) {
@@ -115057,12 +120823,18 @@ type patternFlowIpv4DscpEcn struct {
 	obj *snappipb.PatternFlowIpv4DscpEcn
 }
 
+func NewPatternFlowIpv4DscpEcn() PatternFlowIpv4DscpEcn {
+	obj := patternFlowIpv4DscpEcn{obj: &snappipb.PatternFlowIpv4DscpEcn{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowIpv4DscpEcn) Msg() *snappipb.PatternFlowIpv4DscpEcn {
 	return obj.obj
 }
 
 func (obj *patternFlowIpv4DscpEcn) SetMsg(msg *snappipb.PatternFlowIpv4DscpEcn) PatternFlowIpv4DscpEcn {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -115194,8 +120966,10 @@ type PatternFlowIpv4DscpEcn interface {
 	SetMetricGroup(value string) PatternFlowIpv4DscpEcn
 	HasMetricGroup() bool
 	Increment() PatternFlowIpv4DscpEcnCounter
+	SetIncrement(value PatternFlowIpv4DscpEcnCounter) PatternFlowIpv4DscpEcn
 	HasIncrement() bool
 	Decrement() PatternFlowIpv4DscpEcnCounter
+	SetDecrement(value PatternFlowIpv4DscpEcnCounter) PatternFlowIpv4DscpEcn
 	HasDecrement() bool
 }
 
@@ -115301,10 +121075,7 @@ func (obj *patternFlowIpv4DscpEcn) SetMetricGroup(value string) PatternFlowIpv4D
 func (obj *patternFlowIpv4DscpEcn) Increment() PatternFlowIpv4DscpEcnCounter {
 	obj.SetChoice(PatternFlowIpv4DscpEcnChoice.INCREMENT)
 	if obj.obj.Increment == nil {
-		obj.obj.Increment = &snappipb.PatternFlowIpv4DscpEcnCounter{}
-		newObj := &patternFlowIpv4DscpEcnCounter{obj: obj.obj.Increment}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Increment = NewPatternFlowIpv4DscpEcnCounter().Msg()
 	}
 	return &patternFlowIpv4DscpEcnCounter{obj: obj.obj.Increment}
 }
@@ -115315,15 +121086,20 @@ func (obj *patternFlowIpv4DscpEcn) HasIncrement() bool {
 	return obj.obj.Increment != nil
 }
 
+// SetIncrement sets the PatternFlowIpv4DscpEcnCounter value in the PatternFlowIpv4DscpEcn object
+//  description is TBD
+func (obj *patternFlowIpv4DscpEcn) SetIncrement(value PatternFlowIpv4DscpEcnCounter) PatternFlowIpv4DscpEcn {
+	obj.Increment().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowIpv4DscpEcnChoice.INCREMENT)
+	return obj
+}
+
 // Decrement returns a PatternFlowIpv4DscpEcnCounter
 //  description is TBD
 func (obj *patternFlowIpv4DscpEcn) Decrement() PatternFlowIpv4DscpEcnCounter {
 	obj.SetChoice(PatternFlowIpv4DscpEcnChoice.DECREMENT)
 	if obj.obj.Decrement == nil {
-		obj.obj.Decrement = &snappipb.PatternFlowIpv4DscpEcnCounter{}
-		newObj := &patternFlowIpv4DscpEcnCounter{obj: obj.obj.Decrement}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Decrement = NewPatternFlowIpv4DscpEcnCounter().Msg()
 	}
 	return &patternFlowIpv4DscpEcnCounter{obj: obj.obj.Decrement}
 }
@@ -115332,6 +121108,14 @@ func (obj *patternFlowIpv4DscpEcn) Decrement() PatternFlowIpv4DscpEcnCounter {
 //  description is TBD
 func (obj *patternFlowIpv4DscpEcn) HasDecrement() bool {
 	return obj.obj.Decrement != nil
+}
+
+// SetDecrement sets the PatternFlowIpv4DscpEcnCounter value in the PatternFlowIpv4DscpEcn object
+//  description is TBD
+func (obj *patternFlowIpv4DscpEcn) SetDecrement(value PatternFlowIpv4DscpEcnCounter) PatternFlowIpv4DscpEcn {
+	obj.Decrement().SetMsg(value.Msg())
+	obj.SetChoice(PatternFlowIpv4DscpEcnChoice.DECREMENT)
+	return obj
 }
 
 func (obj *patternFlowIpv4DscpEcn) validateObj(set_default bool) {
@@ -115378,12 +121162,18 @@ type patternFlowGtpExtensionExtensionLengthCounter struct {
 	obj *snappipb.PatternFlowGtpExtensionExtensionLengthCounter
 }
 
+func NewPatternFlowGtpExtensionExtensionLengthCounter() PatternFlowGtpExtensionExtensionLengthCounter {
+	obj := patternFlowGtpExtensionExtensionLengthCounter{obj: &snappipb.PatternFlowGtpExtensionExtensionLengthCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowGtpExtensionExtensionLengthCounter) Msg() *snappipb.PatternFlowGtpExtensionExtensionLengthCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowGtpExtensionExtensionLengthCounter) SetMsg(msg *snappipb.PatternFlowGtpExtensionExtensionLengthCounter) PatternFlowGtpExtensionExtensionLengthCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -115614,12 +121404,18 @@ type patternFlowGtpExtensionContentsCounter struct {
 	obj *snappipb.PatternFlowGtpExtensionContentsCounter
 }
 
+func NewPatternFlowGtpExtensionContentsCounter() PatternFlowGtpExtensionContentsCounter {
+	obj := patternFlowGtpExtensionContentsCounter{obj: &snappipb.PatternFlowGtpExtensionContentsCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowGtpExtensionContentsCounter) Msg() *snappipb.PatternFlowGtpExtensionContentsCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowGtpExtensionContentsCounter) SetMsg(msg *snappipb.PatternFlowGtpExtensionContentsCounter) PatternFlowGtpExtensionContentsCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -115850,12 +121646,18 @@ type patternFlowGtpExtensionNextExtensionHeaderCounter struct {
 	obj *snappipb.PatternFlowGtpExtensionNextExtensionHeaderCounter
 }
 
+func NewPatternFlowGtpExtensionNextExtensionHeaderCounter() PatternFlowGtpExtensionNextExtensionHeaderCounter {
+	obj := patternFlowGtpExtensionNextExtensionHeaderCounter{obj: &snappipb.PatternFlowGtpExtensionNextExtensionHeaderCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowGtpExtensionNextExtensionHeaderCounter) Msg() *snappipb.PatternFlowGtpExtensionNextExtensionHeaderCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowGtpExtensionNextExtensionHeaderCounter) SetMsg(msg *snappipb.PatternFlowGtpExtensionNextExtensionHeaderCounter) PatternFlowGtpExtensionNextExtensionHeaderCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -116086,12 +121888,18 @@ type patternFlowIcmpEchoTypeCounter struct {
 	obj *snappipb.PatternFlowIcmpEchoTypeCounter
 }
 
+func NewPatternFlowIcmpEchoTypeCounter() PatternFlowIcmpEchoTypeCounter {
+	obj := patternFlowIcmpEchoTypeCounter{obj: &snappipb.PatternFlowIcmpEchoTypeCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowIcmpEchoTypeCounter) Msg() *snappipb.PatternFlowIcmpEchoTypeCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowIcmpEchoTypeCounter) SetMsg(msg *snappipb.PatternFlowIcmpEchoTypeCounter) PatternFlowIcmpEchoTypeCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -116322,12 +122130,18 @@ type patternFlowIcmpEchoCodeCounter struct {
 	obj *snappipb.PatternFlowIcmpEchoCodeCounter
 }
 
+func NewPatternFlowIcmpEchoCodeCounter() PatternFlowIcmpEchoCodeCounter {
+	obj := patternFlowIcmpEchoCodeCounter{obj: &snappipb.PatternFlowIcmpEchoCodeCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowIcmpEchoCodeCounter) Msg() *snappipb.PatternFlowIcmpEchoCodeCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowIcmpEchoCodeCounter) SetMsg(msg *snappipb.PatternFlowIcmpEchoCodeCounter) PatternFlowIcmpEchoCodeCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -116558,12 +122372,18 @@ type patternFlowIcmpEchoIdentifierCounter struct {
 	obj *snappipb.PatternFlowIcmpEchoIdentifierCounter
 }
 
+func NewPatternFlowIcmpEchoIdentifierCounter() PatternFlowIcmpEchoIdentifierCounter {
+	obj := patternFlowIcmpEchoIdentifierCounter{obj: &snappipb.PatternFlowIcmpEchoIdentifierCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowIcmpEchoIdentifierCounter) Msg() *snappipb.PatternFlowIcmpEchoIdentifierCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowIcmpEchoIdentifierCounter) SetMsg(msg *snappipb.PatternFlowIcmpEchoIdentifierCounter) PatternFlowIcmpEchoIdentifierCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -116794,12 +122614,18 @@ type patternFlowIcmpEchoSequenceNumberCounter struct {
 	obj *snappipb.PatternFlowIcmpEchoSequenceNumberCounter
 }
 
+func NewPatternFlowIcmpEchoSequenceNumberCounter() PatternFlowIcmpEchoSequenceNumberCounter {
+	obj := patternFlowIcmpEchoSequenceNumberCounter{obj: &snappipb.PatternFlowIcmpEchoSequenceNumberCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowIcmpEchoSequenceNumberCounter) Msg() *snappipb.PatternFlowIcmpEchoSequenceNumberCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowIcmpEchoSequenceNumberCounter) SetMsg(msg *snappipb.PatternFlowIcmpEchoSequenceNumberCounter) PatternFlowIcmpEchoSequenceNumberCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -117030,12 +122856,18 @@ type patternFlowIcmpv6EchoTypeCounter struct {
 	obj *snappipb.PatternFlowIcmpv6EchoTypeCounter
 }
 
+func NewPatternFlowIcmpv6EchoTypeCounter() PatternFlowIcmpv6EchoTypeCounter {
+	obj := patternFlowIcmpv6EchoTypeCounter{obj: &snappipb.PatternFlowIcmpv6EchoTypeCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowIcmpv6EchoTypeCounter) Msg() *snappipb.PatternFlowIcmpv6EchoTypeCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowIcmpv6EchoTypeCounter) SetMsg(msg *snappipb.PatternFlowIcmpv6EchoTypeCounter) PatternFlowIcmpv6EchoTypeCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -117266,12 +123098,18 @@ type patternFlowIcmpv6EchoCodeCounter struct {
 	obj *snappipb.PatternFlowIcmpv6EchoCodeCounter
 }
 
+func NewPatternFlowIcmpv6EchoCodeCounter() PatternFlowIcmpv6EchoCodeCounter {
+	obj := patternFlowIcmpv6EchoCodeCounter{obj: &snappipb.PatternFlowIcmpv6EchoCodeCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowIcmpv6EchoCodeCounter) Msg() *snappipb.PatternFlowIcmpv6EchoCodeCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowIcmpv6EchoCodeCounter) SetMsg(msg *snappipb.PatternFlowIcmpv6EchoCodeCounter) PatternFlowIcmpv6EchoCodeCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -117502,12 +123340,18 @@ type patternFlowIcmpv6EchoIdentifierCounter struct {
 	obj *snappipb.PatternFlowIcmpv6EchoIdentifierCounter
 }
 
+func NewPatternFlowIcmpv6EchoIdentifierCounter() PatternFlowIcmpv6EchoIdentifierCounter {
+	obj := patternFlowIcmpv6EchoIdentifierCounter{obj: &snappipb.PatternFlowIcmpv6EchoIdentifierCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowIcmpv6EchoIdentifierCounter) Msg() *snappipb.PatternFlowIcmpv6EchoIdentifierCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowIcmpv6EchoIdentifierCounter) SetMsg(msg *snappipb.PatternFlowIcmpv6EchoIdentifierCounter) PatternFlowIcmpv6EchoIdentifierCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -117738,12 +123582,18 @@ type patternFlowIcmpv6EchoSequenceNumberCounter struct {
 	obj *snappipb.PatternFlowIcmpv6EchoSequenceNumberCounter
 }
 
+func NewPatternFlowIcmpv6EchoSequenceNumberCounter() PatternFlowIcmpv6EchoSequenceNumberCounter {
+	obj := patternFlowIcmpv6EchoSequenceNumberCounter{obj: &snappipb.PatternFlowIcmpv6EchoSequenceNumberCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowIcmpv6EchoSequenceNumberCounter) Msg() *snappipb.PatternFlowIcmpv6EchoSequenceNumberCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowIcmpv6EchoSequenceNumberCounter) SetMsg(msg *snappipb.PatternFlowIcmpv6EchoSequenceNumberCounter) PatternFlowIcmpv6EchoSequenceNumberCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -117974,12 +123824,18 @@ type bgpAsPathSegment struct {
 	obj *snappipb.BgpAsPathSegment
 }
 
+func NewBgpAsPathSegment() BgpAsPathSegment {
+	obj := bgpAsPathSegment{obj: &snappipb.BgpAsPathSegment{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *bgpAsPathSegment) Msg() *snappipb.BgpAsPathSegment {
 	return obj.obj
 }
 
 func (obj *bgpAsPathSegment) SetMsg(msg *snappipb.BgpAsPathSegment) BgpAsPathSegment {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -118181,12 +124037,18 @@ type bgpSrteRemoteEndpointSubTlv struct {
 	obj *snappipb.BgpSrteRemoteEndpointSubTlv
 }
 
+func NewBgpSrteRemoteEndpointSubTlv() BgpSrteRemoteEndpointSubTlv {
+	obj := bgpSrteRemoteEndpointSubTlv{obj: &snappipb.BgpSrteRemoteEndpointSubTlv{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *bgpSrteRemoteEndpointSubTlv) Msg() *snappipb.BgpSrteRemoteEndpointSubTlv {
 	return obj.obj
 }
 
 func (obj *bgpSrteRemoteEndpointSubTlv) SetMsg(msg *snappipb.BgpSrteRemoteEndpointSubTlv) BgpSrteRemoteEndpointSubTlv {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -118461,12 +124323,18 @@ type bgpSrteColorSubTlv struct {
 	obj *snappipb.BgpSrteColorSubTlv
 }
 
+func NewBgpSrteColorSubTlv() BgpSrteColorSubTlv {
+	obj := bgpSrteColorSubTlv{obj: &snappipb.BgpSrteColorSubTlv{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *bgpSrteColorSubTlv) Msg() *snappipb.BgpSrteColorSubTlv {
 	return obj.obj
 }
 
 func (obj *bgpSrteColorSubTlv) SetMsg(msg *snappipb.BgpSrteColorSubTlv) BgpSrteColorSubTlv {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -118633,12 +124501,18 @@ type bgpSrteBindingSubTlv struct {
 	obj *snappipb.BgpSrteBindingSubTlv
 }
 
+func NewBgpSrteBindingSubTlv() BgpSrteBindingSubTlv {
+	obj := bgpSrteBindingSubTlv{obj: &snappipb.BgpSrteBindingSubTlv{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *bgpSrteBindingSubTlv) Msg() *snappipb.BgpSrteBindingSubTlv {
 	return obj.obj
 }
 
 func (obj *bgpSrteBindingSubTlv) SetMsg(msg *snappipb.BgpSrteBindingSubTlv) BgpSrteBindingSubTlv {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -118920,12 +124794,18 @@ type bgpSrtePreferenceSubTlv struct {
 	obj *snappipb.BgpSrtePreferenceSubTlv
 }
 
+func NewBgpSrtePreferenceSubTlv() BgpSrtePreferenceSubTlv {
+	obj := bgpSrtePreferenceSubTlv{obj: &snappipb.BgpSrtePreferenceSubTlv{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *bgpSrtePreferenceSubTlv) Msg() *snappipb.BgpSrtePreferenceSubTlv {
 	return obj.obj
 }
 
 func (obj *bgpSrtePreferenceSubTlv) SetMsg(msg *snappipb.BgpSrtePreferenceSubTlv) BgpSrtePreferenceSubTlv {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -119096,12 +124976,18 @@ type bgpSrtePolicyPrioritySubTlv struct {
 	obj *snappipb.BgpSrtePolicyPrioritySubTlv
 }
 
+func NewBgpSrtePolicyPrioritySubTlv() BgpSrtePolicyPrioritySubTlv {
+	obj := bgpSrtePolicyPrioritySubTlv{obj: &snappipb.BgpSrtePolicyPrioritySubTlv{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *bgpSrtePolicyPrioritySubTlv) Msg() *snappipb.BgpSrtePolicyPrioritySubTlv {
 	return obj.obj
 }
 
 func (obj *bgpSrtePolicyPrioritySubTlv) SetMsg(msg *snappipb.BgpSrtePolicyPrioritySubTlv) BgpSrtePolicyPrioritySubTlv {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -119269,12 +125155,18 @@ type bgpSrtePolicyNameSubTlv struct {
 	obj *snappipb.BgpSrtePolicyNameSubTlv
 }
 
+func NewBgpSrtePolicyNameSubTlv() BgpSrtePolicyNameSubTlv {
+	obj := bgpSrtePolicyNameSubTlv{obj: &snappipb.BgpSrtePolicyNameSubTlv{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *bgpSrtePolicyNameSubTlv) Msg() *snappipb.BgpSrtePolicyNameSubTlv {
 	return obj.obj
 }
 
 func (obj *bgpSrtePolicyNameSubTlv) SetMsg(msg *snappipb.BgpSrtePolicyNameSubTlv) BgpSrtePolicyNameSubTlv {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -119434,12 +125326,18 @@ type bgpSrteExplicitNullLabelPolicySubTlv struct {
 	obj *snappipb.BgpSrteExplicitNullLabelPolicySubTlv
 }
 
+func NewBgpSrteExplicitNullLabelPolicySubTlv() BgpSrteExplicitNullLabelPolicySubTlv {
+	obj := bgpSrteExplicitNullLabelPolicySubTlv{obj: &snappipb.BgpSrteExplicitNullLabelPolicySubTlv{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *bgpSrteExplicitNullLabelPolicySubTlv) Msg() *snappipb.BgpSrteExplicitNullLabelPolicySubTlv {
 	return obj.obj
 }
 
 func (obj *bgpSrteExplicitNullLabelPolicySubTlv) SetMsg(msg *snappipb.BgpSrteExplicitNullLabelPolicySubTlv) BgpSrteExplicitNullLabelPolicySubTlv {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -119620,12 +125518,18 @@ type bgpSrteSegmentList struct {
 	obj *snappipb.BgpSrteSegmentList
 }
 
+func NewBgpSrteSegmentList() BgpSrteSegmentList {
+	obj := bgpSrteSegmentList{obj: &snappipb.BgpSrteSegmentList{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *bgpSrteSegmentList) Msg() *snappipb.BgpSrteSegmentList {
 	return obj.obj
 }
 
 func (obj *bgpSrteSegmentList) SetMsg(msg *snappipb.BgpSrteSegmentList) BgpSrteSegmentList {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -119873,6 +125777,9 @@ func (obj *bgpSrteSegmentList) setDefault() {
 	if obj.obj.Weight == nil {
 		obj.SetWeight(0)
 	}
+	if obj.obj.Segments == nil {
+		obj.Segments()
+	}
 	if obj.obj.Active == nil {
 		obj.SetActive(true)
 	}
@@ -119883,12 +125790,18 @@ type patternFlowIpv4TosPrecedenceCounter struct {
 	obj *snappipb.PatternFlowIpv4TosPrecedenceCounter
 }
 
+func NewPatternFlowIpv4TosPrecedenceCounter() PatternFlowIpv4TosPrecedenceCounter {
+	obj := patternFlowIpv4TosPrecedenceCounter{obj: &snappipb.PatternFlowIpv4TosPrecedenceCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowIpv4TosPrecedenceCounter) Msg() *snappipb.PatternFlowIpv4TosPrecedenceCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowIpv4TosPrecedenceCounter) SetMsg(msg *snappipb.PatternFlowIpv4TosPrecedenceCounter) PatternFlowIpv4TosPrecedenceCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -120119,12 +126032,18 @@ type patternFlowIpv4TosDelayCounter struct {
 	obj *snappipb.PatternFlowIpv4TosDelayCounter
 }
 
+func NewPatternFlowIpv4TosDelayCounter() PatternFlowIpv4TosDelayCounter {
+	obj := patternFlowIpv4TosDelayCounter{obj: &snappipb.PatternFlowIpv4TosDelayCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowIpv4TosDelayCounter) Msg() *snappipb.PatternFlowIpv4TosDelayCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowIpv4TosDelayCounter) SetMsg(msg *snappipb.PatternFlowIpv4TosDelayCounter) PatternFlowIpv4TosDelayCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -120355,12 +126274,18 @@ type patternFlowIpv4TosThroughputCounter struct {
 	obj *snappipb.PatternFlowIpv4TosThroughputCounter
 }
 
+func NewPatternFlowIpv4TosThroughputCounter() PatternFlowIpv4TosThroughputCounter {
+	obj := patternFlowIpv4TosThroughputCounter{obj: &snappipb.PatternFlowIpv4TosThroughputCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowIpv4TosThroughputCounter) Msg() *snappipb.PatternFlowIpv4TosThroughputCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowIpv4TosThroughputCounter) SetMsg(msg *snappipb.PatternFlowIpv4TosThroughputCounter) PatternFlowIpv4TosThroughputCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -120591,12 +126516,18 @@ type patternFlowIpv4TosReliabilityCounter struct {
 	obj *snappipb.PatternFlowIpv4TosReliabilityCounter
 }
 
+func NewPatternFlowIpv4TosReliabilityCounter() PatternFlowIpv4TosReliabilityCounter {
+	obj := patternFlowIpv4TosReliabilityCounter{obj: &snappipb.PatternFlowIpv4TosReliabilityCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowIpv4TosReliabilityCounter) Msg() *snappipb.PatternFlowIpv4TosReliabilityCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowIpv4TosReliabilityCounter) SetMsg(msg *snappipb.PatternFlowIpv4TosReliabilityCounter) PatternFlowIpv4TosReliabilityCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -120827,12 +126758,18 @@ type patternFlowIpv4TosMonetaryCounter struct {
 	obj *snappipb.PatternFlowIpv4TosMonetaryCounter
 }
 
+func NewPatternFlowIpv4TosMonetaryCounter() PatternFlowIpv4TosMonetaryCounter {
+	obj := patternFlowIpv4TosMonetaryCounter{obj: &snappipb.PatternFlowIpv4TosMonetaryCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowIpv4TosMonetaryCounter) Msg() *snappipb.PatternFlowIpv4TosMonetaryCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowIpv4TosMonetaryCounter) SetMsg(msg *snappipb.PatternFlowIpv4TosMonetaryCounter) PatternFlowIpv4TosMonetaryCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -121063,12 +127000,18 @@ type patternFlowIpv4TosUnusedCounter struct {
 	obj *snappipb.PatternFlowIpv4TosUnusedCounter
 }
 
+func NewPatternFlowIpv4TosUnusedCounter() PatternFlowIpv4TosUnusedCounter {
+	obj := patternFlowIpv4TosUnusedCounter{obj: &snappipb.PatternFlowIpv4TosUnusedCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowIpv4TosUnusedCounter) Msg() *snappipb.PatternFlowIpv4TosUnusedCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowIpv4TosUnusedCounter) SetMsg(msg *snappipb.PatternFlowIpv4TosUnusedCounter) PatternFlowIpv4TosUnusedCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -121299,12 +127242,18 @@ type patternFlowIpv4DscpPhbCounter struct {
 	obj *snappipb.PatternFlowIpv4DscpPhbCounter
 }
 
+func NewPatternFlowIpv4DscpPhbCounter() PatternFlowIpv4DscpPhbCounter {
+	obj := patternFlowIpv4DscpPhbCounter{obj: &snappipb.PatternFlowIpv4DscpPhbCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowIpv4DscpPhbCounter) Msg() *snappipb.PatternFlowIpv4DscpPhbCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowIpv4DscpPhbCounter) SetMsg(msg *snappipb.PatternFlowIpv4DscpPhbCounter) PatternFlowIpv4DscpPhbCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -121535,12 +127484,18 @@ type patternFlowIpv4DscpEcnCounter struct {
 	obj *snappipb.PatternFlowIpv4DscpEcnCounter
 }
 
+func NewPatternFlowIpv4DscpEcnCounter() PatternFlowIpv4DscpEcnCounter {
+	obj := patternFlowIpv4DscpEcnCounter{obj: &snappipb.PatternFlowIpv4DscpEcnCounter{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *patternFlowIpv4DscpEcnCounter) Msg() *snappipb.PatternFlowIpv4DscpEcnCounter {
 	return obj.obj
 }
 
 func (obj *patternFlowIpv4DscpEcnCounter) SetMsg(msg *snappipb.PatternFlowIpv4DscpEcnCounter) PatternFlowIpv4DscpEcnCounter {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -121771,12 +127726,18 @@ type bgpSrteSegment struct {
 	obj *snappipb.BgpSrteSegment
 }
 
+func NewBgpSrteSegment() BgpSrteSegment {
+	obj := bgpSrteSegment{obj: &snappipb.BgpSrteSegment{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *bgpSrteSegment) Msg() *snappipb.BgpSrteSegment {
 	return obj.obj
 }
 
 func (obj *bgpSrteSegment) SetMsg(msg *snappipb.BgpSrteSegment) BgpSrteSegment {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -121899,26 +127860,37 @@ type BgpSrteSegment interface {
 	SegmentType() BgpSrteSegmentSegmentTypeEnum
 	SetSegmentType(value BgpSrteSegmentSegmentTypeEnum) BgpSrteSegment
 	TypeA() BgpSrteSegmentATypeSubTlv
+	SetTypeA(value BgpSrteSegmentATypeSubTlv) BgpSrteSegment
 	HasTypeA() bool
 	TypeB() BgpSrteSegmentBTypeSubTlv
+	SetTypeB(value BgpSrteSegmentBTypeSubTlv) BgpSrteSegment
 	HasTypeB() bool
 	TypeC() BgpSrteSegmentCTypeSubTlv
+	SetTypeC(value BgpSrteSegmentCTypeSubTlv) BgpSrteSegment
 	HasTypeC() bool
 	TypeD() BgpSrteSegmentDTypeSubTlv
+	SetTypeD(value BgpSrteSegmentDTypeSubTlv) BgpSrteSegment
 	HasTypeD() bool
 	TypeE() BgpSrteSegmentETypeSubTlv
+	SetTypeE(value BgpSrteSegmentETypeSubTlv) BgpSrteSegment
 	HasTypeE() bool
 	TypeF() BgpSrteSegmentFTypeSubTlv
+	SetTypeF(value BgpSrteSegmentFTypeSubTlv) BgpSrteSegment
 	HasTypeF() bool
 	TypeG() BgpSrteSegmentGTypeSubTlv
+	SetTypeG(value BgpSrteSegmentGTypeSubTlv) BgpSrteSegment
 	HasTypeG() bool
 	TypeH() BgpSrteSegmentHTypeSubTlv
+	SetTypeH(value BgpSrteSegmentHTypeSubTlv) BgpSrteSegment
 	HasTypeH() bool
 	TypeI() BgpSrteSegmentITypeSubTlv
+	SetTypeI(value BgpSrteSegmentITypeSubTlv) BgpSrteSegment
 	HasTypeI() bool
 	TypeJ() BgpSrteSegmentJTypeSubTlv
+	SetTypeJ(value BgpSrteSegmentJTypeSubTlv) BgpSrteSegment
 	HasTypeJ() bool
 	TypeK() BgpSrteSegmentKTypeSubTlv
+	SetTypeK(value BgpSrteSegmentKTypeSubTlv) BgpSrteSegment
 	HasTypeK() bool
 	Name() string
 	SetName(value string) BgpSrteSegment
@@ -121973,12 +127945,8 @@ func (obj *bgpSrteSegment) SetSegmentType(value BgpSrteSegmentSegmentTypeEnum) B
 // TypeA returns a BgpSrteSegmentATypeSubTlv
 //  description is TBD
 func (obj *bgpSrteSegment) TypeA() BgpSrteSegmentATypeSubTlv {
-
 	if obj.obj.TypeA == nil {
-		obj.obj.TypeA = &snappipb.BgpSrteSegmentATypeSubTlv{}
-		newObj := &bgpSrteSegmentATypeSubTlv{obj: obj.obj.TypeA}
-		newObj.setDefault()
-		return newObj
+		obj.obj.TypeA = NewBgpSrteSegmentATypeSubTlv().Msg()
 	}
 	return &bgpSrteSegmentATypeSubTlv{obj: obj.obj.TypeA}
 }
@@ -121989,15 +127957,19 @@ func (obj *bgpSrteSegment) HasTypeA() bool {
 	return obj.obj.TypeA != nil
 }
 
+// SetTypeA sets the BgpSrteSegmentATypeSubTlv value in the BgpSrteSegment object
+//  description is TBD
+func (obj *bgpSrteSegment) SetTypeA(value BgpSrteSegmentATypeSubTlv) BgpSrteSegment {
+	obj.TypeA().SetMsg(value.Msg())
+
+	return obj
+}
+
 // TypeB returns a BgpSrteSegmentBTypeSubTlv
 //  description is TBD
 func (obj *bgpSrteSegment) TypeB() BgpSrteSegmentBTypeSubTlv {
-
 	if obj.obj.TypeB == nil {
-		obj.obj.TypeB = &snappipb.BgpSrteSegmentBTypeSubTlv{}
-		newObj := &bgpSrteSegmentBTypeSubTlv{obj: obj.obj.TypeB}
-		newObj.setDefault()
-		return newObj
+		obj.obj.TypeB = NewBgpSrteSegmentBTypeSubTlv().Msg()
 	}
 	return &bgpSrteSegmentBTypeSubTlv{obj: obj.obj.TypeB}
 }
@@ -122008,15 +127980,19 @@ func (obj *bgpSrteSegment) HasTypeB() bool {
 	return obj.obj.TypeB != nil
 }
 
+// SetTypeB sets the BgpSrteSegmentBTypeSubTlv value in the BgpSrteSegment object
+//  description is TBD
+func (obj *bgpSrteSegment) SetTypeB(value BgpSrteSegmentBTypeSubTlv) BgpSrteSegment {
+	obj.TypeB().SetMsg(value.Msg())
+
+	return obj
+}
+
 // TypeC returns a BgpSrteSegmentCTypeSubTlv
 //  description is TBD
 func (obj *bgpSrteSegment) TypeC() BgpSrteSegmentCTypeSubTlv {
-
 	if obj.obj.TypeC == nil {
-		obj.obj.TypeC = &snappipb.BgpSrteSegmentCTypeSubTlv{}
-		newObj := &bgpSrteSegmentCTypeSubTlv{obj: obj.obj.TypeC}
-		newObj.setDefault()
-		return newObj
+		obj.obj.TypeC = NewBgpSrteSegmentCTypeSubTlv().Msg()
 	}
 	return &bgpSrteSegmentCTypeSubTlv{obj: obj.obj.TypeC}
 }
@@ -122027,15 +128003,19 @@ func (obj *bgpSrteSegment) HasTypeC() bool {
 	return obj.obj.TypeC != nil
 }
 
+// SetTypeC sets the BgpSrteSegmentCTypeSubTlv value in the BgpSrteSegment object
+//  description is TBD
+func (obj *bgpSrteSegment) SetTypeC(value BgpSrteSegmentCTypeSubTlv) BgpSrteSegment {
+	obj.TypeC().SetMsg(value.Msg())
+
+	return obj
+}
+
 // TypeD returns a BgpSrteSegmentDTypeSubTlv
 //  description is TBD
 func (obj *bgpSrteSegment) TypeD() BgpSrteSegmentDTypeSubTlv {
-
 	if obj.obj.TypeD == nil {
-		obj.obj.TypeD = &snappipb.BgpSrteSegmentDTypeSubTlv{}
-		newObj := &bgpSrteSegmentDTypeSubTlv{obj: obj.obj.TypeD}
-		newObj.setDefault()
-		return newObj
+		obj.obj.TypeD = NewBgpSrteSegmentDTypeSubTlv().Msg()
 	}
 	return &bgpSrteSegmentDTypeSubTlv{obj: obj.obj.TypeD}
 }
@@ -122046,15 +128026,19 @@ func (obj *bgpSrteSegment) HasTypeD() bool {
 	return obj.obj.TypeD != nil
 }
 
+// SetTypeD sets the BgpSrteSegmentDTypeSubTlv value in the BgpSrteSegment object
+//  description is TBD
+func (obj *bgpSrteSegment) SetTypeD(value BgpSrteSegmentDTypeSubTlv) BgpSrteSegment {
+	obj.TypeD().SetMsg(value.Msg())
+
+	return obj
+}
+
 // TypeE returns a BgpSrteSegmentETypeSubTlv
 //  description is TBD
 func (obj *bgpSrteSegment) TypeE() BgpSrteSegmentETypeSubTlv {
-
 	if obj.obj.TypeE == nil {
-		obj.obj.TypeE = &snappipb.BgpSrteSegmentETypeSubTlv{}
-		newObj := &bgpSrteSegmentETypeSubTlv{obj: obj.obj.TypeE}
-		newObj.setDefault()
-		return newObj
+		obj.obj.TypeE = NewBgpSrteSegmentETypeSubTlv().Msg()
 	}
 	return &bgpSrteSegmentETypeSubTlv{obj: obj.obj.TypeE}
 }
@@ -122065,15 +128049,19 @@ func (obj *bgpSrteSegment) HasTypeE() bool {
 	return obj.obj.TypeE != nil
 }
 
+// SetTypeE sets the BgpSrteSegmentETypeSubTlv value in the BgpSrteSegment object
+//  description is TBD
+func (obj *bgpSrteSegment) SetTypeE(value BgpSrteSegmentETypeSubTlv) BgpSrteSegment {
+	obj.TypeE().SetMsg(value.Msg())
+
+	return obj
+}
+
 // TypeF returns a BgpSrteSegmentFTypeSubTlv
 //  description is TBD
 func (obj *bgpSrteSegment) TypeF() BgpSrteSegmentFTypeSubTlv {
-
 	if obj.obj.TypeF == nil {
-		obj.obj.TypeF = &snappipb.BgpSrteSegmentFTypeSubTlv{}
-		newObj := &bgpSrteSegmentFTypeSubTlv{obj: obj.obj.TypeF}
-		newObj.setDefault()
-		return newObj
+		obj.obj.TypeF = NewBgpSrteSegmentFTypeSubTlv().Msg()
 	}
 	return &bgpSrteSegmentFTypeSubTlv{obj: obj.obj.TypeF}
 }
@@ -122084,15 +128072,19 @@ func (obj *bgpSrteSegment) HasTypeF() bool {
 	return obj.obj.TypeF != nil
 }
 
+// SetTypeF sets the BgpSrteSegmentFTypeSubTlv value in the BgpSrteSegment object
+//  description is TBD
+func (obj *bgpSrteSegment) SetTypeF(value BgpSrteSegmentFTypeSubTlv) BgpSrteSegment {
+	obj.TypeF().SetMsg(value.Msg())
+
+	return obj
+}
+
 // TypeG returns a BgpSrteSegmentGTypeSubTlv
 //  description is TBD
 func (obj *bgpSrteSegment) TypeG() BgpSrteSegmentGTypeSubTlv {
-
 	if obj.obj.TypeG == nil {
-		obj.obj.TypeG = &snappipb.BgpSrteSegmentGTypeSubTlv{}
-		newObj := &bgpSrteSegmentGTypeSubTlv{obj: obj.obj.TypeG}
-		newObj.setDefault()
-		return newObj
+		obj.obj.TypeG = NewBgpSrteSegmentGTypeSubTlv().Msg()
 	}
 	return &bgpSrteSegmentGTypeSubTlv{obj: obj.obj.TypeG}
 }
@@ -122103,15 +128095,19 @@ func (obj *bgpSrteSegment) HasTypeG() bool {
 	return obj.obj.TypeG != nil
 }
 
+// SetTypeG sets the BgpSrteSegmentGTypeSubTlv value in the BgpSrteSegment object
+//  description is TBD
+func (obj *bgpSrteSegment) SetTypeG(value BgpSrteSegmentGTypeSubTlv) BgpSrteSegment {
+	obj.TypeG().SetMsg(value.Msg())
+
+	return obj
+}
+
 // TypeH returns a BgpSrteSegmentHTypeSubTlv
 //  description is TBD
 func (obj *bgpSrteSegment) TypeH() BgpSrteSegmentHTypeSubTlv {
-
 	if obj.obj.TypeH == nil {
-		obj.obj.TypeH = &snappipb.BgpSrteSegmentHTypeSubTlv{}
-		newObj := &bgpSrteSegmentHTypeSubTlv{obj: obj.obj.TypeH}
-		newObj.setDefault()
-		return newObj
+		obj.obj.TypeH = NewBgpSrteSegmentHTypeSubTlv().Msg()
 	}
 	return &bgpSrteSegmentHTypeSubTlv{obj: obj.obj.TypeH}
 }
@@ -122122,15 +128118,19 @@ func (obj *bgpSrteSegment) HasTypeH() bool {
 	return obj.obj.TypeH != nil
 }
 
+// SetTypeH sets the BgpSrteSegmentHTypeSubTlv value in the BgpSrteSegment object
+//  description is TBD
+func (obj *bgpSrteSegment) SetTypeH(value BgpSrteSegmentHTypeSubTlv) BgpSrteSegment {
+	obj.TypeH().SetMsg(value.Msg())
+
+	return obj
+}
+
 // TypeI returns a BgpSrteSegmentITypeSubTlv
 //  description is TBD
 func (obj *bgpSrteSegment) TypeI() BgpSrteSegmentITypeSubTlv {
-
 	if obj.obj.TypeI == nil {
-		obj.obj.TypeI = &snappipb.BgpSrteSegmentITypeSubTlv{}
-		newObj := &bgpSrteSegmentITypeSubTlv{obj: obj.obj.TypeI}
-		newObj.setDefault()
-		return newObj
+		obj.obj.TypeI = NewBgpSrteSegmentITypeSubTlv().Msg()
 	}
 	return &bgpSrteSegmentITypeSubTlv{obj: obj.obj.TypeI}
 }
@@ -122141,15 +128141,19 @@ func (obj *bgpSrteSegment) HasTypeI() bool {
 	return obj.obj.TypeI != nil
 }
 
+// SetTypeI sets the BgpSrteSegmentITypeSubTlv value in the BgpSrteSegment object
+//  description is TBD
+func (obj *bgpSrteSegment) SetTypeI(value BgpSrteSegmentITypeSubTlv) BgpSrteSegment {
+	obj.TypeI().SetMsg(value.Msg())
+
+	return obj
+}
+
 // TypeJ returns a BgpSrteSegmentJTypeSubTlv
 //  description is TBD
 func (obj *bgpSrteSegment) TypeJ() BgpSrteSegmentJTypeSubTlv {
-
 	if obj.obj.TypeJ == nil {
-		obj.obj.TypeJ = &snappipb.BgpSrteSegmentJTypeSubTlv{}
-		newObj := &bgpSrteSegmentJTypeSubTlv{obj: obj.obj.TypeJ}
-		newObj.setDefault()
-		return newObj
+		obj.obj.TypeJ = NewBgpSrteSegmentJTypeSubTlv().Msg()
 	}
 	return &bgpSrteSegmentJTypeSubTlv{obj: obj.obj.TypeJ}
 }
@@ -122160,15 +128164,19 @@ func (obj *bgpSrteSegment) HasTypeJ() bool {
 	return obj.obj.TypeJ != nil
 }
 
+// SetTypeJ sets the BgpSrteSegmentJTypeSubTlv value in the BgpSrteSegment object
+//  description is TBD
+func (obj *bgpSrteSegment) SetTypeJ(value BgpSrteSegmentJTypeSubTlv) BgpSrteSegment {
+	obj.TypeJ().SetMsg(value.Msg())
+
+	return obj
+}
+
 // TypeK returns a BgpSrteSegmentKTypeSubTlv
 //  description is TBD
 func (obj *bgpSrteSegment) TypeK() BgpSrteSegmentKTypeSubTlv {
-
 	if obj.obj.TypeK == nil {
-		obj.obj.TypeK = &snappipb.BgpSrteSegmentKTypeSubTlv{}
-		newObj := &bgpSrteSegmentKTypeSubTlv{obj: obj.obj.TypeK}
-		newObj.setDefault()
-		return newObj
+		obj.obj.TypeK = NewBgpSrteSegmentKTypeSubTlv().Msg()
 	}
 	return &bgpSrteSegmentKTypeSubTlv{obj: obj.obj.TypeK}
 }
@@ -122177,6 +128185,14 @@ func (obj *bgpSrteSegment) TypeK() BgpSrteSegmentKTypeSubTlv {
 //  description is TBD
 func (obj *bgpSrteSegment) HasTypeK() bool {
 	return obj.obj.TypeK != nil
+}
+
+// SetTypeK sets the BgpSrteSegmentKTypeSubTlv value in the BgpSrteSegment object
+//  description is TBD
+func (obj *bgpSrteSegment) SetTypeK(value BgpSrteSegmentKTypeSubTlv) BgpSrteSegment {
+	obj.TypeK().SetMsg(value.Msg())
+
+	return obj
 }
 
 // Name returns a string
@@ -122285,12 +128301,18 @@ type bgpSrteSegmentATypeSubTlv struct {
 	obj *snappipb.BgpSrteSegmentATypeSubTlv
 }
 
+func NewBgpSrteSegmentATypeSubTlv() BgpSrteSegmentATypeSubTlv {
+	obj := bgpSrteSegmentATypeSubTlv{obj: &snappipb.BgpSrteSegmentATypeSubTlv{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *bgpSrteSegmentATypeSubTlv) Msg() *snappipb.BgpSrteSegmentATypeSubTlv {
 	return obj.obj
 }
 
 func (obj *bgpSrteSegmentATypeSubTlv) SetMsg(msg *snappipb.BgpSrteSegmentATypeSubTlv) BgpSrteSegmentATypeSubTlv {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -122573,12 +128595,18 @@ type bgpSrteSegmentBTypeSubTlv struct {
 	obj *snappipb.BgpSrteSegmentBTypeSubTlv
 }
 
+func NewBgpSrteSegmentBTypeSubTlv() BgpSrteSegmentBTypeSubTlv {
+	obj := bgpSrteSegmentBTypeSubTlv{obj: &snappipb.BgpSrteSegmentBTypeSubTlv{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *bgpSrteSegmentBTypeSubTlv) Msg() *snappipb.BgpSrteSegmentBTypeSubTlv {
 	return obj.obj
 }
 
 func (obj *bgpSrteSegmentBTypeSubTlv) SetMsg(msg *snappipb.BgpSrteSegmentBTypeSubTlv) BgpSrteSegmentBTypeSubTlv {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -122704,6 +128732,7 @@ type BgpSrteSegmentBTypeSubTlv interface {
 	Srv6Sid() string
 	SetSrv6Sid(value string) BgpSrteSegmentBTypeSubTlv
 	Srv6SidEndpointBehavior() BgpSrteSRv6SIDEndpointBehaviorAndStructure
+	SetSrv6SidEndpointBehavior(value BgpSrteSRv6SIDEndpointBehaviorAndStructure) BgpSrteSegmentBTypeSubTlv
 	HasSrv6SidEndpointBehavior() bool
 }
 
@@ -122744,12 +128773,8 @@ func (obj *bgpSrteSegmentBTypeSubTlv) SetSrv6Sid(value string) BgpSrteSegmentBTy
 // Srv6SidEndpointBehavior returns a BgpSrteSRv6SIDEndpointBehaviorAndStructure
 //  Optional SRv6 Endpoint Behavior and SID Structure.
 func (obj *bgpSrteSegmentBTypeSubTlv) Srv6SidEndpointBehavior() BgpSrteSRv6SIDEndpointBehaviorAndStructure {
-
 	if obj.obj.Srv6SidEndpointBehavior == nil {
-		obj.obj.Srv6SidEndpointBehavior = &snappipb.BgpSrteSRv6SIDEndpointBehaviorAndStructure{}
-		newObj := &bgpSrteSRv6SIDEndpointBehaviorAndStructure{obj: obj.obj.Srv6SidEndpointBehavior}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Srv6SidEndpointBehavior = NewBgpSrteSRv6SIDEndpointBehaviorAndStructure().Msg()
 	}
 	return &bgpSrteSRv6SIDEndpointBehaviorAndStructure{obj: obj.obj.Srv6SidEndpointBehavior}
 }
@@ -122758,6 +128783,14 @@ func (obj *bgpSrteSegmentBTypeSubTlv) Srv6SidEndpointBehavior() BgpSrteSRv6SIDEn
 //  Optional SRv6 Endpoint Behavior and SID Structure.
 func (obj *bgpSrteSegmentBTypeSubTlv) HasSrv6SidEndpointBehavior() bool {
 	return obj.obj.Srv6SidEndpointBehavior != nil
+}
+
+// SetSrv6SidEndpointBehavior sets the BgpSrteSRv6SIDEndpointBehaviorAndStructure value in the BgpSrteSegmentBTypeSubTlv object
+//  Optional SRv6 Endpoint Behavior and SID Structure.
+func (obj *bgpSrteSegmentBTypeSubTlv) SetSrv6SidEndpointBehavior(value BgpSrteSRv6SIDEndpointBehaviorAndStructure) BgpSrteSegmentBTypeSubTlv {
+	obj.Srv6SidEndpointBehavior().SetMsg(value.Msg())
+
+	return obj
 }
 
 func (obj *bgpSrteSegmentBTypeSubTlv) validateObj(set_default bool) {
@@ -122795,12 +128828,18 @@ type bgpSrteSegmentCTypeSubTlv struct {
 	obj *snappipb.BgpSrteSegmentCTypeSubTlv
 }
 
+func NewBgpSrteSegmentCTypeSubTlv() BgpSrteSegmentCTypeSubTlv {
+	obj := bgpSrteSegmentCTypeSubTlv{obj: &snappipb.BgpSrteSegmentCTypeSubTlv{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *bgpSrteSegmentCTypeSubTlv) Msg() *snappipb.BgpSrteSegmentCTypeSubTlv {
 	return obj.obj
 }
 
 func (obj *bgpSrteSegmentCTypeSubTlv) SetMsg(msg *snappipb.BgpSrteSegmentCTypeSubTlv) BgpSrteSegmentCTypeSubTlv {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -122929,6 +128968,7 @@ type BgpSrteSegmentCTypeSubTlv interface {
 	Ipv4NodeAddress() string
 	SetIpv4NodeAddress(value string) BgpSrteSegmentCTypeSubTlv
 	SrMplsSid() BgpSrteSrMplsSid
+	SetSrMplsSid(value BgpSrteSrMplsSid) BgpSrteSegmentCTypeSubTlv
 	HasSrMplsSid() bool
 }
 
@@ -122989,12 +129029,8 @@ func (obj *bgpSrteSegmentCTypeSubTlv) SetIpv4NodeAddress(value string) BgpSrteSe
 // SrMplsSid returns a BgpSrteSrMplsSid
 //  Optional SR-MPLS SID.
 func (obj *bgpSrteSegmentCTypeSubTlv) SrMplsSid() BgpSrteSrMplsSid {
-
 	if obj.obj.SrMplsSid == nil {
-		obj.obj.SrMplsSid = &snappipb.BgpSrteSrMplsSid{}
-		newObj := &bgpSrteSrMplsSid{obj: obj.obj.SrMplsSid}
-		newObj.setDefault()
-		return newObj
+		obj.obj.SrMplsSid = NewBgpSrteSrMplsSid().Msg()
 	}
 	return &bgpSrteSrMplsSid{obj: obj.obj.SrMplsSid}
 }
@@ -123003,6 +129039,14 @@ func (obj *bgpSrteSegmentCTypeSubTlv) SrMplsSid() BgpSrteSrMplsSid {
 //  Optional SR-MPLS SID.
 func (obj *bgpSrteSegmentCTypeSubTlv) HasSrMplsSid() bool {
 	return obj.obj.SrMplsSid != nil
+}
+
+// SetSrMplsSid sets the BgpSrteSrMplsSid value in the BgpSrteSegmentCTypeSubTlv object
+//  Optional SR-MPLS SID.
+func (obj *bgpSrteSegmentCTypeSubTlv) SetSrMplsSid(value BgpSrteSrMplsSid) BgpSrteSegmentCTypeSubTlv {
+	obj.SrMplsSid().SetMsg(value.Msg())
+
+	return obj
 }
 
 func (obj *bgpSrteSegmentCTypeSubTlv) validateObj(set_default bool) {
@@ -123051,12 +129095,18 @@ type bgpSrteSegmentDTypeSubTlv struct {
 	obj *snappipb.BgpSrteSegmentDTypeSubTlv
 }
 
+func NewBgpSrteSegmentDTypeSubTlv() BgpSrteSegmentDTypeSubTlv {
+	obj := bgpSrteSegmentDTypeSubTlv{obj: &snappipb.BgpSrteSegmentDTypeSubTlv{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *bgpSrteSegmentDTypeSubTlv) Msg() *snappipb.BgpSrteSegmentDTypeSubTlv {
 	return obj.obj
 }
 
 func (obj *bgpSrteSegmentDTypeSubTlv) SetMsg(msg *snappipb.BgpSrteSegmentDTypeSubTlv) BgpSrteSegmentDTypeSubTlv {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -123185,6 +129235,7 @@ type BgpSrteSegmentDTypeSubTlv interface {
 	Ipv6NodeAddress() string
 	SetIpv6NodeAddress(value string) BgpSrteSegmentDTypeSubTlv
 	SrMplsSid() BgpSrteSrMplsSid
+	SetSrMplsSid(value BgpSrteSrMplsSid) BgpSrteSegmentDTypeSubTlv
 	HasSrMplsSid() bool
 }
 
@@ -123245,12 +129296,8 @@ func (obj *bgpSrteSegmentDTypeSubTlv) SetIpv6NodeAddress(value string) BgpSrteSe
 // SrMplsSid returns a BgpSrteSrMplsSid
 //  Optional SR-MPLS SID.
 func (obj *bgpSrteSegmentDTypeSubTlv) SrMplsSid() BgpSrteSrMplsSid {
-
 	if obj.obj.SrMplsSid == nil {
-		obj.obj.SrMplsSid = &snappipb.BgpSrteSrMplsSid{}
-		newObj := &bgpSrteSrMplsSid{obj: obj.obj.SrMplsSid}
-		newObj.setDefault()
-		return newObj
+		obj.obj.SrMplsSid = NewBgpSrteSrMplsSid().Msg()
 	}
 	return &bgpSrteSrMplsSid{obj: obj.obj.SrMplsSid}
 }
@@ -123259,6 +129306,14 @@ func (obj *bgpSrteSegmentDTypeSubTlv) SrMplsSid() BgpSrteSrMplsSid {
 //  Optional SR-MPLS SID.
 func (obj *bgpSrteSegmentDTypeSubTlv) HasSrMplsSid() bool {
 	return obj.obj.SrMplsSid != nil
+}
+
+// SetSrMplsSid sets the BgpSrteSrMplsSid value in the BgpSrteSegmentDTypeSubTlv object
+//  Optional SR-MPLS SID.
+func (obj *bgpSrteSegmentDTypeSubTlv) SetSrMplsSid(value BgpSrteSrMplsSid) BgpSrteSegmentDTypeSubTlv {
+	obj.SrMplsSid().SetMsg(value.Msg())
+
+	return obj
 }
 
 func (obj *bgpSrteSegmentDTypeSubTlv) validateObj(set_default bool) {
@@ -123307,12 +129362,18 @@ type bgpSrteSegmentETypeSubTlv struct {
 	obj *snappipb.BgpSrteSegmentETypeSubTlv
 }
 
+func NewBgpSrteSegmentETypeSubTlv() BgpSrteSegmentETypeSubTlv {
+	obj := bgpSrteSegmentETypeSubTlv{obj: &snappipb.BgpSrteSegmentETypeSubTlv{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *bgpSrteSegmentETypeSubTlv) Msg() *snappipb.BgpSrteSegmentETypeSubTlv {
 	return obj.obj
 }
 
 func (obj *bgpSrteSegmentETypeSubTlv) SetMsg(msg *snappipb.BgpSrteSegmentETypeSubTlv) BgpSrteSegmentETypeSubTlv {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -123441,6 +129502,7 @@ type BgpSrteSegmentETypeSubTlv interface {
 	Ipv4NodeAddress() string
 	SetIpv4NodeAddress(value string) BgpSrteSegmentETypeSubTlv
 	SrMplsSid() BgpSrteSrMplsSid
+	SetSrMplsSid(value BgpSrteSrMplsSid) BgpSrteSegmentETypeSubTlv
 	HasSrMplsSid() bool
 }
 
@@ -123501,12 +129563,8 @@ func (obj *bgpSrteSegmentETypeSubTlv) SetIpv4NodeAddress(value string) BgpSrteSe
 // SrMplsSid returns a BgpSrteSrMplsSid
 //  Optional SR-MPLS SID.
 func (obj *bgpSrteSegmentETypeSubTlv) SrMplsSid() BgpSrteSrMplsSid {
-
 	if obj.obj.SrMplsSid == nil {
-		obj.obj.SrMplsSid = &snappipb.BgpSrteSrMplsSid{}
-		newObj := &bgpSrteSrMplsSid{obj: obj.obj.SrMplsSid}
-		newObj.setDefault()
-		return newObj
+		obj.obj.SrMplsSid = NewBgpSrteSrMplsSid().Msg()
 	}
 	return &bgpSrteSrMplsSid{obj: obj.obj.SrMplsSid}
 }
@@ -123515,6 +129573,14 @@ func (obj *bgpSrteSegmentETypeSubTlv) SrMplsSid() BgpSrteSrMplsSid {
 //  Optional SR-MPLS SID.
 func (obj *bgpSrteSegmentETypeSubTlv) HasSrMplsSid() bool {
 	return obj.obj.SrMplsSid != nil
+}
+
+// SetSrMplsSid sets the BgpSrteSrMplsSid value in the BgpSrteSegmentETypeSubTlv object
+//  Optional SR-MPLS SID.
+func (obj *bgpSrteSegmentETypeSubTlv) SetSrMplsSid(value BgpSrteSrMplsSid) BgpSrteSegmentETypeSubTlv {
+	obj.SrMplsSid().SetMsg(value.Msg())
+
+	return obj
 }
 
 func (obj *bgpSrteSegmentETypeSubTlv) validateObj(set_default bool) {
@@ -123563,12 +129629,18 @@ type bgpSrteSegmentFTypeSubTlv struct {
 	obj *snappipb.BgpSrteSegmentFTypeSubTlv
 }
 
+func NewBgpSrteSegmentFTypeSubTlv() BgpSrteSegmentFTypeSubTlv {
+	obj := bgpSrteSegmentFTypeSubTlv{obj: &snappipb.BgpSrteSegmentFTypeSubTlv{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *bgpSrteSegmentFTypeSubTlv) Msg() *snappipb.BgpSrteSegmentFTypeSubTlv {
 	return obj.obj
 }
 
 func (obj *bgpSrteSegmentFTypeSubTlv) SetMsg(msg *snappipb.BgpSrteSegmentFTypeSubTlv) BgpSrteSegmentFTypeSubTlv {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -123696,6 +129768,7 @@ type BgpSrteSegmentFTypeSubTlv interface {
 	RemoteIpv4Address() string
 	SetRemoteIpv4Address(value string) BgpSrteSegmentFTypeSubTlv
 	SrMplsSid() BgpSrteSrMplsSid
+	SetSrMplsSid(value BgpSrteSrMplsSid) BgpSrteSegmentFTypeSubTlv
 	HasSrMplsSid() bool
 }
 
@@ -123750,12 +129823,8 @@ func (obj *bgpSrteSegmentFTypeSubTlv) SetRemoteIpv4Address(value string) BgpSrte
 // SrMplsSid returns a BgpSrteSrMplsSid
 //  Optional SR-MPLS SID.
 func (obj *bgpSrteSegmentFTypeSubTlv) SrMplsSid() BgpSrteSrMplsSid {
-
 	if obj.obj.SrMplsSid == nil {
-		obj.obj.SrMplsSid = &snappipb.BgpSrteSrMplsSid{}
-		newObj := &bgpSrteSrMplsSid{obj: obj.obj.SrMplsSid}
-		newObj.setDefault()
-		return newObj
+		obj.obj.SrMplsSid = NewBgpSrteSrMplsSid().Msg()
 	}
 	return &bgpSrteSrMplsSid{obj: obj.obj.SrMplsSid}
 }
@@ -123764,6 +129833,14 @@ func (obj *bgpSrteSegmentFTypeSubTlv) SrMplsSid() BgpSrteSrMplsSid {
 //  Optional SR-MPLS SID.
 func (obj *bgpSrteSegmentFTypeSubTlv) HasSrMplsSid() bool {
 	return obj.obj.SrMplsSid != nil
+}
+
+// SetSrMplsSid sets the BgpSrteSrMplsSid value in the BgpSrteSegmentFTypeSubTlv object
+//  Optional SR-MPLS SID.
+func (obj *bgpSrteSegmentFTypeSubTlv) SetSrMplsSid(value BgpSrteSrMplsSid) BgpSrteSegmentFTypeSubTlv {
+	obj.SrMplsSid().SetMsg(value.Msg())
+
+	return obj
 }
 
 func (obj *bgpSrteSegmentFTypeSubTlv) validateObj(set_default bool) {
@@ -123811,12 +129888,18 @@ type bgpSrteSegmentGTypeSubTlv struct {
 	obj *snappipb.BgpSrteSegmentGTypeSubTlv
 }
 
+func NewBgpSrteSegmentGTypeSubTlv() BgpSrteSegmentGTypeSubTlv {
+	obj := bgpSrteSegmentGTypeSubTlv{obj: &snappipb.BgpSrteSegmentGTypeSubTlv{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *bgpSrteSegmentGTypeSubTlv) Msg() *snappipb.BgpSrteSegmentGTypeSubTlv {
 	return obj.obj
 }
 
 func (obj *bgpSrteSegmentGTypeSubTlv) SetMsg(msg *snappipb.BgpSrteSegmentGTypeSubTlv) BgpSrteSegmentGTypeSubTlv {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -123950,6 +130033,7 @@ type BgpSrteSegmentGTypeSubTlv interface {
 	RemoteIpv6NodeAddress() string
 	SetRemoteIpv6NodeAddress(value string) BgpSrteSegmentGTypeSubTlv
 	SrMplsSid() BgpSrteSrMplsSid
+	SetSrMplsSid(value BgpSrteSrMplsSid) BgpSrteSegmentGTypeSubTlv
 	HasSrMplsSid() bool
 }
 
@@ -124044,12 +130128,8 @@ func (obj *bgpSrteSegmentGTypeSubTlv) SetRemoteIpv6NodeAddress(value string) Bgp
 // SrMplsSid returns a BgpSrteSrMplsSid
 //  Optional SR-MPLS SID.
 func (obj *bgpSrteSegmentGTypeSubTlv) SrMplsSid() BgpSrteSrMplsSid {
-
 	if obj.obj.SrMplsSid == nil {
-		obj.obj.SrMplsSid = &snappipb.BgpSrteSrMplsSid{}
-		newObj := &bgpSrteSrMplsSid{obj: obj.obj.SrMplsSid}
-		newObj.setDefault()
-		return newObj
+		obj.obj.SrMplsSid = NewBgpSrteSrMplsSid().Msg()
 	}
 	return &bgpSrteSrMplsSid{obj: obj.obj.SrMplsSid}
 }
@@ -124058,6 +130138,14 @@ func (obj *bgpSrteSegmentGTypeSubTlv) SrMplsSid() BgpSrteSrMplsSid {
 //  Optional SR-MPLS SID.
 func (obj *bgpSrteSegmentGTypeSubTlv) HasSrMplsSid() bool {
 	return obj.obj.SrMplsSid != nil
+}
+
+// SetSrMplsSid sets the BgpSrteSrMplsSid value in the BgpSrteSegmentGTypeSubTlv object
+//  Optional SR-MPLS SID.
+func (obj *bgpSrteSegmentGTypeSubTlv) SetSrMplsSid(value BgpSrteSrMplsSid) BgpSrteSegmentGTypeSubTlv {
+	obj.SrMplsSid().SetMsg(value.Msg())
+
+	return obj
 }
 
 func (obj *bgpSrteSegmentGTypeSubTlv) validateObj(set_default bool) {
@@ -124127,12 +130215,18 @@ type bgpSrteSegmentHTypeSubTlv struct {
 	obj *snappipb.BgpSrteSegmentHTypeSubTlv
 }
 
+func NewBgpSrteSegmentHTypeSubTlv() BgpSrteSegmentHTypeSubTlv {
+	obj := bgpSrteSegmentHTypeSubTlv{obj: &snappipb.BgpSrteSegmentHTypeSubTlv{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *bgpSrteSegmentHTypeSubTlv) Msg() *snappipb.BgpSrteSegmentHTypeSubTlv {
 	return obj.obj
 }
 
 func (obj *bgpSrteSegmentHTypeSubTlv) SetMsg(msg *snappipb.BgpSrteSegmentHTypeSubTlv) BgpSrteSegmentHTypeSubTlv {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -124260,6 +130354,7 @@ type BgpSrteSegmentHTypeSubTlv interface {
 	RemoteIpv6Address() string
 	SetRemoteIpv6Address(value string) BgpSrteSegmentHTypeSubTlv
 	SrMplsSid() BgpSrteSrMplsSid
+	SetSrMplsSid(value BgpSrteSrMplsSid) BgpSrteSegmentHTypeSubTlv
 	HasSrMplsSid() bool
 }
 
@@ -124314,12 +130409,8 @@ func (obj *bgpSrteSegmentHTypeSubTlv) SetRemoteIpv6Address(value string) BgpSrte
 // SrMplsSid returns a BgpSrteSrMplsSid
 //  Optional SR-MPLS SID.
 func (obj *bgpSrteSegmentHTypeSubTlv) SrMplsSid() BgpSrteSrMplsSid {
-
 	if obj.obj.SrMplsSid == nil {
-		obj.obj.SrMplsSid = &snappipb.BgpSrteSrMplsSid{}
-		newObj := &bgpSrteSrMplsSid{obj: obj.obj.SrMplsSid}
-		newObj.setDefault()
-		return newObj
+		obj.obj.SrMplsSid = NewBgpSrteSrMplsSid().Msg()
 	}
 	return &bgpSrteSrMplsSid{obj: obj.obj.SrMplsSid}
 }
@@ -124328,6 +130419,14 @@ func (obj *bgpSrteSegmentHTypeSubTlv) SrMplsSid() BgpSrteSrMplsSid {
 //  Optional SR-MPLS SID.
 func (obj *bgpSrteSegmentHTypeSubTlv) HasSrMplsSid() bool {
 	return obj.obj.SrMplsSid != nil
+}
+
+// SetSrMplsSid sets the BgpSrteSrMplsSid value in the BgpSrteSegmentHTypeSubTlv object
+//  Optional SR-MPLS SID.
+func (obj *bgpSrteSegmentHTypeSubTlv) SetSrMplsSid(value BgpSrteSrMplsSid) BgpSrteSegmentHTypeSubTlv {
+	obj.SrMplsSid().SetMsg(value.Msg())
+
+	return obj
 }
 
 func (obj *bgpSrteSegmentHTypeSubTlv) validateObj(set_default bool) {
@@ -124375,12 +130474,18 @@ type bgpSrteSegmentITypeSubTlv struct {
 	obj *snappipb.BgpSrteSegmentITypeSubTlv
 }
 
+func NewBgpSrteSegmentITypeSubTlv() BgpSrteSegmentITypeSubTlv {
+	obj := bgpSrteSegmentITypeSubTlv{obj: &snappipb.BgpSrteSegmentITypeSubTlv{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *bgpSrteSegmentITypeSubTlv) Msg() *snappipb.BgpSrteSegmentITypeSubTlv {
 	return obj.obj
 }
 
 func (obj *bgpSrteSegmentITypeSubTlv) SetMsg(msg *snappipb.BgpSrteSegmentITypeSubTlv) BgpSrteSegmentITypeSubTlv {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -124509,6 +130614,7 @@ type BgpSrteSegmentITypeSubTlv interface {
 	SetSrv6Sid(value string) BgpSrteSegmentITypeSubTlv
 	HasSrv6Sid() bool
 	Srv6SidEndpointBehavior() BgpSrteSRv6SIDEndpointBehaviorAndStructure
+	SetSrv6SidEndpointBehavior(value BgpSrteSRv6SIDEndpointBehaviorAndStructure) BgpSrteSegmentITypeSubTlv
 	HasSrv6SidEndpointBehavior() bool
 }
 
@@ -124569,12 +130675,8 @@ func (obj *bgpSrteSegmentITypeSubTlv) SetSrv6Sid(value string) BgpSrteSegmentITy
 // Srv6SidEndpointBehavior returns a BgpSrteSRv6SIDEndpointBehaviorAndStructure
 //  Optional SRv6 Endpoint Behavior and SID Structure.
 func (obj *bgpSrteSegmentITypeSubTlv) Srv6SidEndpointBehavior() BgpSrteSRv6SIDEndpointBehaviorAndStructure {
-
 	if obj.obj.Srv6SidEndpointBehavior == nil {
-		obj.obj.Srv6SidEndpointBehavior = &snappipb.BgpSrteSRv6SIDEndpointBehaviorAndStructure{}
-		newObj := &bgpSrteSRv6SIDEndpointBehaviorAndStructure{obj: obj.obj.Srv6SidEndpointBehavior}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Srv6SidEndpointBehavior = NewBgpSrteSRv6SIDEndpointBehaviorAndStructure().Msg()
 	}
 	return &bgpSrteSRv6SIDEndpointBehaviorAndStructure{obj: obj.obj.Srv6SidEndpointBehavior}
 }
@@ -124583,6 +130685,14 @@ func (obj *bgpSrteSegmentITypeSubTlv) Srv6SidEndpointBehavior() BgpSrteSRv6SIDEn
 //  Optional SRv6 Endpoint Behavior and SID Structure.
 func (obj *bgpSrteSegmentITypeSubTlv) HasSrv6SidEndpointBehavior() bool {
 	return obj.obj.Srv6SidEndpointBehavior != nil
+}
+
+// SetSrv6SidEndpointBehavior sets the BgpSrteSRv6SIDEndpointBehaviorAndStructure value in the BgpSrteSegmentITypeSubTlv object
+//  Optional SRv6 Endpoint Behavior and SID Structure.
+func (obj *bgpSrteSegmentITypeSubTlv) SetSrv6SidEndpointBehavior(value BgpSrteSRv6SIDEndpointBehaviorAndStructure) BgpSrteSegmentITypeSubTlv {
+	obj.Srv6SidEndpointBehavior().SetMsg(value.Msg())
+
+	return obj
 }
 
 func (obj *bgpSrteSegmentITypeSubTlv) validateObj(set_default bool) {
@@ -124627,12 +130737,18 @@ type bgpSrteSegmentJTypeSubTlv struct {
 	obj *snappipb.BgpSrteSegmentJTypeSubTlv
 }
 
+func NewBgpSrteSegmentJTypeSubTlv() BgpSrteSegmentJTypeSubTlv {
+	obj := bgpSrteSegmentJTypeSubTlv{obj: &snappipb.BgpSrteSegmentJTypeSubTlv{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *bgpSrteSegmentJTypeSubTlv) Msg() *snappipb.BgpSrteSegmentJTypeSubTlv {
 	return obj.obj
 }
 
 func (obj *bgpSrteSegmentJTypeSubTlv) SetMsg(msg *snappipb.BgpSrteSegmentJTypeSubTlv) BgpSrteSegmentJTypeSubTlv {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -124772,6 +130888,7 @@ type BgpSrteSegmentJTypeSubTlv interface {
 	SetSrv6Sid(value string) BgpSrteSegmentJTypeSubTlv
 	HasSrv6Sid() bool
 	Srv6SidEndpointBehavior() BgpSrteSRv6SIDEndpointBehaviorAndStructure
+	SetSrv6SidEndpointBehavior(value BgpSrteSRv6SIDEndpointBehaviorAndStructure) BgpSrteSegmentJTypeSubTlv
 	HasSrv6SidEndpointBehavior() bool
 }
 
@@ -124906,12 +131023,8 @@ func (obj *bgpSrteSegmentJTypeSubTlv) SetSrv6Sid(value string) BgpSrteSegmentJTy
 // Srv6SidEndpointBehavior returns a BgpSrteSRv6SIDEndpointBehaviorAndStructure
 //  Optional SRv6 Endpoint Behavior and SID Structure.
 func (obj *bgpSrteSegmentJTypeSubTlv) Srv6SidEndpointBehavior() BgpSrteSRv6SIDEndpointBehaviorAndStructure {
-
 	if obj.obj.Srv6SidEndpointBehavior == nil {
-		obj.obj.Srv6SidEndpointBehavior = &snappipb.BgpSrteSRv6SIDEndpointBehaviorAndStructure{}
-		newObj := &bgpSrteSRv6SIDEndpointBehaviorAndStructure{obj: obj.obj.Srv6SidEndpointBehavior}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Srv6SidEndpointBehavior = NewBgpSrteSRv6SIDEndpointBehaviorAndStructure().Msg()
 	}
 	return &bgpSrteSRv6SIDEndpointBehaviorAndStructure{obj: obj.obj.Srv6SidEndpointBehavior}
 }
@@ -124920,6 +131033,14 @@ func (obj *bgpSrteSegmentJTypeSubTlv) Srv6SidEndpointBehavior() BgpSrteSRv6SIDEn
 //  Optional SRv6 Endpoint Behavior and SID Structure.
 func (obj *bgpSrteSegmentJTypeSubTlv) HasSrv6SidEndpointBehavior() bool {
 	return obj.obj.Srv6SidEndpointBehavior != nil
+}
+
+// SetSrv6SidEndpointBehavior sets the BgpSrteSRv6SIDEndpointBehaviorAndStructure value in the BgpSrteSegmentJTypeSubTlv object
+//  Optional SRv6 Endpoint Behavior and SID Structure.
+func (obj *bgpSrteSegmentJTypeSubTlv) SetSrv6SidEndpointBehavior(value BgpSrteSRv6SIDEndpointBehaviorAndStructure) BgpSrteSegmentJTypeSubTlv {
+	obj.Srv6SidEndpointBehavior().SetMsg(value.Msg())
+
+	return obj
 }
 
 func (obj *bgpSrteSegmentJTypeSubTlv) validateObj(set_default bool) {
@@ -125007,12 +131128,18 @@ type bgpSrteSegmentKTypeSubTlv struct {
 	obj *snappipb.BgpSrteSegmentKTypeSubTlv
 }
 
+func NewBgpSrteSegmentKTypeSubTlv() BgpSrteSegmentKTypeSubTlv {
+	obj := bgpSrteSegmentKTypeSubTlv{obj: &snappipb.BgpSrteSegmentKTypeSubTlv{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *bgpSrteSegmentKTypeSubTlv) Msg() *snappipb.BgpSrteSegmentKTypeSubTlv {
 	return obj.obj
 }
 
 func (obj *bgpSrteSegmentKTypeSubTlv) SetMsg(msg *snappipb.BgpSrteSegmentKTypeSubTlv) BgpSrteSegmentKTypeSubTlv {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -125146,6 +131273,7 @@ type BgpSrteSegmentKTypeSubTlv interface {
 	SetSrv6Sid(value string) BgpSrteSegmentKTypeSubTlv
 	HasSrv6Sid() bool
 	Srv6SidEndpointBehavior() BgpSrteSRv6SIDEndpointBehaviorAndStructure
+	SetSrv6SidEndpointBehavior(value BgpSrteSRv6SIDEndpointBehaviorAndStructure) BgpSrteSegmentKTypeSubTlv
 	HasSrv6SidEndpointBehavior() bool
 }
 
@@ -125240,12 +131368,8 @@ func (obj *bgpSrteSegmentKTypeSubTlv) SetSrv6Sid(value string) BgpSrteSegmentKTy
 // Srv6SidEndpointBehavior returns a BgpSrteSRv6SIDEndpointBehaviorAndStructure
 //  Optional SRv6 Endpoint Behavior and SID Structure.
 func (obj *bgpSrteSegmentKTypeSubTlv) Srv6SidEndpointBehavior() BgpSrteSRv6SIDEndpointBehaviorAndStructure {
-
 	if obj.obj.Srv6SidEndpointBehavior == nil {
-		obj.obj.Srv6SidEndpointBehavior = &snappipb.BgpSrteSRv6SIDEndpointBehaviorAndStructure{}
-		newObj := &bgpSrteSRv6SIDEndpointBehaviorAndStructure{obj: obj.obj.Srv6SidEndpointBehavior}
-		newObj.setDefault()
-		return newObj
+		obj.obj.Srv6SidEndpointBehavior = NewBgpSrteSRv6SIDEndpointBehaviorAndStructure().Msg()
 	}
 	return &bgpSrteSRv6SIDEndpointBehaviorAndStructure{obj: obj.obj.Srv6SidEndpointBehavior}
 }
@@ -125254,6 +131378,14 @@ func (obj *bgpSrteSegmentKTypeSubTlv) Srv6SidEndpointBehavior() BgpSrteSRv6SIDEn
 //  Optional SRv6 Endpoint Behavior and SID Structure.
 func (obj *bgpSrteSegmentKTypeSubTlv) HasSrv6SidEndpointBehavior() bool {
 	return obj.obj.Srv6SidEndpointBehavior != nil
+}
+
+// SetSrv6SidEndpointBehavior sets the BgpSrteSRv6SIDEndpointBehaviorAndStructure value in the BgpSrteSegmentKTypeSubTlv object
+//  Optional SRv6 Endpoint Behavior and SID Structure.
+func (obj *bgpSrteSegmentKTypeSubTlv) SetSrv6SidEndpointBehavior(value BgpSrteSRv6SIDEndpointBehaviorAndStructure) BgpSrteSegmentKTypeSubTlv {
+	obj.Srv6SidEndpointBehavior().SetMsg(value.Msg())
+
+	return obj
 }
 
 func (obj *bgpSrteSegmentKTypeSubTlv) validateObj(set_default bool) {
@@ -125319,12 +131451,18 @@ type bgpSrteSRv6SIDEndpointBehaviorAndStructure struct {
 	obj *snappipb.BgpSrteSRv6SIDEndpointBehaviorAndStructure
 }
 
+func NewBgpSrteSRv6SIDEndpointBehaviorAndStructure() BgpSrteSRv6SIDEndpointBehaviorAndStructure {
+	obj := bgpSrteSRv6SIDEndpointBehaviorAndStructure{obj: &snappipb.BgpSrteSRv6SIDEndpointBehaviorAndStructure{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *bgpSrteSRv6SIDEndpointBehaviorAndStructure) Msg() *snappipb.BgpSrteSRv6SIDEndpointBehaviorAndStructure {
 	return obj.obj
 }
 
 func (obj *bgpSrteSRv6SIDEndpointBehaviorAndStructure) SetMsg(msg *snappipb.BgpSrteSRv6SIDEndpointBehaviorAndStructure) BgpSrteSRv6SIDEndpointBehaviorAndStructure {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
@@ -125597,12 +131735,18 @@ type bgpSrteSrMplsSid struct {
 	obj *snappipb.BgpSrteSrMplsSid
 }
 
+func NewBgpSrteSrMplsSid() BgpSrteSrMplsSid {
+	obj := bgpSrteSrMplsSid{obj: &snappipb.BgpSrteSrMplsSid{}}
+	obj.setDefault()
+	return &obj
+}
+
 func (obj *bgpSrteSrMplsSid) Msg() *snappipb.BgpSrteSrMplsSid {
 	return obj.obj
 }
 
 func (obj *bgpSrteSrMplsSid) SetMsg(msg *snappipb.BgpSrteSrMplsSid) BgpSrteSrMplsSid {
-	obj.obj = msg
+	proto.Merge(obj.obj, msg)
 	return obj
 }
 
