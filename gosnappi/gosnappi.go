@@ -1,4 +1,4 @@
-// Open Traffic Generator API 0.6.5
+// Open Traffic Generator API 0.6.6
 // License: MIT
 
 package gosnappi
@@ -3120,6 +3120,9 @@ type MetricsRequest interface {
 	Bgpv6() Bgpv6MetricsRequest
 	SetBgpv6(value Bgpv6MetricsRequest) MetricsRequest
 	HasBgpv6() bool
+	Isis() IsisMetricsRequest
+	SetIsis(value IsisMetricsRequest) MetricsRequest
+	HasIsis() bool
 }
 
 type MetricsRequestChoiceEnum string
@@ -3129,11 +3132,13 @@ var MetricsRequestChoice = struct {
 	FLOW  MetricsRequestChoiceEnum
 	BGPV4 MetricsRequestChoiceEnum
 	BGPV6 MetricsRequestChoiceEnum
+	ISIS  MetricsRequestChoiceEnum
 }{
 	PORT:  MetricsRequestChoiceEnum("port"),
 	FLOW:  MetricsRequestChoiceEnum("flow"),
 	BGPV4: MetricsRequestChoiceEnum("bgpv4"),
 	BGPV6: MetricsRequestChoiceEnum("bgpv6"),
+	ISIS:  MetricsRequestChoiceEnum("isis"),
 }
 
 func (obj *metricsRequest) Choice() MetricsRequestChoiceEnum {
@@ -3254,6 +3259,30 @@ func (obj *metricsRequest) SetBgpv6(value Bgpv6MetricsRequest) MetricsRequest {
 	return obj
 }
 
+// Isis returns a IsisMetricsRequest
+//  description is TBD
+func (obj *metricsRequest) Isis() IsisMetricsRequest {
+	obj.SetChoice(MetricsRequestChoice.ISIS)
+	if obj.obj.Isis == nil {
+		obj.obj.Isis = NewIsisMetricsRequest().Msg()
+	}
+	return &isisMetricsRequest{obj: obj.obj.Isis}
+}
+
+// Isis returns a IsisMetricsRequest
+//  description is TBD
+func (obj *metricsRequest) HasIsis() bool {
+	return obj.obj.Isis != nil
+}
+
+// SetIsis sets the IsisMetricsRequest value in the MetricsRequest object
+//  description is TBD
+func (obj *metricsRequest) SetIsis(value IsisMetricsRequest) MetricsRequest {
+	obj.Isis().SetMsg(value.Msg())
+	obj.SetChoice(MetricsRequestChoice.ISIS)
+	return obj
+}
+
 func (obj *metricsRequest) validateObj(set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -3273,6 +3302,10 @@ func (obj *metricsRequest) validateObj(set_default bool) {
 
 	if obj.obj.Bgpv6 != nil {
 		obj.Bgpv6().validateObj(set_default)
+	}
+
+	if obj.obj.Isis != nil {
+		obj.Isis().validateObj(set_default)
 	}
 }
 
@@ -9936,6 +9969,273 @@ func (obj *bgpv6MetricsRequest) setDefault() {
 
 }
 
+type isisMetricsRequest struct {
+	obj *snappipb.IsisMetricsRequest
+}
+
+func NewIsisMetricsRequest() IsisMetricsRequest {
+	obj := isisMetricsRequest{obj: &snappipb.IsisMetricsRequest{}}
+	obj.setDefault()
+	return &obj
+}
+
+func (obj *isisMetricsRequest) Msg() *snappipb.IsisMetricsRequest {
+	return obj.obj
+}
+
+func (obj *isisMetricsRequest) SetMsg(msg *snappipb.IsisMetricsRequest) IsisMetricsRequest {
+	proto.Merge(obj.obj, msg)
+	return obj
+}
+
+func (obj *isisMetricsRequest) ToPbText() string {
+	vErr := obj.Validate()
+	if vErr != nil {
+		panic(vErr)
+	}
+	return proto.MarshalTextString(obj.Msg())
+}
+
+func (obj *isisMetricsRequest) FromPbText(value string) error {
+	retObj := proto.UnmarshalText(value, obj.Msg())
+	if retObj != nil {
+		return retObj
+	}
+	vErr := obj.Validate(true)
+	if vErr != nil {
+		return vErr
+	}
+	return retObj
+}
+
+func (obj *isisMetricsRequest) ToYaml() string {
+	vErr := obj.Validate()
+	if vErr != nil {
+		panic(vErr)
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(obj.Msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *isisMetricsRequest) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: false,
+	}
+	retObj := opts.Unmarshal([]byte(data), obj.Msg())
+	if retObj != nil {
+		return retObj
+	}
+	vErr := obj.Validate(true)
+	if vErr != nil {
+		return vErr
+	}
+	return retObj
+}
+
+func (obj *isisMetricsRequest) ToJson() string {
+	vErr := obj.Validate()
+	if vErr != nil {
+		panic(vErr)
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+		Indent:          "  ",
+	}
+	data, err := opts.Marshal(obj.Msg())
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *isisMetricsRequest) FromJson(value string) error {
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: false,
+	}
+	retObj := opts.Unmarshal([]byte(value), obj.Msg())
+	if retObj != nil {
+		return retObj
+	}
+	err := obj.Validate(true)
+	if err != nil {
+		return err
+	}
+	return retObj
+}
+
+func (obj *isisMetricsRequest) Validate(defaults ...bool) error {
+	var set_default bool = false
+	if len(defaults) > 0 {
+		set_default = defaults[0]
+	}
+	obj.validateObj(set_default)
+	return validationResult()
+}
+
+type IsisMetricsRequest interface {
+	Msg() *snappipb.IsisMetricsRequest
+	SetMsg(*snappipb.IsisMetricsRequest) IsisMetricsRequest
+	ToPbText() string
+	ToYaml() string
+	ToJson() string
+	FromPbText(value string) error
+	FromYaml(value string) error
+	FromJson(value string) error
+	Validate(defaults ...bool) error
+	validateObj(set_default bool)
+	setDefault()
+	RouterNames() []string
+	SetRouterNames(value []string) IsisMetricsRequest
+	ColumnNames() []IsisMetricsRequestColumnNamesEnum
+	SetColumnNames(value []IsisMetricsRequestColumnNamesEnum) IsisMetricsRequest
+}
+
+// RouterNames returns a []string
+//  The names of ISIS Routers to return results for. An empty list will return results for all ISIS router.
+//
+//  x-constraint:
+//  - /components/schemas/Device.IsisRouter/properties/name
+//
+//
+//  x-constraint:
+//  - /components/schemas/Device.IsisRouter/properties/name
+//
+func (obj *isisMetricsRequest) RouterNames() []string {
+	if obj.obj.RouterNames == nil {
+		obj.obj.RouterNames = make([]string, 0)
+	}
+	return obj.obj.RouterNames
+}
+
+// SetRouterNames sets the []string value in the IsisMetricsRequest object
+//  The names of ISIS Routers to return results for. An empty list will return results for all ISIS router.
+//
+//  x-constraint:
+//  - /components/schemas/Device.IsisRouter/properties/name
+//
+//
+//  x-constraint:
+//  - /components/schemas/Device.IsisRouter/properties/name
+//
+func (obj *isisMetricsRequest) SetRouterNames(value []string) IsisMetricsRequest {
+	if obj.obj.RouterNames == nil {
+		obj.obj.RouterNames = make([]string, 0)
+	}
+	obj.obj.RouterNames = value
+
+	return obj
+}
+
+type IsisMetricsRequestColumnNamesEnum string
+
+var IsisMetricsRequestColumnNames = struct {
+	L1_SESSIONS_UP                    IsisMetricsRequestColumnNamesEnum
+	L1_SESSION_FLAP                   IsisMetricsRequestColumnNamesEnum
+	L1_DATABASE_SIZE                  IsisMetricsRequestColumnNamesEnum
+	L1_BROADCAST_HELLOS_SENT          IsisMetricsRequestColumnNamesEnum
+	L1_BROADCAST_HELLOS_RECEIVED      IsisMetricsRequestColumnNamesEnum
+	L1_POINT_TO_POINT_HELLOS_SENT     IsisMetricsRequestColumnNamesEnum
+	L1_POINT_TO_POINT_HELLOS_RECEIVED IsisMetricsRequestColumnNamesEnum
+	L1_PSNP_SENT                      IsisMetricsRequestColumnNamesEnum
+	L1_PSNP_RECEIVED                  IsisMetricsRequestColumnNamesEnum
+	L1_CSNP_SENT                      IsisMetricsRequestColumnNamesEnum
+	L1_CSNP_RECEIVED                  IsisMetricsRequestColumnNamesEnum
+	L1_LSP_SENT                       IsisMetricsRequestColumnNamesEnum
+	L1_LSP_RECEIVED                   IsisMetricsRequestColumnNamesEnum
+	L2_SESSIONS_UP                    IsisMetricsRequestColumnNamesEnum
+	L2_SESSION_FLAP                   IsisMetricsRequestColumnNamesEnum
+	L2_DATABASE_SIZE                  IsisMetricsRequestColumnNamesEnum
+	L2_BROADCAST_HELLOS_SENT          IsisMetricsRequestColumnNamesEnum
+	L2_BROADCAST_HELLOS_RECEIVED      IsisMetricsRequestColumnNamesEnum
+	L2_POINT_TO_POINT_HELLOS_SENT     IsisMetricsRequestColumnNamesEnum
+	L2_POINT_TO_POINT_HELLOS_RECEIVED IsisMetricsRequestColumnNamesEnum
+	L2_PSNP_SENT                      IsisMetricsRequestColumnNamesEnum
+	L2_PSNP_RECEIVED                  IsisMetricsRequestColumnNamesEnum
+	L2_CSNP_SENT                      IsisMetricsRequestColumnNamesEnum
+	L2_CSNP_RECEIVED                  IsisMetricsRequestColumnNamesEnum
+	L2_LSP_SENT                       IsisMetricsRequestColumnNamesEnum
+	L2_LSP_RECEIVED                   IsisMetricsRequestColumnNamesEnum
+}{
+	L1_SESSIONS_UP:                    IsisMetricsRequestColumnNamesEnum("l1_sessions_up"),
+	L1_SESSION_FLAP:                   IsisMetricsRequestColumnNamesEnum("l1_session_flap"),
+	L1_DATABASE_SIZE:                  IsisMetricsRequestColumnNamesEnum("l1_database_size"),
+	L1_BROADCAST_HELLOS_SENT:          IsisMetricsRequestColumnNamesEnum("l1_broadcast_hellos_sent"),
+	L1_BROADCAST_HELLOS_RECEIVED:      IsisMetricsRequestColumnNamesEnum("l1_broadcast_hellos_received"),
+	L1_POINT_TO_POINT_HELLOS_SENT:     IsisMetricsRequestColumnNamesEnum("l1_point_to_point_hellos_sent"),
+	L1_POINT_TO_POINT_HELLOS_RECEIVED: IsisMetricsRequestColumnNamesEnum("l1_point_to_point_hellos_received"),
+	L1_PSNP_SENT:                      IsisMetricsRequestColumnNamesEnum("l1_psnp_sent"),
+	L1_PSNP_RECEIVED:                  IsisMetricsRequestColumnNamesEnum("l1_psnp_received"),
+	L1_CSNP_SENT:                      IsisMetricsRequestColumnNamesEnum("l1_csnp_sent"),
+	L1_CSNP_RECEIVED:                  IsisMetricsRequestColumnNamesEnum("l1_csnp_received"),
+	L1_LSP_SENT:                       IsisMetricsRequestColumnNamesEnum("l1_lsp_sent"),
+	L1_LSP_RECEIVED:                   IsisMetricsRequestColumnNamesEnum("l1_lsp_received"),
+	L2_SESSIONS_UP:                    IsisMetricsRequestColumnNamesEnum("l2_sessions_up"),
+	L2_SESSION_FLAP:                   IsisMetricsRequestColumnNamesEnum("l2_session_flap"),
+	L2_DATABASE_SIZE:                  IsisMetricsRequestColumnNamesEnum("l2_database_size"),
+	L2_BROADCAST_HELLOS_SENT:          IsisMetricsRequestColumnNamesEnum("l2_broadcast_hellos_sent"),
+	L2_BROADCAST_HELLOS_RECEIVED:      IsisMetricsRequestColumnNamesEnum("l2_broadcast_hellos_received"),
+	L2_POINT_TO_POINT_HELLOS_SENT:     IsisMetricsRequestColumnNamesEnum("l2_point_to_point_hellos_sent"),
+	L2_POINT_TO_POINT_HELLOS_RECEIVED: IsisMetricsRequestColumnNamesEnum("l2_point_to_point_hellos_received"),
+	L2_PSNP_SENT:                      IsisMetricsRequestColumnNamesEnum("l2_psnp_sent"),
+	L2_PSNP_RECEIVED:                  IsisMetricsRequestColumnNamesEnum("l2_psnp_received"),
+	L2_CSNP_SENT:                      IsisMetricsRequestColumnNamesEnum("l2_csnp_sent"),
+	L2_CSNP_RECEIVED:                  IsisMetricsRequestColumnNamesEnum("l2_csnp_received"),
+	L2_LSP_SENT:                       IsisMetricsRequestColumnNamesEnum("l2_lsp_sent"),
+	L2_LSP_RECEIVED:                   IsisMetricsRequestColumnNamesEnum("l2_lsp_received"),
+}
+
+func (obj *isisMetricsRequest) ColumnNames() []IsisMetricsRequestColumnNamesEnum {
+	items := []IsisMetricsRequestColumnNamesEnum{}
+	for _, item := range obj.obj.ColumnNames {
+		items = append(items, IsisMetricsRequestColumnNamesEnum(item.String()))
+	}
+	return items
+}
+
+// SetColumnNames sets the []string value in the IsisMetricsRequest object
+//  The list of column names that the returned result set will contain. If the list is empty then all columns will be returned except for any result_groups. The name of the ISIS Router cannot be excluded.
+func (obj *isisMetricsRequest) SetColumnNames(value []IsisMetricsRequestColumnNamesEnum) IsisMetricsRequest {
+	items := []snappipb.IsisMetricsRequest_ColumnNames_Enum{}
+	for _, item := range value {
+		intValue := snappipb.IsisMetricsRequest_ColumnNames_Enum_value[string(item)]
+		items = append(items, snappipb.IsisMetricsRequest_ColumnNames_Enum(intValue))
+	}
+	obj.obj.ColumnNames = items
+
+	return obj
+}
+
+func (obj *isisMetricsRequest) validateObj(set_default bool) {
+	if set_default {
+		obj.setDefault()
+	}
+
+}
+
+func (obj *isisMetricsRequest) setDefault() {
+
+}
+
 type responseWarning struct {
 	obj *snappipb.ResponseWarning
 }
@@ -10613,6 +10913,7 @@ type MetricsResponse interface {
 	FlowMetrics() MetricsResponseFlowMetricIter
 	Bgpv4Metrics() MetricsResponseBgpv4MetricIter
 	Bgpv6Metrics() MetricsResponseBgpv6MetricIter
+	IsisMetrics() MetricsResponseIsisMetricIter
 }
 
 type MetricsResponseChoiceEnum string
@@ -10622,11 +10923,13 @@ var MetricsResponseChoice = struct {
 	PORT_METRICS  MetricsResponseChoiceEnum
 	BGPV4_METRICS MetricsResponseChoiceEnum
 	BGPV6_METRICS MetricsResponseChoiceEnum
+	ISIS_METRICS  MetricsResponseChoiceEnum
 }{
 	FLOW_METRICS:  MetricsResponseChoiceEnum("flow_metrics"),
 	PORT_METRICS:  MetricsResponseChoiceEnum("port_metrics"),
 	BGPV4_METRICS: MetricsResponseChoiceEnum("bgpv4_metrics"),
 	BGPV6_METRICS: MetricsResponseChoiceEnum("bgpv6_metrics"),
+	ISIS_METRICS:  MetricsResponseChoiceEnum("isis_metrics"),
 }
 
 func (obj *metricsResponse) Choice() MetricsResponseChoiceEnum {
@@ -10787,6 +11090,40 @@ func (obj *metricsResponseBgpv6MetricIter) Items() []Bgpv6Metric {
 	return slice
 }
 
+// IsisMetrics returns a []IsisMetric
+//  description is TBD
+func (obj *metricsResponse) IsisMetrics() MetricsResponseIsisMetricIter {
+	if obj.obj.IsisMetrics == nil {
+		obj.obj.IsisMetrics = []*snappipb.IsisMetric{}
+	}
+	return &metricsResponseIsisMetricIter{obj: obj}
+}
+
+type metricsResponseIsisMetricIter struct {
+	obj *metricsResponse
+}
+
+type MetricsResponseIsisMetricIter interface {
+	Add() IsisMetric
+	Items() []IsisMetric
+}
+
+func (obj *metricsResponseIsisMetricIter) Add() IsisMetric {
+	newObj := &snappipb.IsisMetric{}
+	obj.obj.obj.IsisMetrics = append(obj.obj.obj.IsisMetrics, newObj)
+	newLibObj := &isisMetric{obj: newObj}
+	newLibObj.setDefault()
+	return newLibObj
+}
+
+func (obj *metricsResponseIsisMetricIter) Items() []IsisMetric {
+	slice := []IsisMetric{}
+	for _, item := range obj.obj.obj.IsisMetrics {
+		slice = append(slice, &isisMetric{obj: item})
+	}
+	return slice
+}
+
 func (obj *metricsResponse) validateObj(set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -10811,6 +11148,12 @@ func (obj *metricsResponse) validateObj(set_default bool) {
 
 	if obj.obj.Bgpv6Metrics != nil {
 		for _, item := range obj.Bgpv6Metrics().Items() {
+			item.validateObj(set_default)
+		}
+	}
+
+	if obj.obj.IsisMetrics != nil {
+		for _, item := range obj.IsisMetrics().Items() {
 			item.validateObj(set_default)
 		}
 	}
@@ -19823,6 +20166,775 @@ func (obj *bgpv6Metric) setDefault() {
 
 }
 
+type isisMetric struct {
+	obj *snappipb.IsisMetric
+}
+
+func NewIsisMetric() IsisMetric {
+	obj := isisMetric{obj: &snappipb.IsisMetric{}}
+	obj.setDefault()
+	return &obj
+}
+
+func (obj *isisMetric) Msg() *snappipb.IsisMetric {
+	return obj.obj
+}
+
+func (obj *isisMetric) SetMsg(msg *snappipb.IsisMetric) IsisMetric {
+	proto.Merge(obj.obj, msg)
+	return obj
+}
+
+func (obj *isisMetric) ToPbText() string {
+	vErr := obj.Validate()
+	if vErr != nil {
+		panic(vErr)
+	}
+	return proto.MarshalTextString(obj.Msg())
+}
+
+func (obj *isisMetric) FromPbText(value string) error {
+	retObj := proto.UnmarshalText(value, obj.Msg())
+	if retObj != nil {
+		return retObj
+	}
+	vErr := obj.Validate(true)
+	if vErr != nil {
+		return vErr
+	}
+	return retObj
+}
+
+func (obj *isisMetric) ToYaml() string {
+	vErr := obj.Validate()
+	if vErr != nil {
+		panic(vErr)
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(obj.Msg())
+	if err != nil {
+		panic(err)
+	}
+	data, err = yaml.JSONToYAML(data)
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *isisMetric) FromYaml(value string) error {
+	data, err := yaml.YAMLToJSON([]byte(value))
+	if err != nil {
+		return err
+	}
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: false,
+	}
+	retObj := opts.Unmarshal([]byte(data), obj.Msg())
+	if retObj != nil {
+		return retObj
+	}
+	vErr := obj.Validate(true)
+	if vErr != nil {
+		return vErr
+	}
+	return retObj
+}
+
+func (obj *isisMetric) ToJson() string {
+	vErr := obj.Validate()
+	if vErr != nil {
+		panic(vErr)
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+		Indent:          "  ",
+	}
+	data, err := opts.Marshal(obj.Msg())
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func (obj *isisMetric) FromJson(value string) error {
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: false,
+	}
+	retObj := opts.Unmarshal([]byte(value), obj.Msg())
+	if retObj != nil {
+		return retObj
+	}
+	err := obj.Validate(true)
+	if err != nil {
+		return err
+	}
+	return retObj
+}
+
+func (obj *isisMetric) Validate(defaults ...bool) error {
+	var set_default bool = false
+	if len(defaults) > 0 {
+		set_default = defaults[0]
+	}
+	obj.validateObj(set_default)
+	return validationResult()
+}
+
+type IsisMetric interface {
+	Msg() *snappipb.IsisMetric
+	SetMsg(*snappipb.IsisMetric) IsisMetric
+	ToPbText() string
+	ToYaml() string
+	ToJson() string
+	FromPbText(value string) error
+	FromYaml(value string) error
+	FromJson(value string) error
+	Validate(defaults ...bool) error
+	validateObj(set_default bool)
+	setDefault()
+	Name() string
+	SetName(value string) IsisMetric
+	HasName() bool
+	L1SessionsUp() int32
+	SetL1SessionsUp(value int32) IsisMetric
+	HasL1SessionsUp() bool
+	L1SessionFlap() int32
+	SetL1SessionFlap(value int32) IsisMetric
+	HasL1SessionFlap() bool
+	L1BroadcastHellosSent() int32
+	SetL1BroadcastHellosSent(value int32) IsisMetric
+	HasL1BroadcastHellosSent() bool
+	L1BroadcastHellosReceived() int32
+	SetL1BroadcastHellosReceived(value int32) IsisMetric
+	HasL1BroadcastHellosReceived() bool
+	L1PointToPointHellosSent() int32
+	SetL1PointToPointHellosSent(value int32) IsisMetric
+	HasL1PointToPointHellosSent() bool
+	L1PointToPointHellosReceived() int32
+	SetL1PointToPointHellosReceived(value int32) IsisMetric
+	HasL1PointToPointHellosReceived() bool
+	L1DatabaseSize() int32
+	SetL1DatabaseSize(value int32) IsisMetric
+	HasL1DatabaseSize() bool
+	L1PsnpSent() int32
+	SetL1PsnpSent(value int32) IsisMetric
+	HasL1PsnpSent() bool
+	L1PsnpReceived() int32
+	SetL1PsnpReceived(value int32) IsisMetric
+	HasL1PsnpReceived() bool
+	L1CsnpSent() int32
+	SetL1CsnpSent(value int32) IsisMetric
+	HasL1CsnpSent() bool
+	L1CsnpReceived() int32
+	SetL1CsnpReceived(value int32) IsisMetric
+	HasL1CsnpReceived() bool
+	L1LspSent() int32
+	SetL1LspSent(value int32) IsisMetric
+	HasL1LspSent() bool
+	L1LspReceived() int32
+	SetL1LspReceived(value int32) IsisMetric
+	HasL1LspReceived() bool
+	L2SessionsUp() int32
+	SetL2SessionsUp(value int32) IsisMetric
+	HasL2SessionsUp() bool
+	L2SessionFlap() int32
+	SetL2SessionFlap(value int32) IsisMetric
+	HasL2SessionFlap() bool
+	L2BroadcastHellosSent() int32
+	SetL2BroadcastHellosSent(value int32) IsisMetric
+	HasL2BroadcastHellosSent() bool
+	L2BroadcastHellosReceived() int32
+	SetL2BroadcastHellosReceived(value int32) IsisMetric
+	HasL2BroadcastHellosReceived() bool
+	L2PointToPointHellosSent() int32
+	SetL2PointToPointHellosSent(value int32) IsisMetric
+	HasL2PointToPointHellosSent() bool
+	L2PointToPointHellosReceived() int32
+	SetL2PointToPointHellosReceived(value int32) IsisMetric
+	HasL2PointToPointHellosReceived() bool
+	L2DatabaseSize() int32
+	SetL2DatabaseSize(value int32) IsisMetric
+	HasL2DatabaseSize() bool
+	L2PsnpSent() int32
+	SetL2PsnpSent(value int32) IsisMetric
+	HasL2PsnpSent() bool
+	L2PsnpReceived() int32
+	SetL2PsnpReceived(value int32) IsisMetric
+	HasL2PsnpReceived() bool
+	L2CsnpSent() int32
+	SetL2CsnpSent(value int32) IsisMetric
+	HasL2CsnpSent() bool
+	L2CsnpReceived() int32
+	SetL2CsnpReceived(value int32) IsisMetric
+	HasL2CsnpReceived() bool
+	L2LspSent() int32
+	SetL2LspSent(value int32) IsisMetric
+	HasL2LspSent() bool
+	L2LspReceived() int32
+	SetL2LspReceived(value int32) IsisMetric
+	HasL2LspReceived() bool
+}
+
+// Name returns a string
+//  The name of a configured ISIS router.
+func (obj *isisMetric) Name() string {
+	return *obj.obj.Name
+}
+
+// Name returns a string
+//  The name of a configured ISIS router.
+func (obj *isisMetric) HasName() bool {
+	return obj.obj.Name != nil
+}
+
+// SetName sets the string value in the IsisMetric object
+//  The name of a configured ISIS router.
+func (obj *isisMetric) SetName(value string) IsisMetric {
+	obj.obj.Name = &value
+
+	return obj
+}
+
+// L1SessionsUp returns a int32
+//  The number of Level 1 (L1) sessions that are fully up.
+func (obj *isisMetric) L1SessionsUp() int32 {
+	return *obj.obj.L1SessionsUp
+}
+
+// L1SessionsUp returns a int32
+//  The number of Level 1 (L1) sessions that are fully up.
+func (obj *isisMetric) HasL1SessionsUp() bool {
+	return obj.obj.L1SessionsUp != nil
+}
+
+// SetL1SessionsUp sets the int32 value in the IsisMetric object
+//  The number of Level 1 (L1) sessions that are fully up.
+func (obj *isisMetric) SetL1SessionsUp(value int32) IsisMetric {
+	obj.obj.L1SessionsUp = &value
+
+	return obj
+}
+
+// L1SessionFlap returns a int32
+//  The number of Level 1 Sessions Flap.
+func (obj *isisMetric) L1SessionFlap() int32 {
+	return *obj.obj.L1SessionFlap
+}
+
+// L1SessionFlap returns a int32
+//  The number of Level 1 Sessions Flap.
+func (obj *isisMetric) HasL1SessionFlap() bool {
+	return obj.obj.L1SessionFlap != nil
+}
+
+// SetL1SessionFlap sets the int32 value in the IsisMetric object
+//  The number of Level 1 Sessions Flap.
+func (obj *isisMetric) SetL1SessionFlap(value int32) IsisMetric {
+	obj.obj.L1SessionFlap = &value
+
+	return obj
+}
+
+// L1BroadcastHellosSent returns a int32
+//  Number of Level 1 Hello messages sent.
+func (obj *isisMetric) L1BroadcastHellosSent() int32 {
+	return *obj.obj.L1BroadcastHellosSent
+}
+
+// L1BroadcastHellosSent returns a int32
+//  Number of Level 1 Hello messages sent.
+func (obj *isisMetric) HasL1BroadcastHellosSent() bool {
+	return obj.obj.L1BroadcastHellosSent != nil
+}
+
+// SetL1BroadcastHellosSent sets the int32 value in the IsisMetric object
+//  Number of Level 1 Hello messages sent.
+func (obj *isisMetric) SetL1BroadcastHellosSent(value int32) IsisMetric {
+	obj.obj.L1BroadcastHellosSent = &value
+
+	return obj
+}
+
+// L1BroadcastHellosReceived returns a int32
+//  Number of Level 1 Hello messages received.
+func (obj *isisMetric) L1BroadcastHellosReceived() int32 {
+	return *obj.obj.L1BroadcastHellosReceived
+}
+
+// L1BroadcastHellosReceived returns a int32
+//  Number of Level 1 Hello messages received.
+func (obj *isisMetric) HasL1BroadcastHellosReceived() bool {
+	return obj.obj.L1BroadcastHellosReceived != nil
+}
+
+// SetL1BroadcastHellosReceived sets the int32 value in the IsisMetric object
+//  Number of Level 1 Hello messages received.
+func (obj *isisMetric) SetL1BroadcastHellosReceived(value int32) IsisMetric {
+	obj.obj.L1BroadcastHellosReceived = &value
+
+	return obj
+}
+
+// L1PointToPointHellosSent returns a int32
+//  Number of Level 1 Point-to-Point(P2P) Hello messages sent.
+func (obj *isisMetric) L1PointToPointHellosSent() int32 {
+	return *obj.obj.L1PointToPointHellosSent
+}
+
+// L1PointToPointHellosSent returns a int32
+//  Number of Level 1 Point-to-Point(P2P) Hello messages sent.
+func (obj *isisMetric) HasL1PointToPointHellosSent() bool {
+	return obj.obj.L1PointToPointHellosSent != nil
+}
+
+// SetL1PointToPointHellosSent sets the int32 value in the IsisMetric object
+//  Number of Level 1 Point-to-Point(P2P) Hello messages sent.
+func (obj *isisMetric) SetL1PointToPointHellosSent(value int32) IsisMetric {
+	obj.obj.L1PointToPointHellosSent = &value
+
+	return obj
+}
+
+// L1PointToPointHellosReceived returns a int32
+//  Number of Level 1 Point-to-Point(P2P) Hello messages received.
+func (obj *isisMetric) L1PointToPointHellosReceived() int32 {
+	return *obj.obj.L1PointToPointHellosReceived
+}
+
+// L1PointToPointHellosReceived returns a int32
+//  Number of Level 1 Point-to-Point(P2P) Hello messages received.
+func (obj *isisMetric) HasL1PointToPointHellosReceived() bool {
+	return obj.obj.L1PointToPointHellosReceived != nil
+}
+
+// SetL1PointToPointHellosReceived sets the int32 value in the IsisMetric object
+//  Number of Level 1 Point-to-Point(P2P) Hello messages received.
+func (obj *isisMetric) SetL1PointToPointHellosReceived(value int32) IsisMetric {
+	obj.obj.L1PointToPointHellosReceived = &value
+
+	return obj
+}
+
+// L1DatabaseSize returns a int32
+//  Number of Link State Updates (LSPs) in the Level 1 LSP Databases.
+func (obj *isisMetric) L1DatabaseSize() int32 {
+	return *obj.obj.L1DatabaseSize
+}
+
+// L1DatabaseSize returns a int32
+//  Number of Link State Updates (LSPs) in the Level 1 LSP Databases.
+func (obj *isisMetric) HasL1DatabaseSize() bool {
+	return obj.obj.L1DatabaseSize != nil
+}
+
+// SetL1DatabaseSize sets the int32 value in the IsisMetric object
+//  Number of Link State Updates (LSPs) in the Level 1 LSP Databases.
+func (obj *isisMetric) SetL1DatabaseSize(value int32) IsisMetric {
+	obj.obj.L1DatabaseSize = &value
+
+	return obj
+}
+
+// L1PsnpSent returns a int32
+//  Number of Level 1 (L1) Partial Sequence Number Packet (PSNPs) sent.
+func (obj *isisMetric) L1PsnpSent() int32 {
+	return *obj.obj.L1PsnpSent
+}
+
+// L1PsnpSent returns a int32
+//  Number of Level 1 (L1) Partial Sequence Number Packet (PSNPs) sent.
+func (obj *isisMetric) HasL1PsnpSent() bool {
+	return obj.obj.L1PsnpSent != nil
+}
+
+// SetL1PsnpSent sets the int32 value in the IsisMetric object
+//  Number of Level 1 (L1) Partial Sequence Number Packet (PSNPs) sent.
+func (obj *isisMetric) SetL1PsnpSent(value int32) IsisMetric {
+	obj.obj.L1PsnpSent = &value
+
+	return obj
+}
+
+// L1PsnpReceived returns a int32
+//  Number of Level 1 (L1) Complete Sequence Number Packet (PSNPs) received.
+func (obj *isisMetric) L1PsnpReceived() int32 {
+	return *obj.obj.L1PsnpReceived
+}
+
+// L1PsnpReceived returns a int32
+//  Number of Level 1 (L1) Complete Sequence Number Packet (PSNPs) received.
+func (obj *isisMetric) HasL1PsnpReceived() bool {
+	return obj.obj.L1PsnpReceived != nil
+}
+
+// SetL1PsnpReceived sets the int32 value in the IsisMetric object
+//  Number of Level 1 (L1) Complete Sequence Number Packet (PSNPs) received.
+func (obj *isisMetric) SetL1PsnpReceived(value int32) IsisMetric {
+	obj.obj.L1PsnpReceived = &value
+
+	return obj
+}
+
+// L1CsnpSent returns a int32
+//  Number of Level 1 (L1) Complete Sequence Number Packet (CSNPs) sent.
+func (obj *isisMetric) L1CsnpSent() int32 {
+	return *obj.obj.L1CsnpSent
+}
+
+// L1CsnpSent returns a int32
+//  Number of Level 1 (L1) Complete Sequence Number Packet (CSNPs) sent.
+func (obj *isisMetric) HasL1CsnpSent() bool {
+	return obj.obj.L1CsnpSent != nil
+}
+
+// SetL1CsnpSent sets the int32 value in the IsisMetric object
+//  Number of Level 1 (L1) Complete Sequence Number Packet (CSNPs) sent.
+func (obj *isisMetric) SetL1CsnpSent(value int32) IsisMetric {
+	obj.obj.L1CsnpSent = &value
+
+	return obj
+}
+
+// L1CsnpReceived returns a int32
+//  Number of Level 1 (L1) Complete Sequence Number Packet (CSNPs) received.
+func (obj *isisMetric) L1CsnpReceived() int32 {
+	return *obj.obj.L1CsnpReceived
+}
+
+// L1CsnpReceived returns a int32
+//  Number of Level 1 (L1) Complete Sequence Number Packet (CSNPs) received.
+func (obj *isisMetric) HasL1CsnpReceived() bool {
+	return obj.obj.L1CsnpReceived != nil
+}
+
+// SetL1CsnpReceived sets the int32 value in the IsisMetric object
+//  Number of Level 1 (L1) Complete Sequence Number Packet (CSNPs) received.
+func (obj *isisMetric) SetL1CsnpReceived(value int32) IsisMetric {
+	obj.obj.L1CsnpReceived = &value
+
+	return obj
+}
+
+// L1LspSent returns a int32
+//  Number of Level 1 (L1) Link State Protocol Data Units (LSPs) sent.
+func (obj *isisMetric) L1LspSent() int32 {
+	return *obj.obj.L1LspSent
+}
+
+// L1LspSent returns a int32
+//  Number of Level 1 (L1) Link State Protocol Data Units (LSPs) sent.
+func (obj *isisMetric) HasL1LspSent() bool {
+	return obj.obj.L1LspSent != nil
+}
+
+// SetL1LspSent sets the int32 value in the IsisMetric object
+//  Number of Level 1 (L1) Link State Protocol Data Units (LSPs) sent.
+func (obj *isisMetric) SetL1LspSent(value int32) IsisMetric {
+	obj.obj.L1LspSent = &value
+
+	return obj
+}
+
+// L1LspReceived returns a int32
+//  Number of Level 1 (L1) Link State Protocol Data Units (LSPs) received.
+func (obj *isisMetric) L1LspReceived() int32 {
+	return *obj.obj.L1LspReceived
+}
+
+// L1LspReceived returns a int32
+//  Number of Level 1 (L1) Link State Protocol Data Units (LSPs) received.
+func (obj *isisMetric) HasL1LspReceived() bool {
+	return obj.obj.L1LspReceived != nil
+}
+
+// SetL1LspReceived sets the int32 value in the IsisMetric object
+//  Number of Level 1 (L1) Link State Protocol Data Units (LSPs) received.
+func (obj *isisMetric) SetL1LspReceived(value int32) IsisMetric {
+	obj.obj.L1LspReceived = &value
+
+	return obj
+}
+
+// L2SessionsUp returns a int32
+//  The number of Level 2 (L2) sessions that are fully up.
+func (obj *isisMetric) L2SessionsUp() int32 {
+	return *obj.obj.L2SessionsUp
+}
+
+// L2SessionsUp returns a int32
+//  The number of Level 2 (L2) sessions that are fully up.
+func (obj *isisMetric) HasL2SessionsUp() bool {
+	return obj.obj.L2SessionsUp != nil
+}
+
+// SetL2SessionsUp sets the int32 value in the IsisMetric object
+//  The number of Level 2 (L2) sessions that are fully up.
+func (obj *isisMetric) SetL2SessionsUp(value int32) IsisMetric {
+	obj.obj.L2SessionsUp = &value
+
+	return obj
+}
+
+// L2SessionFlap returns a int32
+//  The number of Level 2 Sessions Flap.
+func (obj *isisMetric) L2SessionFlap() int32 {
+	return *obj.obj.L2SessionFlap
+}
+
+// L2SessionFlap returns a int32
+//  The number of Level 2 Sessions Flap.
+func (obj *isisMetric) HasL2SessionFlap() bool {
+	return obj.obj.L2SessionFlap != nil
+}
+
+// SetL2SessionFlap sets the int32 value in the IsisMetric object
+//  The number of Level 2 Sessions Flap.
+func (obj *isisMetric) SetL2SessionFlap(value int32) IsisMetric {
+	obj.obj.L2SessionFlap = &value
+
+	return obj
+}
+
+// L2BroadcastHellosSent returns a int32
+//  Number of Level 2 Hello messages sent.
+func (obj *isisMetric) L2BroadcastHellosSent() int32 {
+	return *obj.obj.L2BroadcastHellosSent
+}
+
+// L2BroadcastHellosSent returns a int32
+//  Number of Level 2 Hello messages sent.
+func (obj *isisMetric) HasL2BroadcastHellosSent() bool {
+	return obj.obj.L2BroadcastHellosSent != nil
+}
+
+// SetL2BroadcastHellosSent sets the int32 value in the IsisMetric object
+//  Number of Level 2 Hello messages sent.
+func (obj *isisMetric) SetL2BroadcastHellosSent(value int32) IsisMetric {
+	obj.obj.L2BroadcastHellosSent = &value
+
+	return obj
+}
+
+// L2BroadcastHellosReceived returns a int32
+//  Number of Level 2 Hello messages received.
+func (obj *isisMetric) L2BroadcastHellosReceived() int32 {
+	return *obj.obj.L2BroadcastHellosReceived
+}
+
+// L2BroadcastHellosReceived returns a int32
+//  Number of Level 2 Hello messages received.
+func (obj *isisMetric) HasL2BroadcastHellosReceived() bool {
+	return obj.obj.L2BroadcastHellosReceived != nil
+}
+
+// SetL2BroadcastHellosReceived sets the int32 value in the IsisMetric object
+//  Number of Level 2 Hello messages received.
+func (obj *isisMetric) SetL2BroadcastHellosReceived(value int32) IsisMetric {
+	obj.obj.L2BroadcastHellosReceived = &value
+
+	return obj
+}
+
+// L2PointToPointHellosSent returns a int32
+//  Number of Level 2 Point-to-Point(P2P) Hello messages sent.
+func (obj *isisMetric) L2PointToPointHellosSent() int32 {
+	return *obj.obj.L2PointToPointHellosSent
+}
+
+// L2PointToPointHellosSent returns a int32
+//  Number of Level 2 Point-to-Point(P2P) Hello messages sent.
+func (obj *isisMetric) HasL2PointToPointHellosSent() bool {
+	return obj.obj.L2PointToPointHellosSent != nil
+}
+
+// SetL2PointToPointHellosSent sets the int32 value in the IsisMetric object
+//  Number of Level 2 Point-to-Point(P2P) Hello messages sent.
+func (obj *isisMetric) SetL2PointToPointHellosSent(value int32) IsisMetric {
+	obj.obj.L2PointToPointHellosSent = &value
+
+	return obj
+}
+
+// L2PointToPointHellosReceived returns a int32
+//  Number of Level 2 Point-to-Point(P2P) Hello messages received.
+func (obj *isisMetric) L2PointToPointHellosReceived() int32 {
+	return *obj.obj.L2PointToPointHellosReceived
+}
+
+// L2PointToPointHellosReceived returns a int32
+//  Number of Level 2 Point-to-Point(P2P) Hello messages received.
+func (obj *isisMetric) HasL2PointToPointHellosReceived() bool {
+	return obj.obj.L2PointToPointHellosReceived != nil
+}
+
+// SetL2PointToPointHellosReceived sets the int32 value in the IsisMetric object
+//  Number of Level 2 Point-to-Point(P2P) Hello messages received.
+func (obj *isisMetric) SetL2PointToPointHellosReceived(value int32) IsisMetric {
+	obj.obj.L2PointToPointHellosReceived = &value
+
+	return obj
+}
+
+// L2DatabaseSize returns a int32
+//  Number of Link State Updates (LSPs) in the Level 2 LSP Databases.
+func (obj *isisMetric) L2DatabaseSize() int32 {
+	return *obj.obj.L2DatabaseSize
+}
+
+// L2DatabaseSize returns a int32
+//  Number of Link State Updates (LSPs) in the Level 2 LSP Databases.
+func (obj *isisMetric) HasL2DatabaseSize() bool {
+	return obj.obj.L2DatabaseSize != nil
+}
+
+// SetL2DatabaseSize sets the int32 value in the IsisMetric object
+//  Number of Link State Updates (LSPs) in the Level 2 LSP Databases.
+func (obj *isisMetric) SetL2DatabaseSize(value int32) IsisMetric {
+	obj.obj.L2DatabaseSize = &value
+
+	return obj
+}
+
+// L2PsnpSent returns a int32
+//  Number of Level 2 (L2) Partial Sequence Number Packet (PSNPs) sent.
+func (obj *isisMetric) L2PsnpSent() int32 {
+	return *obj.obj.L2PsnpSent
+}
+
+// L2PsnpSent returns a int32
+//  Number of Level 2 (L2) Partial Sequence Number Packet (PSNPs) sent.
+func (obj *isisMetric) HasL2PsnpSent() bool {
+	return obj.obj.L2PsnpSent != nil
+}
+
+// SetL2PsnpSent sets the int32 value in the IsisMetric object
+//  Number of Level 2 (L2) Partial Sequence Number Packet (PSNPs) sent.
+func (obj *isisMetric) SetL2PsnpSent(value int32) IsisMetric {
+	obj.obj.L2PsnpSent = &value
+
+	return obj
+}
+
+// L2PsnpReceived returns a int32
+//  Number of Level 2 (L2) Complete Sequence Number Packet (PSNPs) received.
+func (obj *isisMetric) L2PsnpReceived() int32 {
+	return *obj.obj.L2PsnpReceived
+}
+
+// L2PsnpReceived returns a int32
+//  Number of Level 2 (L2) Complete Sequence Number Packet (PSNPs) received.
+func (obj *isisMetric) HasL2PsnpReceived() bool {
+	return obj.obj.L2PsnpReceived != nil
+}
+
+// SetL2PsnpReceived sets the int32 value in the IsisMetric object
+//  Number of Level 2 (L2) Complete Sequence Number Packet (PSNPs) received.
+func (obj *isisMetric) SetL2PsnpReceived(value int32) IsisMetric {
+	obj.obj.L2PsnpReceived = &value
+
+	return obj
+}
+
+// L2CsnpSent returns a int32
+//  Number of Level 2 (L2) Complete Sequence Number Packet (CSNPs) sent.
+func (obj *isisMetric) L2CsnpSent() int32 {
+	return *obj.obj.L2CsnpSent
+}
+
+// L2CsnpSent returns a int32
+//  Number of Level 2 (L2) Complete Sequence Number Packet (CSNPs) sent.
+func (obj *isisMetric) HasL2CsnpSent() bool {
+	return obj.obj.L2CsnpSent != nil
+}
+
+// SetL2CsnpSent sets the int32 value in the IsisMetric object
+//  Number of Level 2 (L2) Complete Sequence Number Packet (CSNPs) sent.
+func (obj *isisMetric) SetL2CsnpSent(value int32) IsisMetric {
+	obj.obj.L2CsnpSent = &value
+
+	return obj
+}
+
+// L2CsnpReceived returns a int32
+//  Number of Level 2 (L2) Complete Sequence Number Packet (CSNPs) received.
+func (obj *isisMetric) L2CsnpReceived() int32 {
+	return *obj.obj.L2CsnpReceived
+}
+
+// L2CsnpReceived returns a int32
+//  Number of Level 2 (L2) Complete Sequence Number Packet (CSNPs) received.
+func (obj *isisMetric) HasL2CsnpReceived() bool {
+	return obj.obj.L2CsnpReceived != nil
+}
+
+// SetL2CsnpReceived sets the int32 value in the IsisMetric object
+//  Number of Level 2 (L2) Complete Sequence Number Packet (CSNPs) received.
+func (obj *isisMetric) SetL2CsnpReceived(value int32) IsisMetric {
+	obj.obj.L2CsnpReceived = &value
+
+	return obj
+}
+
+// L2LspSent returns a int32
+//  Number of Level 2 (L2) Link State Protocol Data Units (LSPs) sent.
+func (obj *isisMetric) L2LspSent() int32 {
+	return *obj.obj.L2LspSent
+}
+
+// L2LspSent returns a int32
+//  Number of Level 2 (L2) Link State Protocol Data Units (LSPs) sent.
+func (obj *isisMetric) HasL2LspSent() bool {
+	return obj.obj.L2LspSent != nil
+}
+
+// SetL2LspSent sets the int32 value in the IsisMetric object
+//  Number of Level 2 (L2) Link State Protocol Data Units (LSPs) sent.
+func (obj *isisMetric) SetL2LspSent(value int32) IsisMetric {
+	obj.obj.L2LspSent = &value
+
+	return obj
+}
+
+// L2LspReceived returns a int32
+//  Number of Level 2 (L2) Link State Protocol Data Units (LSPs) received.
+func (obj *isisMetric) L2LspReceived() int32 {
+	return *obj.obj.L2LspReceived
+}
+
+// L2LspReceived returns a int32
+//  Number of Level 2 (L2) Link State Protocol Data Units (LSPs) received.
+func (obj *isisMetric) HasL2LspReceived() bool {
+	return obj.obj.L2LspReceived != nil
+}
+
+// SetL2LspReceived sets the int32 value in the IsisMetric object
+//  Number of Level 2 (L2) Link State Protocol Data Units (LSPs) received.
+func (obj *isisMetric) SetL2LspReceived(value int32) IsisMetric {
+	obj.obj.L2LspReceived = &value
+
+	return obj
+}
+
+func (obj *isisMetric) validateObj(set_default bool) {
+	if set_default {
+		obj.setDefault()
+	}
+
+}
+
+func (obj *isisMetric) setDefault() {
+
+}
+
 type portState struct {
 	obj *snappipb.PortState
 }
@@ -24291,6 +25403,8 @@ type IsisInterface interface {
 	HasLinkProtection() bool
 	SrlgValues() []int32
 	SetSrlgValues(value []int32) IsisInterface
+	Name() string
+	SetName(value string) IsisInterface
 }
 
 // EthName returns a string
@@ -24613,6 +25727,20 @@ func (obj *isisInterface) SetSrlgValues(value []int32) IsisInterface {
 	return obj
 }
 
+// Name returns a string
+//  Globally unique name of an object. It also serves as the primary key for arrays of objects.
+func (obj *isisInterface) Name() string {
+	return obj.obj.Name
+}
+
+// SetName sets the string value in the IsisInterface object
+//  Globally unique name of an object. It also serves as the primary key for arrays of objects.
+func (obj *isisInterface) SetName(value string) IsisInterface {
+	obj.obj.Name = value
+
+	return obj
+}
+
 func (obj *isisInterface) validateObj(set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -24652,6 +25780,11 @@ func (obj *isisInterface) validateObj(set_default bool) {
 
 	if obj.obj.LinkProtection != nil {
 		obj.LinkProtection().validateObj(set_default)
+	}
+
+	// Name required
+	if obj.obj.Name == "" {
+		validation = append(validation, "Name is required field on interface IsisInterface")
 	}
 }
 
@@ -24872,9 +26005,6 @@ func (obj *isisBasic) validateObj(set_default bool) {
 }
 
 func (obj *isisBasic) setDefault() {
-	if obj.obj.Ipv4TeRouterId == nil {
-		obj.SetIpv4TeRouterId("1.1.1.1")
-	}
 
 }
 
@@ -25457,12 +26587,12 @@ type IsisAuthentication interface {
 	IgnoreReceiveMd5() bool
 	SetIgnoreReceiveMd5(value bool) IsisAuthentication
 	HasIgnoreReceiveMd5() bool
-	AreaAuthType() IsisAuthenticationBase
-	SetAreaAuthType(value IsisAuthenticationBase) IsisAuthentication
-	HasAreaAuthType() bool
-	DomainAuthType() IsisAuthenticationBase
-	SetDomainAuthType(value IsisAuthenticationBase) IsisAuthentication
-	HasDomainAuthType() bool
+	AreaAuth() IsisAuthenticationBase
+	SetAreaAuth(value IsisAuthenticationBase) IsisAuthentication
+	HasAreaAuth() bool
+	DomainAuth() IsisAuthenticationBase
+	SetDomainAuth(value IsisAuthenticationBase) IsisAuthentication
+	HasDomainAuth() bool
 }
 
 // IgnoreReceiveMd5 returns a bool
@@ -25485,54 +26615,54 @@ func (obj *isisAuthentication) SetIgnoreReceiveMd5(value bool) IsisAuthenticatio
 	return obj
 }
 
-// AreaAuthType returns a IsisAuthenticationBase
+// AreaAuth returns a IsisAuthenticationBase
 //  The Area authentication method used for the emulated ISIS router.
 //  This is used for L1 LSPs.
-func (obj *isisAuthentication) AreaAuthType() IsisAuthenticationBase {
-	if obj.obj.AreaAuthType == nil {
-		obj.obj.AreaAuthType = NewIsisAuthenticationBase().Msg()
+func (obj *isisAuthentication) AreaAuth() IsisAuthenticationBase {
+	if obj.obj.AreaAuth == nil {
+		obj.obj.AreaAuth = NewIsisAuthenticationBase().Msg()
 	}
-	return &isisAuthenticationBase{obj: obj.obj.AreaAuthType}
+	return &isisAuthenticationBase{obj: obj.obj.AreaAuth}
 }
 
-// AreaAuthType returns a IsisAuthenticationBase
+// AreaAuth returns a IsisAuthenticationBase
 //  The Area authentication method used for the emulated ISIS router.
 //  This is used for L1 LSPs.
-func (obj *isisAuthentication) HasAreaAuthType() bool {
-	return obj.obj.AreaAuthType != nil
+func (obj *isisAuthentication) HasAreaAuth() bool {
+	return obj.obj.AreaAuth != nil
 }
 
-// SetAreaAuthType sets the IsisAuthenticationBase value in the IsisAuthentication object
+// SetAreaAuth sets the IsisAuthenticationBase value in the IsisAuthentication object
 //  The Area authentication method used for the emulated ISIS router.
 //  This is used for L1 LSPs.
-func (obj *isisAuthentication) SetAreaAuthType(value IsisAuthenticationBase) IsisAuthentication {
-	obj.AreaAuthType().SetMsg(value.Msg())
+func (obj *isisAuthentication) SetAreaAuth(value IsisAuthenticationBase) IsisAuthentication {
+	obj.AreaAuth().SetMsg(value.Msg())
 
 	return obj
 }
 
-// DomainAuthType returns a IsisAuthenticationBase
+// DomainAuth returns a IsisAuthenticationBase
 //  The Domain authentication method used for the emulated ISIS router.
 //  This is used for L2 LSPs.
-func (obj *isisAuthentication) DomainAuthType() IsisAuthenticationBase {
-	if obj.obj.DomainAuthType == nil {
-		obj.obj.DomainAuthType = NewIsisAuthenticationBase().Msg()
+func (obj *isisAuthentication) DomainAuth() IsisAuthenticationBase {
+	if obj.obj.DomainAuth == nil {
+		obj.obj.DomainAuth = NewIsisAuthenticationBase().Msg()
 	}
-	return &isisAuthenticationBase{obj: obj.obj.DomainAuthType}
+	return &isisAuthenticationBase{obj: obj.obj.DomainAuth}
 }
 
-// DomainAuthType returns a IsisAuthenticationBase
+// DomainAuth returns a IsisAuthenticationBase
 //  The Domain authentication method used for the emulated ISIS router.
 //  This is used for L2 LSPs.
-func (obj *isisAuthentication) HasDomainAuthType() bool {
-	return obj.obj.DomainAuthType != nil
+func (obj *isisAuthentication) HasDomainAuth() bool {
+	return obj.obj.DomainAuth != nil
 }
 
-// SetDomainAuthType sets the IsisAuthenticationBase value in the IsisAuthentication object
+// SetDomainAuth sets the IsisAuthenticationBase value in the IsisAuthentication object
 //  The Domain authentication method used for the emulated ISIS router.
 //  This is used for L2 LSPs.
-func (obj *isisAuthentication) SetDomainAuthType(value IsisAuthenticationBase) IsisAuthentication {
-	obj.DomainAuthType().SetMsg(value.Msg())
+func (obj *isisAuthentication) SetDomainAuth(value IsisAuthenticationBase) IsisAuthentication {
+	obj.DomainAuth().SetMsg(value.Msg())
 
 	return obj
 }
@@ -25542,12 +26672,12 @@ func (obj *isisAuthentication) validateObj(set_default bool) {
 		obj.setDefault()
 	}
 
-	if obj.obj.AreaAuthType != nil {
-		obj.AreaAuthType().validateObj(set_default)
+	if obj.obj.AreaAuth != nil {
+		obj.AreaAuth().validateObj(set_default)
 	}
 
-	if obj.obj.DomainAuthType != nil {
-		obj.DomainAuthType().validateObj(set_default)
+	if obj.obj.DomainAuth != nil {
+		obj.DomainAuth().validateObj(set_default)
 	}
 }
 
@@ -25697,14 +26827,17 @@ type IsisV4RouteRange interface {
 	LinkMetric() int32
 	SetLinkMetric(value int32) IsisV4RouteRange
 	HasLinkMetric() bool
-	RouteOrigin() IsisV4RouteRangeRouteOriginEnum
-	SetRouteOrigin(value IsisV4RouteRangeRouteOriginEnum) IsisV4RouteRange
-	HasRouteOrigin() bool
-	Redistribution() IsisV4RouteRangeRedistributionEnum
-	SetRedistribution(value IsisV4RouteRangeRedistributionEnum) IsisV4RouteRange
-	HasRedistribution() bool
+	OriginType() IsisV4RouteRangeOriginTypeEnum
+	SetOriginType(value IsisV4RouteRangeOriginTypeEnum) IsisV4RouteRange
+	HasOriginType() bool
+	RedistributionType() IsisV4RouteRangeRedistributionTypeEnum
+	SetRedistributionType(value IsisV4RouteRangeRedistributionTypeEnum) IsisV4RouteRange
+	HasRedistributionType() bool
 	Name() string
 	SetName(value string) IsisV4RouteRange
+	PrefixAttrEnabled() bool
+	SetPrefixAttrEnabled(value bool) IsisV4RouteRange
+	HasPrefixAttrEnabled() bool
 	XFlag() bool
 	SetXFlag(value bool) IsisV4RouteRange
 	HasXFlag() bool
@@ -25770,73 +26903,73 @@ func (obj *isisV4RouteRange) SetLinkMetric(value int32) IsisV4RouteRange {
 	return obj
 }
 
-type IsisV4RouteRangeRouteOriginEnum string
+type IsisV4RouteRangeOriginTypeEnum string
 
-var IsisV4RouteRangeRouteOrigin = struct {
-	INTERNAL IsisV4RouteRangeRouteOriginEnum
-	EXTERNAL IsisV4RouteRangeRouteOriginEnum
+var IsisV4RouteRangeOriginType = struct {
+	INTERNAL IsisV4RouteRangeOriginTypeEnum
+	EXTERNAL IsisV4RouteRangeOriginTypeEnum
 }{
-	INTERNAL: IsisV4RouteRangeRouteOriginEnum("internal"),
-	EXTERNAL: IsisV4RouteRangeRouteOriginEnum("external"),
+	INTERNAL: IsisV4RouteRangeOriginTypeEnum("internal"),
+	EXTERNAL: IsisV4RouteRangeOriginTypeEnum("external"),
 }
 
-func (obj *isisV4RouteRange) RouteOrigin() IsisV4RouteRangeRouteOriginEnum {
-	return IsisV4RouteRangeRouteOriginEnum(obj.obj.RouteOrigin.Enum().String())
+func (obj *isisV4RouteRange) OriginType() IsisV4RouteRangeOriginTypeEnum {
+	return IsisV4RouteRangeOriginTypeEnum(obj.obj.OriginType.Enum().String())
 }
 
-// RouteOrigin returns a string
+// OriginType returns a string
 //  The origin of the advertised route-internal or external to the ISIS area. Options include the following:
 //  Internal-for intra-area routes, through Level 1 LSPs.
 //  External-for inter-area routes redistributed within L1, through Level 1 LSPs.
-func (obj *isisV4RouteRange) HasRouteOrigin() bool {
-	return obj.obj.RouteOrigin != nil
+func (obj *isisV4RouteRange) HasOriginType() bool {
+	return obj.obj.OriginType != nil
 }
 
-func (obj *isisV4RouteRange) SetRouteOrigin(value IsisV4RouteRangeRouteOriginEnum) IsisV4RouteRange {
-	intValue, ok := snappipb.IsisV4RouteRange_RouteOrigin_Enum_value[string(value)]
+func (obj *isisV4RouteRange) SetOriginType(value IsisV4RouteRangeOriginTypeEnum) IsisV4RouteRange {
+	intValue, ok := snappipb.IsisV4RouteRange_OriginType_Enum_value[string(value)]
 	if !ok {
 		validation = append(validation, fmt.Sprintf(
-			"%s is not a valid choice on IsisV4RouteRangeRouteOriginEnum", string(value)))
+			"%s is not a valid choice on IsisV4RouteRangeOriginTypeEnum", string(value)))
 		return obj
 	}
-	enumValue := snappipb.IsisV4RouteRange_RouteOrigin_Enum(intValue)
-	obj.obj.RouteOrigin = &enumValue
+	enumValue := snappipb.IsisV4RouteRange_OriginType_Enum(intValue)
+	obj.obj.OriginType = &enumValue
 	return obj
 }
 
-type IsisV4RouteRangeRedistributionEnum string
+type IsisV4RouteRangeRedistributionTypeEnum string
 
-var IsisV4RouteRangeRedistribution = struct {
-	UP   IsisV4RouteRangeRedistributionEnum
-	DOWN IsisV4RouteRangeRedistributionEnum
+var IsisV4RouteRangeRedistributionType = struct {
+	UP   IsisV4RouteRangeRedistributionTypeEnum
+	DOWN IsisV4RouteRangeRedistributionTypeEnum
 }{
-	UP:   IsisV4RouteRangeRedistributionEnum("up"),
-	DOWN: IsisV4RouteRangeRedistributionEnum("down"),
+	UP:   IsisV4RouteRangeRedistributionTypeEnum("up"),
+	DOWN: IsisV4RouteRangeRedistributionTypeEnum("down"),
 }
 
-func (obj *isisV4RouteRange) Redistribution() IsisV4RouteRangeRedistributionEnum {
-	return IsisV4RouteRangeRedistributionEnum(obj.obj.Redistribution.Enum().String())
+func (obj *isisV4RouteRange) RedistributionType() IsisV4RouteRangeRedistributionTypeEnum {
+	return IsisV4RouteRangeRedistributionTypeEnum(obj.obj.RedistributionType.Enum().String())
 }
 
-// Redistribution returns a string
+// RedistributionType returns a string
 //  Defines the Up/Down (Redistribution) bit defined for TLVs 128 and 130 by RFC 2966.  It is used for domain-wide advertisement of prefix information.
 //  Up (0)-used when a prefix is initially advertised within the ISIS L3 hierarchy,
 //  and for all other prefixes in L1 and L2 LSPs. (default)
 //  Down (1)-used when an L1/L2 router advertises L2 prefixes in L1 LSPs.
 //  The prefixes are being advertised from a higher level (L2) down to a lower level (L1).
-func (obj *isisV4RouteRange) HasRedistribution() bool {
-	return obj.obj.Redistribution != nil
+func (obj *isisV4RouteRange) HasRedistributionType() bool {
+	return obj.obj.RedistributionType != nil
 }
 
-func (obj *isisV4RouteRange) SetRedistribution(value IsisV4RouteRangeRedistributionEnum) IsisV4RouteRange {
-	intValue, ok := snappipb.IsisV4RouteRange_Redistribution_Enum_value[string(value)]
+func (obj *isisV4RouteRange) SetRedistributionType(value IsisV4RouteRangeRedistributionTypeEnum) IsisV4RouteRange {
+	intValue, ok := snappipb.IsisV4RouteRange_RedistributionType_Enum_value[string(value)]
 	if !ok {
 		validation = append(validation, fmt.Sprintf(
-			"%s is not a valid choice on IsisV4RouteRangeRedistributionEnum", string(value)))
+			"%s is not a valid choice on IsisV4RouteRangeRedistributionTypeEnum", string(value)))
 		return obj
 	}
-	enumValue := snappipb.IsisV4RouteRange_Redistribution_Enum(intValue)
-	obj.obj.Redistribution = &enumValue
+	enumValue := snappipb.IsisV4RouteRange_RedistributionType_Enum(intValue)
+	obj.obj.RedistributionType = &enumValue
 	return obj
 }
 
@@ -25850,6 +26983,29 @@ func (obj *isisV4RouteRange) Name() string {
 //  Globally unique name of an object. It also serves as the primary key for arrays of objects.
 func (obj *isisV4RouteRange) SetName(value string) IsisV4RouteRange {
 	obj.obj.Name = value
+
+	return obj
+}
+
+// PrefixAttrEnabled returns a bool
+//  Specifies whether the sub-TLV for IPv4/IPv6 Extended Reachability Attribute Flags
+//  will be advertised or not.
+func (obj *isisV4RouteRange) PrefixAttrEnabled() bool {
+	return *obj.obj.PrefixAttrEnabled
+}
+
+// PrefixAttrEnabled returns a bool
+//  Specifies whether the sub-TLV for IPv4/IPv6 Extended Reachability Attribute Flags
+//  will be advertised or not.
+func (obj *isisV4RouteRange) HasPrefixAttrEnabled() bool {
+	return obj.obj.PrefixAttrEnabled != nil
+}
+
+// SetPrefixAttrEnabled sets the bool value in the IsisV4RouteRange object
+//  Specifies whether the sub-TLV for IPv4/IPv6 Extended Reachability Attribute Flags
+//  will be advertised or not.
+func (obj *isisV4RouteRange) SetPrefixAttrEnabled(value bool) IsisV4RouteRange {
+	obj.obj.PrefixAttrEnabled = &value
 
 	return obj
 }
@@ -25945,11 +27101,14 @@ func (obj *isisV4RouteRange) setDefault() {
 	if obj.obj.LinkMetric == nil {
 		obj.SetLinkMetric(0)
 	}
-	if obj.obj.RouteOrigin == nil {
-		obj.SetRouteOrigin(IsisV4RouteRangeRouteOrigin.INTERNAL)
+	if obj.obj.OriginType == nil {
+		obj.SetOriginType(IsisV4RouteRangeOriginType.INTERNAL)
 	}
-	if obj.obj.Redistribution == nil {
-		obj.SetRedistribution(IsisV4RouteRangeRedistribution.UP)
+	if obj.obj.RedistributionType == nil {
+		obj.SetRedistributionType(IsisV4RouteRangeRedistributionType.UP)
+	}
+	if obj.obj.PrefixAttrEnabled == nil {
+		obj.SetPrefixAttrEnabled(false)
 	}
 	if obj.obj.XFlag == nil {
 		obj.SetXFlag(false)
@@ -26102,14 +27261,17 @@ type IsisV6RouteRange interface {
 	LinkMetric() int32
 	SetLinkMetric(value int32) IsisV6RouteRange
 	HasLinkMetric() bool
-	RouteOrigin() IsisV6RouteRangeRouteOriginEnum
-	SetRouteOrigin(value IsisV6RouteRangeRouteOriginEnum) IsisV6RouteRange
-	HasRouteOrigin() bool
-	Redistribution() IsisV6RouteRangeRedistributionEnum
-	SetRedistribution(value IsisV6RouteRangeRedistributionEnum) IsisV6RouteRange
-	HasRedistribution() bool
+	OriginType() IsisV6RouteRangeOriginTypeEnum
+	SetOriginType(value IsisV6RouteRangeOriginTypeEnum) IsisV6RouteRange
+	HasOriginType() bool
+	RedistributionType() IsisV6RouteRangeRedistributionTypeEnum
+	SetRedistributionType(value IsisV6RouteRangeRedistributionTypeEnum) IsisV6RouteRange
+	HasRedistributionType() bool
 	Name() string
 	SetName(value string) IsisV6RouteRange
+	PrefixAttrEnabled() bool
+	SetPrefixAttrEnabled(value bool) IsisV6RouteRange
+	HasPrefixAttrEnabled() bool
 	XFlag() bool
 	SetXFlag(value bool) IsisV6RouteRange
 	HasXFlag() bool
@@ -26175,73 +27337,73 @@ func (obj *isisV6RouteRange) SetLinkMetric(value int32) IsisV6RouteRange {
 	return obj
 }
 
-type IsisV6RouteRangeRouteOriginEnum string
+type IsisV6RouteRangeOriginTypeEnum string
 
-var IsisV6RouteRangeRouteOrigin = struct {
-	INTERNAL IsisV6RouteRangeRouteOriginEnum
-	EXTERNAL IsisV6RouteRangeRouteOriginEnum
+var IsisV6RouteRangeOriginType = struct {
+	INTERNAL IsisV6RouteRangeOriginTypeEnum
+	EXTERNAL IsisV6RouteRangeOriginTypeEnum
 }{
-	INTERNAL: IsisV6RouteRangeRouteOriginEnum("internal"),
-	EXTERNAL: IsisV6RouteRangeRouteOriginEnum("external"),
+	INTERNAL: IsisV6RouteRangeOriginTypeEnum("internal"),
+	EXTERNAL: IsisV6RouteRangeOriginTypeEnum("external"),
 }
 
-func (obj *isisV6RouteRange) RouteOrigin() IsisV6RouteRangeRouteOriginEnum {
-	return IsisV6RouteRangeRouteOriginEnum(obj.obj.RouteOrigin.Enum().String())
+func (obj *isisV6RouteRange) OriginType() IsisV6RouteRangeOriginTypeEnum {
+	return IsisV6RouteRangeOriginTypeEnum(obj.obj.OriginType.Enum().String())
 }
 
-// RouteOrigin returns a string
+// OriginType returns a string
 //  The origin of the advertised route-internal or external to the ISIS area. Options include the following:
 //  Internal-for intra-area routes, through Level 1 LSPs.
 //  External-for inter-area routes redistributed within L1, through Level 1 LSPs.
-func (obj *isisV6RouteRange) HasRouteOrigin() bool {
-	return obj.obj.RouteOrigin != nil
+func (obj *isisV6RouteRange) HasOriginType() bool {
+	return obj.obj.OriginType != nil
 }
 
-func (obj *isisV6RouteRange) SetRouteOrigin(value IsisV6RouteRangeRouteOriginEnum) IsisV6RouteRange {
-	intValue, ok := snappipb.IsisV6RouteRange_RouteOrigin_Enum_value[string(value)]
+func (obj *isisV6RouteRange) SetOriginType(value IsisV6RouteRangeOriginTypeEnum) IsisV6RouteRange {
+	intValue, ok := snappipb.IsisV6RouteRange_OriginType_Enum_value[string(value)]
 	if !ok {
 		validation = append(validation, fmt.Sprintf(
-			"%s is not a valid choice on IsisV6RouteRangeRouteOriginEnum", string(value)))
+			"%s is not a valid choice on IsisV6RouteRangeOriginTypeEnum", string(value)))
 		return obj
 	}
-	enumValue := snappipb.IsisV6RouteRange_RouteOrigin_Enum(intValue)
-	obj.obj.RouteOrigin = &enumValue
+	enumValue := snappipb.IsisV6RouteRange_OriginType_Enum(intValue)
+	obj.obj.OriginType = &enumValue
 	return obj
 }
 
-type IsisV6RouteRangeRedistributionEnum string
+type IsisV6RouteRangeRedistributionTypeEnum string
 
-var IsisV6RouteRangeRedistribution = struct {
-	UP   IsisV6RouteRangeRedistributionEnum
-	DOWN IsisV6RouteRangeRedistributionEnum
+var IsisV6RouteRangeRedistributionType = struct {
+	UP   IsisV6RouteRangeRedistributionTypeEnum
+	DOWN IsisV6RouteRangeRedistributionTypeEnum
 }{
-	UP:   IsisV6RouteRangeRedistributionEnum("up"),
-	DOWN: IsisV6RouteRangeRedistributionEnum("down"),
+	UP:   IsisV6RouteRangeRedistributionTypeEnum("up"),
+	DOWN: IsisV6RouteRangeRedistributionTypeEnum("down"),
 }
 
-func (obj *isisV6RouteRange) Redistribution() IsisV6RouteRangeRedistributionEnum {
-	return IsisV6RouteRangeRedistributionEnum(obj.obj.Redistribution.Enum().String())
+func (obj *isisV6RouteRange) RedistributionType() IsisV6RouteRangeRedistributionTypeEnum {
+	return IsisV6RouteRangeRedistributionTypeEnum(obj.obj.RedistributionType.Enum().String())
 }
 
-// Redistribution returns a string
+// RedistributionType returns a string
 //  Defines the Up/Down (Redistribution) bit defined for TLVs 128 and 130 by RFC 2966.  It is used for domain-wide advertisement of prefix information.
 //  Up (0)-used when a prefix is initially advertised within the ISIS L3 hierarchy,
 //  and for all other prefixes in L1 and L2 LSPs. (default)
 //  Down (1)-used when an L1/L2 router advertises L2 prefixes in L1 LSPs.
 //  The prefixes are being advertised from a higher level (L2) down to a lower level (L1).
-func (obj *isisV6RouteRange) HasRedistribution() bool {
-	return obj.obj.Redistribution != nil
+func (obj *isisV6RouteRange) HasRedistributionType() bool {
+	return obj.obj.RedistributionType != nil
 }
 
-func (obj *isisV6RouteRange) SetRedistribution(value IsisV6RouteRangeRedistributionEnum) IsisV6RouteRange {
-	intValue, ok := snappipb.IsisV6RouteRange_Redistribution_Enum_value[string(value)]
+func (obj *isisV6RouteRange) SetRedistributionType(value IsisV6RouteRangeRedistributionTypeEnum) IsisV6RouteRange {
+	intValue, ok := snappipb.IsisV6RouteRange_RedistributionType_Enum_value[string(value)]
 	if !ok {
 		validation = append(validation, fmt.Sprintf(
-			"%s is not a valid choice on IsisV6RouteRangeRedistributionEnum", string(value)))
+			"%s is not a valid choice on IsisV6RouteRangeRedistributionTypeEnum", string(value)))
 		return obj
 	}
-	enumValue := snappipb.IsisV6RouteRange_Redistribution_Enum(intValue)
-	obj.obj.Redistribution = &enumValue
+	enumValue := snappipb.IsisV6RouteRange_RedistributionType_Enum(intValue)
+	obj.obj.RedistributionType = &enumValue
 	return obj
 }
 
@@ -26255,6 +27417,29 @@ func (obj *isisV6RouteRange) Name() string {
 //  Globally unique name of an object. It also serves as the primary key for arrays of objects.
 func (obj *isisV6RouteRange) SetName(value string) IsisV6RouteRange {
 	obj.obj.Name = value
+
+	return obj
+}
+
+// PrefixAttrEnabled returns a bool
+//  Specifies whether the sub-TLV for IPv4/IPv6 Extended Reachability Attribute Flags
+//  will be advertised or not.
+func (obj *isisV6RouteRange) PrefixAttrEnabled() bool {
+	return *obj.obj.PrefixAttrEnabled
+}
+
+// PrefixAttrEnabled returns a bool
+//  Specifies whether the sub-TLV for IPv4/IPv6 Extended Reachability Attribute Flags
+//  will be advertised or not.
+func (obj *isisV6RouteRange) HasPrefixAttrEnabled() bool {
+	return obj.obj.PrefixAttrEnabled != nil
+}
+
+// SetPrefixAttrEnabled sets the bool value in the IsisV6RouteRange object
+//  Specifies whether the sub-TLV for IPv4/IPv6 Extended Reachability Attribute Flags
+//  will be advertised or not.
+func (obj *isisV6RouteRange) SetPrefixAttrEnabled(value bool) IsisV6RouteRange {
+	obj.obj.PrefixAttrEnabled = &value
 
 	return obj
 }
@@ -26350,11 +27535,14 @@ func (obj *isisV6RouteRange) setDefault() {
 	if obj.obj.LinkMetric == nil {
 		obj.SetLinkMetric(0)
 	}
-	if obj.obj.RouteOrigin == nil {
-		obj.SetRouteOrigin(IsisV6RouteRangeRouteOrigin.INTERNAL)
+	if obj.obj.OriginType == nil {
+		obj.SetOriginType(IsisV6RouteRangeOriginType.INTERNAL)
 	}
-	if obj.obj.Redistribution == nil {
-		obj.SetRedistribution(IsisV6RouteRangeRedistribution.UP)
+	if obj.obj.RedistributionType == nil {
+		obj.SetRedistributionType(IsisV6RouteRangeRedistributionType.UP)
+	}
+	if obj.obj.PrefixAttrEnabled == nil {
+		obj.SetPrefixAttrEnabled(false)
 	}
 	if obj.obj.XFlag == nil {
 		obj.SetXFlag(false)
@@ -37095,19 +38283,19 @@ type IsisMT interface {
 }
 
 // MtId returns a int32
-//  The multi-topology ID for one of the topologies supported on the ISIS interface.
+//  The Multi Topology ID for one of the topologies supported on the ISIS interface.
 func (obj *isisMT) MtId() int32 {
 	return *obj.obj.MtId
 }
 
 // MtId returns a int32
-//  The multi-topology ID for one of the topologies supported on the ISIS interface.
+//  The Multi Topology ID for one of the topologies supported on the ISIS interface.
 func (obj *isisMT) HasMtId() bool {
 	return obj.obj.MtId != nil
 }
 
 // SetMtId sets the int32 value in the IsisMT object
-//  The multi-topology ID for one of the topologies supported on the ISIS interface.
+//  The Multi Topology ID for one of the topologies supported on the ISIS interface.
 func (obj *isisMT) SetMtId(value int32) IsisMT {
 	obj.obj.MtId = &value
 
@@ -37314,9 +38502,9 @@ type LinkStateTE interface {
 	MaxReservableBandwidth() int64
 	SetMaxReservableBandwidth(value int64) LinkStateTE
 	HasMaxReservableBandwidth() bool
-	PriorityBandwidths07() LinkStatepriorityBandwidths
-	SetPriorityBandwidths07(value LinkStatepriorityBandwidths) LinkStateTE
-	HasPriorityBandwidths07() bool
+	PriorityBandwidths() LinkStatepriorityBandwidths
+	SetPriorityBandwidths(value LinkStatepriorityBandwidths) LinkStateTE
+	HasPriorityBandwidths() bool
 }
 
 // AdministrativeGroup returns a string
@@ -37420,25 +38608,25 @@ func (obj *linkStateTE) SetMaxReservableBandwidth(value int64) LinkStateTE {
 	return obj
 }
 
-// PriorityBandwidths07 returns a LinkStatepriorityBandwidths
+// PriorityBandwidths returns a LinkStatepriorityBandwidths
 //  Configuration of bandwidths of priority 0 through priority 7.
-func (obj *linkStateTE) PriorityBandwidths07() LinkStatepriorityBandwidths {
-	if obj.obj.PriorityBandwidths_0_7 == nil {
-		obj.obj.PriorityBandwidths_0_7 = NewLinkStatepriorityBandwidths().Msg()
+func (obj *linkStateTE) PriorityBandwidths() LinkStatepriorityBandwidths {
+	if obj.obj.PriorityBandwidths == nil {
+		obj.obj.PriorityBandwidths = NewLinkStatepriorityBandwidths().Msg()
 	}
-	return &linkStatepriorityBandwidths{obj: obj.obj.PriorityBandwidths_0_7}
+	return &linkStatepriorityBandwidths{obj: obj.obj.PriorityBandwidths}
 }
 
-// PriorityBandwidths07 returns a LinkStatepriorityBandwidths
+// PriorityBandwidths returns a LinkStatepriorityBandwidths
 //  Configuration of bandwidths of priority 0 through priority 7.
-func (obj *linkStateTE) HasPriorityBandwidths07() bool {
-	return obj.obj.PriorityBandwidths_0_7 != nil
+func (obj *linkStateTE) HasPriorityBandwidths() bool {
+	return obj.obj.PriorityBandwidths != nil
 }
 
-// SetPriorityBandwidths07 sets the LinkStatepriorityBandwidths value in the LinkStateTE object
+// SetPriorityBandwidths sets the LinkStatepriorityBandwidths value in the LinkStateTE object
 //  Configuration of bandwidths of priority 0 through priority 7.
-func (obj *linkStateTE) SetPriorityBandwidths07(value LinkStatepriorityBandwidths) LinkStateTE {
-	obj.PriorityBandwidths07().SetMsg(value.Msg())
+func (obj *linkStateTE) SetPriorityBandwidths(value LinkStatepriorityBandwidths) LinkStateTE {
+	obj.PriorityBandwidths().SetMsg(value.Msg())
 
 	return obj
 }
@@ -37479,8 +38667,8 @@ func (obj *linkStateTE) validateObj(set_default bool) {
 
 	}
 
-	if obj.obj.PriorityBandwidths_0_7 != nil {
-		obj.PriorityBandwidths07().validateObj(set_default)
+	if obj.obj.PriorityBandwidths != nil {
+		obj.PriorityBandwidths().validateObj(set_default)
 	}
 }
 
@@ -37635,9 +38823,8 @@ type IsisInterfaceAuthentication interface {
 	Validate(defaults ...bool) error
 	validateObj(set_default bool)
 	setDefault()
-	Choice() IsisInterfaceAuthenticationChoiceEnum
-	SetChoice(value IsisInterfaceAuthenticationChoiceEnum) IsisInterfaceAuthentication
-	HasChoice() bool
+	AuthType() IsisInterfaceAuthenticationAuthTypeEnum
+	SetAuthType(value IsisInterfaceAuthenticationAuthTypeEnum) IsisInterfaceAuthentication
 	Md5() string
 	SetMd5(value string) IsisInterfaceAuthentication
 	HasMd5() bool
@@ -37646,35 +38833,28 @@ type IsisInterfaceAuthentication interface {
 	HasPassword() bool
 }
 
-type IsisInterfaceAuthenticationChoiceEnum string
+type IsisInterfaceAuthenticationAuthTypeEnum string
 
-var IsisInterfaceAuthenticationChoice = struct {
-	MD5      IsisInterfaceAuthenticationChoiceEnum
-	PASSWORD IsisInterfaceAuthenticationChoiceEnum
+var IsisInterfaceAuthenticationAuthType = struct {
+	MD5      IsisInterfaceAuthenticationAuthTypeEnum
+	PASSWORD IsisInterfaceAuthenticationAuthTypeEnum
 }{
-	MD5:      IsisInterfaceAuthenticationChoiceEnum("md5"),
-	PASSWORD: IsisInterfaceAuthenticationChoiceEnum("password"),
+	MD5:      IsisInterfaceAuthenticationAuthTypeEnum("md5"),
+	PASSWORD: IsisInterfaceAuthenticationAuthTypeEnum("password"),
 }
 
-func (obj *isisInterfaceAuthentication) Choice() IsisInterfaceAuthenticationChoiceEnum {
-	return IsisInterfaceAuthenticationChoiceEnum(obj.obj.Choice.Enum().String())
+func (obj *isisInterfaceAuthentication) AuthType() IsisInterfaceAuthenticationAuthTypeEnum {
+	return IsisInterfaceAuthenticationAuthTypeEnum(obj.obj.AuthType.Enum().String())
 }
 
-// Choice returns a string
-//  The circuit authentication method.
-func (obj *isisInterfaceAuthentication) HasChoice() bool {
-	return obj.obj.Choice != nil
-}
-
-func (obj *isisInterfaceAuthentication) SetChoice(value IsisInterfaceAuthenticationChoiceEnum) IsisInterfaceAuthentication {
-	intValue, ok := snappipb.IsisInterfaceAuthentication_Choice_Enum_value[string(value)]
+func (obj *isisInterfaceAuthentication) SetAuthType(value IsisInterfaceAuthenticationAuthTypeEnum) IsisInterfaceAuthentication {
+	intValue, ok := snappipb.IsisInterfaceAuthentication_AuthType_Enum_value[string(value)]
 	if !ok {
 		validation = append(validation, fmt.Sprintf(
-			"%s is not a valid choice on IsisInterfaceAuthenticationChoiceEnum", string(value)))
+			"%s is not a valid choice on IsisInterfaceAuthenticationAuthTypeEnum", string(value)))
 		return obj
 	}
-	enumValue := snappipb.IsisInterfaceAuthentication_Choice_Enum(intValue)
-	obj.obj.Choice = &enumValue
+	obj.obj.AuthType = snappipb.IsisInterfaceAuthentication_AuthType_Enum(intValue)
 	return obj
 }
 
@@ -37694,7 +38874,7 @@ func (obj *isisInterfaceAuthentication) HasMd5() bool {
 //  MD5 key to be used for authentication.
 func (obj *isisInterfaceAuthentication) SetMd5(value string) IsisInterfaceAuthentication {
 	obj.obj.Md5 = &value
-	obj.SetChoice(IsisInterfaceAuthenticationChoice.MD5)
+
 	return obj
 }
 
@@ -37714,13 +38894,19 @@ func (obj *isisInterfaceAuthentication) HasPassword() bool {
 //  The password, in clear text, to be used for Authentication.
 func (obj *isisInterfaceAuthentication) SetPassword(value string) IsisInterfaceAuthentication {
 	obj.obj.Password = &value
-	obj.SetChoice(IsisInterfaceAuthenticationChoice.PASSWORD)
+
 	return obj
 }
 
 func (obj *isisInterfaceAuthentication) validateObj(set_default bool) {
 	if set_default {
 		obj.setDefault()
+	}
+
+	// AuthType required
+	if obj.obj.AuthType.Number() == 0 {
+		validation = append(
+			validation, fmt.Sprintf("AuthType is required field on IsisInterfaceAuthentication and got value %s", obj.obj.AuthType.String()))
 	}
 
 }
@@ -38491,8 +39677,8 @@ type IsisAuthenticationBase interface {
 	Validate(defaults ...bool) error
 	validateObj(set_default bool)
 	setDefault()
-	Choice() IsisAuthenticationBaseChoiceEnum
-	SetChoice(value IsisAuthenticationBaseChoiceEnum) IsisAuthenticationBase
+	AuthType() IsisAuthenticationBaseAuthTypeEnum
+	SetAuthType(value IsisAuthenticationBaseAuthTypeEnum) IsisAuthenticationBase
 	Md5() string
 	SetMd5(value string) IsisAuthenticationBase
 	HasMd5() bool
@@ -38501,28 +39687,28 @@ type IsisAuthenticationBase interface {
 	HasPassword() bool
 }
 
-type IsisAuthenticationBaseChoiceEnum string
+type IsisAuthenticationBaseAuthTypeEnum string
 
-var IsisAuthenticationBaseChoice = struct {
-	MD5      IsisAuthenticationBaseChoiceEnum
-	PASSWORD IsisAuthenticationBaseChoiceEnum
+var IsisAuthenticationBaseAuthType = struct {
+	MD5      IsisAuthenticationBaseAuthTypeEnum
+	PASSWORD IsisAuthenticationBaseAuthTypeEnum
 }{
-	MD5:      IsisAuthenticationBaseChoiceEnum("md5"),
-	PASSWORD: IsisAuthenticationBaseChoiceEnum("password"),
+	MD5:      IsisAuthenticationBaseAuthTypeEnum("md5"),
+	PASSWORD: IsisAuthenticationBaseAuthTypeEnum("password"),
 }
 
-func (obj *isisAuthenticationBase) Choice() IsisAuthenticationBaseChoiceEnum {
-	return IsisAuthenticationBaseChoiceEnum(obj.obj.Choice.Enum().String())
+func (obj *isisAuthenticationBase) AuthType() IsisAuthenticationBaseAuthTypeEnum {
+	return IsisAuthenticationBaseAuthTypeEnum(obj.obj.AuthType.Enum().String())
 }
 
-func (obj *isisAuthenticationBase) SetChoice(value IsisAuthenticationBaseChoiceEnum) IsisAuthenticationBase {
-	intValue, ok := snappipb.IsisAuthenticationBase_Choice_Enum_value[string(value)]
+func (obj *isisAuthenticationBase) SetAuthType(value IsisAuthenticationBaseAuthTypeEnum) IsisAuthenticationBase {
+	intValue, ok := snappipb.IsisAuthenticationBase_AuthType_Enum_value[string(value)]
 	if !ok {
 		validation = append(validation, fmt.Sprintf(
-			"%s is not a valid choice on IsisAuthenticationBaseChoiceEnum", string(value)))
+			"%s is not a valid choice on IsisAuthenticationBaseAuthTypeEnum", string(value)))
 		return obj
 	}
-	obj.obj.Choice = snappipb.IsisAuthenticationBase_Choice_Enum(intValue)
+	obj.obj.AuthType = snappipb.IsisAuthenticationBase_AuthType_Enum(intValue)
 	return obj
 }
 
@@ -38542,7 +39728,7 @@ func (obj *isisAuthenticationBase) HasMd5() bool {
 //  Authentication as an MD5 key.
 func (obj *isisAuthenticationBase) SetMd5(value string) IsisAuthenticationBase {
 	obj.obj.Md5 = &value
-	obj.SetChoice(IsisAuthenticationBaseChoice.MD5)
+
 	return obj
 }
 
@@ -38562,7 +39748,7 @@ func (obj *isisAuthenticationBase) HasPassword() bool {
 //  Authentication as a clear text password.
 func (obj *isisAuthenticationBase) SetPassword(value string) IsisAuthenticationBase {
 	obj.obj.Password = &value
-	obj.SetChoice(IsisAuthenticationBaseChoice.PASSWORD)
+
 	return obj
 }
 
@@ -38571,10 +39757,10 @@ func (obj *isisAuthenticationBase) validateObj(set_default bool) {
 		obj.setDefault()
 	}
 
-	// Choice required
-	if obj.obj.Choice.Number() == 0 {
+	// AuthType required
+	if obj.obj.AuthType.Number() == 0 {
 		validation = append(
-			validation, fmt.Sprintf("Choice is required field on IsisAuthenticationBase and got value %s", obj.obj.Choice.String()))
+			validation, fmt.Sprintf("AuthType is required field on IsisAuthenticationBase and got value %s", obj.obj.AuthType.String()))
 	}
 
 }
