@@ -29,14 +29,14 @@ import (
 )
 
 func main() {
-	// Create a new API object, A hook to create and apply the configuration on a traffic generator
+	// Create a new API handle to make API calls against a traffic generator
 	api := gosnappi.NewApi()
 
-	// Set the communication medium to either GRPC or HTTP
+	// Set the transport protocol to either GRPC or HTTP
 	grpc := api.NewGrpcTransport()
-	grpc.SetLocation("<grpc server ip>:<port>")
+	grpc.SetLocation("127.0.0.1:50071")
 
-	// Create a new configuration object that will be applied on traffic generator.
+	// Create a new traffic configuration that will be set on traffic generator
 	config := api.NewConfig()
 
 	// Add port locations to the configuration
@@ -52,9 +52,10 @@ func main() {
 	flow.Duration().FixedPackets().SetPackets(1000)
 
 	// Configure the header stack
-	eth := flow.Packet().Add().Ethernet()
-	ipv4 := flow.Packet().Add().Ipv4()
-	tcp := flow.Packet().Add().Tcp()
+    pkt = flow.Packet()
+	eth := pkt.Add().Ethernet()
+	ipv4 := pkt.Add().Ipv4()
+	tcp := pkt.Add().Tcp()
 
 	eth.Dst().SetValue("00:11:22:33:44:55")
 	eth.Src().SetValue("00:11:22:33:44:66")
@@ -65,8 +66,8 @@ func main() {
 	tcp.SrcPort().SetValue(5000)
 	tcp.DstPort().SetValue(6000)
 
-	// The configuration object is set with ports and flows
-	// Now it shall be pushed to the traffic generator.
+	// Push traffic configuration constructed so far to traffic generator
+    fmt.Println(config.ToJson())
 	api.SetConfig(config)
 
 	// Start transmitting the configured flows
@@ -77,6 +78,11 @@ func main() {
 	// Fetch and the port metrics
 	req := api.NewMetricsRequest()
 	req.Port().SetPortNames([]string{p1.Name(), p2.Name()})
-	fmt.Println(api.GetMetrics(req))
+	metrics, err := api.GetMetrics(req)
+	if err != nil {
+		fmt.Println(err)
+	} else {
+		fmt.Println(metrics.ToJson())
+	}
 }
 ```
