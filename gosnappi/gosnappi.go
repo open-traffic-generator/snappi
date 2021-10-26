@@ -281,7 +281,7 @@ func (api *gosnappiApi) SetConfig(config Config) (ResponseWarning, error) {
 		data, _ := yaml.Marshal(resp.GetStatusCode_500())
 		return nil, fmt.Errorf(string(data))
 	}
-	return nil, fmt.Errorf("A response of 200, 400, 500 has not been implemented")
+	return nil, fmt.Errorf("response of 200, 400, 500 has not been implemented")
 }
 
 func (api *gosnappiApi) GetConfig() (Config, error) {
@@ -311,7 +311,7 @@ func (api *gosnappiApi) GetConfig() (Config, error) {
 		data, _ := yaml.Marshal(resp.GetStatusCode_500())
 		return nil, fmt.Errorf(string(data))
 	}
-	return nil, fmt.Errorf("A response of 200, 400, 500 has not been implemented")
+	return nil, fmt.Errorf("response of 200, 400, 500 has not been implemented")
 }
 
 func (api *gosnappiApi) SetTransmitState(transmitState TransmitState) (ResponseWarning, error) {
@@ -346,7 +346,7 @@ func (api *gosnappiApi) SetTransmitState(transmitState TransmitState) (ResponseW
 		data, _ := yaml.Marshal(resp.GetStatusCode_500())
 		return nil, fmt.Errorf(string(data))
 	}
-	return nil, fmt.Errorf("A response of 200, 400, 500 has not been implemented")
+	return nil, fmt.Errorf("response of 200, 400, 500 has not been implemented")
 }
 
 func (api *gosnappiApi) SetLinkState(linkState LinkState) (ResponseWarning, error) {
@@ -381,7 +381,7 @@ func (api *gosnappiApi) SetLinkState(linkState LinkState) (ResponseWarning, erro
 		data, _ := yaml.Marshal(resp.GetStatusCode_500())
 		return nil, fmt.Errorf(string(data))
 	}
-	return nil, fmt.Errorf("A response of 200, 400, 500 has not been implemented")
+	return nil, fmt.Errorf("response of 200, 400, 500 has not been implemented")
 }
 
 func (api *gosnappiApi) SetCaptureState(captureState CaptureState) (ResponseWarning, error) {
@@ -416,7 +416,7 @@ func (api *gosnappiApi) SetCaptureState(captureState CaptureState) (ResponseWarn
 		data, _ := yaml.Marshal(resp.GetStatusCode_500())
 		return nil, fmt.Errorf(string(data))
 	}
-	return nil, fmt.Errorf("A response of 200, 400, 500 has not been implemented")
+	return nil, fmt.Errorf("response of 200, 400, 500 has not been implemented")
 }
 
 func (api *gosnappiApi) UpdateFlows(flowsUpdate FlowsUpdate) (Config, error) {
@@ -451,7 +451,7 @@ func (api *gosnappiApi) UpdateFlows(flowsUpdate FlowsUpdate) (Config, error) {
 		data, _ := yaml.Marshal(resp.GetStatusCode_500())
 		return nil, fmt.Errorf(string(data))
 	}
-	return nil, fmt.Errorf("A response of 200, 400, 500 has not been implemented")
+	return nil, fmt.Errorf("response of 200, 400, 500 has not been implemented")
 }
 
 func (api *gosnappiApi) SetRouteState(routeState RouteState) (ResponseWarning, error) {
@@ -486,7 +486,7 @@ func (api *gosnappiApi) SetRouteState(routeState RouteState) (ResponseWarning, e
 		data, _ := yaml.Marshal(resp.GetStatusCode_500())
 		return nil, fmt.Errorf(string(data))
 	}
-	return nil, fmt.Errorf("A response of 200, 400, 500 has not been implemented")
+	return nil, fmt.Errorf("response of 200, 400, 500 has not been implemented")
 }
 
 func (api *gosnappiApi) SendPing(pingRequest PingRequest) (PingResponse, error) {
@@ -521,7 +521,7 @@ func (api *gosnappiApi) SendPing(pingRequest PingRequest) (PingResponse, error) 
 		data, _ := yaml.Marshal(resp.GetStatusCode_500())
 		return nil, fmt.Errorf(string(data))
 	}
-	return nil, fmt.Errorf("A response of 200, 400, 500 has not been implemented")
+	return nil, fmt.Errorf("response of 200, 400, 500 has not been implemented")
 }
 
 func (api *gosnappiApi) SetProtocolState(protocolState ProtocolState) (ResponseWarning, error) {
@@ -556,7 +556,7 @@ func (api *gosnappiApi) SetProtocolState(protocolState ProtocolState) (ResponseW
 		data, _ := yaml.Marshal(resp.GetStatusCode_500())
 		return nil, fmt.Errorf(string(data))
 	}
-	return nil, fmt.Errorf("A response of 200, 400, 500 has not been implemented")
+	return nil, fmt.Errorf("response of 200, 400, 500 has not been implemented")
 }
 
 func (api *gosnappiApi) GetMetrics(metricsRequest MetricsRequest) (MetricsResponse, error) {
@@ -591,7 +591,7 @@ func (api *gosnappiApi) GetMetrics(metricsRequest MetricsRequest) (MetricsRespon
 		data, _ := yaml.Marshal(resp.GetStatusCode_500())
 		return nil, fmt.Errorf(string(data))
 	}
-	return nil, fmt.Errorf("A response of 200, 400, 500 has not been implemented")
+	return nil, fmt.Errorf("response of 200, 400, 500 has not been implemented")
 }
 
 func (api *gosnappiApi) GetStateMetrics() (StateMetrics, error) {
@@ -621,7 +621,7 @@ func (api *gosnappiApi) GetStateMetrics() (StateMetrics, error) {
 		data, _ := yaml.Marshal(resp.GetStatusCode_500())
 		return nil, fmt.Errorf(string(data))
 	}
-	return nil, fmt.Errorf("A response of 200, 400, 500 has not been implemented")
+	return nil, fmt.Errorf("response of 200, 400, 500 has not been implemented")
 }
 
 func (api *gosnappiApi) GetCapture(captureRequest CaptureRequest) ([]byte, error) {
@@ -656,7 +656,7 @@ func (api *gosnappiApi) GetCapture(captureRequest CaptureRequest) ([]byte, error
 		data, _ := yaml.Marshal(resp.GetStatusCode_500())
 		return nil, fmt.Errorf(string(data))
 	}
-	return nil, fmt.Errorf("A response of 200, 400, 500 has not been implemented")
+	return nil, fmt.Errorf("response of 200, 400, 500 has not been implemented")
 }
 
 func (api *gosnappiApi) httpSetConfig(config Config) (ResponseWarning, error) {
@@ -1462,24 +1462,6 @@ func (obj *config) validateObj(set_default bool) {
 }
 
 func (obj *config) setDefault() {
-	if obj.obj.Ports == nil {
-		obj.Ports()
-	}
-	if obj.obj.Lags == nil {
-		obj.Lags()
-	}
-	if obj.obj.Layer1 == nil {
-		obj.Layer1()
-	}
-	if obj.obj.Captures == nil {
-		obj.Captures()
-	}
-	if obj.obj.Devices == nil {
-		obj.Devices()
-	}
-	if obj.obj.Flows == nil {
-		obj.Flows()
-	}
 
 }
 
@@ -1684,6 +1666,7 @@ func (obj *transmitState) SetState(value TransmitStateStateEnum) TransmitState {
 		return obj
 	}
 	obj.obj.State = snappipb.TransmitState_State_Enum(intValue)
+
 	return obj
 }
 
@@ -1701,9 +1684,6 @@ func (obj *transmitState) validateObj(set_default bool) {
 }
 
 func (obj *transmitState) setDefault() {
-	if obj.obj.State.Number() == 0 {
-		obj.SetState(TransmitStateState.START)
-	}
 
 }
 
@@ -1906,6 +1886,7 @@ func (obj *linkState) SetState(value LinkStateStateEnum) LinkState {
 		return obj
 	}
 	obj.obj.State = snappipb.LinkState_State_Enum(intValue)
+
 	return obj
 }
 
@@ -2125,6 +2106,7 @@ func (obj *captureState) SetState(value CaptureStateStateEnum) CaptureState {
 		return obj
 	}
 	obj.obj.State = snappipb.CaptureState_State_Enum(intValue)
+
 	return obj
 }
 
@@ -2369,9 +2351,6 @@ func (obj *flowsUpdate) validateObj(set_default bool) {
 }
 
 func (obj *flowsUpdate) setDefault() {
-	if obj.obj.Flows == nil {
-		obj.Flows()
-	}
 
 }
 
@@ -2578,6 +2557,7 @@ func (obj *routeState) SetState(value RouteStateStateEnum) RouteState {
 		return obj
 	}
 	obj.obj.State = snappipb.RouteState_State_Enum(intValue)
+
 	return obj
 }
 
@@ -2783,9 +2763,6 @@ func (obj *pingRequest) validateObj(set_default bool) {
 }
 
 func (obj *pingRequest) setDefault() {
-	if obj.obj.Endpoints == nil {
-		obj.Endpoints()
-	}
 
 }
 
@@ -2950,6 +2927,7 @@ func (obj *protocolState) SetState(value ProtocolStateStateEnum) ProtocolState {
 		return obj
 	}
 	obj.obj.State = snappipb.ProtocolState_State_Enum(intValue)
+
 	return obj
 }
 
@@ -3160,6 +3138,27 @@ func (obj *metricsRequest) SetChoice(value MetricsRequestChoiceEnum) MetricsRequ
 	}
 	enumValue := snappipb.MetricsRequest_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "port" {
+		obj.obj.Port = nil
+	}
+
+	if string(value) != "flow" {
+		obj.obj.Flow = nil
+	}
+
+	if string(value) != "bgpv4" {
+		obj.obj.Bgpv4 = nil
+	}
+
+	if string(value) != "bgpv6" {
+		obj.obj.Bgpv6 = nil
+	}
+
+	if string(value) != "isis" {
+		obj.obj.Isis = nil
+	}
+
 	return obj
 }
 
@@ -3312,6 +3311,7 @@ func (obj *metricsRequest) validateObj(set_default bool) {
 func (obj *metricsRequest) setDefault() {
 	if obj.obj.Choice == nil {
 		obj.SetChoice(MetricsRequestChoice.PORT)
+		obj.Port()
 	}
 
 }
@@ -3466,6 +3466,7 @@ type CaptureRequest interface {
 //  - /components/schemas/Port/properties/name
 //
 func (obj *captureRequest) PortName() string {
+
 	return obj.obj.PortName
 }
 
@@ -6255,6 +6256,7 @@ type GetCaptureResponse interface {
 // StatusCode200 returns a []byte
 //  description is TBD
 func (obj *getCaptureResponse) StatusCode200() []byte {
+
 	return obj.obj.StatusCode_200
 }
 
@@ -6483,7 +6485,9 @@ type Port interface {
 //  The test port location format is implementation specific. Use the /results/capabilities API to determine what formats an  implementation supports for the location property.
 //  Get the configured location state by using the /results/port API.
 func (obj *port) Location() string {
+
 	return *obj.obj.Location
+
 }
 
 // Location returns a string
@@ -6519,6 +6523,7 @@ func (obj *port) SetLocation(value string) Port {
 // Name returns a string
 //  Globally unique name of an object. It also serves as the primary key for arrays of objects.
 func (obj *port) Name() string {
+
 	return obj.obj.Name
 }
 
@@ -6722,6 +6727,7 @@ func (obj *lagLagPortIter) Items() []LagPort {
 // Name returns a string
 //  Globally unique name of an object. It also serves as the primary key for arrays of objects.
 func (obj *lag) Name() string {
+
 	return obj.obj.Name
 }
 
@@ -6750,9 +6756,6 @@ func (obj *lag) validateObj(set_default bool) {
 }
 
 func (obj *lag) setDefault() {
-	if obj.obj.Ports == nil {
-		obj.Ports()
-	}
 
 }
 
@@ -7006,6 +7009,7 @@ func (obj *layer1) SetSpeed(value Layer1SpeedEnum) Layer1 {
 	}
 	enumValue := snappipb.Layer1_Speed_Enum(intValue)
 	obj.obj.Speed = &enumValue
+
 	return obj
 }
 
@@ -7040,13 +7044,20 @@ func (obj *layer1) SetMedia(value Layer1MediaEnum) Layer1 {
 	}
 	enumValue := snappipb.Layer1_Media_Enum(intValue)
 	obj.obj.Media = &enumValue
+
 	return obj
 }
 
 // Promiscuous returns a bool
 //  Enable promiscuous mode if supported.
 func (obj *layer1) Promiscuous() bool {
+
+	if obj.obj.Promiscuous == nil {
+		*obj.obj.Promiscuous = true
+	}
+
 	return *obj.obj.Promiscuous
+
 }
 
 // Promiscuous returns a bool
@@ -7066,7 +7077,13 @@ func (obj *layer1) SetPromiscuous(value bool) Layer1 {
 // Mtu returns a int32
 //  Set the maximum transmission unit size if supported.
 func (obj *layer1) Mtu() int32 {
+
+	if obj.obj.Mtu == nil {
+		*obj.obj.Mtu = 1500
+	}
+
 	return *obj.obj.Mtu
+
 }
 
 // Mtu returns a int32
@@ -7087,7 +7104,13 @@ func (obj *layer1) SetMtu(value int32) Layer1 {
 //  Set to true to override the auto_negotiate, link_training
 //  and rs_fec settings for gigabit ethernet interfaces.
 func (obj *layer1) IeeeMediaDefaults() bool {
+
+	if obj.obj.IeeeMediaDefaults == nil {
+		*obj.obj.IeeeMediaDefaults = true
+	}
+
 	return *obj.obj.IeeeMediaDefaults
+
 }
 
 // IeeeMediaDefaults returns a bool
@@ -7109,7 +7132,13 @@ func (obj *layer1) SetIeeeMediaDefaults(value bool) Layer1 {
 // AutoNegotiate returns a bool
 //  Enable/disable auto negotiation.
 func (obj *layer1) AutoNegotiate() bool {
+
+	if obj.obj.AutoNegotiate == nil {
+		*obj.obj.AutoNegotiate = true
+	}
+
 	return *obj.obj.AutoNegotiate
+
 }
 
 // AutoNegotiate returns a bool
@@ -7175,6 +7204,7 @@ func (obj *layer1) SetFlowControl(value Layer1FlowControl) Layer1 {
 // Name returns a string
 //  Globally unique name of an object. It also serves as the primary key for arrays of objects.
 func (obj *layer1) Name() string {
+
 	return obj.obj.Name
 }
 
@@ -7189,6 +7219,11 @@ func (obj *layer1) SetName(value string) Layer1 {
 func (obj *layer1) validateObj(set_default bool) {
 	if set_default {
 		obj.setDefault()
+	}
+
+	// PortNames required
+	if obj.obj.PortNames == nil {
+		validation = append(validation, "PortNames is required field on interface Layer1")
 	}
 
 	if obj.obj.AutoNegotiation != nil {
@@ -7208,6 +7243,7 @@ func (obj *layer1) validateObj(set_default bool) {
 func (obj *layer1) setDefault() {
 	if obj.obj.Speed == nil {
 		obj.SetSpeed(Layer1Speed.SPEED_10_GBPS)
+
 	}
 	if obj.obj.Promiscuous == nil {
 		obj.SetPromiscuous(true)
@@ -7449,7 +7485,13 @@ func (obj *captureCaptureFilterIter) Items() []CaptureFilter {
 // Overwrite returns a bool
 //  Overwrite the capture buffer.
 func (obj *capture) Overwrite() bool {
+
+	if obj.obj.Overwrite == nil {
+		*obj.obj.Overwrite = true
+	}
+
 	return *obj.obj.Overwrite
+
 }
 
 // Overwrite returns a bool
@@ -7469,7 +7511,9 @@ func (obj *capture) SetOverwrite(value bool) Capture {
 // PacketSize returns a int32
 //  The maximum size of each captured packet. If no value is specified or it is null then the entire packet will be captured.
 func (obj *capture) PacketSize() int32 {
+
 	return *obj.obj.PacketSize
+
 }
 
 // PacketSize returns a int32
@@ -7515,12 +7559,14 @@ func (obj *capture) SetFormat(value CaptureFormatEnum) Capture {
 	}
 	enumValue := snappipb.Capture_Format_Enum(intValue)
 	obj.obj.Format = &enumValue
+
 	return obj
 }
 
 // Name returns a string
 //  Globally unique name of an object. It also serves as the primary key for arrays of objects.
 func (obj *capture) Name() string {
+
 	return obj.obj.Name
 }
 
@@ -7536,6 +7582,11 @@ func (obj *capture) validateObj(set_default bool) {
 	if set_default {
 		obj.setDefault()
 	}
+
+	// PortNames required
+	if obj.obj.PortNames == nil {
+		validation = append(validation, "PortNames is required field on interface Capture")
+	}
 	if obj.obj.Filters != nil {
 		for _, item := range obj.Filters().Items() {
 			item.validateObj(set_default)
@@ -7549,14 +7600,12 @@ func (obj *capture) validateObj(set_default bool) {
 }
 
 func (obj *capture) setDefault() {
-	if obj.obj.Filters == nil {
-		obj.Filters()
-	}
 	if obj.obj.Overwrite == nil {
 		obj.SetOverwrite(true)
 	}
 	if obj.obj.Format == nil {
 		obj.SetFormat(CaptureFormat.PCAP)
+
 	}
 
 }
@@ -7860,6 +7909,7 @@ func (obj *device) SetBgp(value DeviceBgpRouter) Device {
 // Name returns a string
 //  Globally unique name of an object. It also serves as the primary key for arrays of objects.
 func (obj *device) Name() string {
+
 	return obj.obj.Name
 }
 
@@ -7908,15 +7958,6 @@ func (obj *device) validateObj(set_default bool) {
 }
 
 func (obj *device) setDefault() {
-	if obj.obj.Ethernets == nil {
-		obj.Ethernets()
-	}
-	if obj.obj.Ipv4Loopbacks == nil {
-		obj.Ipv4Loopbacks()
-	}
-	if obj.obj.Ipv6Loopbacks == nil {
-		obj.Ipv6Loopbacks()
-	}
 
 }
 
@@ -8231,6 +8272,7 @@ func (obj *flow) SetMetrics(value FlowMetrics) Flow {
 // Name returns a string
 //  Globally unique name of an object. It also serves as the primary key for arrays of objects.
 func (obj *flow) Name() string {
+
 	return obj.obj.Name
 }
 
@@ -8282,12 +8324,6 @@ func (obj *flow) validateObj(set_default bool) {
 }
 
 func (obj *flow) setDefault() {
-	if obj.obj.TxRx == nil {
-		obj.TxRx()
-	}
-	if obj.obj.Packet == nil {
-		obj.Packet()
-	}
 
 }
 
@@ -8445,7 +8481,13 @@ type Event interface {
 //  Enabling this option may affect the resultant packet payload due to
 //  additional instrumentation data.
 func (obj *event) Enable() bool {
+
+	if obj.obj.Enable == nil {
+		*obj.obj.Enable = false
+	}
+
 	return *obj.obj.Enable
+
 }
 
 // Enable returns a bool
@@ -8912,6 +8954,15 @@ func (obj *ping) SetChoice(value PingChoiceEnum) Ping {
 	}
 	enumValue := snappipb.Ping_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "ipv4" {
+		obj.obj.Ipv4 = nil
+	}
+
+	if string(value) != "ipv6" {
+		obj.obj.Ipv6 = nil
+	}
+
 	return obj
 }
 
@@ -8980,6 +9031,7 @@ func (obj *ping) validateObj(set_default bool) {
 func (obj *ping) setDefault() {
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PingChoice.IPV4)
+		obj.Ipv4()
 	}
 
 }
@@ -10765,9 +10817,6 @@ func (obj *pingResponse) validateObj(set_default bool) {
 }
 
 func (obj *pingResponse) setDefault() {
-	if obj.obj.Responses == nil {
-		obj.Responses()
-	}
 
 }
 
@@ -10951,6 +11000,27 @@ func (obj *metricsResponse) SetChoice(value MetricsResponseChoiceEnum) MetricsRe
 	}
 	enumValue := snappipb.MetricsResponse_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "flow_metrics" {
+		obj.obj.FlowMetrics = nil
+	}
+
+	if string(value) != "port_metrics" {
+		obj.obj.PortMetrics = nil
+	}
+
+	if string(value) != "bgpv4_metrics" {
+		obj.obj.Bgpv4Metrics = nil
+	}
+
+	if string(value) != "bgpv6_metrics" {
+		obj.obj.Bgpv6Metrics = nil
+	}
+
+	if string(value) != "isis_metrics" {
+		obj.obj.IsisMetrics = nil
+	}
+
 	return obj
 }
 
@@ -11161,11 +11231,9 @@ func (obj *metricsResponse) validateObj(set_default bool) {
 }
 
 func (obj *metricsResponse) setDefault() {
-	if obj.obj.PortMetrics == nil {
-		obj.PortMetrics()
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(MetricsResponseChoice.PORT_METRICS)
+		obj.PortMetrics()
 	}
 
 }
@@ -11396,12 +11464,6 @@ func (obj *stateMetrics) validateObj(set_default bool) {
 }
 
 func (obj *stateMetrics) setDefault() {
-	if obj.obj.PortState == nil {
-		obj.PortState()
-	}
-	if obj.obj.FlowState == nil {
-		obj.FlowState()
-	}
 
 }
 
@@ -11559,6 +11621,7 @@ type LagPort interface {
 //  - /components/schemas/Port/properties/name
 //
 func (obj *lagPort) PortName() string {
+
 	return obj.obj.PortName
 }
 
@@ -11637,12 +11700,6 @@ func (obj *lagPort) validateObj(set_default bool) {
 }
 
 func (obj *lagPort) setDefault() {
-	if obj.obj.Protocol == nil {
-		obj.Protocol()
-	}
-	if obj.obj.Ethernet == nil {
-		obj.Ethernet()
-	}
 
 }
 
@@ -11808,7 +11865,13 @@ type Layer1AutoNegotiation interface {
 //  If auto_negotiate is true and the interface supports this option
 //  then this speed will be advertised.
 func (obj *layer1AutoNegotiation) Advertise1000Mbps() bool {
+
+	if obj.obj.Advertise_1000Mbps == nil {
+		*obj.obj.Advertise_1000Mbps = true
+	}
+
 	return *obj.obj.Advertise_1000Mbps
+
 }
 
 // Advertise1000Mbps returns a bool
@@ -11831,7 +11894,13 @@ func (obj *layer1AutoNegotiation) SetAdvertise1000Mbps(value bool) Layer1AutoNeg
 //  If auto_negotiate is true and the interface supports this option
 //  then this speed will be advertised.
 func (obj *layer1AutoNegotiation) Advertise100FdMbps() bool {
+
+	if obj.obj.Advertise_100FdMbps == nil {
+		*obj.obj.Advertise_100FdMbps = true
+	}
+
 	return *obj.obj.Advertise_100FdMbps
+
 }
 
 // Advertise100FdMbps returns a bool
@@ -11854,7 +11923,13 @@ func (obj *layer1AutoNegotiation) SetAdvertise100FdMbps(value bool) Layer1AutoNe
 //  If auto_negotiate is true and the interface supports this option
 //  then this speed will be advertised.
 func (obj *layer1AutoNegotiation) Advertise100HdMbps() bool {
+
+	if obj.obj.Advertise_100HdMbps == nil {
+		*obj.obj.Advertise_100HdMbps = true
+	}
+
 	return *obj.obj.Advertise_100HdMbps
+
 }
 
 // Advertise100HdMbps returns a bool
@@ -11877,7 +11952,13 @@ func (obj *layer1AutoNegotiation) SetAdvertise100HdMbps(value bool) Layer1AutoNe
 //  If auto_negotiate is true and the interface supports this option
 //  then this speed will be advertised.
 func (obj *layer1AutoNegotiation) Advertise10FdMbps() bool {
+
+	if obj.obj.Advertise_10FdMbps == nil {
+		*obj.obj.Advertise_10FdMbps = true
+	}
+
 	return *obj.obj.Advertise_10FdMbps
+
 }
 
 // Advertise10FdMbps returns a bool
@@ -11900,7 +11981,13 @@ func (obj *layer1AutoNegotiation) SetAdvertise10FdMbps(value bool) Layer1AutoNeg
 //  If auto_negotiate is true and the interface supports this option
 //  then this speed will be advertised.
 func (obj *layer1AutoNegotiation) Advertise10HdMbps() bool {
+
+	if obj.obj.Advertise_10HdMbps == nil {
+		*obj.obj.Advertise_10HdMbps = true
+	}
+
 	return *obj.obj.Advertise_10HdMbps
+
 }
 
 // Advertise10HdMbps returns a bool
@@ -11922,7 +12009,13 @@ func (obj *layer1AutoNegotiation) SetAdvertise10HdMbps(value bool) Layer1AutoNeg
 // LinkTraining returns a bool
 //  Enable/disable gigabit ethernet link training.
 func (obj *layer1AutoNegotiation) LinkTraining() bool {
+
+	if obj.obj.LinkTraining == nil {
+		*obj.obj.LinkTraining = false
+	}
+
 	return *obj.obj.LinkTraining
+
 }
 
 // LinkTraining returns a bool
@@ -11942,7 +12035,13 @@ func (obj *layer1AutoNegotiation) SetLinkTraining(value bool) Layer1AutoNegotiat
 // RsFec returns a bool
 //  Enable/disable gigabit ethernet reed solomon forward error correction (RS FEC).
 func (obj *layer1AutoNegotiation) RsFec() bool {
+
+	if obj.obj.RsFec == nil {
+		*obj.obj.RsFec = false
+	}
+
 	return *obj.obj.RsFec
+
 }
 
 // RsFec returns a bool
@@ -12144,7 +12243,13 @@ type Layer1FlowControl interface {
 //  The 48bit mac address that the layer1 port names will listen on
 //  for a directed pause.
 func (obj *layer1FlowControl) DirectedAddress() string {
+
+	if obj.obj.DirectedAddress == nil {
+		*obj.obj.DirectedAddress = "01:80:C2:00:00:01"
+	}
+
 	return *obj.obj.DirectedAddress
+
 }
 
 // DirectedAddress returns a string
@@ -12192,6 +12297,15 @@ func (obj *layer1FlowControl) SetChoice(value Layer1FlowControlChoiceEnum) Layer
 	}
 	enumValue := snappipb.Layer1FlowControl_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "ieee_802_1qbb" {
+		obj.obj.Ieee_802_1Qbb = nil
+	}
+
+	if string(value) != "ieee_802_3x" {
+		obj.obj.Ieee_802_3X = nil
+	}
+
 	return obj
 }
 
@@ -12267,6 +12381,10 @@ func (obj *layer1FlowControl) validateObj(set_default bool) {
 func (obj *layer1FlowControl) setDefault() {
 	if obj.obj.Choice == nil {
 		obj.SetChoice(Layer1FlowControlChoice.IEEE_802_1QBB)
+
+	}
+	if obj.obj.DirectedAddress == nil {
+		obj.SetDirectedAddress("01:80:C2:00:00:01")
 	}
 
 }
@@ -12461,6 +12579,27 @@ func (obj *captureFilter) SetChoice(value CaptureFilterChoiceEnum) CaptureFilter
 	}
 	enumValue := snappipb.CaptureFilter_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "custom" {
+		obj.obj.Custom = nil
+	}
+
+	if string(value) != "ethernet" {
+		obj.obj.Ethernet = nil
+	}
+
+	if string(value) != "vlan" {
+		obj.obj.Vlan = nil
+	}
+
+	if string(value) != "ipv4" {
+		obj.obj.Ipv4 = nil
+	}
+
+	if string(value) != "ipv6" {
+		obj.obj.Ipv6 = nil
+	}
+
 	return obj
 }
 
@@ -12613,6 +12752,7 @@ func (obj *captureFilter) validateObj(set_default bool) {
 func (obj *captureFilter) setDefault() {
 	if obj.obj.Choice == nil {
 		obj.SetChoice(CaptureFilterChoice.CUSTOM)
+		obj.Custom()
 	}
 
 }
@@ -12779,6 +12919,7 @@ type DeviceEthernet interface {
 //  - /components/schemas/Lag/properties/name
 //
 func (obj *deviceEthernet) PortName() string {
+
 	return obj.obj.PortName
 }
 
@@ -12872,6 +13013,7 @@ func (obj *deviceEthernetDeviceIpv6Iter) Items() []DeviceIpv6 {
 // Mac returns a string
 //  Media Access Control address.
 func (obj *deviceEthernet) Mac() string {
+
 	return obj.obj.Mac
 }
 
@@ -12886,7 +13028,13 @@ func (obj *deviceEthernet) SetMac(value string) DeviceEthernet {
 // Mtu returns a int32
 //  Maximum Transmission Unit.
 func (obj *deviceEthernet) Mtu() int32 {
+
+	if obj.obj.Mtu == nil {
+		*obj.obj.Mtu = 1500
+	}
+
 	return *obj.obj.Mtu
+
 }
 
 // Mtu returns a int32
@@ -12940,6 +13088,7 @@ func (obj *deviceEthernetDeviceVlanIter) Items() []DeviceVlan {
 // Name returns a string
 //  Globally unique name of an object. It also serves as the primary key for arrays of objects.
 func (obj *deviceEthernet) Name() string {
+
 	return obj.obj.Name
 }
 
@@ -13003,17 +13152,8 @@ func (obj *deviceEthernet) validateObj(set_default bool) {
 }
 
 func (obj *deviceEthernet) setDefault() {
-	if obj.obj.Ipv4Addresses == nil {
-		obj.Ipv4Addresses()
-	}
-	if obj.obj.Ipv6Addresses == nil {
-		obj.Ipv6Addresses()
-	}
 	if obj.obj.Mtu == nil {
 		obj.SetMtu(1500)
-	}
-	if obj.obj.Vlans == nil {
-		obj.Vlans()
 	}
 
 }
@@ -13173,6 +13313,7 @@ type DeviceIpv4Loopback interface {
 //  - /components/schemas/Device.Ethernet/properties/name
 //
 func (obj *deviceIpv4Loopback) EthName() string {
+
 	return obj.obj.EthName
 }
 
@@ -13195,7 +13336,13 @@ func (obj *deviceIpv4Loopback) SetEthName(value string) DeviceIpv4Loopback {
 // Address returns a string
 //  The IPv4 Loopback address with prefix length of 32.
 func (obj *deviceIpv4Loopback) Address() string {
+
+	if obj.obj.Address == nil {
+		*obj.obj.Address = "0.0.0.0"
+	}
+
 	return *obj.obj.Address
+
 }
 
 // Address returns a string
@@ -13215,6 +13362,7 @@ func (obj *deviceIpv4Loopback) SetAddress(value string) DeviceIpv4Loopback {
 // Name returns a string
 //  Globally unique name of an object. It also serves as the primary key for arrays of objects.
 func (obj *deviceIpv4Loopback) Name() string {
+
 	return obj.obj.Name
 }
 
@@ -13412,6 +13560,7 @@ type DeviceIpv6Loopback interface {
 //  - /components/schemas/Device.Ethernet/properties/name
 //
 func (obj *deviceIpv6Loopback) EthName() string {
+
 	return obj.obj.EthName
 }
 
@@ -13435,7 +13584,13 @@ func (obj *deviceIpv6Loopback) SetEthName(value string) DeviceIpv6Loopback {
 // Address returns a string
 //  The IPv6 Loopback address with prefix length of 128.
 func (obj *deviceIpv6Loopback) Address() string {
+
+	if obj.obj.Address == nil {
+		*obj.obj.Address = "::0"
+	}
+
 	return *obj.obj.Address
+
 }
 
 // Address returns a string
@@ -13455,6 +13610,7 @@ func (obj *deviceIpv6Loopback) SetAddress(value string) DeviceIpv6Loopback {
 // Name returns a string
 //  Globally unique name of an object. It also serves as the primary key for arrays of objects.
 func (obj *deviceIpv6Loopback) Name() string {
+
 	return obj.obj.Name
 }
 
@@ -13678,6 +13834,7 @@ func (obj *deviceIsisRouter) SetInstance(value DeviceIsisMultiInstance) DeviceIs
 // SystemId returns a string
 //  The System ID for this emulated ISIS router, e.g. "640100010000".
 func (obj *deviceIsisRouter) SystemId() string {
+
 	return obj.obj.SystemId
 }
 
@@ -13863,6 +14020,7 @@ func (obj *deviceIsisRouterIsisV6RouteRangeIter) Items() []IsisV6RouteRange {
 // Name returns a string
 //  Globally unique name of an object. It also serves as the primary key for arrays of objects.
 func (obj *deviceIsisRouter) Name() string {
+
 	return obj.obj.Name
 }
 
@@ -13929,15 +14087,6 @@ func (obj *deviceIsisRouter) validateObj(set_default bool) {
 }
 
 func (obj *deviceIsisRouter) setDefault() {
-	if obj.obj.Interfaces == nil {
-		obj.Interfaces()
-	}
-	if obj.obj.V4Routes == nil {
-		obj.V4Routes()
-	}
-	if obj.obj.V6Routes == nil {
-		obj.V6Routes()
-	}
 
 }
 
@@ -14085,6 +14234,7 @@ type DeviceBgpRouter interface {
 // RouterId returns a string
 //  The BGP router ID is a unique identifier used by BGP. It is a 32-bit value that is often represented by an IPv4 address.
 func (obj *deviceBgpRouter) RouterId() string {
+
 	return obj.obj.RouterId
 }
 
@@ -14194,12 +14344,6 @@ func (obj *deviceBgpRouter) validateObj(set_default bool) {
 }
 
 func (obj *deviceBgpRouter) setDefault() {
-	if obj.obj.Ipv4Interfaces == nil {
-		obj.Ipv4Interfaces()
-	}
-	if obj.obj.Ipv6Interfaces == nil {
-		obj.Ipv6Interfaces()
-	}
 
 }
 
@@ -14378,6 +14522,15 @@ func (obj *flowTxRx) SetChoice(value FlowTxRxChoiceEnum) FlowTxRx {
 	}
 	enumValue := snappipb.FlowTxRx_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "port" {
+		obj.obj.Port = nil
+	}
+
+	if string(value) != "device" {
+		obj.obj.Device = nil
+	}
+
 	return obj
 }
 
@@ -14446,6 +14599,7 @@ func (obj *flowTxRx) validateObj(set_default bool) {
 func (obj *flowTxRx) setDefault() {
 	if obj.obj.Choice == nil {
 		obj.SetChoice(FlowTxRxChoice.PORT)
+		obj.Port()
 	}
 
 }
@@ -14706,6 +14860,79 @@ func (obj *flowHeader) SetChoice(value FlowHeaderChoiceEnum) FlowHeader {
 	}
 	enumValue := snappipb.FlowHeader_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "custom" {
+		obj.obj.Custom = nil
+	}
+
+	if string(value) != "ethernet" {
+		obj.obj.Ethernet = nil
+	}
+
+	if string(value) != "vlan" {
+		obj.obj.Vlan = nil
+	}
+
+	if string(value) != "vxlan" {
+		obj.obj.Vxlan = nil
+	}
+
+	if string(value) != "ipv4" {
+		obj.obj.Ipv4 = nil
+	}
+
+	if string(value) != "ipv6" {
+		obj.obj.Ipv6 = nil
+	}
+
+	if string(value) != "pfcpause" {
+		obj.obj.Pfcpause = nil
+	}
+
+	if string(value) != "ethernetpause" {
+		obj.obj.Ethernetpause = nil
+	}
+
+	if string(value) != "tcp" {
+		obj.obj.Tcp = nil
+	}
+
+	if string(value) != "udp" {
+		obj.obj.Udp = nil
+	}
+
+	if string(value) != "gre" {
+		obj.obj.Gre = nil
+	}
+
+	if string(value) != "gtpv1" {
+		obj.obj.Gtpv1 = nil
+	}
+
+	if string(value) != "gtpv2" {
+		obj.obj.Gtpv2 = nil
+	}
+
+	if string(value) != "arp" {
+		obj.obj.Arp = nil
+	}
+
+	if string(value) != "icmp" {
+		obj.obj.Icmp = nil
+	}
+
+	if string(value) != "icmpv6" {
+		obj.obj.Icmpv6 = nil
+	}
+
+	if string(value) != "ppp" {
+		obj.obj.Ppp = nil
+	}
+
+	if string(value) != "igmpv1" {
+		obj.obj.Igmpv1 = nil
+	}
+
 	return obj
 }
 
@@ -15222,6 +15449,7 @@ func (obj *flowHeader) validateObj(set_default bool) {
 func (obj *flowHeader) setDefault() {
 	if obj.obj.Choice == nil {
 		obj.SetChoice(FlowHeaderChoice.ETHERNET)
+		obj.Ethernet()
 	}
 
 }
@@ -15406,13 +15634,32 @@ func (obj *flowSize) SetChoice(value FlowSizeChoiceEnum) FlowSize {
 	}
 	enumValue := snappipb.FlowSize_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "fixed" {
+		obj.obj.Fixed = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "random" {
+		obj.obj.Random = nil
+	}
+
 	return obj
 }
 
 // Fixed returns a int32
 //  description is TBD
 func (obj *flowSize) Fixed() int32 {
+
+	if obj.obj.Fixed == nil {
+		*obj.obj.Fixed = 64
+	}
+
 	return *obj.obj.Fixed
+
 }
 
 // Fixed returns a int32
@@ -15492,11 +15739,9 @@ func (obj *flowSize) validateObj(set_default bool) {
 }
 
 func (obj *flowSize) setDefault() {
-	if obj.obj.Fixed == nil {
-		obj.SetFixed(64)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(FlowSizeChoice.FIXED)
+		obj.SetFixed(64)
 	}
 
 }
@@ -15696,13 +15941,44 @@ func (obj *flowRate) SetChoice(value FlowRateChoiceEnum) FlowRate {
 	}
 	enumValue := snappipb.FlowRate_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "pps" {
+		obj.obj.Pps = nil
+	}
+
+	if string(value) != "bps" {
+		obj.obj.Bps = nil
+	}
+
+	if string(value) != "kbps" {
+		obj.obj.Kbps = nil
+	}
+
+	if string(value) != "mbps" {
+		obj.obj.Mbps = nil
+	}
+
+	if string(value) != "gbps" {
+		obj.obj.Gbps = nil
+	}
+
+	if string(value) != "percentage" {
+		obj.obj.Percentage = nil
+	}
+
 	return obj
 }
 
 // Pps returns a int64
 //  Packets per second.
 func (obj *flowRate) Pps() int64 {
+
+	if obj.obj.Pps == nil {
+		*obj.obj.Pps = 1000
+	}
+
 	return *obj.obj.Pps
+
 }
 
 // Pps returns a int64
@@ -15722,7 +15998,13 @@ func (obj *flowRate) SetPps(value int64) FlowRate {
 // Bps returns a int64
 //  Bits per second.
 func (obj *flowRate) Bps() int64 {
+
+	if obj.obj.Bps == nil {
+		*obj.obj.Bps = 1000000000
+	}
+
 	return *obj.obj.Bps
+
 }
 
 // Bps returns a int64
@@ -15742,7 +16024,13 @@ func (obj *flowRate) SetBps(value int64) FlowRate {
 // Kbps returns a int64
 //  Kilobits per second.
 func (obj *flowRate) Kbps() int64 {
+
+	if obj.obj.Kbps == nil {
+		*obj.obj.Kbps = 1000000
+	}
+
 	return *obj.obj.Kbps
+
 }
 
 // Kbps returns a int64
@@ -15762,7 +16050,13 @@ func (obj *flowRate) SetKbps(value int64) FlowRate {
 // Mbps returns a int64
 //  Megabits per second.
 func (obj *flowRate) Mbps() int64 {
+
+	if obj.obj.Mbps == nil {
+		*obj.obj.Mbps = 1000
+	}
+
 	return *obj.obj.Mbps
+
 }
 
 // Mbps returns a int64
@@ -15782,7 +16076,13 @@ func (obj *flowRate) SetMbps(value int64) FlowRate {
 // Gbps returns a int32
 //  Gigabits per second.
 func (obj *flowRate) Gbps() int32 {
+
+	if obj.obj.Gbps == nil {
+		*obj.obj.Gbps = 1
+	}
+
 	return *obj.obj.Gbps
+
 }
 
 // Gbps returns a int32
@@ -15802,7 +16102,13 @@ func (obj *flowRate) SetGbps(value int32) FlowRate {
 // Percentage returns a float32
 //  The percentage of a port location's available bandwidth.
 func (obj *flowRate) Percentage() float32 {
+
+	if obj.obj.Percentage == nil {
+		*obj.obj.Percentage = 100
+	}
+
 	return *obj.obj.Percentage
+
 }
 
 // Percentage returns a float32
@@ -15867,11 +16173,9 @@ func (obj *flowRate) validateObj(set_default bool) {
 }
 
 func (obj *flowRate) setDefault() {
-	if obj.obj.Pps == nil {
-		obj.SetPps(1000)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(FlowRateChoice.PPS)
+		obj.SetPps(1000)
 	}
 
 }
@@ -16061,6 +16365,23 @@ func (obj *flowDuration) SetChoice(value FlowDurationChoiceEnum) FlowDuration {
 	}
 	enumValue := snappipb.FlowDuration_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "fixed_packets" {
+		obj.obj.FixedPackets = nil
+	}
+
+	if string(value) != "fixed_seconds" {
+		obj.obj.FixedSeconds = nil
+	}
+
+	if string(value) != "burst" {
+		obj.obj.Burst = nil
+	}
+
+	if string(value) != "continuous" {
+		obj.obj.Continuous = nil
+	}
+
 	return obj
 }
 
@@ -16185,6 +16506,7 @@ func (obj *flowDuration) validateObj(set_default bool) {
 func (obj *flowDuration) setDefault() {
 	if obj.obj.Choice == nil {
 		obj.SetChoice(FlowDurationChoice.CONTINUOUS)
+		obj.Continuous()
 	}
 
 }
@@ -16343,7 +16665,13 @@ type FlowMetrics interface {
 //  Enabling this option may affect the resultant packet payload due to
 //  additional instrumentation data.
 func (obj *flowMetrics) Enable() bool {
+
+	if obj.obj.Enable == nil {
+		*obj.obj.Enable = false
+	}
+
 	return *obj.obj.Enable
+
 }
 
 // Enable returns a bool
@@ -16367,7 +16695,13 @@ func (obj *flowMetrics) SetEnable(value bool) FlowMetrics {
 // Loss returns a bool
 //  Enables additional flow metric loss calculation.
 func (obj *flowMetrics) Loss() bool {
+
+	if obj.obj.Loss == nil {
+		*obj.obj.Loss = false
+	}
+
 	return *obj.obj.Loss
+
 }
 
 // Loss returns a bool
@@ -16387,7 +16721,13 @@ func (obj *flowMetrics) SetLoss(value bool) FlowMetrics {
 // Timestamps returns a bool
 //  Enables additional flow metric first and last timestamps.
 func (obj *flowMetrics) Timestamps() bool {
+
+	if obj.obj.Timestamps == nil {
+		*obj.obj.Timestamps = false
+	}
+
 	return *obj.obj.Timestamps
+
 }
 
 // Timestamps returns a bool
@@ -16593,7 +16933,13 @@ type EventLink interface {
 // Enable returns a bool
 //  True to enable notifications when a link up/down event occurs.
 func (obj *eventLink) Enable() bool {
+
+	if obj.obj.Enable == nil {
+		*obj.obj.Enable = false
+	}
+
 	return *obj.obj.Enable
+
 }
 
 // Enable returns a bool
@@ -16772,7 +17118,13 @@ type EventRxRateThreshold interface {
 //  Enabling this option may affect the resultant packet payload due to
 //  additional instrumentation data.
 func (obj *eventRxRateThreshold) Enable() bool {
+
+	if obj.obj.Enable == nil {
+		*obj.obj.Enable = false
+	}
+
 	return *obj.obj.Enable
+
 }
 
 // Enable returns a bool
@@ -16797,7 +17149,13 @@ func (obj *eventRxRateThreshold) SetEnable(value bool) EventRxRateThreshold {
 //  True to enable notifications when the rx rate of a flow passes above
 //  or below the threshold value.
 func (obj *eventRxRateThreshold) Threshold() float32 {
+
+	if obj.obj.Threshold == nil {
+		*obj.obj.Threshold = 95
+	}
+
 	return *obj.obj.Threshold
+
 }
 
 // Threshold returns a float32
@@ -16977,7 +17335,13 @@ type EventRouteAdvertiseWithdraw interface {
 //  True to enable notifications when a route advertise/withdraw
 //  event occurs.
 func (obj *eventRouteAdvertiseWithdraw) Enable() bool {
+
+	if obj.obj.Enable == nil {
+		*obj.obj.Enable = false
+	}
+
 	return *obj.obj.Enable
+
 }
 
 // Enable returns a bool
@@ -17153,7 +17517,13 @@ type PortOptions interface {
 // LocationPreemption returns a bool
 //  Preempt all the test port locations as defined by the  Port.Port.properties.location. If the test ports defined by their location values are in use and  this value is true, the test ports will be preempted.
 func (obj *portOptions) LocationPreemption() bool {
+
+	if obj.obj.LocationPreemption == nil {
+		*obj.obj.LocationPreemption = false
+	}
+
 	return *obj.obj.LocationPreemption
+
 }
 
 // LocationPreemption returns a bool
@@ -17338,7 +17708,9 @@ type PingIpv4 interface {
 //  - /components/schemas/Device.Ipv4Base/properties/name
 //
 func (obj *pingIpv4) SrcName() string {
+
 	return *obj.obj.SrcName
+
 }
 
 // SrcName returns a string
@@ -17374,7 +17746,9 @@ func (obj *pingIpv4) SetSrcName(value string) PingIpv4 {
 // DstIp returns a string
 //  IPv4 address to ping
 func (obj *pingIpv4) DstIp() string {
+
 	return *obj.obj.DstIp
+
 }
 
 // DstIp returns a string
@@ -17563,7 +17937,9 @@ type PingIpv6 interface {
 //  - /components/schemas/Device.Ipv6Base/properties/name
 //
 func (obj *pingIpv6) SrcName() string {
+
 	return *obj.obj.SrcName
+
 }
 
 // SrcName returns a string
@@ -17599,7 +17975,9 @@ func (obj *pingIpv6) SetSrcName(value string) PingIpv6 {
 // DstIp returns a string
 //  IPv6 addresses to ping.
 func (obj *pingIpv6) DstIp() string {
+
 	return *obj.obj.DstIp
+
 }
 
 // DstIp returns a string
@@ -17807,6 +18185,15 @@ func (obj *flowMetricGroupRequest) SetChoice(value FlowMetricGroupRequestChoiceE
 	}
 	enumValue := snappipb.FlowMetricGroupRequest_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "ingress" {
+		obj.obj.Ingress = nil
+	}
+
+	if string(value) != "egress" {
+		obj.obj.Egress = nil
+	}
+
 	return obj
 }
 
@@ -17896,11 +18283,9 @@ func (obj *flowMetricGroupRequest) validateObj(set_default bool) {
 }
 
 func (obj *flowMetricGroupRequest) setDefault() {
-	if obj.obj.Ingress == nil {
-		obj.SetIngress([]string{""})
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(FlowMetricGroupRequestChoice.INGRESS)
+		obj.SetIngress([]string{})
 	}
 
 }
@@ -18064,7 +18449,9 @@ type Response interface {
 //  - /components/schemas/Device.Ipv6Base/properties/name
 //
 func (obj *response) SrcName() string {
+
 	return *obj.obj.SrcName
+
 }
 
 // SrcName returns a string
@@ -18104,7 +18491,9 @@ func (obj *response) SetSrcName(value string) Response {
 // DstIp returns a string
 //  Destination address.
 func (obj *response) DstIp() string {
+
 	return *obj.obj.DstIp
+
 }
 
 // DstIp returns a string
@@ -18150,6 +18539,7 @@ func (obj *response) SetResult(value ResponseResultEnum) Response {
 	}
 	enumValue := snappipb.Response_Result_Enum(intValue)
 	obj.obj.Result = &enumValue
+
 	return obj
 }
 
@@ -18163,6 +18553,7 @@ func (obj *response) validateObj(set_default bool) {
 func (obj *response) setDefault() {
 	if obj.obj.Result == nil {
 		obj.SetResult(ResponseResult.FAILURE)
+
 	}
 
 }
@@ -18351,7 +18742,9 @@ type PortMetric interface {
 //  - /components/schemas/Port/properties/name
 //
 func (obj *portMetric) Name() string {
+
 	return *obj.obj.Name
+
 }
 
 // Name returns a string
@@ -18387,7 +18780,9 @@ func (obj *portMetric) SetName(value string) PortMetric {
 // Location returns a string
 //  The state of the connection to the test port location. The format should be the configured port location along with  any custom connection state message.
 func (obj *portMetric) Location() string {
+
 	return *obj.obj.Location
+
 }
 
 // Location returns a string
@@ -18433,6 +18828,7 @@ func (obj *portMetric) SetLink(value PortMetricLinkEnum) PortMetric {
 	}
 	enumValue := snappipb.PortMetric_Link_Enum(intValue)
 	obj.obj.Link = &enumValue
+
 	return obj
 }
 
@@ -18465,13 +18861,16 @@ func (obj *portMetric) SetCapture(value PortMetricCaptureEnum) PortMetric {
 	}
 	enumValue := snappipb.PortMetric_Capture_Enum(intValue)
 	obj.obj.Capture = &enumValue
+
 	return obj
 }
 
 // FramesTx returns a int32
 //  The current total number of frames transmitted
 func (obj *portMetric) FramesTx() int32 {
+
 	return *obj.obj.FramesTx
+
 }
 
 // FramesTx returns a int32
@@ -18491,7 +18890,9 @@ func (obj *portMetric) SetFramesTx(value int32) PortMetric {
 // FramesRx returns a int32
 //  The current total number of valid frames received
 func (obj *portMetric) FramesRx() int32 {
+
 	return *obj.obj.FramesRx
+
 }
 
 // FramesRx returns a int32
@@ -18511,7 +18912,9 @@ func (obj *portMetric) SetFramesRx(value int32) PortMetric {
 // BytesTx returns a int32
 //  The current total number of bytes transmitted
 func (obj *portMetric) BytesTx() int32 {
+
 	return *obj.obj.BytesTx
+
 }
 
 // BytesTx returns a int32
@@ -18531,7 +18934,9 @@ func (obj *portMetric) SetBytesTx(value int32) PortMetric {
 // BytesRx returns a int32
 //  The current total number of valid bytes received
 func (obj *portMetric) BytesRx() int32 {
+
 	return *obj.obj.BytesRx
+
 }
 
 // BytesRx returns a int32
@@ -18551,7 +18956,9 @@ func (obj *portMetric) SetBytesRx(value int32) PortMetric {
 // FramesTxRate returns a float32
 //  The current rate of frames transmitted
 func (obj *portMetric) FramesTxRate() float32 {
+
 	return *obj.obj.FramesTxRate
+
 }
 
 // FramesTxRate returns a float32
@@ -18571,7 +18978,9 @@ func (obj *portMetric) SetFramesTxRate(value float32) PortMetric {
 // FramesRxRate returns a float32
 //  The current rate of valid frames received
 func (obj *portMetric) FramesRxRate() float32 {
+
 	return *obj.obj.FramesRxRate
+
 }
 
 // FramesRxRate returns a float32
@@ -18591,7 +19000,9 @@ func (obj *portMetric) SetFramesRxRate(value float32) PortMetric {
 // BytesTxRate returns a float32
 //  The current rate of bytes transmitted
 func (obj *portMetric) BytesTxRate() float32 {
+
 	return *obj.obj.BytesTxRate
+
 }
 
 // BytesTxRate returns a float32
@@ -18611,7 +19022,9 @@ func (obj *portMetric) SetBytesTxRate(value float32) PortMetric {
 // BytesRxRate returns a float32
 //  The current rate of bytes received
 func (obj *portMetric) BytesRxRate() float32 {
+
 	return *obj.obj.BytesRxRate
+
 }
 
 // BytesRxRate returns a float32
@@ -18819,7 +19232,9 @@ type FlowMetric interface {
 // Name returns a string
 //  The name of the flow
 func (obj *flowMetric) Name() string {
+
 	return *obj.obj.Name
+
 }
 
 // Name returns a string
@@ -18839,7 +19254,9 @@ func (obj *flowMetric) SetName(value string) FlowMetric {
 // PortTx returns a string
 //  The name of the transmit port
 func (obj *flowMetric) PortTx() string {
+
 	return *obj.obj.PortTx
+
 }
 
 // PortTx returns a string
@@ -18859,7 +19276,9 @@ func (obj *flowMetric) SetPortTx(value string) FlowMetric {
 // PortRx returns a string
 //  The name of the receive port
 func (obj *flowMetric) PortRx() string {
+
 	return *obj.obj.PortRx
+
 }
 
 // PortRx returns a string
@@ -18941,13 +19360,16 @@ func (obj *flowMetric) SetTransmit(value FlowMetricTransmitEnum) FlowMetric {
 	}
 	enumValue := snappipb.FlowMetric_Transmit_Enum(intValue)
 	obj.obj.Transmit = &enumValue
+
 	return obj
 }
 
 // FramesTx returns a int32
 //  The current total number of frames transmitted
 func (obj *flowMetric) FramesTx() int32 {
+
 	return *obj.obj.FramesTx
+
 }
 
 // FramesTx returns a int32
@@ -18967,7 +19389,9 @@ func (obj *flowMetric) SetFramesTx(value int32) FlowMetric {
 // FramesRx returns a int32
 //  The current total number of valid frames received
 func (obj *flowMetric) FramesRx() int32 {
+
 	return *obj.obj.FramesRx
+
 }
 
 // FramesRx returns a int32
@@ -18987,7 +19411,9 @@ func (obj *flowMetric) SetFramesRx(value int32) FlowMetric {
 // BytesTx returns a int32
 //  The current total number of bytes transmitted
 func (obj *flowMetric) BytesTx() int32 {
+
 	return *obj.obj.BytesTx
+
 }
 
 // BytesTx returns a int32
@@ -19007,7 +19433,9 @@ func (obj *flowMetric) SetBytesTx(value int32) FlowMetric {
 // BytesRx returns a int32
 //  The current total number of bytes received
 func (obj *flowMetric) BytesRx() int32 {
+
 	return *obj.obj.BytesRx
+
 }
 
 // BytesRx returns a int32
@@ -19027,7 +19455,9 @@ func (obj *flowMetric) SetBytesRx(value int32) FlowMetric {
 // FramesTxRate returns a float32
 //  The current rate of frames transmitted
 func (obj *flowMetric) FramesTxRate() float32 {
+
 	return *obj.obj.FramesTxRate
+
 }
 
 // FramesTxRate returns a float32
@@ -19047,7 +19477,9 @@ func (obj *flowMetric) SetFramesTxRate(value float32) FlowMetric {
 // FramesRxRate returns a float32
 //  The current rate of valid frames received
 func (obj *flowMetric) FramesRxRate() float32 {
+
 	return *obj.obj.FramesRxRate
+
 }
 
 // FramesRxRate returns a float32
@@ -19067,7 +19499,9 @@ func (obj *flowMetric) SetFramesRxRate(value float32) FlowMetric {
 // Loss returns a float32
 //  The percentage of lost frames
 func (obj *flowMetric) Loss() float32 {
+
 	return *obj.obj.Loss
+
 }
 
 // Loss returns a float32
@@ -19150,9 +19584,6 @@ func (obj *flowMetric) validateObj(set_default bool) {
 }
 
 func (obj *flowMetric) setDefault() {
-	if obj.obj.MetricGroups == nil {
-		obj.MetricGroups()
-	}
 
 }
 
@@ -19341,7 +19772,9 @@ type Bgpv4Metric interface {
 // Name returns a string
 //  The name of a configured BGPv4 peer.
 func (obj *bgpv4Metric) Name() string {
+
 	return *obj.obj.Name
+
 }
 
 // Name returns a string
@@ -19387,13 +19820,16 @@ func (obj *bgpv4Metric) SetSessionState(value Bgpv4MetricSessionStateEnum) Bgpv4
 	}
 	enumValue := snappipb.Bgpv4Metric_SessionState_Enum(intValue)
 	obj.obj.SessionState = &enumValue
+
 	return obj
 }
 
 // SessionFlapCount returns a int32
 //  Number of times the session went from Up to Down state.
 func (obj *bgpv4Metric) SessionFlapCount() int32 {
+
 	return *obj.obj.SessionFlapCount
+
 }
 
 // SessionFlapCount returns a int32
@@ -19413,7 +19849,9 @@ func (obj *bgpv4Metric) SetSessionFlapCount(value int32) Bgpv4Metric {
 // RoutesAdvertised returns a int32
 //  Number of routes advertised.
 func (obj *bgpv4Metric) RoutesAdvertised() int32 {
+
 	return *obj.obj.RoutesAdvertised
+
 }
 
 // RoutesAdvertised returns a int32
@@ -19433,7 +19871,9 @@ func (obj *bgpv4Metric) SetRoutesAdvertised(value int32) Bgpv4Metric {
 // RoutesReceived returns a int32
 //  Number of routes received.
 func (obj *bgpv4Metric) RoutesReceived() int32 {
+
 	return *obj.obj.RoutesReceived
+
 }
 
 // RoutesReceived returns a int32
@@ -19453,7 +19893,9 @@ func (obj *bgpv4Metric) SetRoutesReceived(value int32) Bgpv4Metric {
 // RouteWithdrawsSent returns a int32
 //  Number of route withdraws sent.
 func (obj *bgpv4Metric) RouteWithdrawsSent() int32 {
+
 	return *obj.obj.RouteWithdrawsSent
+
 }
 
 // RouteWithdrawsSent returns a int32
@@ -19473,7 +19915,9 @@ func (obj *bgpv4Metric) SetRouteWithdrawsSent(value int32) Bgpv4Metric {
 // RouteWithdrawsReceived returns a int32
 //  Number of route withdraws received.
 func (obj *bgpv4Metric) RouteWithdrawsReceived() int32 {
+
 	return *obj.obj.RouteWithdrawsReceived
+
 }
 
 // RouteWithdrawsReceived returns a int32
@@ -19493,7 +19937,9 @@ func (obj *bgpv4Metric) SetRouteWithdrawsReceived(value int32) Bgpv4Metric {
 // UpdatesSent returns a int32
 //  Number of Update messages sent.
 func (obj *bgpv4Metric) UpdatesSent() int32 {
+
 	return *obj.obj.UpdatesSent
+
 }
 
 // UpdatesSent returns a int32
@@ -19513,7 +19959,9 @@ func (obj *bgpv4Metric) SetUpdatesSent(value int32) Bgpv4Metric {
 // UpdatesReceived returns a int32
 //  Number of Update messages received.
 func (obj *bgpv4Metric) UpdatesReceived() int32 {
+
 	return *obj.obj.UpdatesReceived
+
 }
 
 // UpdatesReceived returns a int32
@@ -19533,7 +19981,9 @@ func (obj *bgpv4Metric) SetUpdatesReceived(value int32) Bgpv4Metric {
 // OpensSent returns a int32
 //  Number of Open messages sent.
 func (obj *bgpv4Metric) OpensSent() int32 {
+
 	return *obj.obj.OpensSent
+
 }
 
 // OpensSent returns a int32
@@ -19553,7 +20003,9 @@ func (obj *bgpv4Metric) SetOpensSent(value int32) Bgpv4Metric {
 // OpensReceived returns a int32
 //  Number of Open messages received.
 func (obj *bgpv4Metric) OpensReceived() int32 {
+
 	return *obj.obj.OpensReceived
+
 }
 
 // OpensReceived returns a int32
@@ -19573,7 +20025,9 @@ func (obj *bgpv4Metric) SetOpensReceived(value int32) Bgpv4Metric {
 // KeepalivesSent returns a int32
 //  Number of Keepalive messages sent.
 func (obj *bgpv4Metric) KeepalivesSent() int32 {
+
 	return *obj.obj.KeepalivesSent
+
 }
 
 // KeepalivesSent returns a int32
@@ -19593,7 +20047,9 @@ func (obj *bgpv4Metric) SetKeepalivesSent(value int32) Bgpv4Metric {
 // KeepalivesReceived returns a int32
 //  Number of Keepalive messages received.
 func (obj *bgpv4Metric) KeepalivesReceived() int32 {
+
 	return *obj.obj.KeepalivesReceived
+
 }
 
 // KeepalivesReceived returns a int32
@@ -19613,7 +20069,9 @@ func (obj *bgpv4Metric) SetKeepalivesReceived(value int32) Bgpv4Metric {
 // NotificationsSent returns a int32
 //  Number of Notification messages sent.
 func (obj *bgpv4Metric) NotificationsSent() int32 {
+
 	return *obj.obj.NotificationsSent
+
 }
 
 // NotificationsSent returns a int32
@@ -19633,7 +20091,9 @@ func (obj *bgpv4Metric) SetNotificationsSent(value int32) Bgpv4Metric {
 // NotificationsReceived returns a int32
 //  Number of Notification messages received.
 func (obj *bgpv4Metric) NotificationsReceived() int32 {
+
 	return *obj.obj.NotificationsReceived
+
 }
 
 // NotificationsReceived returns a int32
@@ -19846,7 +20306,9 @@ type Bgpv6Metric interface {
 // Name returns a string
 //  The name of a configured BGPv6 peer.
 func (obj *bgpv6Metric) Name() string {
+
 	return *obj.obj.Name
+
 }
 
 // Name returns a string
@@ -19892,13 +20354,16 @@ func (obj *bgpv6Metric) SetSessionState(value Bgpv6MetricSessionStateEnum) Bgpv6
 	}
 	enumValue := snappipb.Bgpv6Metric_SessionState_Enum(intValue)
 	obj.obj.SessionState = &enumValue
+
 	return obj
 }
 
 // SessionFlapCount returns a int32
 //  Number of times the session went from Up to Down state.
 func (obj *bgpv6Metric) SessionFlapCount() int32 {
+
 	return *obj.obj.SessionFlapCount
+
 }
 
 // SessionFlapCount returns a int32
@@ -19918,7 +20383,9 @@ func (obj *bgpv6Metric) SetSessionFlapCount(value int32) Bgpv6Metric {
 // RoutesAdvertised returns a int32
 //  Number of routes advertised.
 func (obj *bgpv6Metric) RoutesAdvertised() int32 {
+
 	return *obj.obj.RoutesAdvertised
+
 }
 
 // RoutesAdvertised returns a int32
@@ -19938,7 +20405,9 @@ func (obj *bgpv6Metric) SetRoutesAdvertised(value int32) Bgpv6Metric {
 // RoutesReceived returns a int32
 //  Number of routes received.
 func (obj *bgpv6Metric) RoutesReceived() int32 {
+
 	return *obj.obj.RoutesReceived
+
 }
 
 // RoutesReceived returns a int32
@@ -19958,7 +20427,9 @@ func (obj *bgpv6Metric) SetRoutesReceived(value int32) Bgpv6Metric {
 // RouteWithdrawsSent returns a int32
 //  Number of route withdraws sent.
 func (obj *bgpv6Metric) RouteWithdrawsSent() int32 {
+
 	return *obj.obj.RouteWithdrawsSent
+
 }
 
 // RouteWithdrawsSent returns a int32
@@ -19978,7 +20449,9 @@ func (obj *bgpv6Metric) SetRouteWithdrawsSent(value int32) Bgpv6Metric {
 // RouteWithdrawsReceived returns a int32
 //  Number of route withdraws received.
 func (obj *bgpv6Metric) RouteWithdrawsReceived() int32 {
+
 	return *obj.obj.RouteWithdrawsReceived
+
 }
 
 // RouteWithdrawsReceived returns a int32
@@ -19998,7 +20471,9 @@ func (obj *bgpv6Metric) SetRouteWithdrawsReceived(value int32) Bgpv6Metric {
 // UpdatesSent returns a int32
 //  Number of Update messages sent.
 func (obj *bgpv6Metric) UpdatesSent() int32 {
+
 	return *obj.obj.UpdatesSent
+
 }
 
 // UpdatesSent returns a int32
@@ -20018,7 +20493,9 @@ func (obj *bgpv6Metric) SetUpdatesSent(value int32) Bgpv6Metric {
 // UpdatesReceived returns a int32
 //  Number of Update messages received.
 func (obj *bgpv6Metric) UpdatesReceived() int32 {
+
 	return *obj.obj.UpdatesReceived
+
 }
 
 // UpdatesReceived returns a int32
@@ -20038,7 +20515,9 @@ func (obj *bgpv6Metric) SetUpdatesReceived(value int32) Bgpv6Metric {
 // OpensSent returns a int32
 //  Number of Open messages sent.
 func (obj *bgpv6Metric) OpensSent() int32 {
+
 	return *obj.obj.OpensSent
+
 }
 
 // OpensSent returns a int32
@@ -20058,7 +20537,9 @@ func (obj *bgpv6Metric) SetOpensSent(value int32) Bgpv6Metric {
 // OpensReceived returns a int32
 //  Number of Open messages received.
 func (obj *bgpv6Metric) OpensReceived() int32 {
+
 	return *obj.obj.OpensReceived
+
 }
 
 // OpensReceived returns a int32
@@ -20078,7 +20559,9 @@ func (obj *bgpv6Metric) SetOpensReceived(value int32) Bgpv6Metric {
 // KeepalivesSent returns a int32
 //  Number of Keepalive messages sent.
 func (obj *bgpv6Metric) KeepalivesSent() int32 {
+
 	return *obj.obj.KeepalivesSent
+
 }
 
 // KeepalivesSent returns a int32
@@ -20098,7 +20581,9 @@ func (obj *bgpv6Metric) SetKeepalivesSent(value int32) Bgpv6Metric {
 // KeepalivesReceived returns a int32
 //  Number of Keepalive messages received.
 func (obj *bgpv6Metric) KeepalivesReceived() int32 {
+
 	return *obj.obj.KeepalivesReceived
+
 }
 
 // KeepalivesReceived returns a int32
@@ -20118,7 +20603,9 @@ func (obj *bgpv6Metric) SetKeepalivesReceived(value int32) Bgpv6Metric {
 // NotificationsSent returns a int32
 //  Number of Notification messages sent.
 func (obj *bgpv6Metric) NotificationsSent() int32 {
+
 	return *obj.obj.NotificationsSent
+
 }
 
 // NotificationsSent returns a int32
@@ -20138,7 +20625,9 @@ func (obj *bgpv6Metric) SetNotificationsSent(value int32) Bgpv6Metric {
 // NotificationsReceived returns a int32
 //  Number of Notification messages received.
 func (obj *bgpv6Metric) NotificationsReceived() int32 {
+
 	return *obj.obj.NotificationsReceived
+
 }
 
 // NotificationsReceived returns a int32
@@ -20387,7 +20876,9 @@ type IsisMetric interface {
 // Name returns a string
 //  The name of a configured ISIS router.
 func (obj *isisMetric) Name() string {
+
 	return *obj.obj.Name
+
 }
 
 // Name returns a string
@@ -20407,7 +20898,9 @@ func (obj *isisMetric) SetName(value string) IsisMetric {
 // L1SessionsUp returns a int32
 //  The number of Level 1 (L1) sessions that are fully up.
 func (obj *isisMetric) L1SessionsUp() int32 {
+
 	return *obj.obj.L1SessionsUp
+
 }
 
 // L1SessionsUp returns a int32
@@ -20427,7 +20920,9 @@ func (obj *isisMetric) SetL1SessionsUp(value int32) IsisMetric {
 // L1SessionFlap returns a int32
 //  The number of Level 1 Sessions Flap.
 func (obj *isisMetric) L1SessionFlap() int32 {
+
 	return *obj.obj.L1SessionFlap
+
 }
 
 // L1SessionFlap returns a int32
@@ -20447,7 +20942,9 @@ func (obj *isisMetric) SetL1SessionFlap(value int32) IsisMetric {
 // L1BroadcastHellosSent returns a int32
 //  Number of Level 1 Hello messages sent.
 func (obj *isisMetric) L1BroadcastHellosSent() int32 {
+
 	return *obj.obj.L1BroadcastHellosSent
+
 }
 
 // L1BroadcastHellosSent returns a int32
@@ -20467,7 +20964,9 @@ func (obj *isisMetric) SetL1BroadcastHellosSent(value int32) IsisMetric {
 // L1BroadcastHellosReceived returns a int32
 //  Number of Level 1 Hello messages received.
 func (obj *isisMetric) L1BroadcastHellosReceived() int32 {
+
 	return *obj.obj.L1BroadcastHellosReceived
+
 }
 
 // L1BroadcastHellosReceived returns a int32
@@ -20487,7 +20986,9 @@ func (obj *isisMetric) SetL1BroadcastHellosReceived(value int32) IsisMetric {
 // L1PointToPointHellosSent returns a int32
 //  Number of Level 1 Point-to-Point(P2P) Hello messages sent.
 func (obj *isisMetric) L1PointToPointHellosSent() int32 {
+
 	return *obj.obj.L1PointToPointHellosSent
+
 }
 
 // L1PointToPointHellosSent returns a int32
@@ -20507,7 +21008,9 @@ func (obj *isisMetric) SetL1PointToPointHellosSent(value int32) IsisMetric {
 // L1PointToPointHellosReceived returns a int32
 //  Number of Level 1 Point-to-Point(P2P) Hello messages received.
 func (obj *isisMetric) L1PointToPointHellosReceived() int32 {
+
 	return *obj.obj.L1PointToPointHellosReceived
+
 }
 
 // L1PointToPointHellosReceived returns a int32
@@ -20527,7 +21030,9 @@ func (obj *isisMetric) SetL1PointToPointHellosReceived(value int32) IsisMetric {
 // L1DatabaseSize returns a int32
 //  Number of Link State Updates (LSPs) in the Level 1 LSP Databases.
 func (obj *isisMetric) L1DatabaseSize() int32 {
+
 	return *obj.obj.L1DatabaseSize
+
 }
 
 // L1DatabaseSize returns a int32
@@ -20547,7 +21052,9 @@ func (obj *isisMetric) SetL1DatabaseSize(value int32) IsisMetric {
 // L1PsnpSent returns a int32
 //  Number of Level 1 (L1) Partial Sequence Number Packet (PSNPs) sent.
 func (obj *isisMetric) L1PsnpSent() int32 {
+
 	return *obj.obj.L1PsnpSent
+
 }
 
 // L1PsnpSent returns a int32
@@ -20567,7 +21074,9 @@ func (obj *isisMetric) SetL1PsnpSent(value int32) IsisMetric {
 // L1PsnpReceived returns a int32
 //  Number of Level 1 (L1) Complete Sequence Number Packet (PSNPs) received.
 func (obj *isisMetric) L1PsnpReceived() int32 {
+
 	return *obj.obj.L1PsnpReceived
+
 }
 
 // L1PsnpReceived returns a int32
@@ -20587,7 +21096,9 @@ func (obj *isisMetric) SetL1PsnpReceived(value int32) IsisMetric {
 // L1CsnpSent returns a int32
 //  Number of Level 1 (L1) Complete Sequence Number Packet (CSNPs) sent.
 func (obj *isisMetric) L1CsnpSent() int32 {
+
 	return *obj.obj.L1CsnpSent
+
 }
 
 // L1CsnpSent returns a int32
@@ -20607,7 +21118,9 @@ func (obj *isisMetric) SetL1CsnpSent(value int32) IsisMetric {
 // L1CsnpReceived returns a int32
 //  Number of Level 1 (L1) Complete Sequence Number Packet (CSNPs) received.
 func (obj *isisMetric) L1CsnpReceived() int32 {
+
 	return *obj.obj.L1CsnpReceived
+
 }
 
 // L1CsnpReceived returns a int32
@@ -20627,7 +21140,9 @@ func (obj *isisMetric) SetL1CsnpReceived(value int32) IsisMetric {
 // L1LspSent returns a int32
 //  Number of Level 1 (L1) Link State Protocol Data Units (LSPs) sent.
 func (obj *isisMetric) L1LspSent() int32 {
+
 	return *obj.obj.L1LspSent
+
 }
 
 // L1LspSent returns a int32
@@ -20647,7 +21162,9 @@ func (obj *isisMetric) SetL1LspSent(value int32) IsisMetric {
 // L1LspReceived returns a int32
 //  Number of Level 1 (L1) Link State Protocol Data Units (LSPs) received.
 func (obj *isisMetric) L1LspReceived() int32 {
+
 	return *obj.obj.L1LspReceived
+
 }
 
 // L1LspReceived returns a int32
@@ -20667,7 +21184,9 @@ func (obj *isisMetric) SetL1LspReceived(value int32) IsisMetric {
 // L2SessionsUp returns a int32
 //  The number of Level 2 (L2) sessions that are fully up.
 func (obj *isisMetric) L2SessionsUp() int32 {
+
 	return *obj.obj.L2SessionsUp
+
 }
 
 // L2SessionsUp returns a int32
@@ -20687,7 +21206,9 @@ func (obj *isisMetric) SetL2SessionsUp(value int32) IsisMetric {
 // L2SessionFlap returns a int32
 //  The number of Level 2 Sessions Flap.
 func (obj *isisMetric) L2SessionFlap() int32 {
+
 	return *obj.obj.L2SessionFlap
+
 }
 
 // L2SessionFlap returns a int32
@@ -20707,7 +21228,9 @@ func (obj *isisMetric) SetL2SessionFlap(value int32) IsisMetric {
 // L2BroadcastHellosSent returns a int32
 //  Number of Level 2 Hello messages sent.
 func (obj *isisMetric) L2BroadcastHellosSent() int32 {
+
 	return *obj.obj.L2BroadcastHellosSent
+
 }
 
 // L2BroadcastHellosSent returns a int32
@@ -20727,7 +21250,9 @@ func (obj *isisMetric) SetL2BroadcastHellosSent(value int32) IsisMetric {
 // L2BroadcastHellosReceived returns a int32
 //  Number of Level 2 Hello messages received.
 func (obj *isisMetric) L2BroadcastHellosReceived() int32 {
+
 	return *obj.obj.L2BroadcastHellosReceived
+
 }
 
 // L2BroadcastHellosReceived returns a int32
@@ -20747,7 +21272,9 @@ func (obj *isisMetric) SetL2BroadcastHellosReceived(value int32) IsisMetric {
 // L2PointToPointHellosSent returns a int32
 //  Number of Level 2 Point-to-Point(P2P) Hello messages sent.
 func (obj *isisMetric) L2PointToPointHellosSent() int32 {
+
 	return *obj.obj.L2PointToPointHellosSent
+
 }
 
 // L2PointToPointHellosSent returns a int32
@@ -20767,7 +21294,9 @@ func (obj *isisMetric) SetL2PointToPointHellosSent(value int32) IsisMetric {
 // L2PointToPointHellosReceived returns a int32
 //  Number of Level 2 Point-to-Point(P2P) Hello messages received.
 func (obj *isisMetric) L2PointToPointHellosReceived() int32 {
+
 	return *obj.obj.L2PointToPointHellosReceived
+
 }
 
 // L2PointToPointHellosReceived returns a int32
@@ -20787,7 +21316,9 @@ func (obj *isisMetric) SetL2PointToPointHellosReceived(value int32) IsisMetric {
 // L2DatabaseSize returns a int32
 //  Number of Link State Updates (LSPs) in the Level 2 LSP Databases.
 func (obj *isisMetric) L2DatabaseSize() int32 {
+
 	return *obj.obj.L2DatabaseSize
+
 }
 
 // L2DatabaseSize returns a int32
@@ -20807,7 +21338,9 @@ func (obj *isisMetric) SetL2DatabaseSize(value int32) IsisMetric {
 // L2PsnpSent returns a int32
 //  Number of Level 2 (L2) Partial Sequence Number Packet (PSNPs) sent.
 func (obj *isisMetric) L2PsnpSent() int32 {
+
 	return *obj.obj.L2PsnpSent
+
 }
 
 // L2PsnpSent returns a int32
@@ -20827,7 +21360,9 @@ func (obj *isisMetric) SetL2PsnpSent(value int32) IsisMetric {
 // L2PsnpReceived returns a int32
 //  Number of Level 2 (L2) Complete Sequence Number Packet (PSNPs) received.
 func (obj *isisMetric) L2PsnpReceived() int32 {
+
 	return *obj.obj.L2PsnpReceived
+
 }
 
 // L2PsnpReceived returns a int32
@@ -20847,7 +21382,9 @@ func (obj *isisMetric) SetL2PsnpReceived(value int32) IsisMetric {
 // L2CsnpSent returns a int32
 //  Number of Level 2 (L2) Complete Sequence Number Packet (CSNPs) sent.
 func (obj *isisMetric) L2CsnpSent() int32 {
+
 	return *obj.obj.L2CsnpSent
+
 }
 
 // L2CsnpSent returns a int32
@@ -20867,7 +21404,9 @@ func (obj *isisMetric) SetL2CsnpSent(value int32) IsisMetric {
 // L2CsnpReceived returns a int32
 //  Number of Level 2 (L2) Complete Sequence Number Packet (CSNPs) received.
 func (obj *isisMetric) L2CsnpReceived() int32 {
+
 	return *obj.obj.L2CsnpReceived
+
 }
 
 // L2CsnpReceived returns a int32
@@ -20887,7 +21426,9 @@ func (obj *isisMetric) SetL2CsnpReceived(value int32) IsisMetric {
 // L2LspSent returns a int32
 //  Number of Level 2 (L2) Link State Protocol Data Units (LSPs) sent.
 func (obj *isisMetric) L2LspSent() int32 {
+
 	return *obj.obj.L2LspSent
+
 }
 
 // L2LspSent returns a int32
@@ -20907,7 +21448,9 @@ func (obj *isisMetric) SetL2LspSent(value int32) IsisMetric {
 // L2LspReceived returns a int32
 //  Number of Level 2 (L2) Link State Protocol Data Units (LSPs) received.
 func (obj *isisMetric) L2LspReceived() int32 {
+
 	return *obj.obj.L2LspReceived
+
 }
 
 // L2LspReceived returns a int32
@@ -21084,7 +21627,9 @@ type PortState interface {
 // Name returns a string
 //  description is TBD
 func (obj *portState) Name() string {
+
 	return *obj.obj.Name
+
 }
 
 // Name returns a string
@@ -21130,6 +21675,7 @@ func (obj *portState) SetLink(value PortStateLinkEnum) PortState {
 	}
 	enumValue := snappipb.PortState_Link_Enum(intValue)
 	obj.obj.Link = &enumValue
+
 	return obj
 }
 
@@ -21162,6 +21708,7 @@ func (obj *portState) SetCapture(value PortStateCaptureEnum) PortState {
 	}
 	enumValue := snappipb.PortState_Capture_Enum(intValue)
 	obj.obj.Capture = &enumValue
+
 	return obj
 }
 
@@ -21322,7 +21869,9 @@ type FlowState interface {
 // Name returns a string
 //  description is TBD
 func (obj *flowState) Name() string {
+
 	return *obj.obj.Name
+
 }
 
 // Name returns a string
@@ -21370,6 +21919,7 @@ func (obj *flowState) SetTransmit(value FlowStateTransmitEnum) FlowState {
 	}
 	enumValue := snappipb.FlowState_Transmit_Enum(intValue)
 	obj.obj.Transmit = &enumValue
+
 	return obj
 }
 
@@ -21559,6 +22109,15 @@ func (obj *lagProtocol) SetChoice(value LagProtocolChoiceEnum) LagProtocol {
 	}
 	enumValue := snappipb.LagProtocol_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "lacp" {
+		obj.obj.Lacp = nil
+	}
+
+	if string(value) != "static" {
+		obj.obj.Static = nil
+	}
+
 	return obj
 }
 
@@ -21627,6 +22186,7 @@ func (obj *lagProtocol) validateObj(set_default bool) {
 func (obj *lagProtocol) setDefault() {
 	if obj.obj.Choice == nil {
 		obj.SetChoice(LagProtocolChoice.LACP)
+		obj.Lacp()
 	}
 
 }
@@ -21779,6 +22339,7 @@ type DeviceEthernetBase interface {
 // Mac returns a string
 //  Media Access Control address.
 func (obj *deviceEthernetBase) Mac() string {
+
 	return obj.obj.Mac
 }
 
@@ -21793,7 +22354,13 @@ func (obj *deviceEthernetBase) SetMac(value string) DeviceEthernetBase {
 // Mtu returns a int32
 //  Maximum Transmission Unit.
 func (obj *deviceEthernetBase) Mtu() int32 {
+
+	if obj.obj.Mtu == nil {
+		*obj.obj.Mtu = 1500
+	}
+
 	return *obj.obj.Mtu
+
 }
 
 // Mtu returns a int32
@@ -21847,6 +22414,7 @@ func (obj *deviceEthernetBaseDeviceVlanIter) Items() []DeviceVlan {
 // Name returns a string
 //  Globally unique name of an object. It also serves as the primary key for arrays of objects.
 func (obj *deviceEthernetBase) Name() string {
+
 	return obj.obj.Name
 }
 
@@ -21896,9 +22464,6 @@ func (obj *deviceEthernetBase) validateObj(set_default bool) {
 func (obj *deviceEthernetBase) setDefault() {
 	if obj.obj.Mtu == nil {
 		obj.SetMtu(1500)
-	}
-	if obj.obj.Vlans == nil {
-		obj.Vlans()
 	}
 
 }
@@ -22072,7 +22637,13 @@ type Layer1Ieee8021Qbb interface {
 //  message to pause a specified priority.
 //  A value of 0 or null indicates that pfc delay will not be enabled.
 func (obj *layer1Ieee8021Qbb) PfcDelay() int32 {
+
+	if obj.obj.PfcDelay == nil {
+		*obj.obj.PfcDelay = 0
+	}
+
 	return *obj.obj.PfcDelay
+
 }
 
 // PfcDelay returns a int32
@@ -22097,7 +22668,13 @@ func (obj *layer1Ieee8021Qbb) SetPfcDelay(value int32) Layer1Ieee8021Qbb {
 //  The valid values are null, 0 - 7.
 //  A null value indicates there is no setting for this pfc class.
 func (obj *layer1Ieee8021Qbb) PfcClass0() int32 {
+
+	if obj.obj.PfcClass_0 == nil {
+		*obj.obj.PfcClass_0 = 0
+	}
+
 	return *obj.obj.PfcClass_0
+
 }
 
 // PfcClass0 returns a int32
@@ -22120,7 +22697,13 @@ func (obj *layer1Ieee8021Qbb) SetPfcClass0(value int32) Layer1Ieee8021Qbb {
 //  The valid values are null, 0 - 7.
 //  A null value indicates there is no setting for this pfc class.
 func (obj *layer1Ieee8021Qbb) PfcClass1() int32 {
+
+	if obj.obj.PfcClass_1 == nil {
+		*obj.obj.PfcClass_1 = 1
+	}
+
 	return *obj.obj.PfcClass_1
+
 }
 
 // PfcClass1 returns a int32
@@ -22143,7 +22726,13 @@ func (obj *layer1Ieee8021Qbb) SetPfcClass1(value int32) Layer1Ieee8021Qbb {
 //  The valid values are null, 0 - 7.
 //  A null value indicates there is no setting for this pfc class.
 func (obj *layer1Ieee8021Qbb) PfcClass2() int32 {
+
+	if obj.obj.PfcClass_2 == nil {
+		*obj.obj.PfcClass_2 = 2
+	}
+
 	return *obj.obj.PfcClass_2
+
 }
 
 // PfcClass2 returns a int32
@@ -22166,7 +22755,13 @@ func (obj *layer1Ieee8021Qbb) SetPfcClass2(value int32) Layer1Ieee8021Qbb {
 //  The valid values are null, 0 - 7.
 //  A null value indicates there is no setting for this pfc class.
 func (obj *layer1Ieee8021Qbb) PfcClass3() int32 {
+
+	if obj.obj.PfcClass_3 == nil {
+		*obj.obj.PfcClass_3 = 3
+	}
+
 	return *obj.obj.PfcClass_3
+
 }
 
 // PfcClass3 returns a int32
@@ -22189,7 +22784,13 @@ func (obj *layer1Ieee8021Qbb) SetPfcClass3(value int32) Layer1Ieee8021Qbb {
 //  The valid values are null, 0 - 7.
 //  A null value indicates there is no setting for this pfc class.
 func (obj *layer1Ieee8021Qbb) PfcClass4() int32 {
+
+	if obj.obj.PfcClass_4 == nil {
+		*obj.obj.PfcClass_4 = 4
+	}
+
 	return *obj.obj.PfcClass_4
+
 }
 
 // PfcClass4 returns a int32
@@ -22212,7 +22813,13 @@ func (obj *layer1Ieee8021Qbb) SetPfcClass4(value int32) Layer1Ieee8021Qbb {
 //  The valid values are null, 0 - 7.
 //  A null value indicates there is no setting for this pfc class.
 func (obj *layer1Ieee8021Qbb) PfcClass5() int32 {
+
+	if obj.obj.PfcClass_5 == nil {
+		*obj.obj.PfcClass_5 = 5
+	}
+
 	return *obj.obj.PfcClass_5
+
 }
 
 // PfcClass5 returns a int32
@@ -22235,7 +22842,13 @@ func (obj *layer1Ieee8021Qbb) SetPfcClass5(value int32) Layer1Ieee8021Qbb {
 //  The valid values are null, 0 - 7.
 //  A null value indicates there is no setting for this pfc class.
 func (obj *layer1Ieee8021Qbb) PfcClass6() int32 {
+
+	if obj.obj.PfcClass_6 == nil {
+		*obj.obj.PfcClass_6 = 6
+	}
+
 	return *obj.obj.PfcClass_6
+
 }
 
 // PfcClass6 returns a int32
@@ -22258,7 +22871,13 @@ func (obj *layer1Ieee8021Qbb) SetPfcClass6(value int32) Layer1Ieee8021Qbb {
 //  The valid values are null, 0 - 7.
 //  A null value indicates there is no setting for this pfc class.
 func (obj *layer1Ieee8021Qbb) PfcClass7() int32 {
+
+	if obj.obj.PfcClass_7 == nil {
+		*obj.obj.PfcClass_7 = 7
+	}
+
 	return *obj.obj.PfcClass_7
+
 }
 
 // PfcClass7 returns a int32
@@ -22618,7 +23237,13 @@ type CaptureCustom interface {
 // Offset returns a int32
 //  The bit offset of field to filter on
 func (obj *captureCustom) Offset() int32 {
+
+	if obj.obj.Offset == nil {
+		*obj.obj.Offset = 0
+	}
+
 	return *obj.obj.Offset
+
 }
 
 // Offset returns a int32
@@ -22638,7 +23263,13 @@ func (obj *captureCustom) SetOffset(value int32) CaptureCustom {
 // BitLength returns a int32
 //  The bit length of field to filter on
 func (obj *captureCustom) BitLength() int32 {
+
+	if obj.obj.BitLength == nil {
+		*obj.obj.BitLength = 8
+	}
+
 	return *obj.obj.BitLength
+
 }
 
 // BitLength returns a int32
@@ -22658,7 +23289,13 @@ func (obj *captureCustom) SetBitLength(value int32) CaptureCustom {
 // Value returns a string
 //  description is TBD
 func (obj *captureCustom) Value() string {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = "00"
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a string
@@ -22678,7 +23315,13 @@ func (obj *captureCustom) SetValue(value string) CaptureCustom {
 // Mask returns a string
 //  description is TBD
 func (obj *captureCustom) Mask() string {
+
+	if obj.obj.Mask == nil {
+		*obj.obj.Mask = "00"
+	}
+
 	return *obj.obj.Mask
+
 }
 
 // Mask returns a string
@@ -22698,7 +23341,13 @@ func (obj *captureCustom) SetMask(value string) CaptureCustom {
 // Negate returns a bool
 //  description is TBD
 func (obj *captureCustom) Negate() bool {
+
+	if obj.obj.Negate == nil {
+		*obj.obj.Negate = false
+	}
+
 	return *obj.obj.Negate
+
 }
 
 // Negate returns a bool
@@ -24392,6 +25041,7 @@ type DeviceIpv4 interface {
 // Gateway returns a string
 //  The IPv4 address of the gateway
 func (obj *deviceIpv4) Gateway() string {
+
 	return obj.obj.Gateway
 }
 
@@ -24406,6 +25056,7 @@ func (obj *deviceIpv4) SetGateway(value string) DeviceIpv4 {
 // Address returns a string
 //  The IPv4 address
 func (obj *deviceIpv4) Address() string {
+
 	return obj.obj.Address
 }
 
@@ -24420,7 +25071,13 @@ func (obj *deviceIpv4) SetAddress(value string) DeviceIpv4 {
 // Prefix returns a int32
 //  The prefix of the IPv4 address.
 func (obj *deviceIpv4) Prefix() int32 {
+
+	if obj.obj.Prefix == nil {
+		*obj.obj.Prefix = 24
+	}
+
 	return *obj.obj.Prefix
+
 }
 
 // Prefix returns a int32
@@ -24440,6 +25097,7 @@ func (obj *deviceIpv4) SetPrefix(value int32) DeviceIpv4 {
 // Name returns a string
 //  Globally unique name of an object. It also serves as the primary key for arrays of objects.
 func (obj *deviceIpv4) Name() string {
+
 	return obj.obj.Name
 }
 
@@ -24646,6 +25304,7 @@ type DeviceIpv6 interface {
 // Gateway returns a string
 //  The IPv6 gateway address.
 func (obj *deviceIpv6) Gateway() string {
+
 	return obj.obj.Gateway
 }
 
@@ -24660,6 +25319,7 @@ func (obj *deviceIpv6) SetGateway(value string) DeviceIpv6 {
 // Address returns a string
 //  The IPv6 address.
 func (obj *deviceIpv6) Address() string {
+
 	return obj.obj.Address
 }
 
@@ -24674,7 +25334,13 @@ func (obj *deviceIpv6) SetAddress(value string) DeviceIpv6 {
 // Prefix returns a int32
 //  The network prefix.
 func (obj *deviceIpv6) Prefix() int32 {
+
+	if obj.obj.Prefix == nil {
+		*obj.obj.Prefix = 64
+	}
+
 	return *obj.obj.Prefix
+
 }
 
 // Prefix returns a int32
@@ -24694,6 +25360,7 @@ func (obj *deviceIpv6) SetPrefix(value int32) DeviceIpv6 {
 // Name returns a string
 //  Globally unique name of an object. It also serves as the primary key for arrays of objects.
 func (obj *deviceIpv6) Name() string {
+
 	return obj.obj.Name
 }
 
@@ -24745,9 +25412,6 @@ func (obj *deviceIpv6) validateObj(set_default bool) {
 }
 
 func (obj *deviceIpv6) setDefault() {
-	if obj.obj.Gateway == "" {
-		obj.SetGateway("::0")
-	}
 	if obj.obj.Prefix == nil {
 		obj.SetPrefix(64)
 	}
@@ -24937,13 +25601,20 @@ func (obj *deviceVlan) SetTpid(value DeviceVlanTpidEnum) DeviceVlan {
 	}
 	enumValue := snappipb.DeviceVlan_Tpid_Enum(intValue)
 	obj.obj.Tpid = &enumValue
+
 	return obj
 }
 
 // Priority returns a int32
 //  Priority code point
 func (obj *deviceVlan) Priority() int32 {
+
+	if obj.obj.Priority == nil {
+		*obj.obj.Priority = 0
+	}
+
 	return *obj.obj.Priority
+
 }
 
 // Priority returns a int32
@@ -24963,7 +25634,13 @@ func (obj *deviceVlan) SetPriority(value int32) DeviceVlan {
 // Id returns a int32
 //  VLAN identifier
 func (obj *deviceVlan) Id() int32 {
+
+	if obj.obj.Id == nil {
+		*obj.obj.Id = 1
+	}
+
 	return *obj.obj.Id
+
 }
 
 // Id returns a int32
@@ -24983,6 +25660,7 @@ func (obj *deviceVlan) SetId(value int32) DeviceVlan {
 // Name returns a string
 //  Globally unique name of an object. It also serves as the primary key for arrays of objects.
 func (obj *deviceVlan) Name() string {
+
 	return obj.obj.Name
 }
 
@@ -25024,6 +25702,7 @@ func (obj *deviceVlan) validateObj(set_default bool) {
 func (obj *deviceVlan) setDefault() {
 	if obj.obj.Tpid == nil {
 		obj.SetTpid(DeviceVlanTpid.X8100)
+
 	}
 	if obj.obj.Priority == nil {
 		obj.SetPriority(0)
@@ -25179,7 +25858,13 @@ type DeviceIsisMultiInstance interface {
 // Iid returns a int32
 //  Instance Identifier (IID) TLV will associate a PDU with an ISIS instance  by using a unique 16-bit number and including one or more  Instance-Specific Topology Identifiers (ITIDs).
 func (obj *deviceIsisMultiInstance) Iid() int32 {
+
+	if obj.obj.Iid == nil {
+		*obj.obj.Iid = 1
+	}
+
 	return *obj.obj.Iid
+
 }
 
 // Iid returns a int32
@@ -25418,6 +26103,7 @@ type IsisInterface interface {
 //  - /components/schemas/Device.Ethernet/properties/name
 //
 func (obj *isisInterface) EthName() string {
+
 	return obj.obj.EthName
 }
 
@@ -25440,7 +26126,13 @@ func (obj *isisInterface) SetEthName(value string) IsisInterface {
 // Metric returns a int32
 //  The default metric cost for the interface.
 func (obj *isisInterface) Metric() int32 {
+
+	if obj.obj.Metric == nil {
+		*obj.obj.Metric = 10
+	}
+
 	return *obj.obj.Metric
+
 }
 
 // Metric returns a int32
@@ -25486,6 +26178,7 @@ func (obj *isisInterface) SetNetworkType(value IsisInterfaceNetworkTypeEnum) Isi
 	}
 	enumValue := snappipb.IsisInterface_NetworkType_Enum(intValue)
 	obj.obj.NetworkType = &enumValue
+
 	return obj
 }
 
@@ -25521,6 +26214,7 @@ func (obj *isisInterface) SetLevelType(value IsisInterfaceLevelTypeEnum) IsisInt
 	}
 	enumValue := snappipb.IsisInterface_LevelType_Enum(intValue)
 	obj.obj.LevelType = &enumValue
+
 	return obj
 }
 
@@ -25730,6 +26424,7 @@ func (obj *isisInterface) SetSrlgValues(value []int32) IsisInterface {
 // Name returns a string
 //  Globally unique name of an object. It also serves as the primary key for arrays of objects.
 func (obj *isisInterface) Name() string {
+
 	return obj.obj.Name
 }
 
@@ -25794,15 +26489,11 @@ func (obj *isisInterface) setDefault() {
 	}
 	if obj.obj.NetworkType == nil {
 		obj.SetNetworkType(IsisInterfaceNetworkType.BROADCAST)
+
 	}
 	if obj.obj.LevelType == nil {
 		obj.SetLevelType(IsisInterfaceLevelType.LEVEL_2)
-	}
-	if obj.obj.MultiTopologyIds == nil {
-		obj.MultiTopologyIds()
-	}
-	if obj.obj.TrafficEngineering == nil {
-		obj.TrafficEngineering()
+
 	}
 
 }
@@ -25953,7 +26644,9 @@ type IsisBasic interface {
 // Ipv4TeRouterId returns a string
 //  IPv4 Traffic Engineering(TE) router id. This address should be configured as an IPv4 Loopback address in 'ipv4_loopbacks' in the Device.
 func (obj *isisBasic) Ipv4TeRouterId() string {
+
 	return *obj.obj.Ipv4TeRouterId
+
 }
 
 // Ipv4TeRouterId returns a string
@@ -25973,7 +26666,9 @@ func (obj *isisBasic) SetIpv4TeRouterId(value string) IsisBasic {
 // Hostname returns a string
 //  Host name for the router. The host name is transmitted in all the packets sent from the router.
 func (obj *isisBasic) Hostname() string {
+
 	return *obj.obj.Hostname
+
 }
 
 // Hostname returns a string
@@ -26174,7 +26869,13 @@ type IsisAdvanced interface {
 // EnableHelloPadding returns a bool
 //  It enables padding of Hello message to MTU size.
 func (obj *isisAdvanced) EnableHelloPadding() bool {
+
+	if obj.obj.EnableHelloPadding == nil {
+		*obj.obj.EnableHelloPadding = true
+	}
+
 	return *obj.obj.EnableHelloPadding
+
 }
 
 // EnableHelloPadding returns a bool
@@ -26194,7 +26895,13 @@ func (obj *isisAdvanced) SetEnableHelloPadding(value bool) IsisAdvanced {
 // MaxAreaAddresses returns a int32
 //  The Number of Area Addresses permitted, with a valid range from 0 to 254.  A zero indicates a maximum of 3 addresses.
 func (obj *isisAdvanced) MaxAreaAddresses() int32 {
+
+	if obj.obj.MaxAreaAddresses == nil {
+		*obj.obj.MaxAreaAddresses = 3
+	}
+
 	return *obj.obj.MaxAreaAddresses
+
 }
 
 // MaxAreaAddresses returns a int32
@@ -26234,7 +26941,13 @@ func (obj *isisAdvanced) SetAreaAddresses(value []string) IsisAdvanced {
 // LspRefreshRate returns a int32
 //  The rate at which LSPs are re-sent in seconds.
 func (obj *isisAdvanced) LspRefreshRate() int32 {
+
+	if obj.obj.LspRefreshRate == nil {
+		*obj.obj.LspRefreshRate = 600
+	}
+
 	return *obj.obj.LspRefreshRate
+
 }
 
 // LspRefreshRate returns a int32
@@ -26254,7 +26967,13 @@ func (obj *isisAdvanced) SetLspRefreshRate(value int32) IsisAdvanced {
 // LspLifetime returns a int32
 //  The MaxAge for retaining a learned LSP on this router in seconds.
 func (obj *isisAdvanced) LspLifetime() int32 {
+
+	if obj.obj.LspLifetime == nil {
+		*obj.obj.LspLifetime = 1200
+	}
+
 	return *obj.obj.LspLifetime
+
 }
 
 // LspLifetime returns a int32
@@ -26274,7 +26993,13 @@ func (obj *isisAdvanced) SetLspLifetime(value int32) IsisAdvanced {
 // PsnpInterval returns a int32
 //  The number of milliseconds between transmissions of Partial Sequence Number PDU.
 func (obj *isisAdvanced) PsnpInterval() int32 {
+
+	if obj.obj.PsnpInterval == nil {
+		*obj.obj.PsnpInterval = 2000
+	}
+
 	return *obj.obj.PsnpInterval
+
 }
 
 // PsnpInterval returns a int32
@@ -26294,7 +27019,13 @@ func (obj *isisAdvanced) SetPsnpInterval(value int32) IsisAdvanced {
 // CsnpInterval returns a int32
 //  The number of milliseconds between transmissions of Partial Sequence Number PDU.
 func (obj *isisAdvanced) CsnpInterval() int32 {
+
+	if obj.obj.CsnpInterval == nil {
+		*obj.obj.CsnpInterval = 10000
+	}
+
 	return *obj.obj.CsnpInterval
+
 }
 
 // CsnpInterval returns a int32
@@ -26314,7 +27045,13 @@ func (obj *isisAdvanced) SetCsnpInterval(value int32) IsisAdvanced {
 // MaxLspSize returns a int32
 //  The maximum size in bytes of any LSP that can be transmitted over a link of equal or less  than maximum MTU size.
 func (obj *isisAdvanced) MaxLspSize() int32 {
+
+	if obj.obj.MaxLspSize == nil {
+		*obj.obj.MaxLspSize = 1492
+	}
+
 	return *obj.obj.MaxLspSize
+
 }
 
 // MaxLspSize returns a int32
@@ -26334,7 +27071,13 @@ func (obj *isisAdvanced) SetMaxLspSize(value int32) IsisAdvanced {
 // LspMgroupMinTransInterval returns a int32
 //  The number of seconds between transmissions of LSPs/MGROUP-PDUs.
 func (obj *isisAdvanced) LspMgroupMinTransInterval() int32 {
+
+	if obj.obj.LspMgroupMinTransInterval == nil {
+		*obj.obj.LspMgroupMinTransInterval = 5000
+	}
+
 	return *obj.obj.LspMgroupMinTransInterval
+
 }
 
 // LspMgroupMinTransInterval returns a int32
@@ -26598,7 +27341,13 @@ type IsisAuthentication interface {
 // IgnoreReceiveMd5 returns a bool
 //  Do not verify MD5 checksum in received LSPs.
 func (obj *isisAuthentication) IgnoreReceiveMd5() bool {
+
+	if obj.obj.IgnoreReceiveMd5 == nil {
+		*obj.obj.IgnoreReceiveMd5 = true
+	}
+
 	return *obj.obj.IgnoreReceiveMd5
+
 }
 
 // IgnoreReceiveMd5 returns a bool
@@ -26886,7 +27635,13 @@ func (obj *isisV4RouteRangeV4RouteAddressIter) Items() []V4RouteAddress {
 // LinkMetric returns a int32
 //  The user-defined metric associated with this route range.
 func (obj *isisV4RouteRange) LinkMetric() int32 {
+
+	if obj.obj.LinkMetric == nil {
+		*obj.obj.LinkMetric = 0
+	}
+
 	return *obj.obj.LinkMetric
+
 }
 
 // LinkMetric returns a int32
@@ -26934,6 +27689,7 @@ func (obj *isisV4RouteRange) SetOriginType(value IsisV4RouteRangeOriginTypeEnum)
 	}
 	enumValue := snappipb.IsisV4RouteRange_OriginType_Enum(intValue)
 	obj.obj.OriginType = &enumValue
+
 	return obj
 }
 
@@ -26970,12 +27726,14 @@ func (obj *isisV4RouteRange) SetRedistributionType(value IsisV4RouteRangeRedistr
 	}
 	enumValue := snappipb.IsisV4RouteRange_RedistributionType_Enum(intValue)
 	obj.obj.RedistributionType = &enumValue
+
 	return obj
 }
 
 // Name returns a string
 //  Globally unique name of an object. It also serves as the primary key for arrays of objects.
 func (obj *isisV4RouteRange) Name() string {
+
 	return obj.obj.Name
 }
 
@@ -26991,7 +27749,13 @@ func (obj *isisV4RouteRange) SetName(value string) IsisV4RouteRange {
 //  Specifies whether the sub-TLV for IPv4/IPv6 Extended Reachability Attribute Flags
 //  will be advertised or not.
 func (obj *isisV4RouteRange) PrefixAttrEnabled() bool {
+
+	if obj.obj.PrefixAttrEnabled == nil {
+		*obj.obj.PrefixAttrEnabled = false
+	}
+
 	return *obj.obj.PrefixAttrEnabled
+
 }
 
 // PrefixAttrEnabled returns a bool
@@ -27013,7 +27777,13 @@ func (obj *isisV4RouteRange) SetPrefixAttrEnabled(value bool) IsisV4RouteRange {
 // XFlag returns a bool
 //  External Prefix Flag (Bit 0)
 func (obj *isisV4RouteRange) XFlag() bool {
+
+	if obj.obj.XFlag == nil {
+		*obj.obj.XFlag = false
+	}
+
 	return *obj.obj.XFlag
+
 }
 
 // XFlag returns a bool
@@ -27033,7 +27803,13 @@ func (obj *isisV4RouteRange) SetXFlag(value bool) IsisV4RouteRange {
 // RFlag returns a bool
 //  Re-advertisement Flag (Bit 1)
 func (obj *isisV4RouteRange) RFlag() bool {
+
+	if obj.obj.RFlag == nil {
+		*obj.obj.RFlag = false
+	}
+
 	return *obj.obj.RFlag
+
 }
 
 // RFlag returns a bool
@@ -27053,7 +27829,13 @@ func (obj *isisV4RouteRange) SetRFlag(value bool) IsisV4RouteRange {
 // NFlag returns a bool
 //  Node Flag (Bit 2)
 func (obj *isisV4RouteRange) NFlag() bool {
+
+	if obj.obj.NFlag == nil {
+		*obj.obj.NFlag = false
+	}
+
 	return *obj.obj.NFlag
+
 }
 
 // NFlag returns a bool
@@ -27095,17 +27877,16 @@ func (obj *isisV4RouteRange) validateObj(set_default bool) {
 }
 
 func (obj *isisV4RouteRange) setDefault() {
-	if obj.obj.Addresses == nil {
-		obj.Addresses()
-	}
 	if obj.obj.LinkMetric == nil {
 		obj.SetLinkMetric(0)
 	}
 	if obj.obj.OriginType == nil {
 		obj.SetOriginType(IsisV4RouteRangeOriginType.INTERNAL)
+
 	}
 	if obj.obj.RedistributionType == nil {
 		obj.SetRedistributionType(IsisV4RouteRangeRedistributionType.UP)
+
 	}
 	if obj.obj.PrefixAttrEnabled == nil {
 		obj.SetPrefixAttrEnabled(false)
@@ -27320,7 +28101,13 @@ func (obj *isisV6RouteRangeV6RouteAddressIter) Items() []V6RouteAddress {
 // LinkMetric returns a int32
 //  The user-defined metric associated with this route range.
 func (obj *isisV6RouteRange) LinkMetric() int32 {
+
+	if obj.obj.LinkMetric == nil {
+		*obj.obj.LinkMetric = 0
+	}
+
 	return *obj.obj.LinkMetric
+
 }
 
 // LinkMetric returns a int32
@@ -27368,6 +28155,7 @@ func (obj *isisV6RouteRange) SetOriginType(value IsisV6RouteRangeOriginTypeEnum)
 	}
 	enumValue := snappipb.IsisV6RouteRange_OriginType_Enum(intValue)
 	obj.obj.OriginType = &enumValue
+
 	return obj
 }
 
@@ -27404,12 +28192,14 @@ func (obj *isisV6RouteRange) SetRedistributionType(value IsisV6RouteRangeRedistr
 	}
 	enumValue := snappipb.IsisV6RouteRange_RedistributionType_Enum(intValue)
 	obj.obj.RedistributionType = &enumValue
+
 	return obj
 }
 
 // Name returns a string
 //  Globally unique name of an object. It also serves as the primary key for arrays of objects.
 func (obj *isisV6RouteRange) Name() string {
+
 	return obj.obj.Name
 }
 
@@ -27425,7 +28215,13 @@ func (obj *isisV6RouteRange) SetName(value string) IsisV6RouteRange {
 //  Specifies whether the sub-TLV for IPv4/IPv6 Extended Reachability Attribute Flags
 //  will be advertised or not.
 func (obj *isisV6RouteRange) PrefixAttrEnabled() bool {
+
+	if obj.obj.PrefixAttrEnabled == nil {
+		*obj.obj.PrefixAttrEnabled = false
+	}
+
 	return *obj.obj.PrefixAttrEnabled
+
 }
 
 // PrefixAttrEnabled returns a bool
@@ -27447,7 +28243,13 @@ func (obj *isisV6RouteRange) SetPrefixAttrEnabled(value bool) IsisV6RouteRange {
 // XFlag returns a bool
 //  External Prefix Flag (Bit 0)
 func (obj *isisV6RouteRange) XFlag() bool {
+
+	if obj.obj.XFlag == nil {
+		*obj.obj.XFlag = false
+	}
+
 	return *obj.obj.XFlag
+
 }
 
 // XFlag returns a bool
@@ -27467,7 +28269,13 @@ func (obj *isisV6RouteRange) SetXFlag(value bool) IsisV6RouteRange {
 // RFlag returns a bool
 //  Re-advertisement Flag (Bit 1)
 func (obj *isisV6RouteRange) RFlag() bool {
+
+	if obj.obj.RFlag == nil {
+		*obj.obj.RFlag = false
+	}
+
 	return *obj.obj.RFlag
+
 }
 
 // RFlag returns a bool
@@ -27487,7 +28295,13 @@ func (obj *isisV6RouteRange) SetRFlag(value bool) IsisV6RouteRange {
 // NFlag returns a bool
 //  Node Flag (Bit 2)
 func (obj *isisV6RouteRange) NFlag() bool {
+
+	if obj.obj.NFlag == nil {
+		*obj.obj.NFlag = false
+	}
+
 	return *obj.obj.NFlag
+
 }
 
 // NFlag returns a bool
@@ -27529,17 +28343,16 @@ func (obj *isisV6RouteRange) validateObj(set_default bool) {
 }
 
 func (obj *isisV6RouteRange) setDefault() {
-	if obj.obj.Addresses == nil {
-		obj.Addresses()
-	}
 	if obj.obj.LinkMetric == nil {
 		obj.SetLinkMetric(0)
 	}
 	if obj.obj.OriginType == nil {
 		obj.SetOriginType(IsisV6RouteRangeOriginType.INTERNAL)
+
 	}
 	if obj.obj.RedistributionType == nil {
 		obj.SetRedistributionType(IsisV6RouteRangeRedistributionType.UP)
+
 	}
 	if obj.obj.PrefixAttrEnabled == nil {
 		obj.SetPrefixAttrEnabled(false)
@@ -27709,6 +28522,7 @@ type BgpV4Interface interface {
 //  - /components/schemas/Device.Ipv4Loopback/properties/name
 //
 func (obj *bgpV4Interface) Ipv4Name() string {
+
 	return obj.obj.Ipv4Name
 }
 
@@ -27782,9 +28596,6 @@ func (obj *bgpV4Interface) validateObj(set_default bool) {
 }
 
 func (obj *bgpV4Interface) setDefault() {
-	if obj.obj.Peers == nil {
-		obj.Peers()
-	}
 
 }
 
@@ -27941,6 +28752,7 @@ type BgpV6Interface interface {
 //  - /components/schemas/Device.Ipv6Loopback/properties/name
 //
 func (obj *bgpV6Interface) Ipv6Name() string {
+
 	return obj.obj.Ipv6Name
 }
 
@@ -28014,9 +28826,6 @@ func (obj *bgpV6Interface) validateObj(set_default bool) {
 }
 
 func (obj *bgpV6Interface) setDefault() {
-	if obj.obj.Peers == nil {
-		obj.Peers()
-	}
 
 }
 
@@ -28175,6 +28984,7 @@ type FlowPort interface {
 //  - /components/schemas/Lag/properties/name
 //
 func (obj *flowPort) TxName() string {
+
 	return obj.obj.TxName
 }
 
@@ -28209,7 +29019,9 @@ func (obj *flowPort) SetTxName(value string) FlowPort {
 //  - /components/schemas/Lag/properties/name
 //
 func (obj *flowPort) RxName() string {
+
 	return *obj.obj.RxName
+
 }
 
 // RxName returns a string
@@ -28444,6 +29256,7 @@ func (obj *flowRouter) SetMode(value FlowRouterModeEnum) FlowRouter {
 	}
 	enumValue := snappipb.FlowRouter_Mode_Enum(intValue)
 	obj.obj.Mode = &enumValue
+
 	return obj
 }
 
@@ -28556,11 +29369,21 @@ func (obj *flowRouter) validateObj(set_default bool) {
 		obj.setDefault()
 	}
 
+	// TxNames required
+	if obj.obj.TxNames == nil {
+		validation = append(validation, "TxNames is required field on interface FlowRouter")
+	}
+
+	// RxNames required
+	if obj.obj.RxNames == nil {
+		validation = append(validation, "RxNames is required field on interface FlowRouter")
+	}
 }
 
 func (obj *flowRouter) setDefault() {
 	if obj.obj.Mode == nil {
 		obj.SetMode(FlowRouterMode.MESH)
+
 	}
 
 }
@@ -28707,6 +29530,7 @@ type FlowCustom interface {
 // Bytes returns a string
 //  A custom packet header defined as a string of hex bytes. The string MUST contain sequence of valid hex bytes. Spaces or colons can be part of the bytes but will be discarded. This packet header can be used in multiple places in the packet.
 func (obj *flowCustom) Bytes() string {
+
 	return obj.obj.Bytes
 }
 
@@ -33058,9 +33882,6 @@ func (obj *flowGtpv1) validateObj(set_default bool) {
 }
 
 func (obj *flowGtpv1) setDefault() {
-	if obj.obj.ExtensionHeaders == nil {
-		obj.ExtensionHeaders()
-	}
 
 }
 
@@ -34068,6 +34889,11 @@ func (obj *flowIcmp) SetChoice(value FlowIcmpChoiceEnum) FlowIcmp {
 	}
 	enumValue := snappipb.FlowIcmp_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "echo" {
+		obj.obj.Echo = nil
+	}
+
 	return obj
 }
 
@@ -34108,6 +34934,7 @@ func (obj *flowIcmp) validateObj(set_default bool) {
 func (obj *flowIcmp) setDefault() {
 	if obj.obj.Choice == nil {
 		obj.SetChoice(FlowIcmpChoice.ECHO)
+		obj.Echo()
 	}
 
 }
@@ -34282,6 +35109,11 @@ func (obj *flowIcmpv6) SetChoice(value FlowIcmpv6ChoiceEnum) FlowIcmpv6 {
 	}
 	enumValue := snappipb.FlowIcmpv6_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "echo" {
+		obj.obj.Echo = nil
+	}
+
 	return obj
 }
 
@@ -34322,6 +35154,7 @@ func (obj *flowIcmpv6) validateObj(set_default bool) {
 func (obj *flowIcmpv6) setDefault() {
 	if obj.obj.Choice == nil {
 		obj.SetChoice(FlowIcmpv6Choice.ECHO)
+		obj.Echo()
 	}
 
 }
@@ -35009,7 +35842,13 @@ type FlowSizeIncrement interface {
 // Start returns a int32
 //  Starting frame size in bytes
 func (obj *flowSizeIncrement) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 64
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -35029,7 +35868,13 @@ func (obj *flowSizeIncrement) SetStart(value int32) FlowSizeIncrement {
 // End returns a int32
 //  Ending frame size in bytes
 func (obj *flowSizeIncrement) End() int32 {
+
+	if obj.obj.End == nil {
+		*obj.obj.End = 1518
+	}
+
 	return *obj.obj.End
+
 }
 
 // End returns a int32
@@ -35049,7 +35894,13 @@ func (obj *flowSizeIncrement) SetEnd(value int32) FlowSizeIncrement {
 // Step returns a int32
 //  Step frame size in bytes
 func (obj *flowSizeIncrement) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -35248,7 +36099,13 @@ type FlowSizeRandom interface {
 // Min returns a int32
 //  description is TBD
 func (obj *flowSizeRandom) Min() int32 {
+
+	if obj.obj.Min == nil {
+		*obj.obj.Min = 64
+	}
+
 	return *obj.obj.Min
+
 }
 
 // Min returns a int32
@@ -35268,7 +36125,13 @@ func (obj *flowSizeRandom) SetMin(value int32) FlowSizeRandom {
 // Max returns a int32
 //  description is TBD
 func (obj *flowSizeRandom) Max() int32 {
+
+	if obj.obj.Max == nil {
+		*obj.obj.Max = 1518
+	}
+
 	return *obj.obj.Max
+
 }
 
 // Max returns a int32
@@ -35451,7 +36314,13 @@ type FlowFixedPackets interface {
 // Packets returns a int32
 //  Stop transmit of the flow after this number of packets.
 func (obj *flowFixedPackets) Packets() int32 {
+
+	if obj.obj.Packets == nil {
+		*obj.obj.Packets = 1
+	}
+
 	return *obj.obj.Packets
+
 }
 
 // Packets returns a int32
@@ -35471,7 +36340,13 @@ func (obj *flowFixedPackets) SetPackets(value int32) FlowFixedPackets {
 // Gap returns a int32
 //  The minimum gap between packets expressed as bytes.
 func (obj *flowFixedPackets) Gap() int32 {
+
+	if obj.obj.Gap == nil {
+		*obj.obj.Gap = 12
+	}
+
 	return *obj.obj.Gap
+
 }
 
 // Gap returns a int32
@@ -35680,7 +36555,13 @@ type FlowFixedSeconds interface {
 // Seconds returns a float32
 //  Stop transmit of the flow after this number of seconds.
 func (obj *flowFixedSeconds) Seconds() float32 {
+
+	if obj.obj.Seconds == nil {
+		*obj.obj.Seconds = 1
+	}
+
 	return *obj.obj.Seconds
+
 }
 
 // Seconds returns a float32
@@ -35700,7 +36581,13 @@ func (obj *flowFixedSeconds) SetSeconds(value float32) FlowFixedSeconds {
 // Gap returns a int32
 //  The minimum gap between packets expressed as bytes.
 func (obj *flowFixedSeconds) Gap() int32 {
+
+	if obj.obj.Gap == nil {
+		*obj.obj.Gap = 12
+	}
+
 	return *obj.obj.Gap
+
 }
 
 // Gap returns a int32
@@ -35913,7 +36800,13 @@ type FlowBurst interface {
 //  The number of packet bursts transmitted per flow.
 //  A value of 0 implies continuous burst of packets.
 func (obj *flowBurst) Bursts() int32 {
+
+	if obj.obj.Bursts == nil {
+		*obj.obj.Bursts = 0
+	}
+
 	return *obj.obj.Bursts
+
 }
 
 // Bursts returns a int32
@@ -35935,7 +36828,9 @@ func (obj *flowBurst) SetBursts(value int32) FlowBurst {
 // Packets returns a int32
 //  The number of packets transmitted per burst.
 func (obj *flowBurst) Packets() int32 {
+
 	return *obj.obj.Packets
+
 }
 
 // Packets returns a int32
@@ -35955,7 +36850,13 @@ func (obj *flowBurst) SetPackets(value int32) FlowBurst {
 // Gap returns a int32
 //  The minimum gap between packets expressed as bytes.
 func (obj *flowBurst) Gap() int32 {
+
+	if obj.obj.Gap == nil {
+		*obj.obj.Gap = 12
+	}
+
 	return *obj.obj.Gap
+
 }
 
 // Gap returns a int32
@@ -36169,7 +37070,13 @@ type FlowContinuous interface {
 // Gap returns a int32
 //  The minimum gap between packets expressed as bytes.
 func (obj *flowContinuous) Gap() int32 {
+
+	if obj.obj.Gap == nil {
+		*obj.obj.Gap = 12
+	}
+
 	return *obj.obj.Gap
+
 }
 
 // Gap returns a int32
@@ -36375,7 +37282,13 @@ type FlowLatencyMetrics interface {
 //  Enabling this option may affect the resultant packet payload due to
 //  additional instrumentation data.
 func (obj *flowLatencyMetrics) Enable() bool {
+
+	if obj.obj.Enable == nil {
+		*obj.obj.Enable = false
+	}
+
 	return *obj.obj.Enable
+
 }
 
 // Enable returns a bool
@@ -36441,6 +37354,7 @@ func (obj *flowLatencyMetrics) SetMode(value FlowLatencyMetricsModeEnum) FlowLat
 	}
 	enumValue := snappipb.FlowLatencyMetrics_Mode_Enum(intValue)
 	obj.obj.Mode = &enumValue
+
 	return obj
 }
 
@@ -36457,6 +37371,7 @@ func (obj *flowLatencyMetrics) setDefault() {
 	}
 	if obj.obj.Mode == nil {
 		obj.SetMode(FlowLatencyMetricsMode.STORE_FORWARD)
+
 	}
 
 }
@@ -36607,7 +37522,9 @@ type FlowMetricGroup interface {
 // Name returns a string
 //  Name of packet field metric group
 func (obj *flowMetricGroup) Name() string {
+
 	return *obj.obj.Name
+
 }
 
 // Name returns a string
@@ -36627,7 +37544,9 @@ func (obj *flowMetricGroup) SetName(value string) FlowMetricGroup {
 // Value returns a string
 //  Value of named packet field metric group
 func (obj *flowMetricGroup) Value() string {
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a string
@@ -36801,7 +37720,9 @@ type MetricTimestamp interface {
 // FirstTimestampNs returns a float64
 //  First timestamp in nanoseconds
 func (obj *metricTimestamp) FirstTimestampNs() float64 {
+
 	return *obj.obj.FirstTimestampNs
+
 }
 
 // FirstTimestampNs returns a float64
@@ -36821,7 +37742,9 @@ func (obj *metricTimestamp) SetFirstTimestampNs(value float64) MetricTimestamp {
 // LastTimestampNs returns a float64
 //  Last timestamp in nanoseconds
 func (obj *metricTimestamp) LastTimestampNs() float64 {
+
 	return *obj.obj.LastTimestampNs
+
 }
 
 // LastTimestampNs returns a float64
@@ -36998,7 +37921,9 @@ type MetricLatency interface {
 // MinimumNs returns a float64
 //  Minimum latency in nanoseconds
 func (obj *metricLatency) MinimumNs() float64 {
+
 	return *obj.obj.MinimumNs
+
 }
 
 // MinimumNs returns a float64
@@ -37018,7 +37943,9 @@ func (obj *metricLatency) SetMinimumNs(value float64) MetricLatency {
 // MaximumNs returns a float64
 //  Maximum latency in nanoseconds
 func (obj *metricLatency) MaximumNs() float64 {
+
 	return *obj.obj.MaximumNs
+
 }
 
 // MaximumNs returns a float64
@@ -37038,7 +37965,9 @@ func (obj *metricLatency) SetMaximumNs(value float64) MetricLatency {
 // AverageNs returns a float64
 //  Average latency in nanoseconds
 func (obj *metricLatency) AverageNs() float64 {
+
 	return *obj.obj.AverageNs
+
 }
 
 // AverageNs returns a float64
@@ -37230,7 +38159,13 @@ type LagLacp interface {
 // ActorKey returns a int32
 //  The actor key
 func (obj *lagLacp) ActorKey() int32 {
+
+	if obj.obj.ActorKey == nil {
+		*obj.obj.ActorKey = 0
+	}
+
 	return *obj.obj.ActorKey
+
 }
 
 // ActorKey returns a int32
@@ -37250,7 +38185,13 @@ func (obj *lagLacp) SetActorKey(value int32) LagLacp {
 // ActorPortNumber returns a int32
 //  The actor port number
 func (obj *lagLacp) ActorPortNumber() int32 {
+
+	if obj.obj.ActorPortNumber == nil {
+		*obj.obj.ActorPortNumber = 0
+	}
+
 	return *obj.obj.ActorPortNumber
+
 }
 
 // ActorPortNumber returns a int32
@@ -37270,7 +38211,13 @@ func (obj *lagLacp) SetActorPortNumber(value int32) LagLacp {
 // ActorPortPriority returns a int32
 //  The actor port priority
 func (obj *lagLacp) ActorPortPriority() int32 {
+
+	if obj.obj.ActorPortPriority == nil {
+		*obj.obj.ActorPortPriority = 1
+	}
+
 	return *obj.obj.ActorPortPriority
+
 }
 
 // ActorPortPriority returns a int32
@@ -37290,7 +38237,13 @@ func (obj *lagLacp) SetActorPortPriority(value int32) LagLacp {
 // ActorSystemId returns a string
 //  The actor system id
 func (obj *lagLacp) ActorSystemId() string {
+
+	if obj.obj.ActorSystemId == nil {
+		*obj.obj.ActorSystemId = "00:00:00:00:00:00"
+	}
+
 	return *obj.obj.ActorSystemId
+
 }
 
 // ActorSystemId returns a string
@@ -37310,7 +38263,13 @@ func (obj *lagLacp) SetActorSystemId(value string) LagLacp {
 // ActorSystemPriority returns a int32
 //  The actor system priority
 func (obj *lagLacp) ActorSystemPriority() int32 {
+
+	if obj.obj.ActorSystemPriority == nil {
+		*obj.obj.ActorSystemPriority = 0
+	}
+
 	return *obj.obj.ActorSystemPriority
+
 }
 
 // ActorSystemPriority returns a int32
@@ -37330,7 +38289,13 @@ func (obj *lagLacp) SetActorSystemPriority(value int32) LagLacp {
 // LacpduPeriodicTimeInterval returns a int32
 //  This field defines how frequently LACPDUs are sent to the link partner
 func (obj *lagLacp) LacpduPeriodicTimeInterval() int32 {
+
+	if obj.obj.LacpduPeriodicTimeInterval == nil {
+		*obj.obj.LacpduPeriodicTimeInterval = 0
+	}
+
 	return *obj.obj.LacpduPeriodicTimeInterval
+
 }
 
 // LacpduPeriodicTimeInterval returns a int32
@@ -37350,7 +38315,13 @@ func (obj *lagLacp) SetLacpduPeriodicTimeInterval(value int32) LagLacp {
 // LacpduTimeout returns a int32
 //  This timer is used to detect whether received protocol information has expired
 func (obj *lagLacp) LacpduTimeout() int32 {
+
+	if obj.obj.LacpduTimeout == nil {
+		*obj.obj.LacpduTimeout = 0
+	}
+
 	return *obj.obj.LacpduTimeout
+
 }
 
 // LacpduTimeout returns a int32
@@ -37398,6 +38369,7 @@ func (obj *lagLacp) SetActorActivity(value LagLacpActorActivityEnum) LagLacp {
 	}
 	enumValue := snappipb.LagLacp_ActorActivity_Enum(intValue)
 	obj.obj.ActorActivity = &enumValue
+
 	return obj
 }
 
@@ -37487,6 +38459,7 @@ func (obj *lagLacp) setDefault() {
 	}
 	if obj.obj.ActorActivity == nil {
 		obj.SetActorActivity(LagLacpActorActivity.ACTIVE)
+
 	}
 
 }
@@ -37634,7 +38607,13 @@ type LagStatic interface {
 // LagId returns a int32
 //  The static lag id
 func (obj *lagStatic) LagId() int32 {
+
+	if obj.obj.LagId == nil {
+		*obj.obj.LagId = 0
+	}
+
 	return *obj.obj.LagId
+
 }
 
 // LagId returns a int32
@@ -37822,7 +38801,13 @@ type CaptureField interface {
 // Value returns a string
 //  description is TBD
 func (obj *captureField) Value() string {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = "00"
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a string
@@ -37842,7 +38827,13 @@ func (obj *captureField) SetValue(value string) CaptureField {
 // Mask returns a string
 //  description is TBD
 func (obj *captureField) Mask() string {
+
+	if obj.obj.Mask == nil {
+		*obj.obj.Mask = "00"
+	}
+
 	return *obj.obj.Mask
+
 }
 
 // Mask returns a string
@@ -37862,7 +38853,13 @@ func (obj *captureField) SetMask(value string) CaptureField {
 // Negate returns a bool
 //  description is TBD
 func (obj *captureField) Negate() bool {
+
+	if obj.obj.Negate == nil {
+		*obj.obj.Negate = false
+	}
+
 	return *obj.obj.Negate
+
 }
 
 // Negate returns a bool
@@ -38062,7 +39059,13 @@ type IsisInterfaceLevel interface {
 // Priority returns a int32
 //  The Priority setting in Level 1 LAN Hellos for Designated Router election.
 func (obj *isisInterfaceLevel) Priority() int32 {
+
+	if obj.obj.Priority == nil {
+		*obj.obj.Priority = 0
+	}
+
 	return *obj.obj.Priority
+
 }
 
 // Priority returns a int32
@@ -38082,7 +39085,13 @@ func (obj *isisInterfaceLevel) SetPriority(value int32) IsisInterfaceLevel {
 // HelloInterval returns a int32
 //  The Hello interval for Level 1 Hello messages, in seconds.
 func (obj *isisInterfaceLevel) HelloInterval() int32 {
+
+	if obj.obj.HelloInterval == nil {
+		*obj.obj.HelloInterval = 10
+	}
+
 	return *obj.obj.HelloInterval
+
 }
 
 // HelloInterval returns a int32
@@ -38102,7 +39111,13 @@ func (obj *isisInterfaceLevel) SetHelloInterval(value int32) IsisInterfaceLevel 
 // DeadInterval returns a int32
 //  The Dead (Holding Time) interval for Level 1 Hello messages, in seconds.
 func (obj *isisInterfaceLevel) DeadInterval() int32 {
+
+	if obj.obj.DeadInterval == nil {
+		*obj.obj.DeadInterval = 30
+	}
+
 	return *obj.obj.DeadInterval
+
 }
 
 // DeadInterval returns a int32
@@ -38285,7 +39300,13 @@ type IsisMT interface {
 // MtId returns a int32
 //  The Multi Topology ID for one of the topologies supported on the ISIS interface.
 func (obj *isisMT) MtId() int32 {
+
+	if obj.obj.MtId == nil {
+		*obj.obj.MtId = 0
+	}
+
 	return *obj.obj.MtId
+
 }
 
 // MtId returns a int32
@@ -38305,7 +39326,13 @@ func (obj *isisMT) SetMtId(value int32) IsisMT {
 // LinkMetric returns a int32
 //  Specifies the link metric for this topology on the ISIS interface.
 func (obj *isisMT) LinkMetric() int32 {
+
+	if obj.obj.LinkMetric == nil {
+		*obj.obj.LinkMetric = 10
+	}
+
 	return *obj.obj.LinkMetric
+
 }
 
 // LinkMetric returns a int32
@@ -38515,7 +39542,13 @@ type LinkStateTE interface {
 //  interface. The settings translate into Group numbers, which range
 //  from 0 to 31 (integers).
 func (obj *linkStateTE) AdministrativeGroup() string {
+
+	if obj.obj.AdministrativeGroup == nil {
+		*obj.obj.AdministrativeGroup = "00000000"
+	}
+
 	return *obj.obj.AdministrativeGroup
+
 }
 
 // AdministrativeGroup returns a string
@@ -38545,7 +39578,13 @@ func (obj *linkStateTE) SetAdministrativeGroup(value string) LinkStateTE {
 // MetricLevel returns a int64
 //  The user-assigned link metric for Traffic Engineering.
 func (obj *linkStateTE) MetricLevel() int64 {
+
+	if obj.obj.MetricLevel == nil {
+		*obj.obj.MetricLevel = 0
+	}
+
 	return *obj.obj.MetricLevel
+
 }
 
 // MetricLevel returns a int64
@@ -38566,7 +39605,13 @@ func (obj *linkStateTE) SetMetricLevel(value int64) LinkStateTE {
 //  The maximum link bandwidth (sub-TLV 9) in bytes/sec allowed for this
 //  link for a direction.
 func (obj *linkStateTE) MaxBandwith() int64 {
+
+	if obj.obj.MaxBandwith == nil {
+		*obj.obj.MaxBandwith = 125000000
+	}
+
 	return *obj.obj.MaxBandwith
+
 }
 
 // MaxBandwith returns a int64
@@ -38589,7 +39634,13 @@ func (obj *linkStateTE) SetMaxBandwith(value int64) LinkStateTE {
 //  The maximum link bandwidth (sub-TLV 10) in bytes/sec allowed for this
 //  link in a direction.
 func (obj *linkStateTE) MaxReservableBandwidth() int64 {
+
+	if obj.obj.MaxReservableBandwidth == nil {
+		*obj.obj.MaxReservableBandwidth = 125000000
+	}
+
 	return *obj.obj.MaxReservableBandwidth
+
 }
 
 // MaxReservableBandwidth returns a int64
@@ -38855,13 +39906,16 @@ func (obj *isisInterfaceAuthentication) SetAuthType(value IsisInterfaceAuthentic
 		return obj
 	}
 	obj.obj.AuthType = snappipb.IsisInterfaceAuthentication_AuthType_Enum(intValue)
+
 	return obj
 }
 
 // Md5 returns a string
 //  MD5 key to be used for authentication.
 func (obj *isisInterfaceAuthentication) Md5() string {
+
 	return *obj.obj.Md5
+
 }
 
 // Md5 returns a string
@@ -38881,7 +39935,9 @@ func (obj *isisInterfaceAuthentication) SetMd5(value string) IsisInterfaceAuthen
 // Password returns a string
 //  The password, in clear text, to be used for Authentication.
 func (obj *isisInterfaceAuthentication) Password() string {
+
 	return *obj.obj.Password
+
 }
 
 // Password returns a string
@@ -39065,7 +40121,13 @@ type IsisInterfaceAdvanced interface {
 //  If a padded Hello message is received on the interface, the length of
 //  the Hello packets sent out on that interface is adjusted to match.
 func (obj *isisInterfaceAdvanced) AutoAdjustMtu() bool {
+
+	if obj.obj.AutoAdjustMtu == nil {
+		*obj.obj.AutoAdjustMtu = true
+	}
+
 	return *obj.obj.AutoAdjustMtu
+
 }
 
 // AutoAdjustMtu returns a bool
@@ -39090,7 +40152,13 @@ func (obj *isisInterfaceAdvanced) SetAutoAdjustMtu(value bool) IsisInterfaceAdva
 //  added to that list. This ensures an area match for all future
 //  Level 1 Hellos from the source L1 router.
 func (obj *isisInterfaceAdvanced) AutoAdjustArea() bool {
+
+	if obj.obj.AutoAdjustArea == nil {
+		*obj.obj.AutoAdjustArea = true
+	}
+
 	return *obj.obj.AutoAdjustArea
+
 }
 
 // AutoAdjustArea returns a bool
@@ -39118,7 +40186,13 @@ func (obj *isisInterfaceAdvanced) SetAutoAdjustArea(value bool) IsisInterfaceAdv
 //  emulated router, the supported protocols advertised by this router
 //  are changed to match exactly.
 func (obj *isisInterfaceAdvanced) AutoAdjustSupportedProtocols() bool {
+
+	if obj.obj.AutoAdjustSupportedProtocols == nil {
+		*obj.obj.AutoAdjustSupportedProtocols = false
+	}
+
 	return *obj.obj.AutoAdjustSupportedProtocols
+
 }
 
 // AutoAdjustSupportedProtocols returns a bool
@@ -39324,7 +40398,13 @@ type IsisInterfaceLinkProtection interface {
 //  Enable this to protect other link or links. LSPs on a link of this type are lost
 //  if any of the links fail.
 func (obj *isisInterfaceLinkProtection) ExtraTraffic() bool {
+
+	if obj.obj.ExtraTraffic == nil {
+		*obj.obj.ExtraTraffic = false
+	}
+
 	return *obj.obj.ExtraTraffic
+
 }
 
 // ExtraTraffic returns a bool
@@ -39347,7 +40427,13 @@ func (obj *isisInterfaceLinkProtection) SetExtraTraffic(value bool) IsisInterfac
 //  Enabling this signifies that there is no other link protecting this
 //  link. LSPs on a link of this type are lost if the link fails.
 func (obj *isisInterfaceLinkProtection) Unprotected() bool {
+
+	if obj.obj.Unprotected == nil {
+		*obj.obj.Unprotected = false
+	}
+
 	return *obj.obj.Unprotected
+
 }
 
 // Unprotected returns a bool
@@ -39371,7 +40457,13 @@ func (obj *isisInterfaceLinkProtection) SetUnprotected(value bool) IsisInterface
 //  links of type Shared.There are one or more disjoint links of type
 //  Extra Traffic that are protecting this link.
 func (obj *isisInterfaceLinkProtection) Shared() bool {
+
+	if obj.obj.Shared == nil {
+		*obj.obj.Shared = false
+	}
+
 	return *obj.obj.Shared
+
 }
 
 // Shared returns a bool
@@ -39396,7 +40488,13 @@ func (obj *isisInterfaceLinkProtection) SetShared(value bool) IsisInterfaceLinkP
 //  Enabling this signifies that there is one dedicated disjoint link
 //  of type Extra Traffic that is protecting this link.
 func (obj *isisInterfaceLinkProtection) Dedicated1To1() bool {
+
+	if obj.obj.Dedicated_1To_1 == nil {
+		*obj.obj.Dedicated_1To_1 = false
+	}
+
 	return *obj.obj.Dedicated_1To_1
+
 }
 
 // Dedicated1To1 returns a bool
@@ -39421,7 +40519,13 @@ func (obj *isisInterfaceLinkProtection) SetDedicated1To1(value bool) IsisInterfa
 //  link state database and is therefore not available for the routing
 //  of LSPs.
 func (obj *isisInterfaceLinkProtection) Dedicated1Plus1() bool {
+
+	if obj.obj.Dedicated_1Plus_1 == nil {
+		*obj.obj.Dedicated_1Plus_1 = false
+	}
+
 	return *obj.obj.Dedicated_1Plus_1
+
 }
 
 // Dedicated1Plus1 returns a bool
@@ -39448,7 +40552,13 @@ func (obj *isisInterfaceLinkProtection) SetDedicated1Plus1(value bool) IsisInter
 //  Enabling this signifies that a protection scheme that is more
 //  reliable than Dedicated 1+1.
 func (obj *isisInterfaceLinkProtection) Enhanced() bool {
+
+	if obj.obj.Enhanced == nil {
+		*obj.obj.Enhanced = false
+	}
+
 	return *obj.obj.Enhanced
+
 }
 
 // Enhanced returns a bool
@@ -39470,7 +40580,13 @@ func (obj *isisInterfaceLinkProtection) SetEnhanced(value bool) IsisInterfaceLin
 // Reserved40 returns a bool
 //  This is a Protection Scheme with value 0x40.
 func (obj *isisInterfaceLinkProtection) Reserved40() bool {
+
+	if obj.obj.Reserved_40 == nil {
+		*obj.obj.Reserved_40 = false
+	}
+
 	return *obj.obj.Reserved_40
+
 }
 
 // Reserved40 returns a bool
@@ -39490,7 +40606,13 @@ func (obj *isisInterfaceLinkProtection) SetReserved40(value bool) IsisInterfaceL
 // Reserved80 returns a bool
 //  This is a Protection Scheme with value 0x80.
 func (obj *isisInterfaceLinkProtection) Reserved80() bool {
+
+	if obj.obj.Reserved_80 == nil {
+		*obj.obj.Reserved_80 = false
+	}
+
 	return *obj.obj.Reserved_80
+
 }
 
 // Reserved80 returns a bool
@@ -39709,13 +40831,16 @@ func (obj *isisAuthenticationBase) SetAuthType(value IsisAuthenticationBaseAuthT
 		return obj
 	}
 	obj.obj.AuthType = snappipb.IsisAuthenticationBase_AuthType_Enum(intValue)
+
 	return obj
 }
 
 // Md5 returns a string
 //  Authentication as an MD5 key.
 func (obj *isisAuthenticationBase) Md5() string {
+
 	return *obj.obj.Md5
+
 }
 
 // Md5 returns a string
@@ -39735,7 +40860,9 @@ func (obj *isisAuthenticationBase) SetMd5(value string) IsisAuthenticationBase {
 // Password returns a string
 //  Authentication as a clear text password.
 func (obj *isisAuthenticationBase) Password() string {
+
 	return *obj.obj.Password
+
 }
 
 // Password returns a string
@@ -39920,6 +41047,7 @@ type V4RouteAddress interface {
 // Address returns a string
 //  The starting address of the network.
 func (obj *v4RouteAddress) Address() string {
+
 	return obj.obj.Address
 }
 
@@ -39934,7 +41062,13 @@ func (obj *v4RouteAddress) SetAddress(value string) V4RouteAddress {
 // Prefix returns a int32
 //  The IPv4 network prefix length to be applied to the address.
 func (obj *v4RouteAddress) Prefix() int32 {
+
+	if obj.obj.Prefix == nil {
+		*obj.obj.Prefix = 24
+	}
+
 	return *obj.obj.Prefix
+
 }
 
 // Prefix returns a int32
@@ -39954,7 +41088,13 @@ func (obj *v4RouteAddress) SetPrefix(value int32) V4RouteAddress {
 // Count returns a int32
 //  The total number of addresses in the range.
 func (obj *v4RouteAddress) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -39974,7 +41114,13 @@ func (obj *v4RouteAddress) SetCount(value int32) V4RouteAddress {
 // Step returns a int32
 //  Increments the network address prefixes within a route range  where multiple routes are present.  The value is incremented according to the Prefix Length and Step.
 func (obj *v4RouteAddress) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -40196,6 +41342,7 @@ type V6RouteAddress interface {
 // Address returns a string
 //  The starting address of the network.
 func (obj *v6RouteAddress) Address() string {
+
 	return obj.obj.Address
 }
 
@@ -40210,7 +41357,13 @@ func (obj *v6RouteAddress) SetAddress(value string) V6RouteAddress {
 // Prefix returns a int32
 //  The IPv6 network prefix length to be applied to the address.
 func (obj *v6RouteAddress) Prefix() int32 {
+
+	if obj.obj.Prefix == nil {
+		*obj.obj.Prefix = 64
+	}
+
 	return *obj.obj.Prefix
+
 }
 
 // Prefix returns a int32
@@ -40230,7 +41383,13 @@ func (obj *v6RouteAddress) SetPrefix(value int32) V6RouteAddress {
 // Count returns a int32
 //  The total number of addresses in the range.
 func (obj *v6RouteAddress) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -40250,7 +41409,13 @@ func (obj *v6RouteAddress) SetCount(value int32) V6RouteAddress {
 // Step returns a int32
 //  Increments the network address prefixes within a route range  where multiple routes are present.  The value is incremented according to the Prefix Length and Step.
 func (obj *v6RouteAddress) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -40482,6 +41647,7 @@ type BgpV4Peer interface {
 // PeerAddress returns a string
 //  IPv4 address of the BGP peer for the session.
 func (obj *bgpV4Peer) PeerAddress() string {
+
 	return obj.obj.PeerAddress
 }
 
@@ -40515,12 +41681,14 @@ func (obj *bgpV4Peer) SetAsType(value BgpV4PeerAsTypeEnum) BgpV4Peer {
 		return obj
 	}
 	obj.obj.AsType = snappipb.BgpV4Peer_AsType_Enum(intValue)
+
 	return obj
 }
 
 // AsNumber returns a int32
 //  Autonomous System Number (AS number or ASN)
 func (obj *bgpV4Peer) AsNumber() int32 {
+
 	return obj.obj.AsNumber
 }
 
@@ -40561,6 +41729,7 @@ func (obj *bgpV4Peer) SetAsNumberWidth(value BgpV4PeerAsNumberWidthEnum) BgpV4Pe
 	}
 	enumValue := snappipb.BgpV4Peer_AsNumberWidth_Enum(intValue)
 	obj.obj.AsNumberWidth = &enumValue
+
 	return obj
 }
 
@@ -40749,6 +41918,7 @@ func (obj *bgpV4PeerBgpSrteV6PolicyIter) Items() []BgpSrteV6Policy {
 // Name returns a string
 //  Globally unique name of an object. It also serves as the primary key for arrays of objects.
 func (obj *bgpV4Peer) Name() string {
+
 	return obj.obj.Name
 }
 
@@ -40779,6 +41949,11 @@ func (obj *bgpV4Peer) validateObj(set_default bool) {
 	if obj.obj.AsType.Number() == 0 {
 		validation = append(
 			validation, fmt.Sprintf("AsType is required field on BgpV4Peer and got value %s", obj.obj.AsType.String()))
+	}
+
+	// AsNumber required
+	if obj.obj.AsNumber == 0 {
+		validation = append(validation, "AsNumber is required field on interface BgpV4Peer")
 	}
 
 	if obj.obj.Advanced != nil {
@@ -40821,18 +41996,7 @@ func (obj *bgpV4Peer) validateObj(set_default bool) {
 func (obj *bgpV4Peer) setDefault() {
 	if obj.obj.AsNumberWidth == nil {
 		obj.SetAsNumberWidth(BgpV4PeerAsNumberWidth.FOUR)
-	}
-	if obj.obj.V4Routes == nil {
-		obj.V4Routes()
-	}
-	if obj.obj.V6Routes == nil {
-		obj.V6Routes()
-	}
-	if obj.obj.V4SrtePolicies == nil {
-		obj.V4SrtePolicies()
-	}
-	if obj.obj.V6SrtePolicies == nil {
-		obj.V6SrtePolicies()
+
 	}
 
 }
@@ -41001,6 +42165,7 @@ type BgpV6Peer interface {
 // PeerAddress returns a string
 //  IPv6 address of the BGP peer for the session
 func (obj *bgpV6Peer) PeerAddress() string {
+
 	return obj.obj.PeerAddress
 }
 
@@ -41057,12 +42222,14 @@ func (obj *bgpV6Peer) SetAsType(value BgpV6PeerAsTypeEnum) BgpV6Peer {
 		return obj
 	}
 	obj.obj.AsType = snappipb.BgpV6Peer_AsType_Enum(intValue)
+
 	return obj
 }
 
 // AsNumber returns a int32
 //  Autonomous System Number (AS number or ASN)
 func (obj *bgpV6Peer) AsNumber() int32 {
+
 	return obj.obj.AsNumber
 }
 
@@ -41103,6 +42270,7 @@ func (obj *bgpV6Peer) SetAsNumberWidth(value BgpV6PeerAsNumberWidthEnum) BgpV6Pe
 	}
 	enumValue := snappipb.BgpV6Peer_AsNumberWidth_Enum(intValue)
 	obj.obj.AsNumberWidth = &enumValue
+
 	return obj
 }
 
@@ -41291,6 +42459,7 @@ func (obj *bgpV6PeerBgpSrteV6PolicyIter) Items() []BgpSrteV6Policy {
 // Name returns a string
 //  Globally unique name of an object. It also serves as the primary key for arrays of objects.
 func (obj *bgpV6Peer) Name() string {
+
 	return obj.obj.Name
 }
 
@@ -41325,6 +42494,11 @@ func (obj *bgpV6Peer) validateObj(set_default bool) {
 	if obj.obj.AsType.Number() == 0 {
 		validation = append(
 			validation, fmt.Sprintf("AsType is required field on BgpV6Peer and got value %s", obj.obj.AsType.String()))
+	}
+
+	// AsNumber required
+	if obj.obj.AsNumber == 0 {
+		validation = append(validation, "AsNumber is required field on interface BgpV6Peer")
 	}
 
 	if obj.obj.Advanced != nil {
@@ -41367,18 +42541,7 @@ func (obj *bgpV6Peer) validateObj(set_default bool) {
 func (obj *bgpV6Peer) setDefault() {
 	if obj.obj.AsNumberWidth == nil {
 		obj.SetAsNumberWidth(BgpV6PeerAsNumberWidth.FOUR)
-	}
-	if obj.obj.V4Routes == nil {
-		obj.V4Routes()
-	}
-	if obj.obj.V6Routes == nil {
-		obj.V6Routes()
-	}
-	if obj.obj.V4SrtePolicies == nil {
-		obj.V4SrtePolicies()
-	}
-	if obj.obj.V6SrtePolicies == nil {
-		obj.V6SrtePolicies()
+
 	}
 
 }
@@ -41570,13 +42733,36 @@ func (obj *patternFlowEthernetDst) SetChoice(value PatternFlowEthernetDstChoiceE
 	}
 	enumValue := snappipb.PatternFlowEthernetDst_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a string
 //  description is TBD
 func (obj *patternFlowEthernetDst) Value() string {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = "00:00:00:00:00:00"
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a string
@@ -41617,7 +42803,9 @@ func (obj *patternFlowEthernetDst) SetValues(value []string) PatternFlowEthernet
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowEthernetDst) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -41711,11 +42899,9 @@ func (obj *patternFlowEthernetDst) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowEthernetDst) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue("00:00:00:00:00:00")
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowEthernetDstChoice.VALUE)
+		obj.SetValue("00:00:00:00:00:00")
 	}
 
 }
@@ -41907,13 +43093,36 @@ func (obj *patternFlowEthernetSrc) SetChoice(value PatternFlowEthernetSrcChoiceE
 	}
 	enumValue := snappipb.PatternFlowEthernetSrc_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a string
 //  description is TBD
 func (obj *patternFlowEthernetSrc) Value() string {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = "00:00:00:00:00:00"
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a string
@@ -41954,7 +43163,9 @@ func (obj *patternFlowEthernetSrc) SetValues(value []string) PatternFlowEthernet
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowEthernetSrc) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -42048,11 +43259,9 @@ func (obj *patternFlowEthernetSrc) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowEthernetSrc) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue("00:00:00:00:00:00")
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowEthernetSrcChoice.VALUE)
+		obj.SetValue("00:00:00:00:00:00")
 	}
 
 }
@@ -42249,13 +43458,40 @@ func (obj *patternFlowEthernetEtherType) SetChoice(value PatternFlowEthernetEthe
 	}
 	enumValue := snappipb.PatternFlowEthernetEtherType_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "auto" {
+		obj.obj.Auto = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowEthernetEtherType) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 65535
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -42320,13 +43556,16 @@ func (obj *patternFlowEthernetEtherType) SetAuto(value PatternFlowEthernetEtherT
 	}
 	enumValue := snappipb.PatternFlowEthernetEtherType_Auto_Enum(intValue)
 	obj.obj.Auto = &enumValue
+
 	return obj
 }
 
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowEthernetEtherType) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -42422,11 +43661,13 @@ func (obj *patternFlowEthernetEtherType) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowEthernetEtherType) setDefault() {
-	if obj.obj.Auto == nil {
-		obj.SetAuto(PatternFlowEthernetEtherTypeAuto.AUTO)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowEthernetEtherTypeChoice.AUTO)
+		if obj.obj.Auto == nil {
+			obj.SetAuto(PatternFlowEthernetEtherTypeAuto.AUTO)
+
+		}
+
 	}
 
 }
@@ -42618,13 +43859,36 @@ func (obj *patternFlowEthernetPfcQueue) SetChoice(value PatternFlowEthernetPfcQu
 	}
 	enumValue := snappipb.PatternFlowEthernetPfcQueue_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowEthernetPfcQueue) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 0
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -42665,7 +43929,9 @@ func (obj *patternFlowEthernetPfcQueue) SetValues(value []int32) PatternFlowEthe
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowEthernetPfcQueue) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -42761,11 +44027,9 @@ func (obj *patternFlowEthernetPfcQueue) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowEthernetPfcQueue) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(0)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowEthernetPfcQueueChoice.VALUE)
+		obj.SetValue(0)
 	}
 
 }
@@ -42957,13 +44221,36 @@ func (obj *patternFlowVlanPriority) SetChoice(value PatternFlowVlanPriorityChoic
 	}
 	enumValue := snappipb.PatternFlowVlanPriority_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowVlanPriority) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 0
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -43004,7 +44291,9 @@ func (obj *patternFlowVlanPriority) SetValues(value []int32) PatternFlowVlanPrio
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowVlanPriority) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -43100,11 +44389,9 @@ func (obj *patternFlowVlanPriority) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowVlanPriority) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(0)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowVlanPriorityChoice.VALUE)
+		obj.SetValue(0)
 	}
 
 }
@@ -43296,13 +44583,36 @@ func (obj *patternFlowVlanCfi) SetChoice(value PatternFlowVlanCfiChoiceEnum) Pat
 	}
 	enumValue := snappipb.PatternFlowVlanCfi_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowVlanCfi) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 0
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -43343,7 +44653,9 @@ func (obj *patternFlowVlanCfi) SetValues(value []int32) PatternFlowVlanCfi {
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowVlanCfi) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -43439,11 +44751,9 @@ func (obj *patternFlowVlanCfi) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowVlanCfi) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(0)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowVlanCfiChoice.VALUE)
+		obj.SetValue(0)
 	}
 
 }
@@ -43635,13 +44945,36 @@ func (obj *patternFlowVlanId) SetChoice(value PatternFlowVlanIdChoiceEnum) Patte
 	}
 	enumValue := snappipb.PatternFlowVlanId_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowVlanId) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 0
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -43682,7 +45015,9 @@ func (obj *patternFlowVlanId) SetValues(value []int32) PatternFlowVlanId {
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowVlanId) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -43778,11 +45113,9 @@ func (obj *patternFlowVlanId) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowVlanId) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(0)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowVlanIdChoice.VALUE)
+		obj.SetValue(0)
 	}
 
 }
@@ -43974,13 +45307,36 @@ func (obj *patternFlowVlanTpid) SetChoice(value PatternFlowVlanTpidChoiceEnum) P
 	}
 	enumValue := snappipb.PatternFlowVlanTpid_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowVlanTpid) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 33024
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -44021,7 +45377,9 @@ func (obj *patternFlowVlanTpid) SetValues(value []int32) PatternFlowVlanTpid {
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowVlanTpid) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -44117,11 +45475,9 @@ func (obj *patternFlowVlanTpid) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowVlanTpid) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(33024)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowVlanTpidChoice.VALUE)
+		obj.SetValue(33024)
 	}
 
 }
@@ -44313,13 +45669,36 @@ func (obj *patternFlowVxlanFlags) SetChoice(value PatternFlowVxlanFlagsChoiceEnu
 	}
 	enumValue := snappipb.PatternFlowVxlanFlags_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowVxlanFlags) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 8
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -44360,7 +45739,9 @@ func (obj *patternFlowVxlanFlags) SetValues(value []int32) PatternFlowVxlanFlags
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowVxlanFlags) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -44456,11 +45837,9 @@ func (obj *patternFlowVxlanFlags) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowVxlanFlags) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(8)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowVxlanFlagsChoice.VALUE)
+		obj.SetValue(8)
 	}
 
 }
@@ -44652,13 +46031,36 @@ func (obj *patternFlowVxlanReserved0) SetChoice(value PatternFlowVxlanReserved0C
 	}
 	enumValue := snappipb.PatternFlowVxlanReserved0_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowVxlanReserved0) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 0
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -44699,7 +46101,9 @@ func (obj *patternFlowVxlanReserved0) SetValues(value []int32) PatternFlowVxlanR
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowVxlanReserved0) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -44795,11 +46199,9 @@ func (obj *patternFlowVxlanReserved0) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowVxlanReserved0) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(0)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowVxlanReserved0Choice.VALUE)
+		obj.SetValue(0)
 	}
 
 }
@@ -44991,13 +46393,36 @@ func (obj *patternFlowVxlanVni) SetChoice(value PatternFlowVxlanVniChoiceEnum) P
 	}
 	enumValue := snappipb.PatternFlowVxlanVni_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowVxlanVni) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 0
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -45038,7 +46463,9 @@ func (obj *patternFlowVxlanVni) SetValues(value []int32) PatternFlowVxlanVni {
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowVxlanVni) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -45134,11 +46561,9 @@ func (obj *patternFlowVxlanVni) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowVxlanVni) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(0)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowVxlanVniChoice.VALUE)
+		obj.SetValue(0)
 	}
 
 }
@@ -45330,13 +46755,36 @@ func (obj *patternFlowVxlanReserved1) SetChoice(value PatternFlowVxlanReserved1C
 	}
 	enumValue := snappipb.PatternFlowVxlanReserved1_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowVxlanReserved1) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 0
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -45377,7 +46825,9 @@ func (obj *patternFlowVxlanReserved1) SetValues(value []int32) PatternFlowVxlanR
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowVxlanReserved1) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -45473,11 +46923,9 @@ func (obj *patternFlowVxlanReserved1) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowVxlanReserved1) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(0)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowVxlanReserved1Choice.VALUE)
+		obj.SetValue(0)
 	}
 
 }
@@ -45669,13 +47117,36 @@ func (obj *patternFlowIpv4Version) SetChoice(value PatternFlowIpv4VersionChoiceE
 	}
 	enumValue := snappipb.PatternFlowIpv4Version_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowIpv4Version) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 4
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -45716,7 +47187,9 @@ func (obj *patternFlowIpv4Version) SetValues(value []int32) PatternFlowIpv4Versi
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowIpv4Version) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -45812,11 +47285,9 @@ func (obj *patternFlowIpv4Version) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowIpv4Version) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(4)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowIpv4VersionChoice.VALUE)
+		obj.SetValue(4)
 	}
 
 }
@@ -46013,13 +47484,40 @@ func (obj *patternFlowIpv4HeaderLength) SetChoice(value PatternFlowIpv4HeaderLen
 	}
 	enumValue := snappipb.PatternFlowIpv4HeaderLength_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "auto" {
+		obj.obj.Auto = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowIpv4HeaderLength) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 5
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -46084,13 +47582,16 @@ func (obj *patternFlowIpv4HeaderLength) SetAuto(value PatternFlowIpv4HeaderLengt
 	}
 	enumValue := snappipb.PatternFlowIpv4HeaderLength_Auto_Enum(intValue)
 	obj.obj.Auto = &enumValue
+
 	return obj
 }
 
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowIpv4HeaderLength) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -46186,11 +47687,13 @@ func (obj *patternFlowIpv4HeaderLength) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowIpv4HeaderLength) setDefault() {
-	if obj.obj.Auto == nil {
-		obj.SetAuto(PatternFlowIpv4HeaderLengthAuto.AUTO)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowIpv4HeaderLengthChoice.AUTO)
+		if obj.obj.Auto == nil {
+			obj.SetAuto(PatternFlowIpv4HeaderLengthAuto.AUTO)
+
+		}
+
 	}
 
 }
@@ -46375,6 +47878,19 @@ func (obj *flowIpv4Priority) SetChoice(value FlowIpv4PriorityChoiceEnum) FlowIpv
 	}
 	enumValue := snappipb.FlowIpv4Priority_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "raw" {
+		obj.obj.Raw = nil
+	}
+
+	if string(value) != "tos" {
+		obj.obj.Tos = nil
+	}
+
+	if string(value) != "dscp" {
+		obj.obj.Dscp = nil
+	}
+
 	return obj
 }
 
@@ -46471,6 +47987,7 @@ func (obj *flowIpv4Priority) validateObj(set_default bool) {
 func (obj *flowIpv4Priority) setDefault() {
 	if obj.obj.Choice == nil {
 		obj.SetChoice(FlowIpv4PriorityChoice.DSCP)
+		obj.Dscp()
 	}
 
 }
@@ -46667,13 +48184,40 @@ func (obj *patternFlowIpv4TotalLength) SetChoice(value PatternFlowIpv4TotalLengt
 	}
 	enumValue := snappipb.PatternFlowIpv4TotalLength_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "auto" {
+		obj.obj.Auto = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowIpv4TotalLength) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 46
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -46738,13 +48282,16 @@ func (obj *patternFlowIpv4TotalLength) SetAuto(value PatternFlowIpv4TotalLengthA
 	}
 	enumValue := snappipb.PatternFlowIpv4TotalLength_Auto_Enum(intValue)
 	obj.obj.Auto = &enumValue
+
 	return obj
 }
 
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowIpv4TotalLength) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -46840,11 +48387,13 @@ func (obj *patternFlowIpv4TotalLength) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowIpv4TotalLength) setDefault() {
-	if obj.obj.Auto == nil {
-		obj.SetAuto(PatternFlowIpv4TotalLengthAuto.AUTO)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowIpv4TotalLengthChoice.AUTO)
+		if obj.obj.Auto == nil {
+			obj.SetAuto(PatternFlowIpv4TotalLengthAuto.AUTO)
+
+		}
+
 	}
 
 }
@@ -47036,13 +48585,36 @@ func (obj *patternFlowIpv4Identification) SetChoice(value PatternFlowIpv4Identif
 	}
 	enumValue := snappipb.PatternFlowIpv4Identification_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowIpv4Identification) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 0
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -47083,7 +48655,9 @@ func (obj *patternFlowIpv4Identification) SetValues(value []int32) PatternFlowIp
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowIpv4Identification) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -47179,11 +48753,9 @@ func (obj *patternFlowIpv4Identification) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowIpv4Identification) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(0)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowIpv4IdentificationChoice.VALUE)
+		obj.SetValue(0)
 	}
 
 }
@@ -47375,13 +48947,36 @@ func (obj *patternFlowIpv4Reserved) SetChoice(value PatternFlowIpv4ReservedChoic
 	}
 	enumValue := snappipb.PatternFlowIpv4Reserved_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowIpv4Reserved) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 0
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -47422,7 +49017,9 @@ func (obj *patternFlowIpv4Reserved) SetValues(value []int32) PatternFlowIpv4Rese
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowIpv4Reserved) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -47518,11 +49115,9 @@ func (obj *patternFlowIpv4Reserved) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowIpv4Reserved) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(0)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowIpv4ReservedChoice.VALUE)
+		obj.SetValue(0)
 	}
 
 }
@@ -47714,13 +49309,36 @@ func (obj *patternFlowIpv4DontFragment) SetChoice(value PatternFlowIpv4DontFragm
 	}
 	enumValue := snappipb.PatternFlowIpv4DontFragment_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowIpv4DontFragment) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 0
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -47761,7 +49379,9 @@ func (obj *patternFlowIpv4DontFragment) SetValues(value []int32) PatternFlowIpv4
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowIpv4DontFragment) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -47857,11 +49477,9 @@ func (obj *patternFlowIpv4DontFragment) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowIpv4DontFragment) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(0)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowIpv4DontFragmentChoice.VALUE)
+		obj.SetValue(0)
 	}
 
 }
@@ -48053,13 +49671,36 @@ func (obj *patternFlowIpv4MoreFragments) SetChoice(value PatternFlowIpv4MoreFrag
 	}
 	enumValue := snappipb.PatternFlowIpv4MoreFragments_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowIpv4MoreFragments) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 0
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -48100,7 +49741,9 @@ func (obj *patternFlowIpv4MoreFragments) SetValues(value []int32) PatternFlowIpv
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowIpv4MoreFragments) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -48196,11 +49839,9 @@ func (obj *patternFlowIpv4MoreFragments) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowIpv4MoreFragments) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(0)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowIpv4MoreFragmentsChoice.VALUE)
+		obj.SetValue(0)
 	}
 
 }
@@ -48392,13 +50033,36 @@ func (obj *patternFlowIpv4FragmentOffset) SetChoice(value PatternFlowIpv4Fragmen
 	}
 	enumValue := snappipb.PatternFlowIpv4FragmentOffset_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowIpv4FragmentOffset) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 0
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -48439,7 +50103,9 @@ func (obj *patternFlowIpv4FragmentOffset) SetValues(value []int32) PatternFlowIp
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowIpv4FragmentOffset) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -48535,11 +50201,9 @@ func (obj *patternFlowIpv4FragmentOffset) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowIpv4FragmentOffset) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(0)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowIpv4FragmentOffsetChoice.VALUE)
+		obj.SetValue(0)
 	}
 
 }
@@ -48731,13 +50395,36 @@ func (obj *patternFlowIpv4TimeToLive) SetChoice(value PatternFlowIpv4TimeToLiveC
 	}
 	enumValue := snappipb.PatternFlowIpv4TimeToLive_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowIpv4TimeToLive) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 64
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -48778,7 +50465,9 @@ func (obj *patternFlowIpv4TimeToLive) SetValues(value []int32) PatternFlowIpv4Ti
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowIpv4TimeToLive) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -48874,11 +50563,9 @@ func (obj *patternFlowIpv4TimeToLive) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowIpv4TimeToLive) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(64)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowIpv4TimeToLiveChoice.VALUE)
+		obj.SetValue(64)
 	}
 
 }
@@ -49075,13 +50762,40 @@ func (obj *patternFlowIpv4Protocol) SetChoice(value PatternFlowIpv4ProtocolChoic
 	}
 	enumValue := snappipb.PatternFlowIpv4Protocol_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "auto" {
+		obj.obj.Auto = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowIpv4Protocol) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 61
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -49146,13 +50860,16 @@ func (obj *patternFlowIpv4Protocol) SetAuto(value PatternFlowIpv4ProtocolAutoEnu
 	}
 	enumValue := snappipb.PatternFlowIpv4Protocol_Auto_Enum(intValue)
 	obj.obj.Auto = &enumValue
+
 	return obj
 }
 
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowIpv4Protocol) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -49248,11 +50965,13 @@ func (obj *patternFlowIpv4Protocol) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowIpv4Protocol) setDefault() {
-	if obj.obj.Auto == nil {
-		obj.SetAuto(PatternFlowIpv4ProtocolAuto.AUTO)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowIpv4ProtocolChoice.AUTO)
+		if obj.obj.Auto == nil {
+			obj.SetAuto(PatternFlowIpv4ProtocolAuto.AUTO)
+
+		}
+
 	}
 
 }
@@ -49424,6 +51143,15 @@ func (obj *patternFlowIpv4HeaderChecksum) SetChoice(value PatternFlowIpv4HeaderC
 		return obj
 	}
 	obj.obj.Choice = snappipb.PatternFlowIpv4HeaderChecksum_Choice_Enum(intValue)
+
+	if string(value) != "generated" {
+		obj.obj.Generated = nil
+	}
+
+	if string(value) != "custom" {
+		obj.obj.Custom = nil
+	}
+
 	return obj
 }
 
@@ -49456,13 +51184,16 @@ func (obj *patternFlowIpv4HeaderChecksum) SetGenerated(value PatternFlowIpv4Head
 	}
 	enumValue := snappipb.PatternFlowIpv4HeaderChecksum_Generated_Enum(intValue)
 	obj.obj.Generated = &enumValue
+
 	return obj
 }
 
 // Custom returns a int32
 //  A custom checksum value
 func (obj *patternFlowIpv4HeaderChecksum) Custom() int32 {
+
 	return *obj.obj.Custom
+
 }
 
 // Custom returns a int32
@@ -49501,11 +51232,13 @@ func (obj *patternFlowIpv4HeaderChecksum) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowIpv4HeaderChecksum) setDefault() {
-	if obj.obj.Generated == nil {
-		obj.SetGenerated(PatternFlowIpv4HeaderChecksumGenerated.GOOD)
-	}
 	if obj.obj.Choice.Number() == 0 {
 		obj.SetChoice(PatternFlowIpv4HeaderChecksumChoice.GENERATED)
+		if obj.obj.Generated == nil {
+			obj.SetGenerated(PatternFlowIpv4HeaderChecksumGenerated.GOOD)
+
+		}
+
 	}
 
 }
@@ -49697,13 +51430,36 @@ func (obj *patternFlowIpv4Src) SetChoice(value PatternFlowIpv4SrcChoiceEnum) Pat
 	}
 	enumValue := snappipb.PatternFlowIpv4Src_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a string
 //  description is TBD
 func (obj *patternFlowIpv4Src) Value() string {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = "0.0.0.0"
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a string
@@ -49744,7 +51500,9 @@ func (obj *patternFlowIpv4Src) SetValues(value []string) PatternFlowIpv4Src {
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowIpv4Src) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -49838,11 +51596,9 @@ func (obj *patternFlowIpv4Src) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowIpv4Src) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue("0.0.0.0")
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowIpv4SrcChoice.VALUE)
+		obj.SetValue("0.0.0.0")
 	}
 
 }
@@ -50034,13 +51790,36 @@ func (obj *patternFlowIpv4Dst) SetChoice(value PatternFlowIpv4DstChoiceEnum) Pat
 	}
 	enumValue := snappipb.PatternFlowIpv4Dst_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a string
 //  description is TBD
 func (obj *patternFlowIpv4Dst) Value() string {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = "0.0.0.0"
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a string
@@ -50081,7 +51860,9 @@ func (obj *patternFlowIpv4Dst) SetValues(value []string) PatternFlowIpv4Dst {
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowIpv4Dst) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -50175,11 +51956,9 @@ func (obj *patternFlowIpv4Dst) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowIpv4Dst) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue("0.0.0.0")
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowIpv4DstChoice.VALUE)
+		obj.SetValue("0.0.0.0")
 	}
 
 }
@@ -50371,13 +52150,36 @@ func (obj *patternFlowIpv6Version) SetChoice(value PatternFlowIpv6VersionChoiceE
 	}
 	enumValue := snappipb.PatternFlowIpv6Version_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowIpv6Version) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 6
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -50418,7 +52220,9 @@ func (obj *patternFlowIpv6Version) SetValues(value []int32) PatternFlowIpv6Versi
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowIpv6Version) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -50514,11 +52318,9 @@ func (obj *patternFlowIpv6Version) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowIpv6Version) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(6)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowIpv6VersionChoice.VALUE)
+		obj.SetValue(6)
 	}
 
 }
@@ -50710,13 +52512,36 @@ func (obj *patternFlowIpv6TrafficClass) SetChoice(value PatternFlowIpv6TrafficCl
 	}
 	enumValue := snappipb.PatternFlowIpv6TrafficClass_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowIpv6TrafficClass) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 0
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -50757,7 +52582,9 @@ func (obj *patternFlowIpv6TrafficClass) SetValues(value []int32) PatternFlowIpv6
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowIpv6TrafficClass) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -50853,11 +52680,9 @@ func (obj *patternFlowIpv6TrafficClass) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowIpv6TrafficClass) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(0)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowIpv6TrafficClassChoice.VALUE)
+		obj.SetValue(0)
 	}
 
 }
@@ -51049,13 +52874,36 @@ func (obj *patternFlowIpv6FlowLabel) SetChoice(value PatternFlowIpv6FlowLabelCho
 	}
 	enumValue := snappipb.PatternFlowIpv6FlowLabel_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowIpv6FlowLabel) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 0
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -51096,7 +52944,9 @@ func (obj *patternFlowIpv6FlowLabel) SetValues(value []int32) PatternFlowIpv6Flo
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowIpv6FlowLabel) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -51192,11 +53042,9 @@ func (obj *patternFlowIpv6FlowLabel) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowIpv6FlowLabel) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(0)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowIpv6FlowLabelChoice.VALUE)
+		obj.SetValue(0)
 	}
 
 }
@@ -51393,13 +53241,40 @@ func (obj *patternFlowIpv6PayloadLength) SetChoice(value PatternFlowIpv6PayloadL
 	}
 	enumValue := snappipb.PatternFlowIpv6PayloadLength_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "auto" {
+		obj.obj.Auto = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowIpv6PayloadLength) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 0
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -51464,13 +53339,16 @@ func (obj *patternFlowIpv6PayloadLength) SetAuto(value PatternFlowIpv6PayloadLen
 	}
 	enumValue := snappipb.PatternFlowIpv6PayloadLength_Auto_Enum(intValue)
 	obj.obj.Auto = &enumValue
+
 	return obj
 }
 
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowIpv6PayloadLength) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -51566,11 +53444,13 @@ func (obj *patternFlowIpv6PayloadLength) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowIpv6PayloadLength) setDefault() {
-	if obj.obj.Auto == nil {
-		obj.SetAuto(PatternFlowIpv6PayloadLengthAuto.AUTO)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowIpv6PayloadLengthChoice.AUTO)
+		if obj.obj.Auto == nil {
+			obj.SetAuto(PatternFlowIpv6PayloadLengthAuto.AUTO)
+
+		}
+
 	}
 
 }
@@ -51762,13 +53642,36 @@ func (obj *patternFlowIpv6NextHeader) SetChoice(value PatternFlowIpv6NextHeaderC
 	}
 	enumValue := snappipb.PatternFlowIpv6NextHeader_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowIpv6NextHeader) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 59
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -51809,7 +53712,9 @@ func (obj *patternFlowIpv6NextHeader) SetValues(value []int32) PatternFlowIpv6Ne
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowIpv6NextHeader) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -51905,11 +53810,9 @@ func (obj *patternFlowIpv6NextHeader) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowIpv6NextHeader) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(59)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowIpv6NextHeaderChoice.VALUE)
+		obj.SetValue(59)
 	}
 
 }
@@ -52101,13 +54004,36 @@ func (obj *patternFlowIpv6HopLimit) SetChoice(value PatternFlowIpv6HopLimitChoic
 	}
 	enumValue := snappipb.PatternFlowIpv6HopLimit_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowIpv6HopLimit) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 64
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -52148,7 +54074,9 @@ func (obj *patternFlowIpv6HopLimit) SetValues(value []int32) PatternFlowIpv6HopL
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowIpv6HopLimit) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -52244,11 +54172,9 @@ func (obj *patternFlowIpv6HopLimit) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowIpv6HopLimit) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(64)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowIpv6HopLimitChoice.VALUE)
+		obj.SetValue(64)
 	}
 
 }
@@ -52440,13 +54366,36 @@ func (obj *patternFlowIpv6Src) SetChoice(value PatternFlowIpv6SrcChoiceEnum) Pat
 	}
 	enumValue := snappipb.PatternFlowIpv6Src_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a string
 //  description is TBD
 func (obj *patternFlowIpv6Src) Value() string {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = "::0"
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a string
@@ -52487,7 +54436,9 @@ func (obj *patternFlowIpv6Src) SetValues(value []string) PatternFlowIpv6Src {
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowIpv6Src) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -52581,11 +54532,9 @@ func (obj *patternFlowIpv6Src) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowIpv6Src) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue("::0")
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowIpv6SrcChoice.VALUE)
+		obj.SetValue("::0")
 	}
 
 }
@@ -52777,13 +54726,36 @@ func (obj *patternFlowIpv6Dst) SetChoice(value PatternFlowIpv6DstChoiceEnum) Pat
 	}
 	enumValue := snappipb.PatternFlowIpv6Dst_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a string
 //  description is TBD
 func (obj *patternFlowIpv6Dst) Value() string {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = "::0"
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a string
@@ -52824,7 +54796,9 @@ func (obj *patternFlowIpv6Dst) SetValues(value []string) PatternFlowIpv6Dst {
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowIpv6Dst) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -52918,11 +54892,9 @@ func (obj *patternFlowIpv6Dst) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowIpv6Dst) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue("::0")
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowIpv6DstChoice.VALUE)
+		obj.SetValue("::0")
 	}
 
 }
@@ -53114,13 +55086,36 @@ func (obj *patternFlowPfcPauseDst) SetChoice(value PatternFlowPfcPauseDstChoiceE
 	}
 	enumValue := snappipb.PatternFlowPfcPauseDst_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a string
 //  description is TBD
 func (obj *patternFlowPfcPauseDst) Value() string {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = "01:80:c2:00:00:01"
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a string
@@ -53161,7 +55156,9 @@ func (obj *patternFlowPfcPauseDst) SetValues(value []string) PatternFlowPfcPause
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowPfcPauseDst) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -53255,11 +55252,9 @@ func (obj *patternFlowPfcPauseDst) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowPfcPauseDst) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue("01:80:c2:00:00:01")
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowPfcPauseDstChoice.VALUE)
+		obj.SetValue("01:80:c2:00:00:01")
 	}
 
 }
@@ -53451,13 +55446,36 @@ func (obj *patternFlowPfcPauseSrc) SetChoice(value PatternFlowPfcPauseSrcChoiceE
 	}
 	enumValue := snappipb.PatternFlowPfcPauseSrc_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a string
 //  description is TBD
 func (obj *patternFlowPfcPauseSrc) Value() string {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = "00:00:00:00:00:00"
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a string
@@ -53498,7 +55516,9 @@ func (obj *patternFlowPfcPauseSrc) SetValues(value []string) PatternFlowPfcPause
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowPfcPauseSrc) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -53592,11 +55612,9 @@ func (obj *patternFlowPfcPauseSrc) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowPfcPauseSrc) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue("00:00:00:00:00:00")
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowPfcPauseSrcChoice.VALUE)
+		obj.SetValue("00:00:00:00:00:00")
 	}
 
 }
@@ -53788,13 +55806,36 @@ func (obj *patternFlowPfcPauseEtherType) SetChoice(value PatternFlowPfcPauseEthe
 	}
 	enumValue := snappipb.PatternFlowPfcPauseEtherType_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowPfcPauseEtherType) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 34824
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -53835,7 +55876,9 @@ func (obj *patternFlowPfcPauseEtherType) SetValues(value []int32) PatternFlowPfc
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowPfcPauseEtherType) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -53931,11 +55974,9 @@ func (obj *patternFlowPfcPauseEtherType) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowPfcPauseEtherType) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(34824)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowPfcPauseEtherTypeChoice.VALUE)
+		obj.SetValue(34824)
 	}
 
 }
@@ -54127,13 +56168,36 @@ func (obj *patternFlowPfcPauseControlOpCode) SetChoice(value PatternFlowPfcPause
 	}
 	enumValue := snappipb.PatternFlowPfcPauseControlOpCode_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowPfcPauseControlOpCode) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 257
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -54174,7 +56238,9 @@ func (obj *patternFlowPfcPauseControlOpCode) SetValues(value []int32) PatternFlo
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowPfcPauseControlOpCode) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -54270,11 +56336,9 @@ func (obj *patternFlowPfcPauseControlOpCode) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowPfcPauseControlOpCode) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(257)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowPfcPauseControlOpCodeChoice.VALUE)
+		obj.SetValue(257)
 	}
 
 }
@@ -54466,13 +56530,36 @@ func (obj *patternFlowPfcPauseClassEnableVector) SetChoice(value PatternFlowPfcP
 	}
 	enumValue := snappipb.PatternFlowPfcPauseClassEnableVector_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowPfcPauseClassEnableVector) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 0
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -54513,7 +56600,9 @@ func (obj *patternFlowPfcPauseClassEnableVector) SetValues(value []int32) Patter
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowPfcPauseClassEnableVector) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -54609,11 +56698,9 @@ func (obj *patternFlowPfcPauseClassEnableVector) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowPfcPauseClassEnableVector) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(0)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowPfcPauseClassEnableVectorChoice.VALUE)
+		obj.SetValue(0)
 	}
 
 }
@@ -54805,13 +56892,36 @@ func (obj *patternFlowPfcPausePauseClass0) SetChoice(value PatternFlowPfcPausePa
 	}
 	enumValue := snappipb.PatternFlowPfcPausePauseClass0_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass0) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 0
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -54852,7 +56962,9 @@ func (obj *patternFlowPfcPausePauseClass0) SetValues(value []int32) PatternFlowP
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowPfcPausePauseClass0) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -54948,11 +57060,9 @@ func (obj *patternFlowPfcPausePauseClass0) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowPfcPausePauseClass0) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(0)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowPfcPausePauseClass0Choice.VALUE)
+		obj.SetValue(0)
 	}
 
 }
@@ -55144,13 +57254,36 @@ func (obj *patternFlowPfcPausePauseClass1) SetChoice(value PatternFlowPfcPausePa
 	}
 	enumValue := snappipb.PatternFlowPfcPausePauseClass1_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass1) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 0
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -55191,7 +57324,9 @@ func (obj *patternFlowPfcPausePauseClass1) SetValues(value []int32) PatternFlowP
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowPfcPausePauseClass1) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -55287,11 +57422,9 @@ func (obj *patternFlowPfcPausePauseClass1) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowPfcPausePauseClass1) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(0)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowPfcPausePauseClass1Choice.VALUE)
+		obj.SetValue(0)
 	}
 
 }
@@ -55483,13 +57616,36 @@ func (obj *patternFlowPfcPausePauseClass2) SetChoice(value PatternFlowPfcPausePa
 	}
 	enumValue := snappipb.PatternFlowPfcPausePauseClass2_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass2) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 0
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -55530,7 +57686,9 @@ func (obj *patternFlowPfcPausePauseClass2) SetValues(value []int32) PatternFlowP
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowPfcPausePauseClass2) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -55626,11 +57784,9 @@ func (obj *patternFlowPfcPausePauseClass2) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowPfcPausePauseClass2) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(0)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowPfcPausePauseClass2Choice.VALUE)
+		obj.SetValue(0)
 	}
 
 }
@@ -55822,13 +57978,36 @@ func (obj *patternFlowPfcPausePauseClass3) SetChoice(value PatternFlowPfcPausePa
 	}
 	enumValue := snappipb.PatternFlowPfcPausePauseClass3_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass3) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 0
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -55869,7 +58048,9 @@ func (obj *patternFlowPfcPausePauseClass3) SetValues(value []int32) PatternFlowP
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowPfcPausePauseClass3) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -55965,11 +58146,9 @@ func (obj *patternFlowPfcPausePauseClass3) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowPfcPausePauseClass3) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(0)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowPfcPausePauseClass3Choice.VALUE)
+		obj.SetValue(0)
 	}
 
 }
@@ -56161,13 +58340,36 @@ func (obj *patternFlowPfcPausePauseClass4) SetChoice(value PatternFlowPfcPausePa
 	}
 	enumValue := snappipb.PatternFlowPfcPausePauseClass4_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass4) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 0
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -56208,7 +58410,9 @@ func (obj *patternFlowPfcPausePauseClass4) SetValues(value []int32) PatternFlowP
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowPfcPausePauseClass4) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -56304,11 +58508,9 @@ func (obj *patternFlowPfcPausePauseClass4) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowPfcPausePauseClass4) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(0)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowPfcPausePauseClass4Choice.VALUE)
+		obj.SetValue(0)
 	}
 
 }
@@ -56500,13 +58702,36 @@ func (obj *patternFlowPfcPausePauseClass5) SetChoice(value PatternFlowPfcPausePa
 	}
 	enumValue := snappipb.PatternFlowPfcPausePauseClass5_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass5) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 0
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -56547,7 +58772,9 @@ func (obj *patternFlowPfcPausePauseClass5) SetValues(value []int32) PatternFlowP
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowPfcPausePauseClass5) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -56643,11 +58870,9 @@ func (obj *patternFlowPfcPausePauseClass5) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowPfcPausePauseClass5) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(0)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowPfcPausePauseClass5Choice.VALUE)
+		obj.SetValue(0)
 	}
 
 }
@@ -56839,13 +59064,36 @@ func (obj *patternFlowPfcPausePauseClass6) SetChoice(value PatternFlowPfcPausePa
 	}
 	enumValue := snappipb.PatternFlowPfcPausePauseClass6_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass6) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 0
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -56886,7 +59134,9 @@ func (obj *patternFlowPfcPausePauseClass6) SetValues(value []int32) PatternFlowP
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowPfcPausePauseClass6) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -56982,11 +59232,9 @@ func (obj *patternFlowPfcPausePauseClass6) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowPfcPausePauseClass6) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(0)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowPfcPausePauseClass6Choice.VALUE)
+		obj.SetValue(0)
 	}
 
 }
@@ -57178,13 +59426,36 @@ func (obj *patternFlowPfcPausePauseClass7) SetChoice(value PatternFlowPfcPausePa
 	}
 	enumValue := snappipb.PatternFlowPfcPausePauseClass7_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass7) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 0
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -57225,7 +59496,9 @@ func (obj *patternFlowPfcPausePauseClass7) SetValues(value []int32) PatternFlowP
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowPfcPausePauseClass7) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -57321,11 +59594,9 @@ func (obj *patternFlowPfcPausePauseClass7) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowPfcPausePauseClass7) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(0)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowPfcPausePauseClass7Choice.VALUE)
+		obj.SetValue(0)
 	}
 
 }
@@ -57517,13 +59788,36 @@ func (obj *patternFlowEthernetPauseDst) SetChoice(value PatternFlowEthernetPause
 	}
 	enumValue := snappipb.PatternFlowEthernetPauseDst_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a string
 //  description is TBD
 func (obj *patternFlowEthernetPauseDst) Value() string {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = "01:80:c2:00:00:01"
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a string
@@ -57564,7 +59858,9 @@ func (obj *patternFlowEthernetPauseDst) SetValues(value []string) PatternFlowEth
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowEthernetPauseDst) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -57658,11 +59954,9 @@ func (obj *patternFlowEthernetPauseDst) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowEthernetPauseDst) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue("01:80:c2:00:00:01")
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowEthernetPauseDstChoice.VALUE)
+		obj.SetValue("01:80:c2:00:00:01")
 	}
 
 }
@@ -57854,13 +60148,36 @@ func (obj *patternFlowEthernetPauseSrc) SetChoice(value PatternFlowEthernetPause
 	}
 	enumValue := snappipb.PatternFlowEthernetPauseSrc_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a string
 //  description is TBD
 func (obj *patternFlowEthernetPauseSrc) Value() string {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = "00:00:00:00:00:00"
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a string
@@ -57901,7 +60218,9 @@ func (obj *patternFlowEthernetPauseSrc) SetValues(value []string) PatternFlowEth
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowEthernetPauseSrc) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -57995,11 +60314,9 @@ func (obj *patternFlowEthernetPauseSrc) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowEthernetPauseSrc) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue("00:00:00:00:00:00")
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowEthernetPauseSrcChoice.VALUE)
+		obj.SetValue("00:00:00:00:00:00")
 	}
 
 }
@@ -58191,13 +60508,36 @@ func (obj *patternFlowEthernetPauseEtherType) SetChoice(value PatternFlowEtherne
 	}
 	enumValue := snappipb.PatternFlowEthernetPauseEtherType_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowEthernetPauseEtherType) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 34824
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -58238,7 +60578,9 @@ func (obj *patternFlowEthernetPauseEtherType) SetValues(value []int32) PatternFl
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowEthernetPauseEtherType) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -58334,11 +60676,9 @@ func (obj *patternFlowEthernetPauseEtherType) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowEthernetPauseEtherType) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(34824)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowEthernetPauseEtherTypeChoice.VALUE)
+		obj.SetValue(34824)
 	}
 
 }
@@ -58530,13 +60870,36 @@ func (obj *patternFlowEthernetPauseControlOpCode) SetChoice(value PatternFlowEth
 	}
 	enumValue := snappipb.PatternFlowEthernetPauseControlOpCode_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowEthernetPauseControlOpCode) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 1
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -58577,7 +60940,9 @@ func (obj *patternFlowEthernetPauseControlOpCode) SetValues(value []int32) Patte
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowEthernetPauseControlOpCode) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -58673,11 +61038,9 @@ func (obj *patternFlowEthernetPauseControlOpCode) validateObj(set_default bool) 
 }
 
 func (obj *patternFlowEthernetPauseControlOpCode) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(1)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowEthernetPauseControlOpCodeChoice.VALUE)
+		obj.SetValue(1)
 	}
 
 }
@@ -58869,13 +61232,36 @@ func (obj *patternFlowEthernetPauseTime) SetChoice(value PatternFlowEthernetPaus
 	}
 	enumValue := snappipb.PatternFlowEthernetPauseTime_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowEthernetPauseTime) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 0
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -58916,7 +61302,9 @@ func (obj *patternFlowEthernetPauseTime) SetValues(value []int32) PatternFlowEth
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowEthernetPauseTime) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -59012,11 +61400,9 @@ func (obj *patternFlowEthernetPauseTime) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowEthernetPauseTime) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(0)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowEthernetPauseTimeChoice.VALUE)
+		obj.SetValue(0)
 	}
 
 }
@@ -59208,13 +61594,36 @@ func (obj *patternFlowTcpSrcPort) SetChoice(value PatternFlowTcpSrcPortChoiceEnu
 	}
 	enumValue := snappipb.PatternFlowTcpSrcPort_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowTcpSrcPort) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 0
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -59255,7 +61664,9 @@ func (obj *patternFlowTcpSrcPort) SetValues(value []int32) PatternFlowTcpSrcPort
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowTcpSrcPort) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -59351,11 +61762,9 @@ func (obj *patternFlowTcpSrcPort) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowTcpSrcPort) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(0)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowTcpSrcPortChoice.VALUE)
+		obj.SetValue(0)
 	}
 
 }
@@ -59547,13 +61956,36 @@ func (obj *patternFlowTcpDstPort) SetChoice(value PatternFlowTcpDstPortChoiceEnu
 	}
 	enumValue := snappipb.PatternFlowTcpDstPort_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowTcpDstPort) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 0
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -59594,7 +62026,9 @@ func (obj *patternFlowTcpDstPort) SetValues(value []int32) PatternFlowTcpDstPort
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowTcpDstPort) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -59690,11 +62124,9 @@ func (obj *patternFlowTcpDstPort) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowTcpDstPort) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(0)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowTcpDstPortChoice.VALUE)
+		obj.SetValue(0)
 	}
 
 }
@@ -59886,13 +62318,36 @@ func (obj *patternFlowTcpSeqNum) SetChoice(value PatternFlowTcpSeqNumChoiceEnum)
 	}
 	enumValue := snappipb.PatternFlowTcpSeqNum_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int64
 //  description is TBD
 func (obj *patternFlowTcpSeqNum) Value() int64 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 0
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int64
@@ -59933,7 +62388,9 @@ func (obj *patternFlowTcpSeqNum) SetValues(value []int64) PatternFlowTcpSeqNum {
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowTcpSeqNum) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -60029,11 +62486,9 @@ func (obj *patternFlowTcpSeqNum) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowTcpSeqNum) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(0)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowTcpSeqNumChoice.VALUE)
+		obj.SetValue(0)
 	}
 
 }
@@ -60225,13 +62680,36 @@ func (obj *patternFlowTcpAckNum) SetChoice(value PatternFlowTcpAckNumChoiceEnum)
 	}
 	enumValue := snappipb.PatternFlowTcpAckNum_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int64
 //  description is TBD
 func (obj *patternFlowTcpAckNum) Value() int64 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 0
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int64
@@ -60272,7 +62750,9 @@ func (obj *patternFlowTcpAckNum) SetValues(value []int64) PatternFlowTcpAckNum {
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowTcpAckNum) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -60368,11 +62848,9 @@ func (obj *patternFlowTcpAckNum) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowTcpAckNum) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(0)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowTcpAckNumChoice.VALUE)
+		obj.SetValue(0)
 	}
 
 }
@@ -60564,13 +63042,36 @@ func (obj *patternFlowTcpDataOffset) SetChoice(value PatternFlowTcpDataOffsetCho
 	}
 	enumValue := snappipb.PatternFlowTcpDataOffset_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowTcpDataOffset) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 0
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -60611,7 +63112,9 @@ func (obj *patternFlowTcpDataOffset) SetValues(value []int32) PatternFlowTcpData
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowTcpDataOffset) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -60707,11 +63210,9 @@ func (obj *patternFlowTcpDataOffset) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowTcpDataOffset) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(0)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowTcpDataOffsetChoice.VALUE)
+		obj.SetValue(0)
 	}
 
 }
@@ -60903,13 +63404,36 @@ func (obj *patternFlowTcpEcnNs) SetChoice(value PatternFlowTcpEcnNsChoiceEnum) P
 	}
 	enumValue := snappipb.PatternFlowTcpEcnNs_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowTcpEcnNs) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 0
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -60950,7 +63474,9 @@ func (obj *patternFlowTcpEcnNs) SetValues(value []int32) PatternFlowTcpEcnNs {
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowTcpEcnNs) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -61046,11 +63572,9 @@ func (obj *patternFlowTcpEcnNs) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowTcpEcnNs) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(0)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowTcpEcnNsChoice.VALUE)
+		obj.SetValue(0)
 	}
 
 }
@@ -61242,13 +63766,36 @@ func (obj *patternFlowTcpEcnCwr) SetChoice(value PatternFlowTcpEcnCwrChoiceEnum)
 	}
 	enumValue := snappipb.PatternFlowTcpEcnCwr_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowTcpEcnCwr) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 0
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -61289,7 +63836,9 @@ func (obj *patternFlowTcpEcnCwr) SetValues(value []int32) PatternFlowTcpEcnCwr {
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowTcpEcnCwr) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -61385,11 +63934,9 @@ func (obj *patternFlowTcpEcnCwr) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowTcpEcnCwr) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(0)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowTcpEcnCwrChoice.VALUE)
+		obj.SetValue(0)
 	}
 
 }
@@ -61581,13 +64128,36 @@ func (obj *patternFlowTcpEcnEcho) SetChoice(value PatternFlowTcpEcnEchoChoiceEnu
 	}
 	enumValue := snappipb.PatternFlowTcpEcnEcho_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowTcpEcnEcho) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 0
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -61628,7 +64198,9 @@ func (obj *patternFlowTcpEcnEcho) SetValues(value []int32) PatternFlowTcpEcnEcho
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowTcpEcnEcho) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -61724,11 +64296,9 @@ func (obj *patternFlowTcpEcnEcho) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowTcpEcnEcho) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(0)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowTcpEcnEchoChoice.VALUE)
+		obj.SetValue(0)
 	}
 
 }
@@ -61920,13 +64490,36 @@ func (obj *patternFlowTcpCtlUrg) SetChoice(value PatternFlowTcpCtlUrgChoiceEnum)
 	}
 	enumValue := snappipb.PatternFlowTcpCtlUrg_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowTcpCtlUrg) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 0
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -61967,7 +64560,9 @@ func (obj *patternFlowTcpCtlUrg) SetValues(value []int32) PatternFlowTcpCtlUrg {
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowTcpCtlUrg) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -62063,11 +64658,9 @@ func (obj *patternFlowTcpCtlUrg) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowTcpCtlUrg) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(0)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowTcpCtlUrgChoice.VALUE)
+		obj.SetValue(0)
 	}
 
 }
@@ -62259,13 +64852,36 @@ func (obj *patternFlowTcpCtlAck) SetChoice(value PatternFlowTcpCtlAckChoiceEnum)
 	}
 	enumValue := snappipb.PatternFlowTcpCtlAck_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowTcpCtlAck) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 0
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -62306,7 +64922,9 @@ func (obj *patternFlowTcpCtlAck) SetValues(value []int32) PatternFlowTcpCtlAck {
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowTcpCtlAck) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -62402,11 +65020,9 @@ func (obj *patternFlowTcpCtlAck) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowTcpCtlAck) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(0)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowTcpCtlAckChoice.VALUE)
+		obj.SetValue(0)
 	}
 
 }
@@ -62598,13 +65214,36 @@ func (obj *patternFlowTcpCtlPsh) SetChoice(value PatternFlowTcpCtlPshChoiceEnum)
 	}
 	enumValue := snappipb.PatternFlowTcpCtlPsh_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowTcpCtlPsh) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 0
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -62645,7 +65284,9 @@ func (obj *patternFlowTcpCtlPsh) SetValues(value []int32) PatternFlowTcpCtlPsh {
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowTcpCtlPsh) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -62741,11 +65382,9 @@ func (obj *patternFlowTcpCtlPsh) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowTcpCtlPsh) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(0)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowTcpCtlPshChoice.VALUE)
+		obj.SetValue(0)
 	}
 
 }
@@ -62937,13 +65576,36 @@ func (obj *patternFlowTcpCtlRst) SetChoice(value PatternFlowTcpCtlRstChoiceEnum)
 	}
 	enumValue := snappipb.PatternFlowTcpCtlRst_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowTcpCtlRst) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 0
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -62984,7 +65646,9 @@ func (obj *patternFlowTcpCtlRst) SetValues(value []int32) PatternFlowTcpCtlRst {
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowTcpCtlRst) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -63080,11 +65744,9 @@ func (obj *patternFlowTcpCtlRst) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowTcpCtlRst) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(0)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowTcpCtlRstChoice.VALUE)
+		obj.SetValue(0)
 	}
 
 }
@@ -63276,13 +65938,36 @@ func (obj *patternFlowTcpCtlSyn) SetChoice(value PatternFlowTcpCtlSynChoiceEnum)
 	}
 	enumValue := snappipb.PatternFlowTcpCtlSyn_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowTcpCtlSyn) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 0
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -63323,7 +66008,9 @@ func (obj *patternFlowTcpCtlSyn) SetValues(value []int32) PatternFlowTcpCtlSyn {
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowTcpCtlSyn) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -63419,11 +66106,9 @@ func (obj *patternFlowTcpCtlSyn) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowTcpCtlSyn) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(0)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowTcpCtlSynChoice.VALUE)
+		obj.SetValue(0)
 	}
 
 }
@@ -63615,13 +66300,36 @@ func (obj *patternFlowTcpCtlFin) SetChoice(value PatternFlowTcpCtlFinChoiceEnum)
 	}
 	enumValue := snappipb.PatternFlowTcpCtlFin_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowTcpCtlFin) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 0
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -63662,7 +66370,9 @@ func (obj *patternFlowTcpCtlFin) SetValues(value []int32) PatternFlowTcpCtlFin {
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowTcpCtlFin) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -63758,11 +66468,9 @@ func (obj *patternFlowTcpCtlFin) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowTcpCtlFin) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(0)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowTcpCtlFinChoice.VALUE)
+		obj.SetValue(0)
 	}
 
 }
@@ -63954,13 +66662,36 @@ func (obj *patternFlowTcpWindow) SetChoice(value PatternFlowTcpWindowChoiceEnum)
 	}
 	enumValue := snappipb.PatternFlowTcpWindow_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowTcpWindow) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 0
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -64001,7 +66732,9 @@ func (obj *patternFlowTcpWindow) SetValues(value []int32) PatternFlowTcpWindow {
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowTcpWindow) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -64097,11 +66830,9 @@ func (obj *patternFlowTcpWindow) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowTcpWindow) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(0)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowTcpWindowChoice.VALUE)
+		obj.SetValue(0)
 	}
 
 }
@@ -64293,13 +67024,36 @@ func (obj *patternFlowUdpSrcPort) SetChoice(value PatternFlowUdpSrcPortChoiceEnu
 	}
 	enumValue := snappipb.PatternFlowUdpSrcPort_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowUdpSrcPort) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 0
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -64340,7 +67094,9 @@ func (obj *patternFlowUdpSrcPort) SetValues(value []int32) PatternFlowUdpSrcPort
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowUdpSrcPort) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -64436,11 +67192,9 @@ func (obj *patternFlowUdpSrcPort) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowUdpSrcPort) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(0)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowUdpSrcPortChoice.VALUE)
+		obj.SetValue(0)
 	}
 
 }
@@ -64632,13 +67386,36 @@ func (obj *patternFlowUdpDstPort) SetChoice(value PatternFlowUdpDstPortChoiceEnu
 	}
 	enumValue := snappipb.PatternFlowUdpDstPort_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowUdpDstPort) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 0
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -64679,7 +67456,9 @@ func (obj *patternFlowUdpDstPort) SetValues(value []int32) PatternFlowUdpDstPort
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowUdpDstPort) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -64775,11 +67554,9 @@ func (obj *patternFlowUdpDstPort) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowUdpDstPort) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(0)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowUdpDstPortChoice.VALUE)
+		obj.SetValue(0)
 	}
 
 }
@@ -64971,13 +67748,36 @@ func (obj *patternFlowUdpLength) SetChoice(value PatternFlowUdpLengthChoiceEnum)
 	}
 	enumValue := snappipb.PatternFlowUdpLength_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowUdpLength) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 0
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -65018,7 +67818,9 @@ func (obj *patternFlowUdpLength) SetValues(value []int32) PatternFlowUdpLength {
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowUdpLength) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -65114,11 +67916,9 @@ func (obj *patternFlowUdpLength) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowUdpLength) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(0)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowUdpLengthChoice.VALUE)
+		obj.SetValue(0)
 	}
 
 }
@@ -65290,6 +68090,15 @@ func (obj *patternFlowUdpChecksum) SetChoice(value PatternFlowUdpChecksumChoiceE
 		return obj
 	}
 	obj.obj.Choice = snappipb.PatternFlowUdpChecksum_Choice_Enum(intValue)
+
+	if string(value) != "generated" {
+		obj.obj.Generated = nil
+	}
+
+	if string(value) != "custom" {
+		obj.obj.Custom = nil
+	}
+
 	return obj
 }
 
@@ -65322,13 +68131,16 @@ func (obj *patternFlowUdpChecksum) SetGenerated(value PatternFlowUdpChecksumGene
 	}
 	enumValue := snappipb.PatternFlowUdpChecksum_Generated_Enum(intValue)
 	obj.obj.Generated = &enumValue
+
 	return obj
 }
 
 // Custom returns a int32
 //  A custom checksum value
 func (obj *patternFlowUdpChecksum) Custom() int32 {
+
 	return *obj.obj.Custom
+
 }
 
 // Custom returns a int32
@@ -65367,11 +68179,13 @@ func (obj *patternFlowUdpChecksum) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowUdpChecksum) setDefault() {
-	if obj.obj.Generated == nil {
-		obj.SetGenerated(PatternFlowUdpChecksumGenerated.GOOD)
-	}
 	if obj.obj.Choice.Number() == 0 {
 		obj.SetChoice(PatternFlowUdpChecksumChoice.GENERATED)
+		if obj.obj.Generated == nil {
+			obj.SetGenerated(PatternFlowUdpChecksumGenerated.GOOD)
+
+		}
+
 	}
 
 }
@@ -65563,13 +68377,36 @@ func (obj *patternFlowGreChecksumPresent) SetChoice(value PatternFlowGreChecksum
 	}
 	enumValue := snappipb.PatternFlowGreChecksumPresent_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowGreChecksumPresent) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 0
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -65610,7 +68447,9 @@ func (obj *patternFlowGreChecksumPresent) SetValues(value []int32) PatternFlowGr
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowGreChecksumPresent) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -65706,11 +68545,9 @@ func (obj *patternFlowGreChecksumPresent) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowGreChecksumPresent) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(0)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowGreChecksumPresentChoice.VALUE)
+		obj.SetValue(0)
 	}
 
 }
@@ -65902,13 +68739,36 @@ func (obj *patternFlowGreReserved0) SetChoice(value PatternFlowGreReserved0Choic
 	}
 	enumValue := snappipb.PatternFlowGreReserved0_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowGreReserved0) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 0
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -65949,7 +68809,9 @@ func (obj *patternFlowGreReserved0) SetValues(value []int32) PatternFlowGreReser
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowGreReserved0) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -66045,11 +68907,9 @@ func (obj *patternFlowGreReserved0) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowGreReserved0) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(0)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowGreReserved0Choice.VALUE)
+		obj.SetValue(0)
 	}
 
 }
@@ -66241,13 +69101,36 @@ func (obj *patternFlowGreVersion) SetChoice(value PatternFlowGreVersionChoiceEnu
 	}
 	enumValue := snappipb.PatternFlowGreVersion_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowGreVersion) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 0
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -66288,7 +69171,9 @@ func (obj *patternFlowGreVersion) SetValues(value []int32) PatternFlowGreVersion
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowGreVersion) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -66384,11 +69269,9 @@ func (obj *patternFlowGreVersion) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowGreVersion) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(0)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowGreVersionChoice.VALUE)
+		obj.SetValue(0)
 	}
 
 }
@@ -66580,13 +69463,36 @@ func (obj *patternFlowGreProtocol) SetChoice(value PatternFlowGreProtocolChoiceE
 	}
 	enumValue := snappipb.PatternFlowGreProtocol_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowGreProtocol) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 2048
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -66627,7 +69533,9 @@ func (obj *patternFlowGreProtocol) SetValues(value []int32) PatternFlowGreProtoc
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowGreProtocol) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -66723,11 +69631,9 @@ func (obj *patternFlowGreProtocol) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowGreProtocol) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(2048)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowGreProtocolChoice.VALUE)
+		obj.SetValue(2048)
 	}
 
 }
@@ -66899,6 +69805,15 @@ func (obj *patternFlowGreChecksum) SetChoice(value PatternFlowGreChecksumChoiceE
 		return obj
 	}
 	obj.obj.Choice = snappipb.PatternFlowGreChecksum_Choice_Enum(intValue)
+
+	if string(value) != "generated" {
+		obj.obj.Generated = nil
+	}
+
+	if string(value) != "custom" {
+		obj.obj.Custom = nil
+	}
+
 	return obj
 }
 
@@ -66931,13 +69846,16 @@ func (obj *patternFlowGreChecksum) SetGenerated(value PatternFlowGreChecksumGene
 	}
 	enumValue := snappipb.PatternFlowGreChecksum_Generated_Enum(intValue)
 	obj.obj.Generated = &enumValue
+
 	return obj
 }
 
 // Custom returns a int32
 //  A custom checksum value
 func (obj *patternFlowGreChecksum) Custom() int32 {
+
 	return *obj.obj.Custom
+
 }
 
 // Custom returns a int32
@@ -66976,11 +69894,13 @@ func (obj *patternFlowGreChecksum) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowGreChecksum) setDefault() {
-	if obj.obj.Generated == nil {
-		obj.SetGenerated(PatternFlowGreChecksumGenerated.GOOD)
-	}
 	if obj.obj.Choice.Number() == 0 {
 		obj.SetChoice(PatternFlowGreChecksumChoice.GENERATED)
+		if obj.obj.Generated == nil {
+			obj.SetGenerated(PatternFlowGreChecksumGenerated.GOOD)
+
+		}
+
 	}
 
 }
@@ -67172,13 +70092,36 @@ func (obj *patternFlowGreReserved1) SetChoice(value PatternFlowGreReserved1Choic
 	}
 	enumValue := snappipb.PatternFlowGreReserved1_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowGreReserved1) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 0
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -67219,7 +70162,9 @@ func (obj *patternFlowGreReserved1) SetValues(value []int32) PatternFlowGreReser
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowGreReserved1) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -67315,11 +70260,9 @@ func (obj *patternFlowGreReserved1) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowGreReserved1) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(0)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowGreReserved1Choice.VALUE)
+		obj.SetValue(0)
 	}
 
 }
@@ -67511,13 +70454,36 @@ func (obj *patternFlowGtpv1Version) SetChoice(value PatternFlowGtpv1VersionChoic
 	}
 	enumValue := snappipb.PatternFlowGtpv1Version_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowGtpv1Version) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 1
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -67558,7 +70524,9 @@ func (obj *patternFlowGtpv1Version) SetValues(value []int32) PatternFlowGtpv1Ver
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowGtpv1Version) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -67654,11 +70622,9 @@ func (obj *patternFlowGtpv1Version) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowGtpv1Version) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(1)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowGtpv1VersionChoice.VALUE)
+		obj.SetValue(1)
 	}
 
 }
@@ -67850,13 +70816,36 @@ func (obj *patternFlowGtpv1ProtocolType) SetChoice(value PatternFlowGtpv1Protoco
 	}
 	enumValue := snappipb.PatternFlowGtpv1ProtocolType_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowGtpv1ProtocolType) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 1
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -67897,7 +70886,9 @@ func (obj *patternFlowGtpv1ProtocolType) SetValues(value []int32) PatternFlowGtp
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowGtpv1ProtocolType) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -67993,11 +70984,9 @@ func (obj *patternFlowGtpv1ProtocolType) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowGtpv1ProtocolType) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(1)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowGtpv1ProtocolTypeChoice.VALUE)
+		obj.SetValue(1)
 	}
 
 }
@@ -68189,13 +71178,36 @@ func (obj *patternFlowGtpv1Reserved) SetChoice(value PatternFlowGtpv1ReservedCho
 	}
 	enumValue := snappipb.PatternFlowGtpv1Reserved_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowGtpv1Reserved) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 0
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -68236,7 +71248,9 @@ func (obj *patternFlowGtpv1Reserved) SetValues(value []int32) PatternFlowGtpv1Re
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowGtpv1Reserved) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -68332,11 +71346,9 @@ func (obj *patternFlowGtpv1Reserved) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowGtpv1Reserved) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(0)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowGtpv1ReservedChoice.VALUE)
+		obj.SetValue(0)
 	}
 
 }
@@ -68528,13 +71540,36 @@ func (obj *patternFlowGtpv1EFlag) SetChoice(value PatternFlowGtpv1EFlagChoiceEnu
 	}
 	enumValue := snappipb.PatternFlowGtpv1EFlag_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowGtpv1EFlag) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 0
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -68575,7 +71610,9 @@ func (obj *patternFlowGtpv1EFlag) SetValues(value []int32) PatternFlowGtpv1EFlag
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowGtpv1EFlag) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -68671,11 +71708,9 @@ func (obj *patternFlowGtpv1EFlag) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowGtpv1EFlag) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(0)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowGtpv1EFlagChoice.VALUE)
+		obj.SetValue(0)
 	}
 
 }
@@ -68867,13 +71902,36 @@ func (obj *patternFlowGtpv1SFlag) SetChoice(value PatternFlowGtpv1SFlagChoiceEnu
 	}
 	enumValue := snappipb.PatternFlowGtpv1SFlag_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowGtpv1SFlag) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 0
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -68914,7 +71972,9 @@ func (obj *patternFlowGtpv1SFlag) SetValues(value []int32) PatternFlowGtpv1SFlag
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowGtpv1SFlag) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -69010,11 +72070,9 @@ func (obj *patternFlowGtpv1SFlag) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowGtpv1SFlag) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(0)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowGtpv1SFlagChoice.VALUE)
+		obj.SetValue(0)
 	}
 
 }
@@ -69206,13 +72264,36 @@ func (obj *patternFlowGtpv1PnFlag) SetChoice(value PatternFlowGtpv1PnFlagChoiceE
 	}
 	enumValue := snappipb.PatternFlowGtpv1PnFlag_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowGtpv1PnFlag) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 0
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -69253,7 +72334,9 @@ func (obj *patternFlowGtpv1PnFlag) SetValues(value []int32) PatternFlowGtpv1PnFl
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowGtpv1PnFlag) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -69349,11 +72432,9 @@ func (obj *patternFlowGtpv1PnFlag) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowGtpv1PnFlag) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(0)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowGtpv1PnFlagChoice.VALUE)
+		obj.SetValue(0)
 	}
 
 }
@@ -69545,13 +72626,36 @@ func (obj *patternFlowGtpv1MessageType) SetChoice(value PatternFlowGtpv1MessageT
 	}
 	enumValue := snappipb.PatternFlowGtpv1MessageType_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowGtpv1MessageType) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 0
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -69592,7 +72696,9 @@ func (obj *patternFlowGtpv1MessageType) SetValues(value []int32) PatternFlowGtpv
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowGtpv1MessageType) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -69688,11 +72794,9 @@ func (obj *patternFlowGtpv1MessageType) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowGtpv1MessageType) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(0)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowGtpv1MessageTypeChoice.VALUE)
+		obj.SetValue(0)
 	}
 
 }
@@ -69884,13 +72988,36 @@ func (obj *patternFlowGtpv1MessageLength) SetChoice(value PatternFlowGtpv1Messag
 	}
 	enumValue := snappipb.PatternFlowGtpv1MessageLength_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowGtpv1MessageLength) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 0
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -69931,7 +73058,9 @@ func (obj *patternFlowGtpv1MessageLength) SetValues(value []int32) PatternFlowGt
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowGtpv1MessageLength) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -70027,11 +73156,9 @@ func (obj *patternFlowGtpv1MessageLength) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowGtpv1MessageLength) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(0)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowGtpv1MessageLengthChoice.VALUE)
+		obj.SetValue(0)
 	}
 
 }
@@ -70223,13 +73350,36 @@ func (obj *patternFlowGtpv1Teid) SetChoice(value PatternFlowGtpv1TeidChoiceEnum)
 	}
 	enumValue := snappipb.PatternFlowGtpv1Teid_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int64
 //  description is TBD
 func (obj *patternFlowGtpv1Teid) Value() int64 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 0
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int64
@@ -70270,7 +73420,9 @@ func (obj *patternFlowGtpv1Teid) SetValues(value []int64) PatternFlowGtpv1Teid {
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowGtpv1Teid) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -70366,11 +73518,9 @@ func (obj *patternFlowGtpv1Teid) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowGtpv1Teid) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(0)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowGtpv1TeidChoice.VALUE)
+		obj.SetValue(0)
 	}
 
 }
@@ -70562,13 +73712,36 @@ func (obj *patternFlowGtpv1SquenceNumber) SetChoice(value PatternFlowGtpv1Squenc
 	}
 	enumValue := snappipb.PatternFlowGtpv1SquenceNumber_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowGtpv1SquenceNumber) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 0
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -70609,7 +73782,9 @@ func (obj *patternFlowGtpv1SquenceNumber) SetValues(value []int32) PatternFlowGt
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowGtpv1SquenceNumber) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -70705,11 +73880,9 @@ func (obj *patternFlowGtpv1SquenceNumber) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowGtpv1SquenceNumber) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(0)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowGtpv1SquenceNumberChoice.VALUE)
+		obj.SetValue(0)
 	}
 
 }
@@ -70901,13 +74074,36 @@ func (obj *patternFlowGtpv1NPduNumber) SetChoice(value PatternFlowGtpv1NPduNumbe
 	}
 	enumValue := snappipb.PatternFlowGtpv1NPduNumber_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowGtpv1NPduNumber) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 0
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -70948,7 +74144,9 @@ func (obj *patternFlowGtpv1NPduNumber) SetValues(value []int32) PatternFlowGtpv1
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowGtpv1NPduNumber) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -71044,11 +74242,9 @@ func (obj *patternFlowGtpv1NPduNumber) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowGtpv1NPduNumber) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(0)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowGtpv1NPduNumberChoice.VALUE)
+		obj.SetValue(0)
 	}
 
 }
@@ -71240,13 +74436,36 @@ func (obj *patternFlowGtpv1NextExtensionHeaderType) SetChoice(value PatternFlowG
 	}
 	enumValue := snappipb.PatternFlowGtpv1NextExtensionHeaderType_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowGtpv1NextExtensionHeaderType) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 0
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -71287,7 +74506,9 @@ func (obj *patternFlowGtpv1NextExtensionHeaderType) SetValues(value []int32) Pat
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowGtpv1NextExtensionHeaderType) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -71383,11 +74604,9 @@ func (obj *patternFlowGtpv1NextExtensionHeaderType) validateObj(set_default bool
 }
 
 func (obj *patternFlowGtpv1NextExtensionHeaderType) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(0)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowGtpv1NextExtensionHeaderTypeChoice.VALUE)
+		obj.SetValue(0)
 	}
 
 }
@@ -71816,13 +75035,36 @@ func (obj *patternFlowGtpv2Version) SetChoice(value PatternFlowGtpv2VersionChoic
 	}
 	enumValue := snappipb.PatternFlowGtpv2Version_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowGtpv2Version) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 2
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -71863,7 +75105,9 @@ func (obj *patternFlowGtpv2Version) SetValues(value []int32) PatternFlowGtpv2Ver
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowGtpv2Version) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -71959,11 +75203,9 @@ func (obj *patternFlowGtpv2Version) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowGtpv2Version) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(2)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowGtpv2VersionChoice.VALUE)
+		obj.SetValue(2)
 	}
 
 }
@@ -72155,13 +75397,36 @@ func (obj *patternFlowGtpv2PiggybackingFlag) SetChoice(value PatternFlowGtpv2Pig
 	}
 	enumValue := snappipb.PatternFlowGtpv2PiggybackingFlag_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowGtpv2PiggybackingFlag) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 0
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -72202,7 +75467,9 @@ func (obj *patternFlowGtpv2PiggybackingFlag) SetValues(value []int32) PatternFlo
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowGtpv2PiggybackingFlag) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -72298,11 +75565,9 @@ func (obj *patternFlowGtpv2PiggybackingFlag) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowGtpv2PiggybackingFlag) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(0)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowGtpv2PiggybackingFlagChoice.VALUE)
+		obj.SetValue(0)
 	}
 
 }
@@ -72494,13 +75759,36 @@ func (obj *patternFlowGtpv2TeidFlag) SetChoice(value PatternFlowGtpv2TeidFlagCho
 	}
 	enumValue := snappipb.PatternFlowGtpv2TeidFlag_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowGtpv2TeidFlag) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 0
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -72541,7 +75829,9 @@ func (obj *patternFlowGtpv2TeidFlag) SetValues(value []int32) PatternFlowGtpv2Te
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowGtpv2TeidFlag) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -72637,11 +75927,9 @@ func (obj *patternFlowGtpv2TeidFlag) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowGtpv2TeidFlag) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(0)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowGtpv2TeidFlagChoice.VALUE)
+		obj.SetValue(0)
 	}
 
 }
@@ -72833,13 +76121,36 @@ func (obj *patternFlowGtpv2Spare1) SetChoice(value PatternFlowGtpv2Spare1ChoiceE
 	}
 	enumValue := snappipb.PatternFlowGtpv2Spare1_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowGtpv2Spare1) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 0
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -72880,7 +76191,9 @@ func (obj *patternFlowGtpv2Spare1) SetValues(value []int32) PatternFlowGtpv2Spar
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowGtpv2Spare1) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -72976,11 +76289,9 @@ func (obj *patternFlowGtpv2Spare1) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowGtpv2Spare1) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(0)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowGtpv2Spare1Choice.VALUE)
+		obj.SetValue(0)
 	}
 
 }
@@ -73172,13 +76483,36 @@ func (obj *patternFlowGtpv2MessageType) SetChoice(value PatternFlowGtpv2MessageT
 	}
 	enumValue := snappipb.PatternFlowGtpv2MessageType_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowGtpv2MessageType) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 0
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -73219,7 +76553,9 @@ func (obj *patternFlowGtpv2MessageType) SetValues(value []int32) PatternFlowGtpv
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowGtpv2MessageType) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -73315,11 +76651,9 @@ func (obj *patternFlowGtpv2MessageType) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowGtpv2MessageType) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(0)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowGtpv2MessageTypeChoice.VALUE)
+		obj.SetValue(0)
 	}
 
 }
@@ -73511,13 +76845,36 @@ func (obj *patternFlowGtpv2MessageLength) SetChoice(value PatternFlowGtpv2Messag
 	}
 	enumValue := snappipb.PatternFlowGtpv2MessageLength_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowGtpv2MessageLength) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 0
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -73558,7 +76915,9 @@ func (obj *patternFlowGtpv2MessageLength) SetValues(value []int32) PatternFlowGt
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowGtpv2MessageLength) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -73654,11 +77013,9 @@ func (obj *patternFlowGtpv2MessageLength) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowGtpv2MessageLength) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(0)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowGtpv2MessageLengthChoice.VALUE)
+		obj.SetValue(0)
 	}
 
 }
@@ -73850,13 +77207,36 @@ func (obj *patternFlowGtpv2Teid) SetChoice(value PatternFlowGtpv2TeidChoiceEnum)
 	}
 	enumValue := snappipb.PatternFlowGtpv2Teid_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int64
 //  description is TBD
 func (obj *patternFlowGtpv2Teid) Value() int64 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 0
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int64
@@ -73897,7 +77277,9 @@ func (obj *patternFlowGtpv2Teid) SetValues(value []int64) PatternFlowGtpv2Teid {
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowGtpv2Teid) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -73993,11 +77375,9 @@ func (obj *patternFlowGtpv2Teid) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowGtpv2Teid) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(0)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowGtpv2TeidChoice.VALUE)
+		obj.SetValue(0)
 	}
 
 }
@@ -74189,13 +77569,36 @@ func (obj *patternFlowGtpv2SequenceNumber) SetChoice(value PatternFlowGtpv2Seque
 	}
 	enumValue := snappipb.PatternFlowGtpv2SequenceNumber_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowGtpv2SequenceNumber) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 0
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -74236,7 +77639,9 @@ func (obj *patternFlowGtpv2SequenceNumber) SetValues(value []int32) PatternFlowG
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowGtpv2SequenceNumber) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -74332,11 +77737,9 @@ func (obj *patternFlowGtpv2SequenceNumber) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowGtpv2SequenceNumber) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(0)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowGtpv2SequenceNumberChoice.VALUE)
+		obj.SetValue(0)
 	}
 
 }
@@ -74528,13 +77931,36 @@ func (obj *patternFlowGtpv2Spare2) SetChoice(value PatternFlowGtpv2Spare2ChoiceE
 	}
 	enumValue := snappipb.PatternFlowGtpv2Spare2_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowGtpv2Spare2) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 0
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -74575,7 +78001,9 @@ func (obj *patternFlowGtpv2Spare2) SetValues(value []int32) PatternFlowGtpv2Spar
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowGtpv2Spare2) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -74671,11 +78099,9 @@ func (obj *patternFlowGtpv2Spare2) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowGtpv2Spare2) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(0)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowGtpv2Spare2Choice.VALUE)
+		obj.SetValue(0)
 	}
 
 }
@@ -74867,13 +78293,36 @@ func (obj *patternFlowArpHardwareType) SetChoice(value PatternFlowArpHardwareTyp
 	}
 	enumValue := snappipb.PatternFlowArpHardwareType_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowArpHardwareType) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 1
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -74914,7 +78363,9 @@ func (obj *patternFlowArpHardwareType) SetValues(value []int32) PatternFlowArpHa
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowArpHardwareType) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -75010,11 +78461,9 @@ func (obj *patternFlowArpHardwareType) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowArpHardwareType) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(1)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowArpHardwareTypeChoice.VALUE)
+		obj.SetValue(1)
 	}
 
 }
@@ -75206,13 +78655,36 @@ func (obj *patternFlowArpProtocolType) SetChoice(value PatternFlowArpProtocolTyp
 	}
 	enumValue := snappipb.PatternFlowArpProtocolType_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowArpProtocolType) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 2048
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -75253,7 +78725,9 @@ func (obj *patternFlowArpProtocolType) SetValues(value []int32) PatternFlowArpPr
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowArpProtocolType) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -75349,11 +78823,9 @@ func (obj *patternFlowArpProtocolType) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowArpProtocolType) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(2048)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowArpProtocolTypeChoice.VALUE)
+		obj.SetValue(2048)
 	}
 
 }
@@ -75545,13 +79017,36 @@ func (obj *patternFlowArpHardwareLength) SetChoice(value PatternFlowArpHardwareL
 	}
 	enumValue := snappipb.PatternFlowArpHardwareLength_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowArpHardwareLength) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 6
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -75592,7 +79087,9 @@ func (obj *patternFlowArpHardwareLength) SetValues(value []int32) PatternFlowArp
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowArpHardwareLength) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -75688,11 +79185,9 @@ func (obj *patternFlowArpHardwareLength) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowArpHardwareLength) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(6)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowArpHardwareLengthChoice.VALUE)
+		obj.SetValue(6)
 	}
 
 }
@@ -75884,13 +79379,36 @@ func (obj *patternFlowArpProtocolLength) SetChoice(value PatternFlowArpProtocolL
 	}
 	enumValue := snappipb.PatternFlowArpProtocolLength_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowArpProtocolLength) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 4
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -75931,7 +79449,9 @@ func (obj *patternFlowArpProtocolLength) SetValues(value []int32) PatternFlowArp
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowArpProtocolLength) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -76027,11 +79547,9 @@ func (obj *patternFlowArpProtocolLength) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowArpProtocolLength) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(4)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowArpProtocolLengthChoice.VALUE)
+		obj.SetValue(4)
 	}
 
 }
@@ -76223,13 +79741,36 @@ func (obj *patternFlowArpOperation) SetChoice(value PatternFlowArpOperationChoic
 	}
 	enumValue := snappipb.PatternFlowArpOperation_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowArpOperation) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 1
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -76270,7 +79811,9 @@ func (obj *patternFlowArpOperation) SetValues(value []int32) PatternFlowArpOpera
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowArpOperation) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -76366,11 +79909,9 @@ func (obj *patternFlowArpOperation) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowArpOperation) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(1)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowArpOperationChoice.VALUE)
+		obj.SetValue(1)
 	}
 
 }
@@ -76562,13 +80103,36 @@ func (obj *patternFlowArpSenderHardwareAddr) SetChoice(value PatternFlowArpSende
 	}
 	enumValue := snappipb.PatternFlowArpSenderHardwareAddr_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a string
 //  description is TBD
 func (obj *patternFlowArpSenderHardwareAddr) Value() string {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = "00:00:00:00:00:00"
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a string
@@ -76609,7 +80173,9 @@ func (obj *patternFlowArpSenderHardwareAddr) SetValues(value []string) PatternFl
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowArpSenderHardwareAddr) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -76703,11 +80269,9 @@ func (obj *patternFlowArpSenderHardwareAddr) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowArpSenderHardwareAddr) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue("00:00:00:00:00:00")
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowArpSenderHardwareAddrChoice.VALUE)
+		obj.SetValue("00:00:00:00:00:00")
 	}
 
 }
@@ -76899,13 +80463,36 @@ func (obj *patternFlowArpSenderProtocolAddr) SetChoice(value PatternFlowArpSende
 	}
 	enumValue := snappipb.PatternFlowArpSenderProtocolAddr_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a string
 //  description is TBD
 func (obj *patternFlowArpSenderProtocolAddr) Value() string {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = "0.0.0.0"
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a string
@@ -76946,7 +80533,9 @@ func (obj *patternFlowArpSenderProtocolAddr) SetValues(value []string) PatternFl
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowArpSenderProtocolAddr) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -77040,11 +80629,9 @@ func (obj *patternFlowArpSenderProtocolAddr) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowArpSenderProtocolAddr) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue("0.0.0.0")
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowArpSenderProtocolAddrChoice.VALUE)
+		obj.SetValue("0.0.0.0")
 	}
 
 }
@@ -77236,13 +80823,36 @@ func (obj *patternFlowArpTargetHardwareAddr) SetChoice(value PatternFlowArpTarge
 	}
 	enumValue := snappipb.PatternFlowArpTargetHardwareAddr_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a string
 //  description is TBD
 func (obj *patternFlowArpTargetHardwareAddr) Value() string {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = "00:00:00:00:00:00"
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a string
@@ -77283,7 +80893,9 @@ func (obj *patternFlowArpTargetHardwareAddr) SetValues(value []string) PatternFl
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowArpTargetHardwareAddr) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -77377,11 +80989,9 @@ func (obj *patternFlowArpTargetHardwareAddr) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowArpTargetHardwareAddr) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue("00:00:00:00:00:00")
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowArpTargetHardwareAddrChoice.VALUE)
+		obj.SetValue("00:00:00:00:00:00")
 	}
 
 }
@@ -77573,13 +81183,36 @@ func (obj *patternFlowArpTargetProtocolAddr) SetChoice(value PatternFlowArpTarge
 	}
 	enumValue := snappipb.PatternFlowArpTargetProtocolAddr_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a string
 //  description is TBD
 func (obj *patternFlowArpTargetProtocolAddr) Value() string {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = "0.0.0.0"
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a string
@@ -77620,7 +81253,9 @@ func (obj *patternFlowArpTargetProtocolAddr) SetValues(value []string) PatternFl
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowArpTargetProtocolAddr) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -77714,11 +81349,9 @@ func (obj *patternFlowArpTargetProtocolAddr) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowArpTargetProtocolAddr) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue("0.0.0.0")
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowArpTargetProtocolAddrChoice.VALUE)
+		obj.SetValue("0.0.0.0")
 	}
 
 }
@@ -78504,13 +82137,36 @@ func (obj *patternFlowPppAddress) SetChoice(value PatternFlowPppAddressChoiceEnu
 	}
 	enumValue := snappipb.PatternFlowPppAddress_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowPppAddress) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 255
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -78551,7 +82207,9 @@ func (obj *patternFlowPppAddress) SetValues(value []int32) PatternFlowPppAddress
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowPppAddress) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -78647,11 +82305,9 @@ func (obj *patternFlowPppAddress) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowPppAddress) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(255)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowPppAddressChoice.VALUE)
+		obj.SetValue(255)
 	}
 
 }
@@ -78843,13 +82499,36 @@ func (obj *patternFlowPppControl) SetChoice(value PatternFlowPppControlChoiceEnu
 	}
 	enumValue := snappipb.PatternFlowPppControl_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowPppControl) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 3
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -78890,7 +82569,9 @@ func (obj *patternFlowPppControl) SetValues(value []int32) PatternFlowPppControl
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowPppControl) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -78986,11 +82667,9 @@ func (obj *patternFlowPppControl) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowPppControl) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(3)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowPppControlChoice.VALUE)
+		obj.SetValue(3)
 	}
 
 }
@@ -79187,13 +82866,36 @@ func (obj *patternFlowPppProtocolType) SetChoice(value PatternFlowPppProtocolTyp
 	}
 	enumValue := snappipb.PatternFlowPppProtocolType_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "auto" {
+		obj.obj.Auto = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowPppProtocolType) Value() int32 {
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -79258,13 +82960,16 @@ func (obj *patternFlowPppProtocolType) SetAuto(value PatternFlowPppProtocolTypeA
 	}
 	enumValue := snappipb.PatternFlowPppProtocolType_Auto_Enum(intValue)
 	obj.obj.Auto = &enumValue
+
 	return obj
 }
 
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowPppProtocolType) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -79360,11 +83065,13 @@ func (obj *patternFlowPppProtocolType) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowPppProtocolType) setDefault() {
-	if obj.obj.Auto == nil {
-		obj.SetAuto(PatternFlowPppProtocolTypeAuto.AUTO)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowPppProtocolTypeChoice.AUTO)
+		if obj.obj.Auto == nil {
+			obj.SetAuto(PatternFlowPppProtocolTypeAuto.AUTO)
+
+		}
+
 	}
 
 }
@@ -79556,13 +83263,36 @@ func (obj *patternFlowIgmpv1Version) SetChoice(value PatternFlowIgmpv1VersionCho
 	}
 	enumValue := snappipb.PatternFlowIgmpv1Version_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowIgmpv1Version) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 1
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -79603,7 +83333,9 @@ func (obj *patternFlowIgmpv1Version) SetValues(value []int32) PatternFlowIgmpv1V
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowIgmpv1Version) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -79699,11 +83431,9 @@ func (obj *patternFlowIgmpv1Version) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowIgmpv1Version) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(1)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowIgmpv1VersionChoice.VALUE)
+		obj.SetValue(1)
 	}
 
 }
@@ -79895,13 +83625,36 @@ func (obj *patternFlowIgmpv1Type) SetChoice(value PatternFlowIgmpv1TypeChoiceEnu
 	}
 	enumValue := snappipb.PatternFlowIgmpv1Type_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowIgmpv1Type) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 17
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -79942,7 +83695,9 @@ func (obj *patternFlowIgmpv1Type) SetValues(value []int32) PatternFlowIgmpv1Type
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowIgmpv1Type) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -80038,11 +83793,9 @@ func (obj *patternFlowIgmpv1Type) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowIgmpv1Type) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(17)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowIgmpv1TypeChoice.VALUE)
+		obj.SetValue(17)
 	}
 
 }
@@ -80234,13 +83987,36 @@ func (obj *patternFlowIgmpv1Unused) SetChoice(value PatternFlowIgmpv1UnusedChoic
 	}
 	enumValue := snappipb.PatternFlowIgmpv1Unused_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowIgmpv1Unused) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 0
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -80281,7 +84057,9 @@ func (obj *patternFlowIgmpv1Unused) SetValues(value []int32) PatternFlowIgmpv1Un
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowIgmpv1Unused) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -80377,11 +84155,9 @@ func (obj *patternFlowIgmpv1Unused) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowIgmpv1Unused) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(0)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowIgmpv1UnusedChoice.VALUE)
+		obj.SetValue(0)
 	}
 
 }
@@ -80553,6 +84329,15 @@ func (obj *patternFlowIgmpv1Checksum) SetChoice(value PatternFlowIgmpv1ChecksumC
 		return obj
 	}
 	obj.obj.Choice = snappipb.PatternFlowIgmpv1Checksum_Choice_Enum(intValue)
+
+	if string(value) != "generated" {
+		obj.obj.Generated = nil
+	}
+
+	if string(value) != "custom" {
+		obj.obj.Custom = nil
+	}
+
 	return obj
 }
 
@@ -80585,13 +84370,16 @@ func (obj *patternFlowIgmpv1Checksum) SetGenerated(value PatternFlowIgmpv1Checks
 	}
 	enumValue := snappipb.PatternFlowIgmpv1Checksum_Generated_Enum(intValue)
 	obj.obj.Generated = &enumValue
+
 	return obj
 }
 
 // Custom returns a int32
 //  A custom checksum value
 func (obj *patternFlowIgmpv1Checksum) Custom() int32 {
+
 	return *obj.obj.Custom
+
 }
 
 // Custom returns a int32
@@ -80630,11 +84418,13 @@ func (obj *patternFlowIgmpv1Checksum) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowIgmpv1Checksum) setDefault() {
-	if obj.obj.Generated == nil {
-		obj.SetGenerated(PatternFlowIgmpv1ChecksumGenerated.GOOD)
-	}
 	if obj.obj.Choice.Number() == 0 {
 		obj.SetChoice(PatternFlowIgmpv1ChecksumChoice.GENERATED)
+		if obj.obj.Generated == nil {
+			obj.SetGenerated(PatternFlowIgmpv1ChecksumGenerated.GOOD)
+
+		}
+
 	}
 
 }
@@ -80826,13 +84616,36 @@ func (obj *patternFlowIgmpv1GroupAddress) SetChoice(value PatternFlowIgmpv1Group
 	}
 	enumValue := snappipb.PatternFlowIgmpv1GroupAddress_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a string
 //  description is TBD
 func (obj *patternFlowIgmpv1GroupAddress) Value() string {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = "0.0.0.0"
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a string
@@ -80873,7 +84686,9 @@ func (obj *patternFlowIgmpv1GroupAddress) SetValues(value []string) PatternFlowI
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowIgmpv1GroupAddress) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -80967,11 +84782,9 @@ func (obj *patternFlowIgmpv1GroupAddress) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowIgmpv1GroupAddress) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue("0.0.0.0")
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowIgmpv1GroupAddressChoice.VALUE)
+		obj.SetValue("0.0.0.0")
 	}
 
 }
@@ -81156,6 +84969,19 @@ func (obj *flowDelay) SetChoice(value FlowDelayChoiceEnum) FlowDelay {
 	}
 	enumValue := snappipb.FlowDelay_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "bytes" {
+		obj.obj.Bytes = nil
+	}
+
+	if string(value) != "nanoseconds" {
+		obj.obj.Nanoseconds = nil
+	}
+
+	if string(value) != "microseconds" {
+		obj.obj.Microseconds = nil
+	}
+
 	return obj
 }
 
@@ -81163,7 +84989,13 @@ func (obj *flowDelay) SetChoice(value FlowDelayChoiceEnum) FlowDelay {
 //  The delay before starting transmission of packets.
 //  A value of 0 indicates no delay.
 func (obj *flowDelay) Bytes() float32 {
+
+	if obj.obj.Bytes == nil {
+		*obj.obj.Bytes = 0
+	}
+
 	return *obj.obj.Bytes
+
 }
 
 // Bytes returns a float32
@@ -81186,7 +85018,13 @@ func (obj *flowDelay) SetBytes(value float32) FlowDelay {
 //  The delay before starting transmission of packets.
 //  A value of 0 indicates no delay.
 func (obj *flowDelay) Nanoseconds() float32 {
+
+	if obj.obj.Nanoseconds == nil {
+		*obj.obj.Nanoseconds = 0
+	}
+
 	return *obj.obj.Nanoseconds
+
 }
 
 // Nanoseconds returns a float32
@@ -81209,7 +85047,13 @@ func (obj *flowDelay) SetNanoseconds(value float32) FlowDelay {
 //  The delay before starting transmission of packets.
 //  A value of 0 indicates no delay.
 func (obj *flowDelay) Microseconds() float32 {
+
+	if obj.obj.Microseconds == nil {
+		*obj.obj.Microseconds = 0
+	}
+
 	return *obj.obj.Microseconds
+
 }
 
 // Microseconds returns a float32
@@ -81236,11 +85080,9 @@ func (obj *flowDelay) validateObj(set_default bool) {
 }
 
 func (obj *flowDelay) setDefault() {
-	if obj.obj.Bytes == nil {
-		obj.SetBytes(0)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(FlowDelayChoice.BYTES)
+		obj.SetBytes(0)
 	}
 
 }
@@ -81425,6 +85267,19 @@ func (obj *flowDurationInterBurstGap) SetChoice(value FlowDurationInterBurstGapC
 	}
 	enumValue := snappipb.FlowDurationInterBurstGap_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "bytes" {
+		obj.obj.Bytes = nil
+	}
+
+	if string(value) != "nanoseconds" {
+		obj.obj.Nanoseconds = nil
+	}
+
+	if string(value) != "microseconds" {
+		obj.obj.Microseconds = nil
+	}
+
 	return obj
 }
 
@@ -81432,7 +85287,13 @@ func (obj *flowDurationInterBurstGap) SetChoice(value FlowDurationInterBurstGapC
 //  The amount of time between bursts expressed in bytes.
 //  A value of 0 indicates no gap between bursts.
 func (obj *flowDurationInterBurstGap) Bytes() float64 {
+
+	if obj.obj.Bytes == nil {
+		*obj.obj.Bytes = 12
+	}
+
 	return *obj.obj.Bytes
+
 }
 
 // Bytes returns a float64
@@ -81455,7 +85316,13 @@ func (obj *flowDurationInterBurstGap) SetBytes(value float64) FlowDurationInterB
 //  The amount of time between bursts expressed in nanoseconds.
 //  A value of 0 indicates no gap between bursts.
 func (obj *flowDurationInterBurstGap) Nanoseconds() float64 {
+
+	if obj.obj.Nanoseconds == nil {
+		*obj.obj.Nanoseconds = 96
+	}
+
 	return *obj.obj.Nanoseconds
+
 }
 
 // Nanoseconds returns a float64
@@ -81478,7 +85345,13 @@ func (obj *flowDurationInterBurstGap) SetNanoseconds(value float64) FlowDuration
 //  The amount of time between bursts expressed in microseconds.
 //  A value of 0 indicates no gap between bursts.
 func (obj *flowDurationInterBurstGap) Microseconds() float64 {
+
+	if obj.obj.Microseconds == nil {
+		*obj.obj.Microseconds = 0.096
+	}
+
 	return *obj.obj.Microseconds
+
 }
 
 // Microseconds returns a float64
@@ -81505,11 +85378,9 @@ func (obj *flowDurationInterBurstGap) validateObj(set_default bool) {
 }
 
 func (obj *flowDurationInterBurstGap) setDefault() {
-	if obj.obj.Bytes == nil {
-		obj.SetBytes(12)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(FlowDurationInterBurstGapChoice.BYTES)
+		obj.SetBytes(12)
 	}
 
 }
@@ -81678,7 +85549,13 @@ type LinkStatepriorityBandwidths interface {
 // Pb0 returns a int64
 //  Specifies the amount of bandwidth that can be reserved for the Priority 0.
 func (obj *linkStatepriorityBandwidths) Pb0() int64 {
+
+	if obj.obj.Pb0 == nil {
+		*obj.obj.Pb0 = 125000000
+	}
+
 	return *obj.obj.Pb0
+
 }
 
 // Pb0 returns a int64
@@ -81698,7 +85575,13 @@ func (obj *linkStatepriorityBandwidths) SetPb0(value int64) LinkStatepriorityBan
 // Pb1 returns a int64
 //  Specifies the amount of bandwidth that can be reserved for the Priority 1.
 func (obj *linkStatepriorityBandwidths) Pb1() int64 {
+
+	if obj.obj.Pb1 == nil {
+		*obj.obj.Pb1 = 125000000
+	}
+
 	return *obj.obj.Pb1
+
 }
 
 // Pb1 returns a int64
@@ -81718,7 +85601,13 @@ func (obj *linkStatepriorityBandwidths) SetPb1(value int64) LinkStatepriorityBan
 // Pb2 returns a int64
 //  Specify the amount of bandwidth that can be reserved for the Priority 2.
 func (obj *linkStatepriorityBandwidths) Pb2() int64 {
+
+	if obj.obj.Pb2 == nil {
+		*obj.obj.Pb2 = 125000000
+	}
+
 	return *obj.obj.Pb2
+
 }
 
 // Pb2 returns a int64
@@ -81738,7 +85627,13 @@ func (obj *linkStatepriorityBandwidths) SetPb2(value int64) LinkStatepriorityBan
 // Pb3 returns a int64
 //  Specifies the amount of bandwidth that can be reserved for the Priority 3.
 func (obj *linkStatepriorityBandwidths) Pb3() int64 {
+
+	if obj.obj.Pb3 == nil {
+		*obj.obj.Pb3 = 125000000
+	}
+
 	return *obj.obj.Pb3
+
 }
 
 // Pb3 returns a int64
@@ -81758,7 +85653,13 @@ func (obj *linkStatepriorityBandwidths) SetPb3(value int64) LinkStatepriorityBan
 // Pb4 returns a int64
 //  Specifies the amount of bandwidth that can be reserved for the Priority 4.
 func (obj *linkStatepriorityBandwidths) Pb4() int64 {
+
+	if obj.obj.Pb4 == nil {
+		*obj.obj.Pb4 = 125000000
+	}
+
 	return *obj.obj.Pb4
+
 }
 
 // Pb4 returns a int64
@@ -81778,7 +85679,13 @@ func (obj *linkStatepriorityBandwidths) SetPb4(value int64) LinkStatepriorityBan
 // Pb5 returns a int64
 //  Specifies the amount of bandwidth that can be reserved for the Priority 5.
 func (obj *linkStatepriorityBandwidths) Pb5() int64 {
+
+	if obj.obj.Pb5 == nil {
+		*obj.obj.Pb5 = 125000000
+	}
+
 	return *obj.obj.Pb5
+
 }
 
 // Pb5 returns a int64
@@ -81798,7 +85705,13 @@ func (obj *linkStatepriorityBandwidths) SetPb5(value int64) LinkStatepriorityBan
 // Pb6 returns a int64
 //  Specifies the amount of bandwidth that can be reserved for the Priority 6.
 func (obj *linkStatepriorityBandwidths) Pb6() int64 {
+
+	if obj.obj.Pb6 == nil {
+		*obj.obj.Pb6 = 125000000
+	}
+
 	return *obj.obj.Pb6
+
 }
 
 // Pb6 returns a int64
@@ -81818,7 +85731,13 @@ func (obj *linkStatepriorityBandwidths) SetPb6(value int64) LinkStatepriorityBan
 // Pb7 returns a int64
 //  Specifies the amount of bandwidth that can be reserved for the Priority 7.
 func (obj *linkStatepriorityBandwidths) Pb7() int64 {
+
+	if obj.obj.Pb7 == nil {
+		*obj.obj.Pb7 = 125000000
+	}
+
 	return *obj.obj.Pb7
+
 }
 
 // Pb7 returns a int64
@@ -82089,7 +86008,13 @@ type BgpAdvanced interface {
 // HoldTimeInterval returns a int32
 //  Number of seconds the sender proposes for the value of the Hold Timer.
 func (obj *bgpAdvanced) HoldTimeInterval() int32 {
+
+	if obj.obj.HoldTimeInterval == nil {
+		*obj.obj.HoldTimeInterval = 90
+	}
+
 	return *obj.obj.HoldTimeInterval
+
 }
 
 // HoldTimeInterval returns a int32
@@ -82109,7 +86034,13 @@ func (obj *bgpAdvanced) SetHoldTimeInterval(value int32) BgpAdvanced {
 // KeepAliveInterval returns a int32
 //  Number of seconds between transmissions of Keepalive messages by this peer.
 func (obj *bgpAdvanced) KeepAliveInterval() int32 {
+
+	if obj.obj.KeepAliveInterval == nil {
+		*obj.obj.KeepAliveInterval = 30
+	}
+
 	return *obj.obj.KeepAliveInterval
+
 }
 
 // KeepAliveInterval returns a int32
@@ -82129,7 +86060,13 @@ func (obj *bgpAdvanced) SetKeepAliveInterval(value int32) BgpAdvanced {
 // UpdateInterval returns a int32
 //  The time interval at which Update messages are sent to the DUT, expressed as the number of milliseconds between Update messages. The update interval 0 implies to send all the updates as fast as possible.
 func (obj *bgpAdvanced) UpdateInterval() int32 {
+
+	if obj.obj.UpdateInterval == nil {
+		*obj.obj.UpdateInterval = 0
+	}
+
 	return *obj.obj.UpdateInterval
+
 }
 
 // UpdateInterval returns a int32
@@ -82149,7 +86086,13 @@ func (obj *bgpAdvanced) SetUpdateInterval(value int32) BgpAdvanced {
 // TimeToLive returns a int32
 //  The limited number of iterations that a unit of data can experience before the data is discarded. This is placed in the TTL field in the IP header of the  transmitted packets.
 func (obj *bgpAdvanced) TimeToLive() int32 {
+
+	if obj.obj.TimeToLive == nil {
+		*obj.obj.TimeToLive = 64
+	}
+
 	return *obj.obj.TimeToLive
+
 }
 
 // TimeToLive returns a int32
@@ -82169,7 +86112,9 @@ func (obj *bgpAdvanced) SetTimeToLive(value int32) BgpAdvanced {
 // Md5Key returns a string
 //  The value to be used as a secret MD5 key for authentication. If not configured, MD5 authentication will not be enabled.
 func (obj *bgpAdvanced) Md5Key() string {
+
 	return *obj.obj.Md5Key
+
 }
 
 // Md5Key returns a string
@@ -82424,7 +86369,13 @@ type BgpCapability interface {
 // Ipv4Unicast returns a bool
 //  Support for the IPv4 Unicast address family.
 func (obj *bgpCapability) Ipv4Unicast() bool {
+
+	if obj.obj.Ipv4Unicast == nil {
+		*obj.obj.Ipv4Unicast = true
+	}
+
 	return *obj.obj.Ipv4Unicast
+
 }
 
 // Ipv4Unicast returns a bool
@@ -82444,7 +86395,13 @@ func (obj *bgpCapability) SetIpv4Unicast(value bool) BgpCapability {
 // Ipv4Multicast returns a bool
 //  Support for the IPv4 Multicast address family.
 func (obj *bgpCapability) Ipv4Multicast() bool {
+
+	if obj.obj.Ipv4Multicast == nil {
+		*obj.obj.Ipv4Multicast = false
+	}
+
 	return *obj.obj.Ipv4Multicast
+
 }
 
 // Ipv4Multicast returns a bool
@@ -82464,7 +86421,13 @@ func (obj *bgpCapability) SetIpv4Multicast(value bool) BgpCapability {
 // Ipv6Unicast returns a bool
 //  Support for the IPv4 Unicast address family.
 func (obj *bgpCapability) Ipv6Unicast() bool {
+
+	if obj.obj.Ipv6Unicast == nil {
+		*obj.obj.Ipv6Unicast = true
+	}
+
 	return *obj.obj.Ipv6Unicast
+
 }
 
 // Ipv6Unicast returns a bool
@@ -82484,7 +86447,13 @@ func (obj *bgpCapability) SetIpv6Unicast(value bool) BgpCapability {
 // Ipv6Multicast returns a bool
 //  Support for the IPv6 Multicast address family.
 func (obj *bgpCapability) Ipv6Multicast() bool {
+
+	if obj.obj.Ipv6Multicast == nil {
+		*obj.obj.Ipv6Multicast = false
+	}
+
 	return *obj.obj.Ipv6Multicast
+
 }
 
 // Ipv6Multicast returns a bool
@@ -82508,7 +86477,13 @@ func (obj *bgpCapability) SetIpv6Multicast(value bool) BgpCapability {
 //  RFC6624 - Layer 2 Virtual Private Networks using BGP for Auto-Discovery
 //  and Signaling.
 func (obj *bgpCapability) Vpls() bool {
+
+	if obj.obj.Vpls == nil {
+		*obj.obj.Vpls = false
+	}
+
 	return *obj.obj.Vpls
+
 }
 
 // Vpls returns a bool
@@ -82536,7 +86511,13 @@ func (obj *bgpCapability) SetVpls(value bool) BgpCapability {
 // RouteRefresh returns a bool
 //  Support for the route refresh capabilities. Route Refresh allows the dynamic exchange of route refresh requests  and routing information between BGP peers and the subsequent re-advertisement  of the outbound or inbound routing table.
 func (obj *bgpCapability) RouteRefresh() bool {
+
+	if obj.obj.RouteRefresh == nil {
+		*obj.obj.RouteRefresh = true
+	}
+
 	return *obj.obj.RouteRefresh
+
 }
 
 // RouteRefresh returns a bool
@@ -82556,7 +86537,13 @@ func (obj *bgpCapability) SetRouteRefresh(value bool) BgpCapability {
 // RouteConstraint returns a bool
 //  Supports for the route constraint capabilities. Route Constraint allows the advertisement of Route Target Membership  information. The BGP peers exchange Route Target Reachability Information,  which is used to build a route distribution graph.  This limits the propagation of VPN Network Layer Reachability Information (NLRI) between different autonomous systems  or distinct clusters of the same autonomous system. This is supported for Layer 3 Virtual Private Network scenario.
 func (obj *bgpCapability) RouteConstraint() bool {
+
+	if obj.obj.RouteConstraint == nil {
+		*obj.obj.RouteConstraint = false
+	}
+
 	return *obj.obj.RouteConstraint
+
 }
 
 // RouteConstraint returns a bool
@@ -82576,7 +86563,13 @@ func (obj *bgpCapability) SetRouteConstraint(value bool) BgpCapability {
 // LinkStateNonVpn returns a bool
 //  Support for BGP Link State for ISIS and OSPF.
 func (obj *bgpCapability) LinkStateNonVpn() bool {
+
+	if obj.obj.LinkStateNonVpn == nil {
+		*obj.obj.LinkStateNonVpn = false
+	}
+
 	return *obj.obj.LinkStateNonVpn
+
 }
 
 // LinkStateNonVpn returns a bool
@@ -82596,7 +86589,13 @@ func (obj *bgpCapability) SetLinkStateNonVpn(value bool) BgpCapability {
 // LinkStateVpn returns a bool
 //  Capability advertisement of BGP Link State for VPNs.
 func (obj *bgpCapability) LinkStateVpn() bool {
+
+	if obj.obj.LinkStateVpn == nil {
+		*obj.obj.LinkStateVpn = false
+	}
+
 	return *obj.obj.LinkStateVpn
+
 }
 
 // LinkStateVpn returns a bool
@@ -82616,7 +86615,13 @@ func (obj *bgpCapability) SetLinkStateVpn(value bool) BgpCapability {
 // Evpn returns a bool
 //  Support for the EVPN address family.
 func (obj *bgpCapability) Evpn() bool {
+
+	if obj.obj.Evpn == nil {
+		*obj.obj.Evpn = false
+	}
+
 	return *obj.obj.Evpn
+
 }
 
 // Evpn returns a bool
@@ -82636,7 +86641,13 @@ func (obj *bgpCapability) SetEvpn(value bool) BgpCapability {
 // ExtendedNextHopEncoding returns a bool
 //  Support for extended Next Hop Encoding for Nexthop field in  IPv4 routes advertisement.  This allows IPv4 routes being advertised by IPv6 peers to  include an IPv6 Nexthop.
 func (obj *bgpCapability) ExtendedNextHopEncoding() bool {
+
+	if obj.obj.ExtendedNextHopEncoding == nil {
+		*obj.obj.ExtendedNextHopEncoding = false
+	}
+
 	return *obj.obj.ExtendedNextHopEncoding
+
 }
 
 // ExtendedNextHopEncoding returns a bool
@@ -82656,7 +86667,13 @@ func (obj *bgpCapability) SetExtendedNextHopEncoding(value bool) BgpCapability {
 // Ipv4MulticastVpn returns a bool
 //  Support for the IPv4 Multicast VPN address family.
 func (obj *bgpCapability) Ipv4MulticastVpn() bool {
+
+	if obj.obj.Ipv4MulticastVpn == nil {
+		*obj.obj.Ipv4MulticastVpn = false
+	}
+
 	return *obj.obj.Ipv4MulticastVpn
+
 }
 
 // Ipv4MulticastVpn returns a bool
@@ -82676,7 +86693,13 @@ func (obj *bgpCapability) SetIpv4MulticastVpn(value bool) BgpCapability {
 // Ipv4MplsVpn returns a bool
 //  Support for the IPv4 MPLS L3VPN address family.
 func (obj *bgpCapability) Ipv4MplsVpn() bool {
+
+	if obj.obj.Ipv4MplsVpn == nil {
+		*obj.obj.Ipv4MplsVpn = false
+	}
+
 	return *obj.obj.Ipv4MplsVpn
+
 }
 
 // Ipv4MplsVpn returns a bool
@@ -82696,7 +86719,13 @@ func (obj *bgpCapability) SetIpv4MplsVpn(value bool) BgpCapability {
 // Ipv4Mdt returns a bool
 //  Supports for IPv4 MDT address family messages.
 func (obj *bgpCapability) Ipv4Mdt() bool {
+
+	if obj.obj.Ipv4Mdt == nil {
+		*obj.obj.Ipv4Mdt = false
+	}
+
 	return *obj.obj.Ipv4Mdt
+
 }
 
 // Ipv4Mdt returns a bool
@@ -82716,7 +86745,13 @@ func (obj *bgpCapability) SetIpv4Mdt(value bool) BgpCapability {
 // Ipv4MulticastMplsVpn returns a bool
 //  Support for the IPv4 Multicast VPN address family.
 func (obj *bgpCapability) Ipv4MulticastMplsVpn() bool {
+
+	if obj.obj.Ipv4MulticastMplsVpn == nil {
+		*obj.obj.Ipv4MulticastMplsVpn = false
+	}
+
 	return *obj.obj.Ipv4MulticastMplsVpn
+
 }
 
 // Ipv4MulticastMplsVpn returns a bool
@@ -82736,7 +86771,13 @@ func (obj *bgpCapability) SetIpv4MulticastMplsVpn(value bool) BgpCapability {
 // Ipv4UnicastFlowSpec returns a bool
 //  Support for propagation of IPv4 unicast flow specification rules.
 func (obj *bgpCapability) Ipv4UnicastFlowSpec() bool {
+
+	if obj.obj.Ipv4UnicastFlowSpec == nil {
+		*obj.obj.Ipv4UnicastFlowSpec = false
+	}
+
 	return *obj.obj.Ipv4UnicastFlowSpec
+
 }
 
 // Ipv4UnicastFlowSpec returns a bool
@@ -82756,7 +86797,13 @@ func (obj *bgpCapability) SetIpv4UnicastFlowSpec(value bool) BgpCapability {
 // Ipv4SrTePolicy returns a bool
 //  Support for IPv4 SRTE policy.
 func (obj *bgpCapability) Ipv4SrTePolicy() bool {
+
+	if obj.obj.Ipv4SrTePolicy == nil {
+		*obj.obj.Ipv4SrTePolicy = false
+	}
+
 	return *obj.obj.Ipv4SrTePolicy
+
 }
 
 // Ipv4SrTePolicy returns a bool
@@ -82776,7 +86823,13 @@ func (obj *bgpCapability) SetIpv4SrTePolicy(value bool) BgpCapability {
 // Ipv4UnicastAddPath returns a bool
 //  Support for IPv4 Unicast Add Path Capability.
 func (obj *bgpCapability) Ipv4UnicastAddPath() bool {
+
+	if obj.obj.Ipv4UnicastAddPath == nil {
+		*obj.obj.Ipv4UnicastAddPath = false
+	}
+
 	return *obj.obj.Ipv4UnicastAddPath
+
 }
 
 // Ipv4UnicastAddPath returns a bool
@@ -82796,7 +86849,13 @@ func (obj *bgpCapability) SetIpv4UnicastAddPath(value bool) BgpCapability {
 // Ipv6MulticastVpn returns a bool
 //  Support for the IPv6 Multicast VPN address family.
 func (obj *bgpCapability) Ipv6MulticastVpn() bool {
+
+	if obj.obj.Ipv6MulticastVpn == nil {
+		*obj.obj.Ipv6MulticastVpn = false
+	}
+
 	return *obj.obj.Ipv6MulticastVpn
+
 }
 
 // Ipv6MulticastVpn returns a bool
@@ -82816,7 +86875,13 @@ func (obj *bgpCapability) SetIpv6MulticastVpn(value bool) BgpCapability {
 // Ipv6MplsVpn returns a bool
 //  Support for the IPv6 MPLS L3VPN address family.
 func (obj *bgpCapability) Ipv6MplsVpn() bool {
+
+	if obj.obj.Ipv6MplsVpn == nil {
+		*obj.obj.Ipv6MplsVpn = false
+	}
+
 	return *obj.obj.Ipv6MplsVpn
+
 }
 
 // Ipv6MplsVpn returns a bool
@@ -82836,7 +86901,13 @@ func (obj *bgpCapability) SetIpv6MplsVpn(value bool) BgpCapability {
 // Ipv6Mdt returns a bool
 //  Support for IPv6 MDT address family messages.
 func (obj *bgpCapability) Ipv6Mdt() bool {
+
+	if obj.obj.Ipv6Mdt == nil {
+		*obj.obj.Ipv6Mdt = false
+	}
+
 	return *obj.obj.Ipv6Mdt
+
 }
 
 // Ipv6Mdt returns a bool
@@ -82856,7 +86927,13 @@ func (obj *bgpCapability) SetIpv6Mdt(value bool) BgpCapability {
 // Ipv6MulticastMplsVpn returns a bool
 //  Support for the IPv6 Multicast VPN address family.
 func (obj *bgpCapability) Ipv6MulticastMplsVpn() bool {
+
+	if obj.obj.Ipv6MulticastMplsVpn == nil {
+		*obj.obj.Ipv6MulticastMplsVpn = false
+	}
+
 	return *obj.obj.Ipv6MulticastMplsVpn
+
 }
 
 // Ipv6MulticastMplsVpn returns a bool
@@ -82876,7 +86953,13 @@ func (obj *bgpCapability) SetIpv6MulticastMplsVpn(value bool) BgpCapability {
 // Ipv6UnicastFlowSpec returns a bool
 //  Support for propagation of IPv6 unicast flow specification rules.
 func (obj *bgpCapability) Ipv6UnicastFlowSpec() bool {
+
+	if obj.obj.Ipv6UnicastFlowSpec == nil {
+		*obj.obj.Ipv6UnicastFlowSpec = false
+	}
+
 	return *obj.obj.Ipv6UnicastFlowSpec
+
 }
 
 // Ipv6UnicastFlowSpec returns a bool
@@ -82896,7 +86979,13 @@ func (obj *bgpCapability) SetIpv6UnicastFlowSpec(value bool) BgpCapability {
 // Ipv6SrTePolicy returns a bool
 //  Support for IPv6 SRTE policy.
 func (obj *bgpCapability) Ipv6SrTePolicy() bool {
+
+	if obj.obj.Ipv6SrTePolicy == nil {
+		*obj.obj.Ipv6SrTePolicy = false
+	}
+
 	return *obj.obj.Ipv6SrTePolicy
+
 }
 
 // Ipv6SrTePolicy returns a bool
@@ -82916,7 +87005,13 @@ func (obj *bgpCapability) SetIpv6SrTePolicy(value bool) BgpCapability {
 // Ipv6UnicastAddPath returns a bool
 //  Support for IPv6 Unicast Add Path Capability.
 func (obj *bgpCapability) Ipv6UnicastAddPath() bool {
+
+	if obj.obj.Ipv6UnicastAddPath == nil {
+		*obj.obj.Ipv6UnicastAddPath = false
+	}
+
 	return *obj.obj.Ipv6UnicastAddPath
+
 }
 
 // Ipv6UnicastAddPath returns a bool
@@ -83247,6 +87342,7 @@ func (obj *bgpV4RouteRange) SetNextHopMode(value BgpV4RouteRangeNextHopModeEnum)
 	}
 	enumValue := snappipb.BgpV4RouteRange_NextHopMode_Enum(intValue)
 	obj.obj.NextHopMode = &enumValue
+
 	return obj
 }
 
@@ -83279,13 +87375,20 @@ func (obj *bgpV4RouteRange) SetNextHopAddressType(value BgpV4RouteRangeNextHopAd
 	}
 	enumValue := snappipb.BgpV4RouteRange_NextHopAddressType_Enum(intValue)
 	obj.obj.NextHopAddressType = &enumValue
+
 	return obj
 }
 
 // NextHopIpv4Address returns a string
 //  The IPv4 address of the next hop if the Nexthop Mode is manual and the Nexthop type is IPv4. If BGP peer is of type IPv6, Nexthop Encoding capability should be enabled.
 func (obj *bgpV4RouteRange) NextHopIpv4Address() string {
+
+	if obj.obj.NextHopIpv4Address == nil {
+		*obj.obj.NextHopIpv4Address = "0.0.0.0"
+	}
+
 	return *obj.obj.NextHopIpv4Address
+
 }
 
 // NextHopIpv4Address returns a string
@@ -83305,7 +87408,13 @@ func (obj *bgpV4RouteRange) SetNextHopIpv4Address(value string) BgpV4RouteRange 
 // NextHopIpv6Address returns a string
 //  The IPv6 address of the next hop if the Nexthop Mode is manual and the Nexthop type is IPv6.
 func (obj *bgpV4RouteRange) NextHopIpv6Address() string {
+
+	if obj.obj.NextHopIpv6Address == nil {
+		*obj.obj.NextHopIpv6Address = "::0"
+	}
+
 	return *obj.obj.NextHopIpv6Address
+
 }
 
 // NextHopIpv6Address returns a string
@@ -83428,6 +87537,7 @@ func (obj *bgpV4RouteRange) SetAddPath(value BgpAddPath) BgpV4RouteRange {
 // Name returns a string
 //  Globally unique name of an object. It also serves as the primary key for arrays of objects.
 func (obj *bgpV4RouteRange) Name() string {
+
 	return obj.obj.Name
 }
 
@@ -83487,23 +87597,19 @@ func (obj *bgpV4RouteRange) validateObj(set_default bool) {
 }
 
 func (obj *bgpV4RouteRange) setDefault() {
-	if obj.obj.Addresses == nil {
-		obj.Addresses()
-	}
 	if obj.obj.NextHopMode == nil {
 		obj.SetNextHopMode(BgpV4RouteRangeNextHopMode.LOCAL_IP)
+
 	}
 	if obj.obj.NextHopAddressType == nil {
 		obj.SetNextHopAddressType(BgpV4RouteRangeNextHopAddressType.IPV4)
+
 	}
 	if obj.obj.NextHopIpv4Address == nil {
 		obj.SetNextHopIpv4Address("0.0.0.0")
 	}
 	if obj.obj.NextHopIpv6Address == nil {
 		obj.SetNextHopIpv6Address("::0")
-	}
-	if obj.obj.Communities == nil {
-		obj.Communities()
 	}
 
 }
@@ -83736,6 +87842,7 @@ func (obj *bgpV6RouteRange) SetNextHopMode(value BgpV6RouteRangeNextHopModeEnum)
 	}
 	enumValue := snappipb.BgpV6RouteRange_NextHopMode_Enum(intValue)
 	obj.obj.NextHopMode = &enumValue
+
 	return obj
 }
 
@@ -83768,13 +87875,20 @@ func (obj *bgpV6RouteRange) SetNextHopAddressType(value BgpV6RouteRangeNextHopAd
 	}
 	enumValue := snappipb.BgpV6RouteRange_NextHopAddressType_Enum(intValue)
 	obj.obj.NextHopAddressType = &enumValue
+
 	return obj
 }
 
 // NextHopIpv4Address returns a string
 //  The IPv4 address of the next hop if the Nexthop Mode is manual and the Nexthop type is IPv4. If BGP peer is of type IPv6, Nexthop Encoding capability should be enabled.
 func (obj *bgpV6RouteRange) NextHopIpv4Address() string {
+
+	if obj.obj.NextHopIpv4Address == nil {
+		*obj.obj.NextHopIpv4Address = "0.0.0.0"
+	}
+
 	return *obj.obj.NextHopIpv4Address
+
 }
 
 // NextHopIpv4Address returns a string
@@ -83794,7 +87908,13 @@ func (obj *bgpV6RouteRange) SetNextHopIpv4Address(value string) BgpV6RouteRange 
 // NextHopIpv6Address returns a string
 //  The IPv6 address of the next hop if the Nexthop Mode is manual and the Nexthop type is IPv6.
 func (obj *bgpV6RouteRange) NextHopIpv6Address() string {
+
+	if obj.obj.NextHopIpv6Address == nil {
+		*obj.obj.NextHopIpv6Address = "::0"
+	}
+
 	return *obj.obj.NextHopIpv6Address
+
 }
 
 // NextHopIpv6Address returns a string
@@ -83917,6 +88037,7 @@ func (obj *bgpV6RouteRange) SetAddPath(value BgpAddPath) BgpV6RouteRange {
 // Name returns a string
 //  Globally unique name of an object. It also serves as the primary key for arrays of objects.
 func (obj *bgpV6RouteRange) Name() string {
+
 	return obj.obj.Name
 }
 
@@ -83976,23 +88097,19 @@ func (obj *bgpV6RouteRange) validateObj(set_default bool) {
 }
 
 func (obj *bgpV6RouteRange) setDefault() {
-	if obj.obj.Addresses == nil {
-		obj.Addresses()
-	}
 	if obj.obj.NextHopMode == nil {
 		obj.SetNextHopMode(BgpV6RouteRangeNextHopMode.LOCAL_IP)
+
 	}
 	if obj.obj.NextHopAddressType == nil {
 		obj.SetNextHopAddressType(BgpV6RouteRangeNextHopAddressType.IPV6)
+
 	}
 	if obj.obj.NextHopIpv4Address == nil {
 		obj.SetNextHopIpv4Address("0.0.0.0")
 	}
 	if obj.obj.NextHopIpv6Address == nil {
 		obj.SetNextHopIpv6Address("::0")
-	}
-	if obj.obj.Communities == nil {
-		obj.Communities()
 	}
 
 }
@@ -84174,7 +88291,13 @@ type BgpSrteV4Policy interface {
 // Distinguisher returns a int64
 //  4-octet value uniquely identifying the policy in the context of (color, endpoint) tuple. It is used by the SR Policy originator to make unique (from an NLRI perspective)  both for multiple candidate  paths of the same SR Policy as well as candidate paths  of different SR Policies (i.e. with different segment list) with the same Color  and Endpoint but meant for different head-ends.
 func (obj *bgpSrteV4Policy) Distinguisher() int64 {
+
+	if obj.obj.Distinguisher == nil {
+		*obj.obj.Distinguisher = 1
+	}
+
 	return *obj.obj.Distinguisher
+
 }
 
 // Distinguisher returns a int64
@@ -84194,7 +88317,13 @@ func (obj *bgpSrteV4Policy) SetDistinguisher(value int64) BgpSrteV4Policy {
 // Color returns a int64
 //  Policy color is used to match the color of the destination prefixes to steer traffic into the SR Policy.
 func (obj *bgpSrteV4Policy) Color() int64 {
+
+	if obj.obj.Color == nil {
+		*obj.obj.Color = 100
+	}
+
 	return *obj.obj.Color
+
 }
 
 // Color returns a int64
@@ -84214,6 +88343,7 @@ func (obj *bgpSrteV4Policy) SetColor(value int64) BgpSrteV4Policy {
 // Ipv4Endpoint returns a string
 //  Specifies a single node or a set of nodes (e.g. an anycast address). It is selected on the basis of the SR Policy type (AFI).
 func (obj *bgpSrteV4Policy) Ipv4Endpoint() string {
+
 	return obj.obj.Ipv4Endpoint
 }
 
@@ -84254,6 +88384,7 @@ func (obj *bgpSrteV4Policy) SetNextHopMode(value BgpSrteV4PolicyNextHopModeEnum)
 	}
 	enumValue := snappipb.BgpSrteV4Policy_NextHopMode_Enum(intValue)
 	obj.obj.NextHopMode = &enumValue
+
 	return obj
 }
 
@@ -84286,13 +88417,16 @@ func (obj *bgpSrteV4Policy) SetNextHopAddressType(value BgpSrteV4PolicyNextHopAd
 	}
 	enumValue := snappipb.BgpSrteV4Policy_NextHopAddressType_Enum(intValue)
 	obj.obj.NextHopAddressType = &enumValue
+
 	return obj
 }
 
 // NextHopIpv4Address returns a string
 //  The IPv4 address of the next hop if the Nexthop type 'next_hop_mode' is 'manual' and the Nexthop type 'next_hop_address_type' is IPv4. If BGP peer is of type IPv6, Nexthop Encoding capability extended_next_hop_encoding should be enabled.
 func (obj *bgpSrteV4Policy) NextHopIpv4Address() string {
+
 	return *obj.obj.NextHopIpv4Address
+
 }
 
 // NextHopIpv4Address returns a string
@@ -84312,7 +88446,9 @@ func (obj *bgpSrteV4Policy) SetNextHopIpv4Address(value string) BgpSrteV4Policy 
 // NextHopIpv6Address returns a string
 //  The IPv6 address of the next hop if the Nexthop Mode 'next_hop_address_type' is 'manual' and the Nexthop type 'next_hop_address_type' is IPv6.
 func (obj *bgpSrteV4Policy) NextHopIpv6Address() string {
+
 	return *obj.obj.NextHopIpv6Address
+
 }
 
 // NextHopIpv6Address returns a string
@@ -84503,6 +88639,7 @@ func (obj *bgpSrteV4PolicyBgpSrteV4TunnelTlvIter) Items() []BgpSrteV4TunnelTlv {
 // Name returns a string
 //  Globally unique name of an object. It also serves as the primary key for arrays of objects.
 func (obj *bgpSrteV4Policy) Name() string {
+
 	return obj.obj.Name
 }
 
@@ -84517,7 +88654,13 @@ func (obj *bgpSrteV4Policy) SetName(value string) BgpSrteV4Policy {
 // Active returns a bool
 //  If enabled means that this part of the configuration including any active 'children' nodes will be advertised to peer.  If disabled, this means that though config is present, it is not taking any part of the test but can be activated at run-time to advertise just this part of the configuration to the peer.
 func (obj *bgpSrteV4Policy) Active() bool {
+
+	if obj.obj.Active == nil {
+		*obj.obj.Active = true
+	}
+
 	return *obj.obj.Active
+
 }
 
 // Active returns a bool
@@ -84623,18 +88766,11 @@ func (obj *bgpSrteV4Policy) setDefault() {
 	}
 	if obj.obj.NextHopMode == nil {
 		obj.SetNextHopMode(BgpSrteV4PolicyNextHopMode.LOCAL_IP)
+
 	}
 	if obj.obj.NextHopAddressType == nil {
 		obj.SetNextHopAddressType(BgpSrteV4PolicyNextHopAddressType.IPV4)
-	}
-	if obj.obj.Communities == nil {
-		obj.Communities()
-	}
-	if obj.obj.ExtCommunities == nil {
-		obj.ExtCommunities()
-	}
-	if obj.obj.TunnelTlvs == nil {
-		obj.TunnelTlvs()
+
 	}
 	if obj.obj.Active == nil {
 		obj.SetActive(true)
@@ -84819,7 +88955,13 @@ type BgpSrteV6Policy interface {
 // Distinguisher returns a int64
 //  Identifies the policy in the context of (color and endpoint) tuple.  It is used by the SR Policy originator to make unique multiple  occurrences of the same SR Policy.
 func (obj *bgpSrteV6Policy) Distinguisher() int64 {
+
+	if obj.obj.Distinguisher == nil {
+		*obj.obj.Distinguisher = 1
+	}
+
 	return *obj.obj.Distinguisher
+
 }
 
 // Distinguisher returns a int64
@@ -84839,7 +88981,13 @@ func (obj *bgpSrteV6Policy) SetDistinguisher(value int64) BgpSrteV6Policy {
 // Color returns a int64
 //  Identifies the policy. It is used to match the color of the  destination prefixes to steer traffic into the SR Policy.
 func (obj *bgpSrteV6Policy) Color() int64 {
+
+	if obj.obj.Color == nil {
+		*obj.obj.Color = 100
+	}
+
 	return *obj.obj.Color
+
 }
 
 // Color returns a int64
@@ -84859,6 +89007,7 @@ func (obj *bgpSrteV6Policy) SetColor(value int64) BgpSrteV6Policy {
 // Ipv6Endpoint returns a string
 //  Specifies a single node or a set of nodes (e.g., an anycast address). It is selected on the basis of the SR Policy type (AFI).
 func (obj *bgpSrteV6Policy) Ipv6Endpoint() string {
+
 	return obj.obj.Ipv6Endpoint
 }
 
@@ -84899,6 +89048,7 @@ func (obj *bgpSrteV6Policy) SetNextHopMode(value BgpSrteV6PolicyNextHopModeEnum)
 	}
 	enumValue := snappipb.BgpSrteV6Policy_NextHopMode_Enum(intValue)
 	obj.obj.NextHopMode = &enumValue
+
 	return obj
 }
 
@@ -84931,13 +89081,20 @@ func (obj *bgpSrteV6Policy) SetNextHopAddressType(value BgpSrteV6PolicyNextHopAd
 	}
 	enumValue := snappipb.BgpSrteV6Policy_NextHopAddressType_Enum(intValue)
 	obj.obj.NextHopAddressType = &enumValue
+
 	return obj
 }
 
 // NextHopIpv4Address returns a string
 //  The IPv4 address of the Nexthop if the 'next_hop_mode' is 'manual' and the Nexthop type 'next_hop_address_type' is IPv4. If BGP peer is of type IPv6, Nexthop Encoding capability extended_next_hop_encoding should be enabled.
 func (obj *bgpSrteV6Policy) NextHopIpv4Address() string {
+
+	if obj.obj.NextHopIpv4Address == nil {
+		*obj.obj.NextHopIpv4Address = "0.0.0.0"
+	}
+
 	return *obj.obj.NextHopIpv4Address
+
 }
 
 // NextHopIpv4Address returns a string
@@ -84957,7 +89114,13 @@ func (obj *bgpSrteV6Policy) SetNextHopIpv4Address(value string) BgpSrteV6Policy 
 // NextHopIpv6Address returns a string
 //  The IPv6 address of the next hop if the Nexthop Mode 'next_hop_address_type' is 'manual' and the Nexthop type 'next_hop_address_type' is IPv6.
 func (obj *bgpSrteV6Policy) NextHopIpv6Address() string {
+
+	if obj.obj.NextHopIpv6Address == nil {
+		*obj.obj.NextHopIpv6Address = "::0"
+	}
+
 	return *obj.obj.NextHopIpv6Address
+
 }
 
 // NextHopIpv6Address returns a string
@@ -85148,6 +89311,7 @@ func (obj *bgpSrteV6PolicyBgpSrteV6TunnelTlvIter) Items() []BgpSrteV6TunnelTlv {
 // Name returns a string
 //  Globally unique name of an object. It also serves as the primary key for arrays of objects.
 func (obj *bgpSrteV6Policy) Name() string {
+
 	return obj.obj.Name
 }
 
@@ -85162,7 +89326,13 @@ func (obj *bgpSrteV6Policy) SetName(value string) BgpSrteV6Policy {
 // Active returns a bool
 //  If enabled means that this part of the configuration including any active 'children' nodes will be advertised to peer.  If disabled, this means that though config is present, it is not taking any part of the test but can be activated at run-time to advertise just this part of the configuration to the peer.
 func (obj *bgpSrteV6Policy) Active() bool {
+
+	if obj.obj.Active == nil {
+		*obj.obj.Active = true
+	}
+
 	return *obj.obj.Active
+
 }
 
 // Active returns a bool
@@ -85268,24 +89438,17 @@ func (obj *bgpSrteV6Policy) setDefault() {
 	}
 	if obj.obj.NextHopMode == nil {
 		obj.SetNextHopMode(BgpSrteV6PolicyNextHopMode.LOCAL_IP)
+
 	}
 	if obj.obj.NextHopAddressType == nil {
 		obj.SetNextHopAddressType(BgpSrteV6PolicyNextHopAddressType.IPV6)
+
 	}
 	if obj.obj.NextHopIpv4Address == nil {
 		obj.SetNextHopIpv4Address("0.0.0.0")
 	}
 	if obj.obj.NextHopIpv6Address == nil {
 		obj.SetNextHopIpv6Address("::0")
-	}
-	if obj.obj.Communities == nil {
-		obj.Communities()
-	}
-	if obj.obj.Extcommunities == nil {
-		obj.Extcommunities()
-	}
-	if obj.obj.TunnelTlvs == nil {
-		obj.TunnelTlvs()
 	}
 	if obj.obj.Active == nil {
 		obj.SetActive(true)
@@ -85457,7 +89620,13 @@ type BgpV6SegmentRouting interface {
 // IngressSupportsVpn returns a bool
 //  TBD
 func (obj *bgpV6SegmentRouting) IngressSupportsVpn() bool {
+
+	if obj.obj.IngressSupportsVpn == nil {
+		*obj.obj.IngressSupportsVpn = false
+	}
+
 	return *obj.obj.IngressSupportsVpn
+
 }
 
 // IngressSupportsVpn returns a bool
@@ -85477,7 +89646,13 @@ func (obj *bgpV6SegmentRouting) SetIngressSupportsVpn(value bool) BgpV6SegmentRo
 // ReducedEncapsulation returns a bool
 //  TBD
 func (obj *bgpV6SegmentRouting) ReducedEncapsulation() bool {
+
+	if obj.obj.ReducedEncapsulation == nil {
+		*obj.obj.ReducedEncapsulation = false
+	}
+
 	return *obj.obj.ReducedEncapsulation
+
 }
 
 // ReducedEncapsulation returns a bool
@@ -85497,7 +89672,13 @@ func (obj *bgpV6SegmentRouting) SetReducedEncapsulation(value bool) BgpV6Segment
 // CopyTimeToLive returns a bool
 //  TBD
 func (obj *bgpV6SegmentRouting) CopyTimeToLive() bool {
+
+	if obj.obj.CopyTimeToLive == nil {
+		*obj.obj.CopyTimeToLive = false
+	}
+
 	return *obj.obj.CopyTimeToLive
+
 }
 
 // CopyTimeToLive returns a bool
@@ -85517,7 +89698,13 @@ func (obj *bgpV6SegmentRouting) SetCopyTimeToLive(value bool) BgpV6SegmentRoutin
 // TimeToLive returns a int32
 //  TBD
 func (obj *bgpV6SegmentRouting) TimeToLive() int32 {
+
+	if obj.obj.TimeToLive == nil {
+		*obj.obj.TimeToLive = 0
+	}
+
 	return *obj.obj.TimeToLive
+
 }
 
 // TimeToLive returns a int32
@@ -85537,7 +89724,13 @@ func (obj *bgpV6SegmentRouting) SetTimeToLive(value int32) BgpV6SegmentRouting {
 // MaxSidsPerSrh returns a int32
 //  TBD
 func (obj *bgpV6SegmentRouting) MaxSidsPerSrh() int32 {
+
+	if obj.obj.MaxSidsPerSrh == nil {
+		*obj.obj.MaxSidsPerSrh = 0
+	}
+
 	return *obj.obj.MaxSidsPerSrh
+
 }
 
 // MaxSidsPerSrh returns a int32
@@ -85557,7 +89750,13 @@ func (obj *bgpV6SegmentRouting) SetMaxSidsPerSrh(value int32) BgpV6SegmentRoutin
 // AutoGenerateSegmentLeftValue returns a bool
 //  TBD
 func (obj *bgpV6SegmentRouting) AutoGenerateSegmentLeftValue() bool {
+
+	if obj.obj.AutoGenerateSegmentLeftValue == nil {
+		*obj.obj.AutoGenerateSegmentLeftValue = false
+	}
+
 	return *obj.obj.AutoGenerateSegmentLeftValue
+
 }
 
 // AutoGenerateSegmentLeftValue returns a bool
@@ -85577,7 +89776,13 @@ func (obj *bgpV6SegmentRouting) SetAutoGenerateSegmentLeftValue(value bool) BgpV
 // SegmentLeftValue returns a int32
 //  TBD
 func (obj *bgpV6SegmentRouting) SegmentLeftValue() int32 {
+
+	if obj.obj.SegmentLeftValue == nil {
+		*obj.obj.SegmentLeftValue = 0
+	}
+
 	return *obj.obj.SegmentLeftValue
+
 }
 
 // SegmentLeftValue returns a int32
@@ -85597,7 +89802,13 @@ func (obj *bgpV6SegmentRouting) SetSegmentLeftValue(value int32) BgpV6SegmentRou
 // AdvertiseSrTePolicy returns a bool
 //  TBD
 func (obj *bgpV6SegmentRouting) AdvertiseSrTePolicy() bool {
+
+	if obj.obj.AdvertiseSrTePolicy == nil {
+		*obj.obj.AdvertiseSrTePolicy = false
+	}
+
 	return *obj.obj.AdvertiseSrTePolicy
+
 }
 
 // AdvertiseSrTePolicy returns a bool
@@ -85798,7 +90009,13 @@ type PatternFlowEthernetDstCounter interface {
 // Start returns a string
 //  description is TBD
 func (obj *patternFlowEthernetDstCounter) Start() string {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = "00:00:00:00:00:00"
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a string
@@ -85818,7 +90035,13 @@ func (obj *patternFlowEthernetDstCounter) SetStart(value string) PatternFlowEthe
 // Step returns a string
 //  description is TBD
 func (obj *patternFlowEthernetDstCounter) Step() string {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = "00:00:00:00:00:01"
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a string
@@ -85838,7 +90061,13 @@ func (obj *patternFlowEthernetDstCounter) SetStep(value string) PatternFlowEther
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowEthernetDstCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -86038,7 +90267,13 @@ type PatternFlowEthernetSrcCounter interface {
 // Start returns a string
 //  description is TBD
 func (obj *patternFlowEthernetSrcCounter) Start() string {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = "00:00:00:00:00:00"
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a string
@@ -86058,7 +90293,13 @@ func (obj *patternFlowEthernetSrcCounter) SetStart(value string) PatternFlowEthe
 // Step returns a string
 //  description is TBD
 func (obj *patternFlowEthernetSrcCounter) Step() string {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = "00:00:00:00:00:01"
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a string
@@ -86078,7 +90319,13 @@ func (obj *patternFlowEthernetSrcCounter) SetStep(value string) PatternFlowEther
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowEthernetSrcCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -86278,7 +90525,13 @@ type PatternFlowEthernetEtherTypeCounter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowEthernetEtherTypeCounter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 65535
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -86298,7 +90551,13 @@ func (obj *patternFlowEthernetEtherTypeCounter) SetStart(value int32) PatternFlo
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowEthernetEtherTypeCounter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -86318,7 +90577,13 @@ func (obj *patternFlowEthernetEtherTypeCounter) SetStep(value int32) PatternFlow
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowEthernetEtherTypeCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -86520,7 +90785,13 @@ type PatternFlowEthernetPfcQueueCounter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowEthernetPfcQueueCounter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 0
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -86540,7 +90811,13 @@ func (obj *patternFlowEthernetPfcQueueCounter) SetStart(value int32) PatternFlow
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowEthernetPfcQueueCounter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -86560,7 +90837,13 @@ func (obj *patternFlowEthernetPfcQueueCounter) SetStep(value int32) PatternFlowE
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowEthernetPfcQueueCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -86762,7 +91045,13 @@ type PatternFlowVlanPriorityCounter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowVlanPriorityCounter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 0
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -86782,7 +91071,13 @@ func (obj *patternFlowVlanPriorityCounter) SetStart(value int32) PatternFlowVlan
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowVlanPriorityCounter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -86802,7 +91097,13 @@ func (obj *patternFlowVlanPriorityCounter) SetStep(value int32) PatternFlowVlanP
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowVlanPriorityCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -87004,7 +91305,13 @@ type PatternFlowVlanCfiCounter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowVlanCfiCounter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 0
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -87024,7 +91331,13 @@ func (obj *patternFlowVlanCfiCounter) SetStart(value int32) PatternFlowVlanCfiCo
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowVlanCfiCounter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -87044,7 +91357,13 @@ func (obj *patternFlowVlanCfiCounter) SetStep(value int32) PatternFlowVlanCfiCou
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowVlanCfiCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -87246,7 +91565,13 @@ type PatternFlowVlanIdCounter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowVlanIdCounter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 0
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -87266,7 +91591,13 @@ func (obj *patternFlowVlanIdCounter) SetStart(value int32) PatternFlowVlanIdCoun
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowVlanIdCounter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -87286,7 +91617,13 @@ func (obj *patternFlowVlanIdCounter) SetStep(value int32) PatternFlowVlanIdCount
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowVlanIdCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -87488,7 +91825,13 @@ type PatternFlowVlanTpidCounter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowVlanTpidCounter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 33024
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -87508,7 +91851,13 @@ func (obj *patternFlowVlanTpidCounter) SetStart(value int32) PatternFlowVlanTpid
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowVlanTpidCounter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -87528,7 +91877,13 @@ func (obj *patternFlowVlanTpidCounter) SetStep(value int32) PatternFlowVlanTpidC
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowVlanTpidCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -87730,7 +92085,13 @@ type PatternFlowVxlanFlagsCounter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowVxlanFlagsCounter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 8
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -87750,7 +92111,13 @@ func (obj *patternFlowVxlanFlagsCounter) SetStart(value int32) PatternFlowVxlanF
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowVxlanFlagsCounter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -87770,7 +92137,13 @@ func (obj *patternFlowVxlanFlagsCounter) SetStep(value int32) PatternFlowVxlanFl
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowVxlanFlagsCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -87972,7 +92345,13 @@ type PatternFlowVxlanReserved0Counter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowVxlanReserved0Counter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 0
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -87992,7 +92371,13 @@ func (obj *patternFlowVxlanReserved0Counter) SetStart(value int32) PatternFlowVx
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowVxlanReserved0Counter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -88012,7 +92397,13 @@ func (obj *patternFlowVxlanReserved0Counter) SetStep(value int32) PatternFlowVxl
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowVxlanReserved0Counter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -88214,7 +92605,13 @@ type PatternFlowVxlanVniCounter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowVxlanVniCounter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 0
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -88234,7 +92631,13 @@ func (obj *patternFlowVxlanVniCounter) SetStart(value int32) PatternFlowVxlanVni
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowVxlanVniCounter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -88254,7 +92657,13 @@ func (obj *patternFlowVxlanVniCounter) SetStep(value int32) PatternFlowVxlanVniC
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowVxlanVniCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -88456,7 +92865,13 @@ type PatternFlowVxlanReserved1Counter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowVxlanReserved1Counter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 0
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -88476,7 +92891,13 @@ func (obj *patternFlowVxlanReserved1Counter) SetStart(value int32) PatternFlowVx
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowVxlanReserved1Counter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -88496,7 +92917,13 @@ func (obj *patternFlowVxlanReserved1Counter) SetStep(value int32) PatternFlowVxl
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowVxlanReserved1Counter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -88698,7 +93125,13 @@ type PatternFlowIpv4VersionCounter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowIpv4VersionCounter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 4
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -88718,7 +93151,13 @@ func (obj *patternFlowIpv4VersionCounter) SetStart(value int32) PatternFlowIpv4V
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowIpv4VersionCounter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -88738,7 +93177,13 @@ func (obj *patternFlowIpv4VersionCounter) SetStep(value int32) PatternFlowIpv4Ve
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowIpv4VersionCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -88940,7 +93385,13 @@ type PatternFlowIpv4HeaderLengthCounter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowIpv4HeaderLengthCounter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 5
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -88960,7 +93411,13 @@ func (obj *patternFlowIpv4HeaderLengthCounter) SetStart(value int32) PatternFlow
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowIpv4HeaderLengthCounter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -88980,7 +93437,13 @@ func (obj *patternFlowIpv4HeaderLengthCounter) SetStep(value int32) PatternFlowI
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowIpv4HeaderLengthCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -89220,13 +93683,36 @@ func (obj *patternFlowIpv4PriorityRaw) SetChoice(value PatternFlowIpv4PriorityRa
 	}
 	enumValue := snappipb.PatternFlowIpv4PriorityRaw_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowIpv4PriorityRaw) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 0
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -89267,7 +93753,9 @@ func (obj *patternFlowIpv4PriorityRaw) SetValues(value []int32) PatternFlowIpv4P
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowIpv4PriorityRaw) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -89363,11 +93851,9 @@ func (obj *patternFlowIpv4PriorityRaw) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowIpv4PriorityRaw) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(0)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowIpv4PriorityRawChoice.VALUE)
+		obj.SetValue(0)
 	}
 
 }
@@ -90055,7 +94541,13 @@ type PatternFlowIpv4TotalLengthCounter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowIpv4TotalLengthCounter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 46
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -90075,7 +94567,13 @@ func (obj *patternFlowIpv4TotalLengthCounter) SetStart(value int32) PatternFlowI
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowIpv4TotalLengthCounter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -90095,7 +94593,13 @@ func (obj *patternFlowIpv4TotalLengthCounter) SetStep(value int32) PatternFlowIp
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowIpv4TotalLengthCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -90297,7 +94801,13 @@ type PatternFlowIpv4IdentificationCounter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowIpv4IdentificationCounter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 0
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -90317,7 +94827,13 @@ func (obj *patternFlowIpv4IdentificationCounter) SetStart(value int32) PatternFl
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowIpv4IdentificationCounter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -90337,7 +94853,13 @@ func (obj *patternFlowIpv4IdentificationCounter) SetStep(value int32) PatternFlo
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowIpv4IdentificationCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -90539,7 +95061,13 @@ type PatternFlowIpv4ReservedCounter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowIpv4ReservedCounter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 0
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -90559,7 +95087,13 @@ func (obj *patternFlowIpv4ReservedCounter) SetStart(value int32) PatternFlowIpv4
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowIpv4ReservedCounter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -90579,7 +95113,13 @@ func (obj *patternFlowIpv4ReservedCounter) SetStep(value int32) PatternFlowIpv4R
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowIpv4ReservedCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -90781,7 +95321,13 @@ type PatternFlowIpv4DontFragmentCounter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowIpv4DontFragmentCounter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 0
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -90801,7 +95347,13 @@ func (obj *patternFlowIpv4DontFragmentCounter) SetStart(value int32) PatternFlow
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowIpv4DontFragmentCounter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -90821,7 +95373,13 @@ func (obj *patternFlowIpv4DontFragmentCounter) SetStep(value int32) PatternFlowI
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowIpv4DontFragmentCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -91023,7 +95581,13 @@ type PatternFlowIpv4MoreFragmentsCounter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowIpv4MoreFragmentsCounter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 0
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -91043,7 +95607,13 @@ func (obj *patternFlowIpv4MoreFragmentsCounter) SetStart(value int32) PatternFlo
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowIpv4MoreFragmentsCounter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -91063,7 +95633,13 @@ func (obj *patternFlowIpv4MoreFragmentsCounter) SetStep(value int32) PatternFlow
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowIpv4MoreFragmentsCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -91265,7 +95841,13 @@ type PatternFlowIpv4FragmentOffsetCounter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowIpv4FragmentOffsetCounter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 0
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -91285,7 +95867,13 @@ func (obj *patternFlowIpv4FragmentOffsetCounter) SetStart(value int32) PatternFl
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowIpv4FragmentOffsetCounter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -91305,7 +95893,13 @@ func (obj *patternFlowIpv4FragmentOffsetCounter) SetStep(value int32) PatternFlo
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowIpv4FragmentOffsetCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -91507,7 +96101,13 @@ type PatternFlowIpv4TimeToLiveCounter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowIpv4TimeToLiveCounter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 64
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -91527,7 +96127,13 @@ func (obj *patternFlowIpv4TimeToLiveCounter) SetStart(value int32) PatternFlowIp
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowIpv4TimeToLiveCounter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -91547,7 +96153,13 @@ func (obj *patternFlowIpv4TimeToLiveCounter) SetStep(value int32) PatternFlowIpv
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowIpv4TimeToLiveCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -91749,7 +96361,13 @@ type PatternFlowIpv4ProtocolCounter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowIpv4ProtocolCounter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 61
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -91769,7 +96387,13 @@ func (obj *patternFlowIpv4ProtocolCounter) SetStart(value int32) PatternFlowIpv4
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowIpv4ProtocolCounter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -91789,7 +96413,13 @@ func (obj *patternFlowIpv4ProtocolCounter) SetStep(value int32) PatternFlowIpv4P
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowIpv4ProtocolCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -91991,7 +96621,13 @@ type PatternFlowIpv4SrcCounter interface {
 // Start returns a string
 //  description is TBD
 func (obj *patternFlowIpv4SrcCounter) Start() string {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = "0.0.0.0"
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a string
@@ -92011,7 +96647,13 @@ func (obj *patternFlowIpv4SrcCounter) SetStart(value string) PatternFlowIpv4SrcC
 // Step returns a string
 //  description is TBD
 func (obj *patternFlowIpv4SrcCounter) Step() string {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = "0.0.0.1"
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a string
@@ -92031,7 +96673,13 @@ func (obj *patternFlowIpv4SrcCounter) SetStep(value string) PatternFlowIpv4SrcCo
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowIpv4SrcCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -92231,7 +96879,13 @@ type PatternFlowIpv4DstCounter interface {
 // Start returns a string
 //  description is TBD
 func (obj *patternFlowIpv4DstCounter) Start() string {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = "0.0.0.0"
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a string
@@ -92251,7 +96905,13 @@ func (obj *patternFlowIpv4DstCounter) SetStart(value string) PatternFlowIpv4DstC
 // Step returns a string
 //  description is TBD
 func (obj *patternFlowIpv4DstCounter) Step() string {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = "0.0.0.1"
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a string
@@ -92271,7 +96931,13 @@ func (obj *patternFlowIpv4DstCounter) SetStep(value string) PatternFlowIpv4DstCo
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowIpv4DstCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -92471,7 +97137,13 @@ type PatternFlowIpv6VersionCounter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowIpv6VersionCounter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 6
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -92491,7 +97163,13 @@ func (obj *patternFlowIpv6VersionCounter) SetStart(value int32) PatternFlowIpv6V
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowIpv6VersionCounter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -92511,7 +97189,13 @@ func (obj *patternFlowIpv6VersionCounter) SetStep(value int32) PatternFlowIpv6Ve
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowIpv6VersionCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -92713,7 +97397,13 @@ type PatternFlowIpv6TrafficClassCounter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowIpv6TrafficClassCounter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 0
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -92733,7 +97423,13 @@ func (obj *patternFlowIpv6TrafficClassCounter) SetStart(value int32) PatternFlow
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowIpv6TrafficClassCounter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -92753,7 +97449,13 @@ func (obj *patternFlowIpv6TrafficClassCounter) SetStep(value int32) PatternFlowI
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowIpv6TrafficClassCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -92955,7 +97657,13 @@ type PatternFlowIpv6FlowLabelCounter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowIpv6FlowLabelCounter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 0
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -92975,7 +97683,13 @@ func (obj *patternFlowIpv6FlowLabelCounter) SetStart(value int32) PatternFlowIpv
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowIpv6FlowLabelCounter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -92995,7 +97709,13 @@ func (obj *patternFlowIpv6FlowLabelCounter) SetStep(value int32) PatternFlowIpv6
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowIpv6FlowLabelCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -93197,7 +97917,13 @@ type PatternFlowIpv6PayloadLengthCounter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowIpv6PayloadLengthCounter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 0
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -93217,7 +97943,13 @@ func (obj *patternFlowIpv6PayloadLengthCounter) SetStart(value int32) PatternFlo
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowIpv6PayloadLengthCounter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -93237,7 +97969,13 @@ func (obj *patternFlowIpv6PayloadLengthCounter) SetStep(value int32) PatternFlow
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowIpv6PayloadLengthCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -93439,7 +98177,13 @@ type PatternFlowIpv6NextHeaderCounter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowIpv6NextHeaderCounter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 59
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -93459,7 +98203,13 @@ func (obj *patternFlowIpv6NextHeaderCounter) SetStart(value int32) PatternFlowIp
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowIpv6NextHeaderCounter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -93479,7 +98229,13 @@ func (obj *patternFlowIpv6NextHeaderCounter) SetStep(value int32) PatternFlowIpv
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowIpv6NextHeaderCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -93681,7 +98437,13 @@ type PatternFlowIpv6HopLimitCounter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowIpv6HopLimitCounter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 64
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -93701,7 +98463,13 @@ func (obj *patternFlowIpv6HopLimitCounter) SetStart(value int32) PatternFlowIpv6
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowIpv6HopLimitCounter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -93721,7 +98489,13 @@ func (obj *patternFlowIpv6HopLimitCounter) SetStep(value int32) PatternFlowIpv6H
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowIpv6HopLimitCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -93923,7 +98697,13 @@ type PatternFlowIpv6SrcCounter interface {
 // Start returns a string
 //  description is TBD
 func (obj *patternFlowIpv6SrcCounter) Start() string {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = "::0"
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a string
@@ -93943,7 +98723,13 @@ func (obj *patternFlowIpv6SrcCounter) SetStart(value string) PatternFlowIpv6SrcC
 // Step returns a string
 //  description is TBD
 func (obj *patternFlowIpv6SrcCounter) Step() string {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = "::1"
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a string
@@ -93963,7 +98749,13 @@ func (obj *patternFlowIpv6SrcCounter) SetStep(value string) PatternFlowIpv6SrcCo
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowIpv6SrcCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -94163,7 +98955,13 @@ type PatternFlowIpv6DstCounter interface {
 // Start returns a string
 //  description is TBD
 func (obj *patternFlowIpv6DstCounter) Start() string {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = "::0"
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a string
@@ -94183,7 +98981,13 @@ func (obj *patternFlowIpv6DstCounter) SetStart(value string) PatternFlowIpv6DstC
 // Step returns a string
 //  description is TBD
 func (obj *patternFlowIpv6DstCounter) Step() string {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = "::1"
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a string
@@ -94203,7 +99007,13 @@ func (obj *patternFlowIpv6DstCounter) SetStep(value string) PatternFlowIpv6DstCo
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowIpv6DstCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -94403,7 +99213,13 @@ type PatternFlowPfcPauseDstCounter interface {
 // Start returns a string
 //  description is TBD
 func (obj *patternFlowPfcPauseDstCounter) Start() string {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = "01:80:c2:00:00:01"
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a string
@@ -94423,7 +99239,13 @@ func (obj *patternFlowPfcPauseDstCounter) SetStart(value string) PatternFlowPfcP
 // Step returns a string
 //  description is TBD
 func (obj *patternFlowPfcPauseDstCounter) Step() string {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = "00:00:00:00:00:01"
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a string
@@ -94443,7 +99265,13 @@ func (obj *patternFlowPfcPauseDstCounter) SetStep(value string) PatternFlowPfcPa
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowPfcPauseDstCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -94643,7 +99471,13 @@ type PatternFlowPfcPauseSrcCounter interface {
 // Start returns a string
 //  description is TBD
 func (obj *patternFlowPfcPauseSrcCounter) Start() string {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = "00:00:00:00:00:00"
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a string
@@ -94663,7 +99497,13 @@ func (obj *patternFlowPfcPauseSrcCounter) SetStart(value string) PatternFlowPfcP
 // Step returns a string
 //  description is TBD
 func (obj *patternFlowPfcPauseSrcCounter) Step() string {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = "00:00:00:00:00:01"
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a string
@@ -94683,7 +99523,13 @@ func (obj *patternFlowPfcPauseSrcCounter) SetStep(value string) PatternFlowPfcPa
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowPfcPauseSrcCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -94883,7 +99729,13 @@ type PatternFlowPfcPauseEtherTypeCounter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowPfcPauseEtherTypeCounter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 34824
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -94903,7 +99755,13 @@ func (obj *patternFlowPfcPauseEtherTypeCounter) SetStart(value int32) PatternFlo
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowPfcPauseEtherTypeCounter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -94923,7 +99781,13 @@ func (obj *patternFlowPfcPauseEtherTypeCounter) SetStep(value int32) PatternFlow
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowPfcPauseEtherTypeCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -95125,7 +99989,13 @@ type PatternFlowPfcPauseControlOpCodeCounter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowPfcPauseControlOpCodeCounter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 257
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -95145,7 +100015,13 @@ func (obj *patternFlowPfcPauseControlOpCodeCounter) SetStart(value int32) Patter
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowPfcPauseControlOpCodeCounter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -95165,7 +100041,13 @@ func (obj *patternFlowPfcPauseControlOpCodeCounter) SetStep(value int32) Pattern
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowPfcPauseControlOpCodeCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -95367,7 +100249,13 @@ type PatternFlowPfcPauseClassEnableVectorCounter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowPfcPauseClassEnableVectorCounter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 0
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -95387,7 +100275,13 @@ func (obj *patternFlowPfcPauseClassEnableVectorCounter) SetStart(value int32) Pa
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowPfcPauseClassEnableVectorCounter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -95407,7 +100301,13 @@ func (obj *patternFlowPfcPauseClassEnableVectorCounter) SetStep(value int32) Pat
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowPfcPauseClassEnableVectorCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -95609,7 +100509,13 @@ type PatternFlowPfcPausePauseClass0Counter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass0Counter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 0
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -95629,7 +100535,13 @@ func (obj *patternFlowPfcPausePauseClass0Counter) SetStart(value int32) PatternF
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass0Counter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -95649,7 +100561,13 @@ func (obj *patternFlowPfcPausePauseClass0Counter) SetStep(value int32) PatternFl
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass0Counter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -95851,7 +100769,13 @@ type PatternFlowPfcPausePauseClass1Counter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass1Counter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 0
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -95871,7 +100795,13 @@ func (obj *patternFlowPfcPausePauseClass1Counter) SetStart(value int32) PatternF
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass1Counter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -95891,7 +100821,13 @@ func (obj *patternFlowPfcPausePauseClass1Counter) SetStep(value int32) PatternFl
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass1Counter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -96093,7 +101029,13 @@ type PatternFlowPfcPausePauseClass2Counter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass2Counter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 0
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -96113,7 +101055,13 @@ func (obj *patternFlowPfcPausePauseClass2Counter) SetStart(value int32) PatternF
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass2Counter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -96133,7 +101081,13 @@ func (obj *patternFlowPfcPausePauseClass2Counter) SetStep(value int32) PatternFl
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass2Counter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -96335,7 +101289,13 @@ type PatternFlowPfcPausePauseClass3Counter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass3Counter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 0
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -96355,7 +101315,13 @@ func (obj *patternFlowPfcPausePauseClass3Counter) SetStart(value int32) PatternF
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass3Counter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -96375,7 +101341,13 @@ func (obj *patternFlowPfcPausePauseClass3Counter) SetStep(value int32) PatternFl
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass3Counter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -96577,7 +101549,13 @@ type PatternFlowPfcPausePauseClass4Counter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass4Counter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 0
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -96597,7 +101575,13 @@ func (obj *patternFlowPfcPausePauseClass4Counter) SetStart(value int32) PatternF
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass4Counter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -96617,7 +101601,13 @@ func (obj *patternFlowPfcPausePauseClass4Counter) SetStep(value int32) PatternFl
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass4Counter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -96819,7 +101809,13 @@ type PatternFlowPfcPausePauseClass5Counter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass5Counter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 0
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -96839,7 +101835,13 @@ func (obj *patternFlowPfcPausePauseClass5Counter) SetStart(value int32) PatternF
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass5Counter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -96859,7 +101861,13 @@ func (obj *patternFlowPfcPausePauseClass5Counter) SetStep(value int32) PatternFl
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass5Counter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -97061,7 +102069,13 @@ type PatternFlowPfcPausePauseClass6Counter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass6Counter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 0
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -97081,7 +102095,13 @@ func (obj *patternFlowPfcPausePauseClass6Counter) SetStart(value int32) PatternF
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass6Counter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -97101,7 +102121,13 @@ func (obj *patternFlowPfcPausePauseClass6Counter) SetStep(value int32) PatternFl
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass6Counter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -97303,7 +102329,13 @@ type PatternFlowPfcPausePauseClass7Counter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass7Counter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 0
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -97323,7 +102355,13 @@ func (obj *patternFlowPfcPausePauseClass7Counter) SetStart(value int32) PatternF
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass7Counter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -97343,7 +102381,13 @@ func (obj *patternFlowPfcPausePauseClass7Counter) SetStep(value int32) PatternFl
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowPfcPausePauseClass7Counter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -97545,7 +102589,13 @@ type PatternFlowEthernetPauseDstCounter interface {
 // Start returns a string
 //  description is TBD
 func (obj *patternFlowEthernetPauseDstCounter) Start() string {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = "01:80:c2:00:00:01"
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a string
@@ -97565,7 +102615,13 @@ func (obj *patternFlowEthernetPauseDstCounter) SetStart(value string) PatternFlo
 // Step returns a string
 //  description is TBD
 func (obj *patternFlowEthernetPauseDstCounter) Step() string {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = "00:00:00:00:00:01"
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a string
@@ -97585,7 +102641,13 @@ func (obj *patternFlowEthernetPauseDstCounter) SetStep(value string) PatternFlow
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowEthernetPauseDstCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -97785,7 +102847,13 @@ type PatternFlowEthernetPauseSrcCounter interface {
 // Start returns a string
 //  description is TBD
 func (obj *patternFlowEthernetPauseSrcCounter) Start() string {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = "00:00:00:00:00:00"
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a string
@@ -97805,7 +102873,13 @@ func (obj *patternFlowEthernetPauseSrcCounter) SetStart(value string) PatternFlo
 // Step returns a string
 //  description is TBD
 func (obj *patternFlowEthernetPauseSrcCounter) Step() string {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = "00:00:00:00:00:01"
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a string
@@ -97825,7 +102899,13 @@ func (obj *patternFlowEthernetPauseSrcCounter) SetStep(value string) PatternFlow
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowEthernetPauseSrcCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -98025,7 +103105,13 @@ type PatternFlowEthernetPauseEtherTypeCounter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowEthernetPauseEtherTypeCounter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 34824
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -98045,7 +103131,13 @@ func (obj *patternFlowEthernetPauseEtherTypeCounter) SetStart(value int32) Patte
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowEthernetPauseEtherTypeCounter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -98065,7 +103157,13 @@ func (obj *patternFlowEthernetPauseEtherTypeCounter) SetStep(value int32) Patter
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowEthernetPauseEtherTypeCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -98267,7 +103365,13 @@ type PatternFlowEthernetPauseControlOpCodeCounter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowEthernetPauseControlOpCodeCounter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 1
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -98287,7 +103391,13 @@ func (obj *patternFlowEthernetPauseControlOpCodeCounter) SetStart(value int32) P
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowEthernetPauseControlOpCodeCounter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -98307,7 +103417,13 @@ func (obj *patternFlowEthernetPauseControlOpCodeCounter) SetStep(value int32) Pa
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowEthernetPauseControlOpCodeCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -98509,7 +103625,13 @@ type PatternFlowEthernetPauseTimeCounter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowEthernetPauseTimeCounter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 0
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -98529,7 +103651,13 @@ func (obj *patternFlowEthernetPauseTimeCounter) SetStart(value int32) PatternFlo
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowEthernetPauseTimeCounter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -98549,7 +103677,13 @@ func (obj *patternFlowEthernetPauseTimeCounter) SetStep(value int32) PatternFlow
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowEthernetPauseTimeCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -98751,7 +103885,13 @@ type PatternFlowTcpSrcPortCounter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowTcpSrcPortCounter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 0
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -98771,7 +103911,13 @@ func (obj *patternFlowTcpSrcPortCounter) SetStart(value int32) PatternFlowTcpSrc
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowTcpSrcPortCounter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -98791,7 +103937,13 @@ func (obj *patternFlowTcpSrcPortCounter) SetStep(value int32) PatternFlowTcpSrcP
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowTcpSrcPortCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -98993,7 +104145,13 @@ type PatternFlowTcpDstPortCounter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowTcpDstPortCounter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 0
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -99013,7 +104171,13 @@ func (obj *patternFlowTcpDstPortCounter) SetStart(value int32) PatternFlowTcpDst
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowTcpDstPortCounter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -99033,7 +104197,13 @@ func (obj *patternFlowTcpDstPortCounter) SetStep(value int32) PatternFlowTcpDstP
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowTcpDstPortCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -99235,7 +104405,13 @@ type PatternFlowTcpSeqNumCounter interface {
 // Start returns a int64
 //  description is TBD
 func (obj *patternFlowTcpSeqNumCounter) Start() int64 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 0
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int64
@@ -99255,7 +104431,13 @@ func (obj *patternFlowTcpSeqNumCounter) SetStart(value int64) PatternFlowTcpSeqN
 // Step returns a int64
 //  description is TBD
 func (obj *patternFlowTcpSeqNumCounter) Step() int64 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int64
@@ -99275,7 +104457,13 @@ func (obj *patternFlowTcpSeqNumCounter) SetStep(value int64) PatternFlowTcpSeqNu
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowTcpSeqNumCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -99477,7 +104665,13 @@ type PatternFlowTcpAckNumCounter interface {
 // Start returns a int64
 //  description is TBD
 func (obj *patternFlowTcpAckNumCounter) Start() int64 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 0
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int64
@@ -99497,7 +104691,13 @@ func (obj *patternFlowTcpAckNumCounter) SetStart(value int64) PatternFlowTcpAckN
 // Step returns a int64
 //  description is TBD
 func (obj *patternFlowTcpAckNumCounter) Step() int64 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int64
@@ -99517,7 +104717,13 @@ func (obj *patternFlowTcpAckNumCounter) SetStep(value int64) PatternFlowTcpAckNu
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowTcpAckNumCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -99719,7 +104925,13 @@ type PatternFlowTcpDataOffsetCounter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowTcpDataOffsetCounter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 0
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -99739,7 +104951,13 @@ func (obj *patternFlowTcpDataOffsetCounter) SetStart(value int32) PatternFlowTcp
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowTcpDataOffsetCounter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -99759,7 +104977,13 @@ func (obj *patternFlowTcpDataOffsetCounter) SetStep(value int32) PatternFlowTcpD
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowTcpDataOffsetCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -99961,7 +105185,13 @@ type PatternFlowTcpEcnNsCounter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowTcpEcnNsCounter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 0
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -99981,7 +105211,13 @@ func (obj *patternFlowTcpEcnNsCounter) SetStart(value int32) PatternFlowTcpEcnNs
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowTcpEcnNsCounter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -100001,7 +105237,13 @@ func (obj *patternFlowTcpEcnNsCounter) SetStep(value int32) PatternFlowTcpEcnNsC
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowTcpEcnNsCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -100203,7 +105445,13 @@ type PatternFlowTcpEcnCwrCounter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowTcpEcnCwrCounter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 0
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -100223,7 +105471,13 @@ func (obj *patternFlowTcpEcnCwrCounter) SetStart(value int32) PatternFlowTcpEcnC
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowTcpEcnCwrCounter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -100243,7 +105497,13 @@ func (obj *patternFlowTcpEcnCwrCounter) SetStep(value int32) PatternFlowTcpEcnCw
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowTcpEcnCwrCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -100445,7 +105705,13 @@ type PatternFlowTcpEcnEchoCounter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowTcpEcnEchoCounter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 0
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -100465,7 +105731,13 @@ func (obj *patternFlowTcpEcnEchoCounter) SetStart(value int32) PatternFlowTcpEcn
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowTcpEcnEchoCounter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -100485,7 +105757,13 @@ func (obj *patternFlowTcpEcnEchoCounter) SetStep(value int32) PatternFlowTcpEcnE
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowTcpEcnEchoCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -100687,7 +105965,13 @@ type PatternFlowTcpCtlUrgCounter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowTcpCtlUrgCounter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 0
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -100707,7 +105991,13 @@ func (obj *patternFlowTcpCtlUrgCounter) SetStart(value int32) PatternFlowTcpCtlU
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowTcpCtlUrgCounter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -100727,7 +106017,13 @@ func (obj *patternFlowTcpCtlUrgCounter) SetStep(value int32) PatternFlowTcpCtlUr
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowTcpCtlUrgCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -100929,7 +106225,13 @@ type PatternFlowTcpCtlAckCounter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowTcpCtlAckCounter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 0
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -100949,7 +106251,13 @@ func (obj *patternFlowTcpCtlAckCounter) SetStart(value int32) PatternFlowTcpCtlA
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowTcpCtlAckCounter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -100969,7 +106277,13 @@ func (obj *patternFlowTcpCtlAckCounter) SetStep(value int32) PatternFlowTcpCtlAc
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowTcpCtlAckCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -101171,7 +106485,13 @@ type PatternFlowTcpCtlPshCounter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowTcpCtlPshCounter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 0
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -101191,7 +106511,13 @@ func (obj *patternFlowTcpCtlPshCounter) SetStart(value int32) PatternFlowTcpCtlP
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowTcpCtlPshCounter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -101211,7 +106537,13 @@ func (obj *patternFlowTcpCtlPshCounter) SetStep(value int32) PatternFlowTcpCtlPs
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowTcpCtlPshCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -101413,7 +106745,13 @@ type PatternFlowTcpCtlRstCounter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowTcpCtlRstCounter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 0
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -101433,7 +106771,13 @@ func (obj *patternFlowTcpCtlRstCounter) SetStart(value int32) PatternFlowTcpCtlR
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowTcpCtlRstCounter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -101453,7 +106797,13 @@ func (obj *patternFlowTcpCtlRstCounter) SetStep(value int32) PatternFlowTcpCtlRs
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowTcpCtlRstCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -101655,7 +107005,13 @@ type PatternFlowTcpCtlSynCounter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowTcpCtlSynCounter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 0
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -101675,7 +107031,13 @@ func (obj *patternFlowTcpCtlSynCounter) SetStart(value int32) PatternFlowTcpCtlS
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowTcpCtlSynCounter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -101695,7 +107057,13 @@ func (obj *patternFlowTcpCtlSynCounter) SetStep(value int32) PatternFlowTcpCtlSy
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowTcpCtlSynCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -101897,7 +107265,13 @@ type PatternFlowTcpCtlFinCounter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowTcpCtlFinCounter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 0
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -101917,7 +107291,13 @@ func (obj *patternFlowTcpCtlFinCounter) SetStart(value int32) PatternFlowTcpCtlF
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowTcpCtlFinCounter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -101937,7 +107317,13 @@ func (obj *patternFlowTcpCtlFinCounter) SetStep(value int32) PatternFlowTcpCtlFi
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowTcpCtlFinCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -102139,7 +107525,13 @@ type PatternFlowTcpWindowCounter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowTcpWindowCounter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 0
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -102159,7 +107551,13 @@ func (obj *patternFlowTcpWindowCounter) SetStart(value int32) PatternFlowTcpWind
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowTcpWindowCounter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -102179,7 +107577,13 @@ func (obj *patternFlowTcpWindowCounter) SetStep(value int32) PatternFlowTcpWindo
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowTcpWindowCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -102381,7 +107785,13 @@ type PatternFlowUdpSrcPortCounter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowUdpSrcPortCounter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 0
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -102401,7 +107811,13 @@ func (obj *patternFlowUdpSrcPortCounter) SetStart(value int32) PatternFlowUdpSrc
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowUdpSrcPortCounter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -102421,7 +107837,13 @@ func (obj *patternFlowUdpSrcPortCounter) SetStep(value int32) PatternFlowUdpSrcP
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowUdpSrcPortCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -102623,7 +108045,13 @@ type PatternFlowUdpDstPortCounter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowUdpDstPortCounter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 0
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -102643,7 +108071,13 @@ func (obj *patternFlowUdpDstPortCounter) SetStart(value int32) PatternFlowUdpDst
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowUdpDstPortCounter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -102663,7 +108097,13 @@ func (obj *patternFlowUdpDstPortCounter) SetStep(value int32) PatternFlowUdpDstP
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowUdpDstPortCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -102865,7 +108305,13 @@ type PatternFlowUdpLengthCounter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowUdpLengthCounter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 0
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -102885,7 +108331,13 @@ func (obj *patternFlowUdpLengthCounter) SetStart(value int32) PatternFlowUdpLeng
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowUdpLengthCounter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -102905,7 +108357,13 @@ func (obj *patternFlowUdpLengthCounter) SetStep(value int32) PatternFlowUdpLengt
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowUdpLengthCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -103107,7 +108565,13 @@ type PatternFlowGreChecksumPresentCounter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowGreChecksumPresentCounter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 0
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -103127,7 +108591,13 @@ func (obj *patternFlowGreChecksumPresentCounter) SetStart(value int32) PatternFl
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowGreChecksumPresentCounter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -103147,7 +108617,13 @@ func (obj *patternFlowGreChecksumPresentCounter) SetStep(value int32) PatternFlo
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowGreChecksumPresentCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -103349,7 +108825,13 @@ type PatternFlowGreReserved0Counter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowGreReserved0Counter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 0
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -103369,7 +108851,13 @@ func (obj *patternFlowGreReserved0Counter) SetStart(value int32) PatternFlowGreR
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowGreReserved0Counter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -103389,7 +108877,13 @@ func (obj *patternFlowGreReserved0Counter) SetStep(value int32) PatternFlowGreRe
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowGreReserved0Counter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -103591,7 +109085,13 @@ type PatternFlowGreVersionCounter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowGreVersionCounter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 0
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -103611,7 +109111,13 @@ func (obj *patternFlowGreVersionCounter) SetStart(value int32) PatternFlowGreVer
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowGreVersionCounter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -103631,7 +109137,13 @@ func (obj *patternFlowGreVersionCounter) SetStep(value int32) PatternFlowGreVers
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowGreVersionCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -103833,7 +109345,13 @@ type PatternFlowGreProtocolCounter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowGreProtocolCounter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 2048
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -103853,7 +109371,13 @@ func (obj *patternFlowGreProtocolCounter) SetStart(value int32) PatternFlowGrePr
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowGreProtocolCounter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -103873,7 +109397,13 @@ func (obj *patternFlowGreProtocolCounter) SetStep(value int32) PatternFlowGrePro
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowGreProtocolCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -104075,7 +109605,13 @@ type PatternFlowGreReserved1Counter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowGreReserved1Counter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 0
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -104095,7 +109631,13 @@ func (obj *patternFlowGreReserved1Counter) SetStart(value int32) PatternFlowGreR
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowGreReserved1Counter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -104115,7 +109657,13 @@ func (obj *patternFlowGreReserved1Counter) SetStep(value int32) PatternFlowGreRe
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowGreReserved1Counter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -104317,7 +109865,13 @@ type PatternFlowGtpv1VersionCounter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowGtpv1VersionCounter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 1
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -104337,7 +109891,13 @@ func (obj *patternFlowGtpv1VersionCounter) SetStart(value int32) PatternFlowGtpv
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowGtpv1VersionCounter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -104357,7 +109917,13 @@ func (obj *patternFlowGtpv1VersionCounter) SetStep(value int32) PatternFlowGtpv1
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowGtpv1VersionCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -104559,7 +110125,13 @@ type PatternFlowGtpv1ProtocolTypeCounter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowGtpv1ProtocolTypeCounter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 1
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -104579,7 +110151,13 @@ func (obj *patternFlowGtpv1ProtocolTypeCounter) SetStart(value int32) PatternFlo
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowGtpv1ProtocolTypeCounter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -104599,7 +110177,13 @@ func (obj *patternFlowGtpv1ProtocolTypeCounter) SetStep(value int32) PatternFlow
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowGtpv1ProtocolTypeCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -104801,7 +110385,13 @@ type PatternFlowGtpv1ReservedCounter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowGtpv1ReservedCounter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 0
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -104821,7 +110411,13 @@ func (obj *patternFlowGtpv1ReservedCounter) SetStart(value int32) PatternFlowGtp
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowGtpv1ReservedCounter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -104841,7 +110437,13 @@ func (obj *patternFlowGtpv1ReservedCounter) SetStep(value int32) PatternFlowGtpv
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowGtpv1ReservedCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -105043,7 +110645,13 @@ type PatternFlowGtpv1EFlagCounter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowGtpv1EFlagCounter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 0
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -105063,7 +110671,13 @@ func (obj *patternFlowGtpv1EFlagCounter) SetStart(value int32) PatternFlowGtpv1E
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowGtpv1EFlagCounter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -105083,7 +110697,13 @@ func (obj *patternFlowGtpv1EFlagCounter) SetStep(value int32) PatternFlowGtpv1EF
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowGtpv1EFlagCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -105285,7 +110905,13 @@ type PatternFlowGtpv1SFlagCounter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowGtpv1SFlagCounter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 0
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -105305,7 +110931,13 @@ func (obj *patternFlowGtpv1SFlagCounter) SetStart(value int32) PatternFlowGtpv1S
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowGtpv1SFlagCounter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -105325,7 +110957,13 @@ func (obj *patternFlowGtpv1SFlagCounter) SetStep(value int32) PatternFlowGtpv1SF
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowGtpv1SFlagCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -105527,7 +111165,13 @@ type PatternFlowGtpv1PnFlagCounter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowGtpv1PnFlagCounter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 0
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -105547,7 +111191,13 @@ func (obj *patternFlowGtpv1PnFlagCounter) SetStart(value int32) PatternFlowGtpv1
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowGtpv1PnFlagCounter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -105567,7 +111217,13 @@ func (obj *patternFlowGtpv1PnFlagCounter) SetStep(value int32) PatternFlowGtpv1P
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowGtpv1PnFlagCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -105769,7 +111425,13 @@ type PatternFlowGtpv1MessageTypeCounter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowGtpv1MessageTypeCounter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 0
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -105789,7 +111451,13 @@ func (obj *patternFlowGtpv1MessageTypeCounter) SetStart(value int32) PatternFlow
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowGtpv1MessageTypeCounter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -105809,7 +111477,13 @@ func (obj *patternFlowGtpv1MessageTypeCounter) SetStep(value int32) PatternFlowG
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowGtpv1MessageTypeCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -106011,7 +111685,13 @@ type PatternFlowGtpv1MessageLengthCounter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowGtpv1MessageLengthCounter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 0
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -106031,7 +111711,13 @@ func (obj *patternFlowGtpv1MessageLengthCounter) SetStart(value int32) PatternFl
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowGtpv1MessageLengthCounter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -106051,7 +111737,13 @@ func (obj *patternFlowGtpv1MessageLengthCounter) SetStep(value int32) PatternFlo
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowGtpv1MessageLengthCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -106253,7 +111945,13 @@ type PatternFlowGtpv1TeidCounter interface {
 // Start returns a int64
 //  description is TBD
 func (obj *patternFlowGtpv1TeidCounter) Start() int64 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 0
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int64
@@ -106273,7 +111971,13 @@ func (obj *patternFlowGtpv1TeidCounter) SetStart(value int64) PatternFlowGtpv1Te
 // Step returns a int64
 //  description is TBD
 func (obj *patternFlowGtpv1TeidCounter) Step() int64 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int64
@@ -106293,7 +111997,13 @@ func (obj *patternFlowGtpv1TeidCounter) SetStep(value int64) PatternFlowGtpv1Tei
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowGtpv1TeidCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -106495,7 +112205,13 @@ type PatternFlowGtpv1SquenceNumberCounter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowGtpv1SquenceNumberCounter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 0
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -106515,7 +112231,13 @@ func (obj *patternFlowGtpv1SquenceNumberCounter) SetStart(value int32) PatternFl
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowGtpv1SquenceNumberCounter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -106535,7 +112257,13 @@ func (obj *patternFlowGtpv1SquenceNumberCounter) SetStep(value int32) PatternFlo
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowGtpv1SquenceNumberCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -106737,7 +112465,13 @@ type PatternFlowGtpv1NPduNumberCounter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowGtpv1NPduNumberCounter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 0
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -106757,7 +112491,13 @@ func (obj *patternFlowGtpv1NPduNumberCounter) SetStart(value int32) PatternFlowG
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowGtpv1NPduNumberCounter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -106777,7 +112517,13 @@ func (obj *patternFlowGtpv1NPduNumberCounter) SetStep(value int32) PatternFlowGt
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowGtpv1NPduNumberCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -106979,7 +112725,13 @@ type PatternFlowGtpv1NextExtensionHeaderTypeCounter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowGtpv1NextExtensionHeaderTypeCounter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 0
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -106999,7 +112751,13 @@ func (obj *patternFlowGtpv1NextExtensionHeaderTypeCounter) SetStart(value int32)
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowGtpv1NextExtensionHeaderTypeCounter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -107019,7 +112777,13 @@ func (obj *patternFlowGtpv1NextExtensionHeaderTypeCounter) SetStep(value int32) 
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowGtpv1NextExtensionHeaderTypeCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -107259,13 +113023,36 @@ func (obj *patternFlowGtpExtensionExtensionLength) SetChoice(value PatternFlowGt
 	}
 	enumValue := snappipb.PatternFlowGtpExtensionExtensionLength_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowGtpExtensionExtensionLength) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 0
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -107306,7 +113093,9 @@ func (obj *patternFlowGtpExtensionExtensionLength) SetValues(value []int32) Patt
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowGtpExtensionExtensionLength) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -107402,11 +113191,9 @@ func (obj *patternFlowGtpExtensionExtensionLength) validateObj(set_default bool)
 }
 
 func (obj *patternFlowGtpExtensionExtensionLength) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(0)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowGtpExtensionExtensionLengthChoice.VALUE)
+		obj.SetValue(0)
 	}
 
 }
@@ -107598,13 +113385,36 @@ func (obj *patternFlowGtpExtensionContents) SetChoice(value PatternFlowGtpExtens
 	}
 	enumValue := snappipb.PatternFlowGtpExtensionContents_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int64
 //  description is TBD
 func (obj *patternFlowGtpExtensionContents) Value() int64 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 0
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int64
@@ -107645,7 +113455,9 @@ func (obj *patternFlowGtpExtensionContents) SetValues(value []int64) PatternFlow
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowGtpExtensionContents) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -107741,11 +113553,9 @@ func (obj *patternFlowGtpExtensionContents) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowGtpExtensionContents) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(0)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowGtpExtensionContentsChoice.VALUE)
+		obj.SetValue(0)
 	}
 
 }
@@ -107937,13 +113747,36 @@ func (obj *patternFlowGtpExtensionNextExtensionHeader) SetChoice(value PatternFl
 	}
 	enumValue := snappipb.PatternFlowGtpExtensionNextExtensionHeader_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowGtpExtensionNextExtensionHeader) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 0
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -107984,7 +113817,9 @@ func (obj *patternFlowGtpExtensionNextExtensionHeader) SetValues(value []int32) 
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowGtpExtensionNextExtensionHeader) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -108080,11 +113915,9 @@ func (obj *patternFlowGtpExtensionNextExtensionHeader) validateObj(set_default b
 }
 
 func (obj *patternFlowGtpExtensionNextExtensionHeader) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(0)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowGtpExtensionNextExtensionHeaderChoice.VALUE)
+		obj.SetValue(0)
 	}
 
 }
@@ -108238,7 +114071,13 @@ type PatternFlowGtpv2VersionCounter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowGtpv2VersionCounter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 2
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -108258,7 +114097,13 @@ func (obj *patternFlowGtpv2VersionCounter) SetStart(value int32) PatternFlowGtpv
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowGtpv2VersionCounter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -108278,7 +114123,13 @@ func (obj *patternFlowGtpv2VersionCounter) SetStep(value int32) PatternFlowGtpv2
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowGtpv2VersionCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -108480,7 +114331,13 @@ type PatternFlowGtpv2PiggybackingFlagCounter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowGtpv2PiggybackingFlagCounter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 0
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -108500,7 +114357,13 @@ func (obj *patternFlowGtpv2PiggybackingFlagCounter) SetStart(value int32) Patter
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowGtpv2PiggybackingFlagCounter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -108520,7 +114383,13 @@ func (obj *patternFlowGtpv2PiggybackingFlagCounter) SetStep(value int32) Pattern
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowGtpv2PiggybackingFlagCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -108722,7 +114591,13 @@ type PatternFlowGtpv2TeidFlagCounter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowGtpv2TeidFlagCounter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 0
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -108742,7 +114617,13 @@ func (obj *patternFlowGtpv2TeidFlagCounter) SetStart(value int32) PatternFlowGtp
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowGtpv2TeidFlagCounter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -108762,7 +114643,13 @@ func (obj *patternFlowGtpv2TeidFlagCounter) SetStep(value int32) PatternFlowGtpv
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowGtpv2TeidFlagCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -108964,7 +114851,13 @@ type PatternFlowGtpv2Spare1Counter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowGtpv2Spare1Counter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 0
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -108984,7 +114877,13 @@ func (obj *patternFlowGtpv2Spare1Counter) SetStart(value int32) PatternFlowGtpv2
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowGtpv2Spare1Counter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -109004,7 +114903,13 @@ func (obj *patternFlowGtpv2Spare1Counter) SetStep(value int32) PatternFlowGtpv2S
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowGtpv2Spare1Counter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -109206,7 +115111,13 @@ type PatternFlowGtpv2MessageTypeCounter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowGtpv2MessageTypeCounter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 0
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -109226,7 +115137,13 @@ func (obj *patternFlowGtpv2MessageTypeCounter) SetStart(value int32) PatternFlow
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowGtpv2MessageTypeCounter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -109246,7 +115163,13 @@ func (obj *patternFlowGtpv2MessageTypeCounter) SetStep(value int32) PatternFlowG
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowGtpv2MessageTypeCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -109448,7 +115371,13 @@ type PatternFlowGtpv2MessageLengthCounter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowGtpv2MessageLengthCounter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 0
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -109468,7 +115397,13 @@ func (obj *patternFlowGtpv2MessageLengthCounter) SetStart(value int32) PatternFl
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowGtpv2MessageLengthCounter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -109488,7 +115423,13 @@ func (obj *patternFlowGtpv2MessageLengthCounter) SetStep(value int32) PatternFlo
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowGtpv2MessageLengthCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -109690,7 +115631,13 @@ type PatternFlowGtpv2TeidCounter interface {
 // Start returns a int64
 //  description is TBD
 func (obj *patternFlowGtpv2TeidCounter) Start() int64 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 0
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int64
@@ -109710,7 +115657,13 @@ func (obj *patternFlowGtpv2TeidCounter) SetStart(value int64) PatternFlowGtpv2Te
 // Step returns a int64
 //  description is TBD
 func (obj *patternFlowGtpv2TeidCounter) Step() int64 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int64
@@ -109730,7 +115683,13 @@ func (obj *patternFlowGtpv2TeidCounter) SetStep(value int64) PatternFlowGtpv2Tei
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowGtpv2TeidCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -109932,7 +115891,13 @@ type PatternFlowGtpv2SequenceNumberCounter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowGtpv2SequenceNumberCounter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 0
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -109952,7 +115917,13 @@ func (obj *patternFlowGtpv2SequenceNumberCounter) SetStart(value int32) PatternF
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowGtpv2SequenceNumberCounter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -109972,7 +115943,13 @@ func (obj *patternFlowGtpv2SequenceNumberCounter) SetStep(value int32) PatternFl
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowGtpv2SequenceNumberCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -110174,7 +116151,13 @@ type PatternFlowGtpv2Spare2Counter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowGtpv2Spare2Counter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 0
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -110194,7 +116177,13 @@ func (obj *patternFlowGtpv2Spare2Counter) SetStart(value int32) PatternFlowGtpv2
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowGtpv2Spare2Counter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -110214,7 +116203,13 @@ func (obj *patternFlowGtpv2Spare2Counter) SetStep(value int32) PatternFlowGtpv2S
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowGtpv2Spare2Counter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -110416,7 +116411,13 @@ type PatternFlowArpHardwareTypeCounter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowArpHardwareTypeCounter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 1
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -110436,7 +116437,13 @@ func (obj *patternFlowArpHardwareTypeCounter) SetStart(value int32) PatternFlowA
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowArpHardwareTypeCounter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -110456,7 +116463,13 @@ func (obj *patternFlowArpHardwareTypeCounter) SetStep(value int32) PatternFlowAr
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowArpHardwareTypeCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -110658,7 +116671,13 @@ type PatternFlowArpProtocolTypeCounter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowArpProtocolTypeCounter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 2048
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -110678,7 +116697,13 @@ func (obj *patternFlowArpProtocolTypeCounter) SetStart(value int32) PatternFlowA
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowArpProtocolTypeCounter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -110698,7 +116723,13 @@ func (obj *patternFlowArpProtocolTypeCounter) SetStep(value int32) PatternFlowAr
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowArpProtocolTypeCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -110900,7 +116931,13 @@ type PatternFlowArpHardwareLengthCounter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowArpHardwareLengthCounter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 6
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -110920,7 +116957,13 @@ func (obj *patternFlowArpHardwareLengthCounter) SetStart(value int32) PatternFlo
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowArpHardwareLengthCounter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -110940,7 +116983,13 @@ func (obj *patternFlowArpHardwareLengthCounter) SetStep(value int32) PatternFlow
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowArpHardwareLengthCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -111142,7 +117191,13 @@ type PatternFlowArpProtocolLengthCounter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowArpProtocolLengthCounter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 4
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -111162,7 +117217,13 @@ func (obj *patternFlowArpProtocolLengthCounter) SetStart(value int32) PatternFlo
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowArpProtocolLengthCounter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -111182,7 +117243,13 @@ func (obj *patternFlowArpProtocolLengthCounter) SetStep(value int32) PatternFlow
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowArpProtocolLengthCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -111384,7 +117451,13 @@ type PatternFlowArpOperationCounter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowArpOperationCounter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 1
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -111404,7 +117477,13 @@ func (obj *patternFlowArpOperationCounter) SetStart(value int32) PatternFlowArpO
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowArpOperationCounter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -111424,7 +117503,13 @@ func (obj *patternFlowArpOperationCounter) SetStep(value int32) PatternFlowArpOp
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowArpOperationCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -111626,7 +117711,13 @@ type PatternFlowArpSenderHardwareAddrCounter interface {
 // Start returns a string
 //  description is TBD
 func (obj *patternFlowArpSenderHardwareAddrCounter) Start() string {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = "00:00:00:00:00:00"
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a string
@@ -111646,7 +117737,13 @@ func (obj *patternFlowArpSenderHardwareAddrCounter) SetStart(value string) Patte
 // Step returns a string
 //  description is TBD
 func (obj *patternFlowArpSenderHardwareAddrCounter) Step() string {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = "00:00:00:00:00:01"
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a string
@@ -111666,7 +117763,13 @@ func (obj *patternFlowArpSenderHardwareAddrCounter) SetStep(value string) Patter
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowArpSenderHardwareAddrCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -111866,7 +117969,13 @@ type PatternFlowArpSenderProtocolAddrCounter interface {
 // Start returns a string
 //  description is TBD
 func (obj *patternFlowArpSenderProtocolAddrCounter) Start() string {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = "0.0.0.0"
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a string
@@ -111886,7 +117995,13 @@ func (obj *patternFlowArpSenderProtocolAddrCounter) SetStart(value string) Patte
 // Step returns a string
 //  description is TBD
 func (obj *patternFlowArpSenderProtocolAddrCounter) Step() string {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = "0.0.0.1"
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a string
@@ -111906,7 +118021,13 @@ func (obj *patternFlowArpSenderProtocolAddrCounter) SetStep(value string) Patter
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowArpSenderProtocolAddrCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -112106,7 +118227,13 @@ type PatternFlowArpTargetHardwareAddrCounter interface {
 // Start returns a string
 //  description is TBD
 func (obj *patternFlowArpTargetHardwareAddrCounter) Start() string {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = "00:00:00:00:00:00"
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a string
@@ -112126,7 +118253,13 @@ func (obj *patternFlowArpTargetHardwareAddrCounter) SetStart(value string) Patte
 // Step returns a string
 //  description is TBD
 func (obj *patternFlowArpTargetHardwareAddrCounter) Step() string {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = "00:00:00:00:00:01"
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a string
@@ -112146,7 +118279,13 @@ func (obj *patternFlowArpTargetHardwareAddrCounter) SetStep(value string) Patter
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowArpTargetHardwareAddrCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -112346,7 +118485,13 @@ type PatternFlowArpTargetProtocolAddrCounter interface {
 // Start returns a string
 //  description is TBD
 func (obj *patternFlowArpTargetProtocolAddrCounter) Start() string {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = "0.0.0.0"
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a string
@@ -112366,7 +118511,13 @@ func (obj *patternFlowArpTargetProtocolAddrCounter) SetStart(value string) Patte
 // Step returns a string
 //  description is TBD
 func (obj *patternFlowArpTargetProtocolAddrCounter) Step() string {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = "0.0.0.1"
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a string
@@ -112386,7 +118537,13 @@ func (obj *patternFlowArpTargetProtocolAddrCounter) SetStep(value string) Patter
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowArpTargetProtocolAddrCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -112624,13 +118781,36 @@ func (obj *patternFlowIcmpEchoType) SetChoice(value PatternFlowIcmpEchoTypeChoic
 	}
 	enumValue := snappipb.PatternFlowIcmpEchoType_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowIcmpEchoType) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 8
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -112671,7 +118851,9 @@ func (obj *patternFlowIcmpEchoType) SetValues(value []int32) PatternFlowIcmpEcho
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowIcmpEchoType) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -112767,11 +118949,9 @@ func (obj *patternFlowIcmpEchoType) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowIcmpEchoType) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(8)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowIcmpEchoTypeChoice.VALUE)
+		obj.SetValue(8)
 	}
 
 }
@@ -112963,13 +119143,36 @@ func (obj *patternFlowIcmpEchoCode) SetChoice(value PatternFlowIcmpEchoCodeChoic
 	}
 	enumValue := snappipb.PatternFlowIcmpEchoCode_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowIcmpEchoCode) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 0
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -113010,7 +119213,9 @@ func (obj *patternFlowIcmpEchoCode) SetValues(value []int32) PatternFlowIcmpEcho
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowIcmpEchoCode) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -113106,11 +119311,9 @@ func (obj *patternFlowIcmpEchoCode) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowIcmpEchoCode) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(0)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowIcmpEchoCodeChoice.VALUE)
+		obj.SetValue(0)
 	}
 
 }
@@ -113282,6 +119485,15 @@ func (obj *patternFlowIcmpEchoChecksum) SetChoice(value PatternFlowIcmpEchoCheck
 		return obj
 	}
 	obj.obj.Choice = snappipb.PatternFlowIcmpEchoChecksum_Choice_Enum(intValue)
+
+	if string(value) != "generated" {
+		obj.obj.Generated = nil
+	}
+
+	if string(value) != "custom" {
+		obj.obj.Custom = nil
+	}
+
 	return obj
 }
 
@@ -113314,13 +119526,16 @@ func (obj *patternFlowIcmpEchoChecksum) SetGenerated(value PatternFlowIcmpEchoCh
 	}
 	enumValue := snappipb.PatternFlowIcmpEchoChecksum_Generated_Enum(intValue)
 	obj.obj.Generated = &enumValue
+
 	return obj
 }
 
 // Custom returns a int32
 //  A custom checksum value
 func (obj *patternFlowIcmpEchoChecksum) Custom() int32 {
+
 	return *obj.obj.Custom
+
 }
 
 // Custom returns a int32
@@ -113359,11 +119574,13 @@ func (obj *patternFlowIcmpEchoChecksum) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowIcmpEchoChecksum) setDefault() {
-	if obj.obj.Generated == nil {
-		obj.SetGenerated(PatternFlowIcmpEchoChecksumGenerated.GOOD)
-	}
 	if obj.obj.Choice.Number() == 0 {
 		obj.SetChoice(PatternFlowIcmpEchoChecksumChoice.GENERATED)
+		if obj.obj.Generated == nil {
+			obj.SetGenerated(PatternFlowIcmpEchoChecksumGenerated.GOOD)
+
+		}
+
 	}
 
 }
@@ -113555,13 +119772,36 @@ func (obj *patternFlowIcmpEchoIdentifier) SetChoice(value PatternFlowIcmpEchoIde
 	}
 	enumValue := snappipb.PatternFlowIcmpEchoIdentifier_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowIcmpEchoIdentifier) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 0
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -113602,7 +119842,9 @@ func (obj *patternFlowIcmpEchoIdentifier) SetValues(value []int32) PatternFlowIc
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowIcmpEchoIdentifier) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -113698,11 +119940,9 @@ func (obj *patternFlowIcmpEchoIdentifier) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowIcmpEchoIdentifier) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(0)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowIcmpEchoIdentifierChoice.VALUE)
+		obj.SetValue(0)
 	}
 
 }
@@ -113894,13 +120134,36 @@ func (obj *patternFlowIcmpEchoSequenceNumber) SetChoice(value PatternFlowIcmpEch
 	}
 	enumValue := snappipb.PatternFlowIcmpEchoSequenceNumber_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowIcmpEchoSequenceNumber) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 0
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -113941,7 +120204,9 @@ func (obj *patternFlowIcmpEchoSequenceNumber) SetValues(value []int32) PatternFl
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowIcmpEchoSequenceNumber) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -114037,11 +120302,9 @@ func (obj *patternFlowIcmpEchoSequenceNumber) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowIcmpEchoSequenceNumber) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(0)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowIcmpEchoSequenceNumberChoice.VALUE)
+		obj.SetValue(0)
 	}
 
 }
@@ -114233,13 +120496,36 @@ func (obj *patternFlowIcmpv6EchoType) SetChoice(value PatternFlowIcmpv6EchoTypeC
 	}
 	enumValue := snappipb.PatternFlowIcmpv6EchoType_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowIcmpv6EchoType) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 128
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -114280,7 +120566,9 @@ func (obj *patternFlowIcmpv6EchoType) SetValues(value []int32) PatternFlowIcmpv6
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowIcmpv6EchoType) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -114376,11 +120664,9 @@ func (obj *patternFlowIcmpv6EchoType) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowIcmpv6EchoType) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(128)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowIcmpv6EchoTypeChoice.VALUE)
+		obj.SetValue(128)
 	}
 
 }
@@ -114572,13 +120858,36 @@ func (obj *patternFlowIcmpv6EchoCode) SetChoice(value PatternFlowIcmpv6EchoCodeC
 	}
 	enumValue := snappipb.PatternFlowIcmpv6EchoCode_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowIcmpv6EchoCode) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 0
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -114619,7 +120928,9 @@ func (obj *patternFlowIcmpv6EchoCode) SetValues(value []int32) PatternFlowIcmpv6
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowIcmpv6EchoCode) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -114715,11 +121026,9 @@ func (obj *patternFlowIcmpv6EchoCode) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowIcmpv6EchoCode) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(0)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowIcmpv6EchoCodeChoice.VALUE)
+		obj.SetValue(0)
 	}
 
 }
@@ -114911,13 +121220,36 @@ func (obj *patternFlowIcmpv6EchoIdentifier) SetChoice(value PatternFlowIcmpv6Ech
 	}
 	enumValue := snappipb.PatternFlowIcmpv6EchoIdentifier_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowIcmpv6EchoIdentifier) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 0
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -114958,7 +121290,9 @@ func (obj *patternFlowIcmpv6EchoIdentifier) SetValues(value []int32) PatternFlow
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowIcmpv6EchoIdentifier) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -115054,11 +121388,9 @@ func (obj *patternFlowIcmpv6EchoIdentifier) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowIcmpv6EchoIdentifier) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(0)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowIcmpv6EchoIdentifierChoice.VALUE)
+		obj.SetValue(0)
 	}
 
 }
@@ -115250,13 +121582,36 @@ func (obj *patternFlowIcmpv6EchoSequenceNumber) SetChoice(value PatternFlowIcmpv
 	}
 	enumValue := snappipb.PatternFlowIcmpv6EchoSequenceNumber_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowIcmpv6EchoSequenceNumber) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 0
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -115297,7 +121652,9 @@ func (obj *patternFlowIcmpv6EchoSequenceNumber) SetValues(value []int32) Pattern
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowIcmpv6EchoSequenceNumber) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -115393,11 +121750,9 @@ func (obj *patternFlowIcmpv6EchoSequenceNumber) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowIcmpv6EchoSequenceNumber) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(0)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowIcmpv6EchoSequenceNumberChoice.VALUE)
+		obj.SetValue(0)
 	}
 
 }
@@ -115569,6 +121924,15 @@ func (obj *patternFlowIcmpv6EchoChecksum) SetChoice(value PatternFlowIcmpv6EchoC
 		return obj
 	}
 	obj.obj.Choice = snappipb.PatternFlowIcmpv6EchoChecksum_Choice_Enum(intValue)
+
+	if string(value) != "generated" {
+		obj.obj.Generated = nil
+	}
+
+	if string(value) != "custom" {
+		obj.obj.Custom = nil
+	}
+
 	return obj
 }
 
@@ -115601,13 +121965,16 @@ func (obj *patternFlowIcmpv6EchoChecksum) SetGenerated(value PatternFlowIcmpv6Ec
 	}
 	enumValue := snappipb.PatternFlowIcmpv6EchoChecksum_Generated_Enum(intValue)
 	obj.obj.Generated = &enumValue
+
 	return obj
 }
 
 // Custom returns a int32
 //  A custom checksum value
 func (obj *patternFlowIcmpv6EchoChecksum) Custom() int32 {
+
 	return *obj.obj.Custom
+
 }
 
 // Custom returns a int32
@@ -115646,11 +122013,13 @@ func (obj *patternFlowIcmpv6EchoChecksum) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowIcmpv6EchoChecksum) setDefault() {
-	if obj.obj.Generated == nil {
-		obj.SetGenerated(PatternFlowIcmpv6EchoChecksumGenerated.GOOD)
-	}
 	if obj.obj.Choice.Number() == 0 {
 		obj.SetChoice(PatternFlowIcmpv6EchoChecksumChoice.GENERATED)
+		if obj.obj.Generated == nil {
+			obj.SetGenerated(PatternFlowIcmpv6EchoChecksumGenerated.GOOD)
+
+		}
+
 	}
 
 }
@@ -115804,7 +122173,13 @@ type PatternFlowPppAddressCounter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowPppAddressCounter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 255
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -115824,7 +122199,13 @@ func (obj *patternFlowPppAddressCounter) SetStart(value int32) PatternFlowPppAdd
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowPppAddressCounter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -115844,7 +122225,13 @@ func (obj *patternFlowPppAddressCounter) SetStep(value int32) PatternFlowPppAddr
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowPppAddressCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -116046,7 +122433,13 @@ type PatternFlowPppControlCounter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowPppControlCounter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 3
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -116066,7 +122459,13 @@ func (obj *patternFlowPppControlCounter) SetStart(value int32) PatternFlowPppCon
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowPppControlCounter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -116086,7 +122485,13 @@ func (obj *patternFlowPppControlCounter) SetStep(value int32) PatternFlowPppCont
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowPppControlCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -116288,7 +122693,9 @@ type PatternFlowPppProtocolTypeCounter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowPppProtocolTypeCounter) Start() int32 {
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -116308,7 +122715,9 @@ func (obj *patternFlowPppProtocolTypeCounter) SetStart(value int32) PatternFlowP
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowPppProtocolTypeCounter) Step() int32 {
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -116328,7 +122737,13 @@ func (obj *patternFlowPppProtocolTypeCounter) SetStep(value int32) PatternFlowPp
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowPppProtocolTypeCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -116524,7 +122939,13 @@ type PatternFlowIgmpv1VersionCounter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowIgmpv1VersionCounter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 1
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -116544,7 +122965,13 @@ func (obj *patternFlowIgmpv1VersionCounter) SetStart(value int32) PatternFlowIgm
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowIgmpv1VersionCounter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -116564,7 +122991,13 @@ func (obj *patternFlowIgmpv1VersionCounter) SetStep(value int32) PatternFlowIgmp
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowIgmpv1VersionCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -116766,7 +123199,13 @@ type PatternFlowIgmpv1TypeCounter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowIgmpv1TypeCounter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 17
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -116786,7 +123225,13 @@ func (obj *patternFlowIgmpv1TypeCounter) SetStart(value int32) PatternFlowIgmpv1
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowIgmpv1TypeCounter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -116806,7 +123251,13 @@ func (obj *patternFlowIgmpv1TypeCounter) SetStep(value int32) PatternFlowIgmpv1T
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowIgmpv1TypeCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -117008,7 +123459,13 @@ type PatternFlowIgmpv1UnusedCounter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowIgmpv1UnusedCounter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 0
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -117028,7 +123485,13 @@ func (obj *patternFlowIgmpv1UnusedCounter) SetStart(value int32) PatternFlowIgmp
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowIgmpv1UnusedCounter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -117048,7 +123511,13 @@ func (obj *patternFlowIgmpv1UnusedCounter) SetStep(value int32) PatternFlowIgmpv
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowIgmpv1UnusedCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -117250,7 +123719,13 @@ type PatternFlowIgmpv1GroupAddressCounter interface {
 // Start returns a string
 //  description is TBD
 func (obj *patternFlowIgmpv1GroupAddressCounter) Start() string {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = "0.0.0.0"
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a string
@@ -117270,7 +123745,13 @@ func (obj *patternFlowIgmpv1GroupAddressCounter) SetStart(value string) PatternF
 // Step returns a string
 //  description is TBD
 func (obj *patternFlowIgmpv1GroupAddressCounter) Step() string {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = "0.0.0.1"
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a string
@@ -117290,7 +123771,13 @@ func (obj *patternFlowIgmpv1GroupAddressCounter) SetStep(value string) PatternFl
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowIgmpv1GroupAddressCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -117487,7 +123974,9 @@ type BgpRouteAdvanced interface {
 // MultiExitDiscriminator returns a int32
 //  The multi exit discriminator (MED) value.  A null value means the MED feature is not enabled.
 func (obj *bgpRouteAdvanced) MultiExitDiscriminator() int32 {
+
 	return *obj.obj.MultiExitDiscriminator
+
 }
 
 // MultiExitDiscriminator returns a int32
@@ -117533,6 +124022,7 @@ func (obj *bgpRouteAdvanced) SetOrigin(value BgpRouteAdvancedOriginEnum) BgpRout
 	}
 	enumValue := snappipb.BgpRouteAdvanced_Origin_Enum(intValue)
 	obj.obj.Origin = &enumValue
+
 	return obj
 }
 
@@ -117546,6 +124036,7 @@ func (obj *bgpRouteAdvanced) validateObj(set_default bool) {
 func (obj *bgpRouteAdvanced) setDefault() {
 	if obj.obj.Origin == nil {
 		obj.SetOrigin(BgpRouteAdvancedOrigin.IGP)
+
 	}
 
 }
@@ -117733,13 +124224,20 @@ func (obj *bgpCommunity) SetType(value BgpCommunityTypeEnum) BgpCommunity {
 	}
 	enumValue := snappipb.BgpCommunity_Type_Enum(intValue)
 	obj.obj.Type = &enumValue
+
 	return obj
 }
 
 // AsNumber returns a int32
 //  First two octets of 32 bit community AS number.
 func (obj *bgpCommunity) AsNumber() int32 {
+
+	if obj.obj.AsNumber == nil {
+		*obj.obj.AsNumber = 0
+	}
+
 	return *obj.obj.AsNumber
+
 }
 
 // AsNumber returns a int32
@@ -117759,7 +124257,13 @@ func (obj *bgpCommunity) SetAsNumber(value int32) BgpCommunity {
 // AsCustom returns a int32
 //  Last two octets of the community AS number.
 func (obj *bgpCommunity) AsCustom() int32 {
+
+	if obj.obj.AsCustom == nil {
+		*obj.obj.AsCustom = 0
+	}
+
 	return *obj.obj.AsCustom
+
 }
 
 // AsCustom returns a int32
@@ -117987,6 +124491,7 @@ func (obj *bgpAsPath) SetAsSetMode(value BgpAsPathAsSetModeEnum) BgpAsPath {
 	}
 	enumValue := snappipb.BgpAsPath_AsSetMode_Enum(intValue)
 	obj.obj.AsSetMode = &enumValue
+
 	return obj
 }
 
@@ -118039,9 +124544,7 @@ func (obj *bgpAsPath) validateObj(set_default bool) {
 func (obj *bgpAsPath) setDefault() {
 	if obj.obj.AsSetMode == nil {
 		obj.SetAsSetMode(BgpAsPathAsSetMode.DO_NOT_INCLUDE_LOCAL_AS)
-	}
-	if obj.obj.Segments == nil {
-		obj.Segments()
+
 	}
 
 }
@@ -118189,7 +124692,13 @@ type BgpAddPath interface {
 // PathId returns a int32
 //  The id of the additional path.
 func (obj *bgpAddPath) PathId() int32 {
+
+	if obj.obj.PathId == nil {
+		*obj.obj.PathId = 1
+	}
+
 	return *obj.obj.PathId
+
 }
 
 // PathId returns a int32
@@ -118409,6 +124918,7 @@ func (obj *bgpExtCommunity) SetType(value BgpExtCommunityTypeEnum) BgpExtCommuni
 	}
 	enumValue := snappipb.BgpExtCommunity_Type_Enum(intValue)
 	obj.obj.Type = &enumValue
+
 	return obj
 }
 
@@ -118455,13 +124965,16 @@ func (obj *bgpExtCommunity) SetSubtype(value BgpExtCommunitySubtypeEnum) BgpExtC
 	}
 	enumValue := snappipb.BgpExtCommunity_Subtype_Enum(intValue)
 	obj.obj.Subtype = &enumValue
+
 	return obj
 }
 
 // Value returns a string
 //  Extended Community value of 6 Bytes. Example - for the Opaque type and Color subtype value can be '0000000000c8'  for the color value 200.
 func (obj *bgpExtCommunity) Value() string {
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a string
@@ -118858,6 +125371,7 @@ func (obj *bgpSrteV4TunnelTlvBgpSrteSegmentListIter) Items() []BgpSrteSegmentLis
 // Name returns a string
 //  Globally unique name of an object. It also serves as the primary key for arrays of objects.
 func (obj *bgpSrteV4TunnelTlv) Name() string {
+
 	return obj.obj.Name
 }
 
@@ -118872,7 +125386,13 @@ func (obj *bgpSrteV4TunnelTlv) SetName(value string) BgpSrteV4TunnelTlv {
 // Active returns a bool
 //  If enabled means that this part of the configuration including any active 'children' nodes will be advertised to peer.  If disabled, this means that though config is present, it is not taking any part of the test but can be activated at run-time to advertise just this part of the configuration to the peer.
 func (obj *bgpSrteV4TunnelTlv) Active() bool {
+
+	if obj.obj.Active == nil {
+		*obj.obj.Active = true
+	}
+
 	return *obj.obj.Active
+
 }
 
 // Active returns a bool
@@ -118934,9 +125454,6 @@ func (obj *bgpSrteV4TunnelTlv) validateObj(set_default bool) {
 }
 
 func (obj *bgpSrteV4TunnelTlv) setDefault() {
-	if obj.obj.SegmentLists == nil {
-		obj.SegmentLists()
-	}
 	if obj.obj.Active == nil {
 		obj.SetActive(true)
 	}
@@ -119305,6 +125822,7 @@ func (obj *bgpSrteV6TunnelTlvBgpSrteSegmentListIter) Items() []BgpSrteSegmentLis
 // Name returns a string
 //  Globally unique name of an object. It also serves as the primary key for arrays of objects.
 func (obj *bgpSrteV6TunnelTlv) Name() string {
+
 	return obj.obj.Name
 }
 
@@ -119319,7 +125837,13 @@ func (obj *bgpSrteV6TunnelTlv) SetName(value string) BgpSrteV6TunnelTlv {
 // Active returns a bool
 //  If enabled means that this part of the configuration including any active 'children' nodes will be advertised to peer.  If disabled, this means that though config is present, it is not taking any part of the test but can be activated at run-time to advertise just this part of the configuration to the peer.
 func (obj *bgpSrteV6TunnelTlv) Active() bool {
+
+	if obj.obj.Active == nil {
+		*obj.obj.Active = true
+	}
+
 	return *obj.obj.Active
+
 }
 
 // Active returns a bool
@@ -119381,9 +125905,6 @@ func (obj *bgpSrteV6TunnelTlv) validateObj(set_default bool) {
 }
 
 func (obj *bgpSrteV6TunnelTlv) setDefault() {
-	if obj.obj.SegmentLists == nil {
-		obj.SegmentLists()
-	}
 	if obj.obj.Active == nil {
 		obj.SetActive(true)
 	}
@@ -119539,7 +126060,13 @@ type PatternFlowIpv4PriorityRawCounter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowIpv4PriorityRawCounter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 0
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -119559,7 +126086,13 @@ func (obj *patternFlowIpv4PriorityRawCounter) SetStart(value int32) PatternFlowI
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowIpv4PriorityRawCounter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -119579,7 +126112,13 @@ func (obj *patternFlowIpv4PriorityRawCounter) SetStep(value int32) PatternFlowIp
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowIpv4PriorityRawCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -119819,13 +126358,36 @@ func (obj *patternFlowIpv4TosPrecedence) SetChoice(value PatternFlowIpv4TosPrece
 	}
 	enumValue := snappipb.PatternFlowIpv4TosPrecedence_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowIpv4TosPrecedence) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 0
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -119866,7 +126428,9 @@ func (obj *patternFlowIpv4TosPrecedence) SetValues(value []int32) PatternFlowIpv
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowIpv4TosPrecedence) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -119962,11 +126526,9 @@ func (obj *patternFlowIpv4TosPrecedence) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowIpv4TosPrecedence) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(0)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowIpv4TosPrecedenceChoice.VALUE)
+		obj.SetValue(0)
 	}
 
 }
@@ -120158,13 +126720,36 @@ func (obj *patternFlowIpv4TosDelay) SetChoice(value PatternFlowIpv4TosDelayChoic
 	}
 	enumValue := snappipb.PatternFlowIpv4TosDelay_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowIpv4TosDelay) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 0
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -120205,7 +126790,9 @@ func (obj *patternFlowIpv4TosDelay) SetValues(value []int32) PatternFlowIpv4TosD
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowIpv4TosDelay) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -120301,11 +126888,9 @@ func (obj *patternFlowIpv4TosDelay) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowIpv4TosDelay) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(0)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowIpv4TosDelayChoice.VALUE)
+		obj.SetValue(0)
 	}
 
 }
@@ -120497,13 +127082,36 @@ func (obj *patternFlowIpv4TosThroughput) SetChoice(value PatternFlowIpv4TosThrou
 	}
 	enumValue := snappipb.PatternFlowIpv4TosThroughput_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowIpv4TosThroughput) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 0
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -120544,7 +127152,9 @@ func (obj *patternFlowIpv4TosThroughput) SetValues(value []int32) PatternFlowIpv
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowIpv4TosThroughput) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -120640,11 +127250,9 @@ func (obj *patternFlowIpv4TosThroughput) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowIpv4TosThroughput) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(0)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowIpv4TosThroughputChoice.VALUE)
+		obj.SetValue(0)
 	}
 
 }
@@ -120836,13 +127444,36 @@ func (obj *patternFlowIpv4TosReliability) SetChoice(value PatternFlowIpv4TosReli
 	}
 	enumValue := snappipb.PatternFlowIpv4TosReliability_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowIpv4TosReliability) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 0
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -120883,7 +127514,9 @@ func (obj *patternFlowIpv4TosReliability) SetValues(value []int32) PatternFlowIp
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowIpv4TosReliability) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -120979,11 +127612,9 @@ func (obj *patternFlowIpv4TosReliability) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowIpv4TosReliability) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(0)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowIpv4TosReliabilityChoice.VALUE)
+		obj.SetValue(0)
 	}
 
 }
@@ -121175,13 +127806,36 @@ func (obj *patternFlowIpv4TosMonetary) SetChoice(value PatternFlowIpv4TosMonetar
 	}
 	enumValue := snappipb.PatternFlowIpv4TosMonetary_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowIpv4TosMonetary) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 0
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -121222,7 +127876,9 @@ func (obj *patternFlowIpv4TosMonetary) SetValues(value []int32) PatternFlowIpv4T
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowIpv4TosMonetary) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -121318,11 +127974,9 @@ func (obj *patternFlowIpv4TosMonetary) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowIpv4TosMonetary) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(0)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowIpv4TosMonetaryChoice.VALUE)
+		obj.SetValue(0)
 	}
 
 }
@@ -121514,13 +128168,36 @@ func (obj *patternFlowIpv4TosUnused) SetChoice(value PatternFlowIpv4TosUnusedCho
 	}
 	enumValue := snappipb.PatternFlowIpv4TosUnused_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowIpv4TosUnused) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 0
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -121561,7 +128238,9 @@ func (obj *patternFlowIpv4TosUnused) SetValues(value []int32) PatternFlowIpv4Tos
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowIpv4TosUnused) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -121657,11 +128336,9 @@ func (obj *patternFlowIpv4TosUnused) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowIpv4TosUnused) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(0)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowIpv4TosUnusedChoice.VALUE)
+		obj.SetValue(0)
 	}
 
 }
@@ -121853,13 +128530,36 @@ func (obj *patternFlowIpv4DscpPhb) SetChoice(value PatternFlowIpv4DscpPhbChoiceE
 	}
 	enumValue := snappipb.PatternFlowIpv4DscpPhb_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowIpv4DscpPhb) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 0
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -121900,7 +128600,9 @@ func (obj *patternFlowIpv4DscpPhb) SetValues(value []int32) PatternFlowIpv4DscpP
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowIpv4DscpPhb) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -121996,11 +128698,9 @@ func (obj *patternFlowIpv4DscpPhb) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowIpv4DscpPhb) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(0)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowIpv4DscpPhbChoice.VALUE)
+		obj.SetValue(0)
 	}
 
 }
@@ -122192,13 +128892,36 @@ func (obj *patternFlowIpv4DscpEcn) SetChoice(value PatternFlowIpv4DscpEcnChoiceE
 	}
 	enumValue := snappipb.PatternFlowIpv4DscpEcn_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+
+	if string(value) != "value" {
+		obj.obj.Value = nil
+	}
+
+	if string(value) != "values" {
+		obj.obj.Values = nil
+	}
+
+	if string(value) != "increment" {
+		obj.obj.Increment = nil
+	}
+
+	if string(value) != "decrement" {
+		obj.obj.Decrement = nil
+	}
+
 	return obj
 }
 
 // Value returns a int32
 //  description is TBD
 func (obj *patternFlowIpv4DscpEcn) Value() int32 {
+
+	if obj.obj.Value == nil {
+		*obj.obj.Value = 0
+	}
+
 	return *obj.obj.Value
+
 }
 
 // Value returns a int32
@@ -122239,7 +128962,9 @@ func (obj *patternFlowIpv4DscpEcn) SetValues(value []int32) PatternFlowIpv4DscpE
 // MetricGroup returns a string
 //  A unique name is used to indicate to the system that the field may extend the metric row key and create an aggregate metric row for every unique value. To have metric group columns appear in the flow metric rows the flow metric request allows for the metric_group value to be specified as part of the request.
 func (obj *patternFlowIpv4DscpEcn) MetricGroup() string {
+
 	return *obj.obj.MetricGroup
+
 }
 
 // MetricGroup returns a string
@@ -122335,11 +129060,9 @@ func (obj *patternFlowIpv4DscpEcn) validateObj(set_default bool) {
 }
 
 func (obj *patternFlowIpv4DscpEcn) setDefault() {
-	if obj.obj.Value == nil {
-		obj.SetValue(0)
-	}
 	if obj.obj.Choice == nil {
 		obj.SetChoice(PatternFlowIpv4DscpEcnChoice.VALUE)
+		obj.SetValue(0)
 	}
 
 }
@@ -122493,7 +129216,13 @@ type PatternFlowGtpExtensionExtensionLengthCounter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowGtpExtensionExtensionLengthCounter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 0
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -122513,7 +129242,13 @@ func (obj *patternFlowGtpExtensionExtensionLengthCounter) SetStart(value int32) 
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowGtpExtensionExtensionLengthCounter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -122533,7 +129268,13 @@ func (obj *patternFlowGtpExtensionExtensionLengthCounter) SetStep(value int32) P
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowGtpExtensionExtensionLengthCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -122735,7 +129476,13 @@ type PatternFlowGtpExtensionContentsCounter interface {
 // Start returns a int64
 //  description is TBD
 func (obj *patternFlowGtpExtensionContentsCounter) Start() int64 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 0
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int64
@@ -122755,7 +129502,13 @@ func (obj *patternFlowGtpExtensionContentsCounter) SetStart(value int64) Pattern
 // Step returns a int64
 //  description is TBD
 func (obj *patternFlowGtpExtensionContentsCounter) Step() int64 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int64
@@ -122775,7 +129528,13 @@ func (obj *patternFlowGtpExtensionContentsCounter) SetStep(value int64) PatternF
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowGtpExtensionContentsCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -122977,7 +129736,13 @@ type PatternFlowGtpExtensionNextExtensionHeaderCounter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowGtpExtensionNextExtensionHeaderCounter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 0
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -122997,7 +129762,13 @@ func (obj *patternFlowGtpExtensionNextExtensionHeaderCounter) SetStart(value int
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowGtpExtensionNextExtensionHeaderCounter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -123017,7 +129788,13 @@ func (obj *patternFlowGtpExtensionNextExtensionHeaderCounter) SetStep(value int3
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowGtpExtensionNextExtensionHeaderCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -123219,7 +129996,13 @@ type PatternFlowIcmpEchoTypeCounter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowIcmpEchoTypeCounter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 8
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -123239,7 +130022,13 @@ func (obj *patternFlowIcmpEchoTypeCounter) SetStart(value int32) PatternFlowIcmp
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowIcmpEchoTypeCounter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -123259,7 +130048,13 @@ func (obj *patternFlowIcmpEchoTypeCounter) SetStep(value int32) PatternFlowIcmpE
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowIcmpEchoTypeCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -123461,7 +130256,13 @@ type PatternFlowIcmpEchoCodeCounter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowIcmpEchoCodeCounter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 0
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -123481,7 +130282,13 @@ func (obj *patternFlowIcmpEchoCodeCounter) SetStart(value int32) PatternFlowIcmp
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowIcmpEchoCodeCounter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -123501,7 +130308,13 @@ func (obj *patternFlowIcmpEchoCodeCounter) SetStep(value int32) PatternFlowIcmpE
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowIcmpEchoCodeCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -123703,7 +130516,13 @@ type PatternFlowIcmpEchoIdentifierCounter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowIcmpEchoIdentifierCounter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 0
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -123723,7 +130542,13 @@ func (obj *patternFlowIcmpEchoIdentifierCounter) SetStart(value int32) PatternFl
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowIcmpEchoIdentifierCounter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -123743,7 +130568,13 @@ func (obj *patternFlowIcmpEchoIdentifierCounter) SetStep(value int32) PatternFlo
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowIcmpEchoIdentifierCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -123945,7 +130776,13 @@ type PatternFlowIcmpEchoSequenceNumberCounter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowIcmpEchoSequenceNumberCounter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 0
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -123965,7 +130802,13 @@ func (obj *patternFlowIcmpEchoSequenceNumberCounter) SetStart(value int32) Patte
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowIcmpEchoSequenceNumberCounter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -123985,7 +130828,13 @@ func (obj *patternFlowIcmpEchoSequenceNumberCounter) SetStep(value int32) Patter
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowIcmpEchoSequenceNumberCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -124187,7 +131036,13 @@ type PatternFlowIcmpv6EchoTypeCounter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowIcmpv6EchoTypeCounter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 128
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -124207,7 +131062,13 @@ func (obj *patternFlowIcmpv6EchoTypeCounter) SetStart(value int32) PatternFlowIc
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowIcmpv6EchoTypeCounter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -124227,7 +131088,13 @@ func (obj *patternFlowIcmpv6EchoTypeCounter) SetStep(value int32) PatternFlowIcm
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowIcmpv6EchoTypeCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -124429,7 +131296,13 @@ type PatternFlowIcmpv6EchoCodeCounter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowIcmpv6EchoCodeCounter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 0
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -124449,7 +131322,13 @@ func (obj *patternFlowIcmpv6EchoCodeCounter) SetStart(value int32) PatternFlowIc
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowIcmpv6EchoCodeCounter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -124469,7 +131348,13 @@ func (obj *patternFlowIcmpv6EchoCodeCounter) SetStep(value int32) PatternFlowIcm
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowIcmpv6EchoCodeCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -124671,7 +131556,13 @@ type PatternFlowIcmpv6EchoIdentifierCounter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowIcmpv6EchoIdentifierCounter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 0
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -124691,7 +131582,13 @@ func (obj *patternFlowIcmpv6EchoIdentifierCounter) SetStart(value int32) Pattern
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowIcmpv6EchoIdentifierCounter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -124711,7 +131608,13 @@ func (obj *patternFlowIcmpv6EchoIdentifierCounter) SetStep(value int32) PatternF
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowIcmpv6EchoIdentifierCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -124913,7 +131816,13 @@ type PatternFlowIcmpv6EchoSequenceNumberCounter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowIcmpv6EchoSequenceNumberCounter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 0
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -124933,7 +131842,13 @@ func (obj *patternFlowIcmpv6EchoSequenceNumberCounter) SetStart(value int32) Pat
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowIcmpv6EchoSequenceNumberCounter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -124953,7 +131868,13 @@ func (obj *patternFlowIcmpv6EchoSequenceNumberCounter) SetStep(value int32) Patt
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowIcmpv6EchoSequenceNumberCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -125182,6 +132103,7 @@ func (obj *bgpAsPathSegment) SetType(value BgpAsPathSegmentTypeEnum) BgpAsPathSe
 	}
 	enumValue := snappipb.BgpAsPathSegment_Type_Enum(intValue)
 	obj.obj.Type = &enumValue
+
 	return obj
 }
 
@@ -125215,6 +132137,7 @@ func (obj *bgpAsPathSegment) validateObj(set_default bool) {
 func (obj *bgpAsPathSegment) setDefault() {
 	if obj.obj.Type == nil {
 		obj.SetType(BgpAsPathSegmentType.AS_SEQ)
+
 	}
 
 }
@@ -125371,7 +132294,13 @@ type BgpSrteRemoteEndpointSubTlv interface {
 // AsNumber returns a int64
 //  Autonomous system (AS) number
 func (obj *bgpSrteRemoteEndpointSubTlv) AsNumber() int64 {
+
+	if obj.obj.AsNumber == nil {
+		*obj.obj.AsNumber = 0
+	}
+
 	return *obj.obj.AsNumber
+
 }
 
 // AsNumber returns a int64
@@ -125417,13 +132346,20 @@ func (obj *bgpSrteRemoteEndpointSubTlv) SetAddressFamily(value BgpSrteRemoteEndp
 	}
 	enumValue := snappipb.BgpSrteRemoteEndpointSubTlv_AddressFamily_Enum(intValue)
 	obj.obj.AddressFamily = &enumValue
+
 	return obj
 }
 
 // Ipv4Address returns a string
 //  The IPv4 address of the Remote Endpoint.
 func (obj *bgpSrteRemoteEndpointSubTlv) Ipv4Address() string {
+
+	if obj.obj.Ipv4Address == nil {
+		*obj.obj.Ipv4Address = "0.0.0.0"
+	}
+
 	return *obj.obj.Ipv4Address
+
 }
 
 // Ipv4Address returns a string
@@ -125443,7 +132379,13 @@ func (obj *bgpSrteRemoteEndpointSubTlv) SetIpv4Address(value string) BgpSrteRemo
 // Ipv6Address returns a string
 //  The IPv6 address of the Remote Endpoint.
 func (obj *bgpSrteRemoteEndpointSubTlv) Ipv6Address() string {
+
+	if obj.obj.Ipv6Address == nil {
+		*obj.obj.Ipv6Address = "::0"
+	}
+
 	return *obj.obj.Ipv6Address
+
 }
 
 // Ipv6Address returns a string
@@ -125495,6 +132437,7 @@ func (obj *bgpSrteRemoteEndpointSubTlv) setDefault() {
 	}
 	if obj.obj.AddressFamily == nil {
 		obj.SetAddressFamily(BgpSrteRemoteEndpointSubTlvAddressFamily.IPV4)
+
 	}
 	if obj.obj.Ipv4Address == nil {
 		obj.SetIpv4Address("0.0.0.0")
@@ -125648,7 +132591,9 @@ type BgpSrteColorSubTlv interface {
 // Color returns a string
 //  Six octet values. Example: 000000000064 for color value 100.
 func (obj *bgpSrteColorSubTlv) Color() string {
+
 	return *obj.obj.Color
+
 }
 
 // Color returns a string
@@ -125866,13 +132811,16 @@ func (obj *bgpSrteBindingSubTlv) SetBindingSidType(value BgpSrteBindingSubTlvBin
 	}
 	enumValue := snappipb.BgpSrteBindingSubTlv_BindingSidType_Enum(intValue)
 	obj.obj.BindingSidType = &enumValue
+
 	return obj
 }
 
 // FourOctetSid returns a int32
 //  Binding SID is encoded in 4 octets.
 func (obj *bgpSrteBindingSubTlv) FourOctetSid() int32 {
+
 	return *obj.obj.FourOctetSid
+
 }
 
 // FourOctetSid returns a int32
@@ -125892,7 +132840,9 @@ func (obj *bgpSrteBindingSubTlv) SetFourOctetSid(value int32) BgpSrteBindingSubT
 // Ipv6Sid returns a string
 //  IPv6 SID value.
 func (obj *bgpSrteBindingSubTlv) Ipv6Sid() string {
+
 	return *obj.obj.Ipv6Sid
+
 }
 
 // Ipv6Sid returns a string
@@ -125912,7 +132862,13 @@ func (obj *bgpSrteBindingSubTlv) SetIpv6Sid(value string) BgpSrteBindingSubTlv {
 // SFlag returns a bool
 //  S-Flag encodes the "Specified-BSID-only" behavior.
 func (obj *bgpSrteBindingSubTlv) SFlag() bool {
+
+	if obj.obj.SFlag == nil {
+		*obj.obj.SFlag = false
+	}
+
 	return *obj.obj.SFlag
+
 }
 
 // SFlag returns a bool
@@ -125932,7 +132888,13 @@ func (obj *bgpSrteBindingSubTlv) SetSFlag(value bool) BgpSrteBindingSubTlv {
 // IFlag returns a bool
 //  I-Flag encodes the "Drop Upon Invalid" behavior.
 func (obj *bgpSrteBindingSubTlv) IFlag() bool {
+
+	if obj.obj.IFlag == nil {
+		*obj.obj.IFlag = false
+	}
+
 	return *obj.obj.IFlag
+
 }
 
 // IFlag returns a bool
@@ -125966,6 +132928,7 @@ func (obj *bgpSrteBindingSubTlv) validateObj(set_default bool) {
 func (obj *bgpSrteBindingSubTlv) setDefault() {
 	if obj.obj.BindingSidType == nil {
 		obj.SetBindingSidType(BgpSrteBindingSubTlvBindingSidType.NO_BINDING)
+
 	}
 	if obj.obj.SFlag == nil {
 		obj.SetSFlag(false)
@@ -126119,7 +133082,13 @@ type BgpSrtePreferenceSubTlv interface {
 // Preference returns a int64
 //  The preference value of the SR Policy candidate path.
 func (obj *bgpSrtePreferenceSubTlv) Preference() int64 {
+
+	if obj.obj.Preference == nil {
+		*obj.obj.Preference = 0
+	}
+
 	return *obj.obj.Preference
+
 }
 
 // Preference returns a int64
@@ -126301,7 +133270,9 @@ type BgpSrtePolicyPrioritySubTlv interface {
 // PolicyPriority returns a int32
 //  One-octet Priority value.
 func (obj *bgpSrtePolicyPrioritySubTlv) PolicyPriority() int32 {
+
 	return *obj.obj.PolicyPriority
+
 }
 
 // PolicyPriority returns a int32
@@ -126480,7 +133451,9 @@ type BgpSrtePolicyNameSubTlv interface {
 // PolicyName returns a string
 //  Symbolic name for the policy that should be a string of printable ASCII characters, without a NULL terminator.
 func (obj *bgpSrtePolicyNameSubTlv) PolicyName() string {
+
 	return *obj.obj.PolicyName
+
 }
 
 // PolicyName returns a string
@@ -126683,6 +133656,7 @@ func (obj *bgpSrteExplicitNullLabelPolicySubTlv) SetExplicitNullLabelPolicy(valu
 	}
 	enumValue := snappipb.BgpSrteExplicitNullLabelPolicySubTlv_ExplicitNullLabelPolicy_Enum(intValue)
 	obj.obj.ExplicitNullLabelPolicy = &enumValue
+
 	return obj
 }
 
@@ -126696,6 +133670,7 @@ func (obj *bgpSrteExplicitNullLabelPolicySubTlv) validateObj(set_default bool) {
 func (obj *bgpSrteExplicitNullLabelPolicySubTlv) setDefault() {
 	if obj.obj.ExplicitNullLabelPolicy == nil {
 		obj.SetExplicitNullLabelPolicy(BgpSrteExplicitNullLabelPolicySubTlvExplicitNullLabelPolicy.DO_NOT_PUSH_ENLP)
+
 	}
 
 }
@@ -126849,7 +133824,13 @@ type BgpSrteSegmentList interface {
 // Weight returns a int64
 //  The Weight associated with a given path and the sub-TLV is optional.
 func (obj *bgpSrteSegmentList) Weight() int64 {
+
+	if obj.obj.Weight == nil {
+		*obj.obj.Weight = 0
+	}
+
 	return *obj.obj.Weight
+
 }
 
 // Weight returns a int64
@@ -126903,6 +133884,7 @@ func (obj *bgpSrteSegmentListBgpSrteSegmentIter) Items() []BgpSrteSegment {
 // Name returns a string
 //  Globally unique name of an object. It also serves as the primary key for arrays of objects.
 func (obj *bgpSrteSegmentList) Name() string {
+
 	return obj.obj.Name
 }
 
@@ -126917,7 +133899,13 @@ func (obj *bgpSrteSegmentList) SetName(value string) BgpSrteSegmentList {
 // Active returns a bool
 //  If enabled means that this part of the configuration including any active 'children' nodes will be advertised to peer.  If disabled, this means that though config is present, it is not taking any part of the test but can be activated at run-time to advertise just this part of the configuration to the peer.
 func (obj *bgpSrteSegmentList) Active() bool {
+
+	if obj.obj.Active == nil {
+		*obj.obj.Active = true
+	}
+
 	return *obj.obj.Active
+
 }
 
 // Active returns a bool
@@ -126962,9 +133950,6 @@ func (obj *bgpSrteSegmentList) validateObj(set_default bool) {
 func (obj *bgpSrteSegmentList) setDefault() {
 	if obj.obj.Weight == nil {
 		obj.SetWeight(0)
-	}
-	if obj.obj.Segments == nil {
-		obj.Segments()
 	}
 	if obj.obj.Active == nil {
 		obj.SetActive(true)
@@ -127121,7 +134106,13 @@ type PatternFlowIpv4TosPrecedenceCounter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowIpv4TosPrecedenceCounter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 0
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -127141,7 +134132,13 @@ func (obj *patternFlowIpv4TosPrecedenceCounter) SetStart(value int32) PatternFlo
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowIpv4TosPrecedenceCounter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -127161,7 +134158,13 @@ func (obj *patternFlowIpv4TosPrecedenceCounter) SetStep(value int32) PatternFlow
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowIpv4TosPrecedenceCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -127363,7 +134366,13 @@ type PatternFlowIpv4TosDelayCounter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowIpv4TosDelayCounter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 0
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -127383,7 +134392,13 @@ func (obj *patternFlowIpv4TosDelayCounter) SetStart(value int32) PatternFlowIpv4
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowIpv4TosDelayCounter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -127403,7 +134418,13 @@ func (obj *patternFlowIpv4TosDelayCounter) SetStep(value int32) PatternFlowIpv4T
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowIpv4TosDelayCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -127605,7 +134626,13 @@ type PatternFlowIpv4TosThroughputCounter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowIpv4TosThroughputCounter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 0
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -127625,7 +134652,13 @@ func (obj *patternFlowIpv4TosThroughputCounter) SetStart(value int32) PatternFlo
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowIpv4TosThroughputCounter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -127645,7 +134678,13 @@ func (obj *patternFlowIpv4TosThroughputCounter) SetStep(value int32) PatternFlow
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowIpv4TosThroughputCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -127847,7 +134886,13 @@ type PatternFlowIpv4TosReliabilityCounter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowIpv4TosReliabilityCounter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 0
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -127867,7 +134912,13 @@ func (obj *patternFlowIpv4TosReliabilityCounter) SetStart(value int32) PatternFl
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowIpv4TosReliabilityCounter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -127887,7 +134938,13 @@ func (obj *patternFlowIpv4TosReliabilityCounter) SetStep(value int32) PatternFlo
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowIpv4TosReliabilityCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -128089,7 +135146,13 @@ type PatternFlowIpv4TosMonetaryCounter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowIpv4TosMonetaryCounter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 0
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -128109,7 +135172,13 @@ func (obj *patternFlowIpv4TosMonetaryCounter) SetStart(value int32) PatternFlowI
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowIpv4TosMonetaryCounter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -128129,7 +135198,13 @@ func (obj *patternFlowIpv4TosMonetaryCounter) SetStep(value int32) PatternFlowIp
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowIpv4TosMonetaryCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -128331,7 +135406,13 @@ type PatternFlowIpv4TosUnusedCounter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowIpv4TosUnusedCounter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 0
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -128351,7 +135432,13 @@ func (obj *patternFlowIpv4TosUnusedCounter) SetStart(value int32) PatternFlowIpv
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowIpv4TosUnusedCounter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -128371,7 +135458,13 @@ func (obj *patternFlowIpv4TosUnusedCounter) SetStep(value int32) PatternFlowIpv4
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowIpv4TosUnusedCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -128573,7 +135666,13 @@ type PatternFlowIpv4DscpPhbCounter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowIpv4DscpPhbCounter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 0
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -128593,7 +135692,13 @@ func (obj *patternFlowIpv4DscpPhbCounter) SetStart(value int32) PatternFlowIpv4D
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowIpv4DscpPhbCounter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -128613,7 +135718,13 @@ func (obj *patternFlowIpv4DscpPhbCounter) SetStep(value int32) PatternFlowIpv4Ds
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowIpv4DscpPhbCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -128815,7 +135926,13 @@ type PatternFlowIpv4DscpEcnCounter interface {
 // Start returns a int32
 //  description is TBD
 func (obj *patternFlowIpv4DscpEcnCounter) Start() int32 {
+
+	if obj.obj.Start == nil {
+		*obj.obj.Start = 0
+	}
+
 	return *obj.obj.Start
+
 }
 
 // Start returns a int32
@@ -128835,7 +135952,13 @@ func (obj *patternFlowIpv4DscpEcnCounter) SetStart(value int32) PatternFlowIpv4D
 // Step returns a int32
 //  description is TBD
 func (obj *patternFlowIpv4DscpEcnCounter) Step() int32 {
+
+	if obj.obj.Step == nil {
+		*obj.obj.Step = 1
+	}
+
 	return *obj.obj.Step
+
 }
 
 // Step returns a int32
@@ -128855,7 +135978,13 @@ func (obj *patternFlowIpv4DscpEcnCounter) SetStep(value int32) PatternFlowIpv4Ds
 // Count returns a int32
 //  description is TBD
 func (obj *patternFlowIpv4DscpEcnCounter) Count() int32 {
+
+	if obj.obj.Count == nil {
+		*obj.obj.Count = 1
+	}
+
 	return *obj.obj.Count
+
 }
 
 // Count returns a int32
@@ -129125,6 +136254,7 @@ func (obj *bgpSrteSegment) SetSegmentType(value BgpSrteSegmentSegmentTypeEnum) B
 		return obj
 	}
 	obj.obj.SegmentType = snappipb.BgpSrteSegment_SegmentType_Enum(intValue)
+
 	return obj
 }
 
@@ -129384,6 +136514,7 @@ func (obj *bgpSrteSegment) SetTypeK(value BgpSrteSegmentKTypeSubTlv) BgpSrteSegm
 // Name returns a string
 //  Globally unique name of an object. It also serves as the primary key for arrays of objects.
 func (obj *bgpSrteSegment) Name() string {
+
 	return obj.obj.Name
 }
 
@@ -129398,7 +136529,13 @@ func (obj *bgpSrteSegment) SetName(value string) BgpSrteSegment {
 // Active returns a bool
 //  If enabled means that this part of the configuration including any active 'children' nodes will be advertised to peer.  If disabled, this means that though config is present, it is not taking any part of the test but can be activated at run-time to advertise just this part of the configuration to the peer.
 func (obj *bgpSrteSegment) Active() bool {
+
+	if obj.obj.Active == nil {
+		*obj.obj.Active = true
+	}
+
 	return *obj.obj.Active
+
 }
 
 // Active returns a bool
@@ -129638,7 +136775,9 @@ type BgpSrteSegmentATypeSubTlv interface {
 // Flags returns a string
 //  One octet bitmap for flags including V-Flag, A-Flag, S-Flag, B-Flag etc. as defined in https://datatracker.ietf.org/doc/html/draft-ietf-idr-segment-routing-te-policy-13#section-2.4.4.2.12
 func (obj *bgpSrteSegmentATypeSubTlv) Flags() string {
+
 	return *obj.obj.Flags
+
 }
 
 // Flags returns a string
@@ -129658,7 +136797,9 @@ func (obj *bgpSrteSegmentATypeSubTlv) SetFlags(value string) BgpSrteSegmentAType
 // Label returns a int32
 //  Label value in [0, 2^20 -1].
 func (obj *bgpSrteSegmentATypeSubTlv) Label() int32 {
+
 	return *obj.obj.Label
+
 }
 
 // Label returns a int32
@@ -129678,7 +136819,9 @@ func (obj *bgpSrteSegmentATypeSubTlv) SetLabel(value int32) BgpSrteSegmentATypeS
 // Tc returns a int32
 //  Traffic class in bits.
 func (obj *bgpSrteSegmentATypeSubTlv) Tc() int32 {
+
 	return *obj.obj.Tc
+
 }
 
 // Tc returns a int32
@@ -129698,7 +136841,9 @@ func (obj *bgpSrteSegmentATypeSubTlv) SetTc(value int32) BgpSrteSegmentATypeSubT
 // SBit returns a bool
 //  Bottom-of-Stack bit.
 func (obj *bgpSrteSegmentATypeSubTlv) SBit() bool {
+
 	return *obj.obj.SBit
+
 }
 
 // SBit returns a bool
@@ -129718,7 +136863,9 @@ func (obj *bgpSrteSegmentATypeSubTlv) SetSBit(value bool) BgpSrteSegmentATypeSub
 // Ttl returns a int32
 //  Time To Live.
 func (obj *bgpSrteSegmentATypeSubTlv) Ttl() int32 {
+
 	return *obj.obj.Ttl
+
 }
 
 // Ttl returns a int32
@@ -129925,7 +137072,9 @@ type BgpSrteSegmentBTypeSubTlv interface {
 // Flags returns a string
 //  One octet bitmap for flags including V-Flag, A-Flag, S-Flag, B-Flag etc. as defined in https://datatracker.ietf.org/doc/html/draft-ietf-idr-segment-routing-te-policy-13#section-2.4.4.2.12
 func (obj *bgpSrteSegmentBTypeSubTlv) Flags() string {
+
 	return *obj.obj.Flags
+
 }
 
 // Flags returns a string
@@ -129945,6 +137094,7 @@ func (obj *bgpSrteSegmentBTypeSubTlv) SetFlags(value string) BgpSrteSegmentBType
 // Srv6Sid returns a string
 //  SRv6 SID.
 func (obj *bgpSrteSegmentBTypeSubTlv) Srv6Sid() string {
+
 	return obj.obj.Srv6Sid
 }
 
@@ -130161,7 +137311,9 @@ type BgpSrteSegmentCTypeSubTlv interface {
 // Flags returns a string
 //  One octet bitmap for flags including V-Flag, A-Flag, S-Flag, B-Flag etc. as defined in https://datatracker.ietf.org/doc/html/draft-ietf-idr-segment-routing-te-policy-13#section-2.4.4.2.12
 func (obj *bgpSrteSegmentCTypeSubTlv) Flags() string {
+
 	return *obj.obj.Flags
+
 }
 
 // Flags returns a string
@@ -130181,7 +137333,13 @@ func (obj *bgpSrteSegmentCTypeSubTlv) SetFlags(value string) BgpSrteSegmentCType
 // SrAlgorithm returns a int32
 //  SR Algorithm identifier when A-Flag in on.
 func (obj *bgpSrteSegmentCTypeSubTlv) SrAlgorithm() int32 {
+
+	if obj.obj.SrAlgorithm == nil {
+		*obj.obj.SrAlgorithm = 0
+	}
+
 	return *obj.obj.SrAlgorithm
+
 }
 
 // SrAlgorithm returns a int32
@@ -130201,6 +137359,7 @@ func (obj *bgpSrteSegmentCTypeSubTlv) SetSrAlgorithm(value int32) BgpSrteSegment
 // Ipv4NodeAddress returns a string
 //  IPv4 address representing a node.
 func (obj *bgpSrteSegmentCTypeSubTlv) Ipv4NodeAddress() string {
+
 	return obj.obj.Ipv4NodeAddress
 }
 
@@ -130428,7 +137587,9 @@ type BgpSrteSegmentDTypeSubTlv interface {
 // Flags returns a string
 //  One octet bitmap for flags including V-Flag, A-Flag, S-Flag, B-Flag etc. as defined in https://datatracker.ietf.org/doc/html/draft-ietf-idr-segment-routing-te-policy-13#section-2.4.4.2.12
 func (obj *bgpSrteSegmentDTypeSubTlv) Flags() string {
+
 	return *obj.obj.Flags
+
 }
 
 // Flags returns a string
@@ -130448,7 +137609,13 @@ func (obj *bgpSrteSegmentDTypeSubTlv) SetFlags(value string) BgpSrteSegmentDType
 // SrAlgorithm returns a int32
 //  specifying SR Algorithm when when A-Flag as defined in above flags.
 func (obj *bgpSrteSegmentDTypeSubTlv) SrAlgorithm() int32 {
+
+	if obj.obj.SrAlgorithm == nil {
+		*obj.obj.SrAlgorithm = 0
+	}
+
 	return *obj.obj.SrAlgorithm
+
 }
 
 // SrAlgorithm returns a int32
@@ -130468,6 +137635,7 @@ func (obj *bgpSrteSegmentDTypeSubTlv) SetSrAlgorithm(value int32) BgpSrteSegment
 // Ipv6NodeAddress returns a string
 //  IPv6 address representing a node.
 func (obj *bgpSrteSegmentDTypeSubTlv) Ipv6NodeAddress() string {
+
 	return obj.obj.Ipv6NodeAddress
 }
 
@@ -130695,7 +137863,9 @@ type BgpSrteSegmentETypeSubTlv interface {
 // Flags returns a string
 //  One octet bitmap for flags including V-Flag, A-Flag, S-Flag, B-Flag etc. as defined in https://datatracker.ietf.org/doc/html/draft-ietf-idr-segment-routing-te-policy-13#section-2.4.4.2.12
 func (obj *bgpSrteSegmentETypeSubTlv) Flags() string {
+
 	return *obj.obj.Flags
+
 }
 
 // Flags returns a string
@@ -130715,7 +137885,13 @@ func (obj *bgpSrteSegmentETypeSubTlv) SetFlags(value string) BgpSrteSegmentEType
 // LocalInterfaceId returns a int32
 //  Local Interface ID: The Interface Index as defined in [RFC8664].
 func (obj *bgpSrteSegmentETypeSubTlv) LocalInterfaceId() int32 {
+
+	if obj.obj.LocalInterfaceId == nil {
+		*obj.obj.LocalInterfaceId = 0
+	}
+
 	return *obj.obj.LocalInterfaceId
+
 }
 
 // LocalInterfaceId returns a int32
@@ -130735,6 +137911,7 @@ func (obj *bgpSrteSegmentETypeSubTlv) SetLocalInterfaceId(value int32) BgpSrteSe
 // Ipv4NodeAddress returns a string
 //  IPv4 address representing a node.
 func (obj *bgpSrteSegmentETypeSubTlv) Ipv4NodeAddress() string {
+
 	return obj.obj.Ipv4NodeAddress
 }
 
@@ -130961,7 +138138,9 @@ type BgpSrteSegmentFTypeSubTlv interface {
 // Flags returns a string
 //  One octet bitmap for flags including V-Flag, A-Flag, S-Flag, B-Flag etc. as defined in https://datatracker.ietf.org/doc/html/draft-ietf-idr-segment-routing-te-policy-13#section-2.4.4.2.12
 func (obj *bgpSrteSegmentFTypeSubTlv) Flags() string {
+
 	return *obj.obj.Flags
+
 }
 
 // Flags returns a string
@@ -130981,6 +138160,7 @@ func (obj *bgpSrteSegmentFTypeSubTlv) SetFlags(value string) BgpSrteSegmentFType
 // LocalIpv4Address returns a string
 //  Local IPv4 Address.
 func (obj *bgpSrteSegmentFTypeSubTlv) LocalIpv4Address() string {
+
 	return obj.obj.LocalIpv4Address
 }
 
@@ -130995,6 +138175,7 @@ func (obj *bgpSrteSegmentFTypeSubTlv) SetLocalIpv4Address(value string) BgpSrteS
 // RemoteIpv4Address returns a string
 //  Remote IPv4 Address.
 func (obj *bgpSrteSegmentFTypeSubTlv) RemoteIpv4Address() string {
+
 	return obj.obj.RemoteIpv4Address
 }
 
@@ -131226,7 +138407,9 @@ type BgpSrteSegmentGTypeSubTlv interface {
 // Flags returns a string
 //  One octet bitmap for flags including V-Flag, A-Flag, S-Flag, B-Flag etc. as defined in https://datatracker.ietf.org/doc/html/draft-ietf-idr-segment-routing-te-policy-13#section-2.4.4.2.12
 func (obj *bgpSrteSegmentGTypeSubTlv) Flags() string {
+
 	return *obj.obj.Flags
+
 }
 
 // Flags returns a string
@@ -131246,7 +138429,13 @@ func (obj *bgpSrteSegmentGTypeSubTlv) SetFlags(value string) BgpSrteSegmentGType
 // LocalInterfaceId returns a int32
 //  Local Interface ID: The Interface Index as defined in [RFC8664].
 func (obj *bgpSrteSegmentGTypeSubTlv) LocalInterfaceId() int32 {
+
+	if obj.obj.LocalInterfaceId == nil {
+		*obj.obj.LocalInterfaceId = 0
+	}
+
 	return *obj.obj.LocalInterfaceId
+
 }
 
 // LocalInterfaceId returns a int32
@@ -131266,6 +138455,7 @@ func (obj *bgpSrteSegmentGTypeSubTlv) SetLocalInterfaceId(value int32) BgpSrteSe
 // LocalIpv6NodeAddress returns a string
 //  IPv6 address representing a node.
 func (obj *bgpSrteSegmentGTypeSubTlv) LocalIpv6NodeAddress() string {
+
 	return obj.obj.LocalIpv6NodeAddress
 }
 
@@ -131280,7 +138470,13 @@ func (obj *bgpSrteSegmentGTypeSubTlv) SetLocalIpv6NodeAddress(value string) BgpS
 // RemoteInterfaceId returns a int32
 //  Local Interface ID: The Interface Index as defined in [RFC8664].
 func (obj *bgpSrteSegmentGTypeSubTlv) RemoteInterfaceId() int32 {
+
+	if obj.obj.RemoteInterfaceId == nil {
+		*obj.obj.RemoteInterfaceId = 0
+	}
+
 	return *obj.obj.RemoteInterfaceId
+
 }
 
 // RemoteInterfaceId returns a int32
@@ -131300,6 +138496,7 @@ func (obj *bgpSrteSegmentGTypeSubTlv) SetRemoteInterfaceId(value int32) BgpSrteS
 // RemoteIpv6NodeAddress returns a string
 //  IPv6 address representing a node.
 func (obj *bgpSrteSegmentGTypeSubTlv) RemoteIpv6NodeAddress() string {
+
 	return obj.obj.RemoteIpv6NodeAddress
 }
 
@@ -131547,7 +138744,9 @@ type BgpSrteSegmentHTypeSubTlv interface {
 // Flags returns a string
 //  One octet bitmap for flags including V-Flag, A-Flag, S-Flag, B-Flag etc. as defined in https://datatracker.ietf.org/doc/html/draft-ietf-idr-segment-routing-te-policy-13#section-2.4.4.2.12
 func (obj *bgpSrteSegmentHTypeSubTlv) Flags() string {
+
 	return *obj.obj.Flags
+
 }
 
 // Flags returns a string
@@ -131567,6 +138766,7 @@ func (obj *bgpSrteSegmentHTypeSubTlv) SetFlags(value string) BgpSrteSegmentHType
 // LocalIpv6Address returns a string
 //  Local IPv6 Address.
 func (obj *bgpSrteSegmentHTypeSubTlv) LocalIpv6Address() string {
+
 	return obj.obj.LocalIpv6Address
 }
 
@@ -131581,6 +138781,7 @@ func (obj *bgpSrteSegmentHTypeSubTlv) SetLocalIpv6Address(value string) BgpSrteS
 // RemoteIpv6Address returns a string
 //  Remote IPv6 Address.
 func (obj *bgpSrteSegmentHTypeSubTlv) RemoteIpv6Address() string {
+
 	return obj.obj.RemoteIpv6Address
 }
 
@@ -131807,7 +139008,9 @@ type BgpSrteSegmentITypeSubTlv interface {
 // Flags returns a string
 //  One octet bitmap for flags including V-Flag, A-Flag, S-Flag, B-Flag etc. as defined in https://datatracker.ietf.org/doc/html/draft-ietf-idr-segment-routing-te-policy-13#section-2.4.4.2.12
 func (obj *bgpSrteSegmentITypeSubTlv) Flags() string {
+
 	return *obj.obj.Flags
+
 }
 
 // Flags returns a string
@@ -131827,6 +139030,7 @@ func (obj *bgpSrteSegmentITypeSubTlv) SetFlags(value string) BgpSrteSegmentIType
 // Ipv6NodeAddress returns a string
 //  IPv6 address representing a node.
 func (obj *bgpSrteSegmentITypeSubTlv) Ipv6NodeAddress() string {
+
 	return obj.obj.Ipv6NodeAddress
 }
 
@@ -131841,7 +139045,9 @@ func (obj *bgpSrteSegmentITypeSubTlv) SetIpv6NodeAddress(value string) BgpSrteSe
 // Srv6Sid returns a string
 //  Optional SRv6 SID.
 func (obj *bgpSrteSegmentITypeSubTlv) Srv6Sid() string {
+
 	return *obj.obj.Srv6Sid
+
 }
 
 // Srv6Sid returns a string
@@ -132081,7 +139287,9 @@ type BgpSrteSegmentJTypeSubTlv interface {
 // Flags returns a string
 //  One octet bitmap for flags including V-Flag, A-Flag, S-Flag, B-Flag etc. as defined in https://datatracker.ietf.org/doc/html/draft-ietf-idr-segment-routing-te-policy-13#section-2.4.4.2.12
 func (obj *bgpSrteSegmentJTypeSubTlv) Flags() string {
+
 	return *obj.obj.Flags
+
 }
 
 // Flags returns a string
@@ -132101,7 +139309,13 @@ func (obj *bgpSrteSegmentJTypeSubTlv) SetFlags(value string) BgpSrteSegmentJType
 // SrAlgorithm returns a int32
 //  SR Algorithm identifier when A-Flag in on.
 func (obj *bgpSrteSegmentJTypeSubTlv) SrAlgorithm() int32 {
+
+	if obj.obj.SrAlgorithm == nil {
+		*obj.obj.SrAlgorithm = 0
+	}
+
 	return *obj.obj.SrAlgorithm
+
 }
 
 // SrAlgorithm returns a int32
@@ -132121,7 +139335,13 @@ func (obj *bgpSrteSegmentJTypeSubTlv) SetSrAlgorithm(value int32) BgpSrteSegment
 // LocalInterfaceId returns a int32
 //  Local Interface ID: The Interface Index as defined in [RFC8664].
 func (obj *bgpSrteSegmentJTypeSubTlv) LocalInterfaceId() int32 {
+
+	if obj.obj.LocalInterfaceId == nil {
+		*obj.obj.LocalInterfaceId = 0
+	}
+
 	return *obj.obj.LocalInterfaceId
+
 }
 
 // LocalInterfaceId returns a int32
@@ -132141,6 +139361,7 @@ func (obj *bgpSrteSegmentJTypeSubTlv) SetLocalInterfaceId(value int32) BgpSrteSe
 // LocalIpv6NodeAddress returns a string
 //  IPv6 address representing a node.
 func (obj *bgpSrteSegmentJTypeSubTlv) LocalIpv6NodeAddress() string {
+
 	return obj.obj.LocalIpv6NodeAddress
 }
 
@@ -132155,7 +139376,13 @@ func (obj *bgpSrteSegmentJTypeSubTlv) SetLocalIpv6NodeAddress(value string) BgpS
 // RemoteInterfaceId returns a int32
 //  Local Interface ID: The Interface Index as defined in [RFC8664].
 func (obj *bgpSrteSegmentJTypeSubTlv) RemoteInterfaceId() int32 {
+
+	if obj.obj.RemoteInterfaceId == nil {
+		*obj.obj.RemoteInterfaceId = 0
+	}
+
 	return *obj.obj.RemoteInterfaceId
+
 }
 
 // RemoteInterfaceId returns a int32
@@ -132175,6 +139402,7 @@ func (obj *bgpSrteSegmentJTypeSubTlv) SetRemoteInterfaceId(value int32) BgpSrteS
 // RemoteIpv6NodeAddress returns a string
 //  IPv6 address representing a node.
 func (obj *bgpSrteSegmentJTypeSubTlv) RemoteIpv6NodeAddress() string {
+
 	return obj.obj.RemoteIpv6NodeAddress
 }
 
@@ -132189,7 +139417,9 @@ func (obj *bgpSrteSegmentJTypeSubTlv) SetRemoteIpv6NodeAddress(value string) Bgp
 // Srv6Sid returns a string
 //  Optional SRv6 SID.
 func (obj *bgpSrteSegmentJTypeSubTlv) Srv6Sid() string {
+
 	return *obj.obj.Srv6Sid
+
 }
 
 // Srv6Sid returns a string
@@ -132466,7 +139696,9 @@ type BgpSrteSegmentKTypeSubTlv interface {
 // Flags returns a string
 //  One octet bitmap for flags including V-Flag, A-Flag, S-Flag, B-Flag etc. as defined in https://datatracker.ietf.org/doc/html/draft-ietf-idr-segment-routing-te-policy-13#section-2.4.4.2.12
 func (obj *bgpSrteSegmentKTypeSubTlv) Flags() string {
+
 	return *obj.obj.Flags
+
 }
 
 // Flags returns a string
@@ -132486,7 +139718,13 @@ func (obj *bgpSrteSegmentKTypeSubTlv) SetFlags(value string) BgpSrteSegmentKType
 // SrAlgorithm returns a int32
 //  SR Algorithm identifier when A-Flag in on.
 func (obj *bgpSrteSegmentKTypeSubTlv) SrAlgorithm() int32 {
+
+	if obj.obj.SrAlgorithm == nil {
+		*obj.obj.SrAlgorithm = 0
+	}
+
 	return *obj.obj.SrAlgorithm
+
 }
 
 // SrAlgorithm returns a int32
@@ -132506,6 +139744,7 @@ func (obj *bgpSrteSegmentKTypeSubTlv) SetSrAlgorithm(value int32) BgpSrteSegment
 // LocalIpv6Address returns a string
 //  IPv6 address representing a node.
 func (obj *bgpSrteSegmentKTypeSubTlv) LocalIpv6Address() string {
+
 	return obj.obj.LocalIpv6Address
 }
 
@@ -132520,6 +139759,7 @@ func (obj *bgpSrteSegmentKTypeSubTlv) SetLocalIpv6Address(value string) BgpSrteS
 // RemoteIpv6Address returns a string
 //  IPv6 address representing a node.
 func (obj *bgpSrteSegmentKTypeSubTlv) RemoteIpv6Address() string {
+
 	return obj.obj.RemoteIpv6Address
 }
 
@@ -132534,7 +139774,9 @@ func (obj *bgpSrteSegmentKTypeSubTlv) SetRemoteIpv6Address(value string) BgpSrte
 // Srv6Sid returns a string
 //  Optional SRv6 SID.
 func (obj *bgpSrteSegmentKTypeSubTlv) Srv6Sid() string {
+
 	return *obj.obj.Srv6Sid
+
 }
 
 // Srv6Sid returns a string
@@ -132785,7 +140027,13 @@ type BgpSrteSRv6SIDEndpointBehaviorAndStructure interface {
 // LbLength returns a int32
 //  SRv6 SID Locator Block length in bits.
 func (obj *bgpSrteSRv6SIDEndpointBehaviorAndStructure) LbLength() int32 {
+
+	if obj.obj.LbLength == nil {
+		*obj.obj.LbLength = 0
+	}
+
 	return *obj.obj.LbLength
+
 }
 
 // LbLength returns a int32
@@ -132805,7 +140053,13 @@ func (obj *bgpSrteSRv6SIDEndpointBehaviorAndStructure) SetLbLength(value int32) 
 // LnLength returns a int32
 //  SRv6 SID Locator Node length in bits.
 func (obj *bgpSrteSRv6SIDEndpointBehaviorAndStructure) LnLength() int32 {
+
+	if obj.obj.LnLength == nil {
+		*obj.obj.LnLength = 0
+	}
+
 	return *obj.obj.LnLength
+
 }
 
 // LnLength returns a int32
@@ -132825,7 +140079,13 @@ func (obj *bgpSrteSRv6SIDEndpointBehaviorAndStructure) SetLnLength(value int32) 
 // FuncLength returns a int32
 //  SRv6 SID Function length in bits.
 func (obj *bgpSrteSRv6SIDEndpointBehaviorAndStructure) FuncLength() int32 {
+
+	if obj.obj.FuncLength == nil {
+		*obj.obj.FuncLength = 0
+	}
+
 	return *obj.obj.FuncLength
+
 }
 
 // FuncLength returns a int32
@@ -132845,7 +140105,13 @@ func (obj *bgpSrteSRv6SIDEndpointBehaviorAndStructure) SetFuncLength(value int32
 // ArgLength returns a int32
 //  SRv6 SID Arguments length in bits.
 func (obj *bgpSrteSRv6SIDEndpointBehaviorAndStructure) ArgLength() int32 {
+
+	if obj.obj.ArgLength == nil {
+		*obj.obj.ArgLength = 0
+	}
+
 	return *obj.obj.ArgLength
+
 }
 
 // ArgLength returns a int32
@@ -133069,7 +140335,9 @@ type BgpSrteSrMplsSid interface {
 // Label returns a int32
 //  Label value in [0, 2^20 -1].
 func (obj *bgpSrteSrMplsSid) Label() int32 {
+
 	return *obj.obj.Label
+
 }
 
 // Label returns a int32
@@ -133089,7 +140357,9 @@ func (obj *bgpSrteSrMplsSid) SetLabel(value int32) BgpSrteSrMplsSid {
 // Tc returns a int32
 //  Traffic class in bits.
 func (obj *bgpSrteSrMplsSid) Tc() int32 {
+
 	return *obj.obj.Tc
+
 }
 
 // Tc returns a int32
@@ -133109,7 +140379,9 @@ func (obj *bgpSrteSrMplsSid) SetTc(value int32) BgpSrteSrMplsSid {
 // SBit returns a bool
 //  Bottom-of-Stack bit.
 func (obj *bgpSrteSrMplsSid) SBit() bool {
+
 	return *obj.obj.SBit
+
 }
 
 // SBit returns a bool
@@ -133129,7 +140401,9 @@ func (obj *bgpSrteSrMplsSid) SetSBit(value bool) BgpSrteSrMplsSid {
 // Ttl returns a int32
 //  Time To Live.
 func (obj *bgpSrteSrMplsSid) Ttl() int32 {
+
 	return *obj.obj.Ttl
+
 }
 
 // Ttl returns a int32
