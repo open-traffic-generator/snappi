@@ -7,6 +7,7 @@ import (
 	"strconv"
 	"strings"
 	"time"
+	"regexp"
 )
 
 type grpcTransport struct {
@@ -213,9 +214,8 @@ func validateIpv6(ip string) error {
 }
 
 func validateHex(hex string) error {
-	hex = strings.Replace(hex, "0x", "", -1)
-	_, err := strconv.ParseUint(hex, 16, 64)
-	if err != nil {
+	matched, err := regexp.MatchString(`^[0-9a-fA-F]+$|^0[x|X][0-9a-fA-F]+$`, hex)
+	if err != nil || !matched {
 		return fmt.Errorf(fmt.Sprintf("Invalid hex value %s", hex))
 	}
 	return nil
