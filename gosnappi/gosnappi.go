@@ -1,4 +1,4 @@
-// Open Traffic Generator API 0.6.6
+// Open Traffic Generator API 0.6.7
 // License: MIT
 
 package gosnappi
@@ -7105,10 +7105,6 @@ func (obj *layer1) SetMtu(value int32) Layer1 {
 //  and rs_fec settings for gigabit ethernet interfaces.
 func (obj *layer1) IeeeMediaDefaults() bool {
 
-	if obj.obj.IeeeMediaDefaults == nil {
-		*obj.obj.IeeeMediaDefaults = true
-	}
-
 	return *obj.obj.IeeeMediaDefaults
 
 }
@@ -7132,10 +7128,6 @@ func (obj *layer1) SetIeeeMediaDefaults(value bool) Layer1 {
 // AutoNegotiate returns a bool
 //  Enable/disable auto negotiation.
 func (obj *layer1) AutoNegotiate() bool {
-
-	if obj.obj.AutoNegotiate == nil {
-		*obj.obj.AutoNegotiate = true
-	}
 
 	return *obj.obj.AutoNegotiate
 
@@ -7226,6 +7218,14 @@ func (obj *layer1) validateObj(set_default bool) {
 		validation = append(validation, "PortNames is required field on interface Layer1")
 	}
 
+	if obj.obj.Mtu != nil {
+		if *obj.obj.Mtu < 64 || *obj.obj.Mtu > 9000 {
+			validation = append(
+				validation, fmt.Sprintf("64 <= Layer1.Mtu <= 9000 but Got %d", *obj.obj.Mtu))
+		}
+
+	}
+
 	if obj.obj.AutoNegotiation != nil {
 		obj.AutoNegotiation().validateObj(set_default)
 	}
@@ -7250,12 +7250,6 @@ func (obj *layer1) setDefault() {
 	}
 	if obj.obj.Mtu == nil {
 		obj.SetMtu(1500)
-	}
-	if obj.obj.IeeeMediaDefaults == nil {
-		obj.SetIeeeMediaDefaults(true)
-	}
-	if obj.obj.AutoNegotiate == nil {
-		obj.SetAutoNegotiate(true)
 	}
 
 }
@@ -36391,6 +36385,22 @@ func (obj *flowFixedPackets) validateObj(set_default bool) {
 		obj.setDefault()
 	}
 
+	if obj.obj.Packets != nil {
+		if *obj.obj.Packets < 1 {
+			validation = append(
+				validation, fmt.Sprintf("1 <= FlowFixedPackets.Packets <= any but Got %d", *obj.obj.Packets))
+		}
+
+	}
+
+	if obj.obj.Gap != nil {
+		if *obj.obj.Gap < 0 {
+			validation = append(
+				validation, fmt.Sprintf("0 <= FlowFixedPackets.Gap <= any but Got %d", *obj.obj.Gap))
+		}
+
+	}
+
 	if obj.obj.Delay != nil {
 		obj.Delay().validateObj(set_default)
 	}
@@ -36632,6 +36642,14 @@ func (obj *flowFixedSeconds) validateObj(set_default bool) {
 		obj.setDefault()
 	}
 
+	if obj.obj.Gap != nil {
+		if *obj.obj.Gap < 0 {
+			validation = append(
+				validation, fmt.Sprintf("0 <= FlowFixedSeconds.Gap <= any but Got %d", *obj.obj.Gap))
+		}
+
+	}
+
 	if obj.obj.Delay != nil {
 		obj.Delay().validateObj(set_default)
 	}
@@ -36829,6 +36847,10 @@ func (obj *flowBurst) SetBursts(value int32) FlowBurst {
 //  The number of packets transmitted per burst.
 func (obj *flowBurst) Packets() int32 {
 
+	if obj.obj.Packets == nil {
+		*obj.obj.Packets = 1
+	}
+
 	return *obj.obj.Packets
 
 }
@@ -36901,10 +36923,26 @@ func (obj *flowBurst) validateObj(set_default bool) {
 		obj.setDefault()
 	}
 
+	if obj.obj.Bursts != nil {
+		if *obj.obj.Bursts < 0 {
+			validation = append(
+				validation, fmt.Sprintf("0 <= FlowBurst.Bursts <= any but Got %d", *obj.obj.Bursts))
+		}
+
+	}
+
 	if obj.obj.Packets != nil {
 		if *obj.obj.Packets < 1 {
 			validation = append(
 				validation, fmt.Sprintf("1 <= FlowBurst.Packets <= any but Got %d", *obj.obj.Packets))
+		}
+
+	}
+
+	if obj.obj.Gap != nil {
+		if *obj.obj.Gap < 0 {
+			validation = append(
+				validation, fmt.Sprintf("0 <= FlowBurst.Gap <= any but Got %d", *obj.obj.Gap))
 		}
 
 	}
@@ -36917,6 +36955,9 @@ func (obj *flowBurst) validateObj(set_default bool) {
 func (obj *flowBurst) setDefault() {
 	if obj.obj.Bursts == nil {
 		obj.SetBursts(0)
+	}
+	if obj.obj.Packets == nil {
+		obj.SetPackets(1)
 	}
 	if obj.obj.Gap == nil {
 		obj.SetGap(12)
@@ -37119,6 +37160,14 @@ func (obj *flowContinuous) SetDelay(value FlowDelay) FlowContinuous {
 func (obj *flowContinuous) validateObj(set_default bool) {
 	if set_default {
 		obj.setDefault()
+	}
+
+	if obj.obj.Gap != nil {
+		if *obj.obj.Gap < 0 {
+			validation = append(
+				validation, fmt.Sprintf("0 <= FlowContinuous.Gap <= any but Got %d", *obj.obj.Gap))
+		}
+
 	}
 
 	if obj.obj.Delay != nil {
