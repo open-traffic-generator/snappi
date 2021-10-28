@@ -1,3 +1,4 @@
+--prefer-binary
 flake8
 requests
 openapiart==0.1.22
