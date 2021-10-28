@@ -11,6 +11,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	"strings"
 
 	"github.com/ghodss/yaml"
 	"github.com/golang/protobuf/proto"
@@ -1080,15 +1081,16 @@ func (obj *config) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *config) ToJson() string {
@@ -1114,15 +1116,16 @@ func (obj *config) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *config) Validate(defaults ...bool) error {
@@ -1534,15 +1537,16 @@ func (obj *transmitState) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *transmitState) ToJson() string {
@@ -1568,15 +1572,16 @@ func (obj *transmitState) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *transmitState) Validate(defaults ...bool) error {
@@ -1756,15 +1761,16 @@ func (obj *linkState) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *linkState) ToJson() string {
@@ -1790,15 +1796,16 @@ func (obj *linkState) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *linkState) Validate(defaults ...bool) error {
@@ -1976,15 +1983,16 @@ func (obj *captureState) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *captureState) ToJson() string {
@@ -2010,15 +2018,16 @@ func (obj *captureState) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *captureState) Validate(defaults ...bool) error {
@@ -2196,15 +2205,16 @@ func (obj *flowsUpdate) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *flowsUpdate) ToJson() string {
@@ -2230,15 +2240,16 @@ func (obj *flowsUpdate) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *flowsUpdate) Validate(defaults ...bool) error {
@@ -2423,15 +2434,16 @@ func (obj *routeState) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *routeState) ToJson() string {
@@ -2457,15 +2469,16 @@ func (obj *routeState) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *routeState) Validate(defaults ...bool) error {
@@ -2647,15 +2660,16 @@ func (obj *pingRequest) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *pingRequest) ToJson() string {
@@ -2681,15 +2695,16 @@ func (obj *pingRequest) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *pingRequest) Validate(defaults ...bool) error {
@@ -2835,15 +2850,16 @@ func (obj *protocolState) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *protocolState) ToJson() string {
@@ -2869,15 +2885,16 @@ func (obj *protocolState) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *protocolState) Validate(defaults ...bool) error {
@@ -3017,15 +3034,16 @@ func (obj *metricsRequest) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *metricsRequest) ToJson() string {
@@ -3051,15 +3069,16 @@ func (obj *metricsRequest) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *metricsRequest) Validate(defaults ...bool) error {
@@ -3385,15 +3404,16 @@ func (obj *captureRequest) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *captureRequest) ToJson() string {
@@ -3419,15 +3439,16 @@ func (obj *captureRequest) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *captureRequest) Validate(defaults ...bool) error {
@@ -3570,15 +3591,16 @@ func (obj *setConfigResponse) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *setConfigResponse) ToJson() string {
@@ -3604,15 +3626,16 @@ func (obj *setConfigResponse) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *setConfigResponse) Validate(defaults ...bool) error {
@@ -3807,15 +3830,16 @@ func (obj *getConfigResponse) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *getConfigResponse) ToJson() string {
@@ -3841,15 +3865,16 @@ func (obj *getConfigResponse) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *getConfigResponse) Validate(defaults ...bool) error {
@@ -4044,15 +4069,16 @@ func (obj *setTransmitStateResponse) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *setTransmitStateResponse) ToJson() string {
@@ -4078,15 +4104,16 @@ func (obj *setTransmitStateResponse) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *setTransmitStateResponse) Validate(defaults ...bool) error {
@@ -4281,15 +4308,16 @@ func (obj *setLinkStateResponse) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *setLinkStateResponse) ToJson() string {
@@ -4315,15 +4343,16 @@ func (obj *setLinkStateResponse) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *setLinkStateResponse) Validate(defaults ...bool) error {
@@ -4518,15 +4547,16 @@ func (obj *setCaptureStateResponse) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *setCaptureStateResponse) ToJson() string {
@@ -4552,15 +4582,16 @@ func (obj *setCaptureStateResponse) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *setCaptureStateResponse) Validate(defaults ...bool) error {
@@ -4755,15 +4786,16 @@ func (obj *updateFlowsResponse) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *updateFlowsResponse) ToJson() string {
@@ -4789,15 +4821,16 @@ func (obj *updateFlowsResponse) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *updateFlowsResponse) Validate(defaults ...bool) error {
@@ -4992,15 +5025,16 @@ func (obj *setRouteStateResponse) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *setRouteStateResponse) ToJson() string {
@@ -5026,15 +5060,16 @@ func (obj *setRouteStateResponse) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *setRouteStateResponse) Validate(defaults ...bool) error {
@@ -5229,15 +5264,16 @@ func (obj *sendPingResponse) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *sendPingResponse) ToJson() string {
@@ -5263,15 +5299,16 @@ func (obj *sendPingResponse) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *sendPingResponse) Validate(defaults ...bool) error {
@@ -5466,15 +5503,16 @@ func (obj *setProtocolStateResponse) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *setProtocolStateResponse) ToJson() string {
@@ -5500,15 +5538,16 @@ func (obj *setProtocolStateResponse) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *setProtocolStateResponse) Validate(defaults ...bool) error {
@@ -5703,15 +5742,16 @@ func (obj *getMetricsResponse) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *getMetricsResponse) ToJson() string {
@@ -5737,15 +5777,16 @@ func (obj *getMetricsResponse) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *getMetricsResponse) Validate(defaults ...bool) error {
@@ -5940,15 +5981,16 @@ func (obj *getStateMetricsResponse) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *getStateMetricsResponse) ToJson() string {
@@ -5974,15 +6016,16 @@ func (obj *getStateMetricsResponse) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *getStateMetricsResponse) Validate(defaults ...bool) error {
@@ -6177,15 +6220,16 @@ func (obj *getCaptureResponse) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *getCaptureResponse) ToJson() string {
@@ -6211,15 +6255,16 @@ func (obj *getCaptureResponse) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *getCaptureResponse) Validate(defaults ...bool) error {
@@ -6401,15 +6446,16 @@ func (obj *port) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *port) ToJson() string {
@@ -6435,15 +6481,16 @@ func (obj *port) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *port) Validate(defaults ...bool) error {
@@ -6619,15 +6666,16 @@ func (obj *lag) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *lag) ToJson() string {
@@ -6653,15 +6701,16 @@ func (obj *lag) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *lag) Validate(defaults ...bool) error {
@@ -6828,15 +6877,16 @@ func (obj *layer1) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *layer1) ToJson() string {
@@ -6862,15 +6912,16 @@ func (obj *layer1) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *layer1) Validate(defaults ...bool) error {
@@ -7323,15 +7374,16 @@ func (obj *capture) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *capture) ToJson() string {
@@ -7357,15 +7409,16 @@ func (obj *capture) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *capture) Validate(defaults ...bool) error {
@@ -7673,15 +7726,16 @@ func (obj *device) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *device) ToJson() string {
@@ -7707,15 +7761,16 @@ func (obj *device) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *device) Validate(defaults ...bool) error {
@@ -8024,15 +8079,16 @@ func (obj *flow) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *flow) ToJson() string {
@@ -8058,15 +8114,16 @@ func (obj *flow) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *flow) Validate(defaults ...bool) error {
@@ -8390,15 +8447,16 @@ func (obj *event) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *event) ToJson() string {
@@ -8424,15 +8482,16 @@ func (obj *event) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *event) Validate(defaults ...bool) error {
@@ -8665,15 +8724,16 @@ func (obj *configOptions) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *configOptions) ToJson() string {
@@ -8699,15 +8759,16 @@ func (obj *configOptions) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *configOptions) Validate(defaults ...bool) error {
@@ -8842,15 +8903,16 @@ func (obj *ping) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *ping) ToJson() string {
@@ -8876,15 +8938,16 @@ func (obj *ping) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *ping) Validate(defaults ...bool) error {
@@ -9099,15 +9162,16 @@ func (obj *portMetricsRequest) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *portMetricsRequest) ToJson() string {
@@ -9133,15 +9197,16 @@ func (obj *portMetricsRequest) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *portMetricsRequest) Validate(defaults ...bool) error {
@@ -9338,15 +9403,16 @@ func (obj *flowMetricsRequest) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *flowMetricsRequest) ToJson() string {
@@ -9372,15 +9438,16 @@ func (obj *flowMetricsRequest) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *flowMetricsRequest) Validate(defaults ...bool) error {
@@ -9598,15 +9665,16 @@ func (obj *bgpv4MetricsRequest) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *bgpv4MetricsRequest) ToJson() string {
@@ -9632,15 +9700,16 @@ func (obj *bgpv4MetricsRequest) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *bgpv4MetricsRequest) Validate(defaults ...bool) error {
@@ -9841,15 +9910,16 @@ func (obj *bgpv6MetricsRequest) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *bgpv6MetricsRequest) ToJson() string {
@@ -9875,15 +9945,16 @@ func (obj *bgpv6MetricsRequest) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *bgpv6MetricsRequest) Validate(defaults ...bool) error {
@@ -10084,15 +10155,16 @@ func (obj *isisMetricsRequest) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *isisMetricsRequest) ToJson() string {
@@ -10118,15 +10190,16 @@ func (obj *isisMetricsRequest) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *isisMetricsRequest) Validate(defaults ...bool) error {
@@ -10351,15 +10424,16 @@ func (obj *responseWarning) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *responseWarning) ToJson() string {
@@ -10385,15 +10459,16 @@ func (obj *responseWarning) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *responseWarning) Validate(defaults ...bool) error {
@@ -10523,15 +10598,16 @@ func (obj *responseError) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *responseError) ToJson() string {
@@ -10557,15 +10633,16 @@ func (obj *responseError) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *responseError) Validate(defaults ...bool) error {
@@ -10695,15 +10772,16 @@ func (obj *pingResponse) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *pingResponse) ToJson() string {
@@ -10729,15 +10807,16 @@ func (obj *pingResponse) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *pingResponse) Validate(defaults ...bool) error {
@@ -10883,15 +10962,16 @@ func (obj *metricsResponse) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *metricsResponse) ToJson() string {
@@ -10917,15 +10997,16 @@ func (obj *metricsResponse) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *metricsResponse) Validate(defaults ...bool) error {
@@ -11301,15 +11382,16 @@ func (obj *stateMetrics) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *stateMetrics) ToJson() string {
@@ -11335,15 +11417,16 @@ func (obj *stateMetrics) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *stateMetrics) Validate(defaults ...bool) error {
@@ -11530,15 +11613,16 @@ func (obj *lagPort) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *lagPort) ToJson() string {
@@ -11564,15 +11648,16 @@ func (obj *lagPort) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *lagPort) Validate(defaults ...bool) error {
@@ -11766,15 +11851,16 @@ func (obj *layer1AutoNegotiation) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *layer1AutoNegotiation) ToJson() string {
@@ -11800,15 +11886,16 @@ func (obj *layer1AutoNegotiation) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *layer1AutoNegotiation) Validate(defaults ...bool) error {
@@ -12153,15 +12240,16 @@ func (obj *layer1FlowControl) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *layer1FlowControl) ToJson() string {
@@ -12187,15 +12275,16 @@ func (obj *layer1FlowControl) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *layer1FlowControl) Validate(defaults ...bool) error {
@@ -12452,15 +12541,16 @@ func (obj *captureFilter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *captureFilter) ToJson() string {
@@ -12486,15 +12576,16 @@ func (obj *captureFilter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *captureFilter) Validate(defaults ...bool) error {
@@ -12820,15 +12911,16 @@ func (obj *deviceEthernet) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *deviceEthernet) ToJson() string {
@@ -12854,15 +12946,16 @@ func (obj *deviceEthernet) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *deviceEthernet) Validate(defaults ...bool) error {
@@ -13221,15 +13314,16 @@ func (obj *deviceIpv4Loopback) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *deviceIpv4Loopback) ToJson() string {
@@ -13255,15 +13349,16 @@ func (obj *deviceIpv4Loopback) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *deviceIpv4Loopback) Validate(defaults ...bool) error {
@@ -13467,15 +13562,16 @@ func (obj *deviceIpv6Loopback) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *deviceIpv6Loopback) ToJson() string {
@@ -13501,15 +13597,16 @@ func (obj *deviceIpv6Loopback) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *deviceIpv6Loopback) Validate(defaults ...bool) error {
@@ -13715,15 +13812,16 @@ func (obj *deviceIsisRouter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *deviceIsisRouter) ToJson() string {
@@ -13749,15 +13847,16 @@ func (obj *deviceIsisRouter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *deviceIsisRouter) Validate(defaults ...bool) error {
@@ -14153,15 +14252,16 @@ func (obj *deviceBgpRouter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *deviceBgpRouter) ToJson() string {
@@ -14187,15 +14287,16 @@ func (obj *deviceBgpRouter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *deviceBgpRouter) Validate(defaults ...bool) error {
@@ -14410,15 +14511,16 @@ func (obj *flowTxRx) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *flowTxRx) ToJson() string {
@@ -14444,15 +14546,16 @@ func (obj *flowTxRx) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *flowTxRx) Validate(defaults ...bool) error {
@@ -14667,15 +14770,16 @@ func (obj *flowHeader) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *flowHeader) ToJson() string {
@@ -14701,15 +14805,16 @@ func (obj *flowHeader) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *flowHeader) Validate(defaults ...bool) error {
@@ -15517,15 +15622,16 @@ func (obj *flowSize) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *flowSize) ToJson() string {
@@ -15551,15 +15657,16 @@ func (obj *flowSize) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *flowSize) Validate(defaults ...bool) error {
@@ -15809,15 +15916,16 @@ func (obj *flowRate) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *flowRate) ToJson() string {
@@ -15843,15 +15951,16 @@ func (obj *flowRate) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *flowRate) Validate(defaults ...bool) error {
@@ -16243,15 +16352,16 @@ func (obj *flowDuration) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *flowDuration) ToJson() string {
@@ -16277,15 +16387,16 @@ func (obj *flowDuration) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *flowDuration) Validate(defaults ...bool) error {
@@ -16574,15 +16685,16 @@ func (obj *flowMetrics) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *flowMetrics) ToJson() string {
@@ -16608,15 +16720,16 @@ func (obj *flowMetrics) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *flowMetrics) Validate(defaults ...bool) error {
@@ -16853,15 +16966,16 @@ func (obj *eventLink) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *eventLink) ToJson() string {
@@ -16887,15 +17001,16 @@ func (obj *eventLink) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *eventLink) Validate(defaults ...bool) error {
@@ -17033,15 +17148,16 @@ func (obj *eventRxRateThreshold) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *eventRxRateThreshold) ToJson() string {
@@ -17067,15 +17183,16 @@ func (obj *eventRxRateThreshold) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *eventRxRateThreshold) Validate(defaults ...bool) error {
@@ -17254,15 +17371,16 @@ func (obj *eventRouteAdvertiseWithdraw) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *eventRouteAdvertiseWithdraw) ToJson() string {
@@ -17288,15 +17406,16 @@ func (obj *eventRouteAdvertiseWithdraw) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *eventRouteAdvertiseWithdraw) Validate(defaults ...bool) error {
@@ -17437,15 +17556,16 @@ func (obj *portOptions) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *portOptions) ToJson() string {
@@ -17471,15 +17591,16 @@ func (obj *portOptions) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *portOptions) Validate(defaults ...bool) error {
@@ -17617,15 +17738,16 @@ func (obj *pingIpv4) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *pingIpv4) ToJson() string {
@@ -17651,15 +17773,16 @@ func (obj *pingIpv4) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *pingIpv4) Validate(defaults ...bool) error {
@@ -17846,15 +17969,16 @@ func (obj *pingIpv6) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *pingIpv6) ToJson() string {
@@ -17880,15 +18004,16 @@ func (obj *pingIpv6) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *pingIpv6) Validate(defaults ...bool) error {
@@ -18075,15 +18200,16 @@ func (obj *flowMetricGroupRequest) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *flowMetricGroupRequest) ToJson() string {
@@ -18109,15 +18235,16 @@ func (obj *flowMetricGroupRequest) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *flowMetricGroupRequest) Validate(defaults ...bool) error {
@@ -18353,15 +18480,16 @@ func (obj *response) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *response) ToJson() string {
@@ -18387,15 +18515,16 @@ func (obj *response) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *response) Validate(defaults ...bool) error {
@@ -18621,15 +18750,16 @@ func (obj *portMetric) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *portMetric) ToJson() string {
@@ -18655,15 +18785,16 @@ func (obj *portMetric) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *portMetric) Validate(defaults ...bool) error {
@@ -19115,15 +19246,16 @@ func (obj *flowMetric) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *flowMetric) ToJson() string {
@@ -19149,15 +19281,16 @@ func (obj *flowMetric) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *flowMetric) Validate(defaults ...bool) error {
@@ -19650,15 +19783,16 @@ func (obj *bgpv4Metric) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *bgpv4Metric) ToJson() string {
@@ -19684,15 +19818,16 @@ func (obj *bgpv4Metric) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *bgpv4Metric) Validate(defaults ...bool) error {
@@ -20184,15 +20319,16 @@ func (obj *bgpv6Metric) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *bgpv6Metric) ToJson() string {
@@ -20218,15 +20354,16 @@ func (obj *bgpv6Metric) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *bgpv6Metric) Validate(defaults ...bool) error {
@@ -20718,15 +20855,16 @@ func (obj *isisMetric) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *isisMetric) ToJson() string {
@@ -20752,15 +20890,16 @@ func (obj *isisMetric) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *isisMetric) Validate(defaults ...bool) error {
@@ -21541,15 +21680,16 @@ func (obj *portState) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *portState) ToJson() string {
@@ -21575,15 +21715,16 @@ func (obj *portState) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *portState) Validate(defaults ...bool) error {
@@ -21786,15 +21927,16 @@ func (obj *flowState) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *flowState) ToJson() string {
@@ -21820,15 +21962,16 @@ func (obj *flowState) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *flowState) Validate(defaults ...bool) error {
@@ -21997,15 +22140,16 @@ func (obj *lagProtocol) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *lagProtocol) ToJson() string {
@@ -22031,15 +22175,16 @@ func (obj *lagProtocol) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *lagProtocol) Validate(defaults ...bool) error {
@@ -22254,15 +22399,16 @@ func (obj *deviceEthernetBase) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *deviceEthernetBase) ToJson() string {
@@ -22288,15 +22434,16 @@ func (obj *deviceEthernetBase) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *deviceEthernetBase) Validate(defaults ...bool) error {
@@ -22531,15 +22678,16 @@ func (obj *layer1Ieee8021Qbb) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *layer1Ieee8021Qbb) ToJson() string {
@@ -22565,15 +22713,16 @@ func (obj *layer1Ieee8021Qbb) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *layer1Ieee8021Qbb) Validate(defaults ...bool) error {
@@ -22997,15 +23146,16 @@ func (obj *layer1Ieee8023X) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *layer1Ieee8023X) ToJson() string {
@@ -23031,15 +23181,16 @@ func (obj *layer1Ieee8023X) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *layer1Ieee8023X) Validate(defaults ...bool) error {
@@ -23145,15 +23296,16 @@ func (obj *captureCustom) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *captureCustom) ToJson() string {
@@ -23179,15 +23331,16 @@ func (obj *captureCustom) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *captureCustom) Validate(defaults ...bool) error {
@@ -23467,15 +23620,16 @@ func (obj *captureEthernet) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *captureEthernet) ToJson() string {
@@ -23501,15 +23655,16 @@ func (obj *captureEthernet) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *captureEthernet) Validate(defaults ...bool) error {
@@ -23734,15 +23889,16 @@ func (obj *captureVlan) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *captureVlan) ToJson() string {
@@ -23768,15 +23924,16 @@ func (obj *captureVlan) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *captureVlan) Validate(defaults ...bool) error {
@@ -24001,15 +24158,16 @@ func (obj *captureIpv4) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *captureIpv4) ToJson() string {
@@ -24035,15 +24193,16 @@ func (obj *captureIpv4) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *captureIpv4) Validate(defaults ...bool) error {
@@ -24568,15 +24727,16 @@ func (obj *captureIpv6) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *captureIpv6) ToJson() string {
@@ -24602,15 +24762,16 @@ func (obj *captureIpv6) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *captureIpv6) Validate(defaults ...bool) error {
@@ -24955,15 +25116,16 @@ func (obj *deviceIpv4) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *deviceIpv4) ToJson() string {
@@ -24989,15 +25151,16 @@ func (obj *deviceIpv4) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *deviceIpv4) Validate(defaults ...bool) error {
@@ -25218,15 +25381,16 @@ func (obj *deviceIpv6) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *deviceIpv6) ToJson() string {
@@ -25252,15 +25416,16 @@ func (obj *deviceIpv6) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *deviceIpv6) Validate(defaults ...bool) error {
@@ -25481,15 +25646,16 @@ func (obj *deviceVlan) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *deviceVlan) ToJson() string {
@@ -25515,15 +25681,16 @@ func (obj *deviceVlan) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *deviceVlan) Validate(defaults ...bool) error {
@@ -25776,15 +25943,16 @@ func (obj *deviceIsisMultiInstance) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *deviceIsisMultiInstance) ToJson() string {
@@ -25810,15 +25978,16 @@ func (obj *deviceIsisMultiInstance) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *deviceIsisMultiInstance) Validate(defaults ...bool) error {
@@ -25986,15 +26155,16 @@ func (obj *isisInterface) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *isisInterface) ToJson() string {
@@ -26020,15 +26190,16 @@ func (obj *isisInterface) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *isisInterface) Validate(defaults ...bool) error {
@@ -26561,15 +26732,16 @@ func (obj *isisBasic) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *isisBasic) ToJson() string {
@@ -26595,15 +26767,16 @@ func (obj *isisBasic) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *isisBasic) Validate(defaults ...bool) error {
@@ -26766,15 +26939,16 @@ func (obj *isisAdvanced) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *isisAdvanced) ToJson() string {
@@ -26800,15 +26974,16 @@ func (obj *isisAdvanced) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *isisAdvanced) Validate(defaults ...bool) error {
@@ -27255,15 +27430,16 @@ func (obj *isisAuthentication) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *isisAuthentication) ToJson() string {
@@ -27289,15 +27465,16 @@ func (obj *isisAuthentication) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *isisAuthentication) Validate(defaults ...bool) error {
@@ -27500,15 +27677,16 @@ func (obj *isisV4RouteRange) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *isisV4RouteRange) ToJson() string {
@@ -27534,15 +27712,16 @@ func (obj *isisV4RouteRange) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *isisV4RouteRange) Validate(defaults ...bool) error {
@@ -27966,15 +28145,16 @@ func (obj *isisV6RouteRange) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *isisV6RouteRange) ToJson() string {
@@ -28000,15 +28180,16 @@ func (obj *isisV6RouteRange) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *isisV6RouteRange) Validate(defaults ...bool) error {
@@ -28432,15 +28613,16 @@ func (obj *bgpV4Interface) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *bgpV4Interface) ToJson() string {
@@ -28466,15 +28648,16 @@ func (obj *bgpV4Interface) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *bgpV4Interface) Validate(defaults ...bool) error {
@@ -28662,15 +28845,16 @@ func (obj *bgpV6Interface) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *bgpV6Interface) ToJson() string {
@@ -28696,15 +28880,16 @@ func (obj *bgpV6Interface) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *bgpV6Interface) Validate(defaults ...bool) error {
@@ -28892,15 +29077,16 @@ func (obj *flowPort) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *flowPort) ToJson() string {
@@ -28926,15 +29112,16 @@ func (obj *flowPort) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *flowPort) Validate(defaults ...bool) error {
@@ -29136,15 +29323,16 @@ func (obj *flowRouter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *flowRouter) ToJson() string {
@@ -29170,15 +29358,16 @@ func (obj *flowRouter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *flowRouter) Validate(defaults ...bool) error {
@@ -29451,15 +29640,16 @@ func (obj *flowCustom) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *flowCustom) ToJson() string {
@@ -29485,15 +29675,16 @@ func (obj *flowCustom) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *flowCustom) Validate(defaults ...bool) error {
@@ -29620,15 +29811,16 @@ func (obj *flowEthernet) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *flowEthernet) ToJson() string {
@@ -29654,15 +29846,16 @@ func (obj *flowEthernet) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *flowEthernet) Validate(defaults ...bool) error {
@@ -29887,15 +30080,16 @@ func (obj *flowVlan) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *flowVlan) ToJson() string {
@@ -29921,15 +30115,16 @@ func (obj *flowVlan) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *flowVlan) Validate(defaults ...bool) error {
@@ -30154,15 +30349,16 @@ func (obj *flowVxlan) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *flowVxlan) ToJson() string {
@@ -30188,15 +30384,16 @@ func (obj *flowVxlan) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *flowVxlan) Validate(defaults ...bool) error {
@@ -30421,15 +30618,16 @@ func (obj *flowIpv4) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *flowIpv4) ToJson() string {
@@ -30455,15 +30653,16 @@ func (obj *flowIpv4) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *flowIpv4) Validate(defaults ...bool) error {
@@ -30988,15 +31187,16 @@ func (obj *flowIpv6) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *flowIpv6) ToJson() string {
@@ -31022,15 +31222,16 @@ func (obj *flowIpv6) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *flowIpv6) Validate(defaults ...bool) error {
@@ -31375,15 +31576,16 @@ func (obj *flowPfcPause) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *flowPfcPause) ToJson() string {
@@ -31409,15 +31611,16 @@ func (obj *flowPfcPause) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *flowPfcPause) Validate(defaults ...bool) error {
@@ -31912,15 +32115,16 @@ func (obj *flowEthernetPause) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *flowEthernetPause) ToJson() string {
@@ -31946,15 +32150,16 @@ func (obj *flowEthernetPause) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *flowEthernetPause) Validate(defaults ...bool) error {
@@ -32209,15 +32414,16 @@ func (obj *flowTcp) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *flowTcp) ToJson() string {
@@ -32243,15 +32449,16 @@ func (obj *flowTcp) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *flowTcp) Validate(defaults ...bool) error {
@@ -32806,15 +33013,16 @@ func (obj *flowUdp) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *flowUdp) ToJson() string {
@@ -32840,15 +33048,16 @@ func (obj *flowUdp) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *flowUdp) Validate(defaults ...bool) error {
@@ -33073,15 +33282,16 @@ func (obj *flowGre) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *flowGre) ToJson() string {
@@ -33107,15 +33317,16 @@ func (obj *flowGre) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *flowGre) Validate(defaults ...bool) error {
@@ -33400,15 +33611,16 @@ func (obj *flowGtpv1) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *flowGtpv1) ToJson() string {
@@ -33434,15 +33646,16 @@ func (obj *flowGtpv1) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *flowGtpv1) Validate(defaults ...bool) error {
@@ -33948,15 +34161,16 @@ func (obj *flowGtpv2) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *flowGtpv2) ToJson() string {
@@ -33982,15 +34196,16 @@ func (obj *flowGtpv2) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *flowGtpv2) Validate(defaults ...bool) error {
@@ -34365,15 +34580,16 @@ func (obj *flowArp) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *flowArp) ToJson() string {
@@ -34399,15 +34615,16 @@ func (obj *flowArp) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *flowArp) Validate(defaults ...bool) error {
@@ -34782,15 +34999,16 @@ func (obj *flowIcmp) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *flowIcmp) ToJson() string {
@@ -34816,15 +35034,16 @@ func (obj *flowIcmp) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *flowIcmp) Validate(defaults ...bool) error {
@@ -35002,15 +35221,16 @@ func (obj *flowIcmpv6) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *flowIcmpv6) ToJson() string {
@@ -35036,15 +35256,16 @@ func (obj *flowIcmpv6) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *flowIcmpv6) Validate(defaults ...bool) error {
@@ -35222,15 +35443,16 @@ func (obj *flowPpp) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *flowPpp) ToJson() string {
@@ -35256,15 +35478,16 @@ func (obj *flowPpp) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *flowPpp) Validate(defaults ...bool) error {
@@ -35459,15 +35682,16 @@ func (obj *flowIgmpv1) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *flowIgmpv1) ToJson() string {
@@ -35493,15 +35717,16 @@ func (obj *flowIgmpv1) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *flowIgmpv1) Validate(defaults ...bool) error {
@@ -35756,15 +35981,16 @@ func (obj *flowSizeIncrement) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *flowSizeIncrement) ToJson() string {
@@ -35790,15 +36016,16 @@ func (obj *flowSizeIncrement) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *flowSizeIncrement) Validate(defaults ...bool) error {
@@ -36016,15 +36243,16 @@ func (obj *flowSizeRandom) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *flowSizeRandom) ToJson() string {
@@ -36050,15 +36278,16 @@ func (obj *flowSizeRandom) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *flowSizeRandom) Validate(defaults ...bool) error {
@@ -36228,15 +36457,16 @@ func (obj *flowFixedPackets) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *flowFixedPackets) ToJson() string {
@@ -36262,15 +36492,16 @@ func (obj *flowFixedPackets) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *flowFixedPackets) Validate(defaults ...bool) error {
@@ -36485,15 +36716,16 @@ func (obj *flowFixedSeconds) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *flowFixedSeconds) ToJson() string {
@@ -36519,15 +36751,16 @@ func (obj *flowFixedSeconds) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *flowFixedSeconds) Validate(defaults ...bool) error {
@@ -36734,15 +36967,16 @@ func (obj *flowBurst) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *flowBurst) ToJson() string {
@@ -36768,15 +37002,16 @@ func (obj *flowBurst) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *flowBurst) Validate(defaults ...bool) error {
@@ -37034,15 +37269,16 @@ func (obj *flowContinuous) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *flowContinuous) ToJson() string {
@@ -37068,15 +37304,16 @@ func (obj *flowContinuous) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *flowContinuous) Validate(defaults ...bool) error {
@@ -37251,15 +37488,16 @@ func (obj *flowLatencyMetrics) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *flowLatencyMetrics) ToJson() string {
@@ -37285,15 +37523,16 @@ func (obj *flowLatencyMetrics) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *flowLatencyMetrics) Validate(defaults ...bool) error {
@@ -37494,15 +37733,16 @@ func (obj *flowMetricGroup) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *flowMetricGroup) ToJson() string {
@@ -37528,15 +37768,16 @@ func (obj *flowMetricGroup) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *flowMetricGroup) Validate(defaults ...bool) error {
@@ -37692,15 +37933,16 @@ func (obj *metricTimestamp) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *metricTimestamp) ToJson() string {
@@ -37726,15 +37968,16 @@ func (obj *metricTimestamp) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *metricTimestamp) Validate(defaults ...bool) error {
@@ -37890,15 +38133,16 @@ func (obj *metricLatency) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *metricLatency) ToJson() string {
@@ -37924,15 +38168,16 @@ func (obj *metricLatency) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *metricLatency) Validate(defaults ...bool) error {
@@ -38113,15 +38358,16 @@ func (obj *lagLacp) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *lagLacp) ToJson() string {
@@ -38147,15 +38393,16 @@ func (obj *lagLacp) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *lagLacp) Validate(defaults ...bool) error {
@@ -38582,15 +38829,16 @@ func (obj *lagStatic) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *lagStatic) ToJson() string {
@@ -38616,15 +38864,16 @@ func (obj *lagStatic) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *lagStatic) Validate(defaults ...bool) error {
@@ -38770,15 +39019,16 @@ func (obj *captureField) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *captureField) ToJson() string {
@@ -38804,15 +39054,16 @@ func (obj *captureField) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *captureField) Validate(defaults ...bool) error {
@@ -39028,15 +39279,16 @@ func (obj *isisInterfaceLevel) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *isisInterfaceLevel) ToJson() string {
@@ -39062,15 +39314,16 @@ func (obj *isisInterfaceLevel) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *isisInterfaceLevel) Validate(defaults ...bool) error {
@@ -39272,15 +39525,16 @@ func (obj *isisMT) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *isisMT) ToJson() string {
@@ -39306,15 +39560,16 @@ func (obj *isisMT) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *isisMT) Validate(defaults ...bool) error {
@@ -39500,15 +39755,16 @@ func (obj *linkStateTE) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *linkStateTE) ToJson() string {
@@ -39534,15 +39790,16 @@ func (obj *linkStateTE) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *linkStateTE) Validate(defaults ...bool) error {
@@ -39857,15 +40114,16 @@ func (obj *isisInterfaceAuthentication) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *isisInterfaceAuthentication) ToJson() string {
@@ -39891,15 +40149,16 @@ func (obj *isisInterfaceAuthentication) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *isisInterfaceAuthentication) Validate(defaults ...bool) error {
@@ -40089,15 +40348,16 @@ func (obj *isisInterfaceAdvanced) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *isisInterfaceAdvanced) ToJson() string {
@@ -40123,15 +40383,16 @@ func (obj *isisInterfaceAdvanced) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *isisInterfaceAdvanced) Validate(defaults ...bool) error {
@@ -40351,15 +40612,16 @@ func (obj *isisInterfaceLinkProtection) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *isisInterfaceLinkProtection) ToJson() string {
@@ -40385,15 +40647,16 @@ func (obj *isisInterfaceLinkProtection) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *isisInterfaceLinkProtection) Validate(defaults ...bool) error {
@@ -40782,15 +41045,16 @@ func (obj *isisAuthenticationBase) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *isisAuthenticationBase) ToJson() string {
@@ -40816,15 +41080,16 @@ func (obj *isisAuthenticationBase) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *isisAuthenticationBase) Validate(defaults ...bool) error {
@@ -41014,15 +41279,16 @@ func (obj *v4RouteAddress) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *v4RouteAddress) ToJson() string {
@@ -41048,15 +41314,16 @@ func (obj *v4RouteAddress) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *v4RouteAddress) Validate(defaults ...bool) error {
@@ -41309,15 +41576,16 @@ func (obj *v6RouteAddress) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *v6RouteAddress) ToJson() string {
@@ -41343,15 +41611,16 @@ func (obj *v6RouteAddress) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *v6RouteAddress) Validate(defaults ...bool) error {
@@ -41604,15 +41873,16 @@ func (obj *bgpV4Peer) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *bgpV4Peer) ToJson() string {
@@ -41638,15 +41908,16 @@ func (obj *bgpV4Peer) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *bgpV4Peer) Validate(defaults ...bool) error {
@@ -42119,15 +42390,16 @@ func (obj *bgpV6Peer) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *bgpV6Peer) ToJson() string {
@@ -42153,15 +42425,16 @@ func (obj *bgpV6Peer) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *bgpV6Peer) Validate(defaults ...bool) error {
@@ -42664,15 +42937,16 @@ func (obj *patternFlowEthernetDst) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowEthernetDst) ToJson() string {
@@ -42698,15 +42972,16 @@ func (obj *patternFlowEthernetDst) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowEthernetDst) Validate(defaults ...bool) error {
@@ -43024,15 +43299,16 @@ func (obj *patternFlowEthernetSrc) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowEthernetSrc) ToJson() string {
@@ -43058,15 +43334,16 @@ func (obj *patternFlowEthernetSrc) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowEthernetSrc) Validate(defaults ...bool) error {
@@ -43384,15 +43661,16 @@ func (obj *patternFlowEthernetEtherType) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowEthernetEtherType) ToJson() string {
@@ -43418,15 +43696,16 @@ func (obj *patternFlowEthernetEtherType) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowEthernetEtherType) Validate(defaults ...bool) error {
@@ -43790,15 +44069,16 @@ func (obj *patternFlowEthernetPfcQueue) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowEthernetPfcQueue) ToJson() string {
@@ -43824,15 +44104,16 @@ func (obj *patternFlowEthernetPfcQueue) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowEthernetPfcQueue) Validate(defaults ...bool) error {
@@ -44152,15 +44433,16 @@ func (obj *patternFlowVlanPriority) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowVlanPriority) ToJson() string {
@@ -44186,15 +44468,16 @@ func (obj *patternFlowVlanPriority) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowVlanPriority) Validate(defaults ...bool) error {
@@ -44514,15 +44797,16 @@ func (obj *patternFlowVlanCfi) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowVlanCfi) ToJson() string {
@@ -44548,15 +44832,16 @@ func (obj *patternFlowVlanCfi) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowVlanCfi) Validate(defaults ...bool) error {
@@ -44876,15 +45161,16 @@ func (obj *patternFlowVlanId) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowVlanId) ToJson() string {
@@ -44910,15 +45196,16 @@ func (obj *patternFlowVlanId) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowVlanId) Validate(defaults ...bool) error {
@@ -45238,15 +45525,16 @@ func (obj *patternFlowVlanTpid) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowVlanTpid) ToJson() string {
@@ -45272,15 +45560,16 @@ func (obj *patternFlowVlanTpid) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowVlanTpid) Validate(defaults ...bool) error {
@@ -45600,15 +45889,16 @@ func (obj *patternFlowVxlanFlags) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowVxlanFlags) ToJson() string {
@@ -45634,15 +45924,16 @@ func (obj *patternFlowVxlanFlags) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowVxlanFlags) Validate(defaults ...bool) error {
@@ -45962,15 +46253,16 @@ func (obj *patternFlowVxlanReserved0) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowVxlanReserved0) ToJson() string {
@@ -45996,15 +46288,16 @@ func (obj *patternFlowVxlanReserved0) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowVxlanReserved0) Validate(defaults ...bool) error {
@@ -46324,15 +46617,16 @@ func (obj *patternFlowVxlanVni) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowVxlanVni) ToJson() string {
@@ -46358,15 +46652,16 @@ func (obj *patternFlowVxlanVni) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowVxlanVni) Validate(defaults ...bool) error {
@@ -46686,15 +46981,16 @@ func (obj *patternFlowVxlanReserved1) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowVxlanReserved1) ToJson() string {
@@ -46720,15 +47016,16 @@ func (obj *patternFlowVxlanReserved1) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowVxlanReserved1) Validate(defaults ...bool) error {
@@ -47048,15 +47345,16 @@ func (obj *patternFlowIpv4Version) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv4Version) ToJson() string {
@@ -47082,15 +47380,16 @@ func (obj *patternFlowIpv4Version) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv4Version) Validate(defaults ...bool) error {
@@ -47410,15 +47709,16 @@ func (obj *patternFlowIpv4HeaderLength) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv4HeaderLength) ToJson() string {
@@ -47444,15 +47744,16 @@ func (obj *patternFlowIpv4HeaderLength) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv4HeaderLength) Validate(defaults ...bool) error {
@@ -47816,15 +48117,16 @@ func (obj *flowIpv4Priority) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *flowIpv4Priority) ToJson() string {
@@ -47850,15 +48152,16 @@ func (obj *flowIpv4Priority) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *flowIpv4Priority) Validate(defaults ...bool) error {
@@ -48110,15 +48413,16 @@ func (obj *patternFlowIpv4TotalLength) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv4TotalLength) ToJson() string {
@@ -48144,15 +48448,16 @@ func (obj *patternFlowIpv4TotalLength) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv4TotalLength) Validate(defaults ...bool) error {
@@ -48516,15 +48821,16 @@ func (obj *patternFlowIpv4Identification) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv4Identification) ToJson() string {
@@ -48550,15 +48856,16 @@ func (obj *patternFlowIpv4Identification) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv4Identification) Validate(defaults ...bool) error {
@@ -48878,15 +49185,16 @@ func (obj *patternFlowIpv4Reserved) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv4Reserved) ToJson() string {
@@ -48912,15 +49220,16 @@ func (obj *patternFlowIpv4Reserved) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv4Reserved) Validate(defaults ...bool) error {
@@ -49240,15 +49549,16 @@ func (obj *patternFlowIpv4DontFragment) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv4DontFragment) ToJson() string {
@@ -49274,15 +49584,16 @@ func (obj *patternFlowIpv4DontFragment) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv4DontFragment) Validate(defaults ...bool) error {
@@ -49602,15 +49913,16 @@ func (obj *patternFlowIpv4MoreFragments) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv4MoreFragments) ToJson() string {
@@ -49636,15 +49948,16 @@ func (obj *patternFlowIpv4MoreFragments) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv4MoreFragments) Validate(defaults ...bool) error {
@@ -49964,15 +50277,16 @@ func (obj *patternFlowIpv4FragmentOffset) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv4FragmentOffset) ToJson() string {
@@ -49998,15 +50312,16 @@ func (obj *patternFlowIpv4FragmentOffset) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv4FragmentOffset) Validate(defaults ...bool) error {
@@ -50326,15 +50641,16 @@ func (obj *patternFlowIpv4TimeToLive) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv4TimeToLive) ToJson() string {
@@ -50360,15 +50676,16 @@ func (obj *patternFlowIpv4TimeToLive) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv4TimeToLive) Validate(defaults ...bool) error {
@@ -50688,15 +51005,16 @@ func (obj *patternFlowIpv4Protocol) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv4Protocol) ToJson() string {
@@ -50722,15 +51040,16 @@ func (obj *patternFlowIpv4Protocol) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv4Protocol) Validate(defaults ...bool) error {
@@ -51094,15 +51413,16 @@ func (obj *patternFlowIpv4HeaderChecksum) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv4HeaderChecksum) ToJson() string {
@@ -51128,15 +51448,16 @@ func (obj *patternFlowIpv4HeaderChecksum) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv4HeaderChecksum) Validate(defaults ...bool) error {
@@ -51361,15 +51682,16 @@ func (obj *patternFlowIpv4Src) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv4Src) ToJson() string {
@@ -51395,15 +51717,16 @@ func (obj *patternFlowIpv4Src) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv4Src) Validate(defaults ...bool) error {
@@ -51721,15 +52044,16 @@ func (obj *patternFlowIpv4Dst) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv4Dst) ToJson() string {
@@ -51755,15 +52079,16 @@ func (obj *patternFlowIpv4Dst) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv4Dst) Validate(defaults ...bool) error {
@@ -52081,15 +52406,16 @@ func (obj *patternFlowIpv6Version) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv6Version) ToJson() string {
@@ -52115,15 +52441,16 @@ func (obj *patternFlowIpv6Version) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv6Version) Validate(defaults ...bool) error {
@@ -52443,15 +52770,16 @@ func (obj *patternFlowIpv6TrafficClass) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv6TrafficClass) ToJson() string {
@@ -52477,15 +52805,16 @@ func (obj *patternFlowIpv6TrafficClass) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv6TrafficClass) Validate(defaults ...bool) error {
@@ -52805,15 +53134,16 @@ func (obj *patternFlowIpv6FlowLabel) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv6FlowLabel) ToJson() string {
@@ -52839,15 +53169,16 @@ func (obj *patternFlowIpv6FlowLabel) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv6FlowLabel) Validate(defaults ...bool) error {
@@ -53167,15 +53498,16 @@ func (obj *patternFlowIpv6PayloadLength) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv6PayloadLength) ToJson() string {
@@ -53201,15 +53533,16 @@ func (obj *patternFlowIpv6PayloadLength) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv6PayloadLength) Validate(defaults ...bool) error {
@@ -53573,15 +53906,16 @@ func (obj *patternFlowIpv6NextHeader) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv6NextHeader) ToJson() string {
@@ -53607,15 +53941,16 @@ func (obj *patternFlowIpv6NextHeader) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv6NextHeader) Validate(defaults ...bool) error {
@@ -53935,15 +54270,16 @@ func (obj *patternFlowIpv6HopLimit) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv6HopLimit) ToJson() string {
@@ -53969,15 +54305,16 @@ func (obj *patternFlowIpv6HopLimit) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv6HopLimit) Validate(defaults ...bool) error {
@@ -54297,15 +54634,16 @@ func (obj *patternFlowIpv6Src) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv6Src) ToJson() string {
@@ -54331,15 +54669,16 @@ func (obj *patternFlowIpv6Src) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv6Src) Validate(defaults ...bool) error {
@@ -54657,15 +54996,16 @@ func (obj *patternFlowIpv6Dst) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv6Dst) ToJson() string {
@@ -54691,15 +55031,16 @@ func (obj *patternFlowIpv6Dst) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv6Dst) Validate(defaults ...bool) error {
@@ -55017,15 +55358,16 @@ func (obj *patternFlowPfcPauseDst) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowPfcPauseDst) ToJson() string {
@@ -55051,15 +55393,16 @@ func (obj *patternFlowPfcPauseDst) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowPfcPauseDst) Validate(defaults ...bool) error {
@@ -55377,15 +55720,16 @@ func (obj *patternFlowPfcPauseSrc) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowPfcPauseSrc) ToJson() string {
@@ -55411,15 +55755,16 @@ func (obj *patternFlowPfcPauseSrc) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowPfcPauseSrc) Validate(defaults ...bool) error {
@@ -55737,15 +56082,16 @@ func (obj *patternFlowPfcPauseEtherType) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowPfcPauseEtherType) ToJson() string {
@@ -55771,15 +56117,16 @@ func (obj *patternFlowPfcPauseEtherType) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowPfcPauseEtherType) Validate(defaults ...bool) error {
@@ -56099,15 +56446,16 @@ func (obj *patternFlowPfcPauseControlOpCode) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowPfcPauseControlOpCode) ToJson() string {
@@ -56133,15 +56481,16 @@ func (obj *patternFlowPfcPauseControlOpCode) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowPfcPauseControlOpCode) Validate(defaults ...bool) error {
@@ -56461,15 +56810,16 @@ func (obj *patternFlowPfcPauseClassEnableVector) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowPfcPauseClassEnableVector) ToJson() string {
@@ -56495,15 +56845,16 @@ func (obj *patternFlowPfcPauseClassEnableVector) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowPfcPauseClassEnableVector) Validate(defaults ...bool) error {
@@ -56823,15 +57174,16 @@ func (obj *patternFlowPfcPausePauseClass0) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowPfcPausePauseClass0) ToJson() string {
@@ -56857,15 +57209,16 @@ func (obj *patternFlowPfcPausePauseClass0) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowPfcPausePauseClass0) Validate(defaults ...bool) error {
@@ -57185,15 +57538,16 @@ func (obj *patternFlowPfcPausePauseClass1) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowPfcPausePauseClass1) ToJson() string {
@@ -57219,15 +57573,16 @@ func (obj *patternFlowPfcPausePauseClass1) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowPfcPausePauseClass1) Validate(defaults ...bool) error {
@@ -57547,15 +57902,16 @@ func (obj *patternFlowPfcPausePauseClass2) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowPfcPausePauseClass2) ToJson() string {
@@ -57581,15 +57937,16 @@ func (obj *patternFlowPfcPausePauseClass2) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowPfcPausePauseClass2) Validate(defaults ...bool) error {
@@ -57909,15 +58266,16 @@ func (obj *patternFlowPfcPausePauseClass3) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowPfcPausePauseClass3) ToJson() string {
@@ -57943,15 +58301,16 @@ func (obj *patternFlowPfcPausePauseClass3) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowPfcPausePauseClass3) Validate(defaults ...bool) error {
@@ -58271,15 +58630,16 @@ func (obj *patternFlowPfcPausePauseClass4) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowPfcPausePauseClass4) ToJson() string {
@@ -58305,15 +58665,16 @@ func (obj *patternFlowPfcPausePauseClass4) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowPfcPausePauseClass4) Validate(defaults ...bool) error {
@@ -58633,15 +58994,16 @@ func (obj *patternFlowPfcPausePauseClass5) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowPfcPausePauseClass5) ToJson() string {
@@ -58667,15 +59029,16 @@ func (obj *patternFlowPfcPausePauseClass5) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowPfcPausePauseClass5) Validate(defaults ...bool) error {
@@ -58995,15 +59358,16 @@ func (obj *patternFlowPfcPausePauseClass6) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowPfcPausePauseClass6) ToJson() string {
@@ -59029,15 +59393,16 @@ func (obj *patternFlowPfcPausePauseClass6) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowPfcPausePauseClass6) Validate(defaults ...bool) error {
@@ -59357,15 +59722,16 @@ func (obj *patternFlowPfcPausePauseClass7) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowPfcPausePauseClass7) ToJson() string {
@@ -59391,15 +59757,16 @@ func (obj *patternFlowPfcPausePauseClass7) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowPfcPausePauseClass7) Validate(defaults ...bool) error {
@@ -59719,15 +60086,16 @@ func (obj *patternFlowEthernetPauseDst) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowEthernetPauseDst) ToJson() string {
@@ -59753,15 +60121,16 @@ func (obj *patternFlowEthernetPauseDst) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowEthernetPauseDst) Validate(defaults ...bool) error {
@@ -60079,15 +60448,16 @@ func (obj *patternFlowEthernetPauseSrc) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowEthernetPauseSrc) ToJson() string {
@@ -60113,15 +60483,16 @@ func (obj *patternFlowEthernetPauseSrc) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowEthernetPauseSrc) Validate(defaults ...bool) error {
@@ -60439,15 +60810,16 @@ func (obj *patternFlowEthernetPauseEtherType) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowEthernetPauseEtherType) ToJson() string {
@@ -60473,15 +60845,16 @@ func (obj *patternFlowEthernetPauseEtherType) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowEthernetPauseEtherType) Validate(defaults ...bool) error {
@@ -60801,15 +61174,16 @@ func (obj *patternFlowEthernetPauseControlOpCode) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowEthernetPauseControlOpCode) ToJson() string {
@@ -60835,15 +61209,16 @@ func (obj *patternFlowEthernetPauseControlOpCode) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowEthernetPauseControlOpCode) Validate(defaults ...bool) error {
@@ -61163,15 +61538,16 @@ func (obj *patternFlowEthernetPauseTime) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowEthernetPauseTime) ToJson() string {
@@ -61197,15 +61573,16 @@ func (obj *patternFlowEthernetPauseTime) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowEthernetPauseTime) Validate(defaults ...bool) error {
@@ -61525,15 +61902,16 @@ func (obj *patternFlowTcpSrcPort) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowTcpSrcPort) ToJson() string {
@@ -61559,15 +61937,16 @@ func (obj *patternFlowTcpSrcPort) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowTcpSrcPort) Validate(defaults ...bool) error {
@@ -61887,15 +62266,16 @@ func (obj *patternFlowTcpDstPort) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowTcpDstPort) ToJson() string {
@@ -61921,15 +62301,16 @@ func (obj *patternFlowTcpDstPort) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowTcpDstPort) Validate(defaults ...bool) error {
@@ -62249,15 +62630,16 @@ func (obj *patternFlowTcpSeqNum) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowTcpSeqNum) ToJson() string {
@@ -62283,15 +62665,16 @@ func (obj *patternFlowTcpSeqNum) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowTcpSeqNum) Validate(defaults ...bool) error {
@@ -62611,15 +62994,16 @@ func (obj *patternFlowTcpAckNum) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowTcpAckNum) ToJson() string {
@@ -62645,15 +63029,16 @@ func (obj *patternFlowTcpAckNum) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowTcpAckNum) Validate(defaults ...bool) error {
@@ -62973,15 +63358,16 @@ func (obj *patternFlowTcpDataOffset) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowTcpDataOffset) ToJson() string {
@@ -63007,15 +63393,16 @@ func (obj *patternFlowTcpDataOffset) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowTcpDataOffset) Validate(defaults ...bool) error {
@@ -63335,15 +63722,16 @@ func (obj *patternFlowTcpEcnNs) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowTcpEcnNs) ToJson() string {
@@ -63369,15 +63757,16 @@ func (obj *patternFlowTcpEcnNs) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowTcpEcnNs) Validate(defaults ...bool) error {
@@ -63697,15 +64086,16 @@ func (obj *patternFlowTcpEcnCwr) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowTcpEcnCwr) ToJson() string {
@@ -63731,15 +64121,16 @@ func (obj *patternFlowTcpEcnCwr) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowTcpEcnCwr) Validate(defaults ...bool) error {
@@ -64059,15 +64450,16 @@ func (obj *patternFlowTcpEcnEcho) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowTcpEcnEcho) ToJson() string {
@@ -64093,15 +64485,16 @@ func (obj *patternFlowTcpEcnEcho) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowTcpEcnEcho) Validate(defaults ...bool) error {
@@ -64421,15 +64814,16 @@ func (obj *patternFlowTcpCtlUrg) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowTcpCtlUrg) ToJson() string {
@@ -64455,15 +64849,16 @@ func (obj *patternFlowTcpCtlUrg) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowTcpCtlUrg) Validate(defaults ...bool) error {
@@ -64783,15 +65178,16 @@ func (obj *patternFlowTcpCtlAck) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowTcpCtlAck) ToJson() string {
@@ -64817,15 +65213,16 @@ func (obj *patternFlowTcpCtlAck) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowTcpCtlAck) Validate(defaults ...bool) error {
@@ -65145,15 +65542,16 @@ func (obj *patternFlowTcpCtlPsh) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowTcpCtlPsh) ToJson() string {
@@ -65179,15 +65577,16 @@ func (obj *patternFlowTcpCtlPsh) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowTcpCtlPsh) Validate(defaults ...bool) error {
@@ -65507,15 +65906,16 @@ func (obj *patternFlowTcpCtlRst) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowTcpCtlRst) ToJson() string {
@@ -65541,15 +65941,16 @@ func (obj *patternFlowTcpCtlRst) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowTcpCtlRst) Validate(defaults ...bool) error {
@@ -65869,15 +66270,16 @@ func (obj *patternFlowTcpCtlSyn) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowTcpCtlSyn) ToJson() string {
@@ -65903,15 +66305,16 @@ func (obj *patternFlowTcpCtlSyn) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowTcpCtlSyn) Validate(defaults ...bool) error {
@@ -66231,15 +66634,16 @@ func (obj *patternFlowTcpCtlFin) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowTcpCtlFin) ToJson() string {
@@ -66265,15 +66669,16 @@ func (obj *patternFlowTcpCtlFin) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowTcpCtlFin) Validate(defaults ...bool) error {
@@ -66593,15 +66998,16 @@ func (obj *patternFlowTcpWindow) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowTcpWindow) ToJson() string {
@@ -66627,15 +67033,16 @@ func (obj *patternFlowTcpWindow) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowTcpWindow) Validate(defaults ...bool) error {
@@ -66955,15 +67362,16 @@ func (obj *patternFlowUdpSrcPort) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowUdpSrcPort) ToJson() string {
@@ -66989,15 +67397,16 @@ func (obj *patternFlowUdpSrcPort) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowUdpSrcPort) Validate(defaults ...bool) error {
@@ -67317,15 +67726,16 @@ func (obj *patternFlowUdpDstPort) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowUdpDstPort) ToJson() string {
@@ -67351,15 +67761,16 @@ func (obj *patternFlowUdpDstPort) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowUdpDstPort) Validate(defaults ...bool) error {
@@ -67679,15 +68090,16 @@ func (obj *patternFlowUdpLength) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowUdpLength) ToJson() string {
@@ -67713,15 +68125,16 @@ func (obj *patternFlowUdpLength) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowUdpLength) Validate(defaults ...bool) error {
@@ -68041,15 +68454,16 @@ func (obj *patternFlowUdpChecksum) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowUdpChecksum) ToJson() string {
@@ -68075,15 +68489,16 @@ func (obj *patternFlowUdpChecksum) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowUdpChecksum) Validate(defaults ...bool) error {
@@ -68308,15 +68723,16 @@ func (obj *patternFlowGreChecksumPresent) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGreChecksumPresent) ToJson() string {
@@ -68342,15 +68758,16 @@ func (obj *patternFlowGreChecksumPresent) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGreChecksumPresent) Validate(defaults ...bool) error {
@@ -68670,15 +69087,16 @@ func (obj *patternFlowGreReserved0) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGreReserved0) ToJson() string {
@@ -68704,15 +69122,16 @@ func (obj *patternFlowGreReserved0) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGreReserved0) Validate(defaults ...bool) error {
@@ -69032,15 +69451,16 @@ func (obj *patternFlowGreVersion) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGreVersion) ToJson() string {
@@ -69066,15 +69486,16 @@ func (obj *patternFlowGreVersion) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGreVersion) Validate(defaults ...bool) error {
@@ -69394,15 +69815,16 @@ func (obj *patternFlowGreProtocol) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGreProtocol) ToJson() string {
@@ -69428,15 +69850,16 @@ func (obj *patternFlowGreProtocol) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGreProtocol) Validate(defaults ...bool) error {
@@ -69756,15 +70179,16 @@ func (obj *patternFlowGreChecksum) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGreChecksum) ToJson() string {
@@ -69790,15 +70214,16 @@ func (obj *patternFlowGreChecksum) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGreChecksum) Validate(defaults ...bool) error {
@@ -70023,15 +70448,16 @@ func (obj *patternFlowGreReserved1) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGreReserved1) ToJson() string {
@@ -70057,15 +70483,16 @@ func (obj *patternFlowGreReserved1) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGreReserved1) Validate(defaults ...bool) error {
@@ -70385,15 +70812,16 @@ func (obj *patternFlowGtpv1Version) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGtpv1Version) ToJson() string {
@@ -70419,15 +70847,16 @@ func (obj *patternFlowGtpv1Version) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGtpv1Version) Validate(defaults ...bool) error {
@@ -70747,15 +71176,16 @@ func (obj *patternFlowGtpv1ProtocolType) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGtpv1ProtocolType) ToJson() string {
@@ -70781,15 +71211,16 @@ func (obj *patternFlowGtpv1ProtocolType) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGtpv1ProtocolType) Validate(defaults ...bool) error {
@@ -71109,15 +71540,16 @@ func (obj *patternFlowGtpv1Reserved) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGtpv1Reserved) ToJson() string {
@@ -71143,15 +71575,16 @@ func (obj *patternFlowGtpv1Reserved) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGtpv1Reserved) Validate(defaults ...bool) error {
@@ -71471,15 +71904,16 @@ func (obj *patternFlowGtpv1EFlag) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGtpv1EFlag) ToJson() string {
@@ -71505,15 +71939,16 @@ func (obj *patternFlowGtpv1EFlag) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGtpv1EFlag) Validate(defaults ...bool) error {
@@ -71833,15 +72268,16 @@ func (obj *patternFlowGtpv1SFlag) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGtpv1SFlag) ToJson() string {
@@ -71867,15 +72303,16 @@ func (obj *patternFlowGtpv1SFlag) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGtpv1SFlag) Validate(defaults ...bool) error {
@@ -72195,15 +72632,16 @@ func (obj *patternFlowGtpv1PnFlag) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGtpv1PnFlag) ToJson() string {
@@ -72229,15 +72667,16 @@ func (obj *patternFlowGtpv1PnFlag) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGtpv1PnFlag) Validate(defaults ...bool) error {
@@ -72557,15 +72996,16 @@ func (obj *patternFlowGtpv1MessageType) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGtpv1MessageType) ToJson() string {
@@ -72591,15 +73031,16 @@ func (obj *patternFlowGtpv1MessageType) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGtpv1MessageType) Validate(defaults ...bool) error {
@@ -72919,15 +73360,16 @@ func (obj *patternFlowGtpv1MessageLength) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGtpv1MessageLength) ToJson() string {
@@ -72953,15 +73395,16 @@ func (obj *patternFlowGtpv1MessageLength) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGtpv1MessageLength) Validate(defaults ...bool) error {
@@ -73281,15 +73724,16 @@ func (obj *patternFlowGtpv1Teid) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGtpv1Teid) ToJson() string {
@@ -73315,15 +73759,16 @@ func (obj *patternFlowGtpv1Teid) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGtpv1Teid) Validate(defaults ...bool) error {
@@ -73643,15 +74088,16 @@ func (obj *patternFlowGtpv1SquenceNumber) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGtpv1SquenceNumber) ToJson() string {
@@ -73677,15 +74123,16 @@ func (obj *patternFlowGtpv1SquenceNumber) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGtpv1SquenceNumber) Validate(defaults ...bool) error {
@@ -74005,15 +74452,16 @@ func (obj *patternFlowGtpv1NPduNumber) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGtpv1NPduNumber) ToJson() string {
@@ -74039,15 +74487,16 @@ func (obj *patternFlowGtpv1NPduNumber) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGtpv1NPduNumber) Validate(defaults ...bool) error {
@@ -74367,15 +74816,16 @@ func (obj *patternFlowGtpv1NextExtensionHeaderType) FromYaml(value string) error
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGtpv1NextExtensionHeaderType) ToJson() string {
@@ -74401,15 +74851,16 @@ func (obj *patternFlowGtpv1NextExtensionHeaderType) FromJson(value string) error
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGtpv1NextExtensionHeaderType) Validate(defaults ...bool) error {
@@ -74729,15 +75180,16 @@ func (obj *flowGtpExtension) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *flowGtpExtension) ToJson() string {
@@ -74763,15 +75215,16 @@ func (obj *flowGtpExtension) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *flowGtpExtension) Validate(defaults ...bool) error {
@@ -74966,15 +75419,16 @@ func (obj *patternFlowGtpv2Version) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGtpv2Version) ToJson() string {
@@ -75000,15 +75454,16 @@ func (obj *patternFlowGtpv2Version) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGtpv2Version) Validate(defaults ...bool) error {
@@ -75328,15 +75783,16 @@ func (obj *patternFlowGtpv2PiggybackingFlag) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGtpv2PiggybackingFlag) ToJson() string {
@@ -75362,15 +75818,16 @@ func (obj *patternFlowGtpv2PiggybackingFlag) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGtpv2PiggybackingFlag) Validate(defaults ...bool) error {
@@ -75690,15 +76147,16 @@ func (obj *patternFlowGtpv2TeidFlag) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGtpv2TeidFlag) ToJson() string {
@@ -75724,15 +76182,16 @@ func (obj *patternFlowGtpv2TeidFlag) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGtpv2TeidFlag) Validate(defaults ...bool) error {
@@ -76052,15 +76511,16 @@ func (obj *patternFlowGtpv2Spare1) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGtpv2Spare1) ToJson() string {
@@ -76086,15 +76546,16 @@ func (obj *patternFlowGtpv2Spare1) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGtpv2Spare1) Validate(defaults ...bool) error {
@@ -76414,15 +76875,16 @@ func (obj *patternFlowGtpv2MessageType) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGtpv2MessageType) ToJson() string {
@@ -76448,15 +76910,16 @@ func (obj *patternFlowGtpv2MessageType) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGtpv2MessageType) Validate(defaults ...bool) error {
@@ -76776,15 +77239,16 @@ func (obj *patternFlowGtpv2MessageLength) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGtpv2MessageLength) ToJson() string {
@@ -76810,15 +77274,16 @@ func (obj *patternFlowGtpv2MessageLength) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGtpv2MessageLength) Validate(defaults ...bool) error {
@@ -77138,15 +77603,16 @@ func (obj *patternFlowGtpv2Teid) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGtpv2Teid) ToJson() string {
@@ -77172,15 +77638,16 @@ func (obj *patternFlowGtpv2Teid) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGtpv2Teid) Validate(defaults ...bool) error {
@@ -77500,15 +77967,16 @@ func (obj *patternFlowGtpv2SequenceNumber) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGtpv2SequenceNumber) ToJson() string {
@@ -77534,15 +78002,16 @@ func (obj *patternFlowGtpv2SequenceNumber) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGtpv2SequenceNumber) Validate(defaults ...bool) error {
@@ -77862,15 +78331,16 @@ func (obj *patternFlowGtpv2Spare2) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGtpv2Spare2) ToJson() string {
@@ -77896,15 +78366,16 @@ func (obj *patternFlowGtpv2Spare2) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGtpv2Spare2) Validate(defaults ...bool) error {
@@ -78224,15 +78695,16 @@ func (obj *patternFlowArpHardwareType) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowArpHardwareType) ToJson() string {
@@ -78258,15 +78730,16 @@ func (obj *patternFlowArpHardwareType) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowArpHardwareType) Validate(defaults ...bool) error {
@@ -78586,15 +79059,16 @@ func (obj *patternFlowArpProtocolType) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowArpProtocolType) ToJson() string {
@@ -78620,15 +79094,16 @@ func (obj *patternFlowArpProtocolType) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowArpProtocolType) Validate(defaults ...bool) error {
@@ -78948,15 +79423,16 @@ func (obj *patternFlowArpHardwareLength) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowArpHardwareLength) ToJson() string {
@@ -78982,15 +79458,16 @@ func (obj *patternFlowArpHardwareLength) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowArpHardwareLength) Validate(defaults ...bool) error {
@@ -79310,15 +79787,16 @@ func (obj *patternFlowArpProtocolLength) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowArpProtocolLength) ToJson() string {
@@ -79344,15 +79822,16 @@ func (obj *patternFlowArpProtocolLength) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowArpProtocolLength) Validate(defaults ...bool) error {
@@ -79672,15 +80151,16 @@ func (obj *patternFlowArpOperation) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowArpOperation) ToJson() string {
@@ -79706,15 +80186,16 @@ func (obj *patternFlowArpOperation) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowArpOperation) Validate(defaults ...bool) error {
@@ -80034,15 +80515,16 @@ func (obj *patternFlowArpSenderHardwareAddr) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowArpSenderHardwareAddr) ToJson() string {
@@ -80068,15 +80550,16 @@ func (obj *patternFlowArpSenderHardwareAddr) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowArpSenderHardwareAddr) Validate(defaults ...bool) error {
@@ -80394,15 +80877,16 @@ func (obj *patternFlowArpSenderProtocolAddr) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowArpSenderProtocolAddr) ToJson() string {
@@ -80428,15 +80912,16 @@ func (obj *patternFlowArpSenderProtocolAddr) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowArpSenderProtocolAddr) Validate(defaults ...bool) error {
@@ -80754,15 +81239,16 @@ func (obj *patternFlowArpTargetHardwareAddr) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowArpTargetHardwareAddr) ToJson() string {
@@ -80788,15 +81274,16 @@ func (obj *patternFlowArpTargetHardwareAddr) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowArpTargetHardwareAddr) Validate(defaults ...bool) error {
@@ -81114,15 +81601,16 @@ func (obj *patternFlowArpTargetProtocolAddr) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowArpTargetProtocolAddr) ToJson() string {
@@ -81148,15 +81636,16 @@ func (obj *patternFlowArpTargetProtocolAddr) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowArpTargetProtocolAddr) Validate(defaults ...bool) error {
@@ -81474,15 +81963,16 @@ func (obj *flowIcmpEcho) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *flowIcmpEcho) ToJson() string {
@@ -81508,15 +81998,16 @@ func (obj *flowIcmpEcho) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *flowIcmpEcho) Validate(defaults ...bool) error {
@@ -81771,15 +82262,16 @@ func (obj *flowIcmpv6Echo) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *flowIcmpv6Echo) ToJson() string {
@@ -81805,15 +82297,16 @@ func (obj *flowIcmpv6Echo) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *flowIcmpv6Echo) Validate(defaults ...bool) error {
@@ -82068,15 +82561,16 @@ func (obj *patternFlowPppAddress) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowPppAddress) ToJson() string {
@@ -82102,15 +82596,16 @@ func (obj *patternFlowPppAddress) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowPppAddress) Validate(defaults ...bool) error {
@@ -82430,15 +82925,16 @@ func (obj *patternFlowPppControl) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowPppControl) ToJson() string {
@@ -82464,15 +82960,16 @@ func (obj *patternFlowPppControl) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowPppControl) Validate(defaults ...bool) error {
@@ -82792,15 +83289,16 @@ func (obj *patternFlowPppProtocolType) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowPppProtocolType) ToJson() string {
@@ -82826,15 +83324,16 @@ func (obj *patternFlowPppProtocolType) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowPppProtocolType) Validate(defaults ...bool) error {
@@ -83194,15 +83693,16 @@ func (obj *patternFlowIgmpv1Version) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIgmpv1Version) ToJson() string {
@@ -83228,15 +83728,16 @@ func (obj *patternFlowIgmpv1Version) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIgmpv1Version) Validate(defaults ...bool) error {
@@ -83556,15 +84057,16 @@ func (obj *patternFlowIgmpv1Type) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIgmpv1Type) ToJson() string {
@@ -83590,15 +84092,16 @@ func (obj *patternFlowIgmpv1Type) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIgmpv1Type) Validate(defaults ...bool) error {
@@ -83918,15 +84421,16 @@ func (obj *patternFlowIgmpv1Unused) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIgmpv1Unused) ToJson() string {
@@ -83952,15 +84456,16 @@ func (obj *patternFlowIgmpv1Unused) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIgmpv1Unused) Validate(defaults ...bool) error {
@@ -84280,15 +84785,16 @@ func (obj *patternFlowIgmpv1Checksum) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIgmpv1Checksum) ToJson() string {
@@ -84314,15 +84820,16 @@ func (obj *patternFlowIgmpv1Checksum) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIgmpv1Checksum) Validate(defaults ...bool) error {
@@ -84547,15 +85054,16 @@ func (obj *patternFlowIgmpv1GroupAddress) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIgmpv1GroupAddress) ToJson() string {
@@ -84581,15 +85089,16 @@ func (obj *patternFlowIgmpv1GroupAddress) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIgmpv1GroupAddress) Validate(defaults ...bool) error {
@@ -84907,15 +85416,16 @@ func (obj *flowDelay) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *flowDelay) ToJson() string {
@@ -84941,15 +85451,16 @@ func (obj *flowDelay) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *flowDelay) Validate(defaults ...bool) error {
@@ -85205,15 +85716,16 @@ func (obj *flowDurationInterBurstGap) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *flowDurationInterBurstGap) ToJson() string {
@@ -85239,15 +85751,16 @@ func (obj *flowDurationInterBurstGap) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *flowDurationInterBurstGap) Validate(defaults ...bool) error {
@@ -85503,15 +86016,16 @@ func (obj *linkStatepriorityBandwidths) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *linkStatepriorityBandwidths) ToJson() string {
@@ -85537,15 +86051,16 @@ func (obj *linkStatepriorityBandwidths) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *linkStatepriorityBandwidths) Validate(defaults ...bool) error {
@@ -85971,15 +86486,16 @@ func (obj *bgpAdvanced) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *bgpAdvanced) ToJson() string {
@@ -86005,15 +86521,16 @@ func (obj *bgpAdvanced) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *bgpAdvanced) Validate(defaults ...bool) error {
@@ -86272,15 +86789,16 @@ func (obj *bgpCapability) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *bgpCapability) ToJson() string {
@@ -86306,15 +86824,16 @@ func (obj *bgpCapability) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *bgpCapability) Validate(defaults ...bool) error {
@@ -87232,15 +87751,16 @@ func (obj *bgpV4RouteRange) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *bgpV4RouteRange) ToJson() string {
@@ -87266,15 +87786,16 @@ func (obj *bgpV4RouteRange) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *bgpV4RouteRange) Validate(defaults ...bool) error {
@@ -87732,15 +88253,16 @@ func (obj *bgpV6RouteRange) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *bgpV6RouteRange) ToJson() string {
@@ -87766,15 +88288,16 @@ func (obj *bgpV6RouteRange) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *bgpV6RouteRange) Validate(defaults ...bool) error {
@@ -88232,15 +88755,16 @@ func (obj *bgpSrteV4Policy) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *bgpSrteV4Policy) ToJson() string {
@@ -88266,15 +88790,16 @@ func (obj *bgpSrteV4Policy) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *bgpSrteV4Policy) Validate(defaults ...bool) error {
@@ -88896,15 +89421,16 @@ func (obj *bgpSrteV6Policy) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *bgpSrteV6Policy) ToJson() string {
@@ -88930,15 +89456,16 @@ func (obj *bgpSrteV6Policy) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *bgpSrteV6Policy) Validate(defaults ...bool) error {
@@ -89574,15 +90101,16 @@ func (obj *bgpV6SegmentRouting) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *bgpV6SegmentRouting) ToJson() string {
@@ -89608,15 +90136,16 @@ func (obj *bgpV6SegmentRouting) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *bgpV6SegmentRouting) Validate(defaults ...bool) error {
@@ -89978,15 +90507,16 @@ func (obj *patternFlowEthernetDstCounter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowEthernetDstCounter) ToJson() string {
@@ -90012,15 +90542,16 @@ func (obj *patternFlowEthernetDstCounter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowEthernetDstCounter) Validate(defaults ...bool) error {
@@ -90236,15 +90767,16 @@ func (obj *patternFlowEthernetSrcCounter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowEthernetSrcCounter) ToJson() string {
@@ -90270,15 +90802,16 @@ func (obj *patternFlowEthernetSrcCounter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowEthernetSrcCounter) Validate(defaults ...bool) error {
@@ -90494,15 +91027,16 @@ func (obj *patternFlowEthernetEtherTypeCounter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowEthernetEtherTypeCounter) ToJson() string {
@@ -90528,15 +91062,16 @@ func (obj *patternFlowEthernetEtherTypeCounter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowEthernetEtherTypeCounter) Validate(defaults ...bool) error {
@@ -90754,15 +91289,16 @@ func (obj *patternFlowEthernetPfcQueueCounter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowEthernetPfcQueueCounter) ToJson() string {
@@ -90788,15 +91324,16 @@ func (obj *patternFlowEthernetPfcQueueCounter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowEthernetPfcQueueCounter) Validate(defaults ...bool) error {
@@ -91014,15 +91551,16 @@ func (obj *patternFlowVlanPriorityCounter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowVlanPriorityCounter) ToJson() string {
@@ -91048,15 +91586,16 @@ func (obj *patternFlowVlanPriorityCounter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowVlanPriorityCounter) Validate(defaults ...bool) error {
@@ -91274,15 +91813,16 @@ func (obj *patternFlowVlanCfiCounter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowVlanCfiCounter) ToJson() string {
@@ -91308,15 +91848,16 @@ func (obj *patternFlowVlanCfiCounter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowVlanCfiCounter) Validate(defaults ...bool) error {
@@ -91534,15 +92075,16 @@ func (obj *patternFlowVlanIdCounter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowVlanIdCounter) ToJson() string {
@@ -91568,15 +92110,16 @@ func (obj *patternFlowVlanIdCounter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowVlanIdCounter) Validate(defaults ...bool) error {
@@ -91794,15 +92337,16 @@ func (obj *patternFlowVlanTpidCounter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowVlanTpidCounter) ToJson() string {
@@ -91828,15 +92372,16 @@ func (obj *patternFlowVlanTpidCounter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowVlanTpidCounter) Validate(defaults ...bool) error {
@@ -92054,15 +92599,16 @@ func (obj *patternFlowVxlanFlagsCounter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowVxlanFlagsCounter) ToJson() string {
@@ -92088,15 +92634,16 @@ func (obj *patternFlowVxlanFlagsCounter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowVxlanFlagsCounter) Validate(defaults ...bool) error {
@@ -92314,15 +92861,16 @@ func (obj *patternFlowVxlanReserved0Counter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowVxlanReserved0Counter) ToJson() string {
@@ -92348,15 +92896,16 @@ func (obj *patternFlowVxlanReserved0Counter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowVxlanReserved0Counter) Validate(defaults ...bool) error {
@@ -92574,15 +93123,16 @@ func (obj *patternFlowVxlanVniCounter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowVxlanVniCounter) ToJson() string {
@@ -92608,15 +93158,16 @@ func (obj *patternFlowVxlanVniCounter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowVxlanVniCounter) Validate(defaults ...bool) error {
@@ -92834,15 +93385,16 @@ func (obj *patternFlowVxlanReserved1Counter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowVxlanReserved1Counter) ToJson() string {
@@ -92868,15 +93420,16 @@ func (obj *patternFlowVxlanReserved1Counter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowVxlanReserved1Counter) Validate(defaults ...bool) error {
@@ -93094,15 +93647,16 @@ func (obj *patternFlowIpv4VersionCounter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv4VersionCounter) ToJson() string {
@@ -93128,15 +93682,16 @@ func (obj *patternFlowIpv4VersionCounter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv4VersionCounter) Validate(defaults ...bool) error {
@@ -93354,15 +93909,16 @@ func (obj *patternFlowIpv4HeaderLengthCounter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv4HeaderLengthCounter) ToJson() string {
@@ -93388,15 +93944,16 @@ func (obj *patternFlowIpv4HeaderLengthCounter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv4HeaderLengthCounter) Validate(defaults ...bool) error {
@@ -93614,15 +94171,16 @@ func (obj *patternFlowIpv4PriorityRaw) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv4PriorityRaw) ToJson() string {
@@ -93648,15 +94206,16 @@ func (obj *patternFlowIpv4PriorityRaw) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv4PriorityRaw) Validate(defaults ...bool) error {
@@ -93976,15 +94535,16 @@ func (obj *flowIpv4Tos) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *flowIpv4Tos) ToJson() string {
@@ -94010,15 +94570,16 @@ func (obj *flowIpv4Tos) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *flowIpv4Tos) Validate(defaults ...bool) error {
@@ -94303,15 +94864,16 @@ func (obj *flowIpv4Dscp) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *flowIpv4Dscp) ToJson() string {
@@ -94337,15 +94899,16 @@ func (obj *flowIpv4Dscp) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *flowIpv4Dscp) Validate(defaults ...bool) error {
@@ -94510,15 +95073,16 @@ func (obj *patternFlowIpv4TotalLengthCounter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv4TotalLengthCounter) ToJson() string {
@@ -94544,15 +95108,16 @@ func (obj *patternFlowIpv4TotalLengthCounter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv4TotalLengthCounter) Validate(defaults ...bool) error {
@@ -94770,15 +95335,16 @@ func (obj *patternFlowIpv4IdentificationCounter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv4IdentificationCounter) ToJson() string {
@@ -94804,15 +95370,16 @@ func (obj *patternFlowIpv4IdentificationCounter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv4IdentificationCounter) Validate(defaults ...bool) error {
@@ -95030,15 +95597,16 @@ func (obj *patternFlowIpv4ReservedCounter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv4ReservedCounter) ToJson() string {
@@ -95064,15 +95632,16 @@ func (obj *patternFlowIpv4ReservedCounter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv4ReservedCounter) Validate(defaults ...bool) error {
@@ -95290,15 +95859,16 @@ func (obj *patternFlowIpv4DontFragmentCounter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv4DontFragmentCounter) ToJson() string {
@@ -95324,15 +95894,16 @@ func (obj *patternFlowIpv4DontFragmentCounter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv4DontFragmentCounter) Validate(defaults ...bool) error {
@@ -95550,15 +96121,16 @@ func (obj *patternFlowIpv4MoreFragmentsCounter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv4MoreFragmentsCounter) ToJson() string {
@@ -95584,15 +96156,16 @@ func (obj *patternFlowIpv4MoreFragmentsCounter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv4MoreFragmentsCounter) Validate(defaults ...bool) error {
@@ -95810,15 +96383,16 @@ func (obj *patternFlowIpv4FragmentOffsetCounter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv4FragmentOffsetCounter) ToJson() string {
@@ -95844,15 +96418,16 @@ func (obj *patternFlowIpv4FragmentOffsetCounter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv4FragmentOffsetCounter) Validate(defaults ...bool) error {
@@ -96070,15 +96645,16 @@ func (obj *patternFlowIpv4TimeToLiveCounter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv4TimeToLiveCounter) ToJson() string {
@@ -96104,15 +96680,16 @@ func (obj *patternFlowIpv4TimeToLiveCounter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv4TimeToLiveCounter) Validate(defaults ...bool) error {
@@ -96330,15 +96907,16 @@ func (obj *patternFlowIpv4ProtocolCounter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv4ProtocolCounter) ToJson() string {
@@ -96364,15 +96942,16 @@ func (obj *patternFlowIpv4ProtocolCounter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv4ProtocolCounter) Validate(defaults ...bool) error {
@@ -96590,15 +97169,16 @@ func (obj *patternFlowIpv4SrcCounter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv4SrcCounter) ToJson() string {
@@ -96624,15 +97204,16 @@ func (obj *patternFlowIpv4SrcCounter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv4SrcCounter) Validate(defaults ...bool) error {
@@ -96848,15 +97429,16 @@ func (obj *patternFlowIpv4DstCounter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv4DstCounter) ToJson() string {
@@ -96882,15 +97464,16 @@ func (obj *patternFlowIpv4DstCounter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv4DstCounter) Validate(defaults ...bool) error {
@@ -97106,15 +97689,16 @@ func (obj *patternFlowIpv6VersionCounter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv6VersionCounter) ToJson() string {
@@ -97140,15 +97724,16 @@ func (obj *patternFlowIpv6VersionCounter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv6VersionCounter) Validate(defaults ...bool) error {
@@ -97366,15 +97951,16 @@ func (obj *patternFlowIpv6TrafficClassCounter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv6TrafficClassCounter) ToJson() string {
@@ -97400,15 +97986,16 @@ func (obj *patternFlowIpv6TrafficClassCounter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv6TrafficClassCounter) Validate(defaults ...bool) error {
@@ -97626,15 +98213,16 @@ func (obj *patternFlowIpv6FlowLabelCounter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv6FlowLabelCounter) ToJson() string {
@@ -97660,15 +98248,16 @@ func (obj *patternFlowIpv6FlowLabelCounter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv6FlowLabelCounter) Validate(defaults ...bool) error {
@@ -97886,15 +98475,16 @@ func (obj *patternFlowIpv6PayloadLengthCounter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv6PayloadLengthCounter) ToJson() string {
@@ -97920,15 +98510,16 @@ func (obj *patternFlowIpv6PayloadLengthCounter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv6PayloadLengthCounter) Validate(defaults ...bool) error {
@@ -98146,15 +98737,16 @@ func (obj *patternFlowIpv6NextHeaderCounter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv6NextHeaderCounter) ToJson() string {
@@ -98180,15 +98772,16 @@ func (obj *patternFlowIpv6NextHeaderCounter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv6NextHeaderCounter) Validate(defaults ...bool) error {
@@ -98406,15 +98999,16 @@ func (obj *patternFlowIpv6HopLimitCounter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv6HopLimitCounter) ToJson() string {
@@ -98440,15 +99034,16 @@ func (obj *patternFlowIpv6HopLimitCounter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv6HopLimitCounter) Validate(defaults ...bool) error {
@@ -98666,15 +99261,16 @@ func (obj *patternFlowIpv6SrcCounter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv6SrcCounter) ToJson() string {
@@ -98700,15 +99296,16 @@ func (obj *patternFlowIpv6SrcCounter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv6SrcCounter) Validate(defaults ...bool) error {
@@ -98924,15 +99521,16 @@ func (obj *patternFlowIpv6DstCounter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv6DstCounter) ToJson() string {
@@ -98958,15 +99556,16 @@ func (obj *patternFlowIpv6DstCounter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv6DstCounter) Validate(defaults ...bool) error {
@@ -99182,15 +99781,16 @@ func (obj *patternFlowPfcPauseDstCounter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowPfcPauseDstCounter) ToJson() string {
@@ -99216,15 +99816,16 @@ func (obj *patternFlowPfcPauseDstCounter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowPfcPauseDstCounter) Validate(defaults ...bool) error {
@@ -99440,15 +100041,16 @@ func (obj *patternFlowPfcPauseSrcCounter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowPfcPauseSrcCounter) ToJson() string {
@@ -99474,15 +100076,16 @@ func (obj *patternFlowPfcPauseSrcCounter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowPfcPauseSrcCounter) Validate(defaults ...bool) error {
@@ -99698,15 +100301,16 @@ func (obj *patternFlowPfcPauseEtherTypeCounter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowPfcPauseEtherTypeCounter) ToJson() string {
@@ -99732,15 +100336,16 @@ func (obj *patternFlowPfcPauseEtherTypeCounter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowPfcPauseEtherTypeCounter) Validate(defaults ...bool) error {
@@ -99958,15 +100563,16 @@ func (obj *patternFlowPfcPauseControlOpCodeCounter) FromYaml(value string) error
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowPfcPauseControlOpCodeCounter) ToJson() string {
@@ -99992,15 +100598,16 @@ func (obj *patternFlowPfcPauseControlOpCodeCounter) FromJson(value string) error
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowPfcPauseControlOpCodeCounter) Validate(defaults ...bool) error {
@@ -100218,15 +100825,16 @@ func (obj *patternFlowPfcPauseClassEnableVectorCounter) FromYaml(value string) e
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowPfcPauseClassEnableVectorCounter) ToJson() string {
@@ -100252,15 +100860,16 @@ func (obj *patternFlowPfcPauseClassEnableVectorCounter) FromJson(value string) e
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowPfcPauseClassEnableVectorCounter) Validate(defaults ...bool) error {
@@ -100478,15 +101087,16 @@ func (obj *patternFlowPfcPausePauseClass0Counter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowPfcPausePauseClass0Counter) ToJson() string {
@@ -100512,15 +101122,16 @@ func (obj *patternFlowPfcPausePauseClass0Counter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowPfcPausePauseClass0Counter) Validate(defaults ...bool) error {
@@ -100738,15 +101349,16 @@ func (obj *patternFlowPfcPausePauseClass1Counter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowPfcPausePauseClass1Counter) ToJson() string {
@@ -100772,15 +101384,16 @@ func (obj *patternFlowPfcPausePauseClass1Counter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowPfcPausePauseClass1Counter) Validate(defaults ...bool) error {
@@ -100998,15 +101611,16 @@ func (obj *patternFlowPfcPausePauseClass2Counter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowPfcPausePauseClass2Counter) ToJson() string {
@@ -101032,15 +101646,16 @@ func (obj *patternFlowPfcPausePauseClass2Counter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowPfcPausePauseClass2Counter) Validate(defaults ...bool) error {
@@ -101258,15 +101873,16 @@ func (obj *patternFlowPfcPausePauseClass3Counter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowPfcPausePauseClass3Counter) ToJson() string {
@@ -101292,15 +101908,16 @@ func (obj *patternFlowPfcPausePauseClass3Counter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowPfcPausePauseClass3Counter) Validate(defaults ...bool) error {
@@ -101518,15 +102135,16 @@ func (obj *patternFlowPfcPausePauseClass4Counter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowPfcPausePauseClass4Counter) ToJson() string {
@@ -101552,15 +102170,16 @@ func (obj *patternFlowPfcPausePauseClass4Counter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowPfcPausePauseClass4Counter) Validate(defaults ...bool) error {
@@ -101778,15 +102397,16 @@ func (obj *patternFlowPfcPausePauseClass5Counter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowPfcPausePauseClass5Counter) ToJson() string {
@@ -101812,15 +102432,16 @@ func (obj *patternFlowPfcPausePauseClass5Counter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowPfcPausePauseClass5Counter) Validate(defaults ...bool) error {
@@ -102038,15 +102659,16 @@ func (obj *patternFlowPfcPausePauseClass6Counter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowPfcPausePauseClass6Counter) ToJson() string {
@@ -102072,15 +102694,16 @@ func (obj *patternFlowPfcPausePauseClass6Counter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowPfcPausePauseClass6Counter) Validate(defaults ...bool) error {
@@ -102298,15 +102921,16 @@ func (obj *patternFlowPfcPausePauseClass7Counter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowPfcPausePauseClass7Counter) ToJson() string {
@@ -102332,15 +102956,16 @@ func (obj *patternFlowPfcPausePauseClass7Counter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowPfcPausePauseClass7Counter) Validate(defaults ...bool) error {
@@ -102558,15 +103183,16 @@ func (obj *patternFlowEthernetPauseDstCounter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowEthernetPauseDstCounter) ToJson() string {
@@ -102592,15 +103218,16 @@ func (obj *patternFlowEthernetPauseDstCounter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowEthernetPauseDstCounter) Validate(defaults ...bool) error {
@@ -102816,15 +103443,16 @@ func (obj *patternFlowEthernetPauseSrcCounter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowEthernetPauseSrcCounter) ToJson() string {
@@ -102850,15 +103478,16 @@ func (obj *patternFlowEthernetPauseSrcCounter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowEthernetPauseSrcCounter) Validate(defaults ...bool) error {
@@ -103074,15 +103703,16 @@ func (obj *patternFlowEthernetPauseEtherTypeCounter) FromYaml(value string) erro
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowEthernetPauseEtherTypeCounter) ToJson() string {
@@ -103108,15 +103738,16 @@ func (obj *patternFlowEthernetPauseEtherTypeCounter) FromJson(value string) erro
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowEthernetPauseEtherTypeCounter) Validate(defaults ...bool) error {
@@ -103334,15 +103965,16 @@ func (obj *patternFlowEthernetPauseControlOpCodeCounter) FromYaml(value string) 
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowEthernetPauseControlOpCodeCounter) ToJson() string {
@@ -103368,15 +104000,16 @@ func (obj *patternFlowEthernetPauseControlOpCodeCounter) FromJson(value string) 
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowEthernetPauseControlOpCodeCounter) Validate(defaults ...bool) error {
@@ -103594,15 +104227,16 @@ func (obj *patternFlowEthernetPauseTimeCounter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowEthernetPauseTimeCounter) ToJson() string {
@@ -103628,15 +104262,16 @@ func (obj *patternFlowEthernetPauseTimeCounter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowEthernetPauseTimeCounter) Validate(defaults ...bool) error {
@@ -103854,15 +104489,16 @@ func (obj *patternFlowTcpSrcPortCounter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowTcpSrcPortCounter) ToJson() string {
@@ -103888,15 +104524,16 @@ func (obj *patternFlowTcpSrcPortCounter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowTcpSrcPortCounter) Validate(defaults ...bool) error {
@@ -104114,15 +104751,16 @@ func (obj *patternFlowTcpDstPortCounter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowTcpDstPortCounter) ToJson() string {
@@ -104148,15 +104786,16 @@ func (obj *patternFlowTcpDstPortCounter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowTcpDstPortCounter) Validate(defaults ...bool) error {
@@ -104374,15 +105013,16 @@ func (obj *patternFlowTcpSeqNumCounter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowTcpSeqNumCounter) ToJson() string {
@@ -104408,15 +105048,16 @@ func (obj *patternFlowTcpSeqNumCounter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowTcpSeqNumCounter) Validate(defaults ...bool) error {
@@ -104634,15 +105275,16 @@ func (obj *patternFlowTcpAckNumCounter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowTcpAckNumCounter) ToJson() string {
@@ -104668,15 +105310,16 @@ func (obj *patternFlowTcpAckNumCounter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowTcpAckNumCounter) Validate(defaults ...bool) error {
@@ -104894,15 +105537,16 @@ func (obj *patternFlowTcpDataOffsetCounter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowTcpDataOffsetCounter) ToJson() string {
@@ -104928,15 +105572,16 @@ func (obj *patternFlowTcpDataOffsetCounter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowTcpDataOffsetCounter) Validate(defaults ...bool) error {
@@ -105154,15 +105799,16 @@ func (obj *patternFlowTcpEcnNsCounter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowTcpEcnNsCounter) ToJson() string {
@@ -105188,15 +105834,16 @@ func (obj *patternFlowTcpEcnNsCounter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowTcpEcnNsCounter) Validate(defaults ...bool) error {
@@ -105414,15 +106061,16 @@ func (obj *patternFlowTcpEcnCwrCounter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowTcpEcnCwrCounter) ToJson() string {
@@ -105448,15 +106096,16 @@ func (obj *patternFlowTcpEcnCwrCounter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowTcpEcnCwrCounter) Validate(defaults ...bool) error {
@@ -105674,15 +106323,16 @@ func (obj *patternFlowTcpEcnEchoCounter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowTcpEcnEchoCounter) ToJson() string {
@@ -105708,15 +106358,16 @@ func (obj *patternFlowTcpEcnEchoCounter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowTcpEcnEchoCounter) Validate(defaults ...bool) error {
@@ -105934,15 +106585,16 @@ func (obj *patternFlowTcpCtlUrgCounter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowTcpCtlUrgCounter) ToJson() string {
@@ -105968,15 +106620,16 @@ func (obj *patternFlowTcpCtlUrgCounter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowTcpCtlUrgCounter) Validate(defaults ...bool) error {
@@ -106194,15 +106847,16 @@ func (obj *patternFlowTcpCtlAckCounter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowTcpCtlAckCounter) ToJson() string {
@@ -106228,15 +106882,16 @@ func (obj *patternFlowTcpCtlAckCounter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowTcpCtlAckCounter) Validate(defaults ...bool) error {
@@ -106454,15 +107109,16 @@ func (obj *patternFlowTcpCtlPshCounter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowTcpCtlPshCounter) ToJson() string {
@@ -106488,15 +107144,16 @@ func (obj *patternFlowTcpCtlPshCounter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowTcpCtlPshCounter) Validate(defaults ...bool) error {
@@ -106714,15 +107371,16 @@ func (obj *patternFlowTcpCtlRstCounter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowTcpCtlRstCounter) ToJson() string {
@@ -106748,15 +107406,16 @@ func (obj *patternFlowTcpCtlRstCounter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowTcpCtlRstCounter) Validate(defaults ...bool) error {
@@ -106974,15 +107633,16 @@ func (obj *patternFlowTcpCtlSynCounter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowTcpCtlSynCounter) ToJson() string {
@@ -107008,15 +107668,16 @@ func (obj *patternFlowTcpCtlSynCounter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowTcpCtlSynCounter) Validate(defaults ...bool) error {
@@ -107234,15 +107895,16 @@ func (obj *patternFlowTcpCtlFinCounter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowTcpCtlFinCounter) ToJson() string {
@@ -107268,15 +107930,16 @@ func (obj *patternFlowTcpCtlFinCounter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowTcpCtlFinCounter) Validate(defaults ...bool) error {
@@ -107494,15 +108157,16 @@ func (obj *patternFlowTcpWindowCounter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowTcpWindowCounter) ToJson() string {
@@ -107528,15 +108192,16 @@ func (obj *patternFlowTcpWindowCounter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowTcpWindowCounter) Validate(defaults ...bool) error {
@@ -107754,15 +108419,16 @@ func (obj *patternFlowUdpSrcPortCounter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowUdpSrcPortCounter) ToJson() string {
@@ -107788,15 +108454,16 @@ func (obj *patternFlowUdpSrcPortCounter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowUdpSrcPortCounter) Validate(defaults ...bool) error {
@@ -108014,15 +108681,16 @@ func (obj *patternFlowUdpDstPortCounter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowUdpDstPortCounter) ToJson() string {
@@ -108048,15 +108716,16 @@ func (obj *patternFlowUdpDstPortCounter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowUdpDstPortCounter) Validate(defaults ...bool) error {
@@ -108274,15 +108943,16 @@ func (obj *patternFlowUdpLengthCounter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowUdpLengthCounter) ToJson() string {
@@ -108308,15 +108978,16 @@ func (obj *patternFlowUdpLengthCounter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowUdpLengthCounter) Validate(defaults ...bool) error {
@@ -108534,15 +109205,16 @@ func (obj *patternFlowGreChecksumPresentCounter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGreChecksumPresentCounter) ToJson() string {
@@ -108568,15 +109240,16 @@ func (obj *patternFlowGreChecksumPresentCounter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGreChecksumPresentCounter) Validate(defaults ...bool) error {
@@ -108794,15 +109467,16 @@ func (obj *patternFlowGreReserved0Counter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGreReserved0Counter) ToJson() string {
@@ -108828,15 +109502,16 @@ func (obj *patternFlowGreReserved0Counter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGreReserved0Counter) Validate(defaults ...bool) error {
@@ -109054,15 +109729,16 @@ func (obj *patternFlowGreVersionCounter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGreVersionCounter) ToJson() string {
@@ -109088,15 +109764,16 @@ func (obj *patternFlowGreVersionCounter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGreVersionCounter) Validate(defaults ...bool) error {
@@ -109314,15 +109991,16 @@ func (obj *patternFlowGreProtocolCounter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGreProtocolCounter) ToJson() string {
@@ -109348,15 +110026,16 @@ func (obj *patternFlowGreProtocolCounter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGreProtocolCounter) Validate(defaults ...bool) error {
@@ -109574,15 +110253,16 @@ func (obj *patternFlowGreReserved1Counter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGreReserved1Counter) ToJson() string {
@@ -109608,15 +110288,16 @@ func (obj *patternFlowGreReserved1Counter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGreReserved1Counter) Validate(defaults ...bool) error {
@@ -109834,15 +110515,16 @@ func (obj *patternFlowGtpv1VersionCounter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGtpv1VersionCounter) ToJson() string {
@@ -109868,15 +110550,16 @@ func (obj *patternFlowGtpv1VersionCounter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGtpv1VersionCounter) Validate(defaults ...bool) error {
@@ -110094,15 +110777,16 @@ func (obj *patternFlowGtpv1ProtocolTypeCounter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGtpv1ProtocolTypeCounter) ToJson() string {
@@ -110128,15 +110812,16 @@ func (obj *patternFlowGtpv1ProtocolTypeCounter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGtpv1ProtocolTypeCounter) Validate(defaults ...bool) error {
@@ -110354,15 +111039,16 @@ func (obj *patternFlowGtpv1ReservedCounter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGtpv1ReservedCounter) ToJson() string {
@@ -110388,15 +111074,16 @@ func (obj *patternFlowGtpv1ReservedCounter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGtpv1ReservedCounter) Validate(defaults ...bool) error {
@@ -110614,15 +111301,16 @@ func (obj *patternFlowGtpv1EFlagCounter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGtpv1EFlagCounter) ToJson() string {
@@ -110648,15 +111336,16 @@ func (obj *patternFlowGtpv1EFlagCounter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGtpv1EFlagCounter) Validate(defaults ...bool) error {
@@ -110874,15 +111563,16 @@ func (obj *patternFlowGtpv1SFlagCounter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGtpv1SFlagCounter) ToJson() string {
@@ -110908,15 +111598,16 @@ func (obj *patternFlowGtpv1SFlagCounter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGtpv1SFlagCounter) Validate(defaults ...bool) error {
@@ -111134,15 +111825,16 @@ func (obj *patternFlowGtpv1PnFlagCounter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGtpv1PnFlagCounter) ToJson() string {
@@ -111168,15 +111860,16 @@ func (obj *patternFlowGtpv1PnFlagCounter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGtpv1PnFlagCounter) Validate(defaults ...bool) error {
@@ -111394,15 +112087,16 @@ func (obj *patternFlowGtpv1MessageTypeCounter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGtpv1MessageTypeCounter) ToJson() string {
@@ -111428,15 +112122,16 @@ func (obj *patternFlowGtpv1MessageTypeCounter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGtpv1MessageTypeCounter) Validate(defaults ...bool) error {
@@ -111654,15 +112349,16 @@ func (obj *patternFlowGtpv1MessageLengthCounter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGtpv1MessageLengthCounter) ToJson() string {
@@ -111688,15 +112384,16 @@ func (obj *patternFlowGtpv1MessageLengthCounter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGtpv1MessageLengthCounter) Validate(defaults ...bool) error {
@@ -111914,15 +112611,16 @@ func (obj *patternFlowGtpv1TeidCounter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGtpv1TeidCounter) ToJson() string {
@@ -111948,15 +112646,16 @@ func (obj *patternFlowGtpv1TeidCounter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGtpv1TeidCounter) Validate(defaults ...bool) error {
@@ -112174,15 +112873,16 @@ func (obj *patternFlowGtpv1SquenceNumberCounter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGtpv1SquenceNumberCounter) ToJson() string {
@@ -112208,15 +112908,16 @@ func (obj *patternFlowGtpv1SquenceNumberCounter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGtpv1SquenceNumberCounter) Validate(defaults ...bool) error {
@@ -112434,15 +113135,16 @@ func (obj *patternFlowGtpv1NPduNumberCounter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGtpv1NPduNumberCounter) ToJson() string {
@@ -112468,15 +113170,16 @@ func (obj *patternFlowGtpv1NPduNumberCounter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGtpv1NPduNumberCounter) Validate(defaults ...bool) error {
@@ -112694,15 +113397,16 @@ func (obj *patternFlowGtpv1NextExtensionHeaderTypeCounter) FromYaml(value string
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGtpv1NextExtensionHeaderTypeCounter) ToJson() string {
@@ -112728,15 +113432,16 @@ func (obj *patternFlowGtpv1NextExtensionHeaderTypeCounter) FromJson(value string
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGtpv1NextExtensionHeaderTypeCounter) Validate(defaults ...bool) error {
@@ -112954,15 +113659,16 @@ func (obj *patternFlowGtpExtensionExtensionLength) FromYaml(value string) error 
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGtpExtensionExtensionLength) ToJson() string {
@@ -112988,15 +113694,16 @@ func (obj *patternFlowGtpExtensionExtensionLength) FromJson(value string) error 
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGtpExtensionExtensionLength) Validate(defaults ...bool) error {
@@ -113316,15 +114023,16 @@ func (obj *patternFlowGtpExtensionContents) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGtpExtensionContents) ToJson() string {
@@ -113350,15 +114058,16 @@ func (obj *patternFlowGtpExtensionContents) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGtpExtensionContents) Validate(defaults ...bool) error {
@@ -113678,15 +114387,16 @@ func (obj *patternFlowGtpExtensionNextExtensionHeader) FromYaml(value string) er
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGtpExtensionNextExtensionHeader) ToJson() string {
@@ -113712,15 +114422,16 @@ func (obj *patternFlowGtpExtensionNextExtensionHeader) FromJson(value string) er
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGtpExtensionNextExtensionHeader) Validate(defaults ...bool) error {
@@ -114040,15 +114751,16 @@ func (obj *patternFlowGtpv2VersionCounter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGtpv2VersionCounter) ToJson() string {
@@ -114074,15 +114786,16 @@ func (obj *patternFlowGtpv2VersionCounter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGtpv2VersionCounter) Validate(defaults ...bool) error {
@@ -114300,15 +115013,16 @@ func (obj *patternFlowGtpv2PiggybackingFlagCounter) FromYaml(value string) error
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGtpv2PiggybackingFlagCounter) ToJson() string {
@@ -114334,15 +115048,16 @@ func (obj *patternFlowGtpv2PiggybackingFlagCounter) FromJson(value string) error
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGtpv2PiggybackingFlagCounter) Validate(defaults ...bool) error {
@@ -114560,15 +115275,16 @@ func (obj *patternFlowGtpv2TeidFlagCounter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGtpv2TeidFlagCounter) ToJson() string {
@@ -114594,15 +115310,16 @@ func (obj *patternFlowGtpv2TeidFlagCounter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGtpv2TeidFlagCounter) Validate(defaults ...bool) error {
@@ -114820,15 +115537,16 @@ func (obj *patternFlowGtpv2Spare1Counter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGtpv2Spare1Counter) ToJson() string {
@@ -114854,15 +115572,16 @@ func (obj *patternFlowGtpv2Spare1Counter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGtpv2Spare1Counter) Validate(defaults ...bool) error {
@@ -115080,15 +115799,16 @@ func (obj *patternFlowGtpv2MessageTypeCounter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGtpv2MessageTypeCounter) ToJson() string {
@@ -115114,15 +115834,16 @@ func (obj *patternFlowGtpv2MessageTypeCounter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGtpv2MessageTypeCounter) Validate(defaults ...bool) error {
@@ -115340,15 +116061,16 @@ func (obj *patternFlowGtpv2MessageLengthCounter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGtpv2MessageLengthCounter) ToJson() string {
@@ -115374,15 +116096,16 @@ func (obj *patternFlowGtpv2MessageLengthCounter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGtpv2MessageLengthCounter) Validate(defaults ...bool) error {
@@ -115600,15 +116323,16 @@ func (obj *patternFlowGtpv2TeidCounter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGtpv2TeidCounter) ToJson() string {
@@ -115634,15 +116358,16 @@ func (obj *patternFlowGtpv2TeidCounter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGtpv2TeidCounter) Validate(defaults ...bool) error {
@@ -115860,15 +116585,16 @@ func (obj *patternFlowGtpv2SequenceNumberCounter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGtpv2SequenceNumberCounter) ToJson() string {
@@ -115894,15 +116620,16 @@ func (obj *patternFlowGtpv2SequenceNumberCounter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGtpv2SequenceNumberCounter) Validate(defaults ...bool) error {
@@ -116120,15 +116847,16 @@ func (obj *patternFlowGtpv2Spare2Counter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGtpv2Spare2Counter) ToJson() string {
@@ -116154,15 +116882,16 @@ func (obj *patternFlowGtpv2Spare2Counter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGtpv2Spare2Counter) Validate(defaults ...bool) error {
@@ -116380,15 +117109,16 @@ func (obj *patternFlowArpHardwareTypeCounter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowArpHardwareTypeCounter) ToJson() string {
@@ -116414,15 +117144,16 @@ func (obj *patternFlowArpHardwareTypeCounter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowArpHardwareTypeCounter) Validate(defaults ...bool) error {
@@ -116640,15 +117371,16 @@ func (obj *patternFlowArpProtocolTypeCounter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowArpProtocolTypeCounter) ToJson() string {
@@ -116674,15 +117406,16 @@ func (obj *patternFlowArpProtocolTypeCounter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowArpProtocolTypeCounter) Validate(defaults ...bool) error {
@@ -116900,15 +117633,16 @@ func (obj *patternFlowArpHardwareLengthCounter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowArpHardwareLengthCounter) ToJson() string {
@@ -116934,15 +117668,16 @@ func (obj *patternFlowArpHardwareLengthCounter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowArpHardwareLengthCounter) Validate(defaults ...bool) error {
@@ -117160,15 +117895,16 @@ func (obj *patternFlowArpProtocolLengthCounter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowArpProtocolLengthCounter) ToJson() string {
@@ -117194,15 +117930,16 @@ func (obj *patternFlowArpProtocolLengthCounter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowArpProtocolLengthCounter) Validate(defaults ...bool) error {
@@ -117420,15 +118157,16 @@ func (obj *patternFlowArpOperationCounter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowArpOperationCounter) ToJson() string {
@@ -117454,15 +118192,16 @@ func (obj *patternFlowArpOperationCounter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowArpOperationCounter) Validate(defaults ...bool) error {
@@ -117680,15 +118419,16 @@ func (obj *patternFlowArpSenderHardwareAddrCounter) FromYaml(value string) error
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowArpSenderHardwareAddrCounter) ToJson() string {
@@ -117714,15 +118454,16 @@ func (obj *patternFlowArpSenderHardwareAddrCounter) FromJson(value string) error
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowArpSenderHardwareAddrCounter) Validate(defaults ...bool) error {
@@ -117938,15 +118679,16 @@ func (obj *patternFlowArpSenderProtocolAddrCounter) FromYaml(value string) error
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowArpSenderProtocolAddrCounter) ToJson() string {
@@ -117972,15 +118714,16 @@ func (obj *patternFlowArpSenderProtocolAddrCounter) FromJson(value string) error
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowArpSenderProtocolAddrCounter) Validate(defaults ...bool) error {
@@ -118196,15 +118939,16 @@ func (obj *patternFlowArpTargetHardwareAddrCounter) FromYaml(value string) error
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowArpTargetHardwareAddrCounter) ToJson() string {
@@ -118230,15 +118974,16 @@ func (obj *patternFlowArpTargetHardwareAddrCounter) FromJson(value string) error
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowArpTargetHardwareAddrCounter) Validate(defaults ...bool) error {
@@ -118454,15 +119199,16 @@ func (obj *patternFlowArpTargetProtocolAddrCounter) FromYaml(value string) error
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowArpTargetProtocolAddrCounter) ToJson() string {
@@ -118488,15 +119234,16 @@ func (obj *patternFlowArpTargetProtocolAddrCounter) FromJson(value string) error
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowArpTargetProtocolAddrCounter) Validate(defaults ...bool) error {
@@ -118712,15 +119459,16 @@ func (obj *patternFlowIcmpEchoType) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIcmpEchoType) ToJson() string {
@@ -118746,15 +119494,16 @@ func (obj *patternFlowIcmpEchoType) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIcmpEchoType) Validate(defaults ...bool) error {
@@ -119074,15 +119823,16 @@ func (obj *patternFlowIcmpEchoCode) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIcmpEchoCode) ToJson() string {
@@ -119108,15 +119858,16 @@ func (obj *patternFlowIcmpEchoCode) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIcmpEchoCode) Validate(defaults ...bool) error {
@@ -119436,15 +120187,16 @@ func (obj *patternFlowIcmpEchoChecksum) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIcmpEchoChecksum) ToJson() string {
@@ -119470,15 +120222,16 @@ func (obj *patternFlowIcmpEchoChecksum) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIcmpEchoChecksum) Validate(defaults ...bool) error {
@@ -119703,15 +120456,16 @@ func (obj *patternFlowIcmpEchoIdentifier) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIcmpEchoIdentifier) ToJson() string {
@@ -119737,15 +120491,16 @@ func (obj *patternFlowIcmpEchoIdentifier) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIcmpEchoIdentifier) Validate(defaults ...bool) error {
@@ -120065,15 +120820,16 @@ func (obj *patternFlowIcmpEchoSequenceNumber) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIcmpEchoSequenceNumber) ToJson() string {
@@ -120099,15 +120855,16 @@ func (obj *patternFlowIcmpEchoSequenceNumber) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIcmpEchoSequenceNumber) Validate(defaults ...bool) error {
@@ -120427,15 +121184,16 @@ func (obj *patternFlowIcmpv6EchoType) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIcmpv6EchoType) ToJson() string {
@@ -120461,15 +121219,16 @@ func (obj *patternFlowIcmpv6EchoType) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIcmpv6EchoType) Validate(defaults ...bool) error {
@@ -120789,15 +121548,16 @@ func (obj *patternFlowIcmpv6EchoCode) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIcmpv6EchoCode) ToJson() string {
@@ -120823,15 +121583,16 @@ func (obj *patternFlowIcmpv6EchoCode) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIcmpv6EchoCode) Validate(defaults ...bool) error {
@@ -121151,15 +121912,16 @@ func (obj *patternFlowIcmpv6EchoIdentifier) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIcmpv6EchoIdentifier) ToJson() string {
@@ -121185,15 +121947,16 @@ func (obj *patternFlowIcmpv6EchoIdentifier) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIcmpv6EchoIdentifier) Validate(defaults ...bool) error {
@@ -121513,15 +122276,16 @@ func (obj *patternFlowIcmpv6EchoSequenceNumber) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIcmpv6EchoSequenceNumber) ToJson() string {
@@ -121547,15 +122311,16 @@ func (obj *patternFlowIcmpv6EchoSequenceNumber) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIcmpv6EchoSequenceNumber) Validate(defaults ...bool) error {
@@ -121875,15 +122640,16 @@ func (obj *patternFlowIcmpv6EchoChecksum) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIcmpv6EchoChecksum) ToJson() string {
@@ -121909,15 +122675,16 @@ func (obj *patternFlowIcmpv6EchoChecksum) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIcmpv6EchoChecksum) Validate(defaults ...bool) error {
@@ -122142,15 +122909,16 @@ func (obj *patternFlowPppAddressCounter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowPppAddressCounter) ToJson() string {
@@ -122176,15 +122944,16 @@ func (obj *patternFlowPppAddressCounter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowPppAddressCounter) Validate(defaults ...bool) error {
@@ -122402,15 +123171,16 @@ func (obj *patternFlowPppControlCounter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowPppControlCounter) ToJson() string {
@@ -122436,15 +123206,16 @@ func (obj *patternFlowPppControlCounter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowPppControlCounter) Validate(defaults ...bool) error {
@@ -122662,15 +123433,16 @@ func (obj *patternFlowPppProtocolTypeCounter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowPppProtocolTypeCounter) ToJson() string {
@@ -122696,15 +123468,16 @@ func (obj *patternFlowPppProtocolTypeCounter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowPppProtocolTypeCounter) Validate(defaults ...bool) error {
@@ -122908,15 +123681,16 @@ func (obj *patternFlowIgmpv1VersionCounter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIgmpv1VersionCounter) ToJson() string {
@@ -122942,15 +123716,16 @@ func (obj *patternFlowIgmpv1VersionCounter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIgmpv1VersionCounter) Validate(defaults ...bool) error {
@@ -123168,15 +123943,16 @@ func (obj *patternFlowIgmpv1TypeCounter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIgmpv1TypeCounter) ToJson() string {
@@ -123202,15 +123978,16 @@ func (obj *patternFlowIgmpv1TypeCounter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIgmpv1TypeCounter) Validate(defaults ...bool) error {
@@ -123428,15 +124205,16 @@ func (obj *patternFlowIgmpv1UnusedCounter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIgmpv1UnusedCounter) ToJson() string {
@@ -123462,15 +124240,16 @@ func (obj *patternFlowIgmpv1UnusedCounter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIgmpv1UnusedCounter) Validate(defaults ...bool) error {
@@ -123688,15 +124467,16 @@ func (obj *patternFlowIgmpv1GroupAddressCounter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIgmpv1GroupAddressCounter) ToJson() string {
@@ -123722,15 +124502,16 @@ func (obj *patternFlowIgmpv1GroupAddressCounter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIgmpv1GroupAddressCounter) Validate(defaults ...bool) error {
@@ -123946,15 +124727,16 @@ func (obj *bgpRouteAdvanced) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *bgpRouteAdvanced) ToJson() string {
@@ -123980,15 +124762,16 @@ func (obj *bgpRouteAdvanced) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *bgpRouteAdvanced) Validate(defaults ...bool) error {
@@ -124159,15 +124942,16 @@ func (obj *bgpCommunity) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *bgpCommunity) ToJson() string {
@@ -124193,15 +124977,16 @@ func (obj *bgpCommunity) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *bgpCommunity) Validate(defaults ...bool) error {
@@ -124431,15 +125216,16 @@ func (obj *bgpAsPath) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *bgpAsPath) ToJson() string {
@@ -124465,15 +125251,16 @@ func (obj *bgpAsPath) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *bgpAsPath) Validate(defaults ...bool) error {
@@ -124667,15 +125454,16 @@ func (obj *bgpAddPath) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *bgpAddPath) ToJson() string {
@@ -124701,15 +125489,16 @@ func (obj *bgpAddPath) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *bgpAddPath) Validate(defaults ...bool) error {
@@ -124847,15 +125636,16 @@ func (obj *bgpExtCommunity) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *bgpExtCommunity) ToJson() string {
@@ -124881,15 +125671,16 @@ func (obj *bgpExtCommunity) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *bgpExtCommunity) Validate(defaults ...bool) error {
@@ -125127,15 +125918,16 @@ func (obj *bgpSrteV4TunnelTlv) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *bgpSrteV4TunnelTlv) ToJson() string {
@@ -125161,15 +125953,16 @@ func (obj *bgpSrteV4TunnelTlv) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *bgpSrteV4TunnelTlv) Validate(defaults ...bool) error {
@@ -125578,15 +126371,16 @@ func (obj *bgpSrteV6TunnelTlv) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *bgpSrteV6TunnelTlv) ToJson() string {
@@ -125612,15 +126406,16 @@ func (obj *bgpSrteV6TunnelTlv) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *bgpSrteV6TunnelTlv) Validate(defaults ...bool) error {
@@ -126029,15 +126824,16 @@ func (obj *patternFlowIpv4PriorityRawCounter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv4PriorityRawCounter) ToJson() string {
@@ -126063,15 +126859,16 @@ func (obj *patternFlowIpv4PriorityRawCounter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv4PriorityRawCounter) Validate(defaults ...bool) error {
@@ -126289,15 +127086,16 @@ func (obj *patternFlowIpv4TosPrecedence) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv4TosPrecedence) ToJson() string {
@@ -126323,15 +127121,16 @@ func (obj *patternFlowIpv4TosPrecedence) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv4TosPrecedence) Validate(defaults ...bool) error {
@@ -126651,15 +127450,16 @@ func (obj *patternFlowIpv4TosDelay) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv4TosDelay) ToJson() string {
@@ -126685,15 +127485,16 @@ func (obj *patternFlowIpv4TosDelay) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv4TosDelay) Validate(defaults ...bool) error {
@@ -127013,15 +127814,16 @@ func (obj *patternFlowIpv4TosThroughput) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv4TosThroughput) ToJson() string {
@@ -127047,15 +127849,16 @@ func (obj *patternFlowIpv4TosThroughput) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv4TosThroughput) Validate(defaults ...bool) error {
@@ -127375,15 +128178,16 @@ func (obj *patternFlowIpv4TosReliability) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv4TosReliability) ToJson() string {
@@ -127409,15 +128213,16 @@ func (obj *patternFlowIpv4TosReliability) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv4TosReliability) Validate(defaults ...bool) error {
@@ -127737,15 +128542,16 @@ func (obj *patternFlowIpv4TosMonetary) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv4TosMonetary) ToJson() string {
@@ -127771,15 +128577,16 @@ func (obj *patternFlowIpv4TosMonetary) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv4TosMonetary) Validate(defaults ...bool) error {
@@ -128099,15 +128906,16 @@ func (obj *patternFlowIpv4TosUnused) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv4TosUnused) ToJson() string {
@@ -128133,15 +128941,16 @@ func (obj *patternFlowIpv4TosUnused) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv4TosUnused) Validate(defaults ...bool) error {
@@ -128461,15 +129270,16 @@ func (obj *patternFlowIpv4DscpPhb) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv4DscpPhb) ToJson() string {
@@ -128495,15 +129305,16 @@ func (obj *patternFlowIpv4DscpPhb) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv4DscpPhb) Validate(defaults ...bool) error {
@@ -128823,15 +129634,16 @@ func (obj *patternFlowIpv4DscpEcn) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv4DscpEcn) ToJson() string {
@@ -128857,15 +129669,16 @@ func (obj *patternFlowIpv4DscpEcn) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv4DscpEcn) Validate(defaults ...bool) error {
@@ -129185,15 +129998,16 @@ func (obj *patternFlowGtpExtensionExtensionLengthCounter) FromYaml(value string)
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGtpExtensionExtensionLengthCounter) ToJson() string {
@@ -129219,15 +130033,16 @@ func (obj *patternFlowGtpExtensionExtensionLengthCounter) FromJson(value string)
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGtpExtensionExtensionLengthCounter) Validate(defaults ...bool) error {
@@ -129445,15 +130260,16 @@ func (obj *patternFlowGtpExtensionContentsCounter) FromYaml(value string) error 
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGtpExtensionContentsCounter) ToJson() string {
@@ -129479,15 +130295,16 @@ func (obj *patternFlowGtpExtensionContentsCounter) FromJson(value string) error 
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGtpExtensionContentsCounter) Validate(defaults ...bool) error {
@@ -129705,15 +130522,16 @@ func (obj *patternFlowGtpExtensionNextExtensionHeaderCounter) FromYaml(value str
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGtpExtensionNextExtensionHeaderCounter) ToJson() string {
@@ -129739,15 +130557,16 @@ func (obj *patternFlowGtpExtensionNextExtensionHeaderCounter) FromJson(value str
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowGtpExtensionNextExtensionHeaderCounter) Validate(defaults ...bool) error {
@@ -129965,15 +130784,16 @@ func (obj *patternFlowIcmpEchoTypeCounter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIcmpEchoTypeCounter) ToJson() string {
@@ -129999,15 +130819,16 @@ func (obj *patternFlowIcmpEchoTypeCounter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIcmpEchoTypeCounter) Validate(defaults ...bool) error {
@@ -130225,15 +131046,16 @@ func (obj *patternFlowIcmpEchoCodeCounter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIcmpEchoCodeCounter) ToJson() string {
@@ -130259,15 +131081,16 @@ func (obj *patternFlowIcmpEchoCodeCounter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIcmpEchoCodeCounter) Validate(defaults ...bool) error {
@@ -130485,15 +131308,16 @@ func (obj *patternFlowIcmpEchoIdentifierCounter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIcmpEchoIdentifierCounter) ToJson() string {
@@ -130519,15 +131343,16 @@ func (obj *patternFlowIcmpEchoIdentifierCounter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIcmpEchoIdentifierCounter) Validate(defaults ...bool) error {
@@ -130745,15 +131570,16 @@ func (obj *patternFlowIcmpEchoSequenceNumberCounter) FromYaml(value string) erro
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIcmpEchoSequenceNumberCounter) ToJson() string {
@@ -130779,15 +131605,16 @@ func (obj *patternFlowIcmpEchoSequenceNumberCounter) FromJson(value string) erro
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIcmpEchoSequenceNumberCounter) Validate(defaults ...bool) error {
@@ -131005,15 +131832,16 @@ func (obj *patternFlowIcmpv6EchoTypeCounter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIcmpv6EchoTypeCounter) ToJson() string {
@@ -131039,15 +131867,16 @@ func (obj *patternFlowIcmpv6EchoTypeCounter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIcmpv6EchoTypeCounter) Validate(defaults ...bool) error {
@@ -131265,15 +132094,16 @@ func (obj *patternFlowIcmpv6EchoCodeCounter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIcmpv6EchoCodeCounter) ToJson() string {
@@ -131299,15 +132129,16 @@ func (obj *patternFlowIcmpv6EchoCodeCounter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIcmpv6EchoCodeCounter) Validate(defaults ...bool) error {
@@ -131525,15 +132356,16 @@ func (obj *patternFlowIcmpv6EchoIdentifierCounter) FromYaml(value string) error 
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIcmpv6EchoIdentifierCounter) ToJson() string {
@@ -131559,15 +132391,16 @@ func (obj *patternFlowIcmpv6EchoIdentifierCounter) FromJson(value string) error 
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIcmpv6EchoIdentifierCounter) Validate(defaults ...bool) error {
@@ -131785,15 +132618,16 @@ func (obj *patternFlowIcmpv6EchoSequenceNumberCounter) FromYaml(value string) er
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIcmpv6EchoSequenceNumberCounter) ToJson() string {
@@ -131819,15 +132653,16 @@ func (obj *patternFlowIcmpv6EchoSequenceNumberCounter) FromJson(value string) er
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIcmpv6EchoSequenceNumberCounter) Validate(defaults ...bool) error {
@@ -132045,15 +132880,16 @@ func (obj *bgpAsPathSegment) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *bgpAsPathSegment) ToJson() string {
@@ -132079,15 +132915,16 @@ func (obj *bgpAsPathSegment) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *bgpAsPathSegment) Validate(defaults ...bool) error {
@@ -132260,15 +133097,16 @@ func (obj *bgpSrteRemoteEndpointSubTlv) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *bgpSrteRemoteEndpointSubTlv) ToJson() string {
@@ -132294,15 +133132,16 @@ func (obj *bgpSrteRemoteEndpointSubTlv) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *bgpSrteRemoteEndpointSubTlv) Validate(defaults ...bool) error {
@@ -132566,15 +133405,16 @@ func (obj *bgpSrteColorSubTlv) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *bgpSrteColorSubTlv) ToJson() string {
@@ -132600,15 +133440,16 @@ func (obj *bgpSrteColorSubTlv) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *bgpSrteColorSubTlv) Validate(defaults ...bool) error {
@@ -132746,15 +133587,16 @@ func (obj *bgpSrteBindingSubTlv) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *bgpSrteBindingSubTlv) ToJson() string {
@@ -132780,15 +133622,16 @@ func (obj *bgpSrteBindingSubTlv) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *bgpSrteBindingSubTlv) Validate(defaults ...bool) error {
@@ -133057,15 +133900,16 @@ func (obj *bgpSrtePreferenceSubTlv) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *bgpSrtePreferenceSubTlv) ToJson() string {
@@ -133091,15 +133935,16 @@ func (obj *bgpSrtePreferenceSubTlv) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *bgpSrtePreferenceSubTlv) Validate(defaults ...bool) error {
@@ -133245,15 +134090,16 @@ func (obj *bgpSrtePolicyPrioritySubTlv) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *bgpSrtePolicyPrioritySubTlv) ToJson() string {
@@ -133279,15 +134125,16 @@ func (obj *bgpSrtePolicyPrioritySubTlv) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *bgpSrtePolicyPrioritySubTlv) Validate(defaults ...bool) error {
@@ -133426,15 +134273,16 @@ func (obj *bgpSrtePolicyNameSubTlv) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *bgpSrtePolicyNameSubTlv) ToJson() string {
@@ -133460,15 +134308,16 @@ func (obj *bgpSrtePolicyNameSubTlv) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *bgpSrtePolicyNameSubTlv) Validate(defaults ...bool) error {
@@ -133599,15 +134448,16 @@ func (obj *bgpSrteExplicitNullLabelPolicySubTlv) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *bgpSrteExplicitNullLabelPolicySubTlv) ToJson() string {
@@ -133633,15 +134483,16 @@ func (obj *bgpSrteExplicitNullLabelPolicySubTlv) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *bgpSrteExplicitNullLabelPolicySubTlv) Validate(defaults ...bool) error {
@@ -133793,15 +134644,16 @@ func (obj *bgpSrteSegmentList) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *bgpSrteSegmentList) ToJson() string {
@@ -133827,15 +134679,16 @@ func (obj *bgpSrteSegmentList) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *bgpSrteSegmentList) Validate(defaults ...bool) error {
@@ -134075,15 +134928,16 @@ func (obj *patternFlowIpv4TosPrecedenceCounter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv4TosPrecedenceCounter) ToJson() string {
@@ -134109,15 +134963,16 @@ func (obj *patternFlowIpv4TosPrecedenceCounter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv4TosPrecedenceCounter) Validate(defaults ...bool) error {
@@ -134335,15 +135190,16 @@ func (obj *patternFlowIpv4TosDelayCounter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv4TosDelayCounter) ToJson() string {
@@ -134369,15 +135225,16 @@ func (obj *patternFlowIpv4TosDelayCounter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv4TosDelayCounter) Validate(defaults ...bool) error {
@@ -134595,15 +135452,16 @@ func (obj *patternFlowIpv4TosThroughputCounter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv4TosThroughputCounter) ToJson() string {
@@ -134629,15 +135487,16 @@ func (obj *patternFlowIpv4TosThroughputCounter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv4TosThroughputCounter) Validate(defaults ...bool) error {
@@ -134855,15 +135714,16 @@ func (obj *patternFlowIpv4TosReliabilityCounter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv4TosReliabilityCounter) ToJson() string {
@@ -134889,15 +135749,16 @@ func (obj *patternFlowIpv4TosReliabilityCounter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv4TosReliabilityCounter) Validate(defaults ...bool) error {
@@ -135115,15 +135976,16 @@ func (obj *patternFlowIpv4TosMonetaryCounter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv4TosMonetaryCounter) ToJson() string {
@@ -135149,15 +136011,16 @@ func (obj *patternFlowIpv4TosMonetaryCounter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv4TosMonetaryCounter) Validate(defaults ...bool) error {
@@ -135375,15 +136238,16 @@ func (obj *patternFlowIpv4TosUnusedCounter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv4TosUnusedCounter) ToJson() string {
@@ -135409,15 +136273,16 @@ func (obj *patternFlowIpv4TosUnusedCounter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv4TosUnusedCounter) Validate(defaults ...bool) error {
@@ -135635,15 +136500,16 @@ func (obj *patternFlowIpv4DscpPhbCounter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv4DscpPhbCounter) ToJson() string {
@@ -135669,15 +136535,16 @@ func (obj *patternFlowIpv4DscpPhbCounter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv4DscpPhbCounter) Validate(defaults ...bool) error {
@@ -135895,15 +136762,16 @@ func (obj *patternFlowIpv4DscpEcnCounter) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv4DscpEcnCounter) ToJson() string {
@@ -135929,15 +136797,16 @@ func (obj *patternFlowIpv4DscpEcnCounter) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *patternFlowIpv4DscpEcnCounter) Validate(defaults ...bool) error {
@@ -136155,15 +137024,16 @@ func (obj *bgpSrteSegment) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *bgpSrteSegment) ToJson() string {
@@ -136189,15 +137059,16 @@ func (obj *bgpSrteSegment) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *bgpSrteSegment) Validate(defaults ...bool) error {
@@ -136738,15 +137609,16 @@ func (obj *bgpSrteSegmentATypeSubTlv) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *bgpSrteSegmentATypeSubTlv) ToJson() string {
@@ -136772,15 +137644,16 @@ func (obj *bgpSrteSegmentATypeSubTlv) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *bgpSrteSegmentATypeSubTlv) Validate(defaults ...bool) error {
@@ -137042,15 +137915,16 @@ func (obj *bgpSrteSegmentBTypeSubTlv) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *bgpSrteSegmentBTypeSubTlv) ToJson() string {
@@ -137076,15 +137950,16 @@ func (obj *bgpSrteSegmentBTypeSubTlv) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *bgpSrteSegmentBTypeSubTlv) Validate(defaults ...bool) error {
@@ -137278,15 +138153,16 @@ func (obj *bgpSrteSegmentCTypeSubTlv) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *bgpSrteSegmentCTypeSubTlv) ToJson() string {
@@ -137312,15 +138188,16 @@ func (obj *bgpSrteSegmentCTypeSubTlv) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *bgpSrteSegmentCTypeSubTlv) Validate(defaults ...bool) error {
@@ -137554,15 +138431,16 @@ func (obj *bgpSrteSegmentDTypeSubTlv) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *bgpSrteSegmentDTypeSubTlv) ToJson() string {
@@ -137588,15 +138466,16 @@ func (obj *bgpSrteSegmentDTypeSubTlv) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *bgpSrteSegmentDTypeSubTlv) Validate(defaults ...bool) error {
@@ -137830,15 +138709,16 @@ func (obj *bgpSrteSegmentETypeSubTlv) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *bgpSrteSegmentETypeSubTlv) ToJson() string {
@@ -137864,15 +138744,16 @@ func (obj *bgpSrteSegmentETypeSubTlv) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *bgpSrteSegmentETypeSubTlv) Validate(defaults ...bool) error {
@@ -138106,15 +138987,16 @@ func (obj *bgpSrteSegmentFTypeSubTlv) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *bgpSrteSegmentFTypeSubTlv) ToJson() string {
@@ -138140,15 +139022,16 @@ func (obj *bgpSrteSegmentFTypeSubTlv) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *bgpSrteSegmentFTypeSubTlv) Validate(defaults ...bool) error {
@@ -138369,15 +139252,16 @@ func (obj *bgpSrteSegmentGTypeSubTlv) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *bgpSrteSegmentGTypeSubTlv) ToJson() string {
@@ -138403,15 +139287,16 @@ func (obj *bgpSrteSegmentGTypeSubTlv) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *bgpSrteSegmentGTypeSubTlv) Validate(defaults ...bool) error {
@@ -138712,15 +139597,16 @@ func (obj *bgpSrteSegmentHTypeSubTlv) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *bgpSrteSegmentHTypeSubTlv) ToJson() string {
@@ -138746,15 +139632,16 @@ func (obj *bgpSrteSegmentHTypeSubTlv) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *bgpSrteSegmentHTypeSubTlv) Validate(defaults ...bool) error {
@@ -138975,15 +139862,16 @@ func (obj *bgpSrteSegmentITypeSubTlv) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *bgpSrteSegmentITypeSubTlv) ToJson() string {
@@ -139009,15 +139897,16 @@ func (obj *bgpSrteSegmentITypeSubTlv) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *bgpSrteSegmentITypeSubTlv) Validate(defaults ...bool) error {
@@ -139243,15 +140132,16 @@ func (obj *bgpSrteSegmentJTypeSubTlv) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *bgpSrteSegmentJTypeSubTlv) ToJson() string {
@@ -139277,15 +140167,16 @@ func (obj *bgpSrteSegmentJTypeSubTlv) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *bgpSrteSegmentJTypeSubTlv) Validate(defaults ...bool) error {
@@ -139658,15 +140549,16 @@ func (obj *bgpSrteSegmentKTypeSubTlv) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *bgpSrteSegmentKTypeSubTlv) ToJson() string {
@@ -139692,15 +140584,16 @@ func (obj *bgpSrteSegmentKTypeSubTlv) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *bgpSrteSegmentKTypeSubTlv) Validate(defaults ...bool) error {
@@ -139993,15 +140886,16 @@ func (obj *bgpSrteSRv6SIDEndpointBehaviorAndStructure) FromYaml(value string) er
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *bgpSrteSRv6SIDEndpointBehaviorAndStructure) ToJson() string {
@@ -140027,15 +140921,16 @@ func (obj *bgpSrteSRv6SIDEndpointBehaviorAndStructure) FromJson(value string) er
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *bgpSrteSRv6SIDEndpointBehaviorAndStructure) Validate(defaults ...bool) error {
@@ -140301,15 +141196,16 @@ func (obj *bgpSrteSrMplsSid) FromYaml(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(data), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(data), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	vErr := obj.Validate(true)
 	if vErr != nil {
 		return vErr
 	}
-	return retObj
+	return nil
 }
 
 func (obj *bgpSrteSrMplsSid) ToJson() string {
@@ -140335,15 +141231,16 @@ func (obj *bgpSrteSrMplsSid) FromJson(value string) error {
 		AllowPartial:   true,
 		DiscardUnknown: false,
 	}
-	retObj := opts.Unmarshal([]byte(value), obj.Msg())
-	if retObj != nil {
-		return retObj
+	uError := opts.Unmarshal([]byte(value), obj.Msg())
+	if uError != nil {
+		return fmt.Errorf("unmarshal error %s", strings.Replace(
+			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
 	err := obj.Validate(true)
 	if err != nil {
 		return err
 	}
-	return retObj
+	return nil
 }
 
 func (obj *bgpSrteSrMplsSid) Validate(defaults ...bool) error {
