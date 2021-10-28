@@ -1,4 +1,4 @@
 flake8
 requests
-openapiart==0.1.21
+openapiart==0.1.22
 jsonschema==3.2.0
