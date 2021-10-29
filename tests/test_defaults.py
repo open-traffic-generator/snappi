@@ -109,6 +109,8 @@ def test_defaults(api):
     layer1 = config.layer1.layer1()[-1]
     layer1.name = "abc"
     layer1.port_names = ["test"]
+    layer1.ieee_media_defaults = True
+    layer1.auto_negotiate = True
     layer1.flow_control
     l = config.lags.lag()[-1]
     l.name = "abc"
