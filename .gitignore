@@ -21,3 +21,4 @@ gosnappi/coverage.out
 gosnappi/coverage.txt
 .local
 .vscode
+*.proto

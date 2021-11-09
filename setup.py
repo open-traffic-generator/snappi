@@ -9,7 +9,7 @@ import shutil
 
 pkg_name = "snappi"
 go_pkg_name = "gosnappi"
-version = "0.6.13"
+version = "0.6.14"
 models_version = "0.6.8"
 
 # read long description from readme.md
@@ -40,6 +40,10 @@ if os.path.exists(pkg_name):
 
 # remove unwanted files
 shutil.copytree(os.path.join("artifacts", pkg_name), pkg_name)
+shutil.copyfile(
+    os.path.join(base_dir, "artifacts", pkg_name + "pb.proto"),
+    os.path.join(base_dir, pkg_name + "pb.proto")
+)
 shutil.rmtree("artifacts", ignore_errors=True)
 for name in os.listdir(pkg_name):
     path = os.path.join(pkg_name, name)
