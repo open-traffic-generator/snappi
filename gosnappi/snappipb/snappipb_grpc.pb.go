@@ -29,7 +29,7 @@ type OpenapiClient interface {
 	SendPing(ctx context.Context, in *SendPingRequest, opts ...grpc.CallOption) (*SendPingResponse, error)
 	SetProtocolState(ctx context.Context, in *SetProtocolStateRequest, opts ...grpc.CallOption) (*SetProtocolStateResponse, error)
 	GetMetrics(ctx context.Context, in *GetMetricsRequest, opts ...grpc.CallOption) (*GetMetricsResponse, error)
-	GetStateMetrics(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*GetStateMetricsResponse, error)
+	GetStates(ctx context.Context, in *GetStatesRequest, opts ...grpc.CallOption) (*GetStatesResponse, error)
 	GetCapture(ctx context.Context, in *GetCaptureRequest, opts ...grpc.CallOption) (*GetCaptureResponse, error)
 }
 
@@ -131,9 +131,9 @@ func (c *openapiClient) GetMetrics(ctx context.Context, in *GetMetricsRequest, o
 	return out, nil
 }
 
-func (c *openapiClient) GetStateMetrics(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*GetStateMetricsResponse, error) {
-	out := new(GetStateMetricsResponse)
-	err := c.cc.Invoke(ctx, "/snappipb.Openapi/GetStateMetrics", in, out, opts...)
+func (c *openapiClient) GetStates(ctx context.Context, in *GetStatesRequest, opts ...grpc.CallOption) (*GetStatesResponse, error) {
+	out := new(GetStatesResponse)
+	err := c.cc.Invoke(ctx, "/snappipb.Openapi/GetStates", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -163,7 +163,7 @@ type OpenapiServer interface {
 	SendPing(context.Context, *SendPingRequest) (*SendPingResponse, error)
 	SetProtocolState(context.Context, *SetProtocolStateRequest) (*SetProtocolStateResponse, error)
 	GetMetrics(context.Context, *GetMetricsRequest) (*GetMetricsResponse, error)
-	GetStateMetrics(context.Context, *emptypb.Empty) (*GetStateMetricsResponse, error)
+	GetStates(context.Context, *GetStatesRequest) (*GetStatesResponse, error)
 	GetCapture(context.Context, *GetCaptureRequest) (*GetCaptureResponse, error)
 	mustEmbedUnimplementedOpenapiServer()
 }
@@ -202,8 +202,8 @@ func (UnimplementedOpenapiServer) SetProtocolState(context.Context, *SetProtocol
 func (UnimplementedOpenapiServer) GetMetrics(context.Context, *GetMetricsRequest) (*GetMetricsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetMetrics not implemented")
 }
-func (UnimplementedOpenapiServer) GetStateMetrics(context.Context, *emptypb.Empty) (*GetStateMetricsResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetStateMetrics not implemented")
+func (UnimplementedOpenapiServer) GetStates(context.Context, *GetStatesRequest) (*GetStatesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetStates not implemented")
 }
 func (UnimplementedOpenapiServer) GetCapture(context.Context, *GetCaptureRequest) (*GetCaptureResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetCapture not implemented")
@@ -401,20 +401,20 @@ func _Openapi_GetMetrics_Handler(srv interface{}, ctx context.Context, dec func(
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Openapi_GetStateMetrics_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(emptypb.Empty)
+func _Openapi_GetStates_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetStatesRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(OpenapiServer).GetStateMetrics(ctx, in)
+		return srv.(OpenapiServer).GetStates(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/snappipb.Openapi/GetStateMetrics",
+		FullMethod: "/snappipb.Openapi/GetStates",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(OpenapiServer).GetStateMetrics(ctx, req.(*emptypb.Empty))
+		return srv.(OpenapiServer).GetStates(ctx, req.(*GetStatesRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -485,8 +485,8 @@ var Openapi_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Openapi_GetMetrics_Handler,
 		},
 		{
-			MethodName: "GetStateMetrics",
-			Handler:    _Openapi_GetStateMetrics_Handler,
+			MethodName: "GetStates",
+			Handler:    _Openapi_GetStates_Handler,
 		},
 		{
 			MethodName: "GetCapture",

@@ -9,8 +9,8 @@ import shutil
 
 pkg_name = "snappi"
 go_pkg_name = "gosnappi"
-version = "0.6.5"
-models_version = "0.6.5"
+version = "0.6.15"
+models_version = "0.6.10"
 
 # read long description from readme.md
 base_dir = os.path.abspath(os.path.dirname(__file__))
@@ -40,6 +40,10 @@ if os.path.exists(pkg_name):
 
 # remove unwanted files
 shutil.copytree(os.path.join("artifacts", pkg_name), pkg_name)
+shutil.copyfile(
+    os.path.join(base_dir, "artifacts", pkg_name + "pb.proto"),
+    os.path.join(base_dir, pkg_name + "pb.proto")
+)
 shutil.rmtree("artifacts", ignore_errors=True)
 for name in os.listdir(pkg_name):
     path = os.path.join(pkg_name, name)
@@ -87,7 +91,7 @@ setuptools.setup(
     extras_require={
         "ixnetwork": ["snappi_ixnetwork==0.5.4"],
         "trex": ["snappi_trex"],
-        "convergence": ["snappi_convergence==0.1.1"],
+        "convergence": ["snappi_convergence==0.2.1"],
         "testing": ["pytest", "flask"],
     },
 )

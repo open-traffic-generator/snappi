@@ -72,7 +72,7 @@ jobs:
         if: steps.check_tag.outputs.exists == 'false' && matrix.python-version == '3.6'
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "dist/*,models-release"
+          artifacts: "dist/*,models-release,*.proto"
           tag: ${{ steps.get_version.outputs.version }}
           token: ${{ secrets.GITHUB_TOKEN }}
       - name: Create tag for gosnappi

@@ -958,7 +958,8 @@ var expected_flow_json = `{
 				"value":  4
 				},
 				"priority":  {
-				"choice":  "dscp"
+				"choice":  "dscp",
+				"dscp": {}
 				},
 				"src":  {
 				"choice":  "value",
@@ -1030,4 +1031,15 @@ func TestDefaultsFlow(t *testing.T) {
 	flow1.Rate()
 	expected_result := config.ToJson()
 	require.JSONEq(t, expected_flow_json, expected_result)
+}
+
+func TestFromJsonUnmarshalError(t *testing.T) {
+	input_str := `{
+		"state": "run"
+	  }`
+	api := gosnappi.NewApi()
+	req := api.NewTransmitState()
+	err := req.FromJson(input_str)
+	assert.NotNil(t, err)
+	assert.Contains(t, err.Error(), `unmarshal error (line 2:12): invalid value for enum type: "run"`)
 }
