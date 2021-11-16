@@ -9,6 +9,7 @@ import shutil
 
 pkg_name = "snappi"
 go_pkg_name = "gosnappi"
+model_protobuf_name = "otg"
 version = "0.6.15"
 models_version = "0.6.10"
 
@@ -28,7 +29,7 @@ with open(os.path.join("openapi.yaml"), "wb") as fp:
 
 openapiart.OpenApiArt(
     api_files=["openapi.yaml"],
-    protobuf_name=pkg_name + "pb",
+    protobuf_name=model_protobuf_name,
     artifact_dir="artifacts",
     extension_prefix=pkg_name,
 ).GeneratePythonSdk(package_name=pkg_name).GenerateGoSdk(
@@ -41,8 +42,8 @@ if os.path.exists(pkg_name):
 # remove unwanted files
 shutil.copytree(os.path.join("artifacts", pkg_name), pkg_name)
 shutil.copyfile(
-    os.path.join(base_dir, "artifacts", pkg_name + "pb.proto"),
-    os.path.join(base_dir, pkg_name + "pb.proto")
+    os.path.join(base_dir, "artifacts", model_protobuf_name + ".proto"),
+    os.path.join(base_dir, model_protobuf_name + ".proto")
 )
 shutil.rmtree("artifacts", ignore_errors=True)
 for name in os.listdir(pkg_name):
