@@ -32,7 +32,7 @@ openapiart.OpenApiArt(
     artifact_dir="artifacts",
     extension_prefix=pkg_name,
 ).GeneratePythonSdk(package_name=pkg_name).GenerateGoSdk(
-    package_dir="github.com/open-traffic-generator/snappi/%s" % go_pkg_name, package_name=go_pkg_name, generate_unit_test=False
+    package_dir="github.com/open-traffic-generator/snappi/%s" % go_pkg_name, package_name=go_pkg_name
 )
 
 if os.path.exists(pkg_name):
