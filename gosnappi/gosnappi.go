@@ -3834,7 +3834,7 @@ type Layer1SpeedEnum string
 
 var Layer1Speed = struct {
 	SPEED_10_FD_MBPS  Layer1SpeedEnum
-	SPEED_10_HD_MBPS  Layer1SpeedEnum
+	SPEED_50_GBPS     Layer1SpeedEnum
 	SPEED_100_FD_MBPS Layer1SpeedEnum
 	SPEED_100_HD_MBPS Layer1SpeedEnum
 	SPEED_1_GBPS      Layer1SpeedEnum
@@ -3846,7 +3846,7 @@ var Layer1Speed = struct {
 	SPEED_400_GBPS    Layer1SpeedEnum
 }{
 	SPEED_10_FD_MBPS:  Layer1SpeedEnum("speed_10_fd_mbps"),
-	SPEED_10_HD_MBPS:  Layer1SpeedEnum("speed_10_hd_mbps"),
+	SPEED_50_GBPS:     Layer1SpeedEnum("speed_50_gbps"),
 	SPEED_100_FD_MBPS: Layer1SpeedEnum("speed_100_fd_mbps"),
 	SPEED_100_HD_MBPS: Layer1SpeedEnum("speed_100_hd_mbps"),
 	SPEED_1_GBPS:      Layer1SpeedEnum("speed_1_gbps"),
