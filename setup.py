@@ -9,7 +9,7 @@ import shutil
 
 pkg_name = "snappi"
 go_pkg_name = "gosnappi"
-version = "0.5.12"
+version = "0.5.13"
 models_version = "0.5.7"
 
 # read long description from readme.md
@@ -22,7 +22,9 @@ openapi_url = "https://github.com/open-traffic-generator/models/releases/downloa
 response = requests.request("GET", openapi_url, allow_redirects=True)
 assert response.status_code == 200
 with open(os.path.join("openapi.yaml"), "wb") as fp:
-    fp.write(response.content)
+    # patch to replace 10G HD speed with 50G speed in downloaded openapi.yaml
+    content = response.content.replace(b'speed_10_hd_mbps', b'speed_50_gbps')
+    fp.write(content)
 
 openapiart.OpenApiArt(
     api_files=["openapi.yaml"],
