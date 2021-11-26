@@ -10,8 +10,8 @@ import shutil
 pkg_name = "snappi"
 go_pkg_name = "gosnappi"
 model_protobuf_name = "otg"
-version = "0.6.16"
-models_version = "0.6.10"
+version = "0.6.17"
+models_version = "0.6.12"
 
 # read long description from readme.md
 base_dir = os.path.abspath(os.path.dirname(__file__))
