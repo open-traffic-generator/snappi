@@ -3551,7 +3551,7 @@ func TestConfigGenerated(t *testing.T) {
 	assert.Nil(t, v269.FromJson(v269.ToJson()))
 	assert.Nil(t, v269.FromYaml(v269.ToYaml()))
 	assert.Nil(t, v269.FromPbText(v269.ToPbText()))
-	v267.SetDevice(v269)
+	// v267.SetDevice(v269)
 	v267.HasChoice()
 	v267.HasPort()
 	v267.HasDevice()
