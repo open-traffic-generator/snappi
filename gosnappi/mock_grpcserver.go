@@ -137,7 +137,7 @@ func isFlowMetricsDisabled(cfg *otg.Config) []string {
 
 func (s *server) GetMetrics(ctx context.Context, req *otg.GetMetricsRequest) (*otg.GetMetricsResponse, error) {
 	var resp *otg.GetMetricsResponse
-	var tx int32 = 100
+	var tx int64 = 100
 	metricsDisabledFlows := isFlowMetricsDisabled(mockConfig)
 	if req.MetricsRequest.Flow != nil {
 		f := &otg.FlowMetric{FramesTx: &tx}
