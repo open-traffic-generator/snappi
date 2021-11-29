@@ -6,14 +6,14 @@ import (
 	net "net"
 	"reflect"
 
-	snappipb "github.com/open-traffic-generator/snappi/gosnappi/snappipb"
+	otg "github.com/open-traffic-generator/snappi/gosnappi/otg"
 	grpc "google.golang.org/grpc"
 	"google.golang.org/protobuf/types/known/emptypb"
 )
 
 var (
-	mockServer *grpc.Server     = nil
-	mockConfig *snappipb.Config = nil
+	mockServer *grpc.Server = nil
+	mockConfig *otg.Config  = nil
 )
 
 func contains(s []string, e string) bool {
@@ -26,7 +26,7 @@ func contains(s []string, e string) bool {
 }
 
 type server struct {
-	snappipb.UnimplementedOpenapiServer
+	otg.UnimplementedOpenapiServer
 }
 
 func StartMockGrpcServer(location string) error {
@@ -42,7 +42,7 @@ func StartMockGrpcServer(location string) error {
 	}
 	svr := grpc.NewServer()
 	log.Println("MockServer: started and listening on address " + location)
-	snappipb.RegisterOpenapiServer(svr, &server{})
+	otg.RegisterOpenapiServer(svr, &server{})
 	log.Println("MockServer: Server subscribed with gRPC Protocol Service")
 
 	go func() {
@@ -55,18 +55,18 @@ func StartMockGrpcServer(location string) error {
 	return nil
 }
 
-func (s *server) SetConfig(ctx context.Context, req *snappipb.SetConfigRequest) (*snappipb.SetConfigResponse, error) {
-	var resp *snappipb.SetConfigResponse
+func (s *server) SetConfig(ctx context.Context, req *otg.SetConfigRequest) (*otg.SetConfigResponse, error) {
+	var resp *otg.SetConfigResponse
 	if reflect.TypeOf(req.Config) != reflect.TypeOf(mockConfig) {
-		resp = &snappipb.SetConfigResponse{
-			StatusCode_400: &snappipb.ResponseError{
+		resp = &otg.SetConfigResponse{
+			StatusCode_400: &otg.ResponseError{
 				Errors: []string{"Invalid Config object received"},
 			},
 		}
 	} else {
 		mockConfig = req.Config
-		resp = &snappipb.SetConfigResponse{
-			StatusCode_200: &snappipb.ResponseWarning{
+		resp = &otg.SetConfigResponse{
+			StatusCode_200: &otg.ResponseWarning{
 				Warnings: []string{},
 			},
 		}
@@ -75,14 +75,14 @@ func (s *server) SetConfig(ctx context.Context, req *snappipb.SetConfigRequest) 
 	return resp, nil
 }
 
-func (s *server) GetConfig(ctx context.Context, in *emptypb.Empty) (*snappipb.GetConfigResponse, error) {
-	resp := &snappipb.GetConfigResponse{
+func (s *server) GetConfig(ctx context.Context, in *emptypb.Empty) (*otg.GetConfigResponse, error) {
+	resp := &otg.GetConfigResponse{
 		StatusCode_200: mockConfig,
 	}
 	return resp, nil
 }
 
-func getBgpPeerNames(cfg *snappipb.Config) []string {
+func getBgpPeerNames(cfg *otg.Config) []string {
 	names := []string{}
 	for _, d := range cfg.Devices {
 		if d == nil || d.Bgp == nil {
@@ -94,7 +94,7 @@ func getBgpPeerNames(cfg *snappipb.Config) []string {
 	return names
 }
 
-func getFlowNames(cfg *snappipb.Config) []string {
+func getFlowNames(cfg *otg.Config) []string {
 	names := []string{}
 	for _, flow := range mockConfig.Flows {
 		names = append(names, flow.Name)
@@ -103,7 +103,7 @@ func getFlowNames(cfg *snappipb.Config) []string {
 	return names
 }
 
-func getPortNames(cfg *snappipb.Config) []string {
+func getPortNames(cfg *otg.Config) []string {
 	names := []string{}
 	for _, port := range mockConfig.Ports {
 		names = append(names, port.Name)
@@ -112,7 +112,7 @@ func getPortNames(cfg *snappipb.Config) []string {
 	return names
 }
 
-func getRouteNames(cfg *snappipb.Config) []string {
+func getRouteNames(cfg *otg.Config) []string {
 	names := []string{}
 	for _, d := range cfg.Devices {
 		if d == nil || d.Bgp == nil {
@@ -125,7 +125,7 @@ func getRouteNames(cfg *snappipb.Config) []string {
 	return names
 }
 
-func isFlowMetricsDisabled(cfg *snappipb.Config) []string {
+func isFlowMetricsDisabled(cfg *otg.Config) []string {
 	names := []string{}
 	for _, flow := range cfg.Flows {
 		if flow.Metrics == nil || !*flow.Metrics.Enable {
@@ -135,50 +135,50 @@ func isFlowMetricsDisabled(cfg *snappipb.Config) []string {
 	return names
 }
 
-func (s *server) GetMetrics(ctx context.Context, req *snappipb.GetMetricsRequest) (*snappipb.GetMetricsResponse, error) {
-	var resp *snappipb.GetMetricsResponse
-	var tx int32 = 100
+func (s *server) GetMetrics(ctx context.Context, req *otg.GetMetricsRequest) (*otg.GetMetricsResponse, error) {
+	var resp *otg.GetMetricsResponse
+	var tx int64 = 100
 	metricsDisabledFlows := isFlowMetricsDisabled(mockConfig)
 	if req.MetricsRequest.Flow != nil {
-		f := &snappipb.FlowMetric{FramesTx: &tx}
+		f := &otg.FlowMetric{FramesTx: &tx}
 		flowNames := getFlowNames(mockConfig)
 		for _, req_flow := range req.MetricsRequest.Flow.FlowNames {
 			res := contains(flowNames, req_flow)
 			if !res {
-				resp = &snappipb.GetMetricsResponse{
-					StatusCode_500: &snappipb.ResponseError{
+				resp = &otg.GetMetricsResponse{
+					StatusCode_500: &otg.ResponseError{
 						Errors: []string{"requested flow is not available in configured flows"},
 					},
 				}
 			} else if len(metricsDisabledFlows) > 0 {
-				resp = &snappipb.GetMetricsResponse{
-					StatusCode_400: &snappipb.ResponseError{
+				resp = &otg.GetMetricsResponse{
+					StatusCode_400: &otg.ResponseError{
 						Errors: []string{"metrics not enabled for all the flows"},
 					},
 				}
 			} else {
-				resp = &snappipb.GetMetricsResponse{
-					StatusCode_200: &snappipb.MetricsResponse{
-						FlowMetrics: []*snappipb.FlowMetric{f},
+				resp = &otg.GetMetricsResponse{
+					StatusCode_200: &otg.MetricsResponse{
+						FlowMetrics: []*otg.FlowMetric{f},
 					},
 				}
 			}
 		}
 	} else if req.MetricsRequest.Port != nil {
-		p := &snappipb.PortMetric{FramesTx: &tx}
+		p := &otg.PortMetric{FramesTx: &tx}
 		portNames := getPortNames(mockConfig)
 		for _, req_port := range req.MetricsRequest.Port.PortNames {
 			res := contains(portNames, req_port)
 			if !res {
-				resp = &snappipb.GetMetricsResponse{
-					StatusCode_400: &snappipb.ResponseError{
+				resp = &otg.GetMetricsResponse{
+					StatusCode_400: &otg.ResponseError{
 						Errors: []string{"requested port is not available in configured ports"},
 					},
 				}
 			} else {
-				resp = &snappipb.GetMetricsResponse{
-					StatusCode_200: &snappipb.MetricsResponse{
-						PortMetrics: []*snappipb.PortMetric{p},
+				resp = &otg.GetMetricsResponse{
+					StatusCode_200: &otg.MetricsResponse{
+						PortMetrics: []*otg.PortMetric{p},
 					},
 				}
 			}
@@ -191,8 +191,8 @@ func (s *server) GetMetrics(ctx context.Context, req *snappipb.GetMetricsRequest
 		} else {
 			for _, name := range someNames {
 				if !contains(allNames, name) {
-					return &snappipb.GetMetricsResponse{
-						StatusCode_400: &snappipb.ResponseError{
+					return &otg.GetMetricsResponse{
+						StatusCode_400: &otg.ResponseError{
 							Errors: []string{name + " is not a valid BGPv4 device"},
 						},
 					}, nil
@@ -200,13 +200,13 @@ func (s *server) GetMetrics(ctx context.Context, req *snappipb.GetMetricsRequest
 			}
 		}
 
-		metrics := []*snappipb.Bgpv4Metric{}
+		metrics := []*otg.Bgpv4Metric{}
 
 		for _, name := range someNames {
 			one := int32(1)
 			zero := int32(0)
-			up := snappipb.Bgpv4Metric_SessionState_up
-			metrics = append(metrics, &snappipb.Bgpv4Metric{
+			up := otg.Bgpv4Metric_SessionState_up
+			metrics = append(metrics, &otg.Bgpv4Metric{
 				Name:               &name,
 				SessionState:       &up,
 				RoutesAdvertised:   &one,
@@ -214,8 +214,8 @@ func (s *server) GetMetrics(ctx context.Context, req *snappipb.GetMetricsRequest
 			})
 		}
 
-		resp = &snappipb.GetMetricsResponse{
-			StatusCode_200: &snappipb.MetricsResponse{
+		resp = &otg.GetMetricsResponse{
+			StatusCode_200: &otg.MetricsResponse{
 				Bgpv4Metrics: metrics,
 			},
 		}
@@ -223,20 +223,20 @@ func (s *server) GetMetrics(ctx context.Context, req *snappipb.GetMetricsRequest
 	return resp, nil
 }
 
-func (s *server) SetTransmitState(ctx context.Context, req *snappipb.SetTransmitStateRequest) (*snappipb.SetTransmitStateResponse, error) {
-	var resp *snappipb.SetTransmitStateResponse
+func (s *server) SetTransmitState(ctx context.Context, req *otg.SetTransmitStateRequest) (*otg.SetTransmitStateResponse, error) {
+	var resp *otg.SetTransmitStateResponse
 	flowNames := getFlowNames(mockConfig)
 	for _, req_flow := range req.TransmitState.FlowNames {
 		res := contains(flowNames, req_flow)
 		if !res {
-			resp = &snappipb.SetTransmitStateResponse{
-				StatusCode_400: &snappipb.ResponseError{
+			resp = &otg.SetTransmitStateResponse{
+				StatusCode_400: &otg.ResponseError{
 					Errors: []string{"requested flow is not available in configured flows to start"},
 				},
 			}
 		} else {
-			resp = &snappipb.SetTransmitStateResponse{
-				StatusCode_200: &snappipb.ResponseWarning{
+			resp = &otg.SetTransmitStateResponse{
+				StatusCode_200: &otg.ResponseWarning{
 					Warnings: []string{},
 				},
 			}
@@ -245,20 +245,20 @@ func (s *server) SetTransmitState(ctx context.Context, req *snappipb.SetTransmit
 	return resp, nil
 }
 
-func (s *server) SetLinkState(ctx context.Context, req *snappipb.SetLinkStateRequest) (*snappipb.SetLinkStateResponse, error) {
-	var resp *snappipb.SetLinkStateResponse
+func (s *server) SetLinkState(ctx context.Context, req *otg.SetLinkStateRequest) (*otg.SetLinkStateResponse, error) {
+	var resp *otg.SetLinkStateResponse
 	portNames := getPortNames(mockConfig)
 	for _, req_port := range req.LinkState.PortNames {
 		res := contains(portNames, req_port)
 		if !res {
-			resp = &snappipb.SetLinkStateResponse{
-				StatusCode_400: &snappipb.ResponseError{
+			resp = &otg.SetLinkStateResponse{
+				StatusCode_400: &otg.ResponseError{
 					Errors: []string{"requested port is not available in configured ports to do link down"},
 				},
 			}
 		} else {
-			resp = &snappipb.SetLinkStateResponse{
-				StatusCode_200: &snappipb.ResponseWarning{
+			resp = &otg.SetLinkStateResponse{
+				StatusCode_200: &otg.ResponseWarning{
 					Warnings: []string{},
 				},
 			}
@@ -267,20 +267,20 @@ func (s *server) SetLinkState(ctx context.Context, req *snappipb.SetLinkStateReq
 	return resp, nil
 }
 
-func (s *server) SetCaptureState(ctx context.Context, req *snappipb.SetCaptureStateRequest) (*snappipb.SetCaptureStateResponse, error) {
-	var resp *snappipb.SetCaptureStateResponse
+func (s *server) SetCaptureState(ctx context.Context, req *otg.SetCaptureStateRequest) (*otg.SetCaptureStateResponse, error) {
+	var resp *otg.SetCaptureStateResponse
 	portNames := getPortNames(mockConfig)
 	for _, req_port := range req.CaptureState.PortNames {
 		res := contains(portNames, req_port)
 		if !res {
-			resp = &snappipb.SetCaptureStateResponse{
-				StatusCode_400: &snappipb.ResponseError{
+			resp = &otg.SetCaptureStateResponse{
+				StatusCode_400: &otg.ResponseError{
 					Errors: []string{"requested port is not available in configured ports to start capture"},
 				},
 			}
 		} else {
-			resp = &snappipb.SetCaptureStateResponse{
-				StatusCode_200: &snappipb.ResponseWarning{
+			resp = &otg.SetCaptureStateResponse{
+				StatusCode_200: &otg.ResponseWarning{
 					Warnings: []string{},
 				},
 			}
@@ -289,20 +289,20 @@ func (s *server) SetCaptureState(ctx context.Context, req *snappipb.SetCaptureSt
 	return resp, nil
 }
 
-func (s *server) SetRouteState(ctx context.Context, req *snappipb.SetRouteStateRequest) (*snappipb.SetRouteStateResponse, error) {
-	var resp *snappipb.SetRouteStateResponse
+func (s *server) SetRouteState(ctx context.Context, req *otg.SetRouteStateRequest) (*otg.SetRouteStateResponse, error) {
+	var resp *otg.SetRouteStateResponse
 	routeNames := getRouteNames(mockConfig)
 	for _, req_route := range req.RouteState.Names {
 		res := contains(routeNames, req_route)
 		if !res {
-			resp = &snappipb.SetRouteStateResponse{
-				StatusCode_400: &snappipb.ResponseError{
+			resp = &otg.SetRouteStateResponse{
+				StatusCode_400: &otg.ResponseError{
 					Errors: []string{"requested route is not available in configured routes to advertise"},
 				},
 			}
 		} else {
-			resp = &snappipb.SetRouteStateResponse{
-				StatusCode_200: &snappipb.ResponseWarning{
+			resp = &otg.SetRouteStateResponse{
+				StatusCode_200: &otg.ResponseWarning{
 					Warnings: []string{},
 				},
 			}

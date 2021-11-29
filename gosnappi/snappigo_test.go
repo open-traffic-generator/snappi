@@ -123,11 +123,11 @@ func TestHttpGetMetricsFlowResponse(t *testing.T) {
 	assert.NotNil(t, resp)
 	assert.Nil(t, err)
 	assert.Equal(t, resp.FlowMetrics().Items()[0].Name(), string("f1"))
-	assert.Equal(t, resp.FlowMetrics().Items()[0].BytesTx(), int32(1000))
-	assert.Equal(t, resp.FlowMetrics().Items()[0].BytesRx(), int32(1000))
+	assert.Equal(t, resp.FlowMetrics().Items()[0].BytesTx(), int64(1000))
+	assert.Equal(t, resp.FlowMetrics().Items()[0].BytesRx(), int64(1000))
 	assert.Equal(t, resp.FlowMetrics().Items()[1].Name(), string("f2"))
-	assert.Equal(t, resp.FlowMetrics().Items()[1].BytesTx(), int32(1000))
-	assert.Equal(t, resp.FlowMetrics().Items()[1].BytesRx(), int32(1000))
+	assert.Equal(t, resp.FlowMetrics().Items()[1].BytesTx(), int64(1000))
+	assert.Equal(t, resp.FlowMetrics().Items()[1].BytesRx(), int64(1000))
 }
 
 func TestSetNewConfig(t *testing.T) {
@@ -197,8 +197,8 @@ func TestHttpGetMetricsPortResponse(t *testing.T) {
 	assert.NotNil(t, resp)
 	assert.Nil(t, err)
 	assert.Equal(t, resp.PortMetrics().Items()[0].Name(), string("port1"))
-	assert.Equal(t, resp.PortMetrics().Items()[0].BytesTx(), int32(2000))
-	assert.Equal(t, resp.PortMetrics().Items()[0].BytesRx(), int32(2000))
+	assert.Equal(t, resp.PortMetrics().Items()[0].BytesTx(), int64(2000))
+	assert.Equal(t, resp.PortMetrics().Items()[0].BytesRx(), int64(2000))
 }
 
 func TestGetMetricsPortResponseError(t *testing.T) {
