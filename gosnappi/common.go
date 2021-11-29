@@ -8,11 +8,13 @@ import (
 	"strings"
 	"time"
 	"regexp"
+	"google.golang.org/grpc"
 )
 
 type grpcTransport struct {
-	location       string
-	requestTimeout time.Duration
+	clientConnection *grpc.ClientConn
+	location         string
+	requestTimeout   time.Duration
 }
 
 type GrpcTransport interface {
@@ -88,6 +90,7 @@ type Api interface {
 	hasGrpcTransport() bool
 	NewHttpTransport() HttpTransport
 	hasHttpTransport() bool
+	Close() error
 }
 
 // NewGrpcTransport sets the underlying transport of the Api as grpc
@@ -110,6 +113,11 @@ func (api *api) NewHttpTransport() HttpTransport {
 	api.http = &httpTransport{
 		location: "https://localhost:443",
 		verify:   false,
+	}
+	if api.grpc != nil {
+		if api.grpc.clientConnection != nil {
+			api.grpc.clientConnection.Close()
+		}
 	}
 	api.grpc = nil
 	return api.http
