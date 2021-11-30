@@ -1,5 +1,5 @@
 --prefer-binary
 flake8
 requests
-openapiart==0.1.30
+openapiart==0.1.31
 jsonschema==3.2.0
