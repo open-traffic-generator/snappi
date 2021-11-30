@@ -15,6 +15,7 @@ type grpcTransport struct {
 	clientConnection *grpc.ClientConn
 	location         string
 	requestTimeout   time.Duration
+	dialTimeout      time.Duration
 }
 
 type GrpcTransport interface {
@@ -22,6 +23,8 @@ type GrpcTransport interface {
 	Location() string
 	SetRequestTimeout(value int) GrpcTransport
 	RequestTimeout() int
+	SetDialTimeout(value int) GrpcTransport
+	DialTimeout() int
 }
 
 // Location
@@ -43,6 +46,14 @@ func (obj *grpcTransport) RequestTimeout() int {
 // SetRequestTimeout contains the timeout value in seconds for a grpc request
 func (obj *grpcTransport) SetRequestTimeout(value int) GrpcTransport {
 	obj.requestTimeout = time.Duration(value) * time.Second
+	return obj
+}
+func (obj *grpcTransport) DialTimeout() int {
+	return int(obj.dialTimeout / time.Second)
+}
+
+func (obj *grpcTransport) SetDialTimeout(value int) GrpcTransport {
+	obj.dialTimeout = time.Duration(value) * time.Second
 	return obj
 }
 
@@ -98,6 +109,7 @@ func (api *api) NewGrpcTransport() GrpcTransport {
 	api.grpc = &grpcTransport{
 		location:       "localhost:5050",
 		requestTimeout: 10 * time.Second,
+		dialTimeout:    10 * time.Second,
 	}
 	api.http = nil
 	return api.grpc
