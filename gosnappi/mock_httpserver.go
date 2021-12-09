@@ -29,14 +29,17 @@ func StartMockHttpServer(location string) {
 			response := httpServer.Api.NewSetConfigResponse()
 			w.Header().Set("Content-Type", "application/json")
 			w.WriteHeader(http.StatusOK)
-			w.Write([]byte(response.StatusCode200().ToJson()))
+			resp, _ := response.StatusCode200().ToJson()
+			w.Write([]byte(resp))
 		case http.MethodGet:
 			// config := httpServer.Config
 			response := httpServer.Api.NewGetConfigResponse()
-			response.StatusCode200().FromJson(httpServer.Config.ToJson())
+			httpServerConfig, _ := httpServer.Config.ToJson()
+			response.StatusCode200().FromJson(httpServerConfig)
 			w.Header().Set("Content-Type", "application/json")
 			w.WriteHeader(http.StatusOK)
-			w.Write([]byte(response.StatusCode200().ToJson()))
+			resp, _ := response.StatusCode200().ToJson()
+			w.Write([]byte(resp))
 		}
 	})
 
@@ -56,9 +59,10 @@ func StartMockHttpServer(location string) {
 					flow_rsp.SetBytesRx(1000)
 				}
 				response := httpServer.Api.NewGetMetricsResponse().StatusCode200()
-				response.FromJson(flow_responses.ToJson())
+				flow_resp, _ := flow_responses.ToJson()
+				response.FromJson(flow_resp)
 				w.WriteHeader(http.StatusOK)
-				w.Write([]byte(flow_responses.ToJson()))
+				w.Write([]byte(flow_resp))
 			} else if metricsReq.Choice() == MetricsRequestChoice.PORT {
 				port_response := httpServer.Api.NewGetMetricsResponse().StatusCode200()
 				for _, port_name := range metricsReq.Port().PortNames() {
@@ -68,9 +72,10 @@ func StartMockHttpServer(location string) {
 					port_rsp.SetBytesRx(2000)
 				}
 				response := httpServer.Api.NewGetMetricsResponse().StatusCode200()
-				response.FromJson(port_response.ToJson())
+				port_resp, _ := port_response.ToJson()
+				response.FromJson(port_resp)
 				w.WriteHeader(http.StatusOK)
-				w.Write([]byte(port_response.ToJson()))
+				w.Write([]byte(port_resp))
 			} else if metricsReq.Choice() == MetricsRequestChoice.BGPV4 {
 				bgpv4_response := httpServer.Api.NewGetMetricsResponse().StatusCode200()
 				for _, bgpv4_name := range metricsReq.Bgpv4().PeerNames() {
@@ -79,9 +84,10 @@ func StartMockHttpServer(location string) {
 					bgpv4_rsp.SetRoutesAdvertised(80)
 				}
 				response := httpServer.Api.NewGetMetricsResponse().StatusCode200()
-				response.FromJson(bgpv4_response.ToJson())
+				bgpv4_resp, _ := bgpv4_response.ToJson()
+				response.FromJson(bgpv4_resp)
 				w.WriteHeader(http.StatusOK)
-				w.Write([]byte(bgpv4_response.ToJson()))
+				w.Write([]byte(bgpv4_resp))
 			}
 		}
 	})
