@@ -3,8 +3,9 @@ package interfaces
 
 import (
 	"net/http"
-	"github.com/open-traffic-generator/snappi/gosnappi/httpapi"
+
 	gosnappi "github.com/open-traffic-generator/snappi/gosnappi"
+	"github.com/open-traffic-generator/snappi/gosnappi/httpapi"
 )
 
 type MetricsController interface {
@@ -15,9 +16,8 @@ type MetricsController interface {
 type MetricsHandler interface {
 	GetController() MetricsController
 	/*
-	GetMetrics: POST /results/metrics
-	Description: 
+		GetMetrics: POST /results/metrics
+		Description:
 	*/
 	GetMetrics(rbody gosnappi.MetricsRequest, r *http.Request) gosnappi.GetMetricsResponse
 }
-

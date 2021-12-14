@@ -3,8 +3,9 @@ package interfaces
 
 import (
 	"net/http"
-	"github.com/open-traffic-generator/snappi/gosnappi/httpapi"
+
 	gosnappi "github.com/open-traffic-generator/snappi/gosnappi"
+	"github.com/open-traffic-generator/snappi/gosnappi/httpapi"
 )
 
 type ConfigurationController interface {
@@ -16,14 +17,13 @@ type ConfigurationController interface {
 type ConfigurationHandler interface {
 	GetController() ConfigurationController
 	/*
-	SetConfig: POST /config
-	Description: Sets configuration resources on the traffic generator.
+		SetConfig: POST /config
+		Description: Sets configuration resources on the traffic generator.
 	*/
 	SetConfig(rbody gosnappi.Config, r *http.Request) gosnappi.SetConfigResponse
 	/*
-	GetConfig: GET /config
-	Description: 
+		GetConfig: GET /config
+		Description:
 	*/
 	GetConfig(r *http.Request) gosnappi.GetConfigResponse
 }
-

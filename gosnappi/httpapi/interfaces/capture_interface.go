@@ -3,8 +3,9 @@ package interfaces
 
 import (
 	"net/http"
-	"github.com/open-traffic-generator/snappi/gosnappi/httpapi"
+
 	gosnappi "github.com/open-traffic-generator/snappi/gosnappi"
+	"github.com/open-traffic-generator/snappi/gosnappi/httpapi"
 )
 
 type CaptureController interface {
@@ -15,9 +16,8 @@ type CaptureController interface {
 type CaptureHandler interface {
 	GetController() CaptureController
 	/*
-	GetCapture: POST /results/capture
-	Description: 
+		GetCapture: POST /results/capture
+		Description:
 	*/
 	GetCapture(rbody gosnappi.CaptureRequest, r *http.Request) gosnappi.GetCaptureResponse
 }
-

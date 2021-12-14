@@ -4,10 +4,11 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"regexp"
 	"strconv"
 	"strings"
 	"time"
-	"regexp"
+
 	"google.golang.org/grpc"
 )
 
@@ -285,4 +286,3 @@ func validateIpv6Slice(ip []string) error {
 func validateHexSlice(hex []string) error {
 	return validateSlice(hex, "hex")
 }
-

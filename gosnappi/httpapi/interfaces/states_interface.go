@@ -3,8 +3,9 @@ package interfaces
 
 import (
 	"net/http"
-	"github.com/open-traffic-generator/snappi/gosnappi/httpapi"
+
 	gosnappi "github.com/open-traffic-generator/snappi/gosnappi"
+	"github.com/open-traffic-generator/snappi/gosnappi/httpapi"
 )
 
 type StatesController interface {
@@ -15,9 +16,8 @@ type StatesController interface {
 type StatesHandler interface {
 	GetController() StatesController
 	/*
-	GetStates: POST /results/states
-	Description: 
+		GetStates: POST /results/states
+		Description:
 	*/
 	GetStates(rbody gosnappi.StatesRequest, r *http.Request) gosnappi.GetStatesResponse
 }
-

@@ -3,8 +3,9 @@ package interfaces
 
 import (
 	"net/http"
-	"github.com/open-traffic-generator/snappi/gosnappi/httpapi"
+
 	gosnappi "github.com/open-traffic-generator/snappi/gosnappi"
+	"github.com/open-traffic-generator/snappi/gosnappi/httpapi"
 )
 
 type ControlController interface {
@@ -21,39 +22,38 @@ type ControlController interface {
 type ControlHandler interface {
 	GetController() ControlController
 	/*
-	SetTransmitState: POST /control/transmit
-	Description: Updates the state of configuration resources on the traffic generator.
+		SetTransmitState: POST /control/transmit
+		Description: Updates the state of configuration resources on the traffic generator.
 	*/
 	SetTransmitState(rbody gosnappi.TransmitState, r *http.Request) gosnappi.SetTransmitStateResponse
 	/*
-	SetLinkState: POST /control/link
-	Description: Updates the state of configuration resources on the traffic generator.
+		SetLinkState: POST /control/link
+		Description: Updates the state of configuration resources on the traffic generator.
 	*/
 	SetLinkState(rbody gosnappi.LinkState, r *http.Request) gosnappi.SetLinkStateResponse
 	/*
-	SetCaptureState: POST /control/capture
-	Description: Updates the state of configuration resources on the traffic generator.
+		SetCaptureState: POST /control/capture
+		Description: Updates the state of configuration resources on the traffic generator.
 	*/
 	SetCaptureState(rbody gosnappi.CaptureState, r *http.Request) gosnappi.SetCaptureStateResponse
 	/*
-	UpdateFlows: POST /control/flows
-	Description: Updates flow properties without disruption of transmit state.
+		UpdateFlows: POST /control/flows
+		Description: Updates flow properties without disruption of transmit state.
 	*/
 	UpdateFlows(rbody gosnappi.FlowsUpdate, r *http.Request) gosnappi.UpdateFlowsResponse
 	/*
-	SetRouteState: POST /control/routes
-	Description: Updates the state of configuration resources on the traffic generator.
+		SetRouteState: POST /control/routes
+		Description: Updates the state of configuration resources on the traffic generator.
 	*/
 	SetRouteState(rbody gosnappi.RouteState, r *http.Request) gosnappi.SetRouteStateResponse
 	/*
-	SendPing: POST /control/ping
-	Description: API to send an IPv4 and/or IPv6 ICMP Echo Request(s) between endpoints. For each endpoint 1 ping packet will be sent and API shall wait for ping response to either be successful or timeout. The API wait timeout for each request is 300ms.
+		SendPing: POST /control/ping
+		Description: API to send an IPv4 and/or IPv6 ICMP Echo Request(s) between endpoints. For each endpoint 1 ping packet will be sent and API shall wait for ping response to either be successful or timeout. The API wait timeout for each request is 300ms.
 	*/
 	SendPing(rbody gosnappi.PingRequest, r *http.Request) gosnappi.SendPingResponse
 	/*
-	SetProtocolState: POST /control/protocols
-	Description: Sets all configured protocols to `start` or `stop` state.
+		SetProtocolState: POST /control/protocols
+		Description: Sets all configured protocols to `start` or `stop` state.
 	*/
 	SetProtocolState(rbody gosnappi.ProtocolState, r *http.Request) gosnappi.SetProtocolStateResponse
 }
-
