@@ -4,10 +4,11 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"regexp"
 	"strconv"
 	"strings"
 	"time"
-	"regexp"
+
 	"google.golang.org/grpc"
 )
 
@@ -21,10 +22,10 @@ type grpcTransport struct {
 type GrpcTransport interface {
 	SetLocation(value string) GrpcTransport
 	Location() string
-	SetRequestTimeout(value int) GrpcTransport
-	RequestTimeout() int
-	SetDialTimeout(value int) GrpcTransport
-	DialTimeout() int
+	SetRequestTimeout(value time.Duration) GrpcTransport
+	RequestTimeout() time.Duration
+	SetDialTimeout(value time.Duration) GrpcTransport
+	DialTimeout() time.Duration
 }
 
 // Location
@@ -39,21 +40,21 @@ func (obj *grpcTransport) SetLocation(value string) GrpcTransport {
 }
 
 // RequestTimeout returns the grpc request timeout in seconds
-func (obj *grpcTransport) RequestTimeout() int {
-	return int(obj.requestTimeout / time.Second)
+func (obj *grpcTransport) RequestTimeout() time.Duration {
+	return obj.requestTimeout
 }
 
 // SetRequestTimeout contains the timeout value in seconds for a grpc request
-func (obj *grpcTransport) SetRequestTimeout(value int) GrpcTransport {
-	obj.requestTimeout = time.Duration(value) * time.Second
+func (obj *grpcTransport) SetRequestTimeout(value time.Duration) GrpcTransport {
+	obj.requestTimeout = value
 	return obj
 }
-func (obj *grpcTransport) DialTimeout() int {
-	return int(obj.dialTimeout / time.Second)
+func (obj *grpcTransport) DialTimeout() time.Duration {
+	return obj.dialTimeout
 }
 
-func (obj *grpcTransport) SetDialTimeout(value int) GrpcTransport {
-	obj.dialTimeout = time.Duration(value) * time.Second
+func (obj *grpcTransport) SetDialTimeout(value time.Duration) GrpcTransport {
+	obj.dialTimeout = value
 	return obj
 }
 
@@ -285,4 +286,3 @@ func validateIpv6Slice(ip []string) error {
 func validateHexSlice(hex []string) error {
 	return validateSlice(hex, "hex")
 }
-

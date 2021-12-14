@@ -11,7 +11,7 @@ pkg_name = "snappi"
 go_pkg_name = "gosnappi"
 model_protobuf_name = "otg"
 version = "0.6.21"
-models_version = "0.6.13"
+models_version = "0.7.2"
 
 # read long description from readme.md
 base_dir = os.path.abspath(os.path.dirname(__file__))
@@ -34,7 +34,11 @@ openapiart.OpenApiArt(
     extension_prefix=pkg_name,
 ).GeneratePythonSdk(package_name=pkg_name).GenerateGoSdk(
     package_dir="github.com/open-traffic-generator/snappi/%s" % go_pkg_name, package_name=go_pkg_name
-)
+).GenerateGoServer(
+    module_path="github.com/open-traffic-generator/snappi/%s" % go_pkg_name,
+    models_prefix=go_pkg_name,
+    models_path="github.com/open-traffic-generator/snappi/%s" % go_pkg_name
+).GoTidy(relative_package_dir=go_pkg_name)
 
 if os.path.exists(pkg_name):
     shutil.rmtree(pkg_name, ignore_errors=True)
