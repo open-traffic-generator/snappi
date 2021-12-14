@@ -38,7 +38,7 @@ openapiart.OpenApiArt(
     module_path="github.com/open-traffic-generator/snappi/%s" % go_pkg_name,
     models_prefix=go_pkg_name,
     models_path="github.com/open-traffic-generator/snappi/%s" % go_pkg_name
-)
+).GoTidy(relative_package_dir=go_pkg_name)
 
 if os.path.exists(pkg_name):
     shutil.rmtree(pkg_name, ignore_errors=True)
