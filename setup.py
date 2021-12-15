@@ -10,7 +10,7 @@ import shutil
 pkg_name = "snappi"
 go_pkg_name = "gosnappi"
 model_protobuf_name = "otg"
-version = "0.7.2"
+version = "0.7.3"
 models_version = "0.7.2"
 
 # read long description from readme.md
@@ -94,7 +94,7 @@ setuptools.setup(
         "typing-extensions",
     ],
     extras_require={
-        "ixnetwork": ["snappi_ixnetwork==0.7.1"],
+        "ixnetwork": ["snappi_ixnetwork==0.7.2"],
         "trex": ["snappi_trex"],
         "convergence": ["snappi_convergence==0.2.2"],
         "testing": ["pytest", "flask"],
