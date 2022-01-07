@@ -53,7 +53,7 @@ jobs:
           name: generated-artifacts
           path: |
             dist
-            art
+            snappi
             gosnppi
 
   python_tests:
