@@ -72,13 +72,13 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python-version }}
-      - name: Install dependencies
-        run: |
-          python do.py setup
-          python do.py init
       - uses: actions/download-artifact@v2
         with:
           name: generated-artifacts
+      - name: Install dependencies
+        run: |
+          python do.py setup
+          python do.py init          
       - name: Display structure of downloaded files
         run: ls -R
       - name: Run python tests
