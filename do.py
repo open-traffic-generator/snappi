@@ -126,6 +126,7 @@ def lint():
 def test_python():
     run(
         [
+            py() + " -m pip install flask",
             py() + " -m pip install pytest-cov",
             py() + " -m pytest -sv --cov=snappi --cov-report term --cov-report html:cov_report",
         ]
