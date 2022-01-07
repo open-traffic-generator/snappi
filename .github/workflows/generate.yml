@@ -98,9 +98,9 @@ jobs:
           name: generated-artifacts
       - name: Display structure of downloaded files
         run: ls -R
-      - uses: actions/setup-go@v2
-        with:
-          go-version: "^1.17.1"
+      - name: Setup Go and protoc
+        run: |
+          python do.py setup_ext
       - name: Run go tests
         run: |
           python do.py test_go
