@@ -123,7 +123,7 @@ def lint():
     )
 
 
-def test():
+def test_python():
     run(
         [
             py() + " -m pip install pytest-cov",
@@ -141,6 +141,7 @@ def test():
         else:
             print("Coverage thresold[{0}] is achieved[{1}]".format(coverage_threshold, result))
 
+def test_go():
     go_coverage_threshold = 0
     # TODO: not able to run the test from main directory
     os.chdir("gosnappi")
