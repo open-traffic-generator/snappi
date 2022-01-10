@@ -83,7 +83,7 @@ jobs:
         run: ls -R
       - name: Run python tests
         run: |
-          sudo python do.py test_python
+          sudo python do.py testpy
 
   go_tests:
     needs: python_tests
@@ -103,7 +103,7 @@ jobs:
           python do.py setup_ext
       - name: Run go tests
         run: |
-          python do.py test_go
+          python do.py testgo
 
   publish_python_package:
     needs: go_tests
@@ -117,10 +117,11 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: 3.6
-      - name: Generate only for 3.6
-        run: |
-          python do.py setup
-          python do.py init
+      - uses: actions/download-artifact@v2
+        with:
+          name: generated-artifacts
+      - name: Display structure of downloaded files
+        run: ls -R
       - name: Get package version
         id: get_version
         run: |
