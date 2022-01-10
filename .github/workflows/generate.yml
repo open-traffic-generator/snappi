@@ -38,6 +38,8 @@ jobs:
             dist
             snappi
             gosnppi
+            models-release
+            *.proto
 
   python_tests:
     needs: build
