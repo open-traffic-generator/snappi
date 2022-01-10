@@ -30,9 +30,6 @@ jobs:
       - name: Build distribution
         run: |
           python do.py dist
-      - name: Install package
-        run: |      
-          python do.py install          
       - name: Commit go pkg
         id: get_sha
         run: |
@@ -60,9 +57,9 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     strategy:
-      max-parallel: 1
+      max-parallel: 6
       matrix:
-        python-version: [2.7, 3.6]
+        python-version: [2.7, 3.6, 3.7, 3.8, 3.9, "3.10"]
     steps:
       - name: Checkout source
         uses: actions/checkout@v2
@@ -98,9 +95,6 @@ jobs:
           name: generated-artifacts
       - name: Display structure of downloaded files
         run: ls -R
-      - name: Setup Go and protoc
-        run: |
-          python do.py setup_ext
       - name: Run go tests
         run: |
           python do.py testgo
