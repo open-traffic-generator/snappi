@@ -123,9 +123,10 @@ def lint():
     )
 
 
-def test():
+def testpy():
     run(
         [
+            py() + " -m pip install flask",
             py() + " -m pip install pytest-cov",
             py() + " -m pytest -sv --cov=snappi --cov-report term --cov-report html:cov_report",
         ]
@@ -141,6 +142,7 @@ def test():
         else:
             print("Coverage thresold[{0}] is achieved[{1}]".format(coverage_threshold, result))
 
+def testgo():
     go_coverage_threshold = 0
     # TODO: not able to run the test from main directory
     os.chdir("gosnappi")

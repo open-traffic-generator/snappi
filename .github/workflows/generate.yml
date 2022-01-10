@@ -3,12 +3,12 @@ name: cicd
 on: [push]
 
 jobs:
-  cicd:
+  build:
     runs-on: ubuntu-latest
     strategy:
       max-parallel: 1
       matrix:
-        python-version: [2.7, 3.6]
+        python-version: [3.9]
 
     steps:
       - name: Checkout source
@@ -30,14 +30,8 @@ jobs:
       - name: Build distribution
         run: |
           python do.py dist
-      - name: Install package on clean env
-        run: |
-          rm -rf .env
-          python do.py setup
-          python do.py install
       - name: Commit go pkg
         id: get_sha
-        if: ${{ matrix.python-version == 3.6 }}
         run: |
           git config user.name "Github Actions Bot"
           git config user.email "actions@github.com"
@@ -49,10 +43,79 @@ jobs:
             else
               echo "No change in auto generated go snappi"
           fi
-          echo "::set-output name=sha::$(git rev-parse HEAD)"
-      - name: Run tests
+          echo "::set-output name=sha::$(git rev-parse HEAD)"      
+      - name: Archive generated artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: generated-artifacts
+          path: |
+            dist
+            snappi
+            gosnppi
+
+  python_tests:
+    needs: build
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 6
+      matrix:
+        python-version: [2.7, 3.6, 3.7, 3.8, 3.9, "3.10"]
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.head_ref }}
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - uses: actions/download-artifact@v2
+        with:
+          name: generated-artifacts
+      - name: Install dependencies
         run: |
-          sudo python do.py test
+          python do.py setup
+          python do.py init          
+      - name: Display structure of downloaded files
+        run: ls -R
+      - name: Run python tests
+        run: |
+          sudo python do.py testpy
+
+  go_tests:
+    needs: python_tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.head_ref }}
+      - uses: actions/download-artifact@v2
+        with:
+          name: generated-artifacts
+      - name: Display structure of downloaded files
+        run: ls -R
+      - name: Run go tests
+        run: |
+          python do.py testgo
+
+  publish_python_package:
+    needs: go_tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.head_ref }}
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.6
+      - uses: actions/download-artifact@v2
+        with:
+          name: generated-artifacts
+      - name: Display structure of downloaded files
+        run: ls -R
       - name: Get package version
         id: get_version
         run: |
@@ -65,18 +128,18 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Publish package
-        if: steps.check_tag.outputs.exists == 'false' && matrix.python-version == '3.6'
+        if: steps.check_tag.outputs.exists == 'false'
         run: |
           PYPI_USERNAME=${{ secrets.PYPI_USERNAME }} PYPI_PASSWORD=${{ secrets.PYPI_PASSWORD }} python do.py release
       - name: Create release and publish artifacts
-        if: steps.check_tag.outputs.exists == 'false' && matrix.python-version == '3.6'
+        if: steps.check_tag.outputs.exists == 'false'
         uses: ncipollo/release-action@v1
         with:
           artifacts: "dist/*,models-release,*.proto"
           tag: ${{ steps.get_version.outputs.version }}
           token: ${{ secrets.GITHUB_TOKEN }}
       - name: Create tag for gosnappi
-        if: steps.check_tag.outputs.exists == 'false' && matrix.python-version == '3.6'
+        if: steps.check_tag.outputs.exists == 'false'
         uses: actions/github-script@v3
         with:
           github-token: ${{ github.token }}
