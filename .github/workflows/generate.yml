@@ -30,6 +30,23 @@ jobs:
       - name: Build distribution
         run: |
           python do.py dist
+      - name: Commit go pkg
+        id: get_sha
+        run: |
+          git config user.name "Github Actions Bot"
+          git config user.email "actions@github.com"
+          git add --force gosnappi/\*
+          if git status --porcelain | grep .
+            then
+              git commit -m "Update auto generated go snappi"
+              git push
+            else
+              echo "No change in auto generated go snappi"
+          fi
+          echo "::set-output name=sha::$(git rev-parse HEAD)"
+      - name: storing get_sha in file
+        run: |
+          echo "${{ steps.get_sha.outputs.sha }}" > store_sha_file
       - name: Archive generated artifacts
         uses: actions/upload-artifact@v2
         with:
@@ -40,6 +57,7 @@ jobs:
             gosnppi
             models-release
             *.proto
+            store_sha_file
 
   python_tests:
     needs: build
@@ -63,7 +81,7 @@ jobs:
       - name: Install dependencies
         run: |
           python do.py setup
-          python do.py init          
+          python do.py init
       - name: Display structure of downloaded files
         run: ls -R
       - name: Run python tests
@@ -104,20 +122,6 @@ jobs:
           name: generated-artifacts
       - name: Display structure of downloaded files
         run: ls -R
-      - name: Commit go pkg
-        id: get_sha
-        run: |
-          git config user.name "Github Actions Bot"
-          git config user.email "actions@github.com"
-          git add --force gosnappi/\*
-          if git status --porcelain | grep .
-            then
-              git commit -m "Update auto generated go snappi"
-              git push
-            else
-              echo "No change in auto generated go snappi"
-          fi
-          echo "::set-output name=sha::$(git rev-parse HEAD)"
       - name: Get package version
         id: get_version
         run: |
@@ -140,6 +144,10 @@ jobs:
           artifacts: "dist/*,models-release,*.proto"
           tag: ${{ steps.get_version.outputs.version }}
           token: ${{ secrets.GITHUB_TOKEN }}
+      - name: get_sha value from file
+        id: get_sha
+        run: |
+          echo "::set-output name=value::v$(cat store_sha_file)"
       - name: Create tag for gosnappi
         if: steps.check_tag.outputs.exists == 'false'
         uses: actions/github-script@v3
@@ -150,5 +158,5 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               ref: "refs/tags/gosnappi/${{ steps.get_version.outputs.version }}",
-              sha: "${{ steps.get_sha.outputs.sha }}"
+              sha: "${{ steps.get_sha.outputs.value }}"
             })
