@@ -1,8 +1,7 @@
 import pytest
-import snappi
 
 
-def test_device_stack(grpc_api):
+def test_grpc_client(grpc_api):
     """Test device dual stack functionality
     """
     config = grpc_api.config()
