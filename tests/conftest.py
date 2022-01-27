@@ -1,6 +1,5 @@
 import pytest
 
-
 @pytest.fixture(scope='session')
 def api():
     """Demonstrates creating a top level Api instance.
@@ -9,6 +8,16 @@ def api():
     pytest.snappiserver = SnappiServer().start()
     import snappi
     yield snappi.api(location='http://127.0.0.1:80')
+
+
+@pytest.fixture(scope='session')
+def grpc_api():
+    from .snappigrpcserver import grpc_server, GRPC_PORT
+    grpc_server()
+    import snappi
+    yield snappi.api(
+        location="127.0.0.1:%s" % GRPC_PORT, transport=snappi.Transport.GRPC
+    )
 
 
 @pytest.fixture(scope='function')
