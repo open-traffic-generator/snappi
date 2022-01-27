@@ -1,9 +1,11 @@
 import pytest
+import time
 
 
 def test_grpc_client(grpc_api):
     """Test device dual stack functionality
     """
+    time.sleep(6)
     config = grpc_api.config()
     p1, p2 = config.ports.port(name='p1').port(name='p2')
 
