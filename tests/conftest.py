@@ -1,4 +1,5 @@
 import pytest
+import time
 
 @pytest.fixture(scope='session')
 def api():
@@ -15,9 +16,23 @@ def grpc_api():
     from .snappigrpcserver import grpc_server, GRPC_PORT
     grpc_server()
     import snappi
-    yield snappi.api(
+    grpc_api = snappi.api(
         location="127.0.0.1:%s" % GRPC_PORT, transport=snappi.Transport.GRPC
     )
+
+    # verify gRpc server is up
+    attempts = 1
+    while True:
+        try:
+            grpc_api.get_config()
+            break
+        except Exception as e:
+            print(e)
+            if attempts > 5:
+                raise (e)
+        time.sleep(0.5)
+        attempts += 1
+    return grpc_api
 
 
 @pytest.fixture(scope='function')

@@ -35,7 +35,7 @@ class OpenapiServicer(pb2_grpc.OpenapiServicer):
         response_200 = """
             {
                 "status_code_200" : {
-                    "warnings" : ["Just to check"]
+                    "warnings" : ["no"]
                 }
             }
             """
@@ -48,6 +48,8 @@ class OpenapiServicer(pb2_grpc.OpenapiServicer):
 
     def GetConfig(self, request, context):
         self._log("Executing GetConfig")
+        if self._config is None:
+            self._config = {}
         response_200 = {
             "status_code_200": self._config
         }

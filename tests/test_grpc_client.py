@@ -1,11 +1,7 @@
 import pytest
-import time
 
 
-def test_grpc_client(grpc_api):
-    """Test device dual stack functionality
-    """
-    time.sleep(6)
+def get_mock_config(grpc_api):
     config = grpc_api.config()
     p1, p2 = config.ports.port(name='p1').port(name='p2')
 
@@ -32,14 +28,20 @@ def test_grpc_client(grpc_api):
 
     ip.priority.dscp.phb.value = 16
     ip.priority.dscp.ecn.value = 1
+    return config
 
-    # tcp.src_port.increment.start = 10
-    # tcp.dst_port.increment.start = 1
 
-    result = grpc_api.set_config(config)
-    print("Result : %s" %result)
-    result1 = grpc_api.get_config()
-    print(result1)
+def test_grpc_set_config(grpc_api):
+    config = get_mock_config(grpc_api)
+    response = grpc_api.set_config(config)
+    assert len(response.warnings) == 1
+    assert response.warnings[0] == "no"
+
+
+def test_grpc_get_config(grpc_api):
+    config = get_mock_config(grpc_api)
+    response = grpc_api.get_config()
+    assert config.serialize() == response.serialize()
 
 
 if __name__ == '__main__':
