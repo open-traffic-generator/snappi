@@ -20,17 +20,31 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type OpenapiClient interface {
+	// Sets configuration resources on the traffic generator.
 	SetConfig(ctx context.Context, in *SetConfigRequest, opts ...grpc.CallOption) (*SetConfigResponse, error)
+	// Description missing in models
 	GetConfig(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*GetConfigResponse, error)
+	// Updates the state of configuration resources on the traffic generator.
 	SetTransmitState(ctx context.Context, in *SetTransmitStateRequest, opts ...grpc.CallOption) (*SetTransmitStateResponse, error)
+	// Updates the state of configuration resources on the traffic generator.
 	SetLinkState(ctx context.Context, in *SetLinkStateRequest, opts ...grpc.CallOption) (*SetLinkStateResponse, error)
+	// Updates the state of configuration resources on the traffic generator.
 	SetCaptureState(ctx context.Context, in *SetCaptureStateRequest, opts ...grpc.CallOption) (*SetCaptureStateResponse, error)
+	// Updates flow properties without disruption of transmit state.
 	UpdateFlows(ctx context.Context, in *UpdateFlowsRequest, opts ...grpc.CallOption) (*UpdateFlowsResponse, error)
+	// Updates the state of configuration resources on the traffic generator.
 	SetRouteState(ctx context.Context, in *SetRouteStateRequest, opts ...grpc.CallOption) (*SetRouteStateResponse, error)
+	// API to send an IPv4 and/or IPv6 ICMP Echo Request(s) between endpoints. For each
+	// endpoint 1 ping packet will be sent and API shall wait for ping response to either
+	// be successful or timeout. The API wait timeout for each request is 300ms.
 	SendPing(ctx context.Context, in *SendPingRequest, opts ...grpc.CallOption) (*SendPingResponse, error)
+	// Sets all configured protocols to `start` or `stop` state.
 	SetProtocolState(ctx context.Context, in *SetProtocolStateRequest, opts ...grpc.CallOption) (*SetProtocolStateResponse, error)
+	// Description missing in models
 	GetMetrics(ctx context.Context, in *GetMetricsRequest, opts ...grpc.CallOption) (*GetMetricsResponse, error)
+	// Description missing in models
 	GetStates(ctx context.Context, in *GetStatesRequest, opts ...grpc.CallOption) (*GetStatesResponse, error)
+	// Description missing in models
 	GetCapture(ctx context.Context, in *GetCaptureRequest, opts ...grpc.CallOption) (*GetCaptureResponse, error)
 }
 
@@ -154,17 +168,31 @@ func (c *openapiClient) GetCapture(ctx context.Context, in *GetCaptureRequest, o
 // All implementations must embed UnimplementedOpenapiServer
 // for forward compatibility
 type OpenapiServer interface {
+	// Sets configuration resources on the traffic generator.
 	SetConfig(context.Context, *SetConfigRequest) (*SetConfigResponse, error)
+	// Description missing in models
 	GetConfig(context.Context, *emptypb.Empty) (*GetConfigResponse, error)
+	// Updates the state of configuration resources on the traffic generator.
 	SetTransmitState(context.Context, *SetTransmitStateRequest) (*SetTransmitStateResponse, error)
+	// Updates the state of configuration resources on the traffic generator.
 	SetLinkState(context.Context, *SetLinkStateRequest) (*SetLinkStateResponse, error)
+	// Updates the state of configuration resources on the traffic generator.
 	SetCaptureState(context.Context, *SetCaptureStateRequest) (*SetCaptureStateResponse, error)
+	// Updates flow properties without disruption of transmit state.
 	UpdateFlows(context.Context, *UpdateFlowsRequest) (*UpdateFlowsResponse, error)
+	// Updates the state of configuration resources on the traffic generator.
 	SetRouteState(context.Context, *SetRouteStateRequest) (*SetRouteStateResponse, error)
+	// API to send an IPv4 and/or IPv6 ICMP Echo Request(s) between endpoints. For each
+	// endpoint 1 ping packet will be sent and API shall wait for ping response to either
+	// be successful or timeout. The API wait timeout for each request is 300ms.
 	SendPing(context.Context, *SendPingRequest) (*SendPingResponse, error)
+	// Sets all configured protocols to `start` or `stop` state.
 	SetProtocolState(context.Context, *SetProtocolStateRequest) (*SetProtocolStateResponse, error)
+	// Description missing in models
 	GetMetrics(context.Context, *GetMetricsRequest) (*GetMetricsResponse, error)
+	// Description missing in models
 	GetStates(context.Context, *GetStatesRequest) (*GetStatesResponse, error)
+	// Description missing in models
 	GetCapture(context.Context, *GetCaptureRequest) (*GetCaptureResponse, error)
 	mustEmbedUnimplementedOpenapiServer()
 }
