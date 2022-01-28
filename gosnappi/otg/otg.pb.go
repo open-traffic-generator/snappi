@@ -1,5 +1,6 @@
-// Open Traffic Generator API 0.7.2
-// The Open Traffic Generator API is the set of core models and APIs.
+// Open Traffic Generator API 0.7.3
+// Open Traffic Generator API defines a model-driven, vendor-neutral and standard
+// interface for emulating layer 2-7 network devices and generating test traffic.
 //
 // Contributions can be made in the following ways:
 // - [open an issue](https://github.com/open-traffic-generator/models/issues) in the
