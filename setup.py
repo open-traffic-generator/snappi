@@ -52,10 +52,7 @@ shutil.copyfile(
 shutil.rmtree("artifacts", ignore_errors=True)
 for name in os.listdir(pkg_name):
     path = os.path.join(pkg_name, name)
-    if "pb2" in path:
-        os.remove(path)
-    else:
-        print(path + " will be published")
+    print(path + " will be published")
 
 doc_dir = os.path.join(pkg_name, "docs")
 os.mkdir(doc_dir)
