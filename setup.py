@@ -89,6 +89,9 @@ setuptools.setup(
         "jsonpath-ng",
         "typing",
         "typing-extensions",
+        "grpcio",
+        "grpcio-tools",
+        "protobuf"
     ],
     extras_require={
         "ixnetwork": ["snappi_ixnetwork==0.7.2"],
