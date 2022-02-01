@@ -147,7 +147,7 @@ jobs:
       - name: get_sha value from file
         id: get_sha
         run: |
-          echo "::set-output name=value::v$(cat store_sha_file)"
+          echo "::set-output name=value::$(cat store_sha_file)"
       - name: Create tag for gosnappi
         if: steps.check_tag.outputs.exists == 'false'
         uses: actions/github-script@v3
