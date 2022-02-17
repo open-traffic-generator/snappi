@@ -30,7 +30,7 @@ def test_defaults(api):
                                 'values': ['00:00:00:00:00:00'],
                             },
                             'ether_type': {
-                                'auto': 'auto',
+                                'auto': 65535,
                                 'choice': 'auto',
                             }
                         },
