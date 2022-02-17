@@ -980,7 +980,7 @@ var expected_flow_json = `{
 				},
 				"ether_type":  {
 				"choice":  "auto",
-				"auto":  "auto"
+				"auto":  65535
 				}
 			}
 			},
