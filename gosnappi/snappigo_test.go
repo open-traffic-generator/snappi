@@ -971,8 +971,8 @@ var expected_flow_json = `{
 			"choice":  "ethernet",
 			"ethernet":  {
 				"dst":  {
-				"choice":  "value",
-				"value":  "00:00:00:00:00:00"
+				"choice":  "auto",
+				"auto":  "00:00:00:00:00:00"
 				},
 				"src":  {
 				"choice":  "value",
