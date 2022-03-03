@@ -10,7 +10,7 @@ import shutil
 pkg_name = "snappi"
 go_pkg_name = "gosnappi"
 model_protobuf_name = "otg"
-version = "0.7.15"
+version = "0.7.16"
 models_version = "0.7.8"
 
 # read long description from readme.md
@@ -89,9 +89,6 @@ setuptools.setup(
         "jsonpath-ng",
         "typing",
         "typing-extensions",
-        "grpcio==1.35.0",
-        "grpcio-tools==1.35.0",
-        "protobuf==3.15.0"
     ],
     extras_require={
         "ixnetwork": ["snappi_ixnetwork==0.7.4"],
