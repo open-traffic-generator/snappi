@@ -11,7 +11,7 @@ pkg_name = "snappi"
 go_pkg_name = "gosnappi"
 model_protobuf_name = "otg"
 version = "0.7.14"
-models_version = "0.7.7"
+models_version = "0.7.8"
 
 # read long description from readme.md
 base_dir = os.path.abspath(os.path.dirname(__file__))

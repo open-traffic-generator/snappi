@@ -22,8 +22,8 @@ def test_defaults(api):
                         'choice': 'ethernet',
                         'ethernet': {
                             'dst': {
-                                'choice': 'value',
-                                'value': '00:00:00:00:00:00',
+                                'choice': 'auto',
+                                'auto': '00:00:00:00:00:00',
                             },
                             'src': {
                                 'choice': 'values',
