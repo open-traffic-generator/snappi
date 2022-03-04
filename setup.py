@@ -89,8 +89,10 @@ setuptools.setup(
         "jsonpath-ng",
         "typing",
         "typing-extensions",
-        "grpcio",
-        "grpcio-tools",
+        "grpcio ; python_version > '2.7'",
+        "grpcio-tools ; python_version > '2.7'",
+        "grpcio==1.35.0 ; python_version == '2.7'",
+        "grpcio-tools==1.35.0 ; python_version == '2.7'",
         "protobuf"
     ],
     extras_require={
