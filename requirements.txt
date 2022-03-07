@@ -1,4 +1,4 @@
---prefer-binary
+# --prefer-binary
 flake8
 requests
 grpcio ; python_version > '2.7'
