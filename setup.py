@@ -89,11 +89,11 @@ setuptools.setup(
         "jsonpath-ng",
         "typing",
         "typing-extensions",
-        "grpcio==1.38.0 ; python_version > '2.7'",
-        "grpcio-tools==1.38.0 ; python_version > '2.7'",
-        "grpcio==1.35.0 ; python_version == '2.7'",
-        "grpcio-tools==1.35.0 ; python_version == '2.7'",
-        "protobuf"
+        "grpcio==1.38.0 ; python_version > '2.7'", # Warning - changing versions need thorough investigation
+        "grpcio-tools==1.38.0 ; python_version > '2.7'", # Warning - changing versions need thorough investigation
+        "grpcio==1.35.0 ; python_version == '2.7'", # Warning - changing versions need thorough investigation
+        "grpcio-tools==1.35.0 ; python_version == '2.7'", # Warning - changing versions need thorough investigation
+        "protobuf==3.15.0" # Warning - changing versions need thorough investigation
     ],
     extras_require={
         "ixnetwork": ["snappi_ixnetwork==0.7.5"],
