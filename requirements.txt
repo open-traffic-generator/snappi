@@ -8,4 +8,4 @@ grpcio-tools==1.35.0 ; python_version == '2.7' # Warning - changing versions nee
 jsonschema==3.2.0
 protobuf==3.15.0 # Warning - changing versions need thorough investigation
 click==8.0.4; python_version > '2.7'
-openapiart==0.1.43
+openapiart==0.1.44
