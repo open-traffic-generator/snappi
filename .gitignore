@@ -22,3 +22,4 @@ gosnappi/coverage.txt
 .local
 .vscode
 *.proto
+pkg_requires.txt

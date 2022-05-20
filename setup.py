@@ -46,6 +46,10 @@ if os.path.exists(pkg_name):
 # remove unwanted files
 shutil.copytree(os.path.join("artifacts", pkg_name), pkg_name)
 shutil.copyfile(
+    os.path.join("artifacts", "requirements.txt"),
+    os.path.join(base_dir, "pkg_requires.txt")
+)
+shutil.copyfile(
     os.path.join(base_dir, "artifacts", model_protobuf_name + ".proto"),
     os.path.join(base_dir, model_protobuf_name + ".proto")
 )
@@ -60,6 +64,10 @@ shutil.move("openapi.yaml", doc_dir)
 
 with open("models-release", "w") as out:
     out.write("v" + models_version)
+install_requires = []
+with open(os.path.join(base_dir, "pkg_requires.txt"), "r+") as fd:
+    install_requires = fd.readlines()
+    install_requires = install_requires[1:]
 
 setuptools.setup(
     name=pkg_name,
@@ -83,18 +91,19 @@ setuptools.setup(
     include_package_data=True,
     packages=[pkg_name],
     python_requires=">=2.7, <4",
-    install_requires=[
-        "requests",
-        "pyyaml",
-        "jsonpath-ng",
-        "typing",
-        "typing-extensions",
-        "grpcio==1.38.0 ; python_version > '2.7'", # Warning - changing versions need thorough investigation
-        "grpcio-tools==1.38.0 ; python_version > '2.7'", # Warning - changing versions need thorough investigation
-        "grpcio==1.35.0 ; python_version == '2.7'", # Warning - changing versions need thorough investigation
-        "grpcio-tools==1.35.0 ; python_version == '2.7'", # Warning - changing versions need thorough investigation
-        "protobuf==3.15.0" # Warning - changing versions need thorough investigation
-    ],
+    install_requires=install_requires,
+    # install_requires=[
+    #     "requests",
+    #     "pyyaml",
+    #     "jsonpath-ng",
+    #     "typing",
+    #     "typing-extensions",
+    #     "grpcio==1.38.0 ; python_version > '2.7'", # Warning - changing versions need thorough investigation
+    #     "grpcio-tools==1.38.0 ; python_version > '2.7'", # Warning - changing versions need thorough investigation
+    #     "grpcio==1.35.0 ; python_version == '2.7'", # Warning - changing versions need thorough investigation
+    #     "grpcio-tools==1.35.0 ; python_version == '2.7'", # Warning - changing versions need thorough investigation
+    #     "protobuf==3.15.0" # Warning - changing versions need thorough investigation
+    # ],
     extras_require={
         "ixnetwork": ["snappi_ixnetwork==0.7.8"],
         "trex": ["snappi_trex"],
