@@ -81,7 +81,7 @@ jobs:
       - name: Install dependencies
         run: |
           python do.py setup
-          python do.py init
+          python do.py install
       - name: Display structure of downloaded files
         run: ls -R
       - name: Run python tests
