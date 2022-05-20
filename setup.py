@@ -67,8 +67,7 @@ with open("models-release", "w") as out:
 install_requires = []
 with open(os.path.join(base_dir, "pkg_requires.txt"), "r+") as fd:
     install_requires = fd.readlines()
-    if "--prefer-binary" in install_requires:
-        install_requires.remove("--prefer-binary")
+    install_requires = install_requires[1:]
 
 setuptools.setup(
     name=pkg_name,
