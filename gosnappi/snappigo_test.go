@@ -1,13 +1,17 @@
 package gosnappi_test
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"log"
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/open-traffic-generator/snappi/gosnappi"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -74,6 +78,26 @@ func TestGrpcApi(t *testing.T) {
 	api := gosnappi.NewApi()
 	grpc := api.NewGrpcTransport()
 	grpc.SetLocation(mockGrpcServerLocation)
+	config := config1(api)
+	state, err := api.SetConfig(config)
+	assert.NotNil(t, state)
+	assert.Nil(t, err)
+	status, _error := api.GetConfig()
+	assert.NotNil(t, status)
+	assert.Nil(t, _error)
+}
+
+func TestGrpcClientConnection(t *testing.T) {
+	ctx, cancelFunc := context.WithTimeout(context.Background(), 20*time.Second)
+	defer cancelFunc()
+	conn, err := grpc.DialContext(ctx, mockGrpcServerLocation, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	if err != nil {
+		log.Fatal(fmt.Sprintf("failed grpc dialcontext due to %s", err.Error()))
+	}
+	api := gosnappi.NewApi()
+	grpc := api.NewGrpcTransport()
+	grpc.SetClientConnection(conn)
+	assert.NotNil(t, grpc.ClientConnection())
 	config := config1(api)
 	state, err := api.SetConfig(config)
 	assert.NotNil(t, state)
