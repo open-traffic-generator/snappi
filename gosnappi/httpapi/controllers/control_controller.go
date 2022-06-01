@@ -36,6 +36,7 @@ func (ctrl *controlController) Routes() []httpapi.Route {
 /*
 SetTransmitState: POST /control/transmit
 Description: Updates the state of configuration resources on the traffic generator.
+The Response.Warnings in the Success response is available for implementers to disclose additional information about a state change including any implicit changes that are outside the scope of the state change.
 */
 func (ctrl *controlController) SetTransmitState(w http.ResponseWriter, r *http.Request) {
 	var item gosnappi.TransmitState

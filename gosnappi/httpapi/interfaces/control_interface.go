@@ -22,8 +22,9 @@ type ControlController interface {
 type ControlHandler interface {
 	GetController() ControlController
 	/*
-		SetTransmitState: POST /control/transmit
-		Description: Updates the state of configuration resources on the traffic generator.
+			SetTransmitState: POST /control/transmit
+			Description: Updates the state of configuration resources on the traffic generator.
+		The Response.Warnings in the Success response is available for implementers to disclose additional information about a state change including any implicit changes that are outside the scope of the state change.
 	*/
 	SetTransmitState(rbody gosnappi.TransmitState, r *http.Request) gosnappi.SetTransmitStateResponse
 	/*

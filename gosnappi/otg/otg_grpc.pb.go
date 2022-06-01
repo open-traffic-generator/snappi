@@ -25,6 +25,9 @@ type OpenapiClient interface {
 	// Description missing in models
 	GetConfig(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*GetConfigResponse, error)
 	// Updates the state of configuration resources on the traffic generator.
+	// The Response.Warnings in the Success response is available for implementers to disclose
+	// additional information about a state change including any implicit changes that are
+	// outside the scope of the state change.
 	SetTransmitState(ctx context.Context, in *SetTransmitStateRequest, opts ...grpc.CallOption) (*SetTransmitStateResponse, error)
 	// Updates the state of configuration resources on the traffic generator.
 	SetLinkState(ctx context.Context, in *SetLinkStateRequest, opts ...grpc.CallOption) (*SetLinkStateResponse, error)
@@ -173,6 +176,9 @@ type OpenapiServer interface {
 	// Description missing in models
 	GetConfig(context.Context, *emptypb.Empty) (*GetConfigResponse, error)
 	// Updates the state of configuration resources on the traffic generator.
+	// The Response.Warnings in the Success response is available for implementers to disclose
+	// additional information about a state change including any implicit changes that are
+	// outside the scope of the state change.
 	SetTransmitState(context.Context, *SetTransmitStateRequest) (*SetTransmitStateResponse, error)
 	// Updates the state of configuration resources on the traffic generator.
 	SetLinkState(context.Context, *SetLinkStateRequest) (*SetLinkStateResponse, error)
