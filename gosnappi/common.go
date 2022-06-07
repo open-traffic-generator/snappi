@@ -169,11 +169,9 @@ type httpRequestDoer interface {
 }
 
 type httpClient struct {
-	client    httpRequestDoer
-	transport *http.Transport
-	ctx       context.Context
+	client httpRequestDoer
+	ctx    context.Context
 }
-
 
 // All methods that perform validation will add errors here
 // All api rpcs MUST call Validate
