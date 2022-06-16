@@ -9,4 +9,4 @@ requests
 # protobuf==3.15.0 # Warning - changing versions need thorough investigation
 # click==8.0.4; python_version > '2.7'
 # openapiart==0.1.44
-git+https://github.com/open-traffic-generator/openapiart@4f90b6505e9e89ba0a9ae73ac92e38a614bcf1ca
+git+https://github.com/open-traffic-generator/openapiart@26dfb1d2daa99a4e75b5ed3ad6bbcfc57aceff52
