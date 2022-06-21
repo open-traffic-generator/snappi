@@ -30,6 +30,7 @@ func (ctrl *controlController) Routes() []httpapi.Route {
 		{Path: "/control/routes", Method: "POST", Name: "SetRouteState", Handler: ctrl.SetRouteState},
 		{Path: "/control/ping", Method: "POST", Name: "SendPing", Handler: ctrl.SendPing},
 		{Path: "/control/protocols", Method: "POST", Name: "SetProtocolState", Handler: ctrl.SetProtocolState},
+		{Path: "/control/devices", Method: "POST", Name: "SetDeviceState", Handler: ctrl.SetDeviceState},
 	}
 }
 
@@ -477,6 +478,71 @@ func (ctrl *controlController) responseSetProtocolState400(w http.ResponseWriter
 
 func (ctrl *controlController) responseSetProtocolState500(w http.ResponseWriter, rsp_err error) {
 	result := gosnappi.NewSetProtocolStateResponse()
+	result.StatusCode500().SetErrors([]string{rsp_err.Error()})
+	if _, err := httpapi.WriteJSONResponse(w, 500, result.StatusCode500()); err != nil {
+		log.Print(err.Error())
+	}
+}
+
+/*
+SetDeviceState: POST /control/devices
+Description: Set specific state/actions on device configuration resources on the traffic generator.
+*/
+func (ctrl *controlController) SetDeviceState(w http.ResponseWriter, r *http.Request) {
+	var item gosnappi.DeviceState
+	if r.Body != nil {
+		body, readError := ioutil.ReadAll(r.Body)
+		if body != nil {
+			item = gosnappi.NewDeviceState()
+			err := item.FromJson(string(body))
+			if err != nil {
+				ctrl.responseSetDeviceState400(w, err)
+				return
+			}
+		} else {
+			ctrl.responseSetDeviceState400(w, readError)
+			return
+		}
+	} else {
+		bodyError := errors.New("Request do not have any body")
+		ctrl.responseSetDeviceState500(w, bodyError)
+		return
+	}
+	result := ctrl.handler.SetDeviceState(item, r)
+	if result.HasStatusCode200() {
+		data, err := controlMrlOpts.Marshal(result.StatusCode200().Msg())
+		if err != nil {
+			ctrl.responseSetDeviceState400(w, err)
+		}
+		httpapi.WriteCustomJSONResponse(w, 200, data)
+
+		return
+	}
+	if result.HasStatusCode400() {
+		if _, err := httpapi.WriteJSONResponse(w, 400, result.StatusCode400()); err != nil {
+			log.Print(err.Error())
+		}
+		return
+	}
+	if result.HasStatusCode500() {
+		if _, err := httpapi.WriteJSONResponse(w, 500, result.StatusCode500()); err != nil {
+			log.Print(err.Error())
+		}
+		return
+	}
+	ctrl.responseSetDeviceState500(w, errors.New("Unknown error"))
+}
+
+func (ctrl *controlController) responseSetDeviceState400(w http.ResponseWriter, rsp_err error) {
+	result := gosnappi.NewSetDeviceStateResponse()
+	result.StatusCode400().SetErrors([]string{rsp_err.Error()})
+	if _, err := httpapi.WriteJSONResponse(w, 400, result.StatusCode400()); err != nil {
+		log.Print(err.Error())
+	}
+}
+
+func (ctrl *controlController) responseSetDeviceState500(w http.ResponseWriter, rsp_err error) {
+	result := gosnappi.NewSetDeviceStateResponse()
 	result.StatusCode500().SetErrors([]string{rsp_err.Error()})
 	if _, err := httpapi.WriteJSONResponse(w, 500, result.StatusCode500()); err != nil {
 		log.Print(err.Error())

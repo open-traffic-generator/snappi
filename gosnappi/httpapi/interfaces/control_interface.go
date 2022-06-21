@@ -17,6 +17,7 @@ type ControlController interface {
 	SetRouteState(w http.ResponseWriter, r *http.Request)
 	SendPing(w http.ResponseWriter, r *http.Request)
 	SetProtocolState(w http.ResponseWriter, r *http.Request)
+	SetDeviceState(w http.ResponseWriter, r *http.Request)
 }
 
 type ControlHandler interface {
@@ -57,4 +58,9 @@ type ControlHandler interface {
 		Description: Sets all configured protocols to `start` or `stop` state.
 	*/
 	SetProtocolState(rbody gosnappi.ProtocolState, r *http.Request) gosnappi.SetProtocolStateResponse
+	/*
+		SetDeviceState: POST /control/devices
+		Description: Set specific state/actions on device configuration resources on the traffic generator.
+	*/
+	SetDeviceState(rbody gosnappi.DeviceState, r *http.Request) gosnappi.SetDeviceStateResponse
 }

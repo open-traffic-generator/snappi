@@ -2270,7 +2270,7 @@ func TestLagLacpIncorrectKey(t *testing.T) {
             }
         }`
 
-	object := gosnappi.NewLagLacp()
+	object := gosnappi.NewLagProtocolLacp()
 	assert.NotNil(t, object.FromYaml(incorrect_key))
 	assert.NotNil(t, object.FromJson(incorrect_key))
 	assert.NotNil(t, object.FromPbText(incorrect_key))
@@ -2288,7 +2288,7 @@ func TestLagStaticIncorrectKey(t *testing.T) {
             }
         }`
 
-	object := gosnappi.NewLagStatic()
+	object := gosnappi.NewLagProtocolStatic()
 	assert.NotNil(t, object.FromYaml(incorrect_key))
 	assert.NotNil(t, object.FromJson(incorrect_key))
 	assert.NotNil(t, object.FromPbText(incorrect_key))
