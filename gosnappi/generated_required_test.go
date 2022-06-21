@@ -243,9 +243,9 @@ func TestDeviceEthernetRequired(t *testing.T) {
 	err1 := object.FromYaml(string(data))
 	protoMarshal, _ := proto.Marshal(object.Msg())
 	err2 := object.FromPbText(string(protoMarshal))
-	assert.Contains(t, err.Error(), "PortName", "Mac", "Name")
-	assert.Contains(t, err1.Error(), "PortName", "Mac", "Name")
-	assert.Contains(t, err2.Error(), "PortName", "Mac", "Name")
+	assert.Contains(t, err.Error(), "Mac", "Name")
+	assert.Contains(t, err1.Error(), "Mac", "Name")
+	assert.Contains(t, err2.Error(), "Mac", "Name")
 }
 func TestDeviceIpv4LoopbackRequired(t *testing.T) {
 	object := gosnappi.NewDeviceIpv4Loopback()

@@ -43,6 +43,8 @@ type OpenapiClient interface {
 	SendPing(ctx context.Context, in *SendPingRequest, opts ...grpc.CallOption) (*SendPingResponse, error)
 	// Sets all configured protocols to `start` or `stop` state.
 	SetProtocolState(ctx context.Context, in *SetProtocolStateRequest, opts ...grpc.CallOption) (*SetProtocolStateResponse, error)
+	// Set specific state/actions on device configuration resources on the traffic generator.
+	SetDeviceState(ctx context.Context, in *SetDeviceStateRequest, opts ...grpc.CallOption) (*SetDeviceStateResponse, error)
 	// Description missing in models
 	GetMetrics(ctx context.Context, in *GetMetricsRequest, opts ...grpc.CallOption) (*GetMetricsResponse, error)
 	// Description missing in models
@@ -140,6 +142,15 @@ func (c *openapiClient) SetProtocolState(ctx context.Context, in *SetProtocolSta
 	return out, nil
 }
 
+func (c *openapiClient) SetDeviceState(ctx context.Context, in *SetDeviceStateRequest, opts ...grpc.CallOption) (*SetDeviceStateResponse, error) {
+	out := new(SetDeviceStateResponse)
+	err := c.cc.Invoke(ctx, "/otg.Openapi/SetDeviceState", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *openapiClient) GetMetrics(ctx context.Context, in *GetMetricsRequest, opts ...grpc.CallOption) (*GetMetricsResponse, error) {
 	out := new(GetMetricsResponse)
 	err := c.cc.Invoke(ctx, "/otg.Openapi/GetMetrics", in, out, opts...)
@@ -194,6 +205,8 @@ type OpenapiServer interface {
 	SendPing(context.Context, *SendPingRequest) (*SendPingResponse, error)
 	// Sets all configured protocols to `start` or `stop` state.
 	SetProtocolState(context.Context, *SetProtocolStateRequest) (*SetProtocolStateResponse, error)
+	// Set specific state/actions on device configuration resources on the traffic generator.
+	SetDeviceState(context.Context, *SetDeviceStateRequest) (*SetDeviceStateResponse, error)
 	// Description missing in models
 	GetMetrics(context.Context, *GetMetricsRequest) (*GetMetricsResponse, error)
 	// Description missing in models
@@ -233,6 +246,9 @@ func (UnimplementedOpenapiServer) SendPing(context.Context, *SendPingRequest) (*
 }
 func (UnimplementedOpenapiServer) SetProtocolState(context.Context, *SetProtocolStateRequest) (*SetProtocolStateResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SetProtocolState not implemented")
+}
+func (UnimplementedOpenapiServer) SetDeviceState(context.Context, *SetDeviceStateRequest) (*SetDeviceStateResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SetDeviceState not implemented")
 }
 func (UnimplementedOpenapiServer) GetMetrics(context.Context, *GetMetricsRequest) (*GetMetricsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetMetrics not implemented")
@@ -418,6 +434,24 @@ func _Openapi_SetProtocolState_Handler(srv interface{}, ctx context.Context, dec
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Openapi_SetDeviceState_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SetDeviceStateRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(OpenapiServer).SetDeviceState(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/otg.Openapi/SetDeviceState",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(OpenapiServer).SetDeviceState(ctx, req.(*SetDeviceStateRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Openapi_GetMetrics_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetMetricsRequest)
 	if err := dec(in); err != nil {
@@ -514,6 +548,10 @@ var Openapi_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "SetProtocolState",
 			Handler:    _Openapi_SetProtocolState_Handler,
+		},
+		{
+			MethodName: "SetDeviceState",
+			Handler:    _Openapi_SetDeviceState_Handler,
 		},
 		{
 			MethodName: "GetMetrics",

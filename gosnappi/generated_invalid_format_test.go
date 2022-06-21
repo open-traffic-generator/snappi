@@ -2144,7 +2144,7 @@ func TestLagLacpIncorrectFormat(t *testing.T) {
 			"e_b" : 2
 	    }`
 
-	object := gosnappi.NewLagLacp()
+	object := gosnappi.NewLagProtocolLacp()
 	assert.NotNil(t, object.FromYaml(incorrect_format))
 	assert.NotNil(t, object.FromJson(incorrect_format))
 	assert.NotNil(t, object.FromPbText(incorrect_format))
@@ -2161,7 +2161,7 @@ func TestLagStaticIncorrectFormat(t *testing.T) {
 			"e_b" : 2
 	    }`
 
-	object := gosnappi.NewLagStatic()
+	object := gosnappi.NewLagProtocolStatic()
 	assert.NotNil(t, object.FromYaml(incorrect_format))
 	assert.NotNil(t, object.FromJson(incorrect_format))
 	assert.NotNil(t, object.FromPbText(incorrect_format))
