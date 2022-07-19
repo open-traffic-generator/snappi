@@ -3,6 +3,7 @@ package gosnappi
 import (
 	"context"
 	"fmt"
+	"net"
 	"net/http"
 	"regexp"
 	"strconv"
@@ -81,6 +82,7 @@ func (obj *grpcTransport) SetClientConnection(con *grpc.ClientConn) GrpcTranspor
 type httpTransport struct {
 	location string
 	verify   bool
+	conn     net.Conn
 }
 
 type HttpTransport interface {
