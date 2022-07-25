@@ -10,7 +10,7 @@ import shutil
 pkg_name = "snappi"
 go_pkg_name = "gosnappi"
 model_protobuf_name = "otg"
-version = "0.8.6"
+version = "0.8.7"
 models_version = "0.8.5"
 
 # read long description from readme.md
