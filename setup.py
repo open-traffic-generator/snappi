@@ -10,7 +10,7 @@ import shutil
 pkg_name = "snappi"
 go_pkg_name = "gosnappi"
 model_protobuf_name = "otg"
-version = "0.9.1"
+version = "0.9.2"
 models_version = "0.9.1"
 
 # read long description from readme.md
@@ -105,9 +105,9 @@ setuptools.setup(
     #     "protobuf==3.15.0" # Warning - changing versions need thorough investigation
     # ],
     extras_require={
-        "ixnetwork": ["snappi_ixnetwork==0.8.2"],
+        "ixnetwork": ["snappi_ixnetwork==0.9.1"],
         "trex": ["snappi_trex"],
-        "convergence": ["snappi_convergence==0.3.4"],
+        "convergence": ["snappi_convergence==0.4.1"],
         "testing": ["pytest", "flask"],
     },
 )
