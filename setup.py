@@ -53,6 +53,10 @@ shutil.copyfile(
     os.path.join(base_dir, "artifacts", model_protobuf_name + ".proto"),
     os.path.join(base_dir, model_protobuf_name + ".proto")
 )
+shutil.copyfile(
+    os.path.join(base_dir, "artifacts", model_protobuf_name + ".proto"),
+    os.path.join(base_dir, go_pkg_name, model_protobuf_name, model_protobuf_name + ".proto")
+)
 shutil.rmtree("artifacts", ignore_errors=True)
 for name in os.listdir(pkg_name):
     path = os.path.join(pkg_name, name)
