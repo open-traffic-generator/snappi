@@ -7,20 +7,21 @@ def test_device_factory_methods(api):
     Device factory methods should populate saved structures
     """
     config = api.config()
+    config.ports.port(name="p1")
 
-    param = ('name', 'container name')
+    param = ("name", "container name")
     device = config.devices.device(name=param[0])[-1]
-    assert (device.name == param[0])
+    assert device.name == param[0]
 
-    name = 'eth name'
+    name = "eth name"
     eth = device.ethernets.ethernet()[-1]
     eth.name = name
     eth.port_name = "p1"
-    assert (eth.name == name)
-    eth.mac = '00:00:00:00:00:00'
+    assert eth.name == name
+    eth.mac = "00:00:00:00:00:00"
 
     print(config)
 
 
-if __name__ == '__main__':
-    pytest.main(['-vv', '-s', __file__])
+if __name__ == "__main__":
+    pytest.main(["-vv", "-s", __file__])

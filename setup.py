@@ -10,8 +10,8 @@ import shutil
 pkg_name = "snappi"
 go_pkg_name = "gosnappi"
 model_protobuf_name = "otg"
-version = "0.9.5"
-models_version = "0.9.2"
+version = "0.9.6"
+models_version = "0.9.3"
 
 # read long description from readme.md
 base_dir = os.path.abspath(os.path.dirname(__file__))
@@ -28,17 +28,22 @@ with open(os.path.join("openapi.yaml"), "wb") as fp:
     fp.write(response.content)
 
 openapiart.OpenApiArt(
-    api_files=["openapi.yaml"],
+    api_files=[
+        r"C:\Users\rangabar.KEYSIGHT\Documents\GitHub\models\artifacts\openapi.yaml"
+    ],
     protobuf_name=model_protobuf_name,
     artifact_dir="artifacts",
     extension_prefix=pkg_name,
 ).GeneratePythonSdk(package_name=pkg_name).GenerateGoSdk(
-    package_dir="github.com/open-traffic-generator/snappi/%s" % go_pkg_name, package_name=go_pkg_name
+    package_dir="github.com/open-traffic-generator/snappi/%s" % go_pkg_name,
+    package_name=go_pkg_name,
 ).GenerateGoServer(
     module_path="github.com/open-traffic-generator/snappi/%s" % go_pkg_name,
     models_prefix=go_pkg_name,
-    models_path="github.com/open-traffic-generator/snappi/%s" % go_pkg_name
-).GoTidy(relative_package_dir=go_pkg_name)
+    models_path="github.com/open-traffic-generator/snappi/%s" % go_pkg_name,
+).GoTidy(
+    relative_package_dir=go_pkg_name
+)
 
 if os.path.exists(pkg_name):
     shutil.rmtree(pkg_name, ignore_errors=True)
@@ -47,15 +52,17 @@ if os.path.exists(pkg_name):
 shutil.copytree(os.path.join("artifacts", pkg_name), pkg_name)
 shutil.copyfile(
     os.path.join("artifacts", "requirements.txt"),
-    os.path.join(base_dir, "pkg_requires.txt")
+    os.path.join(base_dir, "pkg_requires.txt"),
 )
 shutil.copyfile(
     os.path.join(base_dir, "artifacts", model_protobuf_name + ".proto"),
-    os.path.join(base_dir, model_protobuf_name + ".proto")
+    os.path.join(base_dir, model_protobuf_name + ".proto"),
 )
 shutil.copyfile(
     os.path.join(base_dir, "artifacts", model_protobuf_name + ".proto"),
-    os.path.join(base_dir, go_pkg_name, model_protobuf_name, model_protobuf_name + ".proto")
+    os.path.join(
+        base_dir, go_pkg_name, model_protobuf_name, model_protobuf_name + ".proto"
+    ),
 )
 shutil.rmtree("artifacts", ignore_errors=True)
 for name in os.listdir(pkg_name):
