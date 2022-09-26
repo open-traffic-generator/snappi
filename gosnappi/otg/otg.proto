@@ -1,4 +1,4 @@
-/* Open Traffic Generator API 0.9.2
+/* Open Traffic Generator API 0.9.3
  * Open Traffic Generator API defines a model-driven, vendor-neutral and standard
  * interface for emulating layer 2-7 network devices and generating test traffic.
  * 
@@ -233,7 +233,11 @@ message DeviceEthernetBase {
 message DeviceEthernet {
 
   // Status: deprecated
+  // property port_name is deprecated from the snappi version x.x.x.
+  // please use connection.port_name instead of port_name
   // Status: deprecated
+  // property port_name is deprecated from the snappi version x.x.x.
+  // please use connection.port_name instead of port_name
   // The unique name of a Port or a LAG that will emulate this interface.
   // port_name is deprecated and will be removed in future release.port_name and connection
   // can't be used together, use either port_name or connection.
@@ -436,8 +440,6 @@ message DeviceIpv4GatewayMAC {
   optional string value = 3;
 }
 
-// Status: under-review
-// Status: under-review
 // An IPv6 interface with gateway.
 message DeviceIpv6 {
 
@@ -711,7 +713,9 @@ message Layer1Ieee8021qbb {
 }
 
 // Status: under-review
+// Capture schema is under review
 // Status: under-review
+// Capture schema is under review
 // Configuration for capture settings.
 message Capture {
 
@@ -973,7 +977,9 @@ message Device {
 }
 
 // Status: under-review
+// Device.IsisRouter is under review
 // Status: under-review
+// Device.IsisRouter is under review
 // A container of properties for an ISIS router and its interfaces.
 message DeviceIsisRouter {
 
@@ -1010,7 +1016,9 @@ message DeviceIsisRouter {
 }
 
 // Status: under-review
+// Device.IsisMultiInstance is under review
 // Status: under-review
+// Device.IsisMultiInstance is under review
 // This container properties of an Multi-Instance-capable router (MI-RTR).
 message DeviceIsisMultiInstance {
 
@@ -1025,7 +1033,9 @@ message DeviceIsisMultiInstance {
 }
 
 // Status: under-review
+// Isis.Interface is under review
 // Status: under-review
+// Isis.Interface is under review
 // Configuration for single ISIS interface.
 message IsisInterface {
 
@@ -1118,7 +1128,9 @@ message IsisInterfaceLevel {
 }
 
 // Status: under-review
+// Isis.MT is under review
 // Status: under-review
+// Isis.MT is under review
 // Configuration of properties per interface per topology when multiple topologies are
 // configured in an ISIS router.
 // in a ISIS router.
@@ -1134,7 +1146,9 @@ message IsisMT {
 }
 
 // Status: under-review
+// LinkState.TE is under review
 // Status: under-review
+// LinkState.TE is under review
 // A container for Traffic Engineering properties on a interface.
 message LinkStateTE {
 
@@ -1632,8 +1646,6 @@ message DeviceBgpRouter {
   repeated BgpV6Interface ipv6_interfaces = 3;
 }
 
-// Status: under-review
-// Status: under-review
 // Configuration for emulated BGPv4 peers and routes.
 message BgpV4Peer {
 
@@ -2162,7 +2174,9 @@ message BgpRouteTarget {
 }
 
 // Status: under-review
+// Bgp.Advanced is under review
 // Status: under-review
+// Bgp.Advanced is under review
 // Configuration for BGP advanced settings.
 message BgpAdvanced {
 
@@ -2192,7 +2206,9 @@ message BgpAdvanced {
 }
 
 // Status: under-review
+// Bgp.Capability is under review
 // Status: under-review
+// Bgp.Capability is under review
 // Configuration for BGP capability settings.
 message BgpCapability {
 
@@ -2310,7 +2326,9 @@ message BgpCapability {
 }
 
 // Status: under-review
+// Bgp.LearnedInformationFilter is under review
 // Status: under-review
+// Bgp.LearnedInformationFilter is under review
 // Configuration for controlling storage of BGP learned information recieved from the
 // peer.
 message BgpLearnedInformationFilter {
@@ -2700,7 +2718,9 @@ message BgpSrteExplicitNullLabelPolicySubTlv {
 }
 
 // Status: under-review
+// BgpSrte.SegmentList is under review
 // Status: under-review
+// BgpSrte.SegmentList is under review
 // Optional configuration for BGP SR TE Policy segment list. The Segment List sub-TLV
 // encodes a single explicit path towards the Endpoint.
 message BgpSrteSegmentList {
@@ -2726,7 +2746,9 @@ message BgpSrteSegmentList {
 }
 
 // Status: under-review
+// BgpSrte.Segment is under review
 // Status: under-review
+// BgpSrte.Segment is under review
 // A Segment sub-TLV describes a single segment in a segment list  i.e., a single element
 // of the explicit path. The Segment sub-TLVs are optional.
 message BgpSrteSegment {
@@ -2885,7 +2907,9 @@ message BgpSrteSegmentBTypeSubTlv {
 }
 
 // Status: under-review
+// BgpSrte.SegmentCTypeSubTlv is under review
 // Status: under-review
+// BgpSrte.SegmentCTypeSubTlv is under review
 // Type C: IPv4 Node Address with optional SID.
 message BgpSrteSegmentCTypeSubTlv {
 
@@ -3214,8 +3238,6 @@ message BgpSrteV6TunnelTlv {
   optional bool active = 10;
 }
 
-// Status: under-review
-// Status: under-review
 // Configuration for BGPv6 peer settings and routes.
 message BgpV6Peer {
 
@@ -3335,7 +3357,9 @@ message BgpV6Interface {
 }
 
 // Status: under-review
+// Bgp.V6SegmentRouting is under review
 // Status: under-review
+// Bgp.V6SegmentRouting is under review
 // Configuration for BGPv6 segment routing settings.
 message BgpV6SegmentRouting {
 

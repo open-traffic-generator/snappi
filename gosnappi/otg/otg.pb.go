@@ -1,4 +1,4 @@
-// Open Traffic Generator API 0.9.2
+// Open Traffic Generator API 0.9.3
 // Open Traffic Generator API defines a model-driven, vendor-neutral and standard
 // interface for emulating layer 2-7 network devices and generating test traffic.
 //
@@ -14987,7 +14987,11 @@ type DeviceEthernet struct {
 	unknownFields protoimpl.UnknownFields
 
 	// Status: deprecated
+	// property port_name is deprecated from the snappi version x.x.x.
+	// please use connection.port_name instead of port_name
 	// Status: deprecated
+	// property port_name is deprecated from the snappi version x.x.x.
+	// please use connection.port_name instead of port_name
 	// The unique name of a Port or a LAG that will emulate this interface.
 	// port_name is deprecated and will be removed in future release.port_name and connection
 	// can't be used together, use either port_name or connection.
@@ -15540,8 +15544,6 @@ func (x *DeviceIpv4GatewayMAC) GetValue() string {
 	return ""
 }
 
-// Status: under-review
-// Status: under-review
 // An IPv6 interface with gateway.
 type DeviceIpv6 struct {
 	state         protoimpl.MessageState
@@ -16309,7 +16311,9 @@ func (x *Layer1Ieee8021Qbb) GetPfcClass_7() int32 {
 }
 
 // Status: under-review
+// Capture schema is under review
 // Status: under-review
+// Capture schema is under review
 // Configuration for capture settings.
 type Capture struct {
 	state         protoimpl.MessageState
@@ -17220,7 +17224,9 @@ func (x *Device) GetName() string {
 }
 
 // Status: under-review
+// Device.IsisRouter is under review
 // Status: under-review
+// Device.IsisRouter is under review
 // A container of properties for an ISIS router and its interfaces.
 type DeviceIsisRouter struct {
 	state         protoimpl.MessageState
@@ -17347,7 +17353,9 @@ func (x *DeviceIsisRouter) GetName() string {
 }
 
 // Status: under-review
+// Device.IsisMultiInstance is under review
 // Status: under-review
+// Device.IsisMultiInstance is under review
 // This container properties of an Multi-Instance-capable router (MI-RTR).
 type DeviceIsisMultiInstance struct {
 	state         protoimpl.MessageState
@@ -17410,7 +17418,9 @@ func (x *DeviceIsisMultiInstance) GetItids() []int32 {
 }
 
 // Status: under-review
+// Isis.Interface is under review
 // Status: under-review
+// Isis.Interface is under review
 // Configuration for single ISIS interface.
 type IsisInterface struct {
 	state         protoimpl.MessageState
@@ -17656,7 +17666,9 @@ func (x *IsisInterfaceLevel) GetDeadInterval() int32 {
 }
 
 // Status: under-review
+// Isis.MT is under review
 // Status: under-review
+// Isis.MT is under review
 // Configuration of properties per interface per topology when multiple topologies are
 // configured in an ISIS router.
 // in a ISIS router.
@@ -17720,7 +17732,9 @@ func (x *IsisMT) GetLinkMetric() int32 {
 }
 
 // Status: under-review
+// LinkState.TE is under review
 // Status: under-review
+// LinkState.TE is under review
 // A container for Traffic Engineering properties on a interface.
 type LinkStateTE struct {
 	state         protoimpl.MessageState
@@ -19208,8 +19222,6 @@ func (x *DeviceBgpRouter) GetIpv6Interfaces() []*BgpV6Interface {
 	return nil
 }
 
-// Status: under-review
-// Status: under-review
 // Configuration for emulated BGPv4 peers and routes.
 type BgpV4Peer struct {
 	state         protoimpl.MessageState
@@ -20595,7 +20607,9 @@ func (x *BgpRouteTarget) GetRtValue() string {
 }
 
 // Status: under-review
+// Bgp.Advanced is under review
 // Status: under-review
+// Bgp.Advanced is under review
 // Configuration for BGP advanced settings.
 type BgpAdvanced struct {
 	state         protoimpl.MessageState
@@ -20691,7 +20705,9 @@ func (x *BgpAdvanced) GetMd5Key() string {
 }
 
 // Status: under-review
+// Bgp.Capability is under review
 // Status: under-review
+// Bgp.Capability is under review
 // Configuration for BGP capability settings.
 type BgpCapability struct {
 	state         protoimpl.MessageState
@@ -20995,7 +21011,9 @@ func (x *BgpCapability) GetIpv6UnicastAddPath() bool {
 }
 
 // Status: under-review
+// Bgp.LearnedInformationFilter is under review
 // Status: under-review
+// Bgp.LearnedInformationFilter is under review
 // Configuration for controlling storage of BGP learned information recieved from the
 // peer.
 type BgpLearnedInformationFilter struct {
@@ -22158,7 +22176,9 @@ func (x *BgpSrteExplicitNullLabelPolicySubTlv) GetExplicitNullLabelPolicy() BgpS
 }
 
 // Status: under-review
+// BgpSrte.SegmentList is under review
 // Status: under-review
+// BgpSrte.SegmentList is under review
 // Optional configuration for BGP SR TE Policy segment list. The Segment List sub-TLV
 // encodes a single explicit path towards the Endpoint.
 type BgpSrteSegmentList struct {
@@ -22244,7 +22264,9 @@ func (x *BgpSrteSegmentList) GetActive() bool {
 }
 
 // Status: under-review
+// BgpSrte.Segment is under review
 // Status: under-review
+// BgpSrte.Segment is under review
 // A Segment sub-TLV describes a single segment in a segment list  i.e., a single element
 // of the explicit path. The Segment sub-TLVs are optional.
 type BgpSrteSegment struct {
@@ -22747,7 +22769,9 @@ func (x *BgpSrteSegmentBTypeSubTlv) GetSrv6SidEndpointBehavior() *BgpSrteSRv6SID
 }
 
 // Status: under-review
+// BgpSrte.SegmentCTypeSubTlv is under review
 // Status: under-review
+// BgpSrte.SegmentCTypeSubTlv is under review
 // Type C: IPv4 Node Address with optional SID.
 type BgpSrteSegmentCTypeSubTlv struct {
 	state         protoimpl.MessageState
@@ -23872,8 +23896,6 @@ func (x *BgpSrteV6TunnelTlv) GetActive() bool {
 	return false
 }
 
-// Status: under-review
-// Status: under-review
 // Configuration for BGPv6 peer settings and routes.
 type BgpV6Peer struct {
 	state         protoimpl.MessageState
@@ -24147,7 +24169,9 @@ func (x *BgpV6Interface) GetPeers() []*BgpV6Peer {
 }
 
 // Status: under-review
+// Bgp.V6SegmentRouting is under review
 // Status: under-review
+// Bgp.V6SegmentRouting is under review
 // Configuration for BGPv6 segment routing settings.
 type BgpV6SegmentRouting struct {
 	state         protoimpl.MessageState
