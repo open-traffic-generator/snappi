@@ -28,9 +28,7 @@ with open(os.path.join("openapi.yaml"), "wb") as fp:
     fp.write(response.content)
 
 openapiart.OpenApiArt(
-    api_files=[
-        r"C:\Users\rangabar.KEYSIGHT\Documents\GitHub\models\artifacts\openapi.yaml"
-    ],
+    api_files=["openapi.yaml"],
     protobuf_name=model_protobuf_name,
     artifact_dir="artifacts",
     extension_prefix=pkg_name,
