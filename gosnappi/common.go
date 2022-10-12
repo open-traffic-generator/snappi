@@ -130,7 +130,7 @@ type Api interface {
 	// and not intended to use in production
 	Warnings() string
 	deprecated(message string)
-	under_review(message string)
+	underReview(message string)
 }
 
 // NewGrpcTransport sets the underlying transport of the Api as grpc
@@ -177,7 +177,7 @@ func (api *api) deprecated(message string) {
 	fmt.Printf("warning: %s\n", message)
 }
 
-func (api *api) under_review(message string) {
+func (api *api) underReview(message string) {
 	api.warnings = message
 	fmt.Printf("warning: %s\n", message)
 }
@@ -194,35 +194,46 @@ type httpClient struct {
 
 // All methods that perform validation will add errors here
 // All api rpcs MUST call Validate
-type Constraints interface {
-	ValueOf(name string) interface{}
+type valueGetter interface {
+	StringValue(name string) (string, error)
 }
 
-type validation struct {
-	validationErrors []string
-	warnings         []string
-	constraints      map[string]map[string]Constraints
+type rootType interface {
+	validateObj(setDefault bool)
+	validationResult() error
+	checkUnique()
+	checkConstraint()
 }
 
-type Validation interface {
+type validator struct {
+	errors      []string
+	warnings    []string
+	constraints map[string]map[string]valueGetter
+	root        rootType
+	temp        []rootType
+	resolve     bool
+}
+
+type Validator interface {
 	validationResult() error
 	deprecated(message string)
-	under_review(message string)
+	underReview(message string)
 	Warnings() []string
 }
 
-func (obj *validation) validationResult() error {
-	obj.constraints = make(map[string]map[string]Constraints)
-	if len(obj.validationErrors) > 0 {
-		obj.validationErrors = append(obj.validationErrors, "validation errors")
-		errors := strings.Join(obj.validationErrors, "\n")
-		obj.validationErrors = nil
+func (obj *validator) validationResult() error {
+	obj.constraints = make(map[string]map[string]valueGetter)
+	obj.temp = nil
+	if len(obj.errors) > 0 {
+		obj.errors = append(obj.errors, "validation errors")
+		errors := strings.Join(obj.errors, "\n")
+		obj.errors = nil
 		return fmt.Errorf(errors)
 	}
 	return nil
 }
 
-func (obj *validation) Warnings() []string {
+func (obj *validator) Warnings() []string {
 	if len(obj.warnings) > 0 {
 		warns := obj.warnings
 		obj.warnings = nil
@@ -231,17 +242,17 @@ func (obj *validation) Warnings() []string {
 	return obj.warnings
 }
 
-func (obj *validation) deprecated(message string) {
+func (obj *validator) deprecated(message string) {
 	fmt.Printf("warning: %s\n", message)
 	obj.warnings = append(obj.warnings, message)
 }
 
-func (obj *validation) under_review(message string) {
+func (obj *validator) underReview(message string) {
 	fmt.Printf("warning: %s\n", message)
 	obj.warnings = append(obj.warnings, message)
 }
 
-func (obj *validation) validateMac(mac string) error {
+func (obj *validator) validateMac(mac string) error {
 	macSlice := strings.Split(mac, ":")
 	if len(macSlice) != 6 {
 		return fmt.Errorf(fmt.Sprintf("Invalid Mac address %s", mac))
@@ -256,7 +267,7 @@ func (obj *validation) validateMac(mac string) error {
 	return nil
 }
 
-func (obj *validation) validateIpv4(ip string) error {
+func (obj *validator) validateIpv4(ip string) error {
 	ipSlice := strings.Split(ip, ".")
 	if len(ipSlice) != 4 {
 		return fmt.Errorf(fmt.Sprintf("Invalid Ipv4 address %s", ip))
@@ -271,7 +282,7 @@ func (obj *validation) validateIpv4(ip string) error {
 	return nil
 }
 
-func (obj *validation) validateIpv6(ip string) error {
+func (obj *validator) validateIpv6(ip string) error {
 	ip = strings.Trim(ip, " \t")
 	if strings.Count(ip, " ") > 0 || strings.Count(ip, ":") > 7 ||
 		strings.Count(ip, "::") > 1 || strings.Count(ip, ":::") > 0 ||
@@ -311,7 +322,7 @@ func (obj *validation) validateIpv6(ip string) error {
 	return nil
 }
 
-func (obj *validation) validateHex(hex string) error {
+func (obj *validator) validateHex(hex string) error {
 	matched, err := regexp.MatchString(`^[0-9a-fA-F]+$|^0[x|X][0-9a-fA-F]+$`, hex)
 	if err != nil || !matched {
 		return fmt.Errorf(fmt.Sprintf("Invalid hex value %s", hex))
@@ -319,7 +330,7 @@ func (obj *validation) validateHex(hex string) error {
 	return nil
 }
 
-func (obj *validation) validateSlice(valSlice []string, sliceType string) error {
+func (obj *validator) validateSlice(valSlice []string, sliceType string) error {
 	indices := []string{}
 	var err error
 	for i, val := range valSlice {
@@ -348,33 +359,33 @@ func (obj *validation) validateSlice(valSlice []string, sliceType string) error 
 	return nil
 }
 
-func (obj *validation) validateMacSlice(mac []string) error {
+func (obj *validator) validateMacSlice(mac []string) error {
 	return obj.validateSlice(mac, "mac")
 }
 
-func (obj *validation) validateIpv4Slice(ip []string) error {
+func (obj *validator) validateIpv4Slice(ip []string) error {
 	return obj.validateSlice(ip, "ipv4")
 }
 
-func (obj *validation) validateIpv6Slice(ip []string) error {
+func (obj *validator) validateIpv6Slice(ip []string) error {
 	return obj.validateSlice(ip, "ipv6")
 }
 
-func (obj *validation) validateHexSlice(hex []string) error {
+func (obj *validator) validateHexSlice(hex []string) error {
 	return obj.validateSlice(hex, "hex")
 }
 
-func (obj *validation) createMap(objName string) {
+func (obj *validator) createMap(objName string) {
 	if obj.constraints == nil {
-		obj.constraints = make(map[string]map[string]Constraints)
+		obj.constraints = make(map[string]map[string]valueGetter)
 	}
 	_, ok := obj.constraints[objName]
 	if !ok {
-		obj.constraints[objName] = make(map[string]Constraints)
+		obj.constraints[objName] = make(map[string]valueGetter)
 	}
 }
 
-func (obj *validation) isUnique(objectName, value string, object Constraints) bool {
+func (obj *validator) isUnique(objectName, value string, object valueGetter) bool {
 	if value == "" {
 		return true
 	}
@@ -391,7 +402,7 @@ func (obj *validation) isUnique(objectName, value string, object Constraints) bo
 	return unique
 }
 
-func (obj *validation) validateConstraint(objectName []string, value string) bool {
+func (obj *validator) validateConstraint(objectName []string, value string) bool {
 	if value == "" {
 		return false
 	}
@@ -403,11 +414,11 @@ func (obj *validation) validateConstraint(objectName []string, value string) boo
 			continue
 		}
 		for _, object := range strukt {
-			intf := object.ValueOf(obj_[1])
-			if intf == nil {
+			v, e := object.StringValue(obj_[1])
+			if e != nil {
 				continue
 			}
-			if value == fmt.Sprintf("%v", intf) {
+			if value == v {
 				found = true
 				break
 			}
