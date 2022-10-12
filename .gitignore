@@ -3,7 +3,7 @@ __pycache__/
 .pytype/
 *.pyc
 
-.env/
+.env*/
 build/
 dist/
 *.egg-info/

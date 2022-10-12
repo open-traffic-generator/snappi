@@ -57,6 +57,7 @@ def test_types_and_formats():
             "property name shall be of type <class 'str'>"
             " at <class 'snappi.snappi.Flow'>" not in str(e)
         ):
+            print(e)
             assert False
 
     # integer validation
