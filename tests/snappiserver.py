@@ -45,6 +45,7 @@ def set_transmit_state():
 def get_metrics():
     global CONFIG
     api = snappi.api()
+    conf = api.config().deserialize(CONFIG.serialize("dict"))
 
     metrics_request = api.metrics_request()
     metrics_request.deserialize(request.data.decode("utf-8"))
@@ -59,7 +60,6 @@ def get_metrics():
             metrics_response.flow_metrics.metric(
                 name=flow.name, frames_tx=10000, frames_rx=10000
             )
-
     return Response(
         metrics_response.serialize(), mimetype="application/json", status=200
     )

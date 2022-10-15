@@ -1,7 +1,6 @@
 import pytest
 
 
-@pytest.mark.skip("Need model change in port metrics response")
 def test_port_metrics(api, b2b_config):
     """Get port metrics"""
     api.set_config(b2b_config)
