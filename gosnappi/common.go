@@ -115,12 +115,14 @@ func (obj *httpTransport) SetVerify(value bool) HttpTransport {
 }
 
 type api struct {
+	*validator
 	grpc     *grpcTransport
 	http     *httpTransport
 	warnings string
 }
 
 type Api interface {
+	Validator
 	NewGrpcTransport() GrpcTransport
 	hasGrpcTransport() bool
 	NewHttpTransport() HttpTransport
@@ -128,7 +130,7 @@ type Api interface {
 	Close() error
 	// Warnings Api is only for testing purpose
 	// and not intended to use in production
-	Warnings() string
+	// Warnings() string
 	deprecated(message string)
 	underReview(message string)
 }
@@ -168,9 +170,9 @@ func (api *api) hasHttpTransport() bool {
 	return api.http != nil
 }
 
-func (api *api) Warnings() string {
-	return api.warnings
-}
+// func (api *api) Warnings() string {
+// 	return api.warnings
+// }
 
 func (api *api) deprecated(message string) {
 	api.warnings = message
@@ -180,6 +182,10 @@ func (api *api) deprecated(message string) {
 func (api *api) underReview(message string) {
 	api.warnings = message
 	fmt.Printf("warning: %s\n", message)
+}
+
+func (api *api) Close() error {
+	return nil
 }
 
 // HttpRequestDoer will return True for HTTP transport
@@ -203,14 +209,17 @@ type rootType interface {
 	validationResult() error
 	checkUnique()
 	checkConstraint()
+	typeName() string
 }
 
 type validator struct {
 	errors      []string
 	warnings    []string
 	constraints map[string]map[string]valueGetter
-	root        rootType
-	temp        []rootType
+	rootMap     map[string]rootType
+	rootKeys    []string
+	node        rootType
+	deps        []rootType
 	resolve     bool
 }
 
@@ -223,7 +232,7 @@ type Validator interface {
 
 func (obj *validator) validationResult() error {
 	obj.constraints = make(map[string]map[string]valueGetter)
-	obj.temp = nil
+	obj.deps = nil
 	if len(obj.errors) > 0 {
 		obj.errors = append(obj.errors, "validation errors")
 		errors := strings.Join(obj.errors, "\n")

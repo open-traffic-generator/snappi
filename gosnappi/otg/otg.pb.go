@@ -1,4 +1,4 @@
-// Open Traffic Generator API 0.9.4
+// Open Traffic Generator API 0.9.6
 // Open Traffic Generator API defines a model-driven, vendor-neutral and standard
 // interface for emulating layer 2-7 network devices and generating test traffic.
 //
@@ -15147,13 +15147,13 @@ type EthernetConnection struct {
 	// to.
 	//
 	// x-constraint:
-	// - #/components/schemas/VXlan.V4Tunnel/properties/name
-	// - #/components/schemas/VXlan.V6Tunnel/properties/name
+	// - #/components/schemas/Vxlan.V4Tunnel/properties/name
+	// - #/components/schemas/Vxlan.V6Tunnel/properties/name
 	//
 	//
 	// x-constraint:
-	// - #/components/schemas/VXlan.V4Tunnel/properties/name
-	// - #/components/schemas/VXlan.V6Tunnel/properties/name
+	// - #/components/schemas/Vxlan.V4Tunnel/properties/name
+	// - #/components/schemas/Vxlan.V6Tunnel/properties/name
 	//
 	VxlanName *string `protobuf:"bytes,4,opt,name=vxlan_name,json=vxlanName,proto3,oneof" json:"vxlan_name,omitempty"`
 }
@@ -30525,11 +30525,11 @@ type PingIpv4 struct {
 	// A base IPv4 interface
 	//
 	// x-constraint:
-	// - /components/schemas/Device.Ipv4Base/properties/name
+	// - /components/schemas/Device.Ipv4/properties/name
 	//
 	//
 	// x-constraint:
-	// - /components/schemas/Device.Ipv4Base/properties/name
+	// - /components/schemas/Device.Ipv4/properties/name
 	//
 	SrcName *string `protobuf:"bytes,1,opt,name=src_name,json=srcName,proto3,oneof" json:"src_name,omitempty"`
 	// IPv4 address to ping
@@ -30591,11 +30591,11 @@ type PingIpv6 struct {
 	// A base IPv6 interface
 	//
 	// x-constraint:
-	// - /components/schemas/Device.Ipv6Base/properties/name
+	// - /components/schemas/Device.Ipv6/properties/name
 	//
 	//
 	// x-constraint:
-	// - /components/schemas/Device.Ipv6Base/properties/name
+	// - /components/schemas/Device.Ipv6/properties/name
 	//
 	SrcName *string `protobuf:"bytes,1,opt,name=src_name,json=srcName,proto3,oneof" json:"src_name,omitempty"`
 	// IPv6 addresses to ping.
@@ -30706,13 +30706,13 @@ type Response struct {
 	// The name of the source IPv4 or IPv6 interface from which ping was sent.
 	//
 	// x-constraint:
-	// - /components/schemas/Device.Ipv4Base/properties/name
-	// - /components/schemas/Device.Ipv6Base/properties/name
+	// - /components/schemas/Device.Ipv4/properties/name
+	// - /components/schemas/Device.Ipv6/properties/name
 	//
 	//
 	// x-constraint:
-	// - /components/schemas/Device.Ipv4Base/properties/name
-	// - /components/schemas/Device.Ipv6Base/properties/name
+	// - /components/schemas/Device.Ipv4/properties/name
+	// - /components/schemas/Device.Ipv6/properties/name
 	//
 	SrcName *string `protobuf:"bytes,1,opt,name=src_name,json=srcName,proto3,oneof" json:"src_name,omitempty"`
 	// Destination address.
@@ -33602,13 +33602,13 @@ type BgpPrefixStateRequest struct {
 	// BGP peers.
 	//
 	// x-constraint:
-	// - /components/schemas/Bgp.v4Peer/properties/name
-	// - /components/schemas/Bgp.v6Peer/properties/name
+	// - /components/schemas/Bgp.V4Peer/properties/name
+	// - /components/schemas/Bgp.V6Peer/properties/name
 	//
 	//
 	// x-constraint:
-	// - /components/schemas/Bgp.v4Peer/properties/name
-	// - /components/schemas/Bgp.v6Peer/properties/name
+	// - /components/schemas/Bgp.V4Peer/properties/name
+	// - /components/schemas/Bgp.V6Peer/properties/name
 	//
 	BgpPeerNames []string `protobuf:"bytes,1,rep,name=bgp_peer_names,json=bgpPeerNames,proto3" json:"bgp_peer_names,omitempty"`
 	// Specify which prefixes to return. If the list is empty or missing then all prefixes
