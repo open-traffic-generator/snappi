@@ -6,6 +6,7 @@ def test_snappi_lists(api):
     """Validate SnappiList object indexing and unpacking
     """
     config = api.config()
+    config.ports.port(name="p1")
 
     flows = config.flows.flow(name='1')
     assert(flows.__class__ == snappi.FlowIter)

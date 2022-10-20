@@ -1,8 +1,8 @@
 def validate_serialize(node, expected, ignore_assert=False):
     try:
-        getattr(node, 'serialize')(getattr(node, 'DICT'))
+        getattr(node, "serialize")(getattr(node, "DICT"))
         assert ignore_assert
-    except ValueError as e:
+    except Exception as e:
         assert any([exp in e.args[0] for exp in expected])
 
 
@@ -22,7 +22,7 @@ def test_required_serialize(api):
     s = f.size
     validate_serialize(s, s._REQUIRED, True)
     r = f.rate
-    validate_serialize(r, '', True)
+    validate_serialize(r, "", True)
 
     validate_serialize(config.ports, p._REQUIRED)
     validate_serialize(config.layer1, l._REQUIRED)
@@ -30,12 +30,12 @@ def test_required_serialize(api):
     validate_serialize(config.devices, d._REQUIRED)
     validate_serialize(config.flows, f._REQUIRED)
 
-    validate_serialize(f.packet, '', True)
+    validate_serialize(f.packet, "", True)
 
 
 def validate_deserialize(node, input, expected, ignore_assert=False):
     try:
-        getattr(node, 'deserialize')(input)
+        getattr(node, "deserialize")(input)
         assert ignore_assert
     except Exception as e:
         assert any([exp in e.args[0] for exp in expected])
@@ -44,34 +44,19 @@ def validate_deserialize(node, input, expected, ignore_assert=False):
 def test_required_deserialize(api):
     config = api.config()
     import snappi
+
     config = snappi.Api().config()
 
-    ports = [
-        {
-            'name': "Test",
-            'location': None
-        }
-    ]
+    ports = [{"name": "Test", "location": None}]
     validate_deserialize(config.ports, ports, snappi.Port._REQUIRED, True)
 
-    ports = [
-        {
-            'name': None,
-            'location': None
-        }
-    ]
+    ports = [{"name": None, "location": None}]
     validate_deserialize(config.ports, ports, snappi.Port._REQUIRED)
 
-    lags = [
-        {
-            'name': None
-        }
-    ]
+    lags = [{"name": None}]
 
     validate_deserialize(config.lags, lags, snappi.Lag._REQUIRED)
 
     l = config.lags.lag()[-1]
-    lp = [
-        {}
-    ]
+    lp = [{}]
     validate_deserialize(l.ports, lp, snappi.LagPort._REQUIRED)

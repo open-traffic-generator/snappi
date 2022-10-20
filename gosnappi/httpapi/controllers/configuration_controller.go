@@ -37,7 +37,7 @@ func (ctrl *configurationController) SetConfig(w http.ResponseWriter, r *http.Re
 	if r.Body != nil {
 		body, readError := ioutil.ReadAll(r.Body)
 		if body != nil {
-			item = gosnappi.NewConfig()
+			item = NewApi().getApi().NewConfig()
 			err := item.FromJson(string(body))
 			if err != nil {
 				ctrl.responseSetConfig400(w, err)
