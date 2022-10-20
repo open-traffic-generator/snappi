@@ -35,7 +35,7 @@ func (ctrl *statesController) GetStates(w http.ResponseWriter, r *http.Request) 
 	if r.Body != nil {
 		body, readError := ioutil.ReadAll(r.Body)
 		if body != nil {
-			item = gosnappi.NewStatesRequest()
+			item = NewApi().getApi().NewStatesRequest()
 			err := item.FromJson(string(body))
 			if err != nil {
 				ctrl.responseGetStates400(w, err)

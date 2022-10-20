@@ -44,7 +44,7 @@ func (ctrl *controlController) SetTransmitState(w http.ResponseWriter, r *http.R
 	if r.Body != nil {
 		body, readError := ioutil.ReadAll(r.Body)
 		if body != nil {
-			item = gosnappi.NewTransmitState()
+			item = NewApi().getApi().NewTransmitState()
 			err := item.FromJson(string(body))
 			if err != nil {
 				ctrl.responseSetTransmitState400(w, err)
@@ -109,7 +109,7 @@ func (ctrl *controlController) SetLinkState(w http.ResponseWriter, r *http.Reque
 	if r.Body != nil {
 		body, readError := ioutil.ReadAll(r.Body)
 		if body != nil {
-			item = gosnappi.NewLinkState()
+			item = NewApi().getApi().NewLinkState()
 			err := item.FromJson(string(body))
 			if err != nil {
 				ctrl.responseSetLinkState400(w, err)
@@ -174,7 +174,7 @@ func (ctrl *controlController) SetCaptureState(w http.ResponseWriter, r *http.Re
 	if r.Body != nil {
 		body, readError := ioutil.ReadAll(r.Body)
 		if body != nil {
-			item = gosnappi.NewCaptureState()
+			item = NewApi().getApi().NewCaptureState()
 			err := item.FromJson(string(body))
 			if err != nil {
 				ctrl.responseSetCaptureState400(w, err)
@@ -239,7 +239,7 @@ func (ctrl *controlController) UpdateFlows(w http.ResponseWriter, r *http.Reques
 	if r.Body != nil {
 		body, readError := ioutil.ReadAll(r.Body)
 		if body != nil {
-			item = gosnappi.NewFlowsUpdate()
+			item = NewApi().getApi().NewFlowsUpdate()
 			err := item.FromJson(string(body))
 			if err != nil {
 				ctrl.responseUpdateFlows400(w, err)
@@ -301,7 +301,7 @@ func (ctrl *controlController) SetRouteState(w http.ResponseWriter, r *http.Requ
 	if r.Body != nil {
 		body, readError := ioutil.ReadAll(r.Body)
 		if body != nil {
-			item = gosnappi.NewRouteState()
+			item = NewApi().getApi().NewRouteState()
 			err := item.FromJson(string(body))
 			if err != nil {
 				ctrl.responseSetRouteState400(w, err)
@@ -366,7 +366,7 @@ func (ctrl *controlController) SendPing(w http.ResponseWriter, r *http.Request) 
 	if r.Body != nil {
 		body, readError := ioutil.ReadAll(r.Body)
 		if body != nil {
-			item = gosnappi.NewPingRequest()
+			item = NewApi().getApi().NewPingRequest()
 			err := item.FromJson(string(body))
 			if err != nil {
 				ctrl.responseSendPing400(w, err)
@@ -428,7 +428,7 @@ func (ctrl *controlController) SetProtocolState(w http.ResponseWriter, r *http.R
 	if r.Body != nil {
 		body, readError := ioutil.ReadAll(r.Body)
 		if body != nil {
-			item = gosnappi.NewProtocolState()
+			item = NewApi().getApi().NewProtocolState()
 			err := item.FromJson(string(body))
 			if err != nil {
 				ctrl.responseSetProtocolState400(w, err)
@@ -493,7 +493,7 @@ func (ctrl *controlController) SetDeviceState(w http.ResponseWriter, r *http.Req
 	if r.Body != nil {
 		body, readError := ioutil.ReadAll(r.Body)
 		if body != nil {
-			item = gosnappi.NewDeviceState()
+			item = NewApi().getApi().NewDeviceState()
 			err := item.FromJson(string(body))
 			if err != nil {
 				ctrl.responseSetDeviceState400(w, err)

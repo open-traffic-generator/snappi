@@ -35,7 +35,7 @@ func (ctrl *metricsController) GetMetrics(w http.ResponseWriter, r *http.Request
 	if r.Body != nil {
 		body, readError := ioutil.ReadAll(r.Body)
 		if body != nil {
-			item = gosnappi.NewMetricsRequest()
+			item = NewApi().getApi().NewMetricsRequest()
 			err := item.FromJson(string(body))
 			if err != nil {
 				ctrl.responseGetMetrics400(w, err)
