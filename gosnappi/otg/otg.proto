@@ -1,4 +1,4 @@
-/* Open Traffic Generator API 0.9.2
+/* Open Traffic Generator API 0.9.8
  * Open Traffic Generator API defines a model-driven, vendor-neutral and standard
  * interface for emulating layer 2-7 network devices and generating test traffic.
  * 
@@ -46,6 +46,9 @@ message Config {
 
   // Description missing in models
   optional ConfigOptions options = 8;
+
+  // LLDP protocol that will be configured on traffic generator.
+  repeated Lldp lldp = 9;
 }
 
 // Global configuration options.
@@ -316,13 +319,13 @@ message EthernetConnection {
   // to.
   // 
   // x-constraint:
-  // - #/components/schemas/VXlan.V4Tunnel/properties/name
-  // - #/components/schemas/VXlan.V6Tunnel/properties/name
+  // - #/components/schemas/Vxlan.V4Tunnel/properties/name
+  // - #/components/schemas/Vxlan.V6Tunnel/properties/name
   // 
   // 
   // x-constraint:
-  // - #/components/schemas/VXlan.V4Tunnel/properties/name
-  // - #/components/schemas/VXlan.V6Tunnel/properties/name
+  // - #/components/schemas/Vxlan.V4Tunnel/properties/name
+  // - #/components/schemas/Vxlan.V6Tunnel/properties/name
   // 
   optional string vxlan_name = 4;
 }
@@ -436,8 +439,6 @@ message DeviceIpv4GatewayMAC {
   optional string value = 3;
 }
 
-// Status: under-review
-// Status: under-review
 // An IPv6 interface with gateway.
 message DeviceIpv6 {
 
@@ -1632,8 +1633,6 @@ message DeviceBgpRouter {
   repeated BgpV6Interface ipv6_interfaces = 3;
 }
 
-// Status: under-review
-// Status: under-review
 // Configuration for emulated BGPv4 peers and routes.
 message BgpV4Peer {
 
@@ -3214,8 +3213,6 @@ message BgpSrteV6TunnelTlv {
   optional bool active = 10;
 }
 
-// Status: under-review
-// Status: under-review
 // Configuration for BGPv6 peer settings and routes.
 message BgpV6Peer {
 
@@ -4951,6 +4948,191 @@ message EventSubscription {
   optional string callbackurl = 2;
 }
 
+// Configuration of LLDP protocol IEEE Ref: https://www.ieee802.org/1/files/public/docs2002/lldp-protocol-00.pdf
+message Lldp {
+
+  // The unique name of the object on which LLDP is running.
+  // required = true
+  LldpConnection connection = 1;
+
+  // The Chassis ID is a mandatory TLV which identifies the chassis component of the endpoint
+  // identifier associated  with the transmitting LLDP agent. If mac address is specified
+  // it should be in colon seperated mac address format.
+  optional LldpChassisId chassis_id = 2;
+
+  // The Port ID is a mandatory TLV which identifies the port component of the endpoint
+  // identifier associated with  the transmitting LLDP agent. If the specified port is
+  // an IEEE 802.3 Repeater port, then this TLV is optional.
+  optional LldpPortId port_id = 3;
+
+  // The system name field shall contain an alpha-numeric string that indicates the system's
+  // administratively assigned  name. The system name should be the system's fully qualified
+  // domain name. If implementations support IETF RFC  3418, the sysName object should
+  // be used for this field.
+  optional LldpSystemName system_name = 4;
+
+  // Specifies the amount of time in seconds a receiving device should maintain LLDP information
+  // sent  by the device before discarding it.
+  // default = 120
+  optional int32 hold_time = 5;
+
+  // Set the transmission frequency of LLDP updates in seconds.
+  // default = 30
+  optional int32 advertisement_interval = 6;
+
+  // Globally unique name of an object. It also serves as the primary key for arrays of
+  // objects.
+  // required = true
+  string name = 7;
+}
+
+// LLDP connection to a test port. In future if more connection options arise  LLDP
+// connection object will be enhanced.
+message LldpConnection {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      port_name = 1;
+    }
+  }
+  // The name of the test port or other connection objects on which LLDP is configured.
+  optional Choice.Enum choice = 1;
+
+  // Name of the test port on which LLDP is configured on.
+  // 
+  // x-constraint:
+  // - /components/schemas/Port/properties/name
+  // 
+  // 
+  // x-constraint:
+  // - /components/schemas/Port/properties/name
+  // 
+  optional string port_name = 2;
+}
+
+// The Chassis ID is a mandatory TLV which identifies the chassis component of the endpoint
+// identifier associated  with the transmitting LLDP agent. This field identifies the
+// format and source of the chassis identifier string.  It is based on the enumerator
+// defined by the LldpChassisIdSubtype object from IEEE 802.1AB MIB.
+message LldpChassisId {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      mac_address_subtype = 1;
+      interface_name_subtype = 2;
+      local_subtype = 3;
+    }
+  }
+  // Chassis ID subtype to be used in Chassis ID TLV.
+  // default = Choice.Enum.mac_address_subtype
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  optional LldpChassisMacSubType mac_address_subtype = 2;
+
+  // Name of an interface of the chassis that uniquely identifies the chassis.
+  optional string interface_name_subtype = 3;
+
+  // Locally assigned name of the chassis.
+  optional string local_subtype = 4;
+}
+
+// The Port ID is a mandatory TLV which identifies the port component of the endpoint
+// identifier associated with  the transmitting LLDP agent.This field identifies the
+// format and source of the port identifier string. It is  based on the enumerator defined
+// by the PtopoPortIdType object from RFC2922.
+message LldpPortId {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      mac_address_subtype = 1;
+      interface_name_subtype = 2;
+      local_subtype = 3;
+    }
+  }
+  // Port ID subtype to be used in Port ID TLV.
+  // default = Choice.Enum.interface_name_subtype
+  optional Choice.Enum choice = 1;
+
+  // The MAC Address configured in the Port ID TLV.
+  optional string mac_address_subtype = 2;
+
+  // Description missing in models
+  optional LldpPortInterfaceNameSubType interface_name_subtype = 3;
+
+  // The Locally assigned name configured in the Port ID TLV.
+  optional string local_subtype = 4;
+}
+
+// The MAC address configured in the Chassis ID TLV.
+message LldpChassisMacSubType {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      auto = 1;
+      value = 2;
+    }
+  }
+  // In auto mode the system generated value is set for this property, while if the choice
+  // is selected as value,  a user configured value will be used for this property.
+  // default = Choice.Enum.auto
+  optional Choice.Enum choice = 1;
+
+  // The OTG implementation must provide a system generated value for this property.
+  optional string auto = 2;
+
+  // User must specify a value if mode is not auto.
+  optional string value = 3;
+}
+
+// The interface name configured in the Port ID TLV.
+message LldpPortInterfaceNameSubType {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      auto = 1;
+      value = 2;
+    }
+  }
+  // In auto mode the system generated value is set for this property, while if the choice
+  // is selected as value,  a user configured value will be used for this property.
+  // default = Choice.Enum.auto
+  optional Choice.Enum choice = 1;
+
+  // The OTG implementation must provide a system generated value for this property.
+  optional string auto = 2;
+
+  // User must specify a value if mode is not auto.
+  optional string value = 3;
+}
+
+// The system Name configured in the System Name TLV.
+message LldpSystemName {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      auto = 1;
+      value = 2;
+    }
+  }
+  // In auto mode the system generated value is set for this property, while if the choice
+  // is selected as value,  a user configured value will be used for this property.
+  // default = Choice.Enum.auto
+  optional Choice.Enum choice = 1;
+
+  // The OTG implementation must provide a system generated value for this property.
+  optional string auto = 2;
+
+  // User must specify a value if mode is not auto.
+  optional string value = 3;
+}
+
 // A list of errors that may have occurred while executing the request.
 message ResponseError {
 
@@ -5180,11 +5362,11 @@ message PingIpv4 {
   // A base IPv4 interface
   // 
   // x-constraint:
-  // - /components/schemas/Device.Ipv4Base/properties/name
+  // - /components/schemas/Device.Ipv4/properties/name
   // 
   // 
   // x-constraint:
-  // - /components/schemas/Device.Ipv4Base/properties/name
+  // - /components/schemas/Device.Ipv4/properties/name
   // 
   optional string src_name = 1;
 
@@ -5198,11 +5380,11 @@ message PingIpv6 {
   // A base IPv6 interface
   // 
   // x-constraint:
-  // - /components/schemas/Device.Ipv6Base/properties/name
+  // - /components/schemas/Device.Ipv6/properties/name
   // 
   // 
   // x-constraint:
-  // - /components/schemas/Device.Ipv6Base/properties/name
+  // - /components/schemas/Device.Ipv6/properties/name
   // 
   optional string src_name = 1;
 
@@ -5223,13 +5405,13 @@ message Response {
   // The name of the source IPv4 or IPv6 interface from which ping was sent.
   // 
   // x-constraint:
-  // - /components/schemas/Device.Ipv4Base/properties/name
-  // - /components/schemas/Device.Ipv6Base/properties/name
+  // - /components/schemas/Device.Ipv4/properties/name
+  // - /components/schemas/Device.Ipv6/properties/name
   // 
   // 
   // x-constraint:
-  // - /components/schemas/Device.Ipv4Base/properties/name
-  // - /components/schemas/Device.Ipv6Base/properties/name
+  // - /components/schemas/Device.Ipv4/properties/name
+  // - /components/schemas/Device.Ipv6/properties/name
   // 
   optional string src_name = 1;
 
@@ -5290,6 +5472,7 @@ message MetricsRequest {
       isis = 5;
       lag = 6;
       lacp_lag_member = 7;
+      lldp = 8;
     }
   }
   // Description missing in models
@@ -5316,6 +5499,9 @@ message MetricsRequest {
 
   // Description missing in models
   optional LacpLagMemberMetricsRequest lacp_lag_member = 8;
+
+  // Description missing in models
+  optional LldpMetricsRequest lldp = 9;
 }
 
 // Response containing chosen traffic generator metrics
@@ -5331,6 +5517,7 @@ message MetricsResponse {
       isis_metrics = 5;
       lag_metrics = 6;
       lacp_lag_member_metrics = 7;
+      lldp_metrics = 8;
     }
   }
   // Description missing in models
@@ -5357,6 +5544,9 @@ message MetricsResponse {
 
   // Description missing in models
   repeated LacpLagMemberMetric lacp_lag_member_metrics = 8;
+
+  // Description missing in models
+  repeated LldpMetric lldp_metrics = 9;
 }
 
 // The port result request to the traffic generator
@@ -6183,6 +6373,72 @@ message LacpLagMemberMetric {
   optional int32 partner_port_num = 17;
 }
 
+// The request to retrieve LLDP per instance metrics/statistics.
+message LldpMetricsRequest {
+
+  // The names of LLDP instances to return results for. An empty list will return results
+  // for all LLDP instances.
+  // 
+  // x-constraint:
+  // - /components/schemas/Lldp/properties/name
+  // 
+  // 
+  // x-constraint:
+  // - /components/schemas/Lldp/properties/name
+  // 
+  repeated string lldp_names = 1;
+
+  message ColumnNames {
+    enum Enum {
+      unspecified = 0;
+      frames_rx = 1;
+      frames_tx = 2;
+      frames_error_rx = 3;
+      frames_discard = 4;
+      tlvs_discard = 5;
+      tlvs_unknown = 6;
+    }
+  }
+  // The requested list of column names for the result set. If the list is empty then
+  // metrics for all columns will be returned. The name of LLDP instance can not be excluded.
+  repeated ColumnNames.Enum column_names = 2;
+}
+
+// LLDP per instance statistics information.
+message LldpMetric {
+
+  // The name of the configured LLDP instance.
+  optional string name = 1;
+
+  // Number of LLDP frames received.
+  optional int64 frames_rx = 2;
+
+  // Number of LLDP frames transmitted.
+  optional int64 frames_tx = 3;
+
+  // Number of LLDP frames received with packet errors. This stat should be incremented
+  // based on statsFramesInErrorsTotal increment rule in section 10.3.2 of IEEE Std 802.1
+  // AB-2005.
+  optional int64 frames_error_rx = 4;
+
+  // Number of LLDP frames received that are discarded. This stat should be incremented
+  // when one or more of the three mandatory  TLVs at the beginning of the LLDPDU is missing,
+  // out of order or  contains an out of range information string length. This stat should
+  // follow the validation rules in section 10.3.2 of IEEE  Std 802.1 AB-2005.
+  optional int64 frames_discard = 5;
+
+  // Number of LLDP tlvs received that are discarded. If any TLV contains  an error condition
+  // specific for that particular TLV or if any TLV  extends past the physical end of
+  // the frame then these TLVs will be discarded.
+  optional int64 tlvs_discard = 6;
+
+  // Number of LLDP unknown tlvs received. If the OUI of the organizationlly specific
+  // TLV and/or organizationally defined subtype are not recognized,or if TLV type  value
+  // is in the range of reserved TLV types then these TLVs will be considered as  unknown
+  // TLVs.
+  optional int64 tlvs_unknown = 7;
+}
+
 // Request to traffic generator for states of choice
 message StatesRequest {
 
@@ -6193,6 +6449,7 @@ message StatesRequest {
       ipv6_neighbors = 2;
       bgp_prefixes = 3;
       isis_lsps = 4;
+      lldp_neighbors = 5;
     }
   }
   // Description missing in models
@@ -6210,6 +6467,9 @@ message StatesRequest {
 
   // Description missing in models
   optional IsisLspsStateRequest isis_lsps = 5;
+
+  // Description missing in models
+  optional LldpNeighborsStateRequest lldp_neighbors = 6;
 }
 
 // Response containing chosen traffic generator states
@@ -6222,6 +6482,7 @@ message StatesResponse {
       ipv6_neighbors = 2;
       bgp_prefixes = 3;
       isis_lsps = 4;
+      lldp_neighbors = 5;
     }
   }
   // Description missing in models
@@ -6239,6 +6500,9 @@ message StatesResponse {
 
   // Description missing in models
   repeated IsisLspsState isis_lsps = 5;
+
+  // Description missing in models
+  repeated LldpNeighborsState lldp_neighbors = 6;
 }
 
 // The request to retrieve IPv4 Neighbor state (ARP cache entries) of a network interface(s).
@@ -6315,13 +6579,13 @@ message BgpPrefixStateRequest {
   // BGP peers.
   // 
   // x-constraint:
-  // - /components/schemas/Bgp.v4Peer/properties/name
-  // - /components/schemas/Bgp.v6Peer/properties/name
+  // - /components/schemas/Bgp.V4Peer/properties/name
+  // - /components/schemas/Bgp.V6Peer/properties/name
   // 
   // 
   // x-constraint:
-  // - /components/schemas/Bgp.v4Peer/properties/name
-  // - /components/schemas/Bgp.v6Peer/properties/name
+  // - /components/schemas/Bgp.V4Peer/properties/name
+  // - /components/schemas/Bgp.V6Peer/properties/name
   // 
   repeated string bgp_peer_names = 1;
 
@@ -6855,6 +7119,168 @@ message IsisLspPrefixAttributes {
 
   // Node Flag (Bit 2)
   optional bool n_flag = 3;
+}
+
+// The request to retrieve LLDP neighbor information for a given instance.
+message LldpNeighborsStateRequest {
+
+  // The names of LLDP instances for which neighbor information will be retrieved. If
+  // no names are specified then the results will contain neighbor information for all
+  // configured LLDP instances.
+  // 
+  // x-constraint:
+  // - /components/schemas/Lldp/properties/name
+  // 
+  // 
+  // x-constraint:
+  // - /components/schemas/Lldp/properties/name
+  // 
+  repeated string lldp_names = 1;
+
+  // Specify the neighbors for which information will be returned. If empty  or missing
+  // then information for all neighbors will be returned.
+  repeated string neighbor_id_filters = 2;
+}
+
+// LLDP neighbor information.
+message LldpNeighborsState {
+
+  // The name of the LLDP instance.
+  optional string lldp_name = 1;
+
+  // The system name field shall contain an alpha-numeric string that  indicates the system's
+  // administratively assigned name. The system name  should be the system's fully qualified
+  // domain name. If implementations  support IETF RFC 3418, the sysName object should
+  // be used for this field.
+  optional string system_name = 2;
+
+  // The system description field shall contain an alpha-numeric string that  is the textual
+  // description of the network entity. The system description  should include the full
+  // name and version identification of the system's  hardware type, software operating
+  // system, and networking software. If  implementations support IETF RFC 3418, the sysDescr
+  // object should be used  for this field.
+  optional string system_description = 3;
+
+  // The Chassis ID is a mandatory TLV which identifies the chassis component of  the
+  // endpoint identifier associated with the transmitting LLDP agent.
+  optional string chassis_id = 4;
+
+  message ChassisIdType {
+    enum Enum {
+      unspecified = 0;
+      port_component = 1;
+      network_address = 2;
+      chassis_component = 3;
+      mac_address = 4;
+      interface_name = 5;
+      local = 6;
+      interface_alias = 7;
+    }
+  }
+  // This field identifies the format and source of the chassis identifier string.  It
+  // is an enumerator defined by the LldpChassisIdSubtype object from IEEE 802.1AB  MIB.
+  optional ChassisIdType.Enum chassis_id_type = 5;
+
+  // System generated identifier for the neighbor on the LLDP instance.
+  optional string neighbor_id = 6;
+
+  // Age since discovery in seconds.
+  optional int64 age = 7;
+
+  // Seconds since last update received.
+  optional int64 last_update = 8;
+
+  // The time-to-live (TTL) in seconds is a mandatory TLV which indicates how long information
+  // from the neighbor  should be considered valid.
+  optional int32 ttl = 9;
+
+  // The Port ID is a mandatory TLV which identifies the port component of the endpoint
+  // identifier associated with  the transmitting LLDP agent. If the specified port is
+  // an IEEE 802.3 Repeater port, then this TLV is optional.
+  optional string port_id = 10;
+
+  message PortIdType {
+    enum Enum {
+      unspecified = 0;
+      port_component = 1;
+      network_address = 2;
+      agent_circuit_id = 3;
+      mac_address = 4;
+      interface_name = 5;
+      local = 6;
+      interface_alias = 7;
+    }
+  }
+  // This field identifies the format and source of the port identifier string. It is
+  // an enumerator defined by the PtopoPortIdType object from RFC2922.
+  optional PortIdType.Enum port_id_type = 11;
+
+  // The binary string containing the actual port identifier for the port which this LLDP
+  // PDU was transmitted. The source  and format of this field is defined by PtopoPortId
+  // from RFC2922.
+  optional string port_description = 12;
+
+  // The Management Address is a mandatory TLV which identifies a network address associated
+  // with the local LLDP agent, which  can be used to reach the agent on the port identified
+  // in the Port ID TLV.
+  optional string management_address = 13;
+
+  // The enumerated value for the network address type identified in this TLV. This enumeration
+  // is defined in the 'Assigned Numbers'  RFC [RFC3232] and the ianaAddressFamilyNumbers
+  // object.
+  optional string management_address_type = 14;
+
+  // Description missing in models
+  repeated LldpCustomTLVState custom_tlvs = 15;
+
+  // Description missing in models
+  repeated LldpCapabilityState capabilities = 16;
+}
+
+// Custom TLV received from a neighbor.Custom TLVs are organization specific TLVs advertised
+// with TLV type 127.
+message LldpCustomTLVState {
+
+  // The integer value identifying the type of information contained in the value field.
+  optional int32 custom_type = 1;
+
+  // The organizationally unique identifier field shall contain the organization's OUI
+  // as defined in Clause 9 of IEEE Std 802. The high-order octet is 0 and the low-order
+  // 3 octets are the SMI Network Management Private Enterprise Code of the Vendor in
+  // network byte order,  as defined in the 'Assigned Numbers' RFC [RFC3232].
+  optional string oui = 2;
+
+  // The organizationally defined subtype field shall contain a unique subtype value assigned
+  // by the defining organization.
+  optional string oui_subtype = 3;
+}
+
+// LLDP system capability advertised by the neighbor
+message LldpCapabilityState {
+
+  message CapabilityName {
+    enum Enum {
+      unspecified = 0;
+      mac_bridge = 1;
+      two_port_mac_relay = 2;
+      repeater = 3;
+      docsis_cable_device = 4;
+      s_vlan = 5;
+      telephone = 6;
+      other = 7;
+      router = 8;
+      c_vlan = 9;
+      station_only = 10;
+      wlan_access_point = 11;
+    }
+  }
+  // Name of the system capability advertised by the neighbor. Capabilities are represented
+  // in a bitmap that defines the primary functions of the system.  The capabilities are
+  // defined in IEEE 802.1AB.
+  optional CapabilityName.Enum capability_name = 1;
+
+  // Indicates whether the corresponding system capability is enabled on the neighbor.
+  optional bool capability_enabled = 2;
 }
 
 // The capture result request to the traffic generator. Stops the port capture on the
