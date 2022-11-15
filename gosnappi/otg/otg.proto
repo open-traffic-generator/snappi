@@ -1,4 +1,4 @@
-/* Open Traffic Generator API 0.9.8
+/* Open Traffic Generator API 0.9.9
  * Open Traffic Generator API defines a model-driven, vendor-neutral and standard
  * interface for emulating layer 2-7 network devices and generating test traffic.
  * 
@@ -99,7 +99,10 @@ message Lag {
   optional LagProtocol protocol = 2;
 
   // Specifies the mininum number of member interfaces that must be active for the aggregate
-  // interface to be available
+  // interface to be available.
+  // If the aggregate interface is not available due to min-links criterion not being
+  // met, LACPDUs continue to be transmitted and received by the member interfaces if
+  // LACP is enabled, but other PDUs are not transmitted or received.
   // default = 1
   optional int32 min_links = 3;
 
@@ -1805,20 +1808,45 @@ message BgpEthernetSegmentDfElection {
 // Configuration for advanced BGP route range settings.
 message BgpRouteAdvanced {
 
-  // The multi exit discriminator (MED) value.  A null value means the MED feature is
-  // not enabled.
+  // BGP Multi Exit Discriminator attribute sent to the peer to help in the route selection
+  // process.  If set to true, the Multi Exit Discriminator attribute will be included
+  // in the route advertisement.
+  // default = True
+  optional bool include_multi_exit_discriminator = 3;
+
+  // The multi exit discriminator (MED) value used for route selection sent to the peer.
   optional int32 multi_exit_discriminator = 1;
+
+  // If set to true, the Origin attribute will be included in the route advertisement.
+  // default = True
+  optional bool include_origin = 4;
 
   message Origin {
     enum Enum {
       unspecified = 0;
       igp = 1;
       egp = 2;
+      incomplete = 3;
     }
   }
-  // The origin value.  A null value means the origin feature is not enabled.
+  // The origin attribute of a prefix can take three values: the prefix originates from
+  // an interior routing protocol 'igp',  it originates from 'egp' or the origin is 'incomplete',
+  // if the prefix is learned through other means.
   // default = Origin.Enum.igp
   optional Origin.Enum origin = 2;
+
+  // BGP Local Preference attribute sent to the peer to indicate the degree of preference
+  // for externally learned routes. If set to true, the Local Preference attribute will
+  // be included  in the route advertisement. This should be included only for internal
+  // peers.
+  // default = True
+  optional bool include_local_preference = 5;
+
+  // Value to be set in Local Preference attribute if include_local_preference is set
+  // to true. It is  used for the selection of the path for the traffic leaving the AS.
+  // The route with the  highest local preference value is preferred.
+  // default = 100
+  optional int32 local_preference = 6;
 }
 
 // BGP communities provide additional capability for tagging routes and  for modifying
@@ -5452,9 +5480,9 @@ message LacpMemberState {
       down = 2;
     }
   }
-  // The LACP Member admin state. 'up' will start transmission of LACPDUs on selected
-  // member ports. 'down' will send a LACPDU with 'sync' flag unset and then stop transmission
-  // of LACPDUs on selected member ports.
+  // The LACP Member admin state. 'up' will send LACPDUs with 'sync' flag set on selected
+  // member ports. 'down' will send LACPDUs with 'sync' flag unset on selected member
+  // ports.
   // required = true
   State.Enum state = 2;
 }
@@ -6627,6 +6655,7 @@ message BgpPrefixIpv4UnicastFilter {
       unspecified = 0;
       igp = 1;
       egp = 2;
+      incomplete = 3;
     }
   }
   // The origin to match. If the origin is missing then all origins will match.
@@ -6652,6 +6681,7 @@ message BgpPrefixIpv6UnicastFilter {
       unspecified = 0;
       igp = 1;
       egp = 2;
+      incomplete = 3;
     }
   }
   // The origin to match. If the origin is missing then all origins will match.
@@ -6688,6 +6718,7 @@ message BgpPrefixIpv4UnicastState {
       unspecified = 0;
       igp = 1;
       egp = 2;
+      incomplete = 3;
     }
   }
   // The origin of the prefix.
@@ -6723,6 +6754,7 @@ message BgpPrefixIpv6UnicastState {
       unspecified = 0;
       igp = 1;
       egp = 2;
+      incomplete = 3;
     }
   }
   // The origin of the prefix.
