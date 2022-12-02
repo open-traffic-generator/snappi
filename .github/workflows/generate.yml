@@ -61,7 +61,7 @@ jobs:
 
   python_tests:
     needs: build
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     strategy:
       max-parallel: 6
       matrix:
@@ -90,7 +90,7 @@ jobs:
 
   go_tests:
     needs: python_tests
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
       - name: Checkout source
         uses: actions/checkout@v2
@@ -107,7 +107,7 @@ jobs:
 
   publish_python_package:
     needs: go_tests
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
       - name: Checkout source
         uses: actions/checkout@v2
