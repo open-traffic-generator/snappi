@@ -1,4 +1,4 @@
-/* Open Traffic Generator API 0.10.3
+/* Open Traffic Generator API 0.10.4
  * Open Traffic Generator API defines a model-driven, vendor-neutral and standard
  * interface for emulating layer 2-7 network devices and generating test traffic.
  * 
@@ -56,6 +56,9 @@ message ConfigOptions {
 
   // Description missing in models
   optional PortOptions port_options = 1;
+
+  // Description missing in models
+  optional DeviceOptions device_options = 2;
 }
 
 // An abstract test port.
@@ -977,6 +980,17 @@ message Device {
 
   // The properties of an RSVP router and its children.
   optional DeviceRsvp rsvp = 8;
+}
+
+// Common options that apply to all configured devices.
+message DeviceOptions {
+
+  // When set to true, all underlying resources for configured devices  shall be created
+  // and corresponding protocol session negotiation shall  be initiated. Otherwise, when
+  // set to false, corresponding protocol  session negotiation will need to be initiated
+  // using a separate  set_protocol_state API call.
+  // default = True
+  optional bool auto_start_all = 1;
 }
 
 // Status: under-review
@@ -5847,7 +5861,9 @@ message PingRequest {
   repeated Ping endpoints = 1;
 }
 
-// Sets all configured protocols to `start` or `stop` state.
+// Sets all configured protocols to `start` or `stop` state. Setting protocol state
+// to `start`  shall be a no-op if preceding `set_config` API call was made with  `config.options.device_options.auto_start_all`
+// set to `true` or if all the configured protocols are already started.
 message ProtocolState {
 
   message State {
