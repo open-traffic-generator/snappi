@@ -1,4 +1,4 @@
-/* Open Traffic Generator API 0.9.10
+/* Open Traffic Generator API 0.10.3
  * Open Traffic Generator API defines a model-driven, vendor-neutral and standard
  * interface for emulating layer 2-7 network devices and generating test traffic.
  * 
@@ -974,6 +974,9 @@ message Device {
   // objects.
   // required = true
   string name = 7;
+
+  // The properties of an RSVP router and its children.
+  optional DeviceRsvp rsvp = 8;
 }
 
 // Status: under-review
@@ -3731,6 +3734,514 @@ message VxlanV6TunnelDestinationIPModeMulticast {
   optional string address = 1;
 }
 
+// Status: under-review
+// Status: under-review
+// Configuration for one or more RSVP interfaces, ingress and egress LSPs. In this model,
+// currently IPv4 RSVP and point-to-point LSPs are supported as per RFC3209 and related
+// specifications.
+message DeviceRsvp {
+
+  // List of IPv4 RSVP connected interfaces. At least one interface should be present
+  // for device connected to the DUT. For unconnected devices, this array must be empty.
+  repeated RsvpIpv4Interface ipv4_interfaces = 1;
+
+  // List of IPv4 Loopback or IPv4 connected interfaces acting as RSVP ingress and egress
+  // endpoints.
+  repeated RsvpLspIpv4Interface lsp_ipv4_interfaces = 2;
+
+  // Globally unique name of an object. It also serves as the primary key for arrays of
+  // objects.
+  optional string name = 3;
+}
+
+// Status: under-review
+// Status: under-review
+// Configuration for RSVP Interface.
+message RsvpIpv4Interface {
+
+  // The globally unique name of the IPv4 interface connected to the DUT. This name must
+  // match the name field of the ipv4_addresses on top which this RSVP interface is configured.
+  // 
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.Ipv4/properties/name
+  // 
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.Ipv4/properties/name
+  // 
+  // required = true
+  string ipv4_name = 1;
+
+  // IPv4 address of the RSVP neighbor on this interface.
+  // required = true
+  string neighbor_ip = 2;
+
+  // The user-defined label space start value. The LSPs for which this router acts as
+  // a egress are assigned labels from this label pool.Thelabel_space_start and label_space_end
+  // together defines this label-pool.
+  // default = 1000
+  optional int32 label_space_start = 3;
+
+  // The user-defined label space end value.The last label value that can be assigned
+  // to the LSPs for which this router acts as egress.
+  // default = 100000
+  optional int32 label_space_end = 4;
+
+  // Enables sending of Refresh Reduction as described in RFC2961.
+  // default = False
+  optional bool enable_refresh_reduction = 5;
+
+  // The number of seconds between transmissions of successive Summary Refreshes. There
+  // is no specification specified maximum value. For clarity, setting the maximum to
+  // 1 hour.
+  // default = 30
+  optional int32 summary_refresh_interval = 6;
+
+  // Enables aggregration of different RSVP messages within a single PDU.
+  // default = False
+  optional bool send_bundle = 7;
+
+  // The number of milliseconds to wait after which RSVP will bundle different RSVP messages
+  // and transmit Bundle messages.
+  // default = 50
+  optional int32 bundle_threshold = 8;
+
+  // Enables sending of Hello Messages as per RFC3209.
+  // default = False
+  optional bool enable_hello = 9;
+
+  // If enable_hello is set to 'true', this specifies the minimum hello interval in seconds
+  // at which successive Hello Messages  are sent as per RFC3209. There is no specification
+  // specified maximum value. For clarity, setting the maximum to 1 hour.
+  // default = 9
+  optional int32 hello_interval = 10;
+
+  // The number of missed hellos after which the node should consider RSVP Neighbor to
+  // have timed out. There is no specification specified maximum value. Setting the maximum
+  // allowed value to 10.
+  // default = 3
+  optional int32 timeout_multiplier = 11;
+}
+
+// Status: under-review
+// Status: under-review
+// Configuration for RSVP LSP IPv4 Interface.
+message RsvpLspIpv4Interface {
+
+  // The globally unique name of the IPv4 or Loopback IPv4 interface acting as the RSVP
+  // ingress and egress endpoint for  the LSPs configured on this interface. This must
+  // match the name field of either ipv4_addresses or ipv4_loopbacks  on which this LSP
+  // interface is configured.
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.Ipv4/properties/name
+  // - /components/schemas/Device.Ipv4Loopback/properties/name
+  // 
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.Ipv4/properties/name
+  // - /components/schemas/Device.Ipv4Loopback/properties/name
+  // 
+  // required = true
+  string ipv4_name = 1;
+
+  // Contains properties of Tail(Egress) LSPs.
+  optional RsvpLspIpv4InterfaceP2PEgressIpv4Lsp p2p_egress_ipv4_lsps = 2;
+
+  // Array of point-to-point RSVP-TE P2P LSPs originating from this interface.
+  repeated RsvpLspIpv4InterfaceP2PIngressIpv4Lsp p2p_ingress_ipv4_lsps = 3;
+}
+
+// Configuration for RSVP Egress Point-to-Point(P2P) IPv4 LSPs.
+message RsvpLspIpv4InterfaceP2PEgressIpv4Lsp {
+
+  // Globally unique name of an object. It also serves as the primary key for arrays of
+  // objects.
+  // required = true
+  string name = 1;
+
+  // The time in seconds between successive transmissions of RESV Refreshes. The actual
+  // refresh interval is jittered by upto 50%. There is no specification specified maximum
+  // value. For clarity, setting the maximum to 1 hour.
+  // default = 30
+  optional int32 refresh_interval = 2;
+
+  // The number of missed PATH refreshes after which a recieving node should consider
+  // the LSP state to have timed out. There is no specification specified maximum value.
+  // Setting the maximum allowed value to 10.
+  // default = 3
+  optional int32 timeout_multiplier = 3;
+
+  message ReservationStyle {
+    enum Enum {
+      unspecified = 0;
+      shared_explicit = 1;
+      fixed_filter = 2;
+      auto = 3;
+    }
+  }
+  // It determines how RSVP-TE enabled network devices set up reservations along the path
+  // between an end-to-end  QOS-enabled connection. If 'auto' is enabled, the style is
+  // chosen based on whether the incoming Path has 'SE Desired' flag set. Otherwise, the
+  // style is chosen based on the value selected for this attribute.
+  // default = ReservationStyle.Enum.shared_explicit
+  optional ReservationStyle.Enum reservation_style = 4;
+
+  // If enabled, a specific fixed label will be advertised by the egress or tail end for
+  // all Path messages received by this egress.  This can be leveraged to advertise Explicit
+  // or Implicit null labels.
+  // default = False
+  optional bool enable_fixed_label = 5;
+
+  // The fixed label value as advertised by egress in RESV message. Applicable only if
+  // 'fixed_label' is set to 'true'. Special values are '0 - IPv4 Explicit NULL', '2 -
+  // IPv6 Explicit NULL' and '3 - Implicit NULL'.   Outside of this, labels are expected
+  // to have a minimum value of 16.
+  // default = 0
+  optional int32 fixed_label_value = 6;
+}
+
+// Configuration for an RSVP Ingress point-to-point LSP.
+message RsvpLspIpv4InterfaceP2PIngressIpv4Lsp {
+
+  // Globally unique name of an object. It also serves as the primary key for arrays of
+  // objects.
+  // required = true
+  string name = 1;
+
+  // IPv4 address of the remote endpoint of the LSP.
+  // required = true
+  string remote_address = 2;
+
+  // The Tunnel ID of the RSVP LSP. Carried in the SESSION object in Path Messages.
+  // default = 1
+  optional int32 tunnel_id = 3;
+
+  // The LSP ID of the RSVP LSP. Carried in the SENDER_TEMPLATE object in Path Messages.
+  // default = 1
+  optional int32 lsp_id = 4;
+
+  // The time in seconds between successive transmissions of PATH Refreshes.  The actual
+  // refresh interval is jittered by upto 50%. There is no specification specified maximum
+  // value. For clarity, setting the maximum to 1 hour.
+  // default = 30
+  optional int32 refresh_interval = 5;
+
+  // The number of missed RESV refreshes after which a recieving node should consider
+  // the LSP state to have timed out. There is no specification specified maximum value.
+  // Setting the maximum allowed value to 10.
+  // default = 3
+  optional int32 timeout_multiplier = 6;
+
+  // The LSP id that will be used when creating a Make-Before-Break LSP when the active
+  // LSP is using lsp_id. If the active LSP on which Make-Before-Break is being done is
+  // using the backup_lsp_id, the new LSP created will toggle to  use the lsp_id instead.
+  // default = 2
+  optional int32 backup_lsp_id = 7;
+
+  // The amount of delay in milliseconds that an implementation should wait for before
+  // switching traffic to the new LSP created after  a Make-Before-Break is done on an
+  // LSP. The default value is 0 which means to switch immediately. An implementation
+  // should support a minimum delay value of at least 50ms . There is no specification
+  // specified maximum value. Setting maximum allowed value to 1 minute.  If a delay value
+  // is supplied which is lesser than the minimum delay value supported, a warning should
+  // be provided indicating that the minimum value of LSP switchover delay is automatically
+  // increased to the supported minimum value. This warning should be included in the
+  // list of warnings in the 'Response.Warning' attribute sent in the SetConfig 'Success'
+  // Response.
+  // default = 0
+  optional int32 lsp_switchover_delay = 8;
+
+  // This contains the values of the fields to be included in the SESSION_ATTRIBUTE object
+  // in the Path Message sent for the LSP.
+  optional RsvpSessionAttribute session_attribute = 9;
+
+  // This contains the values of the fields to be included in the TSPEC object in the
+  // Path Message sent for the LSP.
+  optional RsvpTspec tspec = 10;
+
+  // This contains the values of the fields to be included in the FAST_REROUTE object
+  // in the Path Message sent for the LSP.
+  // This is an optional object . If this attribute is not included , the FAST_REROUTE
+  // object will not be included.
+  optional RsvpFastReroute fast_reroute = 11;
+
+  // This contains the values of the fields to be included in the ERO object in the Path
+  // Message sent for the LSP.
+  // This is an optional object . If this attribute is not included , the ERO object will
+  // not be included.
+  optional RsvpEro ero = 12;
+}
+
+// Configuration for RSVP-TE SESSION_ATTRIBUTE object included in Path Messages as defined
+// in RFC3209. The bandwidth_protection_desired and node_protection_desired flags are
+// defined in RFC4090 (Fast Reroute).
+message RsvpSessionAttribute {
+
+  // If this is enabled, an auto-generated Session Name is included in the SESSION_ATTRIBUTE
+  // object in the Path Message for this LSP.
+  // default = True
+  optional bool auto_generate_session_name = 1;
+
+  // If auto_generate_session_name is set to 'false', then the value of this field is
+  // used to fill the Session Name field of the SESSION_ATTRIBUTE object in the Path Message
+  // for this LSP. It is suggested to include the Local IP, Remote IP, Tunnel ID and LSP
+  // ID in the auto-generated Session Name to ensure uniqueness of the name in the test.
+  // The maximum length of session name is 254 bytes.
+  optional string session_name = 2;
+
+  // Specifies the value of the Setup Priority field. This controls whether the LSP should
+  // pre-empt existing  LSP setup with certain Holding Priority if resource limitation
+  // is encountered when setting up the LSP. (e.g. bandwidth availability). The value
+  // 0 is the highest priority while 7 is the lowest.
+  // default = 7
+  optional int32 setup_priority = 3;
+
+  // Specifies the value of the Holding Priority field. This controls whether a new LSP
+  // being created with certain Setup Priority should pre-empt this LSP if resource limitation
+  // is encountered when setting up the LSP. (e.g. bandwidth availability). The value
+  // 0 is the highest priority while 7 is the lowest.
+  // default = 7
+  optional int32 holding_priority = 4;
+
+  // This flag permits transit routers to use a local repair mechanism which may result
+  // in violation of the explicit route object.  When a fault is detected on an adjacent
+  // downstream link or node, a transit router can reroute traffic for fast service restoration.
+  // default = False
+  optional bool local_protection_desired = 5;
+
+  // This flag indicates that label information should be included when doing a route
+  // record.
+  // default = False
+  optional bool label_recording_desired = 6;
+
+  // This flag indicates that the tunnel ingress node may choose to reroute this tunnel
+  // without tearing it down. A tunnel egress node SHOULD use the Shared Explicit(SE)
+  // Style when responding with a Resv message.
+  // default = False
+  optional bool se_style_desired = 7;
+
+  // This flag in the SESSION_ATTRIBUTE object in the Path Message indicates to the PLRs
+  // along the protected LSP path that a  backup path with a bandwidth guarantee is desired.
+  // This bandwidth has to be guaranteed for the protected LSP, if no FAST_REROUTE object
+  // is included in the PATH message. If a FAST_REROUTE object is present in the Path
+  // message, then the bandwidth specified therein is to be guaranteed.
+  // default = False
+  optional bool bandwidth_protection_desired = 8;
+
+  // This flag in the SESSION_ATTRIBUTE object in the Path Message indicates to the PLRs
+  // along a protected LSP path that it is desired to have a backup path that bypasses
+  // at least the next node of the protected LSP.
+  // default = False
+  optional bool node_protection_desired = 9;
+
+  // This is an optional object. If included the extended SESSION_ATTRIBUTE object is
+  // sent in the Path message containing
+  // the additional fields included in this object. This contains a set of three bitmaps
+  // using which further constraints can be
+  // set on the path calculated for the LSP based on the Admin Group settings in the IGP
+  // (e.g ISIS or OSPF interface).
+  optional RsvpResourceAffinities resource_affinities = 10;
+}
+
+// This is an optional object. If included, the extended SESSION_ATTRIBUTE object is
+// sent in the Path message containing
+// the additional fields included in this object. This contains a set of three bitmaps
+// using which further constraints can be
+// set on the path calculated for the LSP based on the Admin Group settings in the IGP
+// (e.g ISIS or OSPF interface).
+message RsvpResourceAffinities {
+
+  // A 32-bit vector representing a set of attribute filters associated with a tunnel
+  // any of which renders a link unacceptable.  A null set (all bits set to zero) doesn't
+  // render the link unacceptable.  The most significant byte in the hex-string is the
+  // farthest  to the left in the byte sequence.  Leading zero bytes in the configured
+  // value may be omitted for brevity.
+  // default = 0
+  optional string exclude_any = 1;
+
+  // A 32-bit vector representing a set of attribute filters associated with a tunnel
+  // any of which renders a link acceptable. A null set (all bits set to zero) automatically
+  // passes. The most significant byte in the hex-string is the farthest  to the left
+  // in the byte sequence.  Leading zero bytes in the configured value may be omitted
+  // for brevity.
+  // default = 0
+  optional string include_any = 2;
+
+  // A 32-bit vector representing a set of attribute filters associated with a tunnel
+  // all of which must be present for a link to be acceptable. A null set (all bits set
+  // to zero) automatically passes. The most significant byte in the hex-string is the
+  // farthest  to the left in the byte sequence.  Leading zero bytes in the configured
+  // value may be omitted for brevity.
+  // default = 0
+  optional string include_all = 3;
+}
+
+// Configuration for RSVP-TE TSPEC object included in Path Messages. The usage of these
+// parameters is defined in RFC2215.
+message RsvpTspec {
+
+  // The rate of the traffic to be carried in this LSP in bytes per second. This is part
+  // of the Token Bucket specification defined for a traffic flow defined in RFC2215.
+  // default = 0
+  optional float token_bucket_rate = 1;
+
+  // The depth of the token bucket in bytes used to specify the Token Bucket characteristics
+  // of the traffic to be carried in the LSP. This is part of the Token Bucket specification
+  // defined for a traffic flow defined in RFC2215.
+  // default = 0
+  optional float token_bucket_size = 2;
+
+  // The peak data rate of the traffic in bytes per second used to specify the Token Bucket
+  // characteristics of the traffic  to be carried in the LSP. This is part of the Token
+  // Bucket specification defined for a traffic flow defined in RFC2215.
+  // default = 0
+  optional float peak_data_rate = 3;
+
+  // Specifies the minium length of packet frames that will be policed.
+  // default = 0
+  optional int32 minimum_policed_unit = 4;
+
+  // Specifies the maximum length of packet frames that will be policed.
+  // default = 0
+  optional int32 maximum_policed_unit = 5;
+}
+
+// Configuration for the optional RSVP-TE FAST_REROUTE object included in Path Messages
+// as defined in RFC4090.
+message RsvpFastReroute {
+
+  // Specifies the value of the Setup Priority field. This controls whether the backup
+  // LSP should pre-empt existing LSP that is setup with certain Holding Priority. While
+  // setting up a backup LSP, preemption of existing LSP can happen  if resource limitation
+  // is encountered (e.g bandwidth availability).
+  // default = 7
+  optional int32 setup_priority = 1;
+
+  // Specifies the value of the Holding Priority field. This controls whether a new LSP
+  // being created with certain Setup Priority should pre-empt this LSP set up with this
+  // Holding Priority. While setting up a new LSP, preemption of existing LSP can happen
+  // if resource limitation is encountered (e.g bandwidth availability).
+  // default = 7
+  optional int32 holding_priority = 2;
+
+  // Specifies the value of the Hop Limit field. This controls the maximum number of hops
+  // the LSP should traverse to reach the  LSP end-point.
+  // default = 3
+  optional int32 hop_limit = 3;
+
+  // Specifies the value of the Bandwidth field as a 32-bit IEEE floating point integer,
+  // in bytes per second, as desired for the LSP.
+  // default = 0
+  optional float bandwidth = 4;
+
+  // A 32-bit vector representing a set of attribute filters associated with a tunnel
+  // any of which renders a link unacceptable. A null set (all bits set to zero) doesn't
+  // render the link unacceptable. The most significant byte in the hex-string is the
+  // farthest  to the left in the byte sequence.  Leading zero bytes in the configured
+  // value may be omitted for brevity.
+  // default = 0
+  optional string exclude_any = 5;
+
+  // A 32-bit vector representing a set of attribute filters associated with a tunnel
+  // any of which renders a link acceptable. A null set (all bits set to zero) automatically
+  // passes. The most significant byte in the hex-string is the farthest  to the left
+  // in the byte sequence.  Leading zero bytes in the configured value may be omitted
+  // for brevity.
+  // default = 0
+  optional string include_any = 6;
+
+  // A 32-bit vector representing a set of attribute filters associated with a tunnel
+  // all of which must be present for a link to be acceptable. A null set (all bits set
+  // to zero) automatically passes. The most significant byte in the hex-string is the
+  // farthest  to the left in the byte sequence.  Leading zero bytes in the configured
+  // value may be omitted for brevity.
+  // default = 0
+  optional string include_all = 7;
+
+  // Requests protection via the one-to-one backup method.
+  // default = False
+  optional bool one_to_one_backup_desired = 8;
+
+  // Requests protection via the facility backup method.
+  // default = False
+  optional bool facility_backup_desired = 9;
+}
+
+// Configuration for the optional RSVP-TE explicit route object(ERO) object included
+// in Path Messages.
+message RsvpEro {
+
+  message PrependNeighborIp {
+    enum Enum {
+      unspecified = 0;
+      dont_prepend = 1;
+      prepend_loose = 2;
+      prepend_strict = 3;
+    }
+  }
+  // Determines whether the IP address of the RSVP neighbor should be added as an ERO
+  // sub-object. If it is to be included, it can be included as a Loose hop or as a Strict
+  // hop.
+  // default = PrependNeighborIp.Enum.prepend_loose
+  optional PrependNeighborIp.Enum prepend_neighbor_ip = 1;
+
+  // If prepend_egress_ip is set to one of 'prepend_loose' or 'prepend_strict', then set
+  // this value as the prefix length of the ERO sub-object containing egress IP address.
+  // 
+  // default = 32
+  optional int32 prefix_length = 2;
+
+  // Array of sub-objects to be included in the ERO. These sub-objects contain the intermediate
+  // hops to be traversed by the LSP while being forwarded towards the egress endpoint.
+  // These sub-objects are included after the optional sub-object containing IP address
+  // of egress endpoint of the LSP (when present).
+  repeated RsvpEroSubobject subobjects = 3;
+}
+
+// Configuration for the ERO sub-object.
+message RsvpEroSubobject {
+
+  message Type {
+    enum Enum {
+      unspecified = 0;
+      ipv4 = 1;
+      as_number = 2;
+    }
+  }
+  // The type of the ERO sub-object, one of IPv4 Address or AS Number.
+  // default = Type.Enum.ipv4
+  optional Type.Enum type = 1;
+
+  // IPv4 address that this LSP should traverse through. This field is applicable only
+  // if the value of 'type' is set to 'ipv4'.
+  // default = 0.0.0.0
+  optional string ipv4_address = 2;
+
+  // Prefix length for the IPv4 address in the ERO sub-object. This field is applicable
+  // only if the value of 'type' is set to 'ipv4'.
+  // default = 32
+  optional int32 prefix_length = 3;
+
+  // Autonomous System number to be set in the ERO sub-object that this LSP should traverse
+  // through. This field is applicable only if the value of 'type' is set to 'as_number'.
+  // Note that as per RFC3209, 4-byte AS encoding is not supported.
+  // default = 0
+  optional int32 as_number = 4;
+
+  message HopType {
+    enum Enum {
+      unspecified = 0;
+      strict = 1;
+      loose = 2;
+    }
+  }
+  // The hop type of the ERO sub-object, one of Strict or Loose.
+  // default = HopType.Enum.loose
+  optional HopType.Enum hop_type = 5;
+}
+
 // A high level data plane traffic flow.
 message Flow {
 
@@ -3864,6 +4375,7 @@ message FlowRouter {
   // - /components/schemas/Bgp.V4RouteRange/properties/name
   // - /components/schemas/Bgp.V6RouteRange/properties/name
   // - /components/schemas/Bgp.CMacIpRange/properties/name
+  // - /components/schemas/Rsvp.LspIpv4Interface.P2PIngressIpv4Lsp/properties/name
   // 
   // 
   // x-constraint:
@@ -3873,6 +4385,7 @@ message FlowRouter {
   // - /components/schemas/Bgp.V4RouteRange/properties/name
   // - /components/schemas/Bgp.V6RouteRange/properties/name
   // - /components/schemas/Bgp.CMacIpRange/properties/name
+  // - /components/schemas/Rsvp.LspIpv4Interface.P2PIngressIpv4Lsp/properties/name
   // 
   repeated string tx_names = 2;
 
@@ -3885,6 +4398,7 @@ message FlowRouter {
   // - /components/schemas/Bgp.V4RouteRange/properties/name
   // - /components/schemas/Bgp.V6RouteRange/properties/name
   // - /components/schemas/Bgp.CMacIpRange/properties/name
+  // - /components/schemas/Rsvp.LspIpv4Interface.P2PEgressIpv4Lsp/properties/name
   // 
   // 
   // x-constraint:
@@ -3894,6 +4408,7 @@ message FlowRouter {
   // - /components/schemas/Bgp.V4RouteRange/properties/name
   // - /components/schemas/Bgp.V6RouteRange/properties/name
   // - /components/schemas/Bgp.CMacIpRange/properties/name
+  // - /components/schemas/Rsvp.LspIpv4Interface.P2PEgressIpv4Lsp/properties/name
   // 
   repeated string rx_names = 3;
 }
@@ -5487,7 +6002,7 @@ message LacpMemberState {
   State.Enum state = 2;
 }
 
-// Request to traffic generator for metrics of choice
+// Request to traffic generator for metrics of choice.
 message MetricsRequest {
 
   message Choice {
@@ -5499,8 +6014,9 @@ message MetricsRequest {
       bgpv6 = 4;
       isis = 5;
       lag = 6;
-      lacp_lag_member = 7;
+      lacp = 7;
       lldp = 8;
+      rsvp = 9;
     }
   }
   // Description missing in models
@@ -5526,13 +6042,16 @@ message MetricsRequest {
   optional LagMetricsRequest lag = 7;
 
   // Description missing in models
-  optional LacpLagMemberMetricsRequest lacp_lag_member = 8;
+  optional LacpMetricsRequest lacp = 8;
 
   // Description missing in models
   optional LldpMetricsRequest lldp = 9;
+
+  // Description missing in models
+  optional RsvpMetricsRequest rsvp = 10;
 }
 
-// Response containing chosen traffic generator metrics
+// Response containing chosen traffic generator metrics.
 message MetricsResponse {
 
   message Choice {
@@ -5544,8 +6063,9 @@ message MetricsResponse {
       bgpv6_metrics = 4;
       isis_metrics = 5;
       lag_metrics = 6;
-      lacp_lag_member_metrics = 7;
+      lacp_metrics = 7;
       lldp_metrics = 8;
+      rsvp_metrics = 9;
     }
   }
   // Description missing in models
@@ -5571,10 +6091,13 @@ message MetricsResponse {
   repeated LagMetric lag_metrics = 7;
 
   // Description missing in models
-  repeated LacpLagMemberMetric lacp_lag_member_metrics = 8;
+  repeated LacpMetric lacp_metrics = 8;
 
   // Description missing in models
   repeated LldpMetric lldp_metrics = 9;
+
+  // Description missing in models
+  repeated RsvpMetric rsvp_metrics = 10;
 }
 
 // The port result request to the traffic generator
@@ -6209,7 +6732,7 @@ message LagMetricsRequest {
   message ColumnNames {
     enum Enum {
       unspecified = 0;
-      oper_states = 1;
+      oper_status = 1;
       member_ports_up = 2;
       frames_tx = 3;
       frames_rx = 4;
@@ -6280,7 +6803,7 @@ message LagMetric {
 }
 
 // The request to retrieve LACP per LAG member metrics/statistics.
-message LacpLagMemberMetricsRequest {
+message LacpMetricsRequest {
 
   // The names of LAG (ports group) for which LACP metrics to be returned. An empty list
   // will return metrics for all LAGs.
@@ -6309,8 +6832,8 @@ message LacpLagMemberMetricsRequest {
   message ColumnNames {
     enum Enum {
       unspecified = 0;
-      lacp_in_pkts = 1;
-      lacp_out_pkts = 2;
+      lacp_packets_rx = 1;
+      lacp_packets_tx = 2;
       lacp_rx_errors = 3;
       activity = 4;
       timeout = 5;
@@ -6333,7 +6856,7 @@ message LacpLagMemberMetricsRequest {
 }
 
 // LACP metrics (statistics) per LAG member.
-message LacpLagMemberMetric {
+message LacpMetric {
 
   // The name of a LAG (ports group) configured with LACP.
   optional string lag_name = 1;
@@ -6342,10 +6865,10 @@ message LacpLagMemberMetric {
   optional string lag_member_port_name = 2;
 
   // Number of LACPDUs received.
-  optional int64 lacp_in_pkts = 3;
+  optional int64 lacp_packets_rx = 3;
 
   // Number of LACPDUs transmitted.
-  optional int64 lacp_out_pkts = 4;
+  optional int64 lacp_packets_tx = 4;
 
   // Number of LACPDUs receive packet errors.
   optional int64 lacp_rx_errors = 5;
@@ -6477,6 +7000,166 @@ message LldpMetric {
   optional int64 tlvs_unknown = 7;
 }
 
+// The request to retrieve RSVP-TE per Router metrics/statistics.
+message RsvpMetricsRequest {
+
+  // The names of RSVP-TE Routers to return results for. An empty list as input will return
+  // results for all RSVP-TE routers.
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.Rsvp/properties/name
+  // 
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.Rsvp/properties/name
+  // 
+  repeated string router_names = 1;
+
+  message ColumnNames {
+    enum Enum {
+      unspecified = 0;
+      ingress_p2p_lsps_configured = 1;
+      ingress_p2p_lsps_up = 2;
+      egress_p2p_lsps_up = 3;
+      lsp_flap_count = 4;
+      paths_tx = 5;
+      paths_rx = 6;
+      resvs_tx = 7;
+      resvs_rx = 8;
+      path_tears_tx = 9;
+      path_tears_rx = 10;
+      resv_tears_tx = 11;
+      resv_tears_rx = 12;
+      path_errors_tx = 13;
+      path_errors_rx = 14;
+      resv_errors_tx = 15;
+      resv_errors_rx = 16;
+      resv_conf_tx = 17;
+      resv_conf_rx = 18;
+      hellos_tx = 19;
+      hellos_rx = 20;
+      acks_tx = 21;
+      acks_rx = 22;
+      nacks_tx = 23;
+      nacks_rx = 24;
+      srefresh_tx = 25;
+      srefresh_rx = 26;
+      bundle_tx = 27;
+      bundle_rx = 28;
+      path_reevaluation_request_tx = 29;
+      path_reoptimizations = 30;
+    }
+  }
+  // The list of column names that the returned result set will contain. If the input
+  // list is empty then all columns will be returned except for any result_groups.
+  // 
+  repeated ColumnNames.Enum column_names = 2;
+}
+
+// RSVP-TE per router statistics information.
+message RsvpMetric {
+
+  // The name of a configured RSVP router.
+  optional string name = 1;
+
+  // The number of ingress point-to-point LSPs configured or transiting through the RSVP
+  // router which have been initated from the test port.
+  optional int32 ingress_p2p_lsps_configured = 2;
+
+  // The number of ingress point-to-point LSPs for which Resv has been received and is
+  // currently up.
+  optional int32 ingress_p2p_lsps_up = 3;
+
+  // The number of egress point-to-point LSPs for which Path requests were successfully
+  // processed and is currently up.
+  optional int32 egress_p2p_lsps_up = 4;
+
+  // The number of times an LSP went from up to down state either because it timed out
+  // while waiting for Refreshes or  a PathTear or ResvTear message was received which
+  // caused the LSP to flap.
+  optional int32 lsp_flap_count = 5;
+
+  // The number of Path messages sent by this RSVP router.
+  optional int32 paths_tx = 6;
+
+  // The number of Path messages received by this RSVP router.
+  optional int32 paths_rx = 7;
+
+  // The number of Resv messages sent by this RSVP router.
+  optional int32 resvs_tx = 8;
+
+  // The number of Resv messages received by this RSVP router.
+  optional int32 resvs_rx = 9;
+
+  // The number of  Path Tear messages sent by this RSVP router.
+  optional int32 path_tears_tx = 10;
+
+  // The number of Path Tear messages received by this RSVP router.
+  optional int32 path_tears_rx = 11;
+
+  // The number of  Resv Tear messages sent by this RSVP router.
+  optional int32 resv_tears_tx = 12;
+
+  // The number of Resv Tear messages received by this RSVP router.
+  optional int32 resv_tears_rx = 13;
+
+  // The number of Path Error messages sent by this RSVP router.
+  optional int32 path_errors_tx = 14;
+
+  // The number of Path Error messages received by this RSVP router.
+  optional int32 path_errors_rx = 15;
+
+  // The number of Resv Error messages sent by this RSVP router.
+  optional int32 resv_errors_tx = 16;
+
+  // The number of Resv Error messages received by this RSVP router.
+  optional int32 resv_errors_rx = 17;
+
+  // The number of ResvConf messages sent by this RSVP router.
+  optional int32 resv_conf_tx = 18;
+
+  // The number of ResvConf messages received by this RSVP router.
+  optional int32 resv_conf_rx = 19;
+
+  // The number of Hello messages sent by this RSVP router.
+  optional int32 hellos_tx = 20;
+
+  // The number of Hello messages received by this RSVP router.
+  optional int32 hellos_rx = 21;
+
+  // The number of Ack messages sent by this RSVP router.
+  optional int32 acks_tx = 22;
+
+  // The number of Ack messages received by this RSVP router.
+  optional int32 acks_rx = 23;
+
+  // The number of Nack messages sent by this RSVP router.
+  optional int32 nacks_tx = 24;
+
+  // The number of Nack messages received by this RSVP router.
+  optional int32 nacks_rx = 25;
+
+  // The number of SRefresh messages sent by this RSVP router.
+  optional int32 srefresh_tx = 26;
+
+  // The number of SRefresh messages received by this RSVP router.
+  optional int32 srefresh_rx = 27;
+
+  // The number of Bundle messages sent by this RSVP router.
+  optional int32 bundle_tx = 28;
+
+  // The number of Bundle messages received by this RSVP router.
+  optional int32 bundle_rx = 29;
+
+  // The number of Path messages with Path Re-evaluation Request enabled sent by this
+  // RSVP router.
+  optional int32 path_reevaluation_request_tx = 30;
+
+  // The number of successfully completed Make-Before-Break operations on LSPs on this
+  // RSVP router.
+  optional int32 path_reoptimizations = 31;
+}
+
 // Request to traffic generator for states of choice
 message StatesRequest {
 
@@ -6488,6 +7171,7 @@ message StatesRequest {
       bgp_prefixes = 3;
       isis_lsps = 4;
       lldp_neighbors = 5;
+      rsvp_lsps = 6;
     }
   }
   // Description missing in models
@@ -6508,6 +7192,9 @@ message StatesRequest {
 
   // Description missing in models
   optional LldpNeighborsStateRequest lldp_neighbors = 6;
+
+  // Description missing in models
+  optional RsvpLspsStateRequest rsvp_lsps = 7;
 }
 
 // Response containing chosen traffic generator states
@@ -6521,6 +7208,7 @@ message StatesResponse {
       bgp_prefixes = 3;
       isis_lsps = 4;
       lldp_neighbors = 5;
+      rsvp_lsps = 6;
     }
   }
   // Description missing in models
@@ -6541,6 +7229,9 @@ message StatesResponse {
 
   // Description missing in models
   repeated LldpNeighborsState lldp_neighbors = 6;
+
+  // Description missing in models
+  repeated RsvpLspsState rsvp_lsps = 7;
 }
 
 // The request to retrieve IPv4 Neighbor state (ARP cache entries) of a network interface(s).
@@ -7323,6 +8014,145 @@ message LldpCapabilityState {
 
   // Indicates whether the corresponding system capability is enabled on the neighbor.
   optional bool capability_enabled = 2;
+}
+
+// The request to retrieve RSVP Label Switched Path (LSP) information learned by the
+// router.
+message RsvpLspsStateRequest {
+
+  // The names of RSVP-TE routers for which learned information is requested. An empty
+  // list will return results for all RSVP=TE routers.
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.Rsvp/properties/name
+  // 
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.Rsvp/properties/name
+  // 
+  repeated string rsvp_router_names = 1;
+}
+
+// Discovered IPv4 Point-to-Point LSPs of a RSVP-TE router.
+message RsvpLspsState {
+
+  // The name of the RSVP-TE Router.
+  optional string rsvp_router_name = 1;
+
+  // IPv4 Point-to-Point RSVP-TE Discovered LSPs.
+  repeated RsvpIPv4LspState ipv4_lsps = 2;
+}
+
+// IPv4 RSVP-TE Discovered LSPs.
+message RsvpIPv4LspState {
+
+  // The origin IPv4 address of RSVP session.
+  optional string source_address = 1;
+
+  // The IPv4 destination address of RSVP session.
+  optional string destination_address = 2;
+
+  // It refers to the RSVP LSP properties.
+  optional RsvpLspState lsp = 3;
+
+  // It refers to RSVP RRO objects container.
+  repeated RsvpLspIpv4Rro rros = 4;
+
+  // It refers to RSVP ERO objects container.
+  repeated RsvpLspIpv4Ero eros = 5;
+}
+
+// IPv4 RSVP-TE Discovered LSPs.
+message RsvpLspState {
+
+  // The tunnel id of RSVP session which acts as an identifier that remains constant over
+  // the life of the tunnel.
+  optional int32 tunnel_id = 1;
+
+  // The lsp-id of RSVP session which acts as a differentiator for two lsps originating
+  // from the same headend, commonly used to distinguish RSVP sessions during make before
+  // break operations.
+  optional int32 lsp_id = 2;
+
+  // The name of RSVP-TE session.
+  optional int32 session_name = 3;
+
+  // The label received by RSVP-TE ingress.
+  optional int32 label_in = 4;
+
+  // The label assigned by RSVP-TE egress.
+  optional int32 label_out = 5;
+
+  message SessionStatus {
+    enum Enum {
+      unspecified = 0;
+      up = 1;
+      down = 2;
+    }
+  }
+  // Operational state of the RSVP LSP.
+  optional SessionStatus.Enum session_status = 6;
+
+  message LastFlapReason {
+    enum Enum {
+      unspecified = 0;
+      resv_tear = 1;
+      path_tear = 2;
+      path_timeout = 3;
+    }
+  }
+  // The reason for the last flap of this RSVP session.
+  optional LastFlapReason.Enum last_flap_reason = 7;
+
+  // The tunnel UP time in milli seconds. If the tunnel is DOWN the UP time will be zero.
+  optional int64 up_time = 8;
+}
+
+// This contains the list of Record Route Object(RRO) objects associated with the traffic
+// engineering tunnel. The  Record Route Object(RRO) is used in RSVP-TE to record the
+// route traversed by the LSP. The RRO might be present in both   Path message and Resv
+// message, the RRO stores the IP addresses of the routers that the traffic engineering
+// tunnel  traversed and also the label generated and distributed by the routers. The
+// RROs in the Resv message mirrors that of  the Path message, the only difference is
+// that the RRO in a Resv message records the path information in the reverse  direction.
+// 
+message RsvpLspIpv4Rro {
+
+  // The IPv4 addresses of the routers that the traffic engineering tunnel traversed.
+  optional string address = 1;
+
+  // Label reported for RRO hop. When the Label_Recording flag is set in the Session Attribute
+  // object, nodes doing route recording should include the Label Record subobject containing
+  // the reported label.
+  optional int32 reported_label = 2;
+}
+
+// This contains the list of sub-objects included in the Explicit Route Object(ERO)
+// object send in the PATH message from the ingress. These sub-objects contain the intermediate
+// hops to be traversed by the LSP while being forwarded  towards the egress endpoint.
+message RsvpLspIpv4Ero {
+
+  // The IPv4 prefix indicated by the ERO. Specified only when the ERO hop is an IPv4
+  // prefix.
+  optional string prefix = 1;
+
+  // The autonomous system number indicated by the ERO. Specified only when the ERO hop
+  // is an  2 or 4-byte AS number.
+  optional int32 asn = 2;
+
+  message Type {
+    enum Enum {
+      unspecified = 0;
+      ipv4 = 1;
+      ipv6 = 2;
+      asn = 3;
+      asn4 = 4;
+      label = 5;
+      unnumbered_interface = 6;
+    }
+  }
+  // The type indicated by the ERO.
+  optional Type.Enum type = 3;
 }
 
 // The capture result request to the traffic generator. Stops the port capture on the
