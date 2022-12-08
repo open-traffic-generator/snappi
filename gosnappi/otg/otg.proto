@@ -1,4 +1,4 @@
-/* Open Traffic Generator API 0.10.4
+/* Open Traffic Generator API 0.10.5
  * Open Traffic Generator API defines a model-driven, vendor-neutral and standard
  * interface for emulating layer 2-7 network devices and generating test traffic.
  * 
@@ -58,7 +58,7 @@ message ConfigOptions {
   optional PortOptions port_options = 1;
 
   // Description missing in models
-  optional DeviceOptions device_options = 2;
+  optional ProtocolOptions protocol_options = 2;
 }
 
 // An abstract test port.
@@ -982,13 +982,13 @@ message Device {
   optional DeviceRsvp rsvp = 8;
 }
 
-// Common options that apply to all configured devices.
-message DeviceOptions {
+// Common options that apply to all configured protocols and interfaces.
+message ProtocolOptions {
 
-  // When set to true, all underlying resources for configured devices  shall be created
-  // and corresponding protocol session negotiation shall  be initiated. Otherwise, when
-  // set to false, corresponding protocol  session negotiation will need to be initiated
-  // using a separate  set_protocol_state API call.
+  // When set to true, all underlying resources for configured protocols   and interfaces
+  // shall be created and corresponding protocol session negotiation shall be initiated.
+  // Otherwise, when set to false,  corresponding protocol session negotiation will need
+  // to be initiated  using a separate set_protocol_state API call.
   // default = True
   optional bool auto_start_all = 1;
 }
@@ -5862,7 +5862,7 @@ message PingRequest {
 }
 
 // Sets all configured protocols to `start` or `stop` state. Setting protocol state
-// to `start`  shall be a no-op if preceding `set_config` API call was made with  `config.options.device_options.auto_start_all`
+// to `start`  shall be a no-op if preceding `set_config` API call was made with  `config.options.protocol_options.auto_start_all`
 // set to `true` or if all the configured protocols are already started.
 message ProtocolState {
 
@@ -8090,8 +8090,8 @@ message RsvpLspState {
   // break operations.
   optional int32 lsp_id = 2;
 
-  // The name of RSVP-TE session.
-  optional int32 session_name = 3;
+  // The value of RSVP-TE Session Name field of the Session Attribute object.
+  optional string session_name = 3;
 
   // The label received by RSVP-TE ingress.
   optional int32 label_in = 4;
