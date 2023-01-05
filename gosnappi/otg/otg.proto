@@ -1,4 +1,4 @@
-/* Open Traffic Generator API 0.10.5
+/* Open Traffic Generator API 0.10.6
  * Open Traffic Generator API defines a model-driven, vendor-neutral and standard
  * interface for emulating layer 2-7 network devices and generating test traffic.
  * 
@@ -2429,6 +2429,9 @@ message BgpV4RouteRange {
   // objects.
   // required = true
   string name = 10;
+
+  // Optional Extended Community settings.
+  repeated BgpExtCommunity ext_communities = 11;
 }
 
 // The BGP Additional Paths feature is a BGP extension that allows the  advertisement
@@ -2500,6 +2503,9 @@ message BgpV6RouteRange {
   // objects.
   // required = true
   string name = 10;
+
+  // Optional Extended Community settings.
+  repeated BgpExtCommunity ext_communities = 11;
 }
 
 // Configuration for BGP Segment Routing Traffic Engineering(SRTE)
