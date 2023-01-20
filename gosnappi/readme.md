@@ -11,87 +11,104 @@ Test scripts written in `gosnappi`, an auto-generated Go SDK, can be executed ag
 
 > The repository is under active development and is subject to updates. All efforts will be made to keep the updates backwards compatible.
 
+## Setup Client
+
+```sh
+go get github.com/open-traffic-generator/snappi/gosnappi
+```
+
 ## Start testing
 
-1. [Deploy one-arm ixia-c topology](https://github.com/open-traffic-generator/ixia-c#quick-start)
-2. [Install Go](https://golang.org/doc/install)
-3. Setup go module for tests
+```go
+package examples
 
-	```bash
-	mkdir tests && cd tests
-	go mod init tests
-	go get github.com/open-traffic-generator/snappi/gosnappi
-	```
-4. Add a new file `hello.go` with following snippet.
+import (
+	"encoding/hex"
+	"testing"
+	"time"
 
-	```go
-	package main
+	"github.com/open-traffic-generator/snappi/gosnappi"
+)
 
-	import (
-		"log"
+func TestQuickstart(t *testing.T) {
+	// Create a new API handle to make API calls against OTG
+	api := gosnappi.NewApi()
 
-		"github.com/open-traffic-generator/snappi/gosnappi"
-	)
+	// Set the transport protocol to HTTP
+	api.NewHttpTransport().SetLocation("https://localhost:8443")
 
-	func main() {
-		// Create a new API handle to make API calls against a traffic generator
-		api := gosnappi.NewApi()
+	// Create a new traffic configuration that will be set on OTG
+	config := api.NewConfig()
 
-		// Set the transport protocol to either HTTP or GRPC
-		api.NewHttpTransport().SetLocation("https://localhost")
+	// Add a test port to the configuration
+	ptx := config.Ports().Add().SetName("ptx").SetLocation("veth-a")
 
-		// Create a new traffic configuration that will be set on traffic generator
-		config := api.NewConfig()
+	// Configure a flow and set previously created test port as one of endpoints
+	flow := config.Flows().Add().SetName("f1")
+	flow.TxRx().Port().SetTxName(ptx.Name())
+	// and enable tracking flow metrics
+	flow.Metrics().SetEnable(true)
 
-		// Add port locations to the configuration
-		p1 := config.Ports().Add().SetName("p1").SetLocation("localhost:5555")
+	// Configure number of packets to transmit for previously configured flow
+	flow.Duration().FixedPackets().SetPackets(100)
+	// and fixed byte size of all packets in the flow
+	flow.Size().SetFixed(128)
 
-		// Configure the flow and set the endpoints
-		flow := config.Flows().Add().SetName("f1")
-		flow.TxRx().Port().SetTxName(p1.Name())
+	// Configure protocol headers for all packets in the flow
+	pkt := flow.Packet()
+	eth := pkt.Add().Ethernet()
+	ipv4 := pkt.Add().Ipv4()
+	udp := pkt.Add().Udp()
+	cus := pkt.Add().Custom()
 
-		// Configure the size of a packet and the number of packets to transmit
-		flow.Size().SetFixed(128)
-		flow.Duration().FixedPackets().SetPackets(1000)
+	eth.Dst().SetValue("00:11:22:33:44:55")
+	eth.Src().SetValue("00:11:22:33:44:66")
 
-		// Configure the header stack
-		pkt = flow.Packet()
-		eth := pkt.Add().Ethernet()
-		ipv4 := pkt.Add().Ipv4()
-		tcp := pkt.Add().Tcp()
+	ipv4.Src().SetValue("10.1.1.1")
+	ipv4.Dst().SetValue("20.1.1.1")
 
-		eth.Dst().SetValue("00:11:22:33:44:55")
-		eth.Src().SetValue("00:11:22:33:44:66")
+	// Configure repeating patterns for source and destination UDP ports
+	udp.SrcPort().SetValues([]int32{5010, 5015, 5020, 5025, 5030})
+	udp.DstPort().Increment().SetStart(6010).SetStep(5).SetCount(5)
 
-		ipv4.Src().SetValue("10.1.1.1")
-		ipv4.Dst().SetValue("20.1.1.1")
+	// Configure custom bytes (hex string) in payload
+	cus.SetBytes(hex.EncodeToString([]byte("..QUICKSTART SNAPPI..")))
 
-		tcp.SrcPort().SetValue(5000)
-		tcp.DstPort().SetValue(6000)
-
-		// Push traffic configuration constructed so far to traffic generator
-		log.Println(config.ToYaml())
-		if err := api.SetConfig(config); err != nil {
-			log.Fatal(err)
-		}
-
-		// Start transmitting the configured flows
-		ts := api.NewTransmitState()
-		ts.SetState(gosnappi.TransmitStateState.START)
-		if err := api.SetTransmitState(ts); err != nil {
-			log.Fatal(err)
-		}
-
-		// Fetch and the port metrics
-		req := api.NewMetricsRequest()
-		req.Port().SetPortNames([]string{p1.Name()})
-		metrics, err := api.GetMetrics(req)
-		if err != nil {
-			log.Fatal(err)
-		}
-
-		log.Println(metrics.ToYaml())
+	// Optionally, print JSON representation of config
+	if j, err := config.ToJson(); err != nil {
+		t.Fatal(err)
+	} else {
+		t.Log("Configuration: ", j)
 	}
-	```
 
-5. Run test: `go run hello.go`
+	// Push traffic configuration constructed so far to OTG
+	if _, err := api.SetConfig(config); err != nil {
+		t.Fatal(err)
+	}
+
+	// Start transmitting the packets from configured flow
+	ts := api.NewTransmitState()
+	ts.SetState(gosnappi.TransmitStateState.START)
+	if _, err := api.SetTransmitState(ts); err != nil {
+		t.Fatal(err)
+	}
+
+	// Fetch metrics for configured flow
+	req := api.NewMetricsRequest()
+	req.Flow().SetFlowNames([]string{flow.Name()})
+	// and keep polling until either expectation is met or deadline exceeds
+	deadline := time.Now().Add(10 * time.Second)
+	for {
+		metrics, err := api.GetMetrics(req)
+		if err != nil || time.Now().After(deadline) {
+			t.Fatalf("err = %v || deadline exceeded", err)
+		}
+		// print YAML representation of flow metrics
+		t.Log(metrics)
+		if metrics.FlowMetrics().Items()[0].Transmit() == gosnappi.FlowMetricTransmit.STOPPED {
+			break
+		}
+		time.Sleep(100 * time.Millisecond)
+	}
+}
+```
