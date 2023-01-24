@@ -1,4 +1,4 @@
-/* Open Traffic Generator API 0.10.6
+/* Open Traffic Generator API 0.10.7
  * Open Traffic Generator API defines a model-driven, vendor-neutral and standard
  * interface for emulating layer 2-7 network devices and generating test traffic.
  * 
@@ -1806,7 +1806,33 @@ message BgpV4EthernetSegment {
   // Optional community settings.
   repeated BgpCommunity communities = 7;
 
-  // Optional Extended Community settings.
+  // Optional Extended Community settings. The Extended Communities Attribute is a transitive
+  // optional BGP attribute, with the Type Code 16. Community and Extended Communities
+  // attributes are utilized to trigger routing decisions, such as acceptance, rejection,
+  // preference, or redistribution. An extended community is an 8-Bytes value. It is
+  // divided into two main parts. The first 2 Bytes of the community encode a type and
+  // sub-type fields and the last 6 Bytes carry a unique set of data in a format defined
+  // by the type and sub-type field. Extended communities provide a larger  range for
+  // grouping or categorizing communities. When type is administrator_as_2octet or administrator_as_4octet,
+  // the valid sub types are route target and origin. The valid value for  administrator_as_2octet
+  // and administrator_as_4octet type is either two byte AS followed by four byte local
+  // administrator id or four byte AS followed by two  byte local administrator id.  When
+  // type is administrator_ipv4_address the valid sub types are route target and origin.
+  // The valid value for  administrator_ipv4_address is a four byte IPv4 address followed
+  // by a two byte local administrator id.  When type is opaque, valid sub types are color
+  // and encapsulation. When sub type is color, first two bytes of the value field contain
+  // flags and last four bytes  contains the value of the color. When sub type is encapsulation
+  // the first four bytes of value field are reserved and last two bytes carries the tunnel
+  // type from  IANA's ETHER TYPES registry e.g IPv4 (protocol type = 0x0800), IPv6 (protocol
+  // type = 0x86dd), and MPLS (protocol type = 0x8847). When type is administrator_as_2octet_link_bandwidth
+  // the valid sub type is extended_bandwidth. The first two bytes of the value field
+  // contains the AS number and the last four bytes contains the bandwidth in IEEE floating
+  // point format.  When type is evpn the valid subtype is mac_address. In the value field
+  // the low-order bit of the first byte(Flags) is defined as the Sticky/static flag and
+  // may be set to 1, indicating the MAC address is static and cannot move. The second
+  // byte is reserved and the  last four bytes contain the sequence number which is used
+  // to ensure that PEs retain the correct MAC/IP Advertisement route when multiple updates
+  // occur for the same MAC address.
   repeated BgpExtCommunity ext_communities = 8;
 
   // Optional AS PATH settings.
@@ -1895,12 +1921,12 @@ message BgpCommunity {
 }
 
 // The Extended Communities Attribute is a transitive optional BGP attribute, with the
-// Type Code 16. Community and Extended Communities  attributes to trigger routing decisions,
-// such as acceptance, rejection,  preference, or redistribution. An extended community
-// is an 8-Bytes value. It is also divided into two main parts. The first 2 Bytes of
-// the community encode a type and sub-type fields and the last 6 Bytes carry a unique
-// set of data in a  format defined by the type and sub-type field. Extended communities
-// provide a larger  range for grouping or categorizing communities.
+// Type Code 16. Community and Extended Communities  attributes are utilized to trigger
+// routing decisions, such as acceptance, rejection,  preference, or redistribution.
+// An extended community is an 8-Bytes value. It is divided into two main parts. The
+// first 2 Bytes of the community encode a type and sub-type fields and the last 6 Bytes
+// carry a unique set of data in a  format defined by the type and sub-type field. Extended
+// communities provide a larger  range for grouping or categorizing communities.
 message BgpExtCommunity {
 
   message Type {
@@ -2082,7 +2108,33 @@ message BgpV4EviVxlan {
   // Optional community settings.
   repeated BgpCommunity communities = 11;
 
-  // Optional Extended Community settings.
+  // Optional Extended Community settings. The Extended Communities Attribute is a transitive
+  // optional BGP attribute, with the Type Code 16. Community and Extended Communities
+  // attributes are utilized to trigger routing decisions, such as acceptance, rejection,
+  // preference, or redistribution. An extended community is an 8-Bytes value. It is
+  // divided into two main parts. The first 2 Bytes of the community encode a type and
+  // sub-type fields and the last 6 Bytes carry a unique set of data in a format defined
+  // by the type and sub-type field. Extended communities provide a larger  range for
+  // grouping or categorizing communities. When type is administrator_as_2octet or administrator_as_4octet,
+  // the valid sub types are route target and origin. The valid value for  administrator_as_2octet
+  // and administrator_as_4octet type is either two byte AS followed by four byte local
+  // administrator id or four byte AS followed by two  byte local administrator id.  When
+  // type is administrator_ipv4_address the valid sub types are route target and origin.
+  // The valid value for  administrator_ipv4_address is a four byte IPv4 address followed
+  // by a two byte local administrator id.  When type is opaque, valid sub types are color
+  // and encapsulation. When sub type is color, first two bytes of the value field contain
+  // flags and last four bytes  contains the value of the color. When sub type is encapsulation
+  // the first four bytes of value field are reserved and last two bytes carries the tunnel
+  // type from  IANA's ETHER TYPES registry e.g IPv4 (protocol type = 0x0800), IPv6 (protocol
+  // type = 0x86dd), and MPLS (protocol type = 0x8847). When type is administrator_as_2octet_link_bandwidth
+  // the valid sub type is extended_bandwidth. The first two bytes of the value field
+  // contains the AS number and the last four bytes contains the bandwidth in IEEE floating
+  // point format.  When type is evpn the valid subtype is mac_address. In the value field
+  // the low-order bit of the first byte(Flags) is defined as the Sticky/static flag and
+  // may be set to 1, indicating the MAC address is static and cannot move. The second
+  // byte is reserved and the  last four bytes contain the sequence number which is used
+  // to ensure that PEs retain the correct MAC/IP Advertisement route when multiple updates
+  // occur for the same MAC address.
   repeated BgpExtCommunity ext_communities = 12;
 
   // Optional AS PATH settings.
@@ -2144,7 +2196,33 @@ message BgpCMacIpRange {
   // Optional community settings.
   repeated BgpCommunity communities = 8;
 
-  // Optional Extended Community settings.
+  // Optional Extended Community settings. The Extended Communities Attribute is a transitive
+  // optional BGP attribute, with the Type Code 16. Community and Extended Communities
+  // attributes are utilized to trigger routing decisions, such as acceptance, rejection,
+  // preference, or redistribution. An extended community is an 8-Bytes value. It is
+  // divided into two main parts. The first 2 Bytes of the community encode a type and
+  // sub-type fields and the last 6 Bytes carry a unique set of data in a format defined
+  // by the type and sub-type field. Extended communities provide a larger  range for
+  // grouping or categorizing communities. When type is administrator_as_2octet or administrator_as_4octet,
+  // the valid sub types are route target and origin. The valid value for  administrator_as_2octet
+  // and administrator_as_4octet type is either two byte AS followed by four byte local
+  // administrator id or four byte AS followed by two  byte local administrator id.  When
+  // type is administrator_ipv4_address the valid sub types are route target and origin.
+  // The valid value for  administrator_ipv4_address is a four byte IPv4 address followed
+  // by a two byte local administrator id.  When type is opaque, valid sub types are color
+  // and encapsulation. When sub type is color, first two bytes of the value field contain
+  // flags and last four bytes  contains the value of the color. When sub type is encapsulation
+  // the first four bytes of value field are reserved and last two bytes carries the tunnel
+  // type from  IANA's ETHER TYPES registry e.g IPv4 (protocol type = 0x0800), IPv6 (protocol
+  // type = 0x86dd), and MPLS (protocol type = 0x8847). When type is administrator_as_2octet_link_bandwidth
+  // the valid sub type is extended_bandwidth. The first two bytes of the value field
+  // contains the AS number and the last four bytes contains the bandwidth in IEEE floating
+  // point format.  When type is evpn the valid subtype is mac_address. In the value field
+  // the low-order bit of the first byte(Flags) is defined as the Sticky/static flag and
+  // may be set to 1, indicating the MAC address is static and cannot move. The second
+  // byte is reserved and the  last four bytes contain the sequence number which is used
+  // to ensure that PEs retain the correct MAC/IP Advertisement route when multiple updates
+  // occur for the same MAC address.
   repeated BgpExtCommunity ext_communities = 9;
 
   // Optional AS PATH settings.
@@ -2430,7 +2508,34 @@ message BgpV4RouteRange {
   // required = true
   string name = 10;
 
-  // Optional Extended Community settings.
+  // Optional Extended Community settings. The Extended Communities Attribute is a transitive
+  // optional BGP attribute, with the Type Code 16. Community and Extended Communities
+  // attributes are utilized to trigger routing decisions, such as acceptance, rejection,
+  // preference, or redistribution. An extended community is an 8-Bytes value. It is
+  // divided into two main parts. The first 2 Bytes of the community encode a type and
+  // sub-type fields and the last 6 Bytes carry a unique set of data in a format defined
+  // by the type and sub-type field. Extended communities provide a larger  range for
+  // grouping or categorizing communities. When type is administrator_as_2octet or administrator_as_4octet,
+  // the valid sub types are route target and origin. The valid value for  administrator_as_2octet
+  // and administrator_as_4octet type is either two byte AS followed by four byte local
+  // administrator id or four byte AS followed by two  byte local administrator id.  When
+  // type is administrator_ipv4_address the valid sub types are route target and origin.
+  // The valid value for  administrator_ipv4_address is a four byte IPv4 address followed
+  // by a two byte local administrator id.  When type is opaque, valid sub types are color
+  // and encapsulation. When sub type is color, first two bytes of the value field contain
+  // flags and last four bytes  contains the value of the color. When sub type is encapsulation
+  // the first four bytes of value field are reserved and last two bytes carries the tunnel
+  // type from  IANA's ETHER TYPES registry e.g IPv4 (protocol type = 0x0800), IPv6 (protocol
+  // type = 0x86dd), and MPLS (protocol type = 0x8847). When type is administrator_as_2octet_link_bandwidth
+  // the valid sub type is extended_bandwidth. The first two bytes of the value field
+  // contains the AS number and the last four bytes contains the bandwidth in IEEE floating
+  // point format.  When type is evpn the valid subtype is mac_address. In the value field
+  // the low-order bit of the first byte(Flags) is defined as the Sticky/static flag and
+  // may be set to 1, indicating the MAC address is static and cannot move. The second
+  // byte is reserved and the  last four bytes contain the sequence number which is used
+  // to ensure that PEs retain the correct MAC/IP Advertisement route when multiple updates
+  // occur for the same MAC address.  Note evpn type is defined mainly for use with evpn
+  // route updates and not for IPv4 and IPv6 route updates.
   repeated BgpExtCommunity ext_communities = 11;
 }
 
@@ -2504,7 +2609,34 @@ message BgpV6RouteRange {
   // required = true
   string name = 10;
 
-  // Optional Extended Community settings.
+  // Optional Extended Community settings. The Extended Communities Attribute is a transitive
+  // optional BGP attribute, with the Type Code 16. Community and Extended Communities
+  // attributes are utilized to trigger routing decisions, such as acceptance, rejection,
+  // preference, or redistribution. An extended community is an 8-Bytes value. It is
+  // divided into two main parts. The first 2 Bytes of the community encode a type and
+  // sub-type fields and the last 6 Bytes carry a unique set of data in a format defined
+  // by the type and sub-type field. Extended communities provide a larger  range for
+  // grouping or categorizing communities. When type is administrator_as_2octet or administrator_as_4octet,
+  // the valid sub types are route target and origin. The valid value for  administrator_as_2octet
+  // and administrator_as_4octet type is either two byte AS followed by four byte local
+  // administrator id or four byte AS followed by two  byte local administrator id.  When
+  // type is administrator_ipv4_address the valid sub types are route target and origin.
+  // The valid value for  administrator_ipv4_address is a four byte IPv4 address followed
+  // by a two byte local administrator id.  When type is opaque, valid sub types are color
+  // and encapsulation. When sub type is color, first two bytes of the value field contain
+  // flags and last four bytes  contains the value of the color. When sub type is encapsulation
+  // the first four bytes of value field are reserved and last two bytes carries the tunnel
+  // type from  IANA's ETHER TYPES registry e.g IPv4 (protocol type = 0x0800), IPv6 (protocol
+  // type = 0x86dd), and MPLS (protocol type = 0x8847). When type is administrator_as_2octet_link_bandwidth
+  // the valid sub type is extended_bandwidth. The first two bytes of the value field
+  // contains the AS number and the last four bytes contains the bandwidth in IEEE floating
+  // point format.  When type is evpn the valid subtype is mac_address. In the value field
+  // the low-order bit of the first byte(Flags) is defined as the Sticky/static flag and
+  // may be set to 1, indicating the MAC address is static and cannot move. The second
+  // byte is reserved and the  last four bytes contain the sequence number which is used
+  // to ensure that PEs retain the correct MAC/IP Advertisement route when multiple updates
+  // occur for the same MAC address.  Note evpn type is defined mainly for use with evpn
+  // route updates and not for IPv4 and IPv6 route updates.
   repeated BgpExtCommunity ext_communities = 11;
 }
 
@@ -2577,7 +2709,33 @@ message BgpSrteV4Policy {
   // Optional Community settings.
   repeated BgpCommunity communities = 11;
 
-  // Optional Extended Community settings.
+  // Optional Extended Community settings. The Extended Communities Attribute is a transitive
+  // optional BGP attribute, with the Type Code 16. Community and Extended Communities
+  // attributes are utilized to trigger routing decisions, such as acceptance, rejection,
+  // preference, or redistribution. An extended community is an 8-Bytes value. It is
+  // divided into two main parts. The first 2 Bytes of the community encode a type and
+  // sub-type fields and the last 6 Bytes carry a unique set of data in a format defined
+  // by the type and sub-type field. Extended communities provide a larger  range for
+  // grouping or categorizing communities. When type is administrator_as_2octet or administrator_as_4octet,
+  // the valid sub types are route target and origin. The valid value for  administrator_as_2octet
+  // and administrator_as_4octet type is either two byte AS followed by four byte local
+  // administrator id or four byte AS followed by two  byte local administrator id.  When
+  // type is administrator_ipv4_address the valid sub types are route target and origin.
+  // The valid value for  administrator_ipv4_address is a four byte IPv4 address followed
+  // by a two byte local administrator id.  When type is opaque, valid sub types are color
+  // and encapsulation. When sub type is color, first two bytes of the value field contain
+  // flags and last four bytes  contains the value of the color. When sub type is encapsulation
+  // the first four bytes of value field are reserved and last two bytes carries the tunnel
+  // type from  IANA's ETHER TYPES registry e.g IPv4 (protocol type = 0x0800), IPv6 (protocol
+  // type = 0x86dd), and MPLS (protocol type = 0x8847). When type is administrator_as_2octet_link_bandwidth
+  // the valid sub type is extended_bandwidth. The first two bytes of the value field
+  // contains the AS number and the last four bytes contains the bandwidth in IEEE floating
+  // point format.  When type is evpn the valid subtype is mac_address. In the value field
+  // the low-order bit of the first byte(Flags) is defined as the Sticky/static flag and
+  // may be set to 1, indicating the MAC address is static and cannot move. The second
+  // byte is reserved and the  last four bytes contain the sequence number which is used
+  // to ensure that PEs retain the correct MAC/IP Advertisement route when multiple updates
+  // occur for the same MAC address.
   repeated BgpExtCommunity ext_communities = 12;
 
   // List Tunnel Encapsulation Attributes.
@@ -3205,7 +3363,33 @@ message BgpSrteV6Policy {
   // Optional community settings.
   repeated BgpCommunity communities = 11;
 
-  // Optional Extended Community settings.
+  // Optional Extended Community settings. The Extended Communities Attribute is a transitive
+  // optional BGP attribute, with the Type Code 16. Community and Extended Communities
+  // attributes are utilized to trigger routing decisions, such as acceptance, rejection,
+  // preference, or redistribution. An extended community is an 8-Bytes value. It is
+  // divided into two main parts. The first 2 Bytes of the community encode a type and
+  // sub-type fields and the last 6 Bytes carry a unique set of data in a format defined
+  // by the type and sub-type field. Extended communities provide a larger  range for
+  // grouping or categorizing communities. When type is administrator_as_2octet or administrator_as_4octet,
+  // the valid sub types are route target and origin. The valid value for  administrator_as_2octet
+  // and administrator_as_4octet type is either two byte AS followed by four byte local
+  // administrator id or four byte AS followed by two  byte local administrator id.  When
+  // type is administrator_ipv4_address the valid sub types are route target and origin.
+  // The valid value for  administrator_ipv4_address is a four byte IPv4 address followed
+  // by a two byte local administrator id.  When type is opaque, valid sub types are color
+  // and encapsulation. When sub type is color, first two bytes of the value field contain
+  // flags and last four bytes  contains the value of the color. When sub type is encapsulation
+  // the first four bytes of value field are reserved and last two bytes carries the tunnel
+  // type from  IANA's ETHER TYPES registry e.g IPv4 (protocol type = 0x0800), IPv6 (protocol
+  // type = 0x86dd), and MPLS (protocol type = 0x8847). When type is administrator_as_2octet_link_bandwidth
+  // the valid sub type is extended_bandwidth. The first two bytes of the value field
+  // contains the AS number and the last four bytes contains the bandwidth in IEEE floating
+  // point format.  When type is evpn the valid subtype is mac_address. In the value field
+  // the low-order bit of the first byte(Flags) is defined as the Sticky/static flag and
+  // may be set to 1, indicating the MAC address is static and cannot move. The second
+  // byte is reserved and the  last four bytes contain the sequence number which is used
+  // to ensure that PEs retain the correct MAC/IP Advertisement route when multiple updates
+  // occur for the same MAC address.
   repeated BgpExtCommunity extcommunities = 12;
 
   // List of optional tunnel TLV settings.
@@ -3458,7 +3642,33 @@ message BgpV6EthernetSegment {
   // Optional community settings.
   repeated BgpCommunity communities = 7;
 
-  // Optional Extended Community settings.
+  // Optional Extended Community settings. The Extended Communities Attribute is a transitive
+  // optional BGP attribute, with the Type Code 16. Community and Extended Communities
+  // attributes are utilized to trigger routing decisions, such as acceptance, rejection,
+  // preference, or redistribution. An extended community is an 8-Bytes value. It is
+  // divided into two main parts. The first 2 Bytes of the community encode a type and
+  // sub-type fields and the last 6 Bytes carry a unique set of data in a format defined
+  // by the type and sub-type field. Extended communities provide a larger  range for
+  // grouping or categorizing communities. When type is administrator_as_2octet or administrator_as_4octet,
+  // the valid sub types are route target and origin. The valid value for  administrator_as_2octet
+  // and administrator_as_4octet type is either two byte AS followed by four byte local
+  // administrator id or four byte AS followed by two  byte local administrator id.  When
+  // type is administrator_ipv4_address the valid sub types are route target and origin.
+  // The valid value for  administrator_ipv4_address is a four byte IPv4 address followed
+  // by a two byte local administrator id.  When type is opaque, valid sub types are color
+  // and encapsulation. When sub type is color, first two bytes of the value field contain
+  // flags and last four bytes  contains the value of the color. When sub type is encapsulation
+  // the first four bytes of value field are reserved and last two bytes carries the tunnel
+  // type from  IANA's ETHER TYPES registry e.g IPv4 (protocol type = 0x0800), IPv6 (protocol
+  // type = 0x86dd), and MPLS (protocol type = 0x8847). When type is administrator_as_2octet_link_bandwidth
+  // the valid sub type is extended_bandwidth. The first two bytes of the value field
+  // contains the AS number and the last four bytes contains the bandwidth in IEEE floating
+  // point format.  When type is evpn the valid subtype is mac_address. In the value field
+  // the low-order bit of the first byte(Flags) is defined as the Sticky/static flag and
+  // may be set to 1, indicating the MAC address is static and cannot move. The second
+  // byte is reserved and the  last four bytes contain the sequence number which is used
+  // to ensure that PEs retain the correct MAC/IP Advertisement route when multiple updates
+  // occur for the same MAC address.
   repeated BgpExtCommunity ext_communities = 8;
 
   // Optional AS PATH settings.
@@ -3540,7 +3750,33 @@ message BgpV6EviVxlan {
   // Optional community settings.
   repeated BgpCommunity communities = 11;
 
-  // Optional Extended Community settings.
+  // Optional Extended Community settings. The Extended Communities Attribute is a transitive
+  // optional BGP attribute, with the Type Code 16. Community and Extended Communities
+  // attributes are utilized to trigger routing decisions, such as acceptance, rejection,
+  // preference, or redistribution. An extended community is an 8-Bytes value. It is
+  // divided into two main parts. The first 2 Bytes of the community encode a type and
+  // sub-type fields and the last 6 Bytes carry a unique set of data in a format defined
+  // by the type and sub-type field. Extended communities provide a larger  range for
+  // grouping or categorizing communities. When type is administrator_as_2octet or administrator_as_4octet,
+  // the valid sub types are route target and origin. The valid value for  administrator_as_2octet
+  // and administrator_as_4octet type is either two byte AS followed by four byte local
+  // administrator id or four byte AS followed by two  byte local administrator id.  When
+  // type is administrator_ipv4_address the valid sub types are route target and origin.
+  // The valid value for  administrator_ipv4_address is a four byte IPv4 address followed
+  // by a two byte local administrator id.  When type is opaque, valid sub types are color
+  // and encapsulation. When sub type is color, first two bytes of the value field contain
+  // flags and last four bytes  contains the value of the color. When sub type is encapsulation
+  // the first four bytes of value field are reserved and last two bytes carries the tunnel
+  // type from  IANA's ETHER TYPES registry e.g IPv4 (protocol type = 0x0800), IPv6 (protocol
+  // type = 0x86dd), and MPLS (protocol type = 0x8847). When type is administrator_as_2octet_link_bandwidth
+  // the valid sub type is extended_bandwidth. The first two bytes of the value field
+  // contains the AS number and the last four bytes contains the bandwidth in IEEE floating
+  // point format.  When type is evpn the valid subtype is mac_address. In the value field
+  // the low-order bit of the first byte(Flags) is defined as the Sticky/static flag and
+  // may be set to 1, indicating the MAC address is static and cannot move. The second
+  // byte is reserved and the  last four bytes contain the sequence number which is used
+  // to ensure that PEs retain the correct MAC/IP Advertisement route when multiple updates
+  // occur for the same MAC address.
   repeated BgpExtCommunity ext_communities = 12;
 
   // Optional AS PATH settings.
@@ -4396,6 +4632,8 @@ message FlowRouter {
   // - /components/schemas/Bgp.V6RouteRange/properties/name
   // - /components/schemas/Bgp.CMacIpRange/properties/name
   // - /components/schemas/Rsvp.LspIpv4Interface.P2PIngressIpv4Lsp/properties/name
+  // - /components/schemas/Isis.V4RouteRange/properties/name
+  // - /components/schemas/Isis.V6RouteRange/properties/name
   // 
   // 
   // x-constraint:
@@ -4406,6 +4644,8 @@ message FlowRouter {
   // - /components/schemas/Bgp.V6RouteRange/properties/name
   // - /components/schemas/Bgp.CMacIpRange/properties/name
   // - /components/schemas/Rsvp.LspIpv4Interface.P2PIngressIpv4Lsp/properties/name
+  // - /components/schemas/Isis.V4RouteRange/properties/name
+  // - /components/schemas/Isis.V6RouteRange/properties/name
   // 
   repeated string tx_names = 2;
 
@@ -4419,6 +4659,8 @@ message FlowRouter {
   // - /components/schemas/Bgp.V6RouteRange/properties/name
   // - /components/schemas/Bgp.CMacIpRange/properties/name
   // - /components/schemas/Rsvp.LspIpv4Interface.P2PEgressIpv4Lsp/properties/name
+  // - /components/schemas/Isis.V4RouteRange/properties/name
+  // - /components/schemas/Isis.V6RouteRange/properties/name
   // 
   // 
   // x-constraint:
@@ -4429,6 +4671,8 @@ message FlowRouter {
   // - /components/schemas/Bgp.V6RouteRange/properties/name
   // - /components/schemas/Bgp.CMacIpRange/properties/name
   // - /components/schemas/Rsvp.LspIpv4Interface.P2PEgressIpv4Lsp/properties/name
+  // - /components/schemas/Isis.V4RouteRange/properties/name
+  // - /components/schemas/Isis.V6RouteRange/properties/name
   // 
   repeated string rx_names = 3;
 }
@@ -6437,6 +6681,7 @@ message Bgpv4MetricsRequest {
       keepalives_received = 12;
       notifications_sent = 13;
       notifications_received = 14;
+      fsm_state = 15;
     }
   }
   // The list of column names that the returned result set will contain. If the list is
@@ -6500,6 +6745,29 @@ message Bgpv4Metric {
 
   // Number of Notification messages received.
   optional int32 notifications_received = 15;
+
+  message FsmState {
+    enum Enum {
+      unspecified = 0;
+      idle = 1;
+      connect = 2;
+      active = 3;
+      opensent = 4;
+      openconfirm = 5;
+      established = 6;
+    }
+  }
+  // Bgp peer fsm state as idle, connect, active, opensent, openconfirm and established.
+  // In all the states except Established the bgp session is down, Idle refers to the
+  // Idle state of the FSM. Connect refers to the state where the session is waiting for
+  // the underlying transport session to be established. Active refers to the state where
+  // the session is awaiting for a connection from the remote peer. OpenSent refers to
+  // the state where the session is in the process of being established. The local system
+  // has sent an OPEN message. OpenConfirm refers to the state where the session is in
+  // the process of being established. The local system has sent and received an OPEN
+  // message and is awaiting a NOTIFICATION or KEEPALIVE message from remote peer. Established
+  // refers to the state where the BGP session with the peer is established.
+  optional FsmState.Enum fsm_state = 16;
 }
 
 // The request to retrieve BGPv6 per peer metrics/statistics.
@@ -6534,6 +6802,7 @@ message Bgpv6MetricsRequest {
       keepalives_received = 12;
       notifications_sent = 13;
       notifications_received = 14;
+      fsm_state = 15;
     }
   }
   // The list of column names that the returned result set will contain. If the list is
@@ -6597,6 +6866,29 @@ message Bgpv6Metric {
 
   // Number of Notification messages received.
   optional int32 notifications_received = 15;
+
+  message FsmState {
+    enum Enum {
+      unspecified = 0;
+      idle = 1;
+      connect = 2;
+      active = 3;
+      opensent = 4;
+      openconfirm = 5;
+      established = 6;
+    }
+  }
+  // Bgp peer fsm state as idle, connect, active, opensent, openconfirm and established.
+  // In all the states except Established the bgp session is down, Idle refers to the
+  // Idle state of the FSM. Connect refers to the state where the session is waiting for
+  // the underlying transport session to be established. Active refers to the state where
+  // the session is awaiting for a connection from the remote peer. OpenSent refers to
+  // the state where the session is in the process of being established. The local system
+  // has sent an OPEN message. OpenConfirm refers to the state where the session is in
+  // the process of being established. The local system has sent and received an OPEN
+  // message and is awaiting a NOTIFICATION or KEEPALIVE message from remote peer. Established
+  // refers to the state where the BGP session with the peer is established.
+  optional FsmState.Enum fsm_state = 16;
 }
 
 // The request to retrieve ISIS per Router metrics/statistics.
