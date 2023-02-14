@@ -1,4 +1,4 @@
-/* Open Traffic Generator API 0.10.7
+/* Open Traffic Generator API 0.10.8
  * Open Traffic Generator API defines a model-driven, vendor-neutral and standard
  * interface for emulating layer 2-7 network devices and generating test traffic.
  * 
@@ -13,7 +13,7 @@ syntax = "proto3";
 
 package otg;
 
-option go_package = "github.com/open-traffic-generator/snappi/gosnappi/otg";
+option go_package = "./otg;otg";
 
 import "google/protobuf/descriptor.proto";
 import "google/protobuf/empty.proto";
@@ -5752,7 +5752,7 @@ message EventSubscription {
   // the events property.
   // If this property is empty or null then no event notifications will
   // be forwarded.
-  optional string callbackurl = 2;
+  optional string callback_url = 2;
 }
 
 // Configuration of LLDP protocol IEEE Ref: https://www.ieee802.org/1/files/public/docs2002/lldp-protocol-00.pdf
@@ -6757,16 +6757,17 @@ message Bgpv4Metric {
       established = 6;
     }
   }
-  // Bgp peer fsm state as idle, connect, active, opensent, openconfirm and established.
-  // In all the states except Established the bgp session is down, Idle refers to the
-  // Idle state of the FSM. Connect refers to the state where the session is waiting for
-  // the underlying transport session to be established. Active refers to the state where
-  // the session is awaiting for a connection from the remote peer. OpenSent refers to
-  // the state where the session is in the process of being established. The local system
-  // has sent an OPEN message. OpenConfirm refers to the state where the session is in
-  // the process of being established. The local system has sent and received an OPEN
-  // message and is awaiting a NOTIFICATION or KEEPALIVE message from remote peer. Established
-  // refers to the state where the BGP session with the peer is established.
+  // BGP peer FSM (Finite State Machine) state as Idle, Connect, Active, OpenSent, OpenConfirm
+  // and Established. In all the states except Established the BGP session is down. Idle
+  // refers to the Idle state of the FSM. Connect refers to the state where the session
+  // is waiting for the underlying transport session to be established. Active refers
+  // to the state where the session is awaiting for a connection from the remote peer.
+  // OpenSent refers to the state where the session is in the process of being established.
+  // The local system has sent an OPEN message. OpenConfirm refers to the state where
+  // the session is in the process of being established. The local system has sent and
+  // received an OPEN message and is awaiting a NOTIFICATION or KEEPALIVE message from
+  // remote peer. Established refers to the state where the BGP session with the peer
+  // is established.
   optional FsmState.Enum fsm_state = 16;
 }
 
@@ -6878,16 +6879,17 @@ message Bgpv6Metric {
       established = 6;
     }
   }
-  // Bgp peer fsm state as idle, connect, active, opensent, openconfirm and established.
-  // In all the states except Established the bgp session is down, Idle refers to the
-  // Idle state of the FSM. Connect refers to the state where the session is waiting for
-  // the underlying transport session to be established. Active refers to the state where
-  // the session is awaiting for a connection from the remote peer. OpenSent refers to
-  // the state where the session is in the process of being established. The local system
-  // has sent an OPEN message. OpenConfirm refers to the state where the session is in
-  // the process of being established. The local system has sent and received an OPEN
-  // message and is awaiting a NOTIFICATION or KEEPALIVE message from remote peer. Established
-  // refers to the state where the BGP session with the peer is established.
+  // BGP peer FSM (Finite State Machine) state as Idle, Connect, Active, OpenSent, OpenConfirm
+  // and Established. In all the states except Established the BGP session is down. Idle
+  // refers to the Idle state of the FSM. Connect refers to the state where the session
+  // is waiting for the underlying transport session to be established. Active refers
+  // to the state where the session is awaiting for a connection from the remote peer.
+  // OpenSent refers to the state where the session is in the process of being established.
+  // The local system has sent an OPEN message. OpenConfirm refers to the state where
+  // the session is in the process of being established. The local system has sent and
+  // received an OPEN message and is awaiting a NOTIFICATION or KEEPALIVE message from
+  // remote peer. Established refers to the state where the BGP session with the peer
+  // is established.
   optional FsmState.Enum fsm_state = 16;
 }
 

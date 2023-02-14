@@ -3,7 +3,7 @@ package controllers
 
 import (
 	"errors"
-	"io/ioutil"
+	"io"
 	"log"
 	"net/http"
 
@@ -35,7 +35,7 @@ Description: Sets configuration resources on the traffic generator.
 func (ctrl *configurationController) SetConfig(w http.ResponseWriter, r *http.Request) {
 	var item gosnappi.Config
 	if r.Body != nil {
-		body, readError := ioutil.ReadAll(r.Body)
+		body, readError := io.ReadAll(r.Body)
 		if body != nil {
 			item = gosnappi.NewConfig()
 			err := item.FromJson(string(body))

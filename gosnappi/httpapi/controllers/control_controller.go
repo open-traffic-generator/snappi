@@ -3,7 +3,7 @@ package controllers
 
 import (
 	"errors"
-	"io/ioutil"
+	"io"
 	"log"
 	"net/http"
 
@@ -42,7 +42,7 @@ The Response.Warnings in the Success response is available for implementers to d
 func (ctrl *controlController) SetTransmitState(w http.ResponseWriter, r *http.Request) {
 	var item gosnappi.TransmitState
 	if r.Body != nil {
-		body, readError := ioutil.ReadAll(r.Body)
+		body, readError := io.ReadAll(r.Body)
 		if body != nil {
 			item = gosnappi.NewTransmitState()
 			err := item.FromJson(string(body))
@@ -107,7 +107,7 @@ Description: Updates the state of configuration resources on the traffic generat
 func (ctrl *controlController) SetLinkState(w http.ResponseWriter, r *http.Request) {
 	var item gosnappi.LinkState
 	if r.Body != nil {
-		body, readError := ioutil.ReadAll(r.Body)
+		body, readError := io.ReadAll(r.Body)
 		if body != nil {
 			item = gosnappi.NewLinkState()
 			err := item.FromJson(string(body))
@@ -172,7 +172,7 @@ Description: Updates the state of configuration resources on the traffic generat
 func (ctrl *controlController) SetCaptureState(w http.ResponseWriter, r *http.Request) {
 	var item gosnappi.CaptureState
 	if r.Body != nil {
-		body, readError := ioutil.ReadAll(r.Body)
+		body, readError := io.ReadAll(r.Body)
 		if body != nil {
 			item = gosnappi.NewCaptureState()
 			err := item.FromJson(string(body))
@@ -237,7 +237,7 @@ Description: Updates flow properties without disruption of transmit state.
 func (ctrl *controlController) UpdateFlows(w http.ResponseWriter, r *http.Request) {
 	var item gosnappi.FlowsUpdate
 	if r.Body != nil {
-		body, readError := ioutil.ReadAll(r.Body)
+		body, readError := io.ReadAll(r.Body)
 		if body != nil {
 			item = gosnappi.NewFlowsUpdate()
 			err := item.FromJson(string(body))
@@ -299,7 +299,7 @@ Description: Updates the state of configuration resources on the traffic generat
 func (ctrl *controlController) SetRouteState(w http.ResponseWriter, r *http.Request) {
 	var item gosnappi.RouteState
 	if r.Body != nil {
-		body, readError := ioutil.ReadAll(r.Body)
+		body, readError := io.ReadAll(r.Body)
 		if body != nil {
 			item = gosnappi.NewRouteState()
 			err := item.FromJson(string(body))
@@ -364,7 +364,7 @@ Description: API to send an IPv4 and/or IPv6 ICMP Echo Request(s) between endpoi
 func (ctrl *controlController) SendPing(w http.ResponseWriter, r *http.Request) {
 	var item gosnappi.PingRequest
 	if r.Body != nil {
-		body, readError := ioutil.ReadAll(r.Body)
+		body, readError := io.ReadAll(r.Body)
 		if body != nil {
 			item = gosnappi.NewPingRequest()
 			err := item.FromJson(string(body))
@@ -426,7 +426,7 @@ Description: Sets all configured protocols to `start` or `stop` state.
 func (ctrl *controlController) SetProtocolState(w http.ResponseWriter, r *http.Request) {
 	var item gosnappi.ProtocolState
 	if r.Body != nil {
-		body, readError := ioutil.ReadAll(r.Body)
+		body, readError := io.ReadAll(r.Body)
 		if body != nil {
 			item = gosnappi.NewProtocolState()
 			err := item.FromJson(string(body))
@@ -491,7 +491,7 @@ Description: Set specific state/actions on device configuration resources on the
 func (ctrl *controlController) SetDeviceState(w http.ResponseWriter, r *http.Request) {
 	var item gosnappi.DeviceState
 	if r.Body != nil {
-		body, readError := ioutil.ReadAll(r.Body)
+		body, readError := io.ReadAll(r.Body)
 		if body != nil {
 			item = gosnappi.NewDeviceState()
 			err := item.FromJson(string(body))

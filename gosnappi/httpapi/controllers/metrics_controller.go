@@ -3,7 +3,7 @@ package controllers
 
 import (
 	"errors"
-	"io/ioutil"
+	"io"
 	"log"
 	"net/http"
 
@@ -33,7 +33,7 @@ Description:
 func (ctrl *metricsController) GetMetrics(w http.ResponseWriter, r *http.Request) {
 	var item gosnappi.MetricsRequest
 	if r.Body != nil {
-		body, readError := ioutil.ReadAll(r.Body)
+		body, readError := io.ReadAll(r.Body)
 		if body != nil {
 			item = gosnappi.NewMetricsRequest()
 			err := item.FromJson(string(body))
