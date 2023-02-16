@@ -12,15 +12,15 @@ pkg_name = "snappi"
 go_pkg_name = "gosnappi"
 model_protobuf_name = "otg"
 version = "0.10.6"
-models_version = "0.10.8"
+models_version = "0.10.9"
 
 # supported values - local openapiart path or None
 USE_OPENAPIART_DIR = None
 USE_MODELS_DIR = None
 
 # supported values - branch name or None
-USE_OPENAPIART_BRANCH = "go-version-check"
-USE_MODELS_BRANCH = "version-check"
+USE_OPENAPIART_BRANCH = None
+USE_MODELS_BRANCH = None
 
 OPENAPIART_REPO = "https://github.com/open-traffic-generator/openapiart.git"
 MODELS_REPO = "https://github.com/open-traffic-generator/models.git"
@@ -81,7 +81,7 @@ openapiart.OpenApiArt(
     artifact_dir="artifacts",
     extension_prefix=pkg_name,
     generate_version_api=True,
-).GeneratePythonSdk(package_name=pkg_name).GenerateGoSdk(
+).GeneratePythonSdk(package_name=pkg_name, sdk_version=version).GenerateGoSdk(
     package_dir="github.com/open-traffic-generator/snappi/%s" % go_pkg_name,
     package_name=go_pkg_name,
     sdk_version=version,
