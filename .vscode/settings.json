@@ -1,0 +1,38 @@
+{
+    "editor.rulers": [
+        88,
+        90
+    ],
+    "go.useLanguageServer": true,
+    "go.testEnvVars": {
+        "CGO_ENABLED": 0,
+    },
+    "go.testFlags": [
+        "-v",
+        "-count",
+        "1"
+    ],
+    "editor.formatOnSave": true,
+    "gopls": {
+        "build.env": {
+            "CGO_ENABLED": 0,
+        },
+    },
+    "go.toolsEnvVars": {
+        "CGO_ENABLED": 0
+    },
+    "go.lintTool": "golangci-lint",
+    "python.linting.pylintEnabled": false,
+    "python.linting.flake8Enabled": true,
+    "python.linting.enabled": true,
+    "python.linting.flake8Args": [
+        "--config=.flake8"
+    ],
+    "python.testing.pytestEnabled": true,
+    "python.analysis.typeCheckingMode": "basic",
+    "python.formatting.provider": "black",
+    "python.defaultInterpreterPath": ".env/bin/python",
+    "files.insertFinalNewline": true,
+    "files.eol": "\n",
+    "diffEditor.ignoreTrimWhitespace": false,
+}

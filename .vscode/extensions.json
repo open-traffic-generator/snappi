@@ -1,0 +1,11 @@
+{
+    "recommendations": [
+        "golang.go",
+        "ms-python.python",
+        "streetsidesoftware.code-spell-checker",
+        "redhat.vscode-yaml",
+        "eamodio.gitlens",
+        "hediet.vscode-drawio",
+        "pbkit.vscode-pbkit"
+    ]
+}

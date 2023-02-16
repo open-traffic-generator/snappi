@@ -20,6 +20,7 @@ cov_report/
 gosnappi/coverage.out
 gosnappi/coverage.txt
 .local
-.vscode
 *.proto
 pkg_requires.txt
+/openapiart
+/models
