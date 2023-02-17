@@ -12,7 +12,7 @@ pkg_name = "snappi"
 go_pkg_name = "gosnappi"
 model_protobuf_name = "otg"
 version = "0.10.8"
-models_version = "0.10.10"
+models_version = "0.10.11"
 
 # supported values - local openapiart path or None
 USE_OPENAPIART_DIR = None
