@@ -1,4 +1,4 @@
-// Open Traffic Generator API 0.10.9
+// Open Traffic Generator API 0.10.11
 // Open Traffic Generator API defines a model-driven, vendor-neutral and standard
 // interface for emulating layer 2-7 network devices and generating test traffic.
 //
@@ -16277,8 +16277,10 @@ type DeviceEthernet struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// Status: deprecated
-	// Status: deprecated
+	// Status: {'status': 'deprecated', 'information': 'This property is deprecated in favor
+	// of property connection.port_name'}
+	// Status: {'status': 'deprecated', 'information': 'This property is deprecated in favor
+	// of property connection.port_name'}
 	// The unique name of a Port or a LAG that will emulate this interface.
 	// port_name is deprecated and will be removed in future release.port_name and connection
 	// can't be used together, use either port_name or connection.
@@ -17597,8 +17599,8 @@ func (x *Layer1Ieee8021Qbb) GetPfcClass_7() int32 {
 	return 0
 }
 
-// Status: under-review
-// Status: under-review
+// Status: {'status': 'under_review'}
+// Status: {'status': 'under_review'}
 // Configuration for capture settings.
 type Capture struct {
 	state         protoimpl.MessageState
@@ -18570,8 +18572,8 @@ func (x *ProtocolOptions) GetAutoStartAll() bool {
 	return false
 }
 
-// Status: under-review
-// Status: under-review
+// Status: {'status': 'under_review'}
+// Status: {'status': 'under_review'}
 // A container of properties for an ISIS router and its interfaces.
 type DeviceIsisRouter struct {
 	state         protoimpl.MessageState
@@ -18697,8 +18699,8 @@ func (x *DeviceIsisRouter) GetName() string {
 	return ""
 }
 
-// Status: under-review
-// Status: under-review
+// Status: {'status': 'under_review'}
+// Status: {'status': 'under_review'}
 // This container properties of an Multi-Instance-capable router (MI-RTR).
 type DeviceIsisMultiInstance struct {
 	state         protoimpl.MessageState
@@ -18760,8 +18762,8 @@ func (x *DeviceIsisMultiInstance) GetItids() []int32 {
 	return nil
 }
 
-// Status: under-review
-// Status: under-review
+// Status: {'status': 'under_review'}
+// Status: {'status': 'under_review'}
 // Configuration for single ISIS interface.
 type IsisInterface struct {
 	state         protoimpl.MessageState
@@ -19006,8 +19008,8 @@ func (x *IsisInterfaceLevel) GetDeadInterval() int32 {
 	return 0
 }
 
-// Status: under-review
-// Status: under-review
+// Status: {'status': 'under_review'}
+// Status: {'status': 'under_review'}
 // Configuration of properties per interface per topology when multiple topologies are
 // configured in an ISIS router.
 // in a ISIS router.
@@ -19070,8 +19072,8 @@ func (x *IsisMT) GetLinkMetric() int32 {
 	return 0
 }
 
-// Status: under-review
-// Status: under-review
+// Status: {'status': 'under_review'}
+// Status: {'status': 'under_review'}
 // A container for Traffic Engineering properties on a interface.
 type LinkStateTE struct {
 	state         protoimpl.MessageState
@@ -22069,8 +22071,8 @@ func (x *BgpRouteTarget) GetRtValue() string {
 	return ""
 }
 
-// Status: under-review
-// Status: under-review
+// Status: {'status': 'under_review'}
+// Status: {'status': 'under_review'}
 // Configuration for BGP advanced settings.
 type BgpAdvanced struct {
 	state         protoimpl.MessageState
@@ -22165,8 +22167,8 @@ func (x *BgpAdvanced) GetMd5Key() string {
 	return ""
 }
 
-// Status: under-review
-// Status: under-review
+// Status: {'status': 'under_review'}
+// Status: {'status': 'under_review'}
 // Configuration for BGP capability settings.
 type BgpCapability struct {
 	state         protoimpl.MessageState
@@ -22469,8 +22471,8 @@ func (x *BgpCapability) GetIpv6UnicastAddPath() bool {
 	return false
 }
 
-// Status: under-review
-// Status: under-review
+// Status: {'status': 'under_review'}
+// Status: {'status': 'under_review'}
 // Configuration for controlling storage of BGP learned information recieved from the
 // peer.
 type BgpLearnedInformationFilter struct {
@@ -23730,8 +23732,8 @@ func (x *BgpSrteExplicitNullLabelPolicySubTlv) GetExplicitNullLabelPolicy() BgpS
 	return BgpSrteExplicitNullLabelPolicySubTlv_ExplicitNullLabelPolicy_unspecified
 }
 
-// Status: under-review
-// Status: under-review
+// Status: {'status': 'under_review'}
+// Status: {'status': 'under_review'}
 // Optional configuration for BGP SR TE Policy segment list. The Segment List sub-TLV
 // encodes a single explicit path towards the Endpoint.
 type BgpSrteSegmentList struct {
@@ -23816,8 +23818,8 @@ func (x *BgpSrteSegmentList) GetActive() bool {
 	return false
 }
 
-// Status: under-review
-// Status: under-review
+// Status: {'status': 'under_review'}
+// Status: {'status': 'under_review'}
 // A Segment sub-TLV describes a single segment in a segment list  i.e., a single element
 // of the explicit path. The Segment sub-TLVs are optional.
 type BgpSrteSegment struct {
@@ -24319,8 +24321,8 @@ func (x *BgpSrteSegmentBTypeSubTlv) GetSrv6SidEndpointBehavior() *BgpSrteSRv6SID
 	return nil
 }
 
-// Status: under-review
-// Status: under-review
+// Status: {'status': 'under_review'}
+// Status: {'status': 'under_review'}
 // Type C: IPv4 Node Address with optional SID.
 type BgpSrteSegmentCTypeSubTlv struct {
 	state         protoimpl.MessageState
@@ -25743,8 +25745,8 @@ func (x *BgpV6Interface) GetPeers() []*BgpV6Peer {
 	return nil
 }
 
-// Status: under-review
-// Status: under-review
+// Status: {'status': 'under_review'}
+// Status: {'status': 'under_review'}
 // Configuration for BGPv6 segment routing settings.
 type BgpV6SegmentRouting struct {
 	state         protoimpl.MessageState
@@ -27112,8 +27114,8 @@ func (x *VxlanV6TunnelDestinationIPModeMulticast) GetAddress() string {
 	return ""
 }
 
-// Status: under-review
-// Status: under-review
+// Status: {'status': 'under_review'}
+// Status: {'status': 'under_review'}
 // Configuration for one or more RSVP interfaces, ingress and egress LSPs. In this model,
 // currently IPv4 RSVP and point-to-point LSPs are supported as per RFC3209 and related
 // specifications.
@@ -27186,8 +27188,8 @@ func (x *DeviceRsvp) GetName() string {
 	return ""
 }
 
-// Status: under-review
-// Status: under-review
+// Status: {'status': 'under_review'}
+// Status: {'status': 'under_review'}
 // Configuration for RSVP Interface.
 type RsvpIpv4Interface struct {
 	state         protoimpl.MessageState
@@ -27358,8 +27360,8 @@ func (x *RsvpIpv4Interface) GetTimeoutMultiplier() int32 {
 	return 0
 }
 
-// Status: under-review
-// Status: under-review
+// Status: {'status': 'under_review'}
+// Status: {'status': 'under_review'}
 // Configuration for RSVP LSP IPv4 Interface.
 type RsvpLspIpv4Interface struct {
 	state         protoimpl.MessageState
