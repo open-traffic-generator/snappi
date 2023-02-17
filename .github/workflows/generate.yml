@@ -89,6 +89,7 @@ jobs:
           sudo python do.py testpy
 
   go_tests:
+    needs: build
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout source
