@@ -65,7 +65,7 @@ jobs:
     strategy:
       max-parallel: 6
       matrix:
-        python-version: [2.7.17, 2.7.18, 3.6, 3.7, 3.8, 3.9, "3.10"]
+        python-version: [2.7.18, 3.6, 3.7, 3.8, 3.9, "3.10"]
     steps:
       - name: Checkout source
         uses: actions/checkout@v2
@@ -89,7 +89,6 @@ jobs:
           sudo python do.py testpy
 
   go_tests:
-    needs: python_tests
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout source
@@ -106,7 +105,8 @@ jobs:
           python do.py testgo
 
   publish_python_package:
-    needs: go_tests
+    if: github.ref == 'refs/heads/main'
+    needs: [go_tests, python_tests]
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout source
