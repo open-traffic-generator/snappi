@@ -1,4 +1,4 @@
-/* Open Traffic Generator API 0.10.9
+/* Open Traffic Generator API 0.10.11
  * Open Traffic Generator API defines a model-driven, vendor-neutral and standard
  * interface for emulating layer 2-7 network devices and generating test traffic.
  * 
@@ -241,8 +241,10 @@ message DeviceEthernetBase {
 // An Ethernet interface with IPv4 and IPv6 addresses.
 message DeviceEthernet {
 
-  // Status: deprecated
-  // Status: deprecated
+  // Status: {'status': 'deprecated', 'information': 'This property is deprecated in favor
+  // of property connection.port_name'}
+  // Status: {'status': 'deprecated', 'information': 'This property is deprecated in favor
+  // of property connection.port_name'}
   // The unique name of a Port or a LAG that will emulate this interface.
   // port_name is deprecated and will be removed in future release.port_name and connection
   // can't be used together, use either port_name or connection.
@@ -717,8 +719,8 @@ message Layer1Ieee8021qbb {
   optional int32 pfc_class_7 = 9;
 }
 
-// Status: under-review
-// Status: under-review
+// Status: {'status': 'under_review'}
+// Status: {'status': 'under_review'}
 // Configuration for capture settings.
 message Capture {
 
@@ -993,8 +995,8 @@ message ProtocolOptions {
   optional bool auto_start_all = 1;
 }
 
-// Status: under-review
-// Status: under-review
+// Status: {'status': 'under_review'}
+// Status: {'status': 'under_review'}
 // A container of properties for an ISIS router and its interfaces.
 message DeviceIsisRouter {
 
@@ -1030,8 +1032,8 @@ message DeviceIsisRouter {
   string name = 9;
 }
 
-// Status: under-review
-// Status: under-review
+// Status: {'status': 'under_review'}
+// Status: {'status': 'under_review'}
 // This container properties of an Multi-Instance-capable router (MI-RTR).
 message DeviceIsisMultiInstance {
 
@@ -1045,8 +1047,8 @@ message DeviceIsisMultiInstance {
   repeated int32 itids = 2;
 }
 
-// Status: under-review
-// Status: under-review
+// Status: {'status': 'under_review'}
+// Status: {'status': 'under_review'}
 // Configuration for single ISIS interface.
 message IsisInterface {
 
@@ -1138,8 +1140,8 @@ message IsisInterfaceLevel {
   optional int32 dead_interval = 3;
 }
 
-// Status: under-review
-// Status: under-review
+// Status: {'status': 'under_review'}
+// Status: {'status': 'under_review'}
 // Configuration of properties per interface per topology when multiple topologies are
 // configured in an ISIS router.
 // in a ISIS router.
@@ -1154,8 +1156,8 @@ message IsisMT {
   optional int32 link_metric = 2;
 }
 
-// Status: under-review
-// Status: under-review
+// Status: {'status': 'under_review'}
+// Status: {'status': 'under_review'}
 // A container for Traffic Engineering properties on a interface.
 message LinkStateTE {
 
@@ -2283,8 +2285,8 @@ message BgpRouteTarget {
   optional string rt_value = 2;
 }
 
-// Status: under-review
-// Status: under-review
+// Status: {'status': 'under_review'}
+// Status: {'status': 'under_review'}
 // Configuration for BGP advanced settings.
 message BgpAdvanced {
 
@@ -2313,8 +2315,8 @@ message BgpAdvanced {
   optional string md5_key = 5;
 }
 
-// Status: under-review
-// Status: under-review
+// Status: {'status': 'under_review'}
+// Status: {'status': 'under_review'}
 // Configuration for BGP capability settings.
 message BgpCapability {
 
@@ -2431,8 +2433,8 @@ message BgpCapability {
   optional bool ipv6_unicast_add_path = 25;
 }
 
-// Status: under-review
-// Status: under-review
+// Status: {'status': 'under_review'}
+// Status: {'status': 'under_review'}
 // Configuration for controlling storage of BGP learned information recieved from the
 // peer.
 message BgpLearnedInformationFilter {
@@ -2907,8 +2909,8 @@ message BgpSrteExplicitNullLabelPolicySubTlv {
   optional ExplicitNullLabelPolicy.Enum explicit_null_label_policy = 1;
 }
 
-// Status: under-review
-// Status: under-review
+// Status: {'status': 'under_review'}
+// Status: {'status': 'under_review'}
 // Optional configuration for BGP SR TE Policy segment list. The Segment List sub-TLV
 // encodes a single explicit path towards the Endpoint.
 message BgpSrteSegmentList {
@@ -2933,8 +2935,8 @@ message BgpSrteSegmentList {
   optional bool active = 4;
 }
 
-// Status: under-review
-// Status: under-review
+// Status: {'status': 'under_review'}
+// Status: {'status': 'under_review'}
 // A Segment sub-TLV describes a single segment in a segment list  i.e., a single element
 // of the explicit path. The Segment sub-TLVs are optional.
 message BgpSrteSegment {
@@ -3092,8 +3094,8 @@ message BgpSrteSegmentBTypeSubTlv {
   optional BgpSrteSRv6SIDEndpointBehaviorAndStructure srv6_sid_endpoint_behavior = 3;
 }
 
-// Status: under-review
-// Status: under-review
+// Status: {'status': 'under_review'}
+// Status: {'status': 'under_review'}
 // Type C: IPv4 Node Address with optional SID.
 message BgpSrteSegmentCTypeSubTlv {
 
@@ -3566,8 +3568,8 @@ message BgpV6Interface {
   repeated BgpV6Peer peers = 2;
 }
 
-// Status: under-review
-// Status: under-review
+// Status: {'status': 'under_review'}
+// Status: {'status': 'under_review'}
 // Configuration for BGPv6 segment routing settings.
 message BgpV6SegmentRouting {
 
@@ -3990,8 +3992,8 @@ message VxlanV6TunnelDestinationIPModeMulticast {
   optional string address = 1;
 }
 
-// Status: under-review
-// Status: under-review
+// Status: {'status': 'under_review'}
+// Status: {'status': 'under_review'}
 // Configuration for one or more RSVP interfaces, ingress and egress LSPs. In this model,
 // currently IPv4 RSVP and point-to-point LSPs are supported as per RFC3209 and related
 // specifications.
@@ -4010,8 +4012,8 @@ message DeviceRsvp {
   optional string name = 3;
 }
 
-// Status: under-review
-// Status: under-review
+// Status: {'status': 'under_review'}
+// Status: {'status': 'under_review'}
 // Configuration for RSVP Interface.
 message RsvpIpv4Interface {
 
@@ -4080,8 +4082,8 @@ message RsvpIpv4Interface {
   optional int32 timeout_multiplier = 11;
 }
 
-// Status: under-review
-// Status: under-review
+// Status: {'status': 'under_review'}
+// Status: {'status': 'under_review'}
 // Configuration for RSVP LSP IPv4 Interface.
 message RsvpLspIpv4Interface {
 
