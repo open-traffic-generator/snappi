@@ -19,8 +19,8 @@ USE_OPENAPIART_DIR = None
 USE_MODELS_DIR = None
 
 # supported values - branch name or None
-USE_OPENAPIART_BRANCH = None
-USE_MODELS_BRANCH = None
+USE_OPENAPIART_BRANCH = "new-refactor-nomencleture-change"
+USE_MODELS_BRANCH = "go_nomenclature_change"
 
 OPENAPIART_REPO = "https://github.com/open-traffic-generator/openapiart.git"
 MODELS_REPO = "https://github.com/open-traffic-generator/models.git"
