@@ -15843,10 +15843,6 @@ type LagPort struct {
 	// x-constraint:
 	// - /components/schemas/Port/properties/name
 	//
-	//
-	// x-constraint:
-	// - /components/schemas/Port/properties/name
-	//
 	// required = true
 	PortName string `protobuf:"bytes,1,opt,name=port_name,json=portName,proto3" json:"port_name,omitempty"`
 	// Description missing in models
@@ -16279,16 +16275,9 @@ type DeviceEthernet struct {
 
 	// Status: {'status': 'deprecated', 'information': 'This property is deprecated in favor
 	// of property connection.port_name'}
-	// Status: {'status': 'deprecated', 'information': 'This property is deprecated in favor
-	// of property connection.port_name'}
 	// The unique name of a Port or a LAG that will emulate this interface.
 	// port_name is deprecated and will be removed in future release.port_name and connection
 	// can't be used together, use either port_name or connection.
-	//
-	// x-constraint:
-	// - /components/schemas/Port/properties/name
-	// - /components/schemas/Lag/properties/name
-	//
 	//
 	// x-constraint:
 	// - /components/schemas/Port/properties/name
@@ -16417,16 +16406,8 @@ type EthernetConnection struct {
 	// x-constraint:
 	// - /components/schemas/Port/properties/name
 	//
-	//
-	// x-constraint:
-	// - /components/schemas/Port/properties/name
-	//
 	PortName *string `protobuf:"bytes,2,opt,name=port_name,json=portName,proto3,oneof" json:"port_name,omitempty"`
 	// Name of the LAG that the Ethernet interface is configured on.
-	//
-	// x-constraint:
-	// - /components/schemas/Lag/properties/name
-	//
 	//
 	// x-constraint:
 	// - /components/schemas/Lag/properties/name
@@ -16434,11 +16415,6 @@ type EthernetConnection struct {
 	LagName *string `protobuf:"bytes,3,opt,name=lag_name,json=lagName,proto3,oneof" json:"lag_name,omitempty"`
 	// Name of the VXLAN instance (or VXLAN tunnel) that this Ethernet interface is connected
 	// to.
-	//
-	// x-constraint:
-	// - #/components/schemas/Vxlan.V4Tunnel/properties/name
-	// - #/components/schemas/Vxlan.V6Tunnel/properties/name
-	//
 	//
 	// x-constraint:
 	// - #/components/schemas/Vxlan.V4Tunnel/properties/name
@@ -16690,10 +16666,6 @@ type DeviceIpv4Loopback struct {
 	// x-constraint:
 	// - /components/schemas/Device.Ethernet/properties/name
 	//
-	//
-	// x-constraint:
-	// - /components/schemas/Device.Ethernet/properties/name
-	//
 	// required = true
 	EthName string `protobuf:"bytes,1,opt,name=eth_name,json=ethName,proto3" json:"eth_name,omitempty"`
 	// The IPv4 Loopback address with prefix length of 32.
@@ -16935,10 +16907,6 @@ type DeviceIpv6Loopback struct {
 	// x-constraint:
 	// - /components/schemas/Device.Ethernet/properties/name
 	//
-	//
-	// x-constraint:
-	// - /components/schemas/Device.Ethernet/properties/name
-	//
 	// required = true
 	EthName string `protobuf:"bytes,1,opt,name=eth_name,json=ethName,proto3" json:"eth_name,omitempty"`
 	// The IPv6 Loopback address with prefix length of 128.
@@ -17086,10 +17054,6 @@ type Layer1 struct {
 
 	// A list of unique names of port objects that will share the
 	// choice settings.
-	//
-	// x-constraint:
-	// - /components/schemas/Port/properties/name
-	//
 	//
 	// x-constraint:
 	// - /components/schemas/Port/properties/name
@@ -17600,7 +17564,6 @@ func (x *Layer1Ieee8021Qbb) GetPfcClass_7() int32 {
 }
 
 // Status: {'status': 'under_review'}
-// Status: {'status': 'under_review'}
 // Configuration for capture settings.
 type Capture struct {
 	state         protoimpl.MessageState
@@ -17609,10 +17572,6 @@ type Capture struct {
 
 	// The unique names of ports that the capture settings will apply to. Port_names cannot
 	// be duplicated between capture objects.
-	//
-	// x-constraint:
-	// - /components/schemas/Port/properties/name
-	//
 	//
 	// x-constraint:
 	// - /components/schemas/Port/properties/name
@@ -18573,7 +18532,6 @@ func (x *ProtocolOptions) GetAutoStartAll() bool {
 }
 
 // Status: {'status': 'under_review'}
-// Status: {'status': 'under_review'}
 // A container of properties for an ISIS router and its interfaces.
 type DeviceIsisRouter struct {
 	state         protoimpl.MessageState
@@ -18700,7 +18658,6 @@ func (x *DeviceIsisRouter) GetName() string {
 }
 
 // Status: {'status': 'under_review'}
-// Status: {'status': 'under_review'}
 // This container properties of an Multi-Instance-capable router (MI-RTR).
 type DeviceIsisMultiInstance struct {
 	state         protoimpl.MessageState
@@ -18763,7 +18720,6 @@ func (x *DeviceIsisMultiInstance) GetItids() []int32 {
 }
 
 // Status: {'status': 'under_review'}
-// Status: {'status': 'under_review'}
 // Configuration for single ISIS interface.
 type IsisInterface struct {
 	state         protoimpl.MessageState
@@ -18772,10 +18728,6 @@ type IsisInterface struct {
 
 	// The unique name of the Ethernet interface on which ISIS is running. Two ISIS interfaces
 	// cannot share the same Ethernet.
-	//
-	// x-constraint:
-	// - /components/schemas/Device.Ethernet/properties/name
-	//
 	//
 	// x-constraint:
 	// - /components/schemas/Device.Ethernet/properties/name
@@ -19009,7 +18961,6 @@ func (x *IsisInterfaceLevel) GetDeadInterval() int32 {
 }
 
 // Status: {'status': 'under_review'}
-// Status: {'status': 'under_review'}
 // Configuration of properties per interface per topology when multiple topologies are
 // configured in an ISIS router.
 // in a ISIS router.
@@ -19072,7 +19023,6 @@ func (x *IsisMT) GetLinkMetric() int32 {
 	return 0
 }
 
-// Status: {'status': 'under_review'}
 // Status: {'status': 'under_review'}
 // A container for Traffic Engineering properties on a interface.
 type LinkStateTE struct {
@@ -20767,11 +20717,6 @@ type BgpV4Interface struct {
 	// - /components/schemas/Device.Ipv4/properties/name
 	// - /components/schemas/Device.Ipv4Loopback/properties/name
 	//
-	//
-	// x-constraint:
-	// - /components/schemas/Device.Ipv4/properties/name
-	// - /components/schemas/Device.Ipv4Loopback/properties/name
-	//
 	// required = true
 	Ipv4Name string `protobuf:"bytes,1,opt,name=ipv4_name,json=ipv4Name,proto3" json:"ipv4_name,omitempty"`
 	// This contains the list of BGPv4 peers configured on this interface.
@@ -22072,7 +22017,6 @@ func (x *BgpRouteTarget) GetRtValue() string {
 }
 
 // Status: {'status': 'under_review'}
-// Status: {'status': 'under_review'}
 // Configuration for BGP advanced settings.
 type BgpAdvanced struct {
 	state         protoimpl.MessageState
@@ -22167,7 +22111,6 @@ func (x *BgpAdvanced) GetMd5Key() string {
 	return ""
 }
 
-// Status: {'status': 'under_review'}
 // Status: {'status': 'under_review'}
 // Configuration for BGP capability settings.
 type BgpCapability struct {
@@ -22471,7 +22414,6 @@ func (x *BgpCapability) GetIpv6UnicastAddPath() bool {
 	return false
 }
 
-// Status: {'status': 'under_review'}
 // Status: {'status': 'under_review'}
 // Configuration for controlling storage of BGP learned information recieved from the
 // peer.
@@ -23733,7 +23675,6 @@ func (x *BgpSrteExplicitNullLabelPolicySubTlv) GetExplicitNullLabelPolicy() BgpS
 }
 
 // Status: {'status': 'under_review'}
-// Status: {'status': 'under_review'}
 // Optional configuration for BGP SR TE Policy segment list. The Segment List sub-TLV
 // encodes a single explicit path towards the Endpoint.
 type BgpSrteSegmentList struct {
@@ -23818,7 +23759,6 @@ func (x *BgpSrteSegmentList) GetActive() bool {
 	return false
 }
 
-// Status: {'status': 'under_review'}
 // Status: {'status': 'under_review'}
 // A Segment sub-TLV describes a single segment in a segment list  i.e., a single element
 // of the explicit path. The Segment sub-TLVs are optional.
@@ -24321,7 +24261,6 @@ func (x *BgpSrteSegmentBTypeSubTlv) GetSrv6SidEndpointBehavior() *BgpSrteSRv6SID
 	return nil
 }
 
-// Status: {'status': 'under_review'}
 // Status: {'status': 'under_review'}
 // Type C: IPv4 Node Address with optional SID.
 type BgpSrteSegmentCTypeSubTlv struct {
@@ -25688,11 +25627,6 @@ type BgpV6Interface struct {
 	// - /components/schemas/Device.Ipv6/properties/name
 	// - /components/schemas/Device.Ipv6Loopback/properties/name
 	//
-	//
-	// x-constraint:
-	// - /components/schemas/Device.Ipv6/properties/name
-	// - /components/schemas/Device.Ipv6Loopback/properties/name
-	//
 	// required = true
 	Ipv6Name string `protobuf:"bytes,1,opt,name=ipv6_name,json=ipv6Name,proto3" json:"ipv6_name,omitempty"`
 	// This contains the list of BGPv6 peers configured on this interface.
@@ -25745,7 +25679,6 @@ func (x *BgpV6Interface) GetPeers() []*BgpV6Peer {
 	return nil
 }
 
-// Status: {'status': 'under_review'}
 // Status: {'status': 'under_review'}
 // Configuration for BGPv6 segment routing settings.
 type BgpV6SegmentRouting struct {
@@ -26423,11 +26356,6 @@ type VxlanV4Tunnel struct {
 	// - /components/schemas/Device.Ipv4/properties/name
 	// - /components/schemas/Device.Ipv4Loopback/properties/name
 	//
-	//
-	// x-constraint:
-	// - /components/schemas/Device.Ipv4/properties/name
-	// - /components/schemas/Device.Ipv4Loopback/properties/name
-	//
 	// required = true
 	SourceInterface string `protobuf:"bytes,1,opt,name=source_interface,json=sourceInterface,proto3" json:"source_interface,omitempty"`
 	// Description missing in models
@@ -26511,11 +26439,6 @@ type VxlanV6Tunnel struct {
 	unknownFields protoimpl.UnknownFields
 
 	// Determines the source interface.
-	//
-	// x-constraint:
-	// - /components/schemas/Device.Ipv6/properties/name
-	// - /components/schemas/Device.Ipv6Loopback/properties/name
-	//
 	//
 	// x-constraint:
 	// - /components/schemas/Device.Ipv6/properties/name
@@ -27115,7 +27038,6 @@ func (x *VxlanV6TunnelDestinationIPModeMulticast) GetAddress() string {
 }
 
 // Status: {'status': 'under_review'}
-// Status: {'status': 'under_review'}
 // Configuration for one or more RSVP interfaces, ingress and egress LSPs. In this model,
 // currently IPv4 RSVP and point-to-point LSPs are supported as per RFC3209 and related
 // specifications.
@@ -27189,7 +27111,6 @@ func (x *DeviceRsvp) GetName() string {
 }
 
 // Status: {'status': 'under_review'}
-// Status: {'status': 'under_review'}
 // Configuration for RSVP Interface.
 type RsvpIpv4Interface struct {
 	state         protoimpl.MessageState
@@ -27198,10 +27119,6 @@ type RsvpIpv4Interface struct {
 
 	// The globally unique name of the IPv4 interface connected to the DUT. This name must
 	// match the name field of the ipv4_addresses on top which this RSVP interface is configured.
-	//
-	//
-	// x-constraint:
-	// - /components/schemas/Device.Ipv4/properties/name
 	//
 	//
 	// x-constraint:
@@ -27361,7 +27278,6 @@ func (x *RsvpIpv4Interface) GetTimeoutMultiplier() int32 {
 }
 
 // Status: {'status': 'under_review'}
-// Status: {'status': 'under_review'}
 // Configuration for RSVP LSP IPv4 Interface.
 type RsvpLspIpv4Interface struct {
 	state         protoimpl.MessageState
@@ -27372,11 +27288,6 @@ type RsvpLspIpv4Interface struct {
 	// ingress and egress endpoint for  the LSPs configured on this interface. This must
 	// match the name field of either ipv4_addresses or ipv4_loopbacks  on which this LSP
 	// interface is configured.
-	//
-	// x-constraint:
-	// - /components/schemas/Device.Ipv4/properties/name
-	// - /components/schemas/Device.Ipv4Loopback/properties/name
-	//
 	//
 	// x-constraint:
 	// - /components/schemas/Device.Ipv4/properties/name
@@ -28612,19 +28523,9 @@ type FlowPort struct {
 	// - /components/schemas/Port/properties/name
 	// - /components/schemas/Lag/properties/name
 	//
-	//
-	// x-constraint:
-	// - /components/schemas/Port/properties/name
-	// - /components/schemas/Lag/properties/name
-	//
 	// required = true
 	TxName string `protobuf:"bytes,1,opt,name=tx_name,json=txName,proto3" json:"tx_name,omitempty"`
 	// The unique name of a port that is the intended receive port.
-	//
-	// x-constraint:
-	// - /components/schemas/Port/properties/name
-	// - /components/schemas/Lag/properties/name
-	//
 	//
 	// x-constraint:
 	// - /components/schemas/Port/properties/name
@@ -28713,32 +28614,8 @@ type FlowRouter struct {
 	// - /components/schemas/Isis.V4RouteRange/properties/name
 	// - /components/schemas/Isis.V6RouteRange/properties/name
 	//
-	//
-	// x-constraint:
-	// - /components/schemas/Device.Ethernet/properties/name
-	// - /components/schemas/Device.Ipv4/properties/name
-	// - /components/schemas/Device.Ipv6/properties/name
-	// - /components/schemas/Bgp.V4RouteRange/properties/name
-	// - /components/schemas/Bgp.V6RouteRange/properties/name
-	// - /components/schemas/Bgp.CMacIpRange/properties/name
-	// - /components/schemas/Rsvp.LspIpv4Interface.P2PIngressIpv4Lsp/properties/name
-	// - /components/schemas/Isis.V4RouteRange/properties/name
-	// - /components/schemas/Isis.V6RouteRange/properties/name
-	//
 	TxNames []string `protobuf:"bytes,2,rep,name=tx_names,json=txNames,proto3" json:"tx_names,omitempty"`
 	// TBD
-	//
-	// x-constraint:
-	// - /components/schemas/Device.Ethernet/properties/name
-	// - /components/schemas/Device.Ipv4/properties/name
-	// - /components/schemas/Device.Ipv6/properties/name
-	// - /components/schemas/Bgp.V4RouteRange/properties/name
-	// - /components/schemas/Bgp.V6RouteRange/properties/name
-	// - /components/schemas/Bgp.CMacIpRange/properties/name
-	// - /components/schemas/Rsvp.LspIpv4Interface.P2PEgressIpv4Lsp/properties/name
-	// - /components/schemas/Isis.V4RouteRange/properties/name
-	// - /components/schemas/Isis.V6RouteRange/properties/name
-	//
 	//
 	// x-constraint:
 	// - /components/schemas/Device.Ethernet/properties/name
@@ -32656,12 +32533,6 @@ type EventRequest struct {
 	// - /components/schemas/Bgp.V4RouteRange/name
 	// - /components/schemas/Bgp.V6RouteRange/name
 	//
-	//
-	// x-constraint:
-	// - /components/schemas/Port/properties/name
-	// - /components/schemas/Bgp.V4RouteRange/name
-	// - /components/schemas/Bgp.V6RouteRange/name
-	//
 	Source []string `protobuf:"bytes,2,rep,name=source,proto3" json:"source,omitempty"`
 }
 
@@ -32899,10 +32770,6 @@ type LldpConnection struct {
 	// The name of the test port or other connection objects on which LLDP is configured.
 	Choice *LldpConnection_Choice_Enum `protobuf:"varint,1,opt,name=choice,proto3,enum=otg.LldpConnection_Choice_Enum,oneof" json:"choice,omitempty"`
 	// Name of the test port on which LLDP is configured on.
-	//
-	// x-constraint:
-	// - /components/schemas/Port/properties/name
-	//
 	//
 	// x-constraint:
 	// - /components/schemas/Port/properties/name
@@ -33434,10 +33301,6 @@ type LinkState struct {
 	// x-constraint:
 	// - /components/schemas/Port/properties/name
 	//
-	//
-	// x-constraint:
-	// - /components/schemas/Port/properties/name
-	//
 	PortNames []string `protobuf:"bytes,1,rep,name=port_names,json=portNames,proto3" json:"port_names,omitempty"`
 	// The link state.
 	// required = true
@@ -33500,10 +33363,6 @@ type TransmitState struct {
 	// flow_names is empty or null the state will be applied to all configured flows.
 	// If the list is not empty any flow that is not included in the list of flow_names
 	// MUST be ignored and not included in the state change.
-	//
-	// x-constraint:
-	// - /components/schemas/Flow/properties/name
-	//
 	//
 	// x-constraint:
 	// - /components/schemas/Flow/properties/name
@@ -33581,10 +33440,6 @@ type CaptureState struct {
 	// port_names is empty or null the state will be applied to all configured ports.
 	// If the list is not empty any port that is not included in the list of port_names
 	// MUST be ignored and not included in the state change.
-	//
-	// x-constraint:
-	// - /components/schemas/Port/properties/name
-	//
 	//
 	// x-constraint:
 	// - /components/schemas/Port/properties/name
@@ -33708,13 +33563,6 @@ type RouteState struct {
 
 	// The names of device route objects to control. If no names are specified then all
 	// route objects that match the x-constraint will be affected.
-	//
-	// x-constraint:
-	// - /components/schemas/Bgp.V4RouteRange/properties/name
-	// - /components/schemas/Bgp.V6RouteRange/properties/name
-	// - /components/schemas/Isis.V4RouteRange/properties/name
-	// - /components/schemas/Isis.V6RouteRange/properties/name
-	//
 	//
 	// x-constraint:
 	// - /components/schemas/Bgp.V4RouteRange/properties/name
@@ -34012,10 +33860,6 @@ type PingIpv4 struct {
 	// x-constraint:
 	// - /components/schemas/Device.Ipv4/properties/name
 	//
-	//
-	// x-constraint:
-	// - /components/schemas/Device.Ipv4/properties/name
-	//
 	SrcName *string `protobuf:"bytes,1,opt,name=src_name,json=srcName,proto3,oneof" json:"src_name,omitempty"`
 	// IPv4 address to ping
 	DstIp *string `protobuf:"bytes,2,opt,name=dst_ip,json=dstIp,proto3,oneof" json:"dst_ip,omitempty"`
@@ -34074,10 +33918,6 @@ type PingIpv6 struct {
 	unknownFields protoimpl.UnknownFields
 
 	// A base IPv6 interface
-	//
-	// x-constraint:
-	// - /components/schemas/Device.Ipv6/properties/name
-	//
 	//
 	// x-constraint:
 	// - /components/schemas/Device.Ipv6/properties/name
@@ -34194,11 +34034,6 @@ type Response struct {
 	// - /components/schemas/Device.Ipv4/properties/name
 	// - /components/schemas/Device.Ipv6/properties/name
 	//
-	//
-	// x-constraint:
-	// - /components/schemas/Device.Ipv4/properties/name
-	// - /components/schemas/Device.Ipv6/properties/name
-	//
 	SrcName *string `protobuf:"bytes,1,opt,name=src_name,json=srcName,proto3,oneof" json:"src_name,omitempty"`
 	// Destination address.
 	DstIp *string `protobuf:"bytes,2,opt,name=dst_ip,json=dstIp,proto3,oneof" json:"dst_ip,omitempty"`
@@ -34268,10 +34103,6 @@ type LacpMemberState struct {
 
 	// The names of LAG members (ports) for which the state has to be applied. An empty
 	// or null list will control all LAG members.
-	//
-	// x-constraint:
-	// - /components/schemas/Port/properties/name
-	//
 	//
 	// x-constraint:
 	// - /components/schemas/Port/properties/name
@@ -34604,10 +34435,6 @@ type PortMetricsRequest struct {
 	// x-constraint:
 	// - /components/schemas/Port/properties/name
 	//
-	//
-	// x-constraint:
-	// - /components/schemas/Port/properties/name
-	//
 	PortNames []string `protobuf:"bytes,1,rep,name=port_names,json=portNames,proto3" json:"port_names,omitempty"`
 	// The list of column names that the returned result set will contain. If the list is
 	// empty then all columns will be returned. The name of the port cannot be excluded.
@@ -34667,10 +34494,6 @@ type PortMetric struct {
 	unknownFields protoimpl.UnknownFields
 
 	// The name of a configured port
-	//
-	// x-constraint:
-	// - /components/schemas/Port/properties/name
-	//
 	//
 	// x-constraint:
 	// - /components/schemas/Port/properties/name
@@ -34839,10 +34662,6 @@ type FlowMetricsRequest struct {
 	// x-constraint:
 	// - /components/schemas/Flow/properties/name
 	//
-	//
-	// x-constraint:
-	// - /components/schemas/Flow/properties/name
-	//
 	FlowNames []string `protobuf:"bytes,1,rep,name=flow_names,json=flowNames,proto3" json:"flow_names,omitempty"`
 	// A list of metric groups used to disaggregate flows. A metric group that does not
 	// exist for a flow group MUST return an error.
@@ -34920,18 +34739,10 @@ type FlowMetricGroupRequest struct {
 	// x-constraint:
 	// - /components/schemas/Flow/properties/packet/../metric_group
 	//
-	//
-	// x-constraint:
-	// - /components/schemas/Flow/properties/packet/../metric_group
-	//
 	// default = []
 	Ingress []string `protobuf:"bytes,2,rep,name=ingress,proto3" json:"ingress,omitempty"`
 	// Disaggregate the flow metrics by egress packet header field names
 	// If the items is empty then no disaggregation will be done.
-	//
-	// x-constraint:
-	// - /components/schemas/Flow/properties/egress/../metric_group
-	//
 	//
 	// x-constraint:
 	// - /components/schemas/Flow/properties/egress/../metric_group
@@ -35362,10 +35173,6 @@ type Bgpv4MetricsRequest struct {
 	// x-constraint:
 	// - /components/schemas/Bgp.V4peer/properties/name
 	//
-	//
-	// x-constraint:
-	// - /components/schemas/Bgp.V4peer/properties/name
-	//
 	PeerNames []string `protobuf:"bytes,1,rep,name=peer_names,json=peerNames,proto3" json:"peer_names,omitempty"`
 	// The list of column names that the returned result set will contain. If the list is
 	// empty then all columns will be returned except for any result_groups. The name of
@@ -35626,10 +35433,6 @@ type Bgpv6MetricsRequest struct {
 	// x-constraint:
 	// - /components/schemas/Bgp.V6peer/properties/name
 	//
-	//
-	// x-constraint:
-	// - /components/schemas/Bgp.V6peer/properties/name
-	//
 	PeerNames []string `protobuf:"bytes,1,rep,name=peer_names,json=peerNames,proto3" json:"peer_names,omitempty"`
 	// The list of column names that the returned result set will contain. If the list is
 	// empty then all columns will be returned except for any result_groups. The name of
@@ -35886,10 +35689,6 @@ type IsisMetricsRequest struct {
 
 	// The names of ISIS Routers to return results for. An empty list will return results
 	// for all ISIS router.
-	//
-	// x-constraint:
-	// - /components/schemas/Device.IsisRouter/properties/name
-	//
 	//
 	// x-constraint:
 	// - /components/schemas/Device.IsisRouter/properties/name
@@ -36242,10 +36041,6 @@ type LagMetricsRequest struct {
 	// x-constraint:
 	// - /components/schemas/Lag/properties/name
 	//
-	//
-	// x-constraint:
-	// - /components/schemas/Lag/properties/name
-	//
 	LagNames []string `protobuf:"bytes,1,rep,name=lag_names,json=lagNames,proto3" json:"lag_names,omitempty"`
 	// The list of column names that the returned result set will contain. If the list is
 	// empty then all columns will be returned. The name of the LAG cannot be excluded.
@@ -36305,10 +36100,6 @@ type LagMetric struct {
 	unknownFields protoimpl.UnknownFields
 
 	// The name of a configured LAG
-	//
-	// x-constraint:
-	// - /components/schemas/Lag/properties/name
-	//
 	//
 	// x-constraint:
 	// - /components/schemas/Lag/properties/name
@@ -36458,17 +36249,9 @@ type LacpMetricsRequest struct {
 	// x-constraint:
 	// - /components/schemas/Lag/properties/name
 	//
-	//
-	// x-constraint:
-	// - /components/schemas/Lag/properties/name
-	//
 	LagNames []string `protobuf:"bytes,1,rep,name=lag_names,json=lagNames,proto3" json:"lag_names,omitempty"`
 	// The names of LAG members (ports) for which LACP metrics to be returned. An empty
 	// list will return metrics for all LAG members.
-	//
-	// x-constraint:
-	// - /components/schemas/Port/properties/name
-	//
 	//
 	// x-constraint:
 	// - /components/schemas/Port/properties/name
@@ -36741,10 +36524,6 @@ type LldpMetricsRequest struct {
 	// x-constraint:
 	// - /components/schemas/Lldp/properties/name
 	//
-	//
-	// x-constraint:
-	// - /components/schemas/Lldp/properties/name
-	//
 	LldpNames []string `protobuf:"bytes,1,rep,name=lldp_names,json=lldpNames,proto3" json:"lldp_names,omitempty"`
 	// The requested list of column names for the result set. If the list is empty then
 	// metrics for all columns will be returned. The name of LLDP instance can not be excluded.
@@ -36918,10 +36697,6 @@ type RsvpMetricsRequest struct {
 
 	// The names of RSVP-TE Routers to return results for. An empty list as input will return
 	// results for all RSVP-TE routers.
-	//
-	// x-constraint:
-	// - /components/schemas/Device.Rsvp/properties/name
-	//
 	//
 	// x-constraint:
 	// - /components/schemas/Device.Rsvp/properties/name
@@ -37526,10 +37301,6 @@ type Neighborsv4StatesRequest struct {
 	// x-constraint:
 	// - /components/schemas/Device.Ethernet/properties/name
 	//
-	//
-	// x-constraint:
-	// - /components/schemas/Device.Ethernet/properties/name
-	//
 	EthernetNames []string `protobuf:"bytes,1,rep,name=ethernet_names,json=ethernetNames,proto3" json:"ethernet_names,omitempty"`
 }
 
@@ -37655,10 +37426,6 @@ type Neighborsv6StatesRequest struct {
 	// x-constraint:
 	// - /components/schemas/Device.Ethernet/properties/name
 	//
-	//
-	// x-constraint:
-	// - /components/schemas/Device.Ethernet/properties/name
-	//
 	EthernetNames []string `protobuf:"bytes,1,rep,name=ethernet_names,json=ethernetNames,proto3" json:"ethernet_names,omitempty"`
 }
 
@@ -37780,11 +37547,6 @@ type BgpPrefixStateRequest struct {
 	// The names of BGP peers for which prefix information will be retrieved. If no names
 	// are specified then the results will contain prefix information for all configured
 	// BGP peers.
-	//
-	// x-constraint:
-	// - /components/schemas/Bgp.V4Peer/properties/name
-	// - /components/schemas/Bgp.V6Peer/properties/name
-	//
 	//
 	// x-constraint:
 	// - /components/schemas/Bgp.V4Peer/properties/name
@@ -38504,10 +38266,6 @@ type IsisLspsStateRequest struct {
 
 	// The names of ISIS routers for which learned information is requested. An empty list
 	// will return results for all ISIS routers.
-	//
-	// x-constraint:
-	// - /components/schemas/Device.IsisRouter/properties/name
-	//
 	//
 	// x-constraint:
 	// - /components/schemas/Device.IsisRouter/properties/name
@@ -39701,10 +39459,6 @@ type LldpNeighborsStateRequest struct {
 	// x-constraint:
 	// - /components/schemas/Lldp/properties/name
 	//
-	//
-	// x-constraint:
-	// - /components/schemas/Lldp/properties/name
-	//
 	LldpNames []string `protobuf:"bytes,1,rep,name=lldp_names,json=lldpNames,proto3" json:"lldp_names,omitempty"`
 	// Specify the neighbors for which information will be returned. If empty  or missing
 	// then information for all neighbors will be returned.
@@ -40101,10 +39855,6 @@ type RsvpLspsStateRequest struct {
 
 	// The names of RSVP-TE routers for which learned information is requested. An empty
 	// list will return results for all RSVP=TE routers.
-	//
-	// x-constraint:
-	// - /components/schemas/Device.Rsvp/properties/name
-	//
 	//
 	// x-constraint:
 	// - /components/schemas/Device.Rsvp/properties/name
@@ -40555,10 +40305,6 @@ type CaptureRequest struct {
 	unknownFields protoimpl.UnknownFields
 
 	// The name of a port a capture is started on.
-	//
-	// x-constraint:
-	// - /components/schemas/Port/properties/name
-	//
 	//
 	// x-constraint:
 	// - /components/schemas/Port/properties/name
