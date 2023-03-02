@@ -10,7 +10,7 @@ import (
 	"strings"
 	"time"
 
-	"golang.org/x/mod/semver"
+	"github.com/Masterminds/semver/v3"
 	"google.golang.org/grpc"
 )
 
@@ -424,32 +424,25 @@ func (obj *validation) validateHexSlice(hex []string) error {
 // }
 
 func checkClientServerVersionCompatibility(clientVer string, serverVer string, componentName string) error {
-	c := clientVer
-	s := serverVer
-	if !strings.HasPrefix(clientVer, "v") {
-		c = "v" + clientVer
-	}
-	if !strings.HasPrefix(serverVer, "v") {
-		s = "v" + serverVer
-	}
 
-	if !semver.IsValid(c) {
+	c, err := semver.NewVersion(clientVer)
+	if err != nil {
 		return fmt.Errorf("client %s version '%s' is not a valid semver", componentName, clientVer)
 	}
-	if !semver.IsValid(s) {
-		return fmt.Errorf("server %s version '%s' is not a valid semver", componentName, serverVer)
+
+	s, err := semver.NewConstraint(serverVer)
+	if err != nil {
+		return fmt.Errorf("server %s version '%s' is not a valid semver constraint", componentName, serverVer)
 	}
 
-	err := fmt.Errorf("client %s version '%s' is not semver compatible with server %s version '%s'", componentName, clientVer, componentName, serverVer)
+	err = fmt.Errorf("client %s version '%s' is not semver compatible with server %s version constraint '%s'", componentName, clientVer, componentName, serverVer)
+	valid, errs := s.Validate(c)
+	if len(errs) != 0 {
+		return fmt.Errorf("%v: %v", err, errs)
+	}
 
-	if v := semver.Compare(c, s); v > 0 {
-		if semver.MajorMinor(c) != semver.MajorMinor(s) {
-			return err
-		}
-	} else if v < 0 {
-		if semver.Major(c) != semver.Major(s) {
-			return err
-		}
+	if !valid {
+		return err
 	}
 
 	return nil

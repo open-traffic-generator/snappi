@@ -13,12 +13,12 @@ func TestCheckClientServerVersionCompatibility(t *testing.T) {
 		wantErr bool
 	}{
 		// TODO: add TCs for build versions (e.g. 0.1.1-200)
-		{name: "patch-low-high", args: args{clientVer: "0.2.1", serverVer: "0.2.5"}, wantErr: false},
-		{name: "patch-high-low", args: args{clientVer: "0.2.5", serverVer: "0.2.1"}, wantErr: false},
-		{name: "minor-low-high", args: args{clientVer: "0.2.5", serverVer: "0.3.5"}, wantErr: false},
-		{name: "minor-high-low", args: args{clientVer: "0.3.5", serverVer: "0.2.5"}, wantErr: true},
-		{name: "major-low-high", args: args{clientVer: "0.2.5", serverVer: "1.2.5"}, wantErr: true},
-		{name: "major-high-low", args: args{clientVer: "1.2.5", serverVer: "0.2.5"}, wantErr: true},
+		{name: "patch-low-high", args: args{clientVer: "0.2.1", serverVer: "0.2.*"}, wantErr: false},
+		{name: "patch-high-low", args: args{clientVer: "0.2.5", serverVer: "0.2.*"}, wantErr: false},
+		{name: "minor-low-high", args: args{clientVer: "0.2.5", serverVer: ">0.1.0 <0.3.0"}, wantErr: false},
+		{name: "minor-high-low", args: args{clientVer: "0.3.5", serverVer: "^0.2.5"}, wantErr: true},
+		{name: "major-low-high", args: args{clientVer: "0.2.5", serverVer: "^1.2.5"}, wantErr: true},
+		{name: "major-high-low", args: args{clientVer: "1.2.5", serverVer: "^0.2.5"}, wantErr: true},
 		{name: "invalid-valid", args: args{clientVer: "0.2.1.1", serverVer: "0.2.5"}, wantErr: true},
 		{name: "valid-invalid", args: args{clientVer: "0.2.1", serverVer: "0.2.5.1"}, wantErr: true},
 		{name: "invalid-invalid", args: args{clientVer: "0.2.1.1", serverVer: "0.2.5.1"}, wantErr: true},
