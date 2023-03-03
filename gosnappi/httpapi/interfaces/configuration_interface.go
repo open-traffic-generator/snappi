@@ -12,6 +12,7 @@ type ConfigurationController interface {
 	Routes() []httpapi.Route
 	SetConfig(w http.ResponseWriter, r *http.Request)
 	GetConfig(w http.ResponseWriter, r *http.Request)
+	UpdateConfig(w http.ResponseWriter, r *http.Request)
 }
 
 type ConfigurationHandler interface {
@@ -26,4 +27,10 @@ type ConfigurationHandler interface {
 		Description:
 	*/
 	GetConfig(r *http.Request) gosnappi.GetConfigResponse
+	/*
+			UpdateConfig: PATCH /config
+			Description: Updates specific attributes of resources configured on the traffic generator. The fetched configuration shall reflect the updates applied successfully.
+		The Response.Warnings in the Success response is available for implementers to disclose additional information about a state change including any implicit changes that are outside the scope of the state change.
+	*/
+	UpdateConfig(rbody gosnappi.ConfigUpdate, r *http.Request) gosnappi.UpdateConfigResponse
 }

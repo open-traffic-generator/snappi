@@ -10,6 +10,8 @@ import (
 
 type ControlController interface {
 	Routes() []httpapi.Route
+	SetControlState(w http.ResponseWriter, r *http.Request)
+	SetControlAction(w http.ResponseWriter, r *http.Request)
 	SetTransmitState(w http.ResponseWriter, r *http.Request)
 	SetLinkState(w http.ResponseWriter, r *http.Request)
 	SetCaptureState(w http.ResponseWriter, r *http.Request)
@@ -23,44 +25,62 @@ type ControlController interface {
 type ControlHandler interface {
 	GetController() ControlController
 	/*
+		SetControlState: POST /control/state
+		Description: Sets the operational state of configured resources.
+	*/
+	SetControlState(rbody gosnappi.ControlState, r *http.Request) gosnappi.SetControlStateResponse
+	/*
+		SetControlAction: POST /control/action
+		Description: Triggers actions against configured resources.
+	*/
+	SetControlAction(rbody gosnappi.ControlAction, r *http.Request) gosnappi.SetControlActionResponse
+	/*
 			SetTransmitState: POST /control/transmit
-			Description: Updates the state of configuration resources on the traffic generator.
+			Description: Status: {'status': 'deprecated', 'information': 'Please use `set_control_state` with `traffic.flow_transmit` choice instead'}
+		Updates the state of configuration resources on the traffic generator.
 		The Response.Warnings in the Success response is available for implementers to disclose additional information about a state change including any implicit changes that are outside the scope of the state change.
 	*/
 	SetTransmitState(rbody gosnappi.TransmitState, r *http.Request) gosnappi.SetTransmitStateResponse
 	/*
-		SetLinkState: POST /control/link
-		Description: Updates the state of configuration resources on the traffic generator.
+			SetLinkState: POST /control/link
+			Description: Status: {'status': 'deprecated', 'information': 'Please use `set_control_state` with `port.link` choice instead'}
+		Updates the state of configuration resources on the traffic generator.
 	*/
 	SetLinkState(rbody gosnappi.LinkState, r *http.Request) gosnappi.SetLinkStateResponse
 	/*
-		SetCaptureState: POST /control/capture
-		Description: Updates the state of configuration resources on the traffic generator.
+			SetCaptureState: POST /control/capture
+			Description: Status: {'status': 'deprecated', 'information': 'Please use `set_control_state` with `port.capture` choice instead'}
+		Updates the state of configuration resources on the traffic generator.
 	*/
 	SetCaptureState(rbody gosnappi.CaptureState, r *http.Request) gosnappi.SetCaptureStateResponse
 	/*
-		UpdateFlows: POST /control/flows
-		Description: Updates flow properties without disruption of transmit state.
+			UpdateFlows: POST /control/flows
+			Description: Status: {'status': 'deprecated', 'information': 'Please use `update_config` with `flow` choice instead'}
+		Updates flow properties without disruption of transmit state.
 	*/
 	UpdateFlows(rbody gosnappi.FlowsUpdate, r *http.Request) gosnappi.UpdateFlowsResponse
 	/*
-		SetRouteState: POST /control/routes
-		Description: Updates the state of configuration resources on the traffic generator.
+			SetRouteState: POST /control/routes
+			Description: Status: {'status': 'deprecated', 'information': 'Please use `set_control_state` with `protocol.route` choice instead'}
+		Updates the state of configuration resources on the traffic generator.
 	*/
 	SetRouteState(rbody gosnappi.RouteState, r *http.Request) gosnappi.SetRouteStateResponse
 	/*
-		SendPing: POST /control/ping
-		Description: API to send an IPv4 and/or IPv6 ICMP Echo Request(s) between endpoints. For each endpoint 1 ping packet will be sent and API shall wait for ping response to either be successful or timeout. The API wait timeout for each request is 300ms.
+			SendPing: POST /control/ping
+			Description: Status: {'status': 'deprecated', 'information': 'Please use `set_control_action` with `protocol.ipv*.ping` choice instead'}
+		API to send an IPv4 and/or IPv6 ICMP Echo Request(s) between endpoints. For each endpoint 1 ping packet will be sent and API shall wait for ping response to either be successful or timeout. The API wait timeout for each request is 300ms.
 	*/
 	SendPing(rbody gosnappi.PingRequest, r *http.Request) gosnappi.SendPingResponse
 	/*
-		SetProtocolState: POST /control/protocols
-		Description: Sets all configured protocols to `start` or `stop` state.
+			SetProtocolState: POST /control/protocols
+			Description: Status: {'status': 'deprecated', 'information': 'Please use `set_control_state` with `protocol.all` choice instead'}
+		Sets all configured protocols to `start` or `stop` state.
 	*/
 	SetProtocolState(rbody gosnappi.ProtocolState, r *http.Request) gosnappi.SetProtocolStateResponse
 	/*
-		SetDeviceState: POST /control/devices
-		Description: Set specific state/actions on device configuration resources on the traffic generator.
+			SetDeviceState: POST /control/devices
+			Description: Status: {'status': 'deprecated', 'information': 'Please use `set_control_state` with `protocol` choice instead'}
+		Set specific state/actions on device configuration resources on the traffic generator.
 	*/
 	SetDeviceState(rbody gosnappi.DeviceState, r *http.Request) gosnappi.SetDeviceStateResponse
 }

@@ -25,6 +25,7 @@ func (ctrl *configurationController) Routes() []httpapi.Route {
 	return []httpapi.Route{
 		{Path: "/config", Method: "POST", Name: "SetConfig", Handler: ctrl.SetConfig},
 		{Path: "/config", Method: "GET", Name: "GetConfig", Handler: ctrl.GetConfig},
+		{Path: "/config", Method: "PATCH", Name: "UpdateConfig", Handler: ctrl.UpdateConfig},
 	}
 }
 
@@ -122,6 +123,69 @@ func (ctrl *configurationController) GetConfig(w http.ResponseWriter, r *http.Re
 
 func (ctrl *configurationController) responseGetConfig500(w http.ResponseWriter, rsp_err error) {
 	result := gosnappi.NewGetConfigResponse()
+	result.StatusCode500().SetErrors([]string{rsp_err.Error()})
+	if _, err := httpapi.WriteJSONResponse(w, 500, result.StatusCode500()); err != nil {
+		log.Print(err.Error())
+	}
+}
+
+/*
+UpdateConfig: PATCH /config
+Description: Updates specific attributes of resources configured on the traffic generator. The fetched configuration shall reflect the updates applied successfully.
+The Response.Warnings in the Success response is available for implementers to disclose additional information about a state change including any implicit changes that are outside the scope of the state change.
+*/
+func (ctrl *configurationController) UpdateConfig(w http.ResponseWriter, r *http.Request) {
+	var item gosnappi.ConfigUpdate
+	if r.Body != nil {
+		body, readError := io.ReadAll(r.Body)
+		if body != nil {
+			item = gosnappi.NewConfigUpdate()
+			err := item.FromJson(string(body))
+			if err != nil {
+				ctrl.responseUpdateConfig400(w, err)
+				return
+			}
+		} else {
+			ctrl.responseUpdateConfig400(w, readError)
+			return
+		}
+	} else {
+		bodyError := errors.New("Request do not have any body")
+		ctrl.responseUpdateConfig500(w, bodyError)
+		return
+	}
+	result := ctrl.handler.UpdateConfig(item, r)
+	if result.HasStatusCode200() {
+		if _, err := httpapi.WriteJSONResponse(w, 200, result.StatusCode200()); err != nil {
+			log.Print(err.Error())
+		}
+		return
+	}
+	if result.HasStatusCode400() {
+		if _, err := httpapi.WriteJSONResponse(w, 400, result.StatusCode400()); err != nil {
+			log.Print(err.Error())
+		}
+		return
+	}
+	if result.HasStatusCode500() {
+		if _, err := httpapi.WriteJSONResponse(w, 500, result.StatusCode500()); err != nil {
+			log.Print(err.Error())
+		}
+		return
+	}
+	ctrl.responseUpdateConfig500(w, errors.New("Unknown error"))
+}
+
+func (ctrl *configurationController) responseUpdateConfig400(w http.ResponseWriter, rsp_err error) {
+	result := gosnappi.NewUpdateConfigResponse()
+	result.StatusCode400().SetErrors([]string{rsp_err.Error()})
+	if _, err := httpapi.WriteJSONResponse(w, 400, result.StatusCode400()); err != nil {
+		log.Print(err.Error())
+	}
+}
+
+func (ctrl *configurationController) responseUpdateConfig500(w http.ResponseWriter, rsp_err error) {
+	result := gosnappi.NewUpdateConfigResponse()
 	result.StatusCode500().SetErrors([]string{rsp_err.Error()})
 	if _, err := httpapi.WriteJSONResponse(w, 500, result.StatusCode500()); err != nil {
 		log.Print(err.Error())
