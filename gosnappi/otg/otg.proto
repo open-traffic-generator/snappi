@@ -6422,6 +6422,8 @@ message ActionProtocolIpv4Ping {
   repeated ActionProtocolIpv4PingRequest requests = 1;
 }
 
+// Status: {'status': 'under_review', 'information': 'Most ping request parameters are
+// still TBD.'}
 // Request for initiating ping between a single source and destination pair.
 // For ping request, 1 IPv4 ICMP Echo Request shall be sent and wait for ping response
 // to either succeed or time out. The API wait timeout for each request shall be 300ms.
@@ -6453,10 +6455,12 @@ message ActionResponseProtocolIpv4PingResponse {
   // x-constraint:
   // - /components/schemas/Device.Ipv4/properties/name
   // 
-  optional string src_name = 1;
+  // required = true
+  string src_name = 1;
 
   // Destination IPv4 address used for ping.
-  optional string dst_ip = 2;
+  // required = true
+  string dst_ip = 2;
 
   message Result {
     enum Enum {
@@ -6466,8 +6470,8 @@ message ActionResponseProtocolIpv4PingResponse {
     }
   }
   // Result of the ping request.
-  // default = Result.Enum.failed
-  optional Result.Enum result = 3;
+  // required = true
+  Result.Enum result = 3;
 }
 
 // Actions associated with IPv6 on configured resources.
@@ -6511,6 +6515,8 @@ message ActionProtocolIpv6Ping {
   repeated ActionProtocolIpv6PingRequest requests = 1;
 }
 
+// Status: {'status': 'under_review', 'information': 'Most ping request parameters are
+// still TBD.'}
 // Request for initiating ping between a single source and destination pair.
 // For ping request, 1 IPv6 ICMP Echo Request shall be sent and wait for ping response
 // to either succeed or time out. The API wait timeout for each request shall be 300ms.
@@ -6542,10 +6548,12 @@ message ActionResponseProtocolIpv6PingResponse {
   // x-constraint:
   // - /components/schemas/Device.Ipv6/properties/name
   // 
-  optional string src_name = 1;
+  // required = true
+  string src_name = 1;
 
   // Destination IPv6 address used for ping.
-  optional string dst_ip = 2;
+  // required = true
+  string dst_ip = 2;
 
   message Result {
     enum Enum {
@@ -6555,8 +6563,8 @@ message ActionResponseProtocolIpv6PingResponse {
     }
   }
   // Result of the ping request.
-  // default = Result.Enum.failed
-  optional Result.Enum result = 3;
+  // required = true
+  Result.Enum result = 3;
 }
 
 // Description missing in models
