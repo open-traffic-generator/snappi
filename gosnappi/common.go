@@ -132,6 +132,7 @@ type Api interface {
 	Warnings() string
 	deprecated(message string)
 	under_review(message string)
+	addWarnings(message string)
 }
 
 // NewGrpcTransport sets the underlying transport of the Api as grpc
@@ -173,6 +174,11 @@ func (api *api) Warnings() string {
 	return api.warnings
 }
 
+func (api *api) addWarnings(message string) {
+	fmt.Printf("[WARNING]: %s\n", message)
+	api.warnings = message
+}
+
 func (api *api) deprecated(message string) {
 	api.warnings = message
 	fmt.Printf("warning: %s\n", message)
@@ -210,6 +216,7 @@ type Validation interface {
 	deprecated(message string)
 	under_review(message string)
 	Warnings() []string
+	addWarnings(message string)
 }
 
 func (obj *validation) validationResult() error {
@@ -230,6 +237,11 @@ func (obj *validation) Warnings() []string {
 		return warns
 	}
 	return obj.warnings
+}
+
+func (obj *validation) addWarnings(message string) {
+	fmt.Printf("[WARNING]: %s\n", message)
+	obj.warnings = append(obj.warnings, message)
 }
 
 func (obj *validation) deprecated(message string) {

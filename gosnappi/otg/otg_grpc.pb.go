@@ -38,41 +38,41 @@ type OpenapiClient interface {
 	SetControlState(ctx context.Context, in *SetControlStateRequest, opts ...grpc.CallOption) (*SetControlStateResponse, error)
 	// Triggers actions against configured resources.
 	SetControlAction(ctx context.Context, in *SetControlActionRequest, opts ...grpc.CallOption) (*SetControlActionResponse, error)
-	// Status: {'status': 'deprecated', 'information': 'Please use `set_control_state` with
-	// `traffic.flow_transmit` choice instead'}
+	// Deprecated: Please use `set_control_state` with `traffic.flow_transmit` choice instead
+	//
 	// Updates the state of configuration resources on the traffic generator.
 	// The Response.Warnings in the Success response is available for implementers to disclose
 	// additional information about a state change including any implicit changes that are
 	// outside the scope of the state change.
 	SetTransmitState(ctx context.Context, in *SetTransmitStateRequest, opts ...grpc.CallOption) (*SetTransmitStateResponse, error)
-	// Status: {'status': 'deprecated', 'information': 'Please use `set_control_state` with
-	// `port.link` choice instead'}
+	// Deprecated: Please use `set_control_state` with `port.link` choice instead
+	//
 	// Updates the state of configuration resources on the traffic generator.
 	SetLinkState(ctx context.Context, in *SetLinkStateRequest, opts ...grpc.CallOption) (*SetLinkStateResponse, error)
-	// Status: {'status': 'deprecated', 'information': 'Please use `set_control_state` with
-	// `port.capture` choice instead'}
+	// Deprecated: Please use `set_control_state` with `port.capture` choice instead
+	//
 	// Updates the state of configuration resources on the traffic generator.
 	SetCaptureState(ctx context.Context, in *SetCaptureStateRequest, opts ...grpc.CallOption) (*SetCaptureStateResponse, error)
-	// Status: {'status': 'deprecated', 'information': 'Please use `update_config` with
-	// `flow` choice instead'}
+	// Deprecated: Please use `update_config` with `flow` choice instead
+	//
 	// Updates flow properties without disruption of transmit state.
 	UpdateFlows(ctx context.Context, in *UpdateFlowsRequest, opts ...grpc.CallOption) (*UpdateFlowsResponse, error)
-	// Status: {'status': 'deprecated', 'information': 'Please use `set_control_state` with
-	// `protocol.route` choice instead'}
+	// Deprecated: Please use `set_control_state` with `protocol.route` choice instead
+	//
 	// Updates the state of configuration resources on the traffic generator.
 	SetRouteState(ctx context.Context, in *SetRouteStateRequest, opts ...grpc.CallOption) (*SetRouteStateResponse, error)
-	// Status: {'status': 'deprecated', 'information': 'Please use `set_control_action`
-	// with `protocol.ipv*.ping` choice instead'}
+	// Deprecated: Please use `set_control_action` with `protocol.ipv*.ping` choice instead
+	//
 	// API to send an IPv4 and/or IPv6 ICMP Echo Request(s) between endpoints. For each
 	// endpoint 1 ping packet will be sent and API shall wait for ping response to either
 	// be successful or timeout. The API wait timeout for each request is 300ms.
 	SendPing(ctx context.Context, in *SendPingRequest, opts ...grpc.CallOption) (*SendPingResponse, error)
-	// Status: {'status': 'deprecated', 'information': 'Please use `set_control_state` with
-	// `protocol.all` choice instead'}
+	// Deprecated: Please use `set_control_state` with `protocol.all` choice instead
+	//
 	// Sets all configured protocols to `start` or `stop` state.
 	SetProtocolState(ctx context.Context, in *SetProtocolStateRequest, opts ...grpc.CallOption) (*SetProtocolStateResponse, error)
-	// Status: {'status': 'deprecated', 'information': 'Please use `set_control_state` with
-	// `protocol` choice instead'}
+	// Deprecated: Please use `set_control_state` with `protocol` choice instead
+	//
 	// Set specific state/actions on device configuration resources on the traffic generator.
 	SetDeviceState(ctx context.Context, in *SetDeviceStateRequest, opts ...grpc.CallOption) (*SetDeviceStateResponse, error)
 	// Description missing in models
@@ -264,41 +264,41 @@ type OpenapiServer interface {
 	SetControlState(context.Context, *SetControlStateRequest) (*SetControlStateResponse, error)
 	// Triggers actions against configured resources.
 	SetControlAction(context.Context, *SetControlActionRequest) (*SetControlActionResponse, error)
-	// Status: {'status': 'deprecated', 'information': 'Please use `set_control_state` with
-	// `traffic.flow_transmit` choice instead'}
+	// Deprecated: Please use `set_control_state` with `traffic.flow_transmit` choice instead
+	//
 	// Updates the state of configuration resources on the traffic generator.
 	// The Response.Warnings in the Success response is available for implementers to disclose
 	// additional information about a state change including any implicit changes that are
 	// outside the scope of the state change.
 	SetTransmitState(context.Context, *SetTransmitStateRequest) (*SetTransmitStateResponse, error)
-	// Status: {'status': 'deprecated', 'information': 'Please use `set_control_state` with
-	// `port.link` choice instead'}
+	// Deprecated: Please use `set_control_state` with `port.link` choice instead
+	//
 	// Updates the state of configuration resources on the traffic generator.
 	SetLinkState(context.Context, *SetLinkStateRequest) (*SetLinkStateResponse, error)
-	// Status: {'status': 'deprecated', 'information': 'Please use `set_control_state` with
-	// `port.capture` choice instead'}
+	// Deprecated: Please use `set_control_state` with `port.capture` choice instead
+	//
 	// Updates the state of configuration resources on the traffic generator.
 	SetCaptureState(context.Context, *SetCaptureStateRequest) (*SetCaptureStateResponse, error)
-	// Status: {'status': 'deprecated', 'information': 'Please use `update_config` with
-	// `flow` choice instead'}
+	// Deprecated: Please use `update_config` with `flow` choice instead
+	//
 	// Updates flow properties without disruption of transmit state.
 	UpdateFlows(context.Context, *UpdateFlowsRequest) (*UpdateFlowsResponse, error)
-	// Status: {'status': 'deprecated', 'information': 'Please use `set_control_state` with
-	// `protocol.route` choice instead'}
+	// Deprecated: Please use `set_control_state` with `protocol.route` choice instead
+	//
 	// Updates the state of configuration resources on the traffic generator.
 	SetRouteState(context.Context, *SetRouteStateRequest) (*SetRouteStateResponse, error)
-	// Status: {'status': 'deprecated', 'information': 'Please use `set_control_action`
-	// with `protocol.ipv*.ping` choice instead'}
+	// Deprecated: Please use `set_control_action` with `protocol.ipv*.ping` choice instead
+	//
 	// API to send an IPv4 and/or IPv6 ICMP Echo Request(s) between endpoints. For each
 	// endpoint 1 ping packet will be sent and API shall wait for ping response to either
 	// be successful or timeout. The API wait timeout for each request is 300ms.
 	SendPing(context.Context, *SendPingRequest) (*SendPingResponse, error)
-	// Status: {'status': 'deprecated', 'information': 'Please use `set_control_state` with
-	// `protocol.all` choice instead'}
+	// Deprecated: Please use `set_control_state` with `protocol.all` choice instead
+	//
 	// Sets all configured protocols to `start` or `stop` state.
 	SetProtocolState(context.Context, *SetProtocolStateRequest) (*SetProtocolStateResponse, error)
-	// Status: {'status': 'deprecated', 'information': 'Please use `set_control_state` with
-	// `protocol` choice instead'}
+	// Deprecated: Please use `set_control_state` with `protocol` choice instead
+	//
 	// Set specific state/actions on device configuration resources on the traffic generator.
 	SetDeviceState(context.Context, *SetDeviceStateRequest) (*SetDeviceStateResponse, error)
 	// Description missing in models

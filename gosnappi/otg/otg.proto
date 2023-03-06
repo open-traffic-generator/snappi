@@ -237,8 +237,8 @@ message DeviceEthernetBase {
 // An Ethernet interface with IPv4 and IPv6 addresses.
 message DeviceEthernet {
 
-  // Status: {'status': 'deprecated', 'information': 'This property is deprecated in favor
-  // of property connection.port_name'}
+  // Deprecated: This property is deprecated in favor of property connection.port_name
+  // 
   // The unique name of a Port or a LAG that will emulate this interface.
   // port_name is deprecated and will be removed in future release.port_name and connection
   // can't be used together, use either port_name or connection.
@@ -683,7 +683,8 @@ message Layer1Ieee8021qbb {
   optional int32 pfc_class_7 = 9;
 }
 
-// Status: {'status': 'under_review'}
+// Under Review: Information TBD
+// 
 // Configuration for capture settings.
 message Capture {
 
@@ -954,7 +955,8 @@ message ProtocolOptions {
   optional bool auto_start_all = 1;
 }
 
-// Status: {'status': 'under_review'}
+// Under Review: Information TBD
+// 
 // A container of properties for an ISIS router and its interfaces.
 message DeviceIsisRouter {
 
@@ -990,7 +992,8 @@ message DeviceIsisRouter {
   string name = 9;
 }
 
-// Status: {'status': 'under_review'}
+// Under Review: Information TBD
+// 
 // This container properties of an Multi-Instance-capable router (MI-RTR).
 message DeviceIsisMultiInstance {
 
@@ -1004,7 +1007,8 @@ message DeviceIsisMultiInstance {
   repeated int32 itids = 2;
 }
 
-// Status: {'status': 'under_review'}
+// Under Review: Information TBD
+// 
 // Configuration for single ISIS interface.
 message IsisInterface {
 
@@ -1092,7 +1096,8 @@ message IsisInterfaceLevel {
   optional int32 dead_interval = 3;
 }
 
-// Status: {'status': 'under_review'}
+// Under Review: Information TBD
+// 
 // Configuration of properties per interface per topology when multiple topologies are
 // configured in an ISIS router.
 // in a ISIS router.
@@ -1107,7 +1112,8 @@ message IsisMT {
   optional int32 link_metric = 2;
 }
 
-// Status: {'status': 'under_review'}
+// Under Review: Information TBD
+// 
 // A container for Traffic Engineering properties on a interface.
 message LinkStateTE {
 
@@ -2230,7 +2236,8 @@ message BgpRouteTarget {
   optional string rt_value = 2;
 }
 
-// Status: {'status': 'under_review'}
+// Under Review: Information TBD
+// 
 // Configuration for BGP advanced settings.
 message BgpAdvanced {
 
@@ -2259,7 +2266,8 @@ message BgpAdvanced {
   optional string md5_key = 5;
 }
 
-// Status: {'status': 'under_review'}
+// Under Review: Information TBD
+// 
 // Configuration for BGP capability settings.
 message BgpCapability {
 
@@ -2376,7 +2384,8 @@ message BgpCapability {
   optional bool ipv6_unicast_add_path = 25;
 }
 
-// Status: {'status': 'under_review'}
+// Under Review: Information TBD
+// 
 // Configuration for controlling storage of BGP learned information recieved from the
 // peer.
 message BgpLearnedInformationFilter {
@@ -2851,7 +2860,8 @@ message BgpSrteExplicitNullLabelPolicySubTlv {
   optional ExplicitNullLabelPolicy.Enum explicit_null_label_policy = 1;
 }
 
-// Status: {'status': 'under_review'}
+// Under Review: Information TBD
+// 
 // Optional configuration for BGP SR TE Policy segment list. The Segment List sub-TLV
 // encodes a single explicit path towards the Endpoint.
 message BgpSrteSegmentList {
@@ -2876,7 +2886,8 @@ message BgpSrteSegmentList {
   optional bool active = 4;
 }
 
-// Status: {'status': 'under_review'}
+// Under Review: Information TBD
+// 
 // A Segment sub-TLV describes a single segment in a segment list  i.e., a single element
 // of the explicit path. The Segment sub-TLVs are optional.
 message BgpSrteSegment {
@@ -3034,7 +3045,8 @@ message BgpSrteSegmentBTypeSubTlv {
   optional BgpSrteSRv6SIDEndpointBehaviorAndStructure srv6_sid_endpoint_behavior = 3;
 }
 
-// Status: {'status': 'under_review'}
+// Under Review: Information TBD
+// 
 // Type C: IPv4 Node Address with optional SID.
 message BgpSrteSegmentCTypeSubTlv {
 
@@ -3502,7 +3514,8 @@ message BgpV6Interface {
   repeated BgpV6Peer peers = 2;
 }
 
-// Status: {'status': 'under_review'}
+// Under Review: Information TBD
+// 
 // Configuration for BGPv6 segment routing settings.
 message BgpV6SegmentRouting {
 
@@ -3915,7 +3928,8 @@ message VxlanV6TunnelDestinationIPModeMulticast {
   optional string address = 1;
 }
 
-// Status: {'status': 'under_review'}
+// Under Review: Information TBD
+// 
 // Configuration for one or more RSVP interfaces, ingress and egress LSPs. In this model,
 // currently IPv4 RSVP and point-to-point LSPs are supported as per RFC3209 and related
 // specifications.
@@ -3934,7 +3948,8 @@ message DeviceRsvp {
   optional string name = 3;
 }
 
-// Status: {'status': 'under_review'}
+// Under Review: Information TBD
+// 
 // Configuration for RSVP Interface.
 message RsvpIpv4Interface {
 
@@ -3999,7 +4014,8 @@ message RsvpIpv4Interface {
   optional int32 timeout_multiplier = 11;
 }
 
-// Status: {'status': 'under_review'}
+// Under Review: Information TBD
+// 
 // Configuration for RSVP LSP IPv4 Interface.
 message RsvpLspIpv4Interface {
 
@@ -5947,7 +5963,8 @@ message StateProtocol {
   optional StateProtocolLacp lacp = 4;
 }
 
-// Status: {'status': 'deprecated', 'information': 'Please use `StatePortLink` instead'}
+// Deprecated: Please use `StatePortLink` instead
+// 
 // Sets the link state of configured ports.
 message LinkState {
 
@@ -5970,8 +5987,8 @@ message LinkState {
   State.Enum state = 2;
 }
 
-// Status: {'status': 'deprecated', 'information': 'Please use `StateTrafficFlowTransmit`
-// instead'}
+// Deprecated: Please use `StateTrafficFlowTransmit` instead
+// 
 // Flow transmit state.
 message TransmitState {
 
@@ -6010,7 +6027,8 @@ message TransmitState {
   State.Enum state = 2;
 }
 
-// Status: {'status': 'deprecated', 'information': 'Please use `StatePortCapture` instead'}
+// Deprecated: Please use `StatePortCapture` instead
+// 
 // Control port capture state
 message CaptureState {
 
@@ -6036,8 +6054,8 @@ message CaptureState {
   State.Enum state = 2;
 }
 
-// Status: {'status': 'deprecated', 'information': 'Please use `StateProtocolRoute`
-// instead'}
+// Deprecated: Please use `StateProtocolRoute` instead
+// 
 // Sets the device route state
 message RouteState {
 
@@ -6064,7 +6082,8 @@ message RouteState {
   State.Enum state = 2;
 }
 
-// Status: {'status': 'deprecated', 'information': 'Please use `StateProtocolAll` instead'}
+// Deprecated: Please use `StateProtocolAll` instead
+// 
 // Sets all configured protocols to `start` or `stop` state. Setting protocol state
 // to `start`  shall be a no-op if preceding `set_config` API call was made with  `config.options.protocol_options.auto_start_all`
 // set to `true` or if all the configured protocols are already started.
@@ -6082,7 +6101,8 @@ message ProtocolState {
   State.Enum state = 1;
 }
 
-// Status: {'status': 'deprecated', 'information': 'Please use `State.Protocol` instead'}
+// Deprecated: Please use `State.Protocol` instead
+// 
 // Sets attributes for the requested state/actions to be performed on device(s)
 message DeviceState {
 
@@ -6268,8 +6288,8 @@ message StateProtocolLacpAdmin {
   optional State.Enum state = 2;
 }
 
-// Status: {'status': 'deprecated', 'information': 'Please use `StateProtocolLacpAdmin`
-// instead'}
+// Deprecated: Please use `StateProtocolLacpAdmin` instead
+// 
 // Set LACP state for specified LAG Member Port(s).
 message LacpMemberState {
 
@@ -6422,8 +6442,8 @@ message ActionProtocolIpv4Ping {
   repeated ActionProtocolIpv4PingRequest requests = 1;
 }
 
-// Status: {'status': 'under_review', 'information': 'Most ping request parameters are
-// still TBD.'}
+// Under Review: Most ping request parameters are still TBD.
+// 
 // Request for initiating ping between a single source and destination pair.
 // For ping request, 1 IPv4 ICMP Echo Request shall be sent and wait for ping response
 // to either succeed or time out. The API wait timeout for each request shall be 300ms.
@@ -6515,8 +6535,8 @@ message ActionProtocolIpv6Ping {
   repeated ActionProtocolIpv6PingRequest requests = 1;
 }
 
-// Status: {'status': 'under_review', 'information': 'Most ping request parameters are
-// still TBD.'}
+// Under Review: Most ping request parameters are still TBD.
+// 
 // Request for initiating ping between a single source and destination pair.
 // For ping request, 1 IPv6 ICMP Echo Request shall be sent and wait for ping response
 // to either succeed or time out. The API wait timeout for each request shall be 300ms.
@@ -16542,41 +16562,41 @@ service Openapi {
   rpc SetControlState(SetControlStateRequest) returns (SetControlStateResponse);
   // Triggers actions against configured resources.
   rpc SetControlAction(SetControlActionRequest) returns (SetControlActionResponse);
-  // Status: {'status': 'deprecated', 'information': 'Please use `set_control_state` with
-  // `traffic.flow_transmit` choice instead'}
+  // Deprecated: Please use `set_control_state` with `traffic.flow_transmit` choice instead
+  // 
   // Updates the state of configuration resources on the traffic generator.
   // The Response.Warnings in the Success response is available for implementers to disclose
   // additional information about a state change including any implicit changes that are
   // outside the scope of the state change.
   rpc SetTransmitState(SetTransmitStateRequest) returns (SetTransmitStateResponse);
-  // Status: {'status': 'deprecated', 'information': 'Please use `set_control_state` with
-  // `port.link` choice instead'}
+  // Deprecated: Please use `set_control_state` with `port.link` choice instead
+  // 
   // Updates the state of configuration resources on the traffic generator.
   rpc SetLinkState(SetLinkStateRequest) returns (SetLinkStateResponse);
-  // Status: {'status': 'deprecated', 'information': 'Please use `set_control_state` with
-  // `port.capture` choice instead'}
+  // Deprecated: Please use `set_control_state` with `port.capture` choice instead
+  // 
   // Updates the state of configuration resources on the traffic generator.
   rpc SetCaptureState(SetCaptureStateRequest) returns (SetCaptureStateResponse);
-  // Status: {'status': 'deprecated', 'information': 'Please use `update_config` with
-  // `flow` choice instead'}
+  // Deprecated: Please use `update_config` with `flow` choice instead
+  // 
   // Updates flow properties without disruption of transmit state.
   rpc UpdateFlows(UpdateFlowsRequest) returns (UpdateFlowsResponse);
-  // Status: {'status': 'deprecated', 'information': 'Please use `set_control_state` with
-  // `protocol.route` choice instead'}
+  // Deprecated: Please use `set_control_state` with `protocol.route` choice instead
+  // 
   // Updates the state of configuration resources on the traffic generator.
   rpc SetRouteState(SetRouteStateRequest) returns (SetRouteStateResponse);
-  // Status: {'status': 'deprecated', 'information': 'Please use `set_control_action`
-  // with `protocol.ipv*.ping` choice instead'}
+  // Deprecated: Please use `set_control_action` with `protocol.ipv*.ping` choice instead
+  // 
   // API to send an IPv4 and/or IPv6 ICMP Echo Request(s) between endpoints. For each
   // endpoint 1 ping packet will be sent and API shall wait for ping response to either
   // be successful or timeout. The API wait timeout for each request is 300ms.
   rpc SendPing(SendPingRequest) returns (SendPingResponse);
-  // Status: {'status': 'deprecated', 'information': 'Please use `set_control_state` with
-  // `protocol.all` choice instead'}
+  // Deprecated: Please use `set_control_state` with `protocol.all` choice instead
+  // 
   // Sets all configured protocols to `start` or `stop` state.
   rpc SetProtocolState(SetProtocolStateRequest) returns (SetProtocolStateResponse);
-  // Status: {'status': 'deprecated', 'information': 'Please use `set_control_state` with
-  // `protocol` choice instead'}
+  // Deprecated: Please use `set_control_state` with `protocol` choice instead
+  // 
   // Set specific state/actions on device configuration resources on the traffic generator.
   rpc SetDeviceState(SetDeviceStateRequest) returns (SetDeviceStateResponse);
   // Description missing in models
