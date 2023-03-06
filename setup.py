@@ -11,16 +11,16 @@ import shutil
 pkg_name = "snappi"
 go_pkg_name = "gosnappi"
 model_protobuf_name = "otg"
-version = "0.10.9"
-models_version = "0.10.12"
+version = "0.10.8"
+models_version = "0.10.13"
 
 # supported values - local openapiart path or None
 USE_OPENAPIART_DIR = None
 USE_MODELS_DIR = None
 
 # supported values - branch name or None
-USE_OPENAPIART_BRANCH = "x-status-warnings"
-USE_MODELS_BRANCH = "control-api-refactor"
+USE_OPENAPIART_BRANCH = None
+USE_MODELS_BRANCH = None
 
 OPENAPIART_REPO = "https://github.com/open-traffic-generator/openapiart.git"
 MODELS_REPO = "https://github.com/open-traffic-generator/models.git"
