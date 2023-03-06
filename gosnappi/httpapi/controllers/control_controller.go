@@ -23,6 +23,8 @@ func NewHttpControlController(handler interfaces.ControlHandler) interfaces.Cont
 
 func (ctrl *controlController) Routes() []httpapi.Route {
 	return []httpapi.Route{
+		{Path: "/control/state", Method: "POST", Name: "SetControlState", Handler: ctrl.SetControlState},
+		{Path: "/control/action", Method: "POST", Name: "SetControlAction", Handler: ctrl.SetControlAction},
 		{Path: "/control/transmit", Method: "POST", Name: "SetTransmitState", Handler: ctrl.SetTransmitState},
 		{Path: "/control/link", Method: "POST", Name: "SetLinkState", Handler: ctrl.SetLinkState},
 		{Path: "/control/capture", Method: "POST", Name: "SetCaptureState", Handler: ctrl.SetCaptureState},
@@ -35,8 +37,142 @@ func (ctrl *controlController) Routes() []httpapi.Route {
 }
 
 /*
+SetControlState: POST /control/state
+Description: Sets the operational state of configured resources.
+*/
+func (ctrl *controlController) SetControlState(w http.ResponseWriter, r *http.Request) {
+	var item gosnappi.ControlState
+	if r.Body != nil {
+		body, readError := io.ReadAll(r.Body)
+		if body != nil {
+			item = gosnappi.NewControlState()
+			err := item.FromJson(string(body))
+			if err != nil {
+				ctrl.responseSetControlState400(w, err)
+				return
+			}
+		} else {
+			ctrl.responseSetControlState400(w, readError)
+			return
+		}
+	} else {
+		bodyError := errors.New("Request do not have any body")
+		ctrl.responseSetControlState500(w, bodyError)
+		return
+	}
+	result := ctrl.handler.SetControlState(item, r)
+	if result.HasStatusCode200() {
+		data, err := controlMrlOpts.Marshal(result.StatusCode200().Msg())
+		if err != nil {
+			ctrl.responseSetControlState400(w, err)
+		}
+		httpapi.WriteCustomJSONResponse(w, 200, data)
+
+		return
+	}
+	if result.HasStatusCode400() {
+		if _, err := httpapi.WriteJSONResponse(w, 400, result.StatusCode400()); err != nil {
+			log.Print(err.Error())
+		}
+		return
+	}
+	if result.HasStatusCode500() {
+		if _, err := httpapi.WriteJSONResponse(w, 500, result.StatusCode500()); err != nil {
+			log.Print(err.Error())
+		}
+		return
+	}
+	ctrl.responseSetControlState500(w, errors.New("Unknown error"))
+}
+
+func (ctrl *controlController) responseSetControlState400(w http.ResponseWriter, rsp_err error) {
+	result := gosnappi.NewSetControlStateResponse()
+	result.StatusCode400().SetErrors([]string{rsp_err.Error()})
+	if _, err := httpapi.WriteJSONResponse(w, 400, result.StatusCode400()); err != nil {
+		log.Print(err.Error())
+	}
+}
+
+func (ctrl *controlController) responseSetControlState500(w http.ResponseWriter, rsp_err error) {
+	result := gosnappi.NewSetControlStateResponse()
+	result.StatusCode500().SetErrors([]string{rsp_err.Error()})
+	if _, err := httpapi.WriteJSONResponse(w, 500, result.StatusCode500()); err != nil {
+		log.Print(err.Error())
+	}
+}
+
+/*
+SetControlAction: POST /control/action
+Description: Triggers actions against configured resources.
+*/
+func (ctrl *controlController) SetControlAction(w http.ResponseWriter, r *http.Request) {
+	var item gosnappi.ControlAction
+	if r.Body != nil {
+		body, readError := io.ReadAll(r.Body)
+		if body != nil {
+			item = gosnappi.NewControlAction()
+			err := item.FromJson(string(body))
+			if err != nil {
+				ctrl.responseSetControlAction400(w, err)
+				return
+			}
+		} else {
+			ctrl.responseSetControlAction400(w, readError)
+			return
+		}
+	} else {
+		bodyError := errors.New("Request do not have any body")
+		ctrl.responseSetControlAction500(w, bodyError)
+		return
+	}
+	result := ctrl.handler.SetControlAction(item, r)
+	if result.HasStatusCode200() {
+		data, err := controlMrlOpts.Marshal(result.StatusCode200().Msg())
+		if err != nil {
+			ctrl.responseSetControlAction400(w, err)
+		}
+		httpapi.WriteCustomJSONResponse(w, 200, data)
+
+		return
+	}
+	if result.HasStatusCode400() {
+		if _, err := httpapi.WriteJSONResponse(w, 400, result.StatusCode400()); err != nil {
+			log.Print(err.Error())
+		}
+		return
+	}
+	if result.HasStatusCode500() {
+		if _, err := httpapi.WriteJSONResponse(w, 500, result.StatusCode500()); err != nil {
+			log.Print(err.Error())
+		}
+		return
+	}
+	ctrl.responseSetControlAction500(w, errors.New("Unknown error"))
+}
+
+func (ctrl *controlController) responseSetControlAction400(w http.ResponseWriter, rsp_err error) {
+	result := gosnappi.NewSetControlActionResponse()
+	result.StatusCode400().SetErrors([]string{rsp_err.Error()})
+	if _, err := httpapi.WriteJSONResponse(w, 400, result.StatusCode400()); err != nil {
+		log.Print(err.Error())
+	}
+}
+
+func (ctrl *controlController) responseSetControlAction500(w http.ResponseWriter, rsp_err error) {
+	result := gosnappi.NewSetControlActionResponse()
+	result.StatusCode500().SetErrors([]string{rsp_err.Error()})
+	if _, err := httpapi.WriteJSONResponse(w, 500, result.StatusCode500()); err != nil {
+		log.Print(err.Error())
+	}
+}
+
+/*
 SetTransmitState: POST /control/transmit
-Description: Updates the state of configuration resources on the traffic generator.
+Description: Deprecated: Please use `set_control_state` with `traffic.flow_transmit` choice instead
+
+Deprecated: Please use `set_control_state` with `traffic.flow_transmit` choice instead
+
+Updates the state of configuration resources on the traffic generator.
 The Response.Warnings in the Success response is available for implementers to disclose additional information about a state change including any implicit changes that are outside the scope of the state change.
 */
 func (ctrl *controlController) SetTransmitState(w http.ResponseWriter, r *http.Request) {
@@ -102,7 +238,11 @@ func (ctrl *controlController) responseSetTransmitState500(w http.ResponseWriter
 
 /*
 SetLinkState: POST /control/link
-Description: Updates the state of configuration resources on the traffic generator.
+Description: Deprecated: Please use `set_control_state` with `port.link` choice instead
+
+Deprecated: Please use `set_control_state` with `port.link` choice instead
+
+Updates the state of configuration resources on the traffic generator.
 */
 func (ctrl *controlController) SetLinkState(w http.ResponseWriter, r *http.Request) {
 	var item gosnappi.LinkState
@@ -167,7 +307,11 @@ func (ctrl *controlController) responseSetLinkState500(w http.ResponseWriter, rs
 
 /*
 SetCaptureState: POST /control/capture
-Description: Updates the state of configuration resources on the traffic generator.
+Description: Deprecated: Please use `set_control_state` with `port.capture` choice instead
+
+Deprecated: Please use `set_control_state` with `port.capture` choice instead
+
+Updates the state of configuration resources on the traffic generator.
 */
 func (ctrl *controlController) SetCaptureState(w http.ResponseWriter, r *http.Request) {
 	var item gosnappi.CaptureState
@@ -232,7 +376,11 @@ func (ctrl *controlController) responseSetCaptureState500(w http.ResponseWriter,
 
 /*
 UpdateFlows: POST /control/flows
-Description: Updates flow properties without disruption of transmit state.
+Description: Deprecated: Please use `update_config` with `flow` choice instead
+
+Deprecated: Please use `update_config` with `flow` choice instead
+
+Updates flow properties without disruption of transmit state.
 */
 func (ctrl *controlController) UpdateFlows(w http.ResponseWriter, r *http.Request) {
 	var item gosnappi.FlowsUpdate
@@ -294,7 +442,11 @@ func (ctrl *controlController) responseUpdateFlows500(w http.ResponseWriter, rsp
 
 /*
 SetRouteState: POST /control/routes
-Description: Updates the state of configuration resources on the traffic generator.
+Description: Deprecated: Please use `set_control_state` with `protocol.route` choice instead
+
+Deprecated: Please use `set_control_state` with `protocol.route` choice instead
+
+Updates the state of configuration resources on the traffic generator.
 */
 func (ctrl *controlController) SetRouteState(w http.ResponseWriter, r *http.Request) {
 	var item gosnappi.RouteState
@@ -359,7 +511,11 @@ func (ctrl *controlController) responseSetRouteState500(w http.ResponseWriter, r
 
 /*
 SendPing: POST /control/ping
-Description: API to send an IPv4 and/or IPv6 ICMP Echo Request(s) between endpoints. For each endpoint 1 ping packet will be sent and API shall wait for ping response to either be successful or timeout. The API wait timeout for each request is 300ms.
+Description: Deprecated: Please use `set_control_action` with `protocol.ipv*.ping` choice instead
+
+Deprecated: Please use `set_control_action` with `protocol.ipv*.ping` choice instead
+
+API to send an IPv4 and/or IPv6 ICMP Echo Request(s) between endpoints. For each endpoint 1 ping packet will be sent and API shall wait for ping response to either be successful or timeout. The API wait timeout for each request is 300ms.
 */
 func (ctrl *controlController) SendPing(w http.ResponseWriter, r *http.Request) {
 	var item gosnappi.PingRequest
@@ -421,7 +577,11 @@ func (ctrl *controlController) responseSendPing500(w http.ResponseWriter, rsp_er
 
 /*
 SetProtocolState: POST /control/protocols
-Description: Sets all configured protocols to `start` or `stop` state.
+Description: Deprecated: Please use `set_control_state` with `protocol.all` choice instead
+
+Deprecated: Please use `set_control_state` with `protocol.all` choice instead
+
+Sets all configured protocols to `start` or `stop` state.
 */
 func (ctrl *controlController) SetProtocolState(w http.ResponseWriter, r *http.Request) {
 	var item gosnappi.ProtocolState
@@ -486,7 +646,11 @@ func (ctrl *controlController) responseSetProtocolState500(w http.ResponseWriter
 
 /*
 SetDeviceState: POST /control/devices
-Description: Set specific state/actions on device configuration resources on the traffic generator.
+Description: Deprecated: Please use `set_control_state` with `protocol` choice instead
+
+Deprecated: Please use `set_control_state` with `protocol` choice instead
+
+Set specific state/actions on device configuration resources on the traffic generator.
 */
 func (ctrl *controlController) SetDeviceState(w http.ResponseWriter, r *http.Request) {
 	var item gosnappi.DeviceState

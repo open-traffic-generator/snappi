@@ -67,6 +67,13 @@ func (h *configurationHandler) GetConfig(r *http.Request) gosnappi.GetConfigResp
 
 }
 
+func (h *configurationHandler) UpdateConfig(rbody gosnappi.ConfigUpdate, r *http.Request) gosnappi.UpdateConfigResponse {
+	fmt.Println("UpdateConfig: We need to put our business logic ...")
+	result := gosnappi.NewUpdateConfigResponse()
+	result.StatusCode200()
+	return result
+}
+
 //////////////////////////////////////////////////////////////////
 // 		Test Code where init gosnappi server and access it through gosnappi package
 //////////////////////////////////////////////////////////////////

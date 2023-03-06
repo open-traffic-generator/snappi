@@ -1,4 +1,4 @@
-/* Open Traffic Generator API 0.10.12
+/* Open Traffic Generator API 0.10.13
  * Open Traffic Generator API defines a model-driven, vendor-neutral and standard
  * interface for emulating layer 2-7 network devices and generating test traffic.
  * 
@@ -241,10 +241,10 @@ message DeviceEthernetBase {
 // An Ethernet interface with IPv4 and IPv6 addresses.
 message DeviceEthernet {
 
-  // Status: {'status': 'deprecated', 'information': 'This property is deprecated in favor
-  // of property connection.port_name'}
-  // Status: {'status': 'deprecated', 'information': 'This property is deprecated in favor
-  // of property connection.port_name'}
+  // Deprecated: This property is deprecated in favor of property connection.port_name
+  // 
+  // Deprecated: This property is deprecated in favor of property connection.port_name
+  // 
   // The unique name of a Port or a LAG that will emulate this interface.
   // port_name is deprecated and will be removed in future release.port_name and connection
   // can't be used together, use either port_name or connection.
@@ -719,8 +719,10 @@ message Layer1Ieee8021qbb {
   optional int32 pfc_class_7 = 9;
 }
 
-// Status: {'status': 'under_review'}
-// Status: {'status': 'under_review'}
+// Under Review: Information TBD
+// 
+// Under Review: Information TBD
+// 
 // Configuration for capture settings.
 message Capture {
 
@@ -995,8 +997,10 @@ message ProtocolOptions {
   optional bool auto_start_all = 1;
 }
 
-// Status: {'status': 'under_review'}
-// Status: {'status': 'under_review'}
+// Under Review: Information TBD
+// 
+// Under Review: Information TBD
+// 
 // A container of properties for an ISIS router and its interfaces.
 message DeviceIsisRouter {
 
@@ -1032,8 +1036,10 @@ message DeviceIsisRouter {
   string name = 9;
 }
 
-// Status: {'status': 'under_review'}
-// Status: {'status': 'under_review'}
+// Under Review: Information TBD
+// 
+// Under Review: Information TBD
+// 
 // This container properties of an Multi-Instance-capable router (MI-RTR).
 message DeviceIsisMultiInstance {
 
@@ -1047,8 +1053,10 @@ message DeviceIsisMultiInstance {
   repeated int32 itids = 2;
 }
 
-// Status: {'status': 'under_review'}
-// Status: {'status': 'under_review'}
+// Under Review: Information TBD
+// 
+// Under Review: Information TBD
+// 
 // Configuration for single ISIS interface.
 message IsisInterface {
 
@@ -1140,8 +1148,10 @@ message IsisInterfaceLevel {
   optional int32 dead_interval = 3;
 }
 
-// Status: {'status': 'under_review'}
-// Status: {'status': 'under_review'}
+// Under Review: Information TBD
+// 
+// Under Review: Information TBD
+// 
 // Configuration of properties per interface per topology when multiple topologies are
 // configured in an ISIS router.
 // in a ISIS router.
@@ -1156,8 +1166,10 @@ message IsisMT {
   optional int32 link_metric = 2;
 }
 
-// Status: {'status': 'under_review'}
-// Status: {'status': 'under_review'}
+// Under Review: Information TBD
+// 
+// Under Review: Information TBD
+// 
 // A container for Traffic Engineering properties on a interface.
 message LinkStateTE {
 
@@ -2285,8 +2297,10 @@ message BgpRouteTarget {
   optional string rt_value = 2;
 }
 
-// Status: {'status': 'under_review'}
-// Status: {'status': 'under_review'}
+// Under Review: Information TBD
+// 
+// Under Review: Information TBD
+// 
 // Configuration for BGP advanced settings.
 message BgpAdvanced {
 
@@ -2315,8 +2329,10 @@ message BgpAdvanced {
   optional string md5_key = 5;
 }
 
-// Status: {'status': 'under_review'}
-// Status: {'status': 'under_review'}
+// Under Review: Information TBD
+// 
+// Under Review: Information TBD
+// 
 // Configuration for BGP capability settings.
 message BgpCapability {
 
@@ -2433,8 +2449,10 @@ message BgpCapability {
   optional bool ipv6_unicast_add_path = 25;
 }
 
-// Status: {'status': 'under_review'}
-// Status: {'status': 'under_review'}
+// Under Review: Information TBD
+// 
+// Under Review: Information TBD
+// 
 // Configuration for controlling storage of BGP learned information recieved from the
 // peer.
 message BgpLearnedInformationFilter {
@@ -2909,8 +2927,10 @@ message BgpSrteExplicitNullLabelPolicySubTlv {
   optional ExplicitNullLabelPolicy.Enum explicit_null_label_policy = 1;
 }
 
-// Status: {'status': 'under_review'}
-// Status: {'status': 'under_review'}
+// Under Review: Information TBD
+// 
+// Under Review: Information TBD
+// 
 // Optional configuration for BGP SR TE Policy segment list. The Segment List sub-TLV
 // encodes a single explicit path towards the Endpoint.
 message BgpSrteSegmentList {
@@ -2935,8 +2955,10 @@ message BgpSrteSegmentList {
   optional bool active = 4;
 }
 
-// Status: {'status': 'under_review'}
-// Status: {'status': 'under_review'}
+// Under Review: Information TBD
+// 
+// Under Review: Information TBD
+// 
 // A Segment sub-TLV describes a single segment in a segment list  i.e., a single element
 // of the explicit path. The Segment sub-TLVs are optional.
 message BgpSrteSegment {
@@ -3094,8 +3116,10 @@ message BgpSrteSegmentBTypeSubTlv {
   optional BgpSrteSRv6SIDEndpointBehaviorAndStructure srv6_sid_endpoint_behavior = 3;
 }
 
-// Status: {'status': 'under_review'}
-// Status: {'status': 'under_review'}
+// Under Review: Information TBD
+// 
+// Under Review: Information TBD
+// 
 // Type C: IPv4 Node Address with optional SID.
 message BgpSrteSegmentCTypeSubTlv {
 
@@ -3568,8 +3592,10 @@ message BgpV6Interface {
   repeated BgpV6Peer peers = 2;
 }
 
-// Status: {'status': 'under_review'}
-// Status: {'status': 'under_review'}
+// Under Review: Information TBD
+// 
+// Under Review: Information TBD
+// 
 // Configuration for BGPv6 segment routing settings.
 message BgpV6SegmentRouting {
 
@@ -3992,8 +4018,10 @@ message VxlanV6TunnelDestinationIPModeMulticast {
   optional string address = 1;
 }
 
-// Status: {'status': 'under_review'}
-// Status: {'status': 'under_review'}
+// Under Review: Information TBD
+// 
+// Under Review: Information TBD
+// 
 // Configuration for one or more RSVP interfaces, ingress and egress LSPs. In this model,
 // currently IPv4 RSVP and point-to-point LSPs are supported as per RFC3209 and related
 // specifications.
@@ -4012,8 +4040,10 @@ message DeviceRsvp {
   optional string name = 3;
 }
 
-// Status: {'status': 'under_review'}
-// Status: {'status': 'under_review'}
+// Under Review: Information TBD
+// 
+// Under Review: Information TBD
+// 
 // Configuration for RSVP Interface.
 message RsvpIpv4Interface {
 
@@ -4082,8 +4112,10 @@ message RsvpIpv4Interface {
   optional int32 timeout_multiplier = 11;
 }
 
-// Status: {'status': 'under_review'}
-// Status: {'status': 'under_review'}
+// Under Review: Information TBD
+// 
+// Under Review: Information TBD
+// 
 // Configuration for RSVP LSP IPv4 Interface.
 message RsvpLspIpv4Interface {
 
@@ -5958,7 +5990,133 @@ message ResponseWarning {
   repeated string warnings = 1;
 }
 
-// Port link state.
+// Request for updating specific attributes of resources in traffic generator
+message ConfigUpdate {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      flows = 1;
+    }
+  }
+  // Description missing in models
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  optional FlowsUpdate flows = 2;
+}
+
+// A container of flows with associated properties to be updated without affecting the
+// flows current transmit state.
+message FlowsUpdate {
+
+  message PropertyNames {
+    enum Enum {
+      unspecified = 0;
+      rate = 1;
+      size = 2;
+    }
+  }
+  // Flow properties to be updated without affecting the transmit state.
+  repeated PropertyNames.Enum property_names = 1;
+
+  // The list of configured flows for which given property will be updated.
+  repeated Flow flows = 2;
+}
+
+// Request for setting operational state of configured resources.
+message ControlState {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      port = 1;
+      protocol = 2;
+      traffic = 3;
+    }
+  }
+  // Description missing in models
+  // required = true
+  Choice.Enum choice = 1;
+
+  // Description missing in models
+  optional StatePort port = 2;
+
+  // Description missing in models
+  optional StateProtocol protocol = 3;
+
+  // Description missing in models
+  optional StateTraffic traffic = 4;
+}
+
+// States associated with configured ports.
+message StatePort {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      link = 1;
+      capture = 2;
+    }
+  }
+  // Description missing in models
+  // required = true
+  Choice.Enum choice = 1;
+
+  // Description missing in models
+  optional StatePortLink link = 2;
+
+  // Description missing in models
+  optional StatePortCapture capture = 3;
+}
+
+// States associated with configured flows
+message StateTraffic {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      flow_transmit = 1;
+    }
+  }
+  // Description missing in models
+  // required = true
+  Choice.Enum choice = 1;
+
+  // Description missing in models
+  optional StateTrafficFlowTransmit flow_transmit = 2;
+}
+
+// States associated with protocols on configured resources.
+message StateProtocol {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      all = 1;
+      route = 2;
+      lacp = 3;
+    }
+  }
+  // Description missing in models
+  // required = true
+  Choice.Enum choice = 1;
+
+  // Description missing in models
+  optional StateProtocolAll all = 2;
+
+  // Description missing in models
+  optional StateProtocolRoute route = 3;
+
+  // Description missing in models
+  optional StateProtocolLacp lacp = 4;
+}
+
+// Deprecated: Please use `StatePortLink` instead
+// 
+// Deprecated: Please use `StatePortLink` instead
+// 
+// Sets the link state of configured ports.
 message LinkState {
 
   // The names of port objects to. An empty or null list will control all port objects.
@@ -5984,6 +6142,10 @@ message LinkState {
   State.Enum state = 2;
 }
 
+// Deprecated: Please use `StateTrafficFlowTransmit` instead
+// 
+// Deprecated: Please use `StateTrafficFlowTransmit` instead
+// 
 // Flow transmit state.
 message TransmitState {
 
@@ -6026,6 +6188,10 @@ message TransmitState {
   State.Enum state = 2;
 }
 
+// Deprecated: Please use `StatePortCapture` instead
+// 
+// Deprecated: Please use `StatePortCapture` instead
+// 
 // Control port capture state
 message CaptureState {
 
@@ -6055,24 +6221,10 @@ message CaptureState {
   State.Enum state = 2;
 }
 
-// A container of flows with associated properties to be updated without affecting the
-// flows current transmit state.
-message FlowsUpdate {
-
-  message PropertyNames {
-    enum Enum {
-      unspecified = 0;
-      rate = 1;
-      size = 2;
-    }
-  }
-  // Flow properties to be updated without affecting the transmit state.
-  repeated PropertyNames.Enum property_names = 1;
-
-  // The list of configured flows for which given property will be updated.
-  repeated Flow flows = 2;
-}
-
+// Deprecated: Please use `StateProtocolRoute` instead
+// 
+// Deprecated: Please use `StateProtocolRoute` instead
+// 
 // Sets the device route state
 message RouteState {
 
@@ -6106,13 +6258,10 @@ message RouteState {
   State.Enum state = 2;
 }
 
-// Ping request details
-message PingRequest {
-
-  // Array of ping requests
-  repeated Ping endpoints = 1;
-}
-
+// Deprecated: Please use `StateProtocolAll` instead
+// 
+// Deprecated: Please use `StateProtocolAll` instead
+// 
 // Sets all configured protocols to `start` or `stop` state. Setting protocol state
 // to `start`  shall be a no-op if preceding `set_config` API call was made with  `config.options.protocol_options.auto_start_all`
 // set to `true` or if all the configured protocols are already started.
@@ -6130,6 +6279,10 @@ message ProtocolState {
   State.Enum state = 1;
 }
 
+// Deprecated: Please use `State.Protocol` instead
+// 
+// Deprecated: Please use `State.Protocol` instead
+// 
 // Sets attributes for the requested state/actions to be performed on device(s)
 message DeviceState {
 
@@ -6144,6 +6297,523 @@ message DeviceState {
 
   // Description missing in models
   optional LacpMemberState lacp_member_state = 2;
+}
+
+// Sets the link of configured ports.
+message StatePortLink {
+
+  // The names of target ports. An empty or null list will target all ports.
+  // 
+  // x-constraint:
+  // - /components/schemas/Port/properties/name
+  // 
+  // 
+  // x-constraint:
+  // - /components/schemas/Port/properties/name
+  // 
+  repeated string port_names = 1;
+
+  message State {
+    enum Enum {
+      unspecified = 0;
+      up = 1;
+      down = 2;
+    }
+  }
+  // The link state.
+  // required = true
+  State.Enum state = 2;
+}
+
+// Sets the capture state of configured ports
+message StatePortCapture {
+
+  // The names of ports to which the capture state will be applied to. If the list of
+  // port_names is empty or null the state will be applied to all configured ports.
+  // If the list is not empty any port that is not included in the list of port_names
+  // MUST be ignored and not included in the state change.
+  // 
+  // x-constraint:
+  // - /components/schemas/Port/properties/name
+  // 
+  // 
+  // x-constraint:
+  // - /components/schemas/Port/properties/name
+  // 
+  repeated string port_names = 1;
+
+  message State {
+    enum Enum {
+      unspecified = 0;
+      start = 1;
+      stop = 2;
+    }
+  }
+  // The capture state.
+  // required = true
+  State.Enum state = 2;
+}
+
+// Provides state control of flow transmission.
+message StateTrafficFlowTransmit {
+
+  // The names of flows to which the transmit state will be applied to. If the list of
+  // flow_names is empty or null the state will be applied to all configured flows.
+  // If the list is not empty any flow that is not included in the list of flow_names
+  // MUST be ignored and not included in the state change.
+  // 
+  // x-constraint:
+  // - /components/schemas/Flow/properties/name
+  // 
+  // 
+  // x-constraint:
+  // - /components/schemas/Flow/properties/name
+  // 
+  repeated string flow_names = 1;
+
+  message State {
+    enum Enum {
+      unspecified = 0;
+      start = 1;
+      stop = 2;
+      pause = 3;
+      resume = 4;
+    }
+  }
+  // The transmit state.
+  // If the value of the state property is 'start' then all flows defined by the 'flow_names'
+  // property will be started and the metric counters MUST be cleared prior to starting
+  // the flow(s).
+  // If the value of the state property is 'stop' then all flows defined by the 'flow_names'
+  // property will be stopped and the metric counters MUST NOT be cleared.
+  // If the value of the state property is 'pause' then all flows defined by the 'flow_names'
+  // property will be paused and the metric counters MUST NOT be cleared.
+  // If the value of the state property is 'resume' then any paused flows defined by the
+  // 'flow_names' property will start transmit at the point at which they were paused.
+  // Any flow that is stopped will start transmit at the beginning of the flow. The flow(s)
+  // MUST NOT have their metric counters cleared.
+  optional State.Enum state = 2;
+}
+
+// Sets all configured protocols to `start` or `stop` state.
+// Setting protocol state to `start` shall be a no-op if preceding `set_config` API
+// call was made with `config.options.protocol_options.auto_start_all` set to `true`
+// or if all the configured protocols are already started.
+message StateProtocolAll {
+
+  message State {
+    enum Enum {
+      unspecified = 0;
+      start = 1;
+      stop = 2;
+    }
+  }
+  // Protocol states
+  // required = true
+  State.Enum state = 1;
+}
+
+// Sets the state of configured routes
+message StateProtocolRoute {
+
+  // The names of device route objects to control. If no names are specified then all
+  // route objects that match the x-constraint will be affected.
+  // 
+  // x-constraint:
+  // - /components/schemas/Bgp.V4RouteRange/properties/name
+  // - /components/schemas/Bgp.V6RouteRange/properties/name
+  // - /components/schemas/Isis.V4RouteRange/properties/name
+  // - /components/schemas/Isis.V6RouteRange/properties/name
+  // 
+  // 
+  // x-constraint:
+  // - /components/schemas/Bgp.V4RouteRange/properties/name
+  // - /components/schemas/Bgp.V6RouteRange/properties/name
+  // - /components/schemas/Isis.V4RouteRange/properties/name
+  // - /components/schemas/Isis.V6RouteRange/properties/name
+  // 
+  repeated string names = 1;
+
+  message State {
+    enum Enum {
+      unspecified = 0;
+      withdraw = 1;
+      advertise = 2;
+    }
+  }
+  // Route states
+  // required = true
+  State.Enum state = 2;
+}
+
+// Sets state of configured LACP
+message StateProtocolLacp {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      admin = 1;
+    }
+  }
+  // Description missing in models
+  // required = true
+  Choice.Enum choice = 1;
+
+  // Description missing in models
+  optional StateProtocolLacpAdmin admin = 2;
+}
+
+// Sets admin state of LACP configured on LAG members
+message StateProtocolLacpAdmin {
+
+  // The names of LAG members (ports) for which the state has to be applied. An empty
+  // or null list will control all LAG members.
+  // 
+  // x-constraint:
+  // - /components/schemas/Port/properties/name
+  // 
+  // 
+  // x-constraint:
+  // - /components/schemas/Port/properties/name
+  // 
+  repeated string lag_member_names = 1;
+
+  message State {
+    enum Enum {
+      unspecified = 0;
+      up = 1;
+      down = 2;
+    }
+  }
+  // The LACP Member admin state. 'up' will send LACPDUs with 'sync' flag set on selected
+  // member ports. 'down' will send LACPDUs with 'sync' flag unset on selected member
+  // ports.
+  optional State.Enum state = 2;
+}
+
+// Deprecated: Please use `StateProtocolLacpAdmin` instead
+// 
+// Deprecated: Please use `StateProtocolLacpAdmin` instead
+// 
+// Set LACP state for specified LAG Member Port(s).
+message LacpMemberState {
+
+  // The names of LAG members (ports) for which the state has to be applied. An empty
+  // or null list will control all LAG members.
+  // 
+  // x-constraint:
+  // - /components/schemas/Port/properties/name
+  // 
+  // 
+  // x-constraint:
+  // - /components/schemas/Port/properties/name
+  // 
+  repeated string lag_member_port_names = 1;
+
+  message State {
+    enum Enum {
+      unspecified = 0;
+      up = 1;
+      down = 2;
+    }
+  }
+  // The LACP Member admin state. 'up' will send LACPDUs with 'sync' flag set on selected
+  // member ports. 'down' will send LACPDUs with 'sync' flag unset on selected member
+  // ports.
+  // required = true
+  State.Enum state = 2;
+}
+
+// Request for triggering action against configured resources.
+message ControlAction {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      protocol = 1;
+    }
+  }
+  // Description missing in models
+  // required = true
+  Choice.Enum choice = 1;
+
+  // Description missing in models
+  optional ActionProtocol protocol = 2;
+}
+
+// Response for action triggered against configured resources along with warnings.
+message ControlActionResponse {
+
+  // List of warnings generated while triggering specified action
+  repeated string warnings = 1;
+
+  // Description missing in models
+  optional ActionResponse response = 2;
+}
+
+// Response for action triggered against configured resources.
+message ActionResponse {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      protocol = 1;
+    }
+  }
+  // Description missing in models
+  // required = true
+  Choice.Enum choice = 1;
+
+  // Description missing in models
+  optional ActionResponseProtocol protocol = 2;
+}
+
+// Actions associated with protocols on configured resources.
+message ActionProtocol {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      ipv4 = 1;
+      ipv6 = 2;
+    }
+  }
+  // Description missing in models
+  // required = true
+  Choice.Enum choice = 1;
+
+  // Description missing in models
+  optional ActionProtocolIpv4 ipv4 = 2;
+
+  // Description missing in models
+  optional ActionProtocolIpv6 ipv6 = 3;
+}
+
+// Response for actions associated with protocols on configured resources.
+message ActionResponseProtocol {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      ipv4 = 1;
+      ipv6 = 2;
+    }
+  }
+  // Description missing in models
+  // required = true
+  Choice.Enum choice = 1;
+
+  // Description missing in models
+  optional ActionResponseProtocolIpv4 ipv4 = 2;
+
+  // Description missing in models
+  optional ActionResponseProtocolIpv6 ipv6 = 3;
+}
+
+// Actions associated with IPv4 on configured resources.
+message ActionProtocolIpv4 {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      ping = 1;
+    }
+  }
+  // Description missing in models
+  // required = true
+  Choice.Enum choice = 1;
+
+  // Description missing in models
+  optional ActionProtocolIpv4Ping ping = 2;
+}
+
+// Response for actions associated with IPv4 on configured resources.
+message ActionResponseProtocolIpv4 {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      ping = 1;
+    }
+  }
+  // Description missing in models
+  // required = true
+  Choice.Enum choice = 1;
+
+  // Description missing in models
+  optional ActionResponseProtocolIpv4Ping ping = 2;
+}
+
+// Request for initiating ping between multiple source and destination pairs.
+message ActionProtocolIpv4Ping {
+
+  // List of IPv4 ping requests.
+  repeated ActionProtocolIpv4PingRequest requests = 1;
+}
+
+// Under Review: Most ping request parameters are still TBD.
+// 
+// Under Review: Most ping request parameters are still TBD.
+// 
+// Request for initiating ping between a single source and destination pair.
+// For ping request, 1 IPv4 ICMP Echo Request shall be sent and wait for ping response
+// to either succeed or time out. The API wait timeout for each request shall be 300ms.
+message ActionProtocolIpv4PingRequest {
+
+  // Name of source IPv4 interface to be used.
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.Ipv4/properties/name
+  // 
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.Ipv4/properties/name
+  // 
+  optional string src_name = 1;
+
+  // Destination IPv4 address to ping.
+  optional string dst_ip = 2;
+}
+
+// Response for ping initiated between multiple source and destination pairs.
+message ActionResponseProtocolIpv4Ping {
+
+  // List of responses for IPv4 ping responses.
+  repeated ActionResponseProtocolIpv4PingResponse responses = 1;
+}
+
+// Response for ping initiated between a single source and destination pair.
+message ActionResponseProtocolIpv4PingResponse {
+
+  // Name of source IPv4 interface used for ping.
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.Ipv4/properties/name
+  // 
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.Ipv4/properties/name
+  // 
+  // required = true
+  string src_name = 1;
+
+  // Destination IPv4 address used for ping.
+  // required = true
+  string dst_ip = 2;
+
+  message Result {
+    enum Enum {
+      unspecified = 0;
+      succeeded = 1;
+      failed = 2;
+    }
+  }
+  // Result of the ping request.
+  // required = true
+  Result.Enum result = 3;
+}
+
+// Actions associated with IPv6 on configured resources.
+message ActionProtocolIpv6 {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      ping = 1;
+    }
+  }
+  // Description missing in models
+  // required = true
+  Choice.Enum choice = 1;
+
+  // Description missing in models
+  optional ActionProtocolIpv6Ping ping = 2;
+}
+
+// Response for actions associated with IPv6 on configured resources.
+message ActionResponseProtocolIpv6 {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      ping = 1;
+    }
+  }
+  // Description missing in models
+  // required = true
+  Choice.Enum choice = 1;
+
+  // Description missing in models
+  optional ActionResponseProtocolIpv6Ping ping = 2;
+}
+
+// Request for initiating ping between multiple source and destination pairs.
+message ActionProtocolIpv6Ping {
+
+  // List of IPv6 ping requests.
+  repeated ActionProtocolIpv6PingRequest requests = 1;
+}
+
+// Under Review: Most ping request parameters are still TBD.
+// 
+// Under Review: Most ping request parameters are still TBD.
+// 
+// Request for initiating ping between a single source and destination pair.
+// For ping request, 1 IPv6 ICMP Echo Request shall be sent and wait for ping response
+// to either succeed or time out. The API wait timeout for each request shall be 300ms.
+message ActionProtocolIpv6PingRequest {
+
+  // Name of source IPv6 interface to be used.
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.Ipv6/properties/name
+  // 
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.Ipv6/properties/name
+  // 
+  optional string src_name = 1;
+
+  // Destination IPv6 address to ping.
+  optional string dst_ip = 2;
+}
+
+// Response for ping initiated between multiple source and destination pairs.
+message ActionResponseProtocolIpv6Ping {
+
+  // List of responses for IPv6 ping responses.
+  repeated ActionResponseProtocolIpv6PingResponse responses = 1;
+}
+
+// Response for ping initiated between a single source and destination pair.
+message ActionResponseProtocolIpv6PingResponse {
+
+  // Name of source IPv6 interface used for ping.
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.Ipv6/properties/name
+  // 
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.Ipv6/properties/name
+  // 
+  // required = true
+  string src_name = 1;
+
+  // Destination IPv6 address used for ping.
+  // required = true
+  string dst_ip = 2;
+
+  message Result {
+    enum Enum {
+      unspecified = 0;
+      succeeded = 1;
+      failed = 2;
+    }
+  }
+  // Result of the ping request.
+  // required = true
+  Result.Enum result = 3;
 }
 
 // Description missing in models
@@ -6203,6 +6873,13 @@ message PingIpv6 {
   optional string dst_ip = 2;
 }
 
+// Ping request details
+message PingRequest {
+
+  // Array of ping requests
+  repeated Ping endpoints = 1;
+}
+
 // A container for ping responses.
 message PingResponse {
 
@@ -6239,35 +6916,6 @@ message Response {
   // Result of the ping request.
   // default = Result.Enum.failure
   optional Result.Enum result = 3;
-}
-
-// Set LACP state for specified LAG Member Port(s).
-message LacpMemberState {
-
-  // The names of LAG members (ports) for which the state has to be applied. An empty
-  // or null list will control all LAG members.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
-  repeated string lag_member_port_names = 1;
-
-  message State {
-    enum Enum {
-      unspecified = 0;
-      up = 1;
-      down = 2;
-    }
-  }
-  // The LACP Member admin state. 'up' will send LACPDUs with 'sync' flag set on selected
-  // member ports. 'down' will send LACPDUs with 'sync' flag unset on selected member
-  // ports.
-  // required = true
-  State.Enum state = 2;
 }
 
 // Request to traffic generator for metrics of choice.
@@ -16065,6 +16713,10 @@ message InternalServerError {
 message SetConfigRequest {
   Config config = 1;
 }
+
+message UpdateConfigRequest {
+  ConfigUpdate config_update = 1;
+}
 message SetConfigResponse {
   optional ResponseWarning status_code_200 = 1;
   optional ResponseError status_code_400 = 2;
@@ -16073,6 +16725,32 @@ message SetConfigResponse {
 
 message GetConfigResponse {
   optional Config status_code_200 = 1;
+  optional ResponseError status_code_400 = 2;
+  optional ResponseError status_code_500 = 3;
+}
+
+message UpdateConfigResponse {
+  optional ResponseWarning status_code_200 = 1;
+  optional ResponseError status_code_400 = 2;
+  optional ResponseError status_code_500 = 3;
+}
+
+
+message SetControlStateRequest {
+  ControlState control_state = 1;
+}
+message SetControlStateResponse {
+  optional ResponseWarning status_code_200 = 1;
+  optional ResponseError status_code_400 = 2;
+  optional ResponseError status_code_500 = 3;
+}
+
+
+message SetControlActionRequest {
+  ControlAction control_action = 1;
+}
+message SetControlActionResponse {
+  optional ControlActionResponse status_code_200 = 1;
   optional ResponseError status_code_400 = 2;
   optional ResponseError status_code_500 = 3;
 }
@@ -16201,25 +16879,67 @@ service Openapi {
   rpc SetConfig(SetConfigRequest) returns (SetConfigResponse);
   // Description missing in models
   rpc GetConfig(google.protobuf.Empty) returns (GetConfigResponse);
+  // Updates specific attributes of resources configured on the traffic generator. The
+  // fetched configuration shall reflect the updates applied successfully.
+  // The Response.Warnings in the Success response is available for implementers to disclose
+  // additional information about a state change including any implicit changes that are
+  // outside the scope of the state change.
+  rpc UpdateConfig(UpdateConfigRequest) returns (UpdateConfigResponse);
+  // Sets the operational state of configured resources.
+  rpc SetControlState(SetControlStateRequest) returns (SetControlStateResponse);
+  // Triggers actions against configured resources.
+  rpc SetControlAction(SetControlActionRequest) returns (SetControlActionResponse);
+  // Deprecated: Please use `set_control_state` with `traffic.flow_transmit` choice instead
+  // 
+  // Deprecated: Please use `set_control_state` with `traffic.flow_transmit` choice instead
+  // 
   // Updates the state of configuration resources on the traffic generator.
   // The Response.Warnings in the Success response is available for implementers to disclose
   // additional information about a state change including any implicit changes that are
   // outside the scope of the state change.
   rpc SetTransmitState(SetTransmitStateRequest) returns (SetTransmitStateResponse);
+  // Deprecated: Please use `set_control_state` with `port.link` choice instead
+  // 
+  // Deprecated: Please use `set_control_state` with `port.link` choice instead
+  // 
   // Updates the state of configuration resources on the traffic generator.
   rpc SetLinkState(SetLinkStateRequest) returns (SetLinkStateResponse);
+  // Deprecated: Please use `set_control_state` with `port.capture` choice instead
+  // 
+  // Deprecated: Please use `set_control_state` with `port.capture` choice instead
+  // 
   // Updates the state of configuration resources on the traffic generator.
   rpc SetCaptureState(SetCaptureStateRequest) returns (SetCaptureStateResponse);
+  // Deprecated: Please use `update_config` with `flow` choice instead
+  // 
+  // Deprecated: Please use `update_config` with `flow` choice instead
+  // 
   // Updates flow properties without disruption of transmit state.
   rpc UpdateFlows(UpdateFlowsRequest) returns (UpdateFlowsResponse);
+  // Deprecated: Please use `set_control_state` with `protocol.route` choice instead
+  // 
+  // Deprecated: Please use `set_control_state` with `protocol.route` choice instead
+  // 
   // Updates the state of configuration resources on the traffic generator.
   rpc SetRouteState(SetRouteStateRequest) returns (SetRouteStateResponse);
+  // Deprecated: Please use `set_control_action` with `protocol.ipv*.ping` choice instead
+  // 
+  // Deprecated: Please use `set_control_action` with `protocol.ipv*.ping` choice instead
+  // 
   // API to send an IPv4 and/or IPv6 ICMP Echo Request(s) between endpoints. For each
   // endpoint 1 ping packet will be sent and API shall wait for ping response to either
   // be successful or timeout. The API wait timeout for each request is 300ms.
   rpc SendPing(SendPingRequest) returns (SendPingResponse);
+  // Deprecated: Please use `set_control_state` with `protocol.all` choice instead
+  // 
+  // Deprecated: Please use `set_control_state` with `protocol.all` choice instead
+  // 
   // Sets all configured protocols to `start` or `stop` state.
   rpc SetProtocolState(SetProtocolStateRequest) returns (SetProtocolStateResponse);
+  // Deprecated: Please use `set_control_state` with `protocol` choice instead
+  // 
+  // Deprecated: Please use `set_control_state` with `protocol` choice instead
+  // 
   // Set specific state/actions on device configuration resources on the traffic generator.
   rpc SetDeviceState(SetDeviceStateRequest) returns (SetDeviceStateResponse);
   // Description missing in models

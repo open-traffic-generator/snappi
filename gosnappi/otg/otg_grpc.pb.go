@@ -28,25 +28,67 @@ type OpenapiClient interface {
 	SetConfig(ctx context.Context, in *SetConfigRequest, opts ...grpc.CallOption) (*SetConfigResponse, error)
 	// Description missing in models
 	GetConfig(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*GetConfigResponse, error)
+	// Updates specific attributes of resources configured on the traffic generator. The
+	// fetched configuration shall reflect the updates applied successfully.
+	// The Response.Warnings in the Success response is available for implementers to disclose
+	// additional information about a state change including any implicit changes that are
+	// outside the scope of the state change.
+	UpdateConfig(ctx context.Context, in *UpdateConfigRequest, opts ...grpc.CallOption) (*UpdateConfigResponse, error)
+	// Sets the operational state of configured resources.
+	SetControlState(ctx context.Context, in *SetControlStateRequest, opts ...grpc.CallOption) (*SetControlStateResponse, error)
+	// Triggers actions against configured resources.
+	SetControlAction(ctx context.Context, in *SetControlActionRequest, opts ...grpc.CallOption) (*SetControlActionResponse, error)
+	// Deprecated: Please use `set_control_state` with `traffic.flow_transmit` choice instead
+	//
+	// Deprecated: Please use `set_control_state` with `traffic.flow_transmit` choice instead
+	//
 	// Updates the state of configuration resources on the traffic generator.
 	// The Response.Warnings in the Success response is available for implementers to disclose
 	// additional information about a state change including any implicit changes that are
 	// outside the scope of the state change.
 	SetTransmitState(ctx context.Context, in *SetTransmitStateRequest, opts ...grpc.CallOption) (*SetTransmitStateResponse, error)
+	// Deprecated: Please use `set_control_state` with `port.link` choice instead
+	//
+	// Deprecated: Please use `set_control_state` with `port.link` choice instead
+	//
 	// Updates the state of configuration resources on the traffic generator.
 	SetLinkState(ctx context.Context, in *SetLinkStateRequest, opts ...grpc.CallOption) (*SetLinkStateResponse, error)
+	// Deprecated: Please use `set_control_state` with `port.capture` choice instead
+	//
+	// Deprecated: Please use `set_control_state` with `port.capture` choice instead
+	//
 	// Updates the state of configuration resources on the traffic generator.
 	SetCaptureState(ctx context.Context, in *SetCaptureStateRequest, opts ...grpc.CallOption) (*SetCaptureStateResponse, error)
+	// Deprecated: Please use `update_config` with `flow` choice instead
+	//
+	// Deprecated: Please use `update_config` with `flow` choice instead
+	//
 	// Updates flow properties without disruption of transmit state.
 	UpdateFlows(ctx context.Context, in *UpdateFlowsRequest, opts ...grpc.CallOption) (*UpdateFlowsResponse, error)
+	// Deprecated: Please use `set_control_state` with `protocol.route` choice instead
+	//
+	// Deprecated: Please use `set_control_state` with `protocol.route` choice instead
+	//
 	// Updates the state of configuration resources on the traffic generator.
 	SetRouteState(ctx context.Context, in *SetRouteStateRequest, opts ...grpc.CallOption) (*SetRouteStateResponse, error)
+	// Deprecated: Please use `set_control_action` with `protocol.ipv*.ping` choice instead
+	//
+	// Deprecated: Please use `set_control_action` with `protocol.ipv*.ping` choice instead
+	//
 	// API to send an IPv4 and/or IPv6 ICMP Echo Request(s) between endpoints. For each
 	// endpoint 1 ping packet will be sent and API shall wait for ping response to either
 	// be successful or timeout. The API wait timeout for each request is 300ms.
 	SendPing(ctx context.Context, in *SendPingRequest, opts ...grpc.CallOption) (*SendPingResponse, error)
+	// Deprecated: Please use `set_control_state` with `protocol.all` choice instead
+	//
+	// Deprecated: Please use `set_control_state` with `protocol.all` choice instead
+	//
 	// Sets all configured protocols to `start` or `stop` state.
 	SetProtocolState(ctx context.Context, in *SetProtocolStateRequest, opts ...grpc.CallOption) (*SetProtocolStateResponse, error)
+	// Deprecated: Please use `set_control_state` with `protocol` choice instead
+	//
+	// Deprecated: Please use `set_control_state` with `protocol` choice instead
+	//
 	// Set specific state/actions on device configuration resources on the traffic generator.
 	SetDeviceState(ctx context.Context, in *SetDeviceStateRequest, opts ...grpc.CallOption) (*SetDeviceStateResponse, error)
 	// Description missing in models
@@ -79,6 +121,33 @@ func (c *openapiClient) SetConfig(ctx context.Context, in *SetConfigRequest, opt
 func (c *openapiClient) GetConfig(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*GetConfigResponse, error) {
 	out := new(GetConfigResponse)
 	err := c.cc.Invoke(ctx, "/otg.Openapi/GetConfig", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *openapiClient) UpdateConfig(ctx context.Context, in *UpdateConfigRequest, opts ...grpc.CallOption) (*UpdateConfigResponse, error) {
+	out := new(UpdateConfigResponse)
+	err := c.cc.Invoke(ctx, "/otg.Openapi/UpdateConfig", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *openapiClient) SetControlState(ctx context.Context, in *SetControlStateRequest, opts ...grpc.CallOption) (*SetControlStateResponse, error) {
+	out := new(SetControlStateResponse)
+	err := c.cc.Invoke(ctx, "/otg.Openapi/SetControlState", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *openapiClient) SetControlAction(ctx context.Context, in *SetControlActionRequest, opts ...grpc.CallOption) (*SetControlActionResponse, error) {
+	out := new(SetControlActionResponse)
+	err := c.cc.Invoke(ctx, "/otg.Openapi/SetControlAction", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -201,25 +270,67 @@ type OpenapiServer interface {
 	SetConfig(context.Context, *SetConfigRequest) (*SetConfigResponse, error)
 	// Description missing in models
 	GetConfig(context.Context, *emptypb.Empty) (*GetConfigResponse, error)
+	// Updates specific attributes of resources configured on the traffic generator. The
+	// fetched configuration shall reflect the updates applied successfully.
+	// The Response.Warnings in the Success response is available for implementers to disclose
+	// additional information about a state change including any implicit changes that are
+	// outside the scope of the state change.
+	UpdateConfig(context.Context, *UpdateConfigRequest) (*UpdateConfigResponse, error)
+	// Sets the operational state of configured resources.
+	SetControlState(context.Context, *SetControlStateRequest) (*SetControlStateResponse, error)
+	// Triggers actions against configured resources.
+	SetControlAction(context.Context, *SetControlActionRequest) (*SetControlActionResponse, error)
+	// Deprecated: Please use `set_control_state` with `traffic.flow_transmit` choice instead
+	//
+	// Deprecated: Please use `set_control_state` with `traffic.flow_transmit` choice instead
+	//
 	// Updates the state of configuration resources on the traffic generator.
 	// The Response.Warnings in the Success response is available for implementers to disclose
 	// additional information about a state change including any implicit changes that are
 	// outside the scope of the state change.
 	SetTransmitState(context.Context, *SetTransmitStateRequest) (*SetTransmitStateResponse, error)
+	// Deprecated: Please use `set_control_state` with `port.link` choice instead
+	//
+	// Deprecated: Please use `set_control_state` with `port.link` choice instead
+	//
 	// Updates the state of configuration resources on the traffic generator.
 	SetLinkState(context.Context, *SetLinkStateRequest) (*SetLinkStateResponse, error)
+	// Deprecated: Please use `set_control_state` with `port.capture` choice instead
+	//
+	// Deprecated: Please use `set_control_state` with `port.capture` choice instead
+	//
 	// Updates the state of configuration resources on the traffic generator.
 	SetCaptureState(context.Context, *SetCaptureStateRequest) (*SetCaptureStateResponse, error)
+	// Deprecated: Please use `update_config` with `flow` choice instead
+	//
+	// Deprecated: Please use `update_config` with `flow` choice instead
+	//
 	// Updates flow properties without disruption of transmit state.
 	UpdateFlows(context.Context, *UpdateFlowsRequest) (*UpdateFlowsResponse, error)
+	// Deprecated: Please use `set_control_state` with `protocol.route` choice instead
+	//
+	// Deprecated: Please use `set_control_state` with `protocol.route` choice instead
+	//
 	// Updates the state of configuration resources on the traffic generator.
 	SetRouteState(context.Context, *SetRouteStateRequest) (*SetRouteStateResponse, error)
+	// Deprecated: Please use `set_control_action` with `protocol.ipv*.ping` choice instead
+	//
+	// Deprecated: Please use `set_control_action` with `protocol.ipv*.ping` choice instead
+	//
 	// API to send an IPv4 and/or IPv6 ICMP Echo Request(s) between endpoints. For each
 	// endpoint 1 ping packet will be sent and API shall wait for ping response to either
 	// be successful or timeout. The API wait timeout for each request is 300ms.
 	SendPing(context.Context, *SendPingRequest) (*SendPingResponse, error)
+	// Deprecated: Please use `set_control_state` with `protocol.all` choice instead
+	//
+	// Deprecated: Please use `set_control_state` with `protocol.all` choice instead
+	//
 	// Sets all configured protocols to `start` or `stop` state.
 	SetProtocolState(context.Context, *SetProtocolStateRequest) (*SetProtocolStateResponse, error)
+	// Deprecated: Please use `set_control_state` with `protocol` choice instead
+	//
+	// Deprecated: Please use `set_control_state` with `protocol` choice instead
+	//
 	// Set specific state/actions on device configuration resources on the traffic generator.
 	SetDeviceState(context.Context, *SetDeviceStateRequest) (*SetDeviceStateResponse, error)
 	// Description missing in models
@@ -242,6 +353,15 @@ func (UnimplementedOpenapiServer) SetConfig(context.Context, *SetConfigRequest) 
 }
 func (UnimplementedOpenapiServer) GetConfig(context.Context, *emptypb.Empty) (*GetConfigResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetConfig not implemented")
+}
+func (UnimplementedOpenapiServer) UpdateConfig(context.Context, *UpdateConfigRequest) (*UpdateConfigResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateConfig not implemented")
+}
+func (UnimplementedOpenapiServer) SetControlState(context.Context, *SetControlStateRequest) (*SetControlStateResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SetControlState not implemented")
+}
+func (UnimplementedOpenapiServer) SetControlAction(context.Context, *SetControlActionRequest) (*SetControlActionResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SetControlAction not implemented")
 }
 func (UnimplementedOpenapiServer) SetTransmitState(context.Context, *SetTransmitStateRequest) (*SetTransmitStateResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SetTransmitState not implemented")
@@ -324,6 +444,60 @@ func _Openapi_GetConfig_Handler(srv interface{}, ctx context.Context, dec func(i
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(OpenapiServer).GetConfig(ctx, req.(*emptypb.Empty))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Openapi_UpdateConfig_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateConfigRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(OpenapiServer).UpdateConfig(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/otg.Openapi/UpdateConfig",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(OpenapiServer).UpdateConfig(ctx, req.(*UpdateConfigRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Openapi_SetControlState_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SetControlStateRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(OpenapiServer).SetControlState(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/otg.Openapi/SetControlState",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(OpenapiServer).SetControlState(ctx, req.(*SetControlStateRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Openapi_SetControlAction_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SetControlActionRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(OpenapiServer).SetControlAction(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/otg.Openapi/SetControlAction",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(OpenapiServer).SetControlAction(ctx, req.(*SetControlActionRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -558,6 +732,18 @@ var Openapi_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetConfig",
 			Handler:    _Openapi_GetConfig_Handler,
+		},
+		{
+			MethodName: "UpdateConfig",
+			Handler:    _Openapi_UpdateConfig_Handler,
+		},
+		{
+			MethodName: "SetControlState",
+			Handler:    _Openapi_SetControlState_Handler,
+		},
+		{
+			MethodName: "SetControlAction",
+			Handler:    _Openapi_SetControlAction_Handler,
 		},
 		{
 			MethodName: "SetTransmitState",

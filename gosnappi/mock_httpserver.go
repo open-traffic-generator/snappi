@@ -43,7 +43,7 @@ func StartMockHttpServer(location string) {
 		}
 	})
 
-	http.HandleFunc("/results/metrics", func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc("/monitor/metrics", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		switch r.Method {
 		case http.MethodPost:

@@ -37,7 +37,7 @@ def set_transmit_state():
     return Response(status=200)
 
 
-@app.route('/results/metrics', methods=['POST'])
+@app.route('/monitor/metrics', methods=['POST'])
 def get_metrics():
     global CONFIG
     api = snappi.api()
