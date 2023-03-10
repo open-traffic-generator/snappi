@@ -1,4 +1,4 @@
-/* Open Traffic Generator API 0.10.13
+/* Open Traffic Generator API 0.10.14
  * Open Traffic Generator API defines a model-driven, vendor-neutral and standard
  * interface for emulating layer 2-7 network devices and generating test traffic.
  * 
@@ -1665,6 +1665,122 @@ message DeviceBgpRouter {
   // This contains an array of references to IPv6 interfaces,  each of which will have
   // list of peers to different destinations.
   repeated BgpV6Interface ipv6_interfaces = 3;
+}
+
+// All errors detected while processing the Message Header are indicated by sending
+// the NOTIFICATION message  with the Error Code-Message Header Error. The Error Subcode
+// elaborates on the specific nature of the error.
+message DeviceBgpMessageHeaderError {
+
+  message Subcode {
+    enum Enum {
+      unspecified = 0;
+      connection_not_synchronized_code1_subcode1 = 1;
+      bad_message_length_code1_subcode2 = 2;
+      bad_message_type_code1_subcode3 = 3;
+    }
+  }
+  // The Error Subcode indicates the specific type of error encountered during Message
+  // Header processing.
+  // default = Subcode.Enum.connection_not_synchronized_code1_subcode1
+  optional Subcode.Enum subcode = 1;
+}
+
+// All errors detected while processing the OPEN message are indicated by sending the
+// NOTIFICATION message  with the Error Code-Open Message Error. The Error Subcode elaborates
+// on the specific nature of the error.
+message DeviceBgpOpenMessageError {
+
+  message Subcode {
+    enum Enum {
+      unspecified = 0;
+      unsupported_version_number_code2_subcode1 = 1;
+      error_peer_as_code2_subcode2 = 2;
+      error_bgp_id_code2_subcode3 = 3;
+      unsupported_optional_parameter_code2_subcode4 = 4;
+      auth_failed_code2_subcode5 = 5;
+      unsupported_hold_time_code2_subcode6 = 6;
+      unsupported_capability_code2_subcode7 = 7;
+    }
+  }
+  // The Error Subcode indicates the specific type of error encountered during OPEN message
+  // processing.
+  // default = Subcode.Enum.unsupported_version_number_code2_subcode1
+  optional Subcode.Enum subcode = 1;
+}
+
+// All errors detected while processing the UPDATE message are indicated by sending
+// the NOTIFICATION message  with the Error Code-Update Message Error. The Error Subcode
+// elaborates on the specific nature of the error.
+message DeviceBgpUpdateMessageError {
+
+  message Subcode {
+    enum Enum {
+      unspecified = 0;
+      malformed_attrib_list_code3_subcode1 = 1;
+      unrecognized_wellknown_attrib_code3_subcode2 = 2;
+      wellknown_attrib_missing_code3_subcode3 = 3;
+      attrib_flags_error_code3_subcode4 = 4;
+      attrib_length_error_code3_subcode5 = 5;
+      invalid_origin_attrib_code3_subcode6 = 6;
+      as_routing_loop_code3_subcode7 = 7;
+      invalid_nhop_attrib_code3_subcode8 = 8;
+      error_optional_attrib_code3_subcode9 = 9;
+      invalid_network_field_code3_subcode10 = 10;
+      abnormal_aspath_code3_subcode11 = 11;
+    }
+  }
+  // The Error Subcode, the specific type of error encountered during UPDATE processing.
+  // default = Subcode.Enum.malformed_attrib_list_code3_subcode1
+  optional Subcode.Enum subcode = 1;
+}
+
+// If a system does not receive successive KEEPALIVE, UPDATE, and/or NOTIFICATION messages
+// within the period specified  in the Hold Time field of the OPEN message, then the
+// NOTIFICATION message with the Hold Timer Expired Error Code(Error Code 4) is  sent
+// and the BGP connection is closed. The Sub Code used is 0. If a user wants to use
+// non zero Sub Code then CustomError can be used.
+message DeviceBgpHoldTimerExpired {
+}
+
+// Any error detected by the BGP Finite State Machine (e.g., receipt of an unexpected
+// event) is indicated by  sending the NOTIFICATION message with the Error Code-Finite
+// State Machine Error(Error Code 5). The Sub Code used is 0.  If a user wants to use
+// non zero Sub Code then CustomError can be used.
+message DeviceBgpFiniteStateMachineError {
+}
+
+// In the absence of any fatal errors, a BGP peer can close its BGP connection by sending
+// the NOTIFICATION message with the  Error Code Cease.
+message DeviceBgpCeaseError {
+
+  message Subcode {
+    enum Enum {
+      unspecified = 0;
+      max_number_prefix_reached_code6_subcode1 = 1;
+      admin_shutdown_code6_subcode2 = 2;
+      peer_deleted_code6_subcode3 = 3;
+      admin_reset_code6_subcode4 = 4;
+      connection_reject_code6_subcode5 = 5;
+      other_config_changes_code6_subcode6 = 6;
+      connection_collision_resolution_code6_subcode7 = 7;
+      out_of_resources_code6_subcode8 = 8;
+      bfd_session_down_code6_subcode9 = 9;
+    }
+  }
+  // The Error Subcode to be sent to the peer in the Cease NOTIFICATION.
+  // default = Subcode.Enum.admin_shutdown_code6_subcode2
+  optional Subcode.Enum subcode = 1;
+}
+
+// A BGP peer can send NOTIFICATION message with user defined Error Code and Error Subcode.
+message DeviceBgpCustomError {
+
+  // The Error code to be sent in the NOTIFICATION message to peer.
+  optional int32 code = 1;
+
+  // The Error Subcode to be sent in the NOTIFICATION message to peer.
+  optional int32 subcode = 2;
 }
 
 // Configuration for emulated BGPv4 peers and routes.
@@ -6576,6 +6692,7 @@ message ActionProtocol {
       unspecified = 0;
       ipv4 = 1;
       ipv6 = 2;
+      bgp = 3;
     }
   }
   // Description missing in models
@@ -6587,6 +6704,9 @@ message ActionProtocol {
 
   // Description missing in models
   optional ActionProtocolIpv6 ipv6 = 3;
+
+  // Description missing in models
+  optional ActionProtocolBgp bgp = 4;
 }
 
 // Response for actions associated with protocols on configured resources.
@@ -6814,6 +6934,88 @@ message ActionResponseProtocolIpv6PingResponse {
   // Result of the ping request.
   // required = true
   Result.Enum result = 3;
+}
+
+// Actions associated with BGP on configured resources.
+message ActionProtocolBgp {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      notification = 1;
+    }
+  }
+  // Description missing in models
+  // required = true
+  Choice.Enum choice = 1;
+
+  // Description missing in models
+  optional ActionProtocolBgpNotification notification = 2;
+}
+
+// A NOTIFICATION message is sent when an error is detected with the BGP session, such
+// as hold timer expiring, misconfigured AS number  or a BGP session reset is requested.
+// This causes the BGP connection to close. Send explicit NOTIFICATIONs for list of
+// specified  BGP peers. If a user wants to send custom Error Code and Error Subcode
+// the custom object should be configured. A user can send IANA defined BGP NOTIFICATIONs
+// according to https://www.iana.org/assignments/bgp-parameters/bgp-parameters.xhtml.
+// 
+message ActionProtocolBgpNotification {
+
+  // The names of BGP Peers to send NOTIFICATION to. If no name is specified then NOTIFICATION
+  // will be sent to all configured BGP peers.
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.Bgp/properties/name
+  // 
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.Bgp/properties/name
+  // 
+  repeated string names = 1;
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      cease = 1;
+      message_header_error = 2;
+      open_message_error = 3;
+      update_message_error = 4;
+      hold_timer_expired = 5;
+      finite_state_machine_error = 6;
+      custom = 7;
+    }
+  }
+  // Each BGP NOTIFICATION message includes an Error Code field indicating what type of
+  // problem occurred. For certain Error Codes, an Error  Subcode field provides additional
+  // details about the specific nature of the problem.  The choice value will provide
+  // the Error Code used in NOTIFICATION message.  The Subcode can be set for each of
+  // the corresponding errors except for Hold Timer Expired error and BGP Finite State
+  // Machine error.  In both of these cases Subcode 0 will be sent. If a user wants to
+  // use non zero Sub Code then custom choice can be used.
+  // default = Choice.Enum.cease
+  optional Choice.Enum choice = 2;
+
+  // Description missing in models
+  optional DeviceBgpCeaseError cease = 3;
+
+  // Description missing in models
+  optional DeviceBgpMessageHeaderError message_header_error = 4;
+
+  // Description missing in models
+  optional DeviceBgpOpenMessageError open_message_error = 5;
+
+  // Description missing in models
+  optional DeviceBgpUpdateMessageError update_message_error = 6;
+
+  // Description missing in models
+  optional DeviceBgpHoldTimerExpired hold_timer_expired = 7;
+
+  // Description missing in models
+  optional DeviceBgpFiniteStateMachineError finite_state_machine_error = 8;
+
+  // Description missing in models
+  optional DeviceBgpCustomError custom = 9;
 }
 
 // Description missing in models
