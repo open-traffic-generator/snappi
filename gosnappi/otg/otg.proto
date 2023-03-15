@@ -1,4 +1,4 @@
-/* Open Traffic Generator API 0.10.14
+/* Open Traffic Generator API 0.11.1
  * Open Traffic Generator API defines a model-driven, vendor-neutral and standard
  * interface for emulating layer 2-7 network devices and generating test traffic.
  * 
@@ -997,10 +997,6 @@ message ProtocolOptions {
   optional bool auto_start_all = 1;
 }
 
-// Under Review: Information TBD
-// 
-// Under Review: Information TBD
-// 
 // A container of properties for an ISIS router and its interfaces.
 message DeviceIsisRouter {
 
@@ -1036,10 +1032,6 @@ message DeviceIsisRouter {
   string name = 9;
 }
 
-// Under Review: Information TBD
-// 
-// Under Review: Information TBD
-// 
 // This container properties of an Multi-Instance-capable router (MI-RTR).
 message DeviceIsisMultiInstance {
 
@@ -1053,10 +1045,6 @@ message DeviceIsisMultiInstance {
   repeated int32 itids = 2;
 }
 
-// Under Review: Information TBD
-// 
-// Under Review: Information TBD
-// 
 // Configuration for single ISIS interface.
 message IsisInterface {
 
@@ -1148,10 +1136,6 @@ message IsisInterfaceLevel {
   optional int32 dead_interval = 3;
 }
 
-// Under Review: Information TBD
-// 
-// Under Review: Information TBD
-// 
 // Configuration of properties per interface per topology when multiple topologies are
 // configured in an ISIS router.
 // in a ISIS router.
@@ -1166,10 +1150,6 @@ message IsisMT {
   optional int32 link_metric = 2;
 }
 
-// Under Review: Information TBD
-// 
-// Under Review: Information TBD
-// 
 // A container for Traffic Engineering properties on a interface.
 message LinkStateTE {
 
@@ -2413,10 +2393,6 @@ message BgpRouteTarget {
   optional string rt_value = 2;
 }
 
-// Under Review: Information TBD
-// 
-// Under Review: Information TBD
-// 
 // Configuration for BGP advanced settings.
 message BgpAdvanced {
 
@@ -2445,10 +2421,6 @@ message BgpAdvanced {
   optional string md5_key = 5;
 }
 
-// Under Review: Information TBD
-// 
-// Under Review: Information TBD
-// 
 // Configuration for BGP capability settings.
 message BgpCapability {
 
@@ -2565,10 +2537,6 @@ message BgpCapability {
   optional bool ipv6_unicast_add_path = 25;
 }
 
-// Under Review: Information TBD
-// 
-// Under Review: Information TBD
-// 
 // Configuration for controlling storage of BGP learned information recieved from the
 // peer.
 message BgpLearnedInformationFilter {
@@ -3043,10 +3011,6 @@ message BgpSrteExplicitNullLabelPolicySubTlv {
   optional ExplicitNullLabelPolicy.Enum explicit_null_label_policy = 1;
 }
 
-// Under Review: Information TBD
-// 
-// Under Review: Information TBD
-// 
 // Optional configuration for BGP SR TE Policy segment list. The Segment List sub-TLV
 // encodes a single explicit path towards the Endpoint.
 message BgpSrteSegmentList {
@@ -3071,10 +3035,6 @@ message BgpSrteSegmentList {
   optional bool active = 4;
 }
 
-// Under Review: Information TBD
-// 
-// Under Review: Information TBD
-// 
 // A Segment sub-TLV describes a single segment in a segment list  i.e., a single element
 // of the explicit path. The Segment sub-TLVs are optional.
 message BgpSrteSegment {
@@ -3232,10 +3192,6 @@ message BgpSrteSegmentBTypeSubTlv {
   optional BgpSrteSRv6SIDEndpointBehaviorAndStructure srv6_sid_endpoint_behavior = 3;
 }
 
-// Under Review: Information TBD
-// 
-// Under Review: Information TBD
-// 
 // Type C: IPv4 Node Address with optional SID.
 message BgpSrteSegmentCTypeSubTlv {
 
@@ -3708,10 +3664,6 @@ message BgpV6Interface {
   repeated BgpV6Peer peers = 2;
 }
 
-// Under Review: Information TBD
-// 
-// Under Review: Information TBD
-// 
 // Configuration for BGPv6 segment routing settings.
 message BgpV6SegmentRouting {
 
@@ -4134,10 +4086,6 @@ message VxlanV6TunnelDestinationIPModeMulticast {
   optional string address = 1;
 }
 
-// Under Review: Information TBD
-// 
-// Under Review: Information TBD
-// 
 // Configuration for one or more RSVP interfaces, ingress and egress LSPs. In this model,
 // currently IPv4 RSVP and point-to-point LSPs are supported as per RFC3209 and related
 // specifications.
@@ -4156,10 +4104,6 @@ message DeviceRsvp {
   optional string name = 3;
 }
 
-// Under Review: Information TBD
-// 
-// Under Review: Information TBD
-// 
 // Configuration for RSVP Interface.
 message RsvpIpv4Interface {
 
@@ -4228,10 +4172,6 @@ message RsvpIpv4Interface {
   optional int32 timeout_multiplier = 11;
 }
 
-// Under Review: Information TBD
-// 
-// Under Review: Information TBD
-// 
 // Configuration for RSVP LSP IPv4 Interface.
 message RsvpLspIpv4Interface {
 
@@ -4758,17 +4698,46 @@ message FlowRouter {
       one_to_one = 2;
     }
   }
-  // Determines the mapping of tx_names to rx_names.
+  // Determines the intent of creating traffic sub-flow(s) between the device
+  // endpoints, from the entities of <b>tx_names</b> to the entities of <b>rx_names</b>
   // 
-  // The mesh mode creates traffic between each value in tx_names to
-  // every value in rx_names except in the case where the individual
-  // tx_names value is equal to rx_names value which will be ignored.
-  // Identical values in tx_names or rx_names MUST raise an error.
+  // to derive how <b>auto</b> packet fields can be populated with
+  // the actual value(s) by the implementation.
   // 
-  // The one_to_one mode creates traffic between each value pair in
-  // of tx_names and rx_names by index.
-  // The length of tx_names and rx_name MUST be the same.
-  // Identical values in tx_names or rx_names MUST raise an error.
+  // The <b>one_to_one</b> mode creates traffic sub-flow(s) between each device endpoint
+  // pair in
+  // tx_names to rx_names by index.
+  // The length of tx_names and rx_names MUST be the same.
+  // The same device name can be repeated multiple times in tx_names or rx_names, in any
+  // order to create desired meshing between device(s).
+  // For 2 values in tx_names and 2 values in rx_names, 2 device endpoint pairs would
+  // be generated (each pair representing a traffic sub-flow).
+  // 
+  // The <b>mesh</b> mode creates traffic sub-flow(s) between each value in tx_names to
+  // every value in rx_names, forming the device endpoint pair(s).
+  // For 2 values in tx_names and 3 values in rx_names, generated device endpoint pairs
+  // would be 2x3=6.
+  // 
+  // A generated device endpoint pair with same device endpoint name for both transmit
+  // & receive device endpoint MUST raise an error.
+  // 
+  // Packet fields of type <b>auto</b> would be populated with one value for each device
+  // endpoint pair (representing the traffic sub-flow).
+  // The value would be determined considering transmit & receive device of the sub-flow.
+  // And the sequence of the populated value(s)
+  // would be in the order of generated device endpoint pair(s).
+  // If 2 device endpoint pairs are generated (based on mode, tx_names and rx_names),
+  // say (d1 to d3) and (d2 to d3), and ethernet.dst is set as <b>auto</b>, then
+  // the auto field would be <b>replaced</b> by the implementation with a sequence of
+  // 2 values, [v1,v2] where
+  // v1 is determined using context (d1,d3) and v2 using context (d2,d3).
+  // The final outcome is that packets generated on the wire will contain the values v1,v2,v1,...
+  // for ethernet.dst field. Any non-auto packet fields
+  // should be configured accordingly. For example, non-auto packet field ethernet.src
+  // can be configured with values [u1, u2], where
+  // u1 & u2 are source MAC of the connected interface of device d1 and d2 respectively.
+  // Then packets on the wire will contain correct value pairs
+  // (u1,v1),(u2,v2),(u1,v1),... for (ethernet.src,ethernet.dst) fields.
   // default = Mode.Enum.mesh
   optional Mode.Enum mode = 1;
 
