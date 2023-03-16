@@ -119,8 +119,8 @@ def create_flow(config, flow_prefix, src_param, dst_param, tx_port, rx_port,
     flow.tx_rx.port.tx_name = tx_port.name
     flow.tx_rx.port.rx_name = rx_port.name
 
-    flow.packet.ethernet().ipv4().udp().gtpv1().ipv4()
-    eth, outer_ip, udp, gtp, inner_ip = flow.packet
+    flow.packet.ingress.ethernet().ipv4().udp().gtpv1().ipv4()
+    eth, outer_ip, udp, gtp, inner_ip = flow.packet.ingress
 
     eth.src.value = src_mac
     eth.dst.value = dst_mac
@@ -131,7 +131,7 @@ def create_flow(config, flow_prefix, src_param, dst_param, tx_port, rx_port,
     gtp.teid.increment.count = gtp_tunnels
     inner_ip.src.value = inner_ip_src
     inner_ip.dst.value = inner_ip_dst
-    gtp.teid.metric_group = 'gtp_teid'
+    gtp.teid.metric_tags.add(name='gtp_teid')
 
     flow.size.fixed = 128
     flow.rate.gbps = 1

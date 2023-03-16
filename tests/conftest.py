@@ -78,11 +78,11 @@ def b2b_config(api):
     flow.rate.pps = 1000
     flow.duration.fixed_packets.packets = 10000
 
-    eth, vlan, ip, tcp = flow.packet.ethernet().vlan().ipv4().tcp()
+    eth, vlan, ip, tcp = flow.packet.ingress.ethernet().vlan().ipv4().tcp()
 
     eth.src.value = '00:00:01:00:00:01'
     eth.dst.values = ['00:00:02:00:00:01', '00:00:02:00:00:01']
-    eth.dst.metric_group = 'eth dst mac'
+    eth.dst.metric_tags.add(name='eth dst mac')
 
     ip.src.increment.start = '1.1.1.1'
     ip.src.increment.step = '0.0.0.1'
