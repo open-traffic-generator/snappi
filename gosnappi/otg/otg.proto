@@ -4793,10 +4793,26 @@ message FlowCustom {
   // discarded. This packet header can be used in multiple places in the packet.
   // required = true
   string bytes = 1;
+
+  // Description missing in models
+  repeated FlowCustomMetricTag metric_tags = 2;
 }
 
 // Description missing in models
-message FlowCustomMetricTags {
+message FlowCustomMetricTag {
+
+  // Globally unique name of an object. It also serves as the primary key for arrays of
+  // objects.
+  // required = true
+  string name = 1;
+
+  // This is in bits and relative to start of the field
+  // default = 0
+  optional int32 offset = 2;
+
+  // This is in bits
+  // default = 1
+  optional int32 length = 3;
 }
 
 // Ethernet packet header
