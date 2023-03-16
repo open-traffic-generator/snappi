@@ -4520,7 +4520,7 @@ message Flow {
   // required = true
   FlowTxRx tx_rx = 1;
 
-  // Deprecated: Use flow.packet.ingress instead.
+  // Deprecated: Use flow.ingress_packet instead.
   // 
   // The header is a list of traffic protocol headers.
   // 
@@ -4535,6 +4535,12 @@ message Flow {
   // which will result in an implementation by default providing at least
   // one ethernet packet header.
   repeated FlowHeader packet = 2;
+
+  // Ingress packet
+  repeated FlowHeader ingress_packet = 3;
+
+  // Egress packets
+  repeated FlowHeader egress_packet = 4;
 
   // The size of the packets.
   optional FlowSize size = 5;
