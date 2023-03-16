@@ -4795,23 +4795,8 @@ message FlowCustom {
   string bytes = 1;
 }
 
-// Metric Info
+// Description missing in models
 message FlowCustomMetricTags {
-
-  // A unique name is used to indicate to the system that the field  may extend the metric
-  // row key and create an aggregate metric  row for every unique value. To have metric
-  // tag columns appear  in the flow metric rows the flow metric request allows for the
-  // metric_tag value to be specified as part of the request.
-  // required = true
-  string name = 1;
-
-  // This is in bits and relative to start of the field
-  // default = 0
-  optional int32 offset = 2;
-
-  // This is in bits
-  // default = 1
-  optional int32 length = 3;
 }
 
 // Ethernet packet header
@@ -9082,7 +9067,7 @@ message PatternFlowEthernetDst {
   optional string auto = 4;
 
   // Description missing in models
-  optional PatternFlowEthernetDstMetricTags metric_tags = 5;
+  repeated PatternFlowEthernetDstMetricTags metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowEthernetDstCounter increment = 6;
@@ -9152,7 +9137,7 @@ message PatternFlowEthernetSrc {
   repeated string values = 3;
 
   // Description missing in models
-  optional PatternFlowEthernetSrcMetricTags metric_tags = 4;
+  repeated PatternFlowEthernetSrcMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowEthernetSrcCounter increment = 5;
@@ -9229,7 +9214,7 @@ message PatternFlowEthernetEtherType {
   optional int32 auto = 4;
 
   // Description missing in models
-  optional PatternFlowEthernetEtherTypeMetricTags metric_tags = 5;
+  repeated PatternFlowEthernetEtherTypeMetricTags metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowEthernetEtherTypeCounter increment = 6;
@@ -9299,7 +9284,7 @@ message PatternFlowEthernetPfcQueue {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowEthernetPfcQueueMetricTags metric_tags = 4;
+  repeated PatternFlowEthernetPfcQueueMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowEthernetPfcQueueCounter increment = 5;
@@ -9369,7 +9354,7 @@ message PatternFlowVlanPriority {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowVlanPriorityMetricTags metric_tags = 4;
+  repeated PatternFlowVlanPriorityMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowVlanPriorityCounter increment = 5;
@@ -9439,7 +9424,7 @@ message PatternFlowVlanCfi {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowVlanCfiMetricTags metric_tags = 4;
+  repeated PatternFlowVlanCfiMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowVlanCfiCounter increment = 5;
@@ -9509,7 +9494,7 @@ message PatternFlowVlanId {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowVlanIdMetricTags metric_tags = 4;
+  repeated PatternFlowVlanIdMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowVlanIdCounter increment = 5;
@@ -9579,7 +9564,7 @@ message PatternFlowVlanTpid {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowVlanTpidMetricTags metric_tags = 4;
+  repeated PatternFlowVlanTpidMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowVlanTpidCounter increment = 5;
@@ -9651,7 +9636,7 @@ message PatternFlowVxlanFlags {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowVxlanFlagsMetricTags metric_tags = 4;
+  repeated PatternFlowVxlanFlagsMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowVxlanFlagsCounter increment = 5;
@@ -9721,7 +9706,7 @@ message PatternFlowVxlanReserved0 {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowVxlanReserved0MetricTags metric_tags = 4;
+  repeated PatternFlowVxlanReserved0MetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowVxlanReserved0Counter increment = 5;
@@ -9798,7 +9783,7 @@ message PatternFlowVxlanVni {
   optional int32 auto = 4;
 
   // Description missing in models
-  optional PatternFlowVxlanVniMetricTags metric_tags = 5;
+  repeated PatternFlowVxlanVniMetricTags metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowVxlanVniCounter increment = 6;
@@ -9868,7 +9853,7 @@ message PatternFlowVxlanReserved1 {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowVxlanReserved1MetricTags metric_tags = 4;
+  repeated PatternFlowVxlanReserved1MetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowVxlanReserved1Counter increment = 5;
@@ -9938,7 +9923,7 @@ message PatternFlowIpv4Version {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowIpv4VersionMetricTags metric_tags = 4;
+  repeated PatternFlowIpv4VersionMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowIpv4VersionCounter increment = 5;
@@ -10015,7 +10000,7 @@ message PatternFlowIpv4HeaderLength {
   optional int32 auto = 4;
 
   // Description missing in models
-  optional PatternFlowIpv4HeaderLengthMetricTags metric_tags = 5;
+  repeated PatternFlowIpv4HeaderLengthMetricTags metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowIpv4HeaderLengthCounter increment = 6;
@@ -10092,7 +10077,7 @@ message PatternFlowIpv4TotalLength {
   optional int32 auto = 4;
 
   // Description missing in models
-  optional PatternFlowIpv4TotalLengthMetricTags metric_tags = 5;
+  repeated PatternFlowIpv4TotalLengthMetricTags metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowIpv4TotalLengthCounter increment = 6;
@@ -10162,7 +10147,7 @@ message PatternFlowIpv4Identification {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowIpv4IdentificationMetricTags metric_tags = 4;
+  repeated PatternFlowIpv4IdentificationMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowIpv4IdentificationCounter increment = 5;
@@ -10232,7 +10217,7 @@ message PatternFlowIpv4Reserved {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowIpv4ReservedMetricTags metric_tags = 4;
+  repeated PatternFlowIpv4ReservedMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowIpv4ReservedCounter increment = 5;
@@ -10303,7 +10288,7 @@ message PatternFlowIpv4DontFragment {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowIpv4DontFragmentMetricTags metric_tags = 4;
+  repeated PatternFlowIpv4DontFragmentMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowIpv4DontFragmentCounter increment = 5;
@@ -10373,7 +10358,7 @@ message PatternFlowIpv4MoreFragments {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowIpv4MoreFragmentsMetricTags metric_tags = 4;
+  repeated PatternFlowIpv4MoreFragmentsMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowIpv4MoreFragmentsCounter increment = 5;
@@ -10443,7 +10428,7 @@ message PatternFlowIpv4FragmentOffset {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowIpv4FragmentOffsetMetricTags metric_tags = 4;
+  repeated PatternFlowIpv4FragmentOffsetMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowIpv4FragmentOffsetCounter increment = 5;
@@ -10513,7 +10498,7 @@ message PatternFlowIpv4TimeToLive {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowIpv4TimeToLiveMetricTags metric_tags = 4;
+  repeated PatternFlowIpv4TimeToLiveMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowIpv4TimeToLiveCounter increment = 5;
@@ -10590,7 +10575,7 @@ message PatternFlowIpv4Protocol {
   optional int32 auto = 4;
 
   // Description missing in models
-  optional PatternFlowIpv4ProtocolMetricTags metric_tags = 5;
+  repeated PatternFlowIpv4ProtocolMetricTags metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowIpv4ProtocolCounter increment = 6;
@@ -10689,7 +10674,7 @@ message PatternFlowIpv4Src {
   repeated string values = 3;
 
   // Description missing in models
-  optional PatternFlowIpv4SrcMetricTags metric_tags = 4;
+  repeated PatternFlowIpv4SrcMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowIpv4SrcCounter increment = 5;
@@ -10759,7 +10744,7 @@ message PatternFlowIpv4Dst {
   repeated string values = 3;
 
   // Description missing in models
-  optional PatternFlowIpv4DstMetricTags metric_tags = 4;
+  repeated PatternFlowIpv4DstMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowIpv4DstCounter increment = 5;
@@ -10829,7 +10814,7 @@ message PatternFlowIpv4PriorityRaw {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowIpv4PriorityRawMetricTags metric_tags = 4;
+  repeated PatternFlowIpv4PriorityRawMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowIpv4PriorityRawCounter increment = 5;
@@ -10899,7 +10884,7 @@ message PatternFlowIpv4DscpPhb {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowIpv4DscpPhbMetricTags metric_tags = 4;
+  repeated PatternFlowIpv4DscpPhbMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowIpv4DscpPhbCounter increment = 5;
@@ -10969,7 +10954,7 @@ message PatternFlowIpv4DscpEcn {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowIpv4DscpEcnMetricTags metric_tags = 4;
+  repeated PatternFlowIpv4DscpEcnMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowIpv4DscpEcnCounter increment = 5;
@@ -11039,7 +11024,7 @@ message PatternFlowIpv4TosPrecedence {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowIpv4TosPrecedenceMetricTags metric_tags = 4;
+  repeated PatternFlowIpv4TosPrecedenceMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowIpv4TosPrecedenceCounter increment = 5;
@@ -11109,7 +11094,7 @@ message PatternFlowIpv4TosDelay {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowIpv4TosDelayMetricTags metric_tags = 4;
+  repeated PatternFlowIpv4TosDelayMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowIpv4TosDelayCounter increment = 5;
@@ -11179,7 +11164,7 @@ message PatternFlowIpv4TosThroughput {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowIpv4TosThroughputMetricTags metric_tags = 4;
+  repeated PatternFlowIpv4TosThroughputMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowIpv4TosThroughputCounter increment = 5;
@@ -11249,7 +11234,7 @@ message PatternFlowIpv4TosReliability {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowIpv4TosReliabilityMetricTags metric_tags = 4;
+  repeated PatternFlowIpv4TosReliabilityMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowIpv4TosReliabilityCounter increment = 5;
@@ -11319,7 +11304,7 @@ message PatternFlowIpv4TosMonetary {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowIpv4TosMonetaryMetricTags metric_tags = 4;
+  repeated PatternFlowIpv4TosMonetaryMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowIpv4TosMonetaryCounter increment = 5;
@@ -11389,7 +11374,7 @@ message PatternFlowIpv4TosUnused {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowIpv4TosUnusedMetricTags metric_tags = 4;
+  repeated PatternFlowIpv4TosUnusedMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowIpv4TosUnusedCounter increment = 5;
@@ -11459,7 +11444,7 @@ message PatternFlowIpv6Version {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowIpv6VersionMetricTags metric_tags = 4;
+  repeated PatternFlowIpv6VersionMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowIpv6VersionCounter increment = 5;
@@ -11529,7 +11514,7 @@ message PatternFlowIpv6TrafficClass {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowIpv6TrafficClassMetricTags metric_tags = 4;
+  repeated PatternFlowIpv6TrafficClassMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowIpv6TrafficClassCounter increment = 5;
@@ -11599,7 +11584,7 @@ message PatternFlowIpv6FlowLabel {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowIpv6FlowLabelMetricTags metric_tags = 4;
+  repeated PatternFlowIpv6FlowLabelMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowIpv6FlowLabelCounter increment = 5;
@@ -11676,7 +11661,7 @@ message PatternFlowIpv6PayloadLength {
   optional int32 auto = 4;
 
   // Description missing in models
-  optional PatternFlowIpv6PayloadLengthMetricTags metric_tags = 5;
+  repeated PatternFlowIpv6PayloadLengthMetricTags metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowIpv6PayloadLengthCounter increment = 6;
@@ -11753,7 +11738,7 @@ message PatternFlowIpv6NextHeader {
   optional int32 auto = 4;
 
   // Description missing in models
-  optional PatternFlowIpv6NextHeaderMetricTags metric_tags = 5;
+  repeated PatternFlowIpv6NextHeaderMetricTags metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowIpv6NextHeaderCounter increment = 6;
@@ -11823,7 +11808,7 @@ message PatternFlowIpv6HopLimit {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowIpv6HopLimitMetricTags metric_tags = 4;
+  repeated PatternFlowIpv6HopLimitMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowIpv6HopLimitCounter increment = 5;
@@ -11893,7 +11878,7 @@ message PatternFlowIpv6Src {
   repeated string values = 3;
 
   // Description missing in models
-  optional PatternFlowIpv6SrcMetricTags metric_tags = 4;
+  repeated PatternFlowIpv6SrcMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowIpv6SrcCounter increment = 5;
@@ -11963,7 +11948,7 @@ message PatternFlowIpv6Dst {
   repeated string values = 3;
 
   // Description missing in models
-  optional PatternFlowIpv6DstMetricTags metric_tags = 4;
+  repeated PatternFlowIpv6DstMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowIpv6DstCounter increment = 5;
@@ -12033,7 +12018,7 @@ message PatternFlowPfcPauseDst {
   repeated string values = 3;
 
   // Description missing in models
-  optional PatternFlowPfcPauseDstMetricTags metric_tags = 4;
+  repeated PatternFlowPfcPauseDstMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowPfcPauseDstCounter increment = 5;
@@ -12103,7 +12088,7 @@ message PatternFlowPfcPauseSrc {
   repeated string values = 3;
 
   // Description missing in models
-  optional PatternFlowPfcPauseSrcMetricTags metric_tags = 4;
+  repeated PatternFlowPfcPauseSrcMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowPfcPauseSrcCounter increment = 5;
@@ -12173,7 +12158,7 @@ message PatternFlowPfcPauseEtherType {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowPfcPauseEtherTypeMetricTags metric_tags = 4;
+  repeated PatternFlowPfcPauseEtherTypeMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowPfcPauseEtherTypeCounter increment = 5;
@@ -12243,7 +12228,7 @@ message PatternFlowPfcPauseControlOpCode {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowPfcPauseControlOpCodeMetricTags metric_tags = 4;
+  repeated PatternFlowPfcPauseControlOpCodeMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowPfcPauseControlOpCodeCounter increment = 5;
@@ -12313,7 +12298,7 @@ message PatternFlowPfcPauseClassEnableVector {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowPfcPauseClassEnableVectorMetricTags metric_tags = 4;
+  repeated PatternFlowPfcPauseClassEnableVectorMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowPfcPauseClassEnableVectorCounter increment = 5;
@@ -12383,7 +12368,7 @@ message PatternFlowPfcPausePauseClass0 {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowPfcPausePauseClass0MetricTags metric_tags = 4;
+  repeated PatternFlowPfcPausePauseClass0MetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowPfcPausePauseClass0Counter increment = 5;
@@ -12453,7 +12438,7 @@ message PatternFlowPfcPausePauseClass1 {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowPfcPausePauseClass1MetricTags metric_tags = 4;
+  repeated PatternFlowPfcPausePauseClass1MetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowPfcPausePauseClass1Counter increment = 5;
@@ -12523,7 +12508,7 @@ message PatternFlowPfcPausePauseClass2 {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowPfcPausePauseClass2MetricTags metric_tags = 4;
+  repeated PatternFlowPfcPausePauseClass2MetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowPfcPausePauseClass2Counter increment = 5;
@@ -12593,7 +12578,7 @@ message PatternFlowPfcPausePauseClass3 {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowPfcPausePauseClass3MetricTags metric_tags = 4;
+  repeated PatternFlowPfcPausePauseClass3MetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowPfcPausePauseClass3Counter increment = 5;
@@ -12663,7 +12648,7 @@ message PatternFlowPfcPausePauseClass4 {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowPfcPausePauseClass4MetricTags metric_tags = 4;
+  repeated PatternFlowPfcPausePauseClass4MetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowPfcPausePauseClass4Counter increment = 5;
@@ -12733,7 +12718,7 @@ message PatternFlowPfcPausePauseClass5 {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowPfcPausePauseClass5MetricTags metric_tags = 4;
+  repeated PatternFlowPfcPausePauseClass5MetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowPfcPausePauseClass5Counter increment = 5;
@@ -12803,7 +12788,7 @@ message PatternFlowPfcPausePauseClass6 {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowPfcPausePauseClass6MetricTags metric_tags = 4;
+  repeated PatternFlowPfcPausePauseClass6MetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowPfcPausePauseClass6Counter increment = 5;
@@ -12873,7 +12858,7 @@ message PatternFlowPfcPausePauseClass7 {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowPfcPausePauseClass7MetricTags metric_tags = 4;
+  repeated PatternFlowPfcPausePauseClass7MetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowPfcPausePauseClass7Counter increment = 5;
@@ -12943,7 +12928,7 @@ message PatternFlowEthernetPauseDst {
   repeated string values = 3;
 
   // Description missing in models
-  optional PatternFlowEthernetPauseDstMetricTags metric_tags = 4;
+  repeated PatternFlowEthernetPauseDstMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowEthernetPauseDstCounter increment = 5;
@@ -13013,7 +12998,7 @@ message PatternFlowEthernetPauseSrc {
   repeated string values = 3;
 
   // Description missing in models
-  optional PatternFlowEthernetPauseSrcMetricTags metric_tags = 4;
+  repeated PatternFlowEthernetPauseSrcMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowEthernetPauseSrcCounter increment = 5;
@@ -13083,7 +13068,7 @@ message PatternFlowEthernetPauseEtherType {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowEthernetPauseEtherTypeMetricTags metric_tags = 4;
+  repeated PatternFlowEthernetPauseEtherTypeMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowEthernetPauseEtherTypeCounter increment = 5;
@@ -13153,7 +13138,7 @@ message PatternFlowEthernetPauseControlOpCode {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowEthernetPauseControlOpCodeMetricTags metric_tags = 4;
+  repeated PatternFlowEthernetPauseControlOpCodeMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowEthernetPauseControlOpCodeCounter increment = 5;
@@ -13223,7 +13208,7 @@ message PatternFlowEthernetPauseTime {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowEthernetPauseTimeMetricTags metric_tags = 4;
+  repeated PatternFlowEthernetPauseTimeMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowEthernetPauseTimeCounter increment = 5;
@@ -13293,7 +13278,7 @@ message PatternFlowTcpSrcPort {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowTcpSrcPortMetricTags metric_tags = 4;
+  repeated PatternFlowTcpSrcPortMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowTcpSrcPortCounter increment = 5;
@@ -13363,7 +13348,7 @@ message PatternFlowTcpDstPort {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowTcpDstPortMetricTags metric_tags = 4;
+  repeated PatternFlowTcpDstPortMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowTcpDstPortCounter increment = 5;
@@ -13433,7 +13418,7 @@ message PatternFlowTcpSeqNum {
   repeated int64 values = 3;
 
   // Description missing in models
-  optional PatternFlowTcpSeqNumMetricTags metric_tags = 4;
+  repeated PatternFlowTcpSeqNumMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowTcpSeqNumCounter increment = 5;
@@ -13503,7 +13488,7 @@ message PatternFlowTcpAckNum {
   repeated int64 values = 3;
 
   // Description missing in models
-  optional PatternFlowTcpAckNumMetricTags metric_tags = 4;
+  repeated PatternFlowTcpAckNumMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowTcpAckNumCounter increment = 5;
@@ -13573,7 +13558,7 @@ message PatternFlowTcpDataOffset {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowTcpDataOffsetMetricTags metric_tags = 4;
+  repeated PatternFlowTcpDataOffsetMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowTcpDataOffsetCounter increment = 5;
@@ -13643,7 +13628,7 @@ message PatternFlowTcpEcnNs {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowTcpEcnNsMetricTags metric_tags = 4;
+  repeated PatternFlowTcpEcnNsMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowTcpEcnNsCounter increment = 5;
@@ -13713,7 +13698,7 @@ message PatternFlowTcpEcnCwr {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowTcpEcnCwrMetricTags metric_tags = 4;
+  repeated PatternFlowTcpEcnCwrMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowTcpEcnCwrCounter increment = 5;
@@ -13784,7 +13769,7 @@ message PatternFlowTcpEcnEcho {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowTcpEcnEchoMetricTags metric_tags = 4;
+  repeated PatternFlowTcpEcnEchoMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowTcpEcnEchoCounter increment = 5;
@@ -13854,7 +13839,7 @@ message PatternFlowTcpCtlUrg {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowTcpCtlUrgMetricTags metric_tags = 4;
+  repeated PatternFlowTcpCtlUrgMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowTcpCtlUrgCounter increment = 5;
@@ -13924,7 +13909,7 @@ message PatternFlowTcpCtlAck {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowTcpCtlAckMetricTags metric_tags = 4;
+  repeated PatternFlowTcpCtlAckMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowTcpCtlAckCounter increment = 5;
@@ -13994,7 +13979,7 @@ message PatternFlowTcpCtlPsh {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowTcpCtlPshMetricTags metric_tags = 4;
+  repeated PatternFlowTcpCtlPshMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowTcpCtlPshCounter increment = 5;
@@ -14064,7 +14049,7 @@ message PatternFlowTcpCtlRst {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowTcpCtlRstMetricTags metric_tags = 4;
+  repeated PatternFlowTcpCtlRstMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowTcpCtlRstCounter increment = 5;
@@ -14134,7 +14119,7 @@ message PatternFlowTcpCtlSyn {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowTcpCtlSynMetricTags metric_tags = 4;
+  repeated PatternFlowTcpCtlSynMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowTcpCtlSynCounter increment = 5;
@@ -14204,7 +14189,7 @@ message PatternFlowTcpCtlFin {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowTcpCtlFinMetricTags metric_tags = 4;
+  repeated PatternFlowTcpCtlFinMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowTcpCtlFinCounter increment = 5;
@@ -14274,7 +14259,7 @@ message PatternFlowTcpWindow {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowTcpWindowMetricTags metric_tags = 4;
+  repeated PatternFlowTcpWindowMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowTcpWindowCounter increment = 5;
@@ -14344,7 +14329,7 @@ message PatternFlowUdpSrcPort {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowUdpSrcPortMetricTags metric_tags = 4;
+  repeated PatternFlowUdpSrcPortMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowUdpSrcPortCounter increment = 5;
@@ -14414,7 +14399,7 @@ message PatternFlowUdpDstPort {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowUdpDstPortMetricTags metric_tags = 4;
+  repeated PatternFlowUdpDstPortMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowUdpDstPortCounter increment = 5;
@@ -14484,7 +14469,7 @@ message PatternFlowUdpLength {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowUdpLengthMetricTags metric_tags = 4;
+  repeated PatternFlowUdpLengthMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowUdpLengthCounter increment = 5;
@@ -14583,7 +14568,7 @@ message PatternFlowGreChecksumPresent {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowGreChecksumPresentMetricTags metric_tags = 4;
+  repeated PatternFlowGreChecksumPresentMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowGreChecksumPresentCounter increment = 5;
@@ -14653,7 +14638,7 @@ message PatternFlowGreReserved0 {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowGreReserved0MetricTags metric_tags = 4;
+  repeated PatternFlowGreReserved0MetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowGreReserved0Counter increment = 5;
@@ -14723,7 +14708,7 @@ message PatternFlowGreVersion {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowGreVersionMetricTags metric_tags = 4;
+  repeated PatternFlowGreVersionMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowGreVersionCounter increment = 5;
@@ -14793,7 +14778,7 @@ message PatternFlowGreProtocol {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowGreProtocolMetricTags metric_tags = 4;
+  repeated PatternFlowGreProtocolMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowGreProtocolCounter increment = 5;
@@ -14893,7 +14878,7 @@ message PatternFlowGreReserved1 {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowGreReserved1MetricTags metric_tags = 4;
+  repeated PatternFlowGreReserved1MetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowGreReserved1Counter increment = 5;
@@ -14963,7 +14948,7 @@ message PatternFlowGtpv1Version {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowGtpv1VersionMetricTags metric_tags = 4;
+  repeated PatternFlowGtpv1VersionMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowGtpv1VersionCounter increment = 5;
@@ -15033,7 +15018,7 @@ message PatternFlowGtpv1ProtocolType {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowGtpv1ProtocolTypeMetricTags metric_tags = 4;
+  repeated PatternFlowGtpv1ProtocolTypeMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowGtpv1ProtocolTypeCounter increment = 5;
@@ -15103,7 +15088,7 @@ message PatternFlowGtpv1Reserved {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowGtpv1ReservedMetricTags metric_tags = 4;
+  repeated PatternFlowGtpv1ReservedMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowGtpv1ReservedCounter increment = 5;
@@ -15173,7 +15158,7 @@ message PatternFlowGtpv1EFlag {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowGtpv1EFlagMetricTags metric_tags = 4;
+  repeated PatternFlowGtpv1EFlagMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowGtpv1EFlagCounter increment = 5;
@@ -15243,7 +15228,7 @@ message PatternFlowGtpv1SFlag {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowGtpv1SFlagMetricTags metric_tags = 4;
+  repeated PatternFlowGtpv1SFlagMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowGtpv1SFlagCounter increment = 5;
@@ -15313,7 +15298,7 @@ message PatternFlowGtpv1PnFlag {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowGtpv1PnFlagMetricTags metric_tags = 4;
+  repeated PatternFlowGtpv1PnFlagMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowGtpv1PnFlagCounter increment = 5;
@@ -15384,7 +15369,7 @@ message PatternFlowGtpv1MessageType {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowGtpv1MessageTypeMetricTags metric_tags = 4;
+  repeated PatternFlowGtpv1MessageTypeMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowGtpv1MessageTypeCounter increment = 5;
@@ -15455,7 +15440,7 @@ message PatternFlowGtpv1MessageLength {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowGtpv1MessageLengthMetricTags metric_tags = 4;
+  repeated PatternFlowGtpv1MessageLengthMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowGtpv1MessageLengthCounter increment = 5;
@@ -15525,7 +15510,7 @@ message PatternFlowGtpv1Teid {
   repeated int64 values = 3;
 
   // Description missing in models
-  optional PatternFlowGtpv1TeidMetricTags metric_tags = 4;
+  repeated PatternFlowGtpv1TeidMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowGtpv1TeidCounter increment = 5;
@@ -15596,7 +15581,7 @@ message PatternFlowGtpv1SquenceNumber {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowGtpv1SquenceNumberMetricTags metric_tags = 4;
+  repeated PatternFlowGtpv1SquenceNumberMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowGtpv1SquenceNumberCounter increment = 5;
@@ -15667,7 +15652,7 @@ message PatternFlowGtpv1NPduNumber {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowGtpv1NPduNumberMetricTags metric_tags = 4;
+  repeated PatternFlowGtpv1NPduNumberMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowGtpv1NPduNumberCounter increment = 5;
@@ -15738,7 +15723,7 @@ message PatternFlowGtpv1NextExtensionHeaderType {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowGtpv1NextExtensionHeaderTypeMetricTags metric_tags = 4;
+  repeated PatternFlowGtpv1NextExtensionHeaderTypeMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowGtpv1NextExtensionHeaderTypeCounter increment = 5;
@@ -15810,7 +15795,7 @@ message PatternFlowGtpExtensionExtensionLength {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowGtpExtensionExtensionLengthMetricTags metric_tags = 4;
+  repeated PatternFlowGtpExtensionExtensionLengthMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowGtpExtensionExtensionLengthCounter increment = 5;
@@ -15880,7 +15865,7 @@ message PatternFlowGtpExtensionContents {
   repeated int64 values = 3;
 
   // Description missing in models
-  optional PatternFlowGtpExtensionContentsMetricTags metric_tags = 4;
+  repeated PatternFlowGtpExtensionContentsMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowGtpExtensionContentsCounter increment = 5;
@@ -15951,7 +15936,7 @@ message PatternFlowGtpExtensionNextExtensionHeader {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowGtpExtensionNextExtensionHeaderMetricTags metric_tags = 4;
+  repeated PatternFlowGtpExtensionNextExtensionHeaderMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowGtpExtensionNextExtensionHeaderCounter increment = 5;
@@ -16021,7 +16006,7 @@ message PatternFlowGtpv2Version {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowGtpv2VersionMetricTags metric_tags = 4;
+  repeated PatternFlowGtpv2VersionMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowGtpv2VersionCounter increment = 5;
@@ -16092,7 +16077,7 @@ message PatternFlowGtpv2PiggybackingFlag {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowGtpv2PiggybackingFlagMetricTags metric_tags = 4;
+  repeated PatternFlowGtpv2PiggybackingFlagMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowGtpv2PiggybackingFlagCounter increment = 5;
@@ -16164,7 +16149,7 @@ message PatternFlowGtpv2TeidFlag {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowGtpv2TeidFlagMetricTags metric_tags = 4;
+  repeated PatternFlowGtpv2TeidFlagMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowGtpv2TeidFlagCounter increment = 5;
@@ -16234,7 +16219,7 @@ message PatternFlowGtpv2Spare1 {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowGtpv2Spare1MetricTags metric_tags = 4;
+  repeated PatternFlowGtpv2Spare1MetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowGtpv2Spare1Counter increment = 5;
@@ -16305,7 +16290,7 @@ message PatternFlowGtpv2MessageType {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowGtpv2MessageTypeMetricTags metric_tags = 4;
+  repeated PatternFlowGtpv2MessageTypeMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowGtpv2MessageTypeCounter increment = 5;
@@ -16376,7 +16361,7 @@ message PatternFlowGtpv2MessageLength {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowGtpv2MessageLengthMetricTags metric_tags = 4;
+  repeated PatternFlowGtpv2MessageLengthMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowGtpv2MessageLengthCounter increment = 5;
@@ -16447,7 +16432,7 @@ message PatternFlowGtpv2Teid {
   repeated int64 values = 3;
 
   // Description missing in models
-  optional PatternFlowGtpv2TeidMetricTags metric_tags = 4;
+  repeated PatternFlowGtpv2TeidMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowGtpv2TeidCounter increment = 5;
@@ -16517,7 +16502,7 @@ message PatternFlowGtpv2SequenceNumber {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowGtpv2SequenceNumberMetricTags metric_tags = 4;
+  repeated PatternFlowGtpv2SequenceNumberMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowGtpv2SequenceNumberCounter increment = 5;
@@ -16587,7 +16572,7 @@ message PatternFlowGtpv2Spare2 {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowGtpv2Spare2MetricTags metric_tags = 4;
+  repeated PatternFlowGtpv2Spare2MetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowGtpv2Spare2Counter increment = 5;
@@ -16657,7 +16642,7 @@ message PatternFlowArpHardwareType {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowArpHardwareTypeMetricTags metric_tags = 4;
+  repeated PatternFlowArpHardwareTypeMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowArpHardwareTypeCounter increment = 5;
@@ -16727,7 +16712,7 @@ message PatternFlowArpProtocolType {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowArpProtocolTypeMetricTags metric_tags = 4;
+  repeated PatternFlowArpProtocolTypeMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowArpProtocolTypeCounter increment = 5;
@@ -16797,7 +16782,7 @@ message PatternFlowArpHardwareLength {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowArpHardwareLengthMetricTags metric_tags = 4;
+  repeated PatternFlowArpHardwareLengthMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowArpHardwareLengthCounter increment = 5;
@@ -16867,7 +16852,7 @@ message PatternFlowArpProtocolLength {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowArpProtocolLengthMetricTags metric_tags = 4;
+  repeated PatternFlowArpProtocolLengthMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowArpProtocolLengthCounter increment = 5;
@@ -16937,7 +16922,7 @@ message PatternFlowArpOperation {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowArpOperationMetricTags metric_tags = 4;
+  repeated PatternFlowArpOperationMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowArpOperationCounter increment = 5;
@@ -17007,7 +16992,7 @@ message PatternFlowArpSenderHardwareAddr {
   repeated string values = 3;
 
   // Description missing in models
-  optional PatternFlowArpSenderHardwareAddrMetricTags metric_tags = 4;
+  repeated PatternFlowArpSenderHardwareAddrMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowArpSenderHardwareAddrCounter increment = 5;
@@ -17077,7 +17062,7 @@ message PatternFlowArpSenderProtocolAddr {
   repeated string values = 3;
 
   // Description missing in models
-  optional PatternFlowArpSenderProtocolAddrMetricTags metric_tags = 4;
+  repeated PatternFlowArpSenderProtocolAddrMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowArpSenderProtocolAddrCounter increment = 5;
@@ -17147,7 +17132,7 @@ message PatternFlowArpTargetHardwareAddr {
   repeated string values = 3;
 
   // Description missing in models
-  optional PatternFlowArpTargetHardwareAddrMetricTags metric_tags = 4;
+  repeated PatternFlowArpTargetHardwareAddrMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowArpTargetHardwareAddrCounter increment = 5;
@@ -17217,7 +17202,7 @@ message PatternFlowArpTargetProtocolAddr {
   repeated string values = 3;
 
   // Description missing in models
-  optional PatternFlowArpTargetProtocolAddrMetricTags metric_tags = 4;
+  repeated PatternFlowArpTargetProtocolAddrMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowArpTargetProtocolAddrCounter increment = 5;
@@ -17287,7 +17272,7 @@ message PatternFlowIcmpEchoType {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowIcmpEchoTypeMetricTags metric_tags = 4;
+  repeated PatternFlowIcmpEchoTypeMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowIcmpEchoTypeCounter increment = 5;
@@ -17357,7 +17342,7 @@ message PatternFlowIcmpEchoCode {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowIcmpEchoCodeMetricTags metric_tags = 4;
+  repeated PatternFlowIcmpEchoCodeMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowIcmpEchoCodeCounter increment = 5;
@@ -17456,7 +17441,7 @@ message PatternFlowIcmpEchoIdentifier {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowIcmpEchoIdentifierMetricTags metric_tags = 4;
+  repeated PatternFlowIcmpEchoIdentifierMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowIcmpEchoIdentifierCounter increment = 5;
@@ -17526,7 +17511,7 @@ message PatternFlowIcmpEchoSequenceNumber {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowIcmpEchoSequenceNumberMetricTags metric_tags = 4;
+  repeated PatternFlowIcmpEchoSequenceNumberMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowIcmpEchoSequenceNumberCounter increment = 5;
@@ -17625,7 +17610,7 @@ message PatternFlowIcmpNextFieldsIdentifier {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowIcmpNextFieldsIdentifierMetricTags metric_tags = 4;
+  repeated PatternFlowIcmpNextFieldsIdentifierMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowIcmpNextFieldsIdentifierCounter increment = 5;
@@ -17695,7 +17680,7 @@ message PatternFlowIcmpNextFieldsSequenceNumber {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowIcmpNextFieldsSequenceNumberMetricTags metric_tags = 4;
+  repeated PatternFlowIcmpNextFieldsSequenceNumberMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowIcmpNextFieldsSequenceNumberCounter increment = 5;
@@ -17765,7 +17750,7 @@ message PatternFlowIcmpv6EchoType {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowIcmpv6EchoTypeMetricTags metric_tags = 4;
+  repeated PatternFlowIcmpv6EchoTypeMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowIcmpv6EchoTypeCounter increment = 5;
@@ -17835,7 +17820,7 @@ message PatternFlowIcmpv6EchoCode {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowIcmpv6EchoCodeMetricTags metric_tags = 4;
+  repeated PatternFlowIcmpv6EchoCodeMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowIcmpv6EchoCodeCounter increment = 5;
@@ -17905,7 +17890,7 @@ message PatternFlowIcmpv6EchoIdentifier {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowIcmpv6EchoIdentifierMetricTags metric_tags = 4;
+  repeated PatternFlowIcmpv6EchoIdentifierMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowIcmpv6EchoIdentifierCounter increment = 5;
@@ -17975,7 +17960,7 @@ message PatternFlowIcmpv6EchoSequenceNumber {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowIcmpv6EchoSequenceNumberMetricTags metric_tags = 4;
+  repeated PatternFlowIcmpv6EchoSequenceNumberMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowIcmpv6EchoSequenceNumberCounter increment = 5;
@@ -18103,7 +18088,7 @@ message PatternFlowPppAddress {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowPppAddressMetricTags metric_tags = 4;
+  repeated PatternFlowPppAddressMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowPppAddressCounter increment = 5;
@@ -18173,7 +18158,7 @@ message PatternFlowPppControl {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowPppControlMetricTags metric_tags = 4;
+  repeated PatternFlowPppControlMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowPppControlCounter increment = 5;
@@ -18250,7 +18235,7 @@ message PatternFlowPppProtocolType {
   optional int32 auto = 4;
 
   // Description missing in models
-  optional PatternFlowPppProtocolTypeMetricTags metric_tags = 5;
+  repeated PatternFlowPppProtocolTypeMetricTags metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowPppProtocolTypeCounter increment = 6;
@@ -18320,7 +18305,7 @@ message PatternFlowIgmpv1Version {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowIgmpv1VersionMetricTags metric_tags = 4;
+  repeated PatternFlowIgmpv1VersionMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowIgmpv1VersionCounter increment = 5;
@@ -18390,7 +18375,7 @@ message PatternFlowIgmpv1Type {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowIgmpv1TypeMetricTags metric_tags = 4;
+  repeated PatternFlowIgmpv1TypeMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowIgmpv1TypeCounter increment = 5;
@@ -18460,7 +18445,7 @@ message PatternFlowIgmpv1Unused {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowIgmpv1UnusedMetricTags metric_tags = 4;
+  repeated PatternFlowIgmpv1UnusedMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowIgmpv1UnusedCounter increment = 5;
@@ -18559,7 +18544,7 @@ message PatternFlowIgmpv1GroupAddress {
   repeated string values = 3;
 
   // Description missing in models
-  optional PatternFlowIgmpv1GroupAddressMetricTags metric_tags = 4;
+  repeated PatternFlowIgmpv1GroupAddressMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowIgmpv1GroupAddressCounter increment = 5;
@@ -18636,7 +18621,7 @@ message PatternFlowMplsLabel {
   optional int32 auto = 4;
 
   // Description missing in models
-  optional PatternFlowMplsLabelMetricTags metric_tags = 5;
+  repeated PatternFlowMplsLabelMetricTags metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowMplsLabelCounter increment = 6;
@@ -18706,7 +18691,7 @@ message PatternFlowMplsTrafficClass {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowMplsTrafficClassMetricTags metric_tags = 4;
+  repeated PatternFlowMplsTrafficClassMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowMplsTrafficClassCounter increment = 5;
@@ -18783,7 +18768,7 @@ message PatternFlowMplsBottomOfStack {
   optional int32 auto = 4;
 
   // Description missing in models
-  optional PatternFlowMplsBottomOfStackMetricTags metric_tags = 5;
+  repeated PatternFlowMplsBottomOfStackMetricTags metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowMplsBottomOfStackCounter increment = 6;
@@ -18853,7 +18838,7 @@ message PatternFlowMplsTimeToLive {
   repeated int32 values = 3;
 
   // Description missing in models
-  optional PatternFlowMplsTimeToLiveMetricTags metric_tags = 4;
+  repeated PatternFlowMplsTimeToLiveMetricTags metric_tags = 4;
 
   // Description missing in models
   optional PatternFlowMplsTimeToLiveCounter increment = 5;
