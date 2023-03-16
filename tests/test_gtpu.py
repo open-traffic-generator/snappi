@@ -150,7 +150,7 @@ def create_flow(
     flow.tx_rx.port.rx_name = rx_port.name
 
     flow.packet.ethernet().ipv4().udp().gtpv1().ipv4()
-    eth, outer_ip, udp, gtp, inner_ip = flow.packet.ingress
+    eth, outer_ip, udp, gtp, inner_ip = flow.packet
 
     eth.src.value = src_mac
     eth.dst.value = dst_mac
