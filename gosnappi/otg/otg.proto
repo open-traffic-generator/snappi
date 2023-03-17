@@ -7113,9 +7113,9 @@ message FlowMetricsRequest {
   // 
   repeated string flow_names = 1;
 
-  // A list of metric groups used to disaggregate flows. A metric group that does not
-  // exist for a flow group MUST return an error.
-  optional FlowMetricTagFilter metric_tags = 2;
+  // A list of metric tags used to disaggregate flows. A metric tag that does not exist
+  // for a flow group MUST return an error.
+  repeated FlowMetricTagFilter metric_tags = 2;
 
   message MetricNames {
     enum Enum {
@@ -7134,20 +7134,21 @@ message FlowMetricsRequest {
   repeated MetricNames.Enum metric_names = 3;
 }
 
-// A container for filtering ingress and/or egress metric groups
+// A container for filtering ingress and/or egress metric tags.
+// The Tx stats may not be applicable in both the request and response filter.
 message FlowMetricTagFilter {
 
   // A metric tag name that MUST exist in a flow packet or
   // flow egress_packet configuration
   optional string name = 1;
 
-  // A list of filters that can be applied to the metric group name.
+  // A list of filters that can be applied to the metric tag name.
   // By default all values will be included in the flow metric results.
   repeated string filters = 2;
 }
 
 // A container for flow metrics.
-// The container is keyed by the name, port_tx, port_rx and metric_groups
+// The container is keyed by the name, port_tx, port_rx and metric_tags
 // values.
 message FlowMetric {
 
@@ -7161,7 +7162,7 @@ message FlowMetric {
   optional string port_rx = 3;
 
   // Flow disaggregation groups.
-  repeated FlowMetricGroup metric_groups = 4;
+  repeated FlowMetricTag metric_tags = 4;
 
   message Transmit {
     enum Enum {
@@ -7203,12 +7204,12 @@ message FlowMetric {
 }
 
 // Description missing in models
-message FlowMetricGroup {
+message FlowMetricTag {
 
-  // Name of packet field metric group
+  // Name of packet field metric tag
   optional string name = 1;
 
-  // Value of named packet field metric group
+  // Value of named packet field metric tag
   optional string value = 2;
 }
 
