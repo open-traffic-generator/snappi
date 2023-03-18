@@ -2216,7 +2216,7 @@ func TestFlowMetricGroupIncorrectKey(t *testing.T) {
             }
         }`
 
-	object := gosnappi.NewFlowMetricGroup()
+	object := gosnappi.NewFlowMetricTag()
 	assert.NotNil(t, object.FromYaml(incorrect_key))
 	assert.NotNil(t, object.FromJson(incorrect_key))
 	assert.NotNil(t, object.FromPbText(incorrect_key))

@@ -2093,7 +2093,7 @@ func TestFlowMetricGroupIncorrectFormat(t *testing.T) {
 			"e_b" : 2
 	    }`
 
-	object := gosnappi.NewFlowMetricGroup()
+	object := gosnappi.NewFlowMetricTag()
 	assert.NotNil(t, object.FromYaml(incorrect_format))
 	assert.NotNil(t, object.FromJson(incorrect_format))
 	assert.NotNil(t, object.FromPbText(incorrect_format))
