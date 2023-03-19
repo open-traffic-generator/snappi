@@ -52,26 +52,26 @@ func (h *configurationHandler) GetController() interfaces.ConfigurationControlle
 	return h.controller
 }
 
-func (h *configurationHandler) SetConfig(rbody gosnappi.Config, r *http.Request) gosnappi.SetConfigResponse {
+func (h *configurationHandler) SetConfig(rbody gosnappi.Config, r *http.Request) (gosnappi.SetConfigResponse, error) {
 	fmt.Println("SetConfig: We need to put our business logic ...")
 	result := gosnappi.NewSetConfigResponse()
-	result.StatusCode200()
-	return result
+	result.Warning()
+	return result, nil
 }
 
-func (h *configurationHandler) GetConfig(r *http.Request) gosnappi.GetConfigResponse {
+func (h *configurationHandler) GetConfig(r *http.Request) (gosnappi.GetConfigResponse, error) {
 	fmt.Println("GetConfig: We need to put our business logic ...")
 	result := gosnappi.NewGetConfigResponse()
-	result.StatusCode200()
-	return result
+	result.Config()
+	return result, nil
 
 }
 
-func (h *configurationHandler) UpdateConfig(rbody gosnappi.ConfigUpdate, r *http.Request) gosnappi.UpdateConfigResponse {
+func (h *configurationHandler) UpdateConfig(rbody gosnappi.ConfigUpdate, r *http.Request) (gosnappi.UpdateConfigResponse, error) {
 	fmt.Println("UpdateConfig: We need to put our business logic ...")
 	result := gosnappi.NewUpdateConfigResponse()
-	result.StatusCode200()
-	return result
+	result.Warning()
+	return result, nil
 }
 
 //////////////////////////////////////////////////////////////////
