@@ -34,7 +34,7 @@ class OpenapiServicer(pb2_grpc.OpenapiServicer):
 
         response_200 = """
             {
-                "status_code_200" : {
+                "warning" : {
                     "warnings" : ["no"]
                 }
             }
