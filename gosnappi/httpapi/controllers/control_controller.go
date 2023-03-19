@@ -68,7 +68,7 @@ func (ctrl *controlController) SetControlState(w http.ResponseWriter, r *http.Re
 	}
 
 	if result.HasWarning() {
-		data, err := controlMrlOpts.Marshal(result.StatusCode200().Msg())
+		data, err := controlMrlOpts.Marshal(result.Warning().Msg())
 		if err != nil {
 			ctrl.responseSetControlStateError(w, 400, err)
 		}
@@ -125,7 +125,7 @@ func (ctrl *controlController) SetControlAction(w http.ResponseWriter, r *http.R
 	}
 
 	if result.HasControlActionResponse() {
-		data, err := controlMrlOpts.Marshal(result.StatusCode200().Msg())
+		data, err := controlMrlOpts.Marshal(result.ControlActionResponse().Msg())
 		if err != nil {
 			ctrl.responseSetControlActionError(w, 400, err)
 		}
@@ -185,7 +185,7 @@ func (ctrl *controlController) SetTransmitState(w http.ResponseWriter, r *http.R
 	}
 
 	if result.HasWarning() {
-		data, err := controlMrlOpts.Marshal(result.StatusCode200().Msg())
+		data, err := controlMrlOpts.Marshal(result.Warning().Msg())
 		if err != nil {
 			ctrl.responseSetTransmitStateError(w, 400, err)
 		}
@@ -244,7 +244,7 @@ func (ctrl *controlController) SetLinkState(w http.ResponseWriter, r *http.Reque
 	}
 
 	if result.HasWarning() {
-		data, err := controlMrlOpts.Marshal(result.StatusCode200().Msg())
+		data, err := controlMrlOpts.Marshal(result.Warning().Msg())
 		if err != nil {
 			ctrl.responseSetLinkStateError(w, 400, err)
 		}
@@ -303,7 +303,7 @@ func (ctrl *controlController) SetCaptureState(w http.ResponseWriter, r *http.Re
 	}
 
 	if result.HasWarning() {
-		data, err := controlMrlOpts.Marshal(result.StatusCode200().Msg())
+		data, err := controlMrlOpts.Marshal(result.Warning().Msg())
 		if err != nil {
 			ctrl.responseSetCaptureStateError(w, 400, err)
 		}
@@ -418,7 +418,7 @@ func (ctrl *controlController) SetRouteState(w http.ResponseWriter, r *http.Requ
 	}
 
 	if result.HasWarning() {
-		data, err := controlMrlOpts.Marshal(result.StatusCode200().Msg())
+		data, err := controlMrlOpts.Marshal(result.Warning().Msg())
 		if err != nil {
 			ctrl.responseSetRouteStateError(w, 400, err)
 		}
@@ -533,7 +533,7 @@ func (ctrl *controlController) SetProtocolState(w http.ResponseWriter, r *http.R
 	}
 
 	if result.HasWarning() {
-		data, err := controlMrlOpts.Marshal(result.StatusCode200().Msg())
+		data, err := controlMrlOpts.Marshal(result.Warning().Msg())
 		if err != nil {
 			ctrl.responseSetProtocolStateError(w, 400, err)
 		}
@@ -592,7 +592,7 @@ func (ctrl *controlController) SetDeviceState(w http.ResponseWriter, r *http.Req
 	}
 
 	if result.HasWarning() {
-		data, err := controlMrlOpts.Marshal(result.StatusCode200().Msg())
+		data, err := controlMrlOpts.Marshal(result.Warning().Msg())
 		if err != nil {
 			ctrl.responseSetDeviceStateError(w, 400, err)
 		}

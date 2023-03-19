@@ -61,7 +61,7 @@ func (ctrl *configurationController) SetConfig(w http.ResponseWriter, r *http.Re
 	}
 
 	if result.HasWarning() {
-		data, err := configurationMrlOpts.Marshal(result.StatusCode200().Msg())
+		data, err := configurationMrlOpts.Marshal(result.Warning().Msg())
 		if err != nil {
 			ctrl.responseSetConfigError(w, 400, err)
 		}
