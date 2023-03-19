@@ -21,15 +21,15 @@ type MonitorHandler interface {
 		GetMetrics: POST /monitor/metrics
 		Description:
 	*/
-	GetMetrics(rbody gosnappi.MetricsRequest, r *http.Request) gosnappi.GetMetricsResponse
+	GetMetrics(rbody gosnappi.MetricsRequest, r *http.Request) (gosnappi.GetMetricsResponse, error)
 	/*
 		GetStates: POST /monitor/states
 		Description:
 	*/
-	GetStates(rbody gosnappi.StatesRequest, r *http.Request) gosnappi.GetStatesResponse
+	GetStates(rbody gosnappi.StatesRequest, r *http.Request) (gosnappi.GetStatesResponse, error)
 	/*
 		GetCapture: POST /monitor/capture
 		Description:
 	*/
-	GetCapture(rbody gosnappi.CaptureRequest, r *http.Request) gosnappi.GetCaptureResponse
+	GetCapture(rbody gosnappi.CaptureRequest, r *http.Request) (gosnappi.GetCaptureResponse, error)
 }
