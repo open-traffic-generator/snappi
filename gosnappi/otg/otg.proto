@@ -1,4 +1,4 @@
-/* Open Traffic Generator API 0.11.1
+/* Open Traffic Generator API 0.11.2
  * Open Traffic Generator API defines a model-driven, vendor-neutral and standard
  * interface for emulating layer 2-7 network devices and generating test traffic.
  * 
@@ -1854,6 +1854,9 @@ message BgpV4Peer {
   // objects.
   // required = true
   string name = 13;
+
+  // Description missing in models
+  optional BgpGracefulRestart graceful_restart = 14;
 }
 
 // Configuration for emulated BGPv4 peers and routes on a single IPv4 interface.
@@ -3546,6 +3549,38 @@ message BgpSrteV6TunnelTlv {
   optional bool active = 10;
 }
 
+// The Graceful Restart Capability (RFC 4724) is a BGP capability that can be used by
+// a BGP speaker to indicate its ability to preserve its forwarding state during BGP
+// restart. The Graceful Restart (GR) capability is advertised in OPEN messages sent
+// between BGP peers. After a BGP session has been established, and the initial routing
+// update has been completed,  an End-of-RIB (Routing Information Base) marker is sent
+// in an UPDATE message to convey information  about routing convergence.
+message BgpGracefulRestart {
+
+  // If enabled, Graceful Restart capability is advertised in BGP OPEN messages.
+  // default = False
+  optional bool enable_gr = 1;
+
+  // This is the estimated duration (in seconds) it will take for the BGP session to be
+  // re-established after a restart.  This can be used to speed up routing convergence
+  // by its peer in case the BGP speaker does not come back after a restart.
+  // default = 45
+  optional int32 restart_time = 2;
+
+  // If enabled, the Long-lived Graceful Restart Capability, or LLGR Capability
+  // will be advertised.
+  // This capability MUST be advertised in conjunction with the Graceful Restart
+  // capability.
+  // default = False
+  optional bool enable_llgr = 3;
+
+  // Duration (in seconds) specifying how long stale information (for the AFI/SAFI)
+  // may be retained. This is a three byte field and is applicable
+  // only if 'enable_llgr' is set to 'true'.
+  // default = 10
+  optional int32 stale_time = 4;
+}
+
 // Configuration for BGPv6 peer settings and routes.
 message BgpV6Peer {
 
@@ -3640,6 +3675,9 @@ message BgpV6Peer {
   // objects.
   // required = true
   string name = 14;
+
+  // Description missing in models
+  optional BgpGracefulRestart graceful_restart = 15;
 }
 
 // Configuration for emulated BGPv6 peers and routes on a single IPv6 interface.
@@ -6912,6 +6950,7 @@ message ActionProtocolBgp {
     enum Enum {
       unspecified = 0;
       notification = 1;
+      initiate_graceful_restart = 2;
     }
   }
   // Description missing in models
@@ -6920,6 +6959,9 @@ message ActionProtocolBgp {
 
   // Description missing in models
   optional ActionProtocolBgpNotification notification = 2;
+
+  // Description missing in models
+  optional ActionProtocolBgpInitiateGracefulRestart initiate_graceful_restart = 3;
 }
 
 // A NOTIFICATION message is sent when an error is detected with the BGP session, such
@@ -6985,6 +7027,28 @@ message ActionProtocolBgpNotification {
 
   // Description missing in models
   optional DeviceBgpCustomError custom = 9;
+}
+
+// Initiates BGP Graceful Restart process for the selected BGP peers. If no name is
+// specified then Graceful Restart will be sent to all configured BGP peers.
+message ActionProtocolBgpInitiateGracefulRestart {
+
+  // The names of device BGP peers objects to control.
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.Bgp/properties/name
+  // 
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.Bgp/properties/name
+  // 
+  repeated string peer_names = 1;
+
+  // Duration (in seconds) after which selected BGP peers will initiate
+  // Graceful restart by sending the Open Message with Restart State bit set in the Graceful
+  // Restart capability.
+  // default = 30
+  optional int32 restart_delay = 2;
 }
 
 // Description missing in models
