@@ -6849,10 +6849,6 @@ message ActionProtocolBgpInitiateGracefulRestart {
   // x-constraint:
   // - /components/schemas/Device.Bgp/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Bgp/properties/name
-  // 
   repeated string peer_names = 1;
 
   // Duration (in seconds) after which selected BGP peers will initiate
