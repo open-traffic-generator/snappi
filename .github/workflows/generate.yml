@@ -35,6 +35,7 @@ jobs:
         run: |
           git config user.name "Github Actions Bot"
           git config user.email "actions@github.com"
+          git pull
           git add --force gosnappi/\*
           if git status --porcelain | grep .
             then
