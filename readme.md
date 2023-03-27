@@ -17,7 +17,7 @@ Test scripts written in `snappi`, an auto-generated python SDK, can be executed 
 ## Setup Client
 
 ```sh
-python -m pip install --upgrade snappi
+python -m pip install --upgrade snappi 
 ```
 
 ## Start Testing
