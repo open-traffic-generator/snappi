@@ -155,6 +155,8 @@ func (ctrl *controlController) responseSetControlActionError(w http.ResponseWrit
 SetTransmitState: POST /control/transmit
 Description: Deprecated: Please use `set_control_state` with `traffic.flow_transmit` choice instead
 
+Deprecated: Please use `set_control_state` with `traffic.flow_transmit` choice instead
+
 Updates the state of configuration resources on the traffic generator.
 The Response.Warnings in the Success response is available for implementers to disclose additional information about a state change including any implicit changes that are outside the scope of the state change.
 */
@@ -215,6 +217,8 @@ func (ctrl *controlController) responseSetTransmitStateError(w http.ResponseWrit
 SetLinkState: POST /control/link
 Description: Deprecated: Please use `set_control_state` with `port.link` choice instead
 
+Deprecated: Please use `set_control_state` with `port.link` choice instead
+
 Updates the state of configuration resources on the traffic generator.
 */
 func (ctrl *controlController) SetLinkState(w http.ResponseWriter, r *http.Request) {
@@ -273,6 +277,8 @@ func (ctrl *controlController) responseSetLinkStateError(w http.ResponseWriter, 
 /*
 SetCaptureState: POST /control/capture
 Description: Deprecated: Please use `set_control_state` with `port.capture` choice instead
+
+Deprecated: Please use `set_control_state` with `port.capture` choice instead
 
 Updates the state of configuration resources on the traffic generator.
 */
@@ -333,6 +339,8 @@ func (ctrl *controlController) responseSetCaptureStateError(w http.ResponseWrite
 UpdateFlows: POST /control/flows
 Description: Deprecated: Please use `update_config` with `flow` choice instead
 
+Deprecated: Please use `update_config` with `flow` choice instead
+
 Updates flow properties without disruption of transmit state.
 */
 func (ctrl *controlController) UpdateFlows(w http.ResponseWriter, r *http.Request) {
@@ -388,6 +396,8 @@ func (ctrl *controlController) responseUpdateFlowsError(w http.ResponseWriter, s
 /*
 SetRouteState: POST /control/routes
 Description: Deprecated: Please use `set_control_state` with `protocol.route` choice instead
+
+Deprecated: Please use `set_control_state` with `protocol.route` choice instead
 
 Updates the state of configuration resources on the traffic generator.
 */
@@ -448,6 +458,8 @@ func (ctrl *controlController) responseSetRouteStateError(w http.ResponseWriter,
 SendPing: POST /control/ping
 Description: Deprecated: Please use `set_control_action` with `protocol.ipv*.ping` choice instead
 
+Deprecated: Please use `set_control_action` with `protocol.ipv*.ping` choice instead
+
 API to send an IPv4 and/or IPv6 ICMP Echo Request(s) between endpoints. For each endpoint 1 ping packet will be sent and API shall wait for ping response to either be successful or timeout. The API wait timeout for each request is 300ms.
 */
 func (ctrl *controlController) SendPing(w http.ResponseWriter, r *http.Request) {
@@ -503,6 +515,8 @@ func (ctrl *controlController) responseSendPingError(w http.ResponseWriter, stat
 /*
 SetProtocolState: POST /control/protocols
 Description: Deprecated: Please use `set_control_state` with `protocol.all` choice instead
+
+Deprecated: Please use `set_control_state` with `protocol.all` choice instead
 
 Sets all configured protocols to `start` or `stop` state.
 */
@@ -562,6 +576,8 @@ func (ctrl *controlController) responseSetProtocolStateError(w http.ResponseWrit
 /*
 SetDeviceState: POST /control/devices
 Description: Deprecated: Please use `set_control_state` with `protocol` choice instead
+
+Deprecated: Please use `set_control_state` with `protocol` choice instead
 
 Set specific state/actions on device configuration resources on the traffic generator.
 */
