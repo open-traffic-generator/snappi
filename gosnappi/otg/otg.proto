@@ -5981,22 +5981,28 @@ message LldpSystemName {
 // Error response generated while serving API request.
 message Error {
 
-  // Numeric status code based on underlying transport being used.
+  // Numeric status code based on the underlying transport being used.
+  // The API server MUST set this code explicitly based on following references:
+  // - HTTP 4xx errors: https://datatracker.ietf.org/doc/html/rfc9110#section-15.5
+  // - HTTP 5xx errors: https://datatracker.ietf.org/doc/html/rfc9110#section-15.6
+  // - gRPC errors: https://grpc.github.io/grpc/core/md_doc_statuscodes.html
   // required = true
   int32 code = 1;
 
   message Kind {
     enum Enum {
       unspecified = 0;
-      transport = 1;
-      validation = 2;
-      internal = 3;
+      validation = 1;
+      internal = 2;
     }
   }
-  // Kind of error message.
+  // Classification of error originating from within API server that may not be mapped
+  // to the value in `code`.
+  // Absence of this field may indicate that the error did not originate from within API
+  // server.
   optional Kind.Enum kind = 2;
 
-  // List of error messages generated while serving API request.
+  // List of error messages generated while executing the request.
   repeated string errors = 3;
 }
 
@@ -16645,20 +16651,6 @@ message Failure {
   Error error = 1;
 }
 
-// This indicates that the server cannot or will not process the request
-// due to something that is perceived to be a client error.
-// Additional details are in the errors.
-message BadRequest {
-  Error error = 1;
-}
-
-// This indicates that the server encountered an unexpected condition that
-// prevented it from fulfilling the request.
-// Additional details are in the errors.
-message InternalServerError {
-  Error error = 1;
-}
-
 message SetConfigRequest {
   Config config = 1;
 }
@@ -16787,7 +16779,11 @@ message GetVersionResponse {
 }
 
 
-  // Description missing in models
+// Description missing in models
+//
+// For all RPCs defined in this service, API Server SHOULD provide JSON
+// representation of `Error` message as an error string upon failure, ensuring
+// name of enum constants (instead of value) is present in the representation
 service Openapi {
 
   // Sets configuration resources on the traffic generator.
