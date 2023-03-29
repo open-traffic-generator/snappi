@@ -1,4 +1,4 @@
-/* Open Traffic Generator API 0.11.2
+/* Open Traffic Generator API 0.11.3
  * Open Traffic Generator API defines a model-driven, vendor-neutral and standard
  * interface for emulating layer 2-7 network devices and generating test traffic.
  * 
@@ -3514,7 +3514,7 @@ message BgpGracefulRestart {
   // re-established after a restart.  This can be used to speed up routing convergence
   // by its peer in case the BGP speaker does not come back after a restart.
   // default = 45
-  optional int32 restart_time = 2;
+  optional uint32 restart_time = 2;
 
   // If enabled, the Long-lived Graceful Restart Capability, or LLGR Capability
   // will be advertised.
@@ -3527,7 +3527,7 @@ message BgpGracefulRestart {
   // may be retained. This is a three byte field and is applicable
   // only if 'enable_llgr' is set to 'true'.
   // default = 10
-  optional int32 stale_time = 4;
+  optional uint32 stale_time = 4;
 }
 
 // Configuration for BGPv6 peer settings and routes.
@@ -6855,7 +6855,7 @@ message ActionProtocolBgpInitiateGracefulRestart {
   // Graceful restart by sending the Open Message with Restart State bit set in the Graceful
   // Restart capability.
   // default = 30
-  optional int32 restart_delay = 2;
+  optional uint32 restart_delay = 2;
 }
 
 // Description missing in models
