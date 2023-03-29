@@ -12,6 +12,7 @@ import (
 
 	"github.com/Masterminds/semver/v3"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/status"
 )
 
 type grpcTransport struct {
@@ -133,6 +134,8 @@ type Api interface {
 	deprecated(message string)
 	under_review(message string)
 	addWarnings(message string)
+	fromHttpError(statusCode int, body []byte) Error
+	FromError(err error) Error
 }
 
 // NewGrpcTransport sets the underlying transport of the Api as grpc
@@ -187,6 +190,32 @@ func (api *api) deprecated(message string) {
 func (api *api) under_review(message string) {
 	api.warnings = message
 	fmt.Printf("warning: %s\n", message)
+}
+
+func (api *api) FromError(err error) Error {
+	errObj := NewError()
+	st, _ := status.FromError(err)
+	ers := errObj.FromJson(st.Message())
+	if ers != nil {
+		api.setErrrObj(errObj, int32(st.Code()), st.Message())
+	}
+	return errObj
+}
+
+func (api *api) setErrrObj(obj Error, code int32, message string) {
+	errors := []string{}
+	errors = append(errors, message)
+	obj.Msg().Code = code
+	obj.Msg().Errors = errors
+}
+
+func (api *api) fromHttpError(statusCode int, body []byte) Error {
+	errObj := NewError()
+	err := errObj.FromJson(string(body))
+	if err != nil {
+		api.setErrrObj(errObj, int32(statusCode), string(body))
+	}
+	return errObj
 }
 
 // HttpRequestDoer will return True for HTTP transport
