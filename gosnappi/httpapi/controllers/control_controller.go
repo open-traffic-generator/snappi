@@ -56,8 +56,8 @@ func (ctrl *controlController) SetControlState(w http.ResponseWriter, r *http.Re
 			return
 		}
 	} else {
-		bodyError := errors.New("Request do not have any body")
-		ctrl.responseSetControlStateError(w, 500, bodyError)
+		bodyError := errors.New("Request does not have a body")
+		ctrl.responseSetControlStateError(w, 400, bodyError)
 		return
 	}
 	result, err := ctrl.handler.SetControlState(item, r)
@@ -123,8 +123,8 @@ func (ctrl *controlController) SetControlAction(w http.ResponseWriter, r *http.R
 			return
 		}
 	} else {
-		bodyError := errors.New("Request do not have any body")
-		ctrl.responseSetControlActionError(w, 500, bodyError)
+		bodyError := errors.New("Request does not have a body")
+		ctrl.responseSetControlActionError(w, 400, bodyError)
 		return
 	}
 	result, err := ctrl.handler.SetControlAction(item, r)
@@ -195,8 +195,8 @@ func (ctrl *controlController) SetTransmitState(w http.ResponseWriter, r *http.R
 			return
 		}
 	} else {
-		bodyError := errors.New("Request do not have any body")
-		ctrl.responseSetTransmitStateError(w, 500, bodyError)
+		bodyError := errors.New("Request does not have a body")
+		ctrl.responseSetTransmitStateError(w, 400, bodyError)
 		return
 	}
 	result, err := ctrl.handler.SetTransmitState(item, r)
@@ -266,8 +266,8 @@ func (ctrl *controlController) SetLinkState(w http.ResponseWriter, r *http.Reque
 			return
 		}
 	} else {
-		bodyError := errors.New("Request do not have any body")
-		ctrl.responseSetLinkStateError(w, 500, bodyError)
+		bodyError := errors.New("Request does not have a body")
+		ctrl.responseSetLinkStateError(w, 400, bodyError)
 		return
 	}
 	result, err := ctrl.handler.SetLinkState(item, r)
@@ -337,8 +337,8 @@ func (ctrl *controlController) SetCaptureState(w http.ResponseWriter, r *http.Re
 			return
 		}
 	} else {
-		bodyError := errors.New("Request do not have any body")
-		ctrl.responseSetCaptureStateError(w, 500, bodyError)
+		bodyError := errors.New("Request does not have a body")
+		ctrl.responseSetCaptureStateError(w, 400, bodyError)
 		return
 	}
 	result, err := ctrl.handler.SetCaptureState(item, r)
@@ -408,8 +408,8 @@ func (ctrl *controlController) UpdateFlows(w http.ResponseWriter, r *http.Reques
 			return
 		}
 	} else {
-		bodyError := errors.New("Request do not have any body")
-		ctrl.responseUpdateFlowsError(w, 500, bodyError)
+		bodyError := errors.New("Request does not have a body")
+		ctrl.responseUpdateFlowsError(w, 400, bodyError)
 		return
 	}
 	result, err := ctrl.handler.UpdateFlows(item, r)
@@ -476,8 +476,8 @@ func (ctrl *controlController) SetRouteState(w http.ResponseWriter, r *http.Requ
 			return
 		}
 	} else {
-		bodyError := errors.New("Request do not have any body")
-		ctrl.responseSetRouteStateError(w, 500, bodyError)
+		bodyError := errors.New("Request does not have a body")
+		ctrl.responseSetRouteStateError(w, 400, bodyError)
 		return
 	}
 	result, err := ctrl.handler.SetRouteState(item, r)
@@ -547,8 +547,8 @@ func (ctrl *controlController) SendPing(w http.ResponseWriter, r *http.Request) 
 			return
 		}
 	} else {
-		bodyError := errors.New("Request do not have any body")
-		ctrl.responseSendPingError(w, 500, bodyError)
+		bodyError := errors.New("Request does not have a body")
+		ctrl.responseSendPingError(w, 400, bodyError)
 		return
 	}
 	result, err := ctrl.handler.SendPing(item, r)
@@ -615,8 +615,8 @@ func (ctrl *controlController) SetProtocolState(w http.ResponseWriter, r *http.R
 			return
 		}
 	} else {
-		bodyError := errors.New("Request do not have any body")
-		ctrl.responseSetProtocolStateError(w, 500, bodyError)
+		bodyError := errors.New("Request does not have a body")
+		ctrl.responseSetProtocolStateError(w, 400, bodyError)
 		return
 	}
 	result, err := ctrl.handler.SetProtocolState(item, r)
@@ -686,8 +686,8 @@ func (ctrl *controlController) SetDeviceState(w http.ResponseWriter, r *http.Req
 			return
 		}
 	} else {
-		bodyError := errors.New("Request do not have any body")
-		ctrl.responseSetDeviceStateError(w, 500, bodyError)
+		bodyError := errors.New("Request does not have a body")
+		ctrl.responseSetDeviceStateError(w, 400, bodyError)
 		return
 	}
 	result, err := ctrl.handler.SetDeviceState(item, r)

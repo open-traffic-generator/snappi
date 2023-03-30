@@ -48,8 +48,8 @@ func (ctrl *monitorController) GetMetrics(w http.ResponseWriter, r *http.Request
 			return
 		}
 	} else {
-		bodyError := errors.New("Request do not have any body")
-		ctrl.responseGetMetricsError(w, 500, bodyError)
+		bodyError := errors.New("Request does not have a body")
+		ctrl.responseGetMetricsError(w, 400, bodyError)
 		return
 	}
 	result, err := ctrl.handler.GetMetrics(item, r)
@@ -112,8 +112,8 @@ func (ctrl *monitorController) GetStates(w http.ResponseWriter, r *http.Request)
 			return
 		}
 	} else {
-		bodyError := errors.New("Request do not have any body")
-		ctrl.responseGetStatesError(w, 500, bodyError)
+		bodyError := errors.New("Request does not have a body")
+		ctrl.responseGetStatesError(w, 400, bodyError)
 		return
 	}
 	result, err := ctrl.handler.GetStates(item, r)
@@ -176,8 +176,8 @@ func (ctrl *monitorController) GetCapture(w http.ResponseWriter, r *http.Request
 			return
 		}
 	} else {
-		bodyError := errors.New("Request do not have any body")
-		ctrl.responseGetCaptureError(w, 500, bodyError)
+		bodyError := errors.New("Request does not have a body")
+		ctrl.responseGetCaptureError(w, 400, bodyError)
 		return
 	}
 	result, err := ctrl.handler.GetCapture(item, r)

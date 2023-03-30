@@ -49,8 +49,8 @@ func (ctrl *configurationController) SetConfig(w http.ResponseWriter, r *http.Re
 			return
 		}
 	} else {
-		bodyError := errors.New("Request do not have any body")
-		ctrl.responseSetConfigError(w, 500, bodyError)
+		bodyError := errors.New("Request does not have a body")
+		ctrl.responseSetConfigError(w, 400, bodyError)
 		return
 	}
 	result, err := ctrl.handler.SetConfig(item, r)
@@ -162,8 +162,8 @@ func (ctrl *configurationController) UpdateConfig(w http.ResponseWriter, r *http
 			return
 		}
 	} else {
-		bodyError := errors.New("Request do not have any body")
-		ctrl.responseUpdateConfigError(w, 500, bodyError)
+		bodyError := errors.New("Request does not have a body")
+		ctrl.responseUpdateConfigError(w, 400, bodyError)
 		return
 	}
 	result, err := ctrl.handler.UpdateConfig(item, r)
