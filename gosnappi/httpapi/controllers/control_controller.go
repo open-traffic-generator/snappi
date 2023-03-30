@@ -10,7 +10,6 @@ import (
 	gosnappi "github.com/open-traffic-generator/snappi/gosnappi"
 	"github.com/open-traffic-generator/snappi/gosnappi/httpapi"
 	"github.com/open-traffic-generator/snappi/gosnappi/httpapi/interfaces"
-	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/encoding/protojson"
 )
 
@@ -57,8 +56,8 @@ func (ctrl *controlController) SetControlState(w http.ResponseWriter, r *http.Re
 			return
 		}
 	} else {
-		bodyError := errors.New("Request do not have any body")
-		ctrl.responseSetControlStateError(w, 500, bodyError)
+		bodyError := errors.New("Request does not have a body")
+		ctrl.responseSetControlStateError(w, 400, bodyError)
 		return
 	}
 	result, err := ctrl.handler.SetControlState(item, r)
@@ -80,17 +79,27 @@ func (ctrl *controlController) SetControlState(w http.ResponseWriter, r *http.Re
 }
 
 func (ctrl *controlController) responseSetControlStateError(w http.ResponseWriter, status_code int, rsp_err error) {
-	result := gosnappi.NewError()
+	var result gosnappi.Error
 
-	st, _ := status.FromError(rsp_err)
-	err := result.FromJson(st.Message())
-	if err != nil {
-		result.Msg().Errors = []string{rsp_err.Error()}
+	if rErr, ok := rsp_err.(gosnappi.Error); ok {
+		result = rErr
+	} else {
+		result = gosnappi.NewError()
+		err := result.FromJson(rsp_err.Error())
+		if err != nil {
+			result = nil
+		}
 	}
-	result.Msg().Code = int32(status_code)
 
-	if _, err := httpapi.WriteJSONResponse(w, status_code, result); err != nil {
-		log.Print(err.Error())
+	if result != nil {
+		if _, err := httpapi.WriteJSONResponse(w, int(result.Code()), result); err != nil {
+			log.Print(err.Error())
+		}
+	} else {
+		data := []byte(rsp_err.Error())
+		if _, err := httpapi.WriteCustomJSONResponse(w, status_code, data); err != nil {
+			log.Print(err.Error())
+		}
 	}
 }
 
@@ -114,8 +123,8 @@ func (ctrl *controlController) SetControlAction(w http.ResponseWriter, r *http.R
 			return
 		}
 	} else {
-		bodyError := errors.New("Request do not have any body")
-		ctrl.responseSetControlActionError(w, 500, bodyError)
+		bodyError := errors.New("Request does not have a body")
+		ctrl.responseSetControlActionError(w, 400, bodyError)
 		return
 	}
 	result, err := ctrl.handler.SetControlAction(item, r)
@@ -137,17 +146,27 @@ func (ctrl *controlController) SetControlAction(w http.ResponseWriter, r *http.R
 }
 
 func (ctrl *controlController) responseSetControlActionError(w http.ResponseWriter, status_code int, rsp_err error) {
-	result := gosnappi.NewError()
+	var result gosnappi.Error
 
-	st, _ := status.FromError(rsp_err)
-	err := result.FromJson(st.Message())
-	if err != nil {
-		result.Msg().Errors = []string{rsp_err.Error()}
+	if rErr, ok := rsp_err.(gosnappi.Error); ok {
+		result = rErr
+	} else {
+		result = gosnappi.NewError()
+		err := result.FromJson(rsp_err.Error())
+		if err != nil {
+			result = nil
+		}
 	}
-	result.Msg().Code = int32(status_code)
 
-	if _, err := httpapi.WriteJSONResponse(w, status_code, result); err != nil {
-		log.Print(err.Error())
+	if result != nil {
+		if _, err := httpapi.WriteJSONResponse(w, int(result.Code()), result); err != nil {
+			log.Print(err.Error())
+		}
+	} else {
+		data := []byte(rsp_err.Error())
+		if _, err := httpapi.WriteCustomJSONResponse(w, status_code, data); err != nil {
+			log.Print(err.Error())
+		}
 	}
 }
 
@@ -176,8 +195,8 @@ func (ctrl *controlController) SetTransmitState(w http.ResponseWriter, r *http.R
 			return
 		}
 	} else {
-		bodyError := errors.New("Request do not have any body")
-		ctrl.responseSetTransmitStateError(w, 500, bodyError)
+		bodyError := errors.New("Request does not have a body")
+		ctrl.responseSetTransmitStateError(w, 400, bodyError)
 		return
 	}
 	result, err := ctrl.handler.SetTransmitState(item, r)
@@ -199,17 +218,27 @@ func (ctrl *controlController) SetTransmitState(w http.ResponseWriter, r *http.R
 }
 
 func (ctrl *controlController) responseSetTransmitStateError(w http.ResponseWriter, status_code int, rsp_err error) {
-	result := gosnappi.NewError()
+	var result gosnappi.Error
 
-	st, _ := status.FromError(rsp_err)
-	err := result.FromJson(st.Message())
-	if err != nil {
-		result.Msg().Errors = []string{rsp_err.Error()}
+	if rErr, ok := rsp_err.(gosnappi.Error); ok {
+		result = rErr
+	} else {
+		result = gosnappi.NewError()
+		err := result.FromJson(rsp_err.Error())
+		if err != nil {
+			result = nil
+		}
 	}
-	result.Msg().Code = int32(status_code)
 
-	if _, err := httpapi.WriteJSONResponse(w, status_code, result); err != nil {
-		log.Print(err.Error())
+	if result != nil {
+		if _, err := httpapi.WriteJSONResponse(w, int(result.Code()), result); err != nil {
+			log.Print(err.Error())
+		}
+	} else {
+		data := []byte(rsp_err.Error())
+		if _, err := httpapi.WriteCustomJSONResponse(w, status_code, data); err != nil {
+			log.Print(err.Error())
+		}
 	}
 }
 
@@ -237,8 +266,8 @@ func (ctrl *controlController) SetLinkState(w http.ResponseWriter, r *http.Reque
 			return
 		}
 	} else {
-		bodyError := errors.New("Request do not have any body")
-		ctrl.responseSetLinkStateError(w, 500, bodyError)
+		bodyError := errors.New("Request does not have a body")
+		ctrl.responseSetLinkStateError(w, 400, bodyError)
 		return
 	}
 	result, err := ctrl.handler.SetLinkState(item, r)
@@ -260,17 +289,27 @@ func (ctrl *controlController) SetLinkState(w http.ResponseWriter, r *http.Reque
 }
 
 func (ctrl *controlController) responseSetLinkStateError(w http.ResponseWriter, status_code int, rsp_err error) {
-	result := gosnappi.NewError()
+	var result gosnappi.Error
 
-	st, _ := status.FromError(rsp_err)
-	err := result.FromJson(st.Message())
-	if err != nil {
-		result.Msg().Errors = []string{rsp_err.Error()}
+	if rErr, ok := rsp_err.(gosnappi.Error); ok {
+		result = rErr
+	} else {
+		result = gosnappi.NewError()
+		err := result.FromJson(rsp_err.Error())
+		if err != nil {
+			result = nil
+		}
 	}
-	result.Msg().Code = int32(status_code)
 
-	if _, err := httpapi.WriteJSONResponse(w, status_code, result); err != nil {
-		log.Print(err.Error())
+	if result != nil {
+		if _, err := httpapi.WriteJSONResponse(w, int(result.Code()), result); err != nil {
+			log.Print(err.Error())
+		}
+	} else {
+		data := []byte(rsp_err.Error())
+		if _, err := httpapi.WriteCustomJSONResponse(w, status_code, data); err != nil {
+			log.Print(err.Error())
+		}
 	}
 }
 
@@ -298,8 +337,8 @@ func (ctrl *controlController) SetCaptureState(w http.ResponseWriter, r *http.Re
 			return
 		}
 	} else {
-		bodyError := errors.New("Request do not have any body")
-		ctrl.responseSetCaptureStateError(w, 500, bodyError)
+		bodyError := errors.New("Request does not have a body")
+		ctrl.responseSetCaptureStateError(w, 400, bodyError)
 		return
 	}
 	result, err := ctrl.handler.SetCaptureState(item, r)
@@ -321,17 +360,27 @@ func (ctrl *controlController) SetCaptureState(w http.ResponseWriter, r *http.Re
 }
 
 func (ctrl *controlController) responseSetCaptureStateError(w http.ResponseWriter, status_code int, rsp_err error) {
-	result := gosnappi.NewError()
+	var result gosnappi.Error
 
-	st, _ := status.FromError(rsp_err)
-	err := result.FromJson(st.Message())
-	if err != nil {
-		result.Msg().Errors = []string{rsp_err.Error()}
+	if rErr, ok := rsp_err.(gosnappi.Error); ok {
+		result = rErr
+	} else {
+		result = gosnappi.NewError()
+		err := result.FromJson(rsp_err.Error())
+		if err != nil {
+			result = nil
+		}
 	}
-	result.Msg().Code = int32(status_code)
 
-	if _, err := httpapi.WriteJSONResponse(w, status_code, result); err != nil {
-		log.Print(err.Error())
+	if result != nil {
+		if _, err := httpapi.WriteJSONResponse(w, int(result.Code()), result); err != nil {
+			log.Print(err.Error())
+		}
+	} else {
+		data := []byte(rsp_err.Error())
+		if _, err := httpapi.WriteCustomJSONResponse(w, status_code, data); err != nil {
+			log.Print(err.Error())
+		}
 	}
 }
 
@@ -359,8 +408,8 @@ func (ctrl *controlController) UpdateFlows(w http.ResponseWriter, r *http.Reques
 			return
 		}
 	} else {
-		bodyError := errors.New("Request do not have any body")
-		ctrl.responseUpdateFlowsError(w, 500, bodyError)
+		bodyError := errors.New("Request does not have a body")
+		ctrl.responseUpdateFlowsError(w, 400, bodyError)
 		return
 	}
 	result, err := ctrl.handler.UpdateFlows(item, r)
@@ -379,17 +428,27 @@ func (ctrl *controlController) UpdateFlows(w http.ResponseWriter, r *http.Reques
 }
 
 func (ctrl *controlController) responseUpdateFlowsError(w http.ResponseWriter, status_code int, rsp_err error) {
-	result := gosnappi.NewError()
+	var result gosnappi.Error
 
-	st, _ := status.FromError(rsp_err)
-	err := result.FromJson(st.Message())
-	if err != nil {
-		result.Msg().Errors = []string{rsp_err.Error()}
+	if rErr, ok := rsp_err.(gosnappi.Error); ok {
+		result = rErr
+	} else {
+		result = gosnappi.NewError()
+		err := result.FromJson(rsp_err.Error())
+		if err != nil {
+			result = nil
+		}
 	}
-	result.Msg().Code = int32(status_code)
 
-	if _, err := httpapi.WriteJSONResponse(w, status_code, result); err != nil {
-		log.Print(err.Error())
+	if result != nil {
+		if _, err := httpapi.WriteJSONResponse(w, int(result.Code()), result); err != nil {
+			log.Print(err.Error())
+		}
+	} else {
+		data := []byte(rsp_err.Error())
+		if _, err := httpapi.WriteCustomJSONResponse(w, status_code, data); err != nil {
+			log.Print(err.Error())
+		}
 	}
 }
 
@@ -417,8 +476,8 @@ func (ctrl *controlController) SetRouteState(w http.ResponseWriter, r *http.Requ
 			return
 		}
 	} else {
-		bodyError := errors.New("Request do not have any body")
-		ctrl.responseSetRouteStateError(w, 500, bodyError)
+		bodyError := errors.New("Request does not have a body")
+		ctrl.responseSetRouteStateError(w, 400, bodyError)
 		return
 	}
 	result, err := ctrl.handler.SetRouteState(item, r)
@@ -440,17 +499,27 @@ func (ctrl *controlController) SetRouteState(w http.ResponseWriter, r *http.Requ
 }
 
 func (ctrl *controlController) responseSetRouteStateError(w http.ResponseWriter, status_code int, rsp_err error) {
-	result := gosnappi.NewError()
+	var result gosnappi.Error
 
-	st, _ := status.FromError(rsp_err)
-	err := result.FromJson(st.Message())
-	if err != nil {
-		result.Msg().Errors = []string{rsp_err.Error()}
+	if rErr, ok := rsp_err.(gosnappi.Error); ok {
+		result = rErr
+	} else {
+		result = gosnappi.NewError()
+		err := result.FromJson(rsp_err.Error())
+		if err != nil {
+			result = nil
+		}
 	}
-	result.Msg().Code = int32(status_code)
 
-	if _, err := httpapi.WriteJSONResponse(w, status_code, result); err != nil {
-		log.Print(err.Error())
+	if result != nil {
+		if _, err := httpapi.WriteJSONResponse(w, int(result.Code()), result); err != nil {
+			log.Print(err.Error())
+		}
+	} else {
+		data := []byte(rsp_err.Error())
+		if _, err := httpapi.WriteCustomJSONResponse(w, status_code, data); err != nil {
+			log.Print(err.Error())
+		}
 	}
 }
 
@@ -478,8 +547,8 @@ func (ctrl *controlController) SendPing(w http.ResponseWriter, r *http.Request) 
 			return
 		}
 	} else {
-		bodyError := errors.New("Request do not have any body")
-		ctrl.responseSendPingError(w, 500, bodyError)
+		bodyError := errors.New("Request does not have a body")
+		ctrl.responseSendPingError(w, 400, bodyError)
 		return
 	}
 	result, err := ctrl.handler.SendPing(item, r)
@@ -498,17 +567,27 @@ func (ctrl *controlController) SendPing(w http.ResponseWriter, r *http.Request) 
 }
 
 func (ctrl *controlController) responseSendPingError(w http.ResponseWriter, status_code int, rsp_err error) {
-	result := gosnappi.NewError()
+	var result gosnappi.Error
 
-	st, _ := status.FromError(rsp_err)
-	err := result.FromJson(st.Message())
-	if err != nil {
-		result.Msg().Errors = []string{rsp_err.Error()}
+	if rErr, ok := rsp_err.(gosnappi.Error); ok {
+		result = rErr
+	} else {
+		result = gosnappi.NewError()
+		err := result.FromJson(rsp_err.Error())
+		if err != nil {
+			result = nil
+		}
 	}
-	result.Msg().Code = int32(status_code)
 
-	if _, err := httpapi.WriteJSONResponse(w, status_code, result); err != nil {
-		log.Print(err.Error())
+	if result != nil {
+		if _, err := httpapi.WriteJSONResponse(w, int(result.Code()), result); err != nil {
+			log.Print(err.Error())
+		}
+	} else {
+		data := []byte(rsp_err.Error())
+		if _, err := httpapi.WriteCustomJSONResponse(w, status_code, data); err != nil {
+			log.Print(err.Error())
+		}
 	}
 }
 
@@ -536,8 +615,8 @@ func (ctrl *controlController) SetProtocolState(w http.ResponseWriter, r *http.R
 			return
 		}
 	} else {
-		bodyError := errors.New("Request do not have any body")
-		ctrl.responseSetProtocolStateError(w, 500, bodyError)
+		bodyError := errors.New("Request does not have a body")
+		ctrl.responseSetProtocolStateError(w, 400, bodyError)
 		return
 	}
 	result, err := ctrl.handler.SetProtocolState(item, r)
@@ -559,17 +638,27 @@ func (ctrl *controlController) SetProtocolState(w http.ResponseWriter, r *http.R
 }
 
 func (ctrl *controlController) responseSetProtocolStateError(w http.ResponseWriter, status_code int, rsp_err error) {
-	result := gosnappi.NewError()
+	var result gosnappi.Error
 
-	st, _ := status.FromError(rsp_err)
-	err := result.FromJson(st.Message())
-	if err != nil {
-		result.Msg().Errors = []string{rsp_err.Error()}
+	if rErr, ok := rsp_err.(gosnappi.Error); ok {
+		result = rErr
+	} else {
+		result = gosnappi.NewError()
+		err := result.FromJson(rsp_err.Error())
+		if err != nil {
+			result = nil
+		}
 	}
-	result.Msg().Code = int32(status_code)
 
-	if _, err := httpapi.WriteJSONResponse(w, status_code, result); err != nil {
-		log.Print(err.Error())
+	if result != nil {
+		if _, err := httpapi.WriteJSONResponse(w, int(result.Code()), result); err != nil {
+			log.Print(err.Error())
+		}
+	} else {
+		data := []byte(rsp_err.Error())
+		if _, err := httpapi.WriteCustomJSONResponse(w, status_code, data); err != nil {
+			log.Print(err.Error())
+		}
 	}
 }
 
@@ -597,8 +686,8 @@ func (ctrl *controlController) SetDeviceState(w http.ResponseWriter, r *http.Req
 			return
 		}
 	} else {
-		bodyError := errors.New("Request do not have any body")
-		ctrl.responseSetDeviceStateError(w, 500, bodyError)
+		bodyError := errors.New("Request does not have a body")
+		ctrl.responseSetDeviceStateError(w, 400, bodyError)
 		return
 	}
 	result, err := ctrl.handler.SetDeviceState(item, r)
@@ -620,17 +709,27 @@ func (ctrl *controlController) SetDeviceState(w http.ResponseWriter, r *http.Req
 }
 
 func (ctrl *controlController) responseSetDeviceStateError(w http.ResponseWriter, status_code int, rsp_err error) {
-	result := gosnappi.NewError()
+	var result gosnappi.Error
 
-	st, _ := status.FromError(rsp_err)
-	err := result.FromJson(st.Message())
-	if err != nil {
-		result.Msg().Errors = []string{rsp_err.Error()}
+	if rErr, ok := rsp_err.(gosnappi.Error); ok {
+		result = rErr
+	} else {
+		result = gosnappi.NewError()
+		err := result.FromJson(rsp_err.Error())
+		if err != nil {
+			result = nil
+		}
 	}
-	result.Msg().Code = int32(status_code)
 
-	if _, err := httpapi.WriteJSONResponse(w, status_code, result); err != nil {
-		log.Print(err.Error())
+	if result != nil {
+		if _, err := httpapi.WriteJSONResponse(w, int(result.Code()), result); err != nil {
+			log.Print(err.Error())
+		}
+	} else {
+		data := []byte(rsp_err.Error())
+		if _, err := httpapi.WriteCustomJSONResponse(w, status_code, data); err != nil {
+			log.Print(err.Error())
+		}
 	}
 }
 

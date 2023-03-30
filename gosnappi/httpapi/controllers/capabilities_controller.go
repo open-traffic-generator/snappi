@@ -9,7 +9,6 @@ import (
 	gosnappi "github.com/open-traffic-generator/snappi/gosnappi"
 	"github.com/open-traffic-generator/snappi/gosnappi/httpapi"
 	"github.com/open-traffic-generator/snappi/gosnappi/httpapi/interfaces"
-	"google.golang.org/grpc/status"
 )
 
 type capabilitiesController struct {
@@ -47,16 +46,26 @@ func (ctrl *capabilitiesController) GetVersion(w http.ResponseWriter, r *http.Re
 }
 
 func (ctrl *capabilitiesController) responseGetVersionError(w http.ResponseWriter, status_code int, rsp_err error) {
-	result := gosnappi.NewError()
+	var result gosnappi.Error
 
-	st, _ := status.FromError(rsp_err)
-	err := result.FromJson(st.Message())
-	if err != nil {
-		result.Msg().Errors = []string{rsp_err.Error()}
+	if rErr, ok := rsp_err.(gosnappi.Error); ok {
+		result = rErr
+	} else {
+		result = gosnappi.NewError()
+		err := result.FromJson(rsp_err.Error())
+		if err != nil {
+			result = nil
+		}
 	}
-	result.Msg().Code = int32(status_code)
 
-	if _, err := httpapi.WriteJSONResponse(w, status_code, result); err != nil {
-		log.Print(err.Error())
+	if result != nil {
+		if _, err := httpapi.WriteJSONResponse(w, int(result.Code()), result); err != nil {
+			log.Print(err.Error())
+		}
+	} else {
+		data := []byte(rsp_err.Error())
+		if _, err := httpapi.WriteCustomJSONResponse(w, status_code, data); err != nil {
+			log.Print(err.Error())
+		}
 	}
 }
