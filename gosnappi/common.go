@@ -135,7 +135,8 @@ type Api interface {
 	under_review(message string)
 	addWarnings(message string)
 	fromHttpError(statusCode int, body []byte) Error
-	FromError(err error) Error
+	fromGrpcError(err error) (Error, bool)
+	FromError(err error) (Error, bool)
 }
 
 // NewGrpcTransport sets the underlying transport of the Api as grpc
@@ -192,30 +193,52 @@ func (api *api) under_review(message string) {
 	fmt.Printf("warning: %s\n", message)
 }
 
-func (api *api) FromError(err error) Error {
-	errObj := NewError()
-	st, _ := status.FromError(err)
-	ers := errObj.FromJson(st.Message())
-	if ers != nil {
-		api.setErrrObj(errObj, int32(st.Code()), st.Message())
+func (api *api) FromError(err error) (Error, bool) {
+	if rErr, ok := err.(Error); ok {
+		return rErr, true
 	}
-	return errObj
+
+	rErr := NewError()
+	if err := rErr.FromJson(err.Error()); err == nil {
+		return rErr, true
+	}
+
+	return api.fromGrpcError(err)
 }
 
-func (api *api) setErrrObj(obj Error, code int32, message string) {
+func (api *api) setResponseErr(obj Error, code int32, message string) {
 	errors := []string{}
 	errors = append(errors, message)
 	obj.Msg().Code = code
 	obj.Msg().Errors = errors
 }
 
-func (api *api) fromHttpError(statusCode int, body []byte) Error {
-	errObj := NewError()
-	err := errObj.FromJson(string(body))
-	if err != nil {
-		api.setErrrObj(errObj, int32(statusCode), string(body))
+func (api *api) fromGrpcError(err error) (Error, bool) {
+	st, ok := status.FromError(err)
+	if ok {
+		rErr := NewError()
+		if err := rErr.FromJson(st.Message()); err == nil {
+			rErr.Msg().Code = int32(st.Code())
+			return rErr, true
+		}
+
+		api.setResponseErr(rErr, int32(st.Code()), st.Message())
+		return rErr, true
 	}
-	return errObj
+
+	return nil, false
+}
+
+func (api *api) fromHttpError(statusCode int, body []byte) Error {
+	rErr := NewError()
+	bStr := string(body)
+	if err := rErr.FromJson(bStr); err == nil {
+		return rErr
+	}
+
+	api.setResponseErr(rErr, int32(statusCode), bStr)
+
+	return rErr
 }
 
 // HttpRequestDoer will return True for HTTP transport
