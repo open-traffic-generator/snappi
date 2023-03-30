@@ -11,7 +11,7 @@ import shutil
 pkg_name = "snappi"
 go_pkg_name = "gosnappi"
 model_protobuf_name = "otg"
-version = "0.11.5"
+version = "0.11.6"
 models_version = "0.11.4"
 
 # supported values - local openapiart path or None
@@ -19,7 +19,7 @@ USE_OPENAPIART_DIR = None
 USE_MODELS_DIR = None
 
 # supported values - branch name or None
-USE_OPENAPIART_BRANCH = "error-ux"
+USE_OPENAPIART_BRANCH = None
 USE_MODELS_BRANCH = None
 
 OPENAPIART_REPO = "https://github.com/open-traffic-generator/openapiart.git"
