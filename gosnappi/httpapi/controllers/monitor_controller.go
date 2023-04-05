@@ -76,19 +76,13 @@ func (ctrl *monitorController) responseGetMetricsError(w http.ResponseWriter, st
 		result = gosnappi.NewError()
 		err := result.FromJson(rsp_err.Error())
 		if err != nil {
-			result = nil
+			result.Msg().Code = int32(status_code)
+			result.Msg().Errors = []string{rsp_err.Error()}
 		}
 	}
 
-	if result != nil {
-		if _, err := httpapi.WriteJSONResponse(w, int(result.Code()), result); err != nil {
-			log.Print(err.Error())
-		}
-	} else {
-		data := []byte(rsp_err.Error())
-		if _, err := httpapi.WriteCustomJSONResponse(w, status_code, data); err != nil {
-			log.Print(err.Error())
-		}
+	if _, err := httpapi.WriteJSONResponse(w, int(result.Code()), result); err != nil {
+		log.Print(err.Error())
 	}
 }
 
@@ -140,19 +134,13 @@ func (ctrl *monitorController) responseGetStatesError(w http.ResponseWriter, sta
 		result = gosnappi.NewError()
 		err := result.FromJson(rsp_err.Error())
 		if err != nil {
-			result = nil
+			result.Msg().Code = int32(status_code)
+			result.Msg().Errors = []string{rsp_err.Error()}
 		}
 	}
 
-	if result != nil {
-		if _, err := httpapi.WriteJSONResponse(w, int(result.Code()), result); err != nil {
-			log.Print(err.Error())
-		}
-	} else {
-		data := []byte(rsp_err.Error())
-		if _, err := httpapi.WriteCustomJSONResponse(w, status_code, data); err != nil {
-			log.Print(err.Error())
-		}
+	if _, err := httpapi.WriteJSONResponse(w, int(result.Code()), result); err != nil {
+		log.Print(err.Error())
 	}
 }
 
@@ -204,18 +192,12 @@ func (ctrl *monitorController) responseGetCaptureError(w http.ResponseWriter, st
 		result = gosnappi.NewError()
 		err := result.FromJson(rsp_err.Error())
 		if err != nil {
-			result = nil
+			result.Msg().Code = int32(status_code)
+			result.Msg().Errors = []string{rsp_err.Error()}
 		}
 	}
 
-	if result != nil {
-		if _, err := httpapi.WriteJSONResponse(w, int(result.Code()), result); err != nil {
-			log.Print(err.Error())
-		}
-	} else {
-		data := []byte(rsp_err.Error())
-		if _, err := httpapi.WriteCustomJSONResponse(w, status_code, data); err != nil {
-			log.Print(err.Error())
-		}
+	if _, err := httpapi.WriteJSONResponse(w, int(result.Code()), result); err != nil {
+		log.Print(err.Error())
 	}
 }

@@ -87,19 +87,13 @@ func (ctrl *controlController) responseSetControlStateError(w http.ResponseWrite
 		result = gosnappi.NewError()
 		err := result.FromJson(rsp_err.Error())
 		if err != nil {
-			result = nil
+			result.Msg().Code = int32(status_code)
+			result.Msg().Errors = []string{rsp_err.Error()}
 		}
 	}
 
-	if result != nil {
-		if _, err := httpapi.WriteJSONResponse(w, int(result.Code()), result); err != nil {
-			log.Print(err.Error())
-		}
-	} else {
-		data := []byte(rsp_err.Error())
-		if _, err := httpapi.WriteCustomJSONResponse(w, status_code, data); err != nil {
-			log.Print(err.Error())
-		}
+	if _, err := httpapi.WriteJSONResponse(w, int(result.Code()), result); err != nil {
+		log.Print(err.Error())
 	}
 }
 
@@ -154,27 +148,19 @@ func (ctrl *controlController) responseSetControlActionError(w http.ResponseWrit
 		result = gosnappi.NewError()
 		err := result.FromJson(rsp_err.Error())
 		if err != nil {
-			result = nil
+			result.Msg().Code = int32(status_code)
+			result.Msg().Errors = []string{rsp_err.Error()}
 		}
 	}
 
-	if result != nil {
-		if _, err := httpapi.WriteJSONResponse(w, int(result.Code()), result); err != nil {
-			log.Print(err.Error())
-		}
-	} else {
-		data := []byte(rsp_err.Error())
-		if _, err := httpapi.WriteCustomJSONResponse(w, status_code, data); err != nil {
-			log.Print(err.Error())
-		}
+	if _, err := httpapi.WriteJSONResponse(w, int(result.Code()), result); err != nil {
+		log.Print(err.Error())
 	}
 }
 
 /*
 SetTransmitState: POST /control/transmit
 Description: Deprecated: Please use `set_control_state` with `traffic.flow_transmit` choice instead
-
-Deprecated: Please use `set_control_state` with `traffic.flow_transmit` choice instead
 
 Updates the state of configuration resources on the traffic generator.
 The Response.Warnings in the Success response is available for implementers to disclose additional information about a state change including any implicit changes that are outside the scope of the state change.
@@ -226,27 +212,19 @@ func (ctrl *controlController) responseSetTransmitStateError(w http.ResponseWrit
 		result = gosnappi.NewError()
 		err := result.FromJson(rsp_err.Error())
 		if err != nil {
-			result = nil
+			result.Msg().Code = int32(status_code)
+			result.Msg().Errors = []string{rsp_err.Error()}
 		}
 	}
 
-	if result != nil {
-		if _, err := httpapi.WriteJSONResponse(w, int(result.Code()), result); err != nil {
-			log.Print(err.Error())
-		}
-	} else {
-		data := []byte(rsp_err.Error())
-		if _, err := httpapi.WriteCustomJSONResponse(w, status_code, data); err != nil {
-			log.Print(err.Error())
-		}
+	if _, err := httpapi.WriteJSONResponse(w, int(result.Code()), result); err != nil {
+		log.Print(err.Error())
 	}
 }
 
 /*
 SetLinkState: POST /control/link
 Description: Deprecated: Please use `set_control_state` with `port.link` choice instead
-
-Deprecated: Please use `set_control_state` with `port.link` choice instead
 
 Updates the state of configuration resources on the traffic generator.
 */
@@ -297,27 +275,19 @@ func (ctrl *controlController) responseSetLinkStateError(w http.ResponseWriter, 
 		result = gosnappi.NewError()
 		err := result.FromJson(rsp_err.Error())
 		if err != nil {
-			result = nil
+			result.Msg().Code = int32(status_code)
+			result.Msg().Errors = []string{rsp_err.Error()}
 		}
 	}
 
-	if result != nil {
-		if _, err := httpapi.WriteJSONResponse(w, int(result.Code()), result); err != nil {
-			log.Print(err.Error())
-		}
-	} else {
-		data := []byte(rsp_err.Error())
-		if _, err := httpapi.WriteCustomJSONResponse(w, status_code, data); err != nil {
-			log.Print(err.Error())
-		}
+	if _, err := httpapi.WriteJSONResponse(w, int(result.Code()), result); err != nil {
+		log.Print(err.Error())
 	}
 }
 
 /*
 SetCaptureState: POST /control/capture
 Description: Deprecated: Please use `set_control_state` with `port.capture` choice instead
-
-Deprecated: Please use `set_control_state` with `port.capture` choice instead
 
 Updates the state of configuration resources on the traffic generator.
 */
@@ -368,27 +338,19 @@ func (ctrl *controlController) responseSetCaptureStateError(w http.ResponseWrite
 		result = gosnappi.NewError()
 		err := result.FromJson(rsp_err.Error())
 		if err != nil {
-			result = nil
+			result.Msg().Code = int32(status_code)
+			result.Msg().Errors = []string{rsp_err.Error()}
 		}
 	}
 
-	if result != nil {
-		if _, err := httpapi.WriteJSONResponse(w, int(result.Code()), result); err != nil {
-			log.Print(err.Error())
-		}
-	} else {
-		data := []byte(rsp_err.Error())
-		if _, err := httpapi.WriteCustomJSONResponse(w, status_code, data); err != nil {
-			log.Print(err.Error())
-		}
+	if _, err := httpapi.WriteJSONResponse(w, int(result.Code()), result); err != nil {
+		log.Print(err.Error())
 	}
 }
 
 /*
 UpdateFlows: POST /control/flows
 Description: Deprecated: Please use `update_config` with `flow` choice instead
-
-Deprecated: Please use `update_config` with `flow` choice instead
 
 Updates flow properties without disruption of transmit state.
 */
@@ -436,27 +398,19 @@ func (ctrl *controlController) responseUpdateFlowsError(w http.ResponseWriter, s
 		result = gosnappi.NewError()
 		err := result.FromJson(rsp_err.Error())
 		if err != nil {
-			result = nil
+			result.Msg().Code = int32(status_code)
+			result.Msg().Errors = []string{rsp_err.Error()}
 		}
 	}
 
-	if result != nil {
-		if _, err := httpapi.WriteJSONResponse(w, int(result.Code()), result); err != nil {
-			log.Print(err.Error())
-		}
-	} else {
-		data := []byte(rsp_err.Error())
-		if _, err := httpapi.WriteCustomJSONResponse(w, status_code, data); err != nil {
-			log.Print(err.Error())
-		}
+	if _, err := httpapi.WriteJSONResponse(w, int(result.Code()), result); err != nil {
+		log.Print(err.Error())
 	}
 }
 
 /*
 SetRouteState: POST /control/routes
 Description: Deprecated: Please use `set_control_state` with `protocol.route` choice instead
-
-Deprecated: Please use `set_control_state` with `protocol.route` choice instead
 
 Updates the state of configuration resources on the traffic generator.
 */
@@ -507,27 +461,19 @@ func (ctrl *controlController) responseSetRouteStateError(w http.ResponseWriter,
 		result = gosnappi.NewError()
 		err := result.FromJson(rsp_err.Error())
 		if err != nil {
-			result = nil
+			result.Msg().Code = int32(status_code)
+			result.Msg().Errors = []string{rsp_err.Error()}
 		}
 	}
 
-	if result != nil {
-		if _, err := httpapi.WriteJSONResponse(w, int(result.Code()), result); err != nil {
-			log.Print(err.Error())
-		}
-	} else {
-		data := []byte(rsp_err.Error())
-		if _, err := httpapi.WriteCustomJSONResponse(w, status_code, data); err != nil {
-			log.Print(err.Error())
-		}
+	if _, err := httpapi.WriteJSONResponse(w, int(result.Code()), result); err != nil {
+		log.Print(err.Error())
 	}
 }
 
 /*
 SendPing: POST /control/ping
 Description: Deprecated: Please use `set_control_action` with `protocol.ipv*.ping` choice instead
-
-Deprecated: Please use `set_control_action` with `protocol.ipv*.ping` choice instead
 
 API to send an IPv4 and/or IPv6 ICMP Echo Request(s) between endpoints. For each endpoint 1 ping packet will be sent and API shall wait for ping response to either be successful or timeout. The API wait timeout for each request is 300ms.
 */
@@ -575,27 +521,19 @@ func (ctrl *controlController) responseSendPingError(w http.ResponseWriter, stat
 		result = gosnappi.NewError()
 		err := result.FromJson(rsp_err.Error())
 		if err != nil {
-			result = nil
+			result.Msg().Code = int32(status_code)
+			result.Msg().Errors = []string{rsp_err.Error()}
 		}
 	}
 
-	if result != nil {
-		if _, err := httpapi.WriteJSONResponse(w, int(result.Code()), result); err != nil {
-			log.Print(err.Error())
-		}
-	} else {
-		data := []byte(rsp_err.Error())
-		if _, err := httpapi.WriteCustomJSONResponse(w, status_code, data); err != nil {
-			log.Print(err.Error())
-		}
+	if _, err := httpapi.WriteJSONResponse(w, int(result.Code()), result); err != nil {
+		log.Print(err.Error())
 	}
 }
 
 /*
 SetProtocolState: POST /control/protocols
 Description: Deprecated: Please use `set_control_state` with `protocol.all` choice instead
-
-Deprecated: Please use `set_control_state` with `protocol.all` choice instead
 
 Sets all configured protocols to `start` or `stop` state.
 */
@@ -646,27 +584,19 @@ func (ctrl *controlController) responseSetProtocolStateError(w http.ResponseWrit
 		result = gosnappi.NewError()
 		err := result.FromJson(rsp_err.Error())
 		if err != nil {
-			result = nil
+			result.Msg().Code = int32(status_code)
+			result.Msg().Errors = []string{rsp_err.Error()}
 		}
 	}
 
-	if result != nil {
-		if _, err := httpapi.WriteJSONResponse(w, int(result.Code()), result); err != nil {
-			log.Print(err.Error())
-		}
-	} else {
-		data := []byte(rsp_err.Error())
-		if _, err := httpapi.WriteCustomJSONResponse(w, status_code, data); err != nil {
-			log.Print(err.Error())
-		}
+	if _, err := httpapi.WriteJSONResponse(w, int(result.Code()), result); err != nil {
+		log.Print(err.Error())
 	}
 }
 
 /*
 SetDeviceState: POST /control/devices
 Description: Deprecated: Please use `set_control_state` with `protocol` choice instead
-
-Deprecated: Please use `set_control_state` with `protocol` choice instead
 
 Set specific state/actions on device configuration resources on the traffic generator.
 */
@@ -717,19 +647,13 @@ func (ctrl *controlController) responseSetDeviceStateError(w http.ResponseWriter
 		result = gosnappi.NewError()
 		err := result.FromJson(rsp_err.Error())
 		if err != nil {
-			result = nil
+			result.Msg().Code = int32(status_code)
+			result.Msg().Errors = []string{rsp_err.Error()}
 		}
 	}
 
-	if result != nil {
-		if _, err := httpapi.WriteJSONResponse(w, int(result.Code()), result); err != nil {
-			log.Print(err.Error())
-		}
-	} else {
-		data := []byte(rsp_err.Error())
-		if _, err := httpapi.WriteCustomJSONResponse(w, status_code, data); err != nil {
-			log.Print(err.Error())
-		}
+	if _, err := httpapi.WriteJSONResponse(w, int(result.Code()), result); err != nil {
+		log.Print(err.Error())
 	}
 }
 
