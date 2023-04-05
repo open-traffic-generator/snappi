@@ -2,6 +2,7 @@ package gosnappi
 
 import (
 	context "context"
+	"fmt"
 	log "log"
 	net "net"
 	"reflect"
@@ -57,27 +58,26 @@ func StartMockGrpcServer(location string) error {
 
 func (s *server) SetConfig(ctx context.Context, req *otg.SetConfigRequest) (*otg.SetConfigResponse, error) {
 	var resp *otg.SetConfigResponse
+	var err error
 	if reflect.TypeOf(req.Config) != reflect.TypeOf(mockConfig) {
-		resp = &otg.SetConfigResponse{
-			StatusCode_400: &otg.ResponseError{
-				Errors: []string{"Invalid Config object received"},
-			},
-		}
+		resp = nil
+		err = fmt.Errorf("config did not match")
 	} else {
 		mockConfig = req.Config
 		resp = &otg.SetConfigResponse{
-			StatusCode_200: &otg.ResponseWarning{
+			Warning: &otg.Warning{
 				Warnings: []string{},
 			},
 		}
+		err = nil
 	}
 	log.Printf("Got config: %v\n", req.Config)
-	return resp, nil
+	return resp, err
 }
 
 func (s *server) GetConfig(ctx context.Context, in *emptypb.Empty) (*otg.GetConfigResponse, error) {
 	resp := &otg.GetConfigResponse{
-		StatusCode_200: mockConfig,
+		Config: mockConfig,
 	}
 	return resp, nil
 }
@@ -137,6 +137,7 @@ func isFlowMetricsDisabled(cfg *otg.Config) []string {
 
 func (s *server) GetMetrics(ctx context.Context, req *otg.GetMetricsRequest) (*otg.GetMetricsResponse, error) {
 	var resp *otg.GetMetricsResponse
+	var err error
 	var tx int64 = 100
 	metricsDisabledFlows := isFlowMetricsDisabled(mockConfig)
 	if req.MetricsRequest.Flow != nil {
@@ -145,23 +146,24 @@ func (s *server) GetMetrics(ctx context.Context, req *otg.GetMetricsRequest) (*o
 		for _, req_flow := range req.MetricsRequest.Flow.FlowNames {
 			res := contains(flowNames, req_flow)
 			if !res {
-				resp = &otg.GetMetricsResponse{
-					StatusCode_500: &otg.ResponseError{
-						Errors: []string{"requested flow is not available in configured flows"},
-					},
-				}
+				resp = nil
+				errObj := NewError()
+				errObj.Msg().Code = 13
+				errObj.Msg().Errors = []string{"requested flow is not available in configured flows"}
+				err = errObj
 			} else if len(metricsDisabledFlows) > 0 {
-				resp = &otg.GetMetricsResponse{
-					StatusCode_400: &otg.ResponseError{
-						Errors: []string{"metrics not enabled for all the flows"},
-					},
-				}
+				resp = nil
+				errObj := NewError()
+				errObj.Msg().Code = 13
+				errObj.Msg().Errors = []string{"metrics not enabled for all the flows"}
+				err = errObj
 			} else {
 				resp = &otg.GetMetricsResponse{
-					StatusCode_200: &otg.MetricsResponse{
+					MetricsResponse: &otg.MetricsResponse{
 						FlowMetrics: []*otg.FlowMetric{f},
 					},
 				}
+				err = nil
 			}
 		}
 	} else if req.MetricsRequest.Port != nil {
@@ -170,17 +172,19 @@ func (s *server) GetMetrics(ctx context.Context, req *otg.GetMetricsRequest) (*o
 		for _, req_port := range req.MetricsRequest.Port.PortNames {
 			res := contains(portNames, req_port)
 			if !res {
-				resp = &otg.GetMetricsResponse{
-					StatusCode_400: &otg.ResponseError{
-						Errors: []string{"requested port is not available in configured ports"},
-					},
-				}
+				resp = nil
+				resp = nil
+				errObj := NewError()
+				errObj.Msg().Code = 13
+				errObj.Msg().Errors = []string{"requested port is not available in configured ports"}
+				err = errObj
 			} else {
 				resp = &otg.GetMetricsResponse{
-					StatusCode_200: &otg.MetricsResponse{
+					MetricsResponse: &otg.MetricsResponse{
 						PortMetrics: []*otg.PortMetric{p},
 					},
 				}
+				err = nil
 			}
 		}
 	} else if req.MetricsRequest.Bgpv4 != nil {
@@ -191,11 +195,7 @@ func (s *server) GetMetrics(ctx context.Context, req *otg.GetMetricsRequest) (*o
 		} else {
 			for _, name := range someNames {
 				if !contains(allNames, name) {
-					return &otg.GetMetricsResponse{
-						StatusCode_400: &otg.ResponseError{
-							Errors: []string{name + " is not a valid BGPv4 device"},
-						},
-					}, nil
+					return nil, fmt.Errorf("%s is not a valid BGPv4 device", name)
 				}
 			}
 		}
@@ -215,98 +215,95 @@ func (s *server) GetMetrics(ctx context.Context, req *otg.GetMetricsRequest) (*o
 		}
 
 		resp = &otg.GetMetricsResponse{
-			StatusCode_200: &otg.MetricsResponse{
+			MetricsResponse: &otg.MetricsResponse{
 				Bgpv4Metrics: metrics,
 			},
 		}
+		err = nil
 	}
-	return resp, nil
+	return resp, err
 }
 
 func (s *server) SetTransmitState(ctx context.Context, req *otg.SetTransmitStateRequest) (*otg.SetTransmitStateResponse, error) {
 	var resp *otg.SetTransmitStateResponse
+	var err error
 	flowNames := getFlowNames(mockConfig)
 	for _, req_flow := range req.TransmitState.FlowNames {
 		res := contains(flowNames, req_flow)
 		if !res {
-			resp = &otg.SetTransmitStateResponse{
-				StatusCode_400: &otg.ResponseError{
-					Errors: []string{"requested flow is not available in configured flows to start"},
-				},
-			}
+			resp = nil
+			err = fmt.Errorf("requested flow is not available in configured flows to start")
 		} else {
 			resp = &otg.SetTransmitStateResponse{
-				StatusCode_200: &otg.ResponseWarning{
+				Warning: &otg.Warning{
 					Warnings: []string{},
 				},
 			}
+			err = nil
 		}
 	}
-	return resp, nil
+	return resp, err
 }
 
 func (s *server) SetLinkState(ctx context.Context, req *otg.SetLinkStateRequest) (*otg.SetLinkStateResponse, error) {
 	var resp *otg.SetLinkStateResponse
+	var err error
 	portNames := getPortNames(mockConfig)
 	for _, req_port := range req.LinkState.PortNames {
 		res := contains(portNames, req_port)
 		if !res {
-			resp = &otg.SetLinkStateResponse{
-				StatusCode_400: &otg.ResponseError{
-					Errors: []string{"requested port is not available in configured ports to do link down"},
-				},
-			}
+			resp = nil
+			err = fmt.Errorf("requested port is not available in configured ports to do link down")
 		} else {
 			resp = &otg.SetLinkStateResponse{
-				StatusCode_200: &otg.ResponseWarning{
+				Warning: &otg.Warning{
 					Warnings: []string{},
 				},
 			}
+			err = nil
 		}
 	}
-	return resp, nil
+	return resp, err
 }
 
 func (s *server) SetCaptureState(ctx context.Context, req *otg.SetCaptureStateRequest) (*otg.SetCaptureStateResponse, error) {
 	var resp *otg.SetCaptureStateResponse
+	var err error
 	portNames := getPortNames(mockConfig)
 	for _, req_port := range req.CaptureState.PortNames {
 		res := contains(portNames, req_port)
 		if !res {
-			resp = &otg.SetCaptureStateResponse{
-				StatusCode_400: &otg.ResponseError{
-					Errors: []string{"requested port is not available in configured ports to start capture"},
-				},
-			}
+			resp = nil
+			err = fmt.Errorf("requested port is not available in configured ports to start capture")
 		} else {
 			resp = &otg.SetCaptureStateResponse{
-				StatusCode_200: &otg.ResponseWarning{
+				Warning: &otg.Warning{
 					Warnings: []string{},
 				},
 			}
+			err = nil
 		}
 	}
-	return resp, nil
+	return resp, err
 }
 
 func (s *server) SetRouteState(ctx context.Context, req *otg.SetRouteStateRequest) (*otg.SetRouteStateResponse, error) {
 	var resp *otg.SetRouteStateResponse
+	var err error
 	routeNames := getRouteNames(mockConfig)
 	for _, req_route := range req.RouteState.Names {
 		res := contains(routeNames, req_route)
 		if !res {
-			resp = &otg.SetRouteStateResponse{
-				StatusCode_400: &otg.ResponseError{
-					Errors: []string{"requested route is not available in configured routes to advertise"},
-				},
-			}
+			resp = nil
+			err = fmt.Errorf("requested route is not available in configured routes to advertise")
 		} else {
 			resp = &otg.SetRouteStateResponse{
-				StatusCode_200: &otg.ResponseWarning{
+				Warning: &otg.Warning{
 					Warnings: []string{},
 				},
 			}
+			err = nil
 		}
 	}
-	return resp, nil
+	return resp, err
 }

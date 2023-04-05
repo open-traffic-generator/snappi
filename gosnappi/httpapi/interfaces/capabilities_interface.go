@@ -19,5 +19,5 @@ type CapabilitiesHandler interface {
 		GetVersion: GET /capabilities/version
 		Description:
 	*/
-	GetVersion(r *http.Request) gosnappi.GetVersionResponse
+	GetVersion(r *http.Request) (gosnappi.GetVersionResponse, error)
 }

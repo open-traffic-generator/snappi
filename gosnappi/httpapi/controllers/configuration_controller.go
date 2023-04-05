@@ -41,56 +41,58 @@ func (ctrl *configurationController) SetConfig(w http.ResponseWriter, r *http.Re
 			item = gosnappi.NewConfig()
 			err := item.FromJson(string(body))
 			if err != nil {
-				ctrl.responseSetConfig400(w, err)
+				ctrl.responseSetConfigError(w, 400, err)
 				return
 			}
 		} else {
-			ctrl.responseSetConfig400(w, readError)
+			ctrl.responseSetConfigError(w, 400, readError)
 			return
 		}
 	} else {
-		bodyError := errors.New("Request do not have any body")
-		ctrl.responseSetConfig500(w, bodyError)
+		bodyError := errors.New("Request does not have a body")
+		ctrl.responseSetConfigError(w, 400, bodyError)
 		return
 	}
-	result := ctrl.handler.SetConfig(item, r)
-	if result.HasStatusCode200() {
-		data, err := configurationMrlOpts.Marshal(result.StatusCode200().Msg())
+	result, err := ctrl.handler.SetConfig(item, r)
+	if err != nil {
+		ctrl.responseSetConfigError(w, 500, err)
+		return
+	}
+
+	if result.HasWarning() {
+		data, err := configurationMrlOpts.Marshal(result.Warning().Msg())
 		if err != nil {
-			ctrl.responseSetConfig400(w, err)
+			ctrl.responseSetConfigError(w, 400, err)
 		}
 		httpapi.WriteCustomJSONResponse(w, 200, data)
 
 		return
 	}
-	if result.HasStatusCode400() {
-		if _, err := httpapi.WriteJSONResponse(w, 400, result.StatusCode400()); err != nil {
-			log.Print(err.Error())
-		}
-		return
-	}
-	if result.HasStatusCode500() {
-		if _, err := httpapi.WriteJSONResponse(w, 500, result.StatusCode500()); err != nil {
-			log.Print(err.Error())
-		}
-		return
-	}
-	ctrl.responseSetConfig500(w, errors.New("Unknown error"))
+	ctrl.responseSetConfigError(w, 500, errors.New("Unknown error"))
 }
 
-func (ctrl *configurationController) responseSetConfig400(w http.ResponseWriter, rsp_err error) {
-	result := gosnappi.NewSetConfigResponse()
-	result.StatusCode400().SetErrors([]string{rsp_err.Error()})
-	if _, err := httpapi.WriteJSONResponse(w, 400, result.StatusCode400()); err != nil {
-		log.Print(err.Error())
-	}
-}
+func (ctrl *configurationController) responseSetConfigError(w http.ResponseWriter, status_code int, rsp_err error) {
+	var result gosnappi.Error
 
-func (ctrl *configurationController) responseSetConfig500(w http.ResponseWriter, rsp_err error) {
-	result := gosnappi.NewSetConfigResponse()
-	result.StatusCode500().SetErrors([]string{rsp_err.Error()})
-	if _, err := httpapi.WriteJSONResponse(w, 500, result.StatusCode500()); err != nil {
-		log.Print(err.Error())
+	if rErr, ok := rsp_err.(gosnappi.Error); ok {
+		result = rErr
+	} else {
+		result = gosnappi.NewError()
+		err := result.FromJson(rsp_err.Error())
+		if err != nil {
+			result = nil
+		}
+	}
+
+	if result != nil {
+		if _, err := httpapi.WriteJSONResponse(w, int(result.Code()), result); err != nil {
+			log.Print(err.Error())
+		}
+	} else {
+		data := []byte(rsp_err.Error())
+		if _, err := httpapi.WriteCustomJSONResponse(w, status_code, data); err != nil {
+			log.Print(err.Error())
+		}
 	}
 }
 
@@ -99,33 +101,43 @@ GetConfig: GET /config
 Description:
 */
 func (ctrl *configurationController) GetConfig(w http.ResponseWriter, r *http.Request) {
-	result := ctrl.handler.GetConfig(r)
-	if result.HasStatusCode200() {
-		if _, err := httpapi.WriteJSONResponse(w, 200, result.StatusCode200()); err != nil {
+	result, err := ctrl.handler.GetConfig(r)
+	if err != nil {
+		ctrl.responseGetConfigError(w, 500, err)
+		return
+	}
+
+	if result.HasConfig() {
+		if _, err := httpapi.WriteJSONResponse(w, 200, result.Config()); err != nil {
 			log.Print(err.Error())
 		}
 		return
 	}
-	if result.HasStatusCode400() {
-		if _, err := httpapi.WriteJSONResponse(w, 400, result.StatusCode400()); err != nil {
-			log.Print(err.Error())
-		}
-		return
-	}
-	if result.HasStatusCode500() {
-		if _, err := httpapi.WriteJSONResponse(w, 500, result.StatusCode500()); err != nil {
-			log.Print(err.Error())
-		}
-		return
-	}
-	ctrl.responseGetConfig500(w, errors.New("Unknown error"))
+	ctrl.responseGetConfigError(w, 500, errors.New("Unknown error"))
 }
 
-func (ctrl *configurationController) responseGetConfig500(w http.ResponseWriter, rsp_err error) {
-	result := gosnappi.NewGetConfigResponse()
-	result.StatusCode500().SetErrors([]string{rsp_err.Error()})
-	if _, err := httpapi.WriteJSONResponse(w, 500, result.StatusCode500()); err != nil {
-		log.Print(err.Error())
+func (ctrl *configurationController) responseGetConfigError(w http.ResponseWriter, status_code int, rsp_err error) {
+	var result gosnappi.Error
+
+	if rErr, ok := rsp_err.(gosnappi.Error); ok {
+		result = rErr
+	} else {
+		result = gosnappi.NewError()
+		err := result.FromJson(rsp_err.Error())
+		if err != nil {
+			result = nil
+		}
+	}
+
+	if result != nil {
+		if _, err := httpapi.WriteJSONResponse(w, int(result.Code()), result); err != nil {
+			log.Print(err.Error())
+		}
+	} else {
+		data := []byte(rsp_err.Error())
+		if _, err := httpapi.WriteCustomJSONResponse(w, status_code, data); err != nil {
+			log.Print(err.Error())
+		}
 	}
 }
 
@@ -142,53 +154,55 @@ func (ctrl *configurationController) UpdateConfig(w http.ResponseWriter, r *http
 			item = gosnappi.NewConfigUpdate()
 			err := item.FromJson(string(body))
 			if err != nil {
-				ctrl.responseUpdateConfig400(w, err)
+				ctrl.responseUpdateConfigError(w, 400, err)
 				return
 			}
 		} else {
-			ctrl.responseUpdateConfig400(w, readError)
+			ctrl.responseUpdateConfigError(w, 400, readError)
 			return
 		}
 	} else {
-		bodyError := errors.New("Request do not have any body")
-		ctrl.responseUpdateConfig500(w, bodyError)
+		bodyError := errors.New("Request does not have a body")
+		ctrl.responseUpdateConfigError(w, 400, bodyError)
 		return
 	}
-	result := ctrl.handler.UpdateConfig(item, r)
-	if result.HasStatusCode200() {
-		if _, err := httpapi.WriteJSONResponse(w, 200, result.StatusCode200()); err != nil {
+	result, err := ctrl.handler.UpdateConfig(item, r)
+	if err != nil {
+		ctrl.responseUpdateConfigError(w, 500, err)
+		return
+	}
+
+	if result.HasWarning() {
+		if _, err := httpapi.WriteJSONResponse(w, 200, result.Warning()); err != nil {
 			log.Print(err.Error())
 		}
 		return
 	}
-	if result.HasStatusCode400() {
-		if _, err := httpapi.WriteJSONResponse(w, 400, result.StatusCode400()); err != nil {
-			log.Print(err.Error())
-		}
-		return
-	}
-	if result.HasStatusCode500() {
-		if _, err := httpapi.WriteJSONResponse(w, 500, result.StatusCode500()); err != nil {
-			log.Print(err.Error())
-		}
-		return
-	}
-	ctrl.responseUpdateConfig500(w, errors.New("Unknown error"))
+	ctrl.responseUpdateConfigError(w, 500, errors.New("Unknown error"))
 }
 
-func (ctrl *configurationController) responseUpdateConfig400(w http.ResponseWriter, rsp_err error) {
-	result := gosnappi.NewUpdateConfigResponse()
-	result.StatusCode400().SetErrors([]string{rsp_err.Error()})
-	if _, err := httpapi.WriteJSONResponse(w, 400, result.StatusCode400()); err != nil {
-		log.Print(err.Error())
-	}
-}
+func (ctrl *configurationController) responseUpdateConfigError(w http.ResponseWriter, status_code int, rsp_err error) {
+	var result gosnappi.Error
 
-func (ctrl *configurationController) responseUpdateConfig500(w http.ResponseWriter, rsp_err error) {
-	result := gosnappi.NewUpdateConfigResponse()
-	result.StatusCode500().SetErrors([]string{rsp_err.Error()})
-	if _, err := httpapi.WriteJSONResponse(w, 500, result.StatusCode500()); err != nil {
-		log.Print(err.Error())
+	if rErr, ok := rsp_err.(gosnappi.Error); ok {
+		result = rErr
+	} else {
+		result = gosnappi.NewError()
+		err := result.FromJson(rsp_err.Error())
+		if err != nil {
+			result = nil
+		}
+	}
+
+	if result != nil {
+		if _, err := httpapi.WriteJSONResponse(w, int(result.Code()), result); err != nil {
+			log.Print(err.Error())
+		}
+	} else {
+		data := []byte(rsp_err.Error())
+		if _, err := httpapi.WriteCustomJSONResponse(w, status_code, data); err != nil {
+			log.Print(err.Error())
+		}
 	}
 }
 

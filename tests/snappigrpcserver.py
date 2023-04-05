@@ -34,7 +34,7 @@ class OpenapiServicer(pb2_grpc.OpenapiServicer):
 
         response_200 = """
             {
-                "status_code_200" : {
+                "warning" : {
                     "warnings" : ["no"]
                 }
             }
@@ -51,7 +51,7 @@ class OpenapiServicer(pb2_grpc.OpenapiServicer):
         if self._config is None:
             self._config = {}
         response_200 = {
-            "status_code_200": self._config
+            "config": self._config
         }
         res_obj = json_format.Parse(
             json.dumps(response_200), pb2.GetConfigResponse()

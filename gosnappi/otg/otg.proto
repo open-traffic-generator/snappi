@@ -1,4 +1,4 @@
-/* Open Traffic Generator API 0.11.1
+/* Open Traffic Generator API 0.11.4
  * Open Traffic Generator API defines a model-driven, vendor-neutral and standard
  * interface for emulating layer 2-7 network devices and generating test traffic.
  * 
@@ -1808,6 +1808,9 @@ message BgpV4Peer {
   // objects.
   // required = true
   string name = 13;
+
+  // Description missing in models
+  optional BgpGracefulRestart graceful_restart = 14;
 }
 
 // Configuration for emulated BGPv4 peers and routes on a single IPv4 interface.
@@ -3495,6 +3498,38 @@ message BgpSrteV6TunnelTlv {
   optional bool active = 10;
 }
 
+// The Graceful Restart Capability (RFC 4724) is a BGP capability that can be used by
+// a BGP speaker to indicate its ability to preserve its forwarding state during BGP
+// restart. The Graceful Restart (GR) capability is advertised in OPEN messages sent
+// between BGP peers. After a BGP session has been established, and the initial routing
+// update has been completed,  an End-of-RIB (Routing Information Base) marker is sent
+// in an UPDATE message to convey information  about routing convergence.
+message BgpGracefulRestart {
+
+  // If enabled, Graceful Restart capability is advertised in BGP OPEN messages.
+  // default = False
+  optional bool enable_gr = 1;
+
+  // This is the estimated duration (in seconds) it will take for the BGP session to be
+  // re-established after a restart.  This can be used to speed up routing convergence
+  // by its peer in case the BGP speaker does not come back after a restart.
+  // default = 45
+  optional uint32 restart_time = 2;
+
+  // If enabled, the Long-lived Graceful Restart Capability, or LLGR Capability
+  // will be advertised.
+  // This capability MUST be advertised in conjunction with the Graceful Restart
+  // capability.
+  // default = False
+  optional bool enable_llgr = 3;
+
+  // Duration (in seconds) specifying how long stale information (for the AFI/SAFI)
+  // may be retained. This is a three byte field and is applicable
+  // only if 'enable_llgr' is set to 'true'.
+  // default = 10
+  optional uint32 stale_time = 4;
+}
+
 // Configuration for BGPv6 peer settings and routes.
 message BgpV6Peer {
 
@@ -3589,6 +3624,9 @@ message BgpV6Peer {
   // objects.
   // required = true
   string name = 14;
+
+  // Description missing in models
+  optional BgpGracefulRestart graceful_restart = 15;
 }
 
 // Configuration for emulated BGPv6 peers and routes on a single IPv6 interface.
@@ -5968,16 +6006,36 @@ message LldpSystemName {
   optional string value = 3;
 }
 
-// A list of errors that may have occurred while executing the request.
-message ResponseError {
+// Error response generated while serving API request.
+message Error {
 
-  // A list of any system specific errors that have occurred while
-  // executing the request.
-  repeated string errors = 1;
+  // Numeric status code based on the underlying transport being used.
+  // The API server MUST set this code explicitly based on following references:
+  // - HTTP 4xx errors: https://datatracker.ietf.org/doc/html/rfc9110#section-15.5
+  // - HTTP 5xx errors: https://datatracker.ietf.org/doc/html/rfc9110#section-15.6
+  // - gRPC errors: https://grpc.github.io/grpc/core/md_doc_statuscodes.html
+  // required = true
+  int32 code = 1;
+
+  message Kind {
+    enum Enum {
+      unspecified = 0;
+      validation = 1;
+      internal = 2;
+    }
+  }
+  // Classification of error originating from within API server that may not be mapped
+  // to the value in `code`.
+  // Absence of this field may indicate that the error did not originate from within API
+  // server.
+  optional Kind.Enum kind = 2;
+
+  // List of error messages generated while executing the request.
+  repeated string errors = 3;
 }
 
 // A list of warnings that have occurred while executing the request.
-message ResponseWarning {
+message Warning {
 
   // A list of any system specific warnings that have occurred while
   // executing the request.
@@ -6741,6 +6799,7 @@ message ActionProtocolBgp {
     enum Enum {
       unspecified = 0;
       notification = 1;
+      initiate_graceful_restart = 2;
     }
   }
   // Description missing in models
@@ -6749,6 +6808,9 @@ message ActionProtocolBgp {
 
   // Description missing in models
   optional ActionProtocolBgpNotification notification = 2;
+
+  // Description missing in models
+  optional ActionProtocolBgpInitiateGracefulRestart initiate_graceful_restart = 3;
 }
 
 // A NOTIFICATION message is sent when an error is detected with the BGP session, such
@@ -6810,6 +6872,28 @@ message ActionProtocolBgpNotification {
 
   // Description missing in models
   optional DeviceBgpCustomError custom = 9;
+}
+
+// Initiates BGP Graceful Restart process for the selected BGP peers. If no name is
+// specified then Graceful Restart will be sent to all configured BGP peers.
+message ActionProtocolBgpInitiateGracefulRestart {
+
+  // The names of device BGP peers objects to control.
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.Bgp/properties/name
+  // 
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.Bgp/properties/name
+  // 
+  repeated string peer_names = 1;
+
+  // Duration (in seconds) after which selected BGP peers will initiate
+  // Graceful restart by sending the Open Message with Restart State bit set in the Graceful
+  // Restart capability.
+  // default = 30
+  optional uint32 restart_delay = 2;
 }
 
 // Description missing in models
@@ -18883,21 +18967,12 @@ message Version {
 // The request has succeeded with no application content but the server
 // may return a list of detailed warnings.
 message Success {
-  ResponseWarning response_warning = 1;
+  Warning warning = 1;
 }
 
-// This indicates that the server cannot or will not process the request
-// due to something that is perceived to be a client error.
-// Additional details are in the errors.
-message BadRequest {
-  ResponseError response_error = 1;
-}
-
-// This indicates that the server encountered an unexpected condition that
-// prevented it from fulfilling the request.
-// Additional details are in the errors.
-message InternalServerError {
-  ResponseError response_error = 1;
+// The request did not succeed and server has responded with error details.
+message Failure {
+  Error error = 1;
 }
 
 message SetConfigRequest {
@@ -18908,21 +18983,15 @@ message UpdateConfigRequest {
   ConfigUpdate config_update = 1;
 }
 message SetConfigResponse {
-  optional ResponseWarning status_code_200 = 1;
-  optional ResponseError status_code_400 = 2;
-  optional ResponseError status_code_500 = 3;
+  Warning warning = 1;
 }
 
 message GetConfigResponse {
-  optional Config status_code_200 = 1;
-  optional ResponseError status_code_400 = 2;
-  optional ResponseError status_code_500 = 3;
+  Config config = 1;
 }
 
 message UpdateConfigResponse {
-  optional ResponseWarning status_code_200 = 1;
-  optional ResponseError status_code_400 = 2;
-  optional ResponseError status_code_500 = 3;
+  Warning warning = 1;
 }
 
 
@@ -18930,9 +18999,7 @@ message SetControlStateRequest {
   ControlState control_state = 1;
 }
 message SetControlStateResponse {
-  optional ResponseWarning status_code_200 = 1;
-  optional ResponseError status_code_400 = 2;
-  optional ResponseError status_code_500 = 3;
+  Warning warning = 1;
 }
 
 
@@ -18940,9 +19007,7 @@ message SetControlActionRequest {
   ControlAction control_action = 1;
 }
 message SetControlActionResponse {
-  optional ControlActionResponse status_code_200 = 1;
-  optional ResponseError status_code_400 = 2;
-  optional ResponseError status_code_500 = 3;
+  ControlActionResponse control_action_response = 1;
 }
 
 
@@ -18950,9 +19015,7 @@ message SetTransmitStateRequest {
   TransmitState transmit_state = 1;
 }
 message SetTransmitStateResponse {
-  optional ResponseWarning status_code_200 = 1;
-  optional ResponseError status_code_400 = 2;
-  optional ResponseError status_code_500 = 3;
+  Warning warning = 1;
 }
 
 
@@ -18960,9 +19023,7 @@ message SetLinkStateRequest {
   LinkState link_state = 1;
 }
 message SetLinkStateResponse {
-  optional ResponseWarning status_code_200 = 1;
-  optional ResponseError status_code_400 = 2;
-  optional ResponseError status_code_500 = 3;
+  Warning warning = 1;
 }
 
 
@@ -18970,9 +19031,7 @@ message SetCaptureStateRequest {
   CaptureState capture_state = 1;
 }
 message SetCaptureStateResponse {
-  optional ResponseWarning status_code_200 = 1;
-  optional ResponseError status_code_400 = 2;
-  optional ResponseError status_code_500 = 3;
+  Warning warning = 1;
 }
 
 
@@ -18980,9 +19039,7 @@ message UpdateFlowsRequest {
   FlowsUpdate flows_update = 1;
 }
 message UpdateFlowsResponse {
-  optional Config status_code_200 = 1;
-  optional ResponseError status_code_400 = 2;
-  optional ResponseError status_code_500 = 3;
+  Config config = 1;
 }
 
 
@@ -18990,9 +19047,7 @@ message SetRouteStateRequest {
   RouteState route_state = 1;
 }
 message SetRouteStateResponse {
-  optional ResponseWarning status_code_200 = 1;
-  optional ResponseError status_code_400 = 2;
-  optional ResponseError status_code_500 = 3;
+  Warning warning = 1;
 }
 
 
@@ -19000,9 +19055,7 @@ message SendPingRequest {
   PingRequest ping_request = 1;
 }
 message SendPingResponse {
-  optional PingResponse status_code_200 = 1;
-  optional ResponseError status_code_400 = 2;
-  optional ResponseError status_code_500 = 3;
+  PingResponse ping_response = 1;
 }
 
 
@@ -19010,9 +19063,7 @@ message SetProtocolStateRequest {
   ProtocolState protocol_state = 1;
 }
 message SetProtocolStateResponse {
-  optional ResponseWarning status_code_200 = 1;
-  optional ResponseError status_code_400 = 2;
-  optional ResponseError status_code_500 = 3;
+  Warning warning = 1;
 }
 
 
@@ -19020,9 +19071,7 @@ message SetDeviceStateRequest {
   DeviceState device_state = 1;
 }
 message SetDeviceStateResponse {
-  optional ResponseWarning status_code_200 = 1;
-  optional ResponseError status_code_400 = 2;
-  optional ResponseError status_code_500 = 3;
+  Warning warning = 1;
 }
 
 
@@ -19030,9 +19079,7 @@ message GetMetricsRequest {
   MetricsRequest metrics_request = 1;
 }
 message GetMetricsResponse {
-  optional MetricsResponse status_code_200 = 1;
-  optional ResponseError status_code_400 = 2;
-  optional ResponseError status_code_500 = 3;
+  MetricsResponse metrics_response = 1;
 }
 
 
@@ -19040,9 +19087,7 @@ message GetStatesRequest {
   StatesRequest states_request = 1;
 }
 message GetStatesResponse {
-  optional StatesResponse status_code_200 = 1;
-  optional ResponseError status_code_400 = 2;
-  optional ResponseError status_code_500 = 3;
+  StatesResponse states_response = 1;
 }
 
 
@@ -19050,19 +19095,20 @@ message GetCaptureRequest {
   CaptureRequest capture_request = 1;
 }
 message GetCaptureResponse {
-  optional bytes status_code_200 = 1;
-  optional ResponseError status_code_400 = 2;
-  optional ResponseError status_code_500 = 3;
+  bytes response_bytes = 1;
 }
 
 message GetVersionResponse {
-  optional Version status_code_200 = 1;
-  optional ResponseError status_code_400 = 2;
-  optional ResponseError status_code_500 = 3;
+  Version version = 1;
 }
 
 
-  // Description missing in models
+// Description missing in models
+//
+// For all RPCs defined in this service, API Server SHOULD provide JSON
+// representation of `Error` message as an error string upon failure, ensuring
+// name of enum constants (instead of value) for `kind` property is present
+// in the representation
 service Openapi {
 
   // Sets configuration resources on the traffic generator.

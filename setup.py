@@ -11,8 +11,8 @@ import shutil
 pkg_name = "snappi"
 go_pkg_name = "gosnappi"
 model_protobuf_name = "otg"
-version = "0.11.1"
-models_version = "0.11.1"
+version = "0.11.6"
+models_version = "0.11.4"
 
 # supported values - local openapiart path or None
 USE_OPENAPIART_DIR = None

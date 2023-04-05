@@ -30,32 +30,42 @@ GetVersion: GET /capabilities/version
 Description:
 */
 func (ctrl *capabilitiesController) GetVersion(w http.ResponseWriter, r *http.Request) {
-	result := ctrl.handler.GetVersion(r)
-	if result.HasStatusCode200() {
-		if _, err := httpapi.WriteJSONResponse(w, 200, result.StatusCode200()); err != nil {
+	result, err := ctrl.handler.GetVersion(r)
+	if err != nil {
+		ctrl.responseGetVersionError(w, 500, err)
+		return
+	}
+
+	if result.HasVersion() {
+		if _, err := httpapi.WriteJSONResponse(w, 200, result.Version()); err != nil {
 			log.Print(err.Error())
 		}
 		return
 	}
-	if result.HasStatusCode400() {
-		if _, err := httpapi.WriteJSONResponse(w, 400, result.StatusCode400()); err != nil {
-			log.Print(err.Error())
-		}
-		return
-	}
-	if result.HasStatusCode500() {
-		if _, err := httpapi.WriteJSONResponse(w, 500, result.StatusCode500()); err != nil {
-			log.Print(err.Error())
-		}
-		return
-	}
-	ctrl.responseGetVersion500(w, errors.New("Unknown error"))
+	ctrl.responseGetVersionError(w, 500, errors.New("Unknown error"))
 }
 
-func (ctrl *capabilitiesController) responseGetVersion500(w http.ResponseWriter, rsp_err error) {
-	result := gosnappi.NewGetVersionResponse()
-	result.StatusCode500().SetErrors([]string{rsp_err.Error()})
-	if _, err := httpapi.WriteJSONResponse(w, 500, result.StatusCode500()); err != nil {
-		log.Print(err.Error())
+func (ctrl *capabilitiesController) responseGetVersionError(w http.ResponseWriter, status_code int, rsp_err error) {
+	var result gosnappi.Error
+
+	if rErr, ok := rsp_err.(gosnappi.Error); ok {
+		result = rErr
+	} else {
+		result = gosnappi.NewError()
+		err := result.FromJson(rsp_err.Error())
+		if err != nil {
+			result = nil
+		}
+	}
+
+	if result != nil {
+		if _, err := httpapi.WriteJSONResponse(w, int(result.Code()), result); err != nil {
+			log.Print(err.Error())
+		}
+	} else {
+		data := []byte(rsp_err.Error())
+		if _, err := httpapi.WriteCustomJSONResponse(w, status_code, data); err != nil {
+			log.Print(err.Error())
+		}
 	}
 }

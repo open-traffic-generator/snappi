@@ -55,7 +55,7 @@ jobs:
           path: |
             dist
             snappi
-            gosnppi
+            gosnappi
             models-release
             *.proto
             store_sha_file

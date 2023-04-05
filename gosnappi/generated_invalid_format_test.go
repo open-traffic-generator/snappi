@@ -495,7 +495,7 @@ func TestResponseWarningIncorrectFormat(t *testing.T) {
 			"e_b" : 2
 	    }`
 
-	object := gosnappi.NewResponseWarning()
+	object := gosnappi.NewWarning()
 	assert.NotNil(t, object.FromYaml(incorrect_format))
 	assert.NotNil(t, object.FromJson(incorrect_format))
 	assert.NotNil(t, object.FromPbText(incorrect_format))
@@ -512,7 +512,7 @@ func TestResponseErrorIncorrectFormat(t *testing.T) {
 			"e_b" : 2
 	    }`
 
-	object := gosnappi.NewResponseError()
+	object := gosnappi.NewError()
 	assert.NotNil(t, object.FromYaml(incorrect_format))
 	assert.NotNil(t, object.FromJson(incorrect_format))
 	assert.NotNil(t, object.FromPbText(incorrect_format))

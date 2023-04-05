@@ -12,6 +12,7 @@ import (
 
 	"github.com/Masterminds/semver/v3"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/status"
 )
 
 type grpcTransport struct {
@@ -133,6 +134,9 @@ type Api interface {
 	deprecated(message string)
 	under_review(message string)
 	addWarnings(message string)
+	fromHttpError(statusCode int, body []byte) Error
+	fromGrpcError(err error) (Error, bool)
+	FromError(err error) (Error, bool)
 }
 
 // NewGrpcTransport sets the underlying transport of the Api as grpc
@@ -187,6 +191,54 @@ func (api *api) deprecated(message string) {
 func (api *api) under_review(message string) {
 	api.warnings = message
 	fmt.Printf("warning: %s\n", message)
+}
+
+func (api *api) FromError(err error) (Error, bool) {
+	if rErr, ok := err.(Error); ok {
+		return rErr, true
+	}
+
+	rErr := NewError()
+	if err := rErr.FromJson(err.Error()); err == nil {
+		return rErr, true
+	}
+
+	return api.fromGrpcError(err)
+}
+
+func (api *api) setResponseErr(obj Error, code int32, message string) {
+	errors := []string{}
+	errors = append(errors, message)
+	obj.Msg().Code = code
+	obj.Msg().Errors = errors
+}
+
+func (api *api) fromGrpcError(err error) (Error, bool) {
+	st, ok := status.FromError(err)
+	if ok {
+		rErr := NewError()
+		if err := rErr.FromJson(st.Message()); err == nil {
+			rErr.Msg().Code = int32(st.Code())
+			return rErr, true
+		}
+
+		api.setResponseErr(rErr, int32(st.Code()), st.Message())
+		return rErr, true
+	}
+
+	return nil, false
+}
+
+func (api *api) fromHttpError(statusCode int, body []byte) Error {
+	rErr := NewError()
+	bStr := string(body)
+	if err := rErr.FromJson(bStr); err == nil {
+		return rErr
+	}
+
+	api.setResponseErr(rErr, int32(statusCode), bStr)
+
+	return rErr
 }
 
 // HttpRequestDoer will return True for HTTP transport

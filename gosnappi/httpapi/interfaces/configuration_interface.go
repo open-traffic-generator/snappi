@@ -21,16 +21,16 @@ type ConfigurationHandler interface {
 		SetConfig: POST /config
 		Description: Sets configuration resources on the traffic generator.
 	*/
-	SetConfig(rbody gosnappi.Config, r *http.Request) gosnappi.SetConfigResponse
+	SetConfig(rbody gosnappi.Config, r *http.Request) (gosnappi.SetConfigResponse, error)
 	/*
 		GetConfig: GET /config
 		Description:
 	*/
-	GetConfig(r *http.Request) gosnappi.GetConfigResponse
+	GetConfig(r *http.Request) (gosnappi.GetConfigResponse, error)
 	/*
 			UpdateConfig: PATCH /config
 			Description: Updates specific attributes of resources configured on the traffic generator. The fetched configuration shall reflect the updates applied successfully.
 		The Response.Warnings in the Success response is available for implementers to disclose additional information about a state change including any implicit changes that are outside the scope of the state change.
 	*/
-	UpdateConfig(rbody gosnappi.ConfigUpdate, r *http.Request) gosnappi.UpdateConfigResponse
+	UpdateConfig(rbody gosnappi.ConfigUpdate, r *http.Request) (gosnappi.UpdateConfigResponse, error)
 }

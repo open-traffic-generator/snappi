@@ -524,7 +524,7 @@ func TestResponseWarningIncorrectKey(t *testing.T) {
             }
         }`
 
-	object := gosnappi.NewResponseWarning()
+	object := gosnappi.NewWarning()
 	assert.NotNil(t, object.FromYaml(incorrect_key))
 	assert.NotNil(t, object.FromJson(incorrect_key))
 	assert.NotNil(t, object.FromPbText(incorrect_key))
@@ -542,7 +542,7 @@ func TestResponseErrorIncorrectKey(t *testing.T) {
             }
         }`
 
-	object := gosnappi.NewResponseError()
+	object := gosnappi.NewError()
 	assert.NotNil(t, object.FromYaml(incorrect_key))
 	assert.NotNil(t, object.FromJson(incorrect_key))
 	assert.NotNil(t, object.FromPbText(incorrect_key))
