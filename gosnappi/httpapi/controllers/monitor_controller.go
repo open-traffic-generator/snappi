@@ -40,21 +40,21 @@ func (ctrl *monitorController) GetMetrics(w http.ResponseWriter, r *http.Request
 			item = gosnappi.NewMetricsRequest()
 			err := item.FromJson(string(body))
 			if err != nil {
-				ctrl.responseGetMetricsError(w, 400, err)
+				ctrl.responseGetMetricsError(w, "validation", err)
 				return
 			}
 		} else {
-			ctrl.responseGetMetricsError(w, 400, readError)
+			ctrl.responseGetMetricsError(w, "validation", readError)
 			return
 		}
 	} else {
 		bodyError := errors.New("Request does not have a body")
-		ctrl.responseGetMetricsError(w, 400, bodyError)
+		ctrl.responseGetMetricsError(w, "validation", bodyError)
 		return
 	}
 	result, err := ctrl.handler.GetMetrics(item, r)
 	if err != nil {
-		ctrl.responseGetMetricsError(w, 500, err)
+		ctrl.responseGetMetricsError(w, "internal", err)
 		return
 	}
 
@@ -64,11 +64,17 @@ func (ctrl *monitorController) GetMetrics(w http.ResponseWriter, r *http.Request
 		}
 		return
 	}
-	ctrl.responseGetMetricsError(w, 500, errors.New("Unknown error"))
+	ctrl.responseGetMetricsError(w, "internal", errors.New("Unknown error"))
 }
 
-func (ctrl *monitorController) responseGetMetricsError(w http.ResponseWriter, status_code int, rsp_err error) {
+func (ctrl *monitorController) responseGetMetricsError(w http.ResponseWriter, errorKind gosnappi.ErrorKindEnum, rsp_err error) {
 	var result gosnappi.Error
+	var statusCode int32
+	if errorKind == "validation" {
+		statusCode = 400
+	} else if errorKind == "internal" {
+		statusCode = 500
+	}
 
 	if rErr, ok := rsp_err.(gosnappi.Error); ok {
 		result = rErr
@@ -76,7 +82,11 @@ func (ctrl *monitorController) responseGetMetricsError(w http.ResponseWriter, st
 		result = gosnappi.NewError()
 		err := result.FromJson(rsp_err.Error())
 		if err != nil {
-			result.Msg().Code = int32(status_code)
+			result.Msg().Code = statusCode
+			err = result.SetKind(errorKind)
+			if err != nil {
+				log.Print(err.Error())
+			}
 			result.Msg().Errors = []string{rsp_err.Error()}
 		}
 	}
@@ -98,21 +108,21 @@ func (ctrl *monitorController) GetStates(w http.ResponseWriter, r *http.Request)
 			item = gosnappi.NewStatesRequest()
 			err := item.FromJson(string(body))
 			if err != nil {
-				ctrl.responseGetStatesError(w, 400, err)
+				ctrl.responseGetStatesError(w, "validation", err)
 				return
 			}
 		} else {
-			ctrl.responseGetStatesError(w, 400, readError)
+			ctrl.responseGetStatesError(w, "validation", readError)
 			return
 		}
 	} else {
 		bodyError := errors.New("Request does not have a body")
-		ctrl.responseGetStatesError(w, 400, bodyError)
+		ctrl.responseGetStatesError(w, "validation", bodyError)
 		return
 	}
 	result, err := ctrl.handler.GetStates(item, r)
 	if err != nil {
-		ctrl.responseGetStatesError(w, 500, err)
+		ctrl.responseGetStatesError(w, "internal", err)
 		return
 	}
 
@@ -122,11 +132,17 @@ func (ctrl *monitorController) GetStates(w http.ResponseWriter, r *http.Request)
 		}
 		return
 	}
-	ctrl.responseGetStatesError(w, 500, errors.New("Unknown error"))
+	ctrl.responseGetStatesError(w, "internal", errors.New("Unknown error"))
 }
 
-func (ctrl *monitorController) responseGetStatesError(w http.ResponseWriter, status_code int, rsp_err error) {
+func (ctrl *monitorController) responseGetStatesError(w http.ResponseWriter, errorKind gosnappi.ErrorKindEnum, rsp_err error) {
 	var result gosnappi.Error
+	var statusCode int32
+	if errorKind == "validation" {
+		statusCode = 400
+	} else if errorKind == "internal" {
+		statusCode = 500
+	}
 
 	if rErr, ok := rsp_err.(gosnappi.Error); ok {
 		result = rErr
@@ -134,7 +150,11 @@ func (ctrl *monitorController) responseGetStatesError(w http.ResponseWriter, sta
 		result = gosnappi.NewError()
 		err := result.FromJson(rsp_err.Error())
 		if err != nil {
-			result.Msg().Code = int32(status_code)
+			result.Msg().Code = statusCode
+			err = result.SetKind(errorKind)
+			if err != nil {
+				log.Print(err.Error())
+			}
 			result.Msg().Errors = []string{rsp_err.Error()}
 		}
 	}
@@ -156,21 +176,21 @@ func (ctrl *monitorController) GetCapture(w http.ResponseWriter, r *http.Request
 			item = gosnappi.NewCaptureRequest()
 			err := item.FromJson(string(body))
 			if err != nil {
-				ctrl.responseGetCaptureError(w, 400, err)
+				ctrl.responseGetCaptureError(w, "validation", err)
 				return
 			}
 		} else {
-			ctrl.responseGetCaptureError(w, 400, readError)
+			ctrl.responseGetCaptureError(w, "validation", readError)
 			return
 		}
 	} else {
 		bodyError := errors.New("Request does not have a body")
-		ctrl.responseGetCaptureError(w, 400, bodyError)
+		ctrl.responseGetCaptureError(w, "validation", bodyError)
 		return
 	}
 	result, err := ctrl.handler.GetCapture(item, r)
 	if err != nil {
-		ctrl.responseGetCaptureError(w, 500, err)
+		ctrl.responseGetCaptureError(w, "internal", err)
 		return
 	}
 
@@ -180,11 +200,17 @@ func (ctrl *monitorController) GetCapture(w http.ResponseWriter, r *http.Request
 		}
 		return
 	}
-	ctrl.responseGetCaptureError(w, 500, errors.New("Unknown error"))
+	ctrl.responseGetCaptureError(w, "internal", errors.New("Unknown error"))
 }
 
-func (ctrl *monitorController) responseGetCaptureError(w http.ResponseWriter, status_code int, rsp_err error) {
+func (ctrl *monitorController) responseGetCaptureError(w http.ResponseWriter, errorKind gosnappi.ErrorKindEnum, rsp_err error) {
 	var result gosnappi.Error
+	var statusCode int32
+	if errorKind == "validation" {
+		statusCode = 400
+	} else if errorKind == "internal" {
+		statusCode = 500
+	}
 
 	if rErr, ok := rsp_err.(gosnappi.Error); ok {
 		result = rErr
@@ -192,7 +218,11 @@ func (ctrl *monitorController) responseGetCaptureError(w http.ResponseWriter, st
 		result = gosnappi.NewError()
 		err := result.FromJson(rsp_err.Error())
 		if err != nil {
-			result.Msg().Code = int32(status_code)
+			result.Msg().Code = statusCode
+			err = result.SetKind(errorKind)
+			if err != nil {
+				log.Print(err.Error())
+			}
 			result.Msg().Errors = []string{rsp_err.Error()}
 		}
 	}

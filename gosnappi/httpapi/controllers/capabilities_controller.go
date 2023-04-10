@@ -32,7 +32,7 @@ Description:
 func (ctrl *capabilitiesController) GetVersion(w http.ResponseWriter, r *http.Request) {
 	result, err := ctrl.handler.GetVersion(r)
 	if err != nil {
-		ctrl.responseGetVersionError(w, 500, err)
+		ctrl.responseGetVersionError(w, "internal", err)
 		return
 	}
 
@@ -42,11 +42,17 @@ func (ctrl *capabilitiesController) GetVersion(w http.ResponseWriter, r *http.Re
 		}
 		return
 	}
-	ctrl.responseGetVersionError(w, 500, errors.New("Unknown error"))
+	ctrl.responseGetVersionError(w, "internal", errors.New("Unknown error"))
 }
 
-func (ctrl *capabilitiesController) responseGetVersionError(w http.ResponseWriter, status_code int, rsp_err error) {
+func (ctrl *capabilitiesController) responseGetVersionError(w http.ResponseWriter, errorKind gosnappi.ErrorKindEnum, rsp_err error) {
 	var result gosnappi.Error
+	var statusCode int32
+	if errorKind == "validation" {
+		statusCode = 400
+	} else if errorKind == "internal" {
+		statusCode = 500
+	}
 
 	if rErr, ok := rsp_err.(gosnappi.Error); ok {
 		result = rErr
@@ -54,7 +60,11 @@ func (ctrl *capabilitiesController) responseGetVersionError(w http.ResponseWrite
 		result = gosnappi.NewError()
 		err := result.FromJson(rsp_err.Error())
 		if err != nil {
-			result.Msg().Code = int32(status_code)
+			result.Msg().Code = statusCode
+			err = result.SetKind(errorKind)
+			if err != nil {
+				log.Print(err.Error())
+			}
 			result.Msg().Errors = []string{rsp_err.Error()}
 		}
 	}

@@ -41,38 +41,44 @@ func (ctrl *configurationController) SetConfig(w http.ResponseWriter, r *http.Re
 			item = gosnappi.NewConfig()
 			err := item.FromJson(string(body))
 			if err != nil {
-				ctrl.responseSetConfigError(w, 400, err)
+				ctrl.responseSetConfigError(w, "validation", err)
 				return
 			}
 		} else {
-			ctrl.responseSetConfigError(w, 400, readError)
+			ctrl.responseSetConfigError(w, "validation", readError)
 			return
 		}
 	} else {
 		bodyError := errors.New("Request does not have a body")
-		ctrl.responseSetConfigError(w, 400, bodyError)
+		ctrl.responseSetConfigError(w, "validation", bodyError)
 		return
 	}
 	result, err := ctrl.handler.SetConfig(item, r)
 	if err != nil {
-		ctrl.responseSetConfigError(w, 500, err)
+		ctrl.responseSetConfigError(w, "internal", err)
 		return
 	}
 
 	if result.HasWarning() {
 		data, err := configurationMrlOpts.Marshal(result.Warning().Msg())
 		if err != nil {
-			ctrl.responseSetConfigError(w, 400, err)
+			ctrl.responseSetConfigError(w, "validation", err)
 		}
 		httpapi.WriteCustomJSONResponse(w, 200, data)
 
 		return
 	}
-	ctrl.responseSetConfigError(w, 500, errors.New("Unknown error"))
+	ctrl.responseSetConfigError(w, "internal", errors.New("Unknown error"))
 }
 
-func (ctrl *configurationController) responseSetConfigError(w http.ResponseWriter, status_code int, rsp_err error) {
+func (ctrl *configurationController) responseSetConfigError(w http.ResponseWriter, errorKind gosnappi.ErrorKindEnum, rsp_err error) {
 	var result gosnappi.Error
+	var statusCode int32
+	if errorKind == "validation" {
+		statusCode = 400
+	} else if errorKind == "internal" {
+		statusCode = 500
+	}
 
 	if rErr, ok := rsp_err.(gosnappi.Error); ok {
 		result = rErr
@@ -80,7 +86,11 @@ func (ctrl *configurationController) responseSetConfigError(w http.ResponseWrite
 		result = gosnappi.NewError()
 		err := result.FromJson(rsp_err.Error())
 		if err != nil {
-			result.Msg().Code = int32(status_code)
+			result.Msg().Code = statusCode
+			err = result.SetKind(errorKind)
+			if err != nil {
+				log.Print(err.Error())
+			}
 			result.Msg().Errors = []string{rsp_err.Error()}
 		}
 	}
@@ -97,7 +107,7 @@ Description:
 func (ctrl *configurationController) GetConfig(w http.ResponseWriter, r *http.Request) {
 	result, err := ctrl.handler.GetConfig(r)
 	if err != nil {
-		ctrl.responseGetConfigError(w, 500, err)
+		ctrl.responseGetConfigError(w, "internal", err)
 		return
 	}
 
@@ -107,11 +117,17 @@ func (ctrl *configurationController) GetConfig(w http.ResponseWriter, r *http.Re
 		}
 		return
 	}
-	ctrl.responseGetConfigError(w, 500, errors.New("Unknown error"))
+	ctrl.responseGetConfigError(w, "internal", errors.New("Unknown error"))
 }
 
-func (ctrl *configurationController) responseGetConfigError(w http.ResponseWriter, status_code int, rsp_err error) {
+func (ctrl *configurationController) responseGetConfigError(w http.ResponseWriter, errorKind gosnappi.ErrorKindEnum, rsp_err error) {
 	var result gosnappi.Error
+	var statusCode int32
+	if errorKind == "validation" {
+		statusCode = 400
+	} else if errorKind == "internal" {
+		statusCode = 500
+	}
 
 	if rErr, ok := rsp_err.(gosnappi.Error); ok {
 		result = rErr
@@ -119,7 +135,11 @@ func (ctrl *configurationController) responseGetConfigError(w http.ResponseWrite
 		result = gosnappi.NewError()
 		err := result.FromJson(rsp_err.Error())
 		if err != nil {
-			result.Msg().Code = int32(status_code)
+			result.Msg().Code = statusCode
+			err = result.SetKind(errorKind)
+			if err != nil {
+				log.Print(err.Error())
+			}
 			result.Msg().Errors = []string{rsp_err.Error()}
 		}
 	}
@@ -142,21 +162,21 @@ func (ctrl *configurationController) UpdateConfig(w http.ResponseWriter, r *http
 			item = gosnappi.NewConfigUpdate()
 			err := item.FromJson(string(body))
 			if err != nil {
-				ctrl.responseUpdateConfigError(w, 400, err)
+				ctrl.responseUpdateConfigError(w, "validation", err)
 				return
 			}
 		} else {
-			ctrl.responseUpdateConfigError(w, 400, readError)
+			ctrl.responseUpdateConfigError(w, "validation", readError)
 			return
 		}
 	} else {
 		bodyError := errors.New("Request does not have a body")
-		ctrl.responseUpdateConfigError(w, 400, bodyError)
+		ctrl.responseUpdateConfigError(w, "validation", bodyError)
 		return
 	}
 	result, err := ctrl.handler.UpdateConfig(item, r)
 	if err != nil {
-		ctrl.responseUpdateConfigError(w, 500, err)
+		ctrl.responseUpdateConfigError(w, "internal", err)
 		return
 	}
 
@@ -166,11 +186,17 @@ func (ctrl *configurationController) UpdateConfig(w http.ResponseWriter, r *http
 		}
 		return
 	}
-	ctrl.responseUpdateConfigError(w, 500, errors.New("Unknown error"))
+	ctrl.responseUpdateConfigError(w, "internal", errors.New("Unknown error"))
 }
 
-func (ctrl *configurationController) responseUpdateConfigError(w http.ResponseWriter, status_code int, rsp_err error) {
+func (ctrl *configurationController) responseUpdateConfigError(w http.ResponseWriter, errorKind gosnappi.ErrorKindEnum, rsp_err error) {
 	var result gosnappi.Error
+	var statusCode int32
+	if errorKind == "validation" {
+		statusCode = 400
+	} else if errorKind == "internal" {
+		statusCode = 500
+	}
 
 	if rErr, ok := rsp_err.(gosnappi.Error); ok {
 		result = rErr
@@ -178,7 +204,11 @@ func (ctrl *configurationController) responseUpdateConfigError(w http.ResponseWr
 		result = gosnappi.NewError()
 		err := result.FromJson(rsp_err.Error())
 		if err != nil {
-			result.Msg().Code = int32(status_code)
+			result.Msg().Code = statusCode
+			err = result.SetKind(errorKind)
+			if err != nil {
+				log.Print(err.Error())
+			}
 			result.Msg().Errors = []string{rsp_err.Error()}
 		}
 	}
