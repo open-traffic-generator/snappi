@@ -1,4 +1,4 @@
-/* Open Traffic Generator API 0.11.4
+/* Open Traffic Generator API 0.11.5
  * Open Traffic Generator API defines a model-driven, vendor-neutral and standard
  * interface for emulating layer 2-7 network devices and generating test traffic.
  * 
@@ -123,10 +123,6 @@ message LagPort {
   // x-constraint:
   // - /components/schemas/Port/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // required = true
   string port_name = 1;
 
@@ -243,16 +239,9 @@ message DeviceEthernet {
 
   // Deprecated: This property is deprecated in favor of property connection.port_name
   // 
-  // Deprecated: This property is deprecated in favor of property connection.port_name
-  // 
   // The unique name of a Port or a LAG that will emulate this interface.
   // port_name is deprecated and will be removed in future release.port_name and connection
   // can't be used together, use either port_name or connection.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // - /components/schemas/Lag/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -306,17 +295,9 @@ message EthernetConnection {
   // x-constraint:
   // - /components/schemas/Port/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   optional string port_name = 2;
 
   // Name of the LAG that the Ethernet interface is configured on.
-  // 
-  // x-constraint:
-  // - /components/schemas/Lag/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Lag/properties/name
@@ -325,11 +306,6 @@ message EthernetConnection {
 
   // Name of the VXLAN instance (or VXLAN tunnel) that this Ethernet interface is connected
   // to.
-  // 
-  // x-constraint:
-  // - #/components/schemas/Vxlan.V4Tunnel/properties/name
-  // - #/components/schemas/Vxlan.V6Tunnel/properties/name
-  // 
   // 
   // x-constraint:
   // - #/components/schemas/Vxlan.V4Tunnel/properties/name
@@ -398,10 +374,6 @@ message DeviceIpv4Loopback {
 
   // The unique name of the Ethernet interface behind which this Loopback  interface will
   // be created.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ethernet/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ethernet/properties/name
@@ -480,10 +452,6 @@ message DeviceIpv6Loopback {
   // x-constraint:
   // - /components/schemas/Device.Ethernet/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ethernet/properties/name
-  // 
   // required = true
   string eth_name = 1;
 
@@ -530,10 +498,6 @@ message Layer1 {
 
   // A list of unique names of port objects that will share the
   // choice settings.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -721,17 +685,11 @@ message Layer1Ieee8021qbb {
 
 // Under Review: Information TBD
 // 
-// Under Review: Information TBD
-// 
 // Configuration for capture settings.
 message Capture {
 
   // The unique names of ports that the capture settings will apply to. Port_names cannot
   // be duplicated between capture objects.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -1050,10 +1008,6 @@ message IsisInterface {
 
   // The unique name of the Ethernet interface on which ISIS is running. Two ISIS interfaces
   // cannot share the same Ethernet.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ethernet/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ethernet/properties/name
@@ -1864,11 +1818,6 @@ message BgpV4Interface {
 
   // The unique name of the IPv4 or Loopback IPv4 interface used as the source IP for
   // this list of BGP peers.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv4/properties/name
-  // - /components/schemas/Device.Ipv4Loopback/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv4/properties/name
@@ -3690,11 +3639,6 @@ message BgpV6Interface {
   // - /components/schemas/Device.Ipv6/properties/name
   // - /components/schemas/Device.Ipv6Loopback/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv6/properties/name
-  // - /components/schemas/Device.Ipv6Loopback/properties/name
-  // 
   // required = true
   string ipv6_name = 1;
 
@@ -3956,11 +3900,6 @@ message VxlanV4Tunnel {
   // - /components/schemas/Device.Ipv4/properties/name
   // - /components/schemas/Device.Ipv4Loopback/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv4/properties/name
-  // - /components/schemas/Device.Ipv4Loopback/properties/name
-  // 
   // required = true
   string source_interface = 1;
 
@@ -3984,11 +3923,6 @@ message VxlanV4Tunnel {
 message VxlanV6Tunnel {
 
   // Determines the source interface.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv6/properties/name
-  // - /components/schemas/Device.Ipv6Loopback/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv6/properties/name
@@ -4152,10 +4086,6 @@ message RsvpIpv4Interface {
   // x-constraint:
   // - /components/schemas/Device.Ipv4/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv4/properties/name
-  // 
   // required = true
   string ipv4_name = 1;
 
@@ -4217,11 +4147,6 @@ message RsvpLspIpv4Interface {
   // ingress and egress endpoint for  the LSPs configured on this interface. This must
   // match the name field of either ipv4_addresses or ipv4_loopbacks  on which this LSP
   // interface is configured.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv4/properties/name
-  // - /components/schemas/Device.Ipv4Loopback/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv4/properties/name
@@ -4702,20 +4627,10 @@ message FlowPort {
   // - /components/schemas/Port/properties/name
   // - /components/schemas/Lag/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // - /components/schemas/Lag/properties/name
-  // 
   // required = true
   string tx_name = 1;
 
   // The unique name of a port that is the intended receive port.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // - /components/schemas/Lag/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -4792,33 +4707,9 @@ message FlowRouter {
   // - /components/schemas/Isis.V4RouteRange/properties/name
   // - /components/schemas/Isis.V6RouteRange/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ethernet/properties/name
-  // - /components/schemas/Device.Ipv4/properties/name
-  // - /components/schemas/Device.Ipv6/properties/name
-  // - /components/schemas/Bgp.V4RouteRange/properties/name
-  // - /components/schemas/Bgp.V6RouteRange/properties/name
-  // - /components/schemas/Bgp.CMacIpRange/properties/name
-  // - /components/schemas/Rsvp.LspIpv4Interface.P2PIngressIpv4Lsp/properties/name
-  // - /components/schemas/Isis.V4RouteRange/properties/name
-  // - /components/schemas/Isis.V6RouteRange/properties/name
-  // 
   repeated string tx_names = 2;
 
   // TBD
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ethernet/properties/name
-  // - /components/schemas/Device.Ipv4/properties/name
-  // - /components/schemas/Device.Ipv6/properties/name
-  // - /components/schemas/Bgp.V4RouteRange/properties/name
-  // - /components/schemas/Bgp.V6RouteRange/properties/name
-  // - /components/schemas/Bgp.CMacIpRange/properties/name
-  // - /components/schemas/Rsvp.LspIpv4Interface.P2PEgressIpv4Lsp/properties/name
-  // - /components/schemas/Isis.V4RouteRange/properties/name
-  // - /components/schemas/Isis.V6RouteRange/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ethernet/properties/name
@@ -5889,12 +5780,6 @@ message EventRequest {
   // - /components/schemas/Bgp.V4RouteRange/name
   // - /components/schemas/Bgp.V6RouteRange/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // - /components/schemas/Bgp.V4RouteRange/name
-  // - /components/schemas/Bgp.V6RouteRange/name
-  // 
   repeated string source = 2;
 }
 
@@ -5964,10 +5849,6 @@ message LldpConnection {
   optional Choice.Enum choice = 1;
 
   // Name of the test port on which LLDP is configured on.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -6257,16 +6138,10 @@ message StateProtocol {
 
 // Deprecated: Please use `StatePortLink` instead
 // 
-// Deprecated: Please use `StatePortLink` instead
-// 
 // Sets the link state of configured ports.
 message LinkState {
 
   // The names of port objects to. An empty or null list will control all port objects.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -6287,8 +6162,6 @@ message LinkState {
 
 // Deprecated: Please use `StateTrafficFlowTransmit` instead
 // 
-// Deprecated: Please use `StateTrafficFlowTransmit` instead
-// 
 // Flow transmit state.
 message TransmitState {
 
@@ -6296,10 +6169,6 @@ message TransmitState {
   // flow_names is empty or null the state will be applied to all configured flows.
   // If the list is not empty any flow that is not included in the list of flow_names
   // MUST be ignored and not included in the state change.
-  // 
-  // x-constraint:
-  // - /components/schemas/Flow/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Flow/properties/name
@@ -6333,8 +6202,6 @@ message TransmitState {
 
 // Deprecated: Please use `StatePortCapture` instead
 // 
-// Deprecated: Please use `StatePortCapture` instead
-// 
 // Control port capture state
 message CaptureState {
 
@@ -6342,10 +6209,6 @@ message CaptureState {
   // port_names is empty or null the state will be applied to all configured ports.
   // If the list is not empty any port that is not included in the list of port_names
   // MUST be ignored and not included in the state change.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -6366,20 +6229,11 @@ message CaptureState {
 
 // Deprecated: Please use `StateProtocolRoute` instead
 // 
-// Deprecated: Please use `StateProtocolRoute` instead
-// 
 // Sets the device route state
 message RouteState {
 
   // The names of device route objects to control. If no names are specified then all
   // route objects that match the x-constraint will be affected.
-  // 
-  // x-constraint:
-  // - /components/schemas/Bgp.V4RouteRange/properties/name
-  // - /components/schemas/Bgp.V6RouteRange/properties/name
-  // - /components/schemas/Isis.V4RouteRange/properties/name
-  // - /components/schemas/Isis.V6RouteRange/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Bgp.V4RouteRange/properties/name
@@ -6403,8 +6257,6 @@ message RouteState {
 
 // Deprecated: Please use `StateProtocolAll` instead
 // 
-// Deprecated: Please use `StateProtocolAll` instead
-// 
 // Sets all configured protocols to `start` or `stop` state. Setting protocol state
 // to `start`  shall be a no-op if preceding `set_config` API call was made with  `config.options.protocol_options.auto_start_all`
 // set to `true` or if all the configured protocols are already started.
@@ -6422,8 +6274,6 @@ message ProtocolState {
   State.Enum state = 1;
 }
 
-// Deprecated: Please use `State.Protocol` instead
-// 
 // Deprecated: Please use `State.Protocol` instead
 // 
 // Sets attributes for the requested state/actions to be performed on device(s)
@@ -6446,10 +6296,6 @@ message DeviceState {
 message StatePortLink {
 
   // The names of target ports. An empty or null list will target all ports.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -6479,10 +6325,6 @@ message StatePortCapture {
   // x-constraint:
   // - /components/schemas/Port/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   repeated string port_names = 1;
 
   message State {
@@ -6504,10 +6346,6 @@ message StateTrafficFlowTransmit {
   // flow_names is empty or null the state will be applied to all configured flows.
   // If the list is not empty any flow that is not included in the list of flow_names
   // MUST be ignored and not included in the state change.
-  // 
-  // x-constraint:
-  // - /components/schemas/Flow/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Flow/properties/name
@@ -6568,13 +6406,6 @@ message StateProtocolRoute {
   // - /components/schemas/Isis.V4RouteRange/properties/name
   // - /components/schemas/Isis.V6RouteRange/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Bgp.V4RouteRange/properties/name
-  // - /components/schemas/Bgp.V6RouteRange/properties/name
-  // - /components/schemas/Isis.V4RouteRange/properties/name
-  // - /components/schemas/Isis.V6RouteRange/properties/name
-  // 
   repeated string names = 1;
 
   message State {
@@ -6615,10 +6446,6 @@ message StateProtocolLacpAdmin {
   // x-constraint:
   // - /components/schemas/Port/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   repeated string lag_member_names = 1;
 
   message State {
@@ -6636,17 +6463,11 @@ message StateProtocolLacpAdmin {
 
 // Deprecated: Please use `StateProtocolLacpAdmin` instead
 // 
-// Deprecated: Please use `StateProtocolLacpAdmin` instead
-// 
 // Set LACP state for specified LAG Member Port(s).
 message LacpMemberState {
 
   // The names of LAG members (ports) for which the state has to be applied. An empty
   // or null list will control all LAG members.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -6800,18 +6621,12 @@ message ActionProtocolIpv4Ping {
 
 // Under Review: Most ping request parameters are still TBD.
 // 
-// Under Review: Most ping request parameters are still TBD.
-// 
 // Request for initiating ping between a single source and destination pair.
 // For ping request, 1 IPv4 ICMP Echo Request shall be sent and wait for ping response
 // to either succeed or time out. The API wait timeout for each request shall be 300ms.
 message ActionProtocolIpv4PingRequest {
 
   // Name of source IPv4 interface to be used.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv4/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv4/properties/name
@@ -6833,10 +6648,6 @@ message ActionResponseProtocolIpv4Ping {
 message ActionResponseProtocolIpv4PingResponse {
 
   // Name of source IPv4 interface used for ping.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv4/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv4/properties/name
@@ -6903,18 +6714,12 @@ message ActionProtocolIpv6Ping {
 
 // Under Review: Most ping request parameters are still TBD.
 // 
-// Under Review: Most ping request parameters are still TBD.
-// 
 // Request for initiating ping between a single source and destination pair.
 // For ping request, 1 IPv6 ICMP Echo Request shall be sent and wait for ping response
 // to either succeed or time out. The API wait timeout for each request shall be 300ms.
 message ActionProtocolIpv6PingRequest {
 
   // Name of source IPv6 interface to be used.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv6/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv6/properties/name
@@ -6936,10 +6741,6 @@ message ActionResponseProtocolIpv6Ping {
 message ActionResponseProtocolIpv6PingResponse {
 
   // Name of source IPv6 interface used for ping.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv6/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv6/properties/name
@@ -6999,10 +6800,6 @@ message ActionProtocolBgpNotification {
   // x-constraint:
   // - /components/schemas/Device.Bgp/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Bgp/properties/name
-  // 
   repeated string names = 1;
 
   message Choice {
@@ -7058,10 +6855,6 @@ message ActionProtocolBgpInitiateGracefulRestart {
   // x-constraint:
   // - /components/schemas/Device.Bgp/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Bgp/properties/name
-  // 
   repeated string peer_names = 1;
 
   // Duration (in seconds) after which selected BGP peers will initiate
@@ -7100,10 +6893,6 @@ message PingIpv4 {
   // x-constraint:
   // - /components/schemas/Device.Ipv4/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv4/properties/name
-  // 
   optional string src_name = 1;
 
   // IPv4 address to ping
@@ -7114,10 +6903,6 @@ message PingIpv4 {
 message PingIpv6 {
 
   // A base IPv6 interface
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv6/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv6/properties/name
@@ -7146,11 +6931,6 @@ message PingResponse {
 message Response {
 
   // The name of the source IPv4 or IPv6 interface from which ping was sent.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv4/properties/name
-  // - /components/schemas/Device.Ipv6/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv4/properties/name
@@ -7280,10 +7060,6 @@ message PortMetricsRequest {
   // x-constraint:
   // - /components/schemas/Port/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   repeated string port_names = 1;
 
   message ColumnNames {
@@ -7312,10 +7088,6 @@ message PortMetricsRequest {
 message PortMetric {
 
   // The name of a configured port
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -7391,10 +7163,6 @@ message FlowMetricsRequest {
   // x-constraint:
   // - /components/schemas/Flow/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Flow/properties/name
-  // 
   repeated string flow_names = 1;
 
   // A list of metric groups used to disaggregate flows. A metric group that does not
@@ -7438,19 +7206,11 @@ message FlowMetricGroupRequest {
   // x-constraint:
   // - /components/schemas/Flow/properties/packet/../metric_group
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Flow/properties/packet/../metric_group
-  // 
   // default = []
   repeated string ingress = 2;
 
   // Disaggregate the flow metrics by egress packet header field names
   // If the items is empty then no disaggregation will be done.
-  // 
-  // x-constraint:
-  // - /components/schemas/Flow/properties/egress/../metric_group
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Flow/properties/egress/../metric_group
@@ -7559,10 +7319,6 @@ message Bgpv4MetricsRequest {
 
   // The names of BGPv4 peers to return results for. An empty list will return results
   // for all BGPv4 peers.
-  // 
-  // x-constraint:
-  // - /components/schemas/Bgp.V4peer/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Bgp.V4peer/properties/name
@@ -7685,10 +7441,6 @@ message Bgpv6MetricsRequest {
   // x-constraint:
   // - /components/schemas/Bgp.V6peer/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Bgp.V6peer/properties/name
-  // 
   repeated string peer_names = 1;
 
   message ColumnNames {
@@ -7803,10 +7555,6 @@ message IsisMetricsRequest {
 
   // The names of ISIS Routers to return results for. An empty list will return results
   // for all ISIS router.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.IsisRouter/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.IsisRouter/properties/name
@@ -7944,10 +7692,6 @@ message LagMetricsRequest {
   // x-constraint:
   // - /components/schemas/Lag/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Lag/properties/name
-  // 
   repeated string lag_names = 1;
 
   message ColumnNames {
@@ -7974,10 +7718,6 @@ message LagMetricsRequest {
 message LagMetric {
 
   // The name of a configured LAG
-  // 
-  // x-constraint:
-  // - /components/schemas/Lag/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Lag/properties/name
@@ -8032,18 +7772,10 @@ message LacpMetricsRequest {
   // x-constraint:
   // - /components/schemas/Lag/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Lag/properties/name
-  // 
   repeated string lag_names = 1;
 
   // The names of LAG members (ports) for which LACP metrics to be returned. An empty
   // list will return metrics for all LAG members.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -8164,10 +7896,6 @@ message LldpMetricsRequest {
   // x-constraint:
   // - /components/schemas/Lldp/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Lldp/properties/name
-  // 
   repeated string lldp_names = 1;
 
   message ColumnNames {
@@ -8226,10 +7954,6 @@ message RsvpMetricsRequest {
 
   // The names of RSVP-TE Routers to return results for. An empty list as input will return
   // results for all RSVP-TE routers.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Rsvp/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Rsvp/properties/name
@@ -8465,10 +8189,6 @@ message Neighborsv4StatesRequest {
   // x-constraint:
   // - /components/schemas/Device.Ethernet/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ethernet/properties/name
-  // 
   repeated string ethernet_names = 1;
 }
 
@@ -8498,10 +8218,6 @@ message Neighborsv6StatesRequest {
   // x-constraint:
   // - /components/schemas/Device.Ethernet/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ethernet/properties/name
-  // 
   repeated string ethernet_names = 1;
 }
 
@@ -8527,11 +8243,6 @@ message BgpPrefixStateRequest {
   // The names of BGP peers for which prefix information will be retrieved. If no names
   // are specified then the results will contain prefix information for all configured
   // BGP peers.
-  // 
-  // x-constraint:
-  // - /components/schemas/Bgp.V4Peer/properties/name
-  // - /components/schemas/Bgp.V6Peer/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Bgp.V4Peer/properties/name
@@ -8764,10 +8475,6 @@ message IsisLspsStateRequest {
 
   // The names of ISIS routers for which learned information is requested. An empty list
   // will return results for all ISIS routers.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.IsisRouter/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.IsisRouter/properties/name
@@ -9085,10 +8792,6 @@ message LldpNeighborsStateRequest {
   // x-constraint:
   // - /components/schemas/Lldp/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Lldp/properties/name
-  // 
   repeated string lldp_names = 1;
 
   // Specify the neighbors for which information will be returned. If empty  or missing
@@ -9247,10 +8950,6 @@ message RsvpLspsStateRequest {
   // x-constraint:
   // - /components/schemas/Device.Rsvp/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Rsvp/properties/name
-  // 
   repeated string rsvp_router_names = 1;
 }
 
@@ -9381,10 +9080,6 @@ message RsvpLspIpv4Ero {
 message CaptureRequest {
 
   // The name of a port a capture is started on.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -17108,8 +16803,6 @@ service Openapi {
   rpc SetControlAction(SetControlActionRequest) returns (SetControlActionResponse);
   // Deprecated: Please use `set_control_state` with `traffic.flow_transmit` choice instead
   // 
-  // Deprecated: Please use `set_control_state` with `traffic.flow_transmit` choice instead
-  // 
   // Updates the state of configuration resources on the traffic generator.
   // The Response.Warnings in the Success response is available for implementers to disclose
   // additional information about a state change including any implicit changes that are
@@ -17117,30 +16810,20 @@ service Openapi {
   rpc SetTransmitState(SetTransmitStateRequest) returns (SetTransmitStateResponse);
   // Deprecated: Please use `set_control_state` with `port.link` choice instead
   // 
-  // Deprecated: Please use `set_control_state` with `port.link` choice instead
-  // 
   // Updates the state of configuration resources on the traffic generator.
   rpc SetLinkState(SetLinkStateRequest) returns (SetLinkStateResponse);
-  // Deprecated: Please use `set_control_state` with `port.capture` choice instead
-  // 
   // Deprecated: Please use `set_control_state` with `port.capture` choice instead
   // 
   // Updates the state of configuration resources on the traffic generator.
   rpc SetCaptureState(SetCaptureStateRequest) returns (SetCaptureStateResponse);
   // Deprecated: Please use `update_config` with `flow` choice instead
   // 
-  // Deprecated: Please use `update_config` with `flow` choice instead
-  // 
   // Updates flow properties without disruption of transmit state.
   rpc UpdateFlows(UpdateFlowsRequest) returns (UpdateFlowsResponse);
   // Deprecated: Please use `set_control_state` with `protocol.route` choice instead
   // 
-  // Deprecated: Please use `set_control_state` with `protocol.route` choice instead
-  // 
   // Updates the state of configuration resources on the traffic generator.
   rpc SetRouteState(SetRouteStateRequest) returns (SetRouteStateResponse);
-  // Deprecated: Please use `set_control_action` with `protocol.ipv*.ping` choice instead
-  // 
   // Deprecated: Please use `set_control_action` with `protocol.ipv*.ping` choice instead
   // 
   // API to send an IPv4 and/or IPv6 ICMP Echo Request(s) between endpoints. For each
@@ -17149,12 +16832,8 @@ service Openapi {
   rpc SendPing(SendPingRequest) returns (SendPingResponse);
   // Deprecated: Please use `set_control_state` with `protocol.all` choice instead
   // 
-  // Deprecated: Please use `set_control_state` with `protocol.all` choice instead
-  // 
   // Sets all configured protocols to `start` or `stop` state.
   rpc SetProtocolState(SetProtocolStateRequest) returns (SetProtocolStateResponse);
-  // Deprecated: Please use `set_control_state` with `protocol` choice instead
-  // 
   // Deprecated: Please use `set_control_state` with `protocol` choice instead
   // 
   // Set specific state/actions on device configuration resources on the traffic generator.
