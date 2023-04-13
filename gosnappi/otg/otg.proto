@@ -7195,7 +7195,7 @@ message FlowMetricsRequest {
 
   // A list of metric tags used to disaggregate flows. A metric tag that does not exist
   // for a flow group MUST return an error.
-  repeated FlowMetricTagFilter metric_tags = 2;
+  repeated FlowMetricTagFilter metric_tags = 4;
 
   message MetricNames {
     enum Enum {
@@ -7242,7 +7242,7 @@ message FlowMetric {
   optional string port_rx = 3;
 
   // Flow disaggregation groups.
-  repeated FlowMetricTag metric_tags = 4;
+  repeated FlowMetricTag metric_tags = 15;
 
   message Transmit {
     enum Enum {
@@ -9102,16 +9102,15 @@ message CaptureRequest {
 // metric_tag value to be specified as part of the request.
 message PatternFlowEthernetDstMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 48
   optional int32 length = 3;
 }
@@ -9164,13 +9163,13 @@ message PatternFlowEthernetDst {
   optional string auto = 4;
 
   // Description missing in models
-  repeated PatternFlowEthernetDstMetricTags metric_tags = 5;
+  repeated PatternFlowEthernetDstMetricTags metric_tags = 6;
 
   // Description missing in models
-  optional PatternFlowEthernetDstCounter increment = 6;
+  optional PatternFlowEthernetDstCounter increment = 7;
 
   // Description missing in models
-  optional PatternFlowEthernetDstCounter decrement = 7;
+  optional PatternFlowEthernetDstCounter decrement = 8;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -9179,16 +9178,15 @@ message PatternFlowEthernetDst {
 // metric_tag value to be specified as part of the request.
 message PatternFlowEthernetSrcMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 48
   optional int32 length = 3;
 }
@@ -9234,13 +9232,13 @@ message PatternFlowEthernetSrc {
   repeated string values = 3;
 
   // Description missing in models
-  repeated PatternFlowEthernetSrcMetricTags metric_tags = 4;
+  repeated PatternFlowEthernetSrcMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowEthernetSrcCounter increment = 5;
+  optional PatternFlowEthernetSrcCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowEthernetSrcCounter decrement = 6;
+  optional PatternFlowEthernetSrcCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -9249,16 +9247,15 @@ message PatternFlowEthernetSrc {
 // metric_tag value to be specified as part of the request.
 message PatternFlowEthernetEtherTypeMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 16
   optional int32 length = 3;
 }
@@ -9311,13 +9308,13 @@ message PatternFlowEthernetEtherType {
   optional int32 auto = 4;
 
   // Description missing in models
-  repeated PatternFlowEthernetEtherTypeMetricTags metric_tags = 5;
+  repeated PatternFlowEthernetEtherTypeMetricTags metric_tags = 6;
 
   // Description missing in models
-  optional PatternFlowEthernetEtherTypeCounter increment = 6;
+  optional PatternFlowEthernetEtherTypeCounter increment = 7;
 
   // Description missing in models
-  optional PatternFlowEthernetEtherTypeCounter decrement = 7;
+  optional PatternFlowEthernetEtherTypeCounter decrement = 8;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -9326,16 +9323,15 @@ message PatternFlowEthernetEtherType {
 // metric_tag value to be specified as part of the request.
 message PatternFlowEthernetPfcQueueMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 3
   optional int32 length = 3;
 }
@@ -9381,13 +9377,13 @@ message PatternFlowEthernetPfcQueue {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowEthernetPfcQueueMetricTags metric_tags = 4;
+  repeated PatternFlowEthernetPfcQueueMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowEthernetPfcQueueCounter increment = 5;
+  optional PatternFlowEthernetPfcQueueCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowEthernetPfcQueueCounter decrement = 6;
+  optional PatternFlowEthernetPfcQueueCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -9396,16 +9392,15 @@ message PatternFlowEthernetPfcQueue {
 // metric_tag value to be specified as part of the request.
 message PatternFlowVlanPriorityMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 3
   optional int32 length = 3;
 }
@@ -9451,13 +9446,13 @@ message PatternFlowVlanPriority {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowVlanPriorityMetricTags metric_tags = 4;
+  repeated PatternFlowVlanPriorityMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowVlanPriorityCounter increment = 5;
+  optional PatternFlowVlanPriorityCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowVlanPriorityCounter decrement = 6;
+  optional PatternFlowVlanPriorityCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -9466,16 +9461,15 @@ message PatternFlowVlanPriority {
 // metric_tag value to be specified as part of the request.
 message PatternFlowVlanCfiMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 1
   optional int32 length = 3;
 }
@@ -9521,13 +9515,13 @@ message PatternFlowVlanCfi {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowVlanCfiMetricTags metric_tags = 4;
+  repeated PatternFlowVlanCfiMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowVlanCfiCounter increment = 5;
+  optional PatternFlowVlanCfiCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowVlanCfiCounter decrement = 6;
+  optional PatternFlowVlanCfiCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -9536,16 +9530,15 @@ message PatternFlowVlanCfi {
 // metric_tag value to be specified as part of the request.
 message PatternFlowVlanIdMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 12
   optional int32 length = 3;
 }
@@ -9591,13 +9584,13 @@ message PatternFlowVlanId {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowVlanIdMetricTags metric_tags = 4;
+  repeated PatternFlowVlanIdMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowVlanIdCounter increment = 5;
+  optional PatternFlowVlanIdCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowVlanIdCounter decrement = 6;
+  optional PatternFlowVlanIdCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -9606,16 +9599,15 @@ message PatternFlowVlanId {
 // metric_tag value to be specified as part of the request.
 message PatternFlowVlanTpidMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 16
   optional int32 length = 3;
 }
@@ -9661,13 +9653,13 @@ message PatternFlowVlanTpid {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowVlanTpidMetricTags metric_tags = 4;
+  repeated PatternFlowVlanTpidMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowVlanTpidCounter increment = 5;
+  optional PatternFlowVlanTpidCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowVlanTpidCounter decrement = 6;
+  optional PatternFlowVlanTpidCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -9676,16 +9668,15 @@ message PatternFlowVlanTpid {
 // metric_tag value to be specified as part of the request.
 message PatternFlowVxlanFlagsMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 8
   optional int32 length = 3;
 }
@@ -9733,13 +9724,13 @@ message PatternFlowVxlanFlags {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowVxlanFlagsMetricTags metric_tags = 4;
+  repeated PatternFlowVxlanFlagsMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowVxlanFlagsCounter increment = 5;
+  optional PatternFlowVxlanFlagsCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowVxlanFlagsCounter decrement = 6;
+  optional PatternFlowVxlanFlagsCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -9748,16 +9739,15 @@ message PatternFlowVxlanFlags {
 // metric_tag value to be specified as part of the request.
 message PatternFlowVxlanReserved0MetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 24
   optional int32 length = 3;
 }
@@ -9803,13 +9793,13 @@ message PatternFlowVxlanReserved0 {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowVxlanReserved0MetricTags metric_tags = 4;
+  repeated PatternFlowVxlanReserved0MetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowVxlanReserved0Counter increment = 5;
+  optional PatternFlowVxlanReserved0Counter increment = 6;
 
   // Description missing in models
-  optional PatternFlowVxlanReserved0Counter decrement = 6;
+  optional PatternFlowVxlanReserved0Counter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -9818,16 +9808,15 @@ message PatternFlowVxlanReserved0 {
 // metric_tag value to be specified as part of the request.
 message PatternFlowVxlanVniMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 24
   optional int32 length = 3;
 }
@@ -9880,13 +9869,13 @@ message PatternFlowVxlanVni {
   optional int32 auto = 4;
 
   // Description missing in models
-  repeated PatternFlowVxlanVniMetricTags metric_tags = 5;
+  repeated PatternFlowVxlanVniMetricTags metric_tags = 6;
 
   // Description missing in models
-  optional PatternFlowVxlanVniCounter increment = 6;
+  optional PatternFlowVxlanVniCounter increment = 7;
 
   // Description missing in models
-  optional PatternFlowVxlanVniCounter decrement = 7;
+  optional PatternFlowVxlanVniCounter decrement = 8;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -9895,16 +9884,15 @@ message PatternFlowVxlanVni {
 // metric_tag value to be specified as part of the request.
 message PatternFlowVxlanReserved1MetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 8
   optional int32 length = 3;
 }
@@ -9950,13 +9938,13 @@ message PatternFlowVxlanReserved1 {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowVxlanReserved1MetricTags metric_tags = 4;
+  repeated PatternFlowVxlanReserved1MetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowVxlanReserved1Counter increment = 5;
+  optional PatternFlowVxlanReserved1Counter increment = 6;
 
   // Description missing in models
-  optional PatternFlowVxlanReserved1Counter decrement = 6;
+  optional PatternFlowVxlanReserved1Counter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -9965,16 +9953,15 @@ message PatternFlowVxlanReserved1 {
 // metric_tag value to be specified as part of the request.
 message PatternFlowIpv4VersionMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 4
   optional int32 length = 3;
 }
@@ -10020,13 +10007,13 @@ message PatternFlowIpv4Version {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowIpv4VersionMetricTags metric_tags = 4;
+  repeated PatternFlowIpv4VersionMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowIpv4VersionCounter increment = 5;
+  optional PatternFlowIpv4VersionCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowIpv4VersionCounter decrement = 6;
+  optional PatternFlowIpv4VersionCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -10035,16 +10022,15 @@ message PatternFlowIpv4Version {
 // metric_tag value to be specified as part of the request.
 message PatternFlowIpv4HeaderLengthMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 4
   optional int32 length = 3;
 }
@@ -10097,13 +10083,13 @@ message PatternFlowIpv4HeaderLength {
   optional int32 auto = 4;
 
   // Description missing in models
-  repeated PatternFlowIpv4HeaderLengthMetricTags metric_tags = 5;
+  repeated PatternFlowIpv4HeaderLengthMetricTags metric_tags = 6;
 
   // Description missing in models
-  optional PatternFlowIpv4HeaderLengthCounter increment = 6;
+  optional PatternFlowIpv4HeaderLengthCounter increment = 7;
 
   // Description missing in models
-  optional PatternFlowIpv4HeaderLengthCounter decrement = 7;
+  optional PatternFlowIpv4HeaderLengthCounter decrement = 8;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -10112,16 +10098,15 @@ message PatternFlowIpv4HeaderLength {
 // metric_tag value to be specified as part of the request.
 message PatternFlowIpv4TotalLengthMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 16
   optional int32 length = 3;
 }
@@ -10174,13 +10159,13 @@ message PatternFlowIpv4TotalLength {
   optional int32 auto = 4;
 
   // Description missing in models
-  repeated PatternFlowIpv4TotalLengthMetricTags metric_tags = 5;
+  repeated PatternFlowIpv4TotalLengthMetricTags metric_tags = 6;
 
   // Description missing in models
-  optional PatternFlowIpv4TotalLengthCounter increment = 6;
+  optional PatternFlowIpv4TotalLengthCounter increment = 7;
 
   // Description missing in models
-  optional PatternFlowIpv4TotalLengthCounter decrement = 7;
+  optional PatternFlowIpv4TotalLengthCounter decrement = 8;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -10189,16 +10174,15 @@ message PatternFlowIpv4TotalLength {
 // metric_tag value to be specified as part of the request.
 message PatternFlowIpv4IdentificationMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 16
   optional int32 length = 3;
 }
@@ -10244,13 +10228,13 @@ message PatternFlowIpv4Identification {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowIpv4IdentificationMetricTags metric_tags = 4;
+  repeated PatternFlowIpv4IdentificationMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowIpv4IdentificationCounter increment = 5;
+  optional PatternFlowIpv4IdentificationCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowIpv4IdentificationCounter decrement = 6;
+  optional PatternFlowIpv4IdentificationCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -10259,16 +10243,15 @@ message PatternFlowIpv4Identification {
 // metric_tag value to be specified as part of the request.
 message PatternFlowIpv4ReservedMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 1
   optional int32 length = 3;
 }
@@ -10314,13 +10297,13 @@ message PatternFlowIpv4Reserved {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowIpv4ReservedMetricTags metric_tags = 4;
+  repeated PatternFlowIpv4ReservedMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowIpv4ReservedCounter increment = 5;
+  optional PatternFlowIpv4ReservedCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowIpv4ReservedCounter decrement = 6;
+  optional PatternFlowIpv4ReservedCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -10329,16 +10312,15 @@ message PatternFlowIpv4Reserved {
 // metric_tag value to be specified as part of the request.
 message PatternFlowIpv4DontFragmentMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 1
   optional int32 length = 3;
 }
@@ -10385,13 +10367,13 @@ message PatternFlowIpv4DontFragment {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowIpv4DontFragmentMetricTags metric_tags = 4;
+  repeated PatternFlowIpv4DontFragmentMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowIpv4DontFragmentCounter increment = 5;
+  optional PatternFlowIpv4DontFragmentCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowIpv4DontFragmentCounter decrement = 6;
+  optional PatternFlowIpv4DontFragmentCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -10400,16 +10382,15 @@ message PatternFlowIpv4DontFragment {
 // metric_tag value to be specified as part of the request.
 message PatternFlowIpv4MoreFragmentsMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 1
   optional int32 length = 3;
 }
@@ -10455,13 +10436,13 @@ message PatternFlowIpv4MoreFragments {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowIpv4MoreFragmentsMetricTags metric_tags = 4;
+  repeated PatternFlowIpv4MoreFragmentsMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowIpv4MoreFragmentsCounter increment = 5;
+  optional PatternFlowIpv4MoreFragmentsCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowIpv4MoreFragmentsCounter decrement = 6;
+  optional PatternFlowIpv4MoreFragmentsCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -10470,16 +10451,15 @@ message PatternFlowIpv4MoreFragments {
 // metric_tag value to be specified as part of the request.
 message PatternFlowIpv4FragmentOffsetMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 5
   optional int32 length = 3;
 }
@@ -10525,13 +10505,13 @@ message PatternFlowIpv4FragmentOffset {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowIpv4FragmentOffsetMetricTags metric_tags = 4;
+  repeated PatternFlowIpv4FragmentOffsetMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowIpv4FragmentOffsetCounter increment = 5;
+  optional PatternFlowIpv4FragmentOffsetCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowIpv4FragmentOffsetCounter decrement = 6;
+  optional PatternFlowIpv4FragmentOffsetCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -10540,16 +10520,15 @@ message PatternFlowIpv4FragmentOffset {
 // metric_tag value to be specified as part of the request.
 message PatternFlowIpv4TimeToLiveMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 8
   optional int32 length = 3;
 }
@@ -10595,13 +10574,13 @@ message PatternFlowIpv4TimeToLive {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowIpv4TimeToLiveMetricTags metric_tags = 4;
+  repeated PatternFlowIpv4TimeToLiveMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowIpv4TimeToLiveCounter increment = 5;
+  optional PatternFlowIpv4TimeToLiveCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowIpv4TimeToLiveCounter decrement = 6;
+  optional PatternFlowIpv4TimeToLiveCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -10610,16 +10589,15 @@ message PatternFlowIpv4TimeToLive {
 // metric_tag value to be specified as part of the request.
 message PatternFlowIpv4ProtocolMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 8
   optional int32 length = 3;
 }
@@ -10672,13 +10650,13 @@ message PatternFlowIpv4Protocol {
   optional int32 auto = 4;
 
   // Description missing in models
-  repeated PatternFlowIpv4ProtocolMetricTags metric_tags = 5;
+  repeated PatternFlowIpv4ProtocolMetricTags metric_tags = 6;
 
   // Description missing in models
-  optional PatternFlowIpv4ProtocolCounter increment = 6;
+  optional PatternFlowIpv4ProtocolCounter increment = 7;
 
   // Description missing in models
-  optional PatternFlowIpv4ProtocolCounter decrement = 7;
+  optional PatternFlowIpv4ProtocolCounter decrement = 8;
 }
 
 // Header checksum
@@ -10716,16 +10694,15 @@ message PatternFlowIpv4HeaderChecksum {
 // metric_tag value to be specified as part of the request.
 message PatternFlowIpv4SrcMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 32
   optional int32 length = 3;
 }
@@ -10771,13 +10748,13 @@ message PatternFlowIpv4Src {
   repeated string values = 3;
 
   // Description missing in models
-  repeated PatternFlowIpv4SrcMetricTags metric_tags = 4;
+  repeated PatternFlowIpv4SrcMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowIpv4SrcCounter increment = 5;
+  optional PatternFlowIpv4SrcCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowIpv4SrcCounter decrement = 6;
+  optional PatternFlowIpv4SrcCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -10786,16 +10763,15 @@ message PatternFlowIpv4Src {
 // metric_tag value to be specified as part of the request.
 message PatternFlowIpv4DstMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 32
   optional int32 length = 3;
 }
@@ -10841,13 +10817,13 @@ message PatternFlowIpv4Dst {
   repeated string values = 3;
 
   // Description missing in models
-  repeated PatternFlowIpv4DstMetricTags metric_tags = 4;
+  repeated PatternFlowIpv4DstMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowIpv4DstCounter increment = 5;
+  optional PatternFlowIpv4DstCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowIpv4DstCounter decrement = 6;
+  optional PatternFlowIpv4DstCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -10856,16 +10832,15 @@ message PatternFlowIpv4Dst {
 // metric_tag value to be specified as part of the request.
 message PatternFlowIpv4PriorityRawMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 8
   optional int32 length = 3;
 }
@@ -10911,13 +10886,13 @@ message PatternFlowIpv4PriorityRaw {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowIpv4PriorityRawMetricTags metric_tags = 4;
+  repeated PatternFlowIpv4PriorityRawMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowIpv4PriorityRawCounter increment = 5;
+  optional PatternFlowIpv4PriorityRawCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowIpv4PriorityRawCounter decrement = 6;
+  optional PatternFlowIpv4PriorityRawCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -10926,16 +10901,15 @@ message PatternFlowIpv4PriorityRaw {
 // metric_tag value to be specified as part of the request.
 message PatternFlowIpv4DscpPhbMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 6
   optional int32 length = 3;
 }
@@ -10981,13 +10955,13 @@ message PatternFlowIpv4DscpPhb {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowIpv4DscpPhbMetricTags metric_tags = 4;
+  repeated PatternFlowIpv4DscpPhbMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowIpv4DscpPhbCounter increment = 5;
+  optional PatternFlowIpv4DscpPhbCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowIpv4DscpPhbCounter decrement = 6;
+  optional PatternFlowIpv4DscpPhbCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -10996,16 +10970,15 @@ message PatternFlowIpv4DscpPhb {
 // metric_tag value to be specified as part of the request.
 message PatternFlowIpv4DscpEcnMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 2
   optional int32 length = 3;
 }
@@ -11051,13 +11024,13 @@ message PatternFlowIpv4DscpEcn {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowIpv4DscpEcnMetricTags metric_tags = 4;
+  repeated PatternFlowIpv4DscpEcnMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowIpv4DscpEcnCounter increment = 5;
+  optional PatternFlowIpv4DscpEcnCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowIpv4DscpEcnCounter decrement = 6;
+  optional PatternFlowIpv4DscpEcnCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -11066,16 +11039,15 @@ message PatternFlowIpv4DscpEcn {
 // metric_tag value to be specified as part of the request.
 message PatternFlowIpv4TosPrecedenceMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 3
   optional int32 length = 3;
 }
@@ -11121,13 +11093,13 @@ message PatternFlowIpv4TosPrecedence {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowIpv4TosPrecedenceMetricTags metric_tags = 4;
+  repeated PatternFlowIpv4TosPrecedenceMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowIpv4TosPrecedenceCounter increment = 5;
+  optional PatternFlowIpv4TosPrecedenceCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowIpv4TosPrecedenceCounter decrement = 6;
+  optional PatternFlowIpv4TosPrecedenceCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -11136,16 +11108,15 @@ message PatternFlowIpv4TosPrecedence {
 // metric_tag value to be specified as part of the request.
 message PatternFlowIpv4TosDelayMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 1
   optional int32 length = 3;
 }
@@ -11191,13 +11162,13 @@ message PatternFlowIpv4TosDelay {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowIpv4TosDelayMetricTags metric_tags = 4;
+  repeated PatternFlowIpv4TosDelayMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowIpv4TosDelayCounter increment = 5;
+  optional PatternFlowIpv4TosDelayCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowIpv4TosDelayCounter decrement = 6;
+  optional PatternFlowIpv4TosDelayCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -11206,16 +11177,15 @@ message PatternFlowIpv4TosDelay {
 // metric_tag value to be specified as part of the request.
 message PatternFlowIpv4TosThroughputMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 1
   optional int32 length = 3;
 }
@@ -11261,13 +11231,13 @@ message PatternFlowIpv4TosThroughput {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowIpv4TosThroughputMetricTags metric_tags = 4;
+  repeated PatternFlowIpv4TosThroughputMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowIpv4TosThroughputCounter increment = 5;
+  optional PatternFlowIpv4TosThroughputCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowIpv4TosThroughputCounter decrement = 6;
+  optional PatternFlowIpv4TosThroughputCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -11276,16 +11246,15 @@ message PatternFlowIpv4TosThroughput {
 // metric_tag value to be specified as part of the request.
 message PatternFlowIpv4TosReliabilityMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 1
   optional int32 length = 3;
 }
@@ -11331,13 +11300,13 @@ message PatternFlowIpv4TosReliability {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowIpv4TosReliabilityMetricTags metric_tags = 4;
+  repeated PatternFlowIpv4TosReliabilityMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowIpv4TosReliabilityCounter increment = 5;
+  optional PatternFlowIpv4TosReliabilityCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowIpv4TosReliabilityCounter decrement = 6;
+  optional PatternFlowIpv4TosReliabilityCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -11346,16 +11315,15 @@ message PatternFlowIpv4TosReliability {
 // metric_tag value to be specified as part of the request.
 message PatternFlowIpv4TosMonetaryMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 1
   optional int32 length = 3;
 }
@@ -11401,13 +11369,13 @@ message PatternFlowIpv4TosMonetary {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowIpv4TosMonetaryMetricTags metric_tags = 4;
+  repeated PatternFlowIpv4TosMonetaryMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowIpv4TosMonetaryCounter increment = 5;
+  optional PatternFlowIpv4TosMonetaryCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowIpv4TosMonetaryCounter decrement = 6;
+  optional PatternFlowIpv4TosMonetaryCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -11416,16 +11384,15 @@ message PatternFlowIpv4TosMonetary {
 // metric_tag value to be specified as part of the request.
 message PatternFlowIpv4TosUnusedMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 1
   optional int32 length = 3;
 }
@@ -11471,13 +11438,13 @@ message PatternFlowIpv4TosUnused {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowIpv4TosUnusedMetricTags metric_tags = 4;
+  repeated PatternFlowIpv4TosUnusedMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowIpv4TosUnusedCounter increment = 5;
+  optional PatternFlowIpv4TosUnusedCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowIpv4TosUnusedCounter decrement = 6;
+  optional PatternFlowIpv4TosUnusedCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -11486,16 +11453,15 @@ message PatternFlowIpv4TosUnused {
 // metric_tag value to be specified as part of the request.
 message PatternFlowIpv6VersionMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 4
   optional int32 length = 3;
 }
@@ -11541,13 +11507,13 @@ message PatternFlowIpv6Version {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowIpv6VersionMetricTags metric_tags = 4;
+  repeated PatternFlowIpv6VersionMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowIpv6VersionCounter increment = 5;
+  optional PatternFlowIpv6VersionCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowIpv6VersionCounter decrement = 6;
+  optional PatternFlowIpv6VersionCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -11556,16 +11522,15 @@ message PatternFlowIpv6Version {
 // metric_tag value to be specified as part of the request.
 message PatternFlowIpv6TrafficClassMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 8
   optional int32 length = 3;
 }
@@ -11611,13 +11576,13 @@ message PatternFlowIpv6TrafficClass {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowIpv6TrafficClassMetricTags metric_tags = 4;
+  repeated PatternFlowIpv6TrafficClassMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowIpv6TrafficClassCounter increment = 5;
+  optional PatternFlowIpv6TrafficClassCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowIpv6TrafficClassCounter decrement = 6;
+  optional PatternFlowIpv6TrafficClassCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -11626,16 +11591,15 @@ message PatternFlowIpv6TrafficClass {
 // metric_tag value to be specified as part of the request.
 message PatternFlowIpv6FlowLabelMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 20
   optional int32 length = 3;
 }
@@ -11681,13 +11645,13 @@ message PatternFlowIpv6FlowLabel {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowIpv6FlowLabelMetricTags metric_tags = 4;
+  repeated PatternFlowIpv6FlowLabelMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowIpv6FlowLabelCounter increment = 5;
+  optional PatternFlowIpv6FlowLabelCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowIpv6FlowLabelCounter decrement = 6;
+  optional PatternFlowIpv6FlowLabelCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -11696,16 +11660,15 @@ message PatternFlowIpv6FlowLabel {
 // metric_tag value to be specified as part of the request.
 message PatternFlowIpv6PayloadLengthMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 16
   optional int32 length = 3;
 }
@@ -11758,13 +11721,13 @@ message PatternFlowIpv6PayloadLength {
   optional int32 auto = 4;
 
   // Description missing in models
-  repeated PatternFlowIpv6PayloadLengthMetricTags metric_tags = 5;
+  repeated PatternFlowIpv6PayloadLengthMetricTags metric_tags = 6;
 
   // Description missing in models
-  optional PatternFlowIpv6PayloadLengthCounter increment = 6;
+  optional PatternFlowIpv6PayloadLengthCounter increment = 7;
 
   // Description missing in models
-  optional PatternFlowIpv6PayloadLengthCounter decrement = 7;
+  optional PatternFlowIpv6PayloadLengthCounter decrement = 8;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -11773,16 +11736,15 @@ message PatternFlowIpv6PayloadLength {
 // metric_tag value to be specified as part of the request.
 message PatternFlowIpv6NextHeaderMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 8
   optional int32 length = 3;
 }
@@ -11835,13 +11797,13 @@ message PatternFlowIpv6NextHeader {
   optional int32 auto = 4;
 
   // Description missing in models
-  repeated PatternFlowIpv6NextHeaderMetricTags metric_tags = 5;
+  repeated PatternFlowIpv6NextHeaderMetricTags metric_tags = 6;
 
   // Description missing in models
-  optional PatternFlowIpv6NextHeaderCounter increment = 6;
+  optional PatternFlowIpv6NextHeaderCounter increment = 7;
 
   // Description missing in models
-  optional PatternFlowIpv6NextHeaderCounter decrement = 7;
+  optional PatternFlowIpv6NextHeaderCounter decrement = 8;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -11850,16 +11812,15 @@ message PatternFlowIpv6NextHeader {
 // metric_tag value to be specified as part of the request.
 message PatternFlowIpv6HopLimitMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 8
   optional int32 length = 3;
 }
@@ -11905,13 +11866,13 @@ message PatternFlowIpv6HopLimit {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowIpv6HopLimitMetricTags metric_tags = 4;
+  repeated PatternFlowIpv6HopLimitMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowIpv6HopLimitCounter increment = 5;
+  optional PatternFlowIpv6HopLimitCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowIpv6HopLimitCounter decrement = 6;
+  optional PatternFlowIpv6HopLimitCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -11920,16 +11881,15 @@ message PatternFlowIpv6HopLimit {
 // metric_tag value to be specified as part of the request.
 message PatternFlowIpv6SrcMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 128
   optional int32 length = 3;
 }
@@ -11975,13 +11935,13 @@ message PatternFlowIpv6Src {
   repeated string values = 3;
 
   // Description missing in models
-  repeated PatternFlowIpv6SrcMetricTags metric_tags = 4;
+  repeated PatternFlowIpv6SrcMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowIpv6SrcCounter increment = 5;
+  optional PatternFlowIpv6SrcCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowIpv6SrcCounter decrement = 6;
+  optional PatternFlowIpv6SrcCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -11990,16 +11950,15 @@ message PatternFlowIpv6Src {
 // metric_tag value to be specified as part of the request.
 message PatternFlowIpv6DstMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 128
   optional int32 length = 3;
 }
@@ -12045,13 +12004,13 @@ message PatternFlowIpv6Dst {
   repeated string values = 3;
 
   // Description missing in models
-  repeated PatternFlowIpv6DstMetricTags metric_tags = 4;
+  repeated PatternFlowIpv6DstMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowIpv6DstCounter increment = 5;
+  optional PatternFlowIpv6DstCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowIpv6DstCounter decrement = 6;
+  optional PatternFlowIpv6DstCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -12060,16 +12019,15 @@ message PatternFlowIpv6Dst {
 // metric_tag value to be specified as part of the request.
 message PatternFlowPfcPauseDstMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 48
   optional int32 length = 3;
 }
@@ -12115,13 +12073,13 @@ message PatternFlowPfcPauseDst {
   repeated string values = 3;
 
   // Description missing in models
-  repeated PatternFlowPfcPauseDstMetricTags metric_tags = 4;
+  repeated PatternFlowPfcPauseDstMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowPfcPauseDstCounter increment = 5;
+  optional PatternFlowPfcPauseDstCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowPfcPauseDstCounter decrement = 6;
+  optional PatternFlowPfcPauseDstCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -12130,16 +12088,15 @@ message PatternFlowPfcPauseDst {
 // metric_tag value to be specified as part of the request.
 message PatternFlowPfcPauseSrcMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 48
   optional int32 length = 3;
 }
@@ -12185,13 +12142,13 @@ message PatternFlowPfcPauseSrc {
   repeated string values = 3;
 
   // Description missing in models
-  repeated PatternFlowPfcPauseSrcMetricTags metric_tags = 4;
+  repeated PatternFlowPfcPauseSrcMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowPfcPauseSrcCounter increment = 5;
+  optional PatternFlowPfcPauseSrcCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowPfcPauseSrcCounter decrement = 6;
+  optional PatternFlowPfcPauseSrcCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -12200,16 +12157,15 @@ message PatternFlowPfcPauseSrc {
 // metric_tag value to be specified as part of the request.
 message PatternFlowPfcPauseEtherTypeMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 16
   optional int32 length = 3;
 }
@@ -12255,13 +12211,13 @@ message PatternFlowPfcPauseEtherType {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowPfcPauseEtherTypeMetricTags metric_tags = 4;
+  repeated PatternFlowPfcPauseEtherTypeMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowPfcPauseEtherTypeCounter increment = 5;
+  optional PatternFlowPfcPauseEtherTypeCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowPfcPauseEtherTypeCounter decrement = 6;
+  optional PatternFlowPfcPauseEtherTypeCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -12270,16 +12226,15 @@ message PatternFlowPfcPauseEtherType {
 // metric_tag value to be specified as part of the request.
 message PatternFlowPfcPauseControlOpCodeMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 16
   optional int32 length = 3;
 }
@@ -12325,13 +12280,13 @@ message PatternFlowPfcPauseControlOpCode {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowPfcPauseControlOpCodeMetricTags metric_tags = 4;
+  repeated PatternFlowPfcPauseControlOpCodeMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowPfcPauseControlOpCodeCounter increment = 5;
+  optional PatternFlowPfcPauseControlOpCodeCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowPfcPauseControlOpCodeCounter decrement = 6;
+  optional PatternFlowPfcPauseControlOpCodeCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -12340,16 +12295,15 @@ message PatternFlowPfcPauseControlOpCode {
 // metric_tag value to be specified as part of the request.
 message PatternFlowPfcPauseClassEnableVectorMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 16
   optional int32 length = 3;
 }
@@ -12395,13 +12349,13 @@ message PatternFlowPfcPauseClassEnableVector {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowPfcPauseClassEnableVectorMetricTags metric_tags = 4;
+  repeated PatternFlowPfcPauseClassEnableVectorMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowPfcPauseClassEnableVectorCounter increment = 5;
+  optional PatternFlowPfcPauseClassEnableVectorCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowPfcPauseClassEnableVectorCounter decrement = 6;
+  optional PatternFlowPfcPauseClassEnableVectorCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -12410,16 +12364,15 @@ message PatternFlowPfcPauseClassEnableVector {
 // metric_tag value to be specified as part of the request.
 message PatternFlowPfcPausePauseClass0MetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 16
   optional int32 length = 3;
 }
@@ -12465,13 +12418,13 @@ message PatternFlowPfcPausePauseClass0 {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowPfcPausePauseClass0MetricTags metric_tags = 4;
+  repeated PatternFlowPfcPausePauseClass0MetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowPfcPausePauseClass0Counter increment = 5;
+  optional PatternFlowPfcPausePauseClass0Counter increment = 6;
 
   // Description missing in models
-  optional PatternFlowPfcPausePauseClass0Counter decrement = 6;
+  optional PatternFlowPfcPausePauseClass0Counter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -12480,16 +12433,15 @@ message PatternFlowPfcPausePauseClass0 {
 // metric_tag value to be specified as part of the request.
 message PatternFlowPfcPausePauseClass1MetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 16
   optional int32 length = 3;
 }
@@ -12535,13 +12487,13 @@ message PatternFlowPfcPausePauseClass1 {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowPfcPausePauseClass1MetricTags metric_tags = 4;
+  repeated PatternFlowPfcPausePauseClass1MetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowPfcPausePauseClass1Counter increment = 5;
+  optional PatternFlowPfcPausePauseClass1Counter increment = 6;
 
   // Description missing in models
-  optional PatternFlowPfcPausePauseClass1Counter decrement = 6;
+  optional PatternFlowPfcPausePauseClass1Counter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -12550,16 +12502,15 @@ message PatternFlowPfcPausePauseClass1 {
 // metric_tag value to be specified as part of the request.
 message PatternFlowPfcPausePauseClass2MetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 16
   optional int32 length = 3;
 }
@@ -12605,13 +12556,13 @@ message PatternFlowPfcPausePauseClass2 {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowPfcPausePauseClass2MetricTags metric_tags = 4;
+  repeated PatternFlowPfcPausePauseClass2MetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowPfcPausePauseClass2Counter increment = 5;
+  optional PatternFlowPfcPausePauseClass2Counter increment = 6;
 
   // Description missing in models
-  optional PatternFlowPfcPausePauseClass2Counter decrement = 6;
+  optional PatternFlowPfcPausePauseClass2Counter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -12620,16 +12571,15 @@ message PatternFlowPfcPausePauseClass2 {
 // metric_tag value to be specified as part of the request.
 message PatternFlowPfcPausePauseClass3MetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 16
   optional int32 length = 3;
 }
@@ -12675,13 +12625,13 @@ message PatternFlowPfcPausePauseClass3 {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowPfcPausePauseClass3MetricTags metric_tags = 4;
+  repeated PatternFlowPfcPausePauseClass3MetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowPfcPausePauseClass3Counter increment = 5;
+  optional PatternFlowPfcPausePauseClass3Counter increment = 6;
 
   // Description missing in models
-  optional PatternFlowPfcPausePauseClass3Counter decrement = 6;
+  optional PatternFlowPfcPausePauseClass3Counter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -12690,16 +12640,15 @@ message PatternFlowPfcPausePauseClass3 {
 // metric_tag value to be specified as part of the request.
 message PatternFlowPfcPausePauseClass4MetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 16
   optional int32 length = 3;
 }
@@ -12745,13 +12694,13 @@ message PatternFlowPfcPausePauseClass4 {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowPfcPausePauseClass4MetricTags metric_tags = 4;
+  repeated PatternFlowPfcPausePauseClass4MetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowPfcPausePauseClass4Counter increment = 5;
+  optional PatternFlowPfcPausePauseClass4Counter increment = 6;
 
   // Description missing in models
-  optional PatternFlowPfcPausePauseClass4Counter decrement = 6;
+  optional PatternFlowPfcPausePauseClass4Counter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -12760,16 +12709,15 @@ message PatternFlowPfcPausePauseClass4 {
 // metric_tag value to be specified as part of the request.
 message PatternFlowPfcPausePauseClass5MetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 16
   optional int32 length = 3;
 }
@@ -12815,13 +12763,13 @@ message PatternFlowPfcPausePauseClass5 {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowPfcPausePauseClass5MetricTags metric_tags = 4;
+  repeated PatternFlowPfcPausePauseClass5MetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowPfcPausePauseClass5Counter increment = 5;
+  optional PatternFlowPfcPausePauseClass5Counter increment = 6;
 
   // Description missing in models
-  optional PatternFlowPfcPausePauseClass5Counter decrement = 6;
+  optional PatternFlowPfcPausePauseClass5Counter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -12830,16 +12778,15 @@ message PatternFlowPfcPausePauseClass5 {
 // metric_tag value to be specified as part of the request.
 message PatternFlowPfcPausePauseClass6MetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 16
   optional int32 length = 3;
 }
@@ -12885,13 +12832,13 @@ message PatternFlowPfcPausePauseClass6 {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowPfcPausePauseClass6MetricTags metric_tags = 4;
+  repeated PatternFlowPfcPausePauseClass6MetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowPfcPausePauseClass6Counter increment = 5;
+  optional PatternFlowPfcPausePauseClass6Counter increment = 6;
 
   // Description missing in models
-  optional PatternFlowPfcPausePauseClass6Counter decrement = 6;
+  optional PatternFlowPfcPausePauseClass6Counter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -12900,16 +12847,15 @@ message PatternFlowPfcPausePauseClass6 {
 // metric_tag value to be specified as part of the request.
 message PatternFlowPfcPausePauseClass7MetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 16
   optional int32 length = 3;
 }
@@ -12955,13 +12901,13 @@ message PatternFlowPfcPausePauseClass7 {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowPfcPausePauseClass7MetricTags metric_tags = 4;
+  repeated PatternFlowPfcPausePauseClass7MetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowPfcPausePauseClass7Counter increment = 5;
+  optional PatternFlowPfcPausePauseClass7Counter increment = 6;
 
   // Description missing in models
-  optional PatternFlowPfcPausePauseClass7Counter decrement = 6;
+  optional PatternFlowPfcPausePauseClass7Counter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -12970,16 +12916,15 @@ message PatternFlowPfcPausePauseClass7 {
 // metric_tag value to be specified as part of the request.
 message PatternFlowEthernetPauseDstMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 48
   optional int32 length = 3;
 }
@@ -13025,13 +12970,13 @@ message PatternFlowEthernetPauseDst {
   repeated string values = 3;
 
   // Description missing in models
-  repeated PatternFlowEthernetPauseDstMetricTags metric_tags = 4;
+  repeated PatternFlowEthernetPauseDstMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowEthernetPauseDstCounter increment = 5;
+  optional PatternFlowEthernetPauseDstCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowEthernetPauseDstCounter decrement = 6;
+  optional PatternFlowEthernetPauseDstCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -13040,16 +12985,15 @@ message PatternFlowEthernetPauseDst {
 // metric_tag value to be specified as part of the request.
 message PatternFlowEthernetPauseSrcMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 48
   optional int32 length = 3;
 }
@@ -13095,13 +13039,13 @@ message PatternFlowEthernetPauseSrc {
   repeated string values = 3;
 
   // Description missing in models
-  repeated PatternFlowEthernetPauseSrcMetricTags metric_tags = 4;
+  repeated PatternFlowEthernetPauseSrcMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowEthernetPauseSrcCounter increment = 5;
+  optional PatternFlowEthernetPauseSrcCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowEthernetPauseSrcCounter decrement = 6;
+  optional PatternFlowEthernetPauseSrcCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -13110,16 +13054,15 @@ message PatternFlowEthernetPauseSrc {
 // metric_tag value to be specified as part of the request.
 message PatternFlowEthernetPauseEtherTypeMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 16
   optional int32 length = 3;
 }
@@ -13165,13 +13108,13 @@ message PatternFlowEthernetPauseEtherType {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowEthernetPauseEtherTypeMetricTags metric_tags = 4;
+  repeated PatternFlowEthernetPauseEtherTypeMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowEthernetPauseEtherTypeCounter increment = 5;
+  optional PatternFlowEthernetPauseEtherTypeCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowEthernetPauseEtherTypeCounter decrement = 6;
+  optional PatternFlowEthernetPauseEtherTypeCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -13180,16 +13123,15 @@ message PatternFlowEthernetPauseEtherType {
 // metric_tag value to be specified as part of the request.
 message PatternFlowEthernetPauseControlOpCodeMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 16
   optional int32 length = 3;
 }
@@ -13235,13 +13177,13 @@ message PatternFlowEthernetPauseControlOpCode {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowEthernetPauseControlOpCodeMetricTags metric_tags = 4;
+  repeated PatternFlowEthernetPauseControlOpCodeMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowEthernetPauseControlOpCodeCounter increment = 5;
+  optional PatternFlowEthernetPauseControlOpCodeCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowEthernetPauseControlOpCodeCounter decrement = 6;
+  optional PatternFlowEthernetPauseControlOpCodeCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -13250,16 +13192,15 @@ message PatternFlowEthernetPauseControlOpCode {
 // metric_tag value to be specified as part of the request.
 message PatternFlowEthernetPauseTimeMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 16
   optional int32 length = 3;
 }
@@ -13305,13 +13246,13 @@ message PatternFlowEthernetPauseTime {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowEthernetPauseTimeMetricTags metric_tags = 4;
+  repeated PatternFlowEthernetPauseTimeMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowEthernetPauseTimeCounter increment = 5;
+  optional PatternFlowEthernetPauseTimeCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowEthernetPauseTimeCounter decrement = 6;
+  optional PatternFlowEthernetPauseTimeCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -13320,16 +13261,15 @@ message PatternFlowEthernetPauseTime {
 // metric_tag value to be specified as part of the request.
 message PatternFlowTcpSrcPortMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 16
   optional int32 length = 3;
 }
@@ -13375,13 +13315,13 @@ message PatternFlowTcpSrcPort {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowTcpSrcPortMetricTags metric_tags = 4;
+  repeated PatternFlowTcpSrcPortMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowTcpSrcPortCounter increment = 5;
+  optional PatternFlowTcpSrcPortCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowTcpSrcPortCounter decrement = 6;
+  optional PatternFlowTcpSrcPortCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -13390,16 +13330,15 @@ message PatternFlowTcpSrcPort {
 // metric_tag value to be specified as part of the request.
 message PatternFlowTcpDstPortMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 16
   optional int32 length = 3;
 }
@@ -13445,13 +13384,13 @@ message PatternFlowTcpDstPort {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowTcpDstPortMetricTags metric_tags = 4;
+  repeated PatternFlowTcpDstPortMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowTcpDstPortCounter increment = 5;
+  optional PatternFlowTcpDstPortCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowTcpDstPortCounter decrement = 6;
+  optional PatternFlowTcpDstPortCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -13460,16 +13399,15 @@ message PatternFlowTcpDstPort {
 // metric_tag value to be specified as part of the request.
 message PatternFlowTcpSeqNumMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 32
   optional int32 length = 3;
 }
@@ -13515,13 +13453,13 @@ message PatternFlowTcpSeqNum {
   repeated int64 values = 3;
 
   // Description missing in models
-  repeated PatternFlowTcpSeqNumMetricTags metric_tags = 4;
+  repeated PatternFlowTcpSeqNumMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowTcpSeqNumCounter increment = 5;
+  optional PatternFlowTcpSeqNumCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowTcpSeqNumCounter decrement = 6;
+  optional PatternFlowTcpSeqNumCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -13530,16 +13468,15 @@ message PatternFlowTcpSeqNum {
 // metric_tag value to be specified as part of the request.
 message PatternFlowTcpAckNumMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 32
   optional int32 length = 3;
 }
@@ -13585,13 +13522,13 @@ message PatternFlowTcpAckNum {
   repeated int64 values = 3;
 
   // Description missing in models
-  repeated PatternFlowTcpAckNumMetricTags metric_tags = 4;
+  repeated PatternFlowTcpAckNumMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowTcpAckNumCounter increment = 5;
+  optional PatternFlowTcpAckNumCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowTcpAckNumCounter decrement = 6;
+  optional PatternFlowTcpAckNumCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -13600,16 +13537,15 @@ message PatternFlowTcpAckNum {
 // metric_tag value to be specified as part of the request.
 message PatternFlowTcpDataOffsetMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 4
   optional int32 length = 3;
 }
@@ -13655,13 +13591,13 @@ message PatternFlowTcpDataOffset {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowTcpDataOffsetMetricTags metric_tags = 4;
+  repeated PatternFlowTcpDataOffsetMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowTcpDataOffsetCounter increment = 5;
+  optional PatternFlowTcpDataOffsetCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowTcpDataOffsetCounter decrement = 6;
+  optional PatternFlowTcpDataOffsetCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -13670,16 +13606,15 @@ message PatternFlowTcpDataOffset {
 // metric_tag value to be specified as part of the request.
 message PatternFlowTcpEcnNsMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 1
   optional int32 length = 3;
 }
@@ -13725,13 +13660,13 @@ message PatternFlowTcpEcnNs {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowTcpEcnNsMetricTags metric_tags = 4;
+  repeated PatternFlowTcpEcnNsMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowTcpEcnNsCounter increment = 5;
+  optional PatternFlowTcpEcnNsCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowTcpEcnNsCounter decrement = 6;
+  optional PatternFlowTcpEcnNsCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -13740,16 +13675,15 @@ message PatternFlowTcpEcnNs {
 // metric_tag value to be specified as part of the request.
 message PatternFlowTcpEcnCwrMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 1
   optional int32 length = 3;
 }
@@ -13795,13 +13729,13 @@ message PatternFlowTcpEcnCwr {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowTcpEcnCwrMetricTags metric_tags = 4;
+  repeated PatternFlowTcpEcnCwrMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowTcpEcnCwrCounter increment = 5;
+  optional PatternFlowTcpEcnCwrCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowTcpEcnCwrCounter decrement = 6;
+  optional PatternFlowTcpEcnCwrCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -13810,16 +13744,15 @@ message PatternFlowTcpEcnCwr {
 // metric_tag value to be specified as part of the request.
 message PatternFlowTcpEcnEchoMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 1
   optional int32 length = 3;
 }
@@ -13866,13 +13799,13 @@ message PatternFlowTcpEcnEcho {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowTcpEcnEchoMetricTags metric_tags = 4;
+  repeated PatternFlowTcpEcnEchoMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowTcpEcnEchoCounter increment = 5;
+  optional PatternFlowTcpEcnEchoCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowTcpEcnEchoCounter decrement = 6;
+  optional PatternFlowTcpEcnEchoCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -13881,16 +13814,15 @@ message PatternFlowTcpEcnEcho {
 // metric_tag value to be specified as part of the request.
 message PatternFlowTcpCtlUrgMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 1
   optional int32 length = 3;
 }
@@ -13936,13 +13868,13 @@ message PatternFlowTcpCtlUrg {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowTcpCtlUrgMetricTags metric_tags = 4;
+  repeated PatternFlowTcpCtlUrgMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowTcpCtlUrgCounter increment = 5;
+  optional PatternFlowTcpCtlUrgCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowTcpCtlUrgCounter decrement = 6;
+  optional PatternFlowTcpCtlUrgCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -13951,16 +13883,15 @@ message PatternFlowTcpCtlUrg {
 // metric_tag value to be specified as part of the request.
 message PatternFlowTcpCtlAckMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 1
   optional int32 length = 3;
 }
@@ -14006,13 +13937,13 @@ message PatternFlowTcpCtlAck {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowTcpCtlAckMetricTags metric_tags = 4;
+  repeated PatternFlowTcpCtlAckMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowTcpCtlAckCounter increment = 5;
+  optional PatternFlowTcpCtlAckCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowTcpCtlAckCounter decrement = 6;
+  optional PatternFlowTcpCtlAckCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -14021,16 +13952,15 @@ message PatternFlowTcpCtlAck {
 // metric_tag value to be specified as part of the request.
 message PatternFlowTcpCtlPshMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 1
   optional int32 length = 3;
 }
@@ -14076,13 +14006,13 @@ message PatternFlowTcpCtlPsh {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowTcpCtlPshMetricTags metric_tags = 4;
+  repeated PatternFlowTcpCtlPshMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowTcpCtlPshCounter increment = 5;
+  optional PatternFlowTcpCtlPshCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowTcpCtlPshCounter decrement = 6;
+  optional PatternFlowTcpCtlPshCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -14091,16 +14021,15 @@ message PatternFlowTcpCtlPsh {
 // metric_tag value to be specified as part of the request.
 message PatternFlowTcpCtlRstMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 1
   optional int32 length = 3;
 }
@@ -14146,13 +14075,13 @@ message PatternFlowTcpCtlRst {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowTcpCtlRstMetricTags metric_tags = 4;
+  repeated PatternFlowTcpCtlRstMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowTcpCtlRstCounter increment = 5;
+  optional PatternFlowTcpCtlRstCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowTcpCtlRstCounter decrement = 6;
+  optional PatternFlowTcpCtlRstCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -14161,16 +14090,15 @@ message PatternFlowTcpCtlRst {
 // metric_tag value to be specified as part of the request.
 message PatternFlowTcpCtlSynMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 1
   optional int32 length = 3;
 }
@@ -14216,13 +14144,13 @@ message PatternFlowTcpCtlSyn {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowTcpCtlSynMetricTags metric_tags = 4;
+  repeated PatternFlowTcpCtlSynMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowTcpCtlSynCounter increment = 5;
+  optional PatternFlowTcpCtlSynCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowTcpCtlSynCounter decrement = 6;
+  optional PatternFlowTcpCtlSynCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -14231,16 +14159,15 @@ message PatternFlowTcpCtlSyn {
 // metric_tag value to be specified as part of the request.
 message PatternFlowTcpCtlFinMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 1
   optional int32 length = 3;
 }
@@ -14286,13 +14213,13 @@ message PatternFlowTcpCtlFin {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowTcpCtlFinMetricTags metric_tags = 4;
+  repeated PatternFlowTcpCtlFinMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowTcpCtlFinCounter increment = 5;
+  optional PatternFlowTcpCtlFinCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowTcpCtlFinCounter decrement = 6;
+  optional PatternFlowTcpCtlFinCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -14301,16 +14228,15 @@ message PatternFlowTcpCtlFin {
 // metric_tag value to be specified as part of the request.
 message PatternFlowTcpWindowMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 16
   optional int32 length = 3;
 }
@@ -14356,13 +14282,13 @@ message PatternFlowTcpWindow {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowTcpWindowMetricTags metric_tags = 4;
+  repeated PatternFlowTcpWindowMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowTcpWindowCounter increment = 5;
+  optional PatternFlowTcpWindowCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowTcpWindowCounter decrement = 6;
+  optional PatternFlowTcpWindowCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -14371,16 +14297,15 @@ message PatternFlowTcpWindow {
 // metric_tag value to be specified as part of the request.
 message PatternFlowUdpSrcPortMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 16
   optional int32 length = 3;
 }
@@ -14426,13 +14351,13 @@ message PatternFlowUdpSrcPort {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowUdpSrcPortMetricTags metric_tags = 4;
+  repeated PatternFlowUdpSrcPortMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowUdpSrcPortCounter increment = 5;
+  optional PatternFlowUdpSrcPortCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowUdpSrcPortCounter decrement = 6;
+  optional PatternFlowUdpSrcPortCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -14441,16 +14366,15 @@ message PatternFlowUdpSrcPort {
 // metric_tag value to be specified as part of the request.
 message PatternFlowUdpDstPortMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 16
   optional int32 length = 3;
 }
@@ -14496,13 +14420,13 @@ message PatternFlowUdpDstPort {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowUdpDstPortMetricTags metric_tags = 4;
+  repeated PatternFlowUdpDstPortMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowUdpDstPortCounter increment = 5;
+  optional PatternFlowUdpDstPortCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowUdpDstPortCounter decrement = 6;
+  optional PatternFlowUdpDstPortCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -14511,16 +14435,15 @@ message PatternFlowUdpDstPort {
 // metric_tag value to be specified as part of the request.
 message PatternFlowUdpLengthMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 16
   optional int32 length = 3;
 }
@@ -14566,13 +14489,13 @@ message PatternFlowUdpLength {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowUdpLengthMetricTags metric_tags = 4;
+  repeated PatternFlowUdpLengthMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowUdpLengthCounter increment = 5;
+  optional PatternFlowUdpLengthCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowUdpLengthCounter decrement = 6;
+  optional PatternFlowUdpLengthCounter decrement = 7;
 }
 
 // UDP checksum
@@ -14610,16 +14533,15 @@ message PatternFlowUdpChecksum {
 // metric_tag value to be specified as part of the request.
 message PatternFlowGreChecksumPresentMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 1
   optional int32 length = 3;
 }
@@ -14665,13 +14587,13 @@ message PatternFlowGreChecksumPresent {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowGreChecksumPresentMetricTags metric_tags = 4;
+  repeated PatternFlowGreChecksumPresentMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowGreChecksumPresentCounter increment = 5;
+  optional PatternFlowGreChecksumPresentCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowGreChecksumPresentCounter decrement = 6;
+  optional PatternFlowGreChecksumPresentCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -14680,16 +14602,15 @@ message PatternFlowGreChecksumPresent {
 // metric_tag value to be specified as part of the request.
 message PatternFlowGreReserved0MetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 12
   optional int32 length = 3;
 }
@@ -14735,13 +14656,13 @@ message PatternFlowGreReserved0 {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowGreReserved0MetricTags metric_tags = 4;
+  repeated PatternFlowGreReserved0MetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowGreReserved0Counter increment = 5;
+  optional PatternFlowGreReserved0Counter increment = 6;
 
   // Description missing in models
-  optional PatternFlowGreReserved0Counter decrement = 6;
+  optional PatternFlowGreReserved0Counter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -14750,16 +14671,15 @@ message PatternFlowGreReserved0 {
 // metric_tag value to be specified as part of the request.
 message PatternFlowGreVersionMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 3
   optional int32 length = 3;
 }
@@ -14805,13 +14725,13 @@ message PatternFlowGreVersion {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowGreVersionMetricTags metric_tags = 4;
+  repeated PatternFlowGreVersionMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowGreVersionCounter increment = 5;
+  optional PatternFlowGreVersionCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowGreVersionCounter decrement = 6;
+  optional PatternFlowGreVersionCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -14820,16 +14740,15 @@ message PatternFlowGreVersion {
 // metric_tag value to be specified as part of the request.
 message PatternFlowGreProtocolMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 16
   optional int32 length = 3;
 }
@@ -14875,13 +14794,13 @@ message PatternFlowGreProtocol {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowGreProtocolMetricTags metric_tags = 4;
+  repeated PatternFlowGreProtocolMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowGreProtocolCounter increment = 5;
+  optional PatternFlowGreProtocolCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowGreProtocolCounter decrement = 6;
+  optional PatternFlowGreProtocolCounter decrement = 7;
 }
 
 // Optional checksum of GRE header and payload. Only present if the checksum_present
@@ -14920,16 +14839,15 @@ message PatternFlowGreChecksum {
 // metric_tag value to be specified as part of the request.
 message PatternFlowGreReserved1MetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 16
   optional int32 length = 3;
 }
@@ -14975,13 +14893,13 @@ message PatternFlowGreReserved1 {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowGreReserved1MetricTags metric_tags = 4;
+  repeated PatternFlowGreReserved1MetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowGreReserved1Counter increment = 5;
+  optional PatternFlowGreReserved1Counter increment = 6;
 
   // Description missing in models
-  optional PatternFlowGreReserved1Counter decrement = 6;
+  optional PatternFlowGreReserved1Counter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -14990,16 +14908,15 @@ message PatternFlowGreReserved1 {
 // metric_tag value to be specified as part of the request.
 message PatternFlowGtpv1VersionMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 3
   optional int32 length = 3;
 }
@@ -15045,13 +14962,13 @@ message PatternFlowGtpv1Version {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowGtpv1VersionMetricTags metric_tags = 4;
+  repeated PatternFlowGtpv1VersionMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowGtpv1VersionCounter increment = 5;
+  optional PatternFlowGtpv1VersionCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowGtpv1VersionCounter decrement = 6;
+  optional PatternFlowGtpv1VersionCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -15060,16 +14977,15 @@ message PatternFlowGtpv1Version {
 // metric_tag value to be specified as part of the request.
 message PatternFlowGtpv1ProtocolTypeMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 1
   optional int32 length = 3;
 }
@@ -15115,13 +15031,13 @@ message PatternFlowGtpv1ProtocolType {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowGtpv1ProtocolTypeMetricTags metric_tags = 4;
+  repeated PatternFlowGtpv1ProtocolTypeMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowGtpv1ProtocolTypeCounter increment = 5;
+  optional PatternFlowGtpv1ProtocolTypeCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowGtpv1ProtocolTypeCounter decrement = 6;
+  optional PatternFlowGtpv1ProtocolTypeCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -15130,16 +15046,15 @@ message PatternFlowGtpv1ProtocolType {
 // metric_tag value to be specified as part of the request.
 message PatternFlowGtpv1ReservedMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 1
   optional int32 length = 3;
 }
@@ -15185,13 +15100,13 @@ message PatternFlowGtpv1Reserved {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowGtpv1ReservedMetricTags metric_tags = 4;
+  repeated PatternFlowGtpv1ReservedMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowGtpv1ReservedCounter increment = 5;
+  optional PatternFlowGtpv1ReservedCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowGtpv1ReservedCounter decrement = 6;
+  optional PatternFlowGtpv1ReservedCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -15200,16 +15115,15 @@ message PatternFlowGtpv1Reserved {
 // metric_tag value to be specified as part of the request.
 message PatternFlowGtpv1EFlagMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 1
   optional int32 length = 3;
 }
@@ -15255,13 +15169,13 @@ message PatternFlowGtpv1EFlag {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowGtpv1EFlagMetricTags metric_tags = 4;
+  repeated PatternFlowGtpv1EFlagMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowGtpv1EFlagCounter increment = 5;
+  optional PatternFlowGtpv1EFlagCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowGtpv1EFlagCounter decrement = 6;
+  optional PatternFlowGtpv1EFlagCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -15270,16 +15184,15 @@ message PatternFlowGtpv1EFlag {
 // metric_tag value to be specified as part of the request.
 message PatternFlowGtpv1SFlagMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 1
   optional int32 length = 3;
 }
@@ -15325,13 +15238,13 @@ message PatternFlowGtpv1SFlag {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowGtpv1SFlagMetricTags metric_tags = 4;
+  repeated PatternFlowGtpv1SFlagMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowGtpv1SFlagCounter increment = 5;
+  optional PatternFlowGtpv1SFlagCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowGtpv1SFlagCounter decrement = 6;
+  optional PatternFlowGtpv1SFlagCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -15340,16 +15253,15 @@ message PatternFlowGtpv1SFlag {
 // metric_tag value to be specified as part of the request.
 message PatternFlowGtpv1PnFlagMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 1
   optional int32 length = 3;
 }
@@ -15395,13 +15307,13 @@ message PatternFlowGtpv1PnFlag {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowGtpv1PnFlagMetricTags metric_tags = 4;
+  repeated PatternFlowGtpv1PnFlagMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowGtpv1PnFlagCounter increment = 5;
+  optional PatternFlowGtpv1PnFlagCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowGtpv1PnFlagCounter decrement = 6;
+  optional PatternFlowGtpv1PnFlagCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -15410,16 +15322,15 @@ message PatternFlowGtpv1PnFlag {
 // metric_tag value to be specified as part of the request.
 message PatternFlowGtpv1MessageTypeMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 8
   optional int32 length = 3;
 }
@@ -15466,13 +15377,13 @@ message PatternFlowGtpv1MessageType {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowGtpv1MessageTypeMetricTags metric_tags = 4;
+  repeated PatternFlowGtpv1MessageTypeMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowGtpv1MessageTypeCounter increment = 5;
+  optional PatternFlowGtpv1MessageTypeCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowGtpv1MessageTypeCounter decrement = 6;
+  optional PatternFlowGtpv1MessageTypeCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -15481,16 +15392,15 @@ message PatternFlowGtpv1MessageType {
 // metric_tag value to be specified as part of the request.
 message PatternFlowGtpv1MessageLengthMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 16
   optional int32 length = 3;
 }
@@ -15537,13 +15447,13 @@ message PatternFlowGtpv1MessageLength {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowGtpv1MessageLengthMetricTags metric_tags = 4;
+  repeated PatternFlowGtpv1MessageLengthMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowGtpv1MessageLengthCounter increment = 5;
+  optional PatternFlowGtpv1MessageLengthCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowGtpv1MessageLengthCounter decrement = 6;
+  optional PatternFlowGtpv1MessageLengthCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -15552,16 +15462,15 @@ message PatternFlowGtpv1MessageLength {
 // metric_tag value to be specified as part of the request.
 message PatternFlowGtpv1TeidMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 32
   optional int32 length = 3;
 }
@@ -15607,13 +15516,13 @@ message PatternFlowGtpv1Teid {
   repeated int64 values = 3;
 
   // Description missing in models
-  repeated PatternFlowGtpv1TeidMetricTags metric_tags = 4;
+  repeated PatternFlowGtpv1TeidMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowGtpv1TeidCounter increment = 5;
+  optional PatternFlowGtpv1TeidCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowGtpv1TeidCounter decrement = 6;
+  optional PatternFlowGtpv1TeidCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -15622,16 +15531,15 @@ message PatternFlowGtpv1Teid {
 // metric_tag value to be specified as part of the request.
 message PatternFlowGtpv1SquenceNumberMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 16
   optional int32 length = 3;
 }
@@ -15678,13 +15586,13 @@ message PatternFlowGtpv1SquenceNumber {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowGtpv1SquenceNumberMetricTags metric_tags = 4;
+  repeated PatternFlowGtpv1SquenceNumberMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowGtpv1SquenceNumberCounter increment = 5;
+  optional PatternFlowGtpv1SquenceNumberCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowGtpv1SquenceNumberCounter decrement = 6;
+  optional PatternFlowGtpv1SquenceNumberCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -15693,16 +15601,15 @@ message PatternFlowGtpv1SquenceNumber {
 // metric_tag value to be specified as part of the request.
 message PatternFlowGtpv1NPduNumberMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 8
   optional int32 length = 3;
 }
@@ -15749,13 +15656,13 @@ message PatternFlowGtpv1NPduNumber {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowGtpv1NPduNumberMetricTags metric_tags = 4;
+  repeated PatternFlowGtpv1NPduNumberMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowGtpv1NPduNumberCounter increment = 5;
+  optional PatternFlowGtpv1NPduNumberCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowGtpv1NPduNumberCounter decrement = 6;
+  optional PatternFlowGtpv1NPduNumberCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -15764,16 +15671,15 @@ message PatternFlowGtpv1NPduNumber {
 // metric_tag value to be specified as part of the request.
 message PatternFlowGtpv1NextExtensionHeaderTypeMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 8
   optional int32 length = 3;
 }
@@ -15820,13 +15726,13 @@ message PatternFlowGtpv1NextExtensionHeaderType {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowGtpv1NextExtensionHeaderTypeMetricTags metric_tags = 4;
+  repeated PatternFlowGtpv1NextExtensionHeaderTypeMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowGtpv1NextExtensionHeaderTypeCounter increment = 5;
+  optional PatternFlowGtpv1NextExtensionHeaderTypeCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowGtpv1NextExtensionHeaderTypeCounter decrement = 6;
+  optional PatternFlowGtpv1NextExtensionHeaderTypeCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -15835,16 +15741,15 @@ message PatternFlowGtpv1NextExtensionHeaderType {
 // metric_tag value to be specified as part of the request.
 message PatternFlowGtpExtensionExtensionLengthMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 8
   optional int32 length = 3;
 }
@@ -15892,13 +15797,13 @@ message PatternFlowGtpExtensionExtensionLength {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowGtpExtensionExtensionLengthMetricTags metric_tags = 4;
+  repeated PatternFlowGtpExtensionExtensionLengthMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowGtpExtensionExtensionLengthCounter increment = 5;
+  optional PatternFlowGtpExtensionExtensionLengthCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowGtpExtensionExtensionLengthCounter decrement = 6;
+  optional PatternFlowGtpExtensionExtensionLengthCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -15907,16 +15812,15 @@ message PatternFlowGtpExtensionExtensionLength {
 // metric_tag value to be specified as part of the request.
 message PatternFlowGtpExtensionContentsMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 48
   optional int32 length = 3;
 }
@@ -15962,13 +15866,13 @@ message PatternFlowGtpExtensionContents {
   repeated int64 values = 3;
 
   // Description missing in models
-  repeated PatternFlowGtpExtensionContentsMetricTags metric_tags = 4;
+  repeated PatternFlowGtpExtensionContentsMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowGtpExtensionContentsCounter increment = 5;
+  optional PatternFlowGtpExtensionContentsCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowGtpExtensionContentsCounter decrement = 6;
+  optional PatternFlowGtpExtensionContentsCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -15977,16 +15881,15 @@ message PatternFlowGtpExtensionContents {
 // metric_tag value to be specified as part of the request.
 message PatternFlowGtpExtensionNextExtensionHeaderMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 8
   optional int32 length = 3;
 }
@@ -16033,13 +15936,13 @@ message PatternFlowGtpExtensionNextExtensionHeader {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowGtpExtensionNextExtensionHeaderMetricTags metric_tags = 4;
+  repeated PatternFlowGtpExtensionNextExtensionHeaderMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowGtpExtensionNextExtensionHeaderCounter increment = 5;
+  optional PatternFlowGtpExtensionNextExtensionHeaderCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowGtpExtensionNextExtensionHeaderCounter decrement = 6;
+  optional PatternFlowGtpExtensionNextExtensionHeaderCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -16048,16 +15951,15 @@ message PatternFlowGtpExtensionNextExtensionHeader {
 // metric_tag value to be specified as part of the request.
 message PatternFlowGtpv2VersionMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 3
   optional int32 length = 3;
 }
@@ -16103,13 +16005,13 @@ message PatternFlowGtpv2Version {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowGtpv2VersionMetricTags metric_tags = 4;
+  repeated PatternFlowGtpv2VersionMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowGtpv2VersionCounter increment = 5;
+  optional PatternFlowGtpv2VersionCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowGtpv2VersionCounter decrement = 6;
+  optional PatternFlowGtpv2VersionCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -16118,16 +16020,15 @@ message PatternFlowGtpv2Version {
 // metric_tag value to be specified as part of the request.
 message PatternFlowGtpv2PiggybackingFlagMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 1
   optional int32 length = 3;
 }
@@ -16174,13 +16075,13 @@ message PatternFlowGtpv2PiggybackingFlag {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowGtpv2PiggybackingFlagMetricTags metric_tags = 4;
+  repeated PatternFlowGtpv2PiggybackingFlagMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowGtpv2PiggybackingFlagCounter increment = 5;
+  optional PatternFlowGtpv2PiggybackingFlagCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowGtpv2PiggybackingFlagCounter decrement = 6;
+  optional PatternFlowGtpv2PiggybackingFlagCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -16189,16 +16090,15 @@ message PatternFlowGtpv2PiggybackingFlag {
 // metric_tag value to be specified as part of the request.
 message PatternFlowGtpv2TeidFlagMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 1
   optional int32 length = 3;
 }
@@ -16246,13 +16146,13 @@ message PatternFlowGtpv2TeidFlag {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowGtpv2TeidFlagMetricTags metric_tags = 4;
+  repeated PatternFlowGtpv2TeidFlagMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowGtpv2TeidFlagCounter increment = 5;
+  optional PatternFlowGtpv2TeidFlagCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowGtpv2TeidFlagCounter decrement = 6;
+  optional PatternFlowGtpv2TeidFlagCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -16261,16 +16161,15 @@ message PatternFlowGtpv2TeidFlag {
 // metric_tag value to be specified as part of the request.
 message PatternFlowGtpv2Spare1MetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 3
   optional int32 length = 3;
 }
@@ -16316,13 +16215,13 @@ message PatternFlowGtpv2Spare1 {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowGtpv2Spare1MetricTags metric_tags = 4;
+  repeated PatternFlowGtpv2Spare1MetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowGtpv2Spare1Counter increment = 5;
+  optional PatternFlowGtpv2Spare1Counter increment = 6;
 
   // Description missing in models
-  optional PatternFlowGtpv2Spare1Counter decrement = 6;
+  optional PatternFlowGtpv2Spare1Counter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -16331,16 +16230,15 @@ message PatternFlowGtpv2Spare1 {
 // metric_tag value to be specified as part of the request.
 message PatternFlowGtpv2MessageTypeMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 8
   optional int32 length = 3;
 }
@@ -16387,13 +16285,13 @@ message PatternFlowGtpv2MessageType {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowGtpv2MessageTypeMetricTags metric_tags = 4;
+  repeated PatternFlowGtpv2MessageTypeMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowGtpv2MessageTypeCounter increment = 5;
+  optional PatternFlowGtpv2MessageTypeCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowGtpv2MessageTypeCounter decrement = 6;
+  optional PatternFlowGtpv2MessageTypeCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -16402,16 +16300,15 @@ message PatternFlowGtpv2MessageType {
 // metric_tag value to be specified as part of the request.
 message PatternFlowGtpv2MessageLengthMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 16
   optional int32 length = 3;
 }
@@ -16458,13 +16355,13 @@ message PatternFlowGtpv2MessageLength {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowGtpv2MessageLengthMetricTags metric_tags = 4;
+  repeated PatternFlowGtpv2MessageLengthMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowGtpv2MessageLengthCounter increment = 5;
+  optional PatternFlowGtpv2MessageLengthCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowGtpv2MessageLengthCounter decrement = 6;
+  optional PatternFlowGtpv2MessageLengthCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -16473,16 +16370,15 @@ message PatternFlowGtpv2MessageLength {
 // metric_tag value to be specified as part of the request.
 message PatternFlowGtpv2TeidMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 32
   optional int32 length = 3;
 }
@@ -16529,13 +16425,13 @@ message PatternFlowGtpv2Teid {
   repeated int64 values = 3;
 
   // Description missing in models
-  repeated PatternFlowGtpv2TeidMetricTags metric_tags = 4;
+  repeated PatternFlowGtpv2TeidMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowGtpv2TeidCounter increment = 5;
+  optional PatternFlowGtpv2TeidCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowGtpv2TeidCounter decrement = 6;
+  optional PatternFlowGtpv2TeidCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -16544,16 +16440,15 @@ message PatternFlowGtpv2Teid {
 // metric_tag value to be specified as part of the request.
 message PatternFlowGtpv2SequenceNumberMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 24
   optional int32 length = 3;
 }
@@ -16599,13 +16494,13 @@ message PatternFlowGtpv2SequenceNumber {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowGtpv2SequenceNumberMetricTags metric_tags = 4;
+  repeated PatternFlowGtpv2SequenceNumberMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowGtpv2SequenceNumberCounter increment = 5;
+  optional PatternFlowGtpv2SequenceNumberCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowGtpv2SequenceNumberCounter decrement = 6;
+  optional PatternFlowGtpv2SequenceNumberCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -16614,16 +16509,15 @@ message PatternFlowGtpv2SequenceNumber {
 // metric_tag value to be specified as part of the request.
 message PatternFlowGtpv2Spare2MetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 8
   optional int32 length = 3;
 }
@@ -16669,13 +16563,13 @@ message PatternFlowGtpv2Spare2 {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowGtpv2Spare2MetricTags metric_tags = 4;
+  repeated PatternFlowGtpv2Spare2MetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowGtpv2Spare2Counter increment = 5;
+  optional PatternFlowGtpv2Spare2Counter increment = 6;
 
   // Description missing in models
-  optional PatternFlowGtpv2Spare2Counter decrement = 6;
+  optional PatternFlowGtpv2Spare2Counter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -16684,16 +16578,15 @@ message PatternFlowGtpv2Spare2 {
 // metric_tag value to be specified as part of the request.
 message PatternFlowArpHardwareTypeMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 16
   optional int32 length = 3;
 }
@@ -16739,13 +16632,13 @@ message PatternFlowArpHardwareType {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowArpHardwareTypeMetricTags metric_tags = 4;
+  repeated PatternFlowArpHardwareTypeMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowArpHardwareTypeCounter increment = 5;
+  optional PatternFlowArpHardwareTypeCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowArpHardwareTypeCounter decrement = 6;
+  optional PatternFlowArpHardwareTypeCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -16754,16 +16647,15 @@ message PatternFlowArpHardwareType {
 // metric_tag value to be specified as part of the request.
 message PatternFlowArpProtocolTypeMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 16
   optional int32 length = 3;
 }
@@ -16809,13 +16701,13 @@ message PatternFlowArpProtocolType {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowArpProtocolTypeMetricTags metric_tags = 4;
+  repeated PatternFlowArpProtocolTypeMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowArpProtocolTypeCounter increment = 5;
+  optional PatternFlowArpProtocolTypeCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowArpProtocolTypeCounter decrement = 6;
+  optional PatternFlowArpProtocolTypeCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -16824,16 +16716,15 @@ message PatternFlowArpProtocolType {
 // metric_tag value to be specified as part of the request.
 message PatternFlowArpHardwareLengthMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 8
   optional int32 length = 3;
 }
@@ -16879,13 +16770,13 @@ message PatternFlowArpHardwareLength {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowArpHardwareLengthMetricTags metric_tags = 4;
+  repeated PatternFlowArpHardwareLengthMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowArpHardwareLengthCounter increment = 5;
+  optional PatternFlowArpHardwareLengthCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowArpHardwareLengthCounter decrement = 6;
+  optional PatternFlowArpHardwareLengthCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -16894,16 +16785,15 @@ message PatternFlowArpHardwareLength {
 // metric_tag value to be specified as part of the request.
 message PatternFlowArpProtocolLengthMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 8
   optional int32 length = 3;
 }
@@ -16949,13 +16839,13 @@ message PatternFlowArpProtocolLength {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowArpProtocolLengthMetricTags metric_tags = 4;
+  repeated PatternFlowArpProtocolLengthMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowArpProtocolLengthCounter increment = 5;
+  optional PatternFlowArpProtocolLengthCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowArpProtocolLengthCounter decrement = 6;
+  optional PatternFlowArpProtocolLengthCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -16964,16 +16854,15 @@ message PatternFlowArpProtocolLength {
 // metric_tag value to be specified as part of the request.
 message PatternFlowArpOperationMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 16
   optional int32 length = 3;
 }
@@ -17019,13 +16908,13 @@ message PatternFlowArpOperation {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowArpOperationMetricTags metric_tags = 4;
+  repeated PatternFlowArpOperationMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowArpOperationCounter increment = 5;
+  optional PatternFlowArpOperationCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowArpOperationCounter decrement = 6;
+  optional PatternFlowArpOperationCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -17034,16 +16923,15 @@ message PatternFlowArpOperation {
 // metric_tag value to be specified as part of the request.
 message PatternFlowArpSenderHardwareAddrMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 48
   optional int32 length = 3;
 }
@@ -17089,13 +16977,13 @@ message PatternFlowArpSenderHardwareAddr {
   repeated string values = 3;
 
   // Description missing in models
-  repeated PatternFlowArpSenderHardwareAddrMetricTags metric_tags = 4;
+  repeated PatternFlowArpSenderHardwareAddrMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowArpSenderHardwareAddrCounter increment = 5;
+  optional PatternFlowArpSenderHardwareAddrCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowArpSenderHardwareAddrCounter decrement = 6;
+  optional PatternFlowArpSenderHardwareAddrCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -17104,16 +16992,15 @@ message PatternFlowArpSenderHardwareAddr {
 // metric_tag value to be specified as part of the request.
 message PatternFlowArpSenderProtocolAddrMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 32
   optional int32 length = 3;
 }
@@ -17159,13 +17046,13 @@ message PatternFlowArpSenderProtocolAddr {
   repeated string values = 3;
 
   // Description missing in models
-  repeated PatternFlowArpSenderProtocolAddrMetricTags metric_tags = 4;
+  repeated PatternFlowArpSenderProtocolAddrMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowArpSenderProtocolAddrCounter increment = 5;
+  optional PatternFlowArpSenderProtocolAddrCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowArpSenderProtocolAddrCounter decrement = 6;
+  optional PatternFlowArpSenderProtocolAddrCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -17174,16 +17061,15 @@ message PatternFlowArpSenderProtocolAddr {
 // metric_tag value to be specified as part of the request.
 message PatternFlowArpTargetHardwareAddrMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 48
   optional int32 length = 3;
 }
@@ -17229,13 +17115,13 @@ message PatternFlowArpTargetHardwareAddr {
   repeated string values = 3;
 
   // Description missing in models
-  repeated PatternFlowArpTargetHardwareAddrMetricTags metric_tags = 4;
+  repeated PatternFlowArpTargetHardwareAddrMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowArpTargetHardwareAddrCounter increment = 5;
+  optional PatternFlowArpTargetHardwareAddrCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowArpTargetHardwareAddrCounter decrement = 6;
+  optional PatternFlowArpTargetHardwareAddrCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -17244,16 +17130,15 @@ message PatternFlowArpTargetHardwareAddr {
 // metric_tag value to be specified as part of the request.
 message PatternFlowArpTargetProtocolAddrMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 32
   optional int32 length = 3;
 }
@@ -17299,13 +17184,13 @@ message PatternFlowArpTargetProtocolAddr {
   repeated string values = 3;
 
   // Description missing in models
-  repeated PatternFlowArpTargetProtocolAddrMetricTags metric_tags = 4;
+  repeated PatternFlowArpTargetProtocolAddrMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowArpTargetProtocolAddrCounter increment = 5;
+  optional PatternFlowArpTargetProtocolAddrCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowArpTargetProtocolAddrCounter decrement = 6;
+  optional PatternFlowArpTargetProtocolAddrCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -17314,16 +17199,15 @@ message PatternFlowArpTargetProtocolAddr {
 // metric_tag value to be specified as part of the request.
 message PatternFlowIcmpEchoTypeMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 8
   optional int32 length = 3;
 }
@@ -17369,13 +17253,13 @@ message PatternFlowIcmpEchoType {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowIcmpEchoTypeMetricTags metric_tags = 4;
+  repeated PatternFlowIcmpEchoTypeMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowIcmpEchoTypeCounter increment = 5;
+  optional PatternFlowIcmpEchoTypeCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowIcmpEchoTypeCounter decrement = 6;
+  optional PatternFlowIcmpEchoTypeCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -17384,16 +17268,15 @@ message PatternFlowIcmpEchoType {
 // metric_tag value to be specified as part of the request.
 message PatternFlowIcmpEchoCodeMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 8
   optional int32 length = 3;
 }
@@ -17439,13 +17322,13 @@ message PatternFlowIcmpEchoCode {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowIcmpEchoCodeMetricTags metric_tags = 4;
+  repeated PatternFlowIcmpEchoCodeMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowIcmpEchoCodeCounter increment = 5;
+  optional PatternFlowIcmpEchoCodeCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowIcmpEchoCodeCounter decrement = 6;
+  optional PatternFlowIcmpEchoCodeCounter decrement = 7;
 }
 
 // ICMP checksum
@@ -17483,16 +17366,15 @@ message PatternFlowIcmpEchoChecksum {
 // metric_tag value to be specified as part of the request.
 message PatternFlowIcmpEchoIdentifierMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 16
   optional int32 length = 3;
 }
@@ -17538,13 +17420,13 @@ message PatternFlowIcmpEchoIdentifier {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowIcmpEchoIdentifierMetricTags metric_tags = 4;
+  repeated PatternFlowIcmpEchoIdentifierMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowIcmpEchoIdentifierCounter increment = 5;
+  optional PatternFlowIcmpEchoIdentifierCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowIcmpEchoIdentifierCounter decrement = 6;
+  optional PatternFlowIcmpEchoIdentifierCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -17553,16 +17435,15 @@ message PatternFlowIcmpEchoIdentifier {
 // metric_tag value to be specified as part of the request.
 message PatternFlowIcmpEchoSequenceNumberMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 16
   optional int32 length = 3;
 }
@@ -17608,13 +17489,13 @@ message PatternFlowIcmpEchoSequenceNumber {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowIcmpEchoSequenceNumberMetricTags metric_tags = 4;
+  repeated PatternFlowIcmpEchoSequenceNumberMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowIcmpEchoSequenceNumberCounter increment = 5;
+  optional PatternFlowIcmpEchoSequenceNumberCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowIcmpEchoSequenceNumberCounter decrement = 6;
+  optional PatternFlowIcmpEchoSequenceNumberCounter decrement = 7;
 }
 
 // ICMP checksum
@@ -17652,16 +17533,15 @@ message PatternFlowIcmpCommonChecksum {
 // metric_tag value to be specified as part of the request.
 message PatternFlowIcmpNextFieldsIdentifierMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 16
   optional int32 length = 3;
 }
@@ -17707,13 +17587,13 @@ message PatternFlowIcmpNextFieldsIdentifier {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowIcmpNextFieldsIdentifierMetricTags metric_tags = 4;
+  repeated PatternFlowIcmpNextFieldsIdentifierMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowIcmpNextFieldsIdentifierCounter increment = 5;
+  optional PatternFlowIcmpNextFieldsIdentifierCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowIcmpNextFieldsIdentifierCounter decrement = 6;
+  optional PatternFlowIcmpNextFieldsIdentifierCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -17722,16 +17602,15 @@ message PatternFlowIcmpNextFieldsIdentifier {
 // metric_tag value to be specified as part of the request.
 message PatternFlowIcmpNextFieldsSequenceNumberMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 16
   optional int32 length = 3;
 }
@@ -17777,13 +17656,13 @@ message PatternFlowIcmpNextFieldsSequenceNumber {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowIcmpNextFieldsSequenceNumberMetricTags metric_tags = 4;
+  repeated PatternFlowIcmpNextFieldsSequenceNumberMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowIcmpNextFieldsSequenceNumberCounter increment = 5;
+  optional PatternFlowIcmpNextFieldsSequenceNumberCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowIcmpNextFieldsSequenceNumberCounter decrement = 6;
+  optional PatternFlowIcmpNextFieldsSequenceNumberCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -17792,16 +17671,15 @@ message PatternFlowIcmpNextFieldsSequenceNumber {
 // metric_tag value to be specified as part of the request.
 message PatternFlowIcmpv6EchoTypeMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 8
   optional int32 length = 3;
 }
@@ -17847,13 +17725,13 @@ message PatternFlowIcmpv6EchoType {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowIcmpv6EchoTypeMetricTags metric_tags = 4;
+  repeated PatternFlowIcmpv6EchoTypeMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowIcmpv6EchoTypeCounter increment = 5;
+  optional PatternFlowIcmpv6EchoTypeCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowIcmpv6EchoTypeCounter decrement = 6;
+  optional PatternFlowIcmpv6EchoTypeCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -17862,16 +17740,15 @@ message PatternFlowIcmpv6EchoType {
 // metric_tag value to be specified as part of the request.
 message PatternFlowIcmpv6EchoCodeMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 8
   optional int32 length = 3;
 }
@@ -17917,13 +17794,13 @@ message PatternFlowIcmpv6EchoCode {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowIcmpv6EchoCodeMetricTags metric_tags = 4;
+  repeated PatternFlowIcmpv6EchoCodeMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowIcmpv6EchoCodeCounter increment = 5;
+  optional PatternFlowIcmpv6EchoCodeCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowIcmpv6EchoCodeCounter decrement = 6;
+  optional PatternFlowIcmpv6EchoCodeCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -17932,16 +17809,15 @@ message PatternFlowIcmpv6EchoCode {
 // metric_tag value to be specified as part of the request.
 message PatternFlowIcmpv6EchoIdentifierMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 16
   optional int32 length = 3;
 }
@@ -17987,13 +17863,13 @@ message PatternFlowIcmpv6EchoIdentifier {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowIcmpv6EchoIdentifierMetricTags metric_tags = 4;
+  repeated PatternFlowIcmpv6EchoIdentifierMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowIcmpv6EchoIdentifierCounter increment = 5;
+  optional PatternFlowIcmpv6EchoIdentifierCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowIcmpv6EchoIdentifierCounter decrement = 6;
+  optional PatternFlowIcmpv6EchoIdentifierCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -18002,16 +17878,15 @@ message PatternFlowIcmpv6EchoIdentifier {
 // metric_tag value to be specified as part of the request.
 message PatternFlowIcmpv6EchoSequenceNumberMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 16
   optional int32 length = 3;
 }
@@ -18057,13 +17932,13 @@ message PatternFlowIcmpv6EchoSequenceNumber {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowIcmpv6EchoSequenceNumberMetricTags metric_tags = 4;
+  repeated PatternFlowIcmpv6EchoSequenceNumberMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowIcmpv6EchoSequenceNumberCounter increment = 5;
+  optional PatternFlowIcmpv6EchoSequenceNumberCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowIcmpv6EchoSequenceNumberCounter decrement = 6;
+  optional PatternFlowIcmpv6EchoSequenceNumberCounter decrement = 7;
 }
 
 // ICMPv6 checksum
@@ -18130,16 +18005,15 @@ message PatternFlowIcmpv6CommonChecksum {
 // metric_tag value to be specified as part of the request.
 message PatternFlowPppAddressMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 8
   optional int32 length = 3;
 }
@@ -18185,13 +18059,13 @@ message PatternFlowPppAddress {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowPppAddressMetricTags metric_tags = 4;
+  repeated PatternFlowPppAddressMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowPppAddressCounter increment = 5;
+  optional PatternFlowPppAddressCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowPppAddressCounter decrement = 6;
+  optional PatternFlowPppAddressCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -18200,16 +18074,15 @@ message PatternFlowPppAddress {
 // metric_tag value to be specified as part of the request.
 message PatternFlowPppControlMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 8
   optional int32 length = 3;
 }
@@ -18255,13 +18128,13 @@ message PatternFlowPppControl {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowPppControlMetricTags metric_tags = 4;
+  repeated PatternFlowPppControlMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowPppControlCounter increment = 5;
+  optional PatternFlowPppControlCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowPppControlCounter decrement = 6;
+  optional PatternFlowPppControlCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -18270,16 +18143,15 @@ message PatternFlowPppControl {
 // metric_tag value to be specified as part of the request.
 message PatternFlowPppProtocolTypeMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 16
   optional int32 length = 3;
 }
@@ -18332,13 +18204,13 @@ message PatternFlowPppProtocolType {
   optional int32 auto = 4;
 
   // Description missing in models
-  repeated PatternFlowPppProtocolTypeMetricTags metric_tags = 5;
+  repeated PatternFlowPppProtocolTypeMetricTags metric_tags = 6;
 
   // Description missing in models
-  optional PatternFlowPppProtocolTypeCounter increment = 6;
+  optional PatternFlowPppProtocolTypeCounter increment = 7;
 
   // Description missing in models
-  optional PatternFlowPppProtocolTypeCounter decrement = 7;
+  optional PatternFlowPppProtocolTypeCounter decrement = 8;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -18347,16 +18219,15 @@ message PatternFlowPppProtocolType {
 // metric_tag value to be specified as part of the request.
 message PatternFlowIgmpv1VersionMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 4
   optional int32 length = 3;
 }
@@ -18402,13 +18273,13 @@ message PatternFlowIgmpv1Version {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowIgmpv1VersionMetricTags metric_tags = 4;
+  repeated PatternFlowIgmpv1VersionMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowIgmpv1VersionCounter increment = 5;
+  optional PatternFlowIgmpv1VersionCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowIgmpv1VersionCounter decrement = 6;
+  optional PatternFlowIgmpv1VersionCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -18417,16 +18288,15 @@ message PatternFlowIgmpv1Version {
 // metric_tag value to be specified as part of the request.
 message PatternFlowIgmpv1TypeMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 4
   optional int32 length = 3;
 }
@@ -18472,13 +18342,13 @@ message PatternFlowIgmpv1Type {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowIgmpv1TypeMetricTags metric_tags = 4;
+  repeated PatternFlowIgmpv1TypeMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowIgmpv1TypeCounter increment = 5;
+  optional PatternFlowIgmpv1TypeCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowIgmpv1TypeCounter decrement = 6;
+  optional PatternFlowIgmpv1TypeCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -18487,16 +18357,15 @@ message PatternFlowIgmpv1Type {
 // metric_tag value to be specified as part of the request.
 message PatternFlowIgmpv1UnusedMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 8
   optional int32 length = 3;
 }
@@ -18542,13 +18411,13 @@ message PatternFlowIgmpv1Unused {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowIgmpv1UnusedMetricTags metric_tags = 4;
+  repeated PatternFlowIgmpv1UnusedMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowIgmpv1UnusedCounter increment = 5;
+  optional PatternFlowIgmpv1UnusedCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowIgmpv1UnusedCounter decrement = 6;
+  optional PatternFlowIgmpv1UnusedCounter decrement = 7;
 }
 
 // Checksum
@@ -18586,16 +18455,15 @@ message PatternFlowIgmpv1Checksum {
 // metric_tag value to be specified as part of the request.
 message PatternFlowIgmpv1GroupAddressMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 32
   optional int32 length = 3;
 }
@@ -18641,13 +18509,13 @@ message PatternFlowIgmpv1GroupAddress {
   repeated string values = 3;
 
   // Description missing in models
-  repeated PatternFlowIgmpv1GroupAddressMetricTags metric_tags = 4;
+  repeated PatternFlowIgmpv1GroupAddressMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowIgmpv1GroupAddressCounter increment = 5;
+  optional PatternFlowIgmpv1GroupAddressCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowIgmpv1GroupAddressCounter decrement = 6;
+  optional PatternFlowIgmpv1GroupAddressCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -18656,16 +18524,15 @@ message PatternFlowIgmpv1GroupAddress {
 // metric_tag value to be specified as part of the request.
 message PatternFlowMplsLabelMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 20
   optional int32 length = 3;
 }
@@ -18718,13 +18585,13 @@ message PatternFlowMplsLabel {
   optional int32 auto = 4;
 
   // Description missing in models
-  repeated PatternFlowMplsLabelMetricTags metric_tags = 5;
+  repeated PatternFlowMplsLabelMetricTags metric_tags = 6;
 
   // Description missing in models
-  optional PatternFlowMplsLabelCounter increment = 6;
+  optional PatternFlowMplsLabelCounter increment = 7;
 
   // Description missing in models
-  optional PatternFlowMplsLabelCounter decrement = 7;
+  optional PatternFlowMplsLabelCounter decrement = 8;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -18733,16 +18600,15 @@ message PatternFlowMplsLabel {
 // metric_tag value to be specified as part of the request.
 message PatternFlowMplsTrafficClassMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 3
   optional int32 length = 3;
 }
@@ -18788,13 +18654,13 @@ message PatternFlowMplsTrafficClass {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowMplsTrafficClassMetricTags metric_tags = 4;
+  repeated PatternFlowMplsTrafficClassMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowMplsTrafficClassCounter increment = 5;
+  optional PatternFlowMplsTrafficClassCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowMplsTrafficClassCounter decrement = 6;
+  optional PatternFlowMplsTrafficClassCounter decrement = 7;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -18803,16 +18669,15 @@ message PatternFlowMplsTrafficClass {
 // metric_tag value to be specified as part of the request.
 message PatternFlowMplsBottomOfStackMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 1
   optional int32 length = 3;
 }
@@ -18865,13 +18730,13 @@ message PatternFlowMplsBottomOfStack {
   optional int32 auto = 4;
 
   // Description missing in models
-  repeated PatternFlowMplsBottomOfStackMetricTags metric_tags = 5;
+  repeated PatternFlowMplsBottomOfStackMetricTags metric_tags = 6;
 
   // Description missing in models
-  optional PatternFlowMplsBottomOfStackCounter increment = 6;
+  optional PatternFlowMplsBottomOfStackCounter increment = 7;
 
   // Description missing in models
-  optional PatternFlowMplsBottomOfStackCounter decrement = 7;
+  optional PatternFlowMplsBottomOfStackCounter decrement = 8;
 }
 
 // A unique name is used to indicate to the system that the field may extend the metric
@@ -18880,16 +18745,15 @@ message PatternFlowMplsBottomOfStack {
 // metric_tag value to be specified as part of the request.
 message PatternFlowMplsTimeToLiveMetricTags {
 
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
+  // Name used for metric tag
   // required = true
   string name = 1;
 
-  // This is in bits and relative to start of the field
+  // Offset in bits relative to start of field
   // default = 0
   optional int32 offset = 2;
 
-  // This is in bits
+  // Length in bits
   // default = 8
   optional int32 length = 3;
 }
@@ -18935,13 +18799,13 @@ message PatternFlowMplsTimeToLive {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowMplsTimeToLiveMetricTags metric_tags = 4;
+  repeated PatternFlowMplsTimeToLiveMetricTags metric_tags = 5;
 
   // Description missing in models
-  optional PatternFlowMplsTimeToLiveCounter increment = 5;
+  optional PatternFlowMplsTimeToLiveCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowMplsTimeToLiveCounter decrement = 6;
+  optional PatternFlowMplsTimeToLiveCounter decrement = 7;
 }
 
 // Version details
