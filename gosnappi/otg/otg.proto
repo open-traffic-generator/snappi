@@ -4575,27 +4575,27 @@ message Flow {
   repeated FlowHeader packet = 2;
 
   // Ingress packet
-  repeated FlowHeader ingress_packet = 3;
+  repeated FlowHeader ingress_packet = 8;
 
   // Egress packets
-  repeated FlowHeader egress_packet = 4;
+  repeated FlowHeader egress_packet = 9;
 
   // The size of the packets.
-  optional FlowSize size = 5;
+  optional FlowSize size = 3;
 
   // The transmit rate of the packets.
-  optional FlowRate rate = 6;
+  optional FlowRate rate = 4;
 
   // The transmit duration of the packets.
-  optional FlowDuration duration = 7;
+  optional FlowDuration duration = 5;
 
   // Flow metrics.
-  optional FlowMetrics metrics = 8;
+  optional FlowMetrics metrics = 6;
 
   // Globally unique name of an object. It also serves as the primary key for arrays of
   // objects.
   // required = true
-  string name = 9;
+  string name = 7;
 }
 
 // A container for different types of transmit and receive
