@@ -274,7 +274,6 @@ type Validation interface {
 func (obj *validation) validationResult() error {
 	obj.constraints = make(map[string]map[string]Constraints)
 	if len(obj.validationErrors) > 0 {
-		obj.validationErrors = append(obj.validationErrors, "validation errors")
 		errors := strings.Join(obj.validationErrors, "\n")
 		obj.validationErrors = nil
 		return fmt.Errorf(errors)
