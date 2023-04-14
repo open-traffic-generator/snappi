@@ -7209,11 +7209,11 @@ message FlowMetricsRequest {
   // empty then all metrics will be returned.
   repeated MetricNames.Enum metric_names = 3;
 
-  // Filter for tagged metrics.
-  repeated FlowTaggedMetricsFilter tagged_metrics = 4;
+  // Description missing in models
+  optional FlowTaggedMetricsFilter tagged_metrics = 4;
 }
 
-// Description missing in models
+// Filter for tagged metrics
 message FlowTaggedMetricsFilter {
 
   // Controls inclusion/exclusion of tagged metrics when fetching flow metrics.
