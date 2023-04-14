@@ -7193,10 +7193,6 @@ message FlowMetricsRequest {
   // 
   repeated string flow_names = 1;
 
-  // A list of metric tags used to disaggregate flows. A metric tag that does not exist
-  // for a flow group MUST return an error.
-  repeated FlowMetricTagFilter metric_tags = 4;
-
   message MetricNames {
     enum Enum {
       unspecified = 0;
@@ -7212,6 +7208,41 @@ message FlowMetricsRequest {
   // The list of metric names that the returned result set will contain. If the list is
   // empty then all metrics will be returned.
   repeated MetricNames.Enum metric_names = 3;
+
+  // Filter for tagged metrics.
+  repeated FlowTaggedMetricsFilter tagged_metrics = 4;
+}
+
+// Description missing in models
+message FlowTaggedMetricsFilter {
+
+  // Controls inclusion/exclusion of tagged metrics when fetching flow metrics.
+  // default = True
+  optional bool include = 1;
+
+  // Controls inclusion/exclusion of tagged metrics where each underlying attributes has
+  // zero value or absent value.
+  // default = False
+  optional bool include_empty_metrics = 2;
+
+  message MetricNames {
+    enum Enum {
+      unspecified = 0;
+      frames_tx = 1;
+      frames_rx = 2;
+      bytes_tx = 3;
+      bytes_rx = 4;
+      frames_tx_rate = 5;
+      frames_rx_rate = 6;
+    }
+  }
+  // The list of metric names that the returned result set will contain. If the list is
+  // empty then all metrics will be returned.
+  repeated MetricNames.Enum metric_names = 3;
+
+  // List of filters to selectively fetch tagged metrics with certain tag and corresponding
+  // value.
+  repeated FlowMetricTagFilter filters = 4;
 }
 
 // A container for filtering ingress and/or egress metric tags.
@@ -7224,12 +7255,11 @@ message FlowMetricTagFilter {
 
   // A list of filters that can be applied to the metric tag name.
   // By default all values will be included in the flow metric results.
-  repeated string filters = 2;
+  repeated string values = 2;
 }
 
 // A container for flow metrics.
-// The container is keyed by the name, port_tx, port_rx and metric_tags
-// values.
+// The container is keyed by the name, port_tx and port_rx.
 message FlowMetric {
 
   // The name of the flow
@@ -7240,9 +7270,6 @@ message FlowMetric {
 
   // The name of the receive port
   optional string port_rx = 3;
-
-  // Flow disaggregation groups.
-  repeated FlowMetricTag metric_tags = 15;
 
   message Transmit {
     enum Enum {
@@ -7281,6 +7308,43 @@ message FlowMetric {
 
   // Description missing in models
   optional MetricLatency latency = 14;
+
+  // List of tagged metrics
+  repeated FlowTaggedMetric tagged_metrics = 15;
+}
+
+// A container for tagged flow metrics. The container is keyed by list of tags.
+message FlowTaggedMetric {
+
+  // List of tag and value pairs
+  repeated FlowMetricTag tags = 1;
+
+  // The current total number of frames transmitted
+  optional uint64 frames_tx = 2;
+
+  // The current total number of valid frames received
+  optional uint64 frames_rx = 3;
+
+  // The current total number of bytes transmitted
+  optional uint64 bytes_tx = 4;
+
+  // The current total number of bytes received
+  optional uint64 bytes_rx = 5;
+
+  // The current rate of frames transmitted
+  optional float frames_tx_rate = 6;
+
+  // The current rate of valid frames received
+  optional float frames_rx_rate = 7;
+
+  // The percentage of lost frames
+  optional float loss = 8;
+
+  // Description missing in models
+  optional MetricTimestamp timestamps = 9;
+
+  // Description missing in models
+  optional MetricLatency latency = 10;
 }
 
 // Description missing in models
@@ -9100,7 +9164,7 @@ message CaptureRequest {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowEthernetDstMetricTags {
+message PatternFlowEthernetDstMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -9163,7 +9227,7 @@ message PatternFlowEthernetDst {
   optional string auto = 4;
 
   // Description missing in models
-  repeated PatternFlowEthernetDstMetricTags metric_tags = 6;
+  repeated PatternFlowEthernetDstMetricTag metric_tags = 6;
 
   // Description missing in models
   optional PatternFlowEthernetDstCounter increment = 7;
@@ -9176,7 +9240,7 @@ message PatternFlowEthernetDst {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowEthernetSrcMetricTags {
+message PatternFlowEthernetSrcMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -9232,7 +9296,7 @@ message PatternFlowEthernetSrc {
   repeated string values = 3;
 
   // Description missing in models
-  repeated PatternFlowEthernetSrcMetricTags metric_tags = 5;
+  repeated PatternFlowEthernetSrcMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowEthernetSrcCounter increment = 6;
@@ -9245,7 +9309,7 @@ message PatternFlowEthernetSrc {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowEthernetEtherTypeMetricTags {
+message PatternFlowEthernetEtherTypeMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -9308,7 +9372,7 @@ message PatternFlowEthernetEtherType {
   optional int32 auto = 4;
 
   // Description missing in models
-  repeated PatternFlowEthernetEtherTypeMetricTags metric_tags = 6;
+  repeated PatternFlowEthernetEtherTypeMetricTag metric_tags = 6;
 
   // Description missing in models
   optional PatternFlowEthernetEtherTypeCounter increment = 7;
@@ -9321,7 +9385,7 @@ message PatternFlowEthernetEtherType {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowEthernetPfcQueueMetricTags {
+message PatternFlowEthernetPfcQueueMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -9377,7 +9441,7 @@ message PatternFlowEthernetPfcQueue {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowEthernetPfcQueueMetricTags metric_tags = 5;
+  repeated PatternFlowEthernetPfcQueueMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowEthernetPfcQueueCounter increment = 6;
@@ -9390,7 +9454,7 @@ message PatternFlowEthernetPfcQueue {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowVlanPriorityMetricTags {
+message PatternFlowVlanPriorityMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -9446,7 +9510,7 @@ message PatternFlowVlanPriority {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowVlanPriorityMetricTags metric_tags = 5;
+  repeated PatternFlowVlanPriorityMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowVlanPriorityCounter increment = 6;
@@ -9459,7 +9523,7 @@ message PatternFlowVlanPriority {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowVlanCfiMetricTags {
+message PatternFlowVlanCfiMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -9515,7 +9579,7 @@ message PatternFlowVlanCfi {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowVlanCfiMetricTags metric_tags = 5;
+  repeated PatternFlowVlanCfiMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowVlanCfiCounter increment = 6;
@@ -9528,7 +9592,7 @@ message PatternFlowVlanCfi {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowVlanIdMetricTags {
+message PatternFlowVlanIdMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -9584,7 +9648,7 @@ message PatternFlowVlanId {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowVlanIdMetricTags metric_tags = 5;
+  repeated PatternFlowVlanIdMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowVlanIdCounter increment = 6;
@@ -9597,7 +9661,7 @@ message PatternFlowVlanId {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowVlanTpidMetricTags {
+message PatternFlowVlanTpidMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -9653,7 +9717,7 @@ message PatternFlowVlanTpid {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowVlanTpidMetricTags metric_tags = 5;
+  repeated PatternFlowVlanTpidMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowVlanTpidCounter increment = 6;
@@ -9666,7 +9730,7 @@ message PatternFlowVlanTpid {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowVxlanFlagsMetricTags {
+message PatternFlowVxlanFlagsMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -9724,7 +9788,7 @@ message PatternFlowVxlanFlags {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowVxlanFlagsMetricTags metric_tags = 5;
+  repeated PatternFlowVxlanFlagsMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowVxlanFlagsCounter increment = 6;
@@ -9737,7 +9801,7 @@ message PatternFlowVxlanFlags {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowVxlanReserved0MetricTags {
+message PatternFlowVxlanReserved0MetricTag {
 
   // Name used for metric tag
   // required = true
@@ -9793,7 +9857,7 @@ message PatternFlowVxlanReserved0 {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowVxlanReserved0MetricTags metric_tags = 5;
+  repeated PatternFlowVxlanReserved0MetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowVxlanReserved0Counter increment = 6;
@@ -9806,7 +9870,7 @@ message PatternFlowVxlanReserved0 {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowVxlanVniMetricTags {
+message PatternFlowVxlanVniMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -9869,7 +9933,7 @@ message PatternFlowVxlanVni {
   optional int32 auto = 4;
 
   // Description missing in models
-  repeated PatternFlowVxlanVniMetricTags metric_tags = 6;
+  repeated PatternFlowVxlanVniMetricTag metric_tags = 6;
 
   // Description missing in models
   optional PatternFlowVxlanVniCounter increment = 7;
@@ -9882,7 +9946,7 @@ message PatternFlowVxlanVni {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowVxlanReserved1MetricTags {
+message PatternFlowVxlanReserved1MetricTag {
 
   // Name used for metric tag
   // required = true
@@ -9938,7 +10002,7 @@ message PatternFlowVxlanReserved1 {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowVxlanReserved1MetricTags metric_tags = 5;
+  repeated PatternFlowVxlanReserved1MetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowVxlanReserved1Counter increment = 6;
@@ -9951,7 +10015,7 @@ message PatternFlowVxlanReserved1 {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowIpv4VersionMetricTags {
+message PatternFlowIpv4VersionMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -10007,7 +10071,7 @@ message PatternFlowIpv4Version {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowIpv4VersionMetricTags metric_tags = 5;
+  repeated PatternFlowIpv4VersionMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowIpv4VersionCounter increment = 6;
@@ -10020,7 +10084,7 @@ message PatternFlowIpv4Version {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowIpv4HeaderLengthMetricTags {
+message PatternFlowIpv4HeaderLengthMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -10083,7 +10147,7 @@ message PatternFlowIpv4HeaderLength {
   optional int32 auto = 4;
 
   // Description missing in models
-  repeated PatternFlowIpv4HeaderLengthMetricTags metric_tags = 6;
+  repeated PatternFlowIpv4HeaderLengthMetricTag metric_tags = 6;
 
   // Description missing in models
   optional PatternFlowIpv4HeaderLengthCounter increment = 7;
@@ -10096,7 +10160,7 @@ message PatternFlowIpv4HeaderLength {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowIpv4TotalLengthMetricTags {
+message PatternFlowIpv4TotalLengthMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -10159,7 +10223,7 @@ message PatternFlowIpv4TotalLength {
   optional int32 auto = 4;
 
   // Description missing in models
-  repeated PatternFlowIpv4TotalLengthMetricTags metric_tags = 6;
+  repeated PatternFlowIpv4TotalLengthMetricTag metric_tags = 6;
 
   // Description missing in models
   optional PatternFlowIpv4TotalLengthCounter increment = 7;
@@ -10172,7 +10236,7 @@ message PatternFlowIpv4TotalLength {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowIpv4IdentificationMetricTags {
+message PatternFlowIpv4IdentificationMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -10228,7 +10292,7 @@ message PatternFlowIpv4Identification {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowIpv4IdentificationMetricTags metric_tags = 5;
+  repeated PatternFlowIpv4IdentificationMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowIpv4IdentificationCounter increment = 6;
@@ -10241,7 +10305,7 @@ message PatternFlowIpv4Identification {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowIpv4ReservedMetricTags {
+message PatternFlowIpv4ReservedMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -10297,7 +10361,7 @@ message PatternFlowIpv4Reserved {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowIpv4ReservedMetricTags metric_tags = 5;
+  repeated PatternFlowIpv4ReservedMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowIpv4ReservedCounter increment = 6;
@@ -10310,7 +10374,7 @@ message PatternFlowIpv4Reserved {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowIpv4DontFragmentMetricTags {
+message PatternFlowIpv4DontFragmentMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -10367,7 +10431,7 @@ message PatternFlowIpv4DontFragment {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowIpv4DontFragmentMetricTags metric_tags = 5;
+  repeated PatternFlowIpv4DontFragmentMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowIpv4DontFragmentCounter increment = 6;
@@ -10380,7 +10444,7 @@ message PatternFlowIpv4DontFragment {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowIpv4MoreFragmentsMetricTags {
+message PatternFlowIpv4MoreFragmentsMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -10436,7 +10500,7 @@ message PatternFlowIpv4MoreFragments {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowIpv4MoreFragmentsMetricTags metric_tags = 5;
+  repeated PatternFlowIpv4MoreFragmentsMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowIpv4MoreFragmentsCounter increment = 6;
@@ -10449,7 +10513,7 @@ message PatternFlowIpv4MoreFragments {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowIpv4FragmentOffsetMetricTags {
+message PatternFlowIpv4FragmentOffsetMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -10505,7 +10569,7 @@ message PatternFlowIpv4FragmentOffset {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowIpv4FragmentOffsetMetricTags metric_tags = 5;
+  repeated PatternFlowIpv4FragmentOffsetMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowIpv4FragmentOffsetCounter increment = 6;
@@ -10518,7 +10582,7 @@ message PatternFlowIpv4FragmentOffset {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowIpv4TimeToLiveMetricTags {
+message PatternFlowIpv4TimeToLiveMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -10574,7 +10638,7 @@ message PatternFlowIpv4TimeToLive {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowIpv4TimeToLiveMetricTags metric_tags = 5;
+  repeated PatternFlowIpv4TimeToLiveMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowIpv4TimeToLiveCounter increment = 6;
@@ -10587,7 +10651,7 @@ message PatternFlowIpv4TimeToLive {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowIpv4ProtocolMetricTags {
+message PatternFlowIpv4ProtocolMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -10650,7 +10714,7 @@ message PatternFlowIpv4Protocol {
   optional int32 auto = 4;
 
   // Description missing in models
-  repeated PatternFlowIpv4ProtocolMetricTags metric_tags = 6;
+  repeated PatternFlowIpv4ProtocolMetricTag metric_tags = 6;
 
   // Description missing in models
   optional PatternFlowIpv4ProtocolCounter increment = 7;
@@ -10692,7 +10756,7 @@ message PatternFlowIpv4HeaderChecksum {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowIpv4SrcMetricTags {
+message PatternFlowIpv4SrcMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -10748,7 +10812,7 @@ message PatternFlowIpv4Src {
   repeated string values = 3;
 
   // Description missing in models
-  repeated PatternFlowIpv4SrcMetricTags metric_tags = 5;
+  repeated PatternFlowIpv4SrcMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowIpv4SrcCounter increment = 6;
@@ -10761,7 +10825,7 @@ message PatternFlowIpv4Src {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowIpv4DstMetricTags {
+message PatternFlowIpv4DstMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -10817,7 +10881,7 @@ message PatternFlowIpv4Dst {
   repeated string values = 3;
 
   // Description missing in models
-  repeated PatternFlowIpv4DstMetricTags metric_tags = 5;
+  repeated PatternFlowIpv4DstMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowIpv4DstCounter increment = 6;
@@ -10830,7 +10894,7 @@ message PatternFlowIpv4Dst {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowIpv4PriorityRawMetricTags {
+message PatternFlowIpv4PriorityRawMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -10886,7 +10950,7 @@ message PatternFlowIpv4PriorityRaw {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowIpv4PriorityRawMetricTags metric_tags = 5;
+  repeated PatternFlowIpv4PriorityRawMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowIpv4PriorityRawCounter increment = 6;
@@ -10899,7 +10963,7 @@ message PatternFlowIpv4PriorityRaw {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowIpv4DscpPhbMetricTags {
+message PatternFlowIpv4DscpPhbMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -10955,7 +11019,7 @@ message PatternFlowIpv4DscpPhb {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowIpv4DscpPhbMetricTags metric_tags = 5;
+  repeated PatternFlowIpv4DscpPhbMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowIpv4DscpPhbCounter increment = 6;
@@ -10968,7 +11032,7 @@ message PatternFlowIpv4DscpPhb {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowIpv4DscpEcnMetricTags {
+message PatternFlowIpv4DscpEcnMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -11024,7 +11088,7 @@ message PatternFlowIpv4DscpEcn {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowIpv4DscpEcnMetricTags metric_tags = 5;
+  repeated PatternFlowIpv4DscpEcnMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowIpv4DscpEcnCounter increment = 6;
@@ -11037,7 +11101,7 @@ message PatternFlowIpv4DscpEcn {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowIpv4TosPrecedenceMetricTags {
+message PatternFlowIpv4TosPrecedenceMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -11093,7 +11157,7 @@ message PatternFlowIpv4TosPrecedence {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowIpv4TosPrecedenceMetricTags metric_tags = 5;
+  repeated PatternFlowIpv4TosPrecedenceMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowIpv4TosPrecedenceCounter increment = 6;
@@ -11106,7 +11170,7 @@ message PatternFlowIpv4TosPrecedence {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowIpv4TosDelayMetricTags {
+message PatternFlowIpv4TosDelayMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -11162,7 +11226,7 @@ message PatternFlowIpv4TosDelay {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowIpv4TosDelayMetricTags metric_tags = 5;
+  repeated PatternFlowIpv4TosDelayMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowIpv4TosDelayCounter increment = 6;
@@ -11175,7 +11239,7 @@ message PatternFlowIpv4TosDelay {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowIpv4TosThroughputMetricTags {
+message PatternFlowIpv4TosThroughputMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -11231,7 +11295,7 @@ message PatternFlowIpv4TosThroughput {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowIpv4TosThroughputMetricTags metric_tags = 5;
+  repeated PatternFlowIpv4TosThroughputMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowIpv4TosThroughputCounter increment = 6;
@@ -11244,7 +11308,7 @@ message PatternFlowIpv4TosThroughput {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowIpv4TosReliabilityMetricTags {
+message PatternFlowIpv4TosReliabilityMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -11300,7 +11364,7 @@ message PatternFlowIpv4TosReliability {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowIpv4TosReliabilityMetricTags metric_tags = 5;
+  repeated PatternFlowIpv4TosReliabilityMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowIpv4TosReliabilityCounter increment = 6;
@@ -11313,7 +11377,7 @@ message PatternFlowIpv4TosReliability {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowIpv4TosMonetaryMetricTags {
+message PatternFlowIpv4TosMonetaryMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -11369,7 +11433,7 @@ message PatternFlowIpv4TosMonetary {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowIpv4TosMonetaryMetricTags metric_tags = 5;
+  repeated PatternFlowIpv4TosMonetaryMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowIpv4TosMonetaryCounter increment = 6;
@@ -11382,7 +11446,7 @@ message PatternFlowIpv4TosMonetary {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowIpv4TosUnusedMetricTags {
+message PatternFlowIpv4TosUnusedMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -11438,7 +11502,7 @@ message PatternFlowIpv4TosUnused {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowIpv4TosUnusedMetricTags metric_tags = 5;
+  repeated PatternFlowIpv4TosUnusedMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowIpv4TosUnusedCounter increment = 6;
@@ -11451,7 +11515,7 @@ message PatternFlowIpv4TosUnused {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowIpv6VersionMetricTags {
+message PatternFlowIpv6VersionMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -11507,7 +11571,7 @@ message PatternFlowIpv6Version {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowIpv6VersionMetricTags metric_tags = 5;
+  repeated PatternFlowIpv6VersionMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowIpv6VersionCounter increment = 6;
@@ -11520,7 +11584,7 @@ message PatternFlowIpv6Version {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowIpv6TrafficClassMetricTags {
+message PatternFlowIpv6TrafficClassMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -11576,7 +11640,7 @@ message PatternFlowIpv6TrafficClass {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowIpv6TrafficClassMetricTags metric_tags = 5;
+  repeated PatternFlowIpv6TrafficClassMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowIpv6TrafficClassCounter increment = 6;
@@ -11589,7 +11653,7 @@ message PatternFlowIpv6TrafficClass {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowIpv6FlowLabelMetricTags {
+message PatternFlowIpv6FlowLabelMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -11645,7 +11709,7 @@ message PatternFlowIpv6FlowLabel {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowIpv6FlowLabelMetricTags metric_tags = 5;
+  repeated PatternFlowIpv6FlowLabelMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowIpv6FlowLabelCounter increment = 6;
@@ -11658,7 +11722,7 @@ message PatternFlowIpv6FlowLabel {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowIpv6PayloadLengthMetricTags {
+message PatternFlowIpv6PayloadLengthMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -11721,7 +11785,7 @@ message PatternFlowIpv6PayloadLength {
   optional int32 auto = 4;
 
   // Description missing in models
-  repeated PatternFlowIpv6PayloadLengthMetricTags metric_tags = 6;
+  repeated PatternFlowIpv6PayloadLengthMetricTag metric_tags = 6;
 
   // Description missing in models
   optional PatternFlowIpv6PayloadLengthCounter increment = 7;
@@ -11734,7 +11798,7 @@ message PatternFlowIpv6PayloadLength {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowIpv6NextHeaderMetricTags {
+message PatternFlowIpv6NextHeaderMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -11797,7 +11861,7 @@ message PatternFlowIpv6NextHeader {
   optional int32 auto = 4;
 
   // Description missing in models
-  repeated PatternFlowIpv6NextHeaderMetricTags metric_tags = 6;
+  repeated PatternFlowIpv6NextHeaderMetricTag metric_tags = 6;
 
   // Description missing in models
   optional PatternFlowIpv6NextHeaderCounter increment = 7;
@@ -11810,7 +11874,7 @@ message PatternFlowIpv6NextHeader {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowIpv6HopLimitMetricTags {
+message PatternFlowIpv6HopLimitMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -11866,7 +11930,7 @@ message PatternFlowIpv6HopLimit {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowIpv6HopLimitMetricTags metric_tags = 5;
+  repeated PatternFlowIpv6HopLimitMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowIpv6HopLimitCounter increment = 6;
@@ -11879,7 +11943,7 @@ message PatternFlowIpv6HopLimit {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowIpv6SrcMetricTags {
+message PatternFlowIpv6SrcMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -11935,7 +11999,7 @@ message PatternFlowIpv6Src {
   repeated string values = 3;
 
   // Description missing in models
-  repeated PatternFlowIpv6SrcMetricTags metric_tags = 5;
+  repeated PatternFlowIpv6SrcMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowIpv6SrcCounter increment = 6;
@@ -11948,7 +12012,7 @@ message PatternFlowIpv6Src {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowIpv6DstMetricTags {
+message PatternFlowIpv6DstMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -12004,7 +12068,7 @@ message PatternFlowIpv6Dst {
   repeated string values = 3;
 
   // Description missing in models
-  repeated PatternFlowIpv6DstMetricTags metric_tags = 5;
+  repeated PatternFlowIpv6DstMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowIpv6DstCounter increment = 6;
@@ -12017,7 +12081,7 @@ message PatternFlowIpv6Dst {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowPfcPauseDstMetricTags {
+message PatternFlowPfcPauseDstMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -12073,7 +12137,7 @@ message PatternFlowPfcPauseDst {
   repeated string values = 3;
 
   // Description missing in models
-  repeated PatternFlowPfcPauseDstMetricTags metric_tags = 5;
+  repeated PatternFlowPfcPauseDstMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowPfcPauseDstCounter increment = 6;
@@ -12086,7 +12150,7 @@ message PatternFlowPfcPauseDst {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowPfcPauseSrcMetricTags {
+message PatternFlowPfcPauseSrcMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -12142,7 +12206,7 @@ message PatternFlowPfcPauseSrc {
   repeated string values = 3;
 
   // Description missing in models
-  repeated PatternFlowPfcPauseSrcMetricTags metric_tags = 5;
+  repeated PatternFlowPfcPauseSrcMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowPfcPauseSrcCounter increment = 6;
@@ -12155,7 +12219,7 @@ message PatternFlowPfcPauseSrc {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowPfcPauseEtherTypeMetricTags {
+message PatternFlowPfcPauseEtherTypeMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -12211,7 +12275,7 @@ message PatternFlowPfcPauseEtherType {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowPfcPauseEtherTypeMetricTags metric_tags = 5;
+  repeated PatternFlowPfcPauseEtherTypeMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowPfcPauseEtherTypeCounter increment = 6;
@@ -12224,7 +12288,7 @@ message PatternFlowPfcPauseEtherType {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowPfcPauseControlOpCodeMetricTags {
+message PatternFlowPfcPauseControlOpCodeMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -12280,7 +12344,7 @@ message PatternFlowPfcPauseControlOpCode {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowPfcPauseControlOpCodeMetricTags metric_tags = 5;
+  repeated PatternFlowPfcPauseControlOpCodeMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowPfcPauseControlOpCodeCounter increment = 6;
@@ -12293,7 +12357,7 @@ message PatternFlowPfcPauseControlOpCode {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowPfcPauseClassEnableVectorMetricTags {
+message PatternFlowPfcPauseClassEnableVectorMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -12349,7 +12413,7 @@ message PatternFlowPfcPauseClassEnableVector {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowPfcPauseClassEnableVectorMetricTags metric_tags = 5;
+  repeated PatternFlowPfcPauseClassEnableVectorMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowPfcPauseClassEnableVectorCounter increment = 6;
@@ -12362,7 +12426,7 @@ message PatternFlowPfcPauseClassEnableVector {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowPfcPausePauseClass0MetricTags {
+message PatternFlowPfcPausePauseClass0MetricTag {
 
   // Name used for metric tag
   // required = true
@@ -12418,7 +12482,7 @@ message PatternFlowPfcPausePauseClass0 {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowPfcPausePauseClass0MetricTags metric_tags = 5;
+  repeated PatternFlowPfcPausePauseClass0MetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowPfcPausePauseClass0Counter increment = 6;
@@ -12431,7 +12495,7 @@ message PatternFlowPfcPausePauseClass0 {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowPfcPausePauseClass1MetricTags {
+message PatternFlowPfcPausePauseClass1MetricTag {
 
   // Name used for metric tag
   // required = true
@@ -12487,7 +12551,7 @@ message PatternFlowPfcPausePauseClass1 {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowPfcPausePauseClass1MetricTags metric_tags = 5;
+  repeated PatternFlowPfcPausePauseClass1MetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowPfcPausePauseClass1Counter increment = 6;
@@ -12500,7 +12564,7 @@ message PatternFlowPfcPausePauseClass1 {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowPfcPausePauseClass2MetricTags {
+message PatternFlowPfcPausePauseClass2MetricTag {
 
   // Name used for metric tag
   // required = true
@@ -12556,7 +12620,7 @@ message PatternFlowPfcPausePauseClass2 {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowPfcPausePauseClass2MetricTags metric_tags = 5;
+  repeated PatternFlowPfcPausePauseClass2MetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowPfcPausePauseClass2Counter increment = 6;
@@ -12569,7 +12633,7 @@ message PatternFlowPfcPausePauseClass2 {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowPfcPausePauseClass3MetricTags {
+message PatternFlowPfcPausePauseClass3MetricTag {
 
   // Name used for metric tag
   // required = true
@@ -12625,7 +12689,7 @@ message PatternFlowPfcPausePauseClass3 {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowPfcPausePauseClass3MetricTags metric_tags = 5;
+  repeated PatternFlowPfcPausePauseClass3MetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowPfcPausePauseClass3Counter increment = 6;
@@ -12638,7 +12702,7 @@ message PatternFlowPfcPausePauseClass3 {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowPfcPausePauseClass4MetricTags {
+message PatternFlowPfcPausePauseClass4MetricTag {
 
   // Name used for metric tag
   // required = true
@@ -12694,7 +12758,7 @@ message PatternFlowPfcPausePauseClass4 {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowPfcPausePauseClass4MetricTags metric_tags = 5;
+  repeated PatternFlowPfcPausePauseClass4MetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowPfcPausePauseClass4Counter increment = 6;
@@ -12707,7 +12771,7 @@ message PatternFlowPfcPausePauseClass4 {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowPfcPausePauseClass5MetricTags {
+message PatternFlowPfcPausePauseClass5MetricTag {
 
   // Name used for metric tag
   // required = true
@@ -12763,7 +12827,7 @@ message PatternFlowPfcPausePauseClass5 {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowPfcPausePauseClass5MetricTags metric_tags = 5;
+  repeated PatternFlowPfcPausePauseClass5MetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowPfcPausePauseClass5Counter increment = 6;
@@ -12776,7 +12840,7 @@ message PatternFlowPfcPausePauseClass5 {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowPfcPausePauseClass6MetricTags {
+message PatternFlowPfcPausePauseClass6MetricTag {
 
   // Name used for metric tag
   // required = true
@@ -12832,7 +12896,7 @@ message PatternFlowPfcPausePauseClass6 {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowPfcPausePauseClass6MetricTags metric_tags = 5;
+  repeated PatternFlowPfcPausePauseClass6MetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowPfcPausePauseClass6Counter increment = 6;
@@ -12845,7 +12909,7 @@ message PatternFlowPfcPausePauseClass6 {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowPfcPausePauseClass7MetricTags {
+message PatternFlowPfcPausePauseClass7MetricTag {
 
   // Name used for metric tag
   // required = true
@@ -12901,7 +12965,7 @@ message PatternFlowPfcPausePauseClass7 {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowPfcPausePauseClass7MetricTags metric_tags = 5;
+  repeated PatternFlowPfcPausePauseClass7MetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowPfcPausePauseClass7Counter increment = 6;
@@ -12914,7 +12978,7 @@ message PatternFlowPfcPausePauseClass7 {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowEthernetPauseDstMetricTags {
+message PatternFlowEthernetPauseDstMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -12970,7 +13034,7 @@ message PatternFlowEthernetPauseDst {
   repeated string values = 3;
 
   // Description missing in models
-  repeated PatternFlowEthernetPauseDstMetricTags metric_tags = 5;
+  repeated PatternFlowEthernetPauseDstMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowEthernetPauseDstCounter increment = 6;
@@ -12983,7 +13047,7 @@ message PatternFlowEthernetPauseDst {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowEthernetPauseSrcMetricTags {
+message PatternFlowEthernetPauseSrcMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -13039,7 +13103,7 @@ message PatternFlowEthernetPauseSrc {
   repeated string values = 3;
 
   // Description missing in models
-  repeated PatternFlowEthernetPauseSrcMetricTags metric_tags = 5;
+  repeated PatternFlowEthernetPauseSrcMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowEthernetPauseSrcCounter increment = 6;
@@ -13052,7 +13116,7 @@ message PatternFlowEthernetPauseSrc {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowEthernetPauseEtherTypeMetricTags {
+message PatternFlowEthernetPauseEtherTypeMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -13108,7 +13172,7 @@ message PatternFlowEthernetPauseEtherType {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowEthernetPauseEtherTypeMetricTags metric_tags = 5;
+  repeated PatternFlowEthernetPauseEtherTypeMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowEthernetPauseEtherTypeCounter increment = 6;
@@ -13121,7 +13185,7 @@ message PatternFlowEthernetPauseEtherType {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowEthernetPauseControlOpCodeMetricTags {
+message PatternFlowEthernetPauseControlOpCodeMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -13177,7 +13241,7 @@ message PatternFlowEthernetPauseControlOpCode {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowEthernetPauseControlOpCodeMetricTags metric_tags = 5;
+  repeated PatternFlowEthernetPauseControlOpCodeMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowEthernetPauseControlOpCodeCounter increment = 6;
@@ -13190,7 +13254,7 @@ message PatternFlowEthernetPauseControlOpCode {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowEthernetPauseTimeMetricTags {
+message PatternFlowEthernetPauseTimeMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -13246,7 +13310,7 @@ message PatternFlowEthernetPauseTime {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowEthernetPauseTimeMetricTags metric_tags = 5;
+  repeated PatternFlowEthernetPauseTimeMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowEthernetPauseTimeCounter increment = 6;
@@ -13259,7 +13323,7 @@ message PatternFlowEthernetPauseTime {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowTcpSrcPortMetricTags {
+message PatternFlowTcpSrcPortMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -13315,7 +13379,7 @@ message PatternFlowTcpSrcPort {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowTcpSrcPortMetricTags metric_tags = 5;
+  repeated PatternFlowTcpSrcPortMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowTcpSrcPortCounter increment = 6;
@@ -13328,7 +13392,7 @@ message PatternFlowTcpSrcPort {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowTcpDstPortMetricTags {
+message PatternFlowTcpDstPortMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -13384,7 +13448,7 @@ message PatternFlowTcpDstPort {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowTcpDstPortMetricTags metric_tags = 5;
+  repeated PatternFlowTcpDstPortMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowTcpDstPortCounter increment = 6;
@@ -13397,7 +13461,7 @@ message PatternFlowTcpDstPort {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowTcpSeqNumMetricTags {
+message PatternFlowTcpSeqNumMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -13453,7 +13517,7 @@ message PatternFlowTcpSeqNum {
   repeated int64 values = 3;
 
   // Description missing in models
-  repeated PatternFlowTcpSeqNumMetricTags metric_tags = 5;
+  repeated PatternFlowTcpSeqNumMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowTcpSeqNumCounter increment = 6;
@@ -13466,7 +13530,7 @@ message PatternFlowTcpSeqNum {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowTcpAckNumMetricTags {
+message PatternFlowTcpAckNumMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -13522,7 +13586,7 @@ message PatternFlowTcpAckNum {
   repeated int64 values = 3;
 
   // Description missing in models
-  repeated PatternFlowTcpAckNumMetricTags metric_tags = 5;
+  repeated PatternFlowTcpAckNumMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowTcpAckNumCounter increment = 6;
@@ -13535,7 +13599,7 @@ message PatternFlowTcpAckNum {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowTcpDataOffsetMetricTags {
+message PatternFlowTcpDataOffsetMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -13591,7 +13655,7 @@ message PatternFlowTcpDataOffset {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowTcpDataOffsetMetricTags metric_tags = 5;
+  repeated PatternFlowTcpDataOffsetMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowTcpDataOffsetCounter increment = 6;
@@ -13604,7 +13668,7 @@ message PatternFlowTcpDataOffset {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowTcpEcnNsMetricTags {
+message PatternFlowTcpEcnNsMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -13660,7 +13724,7 @@ message PatternFlowTcpEcnNs {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowTcpEcnNsMetricTags metric_tags = 5;
+  repeated PatternFlowTcpEcnNsMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowTcpEcnNsCounter increment = 6;
@@ -13673,7 +13737,7 @@ message PatternFlowTcpEcnNs {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowTcpEcnCwrMetricTags {
+message PatternFlowTcpEcnCwrMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -13729,7 +13793,7 @@ message PatternFlowTcpEcnCwr {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowTcpEcnCwrMetricTags metric_tags = 5;
+  repeated PatternFlowTcpEcnCwrMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowTcpEcnCwrCounter increment = 6;
@@ -13742,7 +13806,7 @@ message PatternFlowTcpEcnCwr {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowTcpEcnEchoMetricTags {
+message PatternFlowTcpEcnEchoMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -13799,7 +13863,7 @@ message PatternFlowTcpEcnEcho {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowTcpEcnEchoMetricTags metric_tags = 5;
+  repeated PatternFlowTcpEcnEchoMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowTcpEcnEchoCounter increment = 6;
@@ -13812,7 +13876,7 @@ message PatternFlowTcpEcnEcho {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowTcpCtlUrgMetricTags {
+message PatternFlowTcpCtlUrgMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -13868,7 +13932,7 @@ message PatternFlowTcpCtlUrg {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowTcpCtlUrgMetricTags metric_tags = 5;
+  repeated PatternFlowTcpCtlUrgMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowTcpCtlUrgCounter increment = 6;
@@ -13881,7 +13945,7 @@ message PatternFlowTcpCtlUrg {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowTcpCtlAckMetricTags {
+message PatternFlowTcpCtlAckMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -13937,7 +14001,7 @@ message PatternFlowTcpCtlAck {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowTcpCtlAckMetricTags metric_tags = 5;
+  repeated PatternFlowTcpCtlAckMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowTcpCtlAckCounter increment = 6;
@@ -13950,7 +14014,7 @@ message PatternFlowTcpCtlAck {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowTcpCtlPshMetricTags {
+message PatternFlowTcpCtlPshMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -14006,7 +14070,7 @@ message PatternFlowTcpCtlPsh {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowTcpCtlPshMetricTags metric_tags = 5;
+  repeated PatternFlowTcpCtlPshMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowTcpCtlPshCounter increment = 6;
@@ -14019,7 +14083,7 @@ message PatternFlowTcpCtlPsh {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowTcpCtlRstMetricTags {
+message PatternFlowTcpCtlRstMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -14075,7 +14139,7 @@ message PatternFlowTcpCtlRst {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowTcpCtlRstMetricTags metric_tags = 5;
+  repeated PatternFlowTcpCtlRstMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowTcpCtlRstCounter increment = 6;
@@ -14088,7 +14152,7 @@ message PatternFlowTcpCtlRst {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowTcpCtlSynMetricTags {
+message PatternFlowTcpCtlSynMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -14144,7 +14208,7 @@ message PatternFlowTcpCtlSyn {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowTcpCtlSynMetricTags metric_tags = 5;
+  repeated PatternFlowTcpCtlSynMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowTcpCtlSynCounter increment = 6;
@@ -14157,7 +14221,7 @@ message PatternFlowTcpCtlSyn {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowTcpCtlFinMetricTags {
+message PatternFlowTcpCtlFinMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -14213,7 +14277,7 @@ message PatternFlowTcpCtlFin {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowTcpCtlFinMetricTags metric_tags = 5;
+  repeated PatternFlowTcpCtlFinMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowTcpCtlFinCounter increment = 6;
@@ -14226,7 +14290,7 @@ message PatternFlowTcpCtlFin {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowTcpWindowMetricTags {
+message PatternFlowTcpWindowMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -14282,7 +14346,7 @@ message PatternFlowTcpWindow {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowTcpWindowMetricTags metric_tags = 5;
+  repeated PatternFlowTcpWindowMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowTcpWindowCounter increment = 6;
@@ -14295,7 +14359,7 @@ message PatternFlowTcpWindow {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowUdpSrcPortMetricTags {
+message PatternFlowUdpSrcPortMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -14351,7 +14415,7 @@ message PatternFlowUdpSrcPort {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowUdpSrcPortMetricTags metric_tags = 5;
+  repeated PatternFlowUdpSrcPortMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowUdpSrcPortCounter increment = 6;
@@ -14364,7 +14428,7 @@ message PatternFlowUdpSrcPort {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowUdpDstPortMetricTags {
+message PatternFlowUdpDstPortMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -14420,7 +14484,7 @@ message PatternFlowUdpDstPort {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowUdpDstPortMetricTags metric_tags = 5;
+  repeated PatternFlowUdpDstPortMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowUdpDstPortCounter increment = 6;
@@ -14433,7 +14497,7 @@ message PatternFlowUdpDstPort {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowUdpLengthMetricTags {
+message PatternFlowUdpLengthMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -14489,7 +14553,7 @@ message PatternFlowUdpLength {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowUdpLengthMetricTags metric_tags = 5;
+  repeated PatternFlowUdpLengthMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowUdpLengthCounter increment = 6;
@@ -14531,7 +14595,7 @@ message PatternFlowUdpChecksum {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowGreChecksumPresentMetricTags {
+message PatternFlowGreChecksumPresentMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -14587,7 +14651,7 @@ message PatternFlowGreChecksumPresent {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowGreChecksumPresentMetricTags metric_tags = 5;
+  repeated PatternFlowGreChecksumPresentMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowGreChecksumPresentCounter increment = 6;
@@ -14600,7 +14664,7 @@ message PatternFlowGreChecksumPresent {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowGreReserved0MetricTags {
+message PatternFlowGreReserved0MetricTag {
 
   // Name used for metric tag
   // required = true
@@ -14656,7 +14720,7 @@ message PatternFlowGreReserved0 {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowGreReserved0MetricTags metric_tags = 5;
+  repeated PatternFlowGreReserved0MetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowGreReserved0Counter increment = 6;
@@ -14669,7 +14733,7 @@ message PatternFlowGreReserved0 {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowGreVersionMetricTags {
+message PatternFlowGreVersionMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -14725,7 +14789,7 @@ message PatternFlowGreVersion {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowGreVersionMetricTags metric_tags = 5;
+  repeated PatternFlowGreVersionMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowGreVersionCounter increment = 6;
@@ -14738,7 +14802,7 @@ message PatternFlowGreVersion {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowGreProtocolMetricTags {
+message PatternFlowGreProtocolMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -14794,7 +14858,7 @@ message PatternFlowGreProtocol {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowGreProtocolMetricTags metric_tags = 5;
+  repeated PatternFlowGreProtocolMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowGreProtocolCounter increment = 6;
@@ -14837,7 +14901,7 @@ message PatternFlowGreChecksum {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowGreReserved1MetricTags {
+message PatternFlowGreReserved1MetricTag {
 
   // Name used for metric tag
   // required = true
@@ -14893,7 +14957,7 @@ message PatternFlowGreReserved1 {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowGreReserved1MetricTags metric_tags = 5;
+  repeated PatternFlowGreReserved1MetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowGreReserved1Counter increment = 6;
@@ -14906,7 +14970,7 @@ message PatternFlowGreReserved1 {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowGtpv1VersionMetricTags {
+message PatternFlowGtpv1VersionMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -14962,7 +15026,7 @@ message PatternFlowGtpv1Version {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowGtpv1VersionMetricTags metric_tags = 5;
+  repeated PatternFlowGtpv1VersionMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowGtpv1VersionCounter increment = 6;
@@ -14975,7 +15039,7 @@ message PatternFlowGtpv1Version {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowGtpv1ProtocolTypeMetricTags {
+message PatternFlowGtpv1ProtocolTypeMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -15031,7 +15095,7 @@ message PatternFlowGtpv1ProtocolType {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowGtpv1ProtocolTypeMetricTags metric_tags = 5;
+  repeated PatternFlowGtpv1ProtocolTypeMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowGtpv1ProtocolTypeCounter increment = 6;
@@ -15044,7 +15108,7 @@ message PatternFlowGtpv1ProtocolType {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowGtpv1ReservedMetricTags {
+message PatternFlowGtpv1ReservedMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -15100,7 +15164,7 @@ message PatternFlowGtpv1Reserved {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowGtpv1ReservedMetricTags metric_tags = 5;
+  repeated PatternFlowGtpv1ReservedMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowGtpv1ReservedCounter increment = 6;
@@ -15113,7 +15177,7 @@ message PatternFlowGtpv1Reserved {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowGtpv1EFlagMetricTags {
+message PatternFlowGtpv1EFlagMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -15169,7 +15233,7 @@ message PatternFlowGtpv1EFlag {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowGtpv1EFlagMetricTags metric_tags = 5;
+  repeated PatternFlowGtpv1EFlagMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowGtpv1EFlagCounter increment = 6;
@@ -15182,7 +15246,7 @@ message PatternFlowGtpv1EFlag {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowGtpv1SFlagMetricTags {
+message PatternFlowGtpv1SFlagMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -15238,7 +15302,7 @@ message PatternFlowGtpv1SFlag {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowGtpv1SFlagMetricTags metric_tags = 5;
+  repeated PatternFlowGtpv1SFlagMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowGtpv1SFlagCounter increment = 6;
@@ -15251,7 +15315,7 @@ message PatternFlowGtpv1SFlag {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowGtpv1PnFlagMetricTags {
+message PatternFlowGtpv1PnFlagMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -15307,7 +15371,7 @@ message PatternFlowGtpv1PnFlag {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowGtpv1PnFlagMetricTags metric_tags = 5;
+  repeated PatternFlowGtpv1PnFlagMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowGtpv1PnFlagCounter increment = 6;
@@ -15320,7 +15384,7 @@ message PatternFlowGtpv1PnFlag {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowGtpv1MessageTypeMetricTags {
+message PatternFlowGtpv1MessageTypeMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -15377,7 +15441,7 @@ message PatternFlowGtpv1MessageType {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowGtpv1MessageTypeMetricTags metric_tags = 5;
+  repeated PatternFlowGtpv1MessageTypeMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowGtpv1MessageTypeCounter increment = 6;
@@ -15390,7 +15454,7 @@ message PatternFlowGtpv1MessageType {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowGtpv1MessageLengthMetricTags {
+message PatternFlowGtpv1MessageLengthMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -15447,7 +15511,7 @@ message PatternFlowGtpv1MessageLength {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowGtpv1MessageLengthMetricTags metric_tags = 5;
+  repeated PatternFlowGtpv1MessageLengthMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowGtpv1MessageLengthCounter increment = 6;
@@ -15460,7 +15524,7 @@ message PatternFlowGtpv1MessageLength {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowGtpv1TeidMetricTags {
+message PatternFlowGtpv1TeidMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -15516,7 +15580,7 @@ message PatternFlowGtpv1Teid {
   repeated int64 values = 3;
 
   // Description missing in models
-  repeated PatternFlowGtpv1TeidMetricTags metric_tags = 5;
+  repeated PatternFlowGtpv1TeidMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowGtpv1TeidCounter increment = 6;
@@ -15529,7 +15593,7 @@ message PatternFlowGtpv1Teid {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowGtpv1SquenceNumberMetricTags {
+message PatternFlowGtpv1SquenceNumberMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -15586,7 +15650,7 @@ message PatternFlowGtpv1SquenceNumber {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowGtpv1SquenceNumberMetricTags metric_tags = 5;
+  repeated PatternFlowGtpv1SquenceNumberMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowGtpv1SquenceNumberCounter increment = 6;
@@ -15599,7 +15663,7 @@ message PatternFlowGtpv1SquenceNumber {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowGtpv1NPduNumberMetricTags {
+message PatternFlowGtpv1NPduNumberMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -15656,7 +15720,7 @@ message PatternFlowGtpv1NPduNumber {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowGtpv1NPduNumberMetricTags metric_tags = 5;
+  repeated PatternFlowGtpv1NPduNumberMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowGtpv1NPduNumberCounter increment = 6;
@@ -15669,7 +15733,7 @@ message PatternFlowGtpv1NPduNumber {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowGtpv1NextExtensionHeaderTypeMetricTags {
+message PatternFlowGtpv1NextExtensionHeaderTypeMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -15726,7 +15790,7 @@ message PatternFlowGtpv1NextExtensionHeaderType {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowGtpv1NextExtensionHeaderTypeMetricTags metric_tags = 5;
+  repeated PatternFlowGtpv1NextExtensionHeaderTypeMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowGtpv1NextExtensionHeaderTypeCounter increment = 6;
@@ -15739,7 +15803,7 @@ message PatternFlowGtpv1NextExtensionHeaderType {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowGtpExtensionExtensionLengthMetricTags {
+message PatternFlowGtpExtensionExtensionLengthMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -15797,7 +15861,7 @@ message PatternFlowGtpExtensionExtensionLength {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowGtpExtensionExtensionLengthMetricTags metric_tags = 5;
+  repeated PatternFlowGtpExtensionExtensionLengthMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowGtpExtensionExtensionLengthCounter increment = 6;
@@ -15810,7 +15874,7 @@ message PatternFlowGtpExtensionExtensionLength {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowGtpExtensionContentsMetricTags {
+message PatternFlowGtpExtensionContentsMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -15866,7 +15930,7 @@ message PatternFlowGtpExtensionContents {
   repeated int64 values = 3;
 
   // Description missing in models
-  repeated PatternFlowGtpExtensionContentsMetricTags metric_tags = 5;
+  repeated PatternFlowGtpExtensionContentsMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowGtpExtensionContentsCounter increment = 6;
@@ -15879,7 +15943,7 @@ message PatternFlowGtpExtensionContents {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowGtpExtensionNextExtensionHeaderMetricTags {
+message PatternFlowGtpExtensionNextExtensionHeaderMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -15936,7 +16000,7 @@ message PatternFlowGtpExtensionNextExtensionHeader {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowGtpExtensionNextExtensionHeaderMetricTags metric_tags = 5;
+  repeated PatternFlowGtpExtensionNextExtensionHeaderMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowGtpExtensionNextExtensionHeaderCounter increment = 6;
@@ -15949,7 +16013,7 @@ message PatternFlowGtpExtensionNextExtensionHeader {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowGtpv2VersionMetricTags {
+message PatternFlowGtpv2VersionMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -16005,7 +16069,7 @@ message PatternFlowGtpv2Version {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowGtpv2VersionMetricTags metric_tags = 5;
+  repeated PatternFlowGtpv2VersionMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowGtpv2VersionCounter increment = 6;
@@ -16018,7 +16082,7 @@ message PatternFlowGtpv2Version {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowGtpv2PiggybackingFlagMetricTags {
+message PatternFlowGtpv2PiggybackingFlagMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -16075,7 +16139,7 @@ message PatternFlowGtpv2PiggybackingFlag {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowGtpv2PiggybackingFlagMetricTags metric_tags = 5;
+  repeated PatternFlowGtpv2PiggybackingFlagMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowGtpv2PiggybackingFlagCounter increment = 6;
@@ -16088,7 +16152,7 @@ message PatternFlowGtpv2PiggybackingFlag {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowGtpv2TeidFlagMetricTags {
+message PatternFlowGtpv2TeidFlagMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -16146,7 +16210,7 @@ message PatternFlowGtpv2TeidFlag {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowGtpv2TeidFlagMetricTags metric_tags = 5;
+  repeated PatternFlowGtpv2TeidFlagMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowGtpv2TeidFlagCounter increment = 6;
@@ -16159,7 +16223,7 @@ message PatternFlowGtpv2TeidFlag {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowGtpv2Spare1MetricTags {
+message PatternFlowGtpv2Spare1MetricTag {
 
   // Name used for metric tag
   // required = true
@@ -16215,7 +16279,7 @@ message PatternFlowGtpv2Spare1 {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowGtpv2Spare1MetricTags metric_tags = 5;
+  repeated PatternFlowGtpv2Spare1MetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowGtpv2Spare1Counter increment = 6;
@@ -16228,7 +16292,7 @@ message PatternFlowGtpv2Spare1 {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowGtpv2MessageTypeMetricTags {
+message PatternFlowGtpv2MessageTypeMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -16285,7 +16349,7 @@ message PatternFlowGtpv2MessageType {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowGtpv2MessageTypeMetricTags metric_tags = 5;
+  repeated PatternFlowGtpv2MessageTypeMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowGtpv2MessageTypeCounter increment = 6;
@@ -16298,7 +16362,7 @@ message PatternFlowGtpv2MessageType {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowGtpv2MessageLengthMetricTags {
+message PatternFlowGtpv2MessageLengthMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -16355,7 +16419,7 @@ message PatternFlowGtpv2MessageLength {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowGtpv2MessageLengthMetricTags metric_tags = 5;
+  repeated PatternFlowGtpv2MessageLengthMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowGtpv2MessageLengthCounter increment = 6;
@@ -16368,7 +16432,7 @@ message PatternFlowGtpv2MessageLength {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowGtpv2TeidMetricTags {
+message PatternFlowGtpv2TeidMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -16425,7 +16489,7 @@ message PatternFlowGtpv2Teid {
   repeated int64 values = 3;
 
   // Description missing in models
-  repeated PatternFlowGtpv2TeidMetricTags metric_tags = 5;
+  repeated PatternFlowGtpv2TeidMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowGtpv2TeidCounter increment = 6;
@@ -16438,7 +16502,7 @@ message PatternFlowGtpv2Teid {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowGtpv2SequenceNumberMetricTags {
+message PatternFlowGtpv2SequenceNumberMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -16494,7 +16558,7 @@ message PatternFlowGtpv2SequenceNumber {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowGtpv2SequenceNumberMetricTags metric_tags = 5;
+  repeated PatternFlowGtpv2SequenceNumberMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowGtpv2SequenceNumberCounter increment = 6;
@@ -16507,7 +16571,7 @@ message PatternFlowGtpv2SequenceNumber {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowGtpv2Spare2MetricTags {
+message PatternFlowGtpv2Spare2MetricTag {
 
   // Name used for metric tag
   // required = true
@@ -16563,7 +16627,7 @@ message PatternFlowGtpv2Spare2 {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowGtpv2Spare2MetricTags metric_tags = 5;
+  repeated PatternFlowGtpv2Spare2MetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowGtpv2Spare2Counter increment = 6;
@@ -16576,7 +16640,7 @@ message PatternFlowGtpv2Spare2 {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowArpHardwareTypeMetricTags {
+message PatternFlowArpHardwareTypeMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -16632,7 +16696,7 @@ message PatternFlowArpHardwareType {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowArpHardwareTypeMetricTags metric_tags = 5;
+  repeated PatternFlowArpHardwareTypeMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowArpHardwareTypeCounter increment = 6;
@@ -16645,7 +16709,7 @@ message PatternFlowArpHardwareType {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowArpProtocolTypeMetricTags {
+message PatternFlowArpProtocolTypeMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -16701,7 +16765,7 @@ message PatternFlowArpProtocolType {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowArpProtocolTypeMetricTags metric_tags = 5;
+  repeated PatternFlowArpProtocolTypeMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowArpProtocolTypeCounter increment = 6;
@@ -16714,7 +16778,7 @@ message PatternFlowArpProtocolType {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowArpHardwareLengthMetricTags {
+message PatternFlowArpHardwareLengthMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -16770,7 +16834,7 @@ message PatternFlowArpHardwareLength {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowArpHardwareLengthMetricTags metric_tags = 5;
+  repeated PatternFlowArpHardwareLengthMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowArpHardwareLengthCounter increment = 6;
@@ -16783,7 +16847,7 @@ message PatternFlowArpHardwareLength {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowArpProtocolLengthMetricTags {
+message PatternFlowArpProtocolLengthMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -16839,7 +16903,7 @@ message PatternFlowArpProtocolLength {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowArpProtocolLengthMetricTags metric_tags = 5;
+  repeated PatternFlowArpProtocolLengthMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowArpProtocolLengthCounter increment = 6;
@@ -16852,7 +16916,7 @@ message PatternFlowArpProtocolLength {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowArpOperationMetricTags {
+message PatternFlowArpOperationMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -16908,7 +16972,7 @@ message PatternFlowArpOperation {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowArpOperationMetricTags metric_tags = 5;
+  repeated PatternFlowArpOperationMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowArpOperationCounter increment = 6;
@@ -16921,7 +16985,7 @@ message PatternFlowArpOperation {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowArpSenderHardwareAddrMetricTags {
+message PatternFlowArpSenderHardwareAddrMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -16977,7 +17041,7 @@ message PatternFlowArpSenderHardwareAddr {
   repeated string values = 3;
 
   // Description missing in models
-  repeated PatternFlowArpSenderHardwareAddrMetricTags metric_tags = 5;
+  repeated PatternFlowArpSenderHardwareAddrMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowArpSenderHardwareAddrCounter increment = 6;
@@ -16990,7 +17054,7 @@ message PatternFlowArpSenderHardwareAddr {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowArpSenderProtocolAddrMetricTags {
+message PatternFlowArpSenderProtocolAddrMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -17046,7 +17110,7 @@ message PatternFlowArpSenderProtocolAddr {
   repeated string values = 3;
 
   // Description missing in models
-  repeated PatternFlowArpSenderProtocolAddrMetricTags metric_tags = 5;
+  repeated PatternFlowArpSenderProtocolAddrMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowArpSenderProtocolAddrCounter increment = 6;
@@ -17059,7 +17123,7 @@ message PatternFlowArpSenderProtocolAddr {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowArpTargetHardwareAddrMetricTags {
+message PatternFlowArpTargetHardwareAddrMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -17115,7 +17179,7 @@ message PatternFlowArpTargetHardwareAddr {
   repeated string values = 3;
 
   // Description missing in models
-  repeated PatternFlowArpTargetHardwareAddrMetricTags metric_tags = 5;
+  repeated PatternFlowArpTargetHardwareAddrMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowArpTargetHardwareAddrCounter increment = 6;
@@ -17128,7 +17192,7 @@ message PatternFlowArpTargetHardwareAddr {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowArpTargetProtocolAddrMetricTags {
+message PatternFlowArpTargetProtocolAddrMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -17184,7 +17248,7 @@ message PatternFlowArpTargetProtocolAddr {
   repeated string values = 3;
 
   // Description missing in models
-  repeated PatternFlowArpTargetProtocolAddrMetricTags metric_tags = 5;
+  repeated PatternFlowArpTargetProtocolAddrMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowArpTargetProtocolAddrCounter increment = 6;
@@ -17197,7 +17261,7 @@ message PatternFlowArpTargetProtocolAddr {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowIcmpEchoTypeMetricTags {
+message PatternFlowIcmpEchoTypeMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -17253,7 +17317,7 @@ message PatternFlowIcmpEchoType {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowIcmpEchoTypeMetricTags metric_tags = 5;
+  repeated PatternFlowIcmpEchoTypeMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowIcmpEchoTypeCounter increment = 6;
@@ -17266,7 +17330,7 @@ message PatternFlowIcmpEchoType {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowIcmpEchoCodeMetricTags {
+message PatternFlowIcmpEchoCodeMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -17322,7 +17386,7 @@ message PatternFlowIcmpEchoCode {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowIcmpEchoCodeMetricTags metric_tags = 5;
+  repeated PatternFlowIcmpEchoCodeMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowIcmpEchoCodeCounter increment = 6;
@@ -17364,7 +17428,7 @@ message PatternFlowIcmpEchoChecksum {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowIcmpEchoIdentifierMetricTags {
+message PatternFlowIcmpEchoIdentifierMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -17420,7 +17484,7 @@ message PatternFlowIcmpEchoIdentifier {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowIcmpEchoIdentifierMetricTags metric_tags = 5;
+  repeated PatternFlowIcmpEchoIdentifierMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowIcmpEchoIdentifierCounter increment = 6;
@@ -17433,7 +17497,7 @@ message PatternFlowIcmpEchoIdentifier {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowIcmpEchoSequenceNumberMetricTags {
+message PatternFlowIcmpEchoSequenceNumberMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -17489,7 +17553,7 @@ message PatternFlowIcmpEchoSequenceNumber {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowIcmpEchoSequenceNumberMetricTags metric_tags = 5;
+  repeated PatternFlowIcmpEchoSequenceNumberMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowIcmpEchoSequenceNumberCounter increment = 6;
@@ -17531,7 +17595,7 @@ message PatternFlowIcmpCommonChecksum {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowIcmpNextFieldsIdentifierMetricTags {
+message PatternFlowIcmpNextFieldsIdentifierMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -17587,7 +17651,7 @@ message PatternFlowIcmpNextFieldsIdentifier {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowIcmpNextFieldsIdentifierMetricTags metric_tags = 5;
+  repeated PatternFlowIcmpNextFieldsIdentifierMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowIcmpNextFieldsIdentifierCounter increment = 6;
@@ -17600,7 +17664,7 @@ message PatternFlowIcmpNextFieldsIdentifier {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowIcmpNextFieldsSequenceNumberMetricTags {
+message PatternFlowIcmpNextFieldsSequenceNumberMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -17656,7 +17720,7 @@ message PatternFlowIcmpNextFieldsSequenceNumber {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowIcmpNextFieldsSequenceNumberMetricTags metric_tags = 5;
+  repeated PatternFlowIcmpNextFieldsSequenceNumberMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowIcmpNextFieldsSequenceNumberCounter increment = 6;
@@ -17669,7 +17733,7 @@ message PatternFlowIcmpNextFieldsSequenceNumber {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowIcmpv6EchoTypeMetricTags {
+message PatternFlowIcmpv6EchoTypeMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -17725,7 +17789,7 @@ message PatternFlowIcmpv6EchoType {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowIcmpv6EchoTypeMetricTags metric_tags = 5;
+  repeated PatternFlowIcmpv6EchoTypeMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowIcmpv6EchoTypeCounter increment = 6;
@@ -17738,7 +17802,7 @@ message PatternFlowIcmpv6EchoType {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowIcmpv6EchoCodeMetricTags {
+message PatternFlowIcmpv6EchoCodeMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -17794,7 +17858,7 @@ message PatternFlowIcmpv6EchoCode {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowIcmpv6EchoCodeMetricTags metric_tags = 5;
+  repeated PatternFlowIcmpv6EchoCodeMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowIcmpv6EchoCodeCounter increment = 6;
@@ -17807,7 +17871,7 @@ message PatternFlowIcmpv6EchoCode {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowIcmpv6EchoIdentifierMetricTags {
+message PatternFlowIcmpv6EchoIdentifierMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -17863,7 +17927,7 @@ message PatternFlowIcmpv6EchoIdentifier {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowIcmpv6EchoIdentifierMetricTags metric_tags = 5;
+  repeated PatternFlowIcmpv6EchoIdentifierMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowIcmpv6EchoIdentifierCounter increment = 6;
@@ -17876,7 +17940,7 @@ message PatternFlowIcmpv6EchoIdentifier {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowIcmpv6EchoSequenceNumberMetricTags {
+message PatternFlowIcmpv6EchoSequenceNumberMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -17932,7 +17996,7 @@ message PatternFlowIcmpv6EchoSequenceNumber {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowIcmpv6EchoSequenceNumberMetricTags metric_tags = 5;
+  repeated PatternFlowIcmpv6EchoSequenceNumberMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowIcmpv6EchoSequenceNumberCounter increment = 6;
@@ -18003,7 +18067,7 @@ message PatternFlowIcmpv6CommonChecksum {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowPppAddressMetricTags {
+message PatternFlowPppAddressMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -18059,7 +18123,7 @@ message PatternFlowPppAddress {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowPppAddressMetricTags metric_tags = 5;
+  repeated PatternFlowPppAddressMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowPppAddressCounter increment = 6;
@@ -18072,7 +18136,7 @@ message PatternFlowPppAddress {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowPppControlMetricTags {
+message PatternFlowPppControlMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -18128,7 +18192,7 @@ message PatternFlowPppControl {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowPppControlMetricTags metric_tags = 5;
+  repeated PatternFlowPppControlMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowPppControlCounter increment = 6;
@@ -18141,7 +18205,7 @@ message PatternFlowPppControl {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowPppProtocolTypeMetricTags {
+message PatternFlowPppProtocolTypeMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -18204,7 +18268,7 @@ message PatternFlowPppProtocolType {
   optional int32 auto = 4;
 
   // Description missing in models
-  repeated PatternFlowPppProtocolTypeMetricTags metric_tags = 6;
+  repeated PatternFlowPppProtocolTypeMetricTag metric_tags = 6;
 
   // Description missing in models
   optional PatternFlowPppProtocolTypeCounter increment = 7;
@@ -18217,7 +18281,7 @@ message PatternFlowPppProtocolType {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowIgmpv1VersionMetricTags {
+message PatternFlowIgmpv1VersionMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -18273,7 +18337,7 @@ message PatternFlowIgmpv1Version {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowIgmpv1VersionMetricTags metric_tags = 5;
+  repeated PatternFlowIgmpv1VersionMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowIgmpv1VersionCounter increment = 6;
@@ -18286,7 +18350,7 @@ message PatternFlowIgmpv1Version {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowIgmpv1TypeMetricTags {
+message PatternFlowIgmpv1TypeMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -18342,7 +18406,7 @@ message PatternFlowIgmpv1Type {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowIgmpv1TypeMetricTags metric_tags = 5;
+  repeated PatternFlowIgmpv1TypeMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowIgmpv1TypeCounter increment = 6;
@@ -18355,7 +18419,7 @@ message PatternFlowIgmpv1Type {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowIgmpv1UnusedMetricTags {
+message PatternFlowIgmpv1UnusedMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -18411,7 +18475,7 @@ message PatternFlowIgmpv1Unused {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowIgmpv1UnusedMetricTags metric_tags = 5;
+  repeated PatternFlowIgmpv1UnusedMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowIgmpv1UnusedCounter increment = 6;
@@ -18453,7 +18517,7 @@ message PatternFlowIgmpv1Checksum {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowIgmpv1GroupAddressMetricTags {
+message PatternFlowIgmpv1GroupAddressMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -18509,7 +18573,7 @@ message PatternFlowIgmpv1GroupAddress {
   repeated string values = 3;
 
   // Description missing in models
-  repeated PatternFlowIgmpv1GroupAddressMetricTags metric_tags = 5;
+  repeated PatternFlowIgmpv1GroupAddressMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowIgmpv1GroupAddressCounter increment = 6;
@@ -18522,7 +18586,7 @@ message PatternFlowIgmpv1GroupAddress {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowMplsLabelMetricTags {
+message PatternFlowMplsLabelMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -18585,7 +18649,7 @@ message PatternFlowMplsLabel {
   optional int32 auto = 4;
 
   // Description missing in models
-  repeated PatternFlowMplsLabelMetricTags metric_tags = 6;
+  repeated PatternFlowMplsLabelMetricTag metric_tags = 6;
 
   // Description missing in models
   optional PatternFlowMplsLabelCounter increment = 7;
@@ -18598,7 +18662,7 @@ message PatternFlowMplsLabel {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowMplsTrafficClassMetricTags {
+message PatternFlowMplsTrafficClassMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -18654,7 +18718,7 @@ message PatternFlowMplsTrafficClass {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowMplsTrafficClassMetricTags metric_tags = 5;
+  repeated PatternFlowMplsTrafficClassMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowMplsTrafficClassCounter increment = 6;
@@ -18667,7 +18731,7 @@ message PatternFlowMplsTrafficClass {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowMplsBottomOfStackMetricTags {
+message PatternFlowMplsBottomOfStackMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -18730,7 +18794,7 @@ message PatternFlowMplsBottomOfStack {
   optional int32 auto = 4;
 
   // Description missing in models
-  repeated PatternFlowMplsBottomOfStackMetricTags metric_tags = 6;
+  repeated PatternFlowMplsBottomOfStackMetricTag metric_tags = 6;
 
   // Description missing in models
   optional PatternFlowMplsBottomOfStackCounter increment = 7;
@@ -18743,7 +18807,7 @@ message PatternFlowMplsBottomOfStack {
 // row key and create an aggregate metric row for every unique value. To have metric
 // tag columns appear in the flow metric rows the flow metric request allows for the
 // metric_tag value to be specified as part of the request.
-message PatternFlowMplsTimeToLiveMetricTags {
+message PatternFlowMplsTimeToLiveMetricTag {
 
   // Name used for metric tag
   // required = true
@@ -18799,7 +18863,7 @@ message PatternFlowMplsTimeToLive {
   repeated int32 values = 3;
 
   // Description missing in models
-  repeated PatternFlowMplsTimeToLiveMetricTags metric_tags = 5;
+  repeated PatternFlowMplsTimeToLiveMetricTag metric_tags = 5;
 
   // Description missing in models
   optional PatternFlowMplsTimeToLiveCounter increment = 6;
