@@ -7255,7 +7255,7 @@ message FlowMetricTagFilter {
 
   // A list of filters that can be applied to the metric tag name.
   // By default all values will be included in the flow metric results.
-  repeated string values = 2;
+  repeated FlowMetricTagValue values = 2;
 }
 
 // A container for flow metrics.
@@ -7353,8 +7353,25 @@ message FlowMetricTag {
   // Name of packet field metric tag
   optional string name = 1;
 
-  // Value of named packet field metric tag
-  optional string value = 2;
+  // Description missing in models
+  optional FlowMetricTagValue value = 2;
+}
+
+// A container for metric tag value
+message FlowMetricTagValue {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      hex = 1;
+    }
+  }
+  // Available formats for metric tag value
+  // default = Choice.Enum.hex
+  optional Choice.Enum choice = 1;
+
+  // Value represented in hexadecimal format
+  optional string hex = 2;
 }
 
 // The container for timestamp metrics.
