@@ -134,6 +134,7 @@ def init():
     run(
         [
             py() + " -m pip install -r requirements.txt",
+            py() + " -m pip install pipreqs==0.4.11"
         ]
     )
 
