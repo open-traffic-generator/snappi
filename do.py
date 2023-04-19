@@ -27,6 +27,7 @@ os.environ["PATH"] = "{}:{}:{}:{}".format(
 )
 
 models_version = "0.11.6"
+sdk_version = "0.11.7"
 
 # supported values - local openapiart path or None
 USE_OPENAPIART_DIR = None
@@ -101,10 +102,10 @@ def generate_sdk():
         artifact_dir="artifacts",
         extension_prefix=pkg_name,
         generate_version_api=True,
-    ).GeneratePythonSdk(package_name=pkg_name, sdk_version=version).GenerateGoSdk(
+    ).GeneratePythonSdk(package_name=pkg_name, sdk_version=sdk_version).GenerateGoSdk(
         package_dir="github.com/open-traffic-generator/snappi/%s" % go_pkg_name,
         package_name=go_pkg_name,
-        sdk_version=version,
+        sdk_version=sdk_version,
     ).GenerateGoServer(
         module_path="github.com/open-traffic-generator/snappi/%s" % go_pkg_name,
         models_prefix=go_pkg_name,

@@ -33,6 +33,7 @@ jobs:
       - name: Build distribution
         run: |
           python do.py dist
+          ls
       - name: Commit go pkg
         id: get_sha
         run: |
