@@ -125,10 +125,12 @@ def generate_sdk():
         os.path.join("artifacts", "requirements.txt"),
         os.path.join(base_dir, "pkg_requires.txt"),
     )
+
     shutil.copyfile(
         os.path.join(base_dir, "artifacts", model_protobuf_name + ".proto"),
         os.path.join(base_dir, model_protobuf_name + ".proto"),
     )
+
     shutil.copyfile(
         os.path.join(base_dir, "artifacts", model_protobuf_name + ".proto"),
         os.path.join(
@@ -136,15 +138,14 @@ def generate_sdk():
         ),
     )
 
-    for name in os.listdir(pkg_name):
-        if name != "artifacts":
-            path = os.path.join(pkg_name, name)
-            print(path + " will be published")
-
     doc_dir = os.path.join(pkg_name, "docs")
     os.mkdir(doc_dir)
     shutil.move(os.path.join("artifacts", "openapi.yaml"), doc_dir)
 
+    for name in os.listdir(pkg_name):
+        if name != "artifacts":
+            path = os.path.join(pkg_name, name)
+            print(path + " will be published")
 
 def arch():
     return getattr(platform.uname(), "machine", platform.uname()[-1]).lower()
@@ -322,6 +323,13 @@ def dist():
     )
     print(os.listdir("dist"))
 
+    # copy requirements.txt to snappi folder
+    base_dir = os.path.abspath(os.path.dirname(__file__))
+
+    shutil.copyfile(
+        os.path.join("artifacts", "requirements.txt"),
+        os.path.join(base_dir, "snappi", "requirements.txt"),
+    )
 
 def install():
     wheel = "{}-{}-py2.py3-none-any.whl".format(*pkg())
