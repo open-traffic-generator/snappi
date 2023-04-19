@@ -1,0 +1,9 @@
+--prefer-binary
+grpcio~=1.44.0 ; python_version > '2.7'
+grpcio~=1.35.0 ; python_version == '2.7'
+PyYAML
+requests
+protobuf~=3.20.1 ;  python_version > '3.6'
+protobuf~=3.15.0 ;  python_version <= '3.6'
+semantic_version
+urllib3
