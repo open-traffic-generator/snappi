@@ -18,7 +18,7 @@ with open("models-release", "w") as out:
     out.write("v" + models_version)
 
 install_requires = []
-with open(os.path.join(base_dir, "pkg_requires.txt"), "r+") as fd:
+with open(os.path.join(base_dir, "requirements.txt"), "r+") as fd:
     install_requires = fd.readlines()
     install_requires = install_requires[1:]
 

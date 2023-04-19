@@ -86,6 +86,7 @@ def generate_sdk():
     else:
         # download openapi.yaml
         import requests
+
         response = requests.request("GET", OPENAPI_YAML_URL, allow_redirects=True)
         assert response.status_code == 200
         with open(os.path.join("openapi.yaml"), "wb") as fp:
@@ -125,7 +126,7 @@ def generate_sdk():
     shutil.copytree(os.path.join("artifacts", pkg_name), pkg_name)
     shutil.copyfile(
         os.path.join("artifacts", "requirements.txt"),
-        os.path.join(base_dir, "pkg_requires.txt"),
+        os.path.join(base_dir, "requirements.txt"),
     )
 
     shutil.copyfile(
@@ -161,26 +162,14 @@ def generate_checksum(file):
 def generate_distribution_checksum():
     tar_name = "{}-{}.tar.gz".format(*pkg())
     tar_file = os.path.join("dist", tar_name)
-    with open(tar_name+".sha.txt", "w") as f:
+    tar_sha = os.path.join("dist", tar_name + ".sha.txt")
+    with open(tar_sha, "w") as f:
         f.write(generate_checksum(tar_file))
     wheel_name = "{}-{}-py2.py3-none-any.whl".format(*pkg())
     wheel_file = os.path.join("dist", wheel_name)
-    with open(wheel_name+".sha.txt", "w") as f:
+    wheel_sha = os.path.join("dist", wheel_name + ".sha.txt")
+    with open(wheel_sha, "w") as f:
         f.write(generate_checksum(wheel_file))
-
-    # copy release checksums
-    base_dir = os.path.abspath(os.path.dirname(__file__))
-
-    shutil.copyfile(
-        tar_file,
-        os.path.join(base_dir, "snappi", tar_name),
-    )
-
-    shutil.copyfile(
-        wheel_file,
-        os.path.join(base_dir, "snappi", wheel_name),
-    )
-
 
 
 def arch():
@@ -217,9 +206,7 @@ def get_go(version=GO_VERSION, targz=None):
 
     cmd = "go version 2> /dev/null"
     cmd += " || (rm -rf $(dirname {})".format(GO_BIN_PATH)
-    cmd += " && curl -kL -o go-installer https://dl.google.com/go/{}".format(
-        targz
-    )
+    cmd += " && curl -kL -o go-installer https://dl.google.com/go/{}".format(targz)
     cmd += " && tar -C {} -xzf go-installer".format(LOCAL_PATH)
     cmd += " && rm -rf go-installer"
     cmd += " && echo 'PATH=$PATH:{}:{}' >> ~/.profile".format(
@@ -237,8 +224,7 @@ def get_go_deps():
             cmd + " -v google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.2.0",
             cmd + " -v google.golang.org/protobuf/cmd/protoc-gen-go@v1.28.1",
             cmd + " -v golang.org/x/tools/cmd/goimports@v0.6.0",
-            cmd
-            + " -v github.com/pseudomuto/protoc-gen-doc/cmd/protoc-gen-doc@v1.5.1",
+            cmd + " -v github.com/pseudomuto/protoc-gen-doc/cmd/protoc-gen-doc@v1.5.1",
         ]
     )
 
@@ -259,8 +245,10 @@ def get_protoc(version=PROTOC_VERSION, zipfile=None):
         os.mkdir(LOCAL_PATH)
 
     cmd = "protoc --version 2> /dev/null || (curl -kL -o ./protoc.zip "
-    cmd += "https://github.com/protocolbuffers/protobuf/releases/download/v{}/{}".format(
-        version, zipfile
+    cmd += (
+        "https://github.com/protocolbuffers/protobuf/releases/download/v{}/{}".format(
+            version, zipfile
+        )
     )
     cmd += " && unzip -o ./protoc.zip -d {}".format(LOCAL_PATH)
     cmd += " && rm -rf ./protoc.zip"
@@ -290,8 +278,8 @@ def setup():
 def init():
     run(
         [
-            py() + " -m pip install -r requirements.txt",
-            py() + " -m pip install pipreqs==0.4.11"
+            py() + " -m pip install -r dev-requirements.txt",
+            py() + " -m pip install pipreqs==0.4.11",
         ]
     )
 
@@ -313,7 +301,8 @@ def testpy():
         [
             py() + " -m pip install flask",
             py() + " -m pip install pytest-cov",
-            py() + " -m pytest -sv --cov=snappi --cov-report term --cov-report html:cov_report",
+            py()
+            + " -m pytest -sv --cov=snappi --cov-report term --cov-report html:cov_report",
         ]
     )
     import re
@@ -323,9 +312,17 @@ def testpy():
         out = fp.read()
         result = re.findall(r"data-ratio.*?[>](\d+)\b", out)[0]
         if int(result) < coverage_threshold:
-            raise Exception("Coverage thresold[{0}] is NOT achieved[{1}]".format(coverage_threshold, result))
+            raise Exception(
+                "Coverage thresold[{0}] is NOT achieved[{1}]".format(
+                    coverage_threshold, result
+                )
+            )
         else:
-            print("Coverage thresold[{0}] is achieved[{1}]".format(coverage_threshold, result))
+            print(
+                "Coverage thresold[{0}] is achieved[{1}]".format(
+                    coverage_threshold, result
+                )
+            )
 
 
 def testgo():
@@ -333,9 +330,11 @@ def testgo():
     # TODO: not able to run the test from main directory
     os.chdir("gosnappi")
     try:
-        run([
-            "go test ./... -v -coverprofile coverage.txt | tee coverage.out"
-        ], raise_exception=True, msg="Exception occured while running the tests")
+        run(
+            ["go test ./... -v -coverprofile coverage.txt | tee coverage.out"],
+            raise_exception=True,
+            msg="Exception occured while running the tests",
+        )
     finally:
         os.chdir("..")
 
@@ -345,11 +344,15 @@ def testgo():
         if int(result) < go_coverage_threshold:
             raise Exception(
                 "Go tests achieved {1}% which is less than Coverage thresold {0}%,".format(
-                    go_coverage_threshold, result))
+                    go_coverage_threshold, result
+                )
+            )
         else:
             print(
                 "Go tests achieved {1}% ,Coverage thresold {0}%".format(
-                    go_coverage_threshold, result))
+                    go_coverage_threshold, result
+                )
+            )
 
 
 def dist():
@@ -360,14 +363,6 @@ def dist():
         ]
     )
     print(os.listdir("dist"))
-
-    # copy requirements.txt to snappi folder
-    base_dir = os.path.abspath(os.path.dirname(__file__))
-
-    shutil.copyfile(
-        os.path.join("artifacts", "requirements.txt"),
-        os.path.join(base_dir, "snappi", "requirements.txt"),
-    )
 
 
 def install():
