@@ -5,6 +5,7 @@ import sys
 import shutil
 import subprocess
 import platform
+import requests
 
 
 BLACK_VERSION = "22.1.0"
@@ -25,6 +26,123 @@ os.environ["GOPATH"] = GO_HOME_PATH
 os.environ["PATH"] = "{}:{}:{}:{}".format(
     os.environ["PATH"], GO_BIN_PATH, GO_HOME_BIN_PATH, LOCAL_BIN_PATH
 )
+
+models_version = "0.11.6"
+
+# supported values - local openapiart path or None
+USE_OPENAPIART_DIR = None
+USE_MODELS_DIR = None
+
+# supported values - branch name or None
+USE_OPENAPIART_BRANCH = "minimise_requirements.txt"
+USE_MODELS_BRANCH = None
+
+OPENAPIART_REPO = "https://github.com/open-traffic-generator/openapiart.git"
+MODELS_REPO = "https://github.com/open-traffic-generator/models.git"
+OPENAPI_YAML_URL = "https://github.com/open-traffic-generator/models/releases/download/v{}/openapi.yaml".format(
+    models_version
+)
+
+
+def generate_sdk():
+
+    print("handle openapiart dependency")
+    if USE_OPENAPIART_DIR is not None:
+        sys.path.insert(0, USE_OPENAPIART_DIR)
+    elif USE_OPENAPIART_BRANCH is not None:
+        local_path = "openapiart"
+        if not os.path.exists(local_path):
+            subprocess.check_call(
+                "git clone {} && cd {} && git checkout {} && cd ..".format(
+                    OPENAPIART_REPO, local_path, USE_OPENAPIART_BRANCH
+                ),
+                shell=True,
+            )
+        sys.path.insert(0, local_path)
+
+    import openapiart
+
+    print("handle models dependency")
+    if USE_MODELS_DIR is not None:
+        API_FILES = [
+            os.path.join(USE_MODELS_DIR, "api", "info.yaml"),
+            os.path.join(USE_MODELS_DIR, "api", "api.yaml"),
+        ]
+    elif USE_MODELS_BRANCH is not None:
+        local_path = "models"
+        if not os.path.exists(local_path):
+            subprocess.check_call(
+                "git clone {} && cd {} && git checkout {} && cd ..".format(
+                    MODELS_REPO, local_path, USE_MODELS_BRANCH
+                ),
+                shell=True,
+            )
+        API_FILES = [
+            os.path.join(local_path, "api", "info.yaml"),
+            os.path.join(local_path, "api", "api.yaml"),
+        ]
+    else:
+        # download openapi.yaml
+        response = requests.request("GET", OPENAPI_YAML_URL, allow_redirects=True)
+        assert response.status_code == 200
+        with open(os.path.join("openapi.yaml"), "wb") as fp:
+            fp.write(response.content)
+        API_FILES = ["openapi.yaml"]
+
+    print("generate python and go sdk")
+
+    pkg_name = "snappi"
+    go_pkg_name = "gosnappi"
+    model_protobuf_name = "otg"
+
+    openapiart.OpenApiArt(
+        api_files=API_FILES,
+        protobuf_name=model_protobuf_name,
+        artifact_dir="artifacts",
+        extension_prefix=pkg_name,
+        generate_version_api=True,
+    ).GeneratePythonSdk(package_name=pkg_name, sdk_version=version).GenerateGoSdk(
+        package_dir="github.com/open-traffic-generator/snappi/%s" % go_pkg_name,
+        package_name=go_pkg_name,
+        sdk_version=version,
+    ).GenerateGoServer(
+        module_path="github.com/open-traffic-generator/snappi/%s" % go_pkg_name,
+        models_prefix=go_pkg_name,
+        models_path="github.com/open-traffic-generator/snappi/%s" % go_pkg_name,
+    ).GoTidy(
+        relative_package_dir=go_pkg_name
+    )
+
+    if os.path.exists(pkg_name):
+        shutil.rmtree(pkg_name, ignore_errors=True)
+
+    base_dir = os.path.abspath(os.path.dirname(__file__))
+
+    # remove unwanted files
+    shutil.copytree(os.path.join("artifacts", pkg_name), pkg_name)
+    shutil.copyfile(
+        os.path.join("artifacts", "requirements.txt"),
+        os.path.join(base_dir, "pkg_requires.txt"),
+    )
+    shutil.copyfile(
+        os.path.join(base_dir, "artifacts", model_protobuf_name + ".proto"),
+        os.path.join(base_dir, model_protobuf_name + ".proto"),
+    )
+    shutil.copyfile(
+        os.path.join(base_dir, "artifacts", model_protobuf_name + ".proto"),
+        os.path.join(
+            base_dir, go_pkg_name, model_protobuf_name, model_protobuf_name + ".proto"
+        ),
+    )
+
+    for name in os.listdir(pkg_name):
+        if name != "artifacts":
+            path = os.path.join(pkg_name, name)
+            print(path + " will be published")
+
+    doc_dir = os.path.join(pkg_name, "docs")
+    os.mkdir(doc_dir)
+    shutil.move(os.path.join("artifacts", "openapi.yaml"), doc_dir)
 
 
 def arch():
