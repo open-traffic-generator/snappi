@@ -3,12 +3,11 @@ To build distribution: python setup.py sdist bdist_wheel --universal
 """
 import os
 import setuptools
+from version import Version
 
-pkg_name = "snappi"
-go_pkg_name = "gosnappi"
-model_protobuf_name = "otg"
-version = "0.11.7"
-models_version = "0.11.6"
+pkg_name = Version.package_name
+version = Version.version
+models_version = Version.models_version
 
 # read long description from readme.md
 base_dir = os.path.abspath(os.path.dirname(__file__))

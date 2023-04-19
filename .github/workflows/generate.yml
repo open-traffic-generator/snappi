@@ -33,6 +33,7 @@ jobs:
       - name: Build distribution
         run: |
           python do.py dist
+          python do.py generate_distribution_checksum
       - name: Commit go and python pkg
         id: get_sha
         run: |
