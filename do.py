@@ -380,7 +380,7 @@ def release():
     run(
         [
             py() + " -m pip install --upgrade twine",
-            "{} -m twine upload -u {} -p {} dist/*{{.whl,.tar.gz}}".format(
+            "{} -m twine upload -u {} -p {} dist/*.whl dist/*.tar.gz".format(
                 py(),
                 os.environ["PYPI_USERNAME"],
                 os.environ["PYPI_PASSWORD"],
