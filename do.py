@@ -173,12 +173,12 @@ def generate_distribution_checksum():
 
     shutil.copyfile(
         tar_file,
-        os.path.join(base_dir, "snappi", "tar_name"),
+        os.path.join(base_dir, "snappi", tar_name),
     )
 
     shutil.copyfile(
         wheel_file,
-        os.path.join(base_dir, "snappi", "wheel_name"),
+        os.path.join(base_dir, "snappi", wheel_name),
     )
 
 
