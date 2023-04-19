@@ -27,16 +27,21 @@ jobs:
         run: |
           python do.py setup
           python do.py init
+      - name: Generate Python and Go SDK
+        run: |
+          ".env/bin/python" do.py generate_sdk
       - name: Build distribution
         run: |
           python do.py dist
-      - name: Commit go pkg
+          python do.py generate_distribution_checksum
+      - name: Commit go and python pkg
         id: get_sha
         run: |
           git config user.name "Github Actions Bot"
           git config user.email "actions@github.com"
           git pull
           git add --force gosnappi/\*
+          git add --force snappi/\*
           if git status --porcelain | grep .
             then
               git commit -m "Update auto generated go snappi"

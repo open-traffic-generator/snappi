@@ -5,6 +5,8 @@ import sys
 import shutil
 import subprocess
 import platform
+from version import Version
+import hashlib
 
 
 BLACK_VERSION = "22.1.0"
@@ -25,6 +27,160 @@ os.environ["GOPATH"] = GO_HOME_PATH
 os.environ["PATH"] = "{}:{}:{}:{}".format(
     os.environ["PATH"], GO_BIN_PATH, GO_HOME_BIN_PATH, LOCAL_BIN_PATH
 )
+
+models_version = Version.models_version
+sdk_version = Version.version
+
+# supported values - local openapiart path or None
+USE_OPENAPIART_DIR = None
+USE_MODELS_DIR = None
+
+# supported values - branch name or None
+USE_OPENAPIART_BRANCH = "minimise_requirements.txt"
+USE_MODELS_BRANCH = None
+
+OPENAPIART_REPO = "https://github.com/open-traffic-generator/openapiart.git"
+MODELS_REPO = "https://github.com/open-traffic-generator/models.git"
+OPENAPI_YAML_URL = "https://github.com/open-traffic-generator/models/releases/download/v{}/openapi.yaml".format(
+    models_version
+)
+
+
+def generate_sdk():
+
+    print("handle openapiart dependency")
+    if USE_OPENAPIART_DIR is not None:
+        sys.path.insert(0, USE_OPENAPIART_DIR)
+    elif USE_OPENAPIART_BRANCH is not None:
+        local_path = "openapiart"
+        if not os.path.exists(local_path):
+            subprocess.check_call(
+                "git clone {} && cd {} && git checkout {} && cd ..".format(
+                    OPENAPIART_REPO, local_path, USE_OPENAPIART_BRANCH
+                ),
+                shell=True,
+            )
+        sys.path.insert(0, local_path)
+
+    import openapiart
+
+    print("handle models dependency")
+    if USE_MODELS_DIR is not None:
+        API_FILES = [
+            os.path.join(USE_MODELS_DIR, "api", "info.yaml"),
+            os.path.join(USE_MODELS_DIR, "api", "api.yaml"),
+        ]
+    elif USE_MODELS_BRANCH is not None:
+        local_path = "models"
+        if not os.path.exists(local_path):
+            subprocess.check_call(
+                "git clone {} && cd {} && git checkout {} && cd ..".format(
+                    MODELS_REPO, local_path, USE_MODELS_BRANCH
+                ),
+                shell=True,
+            )
+        API_FILES = [
+            os.path.join(local_path, "api", "info.yaml"),
+            os.path.join(local_path, "api", "api.yaml"),
+        ]
+    else:
+        # download openapi.yaml
+        import requests
+        response = requests.request("GET", OPENAPI_YAML_URL, allow_redirects=True)
+        assert response.status_code == 200
+        with open(os.path.join("openapi.yaml"), "wb") as fp:
+            fp.write(response.content)
+        API_FILES = ["openapi.yaml"]
+
+    print("generate python and go sdk")
+
+    pkg_name = Version.package_name
+    go_pkg_name = Version.go_package_name
+    model_protobuf_name = Version.protobuf_name
+
+    openapiart.OpenApiArt(
+        api_files=API_FILES,
+        protobuf_name=model_protobuf_name,
+        artifact_dir="artifacts",
+        extension_prefix=pkg_name,
+        generate_version_api=True,
+    ).GeneratePythonSdk(package_name=pkg_name, sdk_version=sdk_version).GenerateGoSdk(
+        package_dir="github.com/open-traffic-generator/snappi/%s" % go_pkg_name,
+        package_name=go_pkg_name,
+        sdk_version=sdk_version,
+    ).GenerateGoServer(
+        module_path="github.com/open-traffic-generator/snappi/%s" % go_pkg_name,
+        models_prefix=go_pkg_name,
+        models_path="github.com/open-traffic-generator/snappi/%s" % go_pkg_name,
+    ).GoTidy(
+        relative_package_dir=go_pkg_name
+    )
+
+    if os.path.exists(pkg_name):
+        shutil.rmtree(pkg_name, ignore_errors=True)
+
+    base_dir = os.path.abspath(os.path.dirname(__file__))
+
+    # remove unwanted files
+    shutil.copytree(os.path.join("artifacts", pkg_name), pkg_name)
+    shutil.copyfile(
+        os.path.join("artifacts", "requirements.txt"),
+        os.path.join(base_dir, "pkg_requires.txt"),
+    )
+
+    shutil.copyfile(
+        os.path.join(base_dir, "artifacts", model_protobuf_name + ".proto"),
+        os.path.join(base_dir, model_protobuf_name + ".proto"),
+    )
+
+    shutil.copyfile(
+        os.path.join(base_dir, "artifacts", model_protobuf_name + ".proto"),
+        os.path.join(
+            base_dir, go_pkg_name, model_protobuf_name, model_protobuf_name + ".proto"
+        ),
+    )
+
+    doc_dir = os.path.join(pkg_name, "docs")
+    os.mkdir(doc_dir)
+    shutil.move(os.path.join("artifacts", "openapi.yaml"), doc_dir)
+
+    for name in os.listdir(pkg_name):
+        if name != "artifacts":
+            path = os.path.join(pkg_name, name)
+            print(path + " will be published")
+
+
+def generate_checksum(file):
+    hash_sha256 = hashlib.sha256()
+    with open(file, "rb") as f:
+        for chunk in iter(lambda: f.read(4096), b""):
+            hash_sha256.update(chunk)
+    return hash_sha256.hexdigest()
+
+
+def generate_distribution_checksum():
+    tar_name = "{}-{}.tar.gz".format(*pkg())
+    tar_file = os.path.join("dist", tar_name)
+    with open(tar_name+".sha.txt", "w") as f:
+        f.write(generate_checksum(tar_file))
+    wheel_name = "{}-{}-py2.py3-none-any.whl".format(*pkg())
+    wheel_file = os.path.join("dist", wheel_name)
+    with open(wheel_name+".sha.txt", "w") as f:
+        f.write(generate_checksum(wheel_file))
+
+    # copy release checksums
+    base_dir = os.path.abspath(os.path.dirname(__file__))
+
+    shutil.copyfile(
+        tar_file,
+        os.path.join(base_dir, "snappi", tar_name),
+    )
+
+    shutil.copyfile(
+        wheel_file,
+        os.path.join(base_dir, "snappi", wheel_name),
+    )
+
 
 
 def arch():
@@ -111,6 +267,7 @@ def get_protoc(version=PROTOC_VERSION, zipfile=None):
     cmd += " && echo 'PATH=$PATH:{}' >> ~/.profile)".format(LOCAL_BIN_PATH)
     run([cmd])
 
+
 def setup_ext(go_version=GO_VERSION, protoc_version=PROTOC_VERSION):
     if on_linux():
         get_go(go_version)
@@ -134,6 +291,7 @@ def init():
     run(
         [
             py() + " -m pip install -r requirements.txt",
+            py() + " -m pip install pipreqs==0.4.11"
         ]
     )
 
@@ -169,6 +327,7 @@ def testpy():
         else:
             print("Coverage thresold[{0}] is achieved[{1}]".format(coverage_threshold, result))
 
+
 def testgo():
     go_coverage_threshold = 0
     # TODO: not able to run the test from main directory
@@ -201,6 +360,14 @@ def dist():
         ]
     )
     print(os.listdir("dist"))
+
+    # copy requirements.txt to snappi folder
+    base_dir = os.path.abspath(os.path.dirname(__file__))
+
+    shutil.copyfile(
+        os.path.join("artifacts", "requirements.txt"),
+        os.path.join(base_dir, "snappi", "requirements.txt"),
+    )
 
 
 def install():
@@ -254,23 +421,14 @@ def clean():
 
 
 def version():
-    print(pkg()[-1])
+    print(Version.version)
 
 
 def pkg():
     """
     Returns name of python package in current directory and its version.
     """
-    try:
-        return pkg.pkg
-    except AttributeError:
-        with open("setup.py") as f:
-            out = f.read()
-            name = re.findall(r"pkg_name = \"(.+)\"", out)[0]
-            version = re.findall(r"version = \"(.+)\"", out)[0]
-
-            pkg.pkg = (name, version)
-        return pkg.pkg
+    return Version.package_name, Version.version
 
 
 def rm_path(path):
