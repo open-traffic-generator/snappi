@@ -27,6 +27,9 @@ jobs:
         run: |
           python do.py setup
           python do.py init
+      - name: Generate Python and Go SDK
+        run: |
+          python do.py generate_sdk
       - name: Build distribution
         run: |
           python do.py dist

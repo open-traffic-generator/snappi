@@ -5,7 +5,6 @@ import sys
 import shutil
 import subprocess
 import platform
-import requests
 
 
 BLACK_VERSION = "22.1.0"
@@ -83,6 +82,7 @@ def generate_sdk():
         ]
     else:
         # download openapi.yaml
+        import requests
         response = requests.request("GET", OPENAPI_YAML_URL, allow_redirects=True)
         assert response.status_code == 200
         with open(os.path.join("openapi.yaml"), "wb") as fp:
