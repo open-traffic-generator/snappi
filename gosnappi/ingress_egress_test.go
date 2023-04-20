@@ -25,11 +25,11 @@ func TestIngressEgress(t *testing.T) {
 	f1.Duration().FixedPackets().SetPackets(100)
 	f1.Metrics().SetEnable(true)
 
-	Ing := f1.IngressPacket()
+	Ing := f1.Packet()
 	ethIng := Ing.Add().Ethernet()
 	ethIng.Src().SetValue("00:00:01:01:01:01")
 
-	ip4Ing := f1.IngressPacket().Add().Ipv4()
+	ip4Ing := f1.Packet().Add().Ipv4()
 	ip4Ing.Src().SetValue("1.1.1.1")
 
 	ethEgr := f1.EgressPacket().Add().Ethernet()
@@ -39,8 +39,7 @@ func TestIngressEgress(t *testing.T) {
 	ip4Egr.Src().SetValue("1.1.2.2")
 
 	assert.Equal(t, len(f1.EgressPacket().Items()), 2)
-	assert.Equal(t, len(f1.IngressPacket().Items()), 2)
-	assert.Equal(t, len(f1.Packet().Items()), 0)
+	assert.Equal(t, len(f1.Packet().Items()), 2)
 
 	fmt.Println(config)
 }

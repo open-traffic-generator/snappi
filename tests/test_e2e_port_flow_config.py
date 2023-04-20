@@ -16,10 +16,10 @@ def test_e2e_port_flow_config(api):
     flow.rate.pps = 1000
     flow.duration.fixed_packets.packets = 10000
 
-    flow.ingress_packet.ethernet().vlan().ipv4().tcp()
-    ip = flow.ingress_packet[2]
+    flow.packet.ethernet().vlan().ipv4().tcp()
+    ip = flow.packet[2]
 
-    eth = flow.ingress_packet[0]
+    eth = flow.packet[0]
     eth.src.value = "00:00:01:00:00:01"
     eth.dst.values = ["00:00:02:00:00:01", "00:00:02:00:00:01"]
 

@@ -12,7 +12,7 @@ def get_mock_config(grpc_api):
     flow.rate.pps = 1000
     flow.duration.fixed_packets.packets = 10000
 
-    eth, ip = flow.ingress_packet.ethernet().ipv4()
+    eth, ip = flow.packet.ethernet().ipv4()
 
     eth.src.value = "00:00:01:00:00:01"
     eth.dst.values = ["00:00:02:00:00:01", "00:00:02:00:00:01"]
