@@ -13,7 +13,6 @@ dist/
 logs/
 scratch/
 artifacts/
-snappi/
 models-release
 cov_report/
 .coverage
@@ -21,6 +20,5 @@ gosnappi/coverage.out
 gosnappi/coverage.txt
 .local
 *.proto
-pkg_requires.txt
 /openapiart
 /models
