@@ -24,7 +24,7 @@ with open(os.path.join(base_dir, "requirements.txt"), "r+") as fd:
     install_requires = install_requires[1:]
 
 grpc_requires = []
-with open(os.path.join(base_dir, "grpc-requirements.txt"), "r+") as fd:
+with open(os.path.join(base_dir, "minimum-requirements.txt"), "r+") as fd:
     grpc_requires = fd.readlines()
     grpc_requires = grpc_requires[1:]
 
@@ -56,7 +56,6 @@ class InstallCommand(install):
         print(self.noGrpc)
         install.run(self)
 
-print("after")
 
 setuptools.setup(
     name=pkg_name,
