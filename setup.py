@@ -22,11 +22,6 @@ with open(os.path.join(base_dir, "requirements.txt"), "r+") as fd:
     install_requires = fd.readlines()
     install_requires = install_requires[1:]
 
-grpc_requires = []
-with open(os.path.join(base_dir, "grpc-requirements.txt"), "r+") as fd:
-    grpc_requires = fd.readlines()
-    grpc_requires = install_requires[1:]
-
 setuptools.setup(
     name=pkg_name,
     version=version,
@@ -55,6 +50,5 @@ setuptools.setup(
         "trex": ["snappi_trex"],
         "convergence": ["snappi_convergence==0.4.1"],
         "testing": ["pytest", "flask"],
-        "grpc": grpc_requires
     },
 )

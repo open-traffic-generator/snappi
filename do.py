@@ -36,8 +36,8 @@ USE_OPENAPIART_DIR = None
 USE_MODELS_DIR = None
 
 # supported values - branch name or None
-USE_OPENAPIART_BRANCH = "isolate-grpc-from-rest-python"
-USE_MODELS_BRANCH = "isolate-grpc-from-rest-python"
+USE_OPENAPIART_BRANCH = None
+USE_MODELS_BRANCH = None
 
 OPENAPIART_REPO = "https://github.com/open-traffic-generator/openapiart.git"
 MODELS_REPO = "https://github.com/open-traffic-generator/models.git"
@@ -124,15 +124,9 @@ def generate_sdk():
 
     # remove unwanted files
     shutil.copytree(os.path.join("artifacts", pkg_name), pkg_name)
-
     shutil.copyfile(
         os.path.join("artifacts", "requirements.txt"),
         os.path.join(base_dir, "requirements.txt"),
-    )
-
-    shutil.copyfile(
-        os.path.join("artifacts", "grpc-requirements.txt"),
-        os.path.join(base_dir, "grpc-requirements.txt"),
     )
 
     shutil.copyfile(
