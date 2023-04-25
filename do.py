@@ -124,9 +124,15 @@ def generate_sdk():
 
     # remove unwanted files
     shutil.copytree(os.path.join("artifacts", pkg_name), pkg_name)
+
     shutil.copyfile(
         os.path.join("artifacts", "requirements.txt"),
         os.path.join(base_dir, "requirements.txt"),
+    )
+
+    shutil.copyfile(
+        os.path.join("artifacts", "grpc-requirements.txt"),
+        os.path.join(base_dir, "grpc-requirements.txt"),
     )
 
     shutil.copyfile(
@@ -370,6 +376,13 @@ def install():
     run(
         [
             "{} -m pip install --upgrade --force-reinstall {}[testing]".format(
+                py(), os.path.join("dist", wheel)
+            ),
+        ]
+    )
+    run(
+        [
+            "{} -m pip install --upgrade --force-reinstall {}[grpc]".format(
                 py(), os.path.join("dist", wheel)
             ),
         ]
