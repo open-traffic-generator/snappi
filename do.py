@@ -131,8 +131,8 @@ def generate_sdk():
     )
 
     shutil.copyfile(
-        os.path.join("artifacts", "grpc-requirements.txt"),
-        os.path.join(base_dir, "grpc-requirements.txt"),
+        os.path.join("artifacts", "minimum-requirements.txt"),
+        os.path.join(base_dir, "minimum-requirements.txt"),
     )
 
     shutil.copyfile(
