@@ -109342,8 +109342,7 @@ class GrpcApi(Api):
 
         self.grpc = importlib.import_module("grpc")
 
-        protobuf = importlib.import_module("google.protobuf")
-        self.json_format = getattr(protobuf, "json_format")
+        self.json_format = importlib.import_module("google.protobuf.json_format")
 
         try:
             module = importlib.import_module("snappi")
