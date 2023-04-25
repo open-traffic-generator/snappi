@@ -1,4 +1,4 @@
-# Open Traffic Generator API 0.11.7
+# Open Traffic Generator API 0.11.8
 # License: MIT
 
 import importlib
@@ -24935,9 +24935,9 @@ class PatternFlowEthernetDst(OpenApiObject):
             "type": str,
             "format": "mac",
         },
-        "metric_tags": {"type": "PatternFlowEthernetDstMetricTagIter"},
         "increment": {"type": "PatternFlowEthernetDstCounter"},
         "decrement": {"type": "PatternFlowEthernetDstCounter"},
+        "metric_tags": {"type": "PatternFlowEthernetDstMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -25099,6 +25099,109 @@ class PatternFlowEthernetDst(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowEthernetDstCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": str,
+            "format": "mac",
+        },
+        "step": {
+            "type": str,
+            "format": "mac",
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": "00:00:00:00:00:00",
+        "step": "00:00:00:00:00:01",
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self, parent=None, start="00:00:00:00:00:00", step="00:00:00:00:00:01", count=1
+    ):
+        super(PatternFlowEthernetDstCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> str
+        """start getter
+
+        TBD
+
+        Returns: str
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: str
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> str
+        """step getter
+
+        TBD
+
+        Returns: str
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: str
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowEthernetDstMetricTag(OpenApiObject):
@@ -25266,109 +25369,6 @@ class PatternFlowEthernetDstMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowEthernetDstCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": str,
-            "format": "mac",
-        },
-        "step": {
-            "type": str,
-            "format": "mac",
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": "00:00:00:00:00:00",
-        "step": "00:00:00:00:00:01",
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(
-        self, parent=None, start="00:00:00:00:00:00", step="00:00:00:00:00:01", count=1
-    ):
-        super(PatternFlowEthernetDstCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> str
-        """start getter
-
-        TBD
-
-        Returns: str
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: str
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> str
-        """step getter
-
-        TBD
-
-        Returns: str
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: str
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowEthernetSrc(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -25391,9 +25391,9 @@ class PatternFlowEthernetSrc(OpenApiObject):
             "format": "mac",
             "itemtype": str,
         },
-        "metric_tags": {"type": "PatternFlowEthernetSrcMetricTagIter"},
         "increment": {"type": "PatternFlowEthernetSrcCounter"},
         "decrement": {"type": "PatternFlowEthernetSrcCounter"},
+        "metric_tags": {"type": "PatternFlowEthernetSrcMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -25540,6 +25540,109 @@ class PatternFlowEthernetSrc(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowEthernetSrcCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": str,
+            "format": "mac",
+        },
+        "step": {
+            "type": str,
+            "format": "mac",
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": "00:00:00:00:00:00",
+        "step": "00:00:00:00:00:01",
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self, parent=None, start="00:00:00:00:00:00", step="00:00:00:00:00:01", count=1
+    ):
+        super(PatternFlowEthernetSrcCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> str
+        """start getter
+
+        TBD
+
+        Returns: str
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: str
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> str
+        """step getter
+
+        TBD
+
+        Returns: str
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: str
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowEthernetSrcMetricTag(OpenApiObject):
@@ -25707,109 +25810,6 @@ class PatternFlowEthernetSrcMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowEthernetSrcCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": str,
-            "format": "mac",
-        },
-        "step": {
-            "type": str,
-            "format": "mac",
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": "00:00:00:00:00:00",
-        "step": "00:00:00:00:00:01",
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(
-        self, parent=None, start="00:00:00:00:00:00", step="00:00:00:00:00:01", count=1
-    ):
-        super(PatternFlowEthernetSrcCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> str
-        """start getter
-
-        TBD
-
-        Returns: str
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: str
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> str
-        """step getter
-
-        TBD
-
-        Returns: str
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: str
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowEthernetEtherType(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -25840,9 +25840,9 @@ class PatternFlowEthernetEtherType(OpenApiObject):
             "minimum": 0,
             "maximum": 65535,
         },
-        "metric_tags": {"type": "PatternFlowEthernetEtherTypeMetricTagIter"},
         "increment": {"type": "PatternFlowEthernetEtherTypeCounter"},
         "decrement": {"type": "PatternFlowEthernetEtherTypeCounter"},
+        "metric_tags": {"type": "PatternFlowEthernetEtherTypeMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -26005,6 +26005,115 @@ class PatternFlowEthernetEtherType(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowEthernetEtherTypeCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 65535,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 65535,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 65535,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    IPV4 = 2048  #
+    IPV6 = 34525  #
+    ARP = 2054  #
+    VLAN_802_1_Q = 33024  #
+    RESERVED = 65535  #
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=65535, step=1, count=1):
+        super(PatternFlowEthernetEtherTypeCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowEthernetEtherTypeMetricTag(OpenApiObject):
@@ -26172,115 +26281,6 @@ class PatternFlowEthernetEtherTypeMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowEthernetEtherTypeCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 65535,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 65535,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 65535,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    IPV4 = 2048  #
-    IPV6 = 34525  #
-    ARP = 2054  #
-    VLAN_802_1_Q = 33024  #
-    RESERVED = 65535  #
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=65535, step=1, count=1):
-        super(PatternFlowEthernetEtherTypeCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowEthernetPfcQueue(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -26305,9 +26305,9 @@ class PatternFlowEthernetPfcQueue(OpenApiObject):
             "minimum": 0,
             "maximum": 7,
         },
-        "metric_tags": {"type": "PatternFlowEthernetPfcQueueMetricTagIter"},
         "increment": {"type": "PatternFlowEthernetPfcQueueCounter"},
         "decrement": {"type": "PatternFlowEthernetPfcQueueCounter"},
+        "metric_tags": {"type": "PatternFlowEthernetPfcQueueMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -26448,6 +26448,109 @@ class PatternFlowEthernetPfcQueue(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowEthernetPfcQueueCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 7,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 7,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowEthernetPfcQueueCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowEthernetPfcQueueMetricTag(OpenApiObject):
@@ -26615,109 +26718,6 @@ class PatternFlowEthernetPfcQueueMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowEthernetPfcQueueCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 7,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 7,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 0,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=0, step=1, count=1):
-        super(PatternFlowEthernetPfcQueueCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class FlowVlan(OpenApiObject):
     __slots__ = "_parent"
 
@@ -26807,9 +26807,9 @@ class PatternFlowVlanPriority(OpenApiObject):
             "minimum": 0,
             "maximum": 7,
         },
-        "metric_tags": {"type": "PatternFlowVlanPriorityMetricTagIter"},
         "increment": {"type": "PatternFlowVlanPriorityCounter"},
         "decrement": {"type": "PatternFlowVlanPriorityCounter"},
+        "metric_tags": {"type": "PatternFlowVlanPriorityMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -26950,6 +26950,109 @@ class PatternFlowVlanPriority(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowVlanPriorityCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 7,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 7,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowVlanPriorityCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowVlanPriorityMetricTag(OpenApiObject):
@@ -27117,109 +27220,6 @@ class PatternFlowVlanPriorityMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowVlanPriorityCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 7,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 7,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 0,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=0, step=1, count=1):
-        super(PatternFlowVlanPriorityCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowVlanCfi(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -27244,9 +27244,9 @@ class PatternFlowVlanCfi(OpenApiObject):
             "minimum": 0,
             "maximum": 1,
         },
-        "metric_tags": {"type": "PatternFlowVlanCfiMetricTagIter"},
         "increment": {"type": "PatternFlowVlanCfiCounter"},
         "decrement": {"type": "PatternFlowVlanCfiCounter"},
+        "metric_tags": {"type": "PatternFlowVlanCfiMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -27384,6 +27384,109 @@ class PatternFlowVlanCfi(OpenApiObject):
         return self._get_property(
             "metric_tags", PatternFlowVlanCfiMetricTagIter, self._parent, self._choice
         )
+
+
+class PatternFlowVlanCfiCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 1,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 1,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowVlanCfiCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowVlanCfiMetricTag(OpenApiObject):
@@ -27549,109 +27652,6 @@ class PatternFlowVlanCfiMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowVlanCfiCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 1,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 1,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 0,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=0, step=1, count=1):
-        super(PatternFlowVlanCfiCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowVlanId(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -27676,9 +27676,9 @@ class PatternFlowVlanId(OpenApiObject):
             "minimum": 0,
             "maximum": 4095,
         },
-        "metric_tags": {"type": "PatternFlowVlanIdMetricTagIter"},
         "increment": {"type": "PatternFlowVlanIdCounter"},
         "decrement": {"type": "PatternFlowVlanIdCounter"},
+        "metric_tags": {"type": "PatternFlowVlanIdMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -27816,6 +27816,109 @@ class PatternFlowVlanId(OpenApiObject):
         return self._get_property(
             "metric_tags", PatternFlowVlanIdMetricTagIter, self._parent, self._choice
         )
+
+
+class PatternFlowVlanIdCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 4095,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 4095,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowVlanIdCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowVlanIdMetricTag(OpenApiObject):
@@ -27981,109 +28084,6 @@ class PatternFlowVlanIdMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowVlanIdCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 4095,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 4095,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 0,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=0, step=1, count=1):
-        super(PatternFlowVlanIdCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowVlanTpid(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -28108,9 +28108,9 @@ class PatternFlowVlanTpid(OpenApiObject):
             "minimum": 0,
             "maximum": 65535,
         },
-        "metric_tags": {"type": "PatternFlowVlanTpidMetricTagIter"},
         "increment": {"type": "PatternFlowVlanTpidCounter"},
         "decrement": {"type": "PatternFlowVlanTpidCounter"},
+        "metric_tags": {"type": "PatternFlowVlanTpidMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -28254,6 +28254,115 @@ class PatternFlowVlanTpid(OpenApiObject):
         return self._get_property(
             "metric_tags", PatternFlowVlanTpidMetricTagIter, self._parent, self._choice
         )
+
+
+class PatternFlowVlanTpidCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 65535,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 65535,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 33024,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    X8100 = 33024  #
+    X88A8 = 34984  #
+    X9100 = 37120  #
+    X9200 = 37376  #
+    X9300 = 37632  #
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=33024, step=1, count=1):
+        super(PatternFlowVlanTpidCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowVlanTpidMetricTag(OpenApiObject):
@@ -28419,115 +28528,6 @@ class PatternFlowVlanTpidMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowVlanTpidCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 65535,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 65535,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 33024,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    X8100 = 33024  #
-    X88A8 = 34984  #
-    X9100 = 37120  #
-    X9200 = 37376  #
-    X9300 = 37632  #
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=33024, step=1, count=1):
-        super(PatternFlowVlanTpidCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class FlowVxlan(OpenApiObject):
     __slots__ = "_parent"
 
@@ -28617,9 +28617,9 @@ class PatternFlowVxlanFlags(OpenApiObject):
             "minimum": 0,
             "maximum": 255,
         },
-        "metric_tags": {"type": "PatternFlowVxlanFlagsMetricTagIter"},
         "increment": {"type": "PatternFlowVxlanFlagsCounter"},
         "decrement": {"type": "PatternFlowVxlanFlagsCounter"},
+        "metric_tags": {"type": "PatternFlowVxlanFlagsMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -28760,6 +28760,109 @@ class PatternFlowVxlanFlags(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowVxlanFlagsCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 255,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 255,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 8,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=8, step=1, count=1):
+        super(PatternFlowVxlanFlagsCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowVxlanFlagsMetricTag(OpenApiObject):
@@ -28925,109 +29028,6 @@ class PatternFlowVxlanFlagsMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowVxlanFlagsCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 255,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 255,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 8,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=8, step=1, count=1):
-        super(PatternFlowVxlanFlagsCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowVxlanReserved0(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -29052,9 +29052,9 @@ class PatternFlowVxlanReserved0(OpenApiObject):
             "minimum": 0,
             "maximum": 16777215,
         },
-        "metric_tags": {"type": "PatternFlowVxlanReserved0MetricTagIter"},
         "increment": {"type": "PatternFlowVxlanReserved0Counter"},
         "decrement": {"type": "PatternFlowVxlanReserved0Counter"},
+        "metric_tags": {"type": "PatternFlowVxlanReserved0MetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -29195,6 +29195,109 @@ class PatternFlowVxlanReserved0(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowVxlanReserved0Counter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 16777215,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 16777215,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowVxlanReserved0Counter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowVxlanReserved0MetricTag(OpenApiObject):
@@ -29362,109 +29465,6 @@ class PatternFlowVxlanReserved0MetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowVxlanReserved0Counter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 16777215,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 16777215,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 0,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=0, step=1, count=1):
-        super(PatternFlowVxlanReserved0Counter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowVxlanVni(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -29495,9 +29495,9 @@ class PatternFlowVxlanVni(OpenApiObject):
             "minimum": 0,
             "maximum": 16777215,
         },
-        "metric_tags": {"type": "PatternFlowVxlanVniMetricTagIter"},
         "increment": {"type": "PatternFlowVxlanVniCounter"},
         "decrement": {"type": "PatternFlowVxlanVniCounter"},
+        "metric_tags": {"type": "PatternFlowVxlanVniMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -29649,6 +29649,109 @@ class PatternFlowVxlanVni(OpenApiObject):
         return self._get_property(
             "metric_tags", PatternFlowVxlanVniMetricTagIter, self._parent, self._choice
         )
+
+
+class PatternFlowVxlanVniCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 16777215,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 16777215,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowVxlanVniCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowVxlanVniMetricTag(OpenApiObject):
@@ -29814,109 +29917,6 @@ class PatternFlowVxlanVniMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowVxlanVniCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 16777215,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 16777215,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 0,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=0, step=1, count=1):
-        super(PatternFlowVxlanVniCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowVxlanReserved1(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -29941,9 +29941,9 @@ class PatternFlowVxlanReserved1(OpenApiObject):
             "minimum": 0,
             "maximum": 255,
         },
-        "metric_tags": {"type": "PatternFlowVxlanReserved1MetricTagIter"},
         "increment": {"type": "PatternFlowVxlanReserved1Counter"},
         "decrement": {"type": "PatternFlowVxlanReserved1Counter"},
+        "metric_tags": {"type": "PatternFlowVxlanReserved1MetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -30084,6 +30084,109 @@ class PatternFlowVxlanReserved1(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowVxlanReserved1Counter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 255,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 255,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowVxlanReserved1Counter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowVxlanReserved1MetricTag(OpenApiObject):
@@ -30249,109 +30352,6 @@ class PatternFlowVxlanReserved1MetricTagIter(OpenApiIter):
         )
         self._add(item)
         return item
-
-
-class PatternFlowVxlanReserved1Counter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 255,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 255,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 0,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=0, step=1, count=1):
-        super(PatternFlowVxlanReserved1Counter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
 
 
 class FlowIpv4(OpenApiObject):
@@ -30563,9 +30563,9 @@ class PatternFlowIpv4Version(OpenApiObject):
             "minimum": 0,
             "maximum": 15,
         },
-        "metric_tags": {"type": "PatternFlowIpv4VersionMetricTagIter"},
         "increment": {"type": "PatternFlowIpv4VersionCounter"},
         "decrement": {"type": "PatternFlowIpv4VersionCounter"},
+        "metric_tags": {"type": "PatternFlowIpv4VersionMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -30706,6 +30706,109 @@ class PatternFlowIpv4Version(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowIpv4VersionCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 15,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 15,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 4,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=4, step=1, count=1):
+        super(PatternFlowIpv4VersionCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowIpv4VersionMetricTag(OpenApiObject):
@@ -30873,109 +30976,6 @@ class PatternFlowIpv4VersionMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowIpv4VersionCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 15,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 15,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 4,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=4, step=1, count=1):
-        super(PatternFlowIpv4VersionCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowIpv4HeaderLength(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -31006,9 +31006,9 @@ class PatternFlowIpv4HeaderLength(OpenApiObject):
             "minimum": 0,
             "maximum": 15,
         },
-        "metric_tags": {"type": "PatternFlowIpv4HeaderLengthMetricTagIter"},
         "increment": {"type": "PatternFlowIpv4HeaderLengthCounter"},
         "decrement": {"type": "PatternFlowIpv4HeaderLengthCounter"},
+        "metric_tags": {"type": "PatternFlowIpv4HeaderLengthMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -31163,6 +31163,109 @@ class PatternFlowIpv4HeaderLength(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowIpv4HeaderLengthCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 15,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 15,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 5,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=5, step=1, count=1):
+        super(PatternFlowIpv4HeaderLengthCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowIpv4HeaderLengthMetricTag(OpenApiObject):
@@ -31330,109 +31433,6 @@ class PatternFlowIpv4HeaderLengthMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowIpv4HeaderLengthCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 15,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 15,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 5,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=5, step=1, count=1):
-        super(PatternFlowIpv4HeaderLengthCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class FlowIpv4Priority(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -31553,9 +31553,9 @@ class PatternFlowIpv4PriorityRaw(OpenApiObject):
             "minimum": 0,
             "maximum": 255,
         },
-        "metric_tags": {"type": "PatternFlowIpv4PriorityRawMetricTagIter"},
         "increment": {"type": "PatternFlowIpv4PriorityRawCounter"},
         "decrement": {"type": "PatternFlowIpv4PriorityRawCounter"},
+        "metric_tags": {"type": "PatternFlowIpv4PriorityRawMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -31696,6 +31696,109 @@ class PatternFlowIpv4PriorityRaw(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowIpv4PriorityRawCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 255,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 255,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowIpv4PriorityRawCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowIpv4PriorityRawMetricTag(OpenApiObject):
@@ -31863,109 +31966,6 @@ class PatternFlowIpv4PriorityRawMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowIpv4PriorityRawCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 255,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 255,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 0,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=0, step=1, count=1):
-        super(PatternFlowIpv4PriorityRawCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class FlowIpv4Tos(OpenApiObject):
     __slots__ = "_parent"
 
@@ -32079,9 +32079,9 @@ class PatternFlowIpv4TosPrecedence(OpenApiObject):
             "minimum": 0,
             "maximum": 7,
         },
-        "metric_tags": {"type": "PatternFlowIpv4TosPrecedenceMetricTagIter"},
         "increment": {"type": "PatternFlowIpv4TosPrecedenceCounter"},
         "decrement": {"type": "PatternFlowIpv4TosPrecedenceCounter"},
+        "metric_tags": {"type": "PatternFlowIpv4TosPrecedenceMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -32231,6 +32231,118 @@ class PatternFlowIpv4TosPrecedence(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowIpv4TosPrecedenceCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 7,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 7,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    ROUTINE = 0  #
+    PRIORITY = 1  #
+    IMMEDIATE = 2  #
+    FLASH = 3  #
+    FLASH_OVERRIDE = 4  #
+    CRITIC_ECP = 5  #
+    INTERNETWORK_CONTROL = 6  #
+    NETWORK_CONTROL = 7  #
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowIpv4TosPrecedenceCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowIpv4TosPrecedenceMetricTag(OpenApiObject):
@@ -32398,118 +32510,6 @@ class PatternFlowIpv4TosPrecedenceMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowIpv4TosPrecedenceCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 7,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 7,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 0,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    ROUTINE = 0  #
-    PRIORITY = 1  #
-    IMMEDIATE = 2  #
-    FLASH = 3  #
-    FLASH_OVERRIDE = 4  #
-    CRITIC_ECP = 5  #
-    INTERNETWORK_CONTROL = 6  #
-    NETWORK_CONTROL = 7  #
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=0, step=1, count=1):
-        super(PatternFlowIpv4TosPrecedenceCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowIpv4TosDelay(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -32534,9 +32534,9 @@ class PatternFlowIpv4TosDelay(OpenApiObject):
             "minimum": 0,
             "maximum": 1,
         },
-        "metric_tags": {"type": "PatternFlowIpv4TosDelayMetricTagIter"},
         "increment": {"type": "PatternFlowIpv4TosDelayCounter"},
         "decrement": {"type": "PatternFlowIpv4TosDelayCounter"},
+        "metric_tags": {"type": "PatternFlowIpv4TosDelayMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -32680,6 +32680,112 @@ class PatternFlowIpv4TosDelay(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowIpv4TosDelayCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 1,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 1,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    NORMAL = 0  #
+    LOW = 1  #
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowIpv4TosDelayCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowIpv4TosDelayMetricTag(OpenApiObject):
@@ -32847,112 +32953,6 @@ class PatternFlowIpv4TosDelayMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowIpv4TosDelayCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 1,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 1,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 0,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    NORMAL = 0  #
-    LOW = 1  #
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=0, step=1, count=1):
-        super(PatternFlowIpv4TosDelayCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowIpv4TosThroughput(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -32977,9 +32977,9 @@ class PatternFlowIpv4TosThroughput(OpenApiObject):
             "minimum": 0,
             "maximum": 1,
         },
-        "metric_tags": {"type": "PatternFlowIpv4TosThroughputMetricTagIter"},
         "increment": {"type": "PatternFlowIpv4TosThroughputCounter"},
         "decrement": {"type": "PatternFlowIpv4TosThroughputCounter"},
+        "metric_tags": {"type": "PatternFlowIpv4TosThroughputMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -33123,6 +33123,112 @@ class PatternFlowIpv4TosThroughput(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowIpv4TosThroughputCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 1,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 1,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    NORMAL = 0  #
+    LOW = 1  #
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowIpv4TosThroughputCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowIpv4TosThroughputMetricTag(OpenApiObject):
@@ -33290,112 +33396,6 @@ class PatternFlowIpv4TosThroughputMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowIpv4TosThroughputCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 1,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 1,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 0,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    NORMAL = 0  #
-    LOW = 1  #
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=0, step=1, count=1):
-        super(PatternFlowIpv4TosThroughputCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowIpv4TosReliability(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -33420,9 +33420,9 @@ class PatternFlowIpv4TosReliability(OpenApiObject):
             "minimum": 0,
             "maximum": 1,
         },
-        "metric_tags": {"type": "PatternFlowIpv4TosReliabilityMetricTagIter"},
         "increment": {"type": "PatternFlowIpv4TosReliabilityCounter"},
         "decrement": {"type": "PatternFlowIpv4TosReliabilityCounter"},
+        "metric_tags": {"type": "PatternFlowIpv4TosReliabilityMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -33566,6 +33566,112 @@ class PatternFlowIpv4TosReliability(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowIpv4TosReliabilityCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 1,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 1,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    NORMAL = 0  #
+    LOW = 1  #
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowIpv4TosReliabilityCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowIpv4TosReliabilityMetricTag(OpenApiObject):
@@ -33733,112 +33839,6 @@ class PatternFlowIpv4TosReliabilityMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowIpv4TosReliabilityCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 1,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 1,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 0,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    NORMAL = 0  #
-    LOW = 1  #
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=0, step=1, count=1):
-        super(PatternFlowIpv4TosReliabilityCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowIpv4TosMonetary(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -33863,9 +33863,9 @@ class PatternFlowIpv4TosMonetary(OpenApiObject):
             "minimum": 0,
             "maximum": 1,
         },
-        "metric_tags": {"type": "PatternFlowIpv4TosMonetaryMetricTagIter"},
         "increment": {"type": "PatternFlowIpv4TosMonetaryCounter"},
         "decrement": {"type": "PatternFlowIpv4TosMonetaryCounter"},
+        "metric_tags": {"type": "PatternFlowIpv4TosMonetaryMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -34009,6 +34009,112 @@ class PatternFlowIpv4TosMonetary(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowIpv4TosMonetaryCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 1,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 1,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    NORMAL = 0  #
+    LOW = 1  #
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowIpv4TosMonetaryCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowIpv4TosMonetaryMetricTag(OpenApiObject):
@@ -34176,112 +34282,6 @@ class PatternFlowIpv4TosMonetaryMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowIpv4TosMonetaryCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 1,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 1,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 0,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    NORMAL = 0  #
-    LOW = 1  #
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=0, step=1, count=1):
-        super(PatternFlowIpv4TosMonetaryCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowIpv4TosUnused(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -34306,9 +34306,9 @@ class PatternFlowIpv4TosUnused(OpenApiObject):
             "minimum": 0,
             "maximum": 1,
         },
-        "metric_tags": {"type": "PatternFlowIpv4TosUnusedMetricTagIter"},
         "increment": {"type": "PatternFlowIpv4TosUnusedCounter"},
         "decrement": {"type": "PatternFlowIpv4TosUnusedCounter"},
+        "metric_tags": {"type": "PatternFlowIpv4TosUnusedMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -34449,6 +34449,109 @@ class PatternFlowIpv4TosUnused(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowIpv4TosUnusedCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 1,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 1,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowIpv4TosUnusedCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowIpv4TosUnusedMetricTag(OpenApiObject):
@@ -34616,109 +34719,6 @@ class PatternFlowIpv4TosUnusedMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowIpv4TosUnusedCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 1,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 1,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 0,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=0, step=1, count=1):
-        super(PatternFlowIpv4TosUnusedCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class FlowIpv4Dscp(OpenApiObject):
     __slots__ = "_parent"
 
@@ -34784,9 +34784,9 @@ class PatternFlowIpv4DscpPhb(OpenApiObject):
             "minimum": 0,
             "maximum": 63,
         },
-        "metric_tags": {"type": "PatternFlowIpv4DscpPhbMetricTagIter"},
         "increment": {"type": "PatternFlowIpv4DscpPhbCounter"},
         "decrement": {"type": "PatternFlowIpv4DscpPhbCounter"},
+        "metric_tags": {"type": "PatternFlowIpv4DscpPhbMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -34949,6 +34949,131 @@ class PatternFlowIpv4DscpPhb(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowIpv4DscpPhbCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 63,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 63,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    DEFAULT = 0  #
+    CS1 = 8  #
+    CS2 = 16  #
+    CS3 = 24  #
+    CS4 = 32  #
+    CS5 = 40  #
+    CS6 = 48  #
+    CS7 = 56  #
+    AF11 = 10  #
+    AF12 = 12  #
+    AF13 = 14  #
+    AF21 = 18  #
+    AF22 = 20  #
+    AF23 = 22  #
+    AF31 = 26  #
+    AF32 = 28  #
+    AF33 = 30  #
+    AF41 = 34  #
+    AF42 = 36  #
+    AF43 = 38  #
+    EF46 = 46  #
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowIpv4DscpPhbCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowIpv4DscpPhbMetricTag(OpenApiObject):
@@ -35116,131 +35241,6 @@ class PatternFlowIpv4DscpPhbMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowIpv4DscpPhbCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 63,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 63,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 0,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    DEFAULT = 0  #
-    CS1 = 8  #
-    CS2 = 16  #
-    CS3 = 24  #
-    CS4 = 32  #
-    CS5 = 40  #
-    CS6 = 48  #
-    CS7 = 56  #
-    AF11 = 10  #
-    AF12 = 12  #
-    AF13 = 14  #
-    AF21 = 18  #
-    AF22 = 20  #
-    AF23 = 22  #
-    AF31 = 26  #
-    AF32 = 28  #
-    AF33 = 30  #
-    AF41 = 34  #
-    AF42 = 36  #
-    AF43 = 38  #
-    EF46 = 46  #
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=0, step=1, count=1):
-        super(PatternFlowIpv4DscpPhbCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowIpv4DscpEcn(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -35265,9 +35265,9 @@ class PatternFlowIpv4DscpEcn(OpenApiObject):
             "minimum": 0,
             "maximum": 3,
         },
-        "metric_tags": {"type": "PatternFlowIpv4DscpEcnMetricTagIter"},
         "increment": {"type": "PatternFlowIpv4DscpEcnCounter"},
         "decrement": {"type": "PatternFlowIpv4DscpEcnCounter"},
+        "metric_tags": {"type": "PatternFlowIpv4DscpEcnMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -35413,6 +35413,114 @@ class PatternFlowIpv4DscpEcn(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowIpv4DscpEcnCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 3,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 3,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    NON_CAPABLE = 0  #
+    CAPABLE_TRANSPORT_0 = 1  #
+    CAPABLE_TRANSPORT_1 = 2  #
+    CONGESTION_ENCOUNTERED = 3  #
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowIpv4DscpEcnCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowIpv4DscpEcnMetricTag(OpenApiObject):
@@ -35580,114 +35688,6 @@ class PatternFlowIpv4DscpEcnMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowIpv4DscpEcnCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 3,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 3,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 0,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    NON_CAPABLE = 0  #
-    CAPABLE_TRANSPORT_0 = 1  #
-    CAPABLE_TRANSPORT_1 = 2  #
-    CONGESTION_ENCOUNTERED = 3  #
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=0, step=1, count=1):
-        super(PatternFlowIpv4DscpEcnCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowIpv4TotalLength(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -35718,9 +35718,9 @@ class PatternFlowIpv4TotalLength(OpenApiObject):
             "minimum": 0,
             "maximum": 65535,
         },
-        "metric_tags": {"type": "PatternFlowIpv4TotalLengthMetricTagIter"},
         "increment": {"type": "PatternFlowIpv4TotalLengthCounter"},
         "decrement": {"type": "PatternFlowIpv4TotalLengthCounter"},
+        "metric_tags": {"type": "PatternFlowIpv4TotalLengthMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -35875,6 +35875,109 @@ class PatternFlowIpv4TotalLength(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowIpv4TotalLengthCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 65535,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 65535,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 46,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=46, step=1, count=1):
+        super(PatternFlowIpv4TotalLengthCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowIpv4TotalLengthMetricTag(OpenApiObject):
@@ -36042,109 +36145,6 @@ class PatternFlowIpv4TotalLengthMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowIpv4TotalLengthCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 65535,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 65535,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 46,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=46, step=1, count=1):
-        super(PatternFlowIpv4TotalLengthCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowIpv4Identification(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -36169,9 +36169,9 @@ class PatternFlowIpv4Identification(OpenApiObject):
             "minimum": 0,
             "maximum": 65535,
         },
-        "metric_tags": {"type": "PatternFlowIpv4IdentificationMetricTagIter"},
         "increment": {"type": "PatternFlowIpv4IdentificationCounter"},
         "decrement": {"type": "PatternFlowIpv4IdentificationCounter"},
+        "metric_tags": {"type": "PatternFlowIpv4IdentificationMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -36312,6 +36312,109 @@ class PatternFlowIpv4Identification(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowIpv4IdentificationCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 65535,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 65535,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowIpv4IdentificationCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowIpv4IdentificationMetricTag(OpenApiObject):
@@ -36479,109 +36582,6 @@ class PatternFlowIpv4IdentificationMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowIpv4IdentificationCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 65535,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 65535,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 0,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=0, step=1, count=1):
-        super(PatternFlowIpv4IdentificationCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowIpv4Reserved(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -36606,9 +36606,9 @@ class PatternFlowIpv4Reserved(OpenApiObject):
             "minimum": 0,
             "maximum": 1,
         },
-        "metric_tags": {"type": "PatternFlowIpv4ReservedMetricTagIter"},
         "increment": {"type": "PatternFlowIpv4ReservedCounter"},
         "decrement": {"type": "PatternFlowIpv4ReservedCounter"},
+        "metric_tags": {"type": "PatternFlowIpv4ReservedMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -36749,6 +36749,109 @@ class PatternFlowIpv4Reserved(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowIpv4ReservedCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 1,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 1,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowIpv4ReservedCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowIpv4ReservedMetricTag(OpenApiObject):
@@ -36916,109 +37019,6 @@ class PatternFlowIpv4ReservedMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowIpv4ReservedCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 1,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 1,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 0,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=0, step=1, count=1):
-        super(PatternFlowIpv4ReservedCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowIpv4DontFragment(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -37043,9 +37043,9 @@ class PatternFlowIpv4DontFragment(OpenApiObject):
             "minimum": 0,
             "maximum": 1,
         },
-        "metric_tags": {"type": "PatternFlowIpv4DontFragmentMetricTagIter"},
         "increment": {"type": "PatternFlowIpv4DontFragmentCounter"},
         "decrement": {"type": "PatternFlowIpv4DontFragmentCounter"},
+        "metric_tags": {"type": "PatternFlowIpv4DontFragmentMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -37186,6 +37186,109 @@ class PatternFlowIpv4DontFragment(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowIpv4DontFragmentCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 1,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 1,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowIpv4DontFragmentCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowIpv4DontFragmentMetricTag(OpenApiObject):
@@ -37353,109 +37456,6 @@ class PatternFlowIpv4DontFragmentMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowIpv4DontFragmentCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 1,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 1,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 0,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=0, step=1, count=1):
-        super(PatternFlowIpv4DontFragmentCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowIpv4MoreFragments(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -37480,9 +37480,9 @@ class PatternFlowIpv4MoreFragments(OpenApiObject):
             "minimum": 0,
             "maximum": 1,
         },
-        "metric_tags": {"type": "PatternFlowIpv4MoreFragmentsMetricTagIter"},
         "increment": {"type": "PatternFlowIpv4MoreFragmentsCounter"},
         "decrement": {"type": "PatternFlowIpv4MoreFragmentsCounter"},
+        "metric_tags": {"type": "PatternFlowIpv4MoreFragmentsMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -37623,6 +37623,109 @@ class PatternFlowIpv4MoreFragments(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowIpv4MoreFragmentsCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 1,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 1,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowIpv4MoreFragmentsCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowIpv4MoreFragmentsMetricTag(OpenApiObject):
@@ -37790,109 +37893,6 @@ class PatternFlowIpv4MoreFragmentsMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowIpv4MoreFragmentsCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 1,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 1,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 0,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=0, step=1, count=1):
-        super(PatternFlowIpv4MoreFragmentsCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowIpv4FragmentOffset(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -37917,9 +37917,9 @@ class PatternFlowIpv4FragmentOffset(OpenApiObject):
             "minimum": 0,
             "maximum": 31,
         },
-        "metric_tags": {"type": "PatternFlowIpv4FragmentOffsetMetricTagIter"},
         "increment": {"type": "PatternFlowIpv4FragmentOffsetCounter"},
         "decrement": {"type": "PatternFlowIpv4FragmentOffsetCounter"},
+        "metric_tags": {"type": "PatternFlowIpv4FragmentOffsetMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -38060,6 +38060,109 @@ class PatternFlowIpv4FragmentOffset(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowIpv4FragmentOffsetCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 31,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 31,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowIpv4FragmentOffsetCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowIpv4FragmentOffsetMetricTag(OpenApiObject):
@@ -38227,109 +38330,6 @@ class PatternFlowIpv4FragmentOffsetMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowIpv4FragmentOffsetCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 31,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 31,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 0,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=0, step=1, count=1):
-        super(PatternFlowIpv4FragmentOffsetCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowIpv4TimeToLive(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -38354,9 +38354,9 @@ class PatternFlowIpv4TimeToLive(OpenApiObject):
             "minimum": 0,
             "maximum": 255,
         },
-        "metric_tags": {"type": "PatternFlowIpv4TimeToLiveMetricTagIter"},
         "increment": {"type": "PatternFlowIpv4TimeToLiveCounter"},
         "decrement": {"type": "PatternFlowIpv4TimeToLiveCounter"},
+        "metric_tags": {"type": "PatternFlowIpv4TimeToLiveMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -38497,6 +38497,109 @@ class PatternFlowIpv4TimeToLive(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowIpv4TimeToLiveCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 255,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 255,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 64,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=64, step=1, count=1):
+        super(PatternFlowIpv4TimeToLiveCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowIpv4TimeToLiveMetricTag(OpenApiObject):
@@ -38664,109 +38767,6 @@ class PatternFlowIpv4TimeToLiveMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowIpv4TimeToLiveCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 255,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 255,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 64,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=64, step=1, count=1):
-        super(PatternFlowIpv4TimeToLiveCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowIpv4Protocol(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -38797,9 +38797,9 @@ class PatternFlowIpv4Protocol(OpenApiObject):
             "minimum": 0,
             "maximum": 255,
         },
-        "metric_tags": {"type": "PatternFlowIpv4ProtocolMetricTagIter"},
         "increment": {"type": "PatternFlowIpv4ProtocolCounter"},
         "decrement": {"type": "PatternFlowIpv4ProtocolCounter"},
+        "metric_tags": {"type": "PatternFlowIpv4ProtocolMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -38954,6 +38954,109 @@ class PatternFlowIpv4Protocol(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowIpv4ProtocolCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 255,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 255,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 61,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=61, step=1, count=1):
+        super(PatternFlowIpv4ProtocolCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowIpv4ProtocolMetricTag(OpenApiObject):
@@ -39121,109 +39224,6 @@ class PatternFlowIpv4ProtocolMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowIpv4ProtocolCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 255,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 255,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 61,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=61, step=1, count=1):
-        super(PatternFlowIpv4ProtocolCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowIpv4HeaderChecksum(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -39369,9 +39369,9 @@ class PatternFlowIpv4Src(OpenApiObject):
             "format": "ipv4",
             "itemtype": str,
         },
-        "metric_tags": {"type": "PatternFlowIpv4SrcMetricTagIter"},
         "increment": {"type": "PatternFlowIpv4SrcCounter"},
         "decrement": {"type": "PatternFlowIpv4SrcCounter"},
+        "metric_tags": {"type": "PatternFlowIpv4SrcMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -39509,6 +39509,107 @@ class PatternFlowIpv4Src(OpenApiObject):
         return self._get_property(
             "metric_tags", PatternFlowIpv4SrcMetricTagIter, self._parent, self._choice
         )
+
+
+class PatternFlowIpv4SrcCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": str,
+            "format": "ipv4",
+        },
+        "step": {
+            "type": str,
+            "format": "ipv4",
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": "0.0.0.0",
+        "step": "0.0.0.1",
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start="0.0.0.0", step="0.0.0.1", count=1):
+        super(PatternFlowIpv4SrcCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> str
+        """start getter
+
+        TBD
+
+        Returns: str
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: str
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> str
+        """step getter
+
+        TBD
+
+        Returns: str
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: str
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowIpv4SrcMetricTag(OpenApiObject):
@@ -39674,107 +39775,6 @@ class PatternFlowIpv4SrcMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowIpv4SrcCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": str,
-            "format": "ipv4",
-        },
-        "step": {
-            "type": str,
-            "format": "ipv4",
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": "0.0.0.0",
-        "step": "0.0.0.1",
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start="0.0.0.0", step="0.0.0.1", count=1):
-        super(PatternFlowIpv4SrcCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> str
-        """start getter
-
-        TBD
-
-        Returns: str
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: str
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> str
-        """step getter
-
-        TBD
-
-        Returns: str
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: str
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowIpv4Dst(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -39797,9 +39797,9 @@ class PatternFlowIpv4Dst(OpenApiObject):
             "format": "ipv4",
             "itemtype": str,
         },
-        "metric_tags": {"type": "PatternFlowIpv4DstMetricTagIter"},
         "increment": {"type": "PatternFlowIpv4DstCounter"},
         "decrement": {"type": "PatternFlowIpv4DstCounter"},
+        "metric_tags": {"type": "PatternFlowIpv4DstMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -39937,6 +39937,107 @@ class PatternFlowIpv4Dst(OpenApiObject):
         return self._get_property(
             "metric_tags", PatternFlowIpv4DstMetricTagIter, self._parent, self._choice
         )
+
+
+class PatternFlowIpv4DstCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": str,
+            "format": "ipv4",
+        },
+        "step": {
+            "type": str,
+            "format": "ipv4",
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": "0.0.0.0",
+        "step": "0.0.0.1",
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start="0.0.0.0", step="0.0.0.1", count=1):
+        super(PatternFlowIpv4DstCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> str
+        """start getter
+
+        TBD
+
+        Returns: str
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: str
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> str
+        """step getter
+
+        TBD
+
+        Returns: str
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: str
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowIpv4DstMetricTag(OpenApiObject):
@@ -40102,107 +40203,6 @@ class PatternFlowIpv4DstMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowIpv4DstCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": str,
-            "format": "ipv4",
-        },
-        "step": {
-            "type": str,
-            "format": "ipv4",
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": "0.0.0.0",
-        "step": "0.0.0.1",
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start="0.0.0.0", step="0.0.0.1", count=1):
-        super(PatternFlowIpv4DstCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> str
-        """start getter
-
-        TBD
-
-        Returns: str
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: str
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> str
-        """step getter
-
-        TBD
-
-        Returns: str
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: str
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class FlowIpv6(OpenApiObject):
     __slots__ = "_parent"
 
@@ -40340,9 +40340,9 @@ class PatternFlowIpv6Version(OpenApiObject):
             "minimum": 0,
             "maximum": 15,
         },
-        "metric_tags": {"type": "PatternFlowIpv6VersionMetricTagIter"},
         "increment": {"type": "PatternFlowIpv6VersionCounter"},
         "decrement": {"type": "PatternFlowIpv6VersionCounter"},
+        "metric_tags": {"type": "PatternFlowIpv6VersionMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -40483,6 +40483,109 @@ class PatternFlowIpv6Version(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowIpv6VersionCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 15,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 15,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 6,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=6, step=1, count=1):
+        super(PatternFlowIpv6VersionCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowIpv6VersionMetricTag(OpenApiObject):
@@ -40650,109 +40753,6 @@ class PatternFlowIpv6VersionMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowIpv6VersionCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 15,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 15,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 6,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=6, step=1, count=1):
-        super(PatternFlowIpv6VersionCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowIpv6TrafficClass(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -40777,9 +40777,9 @@ class PatternFlowIpv6TrafficClass(OpenApiObject):
             "minimum": 0,
             "maximum": 255,
         },
-        "metric_tags": {"type": "PatternFlowIpv6TrafficClassMetricTagIter"},
         "increment": {"type": "PatternFlowIpv6TrafficClassCounter"},
         "decrement": {"type": "PatternFlowIpv6TrafficClassCounter"},
+        "metric_tags": {"type": "PatternFlowIpv6TrafficClassMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -40920,6 +40920,109 @@ class PatternFlowIpv6TrafficClass(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowIpv6TrafficClassCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 255,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 255,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowIpv6TrafficClassCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowIpv6TrafficClassMetricTag(OpenApiObject):
@@ -41087,109 +41190,6 @@ class PatternFlowIpv6TrafficClassMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowIpv6TrafficClassCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 255,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 255,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 0,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=0, step=1, count=1):
-        super(PatternFlowIpv6TrafficClassCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowIpv6FlowLabel(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -41214,9 +41214,9 @@ class PatternFlowIpv6FlowLabel(OpenApiObject):
             "minimum": 0,
             "maximum": 1048575,
         },
-        "metric_tags": {"type": "PatternFlowIpv6FlowLabelMetricTagIter"},
         "increment": {"type": "PatternFlowIpv6FlowLabelCounter"},
         "decrement": {"type": "PatternFlowIpv6FlowLabelCounter"},
+        "metric_tags": {"type": "PatternFlowIpv6FlowLabelMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -41357,6 +41357,109 @@ class PatternFlowIpv6FlowLabel(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowIpv6FlowLabelCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 1048575,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 1048575,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowIpv6FlowLabelCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowIpv6FlowLabelMetricTag(OpenApiObject):
@@ -41524,109 +41627,6 @@ class PatternFlowIpv6FlowLabelMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowIpv6FlowLabelCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 1048575,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 1048575,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 0,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=0, step=1, count=1):
-        super(PatternFlowIpv6FlowLabelCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowIpv6PayloadLength(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -41657,9 +41657,9 @@ class PatternFlowIpv6PayloadLength(OpenApiObject):
             "minimum": 0,
             "maximum": 65535,
         },
-        "metric_tags": {"type": "PatternFlowIpv6PayloadLengthMetricTagIter"},
         "increment": {"type": "PatternFlowIpv6PayloadLengthCounter"},
         "decrement": {"type": "PatternFlowIpv6PayloadLengthCounter"},
+        "metric_tags": {"type": "PatternFlowIpv6PayloadLengthMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -41814,6 +41814,109 @@ class PatternFlowIpv6PayloadLength(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowIpv6PayloadLengthCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 65535,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 65535,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowIpv6PayloadLengthCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowIpv6PayloadLengthMetricTag(OpenApiObject):
@@ -41981,109 +42084,6 @@ class PatternFlowIpv6PayloadLengthMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowIpv6PayloadLengthCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 65535,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 65535,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 0,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=0, step=1, count=1):
-        super(PatternFlowIpv6PayloadLengthCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowIpv6NextHeader(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -42114,9 +42114,9 @@ class PatternFlowIpv6NextHeader(OpenApiObject):
             "minimum": 0,
             "maximum": 255,
         },
-        "metric_tags": {"type": "PatternFlowIpv6NextHeaderMetricTagIter"},
         "increment": {"type": "PatternFlowIpv6NextHeaderCounter"},
         "decrement": {"type": "PatternFlowIpv6NextHeaderCounter"},
+        "metric_tags": {"type": "PatternFlowIpv6NextHeaderMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -42285,6 +42285,121 @@ class PatternFlowIpv6NextHeader(OpenApiObject):
         )
 
 
+class PatternFlowIpv6NextHeaderCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 255,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 255,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 59,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    HOPOPT = 0  #
+    ICMP = 1  #
+    IGMP = 2  #
+    GGP = 3  #
+    IP_IN_IP = 4  #
+    ST = 5  #
+    TCP = 6  #
+    CPT = 7  #
+    EGP = 8  #
+    IGP = 9  #
+    NO_NEXT_HEADER = 59  #
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=59, step=1, count=1):
+        super(PatternFlowIpv6NextHeaderCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
 class PatternFlowIpv6NextHeaderMetricTag(OpenApiObject):
     __slots__ = "_parent"
 
@@ -42450,121 +42565,6 @@ class PatternFlowIpv6NextHeaderMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowIpv6NextHeaderCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 255,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 255,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 59,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    HOPOPT = 0  #
-    ICMP = 1  #
-    IGMP = 2  #
-    GGP = 3  #
-    IP_IN_IP = 4  #
-    ST = 5  #
-    TCP = 6  #
-    CPT = 7  #
-    EGP = 8  #
-    IGP = 9  #
-    NO_NEXT_HEADER = 59  #
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=59, step=1, count=1):
-        super(PatternFlowIpv6NextHeaderCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowIpv6HopLimit(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -42589,9 +42589,9 @@ class PatternFlowIpv6HopLimit(OpenApiObject):
             "minimum": 0,
             "maximum": 255,
         },
-        "metric_tags": {"type": "PatternFlowIpv6HopLimitMetricTagIter"},
         "increment": {"type": "PatternFlowIpv6HopLimitCounter"},
         "decrement": {"type": "PatternFlowIpv6HopLimitCounter"},
+        "metric_tags": {"type": "PatternFlowIpv6HopLimitMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -42732,6 +42732,109 @@ class PatternFlowIpv6HopLimit(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowIpv6HopLimitCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 255,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 255,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 64,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=64, step=1, count=1):
+        super(PatternFlowIpv6HopLimitCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowIpv6HopLimitMetricTag(OpenApiObject):
@@ -42899,109 +43002,6 @@ class PatternFlowIpv6HopLimitMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowIpv6HopLimitCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 255,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 255,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 64,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=64, step=1, count=1):
-        super(PatternFlowIpv6HopLimitCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowIpv6Src(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -43024,9 +43024,9 @@ class PatternFlowIpv6Src(OpenApiObject):
             "format": "ipv6",
             "itemtype": str,
         },
-        "metric_tags": {"type": "PatternFlowIpv6SrcMetricTagIter"},
         "increment": {"type": "PatternFlowIpv6SrcCounter"},
         "decrement": {"type": "PatternFlowIpv6SrcCounter"},
+        "metric_tags": {"type": "PatternFlowIpv6SrcMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -43164,6 +43164,107 @@ class PatternFlowIpv6Src(OpenApiObject):
         return self._get_property(
             "metric_tags", PatternFlowIpv6SrcMetricTagIter, self._parent, self._choice
         )
+
+
+class PatternFlowIpv6SrcCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": str,
+            "format": "ipv6",
+        },
+        "step": {
+            "type": str,
+            "format": "ipv6",
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": "::0",
+        "step": "::1",
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start="::0", step="::1", count=1):
+        super(PatternFlowIpv6SrcCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> str
+        """start getter
+
+        TBD
+
+        Returns: str
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: str
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> str
+        """step getter
+
+        TBD
+
+        Returns: str
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: str
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowIpv6SrcMetricTag(OpenApiObject):
@@ -43329,107 +43430,6 @@ class PatternFlowIpv6SrcMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowIpv6SrcCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": str,
-            "format": "ipv6",
-        },
-        "step": {
-            "type": str,
-            "format": "ipv6",
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": "::0",
-        "step": "::1",
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start="::0", step="::1", count=1):
-        super(PatternFlowIpv6SrcCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> str
-        """start getter
-
-        TBD
-
-        Returns: str
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: str
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> str
-        """step getter
-
-        TBD
-
-        Returns: str
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: str
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowIpv6Dst(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -43452,9 +43452,9 @@ class PatternFlowIpv6Dst(OpenApiObject):
             "format": "ipv6",
             "itemtype": str,
         },
-        "metric_tags": {"type": "PatternFlowIpv6DstMetricTagIter"},
         "increment": {"type": "PatternFlowIpv6DstCounter"},
         "decrement": {"type": "PatternFlowIpv6DstCounter"},
+        "metric_tags": {"type": "PatternFlowIpv6DstMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -43592,6 +43592,107 @@ class PatternFlowIpv6Dst(OpenApiObject):
         return self._get_property(
             "metric_tags", PatternFlowIpv6DstMetricTagIter, self._parent, self._choice
         )
+
+
+class PatternFlowIpv6DstCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": str,
+            "format": "ipv6",
+        },
+        "step": {
+            "type": str,
+            "format": "ipv6",
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": "::0",
+        "step": "::1",
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start="::0", step="::1", count=1):
+        super(PatternFlowIpv6DstCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> str
+        """start getter
+
+        TBD
+
+        Returns: str
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: str
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> str
+        """step getter
+
+        TBD
+
+        Returns: str
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: str
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowIpv6DstMetricTag(OpenApiObject):
@@ -43755,107 +43856,6 @@ class PatternFlowIpv6DstMetricTagIter(OpenApiIter):
         )
         self._add(item)
         return item
-
-
-class PatternFlowIpv6DstCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": str,
-            "format": "ipv6",
-        },
-        "step": {
-            "type": str,
-            "format": "ipv6",
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": "::0",
-        "step": "::1",
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start="::0", step="::1", count=1):
-        super(PatternFlowIpv6DstCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> str
-        """start getter
-
-        TBD
-
-        Returns: str
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: str
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> str
-        """step getter
-
-        TBD
-
-        Returns: str
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: str
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
 
 
 class FlowPfcPause(OpenApiObject):
@@ -44055,9 +44055,9 @@ class PatternFlowPfcPauseDst(OpenApiObject):
             "format": "mac",
             "itemtype": str,
         },
-        "metric_tags": {"type": "PatternFlowPfcPauseDstMetricTagIter"},
         "increment": {"type": "PatternFlowPfcPauseDstCounter"},
         "decrement": {"type": "PatternFlowPfcPauseDstCounter"},
+        "metric_tags": {"type": "PatternFlowPfcPauseDstMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -44204,6 +44204,109 @@ class PatternFlowPfcPauseDst(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowPfcPauseDstCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": str,
+            "format": "mac",
+        },
+        "step": {
+            "type": str,
+            "format": "mac",
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": "01:80:c2:00:00:01",
+        "step": "00:00:00:00:00:01",
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self, parent=None, start="01:80:c2:00:00:01", step="00:00:00:00:00:01", count=1
+    ):
+        super(PatternFlowPfcPauseDstCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> str
+        """start getter
+
+        TBD
+
+        Returns: str
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: str
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> str
+        """step getter
+
+        TBD
+
+        Returns: str
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: str
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowPfcPauseDstMetricTag(OpenApiObject):
@@ -44371,109 +44474,6 @@ class PatternFlowPfcPauseDstMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowPfcPauseDstCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": str,
-            "format": "mac",
-        },
-        "step": {
-            "type": str,
-            "format": "mac",
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": "01:80:c2:00:00:01",
-        "step": "00:00:00:00:00:01",
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(
-        self, parent=None, start="01:80:c2:00:00:01", step="00:00:00:00:00:01", count=1
-    ):
-        super(PatternFlowPfcPauseDstCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> str
-        """start getter
-
-        TBD
-
-        Returns: str
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: str
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> str
-        """step getter
-
-        TBD
-
-        Returns: str
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: str
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowPfcPauseSrc(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -44496,9 +44496,9 @@ class PatternFlowPfcPauseSrc(OpenApiObject):
             "format": "mac",
             "itemtype": str,
         },
-        "metric_tags": {"type": "PatternFlowPfcPauseSrcMetricTagIter"},
         "increment": {"type": "PatternFlowPfcPauseSrcCounter"},
         "decrement": {"type": "PatternFlowPfcPauseSrcCounter"},
+        "metric_tags": {"type": "PatternFlowPfcPauseSrcMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -44645,6 +44645,109 @@ class PatternFlowPfcPauseSrc(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowPfcPauseSrcCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": str,
+            "format": "mac",
+        },
+        "step": {
+            "type": str,
+            "format": "mac",
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": "00:00:00:00:00:00",
+        "step": "00:00:00:00:00:01",
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self, parent=None, start="00:00:00:00:00:00", step="00:00:00:00:00:01", count=1
+    ):
+        super(PatternFlowPfcPauseSrcCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> str
+        """start getter
+
+        TBD
+
+        Returns: str
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: str
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> str
+        """step getter
+
+        TBD
+
+        Returns: str
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: str
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowPfcPauseSrcMetricTag(OpenApiObject):
@@ -44812,109 +44915,6 @@ class PatternFlowPfcPauseSrcMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowPfcPauseSrcCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": str,
-            "format": "mac",
-        },
-        "step": {
-            "type": str,
-            "format": "mac",
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": "00:00:00:00:00:00",
-        "step": "00:00:00:00:00:01",
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(
-        self, parent=None, start="00:00:00:00:00:00", step="00:00:00:00:00:01", count=1
-    ):
-        super(PatternFlowPfcPauseSrcCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> str
-        """start getter
-
-        TBD
-
-        Returns: str
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: str
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> str
-        """step getter
-
-        TBD
-
-        Returns: str
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: str
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowPfcPauseEtherType(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -44939,9 +44939,9 @@ class PatternFlowPfcPauseEtherType(OpenApiObject):
             "minimum": 0,
             "maximum": 65535,
         },
-        "metric_tags": {"type": "PatternFlowPfcPauseEtherTypeMetricTagIter"},
         "increment": {"type": "PatternFlowPfcPauseEtherTypeCounter"},
         "decrement": {"type": "PatternFlowPfcPauseEtherTypeCounter"},
+        "metric_tags": {"type": "PatternFlowPfcPauseEtherTypeMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -45084,6 +45084,111 @@ class PatternFlowPfcPauseEtherType(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowPfcPauseEtherTypeCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 65535,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 65535,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 34824,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    X8808 = 34824  #
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=34824, step=1, count=1):
+        super(PatternFlowPfcPauseEtherTypeCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowPfcPauseEtherTypeMetricTag(OpenApiObject):
@@ -45251,111 +45356,6 @@ class PatternFlowPfcPauseEtherTypeMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowPfcPauseEtherTypeCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 65535,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 65535,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 34824,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    X8808 = 34824  #
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=34824, step=1, count=1):
-        super(PatternFlowPfcPauseEtherTypeCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowPfcPauseControlOpCode(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -45380,9 +45380,9 @@ class PatternFlowPfcPauseControlOpCode(OpenApiObject):
             "minimum": 0,
             "maximum": 65535,
         },
-        "metric_tags": {"type": "PatternFlowPfcPauseControlOpCodeMetricTagIter"},
         "increment": {"type": "PatternFlowPfcPauseControlOpCodeCounter"},
         "decrement": {"type": "PatternFlowPfcPauseControlOpCodeCounter"},
+        "metric_tags": {"type": "PatternFlowPfcPauseControlOpCodeMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -45523,6 +45523,109 @@ class PatternFlowPfcPauseControlOpCode(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowPfcPauseControlOpCodeCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 65535,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 65535,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 257,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=257, step=1, count=1):
+        super(PatternFlowPfcPauseControlOpCodeCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowPfcPauseControlOpCodeMetricTag(OpenApiObject):
@@ -45690,109 +45793,6 @@ class PatternFlowPfcPauseControlOpCodeMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowPfcPauseControlOpCodeCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 65535,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 65535,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 257,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=257, step=1, count=1):
-        super(PatternFlowPfcPauseControlOpCodeCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowPfcPauseClassEnableVector(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -45817,9 +45817,9 @@ class PatternFlowPfcPauseClassEnableVector(OpenApiObject):
             "minimum": 0,
             "maximum": 65535,
         },
-        "metric_tags": {"type": "PatternFlowPfcPauseClassEnableVectorMetricTagIter"},
         "increment": {"type": "PatternFlowPfcPauseClassEnableVectorCounter"},
         "decrement": {"type": "PatternFlowPfcPauseClassEnableVectorCounter"},
+        "metric_tags": {"type": "PatternFlowPfcPauseClassEnableVectorMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -45960,6 +45960,109 @@ class PatternFlowPfcPauseClassEnableVector(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowPfcPauseClassEnableVectorCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 65535,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 65535,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowPfcPauseClassEnableVectorCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowPfcPauseClassEnableVectorMetricTag(OpenApiObject):
@@ -46127,109 +46230,6 @@ class PatternFlowPfcPauseClassEnableVectorMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowPfcPauseClassEnableVectorCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 65535,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 65535,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 0,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=0, step=1, count=1):
-        super(PatternFlowPfcPauseClassEnableVectorCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowPfcPausePauseClass0(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -46254,9 +46254,9 @@ class PatternFlowPfcPausePauseClass0(OpenApiObject):
             "minimum": 0,
             "maximum": 65535,
         },
-        "metric_tags": {"type": "PatternFlowPfcPausePauseClass0MetricTagIter"},
         "increment": {"type": "PatternFlowPfcPausePauseClass0Counter"},
         "decrement": {"type": "PatternFlowPfcPausePauseClass0Counter"},
+        "metric_tags": {"type": "PatternFlowPfcPausePauseClass0MetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -46397,6 +46397,109 @@ class PatternFlowPfcPausePauseClass0(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowPfcPausePauseClass0Counter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 65535,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 65535,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowPfcPausePauseClass0Counter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowPfcPausePauseClass0MetricTag(OpenApiObject):
@@ -46564,109 +46667,6 @@ class PatternFlowPfcPausePauseClass0MetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowPfcPausePauseClass0Counter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 65535,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 65535,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 0,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=0, step=1, count=1):
-        super(PatternFlowPfcPausePauseClass0Counter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowPfcPausePauseClass1(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -46691,9 +46691,9 @@ class PatternFlowPfcPausePauseClass1(OpenApiObject):
             "minimum": 0,
             "maximum": 65535,
         },
-        "metric_tags": {"type": "PatternFlowPfcPausePauseClass1MetricTagIter"},
         "increment": {"type": "PatternFlowPfcPausePauseClass1Counter"},
         "decrement": {"type": "PatternFlowPfcPausePauseClass1Counter"},
+        "metric_tags": {"type": "PatternFlowPfcPausePauseClass1MetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -46834,6 +46834,109 @@ class PatternFlowPfcPausePauseClass1(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowPfcPausePauseClass1Counter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 65535,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 65535,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowPfcPausePauseClass1Counter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowPfcPausePauseClass1MetricTag(OpenApiObject):
@@ -47001,109 +47104,6 @@ class PatternFlowPfcPausePauseClass1MetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowPfcPausePauseClass1Counter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 65535,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 65535,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 0,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=0, step=1, count=1):
-        super(PatternFlowPfcPausePauseClass1Counter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowPfcPausePauseClass2(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -47128,9 +47128,9 @@ class PatternFlowPfcPausePauseClass2(OpenApiObject):
             "minimum": 0,
             "maximum": 65535,
         },
-        "metric_tags": {"type": "PatternFlowPfcPausePauseClass2MetricTagIter"},
         "increment": {"type": "PatternFlowPfcPausePauseClass2Counter"},
         "decrement": {"type": "PatternFlowPfcPausePauseClass2Counter"},
+        "metric_tags": {"type": "PatternFlowPfcPausePauseClass2MetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -47271,6 +47271,109 @@ class PatternFlowPfcPausePauseClass2(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowPfcPausePauseClass2Counter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 65535,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 65535,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowPfcPausePauseClass2Counter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowPfcPausePauseClass2MetricTag(OpenApiObject):
@@ -47438,109 +47541,6 @@ class PatternFlowPfcPausePauseClass2MetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowPfcPausePauseClass2Counter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 65535,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 65535,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 0,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=0, step=1, count=1):
-        super(PatternFlowPfcPausePauseClass2Counter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowPfcPausePauseClass3(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -47565,9 +47565,9 @@ class PatternFlowPfcPausePauseClass3(OpenApiObject):
             "minimum": 0,
             "maximum": 65535,
         },
-        "metric_tags": {"type": "PatternFlowPfcPausePauseClass3MetricTagIter"},
         "increment": {"type": "PatternFlowPfcPausePauseClass3Counter"},
         "decrement": {"type": "PatternFlowPfcPausePauseClass3Counter"},
+        "metric_tags": {"type": "PatternFlowPfcPausePauseClass3MetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -47708,6 +47708,109 @@ class PatternFlowPfcPausePauseClass3(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowPfcPausePauseClass3Counter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 65535,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 65535,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowPfcPausePauseClass3Counter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowPfcPausePauseClass3MetricTag(OpenApiObject):
@@ -47875,109 +47978,6 @@ class PatternFlowPfcPausePauseClass3MetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowPfcPausePauseClass3Counter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 65535,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 65535,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 0,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=0, step=1, count=1):
-        super(PatternFlowPfcPausePauseClass3Counter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowPfcPausePauseClass4(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -48002,9 +48002,9 @@ class PatternFlowPfcPausePauseClass4(OpenApiObject):
             "minimum": 0,
             "maximum": 65535,
         },
-        "metric_tags": {"type": "PatternFlowPfcPausePauseClass4MetricTagIter"},
         "increment": {"type": "PatternFlowPfcPausePauseClass4Counter"},
         "decrement": {"type": "PatternFlowPfcPausePauseClass4Counter"},
+        "metric_tags": {"type": "PatternFlowPfcPausePauseClass4MetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -48145,6 +48145,109 @@ class PatternFlowPfcPausePauseClass4(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowPfcPausePauseClass4Counter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 65535,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 65535,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowPfcPausePauseClass4Counter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowPfcPausePauseClass4MetricTag(OpenApiObject):
@@ -48312,109 +48415,6 @@ class PatternFlowPfcPausePauseClass4MetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowPfcPausePauseClass4Counter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 65535,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 65535,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 0,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=0, step=1, count=1):
-        super(PatternFlowPfcPausePauseClass4Counter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowPfcPausePauseClass5(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -48439,9 +48439,9 @@ class PatternFlowPfcPausePauseClass5(OpenApiObject):
             "minimum": 0,
             "maximum": 65535,
         },
-        "metric_tags": {"type": "PatternFlowPfcPausePauseClass5MetricTagIter"},
         "increment": {"type": "PatternFlowPfcPausePauseClass5Counter"},
         "decrement": {"type": "PatternFlowPfcPausePauseClass5Counter"},
+        "metric_tags": {"type": "PatternFlowPfcPausePauseClass5MetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -48582,6 +48582,109 @@ class PatternFlowPfcPausePauseClass5(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowPfcPausePauseClass5Counter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 65535,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 65535,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowPfcPausePauseClass5Counter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowPfcPausePauseClass5MetricTag(OpenApiObject):
@@ -48749,109 +48852,6 @@ class PatternFlowPfcPausePauseClass5MetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowPfcPausePauseClass5Counter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 65535,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 65535,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 0,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=0, step=1, count=1):
-        super(PatternFlowPfcPausePauseClass5Counter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowPfcPausePauseClass6(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -48876,9 +48876,9 @@ class PatternFlowPfcPausePauseClass6(OpenApiObject):
             "minimum": 0,
             "maximum": 65535,
         },
-        "metric_tags": {"type": "PatternFlowPfcPausePauseClass6MetricTagIter"},
         "increment": {"type": "PatternFlowPfcPausePauseClass6Counter"},
         "decrement": {"type": "PatternFlowPfcPausePauseClass6Counter"},
+        "metric_tags": {"type": "PatternFlowPfcPausePauseClass6MetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -49019,6 +49019,109 @@ class PatternFlowPfcPausePauseClass6(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowPfcPausePauseClass6Counter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 65535,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 65535,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowPfcPausePauseClass6Counter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowPfcPausePauseClass6MetricTag(OpenApiObject):
@@ -49186,109 +49289,6 @@ class PatternFlowPfcPausePauseClass6MetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowPfcPausePauseClass6Counter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 65535,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 65535,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 0,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=0, step=1, count=1):
-        super(PatternFlowPfcPausePauseClass6Counter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowPfcPausePauseClass7(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -49313,9 +49313,9 @@ class PatternFlowPfcPausePauseClass7(OpenApiObject):
             "minimum": 0,
             "maximum": 65535,
         },
-        "metric_tags": {"type": "PatternFlowPfcPausePauseClass7MetricTagIter"},
         "increment": {"type": "PatternFlowPfcPausePauseClass7Counter"},
         "decrement": {"type": "PatternFlowPfcPausePauseClass7Counter"},
+        "metric_tags": {"type": "PatternFlowPfcPausePauseClass7MetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -49456,6 +49456,109 @@ class PatternFlowPfcPausePauseClass7(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowPfcPausePauseClass7Counter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 65535,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 65535,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowPfcPausePauseClass7Counter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowPfcPausePauseClass7MetricTag(OpenApiObject):
@@ -49623,109 +49726,6 @@ class PatternFlowPfcPausePauseClass7MetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowPfcPausePauseClass7Counter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 65535,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 65535,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 0,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=0, step=1, count=1):
-        super(PatternFlowPfcPausePauseClass7Counter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class FlowEthernetPause(OpenApiObject):
     __slots__ = "_parent"
 
@@ -49827,9 +49827,9 @@ class PatternFlowEthernetPauseDst(OpenApiObject):
             "format": "mac",
             "itemtype": str,
         },
-        "metric_tags": {"type": "PatternFlowEthernetPauseDstMetricTagIter"},
         "increment": {"type": "PatternFlowEthernetPauseDstCounter"},
         "decrement": {"type": "PatternFlowEthernetPauseDstCounter"},
+        "metric_tags": {"type": "PatternFlowEthernetPauseDstMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -49976,6 +49976,109 @@ class PatternFlowEthernetPauseDst(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowEthernetPauseDstCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": str,
+            "format": "mac",
+        },
+        "step": {
+            "type": str,
+            "format": "mac",
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": "01:80:c2:00:00:01",
+        "step": "00:00:00:00:00:01",
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self, parent=None, start="01:80:c2:00:00:01", step="00:00:00:00:00:01", count=1
+    ):
+        super(PatternFlowEthernetPauseDstCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> str
+        """start getter
+
+        TBD
+
+        Returns: str
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: str
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> str
+        """step getter
+
+        TBD
+
+        Returns: str
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: str
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowEthernetPauseDstMetricTag(OpenApiObject):
@@ -50143,109 +50246,6 @@ class PatternFlowEthernetPauseDstMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowEthernetPauseDstCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": str,
-            "format": "mac",
-        },
-        "step": {
-            "type": str,
-            "format": "mac",
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": "01:80:c2:00:00:01",
-        "step": "00:00:00:00:00:01",
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(
-        self, parent=None, start="01:80:c2:00:00:01", step="00:00:00:00:00:01", count=1
-    ):
-        super(PatternFlowEthernetPauseDstCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> str
-        """start getter
-
-        TBD
-
-        Returns: str
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: str
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> str
-        """step getter
-
-        TBD
-
-        Returns: str
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: str
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowEthernetPauseSrc(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -50268,9 +50268,9 @@ class PatternFlowEthernetPauseSrc(OpenApiObject):
             "format": "mac",
             "itemtype": str,
         },
-        "metric_tags": {"type": "PatternFlowEthernetPauseSrcMetricTagIter"},
         "increment": {"type": "PatternFlowEthernetPauseSrcCounter"},
         "decrement": {"type": "PatternFlowEthernetPauseSrcCounter"},
+        "metric_tags": {"type": "PatternFlowEthernetPauseSrcMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -50417,6 +50417,109 @@ class PatternFlowEthernetPauseSrc(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowEthernetPauseSrcCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": str,
+            "format": "mac",
+        },
+        "step": {
+            "type": str,
+            "format": "mac",
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": "00:00:00:00:00:00",
+        "step": "00:00:00:00:00:01",
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self, parent=None, start="00:00:00:00:00:00", step="00:00:00:00:00:01", count=1
+    ):
+        super(PatternFlowEthernetPauseSrcCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> str
+        """start getter
+
+        TBD
+
+        Returns: str
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: str
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> str
+        """step getter
+
+        TBD
+
+        Returns: str
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: str
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowEthernetPauseSrcMetricTag(OpenApiObject):
@@ -50584,109 +50687,6 @@ class PatternFlowEthernetPauseSrcMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowEthernetPauseSrcCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": str,
-            "format": "mac",
-        },
-        "step": {
-            "type": str,
-            "format": "mac",
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": "00:00:00:00:00:00",
-        "step": "00:00:00:00:00:01",
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(
-        self, parent=None, start="00:00:00:00:00:00", step="00:00:00:00:00:01", count=1
-    ):
-        super(PatternFlowEthernetPauseSrcCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> str
-        """start getter
-
-        TBD
-
-        Returns: str
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: str
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> str
-        """step getter
-
-        TBD
-
-        Returns: str
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: str
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowEthernetPauseEtherType(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -50711,9 +50711,9 @@ class PatternFlowEthernetPauseEtherType(OpenApiObject):
             "minimum": 0,
             "maximum": 65535,
         },
-        "metric_tags": {"type": "PatternFlowEthernetPauseEtherTypeMetricTagIter"},
         "increment": {"type": "PatternFlowEthernetPauseEtherTypeCounter"},
         "decrement": {"type": "PatternFlowEthernetPauseEtherTypeCounter"},
+        "metric_tags": {"type": "PatternFlowEthernetPauseEtherTypeMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -50856,6 +50856,111 @@ class PatternFlowEthernetPauseEtherType(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowEthernetPauseEtherTypeCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 65535,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 65535,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 34824,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    FLOW_CONTROL = 34824  #
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=34824, step=1, count=1):
+        super(PatternFlowEthernetPauseEtherTypeCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowEthernetPauseEtherTypeMetricTag(OpenApiObject):
@@ -51023,111 +51128,6 @@ class PatternFlowEthernetPauseEtherTypeMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowEthernetPauseEtherTypeCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 65535,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 65535,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 34824,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    FLOW_CONTROL = 34824  #
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=34824, step=1, count=1):
-        super(PatternFlowEthernetPauseEtherTypeCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowEthernetPauseControlOpCode(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -51152,9 +51152,9 @@ class PatternFlowEthernetPauseControlOpCode(OpenApiObject):
             "minimum": 0,
             "maximum": 65535,
         },
-        "metric_tags": {"type": "PatternFlowEthernetPauseControlOpCodeMetricTagIter"},
         "increment": {"type": "PatternFlowEthernetPauseControlOpCodeCounter"},
         "decrement": {"type": "PatternFlowEthernetPauseControlOpCodeCounter"},
+        "metric_tags": {"type": "PatternFlowEthernetPauseControlOpCodeMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -51295,6 +51295,109 @@ class PatternFlowEthernetPauseControlOpCode(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowEthernetPauseControlOpCodeCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 65535,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 65535,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 1,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=1, step=1, count=1):
+        super(PatternFlowEthernetPauseControlOpCodeCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowEthernetPauseControlOpCodeMetricTag(OpenApiObject):
@@ -51462,109 +51565,6 @@ class PatternFlowEthernetPauseControlOpCodeMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowEthernetPauseControlOpCodeCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 65535,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 65535,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 1,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=1, step=1, count=1):
-        super(PatternFlowEthernetPauseControlOpCodeCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowEthernetPauseTime(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -51589,9 +51589,9 @@ class PatternFlowEthernetPauseTime(OpenApiObject):
             "minimum": 0,
             "maximum": 65535,
         },
-        "metric_tags": {"type": "PatternFlowEthernetPauseTimeMetricTagIter"},
         "increment": {"type": "PatternFlowEthernetPauseTimeCounter"},
         "decrement": {"type": "PatternFlowEthernetPauseTimeCounter"},
+        "metric_tags": {"type": "PatternFlowEthernetPauseTimeMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -51732,6 +51732,109 @@ class PatternFlowEthernetPauseTime(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowEthernetPauseTimeCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 65535,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 65535,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowEthernetPauseTimeCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowEthernetPauseTimeMetricTag(OpenApiObject):
@@ -51897,109 +52000,6 @@ class PatternFlowEthernetPauseTimeMetricTagIter(OpenApiIter):
         )
         self._add(item)
         return item
-
-
-class PatternFlowEthernetPauseTimeCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 65535,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 65535,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 0,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=0, step=1, count=1):
-        super(PatternFlowEthernetPauseTimeCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
 
 
 class FlowTcp(OpenApiObject):
@@ -52223,9 +52223,9 @@ class PatternFlowTcpSrcPort(OpenApiObject):
             "minimum": 0,
             "maximum": 65535,
         },
-        "metric_tags": {"type": "PatternFlowTcpSrcPortMetricTagIter"},
         "increment": {"type": "PatternFlowTcpSrcPortCounter"},
         "decrement": {"type": "PatternFlowTcpSrcPortCounter"},
+        "metric_tags": {"type": "PatternFlowTcpSrcPortMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -52366,6 +52366,109 @@ class PatternFlowTcpSrcPort(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowTcpSrcPortCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 65535,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 65535,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowTcpSrcPortCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowTcpSrcPortMetricTag(OpenApiObject):
@@ -52531,109 +52634,6 @@ class PatternFlowTcpSrcPortMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowTcpSrcPortCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 65535,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 65535,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 0,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=0, step=1, count=1):
-        super(PatternFlowTcpSrcPortCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowTcpDstPort(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -52658,9 +52658,9 @@ class PatternFlowTcpDstPort(OpenApiObject):
             "minimum": 0,
             "maximum": 65535,
         },
-        "metric_tags": {"type": "PatternFlowTcpDstPortMetricTagIter"},
         "increment": {"type": "PatternFlowTcpDstPortCounter"},
         "decrement": {"type": "PatternFlowTcpDstPortCounter"},
+        "metric_tags": {"type": "PatternFlowTcpDstPortMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -52801,6 +52801,109 @@ class PatternFlowTcpDstPort(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowTcpDstPortCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 65535,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 65535,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowTcpDstPortCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowTcpDstPortMetricTag(OpenApiObject):
@@ -52966,109 +53069,6 @@ class PatternFlowTcpDstPortMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowTcpDstPortCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 65535,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 65535,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 0,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=0, step=1, count=1):
-        super(PatternFlowTcpDstPortCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowTcpSeqNum(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -53095,9 +53095,9 @@ class PatternFlowTcpSeqNum(OpenApiObject):
             "minimum": 0,
             "maximum": 4294967295,
         },
-        "metric_tags": {"type": "PatternFlowTcpSeqNumMetricTagIter"},
         "increment": {"type": "PatternFlowTcpSeqNumCounter"},
         "decrement": {"type": "PatternFlowTcpSeqNumCounter"},
+        "metric_tags": {"type": "PatternFlowTcpSeqNumMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -53235,6 +53235,111 @@ class PatternFlowTcpSeqNum(OpenApiObject):
         return self._get_property(
             "metric_tags", PatternFlowTcpSeqNumMetricTagIter, self._parent, self._choice
         )
+
+
+class PatternFlowTcpSeqNumCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "format": "int64",
+            "minimum": 0,
+            "maximum": 4294967295,
+        },
+        "step": {
+            "type": int,
+            "format": "int64",
+            "minimum": 0,
+            "maximum": 4294967295,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowTcpSeqNumCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowTcpSeqNumMetricTag(OpenApiObject):
@@ -53400,111 +53505,6 @@ class PatternFlowTcpSeqNumMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowTcpSeqNumCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "format": "int64",
-            "minimum": 0,
-            "maximum": 4294967295,
-        },
-        "step": {
-            "type": int,
-            "format": "int64",
-            "minimum": 0,
-            "maximum": 4294967295,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 0,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=0, step=1, count=1):
-        super(PatternFlowTcpSeqNumCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowTcpAckNum(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -53531,9 +53531,9 @@ class PatternFlowTcpAckNum(OpenApiObject):
             "minimum": 0,
             "maximum": 4294967295,
         },
-        "metric_tags": {"type": "PatternFlowTcpAckNumMetricTagIter"},
         "increment": {"type": "PatternFlowTcpAckNumCounter"},
         "decrement": {"type": "PatternFlowTcpAckNumCounter"},
+        "metric_tags": {"type": "PatternFlowTcpAckNumMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -53671,6 +53671,111 @@ class PatternFlowTcpAckNum(OpenApiObject):
         return self._get_property(
             "metric_tags", PatternFlowTcpAckNumMetricTagIter, self._parent, self._choice
         )
+
+
+class PatternFlowTcpAckNumCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "format": "int64",
+            "minimum": 0,
+            "maximum": 4294967295,
+        },
+        "step": {
+            "type": int,
+            "format": "int64",
+            "minimum": 0,
+            "maximum": 4294967295,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowTcpAckNumCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowTcpAckNumMetricTag(OpenApiObject):
@@ -53836,111 +53941,6 @@ class PatternFlowTcpAckNumMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowTcpAckNumCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "format": "int64",
-            "minimum": 0,
-            "maximum": 4294967295,
-        },
-        "step": {
-            "type": int,
-            "format": "int64",
-            "minimum": 0,
-            "maximum": 4294967295,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 0,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=0, step=1, count=1):
-        super(PatternFlowTcpAckNumCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowTcpDataOffset(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -53965,9 +53965,9 @@ class PatternFlowTcpDataOffset(OpenApiObject):
             "minimum": 0,
             "maximum": 15,
         },
-        "metric_tags": {"type": "PatternFlowTcpDataOffsetMetricTagIter"},
         "increment": {"type": "PatternFlowTcpDataOffsetCounter"},
         "decrement": {"type": "PatternFlowTcpDataOffsetCounter"},
+        "metric_tags": {"type": "PatternFlowTcpDataOffsetMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -54108,6 +54108,109 @@ class PatternFlowTcpDataOffset(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowTcpDataOffsetCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 15,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 15,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowTcpDataOffsetCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowTcpDataOffsetMetricTag(OpenApiObject):
@@ -54275,109 +54378,6 @@ class PatternFlowTcpDataOffsetMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowTcpDataOffsetCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 15,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 15,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 0,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=0, step=1, count=1):
-        super(PatternFlowTcpDataOffsetCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowTcpEcnNs(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -54402,9 +54402,9 @@ class PatternFlowTcpEcnNs(OpenApiObject):
             "minimum": 0,
             "maximum": 1,
         },
-        "metric_tags": {"type": "PatternFlowTcpEcnNsMetricTagIter"},
         "increment": {"type": "PatternFlowTcpEcnNsCounter"},
         "decrement": {"type": "PatternFlowTcpEcnNsCounter"},
+        "metric_tags": {"type": "PatternFlowTcpEcnNsMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -54542,6 +54542,109 @@ class PatternFlowTcpEcnNs(OpenApiObject):
         return self._get_property(
             "metric_tags", PatternFlowTcpEcnNsMetricTagIter, self._parent, self._choice
         )
+
+
+class PatternFlowTcpEcnNsCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 1,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 1,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowTcpEcnNsCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowTcpEcnNsMetricTag(OpenApiObject):
@@ -54707,109 +54810,6 @@ class PatternFlowTcpEcnNsMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowTcpEcnNsCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 1,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 1,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 0,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=0, step=1, count=1):
-        super(PatternFlowTcpEcnNsCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowTcpEcnCwr(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -54834,9 +54834,9 @@ class PatternFlowTcpEcnCwr(OpenApiObject):
             "minimum": 0,
             "maximum": 1,
         },
-        "metric_tags": {"type": "PatternFlowTcpEcnCwrMetricTagIter"},
         "increment": {"type": "PatternFlowTcpEcnCwrCounter"},
         "decrement": {"type": "PatternFlowTcpEcnCwrCounter"},
+        "metric_tags": {"type": "PatternFlowTcpEcnCwrMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -54974,6 +54974,109 @@ class PatternFlowTcpEcnCwr(OpenApiObject):
         return self._get_property(
             "metric_tags", PatternFlowTcpEcnCwrMetricTagIter, self._parent, self._choice
         )
+
+
+class PatternFlowTcpEcnCwrCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 1,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 1,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowTcpEcnCwrCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowTcpEcnCwrMetricTag(OpenApiObject):
@@ -55139,109 +55242,6 @@ class PatternFlowTcpEcnCwrMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowTcpEcnCwrCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 1,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 1,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 0,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=0, step=1, count=1):
-        super(PatternFlowTcpEcnCwrCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowTcpEcnEcho(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -55266,9 +55266,9 @@ class PatternFlowTcpEcnEcho(OpenApiObject):
             "minimum": 0,
             "maximum": 1,
         },
-        "metric_tags": {"type": "PatternFlowTcpEcnEchoMetricTagIter"},
         "increment": {"type": "PatternFlowTcpEcnEchoCounter"},
         "decrement": {"type": "PatternFlowTcpEcnEchoCounter"},
+        "metric_tags": {"type": "PatternFlowTcpEcnEchoMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -55409,6 +55409,109 @@ class PatternFlowTcpEcnEcho(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowTcpEcnEchoCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 1,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 1,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowTcpEcnEchoCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowTcpEcnEchoMetricTag(OpenApiObject):
@@ -55574,109 +55677,6 @@ class PatternFlowTcpEcnEchoMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowTcpEcnEchoCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 1,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 1,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 0,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=0, step=1, count=1):
-        super(PatternFlowTcpEcnEchoCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowTcpCtlUrg(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -55701,9 +55701,9 @@ class PatternFlowTcpCtlUrg(OpenApiObject):
             "minimum": 0,
             "maximum": 1,
         },
-        "metric_tags": {"type": "PatternFlowTcpCtlUrgMetricTagIter"},
         "increment": {"type": "PatternFlowTcpCtlUrgCounter"},
         "decrement": {"type": "PatternFlowTcpCtlUrgCounter"},
+        "metric_tags": {"type": "PatternFlowTcpCtlUrgMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -55841,6 +55841,109 @@ class PatternFlowTcpCtlUrg(OpenApiObject):
         return self._get_property(
             "metric_tags", PatternFlowTcpCtlUrgMetricTagIter, self._parent, self._choice
         )
+
+
+class PatternFlowTcpCtlUrgCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 1,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 1,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowTcpCtlUrgCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowTcpCtlUrgMetricTag(OpenApiObject):
@@ -56006,109 +56109,6 @@ class PatternFlowTcpCtlUrgMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowTcpCtlUrgCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 1,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 1,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 0,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=0, step=1, count=1):
-        super(PatternFlowTcpCtlUrgCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowTcpCtlAck(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -56133,9 +56133,9 @@ class PatternFlowTcpCtlAck(OpenApiObject):
             "minimum": 0,
             "maximum": 1,
         },
-        "metric_tags": {"type": "PatternFlowTcpCtlAckMetricTagIter"},
         "increment": {"type": "PatternFlowTcpCtlAckCounter"},
         "decrement": {"type": "PatternFlowTcpCtlAckCounter"},
+        "metric_tags": {"type": "PatternFlowTcpCtlAckMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -56273,6 +56273,109 @@ class PatternFlowTcpCtlAck(OpenApiObject):
         return self._get_property(
             "metric_tags", PatternFlowTcpCtlAckMetricTagIter, self._parent, self._choice
         )
+
+
+class PatternFlowTcpCtlAckCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 1,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 1,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowTcpCtlAckCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowTcpCtlAckMetricTag(OpenApiObject):
@@ -56438,109 +56541,6 @@ class PatternFlowTcpCtlAckMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowTcpCtlAckCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 1,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 1,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 0,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=0, step=1, count=1):
-        super(PatternFlowTcpCtlAckCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowTcpCtlPsh(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -56565,9 +56565,9 @@ class PatternFlowTcpCtlPsh(OpenApiObject):
             "minimum": 0,
             "maximum": 1,
         },
-        "metric_tags": {"type": "PatternFlowTcpCtlPshMetricTagIter"},
         "increment": {"type": "PatternFlowTcpCtlPshCounter"},
         "decrement": {"type": "PatternFlowTcpCtlPshCounter"},
+        "metric_tags": {"type": "PatternFlowTcpCtlPshMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -56705,6 +56705,109 @@ class PatternFlowTcpCtlPsh(OpenApiObject):
         return self._get_property(
             "metric_tags", PatternFlowTcpCtlPshMetricTagIter, self._parent, self._choice
         )
+
+
+class PatternFlowTcpCtlPshCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 1,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 1,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowTcpCtlPshCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowTcpCtlPshMetricTag(OpenApiObject):
@@ -56870,109 +56973,6 @@ class PatternFlowTcpCtlPshMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowTcpCtlPshCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 1,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 1,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 0,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=0, step=1, count=1):
-        super(PatternFlowTcpCtlPshCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowTcpCtlRst(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -56997,9 +56997,9 @@ class PatternFlowTcpCtlRst(OpenApiObject):
             "minimum": 0,
             "maximum": 1,
         },
-        "metric_tags": {"type": "PatternFlowTcpCtlRstMetricTagIter"},
         "increment": {"type": "PatternFlowTcpCtlRstCounter"},
         "decrement": {"type": "PatternFlowTcpCtlRstCounter"},
+        "metric_tags": {"type": "PatternFlowTcpCtlRstMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -57137,6 +57137,109 @@ class PatternFlowTcpCtlRst(OpenApiObject):
         return self._get_property(
             "metric_tags", PatternFlowTcpCtlRstMetricTagIter, self._parent, self._choice
         )
+
+
+class PatternFlowTcpCtlRstCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 1,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 1,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowTcpCtlRstCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowTcpCtlRstMetricTag(OpenApiObject):
@@ -57302,109 +57405,6 @@ class PatternFlowTcpCtlRstMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowTcpCtlRstCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 1,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 1,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 0,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=0, step=1, count=1):
-        super(PatternFlowTcpCtlRstCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowTcpCtlSyn(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -57429,9 +57429,9 @@ class PatternFlowTcpCtlSyn(OpenApiObject):
             "minimum": 0,
             "maximum": 1,
         },
-        "metric_tags": {"type": "PatternFlowTcpCtlSynMetricTagIter"},
         "increment": {"type": "PatternFlowTcpCtlSynCounter"},
         "decrement": {"type": "PatternFlowTcpCtlSynCounter"},
+        "metric_tags": {"type": "PatternFlowTcpCtlSynMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -57569,6 +57569,109 @@ class PatternFlowTcpCtlSyn(OpenApiObject):
         return self._get_property(
             "metric_tags", PatternFlowTcpCtlSynMetricTagIter, self._parent, self._choice
         )
+
+
+class PatternFlowTcpCtlSynCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 1,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 1,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowTcpCtlSynCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowTcpCtlSynMetricTag(OpenApiObject):
@@ -57734,109 +57837,6 @@ class PatternFlowTcpCtlSynMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowTcpCtlSynCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 1,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 1,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 0,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=0, step=1, count=1):
-        super(PatternFlowTcpCtlSynCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowTcpCtlFin(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -57861,9 +57861,9 @@ class PatternFlowTcpCtlFin(OpenApiObject):
             "minimum": 0,
             "maximum": 1,
         },
-        "metric_tags": {"type": "PatternFlowTcpCtlFinMetricTagIter"},
         "increment": {"type": "PatternFlowTcpCtlFinCounter"},
         "decrement": {"type": "PatternFlowTcpCtlFinCounter"},
+        "metric_tags": {"type": "PatternFlowTcpCtlFinMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -58001,6 +58001,109 @@ class PatternFlowTcpCtlFin(OpenApiObject):
         return self._get_property(
             "metric_tags", PatternFlowTcpCtlFinMetricTagIter, self._parent, self._choice
         )
+
+
+class PatternFlowTcpCtlFinCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 1,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 1,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowTcpCtlFinCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowTcpCtlFinMetricTag(OpenApiObject):
@@ -58166,109 +58269,6 @@ class PatternFlowTcpCtlFinMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowTcpCtlFinCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 1,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 1,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 0,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=0, step=1, count=1):
-        super(PatternFlowTcpCtlFinCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowTcpWindow(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -58293,9 +58293,9 @@ class PatternFlowTcpWindow(OpenApiObject):
             "minimum": 0,
             "maximum": 65535,
         },
-        "metric_tags": {"type": "PatternFlowTcpWindowMetricTagIter"},
         "increment": {"type": "PatternFlowTcpWindowCounter"},
         "decrement": {"type": "PatternFlowTcpWindowCounter"},
+        "metric_tags": {"type": "PatternFlowTcpWindowMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -58433,6 +58433,109 @@ class PatternFlowTcpWindow(OpenApiObject):
         return self._get_property(
             "metric_tags", PatternFlowTcpWindowMetricTagIter, self._parent, self._choice
         )
+
+
+class PatternFlowTcpWindowCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 65535,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 65535,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowTcpWindowCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowTcpWindowMetricTag(OpenApiObject):
@@ -58598,109 +58701,6 @@ class PatternFlowTcpWindowMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowTcpWindowCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 65535,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 65535,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 0,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=0, step=1, count=1):
-        super(PatternFlowTcpWindowCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class FlowUdp(OpenApiObject):
     __slots__ = "_parent"
 
@@ -58790,9 +58790,9 @@ class PatternFlowUdpSrcPort(OpenApiObject):
             "minimum": 0,
             "maximum": 65535,
         },
-        "metric_tags": {"type": "PatternFlowUdpSrcPortMetricTagIter"},
         "increment": {"type": "PatternFlowUdpSrcPortCounter"},
         "decrement": {"type": "PatternFlowUdpSrcPortCounter"},
+        "metric_tags": {"type": "PatternFlowUdpSrcPortMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -58933,6 +58933,109 @@ class PatternFlowUdpSrcPort(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowUdpSrcPortCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 65535,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 65535,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowUdpSrcPortCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowUdpSrcPortMetricTag(OpenApiObject):
@@ -59098,109 +59201,6 @@ class PatternFlowUdpSrcPortMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowUdpSrcPortCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 65535,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 65535,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 0,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=0, step=1, count=1):
-        super(PatternFlowUdpSrcPortCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowUdpDstPort(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -59225,9 +59225,9 @@ class PatternFlowUdpDstPort(OpenApiObject):
             "minimum": 0,
             "maximum": 65535,
         },
-        "metric_tags": {"type": "PatternFlowUdpDstPortMetricTagIter"},
         "increment": {"type": "PatternFlowUdpDstPortCounter"},
         "decrement": {"type": "PatternFlowUdpDstPortCounter"},
+        "metric_tags": {"type": "PatternFlowUdpDstPortMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -59368,6 +59368,109 @@ class PatternFlowUdpDstPort(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowUdpDstPortCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 65535,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 65535,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowUdpDstPortCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowUdpDstPortMetricTag(OpenApiObject):
@@ -59533,109 +59636,6 @@ class PatternFlowUdpDstPortMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowUdpDstPortCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 65535,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 65535,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 0,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=0, step=1, count=1):
-        super(PatternFlowUdpDstPortCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowUdpLength(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -59660,9 +59660,9 @@ class PatternFlowUdpLength(OpenApiObject):
             "minimum": 0,
             "maximum": 65535,
         },
-        "metric_tags": {"type": "PatternFlowUdpLengthMetricTagIter"},
         "increment": {"type": "PatternFlowUdpLengthCounter"},
         "decrement": {"type": "PatternFlowUdpLengthCounter"},
+        "metric_tags": {"type": "PatternFlowUdpLengthMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -59800,6 +59800,109 @@ class PatternFlowUdpLength(OpenApiObject):
         return self._get_property(
             "metric_tags", PatternFlowUdpLengthMetricTagIter, self._parent, self._choice
         )
+
+
+class PatternFlowUdpLengthCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 65535,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 65535,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowUdpLengthCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowUdpLengthMetricTag(OpenApiObject):
@@ -59963,109 +60066,6 @@ class PatternFlowUdpLengthMetricTagIter(OpenApiIter):
         )
         self._add(item)
         return item
-
-
-class PatternFlowUdpLengthCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 65535,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 65535,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 0,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=0, step=1, count=1):
-        super(PatternFlowUdpLengthCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
 
 
 class PatternFlowUdpChecksum(OpenApiObject):
@@ -60304,9 +60304,9 @@ class PatternFlowGreChecksumPresent(OpenApiObject):
             "minimum": 0,
             "maximum": 1,
         },
-        "metric_tags": {"type": "PatternFlowGreChecksumPresentMetricTagIter"},
         "increment": {"type": "PatternFlowGreChecksumPresentCounter"},
         "decrement": {"type": "PatternFlowGreChecksumPresentCounter"},
+        "metric_tags": {"type": "PatternFlowGreChecksumPresentMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -60447,6 +60447,109 @@ class PatternFlowGreChecksumPresent(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowGreChecksumPresentCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 1,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 1,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowGreChecksumPresentCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowGreChecksumPresentMetricTag(OpenApiObject):
@@ -60614,109 +60717,6 @@ class PatternFlowGreChecksumPresentMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowGreChecksumPresentCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 1,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 1,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 0,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=0, step=1, count=1):
-        super(PatternFlowGreChecksumPresentCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowGreReserved0(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -60741,9 +60741,9 @@ class PatternFlowGreReserved0(OpenApiObject):
             "minimum": 0,
             "maximum": 4095,
         },
-        "metric_tags": {"type": "PatternFlowGreReserved0MetricTagIter"},
         "increment": {"type": "PatternFlowGreReserved0Counter"},
         "decrement": {"type": "PatternFlowGreReserved0Counter"},
+        "metric_tags": {"type": "PatternFlowGreReserved0MetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -60884,6 +60884,109 @@ class PatternFlowGreReserved0(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowGreReserved0Counter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 4095,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 4095,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowGreReserved0Counter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowGreReserved0MetricTag(OpenApiObject):
@@ -61051,109 +61154,6 @@ class PatternFlowGreReserved0MetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowGreReserved0Counter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 4095,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 4095,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 0,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=0, step=1, count=1):
-        super(PatternFlowGreReserved0Counter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowGreVersion(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -61178,9 +61178,9 @@ class PatternFlowGreVersion(OpenApiObject):
             "minimum": 0,
             "maximum": 7,
         },
-        "metric_tags": {"type": "PatternFlowGreVersionMetricTagIter"},
         "increment": {"type": "PatternFlowGreVersionCounter"},
         "decrement": {"type": "PatternFlowGreVersionCounter"},
+        "metric_tags": {"type": "PatternFlowGreVersionMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -61321,6 +61321,109 @@ class PatternFlowGreVersion(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowGreVersionCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 7,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 7,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowGreVersionCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowGreVersionMetricTag(OpenApiObject):
@@ -61486,109 +61589,6 @@ class PatternFlowGreVersionMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowGreVersionCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 7,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 7,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 0,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=0, step=1, count=1):
-        super(PatternFlowGreVersionCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowGreProtocol(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -61613,9 +61613,9 @@ class PatternFlowGreProtocol(OpenApiObject):
             "minimum": 0,
             "maximum": 65535,
         },
-        "metric_tags": {"type": "PatternFlowGreProtocolMetricTagIter"},
         "increment": {"type": "PatternFlowGreProtocolCounter"},
         "decrement": {"type": "PatternFlowGreProtocolCounter"},
+        "metric_tags": {"type": "PatternFlowGreProtocolMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -61759,6 +61759,112 @@ class PatternFlowGreProtocol(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowGreProtocolCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 65535,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 65535,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 2048,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    IPV4 = 2048  #
+    IPV6 = 34525  #
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=2048, step=1, count=1):
+        super(PatternFlowGreProtocolCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowGreProtocolMetricTag(OpenApiObject):
@@ -61926,112 +62032,6 @@ class PatternFlowGreProtocolMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowGreProtocolCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 65535,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 65535,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 2048,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    IPV4 = 2048  #
-    IPV6 = 34525  #
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=2048, step=1, count=1):
-        super(PatternFlowGreProtocolCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowGreChecksum(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -62179,9 +62179,9 @@ class PatternFlowGreReserved1(OpenApiObject):
             "minimum": 0,
             "maximum": 65535,
         },
-        "metric_tags": {"type": "PatternFlowGreReserved1MetricTagIter"},
         "increment": {"type": "PatternFlowGreReserved1Counter"},
         "decrement": {"type": "PatternFlowGreReserved1Counter"},
+        "metric_tags": {"type": "PatternFlowGreReserved1MetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -62322,6 +62322,109 @@ class PatternFlowGreReserved1(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowGreReserved1Counter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 65535,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 65535,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowGreReserved1Counter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowGreReserved1MetricTag(OpenApiObject):
@@ -62487,109 +62590,6 @@ class PatternFlowGreReserved1MetricTagIter(OpenApiIter):
         )
         self._add(item)
         return item
-
-
-class PatternFlowGreReserved1Counter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 65535,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 65535,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 0,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=0, step=1, count=1):
-        super(PatternFlowGreReserved1Counter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
 
 
 class FlowGtpv1(OpenApiObject):
@@ -62795,9 +62795,9 @@ class PatternFlowGtpv1Version(OpenApiObject):
             "minimum": 0,
             "maximum": 7,
         },
-        "metric_tags": {"type": "PatternFlowGtpv1VersionMetricTagIter"},
         "increment": {"type": "PatternFlowGtpv1VersionCounter"},
         "decrement": {"type": "PatternFlowGtpv1VersionCounter"},
+        "metric_tags": {"type": "PatternFlowGtpv1VersionMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -62938,6 +62938,109 @@ class PatternFlowGtpv1Version(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowGtpv1VersionCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 7,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 7,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 1,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=1, step=1, count=1):
+        super(PatternFlowGtpv1VersionCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowGtpv1VersionMetricTag(OpenApiObject):
@@ -63105,109 +63208,6 @@ class PatternFlowGtpv1VersionMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowGtpv1VersionCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 7,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 7,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 1,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=1, step=1, count=1):
-        super(PatternFlowGtpv1VersionCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowGtpv1ProtocolType(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -63232,9 +63232,9 @@ class PatternFlowGtpv1ProtocolType(OpenApiObject):
             "minimum": 0,
             "maximum": 1,
         },
-        "metric_tags": {"type": "PatternFlowGtpv1ProtocolTypeMetricTagIter"},
         "increment": {"type": "PatternFlowGtpv1ProtocolTypeCounter"},
         "decrement": {"type": "PatternFlowGtpv1ProtocolTypeCounter"},
+        "metric_tags": {"type": "PatternFlowGtpv1ProtocolTypeMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -63375,6 +63375,109 @@ class PatternFlowGtpv1ProtocolType(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowGtpv1ProtocolTypeCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 1,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 1,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 1,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=1, step=1, count=1):
+        super(PatternFlowGtpv1ProtocolTypeCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowGtpv1ProtocolTypeMetricTag(OpenApiObject):
@@ -63542,109 +63645,6 @@ class PatternFlowGtpv1ProtocolTypeMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowGtpv1ProtocolTypeCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 1,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 1,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 1,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=1, step=1, count=1):
-        super(PatternFlowGtpv1ProtocolTypeCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowGtpv1Reserved(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -63669,9 +63669,9 @@ class PatternFlowGtpv1Reserved(OpenApiObject):
             "minimum": 0,
             "maximum": 1,
         },
-        "metric_tags": {"type": "PatternFlowGtpv1ReservedMetricTagIter"},
         "increment": {"type": "PatternFlowGtpv1ReservedCounter"},
         "decrement": {"type": "PatternFlowGtpv1ReservedCounter"},
+        "metric_tags": {"type": "PatternFlowGtpv1ReservedMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -63812,6 +63812,109 @@ class PatternFlowGtpv1Reserved(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowGtpv1ReservedCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 1,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 1,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowGtpv1ReservedCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowGtpv1ReservedMetricTag(OpenApiObject):
@@ -63979,109 +64082,6 @@ class PatternFlowGtpv1ReservedMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowGtpv1ReservedCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 1,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 1,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 0,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=0, step=1, count=1):
-        super(PatternFlowGtpv1ReservedCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowGtpv1EFlag(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -64106,9 +64106,9 @@ class PatternFlowGtpv1EFlag(OpenApiObject):
             "minimum": 0,
             "maximum": 1,
         },
-        "metric_tags": {"type": "PatternFlowGtpv1EFlagMetricTagIter"},
         "increment": {"type": "PatternFlowGtpv1EFlagCounter"},
         "decrement": {"type": "PatternFlowGtpv1EFlagCounter"},
+        "metric_tags": {"type": "PatternFlowGtpv1EFlagMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -64249,6 +64249,109 @@ class PatternFlowGtpv1EFlag(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowGtpv1EFlagCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 1,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 1,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowGtpv1EFlagCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowGtpv1EFlagMetricTag(OpenApiObject):
@@ -64414,109 +64517,6 @@ class PatternFlowGtpv1EFlagMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowGtpv1EFlagCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 1,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 1,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 0,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=0, step=1, count=1):
-        super(PatternFlowGtpv1EFlagCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowGtpv1SFlag(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -64541,9 +64541,9 @@ class PatternFlowGtpv1SFlag(OpenApiObject):
             "minimum": 0,
             "maximum": 1,
         },
-        "metric_tags": {"type": "PatternFlowGtpv1SFlagMetricTagIter"},
         "increment": {"type": "PatternFlowGtpv1SFlagCounter"},
         "decrement": {"type": "PatternFlowGtpv1SFlagCounter"},
+        "metric_tags": {"type": "PatternFlowGtpv1SFlagMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -64684,6 +64684,109 @@ class PatternFlowGtpv1SFlag(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowGtpv1SFlagCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 1,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 1,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowGtpv1SFlagCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowGtpv1SFlagMetricTag(OpenApiObject):
@@ -64849,109 +64952,6 @@ class PatternFlowGtpv1SFlagMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowGtpv1SFlagCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 1,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 1,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 0,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=0, step=1, count=1):
-        super(PatternFlowGtpv1SFlagCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowGtpv1PnFlag(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -64976,9 +64976,9 @@ class PatternFlowGtpv1PnFlag(OpenApiObject):
             "minimum": 0,
             "maximum": 1,
         },
-        "metric_tags": {"type": "PatternFlowGtpv1PnFlagMetricTagIter"},
         "increment": {"type": "PatternFlowGtpv1PnFlagCounter"},
         "decrement": {"type": "PatternFlowGtpv1PnFlagCounter"},
+        "metric_tags": {"type": "PatternFlowGtpv1PnFlagMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -65119,6 +65119,109 @@ class PatternFlowGtpv1PnFlag(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowGtpv1PnFlagCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 1,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 1,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowGtpv1PnFlagCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowGtpv1PnFlagMetricTag(OpenApiObject):
@@ -65286,109 +65389,6 @@ class PatternFlowGtpv1PnFlagMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowGtpv1PnFlagCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 1,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 1,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 0,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=0, step=1, count=1):
-        super(PatternFlowGtpv1PnFlagCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowGtpv1MessageType(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -65413,9 +65413,9 @@ class PatternFlowGtpv1MessageType(OpenApiObject):
             "minimum": 0,
             "maximum": 255,
         },
-        "metric_tags": {"type": "PatternFlowGtpv1MessageTypeMetricTagIter"},
         "increment": {"type": "PatternFlowGtpv1MessageTypeCounter"},
         "decrement": {"type": "PatternFlowGtpv1MessageTypeCounter"},
+        "metric_tags": {"type": "PatternFlowGtpv1MessageTypeMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -65556,6 +65556,109 @@ class PatternFlowGtpv1MessageType(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowGtpv1MessageTypeCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 255,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 255,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowGtpv1MessageTypeCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowGtpv1MessageTypeMetricTag(OpenApiObject):
@@ -65723,109 +65826,6 @@ class PatternFlowGtpv1MessageTypeMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowGtpv1MessageTypeCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 255,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 255,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 0,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=0, step=1, count=1):
-        super(PatternFlowGtpv1MessageTypeCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowGtpv1MessageLength(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -65850,9 +65850,9 @@ class PatternFlowGtpv1MessageLength(OpenApiObject):
             "minimum": 0,
             "maximum": 65535,
         },
-        "metric_tags": {"type": "PatternFlowGtpv1MessageLengthMetricTagIter"},
         "increment": {"type": "PatternFlowGtpv1MessageLengthCounter"},
         "decrement": {"type": "PatternFlowGtpv1MessageLengthCounter"},
+        "metric_tags": {"type": "PatternFlowGtpv1MessageLengthMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -65993,6 +65993,109 @@ class PatternFlowGtpv1MessageLength(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowGtpv1MessageLengthCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 65535,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 65535,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowGtpv1MessageLengthCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowGtpv1MessageLengthMetricTag(OpenApiObject):
@@ -66160,109 +66263,6 @@ class PatternFlowGtpv1MessageLengthMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowGtpv1MessageLengthCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 65535,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 65535,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 0,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=0, step=1, count=1):
-        super(PatternFlowGtpv1MessageLengthCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowGtpv1Teid(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -66289,9 +66289,9 @@ class PatternFlowGtpv1Teid(OpenApiObject):
             "minimum": 0,
             "maximum": 4294967295,
         },
-        "metric_tags": {"type": "PatternFlowGtpv1TeidMetricTagIter"},
         "increment": {"type": "PatternFlowGtpv1TeidCounter"},
         "decrement": {"type": "PatternFlowGtpv1TeidCounter"},
+        "metric_tags": {"type": "PatternFlowGtpv1TeidMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -66429,6 +66429,111 @@ class PatternFlowGtpv1Teid(OpenApiObject):
         return self._get_property(
             "metric_tags", PatternFlowGtpv1TeidMetricTagIter, self._parent, self._choice
         )
+
+
+class PatternFlowGtpv1TeidCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "format": "int64",
+            "minimum": 0,
+            "maximum": 4294967295,
+        },
+        "step": {
+            "type": int,
+            "format": "int64",
+            "minimum": 0,
+            "maximum": 4294967295,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowGtpv1TeidCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowGtpv1TeidMetricTag(OpenApiObject):
@@ -66594,111 +66699,6 @@ class PatternFlowGtpv1TeidMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowGtpv1TeidCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "format": "int64",
-            "minimum": 0,
-            "maximum": 4294967295,
-        },
-        "step": {
-            "type": int,
-            "format": "int64",
-            "minimum": 0,
-            "maximum": 4294967295,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 0,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=0, step=1, count=1):
-        super(PatternFlowGtpv1TeidCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowGtpv1SquenceNumber(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -66723,9 +66723,9 @@ class PatternFlowGtpv1SquenceNumber(OpenApiObject):
             "minimum": 0,
             "maximum": 65535,
         },
-        "metric_tags": {"type": "PatternFlowGtpv1SquenceNumberMetricTagIter"},
         "increment": {"type": "PatternFlowGtpv1SquenceNumberCounter"},
         "decrement": {"type": "PatternFlowGtpv1SquenceNumberCounter"},
+        "metric_tags": {"type": "PatternFlowGtpv1SquenceNumberMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -66866,6 +66866,109 @@ class PatternFlowGtpv1SquenceNumber(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowGtpv1SquenceNumberCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 65535,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 65535,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowGtpv1SquenceNumberCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowGtpv1SquenceNumberMetricTag(OpenApiObject):
@@ -67033,109 +67136,6 @@ class PatternFlowGtpv1SquenceNumberMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowGtpv1SquenceNumberCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 65535,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 65535,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 0,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=0, step=1, count=1):
-        super(PatternFlowGtpv1SquenceNumberCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowGtpv1NPduNumber(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -67160,9 +67160,9 @@ class PatternFlowGtpv1NPduNumber(OpenApiObject):
             "minimum": 0,
             "maximum": 255,
         },
-        "metric_tags": {"type": "PatternFlowGtpv1NPduNumberMetricTagIter"},
         "increment": {"type": "PatternFlowGtpv1NPduNumberCounter"},
         "decrement": {"type": "PatternFlowGtpv1NPduNumberCounter"},
+        "metric_tags": {"type": "PatternFlowGtpv1NPduNumberMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -67303,6 +67303,109 @@ class PatternFlowGtpv1NPduNumber(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowGtpv1NPduNumberCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 255,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 255,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowGtpv1NPduNumberCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowGtpv1NPduNumberMetricTag(OpenApiObject):
@@ -67470,109 +67573,6 @@ class PatternFlowGtpv1NPduNumberMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowGtpv1NPduNumberCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 255,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 255,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 0,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=0, step=1, count=1):
-        super(PatternFlowGtpv1NPduNumberCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowGtpv1NextExtensionHeaderType(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -67597,9 +67597,9 @@ class PatternFlowGtpv1NextExtensionHeaderType(OpenApiObject):
             "minimum": 0,
             "maximum": 255,
         },
-        "metric_tags": {"type": "PatternFlowGtpv1NextExtensionHeaderTypeMetricTagIter"},
         "increment": {"type": "PatternFlowGtpv1NextExtensionHeaderTypeCounter"},
         "decrement": {"type": "PatternFlowGtpv1NextExtensionHeaderTypeCounter"},
+        "metric_tags": {"type": "PatternFlowGtpv1NextExtensionHeaderTypeMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -67746,6 +67746,109 @@ class PatternFlowGtpv1NextExtensionHeaderType(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowGtpv1NextExtensionHeaderTypeCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 255,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 255,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowGtpv1NextExtensionHeaderTypeCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowGtpv1NextExtensionHeaderTypeMetricTag(OpenApiObject):
@@ -67913,109 +68016,6 @@ class PatternFlowGtpv1NextExtensionHeaderTypeMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowGtpv1NextExtensionHeaderTypeCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 255,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 255,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 0,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=0, step=1, count=1):
-        super(PatternFlowGtpv1NextExtensionHeaderTypeCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class FlowGtpExtension(OpenApiObject):
     __slots__ = "_parent"
 
@@ -68097,9 +68097,9 @@ class PatternFlowGtpExtensionExtensionLength(OpenApiObject):
             "minimum": 0,
             "maximum": 255,
         },
-        "metric_tags": {"type": "PatternFlowGtpExtensionExtensionLengthMetricTagIter"},
         "increment": {"type": "PatternFlowGtpExtensionExtensionLengthCounter"},
         "decrement": {"type": "PatternFlowGtpExtensionExtensionLengthCounter"},
+        "metric_tags": {"type": "PatternFlowGtpExtensionExtensionLengthMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -68246,6 +68246,109 @@ class PatternFlowGtpExtensionExtensionLength(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowGtpExtensionExtensionLengthCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 255,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 255,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowGtpExtensionExtensionLengthCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowGtpExtensionExtensionLengthMetricTag(OpenApiObject):
@@ -68413,109 +68516,6 @@ class PatternFlowGtpExtensionExtensionLengthMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowGtpExtensionExtensionLengthCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 255,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 255,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 0,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=0, step=1, count=1):
-        super(PatternFlowGtpExtensionExtensionLengthCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowGtpExtensionContents(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -68542,9 +68542,9 @@ class PatternFlowGtpExtensionContents(OpenApiObject):
             "minimum": 0,
             "maximum": 281474976710655,
         },
-        "metric_tags": {"type": "PatternFlowGtpExtensionContentsMetricTagIter"},
         "increment": {"type": "PatternFlowGtpExtensionContentsCounter"},
         "decrement": {"type": "PatternFlowGtpExtensionContentsCounter"},
+        "metric_tags": {"type": "PatternFlowGtpExtensionContentsMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -68685,6 +68685,111 @@ class PatternFlowGtpExtensionContents(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowGtpExtensionContentsCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "format": "int64",
+            "minimum": 0,
+            "maximum": 281474976710655,
+        },
+        "step": {
+            "type": int,
+            "format": "int64",
+            "minimum": 0,
+            "maximum": 281474976710655,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowGtpExtensionContentsCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowGtpExtensionContentsMetricTag(OpenApiObject):
@@ -68852,111 +68957,6 @@ class PatternFlowGtpExtensionContentsMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowGtpExtensionContentsCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "format": "int64",
-            "minimum": 0,
-            "maximum": 281474976710655,
-        },
-        "step": {
-            "type": int,
-            "format": "int64",
-            "minimum": 0,
-            "maximum": 281474976710655,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 0,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=0, step=1, count=1):
-        super(PatternFlowGtpExtensionContentsCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowGtpExtensionNextExtensionHeader(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -68981,11 +68981,11 @@ class PatternFlowGtpExtensionNextExtensionHeader(OpenApiObject):
             "minimum": 0,
             "maximum": 255,
         },
+        "increment": {"type": "PatternFlowGtpExtensionNextExtensionHeaderCounter"},
+        "decrement": {"type": "PatternFlowGtpExtensionNextExtensionHeaderCounter"},
         "metric_tags": {
             "type": "PatternFlowGtpExtensionNextExtensionHeaderMetricTagIter"
         },
-        "increment": {"type": "PatternFlowGtpExtensionNextExtensionHeaderCounter"},
-        "decrement": {"type": "PatternFlowGtpExtensionNextExtensionHeaderCounter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -69132,6 +69132,109 @@ class PatternFlowGtpExtensionNextExtensionHeader(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowGtpExtensionNextExtensionHeaderCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 255,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 255,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowGtpExtensionNextExtensionHeaderCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowGtpExtensionNextExtensionHeaderMetricTag(OpenApiObject):
@@ -69297,109 +69400,6 @@ class PatternFlowGtpExtensionNextExtensionHeaderMetricTagIter(OpenApiIter):
         )
         self._add(item)
         return item
-
-
-class PatternFlowGtpExtensionNextExtensionHeaderCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 255,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 255,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 0,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=0, step=1, count=1):
-        super(PatternFlowGtpExtensionNextExtensionHeaderCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
 
 
 class FlowGtpExtensionIter(OpenApiIter):
@@ -69606,9 +69606,9 @@ class PatternFlowGtpv2Version(OpenApiObject):
             "minimum": 0,
             "maximum": 7,
         },
-        "metric_tags": {"type": "PatternFlowGtpv2VersionMetricTagIter"},
         "increment": {"type": "PatternFlowGtpv2VersionCounter"},
         "decrement": {"type": "PatternFlowGtpv2VersionCounter"},
+        "metric_tags": {"type": "PatternFlowGtpv2VersionMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -69749,6 +69749,109 @@ class PatternFlowGtpv2Version(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowGtpv2VersionCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 7,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 7,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 2,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=2, step=1, count=1):
+        super(PatternFlowGtpv2VersionCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowGtpv2VersionMetricTag(OpenApiObject):
@@ -69916,109 +70019,6 @@ class PatternFlowGtpv2VersionMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowGtpv2VersionCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 7,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 7,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 2,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=2, step=1, count=1):
-        super(PatternFlowGtpv2VersionCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowGtpv2PiggybackingFlag(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -70043,9 +70043,9 @@ class PatternFlowGtpv2PiggybackingFlag(OpenApiObject):
             "minimum": 0,
             "maximum": 1,
         },
-        "metric_tags": {"type": "PatternFlowGtpv2PiggybackingFlagMetricTagIter"},
         "increment": {"type": "PatternFlowGtpv2PiggybackingFlagCounter"},
         "decrement": {"type": "PatternFlowGtpv2PiggybackingFlagCounter"},
+        "metric_tags": {"type": "PatternFlowGtpv2PiggybackingFlagMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -70186,6 +70186,109 @@ class PatternFlowGtpv2PiggybackingFlag(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowGtpv2PiggybackingFlagCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 1,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 1,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowGtpv2PiggybackingFlagCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowGtpv2PiggybackingFlagMetricTag(OpenApiObject):
@@ -70353,109 +70456,6 @@ class PatternFlowGtpv2PiggybackingFlagMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowGtpv2PiggybackingFlagCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 1,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 1,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 0,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=0, step=1, count=1):
-        super(PatternFlowGtpv2PiggybackingFlagCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowGtpv2TeidFlag(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -70480,9 +70480,9 @@ class PatternFlowGtpv2TeidFlag(OpenApiObject):
             "minimum": 0,
             "maximum": 1,
         },
-        "metric_tags": {"type": "PatternFlowGtpv2TeidFlagMetricTagIter"},
         "increment": {"type": "PatternFlowGtpv2TeidFlagCounter"},
         "decrement": {"type": "PatternFlowGtpv2TeidFlagCounter"},
+        "metric_tags": {"type": "PatternFlowGtpv2TeidFlagMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -70623,6 +70623,109 @@ class PatternFlowGtpv2TeidFlag(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowGtpv2TeidFlagCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 1,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 1,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowGtpv2TeidFlagCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowGtpv2TeidFlagMetricTag(OpenApiObject):
@@ -70790,109 +70893,6 @@ class PatternFlowGtpv2TeidFlagMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowGtpv2TeidFlagCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 1,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 1,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 0,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=0, step=1, count=1):
-        super(PatternFlowGtpv2TeidFlagCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowGtpv2Spare1(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -70917,9 +70917,9 @@ class PatternFlowGtpv2Spare1(OpenApiObject):
             "minimum": 0,
             "maximum": 7,
         },
-        "metric_tags": {"type": "PatternFlowGtpv2Spare1MetricTagIter"},
         "increment": {"type": "PatternFlowGtpv2Spare1Counter"},
         "decrement": {"type": "PatternFlowGtpv2Spare1Counter"},
+        "metric_tags": {"type": "PatternFlowGtpv2Spare1MetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -71060,6 +71060,109 @@ class PatternFlowGtpv2Spare1(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowGtpv2Spare1Counter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 7,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 7,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowGtpv2Spare1Counter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowGtpv2Spare1MetricTag(OpenApiObject):
@@ -71227,109 +71330,6 @@ class PatternFlowGtpv2Spare1MetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowGtpv2Spare1Counter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 7,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 7,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 0,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=0, step=1, count=1):
-        super(PatternFlowGtpv2Spare1Counter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowGtpv2MessageType(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -71354,9 +71354,9 @@ class PatternFlowGtpv2MessageType(OpenApiObject):
             "minimum": 0,
             "maximum": 255,
         },
-        "metric_tags": {"type": "PatternFlowGtpv2MessageTypeMetricTagIter"},
         "increment": {"type": "PatternFlowGtpv2MessageTypeCounter"},
         "decrement": {"type": "PatternFlowGtpv2MessageTypeCounter"},
+        "metric_tags": {"type": "PatternFlowGtpv2MessageTypeMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -71497,6 +71497,109 @@ class PatternFlowGtpv2MessageType(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowGtpv2MessageTypeCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 255,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 255,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowGtpv2MessageTypeCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowGtpv2MessageTypeMetricTag(OpenApiObject):
@@ -71664,109 +71767,6 @@ class PatternFlowGtpv2MessageTypeMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowGtpv2MessageTypeCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 255,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 255,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 0,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=0, step=1, count=1):
-        super(PatternFlowGtpv2MessageTypeCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowGtpv2MessageLength(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -71791,9 +71791,9 @@ class PatternFlowGtpv2MessageLength(OpenApiObject):
             "minimum": 0,
             "maximum": 65535,
         },
-        "metric_tags": {"type": "PatternFlowGtpv2MessageLengthMetricTagIter"},
         "increment": {"type": "PatternFlowGtpv2MessageLengthCounter"},
         "decrement": {"type": "PatternFlowGtpv2MessageLengthCounter"},
+        "metric_tags": {"type": "PatternFlowGtpv2MessageLengthMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -71934,6 +71934,109 @@ class PatternFlowGtpv2MessageLength(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowGtpv2MessageLengthCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 65535,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 65535,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowGtpv2MessageLengthCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowGtpv2MessageLengthMetricTag(OpenApiObject):
@@ -72101,109 +72204,6 @@ class PatternFlowGtpv2MessageLengthMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowGtpv2MessageLengthCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 65535,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 65535,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 0,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=0, step=1, count=1):
-        super(PatternFlowGtpv2MessageLengthCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowGtpv2Teid(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -72230,9 +72230,9 @@ class PatternFlowGtpv2Teid(OpenApiObject):
             "minimum": 0,
             "maximum": 4294967295,
         },
-        "metric_tags": {"type": "PatternFlowGtpv2TeidMetricTagIter"},
         "increment": {"type": "PatternFlowGtpv2TeidCounter"},
         "decrement": {"type": "PatternFlowGtpv2TeidCounter"},
+        "metric_tags": {"type": "PatternFlowGtpv2TeidMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -72370,6 +72370,111 @@ class PatternFlowGtpv2Teid(OpenApiObject):
         return self._get_property(
             "metric_tags", PatternFlowGtpv2TeidMetricTagIter, self._parent, self._choice
         )
+
+
+class PatternFlowGtpv2TeidCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "format": "int64",
+            "minimum": 0,
+            "maximum": 4294967295,
+        },
+        "step": {
+            "type": int,
+            "format": "int64",
+            "minimum": 0,
+            "maximum": 4294967295,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowGtpv2TeidCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowGtpv2TeidMetricTag(OpenApiObject):
@@ -72535,111 +72640,6 @@ class PatternFlowGtpv2TeidMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowGtpv2TeidCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "format": "int64",
-            "minimum": 0,
-            "maximum": 4294967295,
-        },
-        "step": {
-            "type": int,
-            "format": "int64",
-            "minimum": 0,
-            "maximum": 4294967295,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 0,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=0, step=1, count=1):
-        super(PatternFlowGtpv2TeidCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowGtpv2SequenceNumber(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -72664,9 +72664,9 @@ class PatternFlowGtpv2SequenceNumber(OpenApiObject):
             "minimum": 0,
             "maximum": 16777215,
         },
-        "metric_tags": {"type": "PatternFlowGtpv2SequenceNumberMetricTagIter"},
         "increment": {"type": "PatternFlowGtpv2SequenceNumberCounter"},
         "decrement": {"type": "PatternFlowGtpv2SequenceNumberCounter"},
+        "metric_tags": {"type": "PatternFlowGtpv2SequenceNumberMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -72807,6 +72807,109 @@ class PatternFlowGtpv2SequenceNumber(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowGtpv2SequenceNumberCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 16777215,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 16777215,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowGtpv2SequenceNumberCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowGtpv2SequenceNumberMetricTag(OpenApiObject):
@@ -72974,109 +73077,6 @@ class PatternFlowGtpv2SequenceNumberMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowGtpv2SequenceNumberCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 16777215,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 16777215,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 0,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=0, step=1, count=1):
-        super(PatternFlowGtpv2SequenceNumberCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowGtpv2Spare2(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -73101,9 +73101,9 @@ class PatternFlowGtpv2Spare2(OpenApiObject):
             "minimum": 0,
             "maximum": 255,
         },
-        "metric_tags": {"type": "PatternFlowGtpv2Spare2MetricTagIter"},
         "increment": {"type": "PatternFlowGtpv2Spare2Counter"},
         "decrement": {"type": "PatternFlowGtpv2Spare2Counter"},
+        "metric_tags": {"type": "PatternFlowGtpv2Spare2MetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -73244,6 +73244,109 @@ class PatternFlowGtpv2Spare2(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowGtpv2Spare2Counter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 255,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 255,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowGtpv2Spare2Counter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowGtpv2Spare2MetricTag(OpenApiObject):
@@ -73411,109 +73514,6 @@ class PatternFlowGtpv2Spare2MetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowGtpv2Spare2Counter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 255,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 255,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 0,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=0, step=1, count=1):
-        super(PatternFlowGtpv2Spare2Counter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class FlowArp(OpenApiObject):
     __slots__ = "_parent"
 
@@ -73671,9 +73671,9 @@ class PatternFlowArpHardwareType(OpenApiObject):
             "minimum": 0,
             "maximum": 65535,
         },
-        "metric_tags": {"type": "PatternFlowArpHardwareTypeMetricTagIter"},
         "increment": {"type": "PatternFlowArpHardwareTypeCounter"},
         "decrement": {"type": "PatternFlowArpHardwareTypeCounter"},
+        "metric_tags": {"type": "PatternFlowArpHardwareTypeMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -73816,6 +73816,111 @@ class PatternFlowArpHardwareType(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowArpHardwareTypeCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 65535,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 65535,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 1,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    ETHERNET = 1  #
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=1, step=1, count=1):
+        super(PatternFlowArpHardwareTypeCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowArpHardwareTypeMetricTag(OpenApiObject):
@@ -73983,111 +74088,6 @@ class PatternFlowArpHardwareTypeMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowArpHardwareTypeCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 65535,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 65535,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 1,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    ETHERNET = 1  #
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=1, step=1, count=1):
-        super(PatternFlowArpHardwareTypeCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowArpProtocolType(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -74112,9 +74112,9 @@ class PatternFlowArpProtocolType(OpenApiObject):
             "minimum": 0,
             "maximum": 65535,
         },
-        "metric_tags": {"type": "PatternFlowArpProtocolTypeMetricTagIter"},
         "increment": {"type": "PatternFlowArpProtocolTypeCounter"},
         "decrement": {"type": "PatternFlowArpProtocolTypeCounter"},
+        "metric_tags": {"type": "PatternFlowArpProtocolTypeMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -74258,6 +74258,112 @@ class PatternFlowArpProtocolType(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowArpProtocolTypeCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 65535,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 65535,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 2048,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    IPV4 = 2048  #
+    IPV6 = 34525  #
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=2048, step=1, count=1):
+        super(PatternFlowArpProtocolTypeCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowArpProtocolTypeMetricTag(OpenApiObject):
@@ -74425,112 +74531,6 @@ class PatternFlowArpProtocolTypeMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowArpProtocolTypeCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 65535,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 65535,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 2048,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    IPV4 = 2048  #
-    IPV6 = 34525  #
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=2048, step=1, count=1):
-        super(PatternFlowArpProtocolTypeCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowArpHardwareLength(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -74555,9 +74555,9 @@ class PatternFlowArpHardwareLength(OpenApiObject):
             "minimum": 0,
             "maximum": 255,
         },
-        "metric_tags": {"type": "PatternFlowArpHardwareLengthMetricTagIter"},
         "increment": {"type": "PatternFlowArpHardwareLengthCounter"},
         "decrement": {"type": "PatternFlowArpHardwareLengthCounter"},
+        "metric_tags": {"type": "PatternFlowArpHardwareLengthMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -74698,6 +74698,109 @@ class PatternFlowArpHardwareLength(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowArpHardwareLengthCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 255,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 255,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 6,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=6, step=1, count=1):
+        super(PatternFlowArpHardwareLengthCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowArpHardwareLengthMetricTag(OpenApiObject):
@@ -74865,109 +74968,6 @@ class PatternFlowArpHardwareLengthMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowArpHardwareLengthCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 255,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 255,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 6,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=6, step=1, count=1):
-        super(PatternFlowArpHardwareLengthCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowArpProtocolLength(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -74992,9 +74992,9 @@ class PatternFlowArpProtocolLength(OpenApiObject):
             "minimum": 0,
             "maximum": 255,
         },
-        "metric_tags": {"type": "PatternFlowArpProtocolLengthMetricTagIter"},
         "increment": {"type": "PatternFlowArpProtocolLengthCounter"},
         "decrement": {"type": "PatternFlowArpProtocolLengthCounter"},
+        "metric_tags": {"type": "PatternFlowArpProtocolLengthMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -75135,6 +75135,109 @@ class PatternFlowArpProtocolLength(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowArpProtocolLengthCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 255,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 255,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 4,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=4, step=1, count=1):
+        super(PatternFlowArpProtocolLengthCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowArpProtocolLengthMetricTag(OpenApiObject):
@@ -75302,109 +75405,6 @@ class PatternFlowArpProtocolLengthMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowArpProtocolLengthCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 255,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 255,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 4,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=4, step=1, count=1):
-        super(PatternFlowArpProtocolLengthCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowArpOperation(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -75429,9 +75429,9 @@ class PatternFlowArpOperation(OpenApiObject):
             "minimum": 0,
             "maximum": 65535,
         },
-        "metric_tags": {"type": "PatternFlowArpOperationMetricTagIter"},
         "increment": {"type": "PatternFlowArpOperationCounter"},
         "decrement": {"type": "PatternFlowArpOperationCounter"},
+        "metric_tags": {"type": "PatternFlowArpOperationMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -75575,6 +75575,112 @@ class PatternFlowArpOperation(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowArpOperationCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 65535,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 65535,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 1,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    REQUEST = 1  #
+    REPLY = 2  #
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=1, step=1, count=1):
+        super(PatternFlowArpOperationCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowArpOperationMetricTag(OpenApiObject):
@@ -75742,112 +75848,6 @@ class PatternFlowArpOperationMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowArpOperationCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 65535,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 65535,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 1,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    REQUEST = 1  #
-    REPLY = 2  #
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=1, step=1, count=1):
-        super(PatternFlowArpOperationCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowArpSenderHardwareAddr(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -75870,9 +75870,9 @@ class PatternFlowArpSenderHardwareAddr(OpenApiObject):
             "format": "mac",
             "itemtype": str,
         },
-        "metric_tags": {"type": "PatternFlowArpSenderHardwareAddrMetricTagIter"},
         "increment": {"type": "PatternFlowArpSenderHardwareAddrCounter"},
         "decrement": {"type": "PatternFlowArpSenderHardwareAddrCounter"},
+        "metric_tags": {"type": "PatternFlowArpSenderHardwareAddrMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -76019,6 +76019,109 @@ class PatternFlowArpSenderHardwareAddr(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowArpSenderHardwareAddrCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": str,
+            "format": "mac",
+        },
+        "step": {
+            "type": str,
+            "format": "mac",
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": "00:00:00:00:00:00",
+        "step": "00:00:00:00:00:01",
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self, parent=None, start="00:00:00:00:00:00", step="00:00:00:00:00:01", count=1
+    ):
+        super(PatternFlowArpSenderHardwareAddrCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> str
+        """start getter
+
+        TBD
+
+        Returns: str
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: str
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> str
+        """step getter
+
+        TBD
+
+        Returns: str
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: str
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowArpSenderHardwareAddrMetricTag(OpenApiObject):
@@ -76186,109 +76289,6 @@ class PatternFlowArpSenderHardwareAddrMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowArpSenderHardwareAddrCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": str,
-            "format": "mac",
-        },
-        "step": {
-            "type": str,
-            "format": "mac",
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": "00:00:00:00:00:00",
-        "step": "00:00:00:00:00:01",
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(
-        self, parent=None, start="00:00:00:00:00:00", step="00:00:00:00:00:01", count=1
-    ):
-        super(PatternFlowArpSenderHardwareAddrCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> str
-        """start getter
-
-        TBD
-
-        Returns: str
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: str
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> str
-        """step getter
-
-        TBD
-
-        Returns: str
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: str
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowArpSenderProtocolAddr(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -76311,9 +76311,9 @@ class PatternFlowArpSenderProtocolAddr(OpenApiObject):
             "format": "ipv4",
             "itemtype": str,
         },
-        "metric_tags": {"type": "PatternFlowArpSenderProtocolAddrMetricTagIter"},
         "increment": {"type": "PatternFlowArpSenderProtocolAddrCounter"},
         "decrement": {"type": "PatternFlowArpSenderProtocolAddrCounter"},
+        "metric_tags": {"type": "PatternFlowArpSenderProtocolAddrMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -76454,6 +76454,107 @@ class PatternFlowArpSenderProtocolAddr(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowArpSenderProtocolAddrCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": str,
+            "format": "ipv4",
+        },
+        "step": {
+            "type": str,
+            "format": "ipv4",
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": "0.0.0.0",
+        "step": "0.0.0.1",
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start="0.0.0.0", step="0.0.0.1", count=1):
+        super(PatternFlowArpSenderProtocolAddrCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> str
+        """start getter
+
+        TBD
+
+        Returns: str
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: str
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> str
+        """step getter
+
+        TBD
+
+        Returns: str
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: str
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowArpSenderProtocolAddrMetricTag(OpenApiObject):
@@ -76621,107 +76722,6 @@ class PatternFlowArpSenderProtocolAddrMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowArpSenderProtocolAddrCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": str,
-            "format": "ipv4",
-        },
-        "step": {
-            "type": str,
-            "format": "ipv4",
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": "0.0.0.0",
-        "step": "0.0.0.1",
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start="0.0.0.0", step="0.0.0.1", count=1):
-        super(PatternFlowArpSenderProtocolAddrCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> str
-        """start getter
-
-        TBD
-
-        Returns: str
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: str
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> str
-        """step getter
-
-        TBD
-
-        Returns: str
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: str
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowArpTargetHardwareAddr(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -76744,9 +76744,9 @@ class PatternFlowArpTargetHardwareAddr(OpenApiObject):
             "format": "mac",
             "itemtype": str,
         },
-        "metric_tags": {"type": "PatternFlowArpTargetHardwareAddrMetricTagIter"},
         "increment": {"type": "PatternFlowArpTargetHardwareAddrCounter"},
         "decrement": {"type": "PatternFlowArpTargetHardwareAddrCounter"},
+        "metric_tags": {"type": "PatternFlowArpTargetHardwareAddrMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -76893,6 +76893,109 @@ class PatternFlowArpTargetHardwareAddr(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowArpTargetHardwareAddrCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": str,
+            "format": "mac",
+        },
+        "step": {
+            "type": str,
+            "format": "mac",
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": "00:00:00:00:00:00",
+        "step": "00:00:00:00:00:01",
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self, parent=None, start="00:00:00:00:00:00", step="00:00:00:00:00:01", count=1
+    ):
+        super(PatternFlowArpTargetHardwareAddrCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> str
+        """start getter
+
+        TBD
+
+        Returns: str
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: str
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> str
+        """step getter
+
+        TBD
+
+        Returns: str
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: str
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowArpTargetHardwareAddrMetricTag(OpenApiObject):
@@ -77060,109 +77163,6 @@ class PatternFlowArpTargetHardwareAddrMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowArpTargetHardwareAddrCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": str,
-            "format": "mac",
-        },
-        "step": {
-            "type": str,
-            "format": "mac",
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": "00:00:00:00:00:00",
-        "step": "00:00:00:00:00:01",
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(
-        self, parent=None, start="00:00:00:00:00:00", step="00:00:00:00:00:01", count=1
-    ):
-        super(PatternFlowArpTargetHardwareAddrCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> str
-        """start getter
-
-        TBD
-
-        Returns: str
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: str
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> str
-        """step getter
-
-        TBD
-
-        Returns: str
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: str
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowArpTargetProtocolAddr(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -77185,9 +77185,9 @@ class PatternFlowArpTargetProtocolAddr(OpenApiObject):
             "format": "ipv4",
             "itemtype": str,
         },
-        "metric_tags": {"type": "PatternFlowArpTargetProtocolAddrMetricTagIter"},
         "increment": {"type": "PatternFlowArpTargetProtocolAddrCounter"},
         "decrement": {"type": "PatternFlowArpTargetProtocolAddrCounter"},
+        "metric_tags": {"type": "PatternFlowArpTargetProtocolAddrMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -77328,6 +77328,107 @@ class PatternFlowArpTargetProtocolAddr(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowArpTargetProtocolAddrCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": str,
+            "format": "ipv4",
+        },
+        "step": {
+            "type": str,
+            "format": "ipv4",
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": "0.0.0.0",
+        "step": "0.0.0.1",
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start="0.0.0.0", step="0.0.0.1", count=1):
+        super(PatternFlowArpTargetProtocolAddrCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> str
+        """start getter
+
+        TBD
+
+        Returns: str
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: str
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> str
+        """step getter
+
+        TBD
+
+        Returns: str
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: str
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowArpTargetProtocolAddrMetricTag(OpenApiObject):
@@ -77493,107 +77594,6 @@ class PatternFlowArpTargetProtocolAddrMetricTagIter(OpenApiIter):
         )
         self._add(item)
         return item
-
-
-class PatternFlowArpTargetProtocolAddrCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": str,
-            "format": "ipv4",
-        },
-        "step": {
-            "type": str,
-            "format": "ipv4",
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": "0.0.0.0",
-        "step": "0.0.0.1",
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start="0.0.0.0", step="0.0.0.1", count=1):
-        super(PatternFlowArpTargetProtocolAddrCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> str
-        """start getter
-
-        TBD
-
-        Returns: str
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: str
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> str
-        """step getter
-
-        TBD
-
-        Returns: str
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: str
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
 
 
 class FlowIcmp(OpenApiObject):
@@ -77765,9 +77765,9 @@ class PatternFlowIcmpEchoType(OpenApiObject):
             "minimum": 0,
             "maximum": 255,
         },
-        "metric_tags": {"type": "PatternFlowIcmpEchoTypeMetricTagIter"},
         "increment": {"type": "PatternFlowIcmpEchoTypeCounter"},
         "decrement": {"type": "PatternFlowIcmpEchoTypeCounter"},
+        "metric_tags": {"type": "PatternFlowIcmpEchoTypeMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -77911,6 +77911,112 @@ class PatternFlowIcmpEchoType(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowIcmpEchoTypeCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 255,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 255,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 8,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    REPLY = 0  #
+    REQUEST = 8  #
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=8, step=1, count=1):
+        super(PatternFlowIcmpEchoTypeCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowIcmpEchoTypeMetricTag(OpenApiObject):
@@ -78078,112 +78184,6 @@ class PatternFlowIcmpEchoTypeMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowIcmpEchoTypeCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 255,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 255,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 8,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    REPLY = 0  #
-    REQUEST = 8  #
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=8, step=1, count=1):
-        super(PatternFlowIcmpEchoTypeCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowIcmpEchoCode(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -78208,9 +78208,9 @@ class PatternFlowIcmpEchoCode(OpenApiObject):
             "minimum": 0,
             "maximum": 255,
         },
-        "metric_tags": {"type": "PatternFlowIcmpEchoCodeMetricTagIter"},
         "increment": {"type": "PatternFlowIcmpEchoCodeCounter"},
         "decrement": {"type": "PatternFlowIcmpEchoCodeCounter"},
+        "metric_tags": {"type": "PatternFlowIcmpEchoCodeMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -78351,6 +78351,109 @@ class PatternFlowIcmpEchoCode(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowIcmpEchoCodeCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 255,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 255,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowIcmpEchoCodeCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowIcmpEchoCodeMetricTag(OpenApiObject):
@@ -78518,109 +78621,6 @@ class PatternFlowIcmpEchoCodeMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowIcmpEchoCodeCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 255,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 255,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 0,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=0, step=1, count=1):
-        super(PatternFlowIcmpEchoCodeCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowIcmpEchoChecksum(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -78768,9 +78768,9 @@ class PatternFlowIcmpEchoIdentifier(OpenApiObject):
             "minimum": 0,
             "maximum": 65535,
         },
-        "metric_tags": {"type": "PatternFlowIcmpEchoIdentifierMetricTagIter"},
         "increment": {"type": "PatternFlowIcmpEchoIdentifierCounter"},
         "decrement": {"type": "PatternFlowIcmpEchoIdentifierCounter"},
+        "metric_tags": {"type": "PatternFlowIcmpEchoIdentifierMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -78911,6 +78911,109 @@ class PatternFlowIcmpEchoIdentifier(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowIcmpEchoIdentifierCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 65535,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 65535,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowIcmpEchoIdentifierCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowIcmpEchoIdentifierMetricTag(OpenApiObject):
@@ -79078,109 +79181,6 @@ class PatternFlowIcmpEchoIdentifierMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowIcmpEchoIdentifierCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 65535,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 65535,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 0,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=0, step=1, count=1):
-        super(PatternFlowIcmpEchoIdentifierCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowIcmpEchoSequenceNumber(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -79205,9 +79205,9 @@ class PatternFlowIcmpEchoSequenceNumber(OpenApiObject):
             "minimum": 0,
             "maximum": 65535,
         },
-        "metric_tags": {"type": "PatternFlowIcmpEchoSequenceNumberMetricTagIter"},
         "increment": {"type": "PatternFlowIcmpEchoSequenceNumberCounter"},
         "decrement": {"type": "PatternFlowIcmpEchoSequenceNumberCounter"},
+        "metric_tags": {"type": "PatternFlowIcmpEchoSequenceNumberMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -79348,6 +79348,109 @@ class PatternFlowIcmpEchoSequenceNumber(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowIcmpEchoSequenceNumberCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 65535,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 65535,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowIcmpEchoSequenceNumberCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowIcmpEchoSequenceNumberMetricTag(OpenApiObject):
@@ -79513,109 +79616,6 @@ class PatternFlowIcmpEchoSequenceNumberMetricTagIter(OpenApiIter):
         )
         self._add(item)
         return item
-
-
-class PatternFlowIcmpEchoSequenceNumberCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 65535,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 65535,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 0,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=0, step=1, count=1):
-        super(PatternFlowIcmpEchoSequenceNumberCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
 
 
 class FlowIcmpv6(OpenApiObject):
@@ -79789,9 +79789,9 @@ class PatternFlowIcmpv6EchoType(OpenApiObject):
             "minimum": 0,
             "maximum": 255,
         },
-        "metric_tags": {"type": "PatternFlowIcmpv6EchoTypeMetricTagIter"},
         "increment": {"type": "PatternFlowIcmpv6EchoTypeCounter"},
         "decrement": {"type": "PatternFlowIcmpv6EchoTypeCounter"},
+        "metric_tags": {"type": "PatternFlowIcmpv6EchoTypeMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -79935,6 +79935,112 @@ class PatternFlowIcmpv6EchoType(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowIcmpv6EchoTypeCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 255,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 255,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 128,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    REQUEST = 128  #
+    REPLY = 129  #
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=128, step=1, count=1):
+        super(PatternFlowIcmpv6EchoTypeCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowIcmpv6EchoTypeMetricTag(OpenApiObject):
@@ -80102,112 +80208,6 @@ class PatternFlowIcmpv6EchoTypeMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowIcmpv6EchoTypeCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 255,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 255,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 128,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    REQUEST = 128  #
-    REPLY = 129  #
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=128, step=1, count=1):
-        super(PatternFlowIcmpv6EchoTypeCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowIcmpv6EchoCode(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -80232,9 +80232,9 @@ class PatternFlowIcmpv6EchoCode(OpenApiObject):
             "minimum": 0,
             "maximum": 255,
         },
-        "metric_tags": {"type": "PatternFlowIcmpv6EchoCodeMetricTagIter"},
         "increment": {"type": "PatternFlowIcmpv6EchoCodeCounter"},
         "decrement": {"type": "PatternFlowIcmpv6EchoCodeCounter"},
+        "metric_tags": {"type": "PatternFlowIcmpv6EchoCodeMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -80375,6 +80375,109 @@ class PatternFlowIcmpv6EchoCode(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowIcmpv6EchoCodeCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 255,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 255,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowIcmpv6EchoCodeCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowIcmpv6EchoCodeMetricTag(OpenApiObject):
@@ -80542,109 +80645,6 @@ class PatternFlowIcmpv6EchoCodeMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowIcmpv6EchoCodeCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 255,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 255,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 0,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=0, step=1, count=1):
-        super(PatternFlowIcmpv6EchoCodeCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowIcmpv6EchoIdentifier(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -80669,9 +80669,9 @@ class PatternFlowIcmpv6EchoIdentifier(OpenApiObject):
             "minimum": 0,
             "maximum": 65535,
         },
-        "metric_tags": {"type": "PatternFlowIcmpv6EchoIdentifierMetricTagIter"},
         "increment": {"type": "PatternFlowIcmpv6EchoIdentifierCounter"},
         "decrement": {"type": "PatternFlowIcmpv6EchoIdentifierCounter"},
+        "metric_tags": {"type": "PatternFlowIcmpv6EchoIdentifierMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -80812,6 +80812,109 @@ class PatternFlowIcmpv6EchoIdentifier(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowIcmpv6EchoIdentifierCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 65535,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 65535,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowIcmpv6EchoIdentifierCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowIcmpv6EchoIdentifierMetricTag(OpenApiObject):
@@ -80979,109 +81082,6 @@ class PatternFlowIcmpv6EchoIdentifierMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowIcmpv6EchoIdentifierCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 65535,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 65535,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 0,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=0, step=1, count=1):
-        super(PatternFlowIcmpv6EchoIdentifierCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowIcmpv6EchoSequenceNumber(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -81106,9 +81106,9 @@ class PatternFlowIcmpv6EchoSequenceNumber(OpenApiObject):
             "minimum": 0,
             "maximum": 65535,
         },
-        "metric_tags": {"type": "PatternFlowIcmpv6EchoSequenceNumberMetricTagIter"},
         "increment": {"type": "PatternFlowIcmpv6EchoSequenceNumberCounter"},
         "decrement": {"type": "PatternFlowIcmpv6EchoSequenceNumberCounter"},
+        "metric_tags": {"type": "PatternFlowIcmpv6EchoSequenceNumberMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -81249,6 +81249,109 @@ class PatternFlowIcmpv6EchoSequenceNumber(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowIcmpv6EchoSequenceNumberCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 65535,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 65535,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowIcmpv6EchoSequenceNumberCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowIcmpv6EchoSequenceNumberMetricTag(OpenApiObject):
@@ -81414,109 +81517,6 @@ class PatternFlowIcmpv6EchoSequenceNumberMetricTagIter(OpenApiIter):
         )
         self._add(item)
         return item
-
-
-class PatternFlowIcmpv6EchoSequenceNumberCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 65535,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 65535,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 0,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=0, step=1, count=1):
-        super(PatternFlowIcmpv6EchoSequenceNumberCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
 
 
 class PatternFlowIcmpv6EchoChecksum(OpenApiObject):
@@ -81719,9 +81719,9 @@ class PatternFlowPppAddress(OpenApiObject):
             "minimum": 0,
             "maximum": 255,
         },
-        "metric_tags": {"type": "PatternFlowPppAddressMetricTagIter"},
         "increment": {"type": "PatternFlowPppAddressCounter"},
         "decrement": {"type": "PatternFlowPppAddressCounter"},
+        "metric_tags": {"type": "PatternFlowPppAddressMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -81864,6 +81864,111 @@ class PatternFlowPppAddress(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowPppAddressCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 255,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 255,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 255,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    STANDARD_ADDRESS = 255  #
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=255, step=1, count=1):
+        super(PatternFlowPppAddressCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowPppAddressMetricTag(OpenApiObject):
@@ -82029,111 +82134,6 @@ class PatternFlowPppAddressMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowPppAddressCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 255,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 255,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 255,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    STANDARD_ADDRESS = 255  #
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=255, step=1, count=1):
-        super(PatternFlowPppAddressCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowPppControl(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -82158,9 +82158,9 @@ class PatternFlowPppControl(OpenApiObject):
             "minimum": 0,
             "maximum": 255,
         },
-        "metric_tags": {"type": "PatternFlowPppControlMetricTagIter"},
         "increment": {"type": "PatternFlowPppControlCounter"},
         "decrement": {"type": "PatternFlowPppControlCounter"},
+        "metric_tags": {"type": "PatternFlowPppControlMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -82303,6 +82303,111 @@ class PatternFlowPppControl(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowPppControlCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 255,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 255,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 3,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    UNNUMBERED_DATA = 3  #
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=3, step=1, count=1):
+        super(PatternFlowPppControlCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowPppControlMetricTag(OpenApiObject):
@@ -82468,111 +82573,6 @@ class PatternFlowPppControlMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowPppControlCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 255,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 255,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 3,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    UNNUMBERED_DATA = 3  #
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=3, step=1, count=1):
-        super(PatternFlowPppControlCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowPppProtocolType(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -82603,9 +82603,9 @@ class PatternFlowPppProtocolType(OpenApiObject):
             "minimum": 0,
             "maximum": 65535,
         },
-        "metric_tags": {"type": "PatternFlowPppProtocolTypeMetricTagIter"},
         "increment": {"type": "PatternFlowPppProtocolTypeCounter"},
         "decrement": {"type": "PatternFlowPppProtocolTypeCounter"},
+        "metric_tags": {"type": "PatternFlowPppProtocolTypeMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -82760,6 +82760,109 @@ class PatternFlowPppProtocolType(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowPppProtocolTypeCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 65535,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 65535,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 33,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=33, step=1, count=1):
+        super(PatternFlowPppProtocolTypeCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowPppProtocolTypeMetricTag(OpenApiObject):
@@ -82927,109 +83030,6 @@ class PatternFlowPppProtocolTypeMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowPppProtocolTypeCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 65535,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 65535,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 33,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=33, step=1, count=1):
-        super(PatternFlowPppProtocolTypeCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class FlowIgmpv1(OpenApiObject):
     __slots__ = "_parent"
 
@@ -83131,9 +83131,9 @@ class PatternFlowIgmpv1Version(OpenApiObject):
             "minimum": 0,
             "maximum": 15,
         },
-        "metric_tags": {"type": "PatternFlowIgmpv1VersionMetricTagIter"},
         "increment": {"type": "PatternFlowIgmpv1VersionCounter"},
         "decrement": {"type": "PatternFlowIgmpv1VersionCounter"},
+        "metric_tags": {"type": "PatternFlowIgmpv1VersionMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -83274,6 +83274,109 @@ class PatternFlowIgmpv1Version(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowIgmpv1VersionCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 15,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 15,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 1,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=1, step=1, count=1):
+        super(PatternFlowIgmpv1VersionCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowIgmpv1VersionMetricTag(OpenApiObject):
@@ -83441,109 +83544,6 @@ class PatternFlowIgmpv1VersionMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowIgmpv1VersionCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 15,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 15,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 1,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=1, step=1, count=1):
-        super(PatternFlowIgmpv1VersionCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowIgmpv1Type(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -83568,9 +83568,9 @@ class PatternFlowIgmpv1Type(OpenApiObject):
             "minimum": 0,
             "maximum": 15,
         },
-        "metric_tags": {"type": "PatternFlowIgmpv1TypeMetricTagIter"},
         "increment": {"type": "PatternFlowIgmpv1TypeCounter"},
         "decrement": {"type": "PatternFlowIgmpv1TypeCounter"},
+        "metric_tags": {"type": "PatternFlowIgmpv1TypeMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -83714,6 +83714,112 @@ class PatternFlowIgmpv1Type(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowIgmpv1TypeCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 15,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 15,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 1,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    QUERY = 1  #
+    REPORT = 2  #
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=1, step=1, count=1):
+        super(PatternFlowIgmpv1TypeCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowIgmpv1TypeMetricTag(OpenApiObject):
@@ -83879,112 +83985,6 @@ class PatternFlowIgmpv1TypeMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowIgmpv1TypeCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 15,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 15,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 1,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    QUERY = 1  #
-    REPORT = 2  #
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=1, step=1, count=1):
-        super(PatternFlowIgmpv1TypeCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowIgmpv1Unused(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -84009,9 +84009,9 @@ class PatternFlowIgmpv1Unused(OpenApiObject):
             "minimum": 0,
             "maximum": 255,
         },
-        "metric_tags": {"type": "PatternFlowIgmpv1UnusedMetricTagIter"},
         "increment": {"type": "PatternFlowIgmpv1UnusedCounter"},
         "decrement": {"type": "PatternFlowIgmpv1UnusedCounter"},
+        "metric_tags": {"type": "PatternFlowIgmpv1UnusedMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -84152,6 +84152,109 @@ class PatternFlowIgmpv1Unused(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowIgmpv1UnusedCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 255,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 255,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowIgmpv1UnusedCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowIgmpv1UnusedMetricTag(OpenApiObject):
@@ -84319,109 +84422,6 @@ class PatternFlowIgmpv1UnusedMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowIgmpv1UnusedCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 255,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 255,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 0,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=0, step=1, count=1):
-        super(PatternFlowIgmpv1UnusedCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowIgmpv1Checksum(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -84567,9 +84567,9 @@ class PatternFlowIgmpv1GroupAddress(OpenApiObject):
             "format": "ipv4",
             "itemtype": str,
         },
-        "metric_tags": {"type": "PatternFlowIgmpv1GroupAddressMetricTagIter"},
         "increment": {"type": "PatternFlowIgmpv1GroupAddressCounter"},
         "decrement": {"type": "PatternFlowIgmpv1GroupAddressCounter"},
+        "metric_tags": {"type": "PatternFlowIgmpv1GroupAddressMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -84710,6 +84710,107 @@ class PatternFlowIgmpv1GroupAddress(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowIgmpv1GroupAddressCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": str,
+            "format": "ipv4",
+        },
+        "step": {
+            "type": str,
+            "format": "ipv4",
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": "0.0.0.0",
+        "step": "0.0.0.1",
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start="0.0.0.0", step="0.0.0.1", count=1):
+        super(PatternFlowIgmpv1GroupAddressCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> str
+        """start getter
+
+        TBD
+
+        Returns: str
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: str
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> str
+        """step getter
+
+        TBD
+
+        Returns: str
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: str
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowIgmpv1GroupAddressMetricTag(OpenApiObject):
@@ -84877,107 +84978,6 @@ class PatternFlowIgmpv1GroupAddressMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowIgmpv1GroupAddressCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": str,
-            "format": "ipv4",
-        },
-        "step": {
-            "type": str,
-            "format": "ipv4",
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": "0.0.0.0",
-        "step": "0.0.0.1",
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start="0.0.0.0", step="0.0.0.1", count=1):
-        super(PatternFlowIgmpv1GroupAddressCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> str
-        """start getter
-
-        TBD
-
-        Returns: str
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: str
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> str
-        """step getter
-
-        TBD
-
-        Returns: str
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: str
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class FlowMpls(OpenApiObject):
     __slots__ = "_parent"
 
@@ -85073,9 +85073,9 @@ class PatternFlowMplsLabel(OpenApiObject):
             "minimum": 0,
             "maximum": 1048575,
         },
-        "metric_tags": {"type": "PatternFlowMplsLabelMetricTagIter"},
         "increment": {"type": "PatternFlowMplsLabelCounter"},
         "decrement": {"type": "PatternFlowMplsLabelCounter"},
+        "metric_tags": {"type": "PatternFlowMplsLabelMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -85227,6 +85227,109 @@ class PatternFlowMplsLabel(OpenApiObject):
         return self._get_property(
             "metric_tags", PatternFlowMplsLabelMetricTagIter, self._parent, self._choice
         )
+
+
+class PatternFlowMplsLabelCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 1048575,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 1048575,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 16,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=16, step=1, count=1):
+        super(PatternFlowMplsLabelCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowMplsLabelMetricTag(OpenApiObject):
@@ -85392,109 +85495,6 @@ class PatternFlowMplsLabelMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowMplsLabelCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 1048575,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 1048575,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 16,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=16, step=1, count=1):
-        super(PatternFlowMplsLabelCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowMplsTrafficClass(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -85519,9 +85519,9 @@ class PatternFlowMplsTrafficClass(OpenApiObject):
             "minimum": 0,
             "maximum": 7,
         },
-        "metric_tags": {"type": "PatternFlowMplsTrafficClassMetricTagIter"},
         "increment": {"type": "PatternFlowMplsTrafficClassCounter"},
         "decrement": {"type": "PatternFlowMplsTrafficClassCounter"},
+        "metric_tags": {"type": "PatternFlowMplsTrafficClassMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -85662,6 +85662,109 @@ class PatternFlowMplsTrafficClass(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowMplsTrafficClassCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 7,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 7,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowMplsTrafficClassCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowMplsTrafficClassMetricTag(OpenApiObject):
@@ -85829,109 +85932,6 @@ class PatternFlowMplsTrafficClassMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowMplsTrafficClassCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 7,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 7,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 0,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=0, step=1, count=1):
-        super(PatternFlowMplsTrafficClassCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowMplsBottomOfStack(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -85962,9 +85962,9 @@ class PatternFlowMplsBottomOfStack(OpenApiObject):
             "minimum": 0,
             "maximum": 1,
         },
-        "metric_tags": {"type": "PatternFlowMplsBottomOfStackMetricTagIter"},
         "increment": {"type": "PatternFlowMplsBottomOfStackCounter"},
         "decrement": {"type": "PatternFlowMplsBottomOfStackCounter"},
+        "metric_tags": {"type": "PatternFlowMplsBottomOfStackMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -86119,6 +86119,109 @@ class PatternFlowMplsBottomOfStack(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowMplsBottomOfStackCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 1,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 1,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 1,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=1, step=1, count=1):
+        super(PatternFlowMplsBottomOfStackCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowMplsBottomOfStackMetricTag(OpenApiObject):
@@ -86286,109 +86389,6 @@ class PatternFlowMplsBottomOfStackMetricTagIter(OpenApiIter):
         return item
 
 
-class PatternFlowMplsBottomOfStackCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 1,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 1,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 1,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=1, step=1, count=1):
-        super(PatternFlowMplsBottomOfStackCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
 class PatternFlowMplsTimeToLive(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -86413,9 +86413,9 @@ class PatternFlowMplsTimeToLive(OpenApiObject):
             "minimum": 0,
             "maximum": 255,
         },
-        "metric_tags": {"type": "PatternFlowMplsTimeToLiveMetricTagIter"},
         "increment": {"type": "PatternFlowMplsTimeToLiveCounter"},
         "decrement": {"type": "PatternFlowMplsTimeToLiveCounter"},
+        "metric_tags": {"type": "PatternFlowMplsTimeToLiveMetricTagIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -86556,6 +86556,109 @@ class PatternFlowMplsTimeToLive(OpenApiObject):
             self._parent,
             self._choice,
         )
+
+
+class PatternFlowMplsTimeToLiveCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 255,
+        },
+        "step": {
+            "type": int,
+            "minimum": 0,
+            "maximum": 255,
+        },
+        "count": {"type": int},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 64,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=64, step=1, count=1):
+        super(PatternFlowMplsTimeToLiveCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
 
 
 class PatternFlowMplsTimeToLiveMetricTag(OpenApiObject):
@@ -86721,109 +86824,6 @@ class PatternFlowMplsTimeToLiveMetricTagIter(OpenApiIter):
         )
         self._add(item)
         return item
-
-
-class PatternFlowMplsTimeToLiveCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 255,
-        },
-        "step": {
-            "type": int,
-            "minimum": 0,
-            "maximum": 255,
-        },
-        "count": {"type": int},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 64,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=64, step=1, count=1):
-        super(PatternFlowMplsTimeToLiveCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
 
 
 class FlowHeaderIter(OpenApiIter):
@@ -108616,8 +108616,8 @@ class Api(object):
 
     def __init__(self, **kwargs):
         self._version_meta = self.version()
-        self._version_meta.api_spec_version = "0.11.7"
-        self._version_meta.sdk_version = "0.11.13"
+        self._version_meta.api_spec_version = "0.11.8"
+        self._version_meta.sdk_version = "0.11.14"
         self._version_check = kwargs.get("version_check")
         if self._version_check is None:
             self._version_check = False
