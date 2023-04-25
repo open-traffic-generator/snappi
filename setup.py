@@ -3,6 +3,7 @@ To build distribution: python setup.py sdist bdist_wheel --universal
 """
 import os
 import setuptools
+from setuptools.command.install import install
 from version import Version
 
 pkg_name = Version.package_name
@@ -27,9 +28,40 @@ with open(os.path.join(base_dir, "grpc-requirements.txt"), "r+") as fd:
     grpc_requires = fd.readlines()
     grpc_requires = grpc_requires[1:]
 
+
+class InstallCommand(install):
+    user_options = install.user_options + [
+        ('noGrpc', None, '<description for this custom option>'),
+    ]
+
+    def initialize_options(self):
+        install.initialize_options(self)
+        self.noGrpc = False
+
+    def finalize_options(self):
+        global install_requires
+        skip_requirement= ["grpc", "protobuf"]
+        min_reqs =[]
+        if self.noGrpc:
+            for skip in skip_requirement:
+                for requirement in install_requires:
+                    if requirement.startswith(skip):
+                        continue
+                    else:
+                        min_reqs.append(requirement)
+        install_requires=min_reqs
+        install.finalize_options(self)
+
+    def run(self):
+        print(self.noGrpc)
+        install.run(self)
+
+print("after")
+
 setuptools.setup(
     name=pkg_name,
     version=version,
+    cmdclass={"install": InstallCommand},
     description="The Snappi Open Traffic Generator Python Package",
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -55,6 +87,5 @@ setuptools.setup(
         "trex": ["snappi_trex"],
         "convergence": ["snappi_convergence==0.4.1"],
         "testing": ["pytest", "flask"],
-        "grpc": grpc_requires
     },
 )

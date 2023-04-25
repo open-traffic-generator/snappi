@@ -380,13 +380,6 @@ def install():
             ),
         ]
     )
-    run(
-        [
-            "{} -m pip install --upgrade --force-reinstall {}[grpc]".format(
-                py(), os.path.join("dist", wheel)
-            ),
-        ]
-    )
 
 
 def release():
