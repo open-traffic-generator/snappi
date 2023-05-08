@@ -38,6 +38,18 @@ if sys.version_info[0] == 3:
 
 openapi_warnings = []
 
+# instantiate the logger
+stderr_handler = logging.StreamHandler(sys.stderr)
+formatter = logging.Formatter(
+    fmt="%(asctime)s.%(msecs)03d [%(name)s] [%(levelname)s] %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S",
+)
+formatter.converter = time.gmtime
+stderr_handler.setFormatter(formatter)
+log = logging.getLogger("snappi")
+log.addHandler(stderr_handler)
+log.info("Logger instantiated")
+
 
 class Transport:
     HTTP = "http"
@@ -75,12 +87,21 @@ def api(
       man-in-the-middle (MitM) attacks. Setting verify to `False`
       may be useful during local development or testing.
     - logger (logging.Logger): A user defined logging.logger, if none is provided
-      then a default logger with a stdout handler will be provided
+      then a default logger with a stderr handler will be provided
     - loglevel (logging.loglevel): The logging package log level.
       The default loglevel is logging.INFO
     - ext (str): Name of an extension package
     """
     params = locals()
+
+    if logger is not None:
+        global log
+        log = logger
+    log.setLevel(loglevel)
+
+    if version_check is False:
+        log.warning("Version check is disabled")
+
     transport_types = ["http", "grpc"]
     if ext is None:
         transport = "http" if transport is None else transport
@@ -91,8 +112,10 @@ def api(
                 )
             )
         if transport == "http":
+            log.info("Transport set to HTTP")
             return HttpApi(**params)
         else:
+            log.info("Transport set to GRPC")
             return GrpcApi(**params)
     try:
         if transport is not None:
@@ -115,19 +138,7 @@ class HttpTransport(object):
             else "https://localhost:443"
         )
         self.verify = kwargs["verify"] if "verify" in kwargs else False
-        self.logger = kwargs["logger"] if "logger" in kwargs else None
-        self.loglevel = kwargs["loglevel"] if "loglevel" in kwargs else logging.DEBUG
-        if self.logger is None:
-            stdout_handler = logging.StreamHandler(sys.stdout)
-            formatter = logging.Formatter(
-                fmt="%(asctime)s [%(name)s] [%(levelname)s] %(message)s",
-                datefmt="%Y-%m-%d %H:%M:%S",
-            )
-            formatter.converter = time.gmtime
-            stdout_handler.setFormatter(formatter)
-            self.logger = logging.Logger(self.__module__, level=self.loglevel)
-            self.logger.addHandler(stdout_handler)
-        self.logger.debug(
+        log.debug(
             "HttpTransport args: {}".format(
                 ", ".join(["{}={!r}".format(k, v) for k, v in kwargs.items()])
             )
@@ -139,7 +150,7 @@ class HttpTransport(object):
         self.verify = verify
         if self.verify is False:
             urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-            self.logger.warning("Certificate verification is disabled")
+            log.warning("Certificate verification is disabled")
 
     def _parse_response_error(self, response_code, response_text):
         error_response = ""
@@ -178,6 +189,10 @@ class HttpTransport(object):
                 data = payload.serialize()
             else:
                 raise Exception("Type of payload provided is unknown")
+        log.debug("Request url - " + str(url))
+        log.debug("Method - " + str(method))
+        log.debug("Request headers - " + str(headers))
+        log.debug("Request payload - " + str(data))
         response = self._session.request(
             method=method,
             url=url,
@@ -187,6 +202,10 @@ class HttpTransport(object):
             # TODO: add a timeout here
             headers=headers,
         )
+        log.debug("Response status code - " + str(response.status_code))
+        log.debug("Response header - " + str(response.headers))
+        log.debug("Response content - " + str(response.content))
+        log.debug("Response text - " + str(response.text))
         if response.ok:
             if "application/json" in response.headers["content-type"]:
                 # TODO: we might want to check for utf-8 charset and decode
@@ -220,6 +239,12 @@ class OpenApiStatus:
             # cls.logger.warning(cls.messages[key])
             logging.warning(cls.messages[key])
             object.__warnings__.append(cls.messages[key])
+            log.warning(
+                "["
+                + OpenApiStatus.warn.__name__
+                + "] cls.messages[key]-"
+                + cls.messages[key]
+            )
             # openapi_warnings.append(cls.messages[key])
 
     @staticmethod
@@ -234,6 +259,9 @@ class OpenApiStatus:
         if isinstance(func_or_data, types.FunctionType):
             return inner
         OpenApiStatus.warn(func_or_data)
+        log.warning(
+            "[" + OpenApiStatus.deprecated.__name__ + "] func_or_data-" + func_or_data
+        )
 
     @staticmethod
     def under_review(func_or_data):
@@ -247,6 +275,9 @@ class OpenApiStatus:
         if isinstance(func_or_data, types.FunctionType):
             return inner
         OpenApiStatus.warn(func_or_data)
+        log.warning(
+            "[" + OpenApiStatus.under_review.__name__ + "] func_or_data-" + func_or_data
+        )
 
 
 class OpenApiBase(object):
@@ -357,6 +388,7 @@ class OpenApiValidator(object):
                 return False
             return all([0 <= int(oct, 16) <= 255 for oct in mac.split(":")])
         except Exception:
+            log.debug("Validating MAC address - " + str(mac) + " failed ")
             return False
 
     def validate_ipv4(self, ip):
@@ -367,6 +399,7 @@ class OpenApiValidator(object):
         try:
             return all([0 <= int(oct) <= 255 for oct in ip.split(".", 3)])
         except Exception:
+            log.debug("Validating IPv4 address - " + str(ip) + " failed")
             return False
 
     def validate_ipv6(self, ip):
@@ -402,6 +435,7 @@ class OpenApiValidator(object):
                 ]
             )
         except Exception:
+            log.debug("Validating IPv6 address - " + str(ip) + " failed")
             return False
 
     def validate_hex(self, hex):
@@ -411,6 +445,7 @@ class OpenApiValidator(object):
             int(hex, 16)
             return True
         except Exception:
+            log.debug("Validating HEX value - " + str(hex) + " failed")
             return False
 
     def validate_integer(self, value, min, max, type_format=None):
@@ -108995,9 +109030,11 @@ class Api(object):
             raise Exception(err)
 
     def get_local_version(self):
+        log.info("Local Version is " + str(self._version_meta))
         return self._version_meta
 
     def get_remote_version(self):
+        log.info("Remote Version is " + str(self.get_version()))
         return self.get_version()
 
     def check_version_compatibility(self):
@@ -109067,6 +109104,7 @@ class HttpApi(Api):
 
         Return: warning
         """
+        log.info("Executing set_config")
         self._do_version_check_once()
         return self._transport.send_recv(
             "post",
@@ -109082,6 +109120,7 @@ class HttpApi(Api):
 
         Return: config
         """
+        log.info("Executing get_config")
         self._do_version_check_once()
         return self._transport.send_recv(
             "get",
@@ -109097,6 +109136,7 @@ class HttpApi(Api):
 
         Return: warning
         """
+        log.info("Executing update_config")
         self._do_version_check_once()
         return self._transport.send_recv(
             "patch",
@@ -109112,6 +109152,7 @@ class HttpApi(Api):
 
         Return: warning
         """
+        log.info("Executing set_control_state")
         self._do_version_check_once()
         return self._transport.send_recv(
             "post",
@@ -109127,6 +109168,7 @@ class HttpApi(Api):
 
         Return: control_action_response
         """
+        log.info("Executing set_control_action")
         self._do_version_check_once()
         return self._transport.send_recv(
             "post",
@@ -109142,6 +109184,7 @@ class HttpApi(Api):
 
         Return: warning
         """
+        log.info("Executing set_transmit_state")
         self.add_warnings(
             "set_transmit_state api is deprecated, Please use `set_control_state` with `traffic.flow_transmit` choice instead"
         )
@@ -109160,6 +109203,7 @@ class HttpApi(Api):
 
         Return: warning
         """
+        log.info("Executing set_link_state")
         self.add_warnings(
             "set_link_state api is deprecated, Please use `set_control_state` with `port.link` choice instead"
         )
@@ -109178,6 +109222,7 @@ class HttpApi(Api):
 
         Return: warning
         """
+        log.info("Executing set_capture_state")
         self.add_warnings(
             "set_capture_state api is deprecated, Please use `set_control_state` with `port.capture` choice instead"
         )
@@ -109196,6 +109241,7 @@ class HttpApi(Api):
 
         Return: config
         """
+        log.info("Executing update_flows")
         self.add_warnings(
             "update_flows api is deprecated, Please use `update_config` with `flow` choice instead"
         )
@@ -109214,6 +109260,7 @@ class HttpApi(Api):
 
         Return: warning
         """
+        log.info("Executing set_route_state")
         self.add_warnings(
             "set_route_state api is deprecated, Please use `set_control_state` with `protocol.route` choice instead"
         )
@@ -109232,6 +109279,7 @@ class HttpApi(Api):
 
         Return: ping_response
         """
+        log.info("Executing send_ping")
         self.add_warnings(
             "send_ping api is deprecated, Please use `set_control_action` with `protocol.ipv*.ping` choice instead"
         )
@@ -109250,6 +109298,7 @@ class HttpApi(Api):
 
         Return: warning
         """
+        log.info("Executing set_protocol_state")
         self.add_warnings(
             "set_protocol_state api is deprecated, Please use `set_control_state` with `protocol.all` choice instead"
         )
@@ -109268,6 +109317,7 @@ class HttpApi(Api):
 
         Return: warning
         """
+        log.info("Executing set_device_state")
         self.add_warnings(
             "set_device_state api is deprecated, Please use `set_control_state` with `protocol` choice instead"
         )
@@ -109286,6 +109336,7 @@ class HttpApi(Api):
 
         Return: metrics_response
         """
+        log.info("Executing get_metrics")
         self._do_version_check_once()
         return self._transport.send_recv(
             "post",
@@ -109301,6 +109352,7 @@ class HttpApi(Api):
 
         Return: states_response
         """
+        log.info("Executing get_states")
         self._do_version_check_once()
         return self._transport.send_recv(
             "post",
@@ -109316,6 +109368,7 @@ class HttpApi(Api):
 
         Return: None
         """
+        log.info("Executing get_capture")
         self._do_version_check_once()
         return self._transport.send_recv(
             "post",
@@ -109331,6 +109384,7 @@ class HttpApi(Api):
 
         Return: version
         """
+        log.info("Executing get_version")
         return self._transport.send_recv(
             "get",
             "/capabilities/version",
@@ -109353,19 +109407,7 @@ class GrpcApi(Api):
             else "localhost:50051"
         )
         self._transport = kwargs["transport"] if "transport" in kwargs else None
-        self._logger = kwargs["logger"] if "logger" in kwargs else None
-        self._loglevel = kwargs["loglevel"] if "loglevel" in kwargs else logging.DEBUG
-        if self._logger is None:
-            stdout_handler = logging.StreamHandler(sys.stdout)
-            formatter = logging.Formatter(
-                fmt="%(asctime)s [%(name)s] [%(levelname)s] %(message)s",
-                datefmt="%Y-%m-%d %H:%M:%S",
-            )
-            formatter.converter = time.gmtime
-            stdout_handler.setFormatter(formatter)
-            self._logger = logging.Logger(self.__module__, level=self._loglevel)
-            self._logger.addHandler(stdout_handler)
-        self._logger.debug(
+        log.debug(
             "gRPCTransport args: {}".format(
                 ", ".join(["{}={!r}".format(k, v) for k, v in kwargs.items()])
             )
@@ -109425,6 +109467,8 @@ class GrpcApi(Api):
             self._stub = None
 
     def set_config(self, payload):
+        log.info("Executing set_config")
+        log.debug("Request payload - " + str(payload))
         pb_obj = json_format.Parse(self._serialize_payload(payload), pb2.Config())
         self._do_version_check_once()
         req_obj = pb2.SetConfigRequest(config=pb_obj)
@@ -109434,6 +109478,7 @@ class GrpcApi(Api):
         except grpc.RpcError as grpc_error:
             self._raise_exception(grpc_error)
         response = json_format.MessageToDict(res_obj, preserving_proto_field_name=True)
+        log.debug("Response - " + str(response))
         result = response.get("warning")
         if result is not None:
             if len(result) == 0:
@@ -109445,15 +109490,19 @@ class GrpcApi(Api):
             return self.warning().deserialize(result)
 
     def get_config(self):
+        log.info("Executing get_config")
         stub = self._get_stub()
         empty = pb2_grpc.google_dot_protobuf_dot_empty__pb2.Empty()
         res_obj = stub.GetConfig(empty, timeout=self._request_timeout)
         response = json_format.MessageToDict(res_obj, preserving_proto_field_name=True)
+        log.debug("Response - " + str(response))
         result = response.get("config")
         if result is not None:
             return self.config().deserialize(result)
 
     def update_config(self, payload):
+        log.info("Executing update_config")
+        log.debug("Request payload - " + str(payload))
         pb_obj = json_format.Parse(self._serialize_payload(payload), pb2.ConfigUpdate())
         self._do_version_check_once()
         req_obj = pb2.UpdateConfigRequest(config_update=pb_obj)
@@ -109463,6 +109512,7 @@ class GrpcApi(Api):
         except grpc.RpcError as grpc_error:
             self._raise_exception(grpc_error)
         response = json_format.MessageToDict(res_obj, preserving_proto_field_name=True)
+        log.debug("Response - " + str(response))
         result = response.get("warning")
         if result is not None:
             if len(result) == 0:
@@ -109474,6 +109524,8 @@ class GrpcApi(Api):
             return self.warning().deserialize(result)
 
     def set_control_state(self, payload):
+        log.info("Executing set_control_state")
+        log.debug("Request payload - " + str(payload))
         pb_obj = json_format.Parse(self._serialize_payload(payload), pb2.ControlState())
         self._do_version_check_once()
         req_obj = pb2.SetControlStateRequest(control_state=pb_obj)
@@ -109483,6 +109535,7 @@ class GrpcApi(Api):
         except grpc.RpcError as grpc_error:
             self._raise_exception(grpc_error)
         response = json_format.MessageToDict(res_obj, preserving_proto_field_name=True)
+        log.debug("Response - " + str(response))
         result = response.get("warning")
         if result is not None:
             if len(result) == 0:
@@ -109494,6 +109547,8 @@ class GrpcApi(Api):
             return self.warning().deserialize(result)
 
     def set_control_action(self, payload):
+        log.info("Executing set_control_action")
+        log.debug("Request payload - " + str(payload))
         pb_obj = json_format.Parse(
             self._serialize_payload(payload), pb2.ControlAction()
         )
@@ -109505,6 +109560,7 @@ class GrpcApi(Api):
         except grpc.RpcError as grpc_error:
             self._raise_exception(grpc_error)
         response = json_format.MessageToDict(res_obj, preserving_proto_field_name=True)
+        log.debug("Response - " + str(response))
         result = response.get("control_action_response")
         if result is not None:
             if len(result) == 0:
@@ -109516,6 +109572,8 @@ class GrpcApi(Api):
             return self.control_action_response().deserialize(result)
 
     def set_transmit_state(self, payload):
+        log.info("Executing set_transmit_state")
+        log.debug("Request payload - " + str(payload))
         self.add_warnings(
             "set_transmit_state api is deprecated, Please use `set_control_state` with `traffic.flow_transmit` choice instead"
         )
@@ -109530,6 +109588,7 @@ class GrpcApi(Api):
         except grpc.RpcError as grpc_error:
             self._raise_exception(grpc_error)
         response = json_format.MessageToDict(res_obj, preserving_proto_field_name=True)
+        log.debug("Response - " + str(response))
         result = response.get("warning")
         if result is not None:
             if len(result) == 0:
@@ -109541,6 +109600,8 @@ class GrpcApi(Api):
             return self.warning().deserialize(result)
 
     def set_link_state(self, payload):
+        log.info("Executing set_link_state")
+        log.debug("Request payload - " + str(payload))
         self.add_warnings(
             "set_link_state api is deprecated, Please use `set_control_state` with `port.link` choice instead"
         )
@@ -109553,6 +109614,7 @@ class GrpcApi(Api):
         except grpc.RpcError as grpc_error:
             self._raise_exception(grpc_error)
         response = json_format.MessageToDict(res_obj, preserving_proto_field_name=True)
+        log.debug("Response - " + str(response))
         result = response.get("warning")
         if result is not None:
             if len(result) == 0:
@@ -109564,6 +109626,8 @@ class GrpcApi(Api):
             return self.warning().deserialize(result)
 
     def set_capture_state(self, payload):
+        log.info("Executing set_capture_state")
+        log.debug("Request payload - " + str(payload))
         self.add_warnings(
             "set_capture_state api is deprecated, Please use `set_control_state` with `port.capture` choice instead"
         )
@@ -109576,6 +109640,7 @@ class GrpcApi(Api):
         except grpc.RpcError as grpc_error:
             self._raise_exception(grpc_error)
         response = json_format.MessageToDict(res_obj, preserving_proto_field_name=True)
+        log.debug("Response - " + str(response))
         result = response.get("warning")
         if result is not None:
             if len(result) == 0:
@@ -109587,6 +109652,8 @@ class GrpcApi(Api):
             return self.warning().deserialize(result)
 
     def update_flows(self, payload):
+        log.info("Executing update_flows")
+        log.debug("Request payload - " + str(payload))
         self.add_warnings(
             "update_flows api is deprecated, Please use `update_config` with `flow` choice instead"
         )
@@ -109599,11 +109666,14 @@ class GrpcApi(Api):
         except grpc.RpcError as grpc_error:
             self._raise_exception(grpc_error)
         response = json_format.MessageToDict(res_obj, preserving_proto_field_name=True)
+        log.debug("Response - " + str(response))
         result = response.get("config")
         if result is not None:
             return self.config().deserialize(result)
 
     def set_route_state(self, payload):
+        log.info("Executing set_route_state")
+        log.debug("Request payload - " + str(payload))
         self.add_warnings(
             "set_route_state api is deprecated, Please use `set_control_state` with `protocol.route` choice instead"
         )
@@ -109616,6 +109686,7 @@ class GrpcApi(Api):
         except grpc.RpcError as grpc_error:
             self._raise_exception(grpc_error)
         response = json_format.MessageToDict(res_obj, preserving_proto_field_name=True)
+        log.debug("Response - " + str(response))
         result = response.get("warning")
         if result is not None:
             if len(result) == 0:
@@ -109627,6 +109698,8 @@ class GrpcApi(Api):
             return self.warning().deserialize(result)
 
     def send_ping(self, payload):
+        log.info("Executing send_ping")
+        log.debug("Request payload - " + str(payload))
         self.add_warnings(
             "send_ping api is deprecated, Please use `set_control_action` with `protocol.ipv*.ping` choice instead"
         )
@@ -109639,11 +109712,14 @@ class GrpcApi(Api):
         except grpc.RpcError as grpc_error:
             self._raise_exception(grpc_error)
         response = json_format.MessageToDict(res_obj, preserving_proto_field_name=True)
+        log.debug("Response - " + str(response))
         result = response.get("ping_response")
         if result is not None:
             return self.ping_response().deserialize(result)
 
     def set_protocol_state(self, payload):
+        log.info("Executing set_protocol_state")
+        log.debug("Request payload - " + str(payload))
         self.add_warnings(
             "set_protocol_state api is deprecated, Please use `set_control_state` with `protocol.all` choice instead"
         )
@@ -109658,6 +109734,7 @@ class GrpcApi(Api):
         except grpc.RpcError as grpc_error:
             self._raise_exception(grpc_error)
         response = json_format.MessageToDict(res_obj, preserving_proto_field_name=True)
+        log.debug("Response - " + str(response))
         result = response.get("warning")
         if result is not None:
             if len(result) == 0:
@@ -109669,6 +109746,8 @@ class GrpcApi(Api):
             return self.warning().deserialize(result)
 
     def set_device_state(self, payload):
+        log.info("Executing set_device_state")
+        log.debug("Request payload - " + str(payload))
         self.add_warnings(
             "set_device_state api is deprecated, Please use `set_control_state` with `protocol` choice instead"
         )
@@ -109681,6 +109760,7 @@ class GrpcApi(Api):
         except grpc.RpcError as grpc_error:
             self._raise_exception(grpc_error)
         response = json_format.MessageToDict(res_obj, preserving_proto_field_name=True)
+        log.debug("Response - " + str(response))
         result = response.get("warning")
         if result is not None:
             if len(result) == 0:
@@ -109692,6 +109772,8 @@ class GrpcApi(Api):
             return self.warning().deserialize(result)
 
     def get_metrics(self, payload):
+        log.info("Executing get_metrics")
+        log.debug("Request payload - " + str(payload))
         pb_obj = json_format.Parse(
             self._serialize_payload(payload), pb2.MetricsRequest()
         )
@@ -109703,11 +109785,14 @@ class GrpcApi(Api):
         except grpc.RpcError as grpc_error:
             self._raise_exception(grpc_error)
         response = json_format.MessageToDict(res_obj, preserving_proto_field_name=True)
+        log.debug("Response - " + str(response))
         result = response.get("metrics_response")
         if result is not None:
             return self.metrics_response().deserialize(result)
 
     def get_states(self, payload):
+        log.info("Executing get_states")
+        log.debug("Request payload - " + str(payload))
         pb_obj = json_format.Parse(
             self._serialize_payload(payload), pb2.StatesRequest()
         )
@@ -109719,11 +109804,14 @@ class GrpcApi(Api):
         except grpc.RpcError as grpc_error:
             self._raise_exception(grpc_error)
         response = json_format.MessageToDict(res_obj, preserving_proto_field_name=True)
+        log.debug("Response - " + str(response))
         result = response.get("states_response")
         if result is not None:
             return self.states_response().deserialize(result)
 
     def get_capture(self, payload):
+        log.info("Executing get_capture")
+        log.debug("Request payload - " + str(payload))
         pb_obj = json_format.Parse(
             self._serialize_payload(payload), pb2.CaptureRequest()
         )
@@ -109735,15 +109823,18 @@ class GrpcApi(Api):
         except grpc.RpcError as grpc_error:
             self._raise_exception(grpc_error)
         response = json_format.MessageToDict(res_obj, preserving_proto_field_name=True)
+        log.debug("Response - " + str(response))
         bytes = response.get("response_bytes")
         if bytes is not None:
             return io.BytesIO(res_obj.response_bytes)
 
     def get_version(self):
+        log.info("Executing get_version")
         stub = self._get_stub()
         empty = pb2_grpc.google_dot_protobuf_dot_empty__pb2.Empty()
         res_obj = stub.GetVersion(empty, timeout=self._request_timeout)
         response = json_format.MessageToDict(res_obj, preserving_proto_field_name=True)
+        log.debug("Response - " + str(response))
         result = response.get("version")
         if result is not None:
             return self.version().deserialize(result)
