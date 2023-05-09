@@ -22,6 +22,7 @@ import (
 type telemetry struct {
 	transport     string
 	endpoint      string
+	serviceName   string
 	rootCtx       context.Context
 	spanProcessor sdktrace.SpanProcessor
 	traceProvider *sdktrace.TracerProvider
@@ -35,6 +36,7 @@ type Telemetry interface {
 	WithExporterEndPoint(endpoint string) Telemetry
 	WithRootContext(ctx context.Context) Telemetry
 	WithCustomSpanProcess(spanProcessor sdktrace.SpanProcessor) Telemetry
+	WithServiceName(serviceName string) Telemetry
 	Start() (Telemetry, error)
 	Stop()
 	NewSpan(ctx context.Context, name string) (context.Context, trace.Span)
@@ -103,6 +105,12 @@ func (t *telemetry) WithCustomSpanProcess(spanProcessor sdktrace.SpanProcessor) 
 	return t
 }
 
+// Gives ability to the user to set name for the OTLP service
+func (t *telemetry) WithServiceName(serviceName string) Telemetry {
+	t.serviceName = serviceName
+	return t
+}
+
 // Initiates the trace provider with proper resources, exporter information
 // and span processors
 func (t *telemetry) Start() (Telemetry, error) {
@@ -155,8 +163,8 @@ func (t *telemetry) Start() (Telemetry, error) {
 		resources, err := resource.New(
 			context.Background(),
 			resource.WithAttributes(
-				attribute.String("service.name", "go-snappi"),
-				attribute.String("application", "go-snappi"),
+				attribute.String("service.name", t.serviceName),
+				attribute.String("application", t.serviceName),
 			),
 		)
 
@@ -200,9 +208,9 @@ func (t *telemetry) Start() (Telemetry, error) {
 func (t *telemetry) Stop() {
 	if t.isOTLPEnabled() {
 		if err := t.traceProvider.Shutdown(context.Background()); err != nil {
-			fmt.Println("Failed shutting down trace provider")
+			GlobalLogger.Error().Msg("Failed shutting down trace provider")
 		}
-		fmt.Println("shut down successful !!!!")
+		GlobalLogger.Info().Msg("shut down successful !!!!")
 	}
 }
 
