@@ -64,6 +64,8 @@ def api(
     loglevel=logging.INFO,
     ext=None,
     version_check=False,
+    telemetry_collector_endpoint=None,
+    telemetry_collector_transport="http",
 ):
     """Create an instance of an Api class
 
@@ -101,6 +103,14 @@ def api(
 
     if version_check is False:
         log.warning("Version check is disabled")
+
+    if telemetry_collector_endpoint is not None:
+        if sys.version_info[0] == 3 and sys.version_info[1] >= 7:
+            log.info("Telemetry feature enabled")
+        else:
+            raise Exception(
+                "Telemetry feature is only available for python version >= 3.7"
+            )
 
     transport_types = ["http", "grpc"]
     if ext is None:
@@ -1101,6 +1111,95 @@ class OpenApiIter(OpenApiBase):
 
     def _instanceOf(self, item):
         raise NotImplementedError("validating an OpenApiIter object is not supported")
+
+
+class Telemetry(object):
+    def __init__(self, endpoint, transport):
+        self.transport = transport
+        self.endpoint = endpoint
+        self.is_telemetry_enabled = False
+        self._tracer = None
+        self._trace_provider = None
+        self._resource = None
+        self._batch_span_processor = None
+        self._trace = None
+        self._http_exporter = None
+        self._grpc_exporter = None
+        self._http_instrumentor = None
+        self._grpc_instrumentor = None
+        if self.endpoint is not None:
+            self.is_telemetry_enabled = True
+            self._initiate_tracer()
+
+    def _initiate_tracer(self):
+        import warnings
+
+        warnings.filterwarnings("ignore", category=DeprecationWarning)
+        self._trace = importlib.import_module("opentelemetry.trace")
+        self._trace_provider = importlib.import_module("opentelemetry.sdk.trace")
+        self._trace_provider = getattr(self._trace_provider, "TracerProvider")
+        self._resource = importlib.import_module("opentelemetry.sdk.resources")
+        self._resource = getattr(self._resource, "Resource")
+        self._batch_span_processor = importlib.import_module(
+            "opentelemetry.sdk.trace.export"
+        )
+        self._batch_span_processor = getattr(
+            self._batch_span_processor, "BatchSpanProcessor"
+        )
+        self._grpc_exporter = importlib.import_module(
+            "opentelemetry.exporter.otlp.proto.grpc.trace_exporter"
+        )
+        self._grpc_exporter = getattr(self._grpc_exporter, "OTLPSpanExporter")
+        self._http_exporter = importlib.import_module(
+            "opentelemetry.exporter.otlp.proto.http.trace_exporter"
+        )
+        self._http_exporter = getattr(self._http_exporter, "OTLPSpanExporter")
+
+        provider = self._trace_provider(
+            resource=self._resource.create({"service.name": "snappi"})
+        )
+        self._trace.set_tracer_provider(provider)
+        if self.transport == "http":
+            otlp_exporter = self._http_exporter(endpoint=self.endpoint)
+        else:
+            otlp_exporter = self._grpc_exporter(endpoint=self.endpoint, insecure=True)
+        span_processor = self._batch_span_processor(otlp_exporter)
+        provider.add_span_processor(span_processor)
+        tracer = self._trace.get_tracer(__name__)
+        self._tracer = tracer
+
+    def initiate_http_instrumentation(self):
+        if self.is_telemetry_enabled:
+            from opentelemetry.instrumentation.requests import (
+                RequestsInstrumentor,
+            )
+
+            RequestsInstrumentor().instrument()
+
+    def initiate_grpc_instrumentation(self):
+        if self.is_telemetry_enabled:
+            from opentelemetry.instrumentation.grpc import (
+                GrpcInstrumentorClient,
+            )
+
+            GrpcInstrumentorClient().instrument()
+
+    def set_span_event(self, message):
+        if self.is_telemetry_enabled:
+            current_span = self._trace.get_current_span()
+            current_span.add_event(message)
+
+    @staticmethod
+    def create_child_span(func):
+        def tracing(self, *args, **kwargs):
+            if self._telemetry.is_telemetry_enabled:
+                name = func.__name__
+                with self.tracer().start_as_current_span(name):
+                    return func(self, *args, **kwargs)
+            else:
+                return func(self, *args, **kwargs)
+
+        return tracing
 
 
 class Config(OpenApiObject):
@@ -108657,6 +108756,12 @@ class Api(object):
         if self._version_check is None:
             self._version_check = False
         self._version_check_err = None
+        endpoint = kwargs.get("telemetry_collector_endpoint")
+        transport = kwargs.get("telemetry_collector_transport")
+        self._telemetry = Telemetry(endpoint, transport)
+
+    def tracer(self):
+        return self._telemetry._tracer
 
     def add_warnings(self, msg):
         print("[WARNING]: %s" % msg)
@@ -109088,6 +109193,7 @@ class HttpApi(Api):
     def __init__(self, **kwargs):
         super(HttpApi, self).__init__(**kwargs)
         self._transport = HttpTransport(**kwargs)
+        self._telemetry.initiate_http_instrumentation()
 
     @property
     def verify(self):
@@ -109097,6 +109203,7 @@ class HttpApi(Api):
     def verify(self, value):
         self._transport.set_verify(value)
 
+    @Telemetry.create_child_span
     def set_config(self, payload):
         """POST /config
 
@@ -109113,6 +109220,7 @@ class HttpApi(Api):
             return_object=self.warning(),
         )
 
+    @Telemetry.create_child_span
     def get_config(self):
         """GET /config
 
@@ -109129,6 +109237,7 @@ class HttpApi(Api):
             return_object=self.config(),
         )
 
+    @Telemetry.create_child_span
     def update_config(self, payload):
         """PATCH /config
 
@@ -109145,6 +109254,7 @@ class HttpApi(Api):
             return_object=self.warning(),
         )
 
+    @Telemetry.create_child_span
     def set_control_state(self, payload):
         """POST /control/state
 
@@ -109161,6 +109271,7 @@ class HttpApi(Api):
             return_object=self.warning(),
         )
 
+    @Telemetry.create_child_span
     def set_control_action(self, payload):
         """POST /control/action
 
@@ -109177,6 +109288,7 @@ class HttpApi(Api):
             return_object=self.control_action_response(),
         )
 
+    @Telemetry.create_child_span
     def set_transmit_state(self, payload):
         """POST /control/transmit
 
@@ -109196,6 +109308,7 @@ class HttpApi(Api):
             return_object=self.warning(),
         )
 
+    @Telemetry.create_child_span
     def set_link_state(self, payload):
         """POST /control/link
 
@@ -109215,6 +109328,7 @@ class HttpApi(Api):
             return_object=self.warning(),
         )
 
+    @Telemetry.create_child_span
     def set_capture_state(self, payload):
         """POST /control/capture
 
@@ -109234,6 +109348,7 @@ class HttpApi(Api):
             return_object=self.warning(),
         )
 
+    @Telemetry.create_child_span
     def update_flows(self, payload):
         """POST /control/flows
 
@@ -109253,6 +109368,7 @@ class HttpApi(Api):
             return_object=self.config(),
         )
 
+    @Telemetry.create_child_span
     def set_route_state(self, payload):
         """POST /control/routes
 
@@ -109272,6 +109388,7 @@ class HttpApi(Api):
             return_object=self.warning(),
         )
 
+    @Telemetry.create_child_span
     def send_ping(self, payload):
         """POST /control/ping
 
@@ -109291,6 +109408,7 @@ class HttpApi(Api):
             return_object=self.ping_response(),
         )
 
+    @Telemetry.create_child_span
     def set_protocol_state(self, payload):
         """POST /control/protocols
 
@@ -109310,6 +109428,7 @@ class HttpApi(Api):
             return_object=self.warning(),
         )
 
+    @Telemetry.create_child_span
     def set_device_state(self, payload):
         """POST /control/devices
 
@@ -109329,6 +109448,7 @@ class HttpApi(Api):
             return_object=self.warning(),
         )
 
+    @Telemetry.create_child_span
     def get_metrics(self, payload):
         """POST /monitor/metrics
 
@@ -109345,6 +109465,7 @@ class HttpApi(Api):
             return_object=self.metrics_response(),
         )
 
+    @Telemetry.create_child_span
     def get_states(self, payload):
         """POST /monitor/states
 
@@ -109361,6 +109482,7 @@ class HttpApi(Api):
             return_object=self.states_response(),
         )
 
+    @Telemetry.create_child_span
     def get_capture(self, payload):
         """POST /monitor/capture
 
@@ -109377,6 +109499,7 @@ class HttpApi(Api):
             return_object=None,
         )
 
+    @Telemetry.create_child_span
     def get_version(self):
         """GET /capabilities/version
 
@@ -109412,6 +109535,7 @@ class GrpcApi(Api):
                 ", ".join(["{}={!r}".format(k, v) for k, v in kwargs.items()])
             )
         )
+        self._telemetry.initiate_grpc_instrumentation()
 
     def _get_stub(self):
         if self._stub is None:
@@ -109466,9 +109590,11 @@ class GrpcApi(Api):
             self._channel = None
             self._stub = None
 
+    @Telemetry.create_child_span
     def set_config(self, payload):
         log.info("Executing set_config")
         log.debug("Request payload - " + str(payload))
+        self._telemetry.set_span_event("REQUEST: %s" % str(payload))
         pb_obj = json_format.Parse(self._serialize_payload(payload), pb2.Config())
         self._do_version_check_once()
         req_obj = pb2.SetConfigRequest(config=pb_obj)
@@ -109479,6 +109605,7 @@ class GrpcApi(Api):
             self._raise_exception(grpc_error)
         response = json_format.MessageToDict(res_obj, preserving_proto_field_name=True)
         log.debug("Response - " + str(response))
+        self._telemetry.set_span_event("RESPONSE: %s" % str(response))
         result = response.get("warning")
         if result is not None:
             if len(result) == 0:
@@ -109489,6 +109616,7 @@ class GrpcApi(Api):
                 )
             return self.warning().deserialize(result)
 
+    @Telemetry.create_child_span
     def get_config(self):
         log.info("Executing get_config")
         stub = self._get_stub()
@@ -109496,13 +109624,16 @@ class GrpcApi(Api):
         res_obj = stub.GetConfig(empty, timeout=self._request_timeout)
         response = json_format.MessageToDict(res_obj, preserving_proto_field_name=True)
         log.debug("Response - " + str(response))
+        self._telemetry.set_span_event("RESPONSE: %s" % str(response))
         result = response.get("config")
         if result is not None:
             return self.config().deserialize(result)
 
+    @Telemetry.create_child_span
     def update_config(self, payload):
         log.info("Executing update_config")
         log.debug("Request payload - " + str(payload))
+        self._telemetry.set_span_event("REQUEST: %s" % str(payload))
         pb_obj = json_format.Parse(self._serialize_payload(payload), pb2.ConfigUpdate())
         self._do_version_check_once()
         req_obj = pb2.UpdateConfigRequest(config_update=pb_obj)
@@ -109513,6 +109644,7 @@ class GrpcApi(Api):
             self._raise_exception(grpc_error)
         response = json_format.MessageToDict(res_obj, preserving_proto_field_name=True)
         log.debug("Response - " + str(response))
+        self._telemetry.set_span_event("RESPONSE: %s" % str(response))
         result = response.get("warning")
         if result is not None:
             if len(result) == 0:
@@ -109523,9 +109655,11 @@ class GrpcApi(Api):
                 )
             return self.warning().deserialize(result)
 
+    @Telemetry.create_child_span
     def set_control_state(self, payload):
         log.info("Executing set_control_state")
         log.debug("Request payload - " + str(payload))
+        self._telemetry.set_span_event("REQUEST: %s" % str(payload))
         pb_obj = json_format.Parse(self._serialize_payload(payload), pb2.ControlState())
         self._do_version_check_once()
         req_obj = pb2.SetControlStateRequest(control_state=pb_obj)
@@ -109536,6 +109670,7 @@ class GrpcApi(Api):
             self._raise_exception(grpc_error)
         response = json_format.MessageToDict(res_obj, preserving_proto_field_name=True)
         log.debug("Response - " + str(response))
+        self._telemetry.set_span_event("RESPONSE: %s" % str(response))
         result = response.get("warning")
         if result is not None:
             if len(result) == 0:
@@ -109546,9 +109681,11 @@ class GrpcApi(Api):
                 )
             return self.warning().deserialize(result)
 
+    @Telemetry.create_child_span
     def set_control_action(self, payload):
         log.info("Executing set_control_action")
         log.debug("Request payload - " + str(payload))
+        self._telemetry.set_span_event("REQUEST: %s" % str(payload))
         pb_obj = json_format.Parse(
             self._serialize_payload(payload), pb2.ControlAction()
         )
@@ -109561,6 +109698,7 @@ class GrpcApi(Api):
             self._raise_exception(grpc_error)
         response = json_format.MessageToDict(res_obj, preserving_proto_field_name=True)
         log.debug("Response - " + str(response))
+        self._telemetry.set_span_event("RESPONSE: %s" % str(response))
         result = response.get("control_action_response")
         if result is not None:
             if len(result) == 0:
@@ -109571,9 +109709,11 @@ class GrpcApi(Api):
                 )
             return self.control_action_response().deserialize(result)
 
+    @Telemetry.create_child_span
     def set_transmit_state(self, payload):
         log.info("Executing set_transmit_state")
         log.debug("Request payload - " + str(payload))
+        self._telemetry.set_span_event("REQUEST: %s" % str(payload))
         self.add_warnings(
             "set_transmit_state api is deprecated, Please use `set_control_state` with `traffic.flow_transmit` choice instead"
         )
@@ -109589,6 +109729,7 @@ class GrpcApi(Api):
             self._raise_exception(grpc_error)
         response = json_format.MessageToDict(res_obj, preserving_proto_field_name=True)
         log.debug("Response - " + str(response))
+        self._telemetry.set_span_event("RESPONSE: %s" % str(response))
         result = response.get("warning")
         if result is not None:
             if len(result) == 0:
@@ -109599,9 +109740,11 @@ class GrpcApi(Api):
                 )
             return self.warning().deserialize(result)
 
+    @Telemetry.create_child_span
     def set_link_state(self, payload):
         log.info("Executing set_link_state")
         log.debug("Request payload - " + str(payload))
+        self._telemetry.set_span_event("REQUEST: %s" % str(payload))
         self.add_warnings(
             "set_link_state api is deprecated, Please use `set_control_state` with `port.link` choice instead"
         )
@@ -109615,6 +109758,7 @@ class GrpcApi(Api):
             self._raise_exception(grpc_error)
         response = json_format.MessageToDict(res_obj, preserving_proto_field_name=True)
         log.debug("Response - " + str(response))
+        self._telemetry.set_span_event("RESPONSE: %s" % str(response))
         result = response.get("warning")
         if result is not None:
             if len(result) == 0:
@@ -109625,9 +109769,11 @@ class GrpcApi(Api):
                 )
             return self.warning().deserialize(result)
 
+    @Telemetry.create_child_span
     def set_capture_state(self, payload):
         log.info("Executing set_capture_state")
         log.debug("Request payload - " + str(payload))
+        self._telemetry.set_span_event("REQUEST: %s" % str(payload))
         self.add_warnings(
             "set_capture_state api is deprecated, Please use `set_control_state` with `port.capture` choice instead"
         )
@@ -109641,6 +109787,7 @@ class GrpcApi(Api):
             self._raise_exception(grpc_error)
         response = json_format.MessageToDict(res_obj, preserving_proto_field_name=True)
         log.debug("Response - " + str(response))
+        self._telemetry.set_span_event("RESPONSE: %s" % str(response))
         result = response.get("warning")
         if result is not None:
             if len(result) == 0:
@@ -109651,9 +109798,11 @@ class GrpcApi(Api):
                 )
             return self.warning().deserialize(result)
 
+    @Telemetry.create_child_span
     def update_flows(self, payload):
         log.info("Executing update_flows")
         log.debug("Request payload - " + str(payload))
+        self._telemetry.set_span_event("REQUEST: %s" % str(payload))
         self.add_warnings(
             "update_flows api is deprecated, Please use `update_config` with `flow` choice instead"
         )
@@ -109667,13 +109816,16 @@ class GrpcApi(Api):
             self._raise_exception(grpc_error)
         response = json_format.MessageToDict(res_obj, preserving_proto_field_name=True)
         log.debug("Response - " + str(response))
+        self._telemetry.set_span_event("RESPONSE: %s" % str(response))
         result = response.get("config")
         if result is not None:
             return self.config().deserialize(result)
 
+    @Telemetry.create_child_span
     def set_route_state(self, payload):
         log.info("Executing set_route_state")
         log.debug("Request payload - " + str(payload))
+        self._telemetry.set_span_event("REQUEST: %s" % str(payload))
         self.add_warnings(
             "set_route_state api is deprecated, Please use `set_control_state` with `protocol.route` choice instead"
         )
@@ -109687,6 +109839,7 @@ class GrpcApi(Api):
             self._raise_exception(grpc_error)
         response = json_format.MessageToDict(res_obj, preserving_proto_field_name=True)
         log.debug("Response - " + str(response))
+        self._telemetry.set_span_event("RESPONSE: %s" % str(response))
         result = response.get("warning")
         if result is not None:
             if len(result) == 0:
@@ -109697,9 +109850,11 @@ class GrpcApi(Api):
                 )
             return self.warning().deserialize(result)
 
+    @Telemetry.create_child_span
     def send_ping(self, payload):
         log.info("Executing send_ping")
         log.debug("Request payload - " + str(payload))
+        self._telemetry.set_span_event("REQUEST: %s" % str(payload))
         self.add_warnings(
             "send_ping api is deprecated, Please use `set_control_action` with `protocol.ipv*.ping` choice instead"
         )
@@ -109713,13 +109868,16 @@ class GrpcApi(Api):
             self._raise_exception(grpc_error)
         response = json_format.MessageToDict(res_obj, preserving_proto_field_name=True)
         log.debug("Response - " + str(response))
+        self._telemetry.set_span_event("RESPONSE: %s" % str(response))
         result = response.get("ping_response")
         if result is not None:
             return self.ping_response().deserialize(result)
 
+    @Telemetry.create_child_span
     def set_protocol_state(self, payload):
         log.info("Executing set_protocol_state")
         log.debug("Request payload - " + str(payload))
+        self._telemetry.set_span_event("REQUEST: %s" % str(payload))
         self.add_warnings(
             "set_protocol_state api is deprecated, Please use `set_control_state` with `protocol.all` choice instead"
         )
@@ -109735,6 +109893,7 @@ class GrpcApi(Api):
             self._raise_exception(grpc_error)
         response = json_format.MessageToDict(res_obj, preserving_proto_field_name=True)
         log.debug("Response - " + str(response))
+        self._telemetry.set_span_event("RESPONSE: %s" % str(response))
         result = response.get("warning")
         if result is not None:
             if len(result) == 0:
@@ -109745,9 +109904,11 @@ class GrpcApi(Api):
                 )
             return self.warning().deserialize(result)
 
+    @Telemetry.create_child_span
     def set_device_state(self, payload):
         log.info("Executing set_device_state")
         log.debug("Request payload - " + str(payload))
+        self._telemetry.set_span_event("REQUEST: %s" % str(payload))
         self.add_warnings(
             "set_device_state api is deprecated, Please use `set_control_state` with `protocol` choice instead"
         )
@@ -109761,6 +109922,7 @@ class GrpcApi(Api):
             self._raise_exception(grpc_error)
         response = json_format.MessageToDict(res_obj, preserving_proto_field_name=True)
         log.debug("Response - " + str(response))
+        self._telemetry.set_span_event("RESPONSE: %s" % str(response))
         result = response.get("warning")
         if result is not None:
             if len(result) == 0:
@@ -109771,9 +109933,11 @@ class GrpcApi(Api):
                 )
             return self.warning().deserialize(result)
 
+    @Telemetry.create_child_span
     def get_metrics(self, payload):
         log.info("Executing get_metrics")
         log.debug("Request payload - " + str(payload))
+        self._telemetry.set_span_event("REQUEST: %s" % str(payload))
         pb_obj = json_format.Parse(
             self._serialize_payload(payload), pb2.MetricsRequest()
         )
@@ -109786,13 +109950,16 @@ class GrpcApi(Api):
             self._raise_exception(grpc_error)
         response = json_format.MessageToDict(res_obj, preserving_proto_field_name=True)
         log.debug("Response - " + str(response))
+        self._telemetry.set_span_event("RESPONSE: %s" % str(response))
         result = response.get("metrics_response")
         if result is not None:
             return self.metrics_response().deserialize(result)
 
+    @Telemetry.create_child_span
     def get_states(self, payload):
         log.info("Executing get_states")
         log.debug("Request payload - " + str(payload))
+        self._telemetry.set_span_event("REQUEST: %s" % str(payload))
         pb_obj = json_format.Parse(
             self._serialize_payload(payload), pb2.StatesRequest()
         )
@@ -109805,13 +109972,16 @@ class GrpcApi(Api):
             self._raise_exception(grpc_error)
         response = json_format.MessageToDict(res_obj, preserving_proto_field_name=True)
         log.debug("Response - " + str(response))
+        self._telemetry.set_span_event("RESPONSE: %s" % str(response))
         result = response.get("states_response")
         if result is not None:
             return self.states_response().deserialize(result)
 
+    @Telemetry.create_child_span
     def get_capture(self, payload):
         log.info("Executing get_capture")
         log.debug("Request payload - " + str(payload))
+        self._telemetry.set_span_event("REQUEST: %s" % str(payload))
         pb_obj = json_format.Parse(
             self._serialize_payload(payload), pb2.CaptureRequest()
         )
@@ -109824,10 +109994,12 @@ class GrpcApi(Api):
             self._raise_exception(grpc_error)
         response = json_format.MessageToDict(res_obj, preserving_proto_field_name=True)
         log.debug("Response - " + str(response))
+        self._telemetry.set_span_event("RESPONSE: %s" % str(response))
         bytes = response.get("response_bytes")
         if bytes is not None:
             return io.BytesIO(res_obj.response_bytes)
 
+    @Telemetry.create_child_span
     def get_version(self):
         log.info("Executing get_version")
         stub = self._get_stub()
@@ -109835,6 +110007,7 @@ class GrpcApi(Api):
         res_obj = stub.GetVersion(empty, timeout=self._request_timeout)
         response = json_format.MessageToDict(res_obj, preserving_proto_field_name=True)
         log.debug("Response - " + str(response))
+        self._telemetry.set_span_event("RESPONSE: %s" % str(response))
         result = response.get("version")
         if result is not None:
             return self.version().deserialize(result)
