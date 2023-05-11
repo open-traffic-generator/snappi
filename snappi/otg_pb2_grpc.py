@@ -162,6 +162,8 @@ class OpenapiServicer(object):
     def SetTransmitState(self, request, context):
         """Deprecated: Please use `set_control_state` with `traffic.flow_transmit` choice instead
 
+        Deprecated: Please use `set_control_state` with `traffic.flow_transmit` choice instead
+
         Updates the state of configuration resources on the traffic generator.
         The Response.Warnings in the Success response is available for implementers to disclose
         additional information about a state change including any implicit changes that are
@@ -174,6 +176,8 @@ class OpenapiServicer(object):
     def SetLinkState(self, request, context):
         """Deprecated: Please use `set_control_state` with `port.link` choice instead
 
+        Deprecated: Please use `set_control_state` with `port.link` choice instead
+
         Updates the state of configuration resources on the traffic generator.
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
@@ -182,6 +186,8 @@ class OpenapiServicer(object):
 
     def SetCaptureState(self, request, context):
         """Deprecated: Please use `set_control_state` with `port.capture` choice instead
+
+        Deprecated: Please use `set_control_state` with `port.capture` choice instead
 
         Updates the state of configuration resources on the traffic generator.
         """
@@ -192,6 +198,8 @@ class OpenapiServicer(object):
     def UpdateFlows(self, request, context):
         """Deprecated: Please use `update_config` with `flow` choice instead
 
+        Deprecated: Please use `update_config` with `flow` choice instead
+
         Updates flow properties without disruption of transmit state.
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
@@ -201,6 +209,8 @@ class OpenapiServicer(object):
     def SetRouteState(self, request, context):
         """Deprecated: Please use `set_control_state` with `protocol.route` choice instead
 
+        Deprecated: Please use `set_control_state` with `protocol.route` choice instead
+
         Updates the state of configuration resources on the traffic generator.
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
@@ -209,6 +219,8 @@ class OpenapiServicer(object):
 
     def SendPing(self, request, context):
         """Deprecated: Please use `set_control_action` with `protocol.ipv*.ping` choice instead
+
+        Deprecated: Please use `set_control_action` with `protocol.ipv*.ping` choice instead
 
         API to send an IPv4 and/or IPv6 ICMP Echo Request(s) between endpoints. For each
         endpoint 1 ping packet will be sent and API shall wait for ping response to either
@@ -221,6 +233,8 @@ class OpenapiServicer(object):
     def SetProtocolState(self, request, context):
         """Deprecated: Please use `set_control_state` with `protocol.all` choice instead
 
+        Deprecated: Please use `set_control_state` with `protocol.all` choice instead
+
         Sets all configured protocols to `start` or `stop` state.
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
@@ -229,6 +243,8 @@ class OpenapiServicer(object):
 
     def SetDeviceState(self, request, context):
         """Deprecated: Please use `set_control_state` with `protocol` choice instead
+
+        Deprecated: Please use `set_control_state` with `protocol` choice instead
 
         Set specific state/actions on device configuration resources on the traffic generator.
         """
