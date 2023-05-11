@@ -759,6 +759,9 @@ from .snappi import FlowHeaderIter
 from .snappi import FlowSize
 from .snappi import FlowSizeIncrement
 from .snappi import FlowSizeRandom
+from .snappi import FlowSizeWeightPairs
+from .snappi import FlowSizeWeightPairsCustom
+from .snappi import FlowSizeWeightPairsCustomIter
 from .snappi import FlowRate
 from .snappi import FlowDuration
 from .snappi import FlowFixedPackets
