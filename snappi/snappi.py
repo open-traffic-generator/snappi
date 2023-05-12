@@ -1127,6 +1127,7 @@ class Telemetry(object):
         self._grpc_exporter = None
         self._http_instrumentor = None
         self._grpc_instrumentor = None
+        self._spankind = None
         if self.endpoint is not None:
             self.is_telemetry_enabled = True
             self._initiate_tracer()
@@ -1136,6 +1137,7 @@ class Telemetry(object):
 
         warnings.filterwarnings("ignore", category=DeprecationWarning)
         self._trace = importlib.import_module("opentelemetry.trace")
+        self._spankind = getattr(self._trace, "SpanKind")
         self._trace_provider = importlib.import_module("opentelemetry.sdk.trace")
         self._trace_provider = getattr(self._trace_provider, "TracerProvider")
         self._resource = importlib.import_module("opentelemetry.sdk.resources")
@@ -1192,9 +1194,12 @@ class Telemetry(object):
     @staticmethod
     def create_child_span(func):
         def tracing(self, *args, **kwargs):
-            if self._telemetry.is_telemetry_enabled:
+            telemetry = self._telemetry
+            if telemetry.is_telemetry_enabled:
                 name = func.__name__
-                with self.tracer().start_as_current_span(name):
+                with self.tracer().start_as_current_span(
+                    name, kind=telemetry._spankind.CLIENT
+                ):
                     return func(self, *args, **kwargs)
             else:
                 return func(self, *args, **kwargs)

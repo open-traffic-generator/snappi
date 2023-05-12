@@ -39,7 +39,7 @@ type Telemetry interface {
 	WithServiceName(serviceName string) Telemetry
 	Start() (Telemetry, error)
 	Stop()
-	NewSpan(ctx context.Context, name string) (context.Context, trace.Span)
+	NewSpan(ctx context.Context, name string, opts ...trace.SpanStartOption) (context.Context, trace.Span)
 	SetSpanStatus(span trace.Span, code codes.Code, description string)
 	SetSpanAttributes(span trace.Span, attrs []attribute.KeyValue)
 	SetSpanEvent(span trace.Span, eventStr string)
@@ -216,9 +216,9 @@ func (t *telemetry) Stop() {
 
 // Creates a new span , if a parent context is passed then it will be child span.
 // By default the span will be root span.
-func (t *telemetry) NewSpan(ctx context.Context, name string) (context.Context, trace.Span) {
+func (t *telemetry) NewSpan(ctx context.Context, name string, opts ...trace.SpanStartOption) (context.Context, trace.Span) {
 	if t.isOTLPEnabled() {
-		return tracer.Start(ctx, name)
+		return tracer.Start(ctx, name, opts...)
 	}
 
 	return nil, nil
