@@ -1,4 +1,4 @@
-/* Open Traffic Generator API 0.11.8
+/* Open Traffic Generator API 0.11.9
  * Open Traffic Generator API defines a model-driven, vendor-neutral and standard
  * interface for emulating layer 2-7 network devices and generating test traffic.
  * 
@@ -5552,6 +5552,7 @@ message FlowSize {
       fixed = 1;
       increment = 2;
       random = 3;
+      weight_pairs = 4;
     }
   }
   // Description missing in models
@@ -5567,6 +5568,9 @@ message FlowSize {
 
   // Description missing in models
   optional FlowSizeRandom random = 4;
+
+  // Description missing in models
+  optional FlowSizeWeightPairs weight_pairs = 5;
 }
 
 // Frame size that increments from a starting size to
@@ -5596,6 +5600,66 @@ message FlowSizeRandom {
   // Description missing in models
   // default = 1518
   optional int32 max = 2;
+}
+
+// Frame size distribution, defined as <size, weight> pairs (including IMIX distribution).
+// Frames are randomly generated such that the proportion of each frame size out of
+// the total number of frames
+// are matching with the weight value of the <size, weight> pair. However, as with any
+// other probability
+// distribution, the sample distribution is close to theoretical value only if the size
+// of the sample is reasonably large.
+// When the number of frames is very low the transmitted frames may not come close to
+// the ratio described in the weight.
+message FlowSizeWeightPairs {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      predefined = 1;
+      custom = 2;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.predefined
+  optional Choice.Enum choice = 1;
+
+  message Predefined {
+    enum Enum {
+      unspecified = 0;
+      imix = 1;
+      ipsec_imix = 2;
+      ipv6_imix = 3;
+      standard_imix = 4;
+      tcp_imix = 5;
+    }
+  }
+  // Specify predefined frame size distribution <size, weight> pairs (including IMIX distribution).
+  // 
+  // The available predefined distribution pairs are:
+  // - IMIX (64:7, 570:4, and 1518:1)
+  // - IPSec IMIX (90:58.67, 92:2, 594:23.66 and 1418:15.67)
+  // - IPv6 IMIX (60:58.67, 496:2, 594:23.66 and 1518:15.67)
+  // - Standard IMIX (58:58.67, 62:2, 594:23.66 and 1518:15.67)
+  // - TCP IMIX (90:58.67, 92:2, 594:23.66 and 1518:15.67)
+  // default = Predefined.Enum.imix
+  optional Predefined.Enum predefined = 2;
+
+  // Description missing in models
+  repeated FlowSizeWeightPairsCustom custom = 3;
+}
+
+// Custom frame size distribution <size, weight> pair.
+message FlowSizeWeightPairsCustom {
+
+  // The size of the frame (in bytes) for this weight pair.
+  // default = 64
+  optional uint32 size = 1;
+
+  // Weight assigned to the corresponding frame size in this weight pair.
+  // Higher weight means more packets.
+  // default = 1
+  optional float weight = 2;
 }
 
 // The rate of packet transmission

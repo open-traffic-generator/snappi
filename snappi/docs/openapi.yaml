@@ -7,7 +7,7 @@ info:
     \ issue](https://github.com/open-traffic-generator/models/issues) in the models\
     \ repository\n- [fork the models repository](https://github.com/open-traffic-generator/models)\
     \ and submit a PR"
-  version: 0.11.8
+  version: 0.11.9
   contact:
     url: https://github.com/open-traffic-generator/models
   license:
@@ -7621,10 +7621,13 @@ components:
               x-field-uid: 2
             random:
               x-field-uid: 3
+            weight_pairs:
+              x-field-uid: 4
           enum:
           - fixed
           - increment
           - random
+          - weight_pairs
         fixed:
           type: integer
           default: 64
@@ -7635,6 +7638,9 @@ components:
         random:
           $ref: '#/components/schemas/Flow.SizeRandom'
           x-field-uid: 4
+        weight_pairs:
+          $ref: '#/components/schemas/Flow.SizeWeightPairs'
+          x-field-uid: 5
     Flow.SizeIncrement:
       type: object
       description: "Frame size that increments from a starting size to \nan ending\
@@ -7672,6 +7678,82 @@ components:
         max:
           type: integer
           default: 1518
+          x-field-uid: 2
+    Flow.SizeWeightPairs:
+      type: object
+      description: "Frame size distribution, defined as <size, weight> pairs (including\
+        \ IMIX distribution).\nFrames are randomly generated such that the proportion\
+        \ of each frame size out of the total number of frames \nare matching with\
+        \ the weight value of the <size, weight> pair. However, as with any other\
+        \ probability \ndistribution, the sample distribution is close to theoretical\
+        \ value only if the size of the sample is reasonably large. \nWhen the number\
+        \ of frames is very low the transmitted frames may not come close to the ratio\
+        \ described in the weight."
+      properties:
+        choice:
+          type: string
+          default: predefined
+          x-field-uid: 1
+          x-enum:
+            predefined:
+              x-field-uid: 1
+            custom:
+              x-field-uid: 2
+          enum:
+          - predefined
+          - custom
+        predefined:
+          type: string
+          default: imix
+          description: "Specify predefined frame size distribution <size, weight>\
+            \ pairs (including IMIX distribution).  \nThe available predefined distribution\
+            \ pairs are:\n- IMIX (64:7, 570:4, and 1518:1)  \n- IPSec IMIX (90:58.67,\
+            \ 92:2, 594:23.66 and 1418:15.67)  \n- IPv6 IMIX (60:58.67, 496:2, 594:23.66\
+            \ and 1518:15.67)  \n- Standard IMIX (58:58.67, 62:2, 594:23.66 and 1518:15.67)\
+            \  \n- TCP IMIX (90:58.67, 92:2, 594:23.66 and 1518:15.67)  "
+          x-field-uid: 2
+          x-enum:
+            imix:
+              x-field-uid: 1
+            ipsec_imix:
+              x-field-uid: 2
+            ipv6_imix:
+              x-field-uid: 3
+            standard_imix:
+              x-field-uid: 4
+            tcp_imix:
+              x-field-uid: 5
+          enum:
+          - imix
+          - ipsec_imix
+          - ipv6_imix
+          - standard_imix
+          - tcp_imix
+        custom:
+          type: array
+          items:
+            $ref: '#/components/schemas/Flow.SizeWeightPairs.Custom'
+          x-field-uid: 3
+    Flow.SizeWeightPairs.Custom:
+      type: object
+      description: |-
+        Custom frame size distribution <size, weight> pair.
+      properties:
+        size:
+          description: |-
+            The size of the frame (in bytes) for this weight pair.
+          type: integer
+          format: uint32
+          minimum: 12
+          maximum: 65535
+          default: 64
+          x-field-uid: 1
+        weight:
+          description: "Weight assigned to the corresponding frame size in this weight\
+            \ pair. \nHigher weight means more packets."
+          type: number
+          format: float
+          default: 1
           x-field-uid: 2
     Flow.Rate:
       type: object
