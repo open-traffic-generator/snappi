@@ -1,4 +1,4 @@
-# Open Traffic Generator API 0.11.8
+# Open Traffic Generator API 0.11.9
 # License: MIT
 
 import importlib
@@ -87296,11 +87296,13 @@ class FlowSize(OpenApiObject):
                 "fixed",
                 "increment",
                 "random",
+                "weight_pairs",
             ],
         },
         "fixed": {"type": int},
         "increment": {"type": "FlowSizeIncrement"},
         "random": {"type": "FlowSizeRandom"},
+        "weight_pairs": {"type": "FlowSizeWeightPairs"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -87313,6 +87315,7 @@ class FlowSize(OpenApiObject):
     FIXED = "fixed"  # type: str
     INCREMENT = "increment"  # type: str
     RANDOM = "random"  # type: str
+    WEIGHT_PAIRS = "weight_pairs"  # type: str
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
@@ -87357,13 +87360,26 @@ class FlowSize(OpenApiObject):
         return self._get_property("random", FlowSizeRandom, self, "random")
 
     @property
+    def weight_pairs(self):
+        # type: () -> FlowSizeWeightPairs
+        """Factory property that returns an instance of the FlowSizeWeightPairs class
+
+        Frame size distribution, defined as <size, weight> pairs (including IMIX distribution).. Frames are randomly generated such that the proportion of each frame size out of the total number of frames are matching with the weight value of the <size, weight> pair. However, as with any other probability distribution, the sample distribution is close to theoretical value only if the size of the sample is reasonably large. When the number of frames is very low the transmitted frames may not come close to the ratio described in the weight.
+
+        Returns: FlowSizeWeightPairs
+        """
+        return self._get_property(
+            "weight_pairs", FlowSizeWeightPairs, self, "weight_pairs"
+        )
+
+    @property
     def choice(self):
-        # type: () -> Union[Literal["fixed"], Literal["increment"], Literal["random"]]
+        # type: () -> Union[Literal["fixed"], Literal["increment"], Literal["random"], Literal["weight_pairs"]]
         """choice getter
 
         TBD
 
-        Returns: Union[Literal["fixed"], Literal["increment"], Literal["random"]]
+        Returns: Union[Literal["fixed"], Literal["increment"], Literal["random"], Literal["weight_pairs"]]
         """
         return self._get_property("choice")
 
@@ -87373,7 +87389,7 @@ class FlowSize(OpenApiObject):
 
         TBD
 
-        value: Union[Literal["fixed"], Literal["increment"], Literal["random"]]
+        value: Union[Literal["fixed"], Literal["increment"], Literal["random"], Literal["weight_pairs"]]
         """
         self._set_property("choice", value)
 
@@ -87569,6 +87585,256 @@ class FlowSizeRandom(OpenApiObject):
         value: int
         """
         self._set_property("max", value)
+
+
+class FlowSizeWeightPairs(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "predefined",
+                "custom",
+            ],
+        },
+        "predefined": {
+            "type": str,
+            "enum": [
+                "imix",
+                "ipsec_imix",
+                "ipv6_imix",
+                "standard_imix",
+                "tcp_imix",
+            ],
+        },
+        "custom": {"type": "FlowSizeWeightPairsCustomIter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "predefined",
+        "predefined": "imix",
+    }  # type: Dict[str, Union(type)]
+
+    PREDEFINED = "predefined"  # type: str
+    CUSTOM = "custom"  # type: str
+
+    IMIX = "imix"  # type: str
+    IPSEC_IMIX = "ipsec_imix"  # type: str
+    IPV6_IMIX = "ipv6_imix"  # type: str
+    STANDARD_IMIX = "standard_imix"  # type: str
+    TCP_IMIX = "tcp_imix"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, predefined="imix"):
+        super(FlowSizeWeightPairs, self).__init__()
+        self._parent = parent
+        self._set_property("predefined", predefined)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, predefined=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["custom"], Literal["predefined"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["custom"], Literal["predefined"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["custom"], Literal["predefined"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def predefined(self):
+        # type: () -> Union[Literal["imix"], Literal["ipsec_imix"], Literal["ipv6_imix"], Literal["standard_imix"], Literal["tcp_imix"]]
+        """predefined getter
+
+        Specify predefined frame size distribution <size, weight> pairs (including IMIX distribution). The available predefined distribution pairs are:. IMIX (64:7, 570:4, and 1518:1) - IPSec IMIX (90:58.67, 92:2, 594:23.66 and 1418:15.67) - IPv6 IMIX (60:58.67, 496:2, 594:23.66 and 1518:15.67) - Standard IMIX (58:58.67, 62:2, 594:23.66 and 1518:15.67) - TCP IMIX (90:58.67, 92:2, 594:23.66 and 1518:15.67)
+
+        Returns: Union[Literal["imix"], Literal["ipsec_imix"], Literal["ipv6_imix"], Literal["standard_imix"], Literal["tcp_imix"]]
+        """
+        return self._get_property("predefined")
+
+    @predefined.setter
+    def predefined(self, value):
+        """predefined setter
+
+        Specify predefined frame size distribution <size, weight> pairs (including IMIX distribution). The available predefined distribution pairs are:. IMIX (64:7, 570:4, and 1518:1) - IPSec IMIX (90:58.67, 92:2, 594:23.66 and 1418:15.67) - IPv6 IMIX (60:58.67, 496:2, 594:23.66 and 1518:15.67) - Standard IMIX (58:58.67, 62:2, 594:23.66 and 1518:15.67) - TCP IMIX (90:58.67, 92:2, 594:23.66 and 1518:15.67)
+
+        value: Union[Literal["imix"], Literal["ipsec_imix"], Literal["ipv6_imix"], Literal["standard_imix"], Literal["tcp_imix"]]
+        """
+        self._set_property("predefined", value, "predefined")
+
+    @property
+    def custom(self):
+        # type: () -> FlowSizeWeightPairsCustomIter
+        """custom getter
+
+        TBD
+
+        Returns: FlowSizeWeightPairsCustomIter
+        """
+        return self._get_property(
+            "custom", FlowSizeWeightPairsCustomIter, self._parent, self._choice
+        )
+
+
+class FlowSizeWeightPairsCustom(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "size": {
+            "type": int,
+            "format": "uint32",
+            "minimum": 12,
+            "maximum": 65535,
+        },
+        "weight": {
+            "type": float,
+            "format": "float",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "size": 64,
+        "weight": 1.0,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, size=64, weight=1):
+        super(FlowSizeWeightPairsCustom, self).__init__()
+        self._parent = parent
+        self._set_property("size", size)
+        self._set_property("weight", weight)
+
+    def set(self, size=None, weight=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def size(self):
+        # type: () -> int
+        """size getter
+
+        The size of the frame (in bytes) for this weight pair.
+
+        Returns: int
+        """
+        return self._get_property("size")
+
+    @size.setter
+    def size(self, value):
+        """size setter
+
+        The size of the frame (in bytes) for this weight pair.
+
+        value: int
+        """
+        self._set_property("size", value)
+
+    @property
+    def weight(self):
+        # type: () -> float
+        """weight getter
+
+        Weight assigned to the corresponding frame size in this weight pair. Higher weight means more packets.
+
+        Returns: float
+        """
+        return self._get_property("weight")
+
+    @weight.setter
+    def weight(self, value):
+        """weight setter
+
+        Weight assigned to the corresponding frame size in this weight pair. Higher weight means more packets.
+
+        value: float
+        """
+        self._set_property("weight", value)
+
+
+class FlowSizeWeightPairsCustomIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = False
+
+    def __init__(self, parent=None, choice=None):
+        super(FlowSizeWeightPairsCustomIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[FlowSizeWeightPairsCustom]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> FlowSizeWeightPairsCustomIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> FlowSizeWeightPairsCustom
+        return self._next()
+
+    def next(self):
+        # type: () -> FlowSizeWeightPairsCustom
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, FlowSizeWeightPairsCustom):
+            raise Exception("Item is not an instance of FlowSizeWeightPairsCustom")
+
+    def custom(self, size=64, weight=1):
+        # type: (int,float) -> FlowSizeWeightPairsCustomIter
+        """Factory method that creates an instance of the FlowSizeWeightPairsCustom class
+
+        Custom frame size distribution <size, weight> pair.
+
+        Returns: FlowSizeWeightPairsCustomIter
+        """
+        item = FlowSizeWeightPairsCustom(parent=self._parent, size=size, weight=weight)
+        self._add(item)
+        return self
+
+    def add(self, size=64, weight=1):
+        # type: (int,float) -> FlowSizeWeightPairsCustom
+        """Add method that creates and returns an instance of the FlowSizeWeightPairsCustom class
+
+        Custom frame size distribution <size, weight> pair.
+
+        Returns: FlowSizeWeightPairsCustom
+        """
+        item = FlowSizeWeightPairsCustom(parent=self._parent, size=size, weight=weight)
+        self._add(item)
+        return item
 
 
 class FlowRate(OpenApiObject):
@@ -108755,8 +109021,8 @@ class Api(object):
 
     def __init__(self, **kwargs):
         self._version_meta = self.version()
-        self._version_meta.api_spec_version = "0.11.8"
-        self._version_meta.sdk_version = "0.11.14"
+        self._version_meta.api_spec_version = "0.11.9"
+        self._version_meta.sdk_version = "0.11.15"
         self._version_check = kwargs.get("version_check")
         if self._version_check is None:
             self._version_check = False
