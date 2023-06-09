@@ -823,6 +823,10 @@ from .snappi import DeviceBgpHoldTimerExpired
 from .snappi import DeviceBgpFiniteStateMachineError
 from .snappi import DeviceBgpCustomError
 from .snappi import ActionProtocolBgpInitiateGracefulRestart
+from .snappi import ActionProtocolBgpLoadRoutes
+from .snappi import ActionProtocolBgpLoadRoutesConfig
+from .snappi import ActionProtocolBgpRoutes
+from .snappi import ActionProtocolBgpLoadRoutesConfigIter
 from .snappi import ControlActionResponse
 from .snappi import ActionResponse
 from .snappi import ActionResponseProtocol
