@@ -4,7 +4,7 @@ When contributing to this repository, please first discuss the change you wish t
 
 Please note we have a [code of conduct](CODE_OF_CONDUCT.md), please follow it in all your interactions with the project.
 
-## Steps to Contribute
+## Steps to Contribute 
 
 This repo uses GitHub to manage reviews of [pull requests](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-pull-requests).
 
