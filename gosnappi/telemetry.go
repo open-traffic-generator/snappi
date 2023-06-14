@@ -31,12 +31,12 @@ type telemetry struct {
 type Telemetry interface {
 	isOTLPEnabled() bool
 	getRootContext() context.Context
-	WithHTTP() Telemetry
-	WithGRPC() Telemetry
-	WithExporterEndPoint(endpoint string) Telemetry
-	WithRootContext(ctx context.Context) Telemetry
-	WithCustomSpanProcess(spanProcessor sdktrace.SpanProcessor) Telemetry
-	WithServiceName(serviceName string) Telemetry
+	SetHTTP() Telemetry
+	SetGRPC() Telemetry
+	SetOtelCollector(endpoint string) Telemetry
+	SetRootContext(ctx context.Context) Telemetry
+	SetCustomSpanProcess(spanProcessor sdktrace.SpanProcessor) Telemetry
+	SetServiceName(serviceName string) Telemetry
 	Start() (Telemetry, error)
 	Stop()
 	NewSpan(ctx context.Context, name string, opts ...trace.SpanStartOption) (context.Context, trace.Span)
@@ -74,39 +74,39 @@ func (t *telemetry) getRootContext() context.Context {
 }
 
 // Sets the transport to HTTP which uses REST communication
-func (t *telemetry) WithHTTP() Telemetry {
+func (t *telemetry) SetHTTP() Telemetry {
 	t.transport = "HTTP"
 	return t
 }
 
 // Sets the transport to GRPC
-func (t *telemetry) WithGRPC() Telemetry {
+func (t *telemetry) SetGRPC() Telemetry {
 	t.transport = "GRPC"
 	return t
 }
 
 // Sets The endpoint of the OTLP collector which will collect the data and visualize it.
 // For HTTP the endpoint shoule be like "IP:PORT" e.g. "127.0.0.1:4138"
-func (t *telemetry) WithExporterEndPoint(endpoint string) Telemetry {
+func (t *telemetry) SetOtelCollector(endpoint string) Telemetry {
 	t.endpoint = endpoint
 	return t
 }
 
 // Sets The Root Context.
 // If the user wants all the spans to be the child of a single span, this method should be used.
-func (t *telemetry) WithRootContext(ctx context.Context) Telemetry {
+func (t *telemetry) SetRootContext(ctx context.Context) Telemetry {
 	t.rootCtx = ctx
 	return t
 }
 
 // Gives ability to the user to set a custom span processor for processing the spans
-func (t *telemetry) WithCustomSpanProcess(spanProcessor sdktrace.SpanProcessor) Telemetry {
+func (t *telemetry) SetCustomSpanProcess(spanProcessor sdktrace.SpanProcessor) Telemetry {
 	t.spanProcessor = spanProcessor
 	return t
 }
 
 // Gives ability to the user to set name for the OTLP service
-func (t *telemetry) WithServiceName(serviceName string) Telemetry {
+func (t *telemetry) SetServiceName(serviceName string) Telemetry {
 	t.serviceName = serviceName
 	return t
 }
