@@ -185,6 +185,7 @@ class HttpTransport(object):
         payload=None,
         return_object=None,
         headers=None,
+        request_class=None,
     ):
         url = "%s%s" % (self.location, relative_url)
         data = None
@@ -194,6 +195,8 @@ class HttpTransport(object):
                 data = payload
                 headers["Content-Type"] = "application/octet-stream"
             elif isinstance(payload, (str, unicode)):
+                if request_class is not None:
+                    request_class().deserialize(payload)
                 data = payload
             elif isinstance(payload, OpenApiBase):
                 data = payload.serialize()
@@ -109731,6 +109734,7 @@ class HttpApi(Api):
             "/config",
             payload=payload,
             return_object=self.warning(),
+            request_class=Config,
         )
 
     @Telemetry.create_child_span
@@ -109765,6 +109769,7 @@ class HttpApi(Api):
             "/config",
             payload=payload,
             return_object=self.warning(),
+            request_class=ConfigUpdate,
         )
 
     @Telemetry.create_child_span
@@ -109782,6 +109787,7 @@ class HttpApi(Api):
             "/control/state",
             payload=payload,
             return_object=self.warning(),
+            request_class=ControlState,
         )
 
     @Telemetry.create_child_span
@@ -109799,6 +109805,7 @@ class HttpApi(Api):
             "/control/action",
             payload=payload,
             return_object=self.control_action_response(),
+            request_class=ControlAction,
         )
 
     @Telemetry.create_child_span
@@ -109819,6 +109826,7 @@ class HttpApi(Api):
             "/control/transmit",
             payload=payload,
             return_object=self.warning(),
+            request_class=TransmitState,
         )
 
     @Telemetry.create_child_span
@@ -109839,6 +109847,7 @@ class HttpApi(Api):
             "/control/link",
             payload=payload,
             return_object=self.warning(),
+            request_class=LinkState,
         )
 
     @Telemetry.create_child_span
@@ -109859,6 +109868,7 @@ class HttpApi(Api):
             "/control/capture",
             payload=payload,
             return_object=self.warning(),
+            request_class=CaptureState,
         )
 
     @Telemetry.create_child_span
@@ -109879,6 +109889,7 @@ class HttpApi(Api):
             "/control/flows",
             payload=payload,
             return_object=self.config(),
+            request_class=FlowsUpdate,
         )
 
     @Telemetry.create_child_span
@@ -109899,6 +109910,7 @@ class HttpApi(Api):
             "/control/routes",
             payload=payload,
             return_object=self.warning(),
+            request_class=RouteState,
         )
 
     @Telemetry.create_child_span
@@ -109919,6 +109931,7 @@ class HttpApi(Api):
             "/control/ping",
             payload=payload,
             return_object=self.ping_response(),
+            request_class=PingRequest,
         )
 
     @Telemetry.create_child_span
@@ -109939,6 +109952,7 @@ class HttpApi(Api):
             "/control/protocols",
             payload=payload,
             return_object=self.warning(),
+            request_class=ProtocolState,
         )
 
     @Telemetry.create_child_span
@@ -109959,6 +109973,7 @@ class HttpApi(Api):
             "/control/devices",
             payload=payload,
             return_object=self.warning(),
+            request_class=DeviceState,
         )
 
     @Telemetry.create_child_span
@@ -109976,6 +109991,7 @@ class HttpApi(Api):
             "/monitor/metrics",
             payload=payload,
             return_object=self.metrics_response(),
+            request_class=MetricsRequest,
         )
 
     @Telemetry.create_child_span
@@ -109993,6 +110009,7 @@ class HttpApi(Api):
             "/monitor/states",
             payload=payload,
             return_object=self.states_response(),
+            request_class=StatesRequest,
         )
 
     @Telemetry.create_child_span
@@ -110010,6 +110027,7 @@ class HttpApi(Api):
             "/monitor/capture",
             payload=payload,
             return_object=None,
+            request_class=CaptureRequest,
         )
 
     @Telemetry.create_child_span
@@ -110069,6 +110087,8 @@ class GrpcApi(Api):
             payload = payload.serialize()
         if isinstance(payload, dict):
             payload = json.dumps(payload)
+        elif isinstance(payload, (str, unicode)):
+            payload = json.dumps(yaml.safe_load(payload))
         return payload
 
     def _raise_exception(self, grpc_error):
