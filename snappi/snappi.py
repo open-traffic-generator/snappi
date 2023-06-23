@@ -1,4 +1,4 @@
-# Open Traffic Generator API 0.11.9
+# Open Traffic Generator API 0.11.10
 # License: MIT
 
 import importlib
@@ -24262,21 +24262,28 @@ class FlowPort(OpenApiObject):
     _TYPES = {
         "tx_name": {"type": str},
         "rx_name": {"type": str},
+        "rx_names": {
+            "type": list,
+            "itemtype": str,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ("tx_name",)  # type: tuple(str)
 
     _DEFAULTS = {}  # type: Dict[str, Union(type)]
 
-    _STATUS = {}  # type: Dict[str, Union(type)]
+    _STATUS = {
+        "rx_name": "rx_name property in schema FlowPort is deprecated, This property is deprecated in favor of property rx_names",
+    }  # type: Dict[str, Union(type)]
 
-    def __init__(self, parent=None, tx_name=None, rx_name=None):
+    def __init__(self, parent=None, tx_name=None, rx_name=None, rx_names=None):
         super(FlowPort, self).__init__()
         self._parent = parent
         self._set_property("tx_name", tx_name)
         self._set_property("rx_name", rx_name)
+        self._set_property("rx_names", rx_names)
 
-    def set(self, tx_name=None, rx_name=None):
+    def set(self, tx_name=None, rx_name=None, rx_names=None):
         for property_name, property_value in locals().items():
             if property_name != "self" and property_value is not None:
                 self._set_property(property_name, property_value)
@@ -24309,7 +24316,7 @@ class FlowPort(OpenApiObject):
         # type: () -> str
         """rx_name getter
 
-        The unique name of port that is the intended receive port.. x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name. . x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name.
+        Deprecated: This property is deprecated in favor of property rx_names. Deprecated: This property is deprecated in favor of property rx_names. The unique name of port that is the intended receive port.. x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name. . x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name.
 
         Returns: str
         """
@@ -24319,11 +24326,32 @@ class FlowPort(OpenApiObject):
     def rx_name(self, value):
         """rx_name setter
 
-        The unique name of port that is the intended receive port.. x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name. . x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name.
+        Deprecated: This property is deprecated in favor of property rx_names. Deprecated: This property is deprecated in favor of property rx_names. The unique name of port that is the intended receive port.. x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name. . x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name.
 
         value: str
         """
         self._set_property("rx_name", value)
+
+    @property
+    def rx_names(self):
+        # type: () -> List[str]
+        """rx_names getter
+
+        Unique name of ports or lags that are intended receive endpoints.. x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name. . x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name.
+
+        Returns: List[str]
+        """
+        return self._get_property("rx_names")
+
+    @rx_names.setter
+    def rx_names(self, value):
+        """rx_names setter
+
+        Unique name of ports or lags that are intended receive endpoints.. x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name. . x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name.
+
+        value: List[str]
+        """
+        self._set_property("rx_names", value)
 
 
 class FlowRouter(OpenApiObject):
@@ -88865,8 +88893,10 @@ class FlowMetrics(OpenApiObject):
     _TYPES = {
         "enable": {"type": bool},
         "loss": {"type": bool},
+        "rx_tx_ratio": {"type": "FlowRxTxRatio"},
         "timestamps": {"type": bool},
         "latency": {"type": "FlowLatencyMetrics"},
+        "predefined_metric_tags": {"type": "FlowPredefinedTags"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -88934,6 +88964,17 @@ class FlowMetrics(OpenApiObject):
         self._set_property("loss", value)
 
     @property
+    def rx_tx_ratio(self):
+        # type: () -> FlowRxTxRatio
+        """rx_tx_ratio getter
+
+        Rx Tx ratio is the ratio of expected number of Rx packets across all Rx ports to the Tx packets. for the configured flow. It is factor by which the Tx packet count is multiplied to calculate. the sum of expected Rx packet count, across all Rx ports. This will be used to calculate loss. percentage of flow at aggregate level.Rx Tx ratio is the ratio of expected number of Rx packets across all Rx ports to the Tx packets. for the configured flow. It is factor by which the Tx packet count is multiplied to calculate. the sum of expected Rx packet count, across all Rx ports. This will be used to calculate loss. percentage of flow at aggregate level.Rx Tx ratio is the ratio of expected number of Rx packets across all Rx ports to the Tx packets. for the configured flow. It is factor by which the Tx packet count is multiplied to calculate. the sum of expected Rx packet count, across all Rx ports. This will be used to calculate loss. percentage of flow at aggregate level.Rx Tx ratio.
+
+        Returns: FlowRxTxRatio
+        """
+        return self._get_property("rx_tx_ratio", FlowRxTxRatio)
+
+    @property
     def timestamps(self):
         # type: () -> bool
         """timestamps getter
@@ -88964,6 +89005,135 @@ class FlowMetrics(OpenApiObject):
         Returns: FlowLatencyMetrics
         """
         return self._get_property("latency", FlowLatencyMetrics)
+
+    @property
+    def predefined_metric_tags(self):
+        # type: () -> FlowPredefinedTags
+        """predefined_metric_tags getter
+
+        List of predefined flow tracking options, outside packet fields, that can be enabled.List of predefined flow tracking options, outside packet fields, that can be enabled.List of predefined flow tracking options, outside packet fields, that can be enabled.Predefined metric tags
+
+        Returns: FlowPredefinedTags
+        """
+        return self._get_property("predefined_metric_tags", FlowPredefinedTags)
+
+
+class FlowRxTxRatio(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "rx_count",
+                "value",
+            ],
+        },
+        "rx_count": {"type": "FlowRxTxRatioRxCount"},
+        "value": {
+            "type": float,
+            "format": "float",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": 1.0,
+    }  # type: Dict[str, Union(type)]
+
+    RX_COUNT = "rx_count"  # type: str
+    VALUE = "value"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=1.0):
+        super(FlowRxTxRatio, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def rx_count(self):
+        # type: () -> FlowRxTxRatioRxCount
+        """Factory property that returns an instance of the FlowRxTxRatioRxCount class
+
+        This is for cases where one copy of Tx packet is received on all Rx ports and so the sum total of Rx packets. received across all Rx ports is multiple of Rx port count and Tx packets.
+
+        Returns: FlowRxTxRatioRxCount
+        """
+        return self._get_property("rx_count", FlowRxTxRatioRxCount, self, "rx_count")
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["rx_count"], Literal["value"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["rx_count"], Literal["value"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["rx_count"], Literal["value"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> float
+        """value getter
+
+        Should be positive, non-zero value. The default value of 1, is when the Rx packet count across. all ports is expected to match the Tx packet count. custom integer value (>1) can be specified for. loss calculation for cases when there are multiple destination addresses configured within one flow,. but DUT is configured to replicate only to subset of Rx ports. For cases when Tx side generates two. packets from each source in 1:1 protection mode but only one of the two packets are received by the. Rx port, we may need to specify fractional value instead.
+
+        Returns: float
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        Should be positive, non-zero value. The default value of 1, is when the Rx packet count across. all ports is expected to match the Tx packet count. custom integer value (>1) can be specified for. loss calculation for cases when there are multiple destination addresses configured within one flow,. but DUT is configured to replicate only to subset of Rx ports. For cases when Tx side generates two. packets from each source in 1:1 protection mode but only one of the two packets are received by the. Rx port, we may need to specify fractional value instead.
+
+        value: float
+        """
+        self._set_property("value", value, "value")
+
+
+class FlowRxTxRatioRxCount(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {}  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(FlowRxTxRatioRxCount, self).__init__()
+        self._parent = parent
 
 
 class FlowLatencyMetrics(OpenApiObject):
@@ -89044,6 +89214,53 @@ class FlowLatencyMetrics(OpenApiObject):
         value: Union[Literal["cut_through"], Literal["store_forward"]]
         """
         self._set_property("mode", value)
+
+
+class FlowPredefinedTags(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "rx_name": {"type": bool},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "rx_name": False,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, rx_name=False):
+        super(FlowPredefinedTags, self).__init__()
+        self._parent = parent
+        self._set_property("rx_name", rx_name)
+
+    def set(self, rx_name=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def rx_name(self):
+        # type: () -> bool
+        """rx_name getter
+
+        Enables Rx port or lag level disaggregation with predefined metrics tag name set as "rx_name".. The Rx port lag names can be found under tagged_metrics tag names in flow metrics response.
+
+        Returns: bool
+        """
+        return self._get_property("rx_name")
+
+    @rx_name.setter
+    def rx_name(self, value):
+        """rx_name setter
+
+        Enables Rx port or lag level disaggregation with predefined metrics tag name set as "rx_name".. The Rx port lag names can be found under tagged_metrics tag names in flow metrics response.
+
+        value: bool
+        """
+        self._set_property("rx_name", value)
 
 
 class FlowIter(OpenApiIter):
@@ -97589,12 +97806,14 @@ class FlowMetricTagValue(OpenApiObject):
             "type": str,
             "enum": [
                 "hex",
+                "str",
             ],
         },
         "hex": {
             "type": str,
             "format": "hex",
         },
+        "str": {"type": str},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -97604,13 +97823,15 @@ class FlowMetricTagValue(OpenApiObject):
     }  # type: Dict[str, Union(type)]
 
     HEX = "hex"  # type: str
+    STR = "str"  # type: str
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
-    def __init__(self, parent=None, choice=None, hex=None):
+    def __init__(self, parent=None, choice=None, hex=None, str=None):
         super(FlowMetricTagValue, self).__init__()
         self._parent = parent
         self._set_property("hex", hex)
+        self._set_property("str", str)
         if (
             "choice" in self._DEFAULTS
             and choice is None
@@ -97620,19 +97841,19 @@ class FlowMetricTagValue(OpenApiObject):
         else:
             self._set_property("choice", choice)
 
-    def set(self, hex=None):
+    def set(self, hex=None, str=None):
         for property_name, property_value in locals().items():
             if property_name != "self" and property_value is not None:
                 self._set_property(property_name, property_value)
 
     @property
     def choice(self):
-        # type: () -> Union[Literal["hex"]]
+        # type: () -> Union[Literal["hex"], Literal["str"]]
         """choice getter
 
         Available formats for metric tag value
 
-        Returns: Union[Literal["hex"]]
+        Returns: Union[Literal["hex"], Literal["str"]]
         """
         return self._get_property("choice")
 
@@ -97642,7 +97863,7 @@ class FlowMetricTagValue(OpenApiObject):
 
         Available formats for metric tag value
 
-        value: Union[Literal["hex"]]
+        value: Union[Literal["hex"], Literal["str"]]
         """
         self._set_property("choice", value)
 
@@ -97666,6 +97887,27 @@ class FlowMetricTagValue(OpenApiObject):
         value: str
         """
         self._set_property("hex", value, "hex")
+
+    @property
+    def str(self):
+        # type: () -> str
+        """str getter
+
+        Value represented in string format
+
+        Returns: str
+        """
+        return self._get_property("str")
+
+    @str.setter
+    def str(self, value):
+        """str setter
+
+        Value represented in string format
+
+        value: str
+        """
+        self._set_property("str", value, "str")
 
 
 class FlowMetricTagIter(OpenApiIter):
@@ -109021,8 +109263,8 @@ class Api(object):
 
     def __init__(self, **kwargs):
         self._version_meta = self.version()
-        self._version_meta.api_spec_version = "0.11.9"
-        self._version_meta.sdk_version = "0.11.15"
+        self._version_meta.api_spec_version = "0.11.10"
+        self._version_meta.sdk_version = "0.11.16"
         self._version_check = kwargs.get("version_check")
         if self._version_check is None:
             self._version_check = False
