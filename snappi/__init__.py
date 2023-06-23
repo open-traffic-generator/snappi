@@ -771,7 +771,10 @@ from .snappi import FlowBurst
 from .snappi import FlowDurationInterBurstGap
 from .snappi import FlowContinuous
 from .snappi import FlowMetrics
+from .snappi import FlowRxTxRatio
+from .snappi import FlowRxTxRatioRxCount
 from .snappi import FlowLatencyMetrics
+from .snappi import FlowPredefinedTags
 from .snappi import FlowIter
 from .snappi import Event
 from .snappi import EventLink
