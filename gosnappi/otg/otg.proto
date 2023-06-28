@@ -1601,6 +1601,15 @@ message DeviceBgpRouter {
   repeated BgpV6Interface ipv6_interfaces = 3;
 }
 
+// A group of V4 or V6 routes.
+// 
+message DeviceBgpRouteGroup {
+
+  // Globally unique name of an object. It also serves as the primary key for arrays of
+  // objects.
+  optional string name = 1;
+}
+
 // All errors detected while processing the Message Header are indicated by sending
 // the NOTIFICATION message  with the Error Code-Message Header Error. The Error Subcode
 // elaborates on the specific nature of the error.
@@ -1804,13 +1813,14 @@ message BgpV4Peer {
 
   // Globally unique name of an object. It also serves as the primary key for arrays of
   // objects.
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
   // required = true
   string name = 13;
 
   // Description missing in models
   optional BgpGracefulRestart graceful_restart = 14;
+
+  // Description missing in models
+  repeated DeviceBgpRouteGroup route_groups = 15;
 }
 
 // Configuration for emulated BGPv4 peers and routes on a single IPv4 interface.
@@ -2593,6 +2603,13 @@ message BgpV4RouteRange {
   // occur for the same MAC address.  Note evpn type is defined mainly for use with evpn
   // route updates and not for IPv4 and IPv6 route updates.
   repeated BgpExtCommunity ext_communities = 11;
+
+  // Name of associated BGP route group.
+  // 
+  // x-constraint:
+  // - ./bgp.yaml#/components/schemas/Device.BgpRouteGroup/properties/name
+  // 
+  optional string group = 12;
 }
 
 // The BGP Additional Paths feature is a BGP extension that allows the  advertisement
@@ -2694,6 +2711,13 @@ message BgpV6RouteRange {
   // occur for the same MAC address.  Note evpn type is defined mainly for use with evpn
   // route updates and not for IPv4 and IPv6 route updates.
   repeated BgpExtCommunity ext_communities = 11;
+
+  // Name of associated BGP route group.
+  // 
+  // x-constraint:
+  // - ./bgp.yaml#/components/schemas/Device.BgpRouteGroup/properties/name
+  // 
+  optional string group = 12;
 }
 
 // Configuration for BGP Segment Routing Traffic Engineering(SRTE)
@@ -3620,13 +3644,14 @@ message BgpV6Peer {
 
   // Globally unique name of an object. It also serves as the primary key for arrays of
   // objects.
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
   // required = true
   string name = 14;
 
   // Description missing in models
   optional BgpGracefulRestart graceful_restart = 15;
+
+  // Description missing in models
+  repeated DeviceBgpRouteGroup route_groups = 16;
 }
 
 // Configuration for emulated BGPv6 peers and routes on a single IPv6 interface.
@@ -4714,7 +4739,9 @@ message FlowRouter {
   // - /components/schemas/Device.Ipv4/properties/name
   // - /components/schemas/Device.Ipv6/properties/name
   // - /components/schemas/Bgp.V4RouteRange/properties/name
+  // - /components/schemas/Bgp.V4RouteRange/properties/group
   // - /components/schemas/Bgp.V6RouteRange/properties/name
+  // - /components/schemas/Bgp.V6RouteRange/properties/group
   // - /components/schemas/Bgp.CMacIpRange/properties/name
   // - /components/schemas/Rsvp.LspIpv4Interface.P2PIngressIpv4Lsp/properties/name
   // - /components/schemas/Isis.V4RouteRange/properties/name
@@ -6504,7 +6531,9 @@ message StateProtocolRoute {
   // 
   // x-constraint:
   // - /components/schemas/Bgp.V4RouteRange/properties/name
+  // - /components/schemas/Bgp.V4RouteRange/properties/group
   // - /components/schemas/Bgp.V6RouteRange/properties/name
+  // - /components/schemas/Bgp.V6RouteRange/properties/group
   // - /components/schemas/Isis.V4RouteRange/properties/name
   // - /components/schemas/Isis.V6RouteRange/properties/name
   // 
@@ -7023,10 +7052,28 @@ message ActionProtocolBgpRoutes {
   repeated BgpV6RouteRange v6_routes = 3;
 
   // Description missing in models
-  optional bytes cisco_routes = 4;
+  optional ActionProtocolBgpRoutesBinary openconfig_routes = 4;
 
   // Description missing in models
-  optional bytes juniper_routes = 5;
+  optional ActionProtocolBgpRoutesBinary cisco_routes = 5;
+
+  // Description missing in models
+  optional ActionProtocolBgpRoutesBinary juniper_routes = 6;
+}
+
+// Routes to be advertised for a given peer in binary format.
+message ActionProtocolBgpRoutesBinary {
+
+  // Binary containing routes to be advertised
+  // 
+  optional bytes bin = 1;
+
+  // TBD
+  // 
+  // x-constraint:
+  // - ../device/bgp/bgp.yaml#/components/schemas/Device.BgpRouteGroup/properties/name
+  // 
+  optional string group = 2;
 }
 
 // Description missing in models

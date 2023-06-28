@@ -133,6 +133,8 @@ from .snappi import BgpSrteV6TunnelTlv
 from .snappi import BgpSrteV6TunnelTlvIter
 from .snappi import BgpSrteV6PolicyIter
 from .snappi import BgpGracefulRestart
+from .snappi import DeviceBgpRouteGroup
+from .snappi import DeviceBgpRouteGroupIter
 from .snappi import BgpV4PeerIter
 from .snappi import BgpV4InterfaceIter
 from .snappi import BgpV6Interface
@@ -826,6 +828,7 @@ from .snappi import ActionProtocolBgpInitiateGracefulRestart
 from .snappi import ActionProtocolBgpLoadRoutes
 from .snappi import ActionProtocolBgpLoadRoutesConfig
 from .snappi import ActionProtocolBgpRoutes
+from .snappi import ActionProtocolBgpRoutesBinary
 from .snappi import ActionProtocolBgpLoadRoutesConfigIter
 from .snappi import ControlActionResponse
 from .snappi import ActionResponse
