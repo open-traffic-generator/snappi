@@ -1103,8 +1103,7 @@ func TestFromJsonUnmarshalError(t *testing.T) {
 	assert.Contains(t, err.Error(), `unmarshal error (line 2:12): invalid value for enum type: "run"`)
 }
 
-
 func TestLoadRoutes(t *testing.T) {
 	api := gosnappi.NewApi()
-	t.
+	t.Log(api)
 }
