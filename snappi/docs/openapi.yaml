@@ -2717,6 +2717,18 @@ components:
           items:
             $ref: '#/components/schemas/Bgp.V6Interface'
           x-field-uid: 3
+    Device.BgpRouteGroup:
+      description: |
+        A group of V4 or V6 routes.
+      type: object
+      properties:
+        name:
+          x-field-uid: 1
+          description: |-
+            Globally unique name of an object. It also serves as the primary key for arrays of objects.
+          type: string
+          pattern: ^[\sa-zA-Z0-9-_()><\[\]]+$
+          x-unique: global
     Device.Bgp.MessageHeaderError:
       description: |-
         All errors detected while processing the Message Header are indicated by sending the NOTIFICATION message  with the Error Code-Message Header Error. The Error Subcode elaborates on the specific nature of the error.
@@ -2987,13 +2999,17 @@ components:
           x-field-uid: 13
           description: |-
             Globally unique name of an object. It also serves as the primary key for arrays of objects.
-            Globally unique name of an object. It also serves as the primary key for arrays of objects.
           type: string
           pattern: ^[\sa-zA-Z0-9-_()><\[\]]+$
           x-unique: global
         graceful_restart:
           x-field-uid: 14
           $ref: '#/components/schemas/Bgp.GracefulRestart'
+        route_groups:
+          x-field-uid: 15
+          type: array
+          items:
+            $ref: '#/components/schemas/Device.BgpRouteGroup'
     Bgp.V4Interface:
       description: |-
         Configuration for emulated BGPv4 peers and routes on a single IPv4 interface.
@@ -3917,6 +3933,16 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Bgp.ExtCommunity'
+        group:
+          x-field-uid: 12
+          description: |
+            Name of associated BGP route group.
+
+            x-constraint:
+            - ./bgp.yaml#/components/schemas/Device.BgpRouteGroup/properties/name
+          type: string
+          x-constraint:
+          - ./bgp.yaml#/components/schemas/Device.BgpRouteGroup/properties/name
       required:
       - name
     Bgp.AddPath:
@@ -4018,6 +4044,16 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Bgp.ExtCommunity'
+        group:
+          x-field-uid: 12
+          description: |
+            Name of associated BGP route group.
+
+            x-constraint:
+            - ./bgp.yaml#/components/schemas/Device.BgpRouteGroup/properties/name
+          type: string
+          x-constraint:
+          - ./bgp.yaml#/components/schemas/Device.BgpRouteGroup/properties/name
       required:
       - name
     BgpSrte.V4Policy:
@@ -5265,13 +5301,17 @@ components:
           x-field-uid: 14
           description: |-
             Globally unique name of an object. It also serves as the primary key for arrays of objects.
-            Globally unique name of an object. It also serves as the primary key for arrays of objects.
           type: string
           pattern: ^[\sa-zA-Z0-9-_()><\[\]]+$
           x-unique: global
         graceful_restart:
           x-field-uid: 15
           $ref: '#/components/schemas/Bgp.GracefulRestart'
+        route_groups:
+          x-field-uid: 16
+          type: array
+          items:
+            $ref: '#/components/schemas/Device.BgpRouteGroup'
     Bgp.V6Interface:
       description: |-
         Configuration for emulated BGPv6 peers and routes on a single IPv6 interface.
@@ -6654,7 +6694,9 @@ components:
           - /components/schemas/Device.Ipv4/properties/name
           - /components/schemas/Device.Ipv6/properties/name
           - /components/schemas/Bgp.V4RouteRange/properties/name
+          - /components/schemas/Bgp.V4RouteRange/properties/group
           - /components/schemas/Bgp.V6RouteRange/properties/name
+          - /components/schemas/Bgp.V6RouteRange/properties/group
           - /components/schemas/Bgp.CMacIpRange/properties/name
           - /components/schemas/Rsvp.LspIpv4Interface.P2PIngressIpv4Lsp/properties/name
           - /components/schemas/Isis.V4RouteRange/properties/name
@@ -6676,7 +6718,9 @@ components:
             - /components/schemas/Device.Ipv4/properties/name
             - /components/schemas/Device.Ipv6/properties/name
             - /components/schemas/Bgp.V4RouteRange/properties/name
+            - /components/schemas/Bgp.V4RouteRange/properties/group
             - /components/schemas/Bgp.V6RouteRange/properties/name
+            - /components/schemas/Bgp.V6RouteRange/properties/group
             - /components/schemas/Bgp.CMacIpRange/properties/name
             - /components/schemas/Rsvp.LspIpv4Interface.P2PIngressIpv4Lsp/properties/name
             - /components/schemas/Isis.V4RouteRange/properties/name
@@ -8907,7 +8951,9 @@ components:
 
             x-constraint:
             - /components/schemas/Bgp.V4RouteRange/properties/name
+            - /components/schemas/Bgp.V4RouteRange/properties/group
             - /components/schemas/Bgp.V6RouteRange/properties/name
+            - /components/schemas/Bgp.V6RouteRange/properties/group
             - /components/schemas/Isis.V4RouteRange/properties/name
             - /components/schemas/Isis.V6RouteRange/properties/name
           type: array
@@ -8915,7 +8961,9 @@ components:
             type: string
           x-constraint:
           - /components/schemas/Bgp.V4RouteRange/properties/name
+          - /components/schemas/Bgp.V4RouteRange/properties/group
           - /components/schemas/Bgp.V6RouteRange/properties/name
+          - /components/schemas/Bgp.V6RouteRange/properties/group
           - /components/schemas/Isis.V4RouteRange/properties/name
           - /components/schemas/Isis.V6RouteRange/properties/name
           x-field-uid: 1
@@ -9579,14 +9627,36 @@ components:
           items:
             $ref: '#/components/schemas/Bgp.V6RouteRange'
           x-field-uid: 3
-        cisco_routes:
-          type: string
-          format: binary
+        openconfig_routes:
+          $ref: '#/components/schemas/Action.Protocol.Bgp.RoutesBinary'
           x-field-uid: 4
+        cisco_routes:
+          $ref: '#/components/schemas/Action.Protocol.Bgp.RoutesBinary'
+          x-field-uid: 5
         juniper_routes:
+          $ref: '#/components/schemas/Action.Protocol.Bgp.RoutesBinary'
+          x-field-uid: 6
+    Action.Protocol.Bgp.RoutesBinary:
+      description: |-
+        Routes to be advertised for a given peer in binary format.
+      type: object
+      properties:
+        bin:
+          description: |
+            Binary containing routes to be advertised
           type: string
           format: binary
-          x-field-uid: 5
+          x-field-uid: 1
+        group:
+          type: string
+          x-constraint:
+          - ../device/bgp/bgp.yaml#/components/schemas/Device.BgpRouteGroup/properties/name
+          x-field-uid: 2
+          description: |
+            TBD
+
+            x-constraint:
+            - ../device/bgp/bgp.yaml#/components/schemas/Device.BgpRouteGroup/properties/name
     Ping:
       type: object
       properties:
