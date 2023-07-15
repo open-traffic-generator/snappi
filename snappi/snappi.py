@@ -164,6 +164,7 @@ class HttpTransport(object):
         payload=None,
         return_object=None,
         headers=None,
+        request_class=None,
     ):
         url = "%s%s" % (self.location, relative_url)
         data = None
@@ -173,6 +174,8 @@ class HttpTransport(object):
                 data = payload
                 headers["Content-Type"] = "application/octet-stream"
             elif isinstance(payload, (str, unicode)):
+                if request_class is not None:
+                    request_class().deserialize(payload)
                 data = payload
             elif isinstance(payload, OpenApiBase):
                 data = payload.serialize()
@@ -865,11 +868,17 @@ class OpenApiObject(OpenApiBase, OpenApiValidator):
             msg = "property {} shall be of type {} at {}".format(
                 property_name, details["type"], self.__class__
             )
+
+            itemtype = (
+                details.get("itemformat")
+                if "itemformat" in details
+                else details.get("itemtype")
+            )
             self.types_validation(
                 property_value,
                 details["type"],
                 msg,
-                details.get("itemtype"),
+                itemtype,
                 details.get("minimum"),
                 details.get("maximum"),
                 details.get("minLength"),
@@ -109581,6 +109590,7 @@ class HttpApi(Api):
             "/config",
             payload=payload,
             return_object=self.warning(),
+            request_class=Config,
         )
 
     def get_config(self):
@@ -109611,6 +109621,7 @@ class HttpApi(Api):
             "/config",
             payload=payload,
             return_object=self.warning(),
+            request_class=ConfigUpdate,
         )
 
     def set_control_state(self, payload):
@@ -109626,6 +109637,7 @@ class HttpApi(Api):
             "/control/state",
             payload=payload,
             return_object=self.warning(),
+            request_class=ControlState,
         )
 
     def set_control_action(self, payload):
@@ -109641,6 +109653,7 @@ class HttpApi(Api):
             "/control/action",
             payload=payload,
             return_object=self.control_action_response(),
+            request_class=ControlAction,
         )
 
     def set_transmit_state(self, payload):
@@ -109659,6 +109672,7 @@ class HttpApi(Api):
             "/control/transmit",
             payload=payload,
             return_object=self.warning(),
+            request_class=TransmitState,
         )
 
     def set_link_state(self, payload):
@@ -109677,6 +109691,7 @@ class HttpApi(Api):
             "/control/link",
             payload=payload,
             return_object=self.warning(),
+            request_class=LinkState,
         )
 
     def set_capture_state(self, payload):
@@ -109695,6 +109710,7 @@ class HttpApi(Api):
             "/control/capture",
             payload=payload,
             return_object=self.warning(),
+            request_class=CaptureState,
         )
 
     def update_flows(self, payload):
@@ -109713,6 +109729,7 @@ class HttpApi(Api):
             "/control/flows",
             payload=payload,
             return_object=self.config(),
+            request_class=FlowsUpdate,
         )
 
     def set_route_state(self, payload):
@@ -109731,6 +109748,7 @@ class HttpApi(Api):
             "/control/routes",
             payload=payload,
             return_object=self.warning(),
+            request_class=RouteState,
         )
 
     def send_ping(self, payload):
@@ -109749,6 +109767,7 @@ class HttpApi(Api):
             "/control/ping",
             payload=payload,
             return_object=self.ping_response(),
+            request_class=PingRequest,
         )
 
     def set_protocol_state(self, payload):
@@ -109767,6 +109786,7 @@ class HttpApi(Api):
             "/control/protocols",
             payload=payload,
             return_object=self.warning(),
+            request_class=ProtocolState,
         )
 
     def set_device_state(self, payload):
@@ -109785,6 +109805,7 @@ class HttpApi(Api):
             "/control/devices",
             payload=payload,
             return_object=self.warning(),
+            request_class=DeviceState,
         )
 
     def get_metrics(self, payload):
@@ -109800,6 +109821,7 @@ class HttpApi(Api):
             "/monitor/metrics",
             payload=payload,
             return_object=self.metrics_response(),
+            request_class=MetricsRequest,
         )
 
     def get_states(self, payload):
@@ -109815,6 +109837,7 @@ class HttpApi(Api):
             "/monitor/states",
             payload=payload,
             return_object=self.states_response(),
+            request_class=StatesRequest,
         )
 
     def get_capture(self, payload):
@@ -109830,6 +109853,7 @@ class HttpApi(Api):
             "/monitor/capture",
             payload=payload,
             return_object=None,
+            request_class=CaptureRequest,
         )
 
     def get_version(self):
@@ -109898,6 +109922,8 @@ class GrpcApi(Api):
             payload = payload.serialize()
         if isinstance(payload, dict):
             payload = json.dumps(payload)
+        elif isinstance(payload, (str, unicode)):
+            payload = json.dumps(yaml.safe_load(payload))
         return payload
 
     def _raise_exception(self, grpc_error):
