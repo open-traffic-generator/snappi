@@ -164,7 +164,7 @@ message LagProtocolStatic {
 
   // The static lag id
   // default = 0
-  optional int32 lag_id = 1;
+  optional uint32 lag_id = 1;
 }
 
 // The container for link aggregation control protocol settings of a LAG (ports group).
@@ -176,11 +176,11 @@ message LagProtocolLacp {
 
   // The actor system priority
   // default = 0
-  optional int32 actor_system_priority = 2;
+  optional uint32 actor_system_priority = 2;
 
   // The actor key
   // default = 0
-  optional int32 actor_key = 3;
+  optional uint32 actor_key = 3;
 }
 
 // The container for link aggregation control protocol settings of a LAG member (port).
@@ -188,11 +188,11 @@ message LagPortLacp {
 
   // The actor port number
   // default = 0
-  optional int32 actor_port_number = 1;
+  optional uint32 actor_port_number = 1;
 
   // The actor port priority
   // default = 1
-  optional int32 actor_port_priority = 2;
+  optional uint32 actor_port_priority = 2;
 
   message ActorActivity {
     enum Enum {
@@ -211,11 +211,11 @@ message LagPortLacp {
 
   // This field defines how frequently LACPDUs are sent to the link partner
   // default = 0
-  optional int32 lacpdu_periodic_time_interval = 4;
+  optional uint32 lacpdu_periodic_time_interval = 4;
 
   // This timer is used to detect whether received protocol information has expired
   // default = 0
-  optional int32 lacpdu_timeout = 5;
+  optional uint32 lacpdu_timeout = 5;
 }
 
 // Base Ethernet interface.
@@ -227,7 +227,7 @@ message DeviceEthernetBase {
 
   // Maximum Transmission Unit.
   // default = 1500
-  optional int32 mtu = 2;
+  optional uint32 mtu = 2;
 
   // List of VLANs
   repeated DeviceVlan vlans = 3;
@@ -276,7 +276,7 @@ message DeviceEthernet {
 
   // Maximum Transmission Unit.
   // default = 1500
-  optional int32 mtu = 6;
+  optional uint32 mtu = 6;
 
   // List of VLANs
   repeated DeviceVlan vlans = 7;
@@ -357,11 +357,11 @@ message DeviceVlan {
 
   // Priority code point
   // default = 0
-  optional int32 priority = 2;
+  optional uint32 priority = 2;
 
   // VLAN identifier
   // default = 1
-  optional int32 id = 3;
+  optional uint32 id = 3;
 
   // Globally unique name of an object. It also serves as the primary key for arrays of
   // objects.
@@ -385,7 +385,7 @@ message DeviceIpv4 {
 
   // The prefix of the IPv4 address.
   // default = 24
-  optional int32 prefix = 4;
+  optional uint32 prefix = 4;
 
   // Globally unique name of an object. It also serves as the primary key for arrays of
   // objects.
@@ -463,7 +463,7 @@ message DeviceIpv6 {
 
   // The network prefix.
   // default = 64
-  optional int32 prefix = 4;
+  optional uint32 prefix = 4;
 
   // Globally unique name of an object. It also serves as the primary key for arrays of
   // objects.
@@ -578,7 +578,7 @@ message Layer1 {
 
   // Set the maximum transmission unit size if supported.
   // default = 1500
-  optional int32 mtu = 5;
+  optional uint32 mtu = 5;
 
   // Set to true to override the auto_negotiate, link_training
   // and rs_fec settings for gigabit ethernet interfaces.
@@ -1039,10 +1039,10 @@ message DeviceIsisMultiInstance {
   // a unique 16-bit number and including one or more  Instance-Specific Topology Identifiers
   // (ITIDs).
   // default = 1
-  optional int32 iid = 1;
+  optional uint32 iid = 1;
 
   // This contains one or more ITIDs that will be advertised in IID TLV.
-  repeated int32 itids = 2;
+  repeated uint32 itids = 2;
 }
 
 // Configuration for single ISIS interface.
@@ -1143,11 +1143,11 @@ message IsisMT {
 
   // The Multi Topology ID for one of the topologies supported on the ISIS interface.
   // default = 0
-  optional int32 mt_id = 1;
+  optional uint32 mt_id = 1;
 
   // Specifies the link metric for this topology on the ISIS interface.
   // default = 10
-  optional int32 link_metric = 2;
+  optional uint32 link_metric = 2;
 }
 
 // A container for Traffic Engineering properties on a interface.
@@ -1353,7 +1353,7 @@ message IsisAdvanced {
   // The Number of Area Addresses permitted, with a valid range from 0 to 254.  A zero
   // indicates a maximum of 3 addresses.
   // default = 3
-  optional int32 max_area_addresses = 2;
+  optional uint32 max_area_addresses = 2;
 
   // Its combination of the ISP and HO-DSP.Usually all nodes within an area have  the
   // same area address. If no area addresses are configured, a default area of 490001
@@ -1362,28 +1362,28 @@ message IsisAdvanced {
 
   // The rate at which LSPs are re-sent in seconds.
   // default = 600
-  optional int32 lsp_refresh_rate = 4;
+  optional uint32 lsp_refresh_rate = 4;
 
   // The MaxAge for retaining a learned LSP on this router in seconds.
   // default = 1200
-  optional int32 lsp_lifetime = 5;
+  optional uint32 lsp_lifetime = 5;
 
   // The number of milliseconds between transmissions of Partial Sequence Number PDU.
   // default = 2000
-  optional int32 psnp_interval = 6;
+  optional uint32 psnp_interval = 6;
 
   // The number of milliseconds between transmissions of Partial Sequence Number PDU.
   // default = 10000
-  optional int32 csnp_interval = 7;
+  optional uint32 csnp_interval = 7;
 
   // The maximum size in bytes of any LSP that can be transmitted over a link of equal
   // or less  than maximum MTU size.
   // default = 1492
-  optional int32 max_lsp_size = 8;
+  optional uint32 max_lsp_size = 8;
 
   // The number of seconds between transmissions of LSPs/MGROUP-PDUs.
   // default = 5000
-  optional int32 lsp_mgroup_min_trans_interval = 9;
+  optional uint32 lsp_mgroup_min_trans_interval = 9;
 
   // If the Attached bit is enabled, it indicates that the ISIS router is attached to
   // another area  or the Level 2 backbone. The purpose of an Attached-Bit is to accomplish
@@ -1439,7 +1439,7 @@ message IsisV4RouteRange {
 
   // The user-defined metric associated with this route range.
   // default = 0
-  optional int32 link_metric = 2;
+  optional uint32 link_metric = 2;
 
   message OriginType {
     enum Enum {
@@ -1508,16 +1508,16 @@ message V4RouteAddress {
 
   // The IPv4 network prefix length to be applied to the address.
   // default = 24
-  optional int32 prefix = 2;
+  optional uint32 prefix = 2;
 
   // The total number of addresses in the range.
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 
   // Increments the network address prefixes within a route range  where multiple routes
   // are present.  The value is incremented according to the Prefix Length and Step.
   // default = 1
-  optional int32 step = 4;
+  optional uint32 step = 4;
 }
 
 // A container for IPv6 route addresses.
@@ -1529,16 +1529,16 @@ message V6RouteAddress {
 
   // The IPv6 network prefix length to be applied to the address.
   // default = 64
-  optional int32 prefix = 2;
+  optional uint32 prefix = 2;
 
   // The total number of addresses in the range.
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 
   // Increments the network address prefixes within a route range  where multiple routes
   // are present.  The value is incremented according to the Prefix Length and Step.
   // default = 1
-  optional int32 step = 4;
+  optional uint32 step = 4;
 }
 
 // A container for MAC route addresses.
@@ -1550,16 +1550,16 @@ message MACRouteAddress {
 
   // The MAC prefix length to be applied to the address.
   // default = 48
-  optional int32 prefix = 2;
+  optional uint32 prefix = 2;
 
   // The total number of mac addresses in the range.
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 
   // Increments the mac address prefixes within a mac range  where multiple routes are
   // present.  The value is incremented according to the mac prefix Length and Step.
   // default = 1
-  optional int32 step = 4;
+  optional uint32 step = 4;
 }
 
 // Emulated ISIS IPv6 routes.
@@ -1570,7 +1570,7 @@ message IsisV6RouteRange {
 
   // The user-defined metric associated with this route range.
   // default = 0
-  optional int32 link_metric = 2;
+  optional uint32 link_metric = 2;
 
   message OriginType {
     enum Enum {
@@ -1911,7 +1911,7 @@ message BgpV4EthernetSegment {
   // The label value to be advertised as ESI Label in ESI Label Extended Community. This
   // is included in Ethernet Auto-discovery per ES Routes advertised by a router.
   // default = 0
-  optional int32 esi_label = 5;
+  optional uint32 esi_label = 5;
 
   // Description missing in models
   optional BgpRouteAdvanced advanced = 6;
@@ -1958,7 +1958,7 @@ message BgpEthernetSegmentDfElection {
 
   // The DF election timer in seconds.
   // default = 3
-  optional int32 election_timer = 1;
+  optional uint32 election_timer = 1;
 }
 
 // Configuration for advanced BGP route range settings.
@@ -2026,11 +2026,11 @@ message BgpCommunity {
 
   // First two octets of 32 bit community AS number.
   // default = 0
-  optional int32 as_number = 2;
+  optional uint32 as_number = 2;
 
   // Last two octets of the community value.
   // default = 0
-  optional int32 as_custom = 3;
+  optional uint32 as_custom = 3;
 }
 
 // The Extended Communities Attribute is a transitive optional BGP attribute, with the
@@ -2191,12 +2191,12 @@ message BgpV4EviVxlan {
   // Downstream assigned VNI to be carried as Part of P-Multicast Service Interface Tunnel
   // attribute (PMSI Tunnel Attribute) in Type 3 Inclusive Multicast Ethernet Tag Route.
   // default = 16
-  optional int32 pmsi_label = 3;
+  optional uint32 pmsi_label = 3;
 
   // The Auto-discovery Route label (AD label) value, which gets advertised in the Ethernet
   // Auto-discovery Route per <EVI, ESI>
   // default = 0
-  optional int32 ad_label = 4;
+  optional uint32 ad_label = 4;
 
   // Colon separated Extended Community value of 6 Bytes - AS number: Value identifying
   // an EVI.            Example - for the as_2octet 60005:100.
@@ -2266,7 +2266,7 @@ message BgpV4EviVxlanBroadcastDomain {
 
   // The Ethernet Tag ID of the Broadcast Domain.
   // default = 0
-  optional int64 ethernet_tag_id = 2;
+  optional uint32 ethernet_tag_id = 2;
 
   // VLAN-Aware service to be enabled or disabled.
   // default = False
@@ -2286,7 +2286,7 @@ message BgpCMacIpRange {
   // Layer 2 Virtual Network Identifier (L2VNI) to be advertised with MAC/IP Advertisement
   // Route (Type 2)
   // default = 0
-  optional int32 l2vni = 2;
+  optional uint32 l2vni = 2;
 
   // Host IPv4 address range per Broadcast Domain.
   optional V4RouteAddress ipv4_addresses = 3;
@@ -2297,7 +2297,7 @@ message BgpCMacIpRange {
   // Layer 3 Virtual Network Identifier (L3VNI) to be advertised with MAC/IP Advertisement
   // Route (Type 2).
   // default = 0
-  optional int32 l3vni = 5;
+  optional uint32 l3vni = 5;
 
   // Include default Gateway Extended Community in MAC/IP Advertisement Route (Type 2).
   // default = False
@@ -2984,7 +2984,7 @@ message BgpSrtePreferenceSubTlv {
 message BgpSrtePolicyPrioritySubTlv {
 
   // One-octet Priority value.
-  optional int32 policy_priority = 1;
+  optional uint32 policy_priority = 1;
 }
 
 // Configuration for the Policy Name sub-TLV. The Policy Name sub-TLV is used to attach
@@ -3126,16 +3126,16 @@ message BgpSrteSegment {
 message BgpSrteSrMplsSid {
 
   // Label value in [0, 2^20 -1].
-  optional int32 label = 1;
+  optional uint32 label = 1;
 
   // Traffic class in bits.
-  optional int32 tc = 2;
+  optional uint32 tc = 2;
 
   // Bottom-of-Stack bit.
   optional bool s_bit = 3;
 
   // Time To Live.
-  optional int32 ttl = 4;
+  optional uint32 ttl = 4;
 }
 
 // Configuration for SRv6 Endpoint Behavior and SID Structure.  Its optional. Summation
@@ -3145,19 +3145,19 @@ message BgpSrteSRv6SIDEndpointBehaviorAndStructure {
 
   // SRv6 SID Locator Block length in bits.
   // default = 0
-  optional int32 lb_length = 1;
+  optional uint32 lb_length = 1;
 
   // SRv6 SID Locator Node length in bits.
   // default = 0
-  optional int32 ln_length = 2;
+  optional uint32 ln_length = 2;
 
   // SRv6 SID Function length in bits.
   // default = 0
-  optional int32 func_length = 3;
+  optional uint32 func_length = 3;
 
   // SRv6 SID Arguments length in bits.
   // default = 0
-  optional int32 arg_length = 4;
+  optional uint32 arg_length = 4;
 }
 
 // Type  A: SID only, in the form of MPLS Label.
@@ -3168,16 +3168,16 @@ message BgpSrteSegmentATypeSubTlv {
   optional string flags = 1;
 
   // Label value in [0, 2^20 -1].
-  optional int32 label = 2;
+  optional uint32 label = 2;
 
   // Traffic class in bits.
-  optional int32 tc = 3;
+  optional uint32 tc = 3;
 
   // Bottom-of-Stack bit.
   optional bool s_bit = 4;
 
   // Time To Live.
-  optional int32 ttl = 5;
+  optional uint32 ttl = 5;
 }
 
 // Type  B: SID only, in the form of IPv6 address.
@@ -3204,7 +3204,7 @@ message BgpSrteSegmentCTypeSubTlv {
 
   // SR Algorithm identifier when A-Flag in on.
   // default = 0
-  optional int32 sr_algorithm = 2;
+  optional uint32 sr_algorithm = 2;
 
   // IPv4 address representing a node.
   // required = true
@@ -3223,7 +3223,7 @@ message BgpSrteSegmentDTypeSubTlv {
 
   // specifying SR Algorithm when when A-Flag as defined in above flags.
   // default = 0
-  optional int32 sr_algorithm = 2;
+  optional uint32 sr_algorithm = 2;
 
   // IPv6 address representing a node.
   // required = true
@@ -3242,7 +3242,7 @@ message BgpSrteSegmentETypeSubTlv {
 
   // Local Interface ID: The Interface Index as defined in [RFC8664].
   // default = 0
-  optional int32 local_interface_id = 2;
+  optional uint32 local_interface_id = 2;
 
   // IPv4 address representing a node.
   // required = true
@@ -3281,7 +3281,7 @@ message BgpSrteSegmentGTypeSubTlv {
 
   // Local Interface ID: The Interface Index as defined in [RFC8664].
   // default = 0
-  optional int32 local_interface_id = 2;
+  optional uint32 local_interface_id = 2;
 
   // IPv6 address representing a node.
   // required = true
@@ -3289,7 +3289,7 @@ message BgpSrteSegmentGTypeSubTlv {
 
   // Local Interface ID: The Interface Index as defined in [RFC8664].
   // default = 0
-  optional int32 remote_interface_id = 4;
+  optional uint32 remote_interface_id = 4;
 
   // IPv6 address representing a node.
   // required = true
@@ -3346,11 +3346,11 @@ message BgpSrteSegmentJTypeSubTlv {
 
   // SR Algorithm identifier when A-Flag in on.
   // default = 0
-  optional int32 sr_algorithm = 2;
+  optional uint32 sr_algorithm = 2;
 
   // Local Interface ID: The Interface Index as defined in [RFC8664].
   // default = 0
-  optional int32 local_interface_id = 3;
+  optional uint32 local_interface_id = 3;
 
   // IPv6 address representing a node.
   // required = true
@@ -3358,7 +3358,7 @@ message BgpSrteSegmentJTypeSubTlv {
 
   // Local Interface ID: The Interface Index as defined in [RFC8664].
   // default = 0
-  optional int32 remote_interface_id = 5;
+  optional uint32 remote_interface_id = 5;
 
   // IPv6 address representing a node.
   // required = true
@@ -3380,7 +3380,7 @@ message BgpSrteSegmentKTypeSubTlv {
 
   // SR Algorithm identifier when A-Flag in on.
   // default = 0
-  optional int32 sr_algorithm = 2;
+  optional uint32 sr_algorithm = 2;
 
   // IPv6 address representing a node.
   // required = true
@@ -3768,7 +3768,7 @@ message BgpV6EthernetSegment {
   // The label value to be advertised as ESI Label in ESI Label Extended Community. This
   // is included in Ethernet Auto-discovery per ES Routes advertised by a router.
   // default = 0
-  optional int32 esi_label = 5;
+  optional uint32 esi_label = 5;
 
   // Description missing in models
   optional BgpRouteAdvanced advanced = 6;
@@ -3854,12 +3854,12 @@ message BgpV6EviVxlan {
   // Downstream assigned VNI to be carried as Part of P-Multicast Service Interface Tunnel
   // attribute (PMSI Tunnel Attribute) in Type 3 Inclusive Multicast Ethernet Tag Route.
   // default = 16
-  optional int32 pmsi_label = 3;
+  optional uint32 pmsi_label = 3;
 
   // The Auto-discovery Route label (AD label) value, which gets advertised in the Ethernet
   // Auto-discovery Route per <EVI, ESI>
   // default = 0
-  optional int32 ad_label = 4;
+  optional uint32 ad_label = 4;
 
   // Colon separated Extended Community value of 6 Bytes - AS number: Value identifying
   // an EVI.            Example - for the as_2octet 60005:100.
@@ -3929,7 +3929,7 @@ message BgpV6EviVxlanBroadcastDomain {
 
   // The Ethernet Tag ID of the Broadcast Domain.
   // default = 0
-  optional int64 ethernet_tag_id = 2;
+  optional uint32 ethernet_tag_id = 2;
 
   // VLAN-Aware service to be enabled or disabled.
   // default = False
@@ -3969,7 +3969,7 @@ message VxlanV4Tunnel {
 
   // VXLAN Network Identifier (VNI) to distinguish network instances on the wire
   // required = true
-  int32 vni = 3;
+  uint32 vni = 3;
 
   // Globally unique name of an object. It also serves as the primary key for arrays of
   // objects.
@@ -4002,7 +4002,7 @@ message VxlanV6Tunnel {
 
   // VXLAN Network Identifier (VNI) to distinguish network instances on the wire
   // required = true
-  int32 vni = 3;
+  uint32 vni = 3;
 
   // Globally unique name of an object. It also serves as the primary key for arrays of
   // objects.
@@ -4167,12 +4167,12 @@ message RsvpIpv4Interface {
   // a egress are assigned labels from this label pool.Thelabel_space_start and label_space_end
   // together defines this label-pool.
   // default = 1000
-  optional int32 label_space_start = 3;
+  optional uint32 label_space_start = 3;
 
   // The user-defined label space end value.The last label value that can be assigned
   // to the LSPs for which this router acts as egress.
   // default = 100000
-  optional int32 label_space_end = 4;
+  optional uint32 label_space_end = 4;
 
   // Enables sending of Refresh Reduction as described in RFC2961.
   // default = False
@@ -4182,7 +4182,7 @@ message RsvpIpv4Interface {
   // is no specification specified maximum value. For clarity, setting the maximum to
   // 1 hour.
   // default = 30
-  optional int32 summary_refresh_interval = 6;
+  optional uint32 summary_refresh_interval = 6;
 
   // Enables aggregration of different RSVP messages within a single PDU.
   // default = False
@@ -4191,7 +4191,7 @@ message RsvpIpv4Interface {
   // The number of milliseconds to wait after which RSVP will bundle different RSVP messages
   // and transmit Bundle messages.
   // default = 50
-  optional int32 bundle_threshold = 8;
+  optional uint32 bundle_threshold = 8;
 
   // Enables sending of Hello Messages as per RFC3209.
   // default = False
@@ -4201,13 +4201,13 @@ message RsvpIpv4Interface {
   // at which successive Hello Messages  are sent as per RFC3209. There is no specification
   // specified maximum value. For clarity, setting the maximum to 1 hour.
   // default = 9
-  optional int32 hello_interval = 10;
+  optional uint32 hello_interval = 10;
 
   // The number of missed hellos after which the node should consider RSVP Neighbor to
   // have timed out. There is no specification specified maximum value. Setting the maximum
   // allowed value to 10.
   // default = 3
-  optional int32 timeout_multiplier = 11;
+  optional uint32 timeout_multiplier = 11;
 }
 
 // Configuration for RSVP LSP IPv4 Interface.
@@ -4249,13 +4249,13 @@ message RsvpLspIpv4InterfaceP2PEgressIpv4Lsp {
   // refresh interval is jittered by upto 50%. There is no specification specified maximum
   // value. For clarity, setting the maximum to 1 hour.
   // default = 30
-  optional int32 refresh_interval = 2;
+  optional uint32 refresh_interval = 2;
 
   // The number of missed PATH refreshes after which a recieving node should consider
   // the LSP state to have timed out. There is no specification specified maximum value.
   // Setting the maximum allowed value to 10.
   // default = 3
-  optional int32 timeout_multiplier = 3;
+  optional uint32 timeout_multiplier = 3;
 
   message ReservationStyle {
     enum Enum {
@@ -4283,7 +4283,7 @@ message RsvpLspIpv4InterfaceP2PEgressIpv4Lsp {
   // IPv6 Explicit NULL' and '3 - Implicit NULL'.   Outside of this, labels are expected
   // to have a minimum value of 16.
   // default = 0
-  optional int32 fixed_label_value = 6;
+  optional uint32 fixed_label_value = 6;
 }
 
 // Configuration for an RSVP Ingress point-to-point LSP.
@@ -4300,29 +4300,29 @@ message RsvpLspIpv4InterfaceP2PIngressIpv4Lsp {
 
   // The Tunnel ID of the RSVP LSP. Carried in the SESSION object in Path Messages.
   // default = 1
-  optional int32 tunnel_id = 3;
+  optional uint32 tunnel_id = 3;
 
   // The LSP ID of the RSVP LSP. Carried in the SENDER_TEMPLATE object in Path Messages.
   // default = 1
-  optional int32 lsp_id = 4;
+  optional uint32 lsp_id = 4;
 
   // The time in seconds between successive transmissions of PATH Refreshes.  The actual
   // refresh interval is jittered by upto 50%. There is no specification specified maximum
   // value. For clarity, setting the maximum to 1 hour.
   // default = 30
-  optional int32 refresh_interval = 5;
+  optional uint32 refresh_interval = 5;
 
   // The number of missed RESV refreshes after which a recieving node should consider
   // the LSP state to have timed out. There is no specification specified maximum value.
   // Setting the maximum allowed value to 10.
   // default = 3
-  optional int32 timeout_multiplier = 6;
+  optional uint32 timeout_multiplier = 6;
 
   // The LSP id that will be used when creating a Make-Before-Break LSP when the active
   // LSP is using lsp_id. If the active LSP on which Make-Before-Break is being done is
   // using the backup_lsp_id, the new LSP created will toggle to  use the lsp_id instead.
   // default = 2
-  optional int32 backup_lsp_id = 7;
+  optional uint32 backup_lsp_id = 7;
 
   // The amount of delay in milliseconds that an implementation should wait for before
   // switching traffic to the new LSP created after  a Make-Before-Break is done on an
@@ -4335,7 +4335,7 @@ message RsvpLspIpv4InterfaceP2PIngressIpv4Lsp {
   // list of warnings in the 'Response.Warning' attribute sent in the SetConfig 'Success'
   // Response.
   // default = 0
-  optional int32 lsp_switchover_delay = 8;
+  optional uint32 lsp_switchover_delay = 8;
 
   // This contains the values of the fields to be included in the SESSION_ATTRIBUTE object
   // in the Path Message sent for the LSP.
@@ -4380,14 +4380,14 @@ message RsvpSessionAttribute {
   // is encountered when setting up the LSP. (e.g. bandwidth availability). The value
   // 0 is the highest priority while 7 is the lowest.
   // default = 7
-  optional int32 setup_priority = 3;
+  optional uint32 setup_priority = 3;
 
   // Specifies the value of the Holding Priority field. This controls whether a new LSP
   // being created with certain Setup Priority should pre-empt this LSP if resource limitation
   // is encountered when setting up the LSP. (e.g. bandwidth availability). The value
   // 0 is the highest priority while 7 is the lowest.
   // default = 7
-  optional int32 holding_priority = 4;
+  optional uint32 holding_priority = 4;
 
   // This flag permits transit routers to use a local repair mechanism which may result
   // in violation of the explicit route object.  When a fault is detected on an adjacent
@@ -4485,11 +4485,11 @@ message RsvpTspec {
 
   // Specifies the minium length of packet frames that will be policed.
   // default = 0
-  optional int32 minimum_policed_unit = 4;
+  optional uint32 minimum_policed_unit = 4;
 
   // Specifies the maximum length of packet frames that will be policed.
   // default = 0
-  optional int32 maximum_policed_unit = 5;
+  optional uint32 maximum_policed_unit = 5;
 }
 
 // Configuration for the optional RSVP-TE FAST_REROUTE object included in Path Messages
@@ -4501,19 +4501,19 @@ message RsvpFastReroute {
   // setting up a backup LSP, preemption of existing LSP can happen  if resource limitation
   // is encountered (e.g bandwidth availability).
   // default = 7
-  optional int32 setup_priority = 1;
+  optional uint32 setup_priority = 1;
 
   // Specifies the value of the Holding Priority field. This controls whether a new LSP
   // being created with certain Setup Priority should pre-empt this LSP set up with this
   // Holding Priority. While setting up a new LSP, preemption of existing LSP can happen
   // if resource limitation is encountered (e.g bandwidth availability).
   // default = 7
-  optional int32 holding_priority = 2;
+  optional uint32 holding_priority = 2;
 
   // Specifies the value of the Hop Limit field. This controls the maximum number of hops
   // the LSP should traverse to reach the  LSP end-point.
   // default = 3
-  optional int32 hop_limit = 3;
+  optional uint32 hop_limit = 3;
 
   // Specifies the value of the Bandwidth field as a 32-bit IEEE floating point integer,
   // in bytes per second, as desired for the LSP.
@@ -4575,7 +4575,7 @@ message RsvpEro {
   // this value as the prefix length of the ERO sub-object containing egress IP address.
   // 
   // default = 32
-  optional int32 prefix_length = 2;
+  optional uint32 prefix_length = 2;
 
   // Array of sub-objects to be included in the ERO. These sub-objects contain the intermediate
   // hops to be traversed by the LSP while being forwarded towards the egress endpoint.
@@ -4606,13 +4606,13 @@ message RsvpEroSubobject {
   // Prefix length for the IPv4 address in the ERO sub-object. This field is applicable
   // only if the value of 'type' is set to 'ipv4'.
   // default = 32
-  optional int32 prefix_length = 3;
+  optional uint32 prefix_length = 3;
 
   // Autonomous System number to be set in the ERO sub-object that this LSP should traverse
   // through. This field is applicable only if the value of 'type' is set to 'as_number'.
   // Note that as per RFC3209, 4-byte AS encoding is not supported.
   // default = 0
-  optional int32 as_number = 4;
+  optional uint32 as_number = 4;
 
   message HopType {
     enum Enum {
@@ -4985,12 +4985,12 @@ message FlowCustomMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset
   // of corresponding header field
   // default = 1
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // Ethernet packet header
@@ -5596,11 +5596,11 @@ message FlowSizeIncrement {
 
   // Starting frame size in bytes
   // default = 64
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Ending frame size in bytes
   // default = 1518
-  optional int32 end = 2;
+  optional uint32 end = 2;
 
   // Step frame size in bytes
   // default = 1
@@ -5756,7 +5756,7 @@ message FlowContinuous {
 
   // The minimum gap between packets expressed as bytes.
   // default = 12
-  optional int32 gap = 1;
+  optional uint32 gap = 1;
 
   // Description missing in models
   optional FlowDelay delay = 2;
@@ -5799,11 +5799,11 @@ message FlowFixedPackets {
 
   // Stop transmit of the flow after this number of packets.
   // default = 1
-  optional int32 packets = 1;
+  optional uint32 packets = 1;
 
   // The minimum gap between packets expressed as bytes.
   // default = 12
-  optional int32 gap = 2;
+  optional uint32 gap = 2;
 
   // Description missing in models
   optional FlowDelay delay = 3;
@@ -5818,7 +5818,7 @@ message FlowFixedSeconds {
 
   // The minimum gap between packets expressed as bytes.
   // default = 12
-  optional int32 gap = 2;
+  optional uint32 gap = 2;
 
   // Description missing in models
   optional FlowDelay delay = 3;
@@ -5833,15 +5833,15 @@ message FlowBurst {
   // The number of packet bursts transmitted per flow.
   // A value of 0 implies continuous burst of packets.
   // default = 0
-  optional int32 bursts = 1;
+  optional uint32 bursts = 1;
 
   // The number of packets transmitted per burst.
   // default = 1
-  optional int32 packets = 2;
+  optional uint32 packets = 2;
 
   // The minimum gap between packets expressed as bytes.
   // default = 12
-  optional int32 gap = 3;
+  optional uint32 gap = 3;
 
   // Description missing in models
   optional FlowDurationInterBurstGap inter_burst_gap = 4;
@@ -6122,11 +6122,11 @@ message Lldp {
   // Specifies the amount of time in seconds a receiving device should maintain LLDP information
   // sent  by the device before discarding it.
   // default = 120
-  optional int32 hold_time = 5;
+  optional uint32 hold_time = 5;
 
   // Set the transmission frequency of LLDP updates in seconds.
   // default = 30
-  optional int32 advertisement_interval = 6;
+  optional uint32 advertisement_interval = 6;
 
   // Globally unique name of an object. It also serves as the primary key for arrays of
   // objects.
@@ -8965,10 +8965,10 @@ message ResultBgpCommunity {
   optional Type.Enum type = 1;
 
   // First two octets of 32 bit community AS number.
-  optional int32 as_number = 2;
+  optional uint32 as_number = 2;
 
   // Last two octets of the community value.
-  optional int32 as_custom = 3;
+  optional uint32 as_custom = 3;
 }
 
 // This attribute identifies the autonomous systems through  which routing information
@@ -9667,12 +9667,12 @@ message PatternFlowEthernetDstMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 48
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // Destination MAC address
@@ -9746,12 +9746,12 @@ message PatternFlowEthernetSrcMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 48
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // Source MAC address
@@ -9795,11 +9795,11 @@ message PatternFlowEthernetEtherTypeCounter {
 
   // Description missing in models
   // default = 65535
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -9818,12 +9818,12 @@ message PatternFlowEthernetEtherTypeMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 16
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // Ethernet type
@@ -9845,17 +9845,17 @@ message PatternFlowEthernetEtherType {
 
   // Description missing in models
   // default = 65535
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [65535]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // The OTG implementation can provide a system generated
   // value for this property. If the OTG is unable to generate a value
   // the default value must be used.
   // default = 65535
-  optional int32 auto = 4;
+  optional uint32 auto = 4;
 
   // Description missing in models
   optional PatternFlowEthernetEtherTypeCounter increment = 6;
@@ -9874,11 +9874,11 @@ message PatternFlowEthernetPfcQueueCounter {
 
   // Description missing in models
   // default = 0
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -9897,12 +9897,12 @@ message PatternFlowEthernetPfcQueueMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 3
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // Priority flow control queue
@@ -9923,11 +9923,11 @@ message PatternFlowEthernetPfcQueue {
 
   // Description missing in models
   // default = 0
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [0]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowEthernetPfcQueueCounter increment = 5;
@@ -9946,11 +9946,11 @@ message PatternFlowVlanPriorityCounter {
 
   // Description missing in models
   // default = 0
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -9969,12 +9969,12 @@ message PatternFlowVlanPriorityMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 3
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // Priority code point
@@ -9995,11 +9995,11 @@ message PatternFlowVlanPriority {
 
   // Description missing in models
   // default = 0
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [0]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowVlanPriorityCounter increment = 5;
@@ -10018,11 +10018,11 @@ message PatternFlowVlanCfiCounter {
 
   // Description missing in models
   // default = 0
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -10041,12 +10041,12 @@ message PatternFlowVlanCfiMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 1
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // Canonical format indicator or drop elegible indicator
@@ -10067,11 +10067,11 @@ message PatternFlowVlanCfi {
 
   // Description missing in models
   // default = 0
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [0]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowVlanCfiCounter increment = 5;
@@ -10090,11 +10090,11 @@ message PatternFlowVlanIdCounter {
 
   // Description missing in models
   // default = 0
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -10113,12 +10113,12 @@ message PatternFlowVlanIdMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 12
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // Vlan identifier
@@ -10139,11 +10139,11 @@ message PatternFlowVlanId {
 
   // Description missing in models
   // default = 0
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [0]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowVlanIdCounter increment = 5;
@@ -10162,11 +10162,11 @@ message PatternFlowVlanTpidCounter {
 
   // Description missing in models
   // default = 33024
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -10185,12 +10185,12 @@ message PatternFlowVlanTpidMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 16
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // Protocol identifier
@@ -10211,11 +10211,11 @@ message PatternFlowVlanTpid {
 
   // Description missing in models
   // default = 33024
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [33024]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowVlanTpidCounter increment = 5;
@@ -10234,11 +10234,11 @@ message PatternFlowVxlanFlagsCounter {
 
   // Description missing in models
   // default = 8
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -10257,12 +10257,12 @@ message PatternFlowVxlanFlagsMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 8
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // Flags field with a bit format of RRRRIRRR. The I flag MUST be set to 1 for a valid
@@ -10285,11 +10285,11 @@ message PatternFlowVxlanFlags {
 
   // Description missing in models
   // default = 8
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [8]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowVxlanFlagsCounter increment = 5;
@@ -10308,11 +10308,11 @@ message PatternFlowVxlanReserved0Counter {
 
   // Description missing in models
   // default = 0
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -10331,12 +10331,12 @@ message PatternFlowVxlanReserved0MetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 24
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // Reserved field
@@ -10357,11 +10357,11 @@ message PatternFlowVxlanReserved0 {
 
   // Description missing in models
   // default = 0
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [0]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowVxlanReserved0Counter increment = 5;
@@ -10380,11 +10380,11 @@ message PatternFlowVxlanVniCounter {
 
   // Description missing in models
   // default = 0
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -10403,12 +10403,12 @@ message PatternFlowVxlanVniMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 24
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // VXLAN network id
@@ -10430,17 +10430,17 @@ message PatternFlowVxlanVni {
 
   // Description missing in models
   // default = 0
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [0]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // The OTG implementation can provide a system generated
   // value for this property. If the OTG is unable to generate a value
   // the default value must be used.
   // default = 0
-  optional int32 auto = 4;
+  optional uint32 auto = 4;
 
   // Description missing in models
   optional PatternFlowVxlanVniCounter increment = 6;
@@ -10459,11 +10459,11 @@ message PatternFlowVxlanReserved1Counter {
 
   // Description missing in models
   // default = 0
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -10482,12 +10482,12 @@ message PatternFlowVxlanReserved1MetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 8
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // Reserved field
@@ -10508,11 +10508,11 @@ message PatternFlowVxlanReserved1 {
 
   // Description missing in models
   // default = 0
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [0]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowVxlanReserved1Counter increment = 5;
@@ -10531,11 +10531,11 @@ message PatternFlowIpv4VersionCounter {
 
   // Description missing in models
   // default = 4
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -10554,12 +10554,12 @@ message PatternFlowIpv4VersionMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 4
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // Version
@@ -10580,11 +10580,11 @@ message PatternFlowIpv4Version {
 
   // Description missing in models
   // default = 4
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [4]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowIpv4VersionCounter increment = 5;
@@ -10603,11 +10603,11 @@ message PatternFlowIpv4HeaderLengthCounter {
 
   // Description missing in models
   // default = 5
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -10626,12 +10626,12 @@ message PatternFlowIpv4HeaderLengthMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 4
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // Header length
@@ -10653,17 +10653,17 @@ message PatternFlowIpv4HeaderLength {
 
   // Description missing in models
   // default = 5
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [5]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // The OTG implementation can provide a system generated
   // value for this property. If the OTG is unable to generate a value
   // the default value must be used.
   // default = 5
-  optional int32 auto = 4;
+  optional uint32 auto = 4;
 
   // Description missing in models
   optional PatternFlowIpv4HeaderLengthCounter increment = 6;
@@ -10682,11 +10682,11 @@ message PatternFlowIpv4TotalLengthCounter {
 
   // Description missing in models
   // default = 46
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -10705,12 +10705,12 @@ message PatternFlowIpv4TotalLengthMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 16
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // Total length
@@ -10732,17 +10732,17 @@ message PatternFlowIpv4TotalLength {
 
   // Description missing in models
   // default = 46
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [46]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // The OTG implementation can provide a system generated
   // value for this property. If the OTG is unable to generate a value
   // the default value must be used.
   // default = 46
-  optional int32 auto = 4;
+  optional uint32 auto = 4;
 
   // Description missing in models
   optional PatternFlowIpv4TotalLengthCounter increment = 6;
@@ -10761,11 +10761,11 @@ message PatternFlowIpv4IdentificationCounter {
 
   // Description missing in models
   // default = 0
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -10784,12 +10784,12 @@ message PatternFlowIpv4IdentificationMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 16
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // Identification
@@ -10810,11 +10810,11 @@ message PatternFlowIpv4Identification {
 
   // Description missing in models
   // default = 0
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [0]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowIpv4IdentificationCounter increment = 5;
@@ -10833,11 +10833,11 @@ message PatternFlowIpv4ReservedCounter {
 
   // Description missing in models
   // default = 0
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -10856,12 +10856,12 @@ message PatternFlowIpv4ReservedMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 1
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // Reserved flag.
@@ -10882,11 +10882,11 @@ message PatternFlowIpv4Reserved {
 
   // Description missing in models
   // default = 0
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [0]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowIpv4ReservedCounter increment = 5;
@@ -10905,11 +10905,11 @@ message PatternFlowIpv4DontFragmentCounter {
 
   // Description missing in models
   // default = 0
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -10928,12 +10928,12 @@ message PatternFlowIpv4DontFragmentMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 1
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // Dont fragment flag If the dont_fragment flag is set and fragmentation is required
@@ -10955,11 +10955,11 @@ message PatternFlowIpv4DontFragment {
 
   // Description missing in models
   // default = 0
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [0]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowIpv4DontFragmentCounter increment = 5;
@@ -10978,11 +10978,11 @@ message PatternFlowIpv4MoreFragmentsCounter {
 
   // Description missing in models
   // default = 0
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -11001,12 +11001,12 @@ message PatternFlowIpv4MoreFragmentsMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 1
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // More fragments flag
@@ -11027,11 +11027,11 @@ message PatternFlowIpv4MoreFragments {
 
   // Description missing in models
   // default = 0
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [0]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowIpv4MoreFragmentsCounter increment = 5;
@@ -11050,11 +11050,11 @@ message PatternFlowIpv4FragmentOffsetCounter {
 
   // Description missing in models
   // default = 0
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -11073,12 +11073,12 @@ message PatternFlowIpv4FragmentOffsetMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 5
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // Fragment offset
@@ -11099,11 +11099,11 @@ message PatternFlowIpv4FragmentOffset {
 
   // Description missing in models
   // default = 0
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [0]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowIpv4FragmentOffsetCounter increment = 5;
@@ -11122,11 +11122,11 @@ message PatternFlowIpv4TimeToLiveCounter {
 
   // Description missing in models
   // default = 64
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -11145,12 +11145,12 @@ message PatternFlowIpv4TimeToLiveMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 8
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // Time to live
@@ -11171,11 +11171,11 @@ message PatternFlowIpv4TimeToLive {
 
   // Description missing in models
   // default = 64
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [64]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowIpv4TimeToLiveCounter increment = 5;
@@ -11194,11 +11194,11 @@ message PatternFlowIpv4ProtocolCounter {
 
   // Description missing in models
   // default = 61
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -11217,12 +11217,12 @@ message PatternFlowIpv4ProtocolMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 8
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // Protocol, default is 61 any host internal protocol
@@ -11244,17 +11244,17 @@ message PatternFlowIpv4Protocol {
 
   // Description missing in models
   // default = 61
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [61]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // The OTG implementation can provide a system generated
   // value for this property. If the OTG is unable to generate a value
   // the default value must be used.
   // default = 61
-  optional int32 auto = 4;
+  optional uint32 auto = 4;
 
   // Description missing in models
   optional PatternFlowIpv4ProtocolCounter increment = 6;
@@ -11294,7 +11294,7 @@ message PatternFlowIpv4HeaderChecksum {
   optional Generated.Enum generated = 2;
 
   // A custom checksum value
-  optional int32 custom = 3;
+  optional uint32 custom = 3;
 }
 
 // ipv4 counter pattern
@@ -11325,12 +11325,12 @@ message PatternFlowIpv4SrcMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 32
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // Source address
@@ -11397,12 +11397,12 @@ message PatternFlowIpv4DstMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 32
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // Destination address
@@ -11446,11 +11446,11 @@ message PatternFlowIpv4PriorityRawCounter {
 
   // Description missing in models
   // default = 0
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -11469,12 +11469,12 @@ message PatternFlowIpv4PriorityRawMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 8
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // Raw priority
@@ -11495,11 +11495,11 @@ message PatternFlowIpv4PriorityRaw {
 
   // Description missing in models
   // default = 0
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [0]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowIpv4PriorityRawCounter increment = 5;
@@ -11518,11 +11518,11 @@ message PatternFlowIpv4DscpPhbCounter {
 
   // Description missing in models
   // default = 0
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -11541,12 +11541,12 @@ message PatternFlowIpv4DscpPhbMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 6
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // Per hop behavior
@@ -11567,11 +11567,11 @@ message PatternFlowIpv4DscpPhb {
 
   // Description missing in models
   // default = 0
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [0]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowIpv4DscpPhbCounter increment = 5;
@@ -11590,11 +11590,11 @@ message PatternFlowIpv4DscpEcnCounter {
 
   // Description missing in models
   // default = 0
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -11613,12 +11613,12 @@ message PatternFlowIpv4DscpEcnMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 2
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // Explicit congestion notification
@@ -11639,11 +11639,11 @@ message PatternFlowIpv4DscpEcn {
 
   // Description missing in models
   // default = 0
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [0]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowIpv4DscpEcnCounter increment = 5;
@@ -11662,11 +11662,11 @@ message PatternFlowIpv4TosPrecedenceCounter {
 
   // Description missing in models
   // default = 0
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -11685,12 +11685,12 @@ message PatternFlowIpv4TosPrecedenceMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 3
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // Precedence
@@ -11711,11 +11711,11 @@ message PatternFlowIpv4TosPrecedence {
 
   // Description missing in models
   // default = 0
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [0]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowIpv4TosPrecedenceCounter increment = 5;
@@ -11734,11 +11734,11 @@ message PatternFlowIpv4TosDelayCounter {
 
   // Description missing in models
   // default = 0
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -11757,12 +11757,12 @@ message PatternFlowIpv4TosDelayMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 1
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // Delay
@@ -11783,11 +11783,11 @@ message PatternFlowIpv4TosDelay {
 
   // Description missing in models
   // default = 0
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [0]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowIpv4TosDelayCounter increment = 5;
@@ -11806,11 +11806,11 @@ message PatternFlowIpv4TosThroughputCounter {
 
   // Description missing in models
   // default = 0
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -11829,12 +11829,12 @@ message PatternFlowIpv4TosThroughputMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 1
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // Throughput
@@ -11855,11 +11855,11 @@ message PatternFlowIpv4TosThroughput {
 
   // Description missing in models
   // default = 0
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [0]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowIpv4TosThroughputCounter increment = 5;
@@ -11878,11 +11878,11 @@ message PatternFlowIpv4TosReliabilityCounter {
 
   // Description missing in models
   // default = 0
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -11901,12 +11901,12 @@ message PatternFlowIpv4TosReliabilityMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 1
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // Reliability
@@ -11927,11 +11927,11 @@ message PatternFlowIpv4TosReliability {
 
   // Description missing in models
   // default = 0
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [0]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowIpv4TosReliabilityCounter increment = 5;
@@ -11950,11 +11950,11 @@ message PatternFlowIpv4TosMonetaryCounter {
 
   // Description missing in models
   // default = 0
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -11973,12 +11973,12 @@ message PatternFlowIpv4TosMonetaryMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 1
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // Monetary
@@ -11999,11 +11999,11 @@ message PatternFlowIpv4TosMonetary {
 
   // Description missing in models
   // default = 0
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [0]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowIpv4TosMonetaryCounter increment = 5;
@@ -12022,11 +12022,11 @@ message PatternFlowIpv4TosUnusedCounter {
 
   // Description missing in models
   // default = 0
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -12045,12 +12045,12 @@ message PatternFlowIpv4TosUnusedMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 1
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // Unused
@@ -12071,11 +12071,11 @@ message PatternFlowIpv4TosUnused {
 
   // Description missing in models
   // default = 0
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [0]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowIpv4TosUnusedCounter increment = 5;
@@ -12094,11 +12094,11 @@ message PatternFlowIpv6VersionCounter {
 
   // Description missing in models
   // default = 6
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -12117,12 +12117,12 @@ message PatternFlowIpv6VersionMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 4
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // Version number
@@ -12143,11 +12143,11 @@ message PatternFlowIpv6Version {
 
   // Description missing in models
   // default = 6
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [6]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowIpv6VersionCounter increment = 5;
@@ -12166,11 +12166,11 @@ message PatternFlowIpv6TrafficClassCounter {
 
   // Description missing in models
   // default = 0
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -12189,12 +12189,12 @@ message PatternFlowIpv6TrafficClassMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 8
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // Traffic class
@@ -12215,11 +12215,11 @@ message PatternFlowIpv6TrafficClass {
 
   // Description missing in models
   // default = 0
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [0]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowIpv6TrafficClassCounter increment = 5;
@@ -12238,11 +12238,11 @@ message PatternFlowIpv6FlowLabelCounter {
 
   // Description missing in models
   // default = 0
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -12261,12 +12261,12 @@ message PatternFlowIpv6FlowLabelMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 20
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // Flow label
@@ -12287,11 +12287,11 @@ message PatternFlowIpv6FlowLabel {
 
   // Description missing in models
   // default = 0
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [0]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowIpv6FlowLabelCounter increment = 5;
@@ -12310,11 +12310,11 @@ message PatternFlowIpv6PayloadLengthCounter {
 
   // Description missing in models
   // default = 0
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -12333,12 +12333,12 @@ message PatternFlowIpv6PayloadLengthMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 16
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // Payload length
@@ -12360,17 +12360,17 @@ message PatternFlowIpv6PayloadLength {
 
   // Description missing in models
   // default = 0
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [0]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // The OTG implementation can provide a system generated
   // value for this property. If the OTG is unable to generate a value
   // the default value must be used.
   // default = 0
-  optional int32 auto = 4;
+  optional uint32 auto = 4;
 
   // Description missing in models
   optional PatternFlowIpv6PayloadLengthCounter increment = 6;
@@ -12389,11 +12389,11 @@ message PatternFlowIpv6NextHeaderCounter {
 
   // Description missing in models
   // default = 59
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -12412,12 +12412,12 @@ message PatternFlowIpv6NextHeaderMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 8
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // Next header
@@ -12439,17 +12439,17 @@ message PatternFlowIpv6NextHeader {
 
   // Description missing in models
   // default = 59
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [59]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // The OTG implementation can provide a system generated
   // value for this property. If the OTG is unable to generate a value
   // the default value must be used.
   // default = 59
-  optional int32 auto = 4;
+  optional uint32 auto = 4;
 
   // Description missing in models
   optional PatternFlowIpv6NextHeaderCounter increment = 6;
@@ -12468,11 +12468,11 @@ message PatternFlowIpv6HopLimitCounter {
 
   // Description missing in models
   // default = 64
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -12491,12 +12491,12 @@ message PatternFlowIpv6HopLimitMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 8
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // Hop limit
@@ -12517,11 +12517,11 @@ message PatternFlowIpv6HopLimit {
 
   // Description missing in models
   // default = 64
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [64]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowIpv6HopLimitCounter increment = 5;
@@ -12563,12 +12563,12 @@ message PatternFlowIpv6SrcMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 128
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // Source address
@@ -12635,12 +12635,12 @@ message PatternFlowIpv6DstMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 128
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // Destination address
@@ -12707,12 +12707,12 @@ message PatternFlowPfcPauseDstMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 48
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // Destination MAC address
@@ -12779,12 +12779,12 @@ message PatternFlowPfcPauseSrcMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 48
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // Source MAC address
@@ -12828,11 +12828,11 @@ message PatternFlowPfcPauseEtherTypeCounter {
 
   // Description missing in models
   // default = 34824
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -12851,12 +12851,12 @@ message PatternFlowPfcPauseEtherTypeMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 16
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // Ethernet type
@@ -12877,11 +12877,11 @@ message PatternFlowPfcPauseEtherType {
 
   // Description missing in models
   // default = 34824
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [34824]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowPfcPauseEtherTypeCounter increment = 5;
@@ -12900,11 +12900,11 @@ message PatternFlowPfcPauseControlOpCodeCounter {
 
   // Description missing in models
   // default = 257
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -12923,12 +12923,12 @@ message PatternFlowPfcPauseControlOpCodeMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 16
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // Control operation code
@@ -12949,11 +12949,11 @@ message PatternFlowPfcPauseControlOpCode {
 
   // Description missing in models
   // default = 257
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [257]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowPfcPauseControlOpCodeCounter increment = 5;
@@ -12972,11 +12972,11 @@ message PatternFlowPfcPauseClassEnableVectorCounter {
 
   // Description missing in models
   // default = 0
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -12995,12 +12995,12 @@ message PatternFlowPfcPauseClassEnableVectorMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 16
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // Destination
@@ -13021,11 +13021,11 @@ message PatternFlowPfcPauseClassEnableVector {
 
   // Description missing in models
   // default = 0
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [0]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowPfcPauseClassEnableVectorCounter increment = 5;
@@ -13044,11 +13044,11 @@ message PatternFlowPfcPausePauseClass0Counter {
 
   // Description missing in models
   // default = 0
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -13067,12 +13067,12 @@ message PatternFlowPfcPausePauseClass0MetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 16
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // Pause class 0
@@ -13093,11 +13093,11 @@ message PatternFlowPfcPausePauseClass0 {
 
   // Description missing in models
   // default = 0
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [0]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowPfcPausePauseClass0Counter increment = 5;
@@ -13116,11 +13116,11 @@ message PatternFlowPfcPausePauseClass1Counter {
 
   // Description missing in models
   // default = 0
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -13139,12 +13139,12 @@ message PatternFlowPfcPausePauseClass1MetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 16
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // Pause class 1
@@ -13165,11 +13165,11 @@ message PatternFlowPfcPausePauseClass1 {
 
   // Description missing in models
   // default = 0
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [0]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowPfcPausePauseClass1Counter increment = 5;
@@ -13188,11 +13188,11 @@ message PatternFlowPfcPausePauseClass2Counter {
 
   // Description missing in models
   // default = 0
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -13211,12 +13211,12 @@ message PatternFlowPfcPausePauseClass2MetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 16
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // Pause class 2
@@ -13237,11 +13237,11 @@ message PatternFlowPfcPausePauseClass2 {
 
   // Description missing in models
   // default = 0
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [0]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowPfcPausePauseClass2Counter increment = 5;
@@ -13260,11 +13260,11 @@ message PatternFlowPfcPausePauseClass3Counter {
 
   // Description missing in models
   // default = 0
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -13283,12 +13283,12 @@ message PatternFlowPfcPausePauseClass3MetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 16
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // Pause class 3
@@ -13309,11 +13309,11 @@ message PatternFlowPfcPausePauseClass3 {
 
   // Description missing in models
   // default = 0
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [0]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowPfcPausePauseClass3Counter increment = 5;
@@ -13332,11 +13332,11 @@ message PatternFlowPfcPausePauseClass4Counter {
 
   // Description missing in models
   // default = 0
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -13355,12 +13355,12 @@ message PatternFlowPfcPausePauseClass4MetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 16
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // Pause class 4
@@ -13381,11 +13381,11 @@ message PatternFlowPfcPausePauseClass4 {
 
   // Description missing in models
   // default = 0
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [0]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowPfcPausePauseClass4Counter increment = 5;
@@ -13404,11 +13404,11 @@ message PatternFlowPfcPausePauseClass5Counter {
 
   // Description missing in models
   // default = 0
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -13427,12 +13427,12 @@ message PatternFlowPfcPausePauseClass5MetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 16
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // Pause class 5
@@ -13453,11 +13453,11 @@ message PatternFlowPfcPausePauseClass5 {
 
   // Description missing in models
   // default = 0
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [0]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowPfcPausePauseClass5Counter increment = 5;
@@ -13476,11 +13476,11 @@ message PatternFlowPfcPausePauseClass6Counter {
 
   // Description missing in models
   // default = 0
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -13499,12 +13499,12 @@ message PatternFlowPfcPausePauseClass6MetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 16
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // Pause class 6
@@ -13525,11 +13525,11 @@ message PatternFlowPfcPausePauseClass6 {
 
   // Description missing in models
   // default = 0
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [0]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowPfcPausePauseClass6Counter increment = 5;
@@ -13548,11 +13548,11 @@ message PatternFlowPfcPausePauseClass7Counter {
 
   // Description missing in models
   // default = 0
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -13571,12 +13571,12 @@ message PatternFlowPfcPausePauseClass7MetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 16
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // Pause class 7
@@ -13597,11 +13597,11 @@ message PatternFlowPfcPausePauseClass7 {
 
   // Description missing in models
   // default = 0
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [0]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowPfcPausePauseClass7Counter increment = 5;
@@ -13643,12 +13643,12 @@ message PatternFlowEthernetPauseDstMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 48
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // Destination MAC address
@@ -13715,12 +13715,12 @@ message PatternFlowEthernetPauseSrcMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 48
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // Source MAC address
@@ -13764,11 +13764,11 @@ message PatternFlowEthernetPauseEtherTypeCounter {
 
   // Description missing in models
   // default = 34824
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -13787,12 +13787,12 @@ message PatternFlowEthernetPauseEtherTypeMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 16
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // Ethernet type
@@ -13813,11 +13813,11 @@ message PatternFlowEthernetPauseEtherType {
 
   // Description missing in models
   // default = 34824
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [34824]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowEthernetPauseEtherTypeCounter increment = 5;
@@ -13836,11 +13836,11 @@ message PatternFlowEthernetPauseControlOpCodeCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -13859,12 +13859,12 @@ message PatternFlowEthernetPauseControlOpCodeMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 16
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // Control operation code
@@ -13885,11 +13885,11 @@ message PatternFlowEthernetPauseControlOpCode {
 
   // Description missing in models
   // default = 1
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [1]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowEthernetPauseControlOpCodeCounter increment = 5;
@@ -13908,11 +13908,11 @@ message PatternFlowEthernetPauseTimeCounter {
 
   // Description missing in models
   // default = 0
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -13931,12 +13931,12 @@ message PatternFlowEthernetPauseTimeMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 16
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // Time
@@ -13957,11 +13957,11 @@ message PatternFlowEthernetPauseTime {
 
   // Description missing in models
   // default = 0
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [0]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowEthernetPauseTimeCounter increment = 5;
@@ -13980,11 +13980,11 @@ message PatternFlowTcpSrcPortCounter {
 
   // Description missing in models
   // default = 0
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -14003,12 +14003,12 @@ message PatternFlowTcpSrcPortMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 16
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // Source port
@@ -14029,11 +14029,11 @@ message PatternFlowTcpSrcPort {
 
   // Description missing in models
   // default = 0
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [0]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowTcpSrcPortCounter increment = 5;
@@ -14052,11 +14052,11 @@ message PatternFlowTcpDstPortCounter {
 
   // Description missing in models
   // default = 0
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -14075,12 +14075,12 @@ message PatternFlowTcpDstPortMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 16
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // Destination port
@@ -14101,11 +14101,11 @@ message PatternFlowTcpDstPort {
 
   // Description missing in models
   // default = 0
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [0]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowTcpDstPortCounter increment = 5;
@@ -14124,11 +14124,11 @@ message PatternFlowTcpSeqNumCounter {
 
   // Description missing in models
   // default = 0
-  optional int64 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int64 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -14147,12 +14147,12 @@ message PatternFlowTcpSeqNumMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 32
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // Sequence number
@@ -14173,11 +14173,11 @@ message PatternFlowTcpSeqNum {
 
   // Description missing in models
   // default = 0
-  optional int64 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [0]
-  repeated int64 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowTcpSeqNumCounter increment = 5;
@@ -14196,11 +14196,11 @@ message PatternFlowTcpAckNumCounter {
 
   // Description missing in models
   // default = 0
-  optional int64 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int64 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -14219,12 +14219,12 @@ message PatternFlowTcpAckNumMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 32
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // Acknowledgement number
@@ -14245,11 +14245,11 @@ message PatternFlowTcpAckNum {
 
   // Description missing in models
   // default = 0
-  optional int64 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [0]
-  repeated int64 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowTcpAckNumCounter increment = 5;
@@ -14268,11 +14268,11 @@ message PatternFlowTcpDataOffsetCounter {
 
   // Description missing in models
   // default = 0
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -14291,12 +14291,12 @@ message PatternFlowTcpDataOffsetMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 4
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // The number of 32 bit words in the TCP header. This indicates where the data begins.
@@ -14317,11 +14317,11 @@ message PatternFlowTcpDataOffset {
 
   // Description missing in models
   // default = 0
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [0]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowTcpDataOffsetCounter increment = 5;
@@ -14340,11 +14340,11 @@ message PatternFlowTcpEcnNsCounter {
 
   // Description missing in models
   // default = 0
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -14363,12 +14363,12 @@ message PatternFlowTcpEcnNsMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 1
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // Explicit congestion notification, concealment protection.
@@ -14389,11 +14389,11 @@ message PatternFlowTcpEcnNs {
 
   // Description missing in models
   // default = 0
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [0]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowTcpEcnNsCounter increment = 5;
@@ -14412,11 +14412,11 @@ message PatternFlowTcpEcnCwrCounter {
 
   // Description missing in models
   // default = 0
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -14435,12 +14435,12 @@ message PatternFlowTcpEcnCwrMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 1
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // Explicit congestion notification, congestion window reduced.
@@ -14461,11 +14461,11 @@ message PatternFlowTcpEcnCwr {
 
   // Description missing in models
   // default = 0
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [0]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowTcpEcnCwrCounter increment = 5;
@@ -14484,11 +14484,11 @@ message PatternFlowTcpEcnEchoCounter {
 
   // Description missing in models
   // default = 0
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -14507,12 +14507,12 @@ message PatternFlowTcpEcnEchoMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 1
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // Explicit congestion notification, echo. 1 indicates the peer is ecn capable. 0 indicates
@@ -14534,11 +14534,11 @@ message PatternFlowTcpEcnEcho {
 
   // Description missing in models
   // default = 0
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [0]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowTcpEcnEchoCounter increment = 5;
@@ -14557,11 +14557,11 @@ message PatternFlowTcpCtlUrgCounter {
 
   // Description missing in models
   // default = 0
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -14580,12 +14580,12 @@ message PatternFlowTcpCtlUrgMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 1
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // A value of 1 indicates that the urgent pointer field is significant.
@@ -14606,11 +14606,11 @@ message PatternFlowTcpCtlUrg {
 
   // Description missing in models
   // default = 0
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [0]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowTcpCtlUrgCounter increment = 5;
@@ -14629,11 +14629,11 @@ message PatternFlowTcpCtlAckCounter {
 
   // Description missing in models
   // default = 0
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -14652,12 +14652,12 @@ message PatternFlowTcpCtlAckMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 1
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // A value of 1 indicates that the ackknowledgment field is significant.
@@ -14678,11 +14678,11 @@ message PatternFlowTcpCtlAck {
 
   // Description missing in models
   // default = 0
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [0]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowTcpCtlAckCounter increment = 5;
@@ -14701,11 +14701,11 @@ message PatternFlowTcpCtlPshCounter {
 
   // Description missing in models
   // default = 0
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -14724,12 +14724,12 @@ message PatternFlowTcpCtlPshMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 1
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // Asks to push the buffered data to the receiving application.
@@ -14750,11 +14750,11 @@ message PatternFlowTcpCtlPsh {
 
   // Description missing in models
   // default = 0
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [0]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowTcpCtlPshCounter increment = 5;
@@ -14773,11 +14773,11 @@ message PatternFlowTcpCtlRstCounter {
 
   // Description missing in models
   // default = 0
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -14796,12 +14796,12 @@ message PatternFlowTcpCtlRstMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 1
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // Reset the connection.
@@ -14822,11 +14822,11 @@ message PatternFlowTcpCtlRst {
 
   // Description missing in models
   // default = 0
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [0]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowTcpCtlRstCounter increment = 5;
@@ -14845,11 +14845,11 @@ message PatternFlowTcpCtlSynCounter {
 
   // Description missing in models
   // default = 0
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -14868,12 +14868,12 @@ message PatternFlowTcpCtlSynMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 1
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // Synchronize sequenece numbers.
@@ -14894,11 +14894,11 @@ message PatternFlowTcpCtlSyn {
 
   // Description missing in models
   // default = 0
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [0]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowTcpCtlSynCounter increment = 5;
@@ -14917,11 +14917,11 @@ message PatternFlowTcpCtlFinCounter {
 
   // Description missing in models
   // default = 0
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -14940,12 +14940,12 @@ message PatternFlowTcpCtlFinMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 1
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // Last packet from the sender.
@@ -14966,11 +14966,11 @@ message PatternFlowTcpCtlFin {
 
   // Description missing in models
   // default = 0
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [0]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowTcpCtlFinCounter increment = 5;
@@ -14989,11 +14989,11 @@ message PatternFlowTcpWindowCounter {
 
   // Description missing in models
   // default = 0
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -15012,12 +15012,12 @@ message PatternFlowTcpWindowMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 16
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // Tcp connection window.
@@ -15038,11 +15038,11 @@ message PatternFlowTcpWindow {
 
   // Description missing in models
   // default = 0
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [0]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowTcpWindowCounter increment = 5;
@@ -15061,11 +15061,11 @@ message PatternFlowUdpSrcPortCounter {
 
   // Description missing in models
   // default = 0
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -15084,12 +15084,12 @@ message PatternFlowUdpSrcPortMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 16
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // Source port
@@ -15110,11 +15110,11 @@ message PatternFlowUdpSrcPort {
 
   // Description missing in models
   // default = 0
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [0]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowUdpSrcPortCounter increment = 5;
@@ -15133,11 +15133,11 @@ message PatternFlowUdpDstPortCounter {
 
   // Description missing in models
   // default = 0
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -15156,12 +15156,12 @@ message PatternFlowUdpDstPortMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 16
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // Destination port
@@ -15182,11 +15182,11 @@ message PatternFlowUdpDstPort {
 
   // Description missing in models
   // default = 0
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [0]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowUdpDstPortCounter increment = 5;
@@ -15205,11 +15205,11 @@ message PatternFlowUdpLengthCounter {
 
   // Description missing in models
   // default = 0
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -15228,12 +15228,12 @@ message PatternFlowUdpLengthMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 16
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // Length
@@ -15254,11 +15254,11 @@ message PatternFlowUdpLength {
 
   // Description missing in models
   // default = 0
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [0]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowUdpLengthCounter increment = 5;
@@ -15298,7 +15298,7 @@ message PatternFlowUdpChecksum {
   optional Generated.Enum generated = 2;
 
   // A custom checksum value
-  optional int32 custom = 3;
+  optional uint32 custom = 3;
 }
 
 // integer counter pattern
@@ -15306,11 +15306,11 @@ message PatternFlowGreChecksumPresentCounter {
 
   // Description missing in models
   // default = 0
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -15329,12 +15329,12 @@ message PatternFlowGreChecksumPresentMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 1
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // Checksum present bit
@@ -15355,11 +15355,11 @@ message PatternFlowGreChecksumPresent {
 
   // Description missing in models
   // default = 0
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [0]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowGreChecksumPresentCounter increment = 5;
@@ -15378,11 +15378,11 @@ message PatternFlowGreReserved0Counter {
 
   // Description missing in models
   // default = 0
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -15401,12 +15401,12 @@ message PatternFlowGreReserved0MetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 12
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // Reserved bits
@@ -15427,11 +15427,11 @@ message PatternFlowGreReserved0 {
 
   // Description missing in models
   // default = 0
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [0]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowGreReserved0Counter increment = 5;
@@ -15450,11 +15450,11 @@ message PatternFlowGreVersionCounter {
 
   // Description missing in models
   // default = 0
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -15473,12 +15473,12 @@ message PatternFlowGreVersionMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 3
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // GRE version number
@@ -15499,11 +15499,11 @@ message PatternFlowGreVersion {
 
   // Description missing in models
   // default = 0
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [0]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowGreVersionCounter increment = 5;
@@ -15522,11 +15522,11 @@ message PatternFlowGreProtocolCounter {
 
   // Description missing in models
   // default = 2048
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -15545,12 +15545,12 @@ message PatternFlowGreProtocolMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 16
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // Protocol type of encapsulated payload
@@ -15571,11 +15571,11 @@ message PatternFlowGreProtocol {
 
   // Description missing in models
   // default = 2048
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [2048]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowGreProtocolCounter increment = 5;
@@ -15616,7 +15616,7 @@ message PatternFlowGreChecksum {
   optional Generated.Enum generated = 2;
 
   // A custom checksum value
-  optional int32 custom = 3;
+  optional uint32 custom = 3;
 }
 
 // integer counter pattern
@@ -15624,11 +15624,11 @@ message PatternFlowGreReserved1Counter {
 
   // Description missing in models
   // default = 0
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -15647,12 +15647,12 @@ message PatternFlowGreReserved1MetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 16
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // Optional reserved field. Only present if the checksum_present bit is set.
@@ -15673,11 +15673,11 @@ message PatternFlowGreReserved1 {
 
   // Description missing in models
   // default = 0
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [0]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowGreReserved1Counter increment = 5;
@@ -15696,11 +15696,11 @@ message PatternFlowGtpv1VersionCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -15719,12 +15719,12 @@ message PatternFlowGtpv1VersionMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 3
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // GTPv1 version
@@ -15745,11 +15745,11 @@ message PatternFlowGtpv1Version {
 
   // Description missing in models
   // default = 1
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [1]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowGtpv1VersionCounter increment = 5;
@@ -15768,11 +15768,11 @@ message PatternFlowGtpv1ProtocolTypeCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -15791,12 +15791,12 @@ message PatternFlowGtpv1ProtocolTypeMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 1
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // Protocol type, GTP is 1, GTP' is 0
@@ -15817,11 +15817,11 @@ message PatternFlowGtpv1ProtocolType {
 
   // Description missing in models
   // default = 1
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [1]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowGtpv1ProtocolTypeCounter increment = 5;
@@ -15840,11 +15840,11 @@ message PatternFlowGtpv1ReservedCounter {
 
   // Description missing in models
   // default = 0
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -15863,12 +15863,12 @@ message PatternFlowGtpv1ReservedMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 1
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // Reserved field
@@ -15889,11 +15889,11 @@ message PatternFlowGtpv1Reserved {
 
   // Description missing in models
   // default = 0
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [0]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowGtpv1ReservedCounter increment = 5;
@@ -15912,11 +15912,11 @@ message PatternFlowGtpv1EFlagCounter {
 
   // Description missing in models
   // default = 0
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -15935,12 +15935,12 @@ message PatternFlowGtpv1EFlagMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 1
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // Extension header field present
@@ -15961,11 +15961,11 @@ message PatternFlowGtpv1EFlag {
 
   // Description missing in models
   // default = 0
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [0]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowGtpv1EFlagCounter increment = 5;
@@ -15984,11 +15984,11 @@ message PatternFlowGtpv1SFlagCounter {
 
   // Description missing in models
   // default = 0
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -16007,12 +16007,12 @@ message PatternFlowGtpv1SFlagMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 1
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // Sequence number field present
@@ -16033,11 +16033,11 @@ message PatternFlowGtpv1SFlag {
 
   // Description missing in models
   // default = 0
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [0]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowGtpv1SFlagCounter increment = 5;
@@ -16056,11 +16056,11 @@ message PatternFlowGtpv1PnFlagCounter {
 
   // Description missing in models
   // default = 0
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -16079,12 +16079,12 @@ message PatternFlowGtpv1PnFlagMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 1
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // N-PDU field present
@@ -16105,11 +16105,11 @@ message PatternFlowGtpv1PnFlag {
 
   // Description missing in models
   // default = 0
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [0]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowGtpv1PnFlagCounter increment = 5;
@@ -16128,11 +16128,11 @@ message PatternFlowGtpv1MessageTypeCounter {
 
   // Description missing in models
   // default = 0
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -16151,12 +16151,12 @@ message PatternFlowGtpv1MessageTypeMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 8
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // The type of GTP message Different types of messages are defined in 3GPP TS 29.060
@@ -16178,11 +16178,11 @@ message PatternFlowGtpv1MessageType {
 
   // Description missing in models
   // default = 0
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [0]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowGtpv1MessageTypeCounter increment = 5;
@@ -16201,11 +16201,11 @@ message PatternFlowGtpv1MessageLengthCounter {
 
   // Description missing in models
   // default = 0
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -16224,12 +16224,12 @@ message PatternFlowGtpv1MessageLengthMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 16
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // The length of the payload (the bytes following the mandatory 8-byte GTP header) in
@@ -16251,11 +16251,11 @@ message PatternFlowGtpv1MessageLength {
 
   // Description missing in models
   // default = 0
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [0]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowGtpv1MessageLengthCounter increment = 5;
@@ -16274,11 +16274,11 @@ message PatternFlowGtpv1TeidCounter {
 
   // Description missing in models
   // default = 0
-  optional int64 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int64 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -16297,12 +16297,12 @@ message PatternFlowGtpv1TeidMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 32
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // Tunnel endpoint identifier (TEID) used to multiplex connections in the same GTP tunnel
@@ -16323,11 +16323,11 @@ message PatternFlowGtpv1Teid {
 
   // Description missing in models
   // default = 0
-  optional int64 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [0]
-  repeated int64 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowGtpv1TeidCounter increment = 5;
@@ -16346,11 +16346,11 @@ message PatternFlowGtpv1SquenceNumberCounter {
 
   // Description missing in models
   // default = 0
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -16369,12 +16369,12 @@ message PatternFlowGtpv1SquenceNumberMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 16
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // Sequence number. Exists if any of the e_flag, s_flag, or pn_flag bits are on.  Must
@@ -16396,11 +16396,11 @@ message PatternFlowGtpv1SquenceNumber {
 
   // Description missing in models
   // default = 0
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [0]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowGtpv1SquenceNumberCounter increment = 5;
@@ -16419,11 +16419,11 @@ message PatternFlowGtpv1NPduNumberCounter {
 
   // Description missing in models
   // default = 0
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -16442,12 +16442,12 @@ message PatternFlowGtpv1NPduNumberMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 8
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // N-PDU number. Exists if any of the e_flag, s_flag, or pn_flag bits are on.  Must
@@ -16469,11 +16469,11 @@ message PatternFlowGtpv1NPduNumber {
 
   // Description missing in models
   // default = 0
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [0]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowGtpv1NPduNumberCounter increment = 5;
@@ -16492,11 +16492,11 @@ message PatternFlowGtpv1NextExtensionHeaderTypeCounter {
 
   // Description missing in models
   // default = 0
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -16515,12 +16515,12 @@ message PatternFlowGtpv1NextExtensionHeaderTypeMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 8
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // Next extension header. Exists if any of the e_flag, s_flag, or pn_flag bits are on.
@@ -16542,11 +16542,11 @@ message PatternFlowGtpv1NextExtensionHeaderType {
 
   // Description missing in models
   // default = 0
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [0]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowGtpv1NextExtensionHeaderTypeCounter increment = 5;
@@ -16565,11 +16565,11 @@ message PatternFlowGtpExtensionExtensionLengthCounter {
 
   // Description missing in models
   // default = 0
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -16588,12 +16588,12 @@ message PatternFlowGtpExtensionExtensionLengthMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 8
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // This field states the length of this extension header,  including the length, the
@@ -16616,11 +16616,11 @@ message PatternFlowGtpExtensionExtensionLength {
 
   // Description missing in models
   // default = 0
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [0]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowGtpExtensionExtensionLengthCounter increment = 5;
@@ -16639,11 +16639,11 @@ message PatternFlowGtpExtensionContentsCounter {
 
   // Description missing in models
   // default = 0
-  optional int64 start = 1;
+  optional uint64 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int64 step = 2;
+  optional uint64 step = 2;
 
   // Description missing in models
   // default = 1
@@ -16662,12 +16662,12 @@ message PatternFlowGtpExtensionContentsMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 48
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // The extension header contents
@@ -16688,11 +16688,11 @@ message PatternFlowGtpExtensionContents {
 
   // Description missing in models
   // default = 0
-  optional int64 value = 2;
+  optional uint64 value = 2;
 
   // Description missing in models
   // default = [0]
-  repeated int64 values = 3;
+  repeated uint64 values = 3;
 
   // Description missing in models
   optional PatternFlowGtpExtensionContentsCounter increment = 5;
@@ -16711,11 +16711,11 @@ message PatternFlowGtpExtensionNextExtensionHeaderCounter {
 
   // Description missing in models
   // default = 0
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -16734,12 +16734,12 @@ message PatternFlowGtpExtensionNextExtensionHeaderMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 8
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // It states the type of the next extension, or 0 if no next  extension exists.  This
@@ -16761,11 +16761,11 @@ message PatternFlowGtpExtensionNextExtensionHeader {
 
   // Description missing in models
   // default = 0
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [0]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowGtpExtensionNextExtensionHeaderCounter increment = 5;
@@ -16784,11 +16784,11 @@ message PatternFlowGtpv2VersionCounter {
 
   // Description missing in models
   // default = 2
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -16807,12 +16807,12 @@ message PatternFlowGtpv2VersionMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 3
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // Version number
@@ -16833,11 +16833,11 @@ message PatternFlowGtpv2Version {
 
   // Description missing in models
   // default = 2
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [2]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowGtpv2VersionCounter increment = 5;
@@ -16856,11 +16856,11 @@ message PatternFlowGtpv2PiggybackingFlagCounter {
 
   // Description missing in models
   // default = 0
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -16879,12 +16879,12 @@ message PatternFlowGtpv2PiggybackingFlagMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 1
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // If piggybacking_flag is set to 1 then another GTP-C message with its own header shall
@@ -16906,11 +16906,11 @@ message PatternFlowGtpv2PiggybackingFlag {
 
   // Description missing in models
   // default = 0
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [0]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowGtpv2PiggybackingFlagCounter increment = 5;
@@ -16929,11 +16929,11 @@ message PatternFlowGtpv2TeidFlagCounter {
 
   // Description missing in models
   // default = 0
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -16952,12 +16952,12 @@ message PatternFlowGtpv2TeidFlagMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 1
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // If teid_flag is set to 1 then the TEID field will be present  between the message
@@ -16980,11 +16980,11 @@ message PatternFlowGtpv2TeidFlag {
 
   // Description missing in models
   // default = 0
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [0]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowGtpv2TeidFlagCounter increment = 5;
@@ -17003,11 +17003,11 @@ message PatternFlowGtpv2Spare1Counter {
 
   // Description missing in models
   // default = 0
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -17026,12 +17026,12 @@ message PatternFlowGtpv2Spare1MetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 3
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // A 3-bit reserved field (must be 0).
@@ -17052,11 +17052,11 @@ message PatternFlowGtpv2Spare1 {
 
   // Description missing in models
   // default = 0
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [0]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowGtpv2Spare1Counter increment = 5;
@@ -17075,11 +17075,11 @@ message PatternFlowGtpv2MessageTypeCounter {
 
   // Description missing in models
   // default = 0
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -17098,12 +17098,12 @@ message PatternFlowGtpv2MessageTypeMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 8
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // An 8-bit field that indicates the type of GTP message. Different types of messages
@@ -17125,11 +17125,11 @@ message PatternFlowGtpv2MessageType {
 
   // Description missing in models
   // default = 0
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [0]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowGtpv2MessageTypeCounter increment = 5;
@@ -17148,11 +17148,11 @@ message PatternFlowGtpv2MessageLengthCounter {
 
   // Description missing in models
   // default = 0
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -17171,12 +17171,12 @@ message PatternFlowGtpv2MessageLengthMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 16
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // A 16-bit field that indicates the length of the payload in bytes, excluding the mandatory
@@ -17198,11 +17198,11 @@ message PatternFlowGtpv2MessageLength {
 
   // Description missing in models
   // default = 0
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [0]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowGtpv2MessageLengthCounter increment = 5;
@@ -17221,11 +17221,11 @@ message PatternFlowGtpv2TeidCounter {
 
   // Description missing in models
   // default = 0
-  optional int64 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int64 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -17244,12 +17244,12 @@ message PatternFlowGtpv2TeidMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 32
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // Tunnel endpoint identifier. A 32-bit (4-octet) field used to multiplex different
@@ -17271,11 +17271,11 @@ message PatternFlowGtpv2Teid {
 
   // Description missing in models
   // default = 0
-  optional int64 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [0]
-  repeated int64 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowGtpv2TeidCounter increment = 5;
@@ -17294,11 +17294,11 @@ message PatternFlowGtpv2SequenceNumberCounter {
 
   // Description missing in models
   // default = 0
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -17317,12 +17317,12 @@ message PatternFlowGtpv2SequenceNumberMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 24
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // The sequence number
@@ -17343,11 +17343,11 @@ message PatternFlowGtpv2SequenceNumber {
 
   // Description missing in models
   // default = 0
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [0]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowGtpv2SequenceNumberCounter increment = 5;
@@ -17366,11 +17366,11 @@ message PatternFlowGtpv2Spare2Counter {
 
   // Description missing in models
   // default = 0
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -17389,12 +17389,12 @@ message PatternFlowGtpv2Spare2MetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 8
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // Reserved field
@@ -17415,11 +17415,11 @@ message PatternFlowGtpv2Spare2 {
 
   // Description missing in models
   // default = 0
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [0]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowGtpv2Spare2Counter increment = 5;
@@ -17438,11 +17438,11 @@ message PatternFlowArpHardwareTypeCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -17461,12 +17461,12 @@ message PatternFlowArpHardwareTypeMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 16
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // Network link protocol type
@@ -17487,11 +17487,11 @@ message PatternFlowArpHardwareType {
 
   // Description missing in models
   // default = 1
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [1]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowArpHardwareTypeCounter increment = 5;
@@ -17510,11 +17510,11 @@ message PatternFlowArpProtocolTypeCounter {
 
   // Description missing in models
   // default = 2048
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -17533,12 +17533,12 @@ message PatternFlowArpProtocolTypeMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 16
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // The internetwork protocol for which the ARP request is intended
@@ -17559,11 +17559,11 @@ message PatternFlowArpProtocolType {
 
   // Description missing in models
   // default = 2048
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [2048]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowArpProtocolTypeCounter increment = 5;
@@ -17582,11 +17582,11 @@ message PatternFlowArpHardwareLengthCounter {
 
   // Description missing in models
   // default = 6
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -17605,12 +17605,12 @@ message PatternFlowArpHardwareLengthMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 8
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // Length (in octets) of a hardware address
@@ -17631,11 +17631,11 @@ message PatternFlowArpHardwareLength {
 
   // Description missing in models
   // default = 6
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [6]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowArpHardwareLengthCounter increment = 5;
@@ -17654,11 +17654,11 @@ message PatternFlowArpProtocolLengthCounter {
 
   // Description missing in models
   // default = 4
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -17677,12 +17677,12 @@ message PatternFlowArpProtocolLengthMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 8
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // Length (in octets) of internetwork addresses
@@ -17703,11 +17703,11 @@ message PatternFlowArpProtocolLength {
 
   // Description missing in models
   // default = 4
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [4]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowArpProtocolLengthCounter increment = 5;
@@ -17726,11 +17726,11 @@ message PatternFlowArpOperationCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -17749,12 +17749,12 @@ message PatternFlowArpOperationMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 16
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // The operation that the sender is performing
@@ -17775,11 +17775,11 @@ message PatternFlowArpOperation {
 
   // Description missing in models
   // default = 1
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [1]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowArpOperationCounter increment = 5;
@@ -17821,12 +17821,12 @@ message PatternFlowArpSenderHardwareAddrMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 48
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // Media address of the sender
@@ -17893,12 +17893,12 @@ message PatternFlowArpSenderProtocolAddrMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 32
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // Internetwork address of the sender
@@ -17965,12 +17965,12 @@ message PatternFlowArpTargetHardwareAddrMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 48
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // Media address of the target
@@ -18037,12 +18037,12 @@ message PatternFlowArpTargetProtocolAddrMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 32
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // Internetwork address of the target
@@ -18086,11 +18086,11 @@ message PatternFlowIcmpEchoTypeCounter {
 
   // Description missing in models
   // default = 8
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -18109,12 +18109,12 @@ message PatternFlowIcmpEchoTypeMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 8
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // The type of ICMP echo packet
@@ -18135,11 +18135,11 @@ message PatternFlowIcmpEchoType {
 
   // Description missing in models
   // default = 8
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [8]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowIcmpEchoTypeCounter increment = 5;
@@ -18158,11 +18158,11 @@ message PatternFlowIcmpEchoCodeCounter {
 
   // Description missing in models
   // default = 0
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -18181,12 +18181,12 @@ message PatternFlowIcmpEchoCodeMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 8
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // The ICMP subtype.  The default code for ICMP echo request and reply is 0.
@@ -18207,11 +18207,11 @@ message PatternFlowIcmpEchoCode {
 
   // Description missing in models
   // default = 0
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [0]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowIcmpEchoCodeCounter increment = 5;
@@ -18251,7 +18251,7 @@ message PatternFlowIcmpEchoChecksum {
   optional Generated.Enum generated = 2;
 
   // A custom checksum value
-  optional int32 custom = 3;
+  optional uint32 custom = 3;
 }
 
 // integer counter pattern
@@ -18259,11 +18259,11 @@ message PatternFlowIcmpEchoIdentifierCounter {
 
   // Description missing in models
   // default = 0
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -18282,12 +18282,12 @@ message PatternFlowIcmpEchoIdentifierMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 16
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // ICMP identifier
@@ -18308,11 +18308,11 @@ message PatternFlowIcmpEchoIdentifier {
 
   // Description missing in models
   // default = 0
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [0]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowIcmpEchoIdentifierCounter increment = 5;
@@ -18331,11 +18331,11 @@ message PatternFlowIcmpEchoSequenceNumberCounter {
 
   // Description missing in models
   // default = 0
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -18354,12 +18354,12 @@ message PatternFlowIcmpEchoSequenceNumberMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 16
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // ICMP sequence number
@@ -18380,11 +18380,11 @@ message PatternFlowIcmpEchoSequenceNumber {
 
   // Description missing in models
   // default = 0
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [0]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowIcmpEchoSequenceNumberCounter increment = 5;
@@ -18424,7 +18424,7 @@ message PatternFlowIcmpCommonChecksum {
   optional Generated.Enum generated = 2;
 
   // A custom checksum value
-  optional int32 custom = 3;
+  optional uint32 custom = 3;
 }
 
 // integer counter pattern
@@ -18432,11 +18432,11 @@ message PatternFlowIcmpNextFieldsIdentifierCounter {
 
   // Description missing in models
   // default = 0
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -18455,12 +18455,12 @@ message PatternFlowIcmpNextFieldsIdentifierMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 16
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // ICMP identifier
@@ -18481,11 +18481,11 @@ message PatternFlowIcmpNextFieldsIdentifier {
 
   // Description missing in models
   // default = 0
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [0]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowIcmpNextFieldsIdentifierCounter increment = 5;
@@ -18504,11 +18504,11 @@ message PatternFlowIcmpNextFieldsSequenceNumberCounter {
 
   // Description missing in models
   // default = 0
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -18527,12 +18527,12 @@ message PatternFlowIcmpNextFieldsSequenceNumberMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 16
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // ICMP sequence number
@@ -18553,11 +18553,11 @@ message PatternFlowIcmpNextFieldsSequenceNumber {
 
   // Description missing in models
   // default = 0
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [0]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowIcmpNextFieldsSequenceNumberCounter increment = 5;
@@ -18576,11 +18576,11 @@ message PatternFlowIcmpv6EchoTypeCounter {
 
   // Description missing in models
   // default = 128
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -18599,12 +18599,12 @@ message PatternFlowIcmpv6EchoTypeMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 8
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // ICMPv6 echo type
@@ -18625,11 +18625,11 @@ message PatternFlowIcmpv6EchoType {
 
   // Description missing in models
   // default = 128
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [128]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowIcmpv6EchoTypeCounter increment = 5;
@@ -18648,11 +18648,11 @@ message PatternFlowIcmpv6EchoCodeCounter {
 
   // Description missing in models
   // default = 0
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -18671,12 +18671,12 @@ message PatternFlowIcmpv6EchoCodeMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 8
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // ICMPv6 echo sub type
@@ -18697,11 +18697,11 @@ message PatternFlowIcmpv6EchoCode {
 
   // Description missing in models
   // default = 0
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [0]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowIcmpv6EchoCodeCounter increment = 5;
@@ -18720,11 +18720,11 @@ message PatternFlowIcmpv6EchoIdentifierCounter {
 
   // Description missing in models
   // default = 0
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -18743,12 +18743,12 @@ message PatternFlowIcmpv6EchoIdentifierMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 16
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // ICMPv6 echo identifier
@@ -18769,11 +18769,11 @@ message PatternFlowIcmpv6EchoIdentifier {
 
   // Description missing in models
   // default = 0
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [0]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowIcmpv6EchoIdentifierCounter increment = 5;
@@ -18792,11 +18792,11 @@ message PatternFlowIcmpv6EchoSequenceNumberCounter {
 
   // Description missing in models
   // default = 0
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -18815,12 +18815,12 @@ message PatternFlowIcmpv6EchoSequenceNumberMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 16
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // ICMPv6 echo sequence number
@@ -18841,11 +18841,11 @@ message PatternFlowIcmpv6EchoSequenceNumber {
 
   // Description missing in models
   // default = 0
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [0]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowIcmpv6EchoSequenceNumberCounter increment = 5;
@@ -18885,7 +18885,7 @@ message PatternFlowIcmpv6EchoChecksum {
   optional Generated.Enum generated = 2;
 
   // A custom checksum value
-  optional int32 custom = 3;
+  optional uint32 custom = 3;
 }
 
 // ICMPv6 checksum
@@ -18914,7 +18914,7 @@ message PatternFlowIcmpv6CommonChecksum {
   optional Generated.Enum generated = 2;
 
   // A custom checksum value
-  optional int32 custom = 3;
+  optional uint32 custom = 3;
 }
 
 // integer counter pattern
@@ -18922,11 +18922,11 @@ message PatternFlowPppAddressCounter {
 
   // Description missing in models
   // default = 255
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -18945,12 +18945,12 @@ message PatternFlowPppAddressMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 8
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // PPP address
@@ -18971,11 +18971,11 @@ message PatternFlowPppAddress {
 
   // Description missing in models
   // default = 255
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [255]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowPppAddressCounter increment = 5;
@@ -18994,11 +18994,11 @@ message PatternFlowPppControlCounter {
 
   // Description missing in models
   // default = 3
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -19017,12 +19017,12 @@ message PatternFlowPppControlMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 8
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // PPP control
@@ -19043,11 +19043,11 @@ message PatternFlowPppControl {
 
   // Description missing in models
   // default = 3
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [3]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowPppControlCounter increment = 5;
@@ -19066,11 +19066,11 @@ message PatternFlowPppProtocolTypeCounter {
 
   // Description missing in models
   // default = 33
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -19089,12 +19089,12 @@ message PatternFlowPppProtocolTypeMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 16
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // PPP protocol type
@@ -19116,17 +19116,17 @@ message PatternFlowPppProtocolType {
 
   // Description missing in models
   // default = 33
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [33]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // The OTG implementation can provide a system generated
   // value for this property. If the OTG is unable to generate a value
   // the default value must be used.
   // default = 33
-  optional int32 auto = 4;
+  optional uint32 auto = 4;
 
   // Description missing in models
   optional PatternFlowPppProtocolTypeCounter increment = 6;
@@ -19145,11 +19145,11 @@ message PatternFlowIgmpv1VersionCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -19168,12 +19168,12 @@ message PatternFlowIgmpv1VersionMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 4
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // Version number
@@ -19194,11 +19194,11 @@ message PatternFlowIgmpv1Version {
 
   // Description missing in models
   // default = 1
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [1]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowIgmpv1VersionCounter increment = 5;
@@ -19217,11 +19217,11 @@ message PatternFlowIgmpv1TypeCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -19240,12 +19240,12 @@ message PatternFlowIgmpv1TypeMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 4
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // Type of message
@@ -19266,11 +19266,11 @@ message PatternFlowIgmpv1Type {
 
   // Description missing in models
   // default = 1
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [1]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowIgmpv1TypeCounter increment = 5;
@@ -19289,11 +19289,11 @@ message PatternFlowIgmpv1UnusedCounter {
 
   // Description missing in models
   // default = 0
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -19312,12 +19312,12 @@ message PatternFlowIgmpv1UnusedMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 8
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // Unused
@@ -19338,11 +19338,11 @@ message PatternFlowIgmpv1Unused {
 
   // Description missing in models
   // default = 0
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [0]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowIgmpv1UnusedCounter increment = 5;
@@ -19382,7 +19382,7 @@ message PatternFlowIgmpv1Checksum {
   optional Generated.Enum generated = 2;
 
   // A custom checksum value
-  optional int32 custom = 3;
+  optional uint32 custom = 3;
 }
 
 // ipv4 counter pattern
@@ -19413,12 +19413,12 @@ message PatternFlowIgmpv1GroupAddressMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 32
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // Group address
@@ -19462,11 +19462,11 @@ message PatternFlowMplsLabelCounter {
 
   // Description missing in models
   // default = 16
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -19485,12 +19485,12 @@ message PatternFlowMplsLabelMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 20
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // Label of routers
@@ -19512,17 +19512,17 @@ message PatternFlowMplsLabel {
 
   // Description missing in models
   // default = 16
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [16]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // The OTG implementation can provide a system generated
   // value for this property. If the OTG is unable to generate a value
   // the default value must be used.
   // default = 16
-  optional int32 auto = 4;
+  optional uint32 auto = 4;
 
   // Description missing in models
   optional PatternFlowMplsLabelCounter increment = 6;
@@ -19541,11 +19541,11 @@ message PatternFlowMplsTrafficClassCounter {
 
   // Description missing in models
   // default = 0
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -19564,12 +19564,12 @@ message PatternFlowMplsTrafficClassMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 3
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // Traffic class
@@ -19590,11 +19590,11 @@ message PatternFlowMplsTrafficClass {
 
   // Description missing in models
   // default = 0
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [0]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowMplsTrafficClassCounter increment = 5;
@@ -19613,11 +19613,11 @@ message PatternFlowMplsBottomOfStackCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -19636,12 +19636,12 @@ message PatternFlowMplsBottomOfStackMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 1
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // Bottom of stack
@@ -19663,17 +19663,17 @@ message PatternFlowMplsBottomOfStack {
 
   // Description missing in models
   // default = 1
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [1]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // The OTG implementation can provide a system generated
   // value for this property. If the OTG is unable to generate a value
   // the default value must be used.
   // default = 1
-  optional int32 auto = 4;
+  optional uint32 auto = 4;
 
   // Description missing in models
   optional PatternFlowMplsBottomOfStackCounter increment = 6;
@@ -19692,11 +19692,11 @@ message PatternFlowMplsTimeToLiveCounter {
 
   // Description missing in models
   // default = 64
-  optional int32 start = 1;
+  optional uint32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional int32 step = 2;
+  optional uint32 step = 2;
 
   // Description missing in models
   // default = 1
@@ -19715,12 +19715,12 @@ message PatternFlowMplsTimeToLiveMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional int32 offset = 2;
+  optional uint32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 8
-  optional int32 length = 3;
+  optional uint32 length = 3;
 }
 
 // Time to live
@@ -19741,11 +19741,11 @@ message PatternFlowMplsTimeToLive {
 
   // Description missing in models
   // default = 64
-  optional int32 value = 2;
+  optional uint32 value = 2;
 
   // Description missing in models
   // default = [64]
-  repeated int32 values = 3;
+  repeated uint32 values = 3;
 
   // Description missing in models
   optional PatternFlowMplsTimeToLiveCounter increment = 5;
