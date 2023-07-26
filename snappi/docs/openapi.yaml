@@ -7,7 +7,7 @@ info:
     \ issue](https://github.com/open-traffic-generator/models/issues) in the models\
     \ repository\n- [fork the models repository](https://github.com/open-traffic-generator/models)\
     \ and submit a PR"
-  version: 0.11.9
+  version: 0.11.11
   contact:
     url: https://github.com/open-traffic-generator/models
   license:
@@ -2717,10 +2717,13 @@ components:
           items:
             $ref: '#/components/schemas/Bgp.V6Interface'
           x-field-uid: 3
-    Device.BgpRouteGroup:
-      description: |
-        A group of V4 or V6 routes.
+    Device.BgpV4RouteGroup:
+      description: |-
+        A group of V4 Routes, each of which MUST be a V4 route range
+        containing exactly one V4 route address.
       type: object
+      required:
+      - name
       properties:
         name:
           x-field-uid: 1
@@ -2729,6 +2732,49 @@ components:
           type: string
           pattern: ^[\sa-zA-Z0-9-_()><\[\]]+$
           x-unique: global
+        route_names:
+          description: |
+            Name of configured V4 routes, each containing exactly one V4 route
+            address. Providing a V4 route name containing more than one V4 route
+            address shall be deemed invalid.
+
+            x-constraint:
+            - /components/schemas/Bgp.V4RouteRange/properties/name
+          type: array
+          items:
+            type: string
+          x-field-uid: 2
+          x-constraint:
+          - /components/schemas/Bgp.V4RouteRange/properties/name
+    Device.BgpV6RouteGroup:
+      description: |-
+        A group of V6 Routes, each of which MUST be a V6 route range
+        containing exactly one V6 route address.
+      type: object
+      required:
+      - name
+      properties:
+        name:
+          x-field-uid: 1
+          description: |-
+            Globally unique name of an object. It also serves as the primary key for arrays of objects.
+          type: string
+          pattern: ^[\sa-zA-Z0-9-_()><\[\]]+$
+          x-unique: global
+        route_names:
+          description: |
+            Name of configured V4 routes, each containing exactly one V4 route
+            address. Providing a V4 route name containing more than one V4 route
+            address shall be deemed invalid.
+
+            x-constraint:
+            - /components/schemas/Bgp.V6RouteRange/properties/name
+          type: array
+          items:
+            type: string
+          x-field-uid: 2
+          x-constraint:
+          - /components/schemas/Bgp.V6RouteRange/properties/name
     Device.Bgp.MessageHeaderError:
       description: |-
         All errors detected while processing the Message Header are indicated by sending the NOTIFICATION message  with the Error Code-Message Header Error. The Error Subcode elaborates on the specific nature of the error.
@@ -3005,11 +3051,22 @@ components:
         graceful_restart:
           x-field-uid: 14
           $ref: '#/components/schemas/Bgp.GracefulRestart'
-        route_groups:
+        v4_route_groups:
           x-field-uid: 15
+          description: |-
+            List of Emulated BGP V4 route groups, each of which MUST be a V4 route range
+            containing exactly one V4 route address
           type: array
           items:
-            $ref: '#/components/schemas/Device.BgpRouteGroup'
+            $ref: '#/components/schemas/Device.BgpV4RouteGroup'
+        v6_route_groups:
+          x-field-uid: 16
+          description: |-
+            List of Emulated BGP V6 route groups, each of which MUST be a V6 route range
+            containing exactly one V6 route address
+          type: array
+          items:
+            $ref: '#/components/schemas/Device.BgpV6RouteGroup'
     Bgp.V4Interface:
       description: |-
         Configuration for emulated BGPv4 peers and routes on a single IPv4 interface.
@@ -3933,16 +3990,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Bgp.ExtCommunity'
-        group:
-          x-field-uid: 12
-          description: |
-            Name of associated BGP route group.
-
-            x-constraint:
-            - ./bgp.yaml#/components/schemas/Device.BgpRouteGroup/properties/name
-          type: string
-          x-constraint:
-          - ./bgp.yaml#/components/schemas/Device.BgpRouteGroup/properties/name
       required:
       - name
     Bgp.AddPath:
@@ -4044,16 +4091,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Bgp.ExtCommunity'
-        group:
-          x-field-uid: 12
-          description: |
-            Name of associated BGP route group.
-
-            x-constraint:
-            - ./bgp.yaml#/components/schemas/Device.BgpRouteGroup/properties/name
-          type: string
-          x-constraint:
-          - ./bgp.yaml#/components/schemas/Device.BgpRouteGroup/properties/name
       required:
       - name
     BgpSrte.V4Policy:
@@ -5307,11 +5344,22 @@ components:
         graceful_restart:
           x-field-uid: 15
           $ref: '#/components/schemas/Bgp.GracefulRestart'
-        route_groups:
+        v4_route_groups:
           x-field-uid: 16
+          description: |-
+            List of Emulated BGP V4 route groups, each of which MUST be a V4 route range
+            containing exactly one V4 route address
           type: array
           items:
-            $ref: '#/components/schemas/Device.BgpRouteGroup'
+            $ref: '#/components/schemas/Device.BgpV4RouteGroup'
+        v6_route_groups:
+          x-field-uid: 17
+          description: |-
+            List of Emulated BGP V6 route groups, each of which MUST be a V6 route range
+            containing exactly one V6 route address
+          type: array
+          items:
+            $ref: '#/components/schemas/Device.BgpV6RouteGroup'
     Bgp.V6Interface:
       description: |-
         Configuration for emulated BGPv6 peers and routes on a single IPv6 interface.
@@ -6620,16 +6668,37 @@ components:
           x-field-uid: 1
         rx_name:
           description: |
+            Deprecated: This property is deprecated in favor of property rx_names
+
             The unique name of a port that is the intended receive port.
 
             x-constraint:
             - /components/schemas/Port/properties/name
             - /components/schemas/Lag/properties/name
+          x-status:
+            status: deprecated
+            information: This property is deprecated in favor of property rx_names
           type: string
           x-constraint:
           - /components/schemas/Port/properties/name
           - /components/schemas/Lag/properties/name
           x-field-uid: 2
+        rx_names:
+          description: |
+            Unique name of ports or lags that are intended receive endpoints.
+
+            x-constraint:
+            - /components/schemas/Port/properties/name
+            - /components/schemas/Lag/properties/name
+          type: array
+          items:
+            description: |-
+              The unique name of a port or lag that is the intended receive port.
+            type: string
+          x-constraint:
+          - /components/schemas/Port/properties/name
+          - /components/schemas/Lag/properties/name
+          x-field-uid: 3
     Flow.Router:
       description: |-
         A container for declaring a map of 1..n transmit devices to 1..n receive devices. This allows for a single flow to have  different tx to rx device flows such as a single one to one map or a  many to many map.
@@ -6694,9 +6763,9 @@ components:
           - /components/schemas/Device.Ipv4/properties/name
           - /components/schemas/Device.Ipv6/properties/name
           - /components/schemas/Bgp.V4RouteRange/properties/name
-          - /components/schemas/Bgp.V4RouteRange/properties/group
+          - /components/schemas/Bgp.V4RouteGroup/properties/name
           - /components/schemas/Bgp.V6RouteRange/properties/name
-          - /components/schemas/Bgp.V6RouteRange/properties/group
+          - /components/schemas/Bgp.V6RouteGroup/properties/name
           - /components/schemas/Bgp.CMacIpRange/properties/name
           - /components/schemas/Rsvp.LspIpv4Interface.P2PIngressIpv4Lsp/properties/name
           - /components/schemas/Isis.V4RouteRange/properties/name
@@ -6718,9 +6787,9 @@ components:
             - /components/schemas/Device.Ipv4/properties/name
             - /components/schemas/Device.Ipv6/properties/name
             - /components/schemas/Bgp.V4RouteRange/properties/name
-            - /components/schemas/Bgp.V4RouteRange/properties/group
+            - /components/schemas/Bgp.V4RouteGroup/properties/name
             - /components/schemas/Bgp.V6RouteRange/properties/name
-            - /components/schemas/Bgp.V6RouteRange/properties/group
+            - /components/schemas/Bgp.V6RouteGroup/properties/name
             - /components/schemas/Bgp.CMacIpRange/properties/name
             - /components/schemas/Rsvp.LspIpv4Interface.P2PIngressIpv4Lsp/properties/name
             - /components/schemas/Isis.V4RouteRange/properties/name
@@ -6736,7 +6805,9 @@ components:
           - /components/schemas/Device.Ipv4/properties/name
           - /components/schemas/Device.Ipv6/properties/name
           - /components/schemas/Bgp.V4RouteRange/properties/name
+          - /components/schemas/Bgp.V4RouteGroup/properties/name
           - /components/schemas/Bgp.V6RouteRange/properties/name
+          - /components/schemas/Bgp.V6RouteGroup/properties/name
           - /components/schemas/Bgp.CMacIpRange/properties/name
           - /components/schemas/Rsvp.LspIpv4Interface.P2PEgressIpv4Lsp/properties/name
           - /components/schemas/Isis.V4RouteRange/properties/name
@@ -6758,7 +6829,9 @@ components:
             - /components/schemas/Device.Ipv4/properties/name
             - /components/schemas/Device.Ipv6/properties/name
             - /components/schemas/Bgp.V4RouteRange/properties/name
+            - /components/schemas/Bgp.V4RouteGroup/properties/name
             - /components/schemas/Bgp.V6RouteRange/properties/name
+            - /components/schemas/Bgp.V6RouteGroup/properties/name
             - /components/schemas/Bgp.CMacIpRange/properties/name
             - /components/schemas/Rsvp.LspIpv4Interface.P2PEgressIpv4Lsp/properties/name
             - /components/schemas/Isis.V4RouteRange/properties/name
@@ -8003,6 +8076,11 @@ components:
           type: boolean
           default: false
           x-field-uid: 2
+        rx_tx_ratio:
+          description: |-
+            Rx Tx ratio.
+          $ref: '#/components/schemas/Flow.RxTxRatio'
+          x-field-uid: 6
         timestamps:
           description: |-
             Enables additional flow metric first and last timestamps.
@@ -8014,6 +8092,11 @@ components:
             Latency metrics.
           $ref: '#/components/schemas/Flow.Latency.Metrics'
           x-field-uid: 4
+        predefined_metric_tags:
+          description: |-
+            Predefined metric tags
+          $ref: '#/components/schemas/Flow.Predefined.Tags'
+          x-field-uid: 5
     Flow.Latency.Metrics:
       description: |-
         The optional container for per flow latency metric configuration.
@@ -8046,6 +8129,57 @@ components:
           enum:
           - store_forward
           - cut_through
+    Flow.Predefined.Tags:
+      description: |-
+        List of predefined flow tracking options, outside packet fields, that can be enabled.
+      type: object
+      properties:
+        rx_name:
+          description: |-
+            Enables Rx port or lag level disaggregation with predefined metrics tag name set as "rx_name".
+            The Rx port / lag names can be found under tagged_metrics tag names in flow metrics response.
+          type: boolean
+          default: false
+          x-field-uid: 1
+    Flow.RxTxRatio:
+      description: |-
+        Rx Tx ratio is the ratio of expected number of Rx packets across all Rx ports to the Tx packets
+        for the configured flow. It is a factor by which the Tx packet count is multiplied to calculate
+        the sum of expected Rx packet count, across all Rx ports. This will be used to calculate loss
+        percentage of flow at aggregate level.
+      type: object
+      properties:
+        choice:
+          type: string
+          default: value
+          x-field-uid: 1
+          x-enum:
+            rx_count:
+              x-field-uid: 1
+            value:
+              x-field-uid: 2
+          enum:
+          - rx_count
+          - value
+        rx_count:
+          $ref: '#/components/schemas/Flow.RxTxRatio.RxCount'
+          x-field-uid: 2
+        value:
+          description: |-
+            Should be a positive, non-zero value. The default value of 1, is when the Rx packet count across
+            all ports is expected to match the Tx packet count. A custom integer value (>1) can be specified for
+            loss calculation for cases when there are multiple destination addresses configured within one flow,
+            but DUT is configured to replicate only to a subset of Rx ports. For cases when Tx side generates two
+            packets from each source in 1:1 protection mode but only one of the two packets are received by the
+            Rx port, we may need to specify a fractional value instead.
+          type: number
+          format: float
+          default: 1.0
+          x-field-uid: 3
+    Flow.RxTxRatio.RxCount:
+      description: |-
+        This is for cases where one copy of Tx packet is received on all Rx ports and so the sum total of Rx packets
+        received across all Rx ports is a multiple of Rx port count and Tx packets.
     Event:
       description: |-
         The optional container for event configuration.
@@ -8951,9 +9085,9 @@ components:
 
             x-constraint:
             - /components/schemas/Bgp.V4RouteRange/properties/name
-            - /components/schemas/Bgp.V4RouteRange/properties/group
+            - /components/schemas/Bgp.V4RouteGroup/properties/name
             - /components/schemas/Bgp.V6RouteRange/properties/name
-            - /components/schemas/Bgp.V6RouteRange/properties/group
+            - /components/schemas/Bgp.V6RouteGroup/properties/name
             - /components/schemas/Isis.V4RouteRange/properties/name
             - /components/schemas/Isis.V6RouteRange/properties/name
           type: array
@@ -8961,9 +9095,9 @@ components:
             type: string
           x-constraint:
           - /components/schemas/Bgp.V4RouteRange/properties/name
-          - /components/schemas/Bgp.V4RouteRange/properties/group
+          - /components/schemas/Bgp.V4RouteGroup/properties/name
           - /components/schemas/Bgp.V6RouteRange/properties/name
-          - /components/schemas/Bgp.V6RouteRange/properties/group
+          - /components/schemas/Bgp.V6RouteGroup/properties/name
           - /components/schemas/Isis.V4RouteRange/properties/name
           - /components/schemas/Isis.V6RouteRange/properties/name
           x-field-uid: 1
@@ -8980,6 +9114,102 @@ components:
           enum:
           - withdraw
           - advertise
+        subsets:
+          description: |-
+            Under Review: There may be enhancements in how we configure subset of routes
+
+            List of configurations specifying portion of V4/V6 routes or route
+            groups to be advertised or withdrawn.
+          x-status:
+            status: under-review
+            information: There may be enhancements in how we configure subset of routes
+          type: array
+          items:
+            $ref: '#/components/schemas/State.Protocol.Route.Subset'
+          x-field-uid: 3
+    State.Protocol.Route.Subset:
+      description: |-
+        Configuration for specifying portion of V4/V6 routes or route
+        groups to be advertised or withdrawn
+      type: object
+      properties:
+        choice:
+          description: |-
+            Format in which subset configuration needs to be provided
+          type: string
+          x-enum:
+            sequence:
+              x-field-uid: 1
+            percent:
+              x-field-uid: 2
+          x-field-uid: 1
+          enum:
+          - sequence
+          - percent
+        sequence:
+          $ref: '#/components/schemas/State.Protocol.Route.SubsetSequence'
+          x-field-uid: 2
+        percent:
+          $ref: '#/components/schemas/State.Protocol.Route.SubsetPercent'
+          x-field-uid: 3
+    State.Protocol.Route.SubsetSequence:
+      description: |-
+        Configuration for specifying sequential subset of V4 or V6 routes belonging
+        to a V4 or V6 route group (respectively) to be advertised or withdrawn
+      properties:
+        name:
+          description: |
+            Name of V4 or V6 route group
+
+            x-constraint:
+            - /components/schemas/Bgp.V4RouteGroup/properties/name
+            - /components/schemas/Bgp.V6RouteGroup/properties/name
+          type: string
+          x-constraint:
+          - /components/schemas/Bgp.V4RouteGroup/properties/name
+          - /components/schemas/Bgp.V6RouteGroup/properties/name
+          x-field-uid: 1
+        start:
+          description: |-
+            Sequence ID of a route in the group that will be the first entry
+            in the subset
+          type: integer
+          format: uint32
+          default: 0
+          x-field-uid: 2
+        count:
+          description: |-
+            Number of routes relative to start value to be included in the subset
+          type: integer
+          format: uint32
+          default: 1
+          x-field-uid: 3
+    State.Protocol.Route.SubsetPercent:
+      description: |-
+        Configuration for specifying percentage of V4 or V6 route addresses belonging
+        to a V4 or V6 route (respectively) to be advertised or withdrawn
+      properties:
+        name:
+          description: |
+            Name of V4 or V6 route
+
+            x-constraint:
+            - /components/schemas/Bgp.V4RouteRange/properties/name
+            - /components/schemas/Bgp.V6RouteRange/properties/name
+          type: string
+          x-constraint:
+          - /components/schemas/Bgp.V4RouteRange/properties/name
+          - /components/schemas/Bgp.V6RouteRange/properties/name
+          x-field-uid: 1
+        percent:
+          description: |-
+            Percentage value corresponding to portion of route addresses
+          type: number
+          format: float
+          default: 100
+          minimum: 0
+          maximum: 100
+          x-field-uid: 2
     State.Protocol.Lacp:
       description: |-
         Sets state of configured LACP
@@ -9433,21 +9663,21 @@ components:
               x-field-uid: 1
             initiate_graceful_restart:
               x-field-uid: 2
-            load_routes:
+            import_routes:
               x-field-uid: 3
           x-field-uid: 1
           enum:
           - notification
           - initiate_graceful_restart
-          - load_routes
+          - import_routes
         notification:
           $ref: '#/components/schemas/Action.Protocol.Bgp.Notification'
           x-field-uid: 2
         initiate_graceful_restart:
           $ref: '#/components/schemas/Action.Protocol.Bgp.InitiateGracefulRestart'
           x-field-uid: 3
-        load_routes:
-          $ref: '#/components/schemas/Action.Protocol.Bgp.LoadRoutes'
+        import_routes:
+          $ref: '#/components/schemas/Action.Protocol.Bgp.ImportRoutes'
           x-field-uid: 4
     Action.Protocol.Bgp.Notification:
       description: "A NOTIFICATION message is sent when an error is detected with\
@@ -9547,60 +9777,59 @@ components:
           maximum: 3600
           default: 30
           x-field-uid: 2
-    Action.Protocol.Bgp.LoadRoutes:
+    Action.Protocol.Bgp.ImportRoutes:
       description: |-
-        Loads routes to be advertised for a given peer in a given format.
+        Import V4 and V6 routes installed on and exported from a DUT,
+        the format for which could be different across vendors, and convert
+        those to OTG V4 or V6 routes configured across corresponding BGP peers.
+        Following additional details need to be considered:
+        - The exported routes may be provided in variety of file formats
+        - A given file may contain both V4 and V6 route entries
+        - Each route entry shall correspond to `Bgp.V4RouteRange` or `Bgp.V6RouteRange`
+          with exactly one entry of `V4RouteAddress` or `V6RouteAddress` respectively
+        - The name of resultant OTG V4 or V6 routes shall be a constituent of
+          an alias associated with import file, name of corresponding BGP peer
+          and the sequence number corresponding to its order of entry in the file
       type: object
       properties:
-        configs:
+        imports:
           type: array
           items:
-            $ref: '#/components/schemas/Action.Protocol.Bgp.LoadRoutes.Config'
+            $ref: '#/components/schemas/Action.Protocol.Bgp.RouteImport'
           x-field-uid: 1
-    Action.Protocol.Bgp.LoadRoutes.Config:
+    Action.Protocol.Bgp.RouteImport:
       description: |-
-        Configuration for loading routes to be advertised for a given peer in a given format.
+        Configuration for specifying the format and corresponding characteristics of V4 or V6 routes to be imported.
       type: object
+      required:
+      - name
       properties:
+        name:
+          x-field-uid: 1
+          description: |-
+            Globally unique name of an object. It also serves as the primary key for arrays of objects.
+          type: string
+          pattern: ^[\sa-zA-Z0-9-_()><\[\]]+$
+          x-unique: global
         routes:
           $ref: '#/components/schemas/Action.Protocol.Bgp.Routes'
-          x-field-uid: 1
-        peer_names:
-          description: |
-            The names of configured BGP peers from which the routes shall be advertised.
-
-            x-constraint:
-            - /components/schemas/Bgp.V4Peer/properties/name
-            - /components/schemas/Bgp.V6Peer/properties/name
+          x-field-uid: 2
+        targets:
+          description: |-
+            List of import targets (i.e. corresponding V4 or V6 route groups) and
+            associated import properties
           type: array
           items:
-            type: string
-            minItems: 1
-          x-constraint:
-          - /components/schemas/Bgp.V4Peer/properties/name
-          - /components/schemas/Bgp.V6Peer/properties/name
-          x-field-uid: 2
-        use_best_routes:
-          description: |-
-            When set to false, all routes available shall be advertised.
-          type: boolean
-          default: true
+            $ref: '#/components/schemas/Action.Protocol.Bgp.RouteImport.Target'
           x-field-uid: 3
-        retain_next_hop:
-          description: |-
-            When set to false, the next hop address present against each route to be advertised
-            is replaced with next hop address of the corresponding test port.
-          type: boolean
-          default: false
-          x-field-uid: 4
     Action.Protocol.Bgp.Routes:
       description: |-
-        Routes to be advertised for a given peer in a given format.
+        Routes to be imported in a given format.
       type: object
       properties:
         choice:
           description: |-
-            Format of routes to be advertised.
+            Format of routes to be imported.
           type: string
           x-field-uid: 1
           x-enum:
@@ -9608,13 +9837,16 @@ components:
               x-field-uid: 1
             v6_routes:
               x-field-uid: 2
-            cisco_routes:
+            openconfig_routes:
               x-field-uid: 3
-            juniper_routes:
+            cisco_routes:
               x-field-uid: 4
+            juniper_routes:
+              x-field-uid: 5
           enum:
           - v4_routes
           - v6_routes
+          - openconfig_routes
           - cisco_routes
           - juniper_routes
         v4_routes:
@@ -9628,35 +9860,55 @@ components:
             $ref: '#/components/schemas/Bgp.V6RouteRange'
           x-field-uid: 3
         openconfig_routes:
-          $ref: '#/components/schemas/Action.Protocol.Bgp.RoutesBinary'
-          x-field-uid: 4
-        cisco_routes:
-          $ref: '#/components/schemas/Action.Protocol.Bgp.RoutesBinary'
-          x-field-uid: 5
-        juniper_routes:
-          $ref: '#/components/schemas/Action.Protocol.Bgp.RoutesBinary'
-          x-field-uid: 6
-    Action.Protocol.Bgp.RoutesBinary:
-      description: |-
-        Routes to be advertised for a given peer in binary format.
-      type: object
-      properties:
-        bin:
-          description: |
-            Binary containing routes to be advertised
+          description: |-
+            Binary containing routes in OpenConfig format
           type: string
           format: binary
-          x-field-uid: 1
-        group:
+          x-field-uid: 4
+        cisco_routes:
+          description: |-
+            Binary containing routes in Cisco format
           type: string
-          x-constraint:
-          - ../device/bgp/bgp.yaml#/components/schemas/Device.BgpRouteGroup/properties/name
-          x-field-uid: 2
+          format: binary
+          x-field-uid: 5
+        juniper_routes:
+          description: |-
+            Binary containing routes in Juniper format
+          type: string
+          format: binary
+          x-field-uid: 6
+    Action.Protocol.Bgp.RouteImport.Target:
+      description: |-
+        Import target (i.e. corresponding V4 or V6 route group) and associated import properties
+      type: object
+      required:
+      - route_group_name
+      properties:
+        route_group_name:
           description: |
-            TBD
+            The names of configured V4 or V6 route group
 
             x-constraint:
-            - ../device/bgp/bgp.yaml#/components/schemas/Device.BgpRouteGroup/properties/name
+            - /components/schemas/Bgp.V4RouteGroup/properties/name
+            - /components/schemas/Bgp.V6RouteGroup/properties/name
+          type: string
+          x-constraint:
+          - /components/schemas/Bgp.V4RouteGroup/properties/name
+          - /components/schemas/Bgp.V6RouteGroup/properties/name
+          x-field-uid: 1
+        use_best_routes:
+          description: |-
+            When set to false, all routes available shall be advertised.
+          type: boolean
+          default: true
+          x-field-uid: 2
+        retain_next_hop:
+          description: |-
+            When set to false, the next hop address present against each route to be advertised
+            is replaced with next hop address of the corresponding test port.
+          type: boolean
+          default: false
+          x-field-uid: 3
     Ping:
       type: object
       properties:
@@ -10390,15 +10642,23 @@ components:
           x-enum:
             hex:
               x-field-uid: 1
+            str:
+              x-field-uid: 2
           x-field-uid: 1
           enum:
           - hex
+          - str
         hex:
           description: |-
             Value represented in hexadecimal format
           type: string
           format: hex
           x-field-uid: 2
+        str:
+          description: |-
+            Value represented in string format
+          type: string
+          x-field-uid: 3
     Metric.Timestamp:
       description: |-
         The container for timestamp metrics.
@@ -10497,6 +10757,8 @@ components:
                 x-field-uid: 14
               fsm_state:
                 x-field-uid: 15
+              end_of_rib_received:
+                x-field-uid: 16
             enum:
             - session_state
             - session_flap_count
@@ -10513,6 +10775,7 @@ components:
             - notifications_sent
             - notifications_received
             - fsm_state
+            - end_of_rib_received
           x-field-uid: 2
     Bgpv4.Metric:
       description: |-
@@ -10627,6 +10890,12 @@ components:
           - opensent
           - openconfirm
           - established
+        end_of_rib_received:
+          description: |-
+            Number of End-of-RIB markers received indicating the completion of the initial routing update for a  particular <AFI, SAFI> address family after the session is established. For the IPv4 unicast address family, the End-of-RIB marker is an UPDATE message with the minimum length. For any other address family, it is an UPDATE message that contains only the MP_UNREACH_NLRI attribute with  no withdrawn routes for that <AFI, SAFI>.
+          type: integer
+          format: uint64
+          x-field-uid: 17
     Bgpv6.Metrics.Request:
       description: |-
         The request to retrieve BGPv6 per peer metrics/statistics.
@@ -10681,6 +10950,8 @@ components:
                 x-field-uid: 14
               fsm_state:
                 x-field-uid: 15
+              end_of_rib_received:
+                x-field-uid: 16
             enum:
             - session_state
             - session_flap_count
@@ -10697,6 +10968,7 @@ components:
             - notifications_sent
             - notifications_received
             - fsm_state
+            - end_of_rib_received
           x-field-uid: 2
     Bgpv6.Metric:
       description: |-
@@ -10811,6 +11083,12 @@ components:
           - opensent
           - openconfirm
           - established
+        end_of_rib_received:
+          description: |-
+            Number of End-of-RIB markers received indicating the completion of the initial routing update for a  particular <AFI, SAFI> address family after the session is established. For the IPv4 unicast address family, the End-of-RIB marker is an UPDATE message with the minimum length. For any other address family, it is an UPDATE message that contains only the MP_UNREACH_NLRI attribute with  no withdrawn routes for that <AFI, SAFI>.
+          type: integer
+          format: uint64
+          x-field-uid: 17
     Isis.Metrics.Request:
       description: |-
         The request to retrieve ISIS per Router metrics/statistics.
@@ -12146,6 +12424,18 @@ components:
         as_path:
           x-field-uid: 8
           $ref: '#/components/schemas/Result.BgpAsPath'
+        local_preference:
+          x-field-uid: 9
+          description: |-
+            The local preference is a well-known attribute and the value is used for route selection. The route with the highest local preference value is preferred.
+          type: integer
+          format: uint32
+        multi_exit_discriminator:
+          x-field-uid: 10
+          description: |-
+            The multi exit discriminator (MED) is an optional non-transitive attribute and the value is used for route selection. The route with the lowest MED value is preferred.
+          type: integer
+          format: uint32
     BgpPrefixIpv6Unicast.State:
       description: |-
         IPv6 unicast prefix.
@@ -12204,6 +12494,18 @@ components:
         as_path:
           x-field-uid: 8
           $ref: '#/components/schemas/Result.BgpAsPath'
+        local_preference:
+          x-field-uid: 9
+          description: |-
+            The local preference is a well-known attribute and the value is used for route selection. The route with the highest local preference value is preferred.
+          type: integer
+          format: uint32
+        multi_exit_discriminator:
+          x-field-uid: 10
+          description: |-
+            The multi exit discriminator (MED) is an optional non-transitive attribute and the value is used for route selection. The route with the lowest MED value is preferred.
+          type: integer
+          format: uint32
     Result.BgpCommunity:
       description: |-
         BGP communities provide additional capability for tagging routes and  for modifying BGP routing policy on upstream and downstream routers. BGP community is a 32-bit number which is broken into 16-bit AS number and  a 16-bit custom value.

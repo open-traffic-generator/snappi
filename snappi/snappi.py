@@ -1,4 +1,4 @@
-# Open Traffic Generator API 0.11.9
+# Open Traffic Generator API 0.11.11
 # License: MIT
 
 import importlib
@@ -9834,7 +9834,8 @@ class BgpV4Peer(OpenApiObject):
         "v6_srte_policies": {"type": "BgpSrteV6PolicyIter"},
         "name": {"type": str},
         "graceful_restart": {"type": "BgpGracefulRestart"},
-        "route_groups": {"type": "DeviceBgpRouteGroupIter"},
+        "v4_route_groups": {"type": "DeviceBgpV4RouteGroupIter"},
+        "v6_route_groups": {"type": "DeviceBgpV6RouteGroupIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ("peer_address", "as_type", "as_number", "name")  # type: tuple(str)
@@ -10108,16 +10109,29 @@ class BgpV4Peer(OpenApiObject):
         return self._get_property("graceful_restart", BgpGracefulRestart)
 
     @property
-    def route_groups(self):
-        # type: () -> DeviceBgpRouteGroupIter
-        """route_groups getter
+    def v4_route_groups(self):
+        # type: () -> DeviceBgpV4RouteGroupIter
+        """v4_route_groups getter
 
-        TBD
+        List of Emulated BGP V4 route groups, each of which MUST be V4 route range. containing exactly one V4 route address
 
-        Returns: DeviceBgpRouteGroupIter
+        Returns: DeviceBgpV4RouteGroupIter
         """
         return self._get_property(
-            "route_groups", DeviceBgpRouteGroupIter, self._parent, self._choice
+            "v4_route_groups", DeviceBgpV4RouteGroupIter, self._parent, self._choice
+        )
+
+    @property
+    def v6_route_groups(self):
+        # type: () -> DeviceBgpV6RouteGroupIter
+        """v6_route_groups getter
+
+        List of Emulated BGP V6 route groups, each of which MUST be V6 route range. containing exactly one V6 route address
+
+        Returns: DeviceBgpV6RouteGroupIter
+        """
+        return self._get_property(
+            "v6_route_groups", DeviceBgpV6RouteGroupIter, self._parent, self._choice
         )
 
 
@@ -13358,7 +13372,6 @@ class BgpV4RouteRange(OpenApiObject):
         "add_path": {"type": "BgpAddPath"},
         "name": {"type": str},
         "ext_communities": {"type": "BgpExtCommunityIter"},
-        "group": {"type": str},
     }  # type: Dict[str, str]
 
     _REQUIRED = ("name",)  # type: tuple(str)
@@ -13386,7 +13399,6 @@ class BgpV4RouteRange(OpenApiObject):
         next_hop_ipv4_address="0.0.0.0",
         next_hop_ipv6_address="::0",
         name=None,
-        group=None,
     ):
         super(BgpV4RouteRange, self).__init__()
         self._parent = parent
@@ -13395,7 +13407,6 @@ class BgpV4RouteRange(OpenApiObject):
         self._set_property("next_hop_ipv4_address", next_hop_ipv4_address)
         self._set_property("next_hop_ipv6_address", next_hop_ipv6_address)
         self._set_property("name", name)
-        self._set_property("group", group)
 
     def set(
         self,
@@ -13404,7 +13415,6 @@ class BgpV4RouteRange(OpenApiObject):
         next_hop_ipv4_address=None,
         next_hop_ipv6_address=None,
         name=None,
-        group=None,
     ):
         for property_name, property_value in locals().items():
             if property_name != "self" and property_value is not None:
@@ -13589,27 +13599,6 @@ class BgpV4RouteRange(OpenApiObject):
             "ext_communities", BgpExtCommunityIter, self._parent, self._choice
         )
 
-    @property
-    def group(self):
-        # type: () -> str
-        """group getter
-
-        Name of associated BGP route group.. x-constraint:. ./bgp.yaml#/components/schemas/Device.BgpRouteGroup/properties/name.
-
-        Returns: str
-        """
-        return self._get_property("group")
-
-    @group.setter
-    def group(self, value):
-        """group setter
-
-        Name of associated BGP route group.. x-constraint:. ./bgp.yaml#/components/schemas/Device.BgpRouteGroup/properties/name.
-
-        value: str
-        """
-        self._set_property("group", value)
-
 
 class BgpAddPath(OpenApiObject):
     __slots__ = "_parent"
@@ -13695,9 +13684,8 @@ class BgpV4RouteRangeIter(OpenApiIter):
         next_hop_ipv4_address="0.0.0.0",
         next_hop_ipv6_address="::0",
         name=None,
-        group=None,
     ):
-        # type: (Union[Literal["local_ip"], Literal["manual"]],Union[Literal["ipv4"], Literal["ipv6"]],str,str,str,str) -> BgpV4RouteRangeIter
+        # type: (Union[Literal["local_ip"], Literal["manual"]],Union[Literal["ipv4"], Literal["ipv6"]],str,str,str) -> BgpV4RouteRangeIter
         """Factory method that creates an instance of the BgpV4RouteRange class
 
         Emulated BGPv4 route range.
@@ -13711,7 +13699,6 @@ class BgpV4RouteRangeIter(OpenApiIter):
             next_hop_ipv4_address=next_hop_ipv4_address,
             next_hop_ipv6_address=next_hop_ipv6_address,
             name=name,
-            group=group,
         )
         self._add(item)
         return self
@@ -13723,9 +13710,8 @@ class BgpV4RouteRangeIter(OpenApiIter):
         next_hop_ipv4_address="0.0.0.0",
         next_hop_ipv6_address="::0",
         name=None,
-        group=None,
     ):
-        # type: (Union[Literal["local_ip"], Literal["manual"]],Union[Literal["ipv4"], Literal["ipv6"]],str,str,str,str) -> BgpV4RouteRange
+        # type: (Union[Literal["local_ip"], Literal["manual"]],Union[Literal["ipv4"], Literal["ipv6"]],str,str,str) -> BgpV4RouteRange
         """Add method that creates and returns an instance of the BgpV4RouteRange class
 
         Emulated BGPv4 route range.
@@ -13739,7 +13725,6 @@ class BgpV4RouteRangeIter(OpenApiIter):
             next_hop_ipv4_address=next_hop_ipv4_address,
             next_hop_ipv6_address=next_hop_ipv6_address,
             name=name,
-            group=group,
         )
         self._add(item)
         return item
@@ -13778,7 +13763,6 @@ class BgpV6RouteRange(OpenApiObject):
         "add_path": {"type": "BgpAddPath"},
         "name": {"type": str},
         "ext_communities": {"type": "BgpExtCommunityIter"},
-        "group": {"type": str},
     }  # type: Dict[str, str]
 
     _REQUIRED = ("name",)  # type: tuple(str)
@@ -13806,7 +13790,6 @@ class BgpV6RouteRange(OpenApiObject):
         next_hop_ipv4_address="0.0.0.0",
         next_hop_ipv6_address="::0",
         name=None,
-        group=None,
     ):
         super(BgpV6RouteRange, self).__init__()
         self._parent = parent
@@ -13815,7 +13798,6 @@ class BgpV6RouteRange(OpenApiObject):
         self._set_property("next_hop_ipv4_address", next_hop_ipv4_address)
         self._set_property("next_hop_ipv6_address", next_hop_ipv6_address)
         self._set_property("name", name)
-        self._set_property("group", group)
 
     def set(
         self,
@@ -13824,7 +13806,6 @@ class BgpV6RouteRange(OpenApiObject):
         next_hop_ipv4_address=None,
         next_hop_ipv6_address=None,
         name=None,
-        group=None,
     ):
         for property_name, property_value in locals().items():
             if property_name != "self" and property_value is not None:
@@ -14009,27 +13990,6 @@ class BgpV6RouteRange(OpenApiObject):
             "ext_communities", BgpExtCommunityIter, self._parent, self._choice
         )
 
-    @property
-    def group(self):
-        # type: () -> str
-        """group getter
-
-        Name of associated BGP route group.. x-constraint:. ./bgp.yaml#/components/schemas/Device.BgpRouteGroup/properties/name.
-
-        Returns: str
-        """
-        return self._get_property("group")
-
-    @group.setter
-    def group(self, value):
-        """group setter
-
-        Name of associated BGP route group.. x-constraint:. ./bgp.yaml#/components/schemas/Device.BgpRouteGroup/properties/name.
-
-        value: str
-        """
-        self._set_property("group", value)
-
 
 class BgpV6RouteRangeIter(OpenApiIter):
     __slots__ = ("_parent", "_choice")
@@ -14068,9 +14028,8 @@ class BgpV6RouteRangeIter(OpenApiIter):
         next_hop_ipv4_address="0.0.0.0",
         next_hop_ipv6_address="::0",
         name=None,
-        group=None,
     ):
-        # type: (Union[Literal["local_ip"], Literal["manual"]],Union[Literal["ipv4"], Literal["ipv6"]],str,str,str,str) -> BgpV6RouteRangeIter
+        # type: (Union[Literal["local_ip"], Literal["manual"]],Union[Literal["ipv4"], Literal["ipv6"]],str,str,str) -> BgpV6RouteRangeIter
         """Factory method that creates an instance of the BgpV6RouteRange class
 
         Emulated BGPv6 route range.
@@ -14084,7 +14043,6 @@ class BgpV6RouteRangeIter(OpenApiIter):
             next_hop_ipv4_address=next_hop_ipv4_address,
             next_hop_ipv6_address=next_hop_ipv6_address,
             name=name,
-            group=group,
         )
         self._add(item)
         return self
@@ -14096,9 +14054,8 @@ class BgpV6RouteRangeIter(OpenApiIter):
         next_hop_ipv4_address="0.0.0.0",
         next_hop_ipv6_address="::0",
         name=None,
-        group=None,
     ):
-        # type: (Union[Literal["local_ip"], Literal["manual"]],Union[Literal["ipv4"], Literal["ipv6"]],str,str,str,str) -> BgpV6RouteRange
+        # type: (Union[Literal["local_ip"], Literal["manual"]],Union[Literal["ipv4"], Literal["ipv6"]],str,str,str) -> BgpV6RouteRange
         """Add method that creates and returns an instance of the BgpV6RouteRange class
 
         Emulated BGPv6 route range.
@@ -14112,7 +14069,6 @@ class BgpV6RouteRangeIter(OpenApiIter):
             next_hop_ipv4_address=next_hop_ipv4_address,
             next_hop_ipv6_address=next_hop_ipv6_address,
             name=name,
-            group=group,
         )
         self._add(item)
         return item
@@ -18597,25 +18553,30 @@ class BgpGracefulRestart(OpenApiObject):
         self._set_property("stale_time", value)
 
 
-class DeviceBgpRouteGroup(OpenApiObject):
+class DeviceBgpV4RouteGroup(OpenApiObject):
     __slots__ = "_parent"
 
     _TYPES = {
         "name": {"type": str},
+        "route_names": {
+            "type": list,
+            "itemtype": str,
+        },
     }  # type: Dict[str, str]
 
-    _REQUIRED = ()  # type: tuple(str)
+    _REQUIRED = ("name",)  # type: tuple(str)
 
     _DEFAULTS = {}  # type: Dict[str, Union(type)]
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
-    def __init__(self, parent=None, name=None):
-        super(DeviceBgpRouteGroup, self).__init__()
+    def __init__(self, parent=None, name=None, route_names=None):
+        super(DeviceBgpV4RouteGroup, self).__init__()
         self._parent = parent
         self._set_property("name", name)
+        self._set_property("route_names", route_names)
 
-    def set(self, name=None):
+    def set(self, name=None, route_names=None):
         for property_name, property_value in locals().items():
             if property_name != "self" and property_value is not None:
                 self._set_property(property_name, property_value)
@@ -18639,60 +18600,219 @@ class DeviceBgpRouteGroup(OpenApiObject):
 
         value: str
         """
+        if value is None:
+            raise TypeError("Cannot set required property name as None")
         self._set_property("name", value)
 
+    @property
+    def route_names(self):
+        # type: () -> List[str]
+        """route_names getter
 
-class DeviceBgpRouteGroupIter(OpenApiIter):
+        Name of configured V4 routes, each containing exactly one V4 route. address. Providing V4 route name containing more than one V4 route. address shall be deemed invalid.. x-constraint:. /components/schemas/Bgp.V4RouteRange/properties/name.
+
+        Returns: List[str]
+        """
+        return self._get_property("route_names")
+
+    @route_names.setter
+    def route_names(self, value):
+        """route_names setter
+
+        Name of configured V4 routes, each containing exactly one V4 route. address. Providing V4 route name containing more than one V4 route. address shall be deemed invalid.. x-constraint:. /components/schemas/Bgp.V4RouteRange/properties/name.
+
+        value: List[str]
+        """
+        self._set_property("route_names", value)
+
+
+class DeviceBgpV4RouteGroupIter(OpenApiIter):
     __slots__ = ("_parent", "_choice")
 
     _GETITEM_RETURNS_CHOICE_OBJECT = False
 
     def __init__(self, parent=None, choice=None):
-        super(DeviceBgpRouteGroupIter, self).__init__()
+        super(DeviceBgpV4RouteGroupIter, self).__init__()
         self._parent = parent
         self._choice = choice
 
     def __getitem__(self, key):
-        # type: (str) -> Union[DeviceBgpRouteGroup]
+        # type: (str) -> Union[DeviceBgpV4RouteGroup]
         return self._getitem(key)
 
     def __iter__(self):
-        # type: () -> DeviceBgpRouteGroupIter
+        # type: () -> DeviceBgpV4RouteGroupIter
         return self._iter()
 
     def __next__(self):
-        # type: () -> DeviceBgpRouteGroup
+        # type: () -> DeviceBgpV4RouteGroup
         return self._next()
 
     def next(self):
-        # type: () -> DeviceBgpRouteGroup
+        # type: () -> DeviceBgpV4RouteGroup
         return self._next()
 
     def _instanceOf(self, item):
-        if not isinstance(item, DeviceBgpRouteGroup):
-            raise Exception("Item is not an instance of DeviceBgpRouteGroup")
+        if not isinstance(item, DeviceBgpV4RouteGroup):
+            raise Exception("Item is not an instance of DeviceBgpV4RouteGroup")
 
-    def bgproutegroup(self, name=None):
-        # type: (str) -> DeviceBgpRouteGroupIter
-        """Factory method that creates an instance of the DeviceBgpRouteGroup class
+    def bgpv4routegroup(self, name=None, route_names=None):
+        # type: (str,List[str]) -> DeviceBgpV4RouteGroupIter
+        """Factory method that creates an instance of the DeviceBgpV4RouteGroup class
 
-        A group of V4 or V6 routes..
+        A group of V4 Routes, each of which MUST be V4 route range. containing exactly one V4 route address.
 
-        Returns: DeviceBgpRouteGroupIter
+        Returns: DeviceBgpV4RouteGroupIter
         """
-        item = DeviceBgpRouteGroup(parent=self._parent, name=name)
+        item = DeviceBgpV4RouteGroup(
+            parent=self._parent, name=name, route_names=route_names
+        )
         self._add(item)
         return self
 
-    def add(self, name=None):
-        # type: (str) -> DeviceBgpRouteGroup
-        """Add method that creates and returns an instance of the DeviceBgpRouteGroup class
+    def add(self, name=None, route_names=None):
+        # type: (str,List[str]) -> DeviceBgpV4RouteGroup
+        """Add method that creates and returns an instance of the DeviceBgpV4RouteGroup class
 
-        A group of V4 or V6 routes..
+        A group of V4 Routes, each of which MUST be V4 route range. containing exactly one V4 route address.
 
-        Returns: DeviceBgpRouteGroup
+        Returns: DeviceBgpV4RouteGroup
         """
-        item = DeviceBgpRouteGroup(parent=self._parent, name=name)
+        item = DeviceBgpV4RouteGroup(
+            parent=self._parent, name=name, route_names=route_names
+        )
+        self._add(item)
+        return item
+
+
+class DeviceBgpV6RouteGroup(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "name": {"type": str},
+        "route_names": {
+            "type": list,
+            "itemtype": str,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ("name",)  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, name=None, route_names=None):
+        super(DeviceBgpV6RouteGroup, self).__init__()
+        self._parent = parent
+        self._set_property("name", name)
+        self._set_property("route_names", route_names)
+
+    def set(self, name=None, route_names=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def name(self):
+        # type: () -> str
+        """name getter
+
+        Globally unique name of an object. It also serves as the primary key for arrays of objects.
+
+        Returns: str
+        """
+        return self._get_property("name")
+
+    @name.setter
+    def name(self, value):
+        """name setter
+
+        Globally unique name of an object. It also serves as the primary key for arrays of objects.
+
+        value: str
+        """
+        if value is None:
+            raise TypeError("Cannot set required property name as None")
+        self._set_property("name", value)
+
+    @property
+    def route_names(self):
+        # type: () -> List[str]
+        """route_names getter
+
+        Name of configured V4 routes, each containing exactly one V4 route. address. Providing V4 route name containing more than one V4 route. address shall be deemed invalid.. x-constraint:. /components/schemas/Bgp.V6RouteRange/properties/name.
+
+        Returns: List[str]
+        """
+        return self._get_property("route_names")
+
+    @route_names.setter
+    def route_names(self, value):
+        """route_names setter
+
+        Name of configured V4 routes, each containing exactly one V4 route. address. Providing V4 route name containing more than one V4 route. address shall be deemed invalid.. x-constraint:. /components/schemas/Bgp.V6RouteRange/properties/name.
+
+        value: List[str]
+        """
+        self._set_property("route_names", value)
+
+
+class DeviceBgpV6RouteGroupIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = False
+
+    def __init__(self, parent=None, choice=None):
+        super(DeviceBgpV6RouteGroupIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[DeviceBgpV6RouteGroup]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> DeviceBgpV6RouteGroupIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> DeviceBgpV6RouteGroup
+        return self._next()
+
+    def next(self):
+        # type: () -> DeviceBgpV6RouteGroup
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, DeviceBgpV6RouteGroup):
+            raise Exception("Item is not an instance of DeviceBgpV6RouteGroup")
+
+    def bgpv6routegroup(self, name=None, route_names=None):
+        # type: (str,List[str]) -> DeviceBgpV6RouteGroupIter
+        """Factory method that creates an instance of the DeviceBgpV6RouteGroup class
+
+        A group of V6 Routes, each of which MUST be V6 route range. containing exactly one V6 route address.
+
+        Returns: DeviceBgpV6RouteGroupIter
+        """
+        item = DeviceBgpV6RouteGroup(
+            parent=self._parent, name=name, route_names=route_names
+        )
+        self._add(item)
+        return self
+
+    def add(self, name=None, route_names=None):
+        # type: (str,List[str]) -> DeviceBgpV6RouteGroup
+        """Add method that creates and returns an instance of the DeviceBgpV6RouteGroup class
+
+        A group of V6 Routes, each of which MUST be V6 route range. containing exactly one V6 route address.
+
+        Returns: DeviceBgpV6RouteGroup
+        """
+        item = DeviceBgpV6RouteGroup(
+            parent=self._parent, name=name, route_names=route_names
+        )
         self._add(item)
         return item
 
@@ -18928,7 +19048,8 @@ class BgpV6Peer(OpenApiObject):
         "v6_srte_policies": {"type": "BgpSrteV6PolicyIter"},
         "name": {"type": str},
         "graceful_restart": {"type": "BgpGracefulRestart"},
-        "route_groups": {"type": "DeviceBgpRouteGroupIter"},
+        "v4_route_groups": {"type": "DeviceBgpV4RouteGroupIter"},
+        "v6_route_groups": {"type": "DeviceBgpV6RouteGroupIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ("peer_address", "as_type", "as_number", "name")  # type: tuple(str)
@@ -19213,16 +19334,29 @@ class BgpV6Peer(OpenApiObject):
         return self._get_property("graceful_restart", BgpGracefulRestart)
 
     @property
-    def route_groups(self):
-        # type: () -> DeviceBgpRouteGroupIter
-        """route_groups getter
+    def v4_route_groups(self):
+        # type: () -> DeviceBgpV4RouteGroupIter
+        """v4_route_groups getter
 
-        TBD
+        List of Emulated BGP V4 route groups, each of which MUST be V4 route range. containing exactly one V4 route address
 
-        Returns: DeviceBgpRouteGroupIter
+        Returns: DeviceBgpV4RouteGroupIter
         """
         return self._get_property(
-            "route_groups", DeviceBgpRouteGroupIter, self._parent, self._choice
+            "v4_route_groups", DeviceBgpV4RouteGroupIter, self._parent, self._choice
+        )
+
+    @property
+    def v6_route_groups(self):
+        # type: () -> DeviceBgpV6RouteGroupIter
+        """v6_route_groups getter
+
+        List of Emulated BGP V6 route groups, each of which MUST be V6 route range. containing exactly one V6 route address
+
+        Returns: DeviceBgpV6RouteGroupIter
+        """
+        return self._get_property(
+            "v6_route_groups", DeviceBgpV6RouteGroupIter, self._parent, self._choice
         )
 
 
@@ -24309,21 +24443,28 @@ class FlowPort(OpenApiObject):
     _TYPES = {
         "tx_name": {"type": str},
         "rx_name": {"type": str},
+        "rx_names": {
+            "type": list,
+            "itemtype": str,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ("tx_name",)  # type: tuple(str)
 
     _DEFAULTS = {}  # type: Dict[str, Union(type)]
 
-    _STATUS = {}  # type: Dict[str, Union(type)]
+    _STATUS = {
+        "rx_name": "rx_name property in schema FlowPort is deprecated, This property is deprecated in favor of property rx_names",
+    }  # type: Dict[str, Union(type)]
 
-    def __init__(self, parent=None, tx_name=None, rx_name=None):
+    def __init__(self, parent=None, tx_name=None, rx_name=None, rx_names=None):
         super(FlowPort, self).__init__()
         self._parent = parent
         self._set_property("tx_name", tx_name)
         self._set_property("rx_name", rx_name)
+        self._set_property("rx_names", rx_names)
 
-    def set(self, tx_name=None, rx_name=None):
+    def set(self, tx_name=None, rx_name=None, rx_names=None):
         for property_name, property_value in locals().items():
             if property_name != "self" and property_value is not None:
                 self._set_property(property_name, property_value)
@@ -24356,7 +24497,7 @@ class FlowPort(OpenApiObject):
         # type: () -> str
         """rx_name getter
 
-        The unique name of port that is the intended receive port.. x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name.
+        Deprecated: This property is deprecated in favor of property rx_names. The unique name of port that is the intended receive port.. x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name.
 
         Returns: str
         """
@@ -24366,11 +24507,32 @@ class FlowPort(OpenApiObject):
     def rx_name(self, value):
         """rx_name setter
 
-        The unique name of port that is the intended receive port.. x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name.
+        Deprecated: This property is deprecated in favor of property rx_names. The unique name of port that is the intended receive port.. x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name.
 
         value: str
         """
         self._set_property("rx_name", value)
+
+    @property
+    def rx_names(self):
+        # type: () -> List[str]
+        """rx_names getter
+
+        Unique name of ports or lags that are intended receive endpoints.. x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name.
+
+        Returns: List[str]
+        """
+        return self._get_property("rx_names")
+
+    @rx_names.setter
+    def rx_names(self, value):
+        """rx_names setter
+
+        Unique name of ports or lags that are intended receive endpoints.. x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name.
+
+        value: List[str]
+        """
+        self._set_property("rx_names", value)
 
 
 class FlowRouter(OpenApiObject):
@@ -24443,7 +24605,7 @@ class FlowRouter(OpenApiObject):
         # type: () -> List[str]
         """tx_names getter
 
-        TBD. x-constraint:. /components/schemas/Device.Ethernet/properties/name. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V4RouteRange/properties/group. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/group. /components/schemas/Bgp.CMacIpRange/properties/name. /components/schemas/Rsvp.LspIpv4Interface.P2PIngressIpv4Lsp/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name.
+        TBD. x-constraint:. /components/schemas/Device.Ethernet/properties/name. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V4RouteGroup/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Bgp.V6RouteGroup/properties/name. /components/schemas/Bgp.CMacIpRange/properties/name. /components/schemas/Rsvp.LspIpv4Interface.P2PIngressIpv4Lsp/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name.
 
         Returns: List[str]
         """
@@ -24453,7 +24615,7 @@ class FlowRouter(OpenApiObject):
     def tx_names(self, value):
         """tx_names setter
 
-        TBD. x-constraint:. /components/schemas/Device.Ethernet/properties/name. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V4RouteRange/properties/group. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/group. /components/schemas/Bgp.CMacIpRange/properties/name. /components/schemas/Rsvp.LspIpv4Interface.P2PIngressIpv4Lsp/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name.
+        TBD. x-constraint:. /components/schemas/Device.Ethernet/properties/name. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V4RouteGroup/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Bgp.V6RouteGroup/properties/name. /components/schemas/Bgp.CMacIpRange/properties/name. /components/schemas/Rsvp.LspIpv4Interface.P2PIngressIpv4Lsp/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name.
 
         value: List[str]
         """
@@ -24466,7 +24628,7 @@ class FlowRouter(OpenApiObject):
         # type: () -> List[str]
         """rx_names getter
 
-        TBD. x-constraint:. /components/schemas/Device.Ethernet/properties/name. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Bgp.CMacIpRange/properties/name. /components/schemas/Rsvp.LspIpv4Interface.P2PEgressIpv4Lsp/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name.
+        TBD. x-constraint:. /components/schemas/Device.Ethernet/properties/name. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V4RouteGroup/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Bgp.V6RouteGroup/properties/name. /components/schemas/Bgp.CMacIpRange/properties/name. /components/schemas/Rsvp.LspIpv4Interface.P2PEgressIpv4Lsp/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name.
 
         Returns: List[str]
         """
@@ -24476,7 +24638,7 @@ class FlowRouter(OpenApiObject):
     def rx_names(self, value):
         """rx_names setter
 
-        TBD. x-constraint:. /components/schemas/Device.Ethernet/properties/name. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Bgp.CMacIpRange/properties/name. /components/schemas/Rsvp.LspIpv4Interface.P2PEgressIpv4Lsp/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name.
+        TBD. x-constraint:. /components/schemas/Device.Ethernet/properties/name. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V4RouteGroup/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Bgp.V6RouteGroup/properties/name. /components/schemas/Bgp.CMacIpRange/properties/name. /components/schemas/Rsvp.LspIpv4Interface.P2PEgressIpv4Lsp/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name.
 
         value: List[str]
         """
@@ -88912,8 +89074,10 @@ class FlowMetrics(OpenApiObject):
     _TYPES = {
         "enable": {"type": bool},
         "loss": {"type": bool},
+        "rx_tx_ratio": {"type": "FlowRxTxRatio"},
         "timestamps": {"type": bool},
         "latency": {"type": "FlowLatencyMetrics"},
+        "predefined_metric_tags": {"type": "FlowPredefinedTags"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -88981,6 +89145,17 @@ class FlowMetrics(OpenApiObject):
         self._set_property("loss", value)
 
     @property
+    def rx_tx_ratio(self):
+        # type: () -> FlowRxTxRatio
+        """rx_tx_ratio getter
+
+        Rx Tx ratio is the ratio of expected number of Rx packets across all Rx ports to the Tx packets. for the configured flow. It is factor by which the Tx packet count is multiplied to calculate. the sum of expected Rx packet count, across all Rx ports. This will be used to calculate loss. percentage of flow at aggregate level.Rx Tx ratio is the ratio of expected number of Rx packets across all Rx ports to the Tx packets. for the configured flow. It is factor by which the Tx packet count is multiplied to calculate. the sum of expected Rx packet count, across all Rx ports. This will be used to calculate loss. percentage of flow at aggregate level.Rx Tx ratio is the ratio of expected number of Rx packets across all Rx ports to the Tx packets. for the configured flow. It is factor by which the Tx packet count is multiplied to calculate. the sum of expected Rx packet count, across all Rx ports. This will be used to calculate loss. percentage of flow at aggregate level.Rx Tx ratio.
+
+        Returns: FlowRxTxRatio
+        """
+        return self._get_property("rx_tx_ratio", FlowRxTxRatio)
+
+    @property
     def timestamps(self):
         # type: () -> bool
         """timestamps getter
@@ -89011,6 +89186,135 @@ class FlowMetrics(OpenApiObject):
         Returns: FlowLatencyMetrics
         """
         return self._get_property("latency", FlowLatencyMetrics)
+
+    @property
+    def predefined_metric_tags(self):
+        # type: () -> FlowPredefinedTags
+        """predefined_metric_tags getter
+
+        List of predefined flow tracking options, outside packet fields, that can be enabled.List of predefined flow tracking options, outside packet fields, that can be enabled.List of predefined flow tracking options, outside packet fields, that can be enabled.Predefined metric tags
+
+        Returns: FlowPredefinedTags
+        """
+        return self._get_property("predefined_metric_tags", FlowPredefinedTags)
+
+
+class FlowRxTxRatio(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "rx_count",
+                "value",
+            ],
+        },
+        "rx_count": {"type": "FlowRxTxRatioRxCount"},
+        "value": {
+            "type": float,
+            "format": "float",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": 1.0,
+    }  # type: Dict[str, Union(type)]
+
+    RX_COUNT = "rx_count"  # type: str
+    VALUE = "value"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=1.0):
+        super(FlowRxTxRatio, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def rx_count(self):
+        # type: () -> FlowRxTxRatioRxCount
+        """Factory property that returns an instance of the FlowRxTxRatioRxCount class
+
+        This is for cases where one copy of Tx packet is received on all Rx ports and so the sum total of Rx packets. received across all Rx ports is multiple of Rx port count and Tx packets.
+
+        Returns: FlowRxTxRatioRxCount
+        """
+        return self._get_property("rx_count", FlowRxTxRatioRxCount, self, "rx_count")
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["rx_count"], Literal["value"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["rx_count"], Literal["value"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["rx_count"], Literal["value"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> float
+        """value getter
+
+        Should be positive, non-zero value. The default value of 1, is when the Rx packet count across. all ports is expected to match the Tx packet count. custom integer value (>1) can be specified for. loss calculation for cases when there are multiple destination addresses configured within one flow,. but DUT is configured to replicate only to subset of Rx ports. For cases when Tx side generates two. packets from each source in 1:1 protection mode but only one of the two packets are received by the. Rx port, we may need to specify fractional value instead.
+
+        Returns: float
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        Should be positive, non-zero value. The default value of 1, is when the Rx packet count across. all ports is expected to match the Tx packet count. custom integer value (>1) can be specified for. loss calculation for cases when there are multiple destination addresses configured within one flow,. but DUT is configured to replicate only to subset of Rx ports. For cases when Tx side generates two. packets from each source in 1:1 protection mode but only one of the two packets are received by the. Rx port, we may need to specify fractional value instead.
+
+        value: float
+        """
+        self._set_property("value", value, "value")
+
+
+class FlowRxTxRatioRxCount(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {}  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(FlowRxTxRatioRxCount, self).__init__()
+        self._parent = parent
 
 
 class FlowLatencyMetrics(OpenApiObject):
@@ -89091,6 +89395,53 @@ class FlowLatencyMetrics(OpenApiObject):
         value: Union[Literal["cut_through"], Literal["store_forward"]]
         """
         self._set_property("mode", value)
+
+
+class FlowPredefinedTags(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "rx_name": {"type": bool},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "rx_name": False,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, rx_name=False):
+        super(FlowPredefinedTags, self).__init__()
+        self._parent = parent
+        self._set_property("rx_name", rx_name)
+
+    def set(self, rx_name=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def rx_name(self):
+        # type: () -> bool
+        """rx_name getter
+
+        Enables Rx port or lag level disaggregation with predefined metrics tag name set as "rx_name".. The Rx port lag names can be found under tagged_metrics tag names in flow metrics response.
+
+        Returns: bool
+        """
+        return self._get_property("rx_name")
+
+    @rx_name.setter
+    def rx_name(self, value):
+        """rx_name setter
+
+        Enables Rx port or lag level disaggregation with predefined metrics tag name set as "rx_name".. The Rx port lag names can be found under tagged_metrics tag names in flow metrics response.
+
+        value: bool
+        """
+        self._set_property("rx_name", value)
 
 
 class FlowIter(OpenApiIter):
@@ -91194,6 +91545,7 @@ class StateProtocolRoute(OpenApiObject):
                 "withdraw",
             ],
         },
+        "subsets": {"type": "StateProtocolRouteSubsetIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ("state",)  # type: tuple(str)
@@ -91203,7 +91555,9 @@ class StateProtocolRoute(OpenApiObject):
     ADVERTISE = "advertise"  # type: str
     WITHDRAW = "withdraw"  # type: str
 
-    _STATUS = {}  # type: Dict[str, Union(type)]
+    _STATUS = {
+        "subsets": "subsets property in schema StateProtocolRoute is under-review, There may be enhancements in how we configure subset of routes",
+    }  # type: Dict[str, Union(type)]
 
     def __init__(self, parent=None, names=None, state=None):
         super(StateProtocolRoute, self).__init__()
@@ -91221,7 +91575,7 @@ class StateProtocolRoute(OpenApiObject):
         # type: () -> List[str]
         """names getter
 
-        The names of device route objects to control. If no names are specified then all route objects that match the x-constraint will be affected.. x-constraint:. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V4RouteRange/properties/group. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/group. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name.
+        The names of device route objects to control. If no names are specified then all route objects that match the x-constraint will be affected.. x-constraint:. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V4RouteGroup/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Bgp.V6RouteGroup/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name.
 
         Returns: List[str]
         """
@@ -91231,7 +91585,7 @@ class StateProtocolRoute(OpenApiObject):
     def names(self, value):
         """names setter
 
-        The names of device route objects to control. If no names are specified then all route objects that match the x-constraint will be affected.. x-constraint:. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V4RouteRange/properties/group. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/group. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name.
+        The names of device route objects to control. If no names are specified then all route objects that match the x-constraint will be affected.. x-constraint:. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V4RouteGroup/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Bgp.V6RouteGroup/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name.
 
         value: List[str]
         """
@@ -91259,6 +91613,361 @@ class StateProtocolRoute(OpenApiObject):
         if value is None:
             raise TypeError("Cannot set required property state as None")
         self._set_property("state", value)
+
+    @property
+    def subsets(self):
+        # type: () -> StateProtocolRouteSubsetIter
+        """subsets getter
+
+        Under Review: There may be enhancements in how we configure subset of routes. List of configurations specifying portion of V4/V6 routes or route. groups to be advertised or withdrawn.
+
+        Returns: StateProtocolRouteSubsetIter
+        """
+        return self._get_property(
+            "subsets", StateProtocolRouteSubsetIter, self._parent, self._choice
+        )
+
+
+class StateProtocolRouteSubset(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "sequence",
+                "percent",
+            ],
+        },
+        "sequence": {"type": "StateProtocolRouteSubsetSequence"},
+        "percent": {"type": "StateProtocolRouteSubsetPercent"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    SEQUENCE = "sequence"  # type: str
+    PERCENT = "percent"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None):
+        super(StateProtocolRouteSubset, self).__init__()
+        self._parent = parent
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    @property
+    def sequence(self):
+        # type: () -> StateProtocolRouteSubsetSequence
+        """Factory property that returns an instance of the StateProtocolRouteSubsetSequence class
+
+        Configuration for specifying sequential subset of V4 or V6 routes belonging. to V4 or V6 route group (respectively) to be advertised or withdrawn
+
+        Returns: StateProtocolRouteSubsetSequence
+        """
+        return self._get_property(
+            "sequence", StateProtocolRouteSubsetSequence, self, "sequence"
+        )
+
+    @property
+    def percent(self):
+        # type: () -> StateProtocolRouteSubsetPercent
+        """Factory property that returns an instance of the StateProtocolRouteSubsetPercent class
+
+        Configuration for specifying percentage of V4 or V6 route addresses belonging. to V4 or V6 route (respectively) to be advertised or withdrawn
+
+        Returns: StateProtocolRouteSubsetPercent
+        """
+        return self._get_property(
+            "percent", StateProtocolRouteSubsetPercent, self, "percent"
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["percent"], Literal["sequence"]]
+        """choice getter
+
+        Format in which subset configuration needs to be provided
+
+        Returns: Union[Literal["percent"], Literal["sequence"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        Format in which subset configuration needs to be provided
+
+        value: Union[Literal["percent"], Literal["sequence"]]
+        """
+        self._set_property("choice", value)
+
+
+class StateProtocolRouteSubsetSequence(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "name": {"type": str},
+        "start": {
+            "type": int,
+            "format": "uint32",
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, name=None, start=0, count=1):
+        super(StateProtocolRouteSubsetSequence, self).__init__()
+        self._parent = parent
+        self._set_property("name", name)
+        self._set_property("start", start)
+        self._set_property("count", count)
+
+    def set(self, name=None, start=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def name(self):
+        # type: () -> str
+        """name getter
+
+        Name of V4 or V6 route group. x-constraint:. /components/schemas/Bgp.V4RouteGroup/properties/name. /components/schemas/Bgp.V6RouteGroup/properties/name.
+
+        Returns: str
+        """
+        return self._get_property("name")
+
+    @name.setter
+    def name(self, value):
+        """name setter
+
+        Name of V4 or V6 route group. x-constraint:. /components/schemas/Bgp.V4RouteGroup/properties/name. /components/schemas/Bgp.V6RouteGroup/properties/name.
+
+        value: str
+        """
+        self._set_property("name", value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        Sequence ID of route in the group that will be the first entry. in the subset
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        Sequence ID of route in the group that will be the first entry. in the subset
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        Number of routes relative to start value to be included in the subset
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        Number of routes relative to start value to be included in the subset
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class StateProtocolRouteSubsetPercent(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "name": {"type": str},
+        "percent": {
+            "type": float,
+            "format": "float",
+            "minimum": 0,
+            "maximum": 100,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "percent": 100.0,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, name=None, percent=100):
+        super(StateProtocolRouteSubsetPercent, self).__init__()
+        self._parent = parent
+        self._set_property("name", name)
+        self._set_property("percent", percent)
+
+    def set(self, name=None, percent=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def name(self):
+        # type: () -> str
+        """name getter
+
+        Name of V4 or V6 route. x-constraint:. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name.
+
+        Returns: str
+        """
+        return self._get_property("name")
+
+    @name.setter
+    def name(self, value):
+        """name setter
+
+        Name of V4 or V6 route. x-constraint:. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name.
+
+        value: str
+        """
+        self._set_property("name", value)
+
+    @property
+    def percent(self):
+        # type: () -> float
+        """percent getter
+
+        Percentage value corresponding to portion of route addresses
+
+        Returns: float
+        """
+        return self._get_property("percent")
+
+    @percent.setter
+    def percent(self, value):
+        """percent setter
+
+        Percentage value corresponding to portion of route addresses
+
+        value: float
+        """
+        self._set_property("percent", value)
+
+
+class StateProtocolRouteSubsetIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = True
+
+    def __init__(self, parent=None, choice=None):
+        super(StateProtocolRouteSubsetIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[StateProtocolRouteSubset, StateProtocolRouteSubsetPercent, StateProtocolRouteSubsetSequence]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> StateProtocolRouteSubsetIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> StateProtocolRouteSubset
+        return self._next()
+
+    def next(self):
+        # type: () -> StateProtocolRouteSubset
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, StateProtocolRouteSubset):
+            raise Exception("Item is not an instance of StateProtocolRouteSubset")
+
+    def subset(self):
+        # type: () -> StateProtocolRouteSubsetIter
+        """Factory method that creates an instance of the StateProtocolRouteSubset class
+
+        Configuration for specifying portion of V4/V6 routes or route. groups to be advertised or withdrawn
+
+        Returns: StateProtocolRouteSubsetIter
+        """
+        item = StateProtocolRouteSubset(parent=self._parent, choice=self._choice)
+        self._add(item)
+        return self
+
+    def add(self):
+        # type: () -> StateProtocolRouteSubset
+        """Add method that creates and returns an instance of the StateProtocolRouteSubset class
+
+        Configuration for specifying portion of V4/V6 routes or route. groups to be advertised or withdrawn
+
+        Returns: StateProtocolRouteSubset
+        """
+        item = StateProtocolRouteSubset(parent=self._parent, choice=self._choice)
+        self._add(item)
+        return item
+
+    def sequence(self, name=None, start=0, count=1):
+        # type: (str,int,int) -> StateProtocolRouteSubsetIter
+        """Factory method that creates an instance of the StateProtocolRouteSubsetSequence class
+
+        Configuration for specifying sequential subset of V4 or V6 routes belonging. to V4 or V6 route group (respectively) to be advertised or withdrawn
+
+        Returns: StateProtocolRouteSubsetIter
+        """
+        item = StateProtocolRouteSubset()
+        item.sequence
+        item.choice = "sequence"
+        self._add(item)
+        return self
+
+    def percent(self, name=None, percent=100):
+        # type: (str,float) -> StateProtocolRouteSubsetIter
+        """Factory method that creates an instance of the StateProtocolRouteSubsetPercent class
+
+        Configuration for specifying percentage of V4 or V6 route addresses belonging. to V4 or V6 route (respectively) to be advertised or withdrawn
+
+        Returns: StateProtocolRouteSubsetIter
+        """
+        item = StateProtocolRouteSubset()
+        item.percent
+        item.choice = "percent"
+        self._add(item)
+        return self
 
 
 class StateProtocolLacp(OpenApiObject):
@@ -92198,14 +92907,14 @@ class ActionProtocolBgp(OpenApiObject):
             "enum": [
                 "notification",
                 "initiate_graceful_restart",
-                "load_routes",
+                "import_routes",
             ],
         },
         "notification": {"type": "ActionProtocolBgpNotification"},
         "initiate_graceful_restart": {
             "type": "ActionProtocolBgpInitiateGracefulRestart"
         },
-        "load_routes": {"type": "ActionProtocolBgpLoadRoutes"},
+        "import_routes": {"type": "ActionProtocolBgpImportRoutes"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ("choice",)  # type: tuple(str)
@@ -92214,7 +92923,7 @@ class ActionProtocolBgp(OpenApiObject):
 
     NOTIFICATION = "notification"  # type: str
     INITIATE_GRACEFUL_RESTART = "initiate_graceful_restart"  # type: str
-    LOAD_ROUTES = "load_routes"  # type: str
+    IMPORT_ROUTES = "import_routes"  # type: str
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
@@ -92260,26 +92969,26 @@ class ActionProtocolBgp(OpenApiObject):
         )
 
     @property
-    def load_routes(self):
-        # type: () -> ActionProtocolBgpLoadRoutes
-        """Factory property that returns an instance of the ActionProtocolBgpLoadRoutes class
+    def import_routes(self):
+        # type: () -> ActionProtocolBgpImportRoutes
+        """Factory property that returns an instance of the ActionProtocolBgpImportRoutes class
 
-        Loads routes to be advertised for given peer in given format.
+        Import V4 and V6 routes installed on and exported from DUT,. the format for which could be different across vendors, and convert. those to OTG V4 or V6 routes configured across corresponding BGP peers.. Following additional details need to be considered:. The exported routes may be provided in variety of file formats. A given file may contain both V4 and V6 route entries. Each route entry shall correspond to `Bgp.V4RouteRange` or `Bgp.V6RouteRange`. with exactly one entry of `V4RouteAddress` or `V6RouteAddress` respectively. The name of resultant OTG V4 or V6 routes shall be constituent of. an alias associated with import file, name of corresponding BGP peer. and the sequence number corresponding to its order of entry in the file
 
-        Returns: ActionProtocolBgpLoadRoutes
+        Returns: ActionProtocolBgpImportRoutes
         """
         return self._get_property(
-            "load_routes", ActionProtocolBgpLoadRoutes, self, "load_routes"
+            "import_routes", ActionProtocolBgpImportRoutes, self, "import_routes"
         )
 
     @property
     def choice(self):
-        # type: () -> Union[Literal["initiate_graceful_restart"], Literal["load_routes"], Literal["notification"]]
+        # type: () -> Union[Literal["import_routes"], Literal["initiate_graceful_restart"], Literal["notification"]]
         """choice getter
 
         TBD
 
-        Returns: Union[Literal["initiate_graceful_restart"], Literal["load_routes"], Literal["notification"]]
+        Returns: Union[Literal["import_routes"], Literal["initiate_graceful_restart"], Literal["notification"]]
         """
         return self._get_property("choice")
 
@@ -92289,7 +92998,7 @@ class ActionProtocolBgp(OpenApiObject):
 
         TBD
 
-        value: Union[Literal["initiate_graceful_restart"], Literal["load_routes"], Literal["notification"]]
+        value: Union[Literal["import_routes"], Literal["initiate_graceful_restart"], Literal["notification"]]
         """
         if value is None:
             raise TypeError("Cannot set required property choice as None")
@@ -92979,11 +93688,11 @@ class ActionProtocolBgpInitiateGracefulRestart(OpenApiObject):
         self._set_property("restart_delay", value)
 
 
-class ActionProtocolBgpLoadRoutes(OpenApiObject):
+class ActionProtocolBgpImportRoutes(OpenApiObject):
     __slots__ = "_parent"
 
     _TYPES = {
-        "configs": {"type": "ActionProtocolBgpLoadRoutesConfigIter"},
+        "imports": {"type": "ActionProtocolBgpRouteImportIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -92993,37 +93702,289 @@ class ActionProtocolBgpLoadRoutes(OpenApiObject):
     _STATUS = {}  # type: Dict[str, Union(type)]
 
     def __init__(self, parent=None):
-        super(ActionProtocolBgpLoadRoutes, self).__init__()
+        super(ActionProtocolBgpImportRoutes, self).__init__()
         self._parent = parent
 
     @property
-    def configs(self):
-        # type: () -> ActionProtocolBgpLoadRoutesConfigIter
-        """configs getter
+    def imports(self):
+        # type: () -> ActionProtocolBgpRouteImportIter
+        """imports getter
 
         TBD
 
-        Returns: ActionProtocolBgpLoadRoutesConfigIter
+        Returns: ActionProtocolBgpRouteImportIter
         """
         return self._get_property(
-            "configs", ActionProtocolBgpLoadRoutesConfigIter, self._parent, self._choice
+            "imports", ActionProtocolBgpRouteImportIter, self._parent, self._choice
         )
 
 
-class ActionProtocolBgpLoadRoutesConfig(OpenApiObject):
+class ActionProtocolBgpRouteImport(OpenApiObject):
     __slots__ = "_parent"
 
     _TYPES = {
+        "name": {"type": str},
         "routes": {"type": "ActionProtocolBgpRoutes"},
-        "peer_names": {
-            "type": list,
-            "itemtype": str,
+        "targets": {"type": "ActionProtocolBgpRouteImportTargetIter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ("name",)  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, name=None):
+        super(ActionProtocolBgpRouteImport, self).__init__()
+        self._parent = parent
+        self._set_property("name", name)
+
+    def set(self, name=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def name(self):
+        # type: () -> str
+        """name getter
+
+        Globally unique name of an object. It also serves as the primary key for arrays of objects.
+
+        Returns: str
+        """
+        return self._get_property("name")
+
+    @name.setter
+    def name(self, value):
+        """name setter
+
+        Globally unique name of an object. It also serves as the primary key for arrays of objects.
+
+        value: str
+        """
+        if value is None:
+            raise TypeError("Cannot set required property name as None")
+        self._set_property("name", value)
+
+    @property
+    def routes(self):
+        # type: () -> ActionProtocolBgpRoutes
+        """routes getter
+
+        Routes to be imported in given format.Routes to be imported in given format.Routes to be imported in given format.
+
+        Returns: ActionProtocolBgpRoutes
+        """
+        return self._get_property("routes", ActionProtocolBgpRoutes)
+
+    @property
+    def targets(self):
+        # type: () -> ActionProtocolBgpRouteImportTargetIter
+        """targets getter
+
+        List of import targets (i.e. corresponding V4 or V6 route groups) and. associated import properties
+
+        Returns: ActionProtocolBgpRouteImportTargetIter
+        """
+        return self._get_property(
+            "targets",
+            ActionProtocolBgpRouteImportTargetIter,
+            self._parent,
+            self._choice,
+        )
+
+
+class ActionProtocolBgpRoutes(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "v4_routes",
+                "v6_routes",
+                "openconfig_routes",
+                "cisco_routes",
+                "juniper_routes",
+            ],
         },
+        "v4_routes": {"type": "BgpV4RouteRangeIter"},
+        "v6_routes": {"type": "BgpV6RouteRangeIter"},
+        "openconfig_routes": {
+            "type": str,
+            "format": "binary",
+        },
+        "cisco_routes": {
+            "type": str,
+            "format": "binary",
+        },
+        "juniper_routes": {
+            "type": str,
+            "format": "binary",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    V4_ROUTES = "v4_routes"  # type: str
+    V6_ROUTES = "v6_routes"  # type: str
+    OPENCONFIG_ROUTES = "openconfig_routes"  # type: str
+    CISCO_ROUTES = "cisco_routes"  # type: str
+    JUNIPER_ROUTES = "juniper_routes"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self,
+        parent=None,
+        choice=None,
+        openconfig_routes=None,
+        cisco_routes=None,
+        juniper_routes=None,
+    ):
+        super(ActionProtocolBgpRoutes, self).__init__()
+        self._parent = parent
+        self._set_property("openconfig_routes", openconfig_routes)
+        self._set_property("cisco_routes", cisco_routes)
+        self._set_property("juniper_routes", juniper_routes)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, openconfig_routes=None, cisco_routes=None, juniper_routes=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["cisco_routes"], Literal["juniper_routes"], Literal["openconfig_routes"], Literal["v4_routes"], Literal["v6_routes"]]
+        """choice getter
+
+        Format of routes to be imported.
+
+        Returns: Union[Literal["cisco_routes"], Literal["juniper_routes"], Literal["openconfig_routes"], Literal["v4_routes"], Literal["v6_routes"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        Format of routes to be imported.
+
+        value: Union[Literal["cisco_routes"], Literal["juniper_routes"], Literal["openconfig_routes"], Literal["v4_routes"], Literal["v6_routes"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def v4_routes(self):
+        # type: () -> BgpV4RouteRangeIter
+        """v4_routes getter
+
+        TBD
+
+        Returns: BgpV4RouteRangeIter
+        """
+        return self._get_property(
+            "v4_routes", BgpV4RouteRangeIter, self._parent, self._choice
+        )
+
+    @property
+    def v6_routes(self):
+        # type: () -> BgpV6RouteRangeIter
+        """v6_routes getter
+
+        TBD
+
+        Returns: BgpV6RouteRangeIter
+        """
+        return self._get_property(
+            "v6_routes", BgpV6RouteRangeIter, self._parent, self._choice
+        )
+
+    @property
+    def openconfig_routes(self):
+        # type: () -> str
+        """openconfig_routes getter
+
+        Binary containing routes in OpenConfig format
+
+        Returns: str
+        """
+        return self._get_property("openconfig_routes")
+
+    @openconfig_routes.setter
+    def openconfig_routes(self, value):
+        """openconfig_routes setter
+
+        Binary containing routes in OpenConfig format
+
+        value: str
+        """
+        self._set_property("openconfig_routes", value, "openconfig_routes")
+
+    @property
+    def cisco_routes(self):
+        # type: () -> str
+        """cisco_routes getter
+
+        Binary containing routes in Cisco format
+
+        Returns: str
+        """
+        return self._get_property("cisco_routes")
+
+    @cisco_routes.setter
+    def cisco_routes(self, value):
+        """cisco_routes setter
+
+        Binary containing routes in Cisco format
+
+        value: str
+        """
+        self._set_property("cisco_routes", value, "cisco_routes")
+
+    @property
+    def juniper_routes(self):
+        # type: () -> str
+        """juniper_routes getter
+
+        Binary containing routes in Juniper format
+
+        Returns: str
+        """
+        return self._get_property("juniper_routes")
+
+    @juniper_routes.setter
+    def juniper_routes(self, value):
+        """juniper_routes setter
+
+        Binary containing routes in Juniper format
+
+        value: str
+        """
+        self._set_property("juniper_routes", value, "juniper_routes")
+
+
+class ActionProtocolBgpRouteImportTarget(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "route_group_name": {"type": str},
         "use_best_routes": {"type": bool},
         "retain_next_hop": {"type": bool},
     }  # type: Dict[str, str]
 
-    _REQUIRED = ()  # type: tuple(str)
+    _REQUIRED = ("route_group_name",)  # type: tuple(str)
 
     _DEFAULTS = {
         "use_best_routes": True,
@@ -93033,50 +93994,45 @@ class ActionProtocolBgpLoadRoutesConfig(OpenApiObject):
     _STATUS = {}  # type: Dict[str, Union(type)]
 
     def __init__(
-        self, parent=None, peer_names=None, use_best_routes=True, retain_next_hop=False
+        self,
+        parent=None,
+        route_group_name=None,
+        use_best_routes=True,
+        retain_next_hop=False,
     ):
-        super(ActionProtocolBgpLoadRoutesConfig, self).__init__()
+        super(ActionProtocolBgpRouteImportTarget, self).__init__()
         self._parent = parent
-        self._set_property("peer_names", peer_names)
+        self._set_property("route_group_name", route_group_name)
         self._set_property("use_best_routes", use_best_routes)
         self._set_property("retain_next_hop", retain_next_hop)
 
-    def set(self, peer_names=None, use_best_routes=None, retain_next_hop=None):
+    def set(self, route_group_name=None, use_best_routes=None, retain_next_hop=None):
         for property_name, property_value in locals().items():
             if property_name != "self" and property_value is not None:
                 self._set_property(property_name, property_value)
 
     @property
-    def routes(self):
-        # type: () -> ActionProtocolBgpRoutes
-        """routes getter
+    def route_group_name(self):
+        # type: () -> str
+        """route_group_name getter
 
-        Routes to be advertised for given peer in given format.Routes to be advertised for given peer in given format.Routes to be advertised for given peer in given format.
+        The names of configured V4 or V6 route group. x-constraint:. /components/schemas/Bgp.V4RouteGroup/properties/name. /components/schemas/Bgp.V6RouteGroup/properties/name.
 
-        Returns: ActionProtocolBgpRoutes
+        Returns: str
         """
-        return self._get_property("routes", ActionProtocolBgpRoutes)
+        return self._get_property("route_group_name")
 
-    @property
-    def peer_names(self):
-        # type: () -> List[str]
-        """peer_names getter
+    @route_group_name.setter
+    def route_group_name(self, value):
+        """route_group_name setter
 
-        The names of configured BGP peers from which the routes shall be advertised.. x-constraint:. /components/schemas/Bgp.V4Peer/properties/name. /components/schemas/Bgp.V6Peer/properties/name.
+        The names of configured V4 or V6 route group. x-constraint:. /components/schemas/Bgp.V4RouteGroup/properties/name. /components/schemas/Bgp.V6RouteGroup/properties/name.
 
-        Returns: List[str]
+        value: str
         """
-        return self._get_property("peer_names")
-
-    @peer_names.setter
-    def peer_names(self, value):
-        """peer_names setter
-
-        The names of configured BGP peers from which the routes shall be advertised.. x-constraint:. /components/schemas/Bgp.V4Peer/properties/name. /components/schemas/Bgp.V6Peer/properties/name.
-
-        value: List[str]
-        """
-        self._set_property("peer_names", value)
+        if value is None:
+            raise TypeError("Cannot set required property route_group_name as None")
+        self._set_property("route_group_name", value)
 
     @property
     def use_best_routes(self):
@@ -93121,268 +94077,126 @@ class ActionProtocolBgpLoadRoutesConfig(OpenApiObject):
         self._set_property("retain_next_hop", value)
 
 
-class ActionProtocolBgpRoutes(OpenApiObject):
-    __slots__ = ("_parent", "_choice")
-
-    _TYPES = {
-        "choice": {
-            "type": str,
-            "enum": [
-                "v4_routes",
-                "v6_routes",
-                "cisco_routes",
-                "juniper_routes",
-            ],
-        },
-        "v4_routes": {"type": "BgpV4RouteRangeIter"},
-        "v6_routes": {"type": "BgpV6RouteRangeIter"},
-        "openconfig_routes": {"type": "ActionProtocolBgpRoutesBinary"},
-        "cisco_routes": {"type": "ActionProtocolBgpRoutesBinary"},
-        "juniper_routes": {"type": "ActionProtocolBgpRoutesBinary"},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {}  # type: Dict[str, Union(type)]
-
-    V4_ROUTES = "v4_routes"  # type: str
-    V6_ROUTES = "v6_routes"  # type: str
-    CISCO_ROUTES = "cisco_routes"  # type: str
-    JUNIPER_ROUTES = "juniper_routes"  # type: str
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, choice=None):
-        super(ActionProtocolBgpRoutes, self).__init__()
-        self._parent = parent
-        if (
-            "choice" in self._DEFAULTS
-            and choice is None
-            and self._DEFAULTS["choice"] in self._TYPES
-        ):
-            getattr(self, self._DEFAULTS["choice"])
-        else:
-            self._set_property("choice", choice)
-
-    @property
-    def cisco_routes(self):
-        # type: () -> ActionProtocolBgpRoutesBinary
-        """Factory property that returns an instance of the ActionProtocolBgpRoutesBinary class
-
-        Routes to be advertised for given peer in binary format.
-
-        Returns: ActionProtocolBgpRoutesBinary
-        """
-        return self._get_property(
-            "cisco_routes", ActionProtocolBgpRoutesBinary, self, "cisco_routes"
-        )
-
-    @property
-    def juniper_routes(self):
-        # type: () -> ActionProtocolBgpRoutesBinary
-        """Factory property that returns an instance of the ActionProtocolBgpRoutesBinary class
-
-        Routes to be advertised for given peer in binary format.
-
-        Returns: ActionProtocolBgpRoutesBinary
-        """
-        return self._get_property(
-            "juniper_routes", ActionProtocolBgpRoutesBinary, self, "juniper_routes"
-        )
-
-    @property
-    def choice(self):
-        # type: () -> Union[Literal["cisco_routes"], Literal["juniper_routes"], Literal["v4_routes"], Literal["v6_routes"]]
-        """choice getter
-
-        Format of routes to be advertised.
-
-        Returns: Union[Literal["cisco_routes"], Literal["juniper_routes"], Literal["v4_routes"], Literal["v6_routes"]]
-        """
-        return self._get_property("choice")
-
-    @choice.setter
-    def choice(self, value):
-        """choice setter
-
-        Format of routes to be advertised.
-
-        value: Union[Literal["cisco_routes"], Literal["juniper_routes"], Literal["v4_routes"], Literal["v6_routes"]]
-        """
-        self._set_property("choice", value)
-
-    @property
-    def v4_routes(self):
-        # type: () -> BgpV4RouteRangeIter
-        """v4_routes getter
-
-        TBD
-
-        Returns: BgpV4RouteRangeIter
-        """
-        return self._get_property(
-            "v4_routes", BgpV4RouteRangeIter, self._parent, self._choice
-        )
-
-    @property
-    def v6_routes(self):
-        # type: () -> BgpV6RouteRangeIter
-        """v6_routes getter
-
-        TBD
-
-        Returns: BgpV6RouteRangeIter
-        """
-        return self._get_property(
-            "v6_routes", BgpV6RouteRangeIter, self._parent, self._choice
-        )
-
-    @property
-    def openconfig_routes(self):
-        # type: () -> ActionProtocolBgpRoutesBinary
-        """openconfig_routes getter
-
-        Routes to be advertised for given peer in binary format.Routes to be advertised for given peer in binary format.Routes to be advertised for given peer in binary format.
-
-        Returns: ActionProtocolBgpRoutesBinary
-        """
-        return self._get_property("openconfig_routes", ActionProtocolBgpRoutesBinary)
-
-
-class ActionProtocolBgpRoutesBinary(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "bin": {
-            "type": str,
-            "format": "binary",
-        },
-        "group": {"type": str},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {}  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, bin=None, group=None):
-        super(ActionProtocolBgpRoutesBinary, self).__init__()
-        self._parent = parent
-        self._set_property("bin", bin)
-        self._set_property("group", group)
-
-    def set(self, bin=None, group=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def bin(self):
-        # type: () -> str
-        """bin getter
-
-        Binary containing routes to be advertised.
-
-        Returns: str
-        """
-        return self._get_property("bin")
-
-    @bin.setter
-    def bin(self, value):
-        """bin setter
-
-        Binary containing routes to be advertised.
-
-        value: str
-        """
-        self._set_property("bin", value)
-
-    @property
-    def group(self):
-        # type: () -> str
-        """group getter
-
-        TBD. x-constraint:. ../device/bgp/bgp.yaml#/components/schemas/Device.BgpRouteGroup/properties/name.
-
-        Returns: str
-        """
-        return self._get_property("group")
-
-    @group.setter
-    def group(self, value):
-        """group setter
-
-        TBD. x-constraint:. ../device/bgp/bgp.yaml#/components/schemas/Device.BgpRouteGroup/properties/name.
-
-        value: str
-        """
-        self._set_property("group", value)
-
-
-class ActionProtocolBgpLoadRoutesConfigIter(OpenApiIter):
+class ActionProtocolBgpRouteImportTargetIter(OpenApiIter):
     __slots__ = ("_parent", "_choice")
 
     _GETITEM_RETURNS_CHOICE_OBJECT = False
 
     def __init__(self, parent=None, choice=None):
-        super(ActionProtocolBgpLoadRoutesConfigIter, self).__init__()
+        super(ActionProtocolBgpRouteImportTargetIter, self).__init__()
         self._parent = parent
         self._choice = choice
 
     def __getitem__(self, key):
-        # type: (str) -> Union[ActionProtocolBgpLoadRoutesConfig]
+        # type: (str) -> Union[ActionProtocolBgpRouteImportTarget]
         return self._getitem(key)
 
     def __iter__(self):
-        # type: () -> ActionProtocolBgpLoadRoutesConfigIter
+        # type: () -> ActionProtocolBgpRouteImportTargetIter
         return self._iter()
 
     def __next__(self):
-        # type: () -> ActionProtocolBgpLoadRoutesConfig
+        # type: () -> ActionProtocolBgpRouteImportTarget
         return self._next()
 
     def next(self):
-        # type: () -> ActionProtocolBgpLoadRoutesConfig
+        # type: () -> ActionProtocolBgpRouteImportTarget
         return self._next()
 
     def _instanceOf(self, item):
-        if not isinstance(item, ActionProtocolBgpLoadRoutesConfig):
+        if not isinstance(item, ActionProtocolBgpRouteImportTarget):
             raise Exception(
-                "Item is not an instance of ActionProtocolBgpLoadRoutesConfig"
+                "Item is not an instance of ActionProtocolBgpRouteImportTarget"
             )
 
-    def config(self, peer_names=None, use_best_routes=True, retain_next_hop=False):
-        # type: (List[str],bool,bool) -> ActionProtocolBgpLoadRoutesConfigIter
-        """Factory method that creates an instance of the ActionProtocolBgpLoadRoutesConfig class
+    def target(
+        self, route_group_name=None, use_best_routes=True, retain_next_hop=False
+    ):
+        # type: (str,bool,bool) -> ActionProtocolBgpRouteImportTargetIter
+        """Factory method that creates an instance of the ActionProtocolBgpRouteImportTarget class
 
-        Configuration for loading routes to be advertised for given peer in given format.
+        Import target (i.e. corresponding V4 or V6 route group) and associated import properties
 
-        Returns: ActionProtocolBgpLoadRoutesConfigIter
+        Returns: ActionProtocolBgpRouteImportTargetIter
         """
-        item = ActionProtocolBgpLoadRoutesConfig(
+        item = ActionProtocolBgpRouteImportTarget(
             parent=self._parent,
-            peer_names=peer_names,
+            route_group_name=route_group_name,
             use_best_routes=use_best_routes,
             retain_next_hop=retain_next_hop,
         )
         self._add(item)
         return self
 
-    def add(self, peer_names=None, use_best_routes=True, retain_next_hop=False):
-        # type: (List[str],bool,bool) -> ActionProtocolBgpLoadRoutesConfig
-        """Add method that creates and returns an instance of the ActionProtocolBgpLoadRoutesConfig class
+    def add(self, route_group_name=None, use_best_routes=True, retain_next_hop=False):
+        # type: (str,bool,bool) -> ActionProtocolBgpRouteImportTarget
+        """Add method that creates and returns an instance of the ActionProtocolBgpRouteImportTarget class
 
-        Configuration for loading routes to be advertised for given peer in given format.
+        Import target (i.e. corresponding V4 or V6 route group) and associated import properties
 
-        Returns: ActionProtocolBgpLoadRoutesConfig
+        Returns: ActionProtocolBgpRouteImportTarget
         """
-        item = ActionProtocolBgpLoadRoutesConfig(
+        item = ActionProtocolBgpRouteImportTarget(
             parent=self._parent,
-            peer_names=peer_names,
+            route_group_name=route_group_name,
             use_best_routes=use_best_routes,
             retain_next_hop=retain_next_hop,
         )
+        self._add(item)
+        return item
+
+
+class ActionProtocolBgpRouteImportIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = False
+
+    def __init__(self, parent=None, choice=None):
+        super(ActionProtocolBgpRouteImportIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[ActionProtocolBgpRouteImport]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> ActionProtocolBgpRouteImportIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> ActionProtocolBgpRouteImport
+        return self._next()
+
+    def next(self):
+        # type: () -> ActionProtocolBgpRouteImport
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, ActionProtocolBgpRouteImport):
+            raise Exception("Item is not an instance of ActionProtocolBgpRouteImport")
+
+    def routeimport(self, name=None):
+        # type: (str) -> ActionProtocolBgpRouteImportIter
+        """Factory method that creates an instance of the ActionProtocolBgpRouteImport class
+
+        Configuration for specifying the format and corresponding characteristics of V4 or V6 routes to be imported.
+
+        Returns: ActionProtocolBgpRouteImportIter
+        """
+        item = ActionProtocolBgpRouteImport(parent=self._parent, name=name)
+        self._add(item)
+        return self
+
+    def add(self, name=None):
+        # type: (str) -> ActionProtocolBgpRouteImport
+        """Add method that creates and returns an instance of the ActionProtocolBgpRouteImport class
+
+        Configuration for specifying the format and corresponding characteristics of V4 or V6 routes to be imported.
+
+        Returns: ActionProtocolBgpRouteImport
+        """
+        item = ActionProtocolBgpRouteImport(parent=self._parent, name=name)
         self._add(item)
         return item
 
@@ -95844,6 +96658,7 @@ class Bgpv4MetricsRequest(OpenApiObject):
 
     _DEFAULTS = {}  # type: Dict[str, Union(type)]
 
+    END_OF_RIB_RECEIVED = "end_of_rib_received"  # type: str
     FSM_STATE = "fsm_state"  # type: str
     KEEPALIVES_RECEIVED = "keepalives_received"  # type: str
     KEEPALIVES_SENT = "keepalives_sent"  # type: str
@@ -95896,12 +96711,12 @@ class Bgpv4MetricsRequest(OpenApiObject):
 
     @property
     def column_names(self):
-        # type: () -> List[Union[Literal["fsm_state"], Literal["keepalives_received"], Literal["keepalives_sent"], Literal["notifications_received"], Literal["notifications_sent"], Literal["opens_received"], Literal["opens_sent"], Literal["route_withdraws_received"], Literal["route_withdraws_sent"], Literal["routes_advertised"], Literal["routes_received"], Literal["session_flap_count"], Literal["session_state"], Literal["updates_received"], Literal["updates_sent"]]]
+        # type: () -> List[Union[Literal["end_of_rib_received"], Literal["fsm_state"], Literal["keepalives_received"], Literal["keepalives_sent"], Literal["notifications_received"], Literal["notifications_sent"], Literal["opens_received"], Literal["opens_sent"], Literal["route_withdraws_received"], Literal["route_withdraws_sent"], Literal["routes_advertised"], Literal["routes_received"], Literal["session_flap_count"], Literal["session_state"], Literal["updates_received"], Literal["updates_sent"]]]
         """column_names getter
 
         The list of column names that the returned result set will contain. If the list is empty then all columns will be returned except for any result_groups. The name of the BGPv4 peer cannot be excluded.
 
-        Returns: List[Union[Literal["fsm_state"], Literal["keepalives_received"], Literal["keepalives_sent"], Literal["notifications_received"], Literal["notifications_sent"], Literal["opens_received"], Literal["opens_sent"], Literal["route_withdraws_received"], Literal["route_withdraws_sent"], Literal["routes_advertised"], Literal["routes_received"], Literal["session_flap_count"], Literal["session_state"], Literal["updates_received"], Literal["updates_sent"]]]
+        Returns: List[Union[Literal["end_of_rib_received"], Literal["fsm_state"], Literal["keepalives_received"], Literal["keepalives_sent"], Literal["notifications_received"], Literal["notifications_sent"], Literal["opens_received"], Literal["opens_sent"], Literal["route_withdraws_received"], Literal["route_withdraws_sent"], Literal["routes_advertised"], Literal["routes_received"], Literal["session_flap_count"], Literal["session_state"], Literal["updates_received"], Literal["updates_sent"]]]
         """
         return self._get_property("column_names")
 
@@ -95911,7 +96726,7 @@ class Bgpv4MetricsRequest(OpenApiObject):
 
         The list of column names that the returned result set will contain. If the list is empty then all columns will be returned except for any result_groups. The name of the BGPv4 peer cannot be excluded.
 
-        value: List[Union[Literal["fsm_state"], Literal["keepalives_received"], Literal["keepalives_sent"], Literal["notifications_received"], Literal["notifications_sent"], Literal["opens_received"], Literal["opens_sent"], Literal["route_withdraws_received"], Literal["route_withdraws_sent"], Literal["routes_advertised"], Literal["routes_received"], Literal["session_flap_count"], Literal["session_state"], Literal["updates_received"], Literal["updates_sent"]]]
+        value: List[Union[Literal["end_of_rib_received"], Literal["fsm_state"], Literal["keepalives_received"], Literal["keepalives_sent"], Literal["notifications_received"], Literal["notifications_sent"], Literal["opens_received"], Literal["opens_sent"], Literal["route_withdraws_received"], Literal["route_withdraws_sent"], Literal["routes_advertised"], Literal["routes_received"], Literal["session_flap_count"], Literal["session_state"], Literal["updates_received"], Literal["updates_sent"]]]
         """
         self._set_property("column_names", value)
 
@@ -95934,6 +96749,7 @@ class Bgpv6MetricsRequest(OpenApiObject):
 
     _DEFAULTS = {}  # type: Dict[str, Union(type)]
 
+    END_OF_RIB_RECEIVED = "end_of_rib_received"  # type: str
     FSM_STATE = "fsm_state"  # type: str
     KEEPALIVES_RECEIVED = "keepalives_received"  # type: str
     KEEPALIVES_SENT = "keepalives_sent"  # type: str
@@ -95986,12 +96802,12 @@ class Bgpv6MetricsRequest(OpenApiObject):
 
     @property
     def column_names(self):
-        # type: () -> List[Union[Literal["fsm_state"], Literal["keepalives_received"], Literal["keepalives_sent"], Literal["notifications_received"], Literal["notifications_sent"], Literal["opens_received"], Literal["opens_sent"], Literal["route_withdraws_received"], Literal["route_withdraws_sent"], Literal["routes_advertised"], Literal["routes_received"], Literal["session_flap_count"], Literal["session_state"], Literal["updates_received"], Literal["updates_sent"]]]
+        # type: () -> List[Union[Literal["end_of_rib_received"], Literal["fsm_state"], Literal["keepalives_received"], Literal["keepalives_sent"], Literal["notifications_received"], Literal["notifications_sent"], Literal["opens_received"], Literal["opens_sent"], Literal["route_withdraws_received"], Literal["route_withdraws_sent"], Literal["routes_advertised"], Literal["routes_received"], Literal["session_flap_count"], Literal["session_state"], Literal["updates_received"], Literal["updates_sent"]]]
         """column_names getter
 
         The list of column names that the returned result set will contain. If the list is empty then all columns will be returned except for any result_groups. The name of the BGPv6 peer cannot be excluded.
 
-        Returns: List[Union[Literal["fsm_state"], Literal["keepalives_received"], Literal["keepalives_sent"], Literal["notifications_received"], Literal["notifications_sent"], Literal["opens_received"], Literal["opens_sent"], Literal["route_withdraws_received"], Literal["route_withdraws_sent"], Literal["routes_advertised"], Literal["routes_received"], Literal["session_flap_count"], Literal["session_state"], Literal["updates_received"], Literal["updates_sent"]]]
+        Returns: List[Union[Literal["end_of_rib_received"], Literal["fsm_state"], Literal["keepalives_received"], Literal["keepalives_sent"], Literal["notifications_received"], Literal["notifications_sent"], Literal["opens_received"], Literal["opens_sent"], Literal["route_withdraws_received"], Literal["route_withdraws_sent"], Literal["routes_advertised"], Literal["routes_received"], Literal["session_flap_count"], Literal["session_state"], Literal["updates_received"], Literal["updates_sent"]]]
         """
         return self._get_property("column_names")
 
@@ -96001,7 +96817,7 @@ class Bgpv6MetricsRequest(OpenApiObject):
 
         The list of column names that the returned result set will contain. If the list is empty then all columns will be returned except for any result_groups. The name of the BGPv6 peer cannot be excluded.
 
-        value: List[Union[Literal["fsm_state"], Literal["keepalives_received"], Literal["keepalives_sent"], Literal["notifications_received"], Literal["notifications_sent"], Literal["opens_received"], Literal["opens_sent"], Literal["route_withdraws_received"], Literal["route_withdraws_sent"], Literal["routes_advertised"], Literal["routes_received"], Literal["session_flap_count"], Literal["session_state"], Literal["updates_received"], Literal["updates_sent"]]]
+        value: List[Union[Literal["end_of_rib_received"], Literal["fsm_state"], Literal["keepalives_received"], Literal["keepalives_sent"], Literal["notifications_received"], Literal["notifications_sent"], Literal["opens_received"], Literal["opens_sent"], Literal["route_withdraws_received"], Literal["route_withdraws_sent"], Literal["routes_advertised"], Literal["routes_received"], Literal["session_flap_count"], Literal["session_state"], Literal["updates_received"], Literal["updates_sent"]]]
         """
         self._set_property("column_names", value)
 
@@ -98060,12 +98876,14 @@ class FlowMetricTagValue(OpenApiObject):
             "type": str,
             "enum": [
                 "hex",
+                "str",
             ],
         },
         "hex": {
             "type": str,
             "format": "hex",
         },
+        "str": {"type": str},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -98075,13 +98893,15 @@ class FlowMetricTagValue(OpenApiObject):
     }  # type: Dict[str, Union(type)]
 
     HEX = "hex"  # type: str
+    STR = "str"  # type: str
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
-    def __init__(self, parent=None, choice=None, hex=None):
+    def __init__(self, parent=None, choice=None, hex=None, str=None):
         super(FlowMetricTagValue, self).__init__()
         self._parent = parent
         self._set_property("hex", hex)
+        self._set_property("str", str)
         if (
             "choice" in self._DEFAULTS
             and choice is None
@@ -98091,19 +98911,19 @@ class FlowMetricTagValue(OpenApiObject):
         else:
             self._set_property("choice", choice)
 
-    def set(self, hex=None):
+    def set(self, hex=None, str=None):
         for property_name, property_value in locals().items():
             if property_name != "self" and property_value is not None:
                 self._set_property(property_name, property_value)
 
     @property
     def choice(self):
-        # type: () -> Union[Literal["hex"]]
+        # type: () -> Union[Literal["hex"], Literal["str"]]
         """choice getter
 
         Available formats for metric tag value
 
-        Returns: Union[Literal["hex"]]
+        Returns: Union[Literal["hex"], Literal["str"]]
         """
         return self._get_property("choice")
 
@@ -98113,7 +98933,7 @@ class FlowMetricTagValue(OpenApiObject):
 
         Available formats for metric tag value
 
-        value: Union[Literal["hex"]]
+        value: Union[Literal["hex"], Literal["str"]]
         """
         self._set_property("choice", value)
 
@@ -98137,6 +98957,27 @@ class FlowMetricTagValue(OpenApiObject):
         value: str
         """
         self._set_property("hex", value, "hex")
+
+    @property
+    def str(self):
+        # type: () -> str
+        """str getter
+
+        Value represented in string format
+
+        Returns: str
+        """
+        return self._get_property("str")
+
+    @str.setter
+    def str(self, value):
+        """str setter
+
+        Value represented in string format
+
+        value: str
+        """
+        self._set_property("str", value, "str")
 
 
 class FlowMetricTagIter(OpenApiIter):
@@ -98428,6 +99269,10 @@ class Bgpv4Metric(OpenApiObject):
                 "established",
             ],
         },
+        "end_of_rib_received": {
+            "type": int,
+            "format": "uint64",
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -98465,6 +99310,7 @@ class Bgpv4Metric(OpenApiObject):
         notifications_sent=None,
         notifications_received=None,
         fsm_state=None,
+        end_of_rib_received=None,
     ):
         super(Bgpv4Metric, self).__init__()
         self._parent = parent
@@ -98484,6 +99330,7 @@ class Bgpv4Metric(OpenApiObject):
         self._set_property("notifications_sent", notifications_sent)
         self._set_property("notifications_received", notifications_received)
         self._set_property("fsm_state", fsm_state)
+        self._set_property("end_of_rib_received", end_of_rib_received)
 
     def set(
         self,
@@ -98503,6 +99350,7 @@ class Bgpv4Metric(OpenApiObject):
         notifications_sent=None,
         notifications_received=None,
         fsm_state=None,
+        end_of_rib_received=None,
     ):
         for property_name, property_value in locals().items():
             if property_name != "self" and property_value is not None:
@@ -98843,6 +99691,27 @@ class Bgpv4Metric(OpenApiObject):
         value: Union[Literal["active"], Literal["connect"], Literal["established"], Literal["idle"], Literal["openconfirm"], Literal["opensent"]]
         """
         self._set_property("fsm_state", value)
+
+    @property
+    def end_of_rib_received(self):
+        # type: () -> int
+        """end_of_rib_received getter
+
+        Number of End-of-RIB markers received indicating the completion of the initial routing update for particular <AFI, SAFI> address family after the session is established. For the IPv4 unicast address family, the End-of-RIB marker is an UPDATE message with the minimum length. For any other address family, it is an UPDATE message that contains only the MP_UNREACH_NLRI attribute with no withdrawn routes for that <AFI, SAFI>.
+
+        Returns: int
+        """
+        return self._get_property("end_of_rib_received")
+
+    @end_of_rib_received.setter
+    def end_of_rib_received(self, value):
+        """end_of_rib_received setter
+
+        Number of End-of-RIB markers received indicating the completion of the initial routing update for particular <AFI, SAFI> address family after the session is established. For the IPv4 unicast address family, the End-of-RIB marker is an UPDATE message with the minimum length. For any other address family, it is an UPDATE message that contains only the MP_UNREACH_NLRI attribute with no withdrawn routes for that <AFI, SAFI>.
+
+        value: int
+        """
+        self._set_property("end_of_rib_received", value)
 
 
 class Bgpv4MetricIter(OpenApiIter):
@@ -98893,8 +99762,9 @@ class Bgpv4MetricIter(OpenApiIter):
         notifications_sent=None,
         notifications_received=None,
         fsm_state=None,
+        end_of_rib_received=None,
     ):
-        # type: (str,Union[Literal["down"], Literal["up"]],int,int,int,int,int,int,int,int,int,int,int,int,int,Union[Literal["active"], Literal["connect"], Literal["established"], Literal["idle"], Literal["openconfirm"], Literal["opensent"]]) -> Bgpv4MetricIter
+        # type: (str,Union[Literal["down"], Literal["up"]],int,int,int,int,int,int,int,int,int,int,int,int,int,Union[Literal["active"], Literal["connect"], Literal["established"], Literal["idle"], Literal["openconfirm"], Literal["opensent"]],int) -> Bgpv4MetricIter
         """Factory method that creates an instance of the Bgpv4Metric class
 
         BGPv4 per peer statistics information.
@@ -98919,6 +99789,7 @@ class Bgpv4MetricIter(OpenApiIter):
             notifications_sent=notifications_sent,
             notifications_received=notifications_received,
             fsm_state=fsm_state,
+            end_of_rib_received=end_of_rib_received,
         )
         self._add(item)
         return self
@@ -98941,8 +99812,9 @@ class Bgpv4MetricIter(OpenApiIter):
         notifications_sent=None,
         notifications_received=None,
         fsm_state=None,
+        end_of_rib_received=None,
     ):
-        # type: (str,Union[Literal["down"], Literal["up"]],int,int,int,int,int,int,int,int,int,int,int,int,int,Union[Literal["active"], Literal["connect"], Literal["established"], Literal["idle"], Literal["openconfirm"], Literal["opensent"]]) -> Bgpv4Metric
+        # type: (str,Union[Literal["down"], Literal["up"]],int,int,int,int,int,int,int,int,int,int,int,int,int,Union[Literal["active"], Literal["connect"], Literal["established"], Literal["idle"], Literal["openconfirm"], Literal["opensent"]],int) -> Bgpv4Metric
         """Add method that creates and returns an instance of the Bgpv4Metric class
 
         BGPv4 per peer statistics information.
@@ -98967,6 +99839,7 @@ class Bgpv4MetricIter(OpenApiIter):
             notifications_sent=notifications_sent,
             notifications_received=notifications_received,
             fsm_state=fsm_state,
+            end_of_rib_received=end_of_rib_received,
         )
         self._add(item)
         return item
@@ -99008,6 +99881,10 @@ class Bgpv6Metric(OpenApiObject):
                 "established",
             ],
         },
+        "end_of_rib_received": {
+            "type": int,
+            "format": "uint64",
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -99045,6 +99922,7 @@ class Bgpv6Metric(OpenApiObject):
         notifications_sent=None,
         notifications_received=None,
         fsm_state=None,
+        end_of_rib_received=None,
     ):
         super(Bgpv6Metric, self).__init__()
         self._parent = parent
@@ -99064,6 +99942,7 @@ class Bgpv6Metric(OpenApiObject):
         self._set_property("notifications_sent", notifications_sent)
         self._set_property("notifications_received", notifications_received)
         self._set_property("fsm_state", fsm_state)
+        self._set_property("end_of_rib_received", end_of_rib_received)
 
     def set(
         self,
@@ -99083,6 +99962,7 @@ class Bgpv6Metric(OpenApiObject):
         notifications_sent=None,
         notifications_received=None,
         fsm_state=None,
+        end_of_rib_received=None,
     ):
         for property_name, property_value in locals().items():
             if property_name != "self" and property_value is not None:
@@ -99424,6 +100304,27 @@ class Bgpv6Metric(OpenApiObject):
         """
         self._set_property("fsm_state", value)
 
+    @property
+    def end_of_rib_received(self):
+        # type: () -> int
+        """end_of_rib_received getter
+
+        Number of End-of-RIB markers received indicating the completion of the initial routing update for particular <AFI, SAFI> address family after the session is established. For the IPv4 unicast address family, the End-of-RIB marker is an UPDATE message with the minimum length. For any other address family, it is an UPDATE message that contains only the MP_UNREACH_NLRI attribute with no withdrawn routes for that <AFI, SAFI>.
+
+        Returns: int
+        """
+        return self._get_property("end_of_rib_received")
+
+    @end_of_rib_received.setter
+    def end_of_rib_received(self, value):
+        """end_of_rib_received setter
+
+        Number of End-of-RIB markers received indicating the completion of the initial routing update for particular <AFI, SAFI> address family after the session is established. For the IPv4 unicast address family, the End-of-RIB marker is an UPDATE message with the minimum length. For any other address family, it is an UPDATE message that contains only the MP_UNREACH_NLRI attribute with no withdrawn routes for that <AFI, SAFI>.
+
+        value: int
+        """
+        self._set_property("end_of_rib_received", value)
+
 
 class Bgpv6MetricIter(OpenApiIter):
     __slots__ = ("_parent", "_choice")
@@ -99473,8 +100374,9 @@ class Bgpv6MetricIter(OpenApiIter):
         notifications_sent=None,
         notifications_received=None,
         fsm_state=None,
+        end_of_rib_received=None,
     ):
-        # type: (str,Union[Literal["down"], Literal["up"]],int,int,int,int,int,int,int,int,int,int,int,int,int,Union[Literal["active"], Literal["connect"], Literal["established"], Literal["idle"], Literal["openconfirm"], Literal["opensent"]]) -> Bgpv6MetricIter
+        # type: (str,Union[Literal["down"], Literal["up"]],int,int,int,int,int,int,int,int,int,int,int,int,int,Union[Literal["active"], Literal["connect"], Literal["established"], Literal["idle"], Literal["openconfirm"], Literal["opensent"]],int) -> Bgpv6MetricIter
         """Factory method that creates an instance of the Bgpv6Metric class
 
         BGPv6 per peer statistics information.
@@ -99499,6 +100401,7 @@ class Bgpv6MetricIter(OpenApiIter):
             notifications_sent=notifications_sent,
             notifications_received=notifications_received,
             fsm_state=fsm_state,
+            end_of_rib_received=end_of_rib_received,
         )
         self._add(item)
         return self
@@ -99521,8 +100424,9 @@ class Bgpv6MetricIter(OpenApiIter):
         notifications_sent=None,
         notifications_received=None,
         fsm_state=None,
+        end_of_rib_received=None,
     ):
-        # type: (str,Union[Literal["down"], Literal["up"]],int,int,int,int,int,int,int,int,int,int,int,int,int,Union[Literal["active"], Literal["connect"], Literal["established"], Literal["idle"], Literal["openconfirm"], Literal["opensent"]]) -> Bgpv6Metric
+        # type: (str,Union[Literal["down"], Literal["up"]],int,int,int,int,int,int,int,int,int,int,int,int,int,Union[Literal["active"], Literal["connect"], Literal["established"], Literal["idle"], Literal["openconfirm"], Literal["opensent"]],int) -> Bgpv6Metric
         """Add method that creates and returns an instance of the Bgpv6Metric class
 
         BGPv6 per peer statistics information.
@@ -99547,6 +100451,7 @@ class Bgpv6MetricIter(OpenApiIter):
             notifications_sent=notifications_sent,
             notifications_received=notifications_received,
             fsm_state=fsm_state,
+            end_of_rib_received=end_of_rib_received,
         )
         self._add(item)
         return item
@@ -104324,6 +105229,14 @@ class BgpPrefixIpv4UnicastState(OpenApiObject):
         },
         "communities": {"type": "ResultBgpCommunityIter"},
         "as_path": {"type": "ResultBgpAsPath"},
+        "local_preference": {
+            "type": int,
+            "format": "uint32",
+        },
+        "multi_exit_discriminator": {
+            "type": int,
+            "format": "uint32",
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -104345,6 +105258,8 @@ class BgpPrefixIpv4UnicastState(OpenApiObject):
         path_id=None,
         ipv4_next_hop=None,
         ipv6_next_hop=None,
+        local_preference=None,
+        multi_exit_discriminator=None,
     ):
         super(BgpPrefixIpv4UnicastState, self).__init__()
         self._parent = parent
@@ -104354,6 +105269,8 @@ class BgpPrefixIpv4UnicastState(OpenApiObject):
         self._set_property("path_id", path_id)
         self._set_property("ipv4_next_hop", ipv4_next_hop)
         self._set_property("ipv6_next_hop", ipv6_next_hop)
+        self._set_property("local_preference", local_preference)
+        self._set_property("multi_exit_discriminator", multi_exit_discriminator)
 
     def set(
         self,
@@ -104363,6 +105280,8 @@ class BgpPrefixIpv4UnicastState(OpenApiObject):
         path_id=None,
         ipv4_next_hop=None,
         ipv6_next_hop=None,
+        local_preference=None,
+        multi_exit_discriminator=None,
     ):
         for property_name, property_value in locals().items():
             if property_name != "self" and property_value is not None:
@@ -104517,6 +105436,48 @@ class BgpPrefixIpv4UnicastState(OpenApiObject):
         Returns: ResultBgpAsPath
         """
         return self._get_property("as_path", ResultBgpAsPath)
+
+    @property
+    def local_preference(self):
+        # type: () -> int
+        """local_preference getter
+
+        The local preference is well-known attribute and the value is used for route selection. The route with the highest local preference value is preferred.
+
+        Returns: int
+        """
+        return self._get_property("local_preference")
+
+    @local_preference.setter
+    def local_preference(self, value):
+        """local_preference setter
+
+        The local preference is well-known attribute and the value is used for route selection. The route with the highest local preference value is preferred.
+
+        value: int
+        """
+        self._set_property("local_preference", value)
+
+    @property
+    def multi_exit_discriminator(self):
+        # type: () -> int
+        """multi_exit_discriminator getter
+
+        The multi exit discriminator (MED) is an optional non-transitive attribute and the value is used for route selection. The route with the lowest MED value is preferred.
+
+        Returns: int
+        """
+        return self._get_property("multi_exit_discriminator")
+
+    @multi_exit_discriminator.setter
+    def multi_exit_discriminator(self, value):
+        """multi_exit_discriminator setter
+
+        The multi exit discriminator (MED) is an optional non-transitive attribute and the value is used for route selection. The route with the lowest MED value is preferred.
+
+        value: int
+        """
+        self._set_property("multi_exit_discriminator", value)
 
 
 class ResultBgpCommunity(OpenApiObject):
@@ -104907,8 +105868,10 @@ class BgpPrefixIpv4UnicastStateIter(OpenApiIter):
         path_id=None,
         ipv4_next_hop=None,
         ipv6_next_hop=None,
+        local_preference=None,
+        multi_exit_discriminator=None,
     ):
-        # type: (str,int,Union[Literal["egp"], Literal["igp"], Literal["incomplete"]],int,str,str) -> BgpPrefixIpv4UnicastStateIter
+        # type: (str,int,Union[Literal["egp"], Literal["igp"], Literal["incomplete"]],int,str,str,int,int) -> BgpPrefixIpv4UnicastStateIter
         """Factory method that creates an instance of the BgpPrefixIpv4UnicastState class
 
         IPv4 unicast prefix.
@@ -104923,6 +105886,8 @@ class BgpPrefixIpv4UnicastStateIter(OpenApiIter):
             path_id=path_id,
             ipv4_next_hop=ipv4_next_hop,
             ipv6_next_hop=ipv6_next_hop,
+            local_preference=local_preference,
+            multi_exit_discriminator=multi_exit_discriminator,
         )
         self._add(item)
         return self
@@ -104935,8 +105900,10 @@ class BgpPrefixIpv4UnicastStateIter(OpenApiIter):
         path_id=None,
         ipv4_next_hop=None,
         ipv6_next_hop=None,
+        local_preference=None,
+        multi_exit_discriminator=None,
     ):
-        # type: (str,int,Union[Literal["egp"], Literal["igp"], Literal["incomplete"]],int,str,str) -> BgpPrefixIpv4UnicastState
+        # type: (str,int,Union[Literal["egp"], Literal["igp"], Literal["incomplete"]],int,str,str,int,int) -> BgpPrefixIpv4UnicastState
         """Add method that creates and returns an instance of the BgpPrefixIpv4UnicastState class
 
         IPv4 unicast prefix.
@@ -104951,6 +105918,8 @@ class BgpPrefixIpv4UnicastStateIter(OpenApiIter):
             path_id=path_id,
             ipv4_next_hop=ipv4_next_hop,
             ipv6_next_hop=ipv6_next_hop,
+            local_preference=local_preference,
+            multi_exit_discriminator=multi_exit_discriminator,
         )
         self._add(item)
         return item
@@ -104981,6 +105950,14 @@ class BgpPrefixIpv6UnicastState(OpenApiObject):
         },
         "communities": {"type": "ResultBgpCommunityIter"},
         "as_path": {"type": "ResultBgpAsPath"},
+        "local_preference": {
+            "type": int,
+            "format": "uint32",
+        },
+        "multi_exit_discriminator": {
+            "type": int,
+            "format": "uint32",
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -105002,6 +105979,8 @@ class BgpPrefixIpv6UnicastState(OpenApiObject):
         path_id=None,
         ipv4_next_hop=None,
         ipv6_next_hop=None,
+        local_preference=None,
+        multi_exit_discriminator=None,
     ):
         super(BgpPrefixIpv6UnicastState, self).__init__()
         self._parent = parent
@@ -105011,6 +105990,8 @@ class BgpPrefixIpv6UnicastState(OpenApiObject):
         self._set_property("path_id", path_id)
         self._set_property("ipv4_next_hop", ipv4_next_hop)
         self._set_property("ipv6_next_hop", ipv6_next_hop)
+        self._set_property("local_preference", local_preference)
+        self._set_property("multi_exit_discriminator", multi_exit_discriminator)
 
     def set(
         self,
@@ -105020,6 +106001,8 @@ class BgpPrefixIpv6UnicastState(OpenApiObject):
         path_id=None,
         ipv4_next_hop=None,
         ipv6_next_hop=None,
+        local_preference=None,
+        multi_exit_discriminator=None,
     ):
         for property_name, property_value in locals().items():
             if property_name != "self" and property_value is not None:
@@ -105175,6 +106158,48 @@ class BgpPrefixIpv6UnicastState(OpenApiObject):
         """
         return self._get_property("as_path", ResultBgpAsPath)
 
+    @property
+    def local_preference(self):
+        # type: () -> int
+        """local_preference getter
+
+        The local preference is well-known attribute and the value is used for route selection. The route with the highest local preference value is preferred.
+
+        Returns: int
+        """
+        return self._get_property("local_preference")
+
+    @local_preference.setter
+    def local_preference(self, value):
+        """local_preference setter
+
+        The local preference is well-known attribute and the value is used for route selection. The route with the highest local preference value is preferred.
+
+        value: int
+        """
+        self._set_property("local_preference", value)
+
+    @property
+    def multi_exit_discriminator(self):
+        # type: () -> int
+        """multi_exit_discriminator getter
+
+        The multi exit discriminator (MED) is an optional non-transitive attribute and the value is used for route selection. The route with the lowest MED value is preferred.
+
+        Returns: int
+        """
+        return self._get_property("multi_exit_discriminator")
+
+    @multi_exit_discriminator.setter
+    def multi_exit_discriminator(self, value):
+        """multi_exit_discriminator setter
+
+        The multi exit discriminator (MED) is an optional non-transitive attribute and the value is used for route selection. The route with the lowest MED value is preferred.
+
+        value: int
+        """
+        self._set_property("multi_exit_discriminator", value)
+
 
 class BgpPrefixIpv6UnicastStateIter(OpenApiIter):
     __slots__ = ("_parent", "_choice")
@@ -105214,8 +106239,10 @@ class BgpPrefixIpv6UnicastStateIter(OpenApiIter):
         path_id=None,
         ipv4_next_hop=None,
         ipv6_next_hop=None,
+        local_preference=None,
+        multi_exit_discriminator=None,
     ):
-        # type: (str,int,Union[Literal["egp"], Literal["igp"], Literal["incomplete"]],int,str,str) -> BgpPrefixIpv6UnicastStateIter
+        # type: (str,int,Union[Literal["egp"], Literal["igp"], Literal["incomplete"]],int,str,str,int,int) -> BgpPrefixIpv6UnicastStateIter
         """Factory method that creates an instance of the BgpPrefixIpv6UnicastState class
 
         IPv6 unicast prefix.
@@ -105230,6 +106257,8 @@ class BgpPrefixIpv6UnicastStateIter(OpenApiIter):
             path_id=path_id,
             ipv4_next_hop=ipv4_next_hop,
             ipv6_next_hop=ipv6_next_hop,
+            local_preference=local_preference,
+            multi_exit_discriminator=multi_exit_discriminator,
         )
         self._add(item)
         return self
@@ -105242,8 +106271,10 @@ class BgpPrefixIpv6UnicastStateIter(OpenApiIter):
         path_id=None,
         ipv4_next_hop=None,
         ipv6_next_hop=None,
+        local_preference=None,
+        multi_exit_discriminator=None,
     ):
-        # type: (str,int,Union[Literal["egp"], Literal["igp"], Literal["incomplete"]],int,str,str) -> BgpPrefixIpv6UnicastState
+        # type: (str,int,Union[Literal["egp"], Literal["igp"], Literal["incomplete"]],int,str,str,int,int) -> BgpPrefixIpv6UnicastState
         """Add method that creates and returns an instance of the BgpPrefixIpv6UnicastState class
 
         IPv6 unicast prefix.
@@ -105258,6 +106289,8 @@ class BgpPrefixIpv6UnicastStateIter(OpenApiIter):
             path_id=path_id,
             ipv4_next_hop=ipv4_next_hop,
             ipv6_next_hop=ipv6_next_hop,
+            local_preference=local_preference,
+            multi_exit_discriminator=multi_exit_discriminator,
         )
         self._add(item)
         return item
@@ -109492,7 +110525,7 @@ class Api(object):
 
     def __init__(self, **kwargs):
         self._version_meta = self.version()
-        self._version_meta.api_spec_version = "0.11.9"
+        self._version_meta.api_spec_version = "0.11.11"
         self._version_meta.sdk_version = "0.11.15"
         self._version_check = kwargs.get("version_check")
         if self._version_check is None:

@@ -1,4 +1,4 @@
-/* Open Traffic Generator API 0.11.9
+/* Open Traffic Generator API 0.11.11
  * Open Traffic Generator API defines a model-driven, vendor-neutral and standard
  * interface for emulating layer 2-7 network devices and generating test traffic.
  * 
@@ -1601,13 +1601,42 @@ message DeviceBgpRouter {
   repeated BgpV6Interface ipv6_interfaces = 3;
 }
 
-// A group of V4 or V6 routes.
-// 
-message DeviceBgpRouteGroup {
+// A group of V4 Routes, each of which MUST be a V4 route range
+// containing exactly one V4 route address.
+message DeviceBgpV4RouteGroup {
 
   // Globally unique name of an object. It also serves as the primary key for arrays of
   // objects.
-  optional string name = 1;
+  // required = true
+  string name = 1;
+
+  // Name of configured V4 routes, each containing exactly one V4 route
+  // address. Providing a V4 route name containing more than one V4 route
+  // address shall be deemed invalid.
+  // 
+  // x-constraint:
+  // - /components/schemas/Bgp.V4RouteRange/properties/name
+  // 
+  repeated string route_names = 2;
+}
+
+// A group of V6 Routes, each of which MUST be a V6 route range
+// containing exactly one V6 route address.
+message DeviceBgpV6RouteGroup {
+
+  // Globally unique name of an object. It also serves as the primary key for arrays of
+  // objects.
+  // required = true
+  string name = 1;
+
+  // Name of configured V4 routes, each containing exactly one V4 route
+  // address. Providing a V4 route name containing more than one V4 route
+  // address shall be deemed invalid.
+  // 
+  // x-constraint:
+  // - /components/schemas/Bgp.V6RouteRange/properties/name
+  // 
+  repeated string route_names = 2;
 }
 
 // All errors detected while processing the Message Header are indicated by sending
@@ -1819,8 +1848,13 @@ message BgpV4Peer {
   // Description missing in models
   optional BgpGracefulRestart graceful_restart = 14;
 
-  // Description missing in models
-  repeated DeviceBgpRouteGroup route_groups = 15;
+  // List of Emulated BGP V4 route groups, each of which MUST be a V4 route range
+  // containing exactly one V4 route address
+  repeated DeviceBgpV4RouteGroup v4_route_groups = 15;
+
+  // List of Emulated BGP V6 route groups, each of which MUST be a V6 route range
+  // containing exactly one V6 route address
+  repeated DeviceBgpV6RouteGroup v6_route_groups = 16;
 }
 
 // Configuration for emulated BGPv4 peers and routes on a single IPv4 interface.
@@ -2603,13 +2637,6 @@ message BgpV4RouteRange {
   // occur for the same MAC address.  Note evpn type is defined mainly for use with evpn
   // route updates and not for IPv4 and IPv6 route updates.
   repeated BgpExtCommunity ext_communities = 11;
-
-  // Name of associated BGP route group.
-  // 
-  // x-constraint:
-  // - ./bgp.yaml#/components/schemas/Device.BgpRouteGroup/properties/name
-  // 
-  optional string group = 12;
 }
 
 // The BGP Additional Paths feature is a BGP extension that allows the  advertisement
@@ -2711,13 +2738,6 @@ message BgpV6RouteRange {
   // occur for the same MAC address.  Note evpn type is defined mainly for use with evpn
   // route updates and not for IPv4 and IPv6 route updates.
   repeated BgpExtCommunity ext_communities = 11;
-
-  // Name of associated BGP route group.
-  // 
-  // x-constraint:
-  // - ./bgp.yaml#/components/schemas/Device.BgpRouteGroup/properties/name
-  // 
-  optional string group = 12;
 }
 
 // Configuration for BGP Segment Routing Traffic Engineering(SRTE)
@@ -3650,8 +3670,13 @@ message BgpV6Peer {
   // Description missing in models
   optional BgpGracefulRestart graceful_restart = 15;
 
-  // Description missing in models
-  repeated DeviceBgpRouteGroup route_groups = 16;
+  // List of Emulated BGP V4 route groups, each of which MUST be a V4 route range
+  // containing exactly one V4 route address
+  repeated DeviceBgpV4RouteGroup v4_route_groups = 16;
+
+  // List of Emulated BGP V6 route groups, each of which MUST be a V6 route range
+  // containing exactly one V6 route address
+  repeated DeviceBgpV6RouteGroup v6_route_groups = 17;
 }
 
 // Configuration for emulated BGPv6 peers and routes on a single IPv6 interface.
@@ -4668,6 +4693,8 @@ message FlowPort {
   // required = true
   string tx_name = 1;
 
+  // Deprecated: This property is deprecated in favor of property rx_names
+  // 
   // The unique name of a port that is the intended receive port.
   // 
   // x-constraint:
@@ -4675,6 +4702,14 @@ message FlowPort {
   // - /components/schemas/Lag/properties/name
   // 
   optional string rx_name = 2;
+
+  // Unique name of ports or lags that are intended receive endpoints.
+  // 
+  // x-constraint:
+  // - /components/schemas/Port/properties/name
+  // - /components/schemas/Lag/properties/name
+  // 
+  repeated string rx_names = 3;
 }
 
 // A container for declaring a map of 1..n transmit devices to 1..n receive devices.
@@ -4739,9 +4774,9 @@ message FlowRouter {
   // - /components/schemas/Device.Ipv4/properties/name
   // - /components/schemas/Device.Ipv6/properties/name
   // - /components/schemas/Bgp.V4RouteRange/properties/name
-  // - /components/schemas/Bgp.V4RouteRange/properties/group
+  // - /components/schemas/Bgp.V4RouteGroup/properties/name
   // - /components/schemas/Bgp.V6RouteRange/properties/name
-  // - /components/schemas/Bgp.V6RouteRange/properties/group
+  // - /components/schemas/Bgp.V6RouteGroup/properties/name
   // - /components/schemas/Bgp.CMacIpRange/properties/name
   // - /components/schemas/Rsvp.LspIpv4Interface.P2PIngressIpv4Lsp/properties/name
   // - /components/schemas/Isis.V4RouteRange/properties/name
@@ -4756,7 +4791,9 @@ message FlowRouter {
   // - /components/schemas/Device.Ipv4/properties/name
   // - /components/schemas/Device.Ipv6/properties/name
   // - /components/schemas/Bgp.V4RouteRange/properties/name
+  // - /components/schemas/Bgp.V4RouteGroup/properties/name
   // - /components/schemas/Bgp.V6RouteRange/properties/name
+  // - /components/schemas/Bgp.V6RouteGroup/properties/name
   // - /components/schemas/Bgp.CMacIpRange/properties/name
   // - /components/schemas/Rsvp.LspIpv4Interface.P2PEgressIpv4Lsp/properties/name
   // - /components/schemas/Isis.V4RouteRange/properties/name
@@ -5788,12 +5825,18 @@ message FlowMetrics {
   // default = False
   optional bool loss = 2;
 
+  // Rx Tx ratio.
+  optional FlowRxTxRatio rx_tx_ratio = 6;
+
   // Enables additional flow metric first and last timestamps.
   // default = False
   optional bool timestamps = 3;
 
   // Latency metrics.
   optional FlowLatencyMetrics latency = 4;
+
+  // Predefined metric tags
+  optional FlowPredefinedTags predefined_metric_tags = 5;
 }
 
 // The optional container for per flow latency metric configuration.
@@ -5830,6 +5873,61 @@ message FlowLatencyMetrics {
   // standard.
   // default = Mode.Enum.store_forward
   optional Mode.Enum mode = 2;
+}
+
+// List of predefined flow tracking options, outside packet fields, that can be enabled.
+message FlowPredefinedTags {
+
+  // Enables Rx port or lag level disaggregation with predefined metrics tag name set
+  // as rx_name.
+  // The Rx port / lag names can be found under tagged_metrics tag names in flow metrics
+  // response.
+  // default = False
+  optional bool rx_name = 1;
+}
+
+// Rx Tx ratio is the ratio of expected number of Rx packets across all Rx ports to
+// the Tx packets
+// for the configured flow. It is a factor by which the Tx packet count is multiplied
+// to calculate
+// the sum of expected Rx packet count, across all Rx ports. This will be used to calculate
+// loss
+// percentage of flow at aggregate level.
+message FlowRxTxRatio {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      rx_count = 1;
+      value = 2;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  optional FlowRxTxRatioRxCount rx_count = 2;
+
+  // Should be a positive, non-zero value. The default value of 1, is when the Rx packet
+  // count across
+  // all ports is expected to match the Tx packet count. A custom integer value (>1) can
+  // be specified for
+  // loss calculation for cases when there are multiple destination addresses configured
+  // within one flow,
+  // but DUT is configured to replicate only to a subset of Rx ports. For cases when Tx
+  // side generates two
+  // packets from each source in 1:1 protection mode but only one of the two packets are
+  // received by the
+  // Rx port, we may need to specify a fractional value instead.
+  // default = 1.0
+  optional float value = 3;
+}
+
+// This is for cases where one copy of Tx packet is received on all Rx ports and so
+// the sum total of Rx packets
+// received across all Rx ports is a multiple of Rx port count and Tx packets.
+message FlowRxTxRatioRxCount {
 }
 
 // The optional container for event configuration.
@@ -6531,9 +6629,9 @@ message StateProtocolRoute {
   // 
   // x-constraint:
   // - /components/schemas/Bgp.V4RouteRange/properties/name
-  // - /components/schemas/Bgp.V4RouteRange/properties/group
+  // - /components/schemas/Bgp.V4RouteGroup/properties/name
   // - /components/schemas/Bgp.V6RouteRange/properties/name
-  // - /components/schemas/Bgp.V6RouteRange/properties/group
+  // - /components/schemas/Bgp.V6RouteGroup/properties/name
   // - /components/schemas/Isis.V4RouteRange/properties/name
   // - /components/schemas/Isis.V6RouteRange/properties/name
   // 
@@ -6549,6 +6647,72 @@ message StateProtocolRoute {
   // Route states
   // required = true
   State.Enum state = 2;
+
+  // Under Review: There may be enhancements in how we configure subset of routes
+  // 
+  // List of configurations specifying portion of V4/V6 routes or route
+  // groups to be advertised or withdrawn.
+  repeated StateProtocolRouteSubset subsets = 3;
+}
+
+// Configuration for specifying portion of V4/V6 routes or route
+// groups to be advertised or withdrawn
+message StateProtocolRouteSubset {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      sequence = 1;
+      percent = 2;
+    }
+  }
+  // Format in which subset configuration needs to be provided
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  optional StateProtocolRouteSubsetSequence sequence = 2;
+
+  // Description missing in models
+  optional StateProtocolRouteSubsetPercent percent = 3;
+}
+
+// Configuration for specifying sequential subset of V4 or V6 routes belonging
+// to a V4 or V6 route group (respectively) to be advertised or withdrawn
+message StateProtocolRouteSubsetSequence {
+
+  // Name of V4 or V6 route group
+  // 
+  // x-constraint:
+  // - /components/schemas/Bgp.V4RouteGroup/properties/name
+  // - /components/schemas/Bgp.V6RouteGroup/properties/name
+  // 
+  optional string name = 1;
+
+  // Sequence ID of a route in the group that will be the first entry
+  // in the subset
+  // default = 0
+  optional uint32 start = 2;
+
+  // Number of routes relative to start value to be included in the subset
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Configuration for specifying percentage of V4 or V6 route addresses belonging
+// to a V4 or V6 route (respectively) to be advertised or withdrawn
+message StateProtocolRouteSubsetPercent {
+
+  // Name of V4 or V6 route
+  // 
+  // x-constraint:
+  // - /components/schemas/Bgp.V4RouteRange/properties/name
+  // - /components/schemas/Bgp.V6RouteRange/properties/name
+  // 
+  optional string name = 1;
+
+  // Percentage value corresponding to portion of route addresses
+  // default = 100
+  optional float percent = 2;
 }
 
 // Sets state of configured LACP
@@ -6903,7 +7067,7 @@ message ActionProtocolBgp {
       unspecified = 0;
       notification = 1;
       initiate_graceful_restart = 2;
-      load_routes = 3;
+      import_routes = 3;
     }
   }
   // Description missing in models
@@ -6917,7 +7081,7 @@ message ActionProtocolBgp {
   optional ActionProtocolBgpInitiateGracefulRestart initiate_graceful_restart = 3;
 
   // Description missing in models
-  optional ActionProtocolBgpLoadRoutes load_routes = 4;
+  optional ActionProtocolBgpImportRoutes import_routes = 4;
 }
 
 // A NOTIFICATION message is sent when an error is detected with the BGP session, such
@@ -6999,38 +7163,41 @@ message ActionProtocolBgpInitiateGracefulRestart {
   optional uint32 restart_delay = 2;
 }
 
-// Loads routes to be advertised for a given peer in a given format.
-message ActionProtocolBgpLoadRoutes {
+// Import V4 and V6 routes installed on and exported from a DUT,
+// the format for which could be different across vendors, and convert
+// those to OTG V4 or V6 routes configured across corresponding BGP peers.
+// Following additional details need to be considered:
+// - The exported routes may be provided in variety of file formats
+// - A given file may contain both V4 and V6 route entries
+// - Each route entry shall correspond to `Bgp.V4RouteRange` or `Bgp.V6RouteRange`
+// with exactly one entry of `V4RouteAddress` or `V6RouteAddress` respectively
+// - The name of resultant OTG V4 or V6 routes shall be a constituent of
+// an alias associated with import file, name of corresponding BGP peer
+// and the sequence number corresponding to its order of entry in the file
+message ActionProtocolBgpImportRoutes {
 
   // Description missing in models
-  repeated ActionProtocolBgpLoadRoutesConfig configs = 1;
+  repeated ActionProtocolBgpRouteImport imports = 1;
 }
 
-// Configuration for loading routes to be advertised for a given peer in a given format.
-message ActionProtocolBgpLoadRoutesConfig {
+// Configuration for specifying the format and corresponding characteristics of V4 or
+// V6 routes to be imported.
+message ActionProtocolBgpRouteImport {
+
+  // Globally unique name of an object. It also serves as the primary key for arrays of
+  // objects.
+  // required = true
+  string name = 1;
 
   // Description missing in models
-  optional ActionProtocolBgpRoutes routes = 1;
+  optional ActionProtocolBgpRoutes routes = 2;
 
-  // The names of configured BGP peers from which the routes shall be advertised.
-  // 
-  // x-constraint:
-  // - /components/schemas/Bgp.V4Peer/properties/name
-  // - /components/schemas/Bgp.V6Peer/properties/name
-  // 
-  repeated string peer_names = 2;
-
-  // When set to false, all routes available shall be advertised.
-  // default = True
-  optional bool use_best_routes = 3;
-
-  // When set to false, the next hop address present against each route to be advertised
-  // is replaced with next hop address of the corresponding test port.
-  // default = False
-  optional bool retain_next_hop = 4;
+  // List of import targets (i.e. corresponding V4 or V6 route groups) and
+  // associated import properties
+  repeated ActionProtocolBgpRouteImportTarget targets = 3;
 }
 
-// Routes to be advertised for a given peer in a given format.
+// Routes to be imported in a given format.
 message ActionProtocolBgpRoutes {
 
   message Choice {
@@ -7038,11 +7205,12 @@ message ActionProtocolBgpRoutes {
       unspecified = 0;
       v4_routes = 1;
       v6_routes = 2;
-      cisco_routes = 3;
-      juniper_routes = 4;
+      openconfig_routes = 3;
+      cisco_routes = 4;
+      juniper_routes = 5;
     }
   }
-  // Format of routes to be advertised.
+  // Format of routes to be imported.
   optional Choice.Enum choice = 1;
 
   // Description missing in models
@@ -7051,29 +7219,36 @@ message ActionProtocolBgpRoutes {
   // Description missing in models
   repeated BgpV6RouteRange v6_routes = 3;
 
-  // Description missing in models
-  optional ActionProtocolBgpRoutesBinary openconfig_routes = 4;
+  // Binary containing routes in OpenConfig format
+  optional bytes openconfig_routes = 4;
 
-  // Description missing in models
-  optional ActionProtocolBgpRoutesBinary cisco_routes = 5;
+  // Binary containing routes in Cisco format
+  optional bytes cisco_routes = 5;
 
-  // Description missing in models
-  optional ActionProtocolBgpRoutesBinary juniper_routes = 6;
+  // Binary containing routes in Juniper format
+  optional bytes juniper_routes = 6;
 }
 
-// Routes to be advertised for a given peer in binary format.
-message ActionProtocolBgpRoutesBinary {
+// Import target (i.e. corresponding V4 or V6 route group) and associated import properties
+message ActionProtocolBgpRouteImportTarget {
 
-  // Binary containing routes to be advertised
-  // 
-  optional bytes bin = 1;
-
-  // TBD
+  // The names of configured V4 or V6 route group
   // 
   // x-constraint:
-  // - ../device/bgp/bgp.yaml#/components/schemas/Device.BgpRouteGroup/properties/name
+  // - /components/schemas/Bgp.V4RouteGroup/properties/name
+  // - /components/schemas/Bgp.V6RouteGroup/properties/name
   // 
-  optional string group = 2;
+  // required = true
+  string route_group_name = 1;
+
+  // When set to false, all routes available shall be advertised.
+  // default = True
+  optional bool use_best_routes = 2;
+
+  // When set to false, the next hop address present against each route to be advertised
+  // is replaced with next hop address of the corresponding test port.
+  // default = False
+  optional bool retain_next_hop = 3;
 }
 
 // Description missing in models
@@ -7553,6 +7728,7 @@ message FlowMetricTagValue {
     enum Enum {
       unspecified = 0;
       hex = 1;
+      str = 2;
     }
   }
   // Available formats for metric tag value
@@ -7561,6 +7737,9 @@ message FlowMetricTagValue {
 
   // Value represented in hexadecimal format
   optional string hex = 2;
+
+  // Value represented in string format
+  optional string str = 3;
 }
 
 // The container for timestamp metrics.
@@ -7621,6 +7800,7 @@ message Bgpv4MetricsRequest {
       notifications_sent = 13;
       notifications_received = 14;
       fsm_state = 15;
+      end_of_rib_received = 16;
     }
   }
   // The list of column names that the returned result set will contain. If the list is
@@ -7708,6 +7888,13 @@ message Bgpv4Metric {
   // remote peer. Established refers to the state where the BGP session with the peer
   // is established.
   optional FsmState.Enum fsm_state = 16;
+
+  // Number of End-of-RIB markers received indicating the completion of the initial routing
+  // update for a  particular <AFI, SAFI> address family after the session is established.
+  // For the IPv4 unicast address family, the End-of-RIB marker is an UPDATE message with
+  // the minimum length. For any other address family, it is an UPDATE message that contains
+  // only the MP_UNREACH_NLRI attribute with  no withdrawn routes for that <AFI, SAFI>.
+  optional uint64 end_of_rib_received = 17;
 }
 
 // The request to retrieve BGPv6 per peer metrics/statistics.
@@ -7739,6 +7926,7 @@ message Bgpv6MetricsRequest {
       notifications_sent = 13;
       notifications_received = 14;
       fsm_state = 15;
+      end_of_rib_received = 16;
     }
   }
   // The list of column names that the returned result set will contain. If the list is
@@ -7826,6 +8014,13 @@ message Bgpv6Metric {
   // remote peer. Established refers to the state where the BGP session with the peer
   // is established.
   optional FsmState.Enum fsm_state = 16;
+
+  // Number of End-of-RIB markers received indicating the completion of the initial routing
+  // update for a  particular <AFI, SAFI> address family after the session is established.
+  // For the IPv4 unicast address family, the End-of-RIB marker is an UPDATE message with
+  // the minimum length. For any other address family, it is an UPDATE message that contains
+  // only the MP_UNREACH_NLRI attribute with  no withdrawn routes for that <AFI, SAFI>.
+  optional uint64 end_of_rib_received = 17;
 }
 
 // The request to retrieve ISIS per Router metrics/statistics.
@@ -8649,6 +8844,14 @@ message BgpPrefixIpv4UnicastState {
 
   // Description missing in models
   optional ResultBgpAsPath as_path = 8;
+
+  // The local preference is a well-known attribute and the value is used for route selection.
+  // The route with the highest local preference value is preferred.
+  optional uint32 local_preference = 9;
+
+  // The multi exit discriminator (MED) is an optional non-transitive attribute and the
+  // value is used for route selection. The route with the lowest MED value is preferred.
+  optional uint32 multi_exit_discriminator = 10;
 }
 
 // IPv6 unicast prefix.
@@ -8685,6 +8888,14 @@ message BgpPrefixIpv6UnicastState {
 
   // Description missing in models
   optional ResultBgpAsPath as_path = 8;
+
+  // The local preference is a well-known attribute and the value is used for route selection.
+  // The route with the highest local preference value is preferred.
+  optional uint32 local_preference = 9;
+
+  // The multi exit discriminator (MED) is an optional non-transitive attribute and the
+  // value is used for route selection. The route with the lowest MED value is preferred.
+  optional uint32 multi_exit_discriminator = 10;
 }
 
 // BGP communities provide additional capability for tagging routes and  for modifying
