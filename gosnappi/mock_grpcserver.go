@@ -138,7 +138,7 @@ func isFlowMetricsDisabled(cfg *otg.Config) []string {
 func (s *server) GetMetrics(ctx context.Context, req *otg.GetMetricsRequest) (*otg.GetMetricsResponse, error) {
 	var resp *otg.GetMetricsResponse
 	var err error
-	var tx int64 = 100
+	var tx uint64 = 100
 	metricsDisabledFlows := isFlowMetricsDisabled(mockConfig)
 	if req.MetricsRequest.Flow != nil {
 		f := &otg.FlowMetric{FramesTx: &tx}
@@ -203,8 +203,8 @@ func (s *server) GetMetrics(ctx context.Context, req *otg.GetMetricsRequest) (*o
 		metrics := []*otg.Bgpv4Metric{}
 
 		for _, name := range someNames {
-			one := int32(1)
-			zero := int32(0)
+			one := uint64(1)
+			zero := uint64(0)
 			up := otg.Bgpv4Metric_SessionState_up
 			metrics = append(metrics, &otg.Bgpv4Metric{
 				Name:               &name,
