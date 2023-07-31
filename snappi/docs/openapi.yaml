@@ -7,7 +7,7 @@ info:
     \ issue](https://github.com/open-traffic-generator/models/issues) in the models\
     \ repository\n- [fork the models repository](https://github.com/open-traffic-generator/models)\
     \ and submit a PR"
-  version: 0.11.10
+  version: 0.11.11
   contact:
     url: https://github.com/open-traffic-generator/models
   license:
@@ -10665,6 +10665,8 @@ components:
                 x-field-uid: 14
               fsm_state:
                 x-field-uid: 15
+              end_of_rib_received:
+                x-field-uid: 16
             enum:
             - session_state
             - session_flap_count
@@ -10681,6 +10683,7 @@ components:
             - notifications_sent
             - notifications_received
             - fsm_state
+            - end_of_rib_received
           x-field-uid: 2
     Bgpv4.Metric:
       description: |-
@@ -10795,6 +10798,12 @@ components:
           - opensent
           - openconfirm
           - established
+        end_of_rib_received:
+          description: |-
+            Number of End-of-RIB markers received indicating the completion of the initial routing update for a  particular <AFI, SAFI> address family after the session is established. For the IPv4 unicast address family, the End-of-RIB marker is an UPDATE message with the minimum length. For any other address family, it is an UPDATE message that contains only the MP_UNREACH_NLRI attribute with  no withdrawn routes for that <AFI, SAFI>.
+          type: integer
+          format: uint64
+          x-field-uid: 17
     Bgpv6.Metrics.Request:
       description: |-
         The request to retrieve BGPv6 per peer metrics/statistics.
@@ -10853,6 +10862,8 @@ components:
                 x-field-uid: 14
               fsm_state:
                 x-field-uid: 15
+              end_of_rib_received:
+                x-field-uid: 16
             enum:
             - session_state
             - session_flap_count
@@ -10869,6 +10880,7 @@ components:
             - notifications_sent
             - notifications_received
             - fsm_state
+            - end_of_rib_received
           x-field-uid: 2
     Bgpv6.Metric:
       description: |-
@@ -10983,6 +10995,12 @@ components:
           - opensent
           - openconfirm
           - established
+        end_of_rib_received:
+          description: |-
+            Number of End-of-RIB markers received indicating the completion of the initial routing update for a  particular <AFI, SAFI> address family after the session is established. For the IPv4 unicast address family, the End-of-RIB marker is an UPDATE message with the minimum length. For any other address family, it is an UPDATE message that contains only the MP_UNREACH_NLRI attribute with  no withdrawn routes for that <AFI, SAFI>.
+          type: integer
+          format: uint64
+          x-field-uid: 17
     Isis.Metrics.Request:
       description: |-
         The request to retrieve ISIS per Router metrics/statistics.
@@ -12359,6 +12377,18 @@ components:
         as_path:
           x-field-uid: 8
           $ref: '#/components/schemas/Result.BgpAsPath'
+        local_preference:
+          x-field-uid: 9
+          description: |-
+            The local preference is a well-known attribute and the value is used for route selection. The route with the highest local preference value is preferred.
+          type: integer
+          format: uint32
+        multi_exit_discriminator:
+          x-field-uid: 10
+          description: |-
+            The multi exit discriminator (MED) is an optional non-transitive attribute and the value is used for route selection. The route with the lowest MED value is preferred.
+          type: integer
+          format: uint32
     BgpPrefixIpv6Unicast.State:
       description: |-
         IPv6 unicast prefix.
@@ -12417,6 +12447,18 @@ components:
         as_path:
           x-field-uid: 8
           $ref: '#/components/schemas/Result.BgpAsPath'
+        local_preference:
+          x-field-uid: 9
+          description: |-
+            The local preference is a well-known attribute and the value is used for route selection. The route with the highest local preference value is preferred.
+          type: integer
+          format: uint32
+        multi_exit_discriminator:
+          x-field-uid: 10
+          description: |-
+            The multi exit discriminator (MED) is an optional non-transitive attribute and the value is used for route selection. The route with the lowest MED value is preferred.
+          type: integer
+          format: uint32
     Result.BgpCommunity:
       description: |-
         BGP communities provide additional capability for tagging routes and  for modifying BGP routing policy on upstream and downstream routers. BGP community is a 32-bit number which is broken into 16-bit AS number and  a 16-bit custom value.

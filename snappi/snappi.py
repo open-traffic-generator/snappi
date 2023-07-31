@@ -1,4 +1,4 @@
-# Open Traffic Generator API 0.11.10
+# Open Traffic Generator API 0.11.11
 # License: MIT
 
 import importlib
@@ -95467,6 +95467,7 @@ class Bgpv4MetricsRequest(OpenApiObject):
 
     _DEFAULTS = {}  # type: Dict[str, Union(type)]
 
+    END_OF_RIB_RECEIVED = "end_of_rib_received"  # type: str
     FSM_STATE = "fsm_state"  # type: str
     KEEPALIVES_RECEIVED = "keepalives_received"  # type: str
     KEEPALIVES_SENT = "keepalives_sent"  # type: str
@@ -95519,12 +95520,12 @@ class Bgpv4MetricsRequest(OpenApiObject):
 
     @property
     def column_names(self):
-        # type: () -> List[Union[Literal["fsm_state"], Literal["keepalives_received"], Literal["keepalives_sent"], Literal["notifications_received"], Literal["notifications_sent"], Literal["opens_received"], Literal["opens_sent"], Literal["route_withdraws_received"], Literal["route_withdraws_sent"], Literal["routes_advertised"], Literal["routes_received"], Literal["session_flap_count"], Literal["session_state"], Literal["updates_received"], Literal["updates_sent"]]]
+        # type: () -> List[Union[Literal["end_of_rib_received"], Literal["fsm_state"], Literal["keepalives_received"], Literal["keepalives_sent"], Literal["notifications_received"], Literal["notifications_sent"], Literal["opens_received"], Literal["opens_sent"], Literal["route_withdraws_received"], Literal["route_withdraws_sent"], Literal["routes_advertised"], Literal["routes_received"], Literal["session_flap_count"], Literal["session_state"], Literal["updates_received"], Literal["updates_sent"]]]
         """column_names getter
 
         The list of column names that the returned result set will contain. If the list is empty then all columns will be returned except for any result_groups. The name of the BGPv4 peer cannot be excluded.
 
-        Returns: List[Union[Literal["fsm_state"], Literal["keepalives_received"], Literal["keepalives_sent"], Literal["notifications_received"], Literal["notifications_sent"], Literal["opens_received"], Literal["opens_sent"], Literal["route_withdraws_received"], Literal["route_withdraws_sent"], Literal["routes_advertised"], Literal["routes_received"], Literal["session_flap_count"], Literal["session_state"], Literal["updates_received"], Literal["updates_sent"]]]
+        Returns: List[Union[Literal["end_of_rib_received"], Literal["fsm_state"], Literal["keepalives_received"], Literal["keepalives_sent"], Literal["notifications_received"], Literal["notifications_sent"], Literal["opens_received"], Literal["opens_sent"], Literal["route_withdraws_received"], Literal["route_withdraws_sent"], Literal["routes_advertised"], Literal["routes_received"], Literal["session_flap_count"], Literal["session_state"], Literal["updates_received"], Literal["updates_sent"]]]
         """
         return self._get_property("column_names")
 
@@ -95534,7 +95535,7 @@ class Bgpv4MetricsRequest(OpenApiObject):
 
         The list of column names that the returned result set will contain. If the list is empty then all columns will be returned except for any result_groups. The name of the BGPv4 peer cannot be excluded.
 
-        value: List[Union[Literal["fsm_state"], Literal["keepalives_received"], Literal["keepalives_sent"], Literal["notifications_received"], Literal["notifications_sent"], Literal["opens_received"], Literal["opens_sent"], Literal["route_withdraws_received"], Literal["route_withdraws_sent"], Literal["routes_advertised"], Literal["routes_received"], Literal["session_flap_count"], Literal["session_state"], Literal["updates_received"], Literal["updates_sent"]]]
+        value: List[Union[Literal["end_of_rib_received"], Literal["fsm_state"], Literal["keepalives_received"], Literal["keepalives_sent"], Literal["notifications_received"], Literal["notifications_sent"], Literal["opens_received"], Literal["opens_sent"], Literal["route_withdraws_received"], Literal["route_withdraws_sent"], Literal["routes_advertised"], Literal["routes_received"], Literal["session_flap_count"], Literal["session_state"], Literal["updates_received"], Literal["updates_sent"]]]
         """
         self._set_property("column_names", value)
 
@@ -95557,6 +95558,7 @@ class Bgpv6MetricsRequest(OpenApiObject):
 
     _DEFAULTS = {}  # type: Dict[str, Union(type)]
 
+    END_OF_RIB_RECEIVED = "end_of_rib_received"  # type: str
     FSM_STATE = "fsm_state"  # type: str
     KEEPALIVES_RECEIVED = "keepalives_received"  # type: str
     KEEPALIVES_SENT = "keepalives_sent"  # type: str
@@ -95609,12 +95611,12 @@ class Bgpv6MetricsRequest(OpenApiObject):
 
     @property
     def column_names(self):
-        # type: () -> List[Union[Literal["fsm_state"], Literal["keepalives_received"], Literal["keepalives_sent"], Literal["notifications_received"], Literal["notifications_sent"], Literal["opens_received"], Literal["opens_sent"], Literal["route_withdraws_received"], Literal["route_withdraws_sent"], Literal["routes_advertised"], Literal["routes_received"], Literal["session_flap_count"], Literal["session_state"], Literal["updates_received"], Literal["updates_sent"]]]
+        # type: () -> List[Union[Literal["end_of_rib_received"], Literal["fsm_state"], Literal["keepalives_received"], Literal["keepalives_sent"], Literal["notifications_received"], Literal["notifications_sent"], Literal["opens_received"], Literal["opens_sent"], Literal["route_withdraws_received"], Literal["route_withdraws_sent"], Literal["routes_advertised"], Literal["routes_received"], Literal["session_flap_count"], Literal["session_state"], Literal["updates_received"], Literal["updates_sent"]]]
         """column_names getter
 
         The list of column names that the returned result set will contain. If the list is empty then all columns will be returned except for any result_groups. The name of the BGPv6 peer cannot be excluded.
 
-        Returns: List[Union[Literal["fsm_state"], Literal["keepalives_received"], Literal["keepalives_sent"], Literal["notifications_received"], Literal["notifications_sent"], Literal["opens_received"], Literal["opens_sent"], Literal["route_withdraws_received"], Literal["route_withdraws_sent"], Literal["routes_advertised"], Literal["routes_received"], Literal["session_flap_count"], Literal["session_state"], Literal["updates_received"], Literal["updates_sent"]]]
+        Returns: List[Union[Literal["end_of_rib_received"], Literal["fsm_state"], Literal["keepalives_received"], Literal["keepalives_sent"], Literal["notifications_received"], Literal["notifications_sent"], Literal["opens_received"], Literal["opens_sent"], Literal["route_withdraws_received"], Literal["route_withdraws_sent"], Literal["routes_advertised"], Literal["routes_received"], Literal["session_flap_count"], Literal["session_state"], Literal["updates_received"], Literal["updates_sent"]]]
         """
         return self._get_property("column_names")
 
@@ -95624,7 +95626,7 @@ class Bgpv6MetricsRequest(OpenApiObject):
 
         The list of column names that the returned result set will contain. If the list is empty then all columns will be returned except for any result_groups. The name of the BGPv6 peer cannot be excluded.
 
-        value: List[Union[Literal["fsm_state"], Literal["keepalives_received"], Literal["keepalives_sent"], Literal["notifications_received"], Literal["notifications_sent"], Literal["opens_received"], Literal["opens_sent"], Literal["route_withdraws_received"], Literal["route_withdraws_sent"], Literal["routes_advertised"], Literal["routes_received"], Literal["session_flap_count"], Literal["session_state"], Literal["updates_received"], Literal["updates_sent"]]]
+        value: List[Union[Literal["end_of_rib_received"], Literal["fsm_state"], Literal["keepalives_received"], Literal["keepalives_sent"], Literal["notifications_received"], Literal["notifications_sent"], Literal["opens_received"], Literal["opens_sent"], Literal["route_withdraws_received"], Literal["route_withdraws_sent"], Literal["routes_advertised"], Literal["routes_received"], Literal["session_flap_count"], Literal["session_state"], Literal["updates_received"], Literal["updates_sent"]]]
         """
         self._set_property("column_names", value)
 
@@ -98076,6 +98078,10 @@ class Bgpv4Metric(OpenApiObject):
                 "established",
             ],
         },
+        "end_of_rib_received": {
+            "type": int,
+            "format": "uint64",
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -98113,6 +98119,7 @@ class Bgpv4Metric(OpenApiObject):
         notifications_sent=None,
         notifications_received=None,
         fsm_state=None,
+        end_of_rib_received=None,
     ):
         super(Bgpv4Metric, self).__init__()
         self._parent = parent
@@ -98132,6 +98139,7 @@ class Bgpv4Metric(OpenApiObject):
         self._set_property("notifications_sent", notifications_sent)
         self._set_property("notifications_received", notifications_received)
         self._set_property("fsm_state", fsm_state)
+        self._set_property("end_of_rib_received", end_of_rib_received)
 
     def set(
         self,
@@ -98151,6 +98159,7 @@ class Bgpv4Metric(OpenApiObject):
         notifications_sent=None,
         notifications_received=None,
         fsm_state=None,
+        end_of_rib_received=None,
     ):
         for property_name, property_value in locals().items():
             if property_name != "self" and property_value is not None:
@@ -98491,6 +98500,27 @@ class Bgpv4Metric(OpenApiObject):
         value: Union[Literal["active"], Literal["connect"], Literal["established"], Literal["idle"], Literal["openconfirm"], Literal["opensent"]]
         """
         self._set_property("fsm_state", value)
+
+    @property
+    def end_of_rib_received(self):
+        # type: () -> int
+        """end_of_rib_received getter
+
+        Number of End-of-RIB markers received indicating the completion of the initial routing update for particular <AFI, SAFI> address family after the session is established. For the IPv4 unicast address family, the End-of-RIB marker is an UPDATE message with the minimum length. For any other address family, it is an UPDATE message that contains only the MP_UNREACH_NLRI attribute with no withdrawn routes for that <AFI, SAFI>.
+
+        Returns: int
+        """
+        return self._get_property("end_of_rib_received")
+
+    @end_of_rib_received.setter
+    def end_of_rib_received(self, value):
+        """end_of_rib_received setter
+
+        Number of End-of-RIB markers received indicating the completion of the initial routing update for particular <AFI, SAFI> address family after the session is established. For the IPv4 unicast address family, the End-of-RIB marker is an UPDATE message with the minimum length. For any other address family, it is an UPDATE message that contains only the MP_UNREACH_NLRI attribute with no withdrawn routes for that <AFI, SAFI>.
+
+        value: int
+        """
+        self._set_property("end_of_rib_received", value)
 
 
 class Bgpv4MetricIter(OpenApiIter):
@@ -98541,8 +98571,9 @@ class Bgpv4MetricIter(OpenApiIter):
         notifications_sent=None,
         notifications_received=None,
         fsm_state=None,
+        end_of_rib_received=None,
     ):
-        # type: (str,Union[Literal["down"], Literal["up"]],int,int,int,int,int,int,int,int,int,int,int,int,int,Union[Literal["active"], Literal["connect"], Literal["established"], Literal["idle"], Literal["openconfirm"], Literal["opensent"]]) -> Bgpv4MetricIter
+        # type: (str,Union[Literal["down"], Literal["up"]],int,int,int,int,int,int,int,int,int,int,int,int,int,Union[Literal["active"], Literal["connect"], Literal["established"], Literal["idle"], Literal["openconfirm"], Literal["opensent"]],int) -> Bgpv4MetricIter
         """Factory method that creates an instance of the Bgpv4Metric class
 
         BGPv4 per peer statistics information.
@@ -98567,6 +98598,7 @@ class Bgpv4MetricIter(OpenApiIter):
             notifications_sent=notifications_sent,
             notifications_received=notifications_received,
             fsm_state=fsm_state,
+            end_of_rib_received=end_of_rib_received,
         )
         self._add(item)
         return self
@@ -98589,8 +98621,9 @@ class Bgpv4MetricIter(OpenApiIter):
         notifications_sent=None,
         notifications_received=None,
         fsm_state=None,
+        end_of_rib_received=None,
     ):
-        # type: (str,Union[Literal["down"], Literal["up"]],int,int,int,int,int,int,int,int,int,int,int,int,int,Union[Literal["active"], Literal["connect"], Literal["established"], Literal["idle"], Literal["openconfirm"], Literal["opensent"]]) -> Bgpv4Metric
+        # type: (str,Union[Literal["down"], Literal["up"]],int,int,int,int,int,int,int,int,int,int,int,int,int,Union[Literal["active"], Literal["connect"], Literal["established"], Literal["idle"], Literal["openconfirm"], Literal["opensent"]],int) -> Bgpv4Metric
         """Add method that creates and returns an instance of the Bgpv4Metric class
 
         BGPv4 per peer statistics information.
@@ -98615,6 +98648,7 @@ class Bgpv4MetricIter(OpenApiIter):
             notifications_sent=notifications_sent,
             notifications_received=notifications_received,
             fsm_state=fsm_state,
+            end_of_rib_received=end_of_rib_received,
         )
         self._add(item)
         return item
@@ -98656,6 +98690,10 @@ class Bgpv6Metric(OpenApiObject):
                 "established",
             ],
         },
+        "end_of_rib_received": {
+            "type": int,
+            "format": "uint64",
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -98693,6 +98731,7 @@ class Bgpv6Metric(OpenApiObject):
         notifications_sent=None,
         notifications_received=None,
         fsm_state=None,
+        end_of_rib_received=None,
     ):
         super(Bgpv6Metric, self).__init__()
         self._parent = parent
@@ -98712,6 +98751,7 @@ class Bgpv6Metric(OpenApiObject):
         self._set_property("notifications_sent", notifications_sent)
         self._set_property("notifications_received", notifications_received)
         self._set_property("fsm_state", fsm_state)
+        self._set_property("end_of_rib_received", end_of_rib_received)
 
     def set(
         self,
@@ -98731,6 +98771,7 @@ class Bgpv6Metric(OpenApiObject):
         notifications_sent=None,
         notifications_received=None,
         fsm_state=None,
+        end_of_rib_received=None,
     ):
         for property_name, property_value in locals().items():
             if property_name != "self" and property_value is not None:
@@ -99072,6 +99113,27 @@ class Bgpv6Metric(OpenApiObject):
         """
         self._set_property("fsm_state", value)
 
+    @property
+    def end_of_rib_received(self):
+        # type: () -> int
+        """end_of_rib_received getter
+
+        Number of End-of-RIB markers received indicating the completion of the initial routing update for particular <AFI, SAFI> address family after the session is established. For the IPv4 unicast address family, the End-of-RIB marker is an UPDATE message with the minimum length. For any other address family, it is an UPDATE message that contains only the MP_UNREACH_NLRI attribute with no withdrawn routes for that <AFI, SAFI>.
+
+        Returns: int
+        """
+        return self._get_property("end_of_rib_received")
+
+    @end_of_rib_received.setter
+    def end_of_rib_received(self, value):
+        """end_of_rib_received setter
+
+        Number of End-of-RIB markers received indicating the completion of the initial routing update for particular <AFI, SAFI> address family after the session is established. For the IPv4 unicast address family, the End-of-RIB marker is an UPDATE message with the minimum length. For any other address family, it is an UPDATE message that contains only the MP_UNREACH_NLRI attribute with no withdrawn routes for that <AFI, SAFI>.
+
+        value: int
+        """
+        self._set_property("end_of_rib_received", value)
+
 
 class Bgpv6MetricIter(OpenApiIter):
     __slots__ = ("_parent", "_choice")
@@ -99121,8 +99183,9 @@ class Bgpv6MetricIter(OpenApiIter):
         notifications_sent=None,
         notifications_received=None,
         fsm_state=None,
+        end_of_rib_received=None,
     ):
-        # type: (str,Union[Literal["down"], Literal["up"]],int,int,int,int,int,int,int,int,int,int,int,int,int,Union[Literal["active"], Literal["connect"], Literal["established"], Literal["idle"], Literal["openconfirm"], Literal["opensent"]]) -> Bgpv6MetricIter
+        # type: (str,Union[Literal["down"], Literal["up"]],int,int,int,int,int,int,int,int,int,int,int,int,int,Union[Literal["active"], Literal["connect"], Literal["established"], Literal["idle"], Literal["openconfirm"], Literal["opensent"]],int) -> Bgpv6MetricIter
         """Factory method that creates an instance of the Bgpv6Metric class
 
         BGPv6 per peer statistics information.
@@ -99147,6 +99210,7 @@ class Bgpv6MetricIter(OpenApiIter):
             notifications_sent=notifications_sent,
             notifications_received=notifications_received,
             fsm_state=fsm_state,
+            end_of_rib_received=end_of_rib_received,
         )
         self._add(item)
         return self
@@ -99169,8 +99233,9 @@ class Bgpv6MetricIter(OpenApiIter):
         notifications_sent=None,
         notifications_received=None,
         fsm_state=None,
+        end_of_rib_received=None,
     ):
-        # type: (str,Union[Literal["down"], Literal["up"]],int,int,int,int,int,int,int,int,int,int,int,int,int,Union[Literal["active"], Literal["connect"], Literal["established"], Literal["idle"], Literal["openconfirm"], Literal["opensent"]]) -> Bgpv6Metric
+        # type: (str,Union[Literal["down"], Literal["up"]],int,int,int,int,int,int,int,int,int,int,int,int,int,Union[Literal["active"], Literal["connect"], Literal["established"], Literal["idle"], Literal["openconfirm"], Literal["opensent"]],int) -> Bgpv6Metric
         """Add method that creates and returns an instance of the Bgpv6Metric class
 
         BGPv6 per peer statistics information.
@@ -99195,6 +99260,7 @@ class Bgpv6MetricIter(OpenApiIter):
             notifications_sent=notifications_sent,
             notifications_received=notifications_received,
             fsm_state=fsm_state,
+            end_of_rib_received=end_of_rib_received,
         )
         self._add(item)
         return item
@@ -103972,6 +104038,14 @@ class BgpPrefixIpv4UnicastState(OpenApiObject):
         },
         "communities": {"type": "ResultBgpCommunityIter"},
         "as_path": {"type": "ResultBgpAsPath"},
+        "local_preference": {
+            "type": int,
+            "format": "uint32",
+        },
+        "multi_exit_discriminator": {
+            "type": int,
+            "format": "uint32",
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -103993,6 +104067,8 @@ class BgpPrefixIpv4UnicastState(OpenApiObject):
         path_id=None,
         ipv4_next_hop=None,
         ipv6_next_hop=None,
+        local_preference=None,
+        multi_exit_discriminator=None,
     ):
         super(BgpPrefixIpv4UnicastState, self).__init__()
         self._parent = parent
@@ -104002,6 +104078,8 @@ class BgpPrefixIpv4UnicastState(OpenApiObject):
         self._set_property("path_id", path_id)
         self._set_property("ipv4_next_hop", ipv4_next_hop)
         self._set_property("ipv6_next_hop", ipv6_next_hop)
+        self._set_property("local_preference", local_preference)
+        self._set_property("multi_exit_discriminator", multi_exit_discriminator)
 
     def set(
         self,
@@ -104011,6 +104089,8 @@ class BgpPrefixIpv4UnicastState(OpenApiObject):
         path_id=None,
         ipv4_next_hop=None,
         ipv6_next_hop=None,
+        local_preference=None,
+        multi_exit_discriminator=None,
     ):
         for property_name, property_value in locals().items():
             if property_name != "self" and property_value is not None:
@@ -104165,6 +104245,48 @@ class BgpPrefixIpv4UnicastState(OpenApiObject):
         Returns: ResultBgpAsPath
         """
         return self._get_property("as_path", ResultBgpAsPath)
+
+    @property
+    def local_preference(self):
+        # type: () -> int
+        """local_preference getter
+
+        The local preference is well-known attribute and the value is used for route selection. The route with the highest local preference value is preferred.
+
+        Returns: int
+        """
+        return self._get_property("local_preference")
+
+    @local_preference.setter
+    def local_preference(self, value):
+        """local_preference setter
+
+        The local preference is well-known attribute and the value is used for route selection. The route with the highest local preference value is preferred.
+
+        value: int
+        """
+        self._set_property("local_preference", value)
+
+    @property
+    def multi_exit_discriminator(self):
+        # type: () -> int
+        """multi_exit_discriminator getter
+
+        The multi exit discriminator (MED) is an optional non-transitive attribute and the value is used for route selection. The route with the lowest MED value is preferred.
+
+        Returns: int
+        """
+        return self._get_property("multi_exit_discriminator")
+
+    @multi_exit_discriminator.setter
+    def multi_exit_discriminator(self, value):
+        """multi_exit_discriminator setter
+
+        The multi exit discriminator (MED) is an optional non-transitive attribute and the value is used for route selection. The route with the lowest MED value is preferred.
+
+        value: int
+        """
+        self._set_property("multi_exit_discriminator", value)
 
 
 class ResultBgpCommunity(OpenApiObject):
@@ -104555,8 +104677,10 @@ class BgpPrefixIpv4UnicastStateIter(OpenApiIter):
         path_id=None,
         ipv4_next_hop=None,
         ipv6_next_hop=None,
+        local_preference=None,
+        multi_exit_discriminator=None,
     ):
-        # type: (str,int,Union[Literal["egp"], Literal["igp"], Literal["incomplete"]],int,str,str) -> BgpPrefixIpv4UnicastStateIter
+        # type: (str,int,Union[Literal["egp"], Literal["igp"], Literal["incomplete"]],int,str,str,int,int) -> BgpPrefixIpv4UnicastStateIter
         """Factory method that creates an instance of the BgpPrefixIpv4UnicastState class
 
         IPv4 unicast prefix.
@@ -104571,6 +104695,8 @@ class BgpPrefixIpv4UnicastStateIter(OpenApiIter):
             path_id=path_id,
             ipv4_next_hop=ipv4_next_hop,
             ipv6_next_hop=ipv6_next_hop,
+            local_preference=local_preference,
+            multi_exit_discriminator=multi_exit_discriminator,
         )
         self._add(item)
         return self
@@ -104583,8 +104709,10 @@ class BgpPrefixIpv4UnicastStateIter(OpenApiIter):
         path_id=None,
         ipv4_next_hop=None,
         ipv6_next_hop=None,
+        local_preference=None,
+        multi_exit_discriminator=None,
     ):
-        # type: (str,int,Union[Literal["egp"], Literal["igp"], Literal["incomplete"]],int,str,str) -> BgpPrefixIpv4UnicastState
+        # type: (str,int,Union[Literal["egp"], Literal["igp"], Literal["incomplete"]],int,str,str,int,int) -> BgpPrefixIpv4UnicastState
         """Add method that creates and returns an instance of the BgpPrefixIpv4UnicastState class
 
         IPv4 unicast prefix.
@@ -104599,6 +104727,8 @@ class BgpPrefixIpv4UnicastStateIter(OpenApiIter):
             path_id=path_id,
             ipv4_next_hop=ipv4_next_hop,
             ipv6_next_hop=ipv6_next_hop,
+            local_preference=local_preference,
+            multi_exit_discriminator=multi_exit_discriminator,
         )
         self._add(item)
         return item
@@ -104629,6 +104759,14 @@ class BgpPrefixIpv6UnicastState(OpenApiObject):
         },
         "communities": {"type": "ResultBgpCommunityIter"},
         "as_path": {"type": "ResultBgpAsPath"},
+        "local_preference": {
+            "type": int,
+            "format": "uint32",
+        },
+        "multi_exit_discriminator": {
+            "type": int,
+            "format": "uint32",
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -104650,6 +104788,8 @@ class BgpPrefixIpv6UnicastState(OpenApiObject):
         path_id=None,
         ipv4_next_hop=None,
         ipv6_next_hop=None,
+        local_preference=None,
+        multi_exit_discriminator=None,
     ):
         super(BgpPrefixIpv6UnicastState, self).__init__()
         self._parent = parent
@@ -104659,6 +104799,8 @@ class BgpPrefixIpv6UnicastState(OpenApiObject):
         self._set_property("path_id", path_id)
         self._set_property("ipv4_next_hop", ipv4_next_hop)
         self._set_property("ipv6_next_hop", ipv6_next_hop)
+        self._set_property("local_preference", local_preference)
+        self._set_property("multi_exit_discriminator", multi_exit_discriminator)
 
     def set(
         self,
@@ -104668,6 +104810,8 @@ class BgpPrefixIpv6UnicastState(OpenApiObject):
         path_id=None,
         ipv4_next_hop=None,
         ipv6_next_hop=None,
+        local_preference=None,
+        multi_exit_discriminator=None,
     ):
         for property_name, property_value in locals().items():
             if property_name != "self" and property_value is not None:
@@ -104823,6 +104967,48 @@ class BgpPrefixIpv6UnicastState(OpenApiObject):
         """
         return self._get_property("as_path", ResultBgpAsPath)
 
+    @property
+    def local_preference(self):
+        # type: () -> int
+        """local_preference getter
+
+        The local preference is well-known attribute and the value is used for route selection. The route with the highest local preference value is preferred.
+
+        Returns: int
+        """
+        return self._get_property("local_preference")
+
+    @local_preference.setter
+    def local_preference(self, value):
+        """local_preference setter
+
+        The local preference is well-known attribute and the value is used for route selection. The route with the highest local preference value is preferred.
+
+        value: int
+        """
+        self._set_property("local_preference", value)
+
+    @property
+    def multi_exit_discriminator(self):
+        # type: () -> int
+        """multi_exit_discriminator getter
+
+        The multi exit discriminator (MED) is an optional non-transitive attribute and the value is used for route selection. The route with the lowest MED value is preferred.
+
+        Returns: int
+        """
+        return self._get_property("multi_exit_discriminator")
+
+    @multi_exit_discriminator.setter
+    def multi_exit_discriminator(self, value):
+        """multi_exit_discriminator setter
+
+        The multi exit discriminator (MED) is an optional non-transitive attribute and the value is used for route selection. The route with the lowest MED value is preferred.
+
+        value: int
+        """
+        self._set_property("multi_exit_discriminator", value)
+
 
 class BgpPrefixIpv6UnicastStateIter(OpenApiIter):
     __slots__ = ("_parent", "_choice")
@@ -104862,8 +105048,10 @@ class BgpPrefixIpv6UnicastStateIter(OpenApiIter):
         path_id=None,
         ipv4_next_hop=None,
         ipv6_next_hop=None,
+        local_preference=None,
+        multi_exit_discriminator=None,
     ):
-        # type: (str,int,Union[Literal["egp"], Literal["igp"], Literal["incomplete"]],int,str,str) -> BgpPrefixIpv6UnicastStateIter
+        # type: (str,int,Union[Literal["egp"], Literal["igp"], Literal["incomplete"]],int,str,str,int,int) -> BgpPrefixIpv6UnicastStateIter
         """Factory method that creates an instance of the BgpPrefixIpv6UnicastState class
 
         IPv6 unicast prefix.
@@ -104878,6 +105066,8 @@ class BgpPrefixIpv6UnicastStateIter(OpenApiIter):
             path_id=path_id,
             ipv4_next_hop=ipv4_next_hop,
             ipv6_next_hop=ipv6_next_hop,
+            local_preference=local_preference,
+            multi_exit_discriminator=multi_exit_discriminator,
         )
         self._add(item)
         return self
@@ -104890,8 +105080,10 @@ class BgpPrefixIpv6UnicastStateIter(OpenApiIter):
         path_id=None,
         ipv4_next_hop=None,
         ipv6_next_hop=None,
+        local_preference=None,
+        multi_exit_discriminator=None,
     ):
-        # type: (str,int,Union[Literal["egp"], Literal["igp"], Literal["incomplete"]],int,str,str) -> BgpPrefixIpv6UnicastState
+        # type: (str,int,Union[Literal["egp"], Literal["igp"], Literal["incomplete"]],int,str,str,int,int) -> BgpPrefixIpv6UnicastState
         """Add method that creates and returns an instance of the BgpPrefixIpv6UnicastState class
 
         IPv6 unicast prefix.
@@ -104906,6 +105098,8 @@ class BgpPrefixIpv6UnicastStateIter(OpenApiIter):
             path_id=path_id,
             ipv4_next_hop=ipv4_next_hop,
             ipv6_next_hop=ipv6_next_hop,
+            local_preference=local_preference,
+            multi_exit_discriminator=multi_exit_discriminator,
         )
         self._add(item)
         return item
@@ -109140,8 +109334,8 @@ class Api(object):
 
     def __init__(self, **kwargs):
         self._version_meta = self.version()
-        self._version_meta.api_spec_version = "0.11.10"
-        self._version_meta.sdk_version = "0.11.16"
+        self._version_meta.api_spec_version = "0.11.11"
+        self._version_meta.sdk_version = "0.11.17"
         self._version_check = kwargs.get("version_check")
         if self._version_check is None:
             self._version_check = False
