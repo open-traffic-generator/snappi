@@ -1,4 +1,4 @@
-/* Open Traffic Generator API 0.11.11
+/* Open Traffic Generator API 0.11.10
  * Open Traffic Generator API defines a model-driven, vendor-neutral and standard
  * interface for emulating layer 2-7 network devices and generating test traffic.
  * 
@@ -107,7 +107,7 @@ message Lag {
   // met, LACPDUs continue to be transmitted and received by the member interfaces if
   // LACP is enabled, but other PDUs are not transmitted or received.
   // default = 1
-  optional int32 min_links = 3;
+  optional uint32 min_links = 3;
 
   // Globally unique name of an object. It also serves as the primary key for arrays of
   // objects.
@@ -119,10 +119,6 @@ message Lag {
 message LagPort {
 
   // The name of a port object that will be part of the LAG.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -243,16 +239,9 @@ message DeviceEthernet {
 
   // Deprecated: This property is deprecated in favor of property connection.port_name
   // 
-  // Deprecated: This property is deprecated in favor of property connection.port_name
-  // 
   // The unique name of a Port or a LAG that will emulate this interface.
   // port_name is deprecated and will be removed in future release.port_name and connection
   // can't be used together, use either port_name or connection.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // - /components/schemas/Lag/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -306,17 +295,9 @@ message EthernetConnection {
   // x-constraint:
   // - /components/schemas/Port/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   optional string port_name = 2;
 
   // Name of the LAG that the Ethernet interface is configured on.
-  // 
-  // x-constraint:
-  // - /components/schemas/Lag/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Lag/properties/name
@@ -325,11 +306,6 @@ message EthernetConnection {
 
   // Name of the VXLAN instance (or VXLAN tunnel) that this Ethernet interface is connected
   // to.
-  // 
-  // x-constraint:
-  // - #/components/schemas/Vxlan.V4Tunnel/properties/name
-  // - #/components/schemas/Vxlan.V6Tunnel/properties/name
-  // 
   // 
   // x-constraint:
   // - #/components/schemas/Vxlan.V4Tunnel/properties/name
@@ -398,10 +374,6 @@ message DeviceIpv4Loopback {
 
   // The unique name of the Ethernet interface behind which this Loopback  interface will
   // be created.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ethernet/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ethernet/properties/name
@@ -480,10 +452,6 @@ message DeviceIpv6Loopback {
   // x-constraint:
   // - /components/schemas/Device.Ethernet/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ethernet/properties/name
-  // 
   // required = true
   string eth_name = 1;
 
@@ -530,10 +498,6 @@ message Layer1 {
 
   // A list of unique names of port objects that will share the
   // choice settings.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -676,51 +640,49 @@ message Layer1Ieee8021qbb {
   // message to pause a specified priority.
   // A value of 0 or null indicates that pfc delay will not be enabled.
   // default = 0
-  optional int32 pfc_delay = 1;
+  optional uint32 pfc_delay = 1;
 
   // The valid values are null, 0 - 7.
   // A null value indicates there is no setting for this pfc class.
   // default = 0
-  optional int32 pfc_class_0 = 2;
+  optional uint32 pfc_class_0 = 2;
 
   // The valid values are null, 0 - 7.
   // A null value indicates there is no setting for this pfc class.
   // default = 1
-  optional int32 pfc_class_1 = 3;
+  optional uint32 pfc_class_1 = 3;
 
   // The valid values are null, 0 - 7.
   // A null value indicates there is no setting for this pfc class.
   // default = 2
-  optional int32 pfc_class_2 = 4;
+  optional uint32 pfc_class_2 = 4;
 
   // The valid values are null, 0 - 7.
   // A null value indicates there is no setting for this pfc class.
   // default = 3
-  optional int32 pfc_class_3 = 5;
+  optional uint32 pfc_class_3 = 5;
 
   // The valid values are null, 0 - 7.
   // A null value indicates there is no setting for this pfc class.
   // default = 4
-  optional int32 pfc_class_4 = 6;
+  optional uint32 pfc_class_4 = 6;
 
   // The valid values are null, 0 - 7.
   // A null value indicates there is no setting for this pfc class.
   // default = 5
-  optional int32 pfc_class_5 = 7;
+  optional uint32 pfc_class_5 = 7;
 
   // The valid values are null, 0 - 7.
   // A null value indicates there is no setting for this pfc class.
   // default = 6
-  optional int32 pfc_class_6 = 8;
+  optional uint32 pfc_class_6 = 8;
 
   // The valid values are null, 0 - 7.
   // A null value indicates there is no setting for this pfc class.
   // default = 7
-  optional int32 pfc_class_7 = 9;
+  optional uint32 pfc_class_7 = 9;
 }
 
-// Under Review: Information TBD
-// 
 // Under Review: Information TBD
 // 
 // Configuration for capture settings.
@@ -728,10 +690,6 @@ message Capture {
 
   // The unique names of ports that the capture settings will apply to. Port_names cannot
   // be duplicated between capture objects.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -752,7 +710,7 @@ message Capture {
 
   // The maximum size of each captured packet. If no value is specified or it is null
   // then the entire packet will be captured.
-  optional int32 packet_size = 4;
+  optional uint32 packet_size = 4;
 
   message Format {
     enum Enum {
@@ -810,12 +768,11 @@ message CaptureFilter {
 message CaptureCustom {
 
   // The bit offset of field to filter on
-  // default = 0
-  optional int32 offset = 1;
+  optional uint32 offset = 1;
 
   // The bit length of field to filter on
   // default = 8
-  optional int32 bit_length = 2;
+  optional uint32 bit_length = 2;
 
   // Description missing in models
   // default = 00
@@ -1054,16 +1011,12 @@ message IsisInterface {
   // x-constraint:
   // - /components/schemas/Device.Ethernet/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ethernet/properties/name
-  // 
   // required = true
   string eth_name = 1;
 
   // The default metric cost for the interface.
   // default = 10
-  optional int32 metric = 2;
+  optional uint32 metric = 2;
 
   message NetworkType {
     enum Enum {
@@ -1112,7 +1065,7 @@ message IsisInterface {
   optional IsisInterfaceLinkProtection link_protection = 11;
 
   // This contains list of SRLG values for the link between two interfaces.
-  repeated int32 srlg_values = 12;
+  repeated uint32 srlg_values = 12;
 
   // Globally unique name of an object. It also serves as the primary key for arrays of
   // objects.
@@ -1125,15 +1078,15 @@ message IsisInterfaceLevel {
 
   // The Priority setting in Level 1 LAN Hellos for Designated Router election.
   // default = 0
-  optional int32 priority = 1;
+  optional uint32 priority = 1;
 
   // The Hello interval for Level 1 Hello messages, in seconds.
   // default = 10
-  optional int32 hello_interval = 2;
+  optional uint32 hello_interval = 2;
 
   // The Dead (Holding Time) interval for Level 1 Hello messages, in seconds.
   // default = 30
-  optional int32 dead_interval = 3;
+  optional uint32 dead_interval = 3;
 }
 
 // Configuration of properties per interface per topology when multiple topologies are
@@ -1164,17 +1117,17 @@ message LinkStateTE {
 
   // The user-assigned link metric for Traffic Engineering.
   // default = 0
-  optional int64 metric_level = 2;
+  optional uint32 metric_level = 2;
 
   // The maximum link bandwidth (sub-TLV 9) in bytes/sec allowed for this
   // link for a direction.
   // default = 125000000
-  optional int64 max_bandwith = 3;
+  optional uint32 max_bandwith = 3;
 
   // The maximum link bandwidth (sub-TLV 10) in bytes/sec allowed for this
   // link in a direction.
   // default = 125000000
-  optional int64 max_reservable_bandwidth = 4;
+  optional uint32 max_reservable_bandwidth = 4;
 
   // Configuration of bandwidths of priority 0 through priority 7.
   optional LinkStatepriorityBandwidths priority_bandwidths = 5;
@@ -1189,35 +1142,35 @@ message LinkStatepriorityBandwidths {
 
   // Specifies the amount of bandwidth that can be reserved for the Priority 0.
   // default = 125000000
-  optional int64 pb0 = 1;
+  optional uint32 pb0 = 1;
 
   // Specifies the amount of bandwidth that can be reserved for the Priority 1.
   // default = 125000000
-  optional int64 pb1 = 2;
+  optional uint32 pb1 = 2;
 
   // Specify the amount of bandwidth that can be reserved for the Priority 2.
   // default = 125000000
-  optional int64 pb2 = 3;
+  optional uint32 pb2 = 3;
 
   // Specifies the amount of bandwidth that can be reserved for the Priority 3.
   // default = 125000000
-  optional int64 pb3 = 4;
+  optional uint32 pb3 = 4;
 
   // Specifies the amount of bandwidth that can be reserved for the Priority 4.
   // default = 125000000
-  optional int64 pb4 = 5;
+  optional uint32 pb4 = 5;
 
   // Specifies the amount of bandwidth that can be reserved for the Priority 5.
   // default = 125000000
-  optional int64 pb5 = 6;
+  optional uint32 pb5 = 6;
 
   // Specifies the amount of bandwidth that can be reserved for the Priority 6.
   // default = 125000000
-  optional int64 pb6 = 7;
+  optional uint32 pb6 = 7;
 
   // Specifies the amount of bandwidth that can be reserved for the Priority 7.
   // default = 125000000
-  optional int64 pb7 = 8;
+  optional uint32 pb7 = 8;
 }
 
 // Optional container for circuit authentication properties.
@@ -1757,10 +1710,10 @@ message DeviceBgpCeaseError {
 message DeviceBgpCustomError {
 
   // The Error code to be sent in the NOTIFICATION message to peer.
-  optional int32 code = 1;
+  optional uint32 code = 1;
 
   // The Error Subcode to be sent in the NOTIFICATION message to peer.
-  optional int32 subcode = 2;
+  optional uint32 subcode = 2;
 }
 
 // Configuration for emulated BGPv4 peers and routes.
@@ -1811,7 +1764,7 @@ message BgpV4Peer {
 
   // Autonomous System Number (AS number or ASN)
   // required = true
-  int32 as_number = 4;
+  uint32 as_number = 4;
 
   message AsNumberWidth {
     enum Enum {
@@ -1864,11 +1817,6 @@ message BgpV4Interface {
 
   // The unique name of the IPv4 or Loopback IPv4 interface used as the source IP for
   // this list of BGP peers.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv4/properties/name
-  // - /components/schemas/Device.Ipv4Loopback/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv4/properties/name
@@ -1971,7 +1919,7 @@ message BgpRouteAdvanced {
   optional bool include_multi_exit_discriminator = 3;
 
   // The multi exit discriminator (MED) value used for route selection sent to the peer.
-  optional int32 multi_exit_discriminator = 1;
+  optional uint32 multi_exit_discriminator = 1;
 
   // If set to true, the Origin attribute will be included in the route advertisement.
   // default = True
@@ -2002,7 +1950,7 @@ message BgpRouteAdvanced {
   // to true. It is  used for the selection of the path for the traffic leaving the AS.
   // The route with the  highest local preference value is preferred.
   // default = 100
-  optional int32 local_preference = 6;
+  optional uint32 local_preference = 6;
 }
 
 // BGP communities provide additional capability for tagging routes and  for modifying
@@ -2143,7 +2091,7 @@ message BgpAsPathSegment {
   optional Type.Enum type = 1;
 
   // The AS numbers in this AS path segment.
-  repeated int64 as_numbers = 2;
+  repeated uint32 as_numbers = 2;
 }
 
 // This contains a list of different flavors of EVPN.
@@ -2401,23 +2349,23 @@ message BgpAdvanced {
 
   // Number of seconds the sender proposes for the value of the Hold Timer.
   // default = 90
-  optional int32 hold_time_interval = 1;
+  optional uint32 hold_time_interval = 1;
 
   // Number of seconds between transmissions of Keepalive messages by this peer.
   // default = 30
-  optional int32 keep_alive_interval = 2;
+  optional uint32 keep_alive_interval = 2;
 
   // The time interval at which Update messages are sent to the DUT, expressed as the
   // number of milliseconds between Update messages. The update interval 0 implies to
   // send all the updates as fast as possible.
   // default = 0
-  optional int32 update_interval = 3;
+  optional uint32 update_interval = 3;
 
   // The limited number of iterations that a unit of data can experience before the data
   // is discarded. This is placed in the TTL field in the IP header of the  transmitted
   // packets.
   // default = 64
-  optional int32 time_to_live = 4;
+  optional uint32 time_to_live = 4;
 
   // The value to be used as a secret MD5 key for authentication. If not configured, MD5
   // authentication will not be enabled.
@@ -2653,7 +2601,7 @@ message BgpAddPath {
 
   // The id of the additional path.
   // default = 1
-  optional int32 path_id = 1;
+  optional uint32 path_id = 1;
 }
 
 // Emulated BGPv6 route range.
@@ -2758,12 +2706,12 @@ message BgpSrteV4Policy {
   // of different SR Policies (i.e. with different segment list) with the same Color
   // and Endpoint but meant for different head-ends.
   // default = 1
-  optional int64 distinguisher = 1;
+  optional uint32 distinguisher = 1;
 
   // Policy color is used to match the color of the destination prefixes to steer traffic
   // into the SR Policy.
   // default = 100
-  optional int64 color = 2;
+  optional uint32 color = 2;
 
   // Specifies a single node or a set of nodes (e.g. an anycast address). It is selected
   // on the basis of the SR Policy type (AFI).
@@ -2906,7 +2854,7 @@ message BgpSrteRemoteEndpointSubTlv {
 
   // Autonomous system (AS) number
   // default = 0
-  optional int64 as_number = 1;
+  optional uint32 as_number = 1;
 
   message AddressFamily {
     enum Enum {
@@ -2957,7 +2905,7 @@ message BgpSrteBindingSubTlv {
   optional BindingSidType.Enum binding_sid_type = 1;
 
   // Binding SID is encoded in 4 octets.
-  optional int32 four_octet_sid = 2;
+  optional uint32 four_octet_sid = 2;
 
   // IPv6 SID value.
   optional string ipv6_sid = 3;
@@ -2976,7 +2924,7 @@ message BgpSrtePreferenceSubTlv {
 
   // The preference value of the SR Policy candidate path.
   // default = 0
-  optional int64 preference = 1;
+  optional uint32 preference = 1;
 }
 
 // Configuration for the Policy Priority sub-TLV. The Policy Priority to indicate the
@@ -3020,7 +2968,7 @@ message BgpSrteSegmentList {
 
   // The Weight associated with a given path and the sub-TLV is optional.
   // default = 0
-  optional int64 weight = 1;
+  optional uint32 weight = 1;
 
   // Description missing in models
   repeated BgpSrteSegment segments = 2;
@@ -3404,12 +3352,12 @@ message BgpSrteV6Policy {
   // Identifies the policy in the context of (color and endpoint) tuple.  It is used by
   // the SR Policy originator to make unique multiple  occurrences of the same SR Policy.
   // default = 1
-  optional int64 distinguisher = 1;
+  optional uint32 distinguisher = 1;
 
   // Identifies the policy. It is used to match the color of the  destination prefixes
   // to steer traffic into the SR Policy.
   // default = 100
-  optional int64 color = 2;
+  optional uint32 color = 2;
 
   // Specifies a single node or a set of nodes (e.g., an anycast address). It is selected
   // on the basis of the SR Policy type (AFI).
@@ -3632,7 +3580,7 @@ message BgpV6Peer {
 
   // Autonomous System Number (AS number or ASN)
   // required = true
-  int32 as_number = 5;
+  uint32 as_number = 5;
 
   message AsNumberWidth {
     enum Enum {
@@ -3690,11 +3638,6 @@ message BgpV6Interface {
   // - /components/schemas/Device.Ipv6/properties/name
   // - /components/schemas/Device.Ipv6Loopback/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv6/properties/name
-  // - /components/schemas/Device.Ipv6Loopback/properties/name
-  // 
   // required = true
   string ipv6_name = 1;
 
@@ -3719,11 +3662,11 @@ message BgpV6SegmentRouting {
 
   // TBD
   // default = 0
-  optional int32 time_to_live = 4;
+  optional uint32 time_to_live = 4;
 
   // TBD
   // default = 0
-  optional int32 max_sids_per_srh = 5;
+  optional uint32 max_sids_per_srh = 5;
 
   // TBD
   // default = False
@@ -3731,7 +3674,7 @@ message BgpV6SegmentRouting {
 
   // TBD
   // default = 0
-  optional int32 segment_left_value = 7;
+  optional uint32 segment_left_value = 7;
 
   // TBD
   // default = False
@@ -3956,11 +3899,6 @@ message VxlanV4Tunnel {
   // - /components/schemas/Device.Ipv4/properties/name
   // - /components/schemas/Device.Ipv4Loopback/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv4/properties/name
-  // - /components/schemas/Device.Ipv4Loopback/properties/name
-  // 
   // required = true
   string source_interface = 1;
 
@@ -3984,11 +3922,6 @@ message VxlanV4Tunnel {
 message VxlanV6Tunnel {
 
   // Determines the source interface.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv6/properties/name
-  // - /components/schemas/Device.Ipv6Loopback/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv6/properties/name
@@ -4152,10 +4085,6 @@ message RsvpIpv4Interface {
   // x-constraint:
   // - /components/schemas/Device.Ipv4/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv4/properties/name
-  // 
   // required = true
   string ipv4_name = 1;
 
@@ -4217,11 +4146,6 @@ message RsvpLspIpv4Interface {
   // ingress and egress endpoint for  the LSPs configured on this interface. This must
   // match the name field of either ipv4_addresses or ipv4_loopbacks  on which this LSP
   // interface is configured.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv4/properties/name
-  // - /components/schemas/Device.Ipv4Loopback/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv4/properties/name
@@ -4653,10 +4577,6 @@ message Flow {
   // fields. The query structure for tagged metrics inside flows metrics requires documenting
   // expected response format.
   // 
-  // Under Review: The packet header schema for egress tracking currently exposes unwanted
-  // fields. The query structure for tagged metrics inside flows metrics requires documenting
-  // expected response format.
-  // 
   // The list of protocol headers defining the shape of all
   // intended packets in corresponding flow as it is received
   // by traffic-generator port.
@@ -4719,16 +4639,9 @@ message FlowPort {
   // - /components/schemas/Port/properties/name
   // - /components/schemas/Lag/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // - /components/schemas/Lag/properties/name
-  // 
   // required = true
   string tx_name = 1;
 
-  // Deprecated: This property is deprecated in favor of property rx_names
-  // 
   // Deprecated: This property is deprecated in favor of property rx_names
   // 
   // The unique name of a port that is the intended receive port.
@@ -4737,19 +4650,9 @@ message FlowPort {
   // - /components/schemas/Port/properties/name
   // - /components/schemas/Lag/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // - /components/schemas/Lag/properties/name
-  // 
   optional string rx_name = 2;
 
   // Unique name of ports or lags that are intended receive endpoints.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // - /components/schemas/Lag/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -4826,33 +4729,9 @@ message FlowRouter {
   // - /components/schemas/Isis.V4RouteRange/properties/name
   // - /components/schemas/Isis.V6RouteRange/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ethernet/properties/name
-  // - /components/schemas/Device.Ipv4/properties/name
-  // - /components/schemas/Device.Ipv6/properties/name
-  // - /components/schemas/Bgp.V4RouteRange/properties/name
-  // - /components/schemas/Bgp.V6RouteRange/properties/name
-  // - /components/schemas/Bgp.CMacIpRange/properties/name
-  // - /components/schemas/Rsvp.LspIpv4Interface.P2PIngressIpv4Lsp/properties/name
-  // - /components/schemas/Isis.V4RouteRange/properties/name
-  // - /components/schemas/Isis.V6RouteRange/properties/name
-  // 
   repeated string tx_names = 2;
 
   // TBD
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ethernet/properties/name
-  // - /components/schemas/Device.Ipv4/properties/name
-  // - /components/schemas/Device.Ipv6/properties/name
-  // - /components/schemas/Bgp.V4RouteRange/properties/name
-  // - /components/schemas/Bgp.V6RouteRange/properties/name
-  // - /components/schemas/Bgp.CMacIpRange/properties/name
-  // - /components/schemas/Rsvp.LspIpv4Interface.P2PEgressIpv4Lsp/properties/name
-  // - /components/schemas/Isis.V4RouteRange/properties/name
-  // - /components/schemas/Isis.V6RouteRange/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ethernet/properties/name
@@ -5578,7 +5457,7 @@ message FlowSize {
 
   // Description missing in models
   // default = 64
-  optional int32 fixed = 2;
+  optional uint32 fixed = 2;
 
   // Description missing in models
   optional FlowSizeIncrement increment = 3;
@@ -5604,7 +5483,7 @@ message FlowSizeIncrement {
 
   // Step frame size in bytes
   // default = 1
-  optional int32 step = 3;
+  optional uint32 step = 3;
 }
 
 // Random frame size from a min value to a max value.
@@ -5612,11 +5491,11 @@ message FlowSizeRandom {
 
   // Description missing in models
   // default = 64
-  optional int32 min = 1;
+  optional uint32 min = 1;
 
   // Description missing in models
   // default = 1518
-  optional int32 max = 2;
+  optional uint32 max = 2;
 }
 
 // Frame size distribution, defined as <size, weight> pairs (including IMIX distribution).
@@ -5699,23 +5578,23 @@ message FlowRate {
 
   // Packets per second.
   // default = 1000
-  optional int64 pps = 2;
+  optional uint64 pps = 2;
 
   // Bits per second.
   // default = 1000000000
-  optional int64 bps = 3;
+  optional uint64 bps = 3;
 
   // Kilobits per second.
   // default = 1000000
-  optional int64 kbps = 4;
+  optional uint64 kbps = 4;
 
   // Megabits per second.
   // default = 1000
-  optional int64 mbps = 5;
+  optional uint64 mbps = 5;
 
   // Gigabits per second.
   // default = 1
-  optional int32 gbps = 6;
+  optional uint32 gbps = 6;
 
   // The percentage of a port location's available bandwidth.
   // default = 100
@@ -6073,12 +5952,6 @@ message EventRequest {
   // - /components/schemas/Bgp.V4RouteRange/name
   // - /components/schemas/Bgp.V6RouteRange/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // - /components/schemas/Bgp.V4RouteRange/name
-  // - /components/schemas/Bgp.V6RouteRange/name
-  // 
   repeated string source = 2;
 }
 
@@ -6148,10 +6021,6 @@ message LldpConnection {
   optional Choice.Enum choice = 1;
 
   // Name of the test port on which LLDP is configured on.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -6441,16 +6310,10 @@ message StateProtocol {
 
 // Deprecated: Please use `StatePortLink` instead
 // 
-// Deprecated: Please use `StatePortLink` instead
-// 
 // Sets the link state of configured ports.
 message LinkState {
 
   // The names of port objects to. An empty or null list will control all port objects.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -6471,8 +6334,6 @@ message LinkState {
 
 // Deprecated: Please use `StateTrafficFlowTransmit` instead
 // 
-// Deprecated: Please use `StateTrafficFlowTransmit` instead
-// 
 // Flow transmit state.
 message TransmitState {
 
@@ -6480,10 +6341,6 @@ message TransmitState {
   // flow_names is empty or null the state will be applied to all configured flows.
   // If the list is not empty any flow that is not included in the list of flow_names
   // MUST be ignored and not included in the state change.
-  // 
-  // x-constraint:
-  // - /components/schemas/Flow/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Flow/properties/name
@@ -6517,8 +6374,6 @@ message TransmitState {
 
 // Deprecated: Please use `StatePortCapture` instead
 // 
-// Deprecated: Please use `StatePortCapture` instead
-// 
 // Control port capture state
 message CaptureState {
 
@@ -6526,10 +6381,6 @@ message CaptureState {
   // port_names is empty or null the state will be applied to all configured ports.
   // If the list is not empty any port that is not included in the list of port_names
   // MUST be ignored and not included in the state change.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -6550,20 +6401,11 @@ message CaptureState {
 
 // Deprecated: Please use `StateProtocolRoute` instead
 // 
-// Deprecated: Please use `StateProtocolRoute` instead
-// 
 // Sets the device route state
 message RouteState {
 
   // The names of device route objects to control. If no names are specified then all
   // route objects that match the x-constraint will be affected.
-  // 
-  // x-constraint:
-  // - /components/schemas/Bgp.V4RouteRange/properties/name
-  // - /components/schemas/Bgp.V6RouteRange/properties/name
-  // - /components/schemas/Isis.V4RouteRange/properties/name
-  // - /components/schemas/Isis.V6RouteRange/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Bgp.V4RouteRange/properties/name
@@ -6587,8 +6429,6 @@ message RouteState {
 
 // Deprecated: Please use `StateProtocolAll` instead
 // 
-// Deprecated: Please use `StateProtocolAll` instead
-// 
 // Sets all configured protocols to `start` or `stop` state. Setting protocol state
 // to `start`  shall be a no-op if preceding `set_config` API call was made with  `config.options.protocol_options.auto_start_all`
 // set to `true` or if all the configured protocols are already started.
@@ -6606,8 +6446,6 @@ message ProtocolState {
   State.Enum state = 1;
 }
 
-// Deprecated: Please use `State.Protocol` instead
-// 
 // Deprecated: Please use `State.Protocol` instead
 // 
 // Sets attributes for the requested state/actions to be performed on device(s)
@@ -6630,10 +6468,6 @@ message DeviceState {
 message StatePortLink {
 
   // The names of target ports. An empty or null list will target all ports.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -6663,10 +6497,6 @@ message StatePortCapture {
   // x-constraint:
   // - /components/schemas/Port/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   repeated string port_names = 1;
 
   message State {
@@ -6688,10 +6518,6 @@ message StateTrafficFlowTransmit {
   // flow_names is empty or null the state will be applied to all configured flows.
   // If the list is not empty any flow that is not included in the list of flow_names
   // MUST be ignored and not included in the state change.
-  // 
-  // x-constraint:
-  // - /components/schemas/Flow/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Flow/properties/name
@@ -6752,13 +6578,6 @@ message StateProtocolRoute {
   // - /components/schemas/Isis.V4RouteRange/properties/name
   // - /components/schemas/Isis.V6RouteRange/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Bgp.V4RouteRange/properties/name
-  // - /components/schemas/Bgp.V6RouteRange/properties/name
-  // - /components/schemas/Isis.V4RouteRange/properties/name
-  // - /components/schemas/Isis.V6RouteRange/properties/name
-  // 
   repeated string names = 1;
 
   message State {
@@ -6799,10 +6618,6 @@ message StateProtocolLacpAdmin {
   // x-constraint:
   // - /components/schemas/Port/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   repeated string lag_member_names = 1;
 
   message State {
@@ -6820,17 +6635,11 @@ message StateProtocolLacpAdmin {
 
 // Deprecated: Please use `StateProtocolLacpAdmin` instead
 // 
-// Deprecated: Please use `StateProtocolLacpAdmin` instead
-// 
 // Set LACP state for specified LAG Member Port(s).
 message LacpMemberState {
 
   // The names of LAG members (ports) for which the state has to be applied. An empty
   // or null list will control all LAG members.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -6984,18 +6793,12 @@ message ActionProtocolIpv4Ping {
 
 // Under Review: Most ping request parameters are still TBD.
 // 
-// Under Review: Most ping request parameters are still TBD.
-// 
 // Request for initiating ping between a single source and destination pair.
 // For ping request, 1 IPv4 ICMP Echo Request shall be sent and wait for ping response
 // to either succeed or time out. The API wait timeout for each request shall be 300ms.
 message ActionProtocolIpv4PingRequest {
 
   // Name of source IPv4 interface to be used.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv4/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv4/properties/name
@@ -7017,10 +6820,6 @@ message ActionResponseProtocolIpv4Ping {
 message ActionResponseProtocolIpv4PingResponse {
 
   // Name of source IPv4 interface used for ping.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv4/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv4/properties/name
@@ -7087,18 +6886,12 @@ message ActionProtocolIpv6Ping {
 
 // Under Review: Most ping request parameters are still TBD.
 // 
-// Under Review: Most ping request parameters are still TBD.
-// 
 // Request for initiating ping between a single source and destination pair.
 // For ping request, 1 IPv6 ICMP Echo Request shall be sent and wait for ping response
 // to either succeed or time out. The API wait timeout for each request shall be 300ms.
 message ActionProtocolIpv6PingRequest {
 
   // Name of source IPv6 interface to be used.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv6/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv6/properties/name
@@ -7120,10 +6913,6 @@ message ActionResponseProtocolIpv6Ping {
 message ActionResponseProtocolIpv6PingResponse {
 
   // Name of source IPv6 interface used for ping.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv6/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv6/properties/name
@@ -7183,10 +6972,6 @@ message ActionProtocolBgpNotification {
   // x-constraint:
   // - /components/schemas/Device.Bgp/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Bgp/properties/name
-  // 
   repeated string names = 1;
 
   message Choice {
@@ -7242,10 +7027,6 @@ message ActionProtocolBgpInitiateGracefulRestart {
   // x-constraint:
   // - /components/schemas/Device.Bgp/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Bgp/properties/name
-  // 
   repeated string peer_names = 1;
 
   // Duration (in seconds) after which selected BGP peers will initiate
@@ -7284,10 +7065,6 @@ message PingIpv4 {
   // x-constraint:
   // - /components/schemas/Device.Ipv4/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv4/properties/name
-  // 
   optional string src_name = 1;
 
   // IPv4 address to ping
@@ -7298,10 +7075,6 @@ message PingIpv4 {
 message PingIpv6 {
 
   // A base IPv6 interface
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv6/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv6/properties/name
@@ -7330,11 +7103,6 @@ message PingResponse {
 message Response {
 
   // The name of the source IPv4 or IPv6 interface from which ping was sent.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv4/properties/name
-  // - /components/schemas/Device.Ipv6/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv4/properties/name
@@ -7464,10 +7232,6 @@ message PortMetricsRequest {
   // x-constraint:
   // - /components/schemas/Port/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   repeated string port_names = 1;
 
   message ColumnNames {
@@ -7500,10 +7264,6 @@ message PortMetric {
   // x-constraint:
   // - /components/schemas/Port/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   optional string name = 1;
 
   // The state of the connection to the test port location. The format should be the configured
@@ -7532,16 +7292,16 @@ message PortMetric {
   optional Capture.Enum capture = 4;
 
   // The current total number of frames transmitted
-  optional int64 frames_tx = 5;
+  optional uint64 frames_tx = 5;
 
   // The current total number of valid frames received
-  optional int64 frames_rx = 6;
+  optional uint64 frames_rx = 6;
 
   // The current total number of bytes transmitted
-  optional int64 bytes_tx = 7;
+  optional uint64 bytes_tx = 7;
 
   // The current total number of valid bytes received
-  optional int64 bytes_rx = 8;
+  optional uint64 bytes_rx = 8;
 
   // The current rate of frames transmitted
   optional float frames_tx_rate = 9;
@@ -7571,10 +7331,6 @@ message FlowMetricsRequest {
 
   // Flow metrics will be retrieved for these flow names.
   // If no flow names are specified then all flows will be returned.
-  // 
-  // x-constraint:
-  // - /components/schemas/Flow/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Flow/properties/name
@@ -7671,16 +7427,16 @@ message FlowMetric {
   optional Transmit.Enum transmit = 5;
 
   // The current total number of frames transmitted
-  optional int64 frames_tx = 6;
+  optional uint64 frames_tx = 6;
 
   // The current total number of valid frames received
-  optional int64 frames_rx = 7;
+  optional uint64 frames_rx = 7;
 
   // The current total number of bytes transmitted
-  optional int64 bytes_tx = 8;
+  optional uint64 bytes_tx = 8;
 
   // The current total number of bytes received
-  optional int64 bytes_rx = 9;
+  optional uint64 bytes_rx = 9;
 
   // The current rate of frames transmitted
   optional float frames_tx_rate = 10;
@@ -7809,10 +7565,6 @@ message Bgpv4MetricsRequest {
   // x-constraint:
   // - /components/schemas/Bgp.V4peer/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Bgp.V4peer/properties/name
-  // 
   repeated string peer_names = 1;
 
   message ColumnNames {
@@ -7833,7 +7585,6 @@ message Bgpv4MetricsRequest {
       notifications_sent = 13;
       notifications_received = 14;
       fsm_state = 15;
-      end_of_rib_received = 16;
     }
   }
   // The list of column names that the returned result set will contain. If the list is
@@ -7860,43 +7611,43 @@ message Bgpv4Metric {
   optional SessionState.Enum session_state = 2;
 
   // Number of times the session went from Up to Down state.
-  optional int32 session_flap_count = 3;
+  optional uint32 session_flap_count = 3;
 
   // Number of routes advertised.
-  optional int32 routes_advertised = 4;
+  optional uint64 routes_advertised = 4;
 
   // Number of routes received.
-  optional int32 routes_received = 5;
+  optional uint64 routes_received = 5;
 
   // Number of route withdraws sent.
-  optional int32 route_withdraws_sent = 6;
+  optional uint64 route_withdraws_sent = 6;
 
   // Number of route withdraws received.
-  optional int32 route_withdraws_received = 7;
+  optional uint64 route_withdraws_received = 7;
 
   // Number of Update messages sent.
-  optional int32 updates_sent = 8;
+  optional uint64 updates_sent = 8;
 
   // Number of Update messages received.
-  optional int32 updates_received = 9;
+  optional uint64 updates_received = 9;
 
   // Number of Open messages sent.
-  optional int32 opens_sent = 10;
+  optional uint64 opens_sent = 10;
 
   // Number of Open messages received.
-  optional int32 opens_received = 11;
+  optional uint64 opens_received = 11;
 
   // Number of Keepalive messages sent.
-  optional int32 keepalives_sent = 12;
+  optional uint64 keepalives_sent = 12;
 
   // Number of Keepalive messages received.
-  optional int32 keepalives_received = 13;
+  optional uint64 keepalives_received = 13;
 
   // Number of Notification messages sent.
-  optional int32 notifications_sent = 14;
+  optional uint64 notifications_sent = 14;
 
   // Number of Notification messages received.
-  optional int32 notifications_received = 15;
+  optional uint64 notifications_received = 15;
 
   message FsmState {
     enum Enum {
@@ -7921,13 +7672,6 @@ message Bgpv4Metric {
   // remote peer. Established refers to the state where the BGP session with the peer
   // is established.
   optional FsmState.Enum fsm_state = 16;
-
-  // Number of End-of-RIB markers received indicating the completion of the initial routing
-  // update for a  particular <AFI, SAFI> address family after the session is established.
-  // For the IPv4 unicast address family, the End-of-RIB marker is an UPDATE message with
-  // the minimum length. For any other address family, it is an UPDATE message that contains
-  // only the MP_UNREACH_NLRI attribute with  no withdrawn routes for that <AFI, SAFI>.
-  optional uint64 end_of_rib_received = 17;
 }
 
 // The request to retrieve BGPv6 per peer metrics/statistics.
@@ -7935,10 +7679,6 @@ message Bgpv6MetricsRequest {
 
   // The names of BGPv6 peers to return results for. An empty list will return results
   // for all BGPv6 peers.
-  // 
-  // x-constraint:
-  // - /components/schemas/Bgp.V6peer/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Bgp.V6peer/properties/name
@@ -7963,7 +7703,6 @@ message Bgpv6MetricsRequest {
       notifications_sent = 13;
       notifications_received = 14;
       fsm_state = 15;
-      end_of_rib_received = 16;
     }
   }
   // The list of column names that the returned result set will contain. If the list is
@@ -7990,43 +7729,43 @@ message Bgpv6Metric {
   optional SessionState.Enum session_state = 2;
 
   // Number of times the session went from Up to Down state.
-  optional int32 session_flap_count = 3;
+  optional uint32 session_flap_count = 3;
 
   // Number of routes advertised.
-  optional int32 routes_advertised = 4;
+  optional uint64 routes_advertised = 4;
 
   // Number of routes received.
-  optional int32 routes_received = 5;
+  optional uint64 routes_received = 5;
 
   // Number of route withdraws sent.
-  optional int32 route_withdraws_sent = 6;
+  optional uint64 route_withdraws_sent = 6;
 
   // Number of route withdraws received.
-  optional int32 route_withdraws_received = 7;
+  optional uint64 route_withdraws_received = 7;
 
   // Number of Update messages sent.
-  optional int32 updates_sent = 8;
+  optional uint64 updates_sent = 8;
 
   // Number of Update messages received.
-  optional int32 updates_received = 9;
+  optional uint64 updates_received = 9;
 
   // Number of Open messages sent.
-  optional int32 opens_sent = 10;
+  optional uint64 opens_sent = 10;
 
   // Number of Open messages received.
-  optional int32 opens_received = 11;
+  optional uint64 opens_received = 11;
 
   // Number of Keepalive messages sent.
-  optional int32 keepalives_sent = 12;
+  optional uint64 keepalives_sent = 12;
 
   // Number of Keepalive messages received.
-  optional int32 keepalives_received = 13;
+  optional uint64 keepalives_received = 13;
 
   // Number of Notification messages sent.
-  optional int32 notifications_sent = 14;
+  optional uint64 notifications_sent = 14;
 
   // Number of Notification messages received.
-  optional int32 notifications_received = 15;
+  optional uint64 notifications_received = 15;
 
   message FsmState {
     enum Enum {
@@ -8051,13 +7790,6 @@ message Bgpv6Metric {
   // remote peer. Established refers to the state where the BGP session with the peer
   // is established.
   optional FsmState.Enum fsm_state = 16;
-
-  // Number of End-of-RIB markers received indicating the completion of the initial routing
-  // update for a  particular <AFI, SAFI> address family after the session is established.
-  // For the IPv4 unicast address family, the End-of-RIB marker is an UPDATE message with
-  // the minimum length. For any other address family, it is an UPDATE message that contains
-  // only the MP_UNREACH_NLRI attribute with  no withdrawn routes for that <AFI, SAFI>.
-  optional uint64 end_of_rib_received = 17;
 }
 
 // The request to retrieve ISIS per Router metrics/statistics.
@@ -8065,10 +7797,6 @@ message IsisMetricsRequest {
 
   // The names of ISIS Routers to return results for. An empty list will return results
   // for all ISIS router.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.IsisRouter/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.IsisRouter/properties/name
@@ -8119,82 +7847,82 @@ message IsisMetric {
   optional string name = 1;
 
   // The number of Level 1 (L1) sessions that are fully up.
-  optional int32 l1_sessions_up = 2;
+  optional uint32 l1_sessions_up = 2;
 
   // The number of Level 1 Sessions Flap.
-  optional int32 l1_session_flap = 3;
+  optional uint32 l1_session_flap = 3;
 
   // Number of Level 1 Hello messages sent.
-  optional int32 l1_broadcast_hellos_sent = 4;
+  optional uint64 l1_broadcast_hellos_sent = 4;
 
   // Number of Level 1 Hello messages received.
-  optional int32 l1_broadcast_hellos_received = 5;
+  optional uint64 l1_broadcast_hellos_received = 5;
 
   // Number of Level 1 Point-to-Point(P2P) Hello messages sent.
-  optional int32 l1_point_to_point_hellos_sent = 6;
+  optional uint64 l1_point_to_point_hellos_sent = 6;
 
   // Number of Level 1 Point-to-Point(P2P) Hello messages received.
-  optional int32 l1_point_to_point_hellos_received = 7;
+  optional uint64 l1_point_to_point_hellos_received = 7;
 
   // Number of Link State Updates (LSPs) in the Level 1 LSP Databases.
-  optional int32 l1_database_size = 8;
+  optional uint32 l1_database_size = 8;
 
   // Number of Level 1 (L1) Partial Sequence Number Packet (PSNPs) sent.
-  optional int32 l1_psnp_sent = 9;
+  optional uint64 l1_psnp_sent = 9;
 
   // Number of Level 1 (L1) Complete Sequence Number Packet (PSNPs) received.
-  optional int32 l1_psnp_received = 10;
+  optional uint64 l1_psnp_received = 10;
 
   // Number of Level 1 (L1) Complete Sequence Number Packet (CSNPs) sent.
-  optional int32 l1_csnp_sent = 11;
+  optional uint64 l1_csnp_sent = 11;
 
   // Number of Level 1 (L1) Complete Sequence Number Packet (CSNPs) received.
-  optional int32 l1_csnp_received = 12;
+  optional uint64 l1_csnp_received = 12;
 
   // Number of Level 1 (L1) Link State Protocol Data Units (LSPs) sent.
-  optional int32 l1_lsp_sent = 13;
+  optional uint32 l1_lsp_sent = 13;
 
   // Number of Level 1 (L1) Link State Protocol Data Units (LSPs) received.
-  optional int32 l1_lsp_received = 14;
+  optional uint32 l1_lsp_received = 14;
 
   // The number of Level 2 (L2) sessions that are fully up.
-  optional int32 l2_sessions_up = 15;
+  optional uint32 l2_sessions_up = 15;
 
   // The number of Level 2 Sessions Flap.
-  optional int32 l2_session_flap = 16;
+  optional uint32 l2_session_flap = 16;
 
   // Number of Level 2 Hello messages sent.
-  optional int32 l2_broadcast_hellos_sent = 17;
+  optional uint64 l2_broadcast_hellos_sent = 17;
 
   // Number of Level 2 Hello messages received.
-  optional int32 l2_broadcast_hellos_received = 18;
+  optional uint64 l2_broadcast_hellos_received = 18;
 
   // Number of Level 2 Point-to-Point(P2P) Hello messages sent.
-  optional int32 l2_point_to_point_hellos_sent = 19;
+  optional uint64 l2_point_to_point_hellos_sent = 19;
 
   // Number of Level 2 Point-to-Point(P2P) Hello messages received.
-  optional int32 l2_point_to_point_hellos_received = 20;
+  optional uint64 l2_point_to_point_hellos_received = 20;
 
   // Number of Link State Updates (LSPs) in the Level 2 LSP Databases.
-  optional int32 l2_database_size = 21;
+  optional uint32 l2_database_size = 21;
 
   // Number of Level 2 (L2) Partial Sequence Number Packet (PSNPs) sent.
-  optional int32 l2_psnp_sent = 22;
+  optional uint64 l2_psnp_sent = 22;
 
   // Number of Level 2 (L2) Complete Sequence Number Packet (PSNPs) received.
-  optional int32 l2_psnp_received = 23;
+  optional uint64 l2_psnp_received = 23;
 
   // Number of Level 2 (L2) Complete Sequence Number Packet (CSNPs) sent.
-  optional int32 l2_csnp_sent = 24;
+  optional uint64 l2_csnp_sent = 24;
 
   // Number of Level 2 (L2) Complete Sequence Number Packet (CSNPs) received.
-  optional int32 l2_csnp_received = 25;
+  optional uint64 l2_csnp_received = 25;
 
   // Number of Level 2 (L2) Link State Protocol Data Units (LSPs) sent.
-  optional int32 l2_lsp_sent = 26;
+  optional uint32 l2_lsp_sent = 26;
 
   // Number of Level 2 (L2) Link State Protocol Data Units (LSPs) received.
-  optional int32 l2_lsp_received = 27;
+  optional uint32 l2_lsp_received = 27;
 }
 
 // The request to retrieve per LAG metrics/statistics.
@@ -8202,10 +7930,6 @@ message LagMetricsRequest {
 
   // The names of LAGs to return results for. An empty list will return results for all
   // LAGs.
-  // 
-  // x-constraint:
-  // - /components/schemas/Lag/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Lag/properties/name
@@ -8240,10 +7964,6 @@ message LagMetric {
   // x-constraint:
   // - /components/schemas/Lag/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Lag/properties/name
-  // 
   optional string name = 1;
 
   message OperStatus {
@@ -8258,19 +7978,19 @@ message LagMetric {
   optional OperStatus.Enum oper_status = 2;
 
   // The number of LAG member ports up.
-  optional int32 member_ports_up = 3;
+  optional uint64 member_ports_up = 3;
 
   // The current total number of frames transmitted.
-  optional int64 frames_tx = 4;
+  optional uint64 frames_tx = 4;
 
   // The current total number of valid frames received.
-  optional int64 frames_rx = 5;
+  optional uint64 frames_rx = 5;
 
   // The current total number of bytes transmitted.
-  optional int64 bytes_tx = 6;
+  optional uint64 bytes_tx = 6;
 
   // The current total number of valid bytes received.
-  optional int64 bytes_rx = 7;
+  optional uint64 bytes_rx = 7;
 
   // The current rate of frames transmitted.
   optional float frames_tx_rate = 8;
@@ -8294,18 +8014,10 @@ message LacpMetricsRequest {
   // x-constraint:
   // - /components/schemas/Lag/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Lag/properties/name
-  // 
   repeated string lag_names = 1;
 
   // The names of LAG members (ports) for which LACP metrics to be returned. An empty
   // list will return metrics for all LAG members.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -8348,13 +8060,13 @@ message LacpMetric {
   optional string lag_member_port_name = 2;
 
   // Number of LACPDUs received.
-  optional int64 lacp_packets_rx = 3;
+  optional uint64 lacp_packets_rx = 3;
 
   // Number of LACPDUs transmitted.
-  optional int64 lacp_packets_tx = 4;
+  optional uint64 lacp_packets_tx = 4;
 
   // Number of LACPDUs receive packet errors.
-  optional int64 lacp_rx_errors = 5;
+  optional uint64 lacp_rx_errors = 5;
 
   message Activity {
     enum Enum {
@@ -8402,19 +8114,19 @@ message LacpMetric {
   optional string system_id = 12;
 
   // Current operational value of the key for the aggregate interface.
-  optional int32 oper_key = 13;
+  optional uint32 oper_key = 13;
 
   // MAC address representing the protocol partner's interface system ID.
   optional string partner_id = 14;
 
   // Operational value of the protocol partner's key.
-  optional int32 partner_key = 15;
+  optional uint32 partner_key = 15;
 
   // Port number of the local (actor) aggregation member.
-  optional int32 port_num = 16;
+  optional uint32 port_num = 16;
 
   // Port number of the partner (remote) port for this member port.
-  optional int32 partner_port_num = 17;
+  optional uint32 partner_port_num = 17;
 }
 
 // The request to retrieve LLDP per instance metrics/statistics.
@@ -8422,10 +8134,6 @@ message LldpMetricsRequest {
 
   // The names of LLDP instances to return results for. An empty list will return results
   // for all LLDP instances.
-  // 
-  // x-constraint:
-  // - /components/schemas/Lldp/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Lldp/properties/name
@@ -8455,32 +8163,32 @@ message LldpMetric {
   optional string name = 1;
 
   // Number of LLDP frames received.
-  optional int64 frames_rx = 2;
+  optional uint64 frames_rx = 2;
 
   // Number of LLDP frames transmitted.
-  optional int64 frames_tx = 3;
+  optional uint64 frames_tx = 3;
 
   // Number of LLDP frames received with packet errors. This stat should be incremented
   // based on statsFramesInErrorsTotal increment rule in section 10.3.2 of IEEE Std 802.1
   // AB-2005.
-  optional int64 frames_error_rx = 4;
+  optional uint64 frames_error_rx = 4;
 
   // Number of LLDP frames received that are discarded. This stat should be incremented
   // when one or more of the three mandatory  TLVs at the beginning of the LLDPDU is missing,
   // out of order or  contains an out of range information string length. This stat should
   // follow the validation rules in section 10.3.2 of IEEE  Std 802.1 AB-2005.
-  optional int64 frames_discard = 5;
+  optional uint64 frames_discard = 5;
 
   // Number of LLDP tlvs received that are discarded. If any TLV contains  an error condition
   // specific for that particular TLV or if any TLV  extends past the physical end of
   // the frame then these TLVs will be discarded.
-  optional int64 tlvs_discard = 6;
+  optional uint64 tlvs_discard = 6;
 
   // Number of LLDP unknown tlvs received. If the OUI of the organizationlly specific
   // TLV and/or organizationally defined subtype are not recognized,or if TLV type  value
   // is in the range of reserved TLV types then these TLVs will be considered as  unknown
   // TLVs.
-  optional int64 tlvs_unknown = 7;
+  optional uint64 tlvs_unknown = 7;
 }
 
 // The request to retrieve RSVP-TE per Router metrics/statistics.
@@ -8488,10 +8196,6 @@ message RsvpMetricsRequest {
 
   // The names of RSVP-TE Routers to return results for. An empty list as input will return
   // results for all RSVP-TE routers.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Rsvp/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Rsvp/properties/name
@@ -8547,100 +8251,100 @@ message RsvpMetric {
 
   // The number of ingress point-to-point LSPs configured or transiting through the RSVP
   // router which have been initated from the test port.
-  optional int32 ingress_p2p_lsps_configured = 2;
+  optional uint32 ingress_p2p_lsps_configured = 2;
 
   // The number of ingress point-to-point LSPs for which Resv has been received and is
   // currently up.
-  optional int32 ingress_p2p_lsps_up = 3;
+  optional uint32 ingress_p2p_lsps_up = 3;
 
   // The number of egress point-to-point LSPs for which Path requests were successfully
   // processed and is currently up.
-  optional int32 egress_p2p_lsps_up = 4;
+  optional uint32 egress_p2p_lsps_up = 4;
 
   // The number of times an LSP went from up to down state either because it timed out
   // while waiting for Refreshes or  a PathTear or ResvTear message was received which
   // caused the LSP to flap.
-  optional int32 lsp_flap_count = 5;
+  optional uint32 lsp_flap_count = 5;
 
   // The number of Path messages sent by this RSVP router.
-  optional int32 paths_tx = 6;
+  optional uint64 paths_tx = 6;
 
   // The number of Path messages received by this RSVP router.
-  optional int32 paths_rx = 7;
+  optional uint64 paths_rx = 7;
 
   // The number of Resv messages sent by this RSVP router.
-  optional int32 resvs_tx = 8;
+  optional uint64 resvs_tx = 8;
 
   // The number of Resv messages received by this RSVP router.
-  optional int32 resvs_rx = 9;
+  optional uint64 resvs_rx = 9;
 
   // The number of  Path Tear messages sent by this RSVP router.
-  optional int32 path_tears_tx = 10;
+  optional uint64 path_tears_tx = 10;
 
   // The number of Path Tear messages received by this RSVP router.
-  optional int32 path_tears_rx = 11;
+  optional uint64 path_tears_rx = 11;
 
   // The number of  Resv Tear messages sent by this RSVP router.
-  optional int32 resv_tears_tx = 12;
+  optional uint64 resv_tears_tx = 12;
 
   // The number of Resv Tear messages received by this RSVP router.
-  optional int32 resv_tears_rx = 13;
+  optional uint64 resv_tears_rx = 13;
 
   // The number of Path Error messages sent by this RSVP router.
-  optional int32 path_errors_tx = 14;
+  optional uint64 path_errors_tx = 14;
 
   // The number of Path Error messages received by this RSVP router.
-  optional int32 path_errors_rx = 15;
+  optional uint64 path_errors_rx = 15;
 
   // The number of Resv Error messages sent by this RSVP router.
-  optional int32 resv_errors_tx = 16;
+  optional uint64 resv_errors_tx = 16;
 
   // The number of Resv Error messages received by this RSVP router.
-  optional int32 resv_errors_rx = 17;
+  optional uint64 resv_errors_rx = 17;
 
   // The number of ResvConf messages sent by this RSVP router.
-  optional int32 resv_conf_tx = 18;
+  optional uint64 resv_conf_tx = 18;
 
   // The number of ResvConf messages received by this RSVP router.
-  optional int32 resv_conf_rx = 19;
+  optional uint64 resv_conf_rx = 19;
 
   // The number of Hello messages sent by this RSVP router.
-  optional int32 hellos_tx = 20;
+  optional uint64 hellos_tx = 20;
 
   // The number of Hello messages received by this RSVP router.
-  optional int32 hellos_rx = 21;
+  optional uint64 hellos_rx = 21;
 
   // The number of Ack messages sent by this RSVP router.
-  optional int32 acks_tx = 22;
+  optional uint64 acks_tx = 22;
 
   // The number of Ack messages received by this RSVP router.
-  optional int32 acks_rx = 23;
+  optional uint64 acks_rx = 23;
 
   // The number of Nack messages sent by this RSVP router.
-  optional int32 nacks_tx = 24;
+  optional uint64 nacks_tx = 24;
 
   // The number of Nack messages received by this RSVP router.
-  optional int32 nacks_rx = 25;
+  optional uint64 nacks_rx = 25;
 
   // The number of SRefresh messages sent by this RSVP router.
-  optional int32 srefresh_tx = 26;
+  optional uint64 srefresh_tx = 26;
 
   // The number of SRefresh messages received by this RSVP router.
-  optional int32 srefresh_rx = 27;
+  optional uint64 srefresh_rx = 27;
 
   // The number of Bundle messages sent by this RSVP router.
-  optional int32 bundle_tx = 28;
+  optional uint64 bundle_tx = 28;
 
   // The number of Bundle messages received by this RSVP router.
-  optional int32 bundle_rx = 29;
+  optional uint64 bundle_rx = 29;
 
   // The number of Path messages with Path Re-evaluation Request enabled sent by this
   // RSVP router.
-  optional int32 path_reevaluation_request_tx = 30;
+  optional uint64 path_reevaluation_request_tx = 30;
 
   // The number of successfully completed Make-Before-Break operations on LSPs on this
   // RSVP router.
-  optional int32 path_reoptimizations = 31;
+  optional uint64 path_reoptimizations = 31;
 }
 
 // Request to traffic generator for states of choice
@@ -8727,10 +8431,6 @@ message Neighborsv4StatesRequest {
   // x-constraint:
   // - /components/schemas/Device.Ethernet/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ethernet/properties/name
-  // 
   repeated string ethernet_names = 1;
 }
 
@@ -8760,10 +8460,6 @@ message Neighborsv6StatesRequest {
   // x-constraint:
   // - /components/schemas/Device.Ethernet/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ethernet/properties/name
-  // 
   repeated string ethernet_names = 1;
 }
 
@@ -8789,11 +8485,6 @@ message BgpPrefixStateRequest {
   // The names of BGP peers for which prefix information will be retrieved. If no names
   // are specified then the results will contain prefix information for all configured
   // BGP peers.
-  // 
-  // x-constraint:
-  // - /components/schemas/Bgp.V4Peer/properties/name
-  // - /components/schemas/Bgp.V6Peer/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Bgp.V4Peer/properties/name
@@ -8832,7 +8523,7 @@ message BgpPrefixIpv4UnicastFilter {
 
   // The prefix length to match. If the prefix length is missing then all prefix lengths
   // will match.
-  optional int32 prefix_length = 2;
+  optional uint32 prefix_length = 2;
 
   message Origin {
     enum Enum {
@@ -8846,7 +8537,7 @@ message BgpPrefixIpv4UnicastFilter {
   optional Origin.Enum origin = 3;
 
   // The path id to match. If the path id is missing then all path ids will match.
-  optional int32 path_id = 4;
+  optional uint32 path_id = 4;
 }
 
 // Description missing in models
@@ -8858,7 +8549,7 @@ message BgpPrefixIpv6UnicastFilter {
 
   // The prefix length to match. If the prefix length is missing then all prefix lengths
   // will match.
-  optional int32 prefix_length = 2;
+  optional uint32 prefix_length = 2;
 
   message Origin {
     enum Enum {
@@ -8872,7 +8563,7 @@ message BgpPrefixIpv6UnicastFilter {
   optional Origin.Enum origin = 3;
 
   // The path id to match. If the path id is missing then all path ids will match.
-  optional int32 path_id = 4;
+  optional uint32 path_id = 4;
 }
 
 // BGP peer prefixes.
@@ -8895,7 +8586,7 @@ message BgpPrefixIpv4UnicastState {
   optional string ipv4_address = 1;
 
   // The length of the prefix.
-  optional int32 prefix_length = 2;
+  optional uint32 prefix_length = 2;
 
   message Origin {
     enum Enum {
@@ -8909,7 +8600,7 @@ message BgpPrefixIpv4UnicastState {
   optional Origin.Enum origin = 3;
 
   // The path id.
-  optional int32 path_id = 4;
+  optional uint32 path_id = 4;
 
   // The IPv4 address of the egress interface.
   optional string ipv4_next_hop = 5;
@@ -8922,14 +8613,6 @@ message BgpPrefixIpv4UnicastState {
 
   // Description missing in models
   optional ResultBgpAsPath as_path = 8;
-
-  // The local preference is a well-known attribute and the value is used for route selection.
-  // The route with the highest local preference value is preferred.
-  optional uint32 local_preference = 9;
-
-  // The multi exit discriminator (MED) is an optional non-transitive attribute and the
-  // value is used for route selection. The route with the lowest MED value is preferred.
-  optional uint32 multi_exit_discriminator = 10;
 }
 
 // IPv6 unicast prefix.
@@ -8939,7 +8622,7 @@ message BgpPrefixIpv6UnicastState {
   optional string ipv6_address = 1;
 
   // The length of the prefix.
-  optional int32 prefix_length = 2;
+  optional uint32 prefix_length = 2;
 
   message Origin {
     enum Enum {
@@ -8953,7 +8636,7 @@ message BgpPrefixIpv6UnicastState {
   optional Origin.Enum origin = 3;
 
   // The path id.
-  optional int32 path_id = 4;
+  optional uint32 path_id = 4;
 
   // The IPv4 address of the egress interface.
   optional string ipv4_next_hop = 5;
@@ -8966,14 +8649,6 @@ message BgpPrefixIpv6UnicastState {
 
   // Description missing in models
   optional ResultBgpAsPath as_path = 8;
-
-  // The local preference is a well-known attribute and the value is used for route selection.
-  // The route with the highest local preference value is preferred.
-  optional uint32 local_preference = 9;
-
-  // The multi exit discriminator (MED) is an optional non-transitive attribute and the
-  // value is used for route selection. The route with the lowest MED value is preferred.
-  optional uint32 multi_exit_discriminator = 10;
 }
 
 // BGP communities provide additional capability for tagging routes and  for modifying
@@ -9034,7 +8709,7 @@ message ResultBgpAsPathSegment {
   optional Type.Enum type = 1;
 
   // The AS numbers in this AS path segment.
-  repeated int64 as_numbers = 2;
+  repeated uint32 as_numbers = 2;
 }
 
 // The request to retrieve ISIS Link State PDU (LSP) information learned by the router.
@@ -9042,10 +8717,6 @@ message IsisLspsStateRequest {
 
   // The names of ISIS routers for which learned information is requested. An empty list
   // will return results for all ISIS routers.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.IsisRouter/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.IsisRouter/properties/name
@@ -9087,13 +8758,13 @@ message IsisLspState {
   optional PduType.Enum pdu_type = 2;
 
   // Remaining lifetime in seconds before LSP expires.
-  optional int64 remaining_lifetime = 3;
+  optional uint64 remaining_lifetime = 3;
 
   // Sequence number of the LSP.
-  optional int64 sequence_number = 4;
+  optional uint64 sequence_number = 4;
 
   // Total length of the LSP.
-  optional int32 pdu_length = 5;
+  optional uint32 pdu_length = 5;
 
   // LSP Type-Block flags.
   optional IsisLspFlags flags = 6;
@@ -9102,7 +8773,7 @@ message IsisLspState {
   // 1 - ( i.e. bit 1 set) Level 1 Intermediate system.
   // 2 - Unused value.
   // 3 - (i.e. bits 1 and 2 set) Level 2 Intermediate system.
-  optional int32 is_type = 7;
+  optional uint32 is_type = 7;
 
   // It refers to Link State PDU State TLVs container.
   optional IsisLspTlvs tlvs = 8;
@@ -9214,7 +8885,7 @@ message IsisLspV4Prefix {
   optional string ipv4_address = 1;
 
   // The length of the IPv4 prefix.
-  optional int32 prefix_length = 2;
+  optional uint32 prefix_length = 2;
 
   message RedistributionType {
     enum Enum {
@@ -9231,7 +8902,7 @@ message IsisLspV4Prefix {
   optional RedistributionType.Enum redistribution_type = 3;
 
   // ISIS default metric value.
-  optional int32 default_metric = 4;
+  optional uint32 default_metric = 4;
 
   message OriginType {
     enum Enum {
@@ -9264,10 +8935,10 @@ message IsisLspExtendedV4Prefix {
   optional string ipv4_address = 1;
 
   // The length of the IPv4 prefix.
-  optional int32 prefix_length = 2;
+  optional uint32 prefix_length = 2;
 
   // ISIS wide metric.
-  optional int32 metric = 3;
+  optional uint32 metric = 3;
 
   message RedistributionType {
     enum Enum {
@@ -9302,10 +8973,10 @@ message IsisLspV6Prefix {
   optional string ipv6_address = 1;
 
   // The length of the IPv6 prefix.
-  optional int32 prefix_length = 2;
+  optional uint32 prefix_length = 2;
 
   // ISIS wide metric.
-  optional int32 metric = 3;
+  optional uint32 metric = 3;
 
   message RedistributionType {
     enum Enum {
@@ -9363,10 +9034,6 @@ message LldpNeighborsStateRequest {
   // x-constraint:
   // - /components/schemas/Lldp/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Lldp/properties/name
-  // 
   repeated string lldp_names = 1;
 
   // Specify the neighbors for which information will be returned. If empty  or missing
@@ -9417,14 +9084,14 @@ message LldpNeighborsState {
   optional string neighbor_id = 6;
 
   // Age since discovery in seconds.
-  optional int64 age = 7;
+  optional uint64 age = 7;
 
   // Seconds since last update received.
-  optional int64 last_update = 8;
+  optional uint64 last_update = 8;
 
   // The time-to-live (TTL) in seconds is a mandatory TLV which indicates how long information
   // from the neighbor  should be considered valid.
-  optional int32 ttl = 9;
+  optional uint32 ttl = 9;
 
   // The Port ID is a mandatory TLV which identifies the port component of the endpoint
   // identifier associated with  the transmitting LLDP agent. If the specified port is
@@ -9474,7 +9141,7 @@ message LldpNeighborsState {
 message LldpCustomTLVState {
 
   // The integer value identifying the type of information contained in the value field.
-  optional int32 custom_type = 1;
+  optional uint32 custom_type = 1;
 
   // The organizationally unique identifier field shall contain the organization's OUI
   // as defined in Clause 9 of IEEE Std 802. The high-order octet is 0 and the low-order
@@ -9525,10 +9192,6 @@ message RsvpLspsStateRequest {
   // x-constraint:
   // - /components/schemas/Device.Rsvp/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Rsvp/properties/name
-  // 
   repeated string rsvp_router_names = 1;
 }
 
@@ -9566,21 +9229,21 @@ message RsvpLspState {
 
   // The tunnel id of RSVP session which acts as an identifier that remains constant over
   // the life of the tunnel.
-  optional int32 tunnel_id = 1;
+  optional uint32 tunnel_id = 1;
 
   // The lsp-id of RSVP session which acts as a differentiator for two lsps originating
   // from the same headend, commonly used to distinguish RSVP sessions during make before
   // break operations.
-  optional int32 lsp_id = 2;
+  optional uint32 lsp_id = 2;
 
   // The value of RSVP-TE Session Name field of the Session Attribute object.
   optional string session_name = 3;
 
   // The label received by RSVP-TE ingress.
-  optional int32 label_in = 4;
+  optional uint32 label_in = 4;
 
   // The label assigned by RSVP-TE egress.
-  optional int32 label_out = 5;
+  optional uint32 label_out = 5;
 
   message SessionStatus {
     enum Enum {
@@ -9604,7 +9267,7 @@ message RsvpLspState {
   optional LastFlapReason.Enum last_flap_reason = 7;
 
   // The tunnel UP time in milli seconds. If the tunnel is DOWN the UP time will be zero.
-  optional int64 up_time = 8;
+  optional uint64 up_time = 8;
 }
 
 // This contains the list of Record Route Object(RRO) objects associated with the traffic
@@ -9623,7 +9286,7 @@ message RsvpLspIpv4Rro {
   // Label reported for RRO hop. When the Label_Recording flag is set in the Session Attribute
   // object, nodes doing route recording should include the Label Record subobject containing
   // the reported label.
-  optional int32 reported_label = 2;
+  optional uint32 reported_label = 2;
 }
 
 // This contains the list of sub-objects included in the Explicit Route Object(ERO)
@@ -9637,7 +9300,7 @@ message RsvpLspIpv4Ero {
 
   // The autonomous system number indicated by the ERO. Specified only when the ERO hop
   // is an  2 or 4-byte AS number.
-  optional int32 asn = 2;
+  optional uint32 asn = 2;
 
   message Type {
     enum Enum {
@@ -9663,10 +9326,6 @@ message CaptureRequest {
   // x-constraint:
   // - /components/schemas/Port/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // required = true
   string port_name = 1;
 }
@@ -9684,7 +9343,7 @@ message PatternFlowEthernetDstCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -9763,7 +9422,7 @@ message PatternFlowEthernetSrcCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -9835,7 +9494,7 @@ message PatternFlowEthernetEtherTypeCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -9914,7 +9573,7 @@ message PatternFlowEthernetPfcQueueCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -9986,7 +9645,7 @@ message PatternFlowVlanPriorityCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -10058,7 +9717,7 @@ message PatternFlowVlanCfiCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -10130,7 +9789,7 @@ message PatternFlowVlanIdCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -10202,7 +9861,7 @@ message PatternFlowVlanTpidCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -10274,7 +9933,7 @@ message PatternFlowVxlanFlagsCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -10348,7 +10007,7 @@ message PatternFlowVxlanReserved0Counter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -10420,7 +10079,7 @@ message PatternFlowVxlanVniCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -10499,7 +10158,7 @@ message PatternFlowVxlanReserved1Counter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -10571,7 +10230,7 @@ message PatternFlowIpv4VersionCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -10643,7 +10302,7 @@ message PatternFlowIpv4HeaderLengthCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -10722,7 +10381,7 @@ message PatternFlowIpv4TotalLengthCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -10801,7 +10460,7 @@ message PatternFlowIpv4IdentificationCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -10873,7 +10532,7 @@ message PatternFlowIpv4ReservedCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -10945,7 +10604,7 @@ message PatternFlowIpv4DontFragmentCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -11018,7 +10677,7 @@ message PatternFlowIpv4MoreFragmentsCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -11090,7 +10749,7 @@ message PatternFlowIpv4FragmentOffsetCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -11162,7 +10821,7 @@ message PatternFlowIpv4TimeToLiveCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -11234,7 +10893,7 @@ message PatternFlowIpv4ProtocolCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -11342,7 +11001,7 @@ message PatternFlowIpv4SrcCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -11414,7 +11073,7 @@ message PatternFlowIpv4DstCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -11486,7 +11145,7 @@ message PatternFlowIpv4PriorityRawCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -11558,7 +11217,7 @@ message PatternFlowIpv4DscpPhbCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -11630,7 +11289,7 @@ message PatternFlowIpv4DscpEcnCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -11702,7 +11361,7 @@ message PatternFlowIpv4TosPrecedenceCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -11774,7 +11433,7 @@ message PatternFlowIpv4TosDelayCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -11846,7 +11505,7 @@ message PatternFlowIpv4TosThroughputCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -11918,7 +11577,7 @@ message PatternFlowIpv4TosReliabilityCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -11990,7 +11649,7 @@ message PatternFlowIpv4TosMonetaryCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -12062,7 +11721,7 @@ message PatternFlowIpv4TosUnusedCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -12134,7 +11793,7 @@ message PatternFlowIpv6VersionCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -12206,7 +11865,7 @@ message PatternFlowIpv6TrafficClassCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -12278,7 +11937,7 @@ message PatternFlowIpv6FlowLabelCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -12350,7 +12009,7 @@ message PatternFlowIpv6PayloadLengthCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -12429,7 +12088,7 @@ message PatternFlowIpv6NextHeaderCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -12508,7 +12167,7 @@ message PatternFlowIpv6HopLimitCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -12580,7 +12239,7 @@ message PatternFlowIpv6SrcCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -12652,7 +12311,7 @@ message PatternFlowIpv6DstCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -12724,7 +12383,7 @@ message PatternFlowPfcPauseDstCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -12796,7 +12455,7 @@ message PatternFlowPfcPauseSrcCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -12868,7 +12527,7 @@ message PatternFlowPfcPauseEtherTypeCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -12940,7 +12599,7 @@ message PatternFlowPfcPauseControlOpCodeCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -13012,7 +12671,7 @@ message PatternFlowPfcPauseClassEnableVectorCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -13084,7 +12743,7 @@ message PatternFlowPfcPausePauseClass0Counter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -13156,7 +12815,7 @@ message PatternFlowPfcPausePauseClass1Counter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -13228,7 +12887,7 @@ message PatternFlowPfcPausePauseClass2Counter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -13300,7 +12959,7 @@ message PatternFlowPfcPausePauseClass3Counter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -13372,7 +13031,7 @@ message PatternFlowPfcPausePauseClass4Counter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -13444,7 +13103,7 @@ message PatternFlowPfcPausePauseClass5Counter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -13516,7 +13175,7 @@ message PatternFlowPfcPausePauseClass6Counter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -13588,7 +13247,7 @@ message PatternFlowPfcPausePauseClass7Counter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -13660,7 +13319,7 @@ message PatternFlowEthernetPauseDstCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -13732,7 +13391,7 @@ message PatternFlowEthernetPauseSrcCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -13804,7 +13463,7 @@ message PatternFlowEthernetPauseEtherTypeCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -13876,7 +13535,7 @@ message PatternFlowEthernetPauseControlOpCodeCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -13948,7 +13607,7 @@ message PatternFlowEthernetPauseTimeCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -14020,7 +13679,7 @@ message PatternFlowTcpSrcPortCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -14092,7 +13751,7 @@ message PatternFlowTcpDstPortCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -14164,7 +13823,7 @@ message PatternFlowTcpSeqNumCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -14236,7 +13895,7 @@ message PatternFlowTcpAckNumCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -14308,7 +13967,7 @@ message PatternFlowTcpDataOffsetCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -14380,7 +14039,7 @@ message PatternFlowTcpEcnNsCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -14452,7 +14111,7 @@ message PatternFlowTcpEcnCwrCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -14524,7 +14183,7 @@ message PatternFlowTcpEcnEchoCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -14597,7 +14256,7 @@ message PatternFlowTcpCtlUrgCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -14669,7 +14328,7 @@ message PatternFlowTcpCtlAckCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -14741,7 +14400,7 @@ message PatternFlowTcpCtlPshCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -14813,7 +14472,7 @@ message PatternFlowTcpCtlRstCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -14885,7 +14544,7 @@ message PatternFlowTcpCtlSynCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -14957,7 +14616,7 @@ message PatternFlowTcpCtlFinCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -15029,7 +14688,7 @@ message PatternFlowTcpWindowCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -15101,7 +14760,7 @@ message PatternFlowUdpSrcPortCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -15173,7 +14832,7 @@ message PatternFlowUdpDstPortCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -15245,7 +14904,7 @@ message PatternFlowUdpLengthCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -15346,7 +15005,7 @@ message PatternFlowGreChecksumPresentCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -15418,7 +15077,7 @@ message PatternFlowGreReserved0Counter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -15490,7 +15149,7 @@ message PatternFlowGreVersionCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -15562,7 +15221,7 @@ message PatternFlowGreProtocolCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -15664,7 +15323,7 @@ message PatternFlowGreReserved1Counter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -15736,7 +15395,7 @@ message PatternFlowGtpv1VersionCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -15808,7 +15467,7 @@ message PatternFlowGtpv1ProtocolTypeCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -15880,7 +15539,7 @@ message PatternFlowGtpv1ReservedCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -15952,7 +15611,7 @@ message PatternFlowGtpv1EFlagCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -16024,7 +15683,7 @@ message PatternFlowGtpv1SFlagCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -16096,7 +15755,7 @@ message PatternFlowGtpv1PnFlagCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -16168,7 +15827,7 @@ message PatternFlowGtpv1MessageTypeCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -16241,7 +15900,7 @@ message PatternFlowGtpv1MessageLengthCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -16314,7 +15973,7 @@ message PatternFlowGtpv1TeidCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -16386,7 +16045,7 @@ message PatternFlowGtpv1SquenceNumberCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -16459,7 +16118,7 @@ message PatternFlowGtpv1NPduNumberCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -16532,7 +16191,7 @@ message PatternFlowGtpv1NextExtensionHeaderTypeCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -16605,7 +16264,7 @@ message PatternFlowGtpExtensionExtensionLengthCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -16679,7 +16338,7 @@ message PatternFlowGtpExtensionContentsCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -16751,7 +16410,7 @@ message PatternFlowGtpExtensionNextExtensionHeaderCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -16824,7 +16483,7 @@ message PatternFlowGtpv2VersionCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -16896,7 +16555,7 @@ message PatternFlowGtpv2PiggybackingFlagCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -16969,7 +16628,7 @@ message PatternFlowGtpv2TeidFlagCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -17043,7 +16702,7 @@ message PatternFlowGtpv2Spare1Counter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -17115,7 +16774,7 @@ message PatternFlowGtpv2MessageTypeCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -17188,7 +16847,7 @@ message PatternFlowGtpv2MessageLengthCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -17261,7 +16920,7 @@ message PatternFlowGtpv2TeidCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -17334,7 +16993,7 @@ message PatternFlowGtpv2SequenceNumberCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -17406,7 +17065,7 @@ message PatternFlowGtpv2Spare2Counter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -17478,7 +17137,7 @@ message PatternFlowArpHardwareTypeCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -17550,7 +17209,7 @@ message PatternFlowArpProtocolTypeCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -17622,7 +17281,7 @@ message PatternFlowArpHardwareLengthCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -17694,7 +17353,7 @@ message PatternFlowArpProtocolLengthCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -17766,7 +17425,7 @@ message PatternFlowArpOperationCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -17838,7 +17497,7 @@ message PatternFlowArpSenderHardwareAddrCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -17910,7 +17569,7 @@ message PatternFlowArpSenderProtocolAddrCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -17982,7 +17641,7 @@ message PatternFlowArpTargetHardwareAddrCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -18054,7 +17713,7 @@ message PatternFlowArpTargetProtocolAddrCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -18126,7 +17785,7 @@ message PatternFlowIcmpEchoTypeCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -18198,7 +17857,7 @@ message PatternFlowIcmpEchoCodeCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -18299,7 +17958,7 @@ message PatternFlowIcmpEchoIdentifierCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -18371,7 +18030,7 @@ message PatternFlowIcmpEchoSequenceNumberCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -18472,7 +18131,7 @@ message PatternFlowIcmpNextFieldsIdentifierCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -18544,7 +18203,7 @@ message PatternFlowIcmpNextFieldsSequenceNumberCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -18616,7 +18275,7 @@ message PatternFlowIcmpv6EchoTypeCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -18688,7 +18347,7 @@ message PatternFlowIcmpv6EchoCodeCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -18760,7 +18419,7 @@ message PatternFlowIcmpv6EchoIdentifierCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -18832,7 +18491,7 @@ message PatternFlowIcmpv6EchoSequenceNumberCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -18962,7 +18621,7 @@ message PatternFlowPppAddressCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -19034,7 +18693,7 @@ message PatternFlowPppControlCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -19106,7 +18765,7 @@ message PatternFlowPppProtocolTypeCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -19185,7 +18844,7 @@ message PatternFlowIgmpv1VersionCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -19257,7 +18916,7 @@ message PatternFlowIgmpv1TypeCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -19329,7 +18988,7 @@ message PatternFlowIgmpv1UnusedCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -19430,7 +19089,7 @@ message PatternFlowIgmpv1GroupAddressCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -19502,7 +19161,7 @@ message PatternFlowMplsLabelCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -19581,7 +19240,7 @@ message PatternFlowMplsTrafficClassCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -19653,7 +19312,7 @@ message PatternFlowMplsBottomOfStackCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -19732,7 +19391,7 @@ message PatternFlowMplsTimeToLiveCounter {
 
   // Description missing in models
   // default = 1
-  optional int32 count = 3;
+  optional uint32 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -19970,8 +19629,6 @@ service Openapi {
   rpc SetControlAction(SetControlActionRequest) returns (SetControlActionResponse);
   // Deprecated: Please use `set_control_state` with `traffic.flow_transmit` choice instead
   // 
-  // Deprecated: Please use `set_control_state` with `traffic.flow_transmit` choice instead
-  // 
   // Updates the state of configuration resources on the traffic generator.
   // The Response.Warnings in the Success response is available for implementers to disclose
   // additional information about a state change including any implicit changes that are
@@ -19979,30 +19636,20 @@ service Openapi {
   rpc SetTransmitState(SetTransmitStateRequest) returns (SetTransmitStateResponse);
   // Deprecated: Please use `set_control_state` with `port.link` choice instead
   // 
-  // Deprecated: Please use `set_control_state` with `port.link` choice instead
-  // 
   // Updates the state of configuration resources on the traffic generator.
   rpc SetLinkState(SetLinkStateRequest) returns (SetLinkStateResponse);
-  // Deprecated: Please use `set_control_state` with `port.capture` choice instead
-  // 
   // Deprecated: Please use `set_control_state` with `port.capture` choice instead
   // 
   // Updates the state of configuration resources on the traffic generator.
   rpc SetCaptureState(SetCaptureStateRequest) returns (SetCaptureStateResponse);
   // Deprecated: Please use `update_config` with `flow` choice instead
   // 
-  // Deprecated: Please use `update_config` with `flow` choice instead
-  // 
   // Updates flow properties without disruption of transmit state.
   rpc UpdateFlows(UpdateFlowsRequest) returns (UpdateFlowsResponse);
   // Deprecated: Please use `set_control_state` with `protocol.route` choice instead
   // 
-  // Deprecated: Please use `set_control_state` with `protocol.route` choice instead
-  // 
   // Updates the state of configuration resources on the traffic generator.
   rpc SetRouteState(SetRouteStateRequest) returns (SetRouteStateResponse);
-  // Deprecated: Please use `set_control_action` with `protocol.ipv*.ping` choice instead
-  // 
   // Deprecated: Please use `set_control_action` with `protocol.ipv*.ping` choice instead
   // 
   // API to send an IPv4 and/or IPv6 ICMP Echo Request(s) between endpoints. For each
@@ -20011,12 +19658,8 @@ service Openapi {
   rpc SendPing(SendPingRequest) returns (SendPingResponse);
   // Deprecated: Please use `set_control_state` with `protocol.all` choice instead
   // 
-  // Deprecated: Please use `set_control_state` with `protocol.all` choice instead
-  // 
   // Sets all configured protocols to `start` or `stop` state.
   rpc SetProtocolState(SetProtocolStateRequest) returns (SetProtocolStateResponse);
-  // Deprecated: Please use `set_control_state` with `protocol` choice instead
-  // 
   // Deprecated: Please use `set_control_state` with `protocol` choice instead
   // 
   // Set specific state/actions on device configuration resources on the traffic generator.
