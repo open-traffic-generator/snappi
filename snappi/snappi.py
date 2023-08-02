@@ -26007,6 +26007,12 @@ class PatternFlowEthernetEtherType(OpenApiObject):
         "auto": 65535,
     }  # type: Dict[str, Union(type)]
 
+    IPV4 = 2048  #
+    IPV6 = 34525  #
+    ARP = 2054  #
+    VLAN_802_1_Q = 33024  #
+    RESERVED = 65535  #
+
     VALUE = "value"  # type: str
     VALUES = "values"  # type: str
     AUTO = "auto"  # type: str
@@ -26183,6 +26189,12 @@ class PatternFlowEthernetEtherTypeCounter(OpenApiObject):
         "step": 1,
         "count": 1,
     }  # type: Dict[str, Union(type)]
+
+    IPV4 = 2048  #
+    IPV6 = 34525  #
+    ARP = 2054  #
+    VLAN_802_1_Q = 33024  #
+    RESERVED = 65535  #
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
@@ -28307,6 +28319,12 @@ class PatternFlowVlanTpid(OpenApiObject):
         "values": [33024],
     }  # type: Dict[str, Union(type)]
 
+    X8100 = 33024  #
+    X88A8 = 34984  #
+    X9100 = 37120  #
+    X9200 = 37376  #
+    X9300 = 37632  #
+
     VALUE = "value"  # type: str
     VALUES = "values"  # type: str
     INCREMENT = "increment"  # type: str
@@ -28465,6 +28483,12 @@ class PatternFlowVlanTpidCounter(OpenApiObject):
         "step": 1,
         "count": 1,
     }  # type: Dict[str, Union(type)]
+
+    X8100 = 33024  #
+    X88A8 = 34984  #
+    X9100 = 37120  #
+    X9200 = 37376  #
+    X9300 = 37632  #
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
@@ -32340,6 +32364,15 @@ class PatternFlowIpv4TosPrecedence(OpenApiObject):
         "values": [0],
     }  # type: Dict[str, Union(type)]
 
+    ROUTINE = 0  #
+    PRIORITY = 1  #
+    IMMEDIATE = 2  #
+    FLASH = 3  #
+    FLASH_OVERRIDE = 4  #
+    CRITIC_ECP = 5  #
+    INTERNETWORK_CONTROL = 6  #
+    NETWORK_CONTROL = 7  #
+
     VALUE = "value"  # type: str
     VALUES = "values"  # type: str
     INCREMENT = "increment"  # type: str
@@ -32501,6 +32534,15 @@ class PatternFlowIpv4TosPrecedenceCounter(OpenApiObject):
         "step": 1,
         "count": 1,
     }  # type: Dict[str, Union(type)]
+
+    ROUTINE = 0  #
+    PRIORITY = 1  #
+    IMMEDIATE = 2  #
+    FLASH = 3  #
+    FLASH_OVERRIDE = 4  #
+    CRITIC_ECP = 5  #
+    INTERNETWORK_CONTROL = 6  #
+    NETWORK_CONTROL = 7  #
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
@@ -32786,6 +32828,9 @@ class PatternFlowIpv4TosDelay(OpenApiObject):
         "values": [0],
     }  # type: Dict[str, Union(type)]
 
+    NORMAL = 0  #
+    LOW = 1  #
+
     VALUE = "value"  # type: str
     VALUES = "values"  # type: str
     INCREMENT = "increment"  # type: str
@@ -32947,6 +32992,9 @@ class PatternFlowIpv4TosDelayCounter(OpenApiObject):
         "step": 1,
         "count": 1,
     }  # type: Dict[str, Union(type)]
+
+    NORMAL = 0  #
+    LOW = 1  #
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
@@ -33232,6 +33280,9 @@ class PatternFlowIpv4TosThroughput(OpenApiObject):
         "values": [0],
     }  # type: Dict[str, Union(type)]
 
+    NORMAL = 0  #
+    LOW = 1  #
+
     VALUE = "value"  # type: str
     VALUES = "values"  # type: str
     INCREMENT = "increment"  # type: str
@@ -33393,6 +33444,9 @@ class PatternFlowIpv4TosThroughputCounter(OpenApiObject):
         "step": 1,
         "count": 1,
     }  # type: Dict[str, Union(type)]
+
+    NORMAL = 0  #
+    LOW = 1  #
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
@@ -33678,6 +33732,9 @@ class PatternFlowIpv4TosReliability(OpenApiObject):
         "values": [0],
     }  # type: Dict[str, Union(type)]
 
+    NORMAL = 0  #
+    LOW = 1  #
+
     VALUE = "value"  # type: str
     VALUES = "values"  # type: str
     INCREMENT = "increment"  # type: str
@@ -33839,6 +33896,9 @@ class PatternFlowIpv4TosReliabilityCounter(OpenApiObject):
         "step": 1,
         "count": 1,
     }  # type: Dict[str, Union(type)]
+
+    NORMAL = 0  #
+    LOW = 1  #
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
@@ -34124,6 +34184,9 @@ class PatternFlowIpv4TosMonetary(OpenApiObject):
         "values": [0],
     }  # type: Dict[str, Union(type)]
 
+    NORMAL = 0  #
+    LOW = 1  #
+
     VALUE = "value"  # type: str
     VALUES = "values"  # type: str
     INCREMENT = "increment"  # type: str
@@ -34285,6 +34348,9 @@ class PatternFlowIpv4TosMonetaryCounter(OpenApiObject):
         "step": 1,
         "count": 1,
     }  # type: Dict[str, Union(type)]
+
+    NORMAL = 0  #
+    LOW = 1  #
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
@@ -35057,6 +35123,28 @@ class PatternFlowIpv4DscpPhb(OpenApiObject):
         "values": [0],
     }  # type: Dict[str, Union(type)]
 
+    DEFAULT = 0  #
+    CS1 = 8  #
+    CS2 = 16  #
+    CS3 = 24  #
+    CS4 = 32  #
+    CS5 = 40  #
+    CS6 = 48  #
+    CS7 = 56  #
+    AF11 = 10  #
+    AF12 = 12  #
+    AF13 = 14  #
+    AF21 = 18  #
+    AF22 = 20  #
+    AF23 = 22  #
+    AF31 = 26  #
+    AF32 = 28  #
+    AF33 = 30  #
+    AF41 = 34  #
+    AF42 = 36  #
+    AF43 = 38  #
+    EF46 = 46  #
+
     VALUE = "value"  # type: str
     VALUES = "values"  # type: str
     INCREMENT = "increment"  # type: str
@@ -35218,6 +35306,28 @@ class PatternFlowIpv4DscpPhbCounter(OpenApiObject):
         "step": 1,
         "count": 1,
     }  # type: Dict[str, Union(type)]
+
+    DEFAULT = 0  #
+    CS1 = 8  #
+    CS2 = 16  #
+    CS3 = 24  #
+    CS4 = 32  #
+    CS5 = 40  #
+    CS6 = 48  #
+    CS7 = 56  #
+    AF11 = 10  #
+    AF12 = 12  #
+    AF13 = 14  #
+    AF21 = 18  #
+    AF22 = 20  #
+    AF23 = 22  #
+    AF31 = 26  #
+    AF32 = 28  #
+    AF33 = 30  #
+    AF41 = 34  #
+    AF42 = 36  #
+    AF43 = 38  #
+    EF46 = 46  #
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
@@ -35503,6 +35613,11 @@ class PatternFlowIpv4DscpEcn(OpenApiObject):
         "values": [0],
     }  # type: Dict[str, Union(type)]
 
+    NON_CAPABLE = 0  #
+    CAPABLE_TRANSPORT_0 = 1  #
+    CAPABLE_TRANSPORT_1 = 2  #
+    CONGESTION_ENCOUNTERED = 3  #
+
     VALUE = "value"  # type: str
     VALUES = "values"  # type: str
     INCREMENT = "increment"  # type: str
@@ -35664,6 +35779,11 @@ class PatternFlowIpv4DscpEcnCounter(OpenApiObject):
         "step": 1,
         "count": 1,
     }  # type: Dict[str, Union(type)]
+
+    NON_CAPABLE = 0  #
+    CAPABLE_TRANSPORT_0 = 1  #
+    CAPABLE_TRANSPORT_1 = 2  #
+    CONGESTION_ENCOUNTERED = 3  #
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
@@ -42475,6 +42595,18 @@ class PatternFlowIpv6NextHeader(OpenApiObject):
         "auto": 59,
     }  # type: Dict[str, Union(type)]
 
+    HOPOPT = 0  #
+    ICMP = 1  #
+    IGMP = 2  #
+    GGP = 3  #
+    IP_IN_IP = 4  #
+    ST = 5  #
+    TCP = 6  #
+    CPT = 7  #
+    EGP = 8  #
+    IGP = 9  #
+    NO_NEXT_HEADER = 59  #
+
     VALUE = "value"  # type: str
     VALUES = "values"  # type: str
     AUTO = "auto"  # type: str
@@ -42649,6 +42781,18 @@ class PatternFlowIpv6NextHeaderCounter(OpenApiObject):
         "step": 1,
         "count": 1,
     }  # type: Dict[str, Union(type)]
+
+    HOPOPT = 0  #
+    ICMP = 1  #
+    IGMP = 2  #
+    GGP = 3  #
+    IP_IN_IP = 4  #
+    ST = 5  #
+    TCP = 6  #
+    CPT = 7  #
+    EGP = 8  #
+    IGP = 9  #
+    NO_NEXT_HEADER = 59  #
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
@@ -45313,6 +45457,8 @@ class PatternFlowPfcPauseEtherType(OpenApiObject):
         "values": [34824],
     }  # type: Dict[str, Union(type)]
 
+    X8808 = 34824  #
+
     VALUE = "value"  # type: str
     VALUES = "values"  # type: str
     INCREMENT = "increment"  # type: str
@@ -45474,6 +45620,8 @@ class PatternFlowPfcPauseEtherTypeCounter(OpenApiObject):
         "step": 1,
         "count": 1,
     }  # type: Dict[str, Union(type)]
+
+    X8808 = 34824  #
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
@@ -51190,6 +51338,8 @@ class PatternFlowEthernetPauseEtherType(OpenApiObject):
         "values": [34824],
     }  # type: Dict[str, Union(type)]
 
+    FLOW_CONTROL = 34824  #
+
     VALUE = "value"  # type: str
     VALUES = "values"  # type: str
     INCREMENT = "increment"  # type: str
@@ -51351,6 +51501,8 @@ class PatternFlowEthernetPauseEtherTypeCounter(OpenApiObject):
         "step": 1,
         "count": 1,
     }  # type: Dict[str, Union(type)]
+
+    FLOW_CONTROL = 34824  #
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
@@ -62281,6 +62433,9 @@ class PatternFlowGreProtocol(OpenApiObject):
         "values": [2048],
     }  # type: Dict[str, Union(type)]
 
+    IPV4 = 2048  #
+    IPV6 = 34525  #
+
     VALUE = "value"  # type: str
     VALUES = "values"  # type: str
     INCREMENT = "increment"  # type: str
@@ -62442,6 +62597,9 @@ class PatternFlowGreProtocolCounter(OpenApiObject):
         "step": 1,
         "count": 1,
     }  # type: Dict[str, Union(type)]
+
+    IPV4 = 2048  #
+    IPV6 = 34525  #
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
@@ -74540,6 +74698,8 @@ class PatternFlowArpHardwareType(OpenApiObject):
         "values": [1],
     }  # type: Dict[str, Union(type)]
 
+    ETHERNET = 1  #
+
     VALUE = "value"  # type: str
     VALUES = "values"  # type: str
     INCREMENT = "increment"  # type: str
@@ -74701,6 +74861,8 @@ class PatternFlowArpHardwareTypeCounter(OpenApiObject):
         "step": 1,
         "count": 1,
     }  # type: Dict[str, Union(type)]
+
+    ETHERNET = 1  #
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
@@ -74986,6 +75148,9 @@ class PatternFlowArpProtocolType(OpenApiObject):
         "values": [2048],
     }  # type: Dict[str, Union(type)]
 
+    IPV4 = 2048  #
+    IPV6 = 34525  #
+
     VALUE = "value"  # type: str
     VALUES = "values"  # type: str
     INCREMENT = "increment"  # type: str
@@ -75147,6 +75312,9 @@ class PatternFlowArpProtocolTypeCounter(OpenApiObject):
         "step": 1,
         "count": 1,
     }  # type: Dict[str, Union(type)]
+
+    IPV4 = 2048  #
+    IPV6 = 34525  #
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
@@ -76324,6 +76492,9 @@ class PatternFlowArpOperation(OpenApiObject):
         "values": [1],
     }  # type: Dict[str, Union(type)]
 
+    REQUEST = 1  #
+    REPLY = 2  #
+
     VALUE = "value"  # type: str
     VALUES = "values"  # type: str
     INCREMENT = "increment"  # type: str
@@ -76485,6 +76656,9 @@ class PatternFlowArpOperationCounter(OpenApiObject):
         "step": 1,
         "count": 1,
     }  # type: Dict[str, Union(type)]
+
+    REQUEST = 1  #
+    REPLY = 2  #
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
@@ -78683,6 +78857,9 @@ class PatternFlowIcmpEchoType(OpenApiObject):
         "values": [8],
     }  # type: Dict[str, Union(type)]
 
+    REPLY = 0  #
+    REQUEST = 8  #
+
     VALUE = "value"  # type: str
     VALUES = "values"  # type: str
     INCREMENT = "increment"  # type: str
@@ -78844,6 +79021,9 @@ class PatternFlowIcmpEchoTypeCounter(OpenApiObject):
         "step": 1,
         "count": 1,
     }  # type: Dict[str, Union(type)]
+
+    REPLY = 0  #
+    REQUEST = 8  #
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
@@ -80738,6 +80918,9 @@ class PatternFlowIcmpv6EchoType(OpenApiObject):
         "values": [128],
     }  # type: Dict[str, Union(type)]
 
+    REQUEST = 128  #
+    REPLY = 129  #
+
     VALUE = "value"  # type: str
     VALUES = "values"  # type: str
     INCREMENT = "increment"  # type: str
@@ -80899,6 +81082,9 @@ class PatternFlowIcmpv6EchoTypeCounter(OpenApiObject):
         "step": 1,
         "count": 1,
     }  # type: Dict[str, Union(type)]
+
+    REQUEST = 128  #
+    REPLY = 129  #
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
@@ -82699,6 +82885,8 @@ class PatternFlowPppAddress(OpenApiObject):
         "values": [255],
     }  # type: Dict[str, Union(type)]
 
+    STANDARD_ADDRESS = 255  #
+
     VALUE = "value"  # type: str
     VALUES = "values"  # type: str
     INCREMENT = "increment"  # type: str
@@ -82860,6 +83048,8 @@ class PatternFlowPppAddressCounter(OpenApiObject):
         "step": 1,
         "count": 1,
     }  # type: Dict[str, Union(type)]
+
+    STANDARD_ADDRESS = 255  #
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
@@ -83143,6 +83333,8 @@ class PatternFlowPppControl(OpenApiObject):
         "values": [3],
     }  # type: Dict[str, Union(type)]
 
+    UNNUMBERED_DATA = 3  #
+
     VALUE = "value"  # type: str
     VALUES = "values"  # type: str
     INCREMENT = "increment"  # type: str
@@ -83304,6 +83496,8 @@ class PatternFlowPppControlCounter(OpenApiObject):
         "step": 1,
         "count": 1,
     }  # type: Dict[str, Union(type)]
+
+    UNNUMBERED_DATA = 3  #
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
@@ -84577,6 +84771,9 @@ class PatternFlowIgmpv1Type(OpenApiObject):
         "values": [1],
     }  # type: Dict[str, Union(type)]
 
+    QUERY = 1  #
+    REPORT = 2  #
+
     VALUE = "value"  # type: str
     VALUES = "values"  # type: str
     INCREMENT = "increment"  # type: str
@@ -84738,6 +84935,9 @@ class PatternFlowIgmpv1TypeCounter(OpenApiObject):
         "step": 1,
         "count": 1,
     }  # type: Dict[str, Union(type)]
+
+    QUERY = 1  #
+    REPORT = 2  #
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 

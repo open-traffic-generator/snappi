@@ -13514,6 +13514,12 @@ components:
           format: uint32
           default: 1
           x-field-uid: 3
+      x-constants:
+        ipv4: 2048
+        ipv6: 34525
+        arp: 2054
+        vlan_802_1_q: 33024
+        reserved: 65535
     Pattern.Flow.Ethernet.EtherType.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -13612,6 +13618,12 @@ components:
           items:
             $ref: '#/components/schemas/Pattern.Flow.Ethernet.EtherType.MetricTag'
           x-field-uid: 8
+      x-constants:
+        ipv4: 2048
+        ipv6: 34525
+        arp: 2054
+        vlan_802_1_q: 33024
+        reserved: 65535
     Pattern.Flow.Ethernet.PfcQueue.Counter:
       description: |-
         integer counter pattern
@@ -14068,6 +14080,12 @@ components:
           format: uint32
           default: 1
           x-field-uid: 3
+      x-constants:
+        x8100: 33024
+        x88A8: 34984
+        x9100: 37120
+        x9200: 37376
+        x9300: 37632
     Pattern.Flow.Vlan.Tpid.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -14152,6 +14170,12 @@ components:
           items:
             $ref: '#/components/schemas/Pattern.Flow.Vlan.Tpid.MetricTag'
           x-field-uid: 7
+      x-constants:
+        x8100: 33024
+        x88A8: 34984
+        x9100: 37120
+        x9200: 37376
+        x9300: 37632
     Pattern.Flow.Vxlan.Flags.Counter:
       description: |-
         integer counter pattern
@@ -16093,6 +16117,28 @@ components:
           format: uint32
           default: 1
           x-field-uid: 3
+      x-constants:
+        default: 0
+        cs1: 8
+        cs2: 16
+        cs3: 24
+        cs4: 32
+        cs5: 40
+        cs6: 48
+        cs7: 56
+        af11: 10
+        af12: 12
+        af13: 14
+        af21: 18
+        af22: 20
+        af23: 22
+        af31: 26
+        af32: 28
+        af33: 30
+        af41: 34
+        af42: 36
+        af43: 38
+        ef46: 46
     Pattern.Flow.Ipv4.Dscp.Phb.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -16177,6 +16223,28 @@ components:
           items:
             $ref: '#/components/schemas/Pattern.Flow.Ipv4.Dscp.Phb.MetricTag'
           x-field-uid: 7
+      x-constants:
+        default: 0
+        cs1: 8
+        cs2: 16
+        cs3: 24
+        cs4: 32
+        cs5: 40
+        cs6: 48
+        cs7: 56
+        af11: 10
+        af12: 12
+        af13: 14
+        af21: 18
+        af22: 20
+        af23: 22
+        af31: 26
+        af32: 28
+        af33: 30
+        af41: 34
+        af42: 36
+        af43: 38
+        ef46: 46
     Pattern.Flow.Ipv4.Dscp.Ecn.Counter:
       description: |-
         integer counter pattern
@@ -16201,6 +16269,11 @@ components:
           format: uint32
           default: 1
           x-field-uid: 3
+      x-constants:
+        non_capable: 0
+        capable_transport_0: 1
+        capable_transport_1: 2
+        congestion_encountered: 3
     Pattern.Flow.Ipv4.Dscp.Ecn.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -16285,6 +16358,11 @@ components:
           items:
             $ref: '#/components/schemas/Pattern.Flow.Ipv4.Dscp.Ecn.MetricTag'
           x-field-uid: 7
+      x-constants:
+        non_capable: 0
+        capable_transport_0: 1
+        capable_transport_1: 2
+        congestion_encountered: 3
     Pattern.Flow.Ipv4.Tos.Precedence.Counter:
       description: |-
         integer counter pattern
@@ -16309,6 +16387,15 @@ components:
           format: uint32
           default: 1
           x-field-uid: 3
+      x-constants:
+        routine: 0
+        priority: 1
+        immediate: 2
+        flash: 3
+        flash_override: 4
+        critic_ecp: 5
+        internetwork_control: 6
+        network_control: 7
     Pattern.Flow.Ipv4.Tos.Precedence.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -16393,6 +16480,15 @@ components:
           items:
             $ref: '#/components/schemas/Pattern.Flow.Ipv4.Tos.Precedence.MetricTag'
           x-field-uid: 7
+      x-constants:
+        routine: 0
+        priority: 1
+        immediate: 2
+        flash: 3
+        flash_override: 4
+        critic_ecp: 5
+        internetwork_control: 6
+        network_control: 7
     Pattern.Flow.Ipv4.Tos.Delay.Counter:
       description: |-
         integer counter pattern
@@ -16417,6 +16513,9 @@ components:
           format: uint32
           default: 1
           x-field-uid: 3
+      x-constants:
+        normal: 0
+        low: 1
     Pattern.Flow.Ipv4.Tos.Delay.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -16501,6 +16600,9 @@ components:
           items:
             $ref: '#/components/schemas/Pattern.Flow.Ipv4.Tos.Delay.MetricTag'
           x-field-uid: 7
+      x-constants:
+        normal: 0
+        low: 1
     Pattern.Flow.Ipv4.Tos.Throughput.Counter:
       description: |-
         integer counter pattern
@@ -16525,6 +16627,9 @@ components:
           format: uint32
           default: 1
           x-field-uid: 3
+      x-constants:
+        normal: 0
+        low: 1
     Pattern.Flow.Ipv4.Tos.Throughput.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -16609,6 +16714,9 @@ components:
           items:
             $ref: '#/components/schemas/Pattern.Flow.Ipv4.Tos.Throughput.MetricTag'
           x-field-uid: 7
+      x-constants:
+        normal: 0
+        low: 1
     Pattern.Flow.Ipv4.Tos.Reliability.Counter:
       description: |-
         integer counter pattern
@@ -16633,6 +16741,9 @@ components:
           format: uint32
           default: 1
           x-field-uid: 3
+      x-constants:
+        normal: 0
+        low: 1
     Pattern.Flow.Ipv4.Tos.Reliability.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -16717,6 +16828,9 @@ components:
           items:
             $ref: '#/components/schemas/Pattern.Flow.Ipv4.Tos.Reliability.MetricTag'
           x-field-uid: 7
+      x-constants:
+        normal: 0
+        low: 1
     Pattern.Flow.Ipv4.Tos.Monetary.Counter:
       description: |-
         integer counter pattern
@@ -16741,6 +16855,9 @@ components:
           format: uint32
           default: 1
           x-field-uid: 3
+      x-constants:
+        normal: 0
+        low: 1
     Pattern.Flow.Ipv4.Tos.Monetary.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -16825,6 +16942,9 @@ components:
           items:
             $ref: '#/components/schemas/Pattern.Flow.Ipv4.Tos.Monetary.MetricTag'
           x-field-uid: 7
+      x-constants:
+        normal: 0
+        low: 1
     Pattern.Flow.Ipv4.Tos.Unused.Counter:
       description: |-
         integer counter pattern
@@ -17403,6 +17523,18 @@ components:
           format: uint32
           default: 1
           x-field-uid: 3
+      x-constants:
+        hopopt: 0
+        icmp: 1
+        igmp: 2
+        ggp: 3
+        ip_in_ip: 4
+        st: 5
+        tcp: 6
+        cpt: 7
+        egp: 8
+        igp: 9
+        no_next_header: 59
     Pattern.Flow.Ipv6.NextHeader.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -17501,6 +17633,18 @@ components:
           items:
             $ref: '#/components/schemas/Pattern.Flow.Ipv6.NextHeader.MetricTag'
           x-field-uid: 8
+      x-constants:
+        hopopt: 0
+        icmp: 1
+        igmp: 2
+        ggp: 3
+        ip_in_ip: 4
+        st: 5
+        tcp: 6
+        cpt: 7
+        egp: 8
+        igp: 9
+        no_next_header: 59
     Pattern.Flow.Ipv6.HopLimit.Counter:
       description: |-
         integer counter pattern
@@ -18033,6 +18177,8 @@ components:
           format: uint32
           default: 1
           x-field-uid: 3
+      x-constants:
+        x8808: 34824
     Pattern.Flow.PfcPause.EtherType.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -18117,6 +18263,8 @@ components:
           items:
             $ref: '#/components/schemas/Pattern.Flow.PfcPause.EtherType.MetricTag'
           x-field-uid: 7
+      x-constants:
+        x8808: 34824
     Pattern.Flow.PfcPause.ControlOpCode.Counter:
       description: |-
         integer counter pattern
@@ -19421,6 +19569,8 @@ components:
           format: uint32
           default: 1
           x-field-uid: 3
+      x-constants:
+        flow_control: 34824
     Pattern.Flow.EthernetPause.EtherType.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -19505,6 +19655,8 @@ components:
           items:
             $ref: '#/components/schemas/Pattern.Flow.EthernetPause.EtherType.MetricTag'
           x-field-uid: 7
+      x-constants:
+        flow_control: 34824
     Pattern.Flow.EthernetPause.ControlOpCode.Counter:
       description: |-
         integer counter pattern
@@ -22034,6 +22186,9 @@ components:
           format: uint32
           default: 1
           x-field-uid: 3
+      x-constants:
+        ipv4: 2048
+        ipv6: 34525
     Pattern.Flow.Gre.Protocol.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -22118,6 +22273,9 @@ components:
           items:
             $ref: '#/components/schemas/Pattern.Flow.Gre.Protocol.MetricTag'
           x-field-uid: 7
+      x-constants:
+        ipv4: 2048
+        ipv6: 34525
     Pattern.Flow.Gre.Checksum:
       description: |-
         Optional checksum of GRE header and payload. Only present if the checksum_present bit is set.
@@ -24867,6 +25025,8 @@ components:
           format: uint32
           default: 1
           x-field-uid: 3
+      x-constants:
+        ethernet: 1
     Pattern.Flow.Arp.HardwareType.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -24951,6 +25111,8 @@ components:
           items:
             $ref: '#/components/schemas/Pattern.Flow.Arp.HardwareType.MetricTag'
           x-field-uid: 7
+      x-constants:
+        ethernet: 1
     Pattern.Flow.Arp.ProtocolType.Counter:
       description: |-
         integer counter pattern
@@ -24975,6 +25137,9 @@ components:
           format: uint32
           default: 1
           x-field-uid: 3
+      x-constants:
+        ipv4: 2048
+        ipv6: 34525
     Pattern.Flow.Arp.ProtocolType.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -25059,6 +25224,9 @@ components:
           items:
             $ref: '#/components/schemas/Pattern.Flow.Arp.ProtocolType.MetricTag'
           x-field-uid: 7
+      x-constants:
+        ipv4: 2048
+        ipv6: 34525
     Pattern.Flow.Arp.HardwareLength.Counter:
       description: |-
         integer counter pattern
@@ -25299,6 +25467,9 @@ components:
           format: uint32
           default: 1
           x-field-uid: 3
+      x-constants:
+        request: 1
+        reply: 2
     Pattern.Flow.Arp.Operation.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -25383,6 +25554,9 @@ components:
           items:
             $ref: '#/components/schemas/Pattern.Flow.Arp.Operation.MetricTag'
           x-field-uid: 7
+      x-constants:
+        request: 1
+        reply: 2
     Pattern.Flow.Arp.SenderHardwareAddr.Counter:
       description: |-
         mac counter pattern
@@ -25807,6 +25981,9 @@ components:
           format: uint32
           default: 1
           x-field-uid: 3
+      x-constants:
+        reply: 0
+        request: 8
     Pattern.Flow.Icmp.Echo.Type.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -25891,6 +26068,9 @@ components:
           items:
             $ref: '#/components/schemas/Pattern.Flow.Icmp.Echo.Type.MetricTag'
           x-field-uid: 7
+      x-constants:
+        reply: 0
+        request: 8
     Pattern.Flow.Icmp.Echo.Code.Counter:
       description: |-
         integer counter pattern
@@ -26537,6 +26717,9 @@ components:
           format: uint32
           default: 1
           x-field-uid: 3
+      x-constants:
+        request: 128
+        reply: 129
     Pattern.Flow.Icmpv6.Echo.Type.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -26621,6 +26804,9 @@ components:
           items:
             $ref: '#/components/schemas/Pattern.Flow.Icmpv6.Echo.Type.MetricTag'
           x-field-uid: 7
+      x-constants:
+        request: 128
+        reply: 129
     Pattern.Flow.Icmpv6.Echo.Code.Counter:
       description: |-
         integer counter pattern
@@ -27051,6 +27237,8 @@ components:
           format: uint32
           default: 1
           x-field-uid: 3
+      x-constants:
+        standard_address: 255
     Pattern.Flow.Ppp.Address.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -27135,6 +27323,8 @@ components:
           items:
             $ref: '#/components/schemas/Pattern.Flow.Ppp.Address.MetricTag'
           x-field-uid: 7
+      x-constants:
+        standard_address: 255
     Pattern.Flow.Ppp.Control.Counter:
       description: |-
         integer counter pattern
@@ -27159,6 +27349,8 @@ components:
           format: uint32
           default: 1
           x-field-uid: 3
+      x-constants:
+        unnumbered_data: 3
     Pattern.Flow.Ppp.Control.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -27243,6 +27435,8 @@ components:
           items:
             $ref: '#/components/schemas/Pattern.Flow.Ppp.Control.MetricTag'
           x-field-uid: 7
+      x-constants:
+        unnumbered_data: 3
     Pattern.Flow.Ppp.ProtocolType.Counter:
       description: |-
         integer counter pattern
@@ -27497,6 +27691,9 @@ components:
           format: uint32
           default: 1
           x-field-uid: 3
+      x-constants:
+        query: 1
+        report: 2
     Pattern.Flow.Igmpv1.Type.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -27581,6 +27778,9 @@ components:
           items:
             $ref: '#/components/schemas/Pattern.Flow.Igmpv1.Type.MetricTag'
           x-field-uid: 7
+      x-constants:
+        query: 1
+        report: 2
     Pattern.Flow.Igmpv1.Unused.Counter:
       description: |-
         integer counter pattern
