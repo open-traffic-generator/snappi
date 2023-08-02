@@ -1,4 +1,4 @@
-/* Open Traffic Generator API 0.11.10
+/* Open Traffic Generator API 0.11.11
  * Open Traffic Generator API defines a model-driven, vendor-neutral and standard
  * interface for emulating layer 2-7 network devices and generating test traffic.
  * 
@@ -7585,6 +7585,7 @@ message Bgpv4MetricsRequest {
       notifications_sent = 13;
       notifications_received = 14;
       fsm_state = 15;
+      end_of_rib_received = 16;
     }
   }
   // The list of column names that the returned result set will contain. If the list is
@@ -7672,6 +7673,13 @@ message Bgpv4Metric {
   // remote peer. Established refers to the state where the BGP session with the peer
   // is established.
   optional FsmState.Enum fsm_state = 16;
+
+  // Number of End-of-RIB markers received indicating the completion of the initial routing
+  // update for a  particular <AFI, SAFI> address family after the session is established.
+  // For the IPv4 unicast address family, the End-of-RIB marker is an UPDATE message with
+  // the minimum length. For any other address family, it is an UPDATE message that contains
+  // only the MP_UNREACH_NLRI attribute with  no withdrawn routes for that <AFI, SAFI>.
+  optional uint64 end_of_rib_received = 17;
 }
 
 // The request to retrieve BGPv6 per peer metrics/statistics.
@@ -7703,6 +7711,7 @@ message Bgpv6MetricsRequest {
       notifications_sent = 13;
       notifications_received = 14;
       fsm_state = 15;
+      end_of_rib_received = 16;
     }
   }
   // The list of column names that the returned result set will contain. If the list is
@@ -7790,6 +7799,13 @@ message Bgpv6Metric {
   // remote peer. Established refers to the state where the BGP session with the peer
   // is established.
   optional FsmState.Enum fsm_state = 16;
+
+  // Number of End-of-RIB markers received indicating the completion of the initial routing
+  // update for a  particular <AFI, SAFI> address family after the session is established.
+  // For the IPv4 unicast address family, the End-of-RIB marker is an UPDATE message with
+  // the minimum length. For any other address family, it is an UPDATE message that contains
+  // only the MP_UNREACH_NLRI attribute with  no withdrawn routes for that <AFI, SAFI>.
+  optional uint64 end_of_rib_received = 17;
 }
 
 // The request to retrieve ISIS per Router metrics/statistics.
@@ -8613,6 +8629,14 @@ message BgpPrefixIpv4UnicastState {
 
   // Description missing in models
   optional ResultBgpAsPath as_path = 8;
+
+  // The local preference is a well-known attribute and the value is used for route selection.
+  // The route with the highest local preference value is preferred.
+  optional uint32 local_preference = 9;
+
+  // The multi exit discriminator (MED) is an optional non-transitive attribute and the
+  // value is used for route selection. The route with the lowest MED value is preferred.
+  optional uint32 multi_exit_discriminator = 10;
 }
 
 // IPv6 unicast prefix.
@@ -8649,6 +8673,14 @@ message BgpPrefixIpv6UnicastState {
 
   // Description missing in models
   optional ResultBgpAsPath as_path = 8;
+
+  // The local preference is a well-known attribute and the value is used for route selection.
+  // The route with the highest local preference value is preferred.
+  optional uint32 local_preference = 9;
+
+  // The multi exit discriminator (MED) is an optional non-transitive attribute and the
+  // value is used for route selection. The route with the lowest MED value is preferred.
+  optional uint32 multi_exit_discriminator = 10;
 }
 
 // BGP communities provide additional capability for tagging routes and  for modifying
@@ -16338,7 +16370,7 @@ message PatternFlowGtpExtensionContentsCounter {
 
   // Description missing in models
   // default = 1
-  optional uint32 count = 3;
+  optional uint64 count = 3;
 }
 
 // Metric tag can be used to enable tracking portion of or all bits in a corresponding
@@ -16353,12 +16385,12 @@ message PatternFlowGtpExtensionContentsMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional uint32 offset = 2;
+  optional uint64 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset of corresponding
   // header field
   // default = 48
-  optional uint32 length = 3;
+  optional uint64 length = 3;
 }
 
 // The extension header contents

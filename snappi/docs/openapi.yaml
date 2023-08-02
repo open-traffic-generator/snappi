@@ -7,7 +7,7 @@ info:
     \ issue](https://github.com/open-traffic-generator/models/issues) in the models\
     \ repository\n- [fork the models repository](https://github.com/open-traffic-generator/models)\
     \ and submit a PR"
-  version: 0.11.10
+  version: 0.11.11
   contact:
     url: https://github.com/open-traffic-generator/models
   license:
@@ -10443,6 +10443,8 @@ components:
                 x-field-uid: 14
               fsm_state:
                 x-field-uid: 15
+              end_of_rib_received:
+                x-field-uid: 16
             enum:
             - session_state
             - session_flap_count
@@ -10459,6 +10461,7 @@ components:
             - notifications_sent
             - notifications_received
             - fsm_state
+            - end_of_rib_received
           x-field-uid: 2
     Bgpv4.Metric:
       description: |-
@@ -10586,6 +10589,12 @@ components:
           - opensent
           - openconfirm
           - established
+        end_of_rib_received:
+          description: |-
+            Number of End-of-RIB markers received indicating the completion of the initial routing update for a  particular <AFI, SAFI> address family after the session is established. For the IPv4 unicast address family, the End-of-RIB marker is an UPDATE message with the minimum length. For any other address family, it is an UPDATE message that contains only the MP_UNREACH_NLRI attribute with  no withdrawn routes for that <AFI, SAFI>.
+          type: integer
+          format: uint64
+          x-field-uid: 17
     Bgpv6.Metrics.Request:
       description: |-
         The request to retrieve BGPv6 per peer metrics/statistics.
@@ -10640,6 +10649,8 @@ components:
                 x-field-uid: 14
               fsm_state:
                 x-field-uid: 15
+              end_of_rib_received:
+                x-field-uid: 16
             enum:
             - session_state
             - session_flap_count
@@ -10656,6 +10667,7 @@ components:
             - notifications_sent
             - notifications_received
             - fsm_state
+            - end_of_rib_received
           x-field-uid: 2
     Bgpv6.Metric:
       description: |-
@@ -10783,6 +10795,12 @@ components:
           - opensent
           - openconfirm
           - established
+        end_of_rib_received:
+          description: |-
+            Number of End-of-RIB markers received indicating the completion of the initial routing update for a  particular <AFI, SAFI> address family after the session is established. For the IPv4 unicast address family, the End-of-RIB marker is an UPDATE message with the minimum length. For any other address family, it is an UPDATE message that contains only the MP_UNREACH_NLRI attribute with  no withdrawn routes for that <AFI, SAFI>.
+          type: integer
+          format: uint64
+          x-field-uid: 17
     Isis.Metrics.Request:
       description: |-
         The request to retrieve ISIS per Router metrics/statistics.
@@ -12178,6 +12196,18 @@ components:
         as_path:
           x-field-uid: 8
           $ref: '#/components/schemas/Result.BgpAsPath'
+        local_preference:
+          x-field-uid: 9
+          description: |-
+            The local preference is a well-known attribute and the value is used for route selection. The route with the highest local preference value is preferred.
+          type: integer
+          format: uint32
+        multi_exit_discriminator:
+          x-field-uid: 10
+          description: |-
+            The multi exit discriminator (MED) is an optional non-transitive attribute and the value is used for route selection. The route with the lowest MED value is preferred.
+          type: integer
+          format: uint32
     BgpPrefixIpv6Unicast.State:
       description: |-
         IPv6 unicast prefix.
@@ -12239,6 +12269,18 @@ components:
         as_path:
           x-field-uid: 8
           $ref: '#/components/schemas/Result.BgpAsPath'
+        local_preference:
+          x-field-uid: 9
+          description: |-
+            The local preference is a well-known attribute and the value is used for route selection. The route with the highest local preference value is preferred.
+          type: integer
+          format: uint32
+        multi_exit_discriminator:
+          x-field-uid: 10
+          description: |-
+            The multi exit discriminator (MED) is an optional non-transitive attribute and the value is used for route selection. The route with the lowest MED value is preferred.
+          type: integer
+          format: uint32
     Result.BgpCommunity:
       description: |-
         BGP communities provide additional capability for tagging routes and  for modifying BGP routing policy on upstream and downstream routers. BGP community is a 32-bit number which is broken into 16-bit AS number and  a 16-bit custom value.
@@ -13472,12 +13514,6 @@ components:
           format: uint32
           default: 1
           x-field-uid: 3
-      x-constants:
-        ipv4: 2048
-        ipv6: 34525
-        arp: 2054
-        vlan_802_1_q: 33024
-        reserved: 65535
     Pattern.Flow.Ethernet.EtherType.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -13547,11 +13583,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 65535
           x-field-uid: 3
           default:
           - 65535
-          minimum: 0
-          maximum: 65535
         auto:
           description: |-
             The OTG implementation can provide a system generated
@@ -13576,12 +13612,6 @@ components:
           items:
             $ref: '#/components/schemas/Pattern.Flow.Ethernet.EtherType.MetricTag'
           x-field-uid: 8
-      x-constants:
-        ipv4: 2048
-        ipv6: 34525
-        arp: 2054
-        vlan_802_1_q: 33024
-        reserved: 65535
     Pattern.Flow.Ethernet.PfcQueue.Counter:
       description: |-
         integer counter pattern
@@ -13672,11 +13702,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 7
           x-field-uid: 3
           default:
           - 0
-          minimum: 0
-          maximum: 7
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Ethernet.PfcQueue.Counter'
           x-field-uid: 5
@@ -13780,11 +13810,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 7
           x-field-uid: 3
           default:
           - 0
-          minimum: 0
-          maximum: 7
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Vlan.Priority.Counter'
           x-field-uid: 5
@@ -13888,11 +13918,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 1
           x-field-uid: 3
           default:
           - 0
-          minimum: 0
-          maximum: 1
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Vlan.Cfi.Counter'
           x-field-uid: 5
@@ -13996,11 +14026,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 4095
           x-field-uid: 3
           default:
           - 0
-          minimum: 0
-          maximum: 4095
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Vlan.Id.Counter'
           x-field-uid: 5
@@ -14038,12 +14068,6 @@ components:
           format: uint32
           default: 1
           x-field-uid: 3
-      x-constants:
-        x8100: 33024
-        x88A8: 34984
-        x9100: 37120
-        x9200: 37376
-        x9300: 37632
     Pattern.Flow.Vlan.Tpid.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -14110,11 +14134,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 65535
           x-field-uid: 3
           default:
           - 33024
-          minimum: 0
-          maximum: 65535
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Vlan.Tpid.Counter'
           x-field-uid: 5
@@ -14128,12 +14152,6 @@ components:
           items:
             $ref: '#/components/schemas/Pattern.Flow.Vlan.Tpid.MetricTag'
           x-field-uid: 7
-      x-constants:
-        x8100: 33024
-        x88A8: 34984
-        x9100: 37120
-        x9200: 37376
-        x9300: 37632
     Pattern.Flow.Vxlan.Flags.Counter:
       description: |-
         integer counter pattern
@@ -14224,11 +14242,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 255
           x-field-uid: 3
           default:
           - 8
-          minimum: 0
-          maximum: 255
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Vxlan.Flags.Counter'
           x-field-uid: 5
@@ -14332,11 +14350,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 16777215
           x-field-uid: 3
           default:
           - 0
-          minimum: 0
-          maximum: 16777215
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Vxlan.Reserved0.Counter'
           x-field-uid: 5
@@ -14443,11 +14461,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 16777215
           x-field-uid: 3
           default:
           - 0
-          minimum: 0
-          maximum: 16777215
         auto:
           description: |-
             The OTG implementation can provide a system generated
@@ -14562,11 +14580,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 255
           x-field-uid: 3
           default:
           - 0
-          minimum: 0
-          maximum: 255
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Vxlan.Reserved1.Counter'
           x-field-uid: 5
@@ -14670,11 +14688,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 15
           x-field-uid: 3
           default:
           - 4
-          minimum: 0
-          maximum: 15
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Ipv4.Version.Counter'
           x-field-uid: 5
@@ -14781,11 +14799,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 15
           x-field-uid: 3
           default:
           - 5
-          minimum: 0
-          maximum: 15
         auto:
           description: |-
             The OTG implementation can provide a system generated
@@ -14903,11 +14921,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 65535
           x-field-uid: 3
           default:
           - 46
-          minimum: 0
-          maximum: 65535
         auto:
           description: |-
             The OTG implementation can provide a system generated
@@ -15022,11 +15040,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 65535
           x-field-uid: 3
           default:
           - 0
-          minimum: 0
-          maximum: 65535
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Ipv4.Identification.Counter'
           x-field-uid: 5
@@ -15130,11 +15148,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 1
           x-field-uid: 3
           default:
           - 0
-          minimum: 0
-          maximum: 1
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Ipv4.Reserved.Counter'
           x-field-uid: 5
@@ -15238,11 +15256,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 1
           x-field-uid: 3
           default:
           - 0
-          minimum: 0
-          maximum: 1
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Ipv4.DontFragment.Counter'
           x-field-uid: 5
@@ -15346,11 +15364,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 1
           x-field-uid: 3
           default:
           - 0
-          minimum: 0
-          maximum: 1
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Ipv4.MoreFragments.Counter'
           x-field-uid: 5
@@ -15454,11 +15472,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 31
           x-field-uid: 3
           default:
           - 0
-          minimum: 0
-          maximum: 31
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Ipv4.FragmentOffset.Counter'
           x-field-uid: 5
@@ -15562,11 +15580,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 255
           x-field-uid: 3
           default:
           - 64
-          minimum: 0
-          maximum: 255
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Ipv4.TimeToLive.Counter'
           x-field-uid: 5
@@ -15673,11 +15691,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 255
           x-field-uid: 3
           default:
           - 61
-          minimum: 0
-          maximum: 255
         auto:
           description: |-
             The OTG implementation can provide a system generated
@@ -16033,11 +16051,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 255
           x-field-uid: 3
           default:
           - 0
-          minimum: 0
-          maximum: 255
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Ipv4.Priority.Raw.Counter'
           x-field-uid: 5
@@ -16075,28 +16093,6 @@ components:
           format: uint32
           default: 1
           x-field-uid: 3
-      x-constants:
-        default: 0
-        cs1: 8
-        cs2: 16
-        cs3: 24
-        cs4: 32
-        cs5: 40
-        cs6: 48
-        cs7: 56
-        af11: 10
-        af12: 12
-        af13: 14
-        af21: 18
-        af22: 20
-        af23: 22
-        af31: 26
-        af32: 28
-        af33: 30
-        af41: 34
-        af42: 36
-        af43: 38
-        ef46: 46
     Pattern.Flow.Ipv4.Dscp.Phb.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -16163,11 +16159,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 63
           x-field-uid: 3
           default:
           - 0
-          minimum: 0
-          maximum: 63
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Ipv4.Dscp.Phb.Counter'
           x-field-uid: 5
@@ -16181,28 +16177,6 @@ components:
           items:
             $ref: '#/components/schemas/Pattern.Flow.Ipv4.Dscp.Phb.MetricTag'
           x-field-uid: 7
-      x-constants:
-        default: 0
-        cs1: 8
-        cs2: 16
-        cs3: 24
-        cs4: 32
-        cs5: 40
-        cs6: 48
-        cs7: 56
-        af11: 10
-        af12: 12
-        af13: 14
-        af21: 18
-        af22: 20
-        af23: 22
-        af31: 26
-        af32: 28
-        af33: 30
-        af41: 34
-        af42: 36
-        af43: 38
-        ef46: 46
     Pattern.Flow.Ipv4.Dscp.Ecn.Counter:
       description: |-
         integer counter pattern
@@ -16227,11 +16201,6 @@ components:
           format: uint32
           default: 1
           x-field-uid: 3
-      x-constants:
-        non_capable: 0
-        capable_transport_0: 1
-        capable_transport_1: 2
-        congestion_encountered: 3
     Pattern.Flow.Ipv4.Dscp.Ecn.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -16298,11 +16267,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 3
           x-field-uid: 3
           default:
           - 0
-          minimum: 0
-          maximum: 3
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Ipv4.Dscp.Ecn.Counter'
           x-field-uid: 5
@@ -16316,11 +16285,6 @@ components:
           items:
             $ref: '#/components/schemas/Pattern.Flow.Ipv4.Dscp.Ecn.MetricTag'
           x-field-uid: 7
-      x-constants:
-        non_capable: 0
-        capable_transport_0: 1
-        capable_transport_1: 2
-        congestion_encountered: 3
     Pattern.Flow.Ipv4.Tos.Precedence.Counter:
       description: |-
         integer counter pattern
@@ -16345,15 +16309,6 @@ components:
           format: uint32
           default: 1
           x-field-uid: 3
-      x-constants:
-        routine: 0
-        priority: 1
-        immediate: 2
-        flash: 3
-        flash_override: 4
-        critic_ecp: 5
-        internetwork_control: 6
-        network_control: 7
     Pattern.Flow.Ipv4.Tos.Precedence.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -16420,11 +16375,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 7
           x-field-uid: 3
           default:
           - 0
-          minimum: 0
-          maximum: 7
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Ipv4.Tos.Precedence.Counter'
           x-field-uid: 5
@@ -16438,15 +16393,6 @@ components:
           items:
             $ref: '#/components/schemas/Pattern.Flow.Ipv4.Tos.Precedence.MetricTag'
           x-field-uid: 7
-      x-constants:
-        routine: 0
-        priority: 1
-        immediate: 2
-        flash: 3
-        flash_override: 4
-        critic_ecp: 5
-        internetwork_control: 6
-        network_control: 7
     Pattern.Flow.Ipv4.Tos.Delay.Counter:
       description: |-
         integer counter pattern
@@ -16471,9 +16417,6 @@ components:
           format: uint32
           default: 1
           x-field-uid: 3
-      x-constants:
-        normal: 0
-        low: 1
     Pattern.Flow.Ipv4.Tos.Delay.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -16540,11 +16483,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 1
           x-field-uid: 3
           default:
           - 0
-          minimum: 0
-          maximum: 1
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Ipv4.Tos.Delay.Counter'
           x-field-uid: 5
@@ -16558,9 +16501,6 @@ components:
           items:
             $ref: '#/components/schemas/Pattern.Flow.Ipv4.Tos.Delay.MetricTag'
           x-field-uid: 7
-      x-constants:
-        normal: 0
-        low: 1
     Pattern.Flow.Ipv4.Tos.Throughput.Counter:
       description: |-
         integer counter pattern
@@ -16585,9 +16525,6 @@ components:
           format: uint32
           default: 1
           x-field-uid: 3
-      x-constants:
-        normal: 0
-        low: 1
     Pattern.Flow.Ipv4.Tos.Throughput.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -16654,11 +16591,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 1
           x-field-uid: 3
           default:
           - 0
-          minimum: 0
-          maximum: 1
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Ipv4.Tos.Throughput.Counter'
           x-field-uid: 5
@@ -16672,9 +16609,6 @@ components:
           items:
             $ref: '#/components/schemas/Pattern.Flow.Ipv4.Tos.Throughput.MetricTag'
           x-field-uid: 7
-      x-constants:
-        normal: 0
-        low: 1
     Pattern.Flow.Ipv4.Tos.Reliability.Counter:
       description: |-
         integer counter pattern
@@ -16699,9 +16633,6 @@ components:
           format: uint32
           default: 1
           x-field-uid: 3
-      x-constants:
-        normal: 0
-        low: 1
     Pattern.Flow.Ipv4.Tos.Reliability.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -16768,11 +16699,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 1
           x-field-uid: 3
           default:
           - 0
-          minimum: 0
-          maximum: 1
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Ipv4.Tos.Reliability.Counter'
           x-field-uid: 5
@@ -16786,9 +16717,6 @@ components:
           items:
             $ref: '#/components/schemas/Pattern.Flow.Ipv4.Tos.Reliability.MetricTag'
           x-field-uid: 7
-      x-constants:
-        normal: 0
-        low: 1
     Pattern.Flow.Ipv4.Tos.Monetary.Counter:
       description: |-
         integer counter pattern
@@ -16813,9 +16741,6 @@ components:
           format: uint32
           default: 1
           x-field-uid: 3
-      x-constants:
-        normal: 0
-        low: 1
     Pattern.Flow.Ipv4.Tos.Monetary.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -16882,11 +16807,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 1
           x-field-uid: 3
           default:
           - 0
-          minimum: 0
-          maximum: 1
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Ipv4.Tos.Monetary.Counter'
           x-field-uid: 5
@@ -16900,9 +16825,6 @@ components:
           items:
             $ref: '#/components/schemas/Pattern.Flow.Ipv4.Tos.Monetary.MetricTag'
           x-field-uid: 7
-      x-constants:
-        normal: 0
-        low: 1
     Pattern.Flow.Ipv4.Tos.Unused.Counter:
       description: |-
         integer counter pattern
@@ -16993,11 +16915,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 1
           x-field-uid: 3
           default:
           - 0
-          minimum: 0
-          maximum: 1
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Ipv4.Tos.Unused.Counter'
           x-field-uid: 5
@@ -17101,11 +17023,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 15
           x-field-uid: 3
           default:
           - 6
-          minimum: 0
-          maximum: 15
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Ipv6.Version.Counter'
           x-field-uid: 5
@@ -17209,11 +17131,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 255
           x-field-uid: 3
           default:
           - 0
-          minimum: 0
-          maximum: 255
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Ipv6.TrafficClass.Counter'
           x-field-uid: 5
@@ -17317,11 +17239,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 1048575
           x-field-uid: 3
           default:
           - 0
-          minimum: 0
-          maximum: 1048575
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Ipv6.FlowLabel.Counter'
           x-field-uid: 5
@@ -17428,11 +17350,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 65535
           x-field-uid: 3
           default:
           - 0
-          minimum: 0
-          maximum: 65535
         auto:
           description: |-
             The OTG implementation can provide a system generated
@@ -17481,18 +17403,6 @@ components:
           format: uint32
           default: 1
           x-field-uid: 3
-      x-constants:
-        hopopt: 0
-        icmp: 1
-        igmp: 2
-        ggp: 3
-        ip_in_ip: 4
-        st: 5
-        tcp: 6
-        cpt: 7
-        egp: 8
-        igp: 9
-        no_next_header: 59
     Pattern.Flow.Ipv6.NextHeader.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -17562,11 +17472,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 255
           x-field-uid: 3
           default:
           - 59
-          minimum: 0
-          maximum: 255
         auto:
           description: |-
             The OTG implementation can provide a system generated
@@ -17591,18 +17501,6 @@ components:
           items:
             $ref: '#/components/schemas/Pattern.Flow.Ipv6.NextHeader.MetricTag'
           x-field-uid: 8
-      x-constants:
-        hopopt: 0
-        icmp: 1
-        igmp: 2
-        ggp: 3
-        ip_in_ip: 4
-        st: 5
-        tcp: 6
-        cpt: 7
-        egp: 8
-        igp: 9
-        no_next_header: 59
     Pattern.Flow.Ipv6.HopLimit.Counter:
       description: |-
         integer counter pattern
@@ -17693,11 +17591,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 255
           x-field-uid: 3
           default:
           - 64
-          minimum: 0
-          maximum: 255
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Ipv6.HopLimit.Counter'
           x-field-uid: 5
@@ -18135,8 +18033,6 @@ components:
           format: uint32
           default: 1
           x-field-uid: 3
-      x-constants:
-        x8808: 34824
     Pattern.Flow.PfcPause.EtherType.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -18203,11 +18099,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 65535
           x-field-uid: 3
           default:
           - 34824
-          minimum: 0
-          maximum: 65535
         increment:
           $ref: '#/components/schemas/Pattern.Flow.PfcPause.EtherType.Counter'
           x-field-uid: 5
@@ -18221,8 +18117,6 @@ components:
           items:
             $ref: '#/components/schemas/Pattern.Flow.PfcPause.EtherType.MetricTag'
           x-field-uid: 7
-      x-constants:
-        x8808: 34824
     Pattern.Flow.PfcPause.ControlOpCode.Counter:
       description: |-
         integer counter pattern
@@ -18313,11 +18207,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 65535
           x-field-uid: 3
           default:
           - 257
-          minimum: 0
-          maximum: 65535
         increment:
           $ref: '#/components/schemas/Pattern.Flow.PfcPause.ControlOpCode.Counter'
           x-field-uid: 5
@@ -18421,11 +18315,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 65535
           x-field-uid: 3
           default:
           - 0
-          minimum: 0
-          maximum: 65535
         increment:
           $ref: '#/components/schemas/Pattern.Flow.PfcPause.ClassEnableVector.Counter'
           x-field-uid: 5
@@ -18529,11 +18423,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 65535
           x-field-uid: 3
           default:
           - 0
-          minimum: 0
-          maximum: 65535
         increment:
           $ref: '#/components/schemas/Pattern.Flow.PfcPause.PauseClass0.Counter'
           x-field-uid: 5
@@ -18637,11 +18531,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 65535
           x-field-uid: 3
           default:
           - 0
-          minimum: 0
-          maximum: 65535
         increment:
           $ref: '#/components/schemas/Pattern.Flow.PfcPause.PauseClass1.Counter'
           x-field-uid: 5
@@ -18745,11 +18639,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 65535
           x-field-uid: 3
           default:
           - 0
-          minimum: 0
-          maximum: 65535
         increment:
           $ref: '#/components/schemas/Pattern.Flow.PfcPause.PauseClass2.Counter'
           x-field-uid: 5
@@ -18853,11 +18747,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 65535
           x-field-uid: 3
           default:
           - 0
-          minimum: 0
-          maximum: 65535
         increment:
           $ref: '#/components/schemas/Pattern.Flow.PfcPause.PauseClass3.Counter'
           x-field-uid: 5
@@ -18961,11 +18855,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 65535
           x-field-uid: 3
           default:
           - 0
-          minimum: 0
-          maximum: 65535
         increment:
           $ref: '#/components/schemas/Pattern.Flow.PfcPause.PauseClass4.Counter'
           x-field-uid: 5
@@ -19069,11 +18963,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 65535
           x-field-uid: 3
           default:
           - 0
-          minimum: 0
-          maximum: 65535
         increment:
           $ref: '#/components/schemas/Pattern.Flow.PfcPause.PauseClass5.Counter'
           x-field-uid: 5
@@ -19177,11 +19071,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 65535
           x-field-uid: 3
           default:
           - 0
-          minimum: 0
-          maximum: 65535
         increment:
           $ref: '#/components/schemas/Pattern.Flow.PfcPause.PauseClass6.Counter'
           x-field-uid: 5
@@ -19285,11 +19179,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 65535
           x-field-uid: 3
           default:
           - 0
-          minimum: 0
-          maximum: 65535
         increment:
           $ref: '#/components/schemas/Pattern.Flow.PfcPause.PauseClass7.Counter'
           x-field-uid: 5
@@ -19527,8 +19421,6 @@ components:
           format: uint32
           default: 1
           x-field-uid: 3
-      x-constants:
-        flow_control: 34824
     Pattern.Flow.EthernetPause.EtherType.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -19595,11 +19487,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 65535
           x-field-uid: 3
           default:
           - 34824
-          minimum: 0
-          maximum: 65535
         increment:
           $ref: '#/components/schemas/Pattern.Flow.EthernetPause.EtherType.Counter'
           x-field-uid: 5
@@ -19613,8 +19505,6 @@ components:
           items:
             $ref: '#/components/schemas/Pattern.Flow.EthernetPause.EtherType.MetricTag'
           x-field-uid: 7
-      x-constants:
-        flow_control: 34824
     Pattern.Flow.EthernetPause.ControlOpCode.Counter:
       description: |-
         integer counter pattern
@@ -19705,11 +19595,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 65535
           x-field-uid: 3
           default:
           - 1
-          minimum: 0
-          maximum: 65535
         increment:
           $ref: '#/components/schemas/Pattern.Flow.EthernetPause.ControlOpCode.Counter'
           x-field-uid: 5
@@ -19813,11 +19703,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 65535
           x-field-uid: 3
           default:
           - 0
-          minimum: 0
-          maximum: 65535
         increment:
           $ref: '#/components/schemas/Pattern.Flow.EthernetPause.Time.Counter'
           x-field-uid: 5
@@ -19921,11 +19811,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 65535
           x-field-uid: 3
           default:
           - 0
-          minimum: 0
-          maximum: 65535
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Tcp.SrcPort.Counter'
           x-field-uid: 5
@@ -20029,11 +19919,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 65535
           x-field-uid: 3
           default:
           - 0
-          minimum: 0
-          maximum: 65535
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Tcp.DstPort.Counter'
           x-field-uid: 5
@@ -20057,15 +19947,11 @@ components:
           x-field-uid: 1
           default: 0
           format: uint32
-          minimum: 0
-          maximum: 4294967295
         step:
           type: integer
           x-field-uid: 2
           default: 1
           format: uint32
-          minimum: 0
-          maximum: 4294967295
         count:
           type: integer
           format: uint32
@@ -20130,8 +20016,6 @@ components:
           x-field-uid: 2
           default: 0
           format: uint32
-          minimum: 0
-          maximum: 4294967295
         values:
           type: array
           items:
@@ -20140,8 +20024,6 @@ components:
           x-field-uid: 3
           default:
           - 0
-          minimum: 0
-          maximum: 4294967295
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Tcp.SeqNum.Counter'
           x-field-uid: 5
@@ -20165,15 +20047,11 @@ components:
           x-field-uid: 1
           default: 0
           format: uint32
-          minimum: 0
-          maximum: 4294967295
         step:
           type: integer
           x-field-uid: 2
           default: 1
           format: uint32
-          minimum: 0
-          maximum: 4294967295
         count:
           type: integer
           format: uint32
@@ -20238,8 +20116,6 @@ components:
           x-field-uid: 2
           default: 0
           format: uint32
-          minimum: 0
-          maximum: 4294967295
         values:
           type: array
           items:
@@ -20248,8 +20124,6 @@ components:
           x-field-uid: 3
           default:
           - 0
-          minimum: 0
-          maximum: 4294967295
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Tcp.AckNum.Counter'
           x-field-uid: 5
@@ -20353,11 +20227,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 15
           x-field-uid: 3
           default:
           - 0
-          minimum: 0
-          maximum: 15
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Tcp.DataOffset.Counter'
           x-field-uid: 5
@@ -20461,11 +20335,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 1
           x-field-uid: 3
           default:
           - 0
-          minimum: 0
-          maximum: 1
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Tcp.EcnNs.Counter'
           x-field-uid: 5
@@ -20569,11 +20443,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 1
           x-field-uid: 3
           default:
           - 0
-          minimum: 0
-          maximum: 1
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Tcp.EcnCwr.Counter'
           x-field-uid: 5
@@ -20677,11 +20551,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 1
           x-field-uid: 3
           default:
           - 0
-          minimum: 0
-          maximum: 1
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Tcp.EcnEcho.Counter'
           x-field-uid: 5
@@ -20785,11 +20659,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 1
           x-field-uid: 3
           default:
           - 0
-          minimum: 0
-          maximum: 1
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Tcp.CtlUrg.Counter'
           x-field-uid: 5
@@ -20893,11 +20767,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 1
           x-field-uid: 3
           default:
           - 0
-          minimum: 0
-          maximum: 1
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Tcp.CtlAck.Counter'
           x-field-uid: 5
@@ -21000,11 +20874,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 1
           x-field-uid: 3
           default:
           - 0
-          minimum: 0
-          maximum: 1
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Tcp.CtlPsh.Counter'
           x-field-uid: 5
@@ -21107,11 +20981,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 1
           x-field-uid: 3
           default:
           - 0
-          minimum: 0
-          maximum: 1
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Tcp.CtlRst.Counter'
           x-field-uid: 5
@@ -21214,11 +21088,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 1
           x-field-uid: 3
           default:
           - 0
-          minimum: 0
-          maximum: 1
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Tcp.CtlSyn.Counter'
           x-field-uid: 5
@@ -21321,11 +21195,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 1
           x-field-uid: 3
           default:
           - 0
-          minimum: 0
-          maximum: 1
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Tcp.CtlFin.Counter'
           x-field-uid: 5
@@ -21429,11 +21303,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 65535
           x-field-uid: 3
           default:
           - 0
-          minimum: 0
-          maximum: 65535
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Tcp.Window.Counter'
           x-field-uid: 5
@@ -21537,11 +21411,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 65535
           x-field-uid: 3
           default:
           - 0
-          minimum: 0
-          maximum: 65535
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Udp.SrcPort.Counter'
           x-field-uid: 5
@@ -21645,11 +21519,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 65535
           x-field-uid: 3
           default:
           - 0
-          minimum: 0
-          maximum: 65535
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Udp.DstPort.Counter'
           x-field-uid: 5
@@ -21753,11 +21627,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 65535
           x-field-uid: 3
           default:
           - 0
-          minimum: 0
-          maximum: 65535
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Udp.Length.Counter'
           x-field-uid: 5
@@ -21902,11 +21776,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 1
           x-field-uid: 3
           default:
           - 0
-          minimum: 0
-          maximum: 1
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Gre.ChecksumPresent.Counter'
           x-field-uid: 5
@@ -22010,11 +21884,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 4095
           x-field-uid: 3
           default:
           - 0
-          minimum: 0
-          maximum: 4095
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Gre.Reserved0.Counter'
           x-field-uid: 5
@@ -22118,11 +21992,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 7
           x-field-uid: 3
           default:
           - 0
-          minimum: 0
-          maximum: 7
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Gre.Version.Counter'
           x-field-uid: 5
@@ -22160,9 +22034,6 @@ components:
           format: uint32
           default: 1
           x-field-uid: 3
-      x-constants:
-        ipv4: 2048
-        ipv6: 34525
     Pattern.Flow.Gre.Protocol.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -22229,11 +22100,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 65535
           x-field-uid: 3
           default:
           - 2048
-          minimum: 0
-          maximum: 65535
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Gre.Protocol.Counter'
           x-field-uid: 5
@@ -22247,9 +22118,6 @@ components:
           items:
             $ref: '#/components/schemas/Pattern.Flow.Gre.Protocol.MetricTag'
           x-field-uid: 7
-      x-constants:
-        ipv4: 2048
-        ipv6: 34525
     Pattern.Flow.Gre.Checksum:
       description: |-
         Optional checksum of GRE header and payload. Only present if the checksum_present bit is set.
@@ -22381,11 +22249,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 65535
           x-field-uid: 3
           default:
           - 0
-          minimum: 0
-          maximum: 65535
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Gre.Reserved1.Counter'
           x-field-uid: 5
@@ -22489,11 +22357,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 7
           x-field-uid: 3
           default:
           - 1
-          minimum: 0
-          maximum: 7
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Gtpv1.Version.Counter'
           x-field-uid: 5
@@ -22597,11 +22465,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 1
           x-field-uid: 3
           default:
           - 1
-          minimum: 0
-          maximum: 1
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Gtpv1.ProtocolType.Counter'
           x-field-uid: 5
@@ -22705,11 +22573,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 1
           x-field-uid: 3
           default:
           - 0
-          minimum: 0
-          maximum: 1
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Gtpv1.Reserved.Counter'
           x-field-uid: 5
@@ -22813,11 +22681,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 1
           x-field-uid: 3
           default:
           - 0
-          minimum: 0
-          maximum: 1
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Gtpv1.EFlag.Counter'
           x-field-uid: 5
@@ -22921,11 +22789,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 1
           x-field-uid: 3
           default:
           - 0
-          minimum: 0
-          maximum: 1
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Gtpv1.SFlag.Counter'
           x-field-uid: 5
@@ -23029,11 +22897,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 1
           x-field-uid: 3
           default:
           - 0
-          minimum: 0
-          maximum: 1
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Gtpv1.PnFlag.Counter'
           x-field-uid: 5
@@ -23137,11 +23005,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 255
           x-field-uid: 3
           default:
           - 0
-          minimum: 0
-          maximum: 255
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Gtpv1.MessageType.Counter'
           x-field-uid: 5
@@ -23245,11 +23113,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 65535
           x-field-uid: 3
           default:
           - 0
-          minimum: 0
-          maximum: 65535
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Gtpv1.MessageLength.Counter'
           x-field-uid: 5
@@ -23273,15 +23141,11 @@ components:
           x-field-uid: 1
           default: 0
           format: uint32
-          minimum: 0
-          maximum: 4294967295
         step:
           type: integer
           x-field-uid: 2
           default: 1
           format: uint32
-          minimum: 0
-          maximum: 4294967295
         count:
           type: integer
           format: uint32
@@ -23346,8 +23210,6 @@ components:
           x-field-uid: 2
           default: 0
           format: uint32
-          minimum: 0
-          maximum: 4294967295
         values:
           type: array
           items:
@@ -23356,8 +23218,6 @@ components:
           x-field-uid: 3
           default:
           - 0
-          minimum: 0
-          maximum: 4294967295
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Gtpv1.Teid.Counter'
           x-field-uid: 5
@@ -23461,11 +23321,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 65535
           x-field-uid: 3
           default:
           - 0
-          minimum: 0
-          maximum: 65535
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Gtpv1.SquenceNumber.Counter'
           x-field-uid: 5
@@ -23569,11 +23429,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 255
           x-field-uid: 3
           default:
           - 0
-          minimum: 0
-          maximum: 255
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Gtpv1.NPduNumber.Counter'
           x-field-uid: 5
@@ -23677,11 +23537,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 255
           x-field-uid: 3
           default:
           - 0
-          minimum: 0
-          maximum: 255
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Gtpv1.NextExtensionHeaderType.Counter'
           x-field-uid: 5
@@ -23785,11 +23645,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 255
           x-field-uid: 3
           default:
           - 0
-          minimum: 0
-          maximum: 255
         increment:
           $ref: '#/components/schemas/Pattern.Flow.GtpExtension.ExtensionLength.Counter'
           x-field-uid: 5
@@ -23824,7 +23684,7 @@ components:
           maximum: 281474976710655
         count:
           type: integer
-          format: uint32
+          format: uint64
           default: 1
           x-field-uid: 3
     Pattern.Flow.GtpExtension.Contents.MetricTag:
@@ -23844,7 +23704,7 @@ components:
           description: |-
             Offset in bits relative to start of corresponding header field
           type: integer
-          format: uint32
+          format: uint64
           default: 0
           minimum: 0
           maximum: 47
@@ -23853,7 +23713,7 @@ components:
           description: |-
             Number of bits to track for metrics starting from configured offset of corresponding header field
           type: integer
-          format: uint32
+          format: uint64
           default: 48
           minimum: 1
           maximum: 48
@@ -23893,11 +23753,11 @@ components:
           items:
             type: integer
             format: uint64
+            minimum: 0
+            maximum: 281474976710655
           x-field-uid: 3
           default:
           - 0
-          minimum: 0
-          maximum: 281474976710655
         increment:
           $ref: '#/components/schemas/Pattern.Flow.GtpExtension.Contents.Counter'
           x-field-uid: 5
@@ -24001,11 +23861,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 255
           x-field-uid: 3
           default:
           - 0
-          minimum: 0
-          maximum: 255
         increment:
           $ref: '#/components/schemas/Pattern.Flow.GtpExtension.NextExtensionHeader.Counter'
           x-field-uid: 5
@@ -24109,11 +23969,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 7
           x-field-uid: 3
           default:
           - 2
-          minimum: 0
-          maximum: 7
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Gtpv2.Version.Counter'
           x-field-uid: 5
@@ -24217,11 +24077,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 1
           x-field-uid: 3
           default:
           - 0
-          minimum: 0
-          maximum: 1
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Gtpv2.PiggybackingFlag.Counter'
           x-field-uid: 5
@@ -24325,11 +24185,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 1
           x-field-uid: 3
           default:
           - 0
-          minimum: 0
-          maximum: 1
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Gtpv2.TeidFlag.Counter'
           x-field-uid: 5
@@ -24433,11 +24293,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 7
           x-field-uid: 3
           default:
           - 0
-          minimum: 0
-          maximum: 7
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Gtpv2.Spare1.Counter'
           x-field-uid: 5
@@ -24541,11 +24401,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 255
           x-field-uid: 3
           default:
           - 0
-          minimum: 0
-          maximum: 255
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Gtpv2.MessageType.Counter'
           x-field-uid: 5
@@ -24649,11 +24509,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 65535
           x-field-uid: 3
           default:
           - 0
-          minimum: 0
-          maximum: 65535
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Gtpv2.MessageLength.Counter'
           x-field-uid: 5
@@ -24677,15 +24537,11 @@ components:
           x-field-uid: 1
           default: 0
           format: uint32
-          minimum: 0
-          maximum: 4294967295
         step:
           type: integer
           x-field-uid: 2
           default: 1
           format: uint32
-          minimum: 0
-          maximum: 4294967295
         count:
           type: integer
           format: uint32
@@ -24750,8 +24606,6 @@ components:
           x-field-uid: 2
           default: 0
           format: uint32
-          minimum: 0
-          maximum: 4294967295
         values:
           type: array
           items:
@@ -24760,8 +24614,6 @@ components:
           x-field-uid: 3
           default:
           - 0
-          minimum: 0
-          maximum: 4294967295
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Gtpv2.Teid.Counter'
           x-field-uid: 5
@@ -24865,11 +24717,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 16777215
           x-field-uid: 3
           default:
           - 0
-          minimum: 0
-          maximum: 16777215
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Gtpv2.SequenceNumber.Counter'
           x-field-uid: 5
@@ -24973,11 +24825,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 255
           x-field-uid: 3
           default:
           - 0
-          minimum: 0
-          maximum: 255
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Gtpv2.Spare2.Counter'
           x-field-uid: 5
@@ -25015,8 +24867,6 @@ components:
           format: uint32
           default: 1
           x-field-uid: 3
-      x-constants:
-        ethernet: 1
     Pattern.Flow.Arp.HardwareType.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -25083,11 +24933,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 65535
           x-field-uid: 3
           default:
           - 1
-          minimum: 0
-          maximum: 65535
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Arp.HardwareType.Counter'
           x-field-uid: 5
@@ -25101,8 +24951,6 @@ components:
           items:
             $ref: '#/components/schemas/Pattern.Flow.Arp.HardwareType.MetricTag'
           x-field-uid: 7
-      x-constants:
-        ethernet: 1
     Pattern.Flow.Arp.ProtocolType.Counter:
       description: |-
         integer counter pattern
@@ -25127,9 +24975,6 @@ components:
           format: uint32
           default: 1
           x-field-uid: 3
-      x-constants:
-        ipv4: 2048
-        ipv6: 34525
     Pattern.Flow.Arp.ProtocolType.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -25196,11 +25041,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 65535
           x-field-uid: 3
           default:
           - 2048
-          minimum: 0
-          maximum: 65535
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Arp.ProtocolType.Counter'
           x-field-uid: 5
@@ -25214,9 +25059,6 @@ components:
           items:
             $ref: '#/components/schemas/Pattern.Flow.Arp.ProtocolType.MetricTag'
           x-field-uid: 7
-      x-constants:
-        ipv4: 2048
-        ipv6: 34525
     Pattern.Flow.Arp.HardwareLength.Counter:
       description: |-
         integer counter pattern
@@ -25307,11 +25149,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 255
           x-field-uid: 3
           default:
           - 6
-          minimum: 0
-          maximum: 255
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Arp.HardwareLength.Counter'
           x-field-uid: 5
@@ -25415,11 +25257,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 255
           x-field-uid: 3
           default:
           - 4
-          minimum: 0
-          maximum: 255
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Arp.ProtocolLength.Counter'
           x-field-uid: 5
@@ -25457,9 +25299,6 @@ components:
           format: uint32
           default: 1
           x-field-uid: 3
-      x-constants:
-        request: 1
-        reply: 2
     Pattern.Flow.Arp.Operation.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -25526,11 +25365,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 65535
           x-field-uid: 3
           default:
           - 1
-          minimum: 0
-          maximum: 65535
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Arp.Operation.Counter'
           x-field-uid: 5
@@ -25544,9 +25383,6 @@ components:
           items:
             $ref: '#/components/schemas/Pattern.Flow.Arp.Operation.MetricTag'
           x-field-uid: 7
-      x-constants:
-        request: 1
-        reply: 2
     Pattern.Flow.Arp.SenderHardwareAddr.Counter:
       description: |-
         mac counter pattern
@@ -25971,9 +25807,6 @@ components:
           format: uint32
           default: 1
           x-field-uid: 3
-      x-constants:
-        reply: 0
-        request: 8
     Pattern.Flow.Icmp.Echo.Type.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -26040,11 +25873,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 255
           x-field-uid: 3
           default:
           - 8
-          minimum: 0
-          maximum: 255
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Icmp.Echo.Type.Counter'
           x-field-uid: 5
@@ -26058,9 +25891,6 @@ components:
           items:
             $ref: '#/components/schemas/Pattern.Flow.Icmp.Echo.Type.MetricTag'
           x-field-uid: 7
-      x-constants:
-        reply: 0
-        request: 8
     Pattern.Flow.Icmp.Echo.Code.Counter:
       description: |-
         integer counter pattern
@@ -26151,11 +25981,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 255
           x-field-uid: 3
           default:
           - 0
-          minimum: 0
-          maximum: 255
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Icmp.Echo.Code.Counter'
           x-field-uid: 5
@@ -26300,11 +26130,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 65535
           x-field-uid: 3
           default:
           - 0
-          minimum: 0
-          maximum: 65535
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Icmp.Echo.Identifier.Counter'
           x-field-uid: 5
@@ -26408,11 +26238,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 65535
           x-field-uid: 3
           default:
           - 0
-          minimum: 0
-          maximum: 65535
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Icmp.Echo.SequenceNumber.Counter'
           x-field-uid: 5
@@ -26557,11 +26387,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 65535
           x-field-uid: 3
           default:
           - 0
-          minimum: 0
-          maximum: 65535
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Icmp.NextFields.Identifier.Counter'
           x-field-uid: 5
@@ -26665,11 +26495,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 65535
           x-field-uid: 3
           default:
           - 0
-          minimum: 0
-          maximum: 65535
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Icmp.NextFields.SequenceNumber.Counter'
           x-field-uid: 5
@@ -26707,9 +26537,6 @@ components:
           format: uint32
           default: 1
           x-field-uid: 3
-      x-constants:
-        request: 128
-        reply: 129
     Pattern.Flow.Icmpv6.Echo.Type.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -26776,11 +26603,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 255
           x-field-uid: 3
           default:
           - 128
-          minimum: 0
-          maximum: 255
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Icmpv6.Echo.Type.Counter'
           x-field-uid: 5
@@ -26794,9 +26621,6 @@ components:
           items:
             $ref: '#/components/schemas/Pattern.Flow.Icmpv6.Echo.Type.MetricTag'
           x-field-uid: 7
-      x-constants:
-        request: 128
-        reply: 129
     Pattern.Flow.Icmpv6.Echo.Code.Counter:
       description: |-
         integer counter pattern
@@ -26887,11 +26711,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 255
           x-field-uid: 3
           default:
           - 0
-          minimum: 0
-          maximum: 255
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Icmpv6.Echo.Code.Counter'
           x-field-uid: 5
@@ -26995,11 +26819,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 65535
           x-field-uid: 3
           default:
           - 0
-          minimum: 0
-          maximum: 65535
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Icmpv6.Echo.Identifier.Counter'
           x-field-uid: 5
@@ -27103,11 +26927,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 65535
           x-field-uid: 3
           default:
           - 0
-          minimum: 0
-          maximum: 65535
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Icmpv6.Echo.SequenceNumber.Counter'
           x-field-uid: 5
@@ -27227,8 +27051,6 @@ components:
           format: uint32
           default: 1
           x-field-uid: 3
-      x-constants:
-        standard_address: 255
     Pattern.Flow.Ppp.Address.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -27295,11 +27117,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 255
           x-field-uid: 3
           default:
           - 255
-          minimum: 0
-          maximum: 255
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Ppp.Address.Counter'
           x-field-uid: 5
@@ -27313,8 +27135,6 @@ components:
           items:
             $ref: '#/components/schemas/Pattern.Flow.Ppp.Address.MetricTag'
           x-field-uid: 7
-      x-constants:
-        standard_address: 255
     Pattern.Flow.Ppp.Control.Counter:
       description: |-
         integer counter pattern
@@ -27339,8 +27159,6 @@ components:
           format: uint32
           default: 1
           x-field-uid: 3
-      x-constants:
-        unnumbered_data: 3
     Pattern.Flow.Ppp.Control.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -27407,11 +27225,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 255
           x-field-uid: 3
           default:
           - 3
-          minimum: 0
-          maximum: 255
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Ppp.Control.Counter'
           x-field-uid: 5
@@ -27425,8 +27243,6 @@ components:
           items:
             $ref: '#/components/schemas/Pattern.Flow.Ppp.Control.MetricTag'
           x-field-uid: 7
-      x-constants:
-        unnumbered_data: 3
     Pattern.Flow.Ppp.ProtocolType.Counter:
       description: |-
         integer counter pattern
@@ -27520,11 +27336,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 65535
           x-field-uid: 3
           default:
           - 33
-          minimum: 0
-          maximum: 65535
         auto:
           description: |-
             The OTG implementation can provide a system generated
@@ -27639,11 +27455,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 15
           x-field-uid: 3
           default:
           - 1
-          minimum: 0
-          maximum: 15
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Igmpv1.Version.Counter'
           x-field-uid: 5
@@ -27681,9 +27497,6 @@ components:
           format: uint32
           default: 1
           x-field-uid: 3
-      x-constants:
-        query: 1
-        report: 2
     Pattern.Flow.Igmpv1.Type.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -27750,11 +27563,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 15
           x-field-uid: 3
           default:
           - 1
-          minimum: 0
-          maximum: 15
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Igmpv1.Type.Counter'
           x-field-uid: 5
@@ -27768,9 +27581,6 @@ components:
           items:
             $ref: '#/components/schemas/Pattern.Flow.Igmpv1.Type.MetricTag'
           x-field-uid: 7
-      x-constants:
-        query: 1
-        report: 2
     Pattern.Flow.Igmpv1.Unused.Counter:
       description: |-
         integer counter pattern
@@ -27861,11 +27671,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 255
           x-field-uid: 3
           default:
           - 0
-          minimum: 0
-          maximum: 255
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Igmpv1.Unused.Counter'
           x-field-uid: 5
@@ -28113,11 +27923,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 1048575
           x-field-uid: 3
           default:
           - 16
-          minimum: 0
-          maximum: 1048575
         auto:
           description: |-
             The OTG implementation can provide a system generated
@@ -28232,11 +28042,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 7
           x-field-uid: 3
           default:
           - 0
-          minimum: 0
-          maximum: 7
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Mpls.TrafficClass.Counter'
           x-field-uid: 5
@@ -28343,11 +28153,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 1
           x-field-uid: 3
           default:
           - 1
-          minimum: 0
-          maximum: 1
         auto:
           description: |-
             The OTG implementation can provide a system generated
@@ -28462,11 +28272,11 @@ components:
           items:
             type: integer
             format: uint32
+            minimum: 0
+            maximum: 255
           x-field-uid: 3
           default:
           - 64
-          minimum: 0
-          maximum: 255
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Mpls.TimeToLive.Counter'
           x-field-uid: 5
