@@ -6,7 +6,7 @@ require (
 	github.com/Masterminds/semver/v3 v3.2.1
 	github.com/ghodss/yaml v1.0.0
 	github.com/gorilla/mux v1.8.0
-	github.com/rs/zerolog v1.29.1
+	github.com/rs/zerolog v1.30.0
 	github.com/stretchr/testify v1.8.2
 	go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.37.0
 	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.37.0
