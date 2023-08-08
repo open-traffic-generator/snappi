@@ -14,7 +14,8 @@ def test_bgp_sr_te_policy(api):
     d = config.devices.device(name='d')[-1]
 
     # setup ethernet
-    eth = d.ethernets.ethernet(port_name=p1.name)[-1]
+    eth = d.ethernets.ethernet()[-1]
+    eth.connection.port_name = p1.name
     eth.name = 'e'
     eth.mac = '00:01:00:00:00:01'
 
