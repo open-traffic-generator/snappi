@@ -55,8 +55,8 @@ func config2(api gosnappi.GosnappiApi) gosnappi.Config {
 	d1 := config.Devices().Add().SetName("d1")
 	eth1 := d1.Ethernets().Add().
 		SetName("Ethernet1").
-		SetPortName("port1").
 		SetMac("00:11:01:00:00:03")
+	eth1.Connection().SetPortName("port1")
 	eth1.Ipv4Addresses().Add().
 		SetName("IPv41").
 		SetAddress("10.10.0.1").
@@ -304,26 +304,28 @@ func TestSetTransmitStateResponse(t *testing.T) {
 	flow_names := []string{"f1", "f2"}
 	api := gosnappi.NewApi()
 	api.NewGrpcTransport().SetLocation(mockGrpcServerLocation)
-	req := api.NewTransmitState()
-	req.SetFlowNames([]string{"f1", "f2"})
-	req.SetState(gosnappi.TransmitStateState.START)
-	assert.Equal(t, flow_names, req.FlowNames())
+	req := api.NewControlState()
+	ft := req.Traffic().FlowTransmit()
+	ft.SetFlowNames([]string{"f1", "f2"})
+	ft.SetState(gosnappi.StateTrafficFlowTransmitState.START)
+	assert.Equal(t, flow_names, ft.FlowNames())
 	req_json, err := req.ToJson()
 	assert.Nil(t, err)
 	req_yaml, err := req.ToYaml()
 	assert.Nil(t, err)
 	log.Print(req_json, req_yaml)
-	resp, _ := api.SetTransmitState(req)
+	resp, _ := api.SetControlState(req)
 	assert.NotNil(t, resp)
 }
 
 func TestSetTransmitStateResponseError(t *testing.T) {
 	api := gosnappi.NewApi()
 	api.NewGrpcTransport().SetLocation(mockGrpcServerLocation)
-	req := api.NewTransmitState()
-	req.SetFlowNames([]string{"f3"})
-	req.SetState(gosnappi.TransmitStateState.START)
-	_, err := api.SetTransmitState(req)
+	req := api.NewControlState()
+	ft := req.Traffic().FlowTransmit()
+	ft.SetFlowNames([]string{"f3"})
+	ft.SetState(gosnappi.StateTrafficFlowTransmitState.START)
+	_, err := api.SetControlState(req)
 	log.Print(err)
 	result := strings.Contains(err.Error(), "requested flow is not available in configured flows to start")
 	assert.Equal(t, result, true)
@@ -333,26 +335,28 @@ func TestSetLinkStateResponse(t *testing.T) {
 	port_names := []string{"port1"}
 	api := gosnappi.NewApi()
 	api.NewGrpcTransport().SetLocation(mockGrpcServerLocation)
-	req := api.NewLinkState()
-	req.SetPortNames([]string{"port1"})
-	req.SetState(gosnappi.LinkStateState.DOWN)
+	req := api.NewControlState()
+	ls := req.Port().Link()
+	ls.SetPortNames([]string{"port1"})
+	ls.SetState(gosnappi.StatePortLinkState.DOWN)
 	req_json, err := req.ToJson()
 	assert.Nil(t, err)
 	req_yaml, err := req.ToYaml()
 	assert.Nil(t, err)
 	log.Print(req_json, req_yaml)
-	assert.Equal(t, port_names, req.PortNames())
-	resp, _ := api.SetLinkState(req)
+	assert.Equal(t, port_names, ls.PortNames())
+	resp, _ := api.SetControlState(req)
 	assert.NotNil(t, resp)
 }
 
 func TestSetLinkStateResponseError(t *testing.T) {
 	api := gosnappi.NewApi()
 	api.NewGrpcTransport().SetLocation(mockGrpcServerLocation)
-	req := api.NewLinkState()
-	req.SetPortNames([]string{"port3"})
-	req.SetState(gosnappi.LinkStateState.DOWN)
-	_, err := api.SetLinkState(req)
+	req := api.NewControlState()
+	ls := req.Port().Link()
+	ls.SetPortNames([]string{"port3"})
+	ls.SetState(gosnappi.StatePortLinkState.DOWN)
+	_, err := api.SetControlState(req)
 	log.Print(err)
 	result := strings.Contains(err.Error(), "requested port is not available in configured ports to do link down")
 	assert.Equal(t, result, true)
@@ -362,26 +366,28 @@ func TestSetCaptureStateResponse(t *testing.T) {
 	port_names := []string{"port1"}
 	api := gosnappi.NewApi()
 	api.NewGrpcTransport().SetLocation(mockGrpcServerLocation)
-	req := api.NewCaptureState()
-	req.SetPortNames([]string{"port1"})
-	req.SetState(gosnappi.CaptureStateState.START)
+	req := api.NewControlState()
+	cp := req.Port().Capture()
+	cp.SetPortNames([]string{"port1"})
+	cp.SetState(gosnappi.StatePortCaptureState.START)
 	req_json, err := req.ToJson()
 	assert.Nil(t, err)
 	req_yaml, err := req.ToYaml()
 	assert.Nil(t, err)
 	log.Print(req_json, req_yaml)
-	assert.Equal(t, port_names, req.PortNames())
-	resp, _ := api.SetCaptureState(req)
+	assert.Equal(t, port_names, cp.PortNames())
+	resp, _ := api.SetControlState(req)
 	assert.NotNil(t, resp)
 }
 
 func TestSetCaptureStateResponseError(t *testing.T) {
 	api := gosnappi.NewApi()
 	api.NewGrpcTransport().SetLocation(mockGrpcServerLocation)
-	req := api.NewCaptureState()
-	req.SetPortNames([]string{"port3"})
-	req.SetState(gosnappi.CaptureStateState.START)
-	_, err := api.SetCaptureState(req)
+	req := api.NewControlState()
+	cp := req.Port().Capture()
+	cp.SetPortNames([]string{"port3"})
+	cp.SetState(gosnappi.StatePortCaptureState.START)
+	_, err := api.SetControlState(req)
 	log.Print(err)
 	result := strings.Contains(err.Error(), "requested port is not available in configured ports to start capture")
 	assert.Equal(t, result, true)
@@ -394,26 +400,28 @@ func TestSetRouteStateResponse(t *testing.T) {
 	config := config2(api)
 	_, err := api.SetConfig(config)
 	assert.Nil(t, err)
-	req := api.NewRouteState()
-	req.SetNames([]string{"RR-1"})
-	req.SetState(gosnappi.RouteStateState.ADVERTISE)
+	req := api.NewControlState()
+	rs := req.Protocol().Route()
+	rs.SetNames([]string{"RR-1"})
+	rs.SetState(gosnappi.StateProtocolRouteState.ADVERTISE)
 	req_json, err := req.ToJson()
 	assert.Nil(t, err)
 	req_yaml, err := req.ToYaml()
 	assert.Nil(t, err)
 	log.Print(req_json, req_yaml)
-	assert.Equal(t, route_names, req.Names())
-	resp, _ := api.SetRouteState(req)
+	assert.Equal(t, route_names, rs.Names())
+	resp, _ := api.SetControlState(req)
 	assert.NotNil(t, resp)
 }
 
 func TestSetRouteStateResponseError(t *testing.T) {
 	api := gosnappi.NewApi()
 	api.NewGrpcTransport().SetLocation(mockGrpcServerLocation)
-	req := api.NewRouteState()
-	req.SetNames([]string{"RR-2"})
-	req.SetState(gosnappi.RouteStateState.ADVERTISE)
-	_, err := api.SetRouteState(req)
+	req := api.NewControlState()
+	rs := req.Protocol().Route()
+	rs.SetNames([]string{"RR-2"})
+	rs.SetState(gosnappi.StateProtocolRouteState.ADVERTISE)
+	_, err := api.SetControlState(req)
 	log.Print(err)
 	result := strings.Contains(err.Error(), "requested route is not available in configured routes to advertise")
 	assert.Equal(t, result, true)
@@ -452,12 +460,12 @@ func TestDevices(t *testing.T) {
 	device.ToPbText()
 
 	eth := device.Ethernets().Add().
-		SetPortName("p1").
 		SetName("Eth").
 		SetMac("00:00:11:11:00:00").
 		SetMtu(1500)
 
-	assert.Equal(t, eth.PortName(), "p1")
+	eth.Connection().SetPortName("p1")
+	assert.Equal(t, eth.Connection().PortName(), "p1")
 	assert.Equal(t, eth.Name(), "Eth")
 	assert.Equal(t, eth.Mac(), "00:00:11:11:00:00")
 	assert.Equal(t, eth.Mtu(), int32(1500))
@@ -872,7 +880,8 @@ func TestDefaultsDevice(t *testing.T) {
 	config := api.NewConfig()
 	device := config.Devices().Add().SetName("d1")
 	eth := device.Ethernets().Add().
-		SetPortName("p1").SetName("Eth").SetMac("00:00:11:11:00:00")
+		SetName("Eth").SetMac("00:00:11:11:00:00")
+	eth.Connection().SetPortName("p1")
 	eth.Vlans().Add().SetName("vlan1")
 	eth.Ipv4Addresses().Add().
 		SetName("ipv4").SetAddress("10.1.1.1").SetGateway("10.1.1.2")
@@ -1097,7 +1106,7 @@ func TestFromJsonUnmarshalError(t *testing.T) {
 		"state": "run"
 	  }`
 	api := gosnappi.NewApi()
-	req := api.NewTransmitState()
+	req := api.NewControlState().Protocol().All()
 	err := req.FromJson(input_str)
 	assert.NotNil(t, err)
 	assert.Contains(t, err.Error(), `unmarshal error (line 2:12): invalid value for enum type: "run"`)

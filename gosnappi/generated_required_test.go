@@ -112,7 +112,7 @@ func TestFlowRequired(t *testing.T) {
 	assert.Contains(t, err2.Error(), "TxRx", "Name")
 }
 func TestTransmitStateRequired(t *testing.T) {
-	object := gosnappi.NewTransmitState()
+	object := gosnappi.NewControlState().Traffic().FlowTransmit()
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
 		AllowPartial:    true,
@@ -129,7 +129,7 @@ func TestTransmitStateRequired(t *testing.T) {
 	assert.Contains(t, err2.Error(), "State")
 }
 func TestLinkStateRequired(t *testing.T) {
-	object := gosnappi.NewLinkState()
+	object := gosnappi.NewControlState().Port().Link()
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
 		AllowPartial:    true,
@@ -146,7 +146,7 @@ func TestLinkStateRequired(t *testing.T) {
 	assert.Contains(t, err2.Error(), "State")
 }
 func TestCaptureStateRequired(t *testing.T) {
-	object := gosnappi.NewCaptureState()
+	object := gosnappi.NewControlState().Port().Capture()
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
 		AllowPartial:    true,
@@ -163,7 +163,7 @@ func TestCaptureStateRequired(t *testing.T) {
 	assert.Contains(t, err2.Error(), "State")
 }
 func TestRouteStateRequired(t *testing.T) {
-	object := gosnappi.NewRouteState()
+	object := gosnappi.NewControlState().Protocol().Route()
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
 		AllowPartial:    true,
@@ -180,7 +180,7 @@ func TestRouteStateRequired(t *testing.T) {
 	assert.Contains(t, err2.Error(), "State")
 }
 func TestProtocolStateRequired(t *testing.T) {
-	object := gosnappi.NewProtocolState()
+	object := gosnappi.NewControlState().Protocol().All()
 	opts := protojson.MarshalOptions{
 		UseProtoNames:   true,
 		AllowPartial:    true,
