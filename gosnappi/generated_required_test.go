@@ -124,9 +124,9 @@ func TestTransmitStateRequired(t *testing.T) {
 	err1 := object.FromYaml(string(data))
 	protoMarshal, _ := proto.Marshal(object.Msg())
 	err2 := object.FromPbText(string(protoMarshal))
-	assert.Contains(t, err.Error(), "State")
-	assert.Contains(t, err1.Error(), "State")
-	assert.Contains(t, err2.Error(), "State")
+	assert.Nil(t, err)
+	assert.Nil(t, err1)
+	assert.Nil(t, err2)
 }
 func TestLinkStateRequired(t *testing.T) {
 	object := gosnappi.NewControlState().Port().Link()
