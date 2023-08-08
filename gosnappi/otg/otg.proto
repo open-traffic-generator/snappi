@@ -423,7 +423,7 @@ message DeviceIpv6 {
 
   // The network prefix.
   // default = 64
-  optional uint32 prefix = 4;
+  optional int32 prefix = 4;
 
   // Globally unique name of an object. It also serves as the primary key for arrays of
   // objects.
@@ -530,7 +530,7 @@ message Layer1 {
 
   // Set the maximum transmission unit size if supported.
   // default = 1500
-  optional uint32 mtu = 5;
+  optional int32 mtu = 5;
 
   // Set to true to override the auto_negotiate, link_training
   // and rs_fec settings for gigabit ethernet interfaces.
@@ -633,42 +633,42 @@ message Layer1Ieee8021qbb {
   // The valid values are null, 0 - 7.
   // A null value indicates there is no setting for this pfc class.
   // default = 0
-  optional uint32 pfc_class_0 = 2;
+  optional int32 pfc_class_0 = 2;
 
   // The valid values are null, 0 - 7.
   // A null value indicates there is no setting for this pfc class.
   // default = 1
-  optional uint32 pfc_class_1 = 3;
+  optional int32 pfc_class_1 = 3;
 
   // The valid values are null, 0 - 7.
   // A null value indicates there is no setting for this pfc class.
   // default = 2
-  optional uint32 pfc_class_2 = 4;
+  optional int32 pfc_class_2 = 4;
 
   // The valid values are null, 0 - 7.
   // A null value indicates there is no setting for this pfc class.
   // default = 3
-  optional uint32 pfc_class_3 = 5;
+  optional int32 pfc_class_3 = 5;
 
   // The valid values are null, 0 - 7.
   // A null value indicates there is no setting for this pfc class.
   // default = 4
-  optional uint32 pfc_class_4 = 6;
+  optional int32 pfc_class_4 = 6;
 
   // The valid values are null, 0 - 7.
   // A null value indicates there is no setting for this pfc class.
   // default = 5
-  optional uint32 pfc_class_5 = 7;
+  optional int32 pfc_class_5 = 7;
 
   // The valid values are null, 0 - 7.
   // A null value indicates there is no setting for this pfc class.
   // default = 6
-  optional uint32 pfc_class_6 = 8;
+  optional int32 pfc_class_6 = 8;
 
   // The valid values are null, 0 - 7.
   // A null value indicates there is no setting for this pfc class.
   // default = 7
-  optional uint32 pfc_class_7 = 9;
+  optional int32 pfc_class_7 = 9;
 }
 
 // Under Review: Information TBD
@@ -4852,12 +4852,12 @@ message FlowCustomMetricTag {
 
   // Offset in bits relative to start of corresponding header field
   // default = 0
-  optional uint32 offset = 2;
+  optional int32 offset = 2;
 
   // Number of bits to track for metrics starting from configured offset
   // of corresponding header field
   // default = 1
-  optional uint32 length = 3;
+  optional int32 length = 3;
 }
 
 // Ethernet packet header

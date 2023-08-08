@@ -12698,9 +12698,9 @@ components:
           format: mac
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
     Pattern.Flow.Ethernet.Dst.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -12810,9 +12810,9 @@ components:
           format: mac
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
     Pattern.Flow.Ethernet.Src.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -12914,9 +12914,11 @@ components:
           maximum: 65535
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 65535
       x-constants:
         ipv4: 2048
         ipv6: 34525
@@ -13048,9 +13050,11 @@ components:
           maximum: 7
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 7
     Pattern.Flow.Ethernet.PfcQueue.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -13156,9 +13160,11 @@ components:
           maximum: 7
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 7
     Pattern.Flow.Vlan.Priority.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -13264,9 +13270,11 @@ components:
           maximum: 1
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 1
     Pattern.Flow.Vlan.Cfi.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -13372,9 +13380,11 @@ components:
           maximum: 4095
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 4095
     Pattern.Flow.Vlan.Id.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -13480,9 +13490,11 @@ components:
           maximum: 65535
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 65535
       x-constants:
         x8100: 33024
         x88A8: 34984
@@ -13600,9 +13612,11 @@ components:
           maximum: 255
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 255
     Pattern.Flow.Vxlan.Flags.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -13708,9 +13722,11 @@ components:
           maximum: 16777215
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 16777215
     Pattern.Flow.Vxlan.Reserved0.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -13816,9 +13832,11 @@ components:
           maximum: 16777215
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 16777215
     Pattern.Flow.Vxlan.Vni.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -13938,9 +13956,11 @@ components:
           maximum: 255
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 255
     Pattern.Flow.Vxlan.Reserved1.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -14046,9 +14066,11 @@ components:
           maximum: 15
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 15
     Pattern.Flow.Ipv4.Version.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -14154,9 +14176,11 @@ components:
           maximum: 15
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 15
     Pattern.Flow.Ipv4.HeaderLength.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -14276,9 +14300,11 @@ components:
           maximum: 65535
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 65535
     Pattern.Flow.Ipv4.TotalLength.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -14398,9 +14424,11 @@ components:
           maximum: 65535
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 65535
     Pattern.Flow.Ipv4.Identification.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -14506,9 +14534,11 @@ components:
           maximum: 1
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 1
     Pattern.Flow.Ipv4.Reserved.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -14614,9 +14644,11 @@ components:
           maximum: 1
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 1
     Pattern.Flow.Ipv4.DontFragment.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -14722,9 +14754,11 @@ components:
           maximum: 1
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 1
     Pattern.Flow.Ipv4.MoreFragments.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -14830,9 +14864,11 @@ components:
           maximum: 31
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 31
     Pattern.Flow.Ipv4.FragmentOffset.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -14938,9 +14974,11 @@ components:
           maximum: 255
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 255
     Pattern.Flow.Ipv4.TimeToLive.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -15046,9 +15084,11 @@ components:
           maximum: 255
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 255
     Pattern.Flow.Ipv4.Protocol.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -15205,9 +15245,9 @@ components:
           format: ipv4
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
     Pattern.Flow.Ipv4.Src.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -15305,9 +15345,9 @@ components:
           format: ipv4
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
     Pattern.Flow.Ipv4.Dst.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -15409,9 +15449,11 @@ components:
           maximum: 255
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 255
     Pattern.Flow.Ipv4.Priority.Raw.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -15517,9 +15559,11 @@ components:
           maximum: 63
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 63
       x-constants:
         default: 0
         cs1: 8
@@ -15669,9 +15713,11 @@ components:
           maximum: 3
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 3
       x-constants:
         non_capable: 0
         capable_transport_0: 1
@@ -15787,9 +15833,11 @@ components:
           maximum: 7
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 7
       x-constants:
         routine: 0
         priority: 1
@@ -15913,9 +15961,11 @@ components:
           maximum: 1
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 1
       x-constants:
         normal: 0
         low: 1
@@ -16027,9 +16077,11 @@ components:
           maximum: 1
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 1
       x-constants:
         normal: 0
         low: 1
@@ -16141,9 +16193,11 @@ components:
           maximum: 1
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 1
       x-constants:
         normal: 0
         low: 1
@@ -16255,9 +16309,11 @@ components:
           maximum: 1
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 1
       x-constants:
         normal: 0
         low: 1
@@ -16369,9 +16425,11 @@ components:
           maximum: 1
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 1
     Pattern.Flow.Ipv4.Tos.Unused.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -16477,9 +16535,11 @@ components:
           maximum: 15
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 15
     Pattern.Flow.Ipv6.Version.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -16585,9 +16645,11 @@ components:
           maximum: 255
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 255
     Pattern.Flow.Ipv6.TrafficClass.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -16693,9 +16755,11 @@ components:
           maximum: 1048575
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 1048575
     Pattern.Flow.Ipv6.FlowLabel.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -16801,9 +16865,11 @@ components:
           maximum: 65535
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 65535
     Pattern.Flow.Ipv6.PayloadLength.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -16923,9 +16989,11 @@ components:
           maximum: 255
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 255
       x-constants:
         hopopt: 0
         icmp: 1
@@ -17069,9 +17137,11 @@ components:
           maximum: 255
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 255
     Pattern.Flow.Ipv6.HopLimit.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -17173,9 +17243,9 @@ components:
           format: ipv6
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
     Pattern.Flow.Ipv6.Src.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -17273,9 +17343,9 @@ components:
           format: ipv6
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
     Pattern.Flow.Ipv6.Dst.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -17373,9 +17443,9 @@ components:
           format: mac
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
     Pattern.Flow.PfcPause.Dst.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -17473,9 +17543,9 @@ components:
           format: mac
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
     Pattern.Flow.PfcPause.Src.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -17577,9 +17647,11 @@ components:
           maximum: 65535
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 65535
       x-constants:
         x8808: 34824
     Pattern.Flow.PfcPause.EtherType.MetricTag:
@@ -17689,9 +17761,11 @@ components:
           maximum: 65535
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 65535
     Pattern.Flow.PfcPause.ControlOpCode.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -17797,9 +17871,11 @@ components:
           maximum: 65535
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 65535
     Pattern.Flow.PfcPause.ClassEnableVector.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -17905,9 +17981,11 @@ components:
           maximum: 65535
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 65535
     Pattern.Flow.PfcPause.PauseClass0.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -18013,9 +18091,11 @@ components:
           maximum: 65535
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 65535
     Pattern.Flow.PfcPause.PauseClass1.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -18121,9 +18201,11 @@ components:
           maximum: 65535
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 65535
     Pattern.Flow.PfcPause.PauseClass2.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -18229,9 +18311,11 @@ components:
           maximum: 65535
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 65535
     Pattern.Flow.PfcPause.PauseClass3.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -18337,9 +18421,11 @@ components:
           maximum: 65535
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 65535
     Pattern.Flow.PfcPause.PauseClass4.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -18445,9 +18531,11 @@ components:
           maximum: 65535
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 65535
     Pattern.Flow.PfcPause.PauseClass5.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -18553,9 +18641,11 @@ components:
           maximum: 65535
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 65535
     Pattern.Flow.PfcPause.PauseClass6.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -18661,9 +18751,11 @@ components:
           maximum: 65535
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 65535
     Pattern.Flow.PfcPause.PauseClass7.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -18765,9 +18857,9 @@ components:
           format: mac
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
     Pattern.Flow.EthernetPause.Dst.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -18865,9 +18957,9 @@ components:
           format: mac
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
     Pattern.Flow.EthernetPause.Src.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -18969,9 +19061,11 @@ components:
           maximum: 65535
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 65535
       x-constants:
         flow_control: 34824
     Pattern.Flow.EthernetPause.EtherType.MetricTag:
@@ -19081,9 +19175,11 @@ components:
           maximum: 65535
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 65535
     Pattern.Flow.EthernetPause.ControlOpCode.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -19189,9 +19285,11 @@ components:
           maximum: 65535
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 65535
     Pattern.Flow.EthernetPause.Time.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -19297,9 +19395,11 @@ components:
           maximum: 65535
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 65535
     Pattern.Flow.Tcp.SrcPort.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -19405,9 +19505,11 @@ components:
           maximum: 65535
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 65535
     Pattern.Flow.Tcp.DstPort.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -19509,9 +19611,9 @@ components:
           format: uint32
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
     Pattern.Flow.Tcp.SeqNum.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -19609,9 +19711,9 @@ components:
           format: uint32
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
     Pattern.Flow.Tcp.AckNum.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -19713,9 +19815,11 @@ components:
           maximum: 15
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 15
     Pattern.Flow.Tcp.DataOffset.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -19821,9 +19925,11 @@ components:
           maximum: 1
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 1
     Pattern.Flow.Tcp.EcnNs.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -19929,9 +20035,11 @@ components:
           maximum: 1
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 1
     Pattern.Flow.Tcp.EcnCwr.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -20037,9 +20145,11 @@ components:
           maximum: 1
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 1
     Pattern.Flow.Tcp.EcnEcho.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -20145,9 +20255,11 @@ components:
           maximum: 1
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 1
     Pattern.Flow.Tcp.CtlUrg.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -20253,9 +20365,11 @@ components:
           maximum: 1
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 1
     Pattern.Flow.Tcp.CtlAck.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -20361,9 +20475,11 @@ components:
           maximum: 1
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 1
     Pattern.Flow.Tcp.CtlPsh.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -20468,9 +20584,11 @@ components:
           maximum: 1
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 1
     Pattern.Flow.Tcp.CtlRst.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -20575,9 +20693,11 @@ components:
           maximum: 1
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 1
     Pattern.Flow.Tcp.CtlSyn.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -20682,9 +20802,11 @@ components:
           maximum: 1
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 1
     Pattern.Flow.Tcp.CtlFin.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -20789,9 +20911,11 @@ components:
           maximum: 65535
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 65535
     Pattern.Flow.Tcp.Window.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -20897,9 +21021,11 @@ components:
           maximum: 65535
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 65535
     Pattern.Flow.Udp.SrcPort.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -21005,9 +21131,11 @@ components:
           maximum: 65535
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 65535
     Pattern.Flow.Udp.DstPort.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -21113,9 +21241,11 @@ components:
           maximum: 65535
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 65535
     Pattern.Flow.Udp.Length.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -21262,9 +21392,11 @@ components:
           maximum: 1
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 1
     Pattern.Flow.Gre.ChecksumPresent.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -21370,9 +21502,11 @@ components:
           maximum: 4095
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 4095
     Pattern.Flow.Gre.Reserved0.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -21478,9 +21612,11 @@ components:
           maximum: 7
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 7
     Pattern.Flow.Gre.Version.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -21586,9 +21722,11 @@ components:
           maximum: 65535
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 65535
       x-constants:
         ipv4: 2048
         ipv6: 34525
@@ -21741,9 +21879,11 @@ components:
           maximum: 65535
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 65535
     Pattern.Flow.Gre.Reserved1.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -21849,9 +21989,11 @@ components:
           maximum: 7
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 7
     Pattern.Flow.Gtpv1.Version.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -21957,9 +22099,11 @@ components:
           maximum: 1
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 1
     Pattern.Flow.Gtpv1.ProtocolType.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -22065,9 +22209,11 @@ components:
           maximum: 1
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 1
     Pattern.Flow.Gtpv1.Reserved.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -22173,9 +22319,11 @@ components:
           maximum: 1
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 1
     Pattern.Flow.Gtpv1.EFlag.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -22281,9 +22429,11 @@ components:
           maximum: 1
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 1
     Pattern.Flow.Gtpv1.SFlag.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -22389,9 +22539,11 @@ components:
           maximum: 1
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 1
     Pattern.Flow.Gtpv1.PnFlag.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -22497,9 +22649,11 @@ components:
           maximum: 255
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 255
     Pattern.Flow.Gtpv1.MessageType.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -22605,9 +22759,11 @@ components:
           maximum: 65535
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 65535
     Pattern.Flow.Gtpv1.MessageLength.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -22709,9 +22865,9 @@ components:
           format: uint32
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
     Pattern.Flow.Gtpv1.Teid.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -22813,9 +22969,11 @@ components:
           maximum: 65535
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 65535
     Pattern.Flow.Gtpv1.SquenceNumber.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -22921,9 +23079,11 @@ components:
           maximum: 255
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 255
     Pattern.Flow.Gtpv1.NPduNumber.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -23029,9 +23189,11 @@ components:
           maximum: 255
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 255
     Pattern.Flow.Gtpv1.NextExtensionHeaderType.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -23137,9 +23299,11 @@ components:
           maximum: 255
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 255
     Pattern.Flow.GtpExtension.ExtensionLength.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -23245,9 +23409,11 @@ components:
           maximum: 281474976710655
         count:
           type: integer
-          format: uint64
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint64
+          minimum: 0
+          maximum: 281474976710655
     Pattern.Flow.GtpExtension.Contents.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -23353,9 +23519,11 @@ components:
           maximum: 255
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 255
     Pattern.Flow.GtpExtension.NextExtensionHeader.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -23461,9 +23629,11 @@ components:
           maximum: 7
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 7
     Pattern.Flow.Gtpv2.Version.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -23569,9 +23739,11 @@ components:
           maximum: 1
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 1
     Pattern.Flow.Gtpv2.PiggybackingFlag.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -23677,9 +23849,11 @@ components:
           maximum: 1
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 1
     Pattern.Flow.Gtpv2.TeidFlag.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -23785,9 +23959,11 @@ components:
           maximum: 7
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 7
     Pattern.Flow.Gtpv2.Spare1.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -23893,9 +24069,11 @@ components:
           maximum: 255
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 255
     Pattern.Flow.Gtpv2.MessageType.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -24001,9 +24179,11 @@ components:
           maximum: 65535
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 65535
     Pattern.Flow.Gtpv2.MessageLength.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -24105,9 +24285,9 @@ components:
           format: uint32
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
     Pattern.Flow.Gtpv2.Teid.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -24209,9 +24389,11 @@ components:
           maximum: 16777215
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 16777215
     Pattern.Flow.Gtpv2.SequenceNumber.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -24317,9 +24499,11 @@ components:
           maximum: 255
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 255
     Pattern.Flow.Gtpv2.Spare2.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -24425,9 +24609,11 @@ components:
           maximum: 65535
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 65535
       x-constants:
         ethernet: 1
     Pattern.Flow.Arp.HardwareType.MetricTag:
@@ -24537,9 +24723,11 @@ components:
           maximum: 65535
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 65535
       x-constants:
         ipv4: 2048
         ipv6: 34525
@@ -24651,9 +24839,11 @@ components:
           maximum: 255
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 255
     Pattern.Flow.Arp.HardwareLength.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -24759,9 +24949,11 @@ components:
           maximum: 255
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 255
     Pattern.Flow.Arp.ProtocolLength.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -24867,9 +25059,11 @@ components:
           maximum: 65535
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 65535
       x-constants:
         request: 1
         reply: 2
@@ -24977,9 +25171,9 @@ components:
           format: mac
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
     Pattern.Flow.Arp.SenderHardwareAddr.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -25077,9 +25271,9 @@ components:
           format: ipv4
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
     Pattern.Flow.Arp.SenderProtocolAddr.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -25177,9 +25371,9 @@ components:
           format: mac
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
     Pattern.Flow.Arp.TargetHardwareAddr.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -25277,9 +25471,9 @@ components:
           format: ipv4
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
     Pattern.Flow.Arp.TargetProtocolAddr.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -25381,9 +25575,11 @@ components:
           maximum: 255
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 255
       x-constants:
         reply: 0
         request: 8
@@ -25495,9 +25691,11 @@ components:
           maximum: 255
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 255
     Pattern.Flow.Icmp.Echo.Code.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -25644,9 +25842,11 @@ components:
           maximum: 65535
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 65535
     Pattern.Flow.Icmp.Echo.Identifier.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -25752,9 +25952,11 @@ components:
           maximum: 65535
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 65535
     Pattern.Flow.Icmp.Echo.SequenceNumber.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -25901,9 +26103,11 @@ components:
           maximum: 65535
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 65535
     Pattern.Flow.Icmp.NextFields.Identifier.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -26009,9 +26213,11 @@ components:
           maximum: 65535
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 65535
     Pattern.Flow.Icmp.NextFields.SequenceNumber.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -26117,9 +26323,11 @@ components:
           maximum: 255
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 255
       x-constants:
         request: 128
         reply: 129
@@ -26231,9 +26439,11 @@ components:
           maximum: 255
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 255
     Pattern.Flow.Icmpv6.Echo.Code.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -26339,9 +26549,11 @@ components:
           maximum: 65535
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 65535
     Pattern.Flow.Icmpv6.Echo.Identifier.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -26447,9 +26659,11 @@ components:
           maximum: 65535
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 65535
     Pattern.Flow.Icmpv6.Echo.SequenceNumber.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -26637,9 +26851,11 @@ components:
           maximum: 255
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 255
       x-constants:
         standard_address: 255
     Pattern.Flow.Ppp.Address.MetricTag:
@@ -26749,9 +26965,11 @@ components:
           maximum: 255
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 255
       x-constants:
         unnumbered_data: 3
     Pattern.Flow.Ppp.Control.MetricTag:
@@ -26861,9 +27079,11 @@ components:
           maximum: 65535
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 65535
     Pattern.Flow.Ppp.ProtocolType.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -26983,9 +27203,11 @@ components:
           maximum: 15
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 15
     Pattern.Flow.Igmpv1.Version.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -27091,9 +27313,11 @@ components:
           maximum: 15
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 15
       x-constants:
         query: 1
         report: 2
@@ -27205,9 +27429,11 @@ components:
           maximum: 255
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 255
     Pattern.Flow.Igmpv1.Unused.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -27350,9 +27576,9 @@ components:
           format: ipv4
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
     Pattern.Flow.Igmpv1.GroupAddress.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -27454,9 +27680,11 @@ components:
           maximum: 1048575
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 1048575
     Pattern.Flow.Mpls.Label.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -27576,9 +27804,11 @@ components:
           maximum: 7
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 7
     Pattern.Flow.Mpls.TrafficClass.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -27684,9 +27914,11 @@ components:
           maximum: 1
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 1
     Pattern.Flow.Mpls.BottomOfStack.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
@@ -27806,9 +28038,11 @@ components:
           maximum: 255
         count:
           type: integer
-          format: uint32
-          default: 1
           x-field-uid: 3
+          default: 1
+          format: uint32
+          minimum: 0
+          maximum: 255
     Pattern.Flow.Mpls.TimeToLive.MetricTag:
       description: |-
         Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
