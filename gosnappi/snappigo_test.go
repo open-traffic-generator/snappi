@@ -468,7 +468,7 @@ func TestDevices(t *testing.T) {
 	assert.Equal(t, eth.Connection().PortName(), "p1")
 	assert.Equal(t, eth.Name(), "Eth")
 	assert.Equal(t, eth.Mac(), "00:00:11:11:00:00")
-	assert.Equal(t, eth.Mtu(), int32(1500))
+	assert.Equal(t, eth.Mtu(), uint32(1500))
 	// TODO: Add validation on Json and Yaml
 	eth.ToJson()
 	eth.ToYaml()
@@ -476,8 +476,8 @@ func TestDevices(t *testing.T) {
 
 	vlan := eth.Vlans().Add().SetName("vlan1").SetId(1).SetPriority(1)
 	assert.Equal(t, vlan.Name(), "vlan1")
-	assert.Equal(t, vlan.Id(), int32(1))
-	assert.Equal(t, vlan.Priority(), int32(1))
+	assert.Equal(t, vlan.Id(), uint32(1))
+	assert.Equal(t, vlan.Priority(), uint32(1))
 	// TODO: Add validation on Json and Yaml
 	vlan.ToJson()
 	vlan.ToYaml()
@@ -491,7 +491,7 @@ func TestDevices(t *testing.T) {
 	assert.Equal(t, ip.Name(), "ipv4")
 	assert.Equal(t, ip.Address(), "10.1.1.1")
 	assert.Equal(t, ip.Gateway(), "10.1.1.2")
-	assert.Equal(t, ip.Prefix(), int32(24))
+	assert.Equal(t, ip.Prefix(), uint32(24))
 	// TODO: Add validation on Json and Yaml
 	ip.ToJson()
 	ip.ToYaml()
@@ -505,7 +505,7 @@ func TestDevices(t *testing.T) {
 	assert.Equal(t, ip6.Name(), "ipv6")
 	assert.Equal(t, ip6.Address(), "2000::1")
 	assert.Equal(t, ip6.Gateway(), "2000::2")
-	assert.Equal(t, ip6.Prefix(), int32(64))
+	assert.Equal(t, ip6.Prefix(), uint32(64))
 	// TODO: Add validation on Json and Yaml
 	ip6.ToJson()
 	ip6.ToYaml()
@@ -532,7 +532,7 @@ func TestDevices(t *testing.T) {
 		SetAsType(gosnappi.BgpV4PeerAsType.EBGP).
 		SetPeerAddress("10.2.2.2")
 	assert.Equal(t, bgpv4Peer.Name(), "bgpv4Peer")
-	assert.Equal(t, bgpv4Peer.AsNumber(), int32(3))
+	assert.Equal(t, bgpv4Peer.AsNumber(), uint32(3))
 	assert.Equal(t, bgpv4Peer.AsNumberWidth(), gosnappi.BgpV4PeerAsNumberWidth.TWO)
 	assert.Equal(t, bgpv4Peer.AsType(), gosnappi.BgpV4PeerAsType.EBGP)
 	assert.Equal(t, bgpv4Peer.PeerAddress(), "10.2.2.2")
@@ -554,7 +554,7 @@ func TestDevices(t *testing.T) {
 		SetAsType(gosnappi.BgpV6PeerAsType.IBGP).
 		SetPeerAddress("2000::1")
 	assert.Equal(t, bgpv6Peer.Name(), "bgpv6Peer")
-	assert.Equal(t, bgpv6Peer.AsNumber(), int32(3))
+	assert.Equal(t, bgpv6Peer.AsNumber(), uint32(3))
 	assert.Equal(t, bgpv6Peer.AsNumberWidth(), gosnappi.BgpV6PeerAsNumberWidth.FOUR)
 	assert.Equal(t, bgpv6Peer.AsType(), gosnappi.BgpV6PeerAsType.IBGP)
 	assert.Equal(t, bgpv6Peer.PeerAddress(), "2000::1")
@@ -568,11 +568,11 @@ func TestDevices(t *testing.T) {
 		SetMd5Key("abc").
 		SetTimeToLive(10).
 		SetUpdateInterval(10)
-	assert.Equal(t, adv.HoldTimeInterval(), int32(10))
-	assert.Equal(t, adv.KeepAliveInterval(), int32(10))
+	assert.Equal(t, adv.HoldTimeInterval(), uint32(10))
+	assert.Equal(t, adv.KeepAliveInterval(), uint32(10))
 	assert.Equal(t, adv.Md5Key(), "abc")
-	assert.Equal(t, adv.TimeToLive(), int32(10))
-	assert.Equal(t, adv.UpdateInterval(), int32(10))
+	assert.Equal(t, adv.TimeToLive(), uint32(10))
+	assert.Equal(t, adv.UpdateInterval(), uint32(10))
 	// TODO: Add validation on Json and Yaml
 	adv.ToJson()
 	adv.ToYaml()
@@ -584,11 +584,11 @@ func TestDevices(t *testing.T) {
 		SetMd5Key("abc").
 		SetTimeToLive(10).
 		SetUpdateInterval(10)
-	assert.Equal(t, adv6.HoldTimeInterval(), int32(10))
-	assert.Equal(t, adv6.KeepAliveInterval(), int32(10))
+	assert.Equal(t, adv6.HoldTimeInterval(), uint32(10))
+	assert.Equal(t, adv6.KeepAliveInterval(), uint32(10))
 	assert.Equal(t, adv6.Md5Key(), "abc")
-	assert.Equal(t, adv6.TimeToLive(), int32(10))
-	assert.Equal(t, adv6.UpdateInterval(), int32(10))
+	assert.Equal(t, adv6.TimeToLive(), uint32(10))
+	assert.Equal(t, adv6.UpdateInterval(), uint32(10))
 	// TODO: Add validation on Json and Yaml
 	adv6.ToJson()
 	adv6.ToYaml()
@@ -706,16 +706,16 @@ func TestFlows(t *testing.T) {
 	udp.SrcPort().SetValue(3000)
 	udp.DstPort().SetValue(4000)
 	udp.Checksum().SetCustom(1)
-	assert.Equal(t, int32(3000), udp.SrcPort().Value())
-	assert.Equal(t, int32(4000), udp.DstPort().Value())
-	assert.Equal(t, int32(1), udp.Checksum().Custom())
+	assert.Equal(t, uint32(3000), udp.SrcPort().Value())
+	assert.Equal(t, uint32(4000), udp.DstPort().Value())
+	assert.Equal(t, uint32(1), udp.Checksum().Custom())
 
 	flow1.Duration().FixedPackets().SetPackets(10000).SetGap(2).Delay().SetBytes(8)
 	flow1.Rate().SetPps(1000)
-	assert.Equal(t, int32(10000), flow1.Duration().FixedPackets().Packets())
-	assert.Equal(t, int32(2), flow1.Duration().FixedPackets().Gap())
+	assert.Equal(t, uint32(10000), flow1.Duration().FixedPackets().Packets())
+	assert.Equal(t, uint32(2), flow1.Duration().FixedPackets().Gap())
 	assert.Equal(t, float32(8), flow1.Duration().FixedPackets().Delay().Bytes())
-	assert.Equal(t, int64(1000), flow1.Rate().Pps())
+	assert.Equal(t, uint64(1000), flow1.Rate().Pps())
 	log.Print(config.ToYaml())
 }
 
