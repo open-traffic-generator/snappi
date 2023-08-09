@@ -25326,7 +25326,6 @@ class PatternFlowEthernetDstMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 47,
         },
         "length": {
@@ -25772,7 +25771,6 @@ class PatternFlowEthernetSrcMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 47,
         },
         "length": {
@@ -25948,20 +25946,17 @@ class PatternFlowEthernetEtherType(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "auto": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "increment": {"type": "PatternFlowEthernetEtherTypeCounter"},
@@ -26138,19 +26133,16 @@ class PatternFlowEthernetEtherTypeCounter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
     }  # type: Dict[str, str]
@@ -26255,7 +26247,6 @@ class PatternFlowEthernetEtherTypeMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 15,
         },
         "length": {
@@ -26430,14 +26421,12 @@ class PatternFlowEthernetPfcQueue(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 7,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 7,
         },
         "increment": {"type": "PatternFlowEthernetPfcQueueCounter"},
@@ -26592,19 +26581,16 @@ class PatternFlowEthernetPfcQueueCounter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 7,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 7,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 7,
         },
     }  # type: Dict[str, str]
@@ -26703,7 +26689,6 @@ class PatternFlowEthernetPfcQueueMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 2,
         },
         "length": {
@@ -26943,14 +26928,12 @@ class PatternFlowVlanPriority(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 7,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 7,
         },
         "increment": {"type": "PatternFlowVlanPriorityCounter"},
@@ -27105,19 +27088,16 @@ class PatternFlowVlanPriorityCounter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 7,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 7,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 7,
         },
     }  # type: Dict[str, str]
@@ -27216,7 +27196,6 @@ class PatternFlowVlanPriorityMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 2,
         },
         "length": {
@@ -27391,14 +27370,12 @@ class PatternFlowVlanCfi(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "increment": {"type": "PatternFlowVlanCfiCounter"},
@@ -27550,19 +27527,16 @@ class PatternFlowVlanCfiCounter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
     }  # type: Dict[str, str]
@@ -27661,7 +27635,6 @@ class PatternFlowVlanCfiMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 0,
         },
         "length": {
@@ -27834,14 +27807,12 @@ class PatternFlowVlanId(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 4095,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 4095,
         },
         "increment": {"type": "PatternFlowVlanIdCounter"},
@@ -27993,19 +27964,16 @@ class PatternFlowVlanIdCounter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 4095,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 4095,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 4095,
         },
     }  # type: Dict[str, str]
@@ -28104,7 +28072,6 @@ class PatternFlowVlanIdMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 11,
         },
         "length": {
@@ -28277,14 +28244,12 @@ class PatternFlowVlanTpid(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "increment": {"type": "PatternFlowVlanTpidCounter"},
@@ -28442,19 +28407,16 @@ class PatternFlowVlanTpidCounter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
     }  # type: Dict[str, str]
@@ -28559,7 +28521,6 @@ class PatternFlowVlanTpidMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 15,
         },
         "length": {
@@ -28797,14 +28758,12 @@ class PatternFlowVxlanFlags(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
         "increment": {"type": "PatternFlowVxlanFlagsCounter"},
@@ -28959,19 +28918,16 @@ class PatternFlowVxlanFlagsCounter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
     }  # type: Dict[str, str]
@@ -29070,7 +29026,6 @@ class PatternFlowVxlanFlagsMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 7,
         },
         "length": {
@@ -29243,14 +29198,12 @@ class PatternFlowVxlanReserved0(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 16777215,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 16777215,
         },
         "increment": {"type": "PatternFlowVxlanReserved0Counter"},
@@ -29405,19 +29358,16 @@ class PatternFlowVxlanReserved0Counter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 16777215,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 16777215,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 16777215,
         },
     }  # type: Dict[str, str]
@@ -29516,7 +29466,6 @@ class PatternFlowVxlanReserved0MetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 23,
         },
         "length": {
@@ -29692,20 +29641,17 @@ class PatternFlowVxlanVni(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 16777215,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 16777215,
         },
         "auto": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 16777215,
         },
         "increment": {"type": "PatternFlowVxlanVniCounter"},
@@ -29871,19 +29817,16 @@ class PatternFlowVxlanVniCounter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 16777215,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 16777215,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 16777215,
         },
     }  # type: Dict[str, str]
@@ -29982,7 +29925,6 @@ class PatternFlowVxlanVniMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 23,
         },
         "length": {
@@ -30155,14 +30097,12 @@ class PatternFlowVxlanReserved1(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
         "increment": {"type": "PatternFlowVxlanReserved1Counter"},
@@ -30317,19 +30257,16 @@ class PatternFlowVxlanReserved1Counter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
     }  # type: Dict[str, str]
@@ -30428,7 +30365,6 @@ class PatternFlowVxlanReserved1MetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 7,
         },
         "length": {
@@ -30788,14 +30724,12 @@ class PatternFlowIpv4Version(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 15,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 15,
         },
         "increment": {"type": "PatternFlowIpv4VersionCounter"},
@@ -30950,19 +30884,16 @@ class PatternFlowIpv4VersionCounter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 15,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 15,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 15,
         },
     }  # type: Dict[str, str]
@@ -31061,7 +30992,6 @@ class PatternFlowIpv4VersionMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 3,
         },
         "length": {
@@ -31237,20 +31167,17 @@ class PatternFlowIpv4HeaderLength(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 15,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 15,
         },
         "auto": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 15,
         },
         "increment": {"type": "PatternFlowIpv4HeaderLengthCounter"},
@@ -31419,19 +31346,16 @@ class PatternFlowIpv4HeaderLengthCounter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 15,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 15,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 15,
         },
     }  # type: Dict[str, str]
@@ -31530,7 +31454,6 @@ class PatternFlowIpv4HeaderLengthMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 3,
         },
         "length": {
@@ -31801,14 +31724,12 @@ class PatternFlowIpv4PriorityRaw(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
         "increment": {"type": "PatternFlowIpv4PriorityRawCounter"},
@@ -31963,19 +31884,16 @@ class PatternFlowIpv4PriorityRawCounter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
     }  # type: Dict[str, str]
@@ -32074,7 +31992,6 @@ class PatternFlowIpv4PriorityRawMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 7,
         },
         "length": {
@@ -32338,14 +32255,12 @@ class PatternFlowIpv4TosPrecedence(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 7,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 7,
         },
         "increment": {"type": "PatternFlowIpv4TosPrecedenceCounter"},
@@ -32509,19 +32424,16 @@ class PatternFlowIpv4TosPrecedenceCounter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 7,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 7,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 7,
         },
     }  # type: Dict[str, str]
@@ -32629,7 +32541,6 @@ class PatternFlowIpv4TosPrecedenceMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 2,
         },
         "length": {
@@ -32804,14 +32715,12 @@ class PatternFlowIpv4TosDelay(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "increment": {"type": "PatternFlowIpv4TosDelayCounter"},
@@ -32969,19 +32878,16 @@ class PatternFlowIpv4TosDelayCounter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
     }  # type: Dict[str, str]
@@ -33083,7 +32989,6 @@ class PatternFlowIpv4TosDelayMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 0,
         },
         "length": {
@@ -33258,14 +33163,12 @@ class PatternFlowIpv4TosThroughput(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "increment": {"type": "PatternFlowIpv4TosThroughputCounter"},
@@ -33423,19 +33326,16 @@ class PatternFlowIpv4TosThroughputCounter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
     }  # type: Dict[str, str]
@@ -33537,7 +33437,6 @@ class PatternFlowIpv4TosThroughputMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 0,
         },
         "length": {
@@ -33712,14 +33611,12 @@ class PatternFlowIpv4TosReliability(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "increment": {"type": "PatternFlowIpv4TosReliabilityCounter"},
@@ -33877,19 +33774,16 @@ class PatternFlowIpv4TosReliabilityCounter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
     }  # type: Dict[str, str]
@@ -33991,7 +33885,6 @@ class PatternFlowIpv4TosReliabilityMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 0,
         },
         "length": {
@@ -34166,14 +34059,12 @@ class PatternFlowIpv4TosMonetary(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "increment": {"type": "PatternFlowIpv4TosMonetaryCounter"},
@@ -34331,19 +34222,16 @@ class PatternFlowIpv4TosMonetaryCounter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
     }  # type: Dict[str, str]
@@ -34445,7 +34333,6 @@ class PatternFlowIpv4TosMonetaryMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 0,
         },
         "length": {
@@ -34620,14 +34507,12 @@ class PatternFlowIpv4TosUnused(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "increment": {"type": "PatternFlowIpv4TosUnusedCounter"},
@@ -34782,19 +34667,16 @@ class PatternFlowIpv4TosUnusedCounter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
     }  # type: Dict[str, str]
@@ -34893,7 +34775,6 @@ class PatternFlowIpv4TosUnusedMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 0,
         },
         "length": {
@@ -35109,14 +34990,12 @@ class PatternFlowIpv4DscpPhb(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 63,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 63,
         },
         "increment": {"type": "PatternFlowIpv4DscpPhbCounter"},
@@ -35293,19 +35172,16 @@ class PatternFlowIpv4DscpPhbCounter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 63,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 63,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 63,
         },
     }  # type: Dict[str, str]
@@ -35426,7 +35302,6 @@ class PatternFlowIpv4DscpPhbMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 5,
         },
         "length": {
@@ -35601,14 +35476,12 @@ class PatternFlowIpv4DscpEcn(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 3,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 3,
         },
         "increment": {"type": "PatternFlowIpv4DscpEcnCounter"},
@@ -35768,19 +35641,16 @@ class PatternFlowIpv4DscpEcnCounter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 3,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 3,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 3,
         },
     }  # type: Dict[str, str]
@@ -35884,7 +35754,6 @@ class PatternFlowIpv4DscpEcnMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "length": {
@@ -36060,20 +35929,17 @@ class PatternFlowIpv4TotalLength(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "auto": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "increment": {"type": "PatternFlowIpv4TotalLengthCounter"},
@@ -36242,19 +36108,16 @@ class PatternFlowIpv4TotalLengthCounter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
     }  # type: Dict[str, str]
@@ -36353,7 +36216,6 @@ class PatternFlowIpv4TotalLengthMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 15,
         },
         "length": {
@@ -36528,14 +36390,12 @@ class PatternFlowIpv4Identification(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "increment": {"type": "PatternFlowIpv4IdentificationCounter"},
@@ -36690,19 +36550,16 @@ class PatternFlowIpv4IdentificationCounter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
     }  # type: Dict[str, str]
@@ -36801,7 +36658,6 @@ class PatternFlowIpv4IdentificationMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 15,
         },
         "length": {
@@ -36976,14 +36832,12 @@ class PatternFlowIpv4Reserved(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "increment": {"type": "PatternFlowIpv4ReservedCounter"},
@@ -37138,19 +36992,16 @@ class PatternFlowIpv4ReservedCounter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
     }  # type: Dict[str, str]
@@ -37249,7 +37100,6 @@ class PatternFlowIpv4ReservedMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 0,
         },
         "length": {
@@ -37424,14 +37274,12 @@ class PatternFlowIpv4DontFragment(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "increment": {"type": "PatternFlowIpv4DontFragmentCounter"},
@@ -37586,19 +37434,16 @@ class PatternFlowIpv4DontFragmentCounter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
     }  # type: Dict[str, str]
@@ -37697,7 +37542,6 @@ class PatternFlowIpv4DontFragmentMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 0,
         },
         "length": {
@@ -37872,14 +37716,12 @@ class PatternFlowIpv4MoreFragments(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "increment": {"type": "PatternFlowIpv4MoreFragmentsCounter"},
@@ -38034,19 +37876,16 @@ class PatternFlowIpv4MoreFragmentsCounter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
     }  # type: Dict[str, str]
@@ -38145,7 +37984,6 @@ class PatternFlowIpv4MoreFragmentsMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 0,
         },
         "length": {
@@ -38320,14 +38158,12 @@ class PatternFlowIpv4FragmentOffset(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 31,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 31,
         },
         "increment": {"type": "PatternFlowIpv4FragmentOffsetCounter"},
@@ -38482,19 +38318,16 @@ class PatternFlowIpv4FragmentOffsetCounter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 31,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 31,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 31,
         },
     }  # type: Dict[str, str]
@@ -38593,7 +38426,6 @@ class PatternFlowIpv4FragmentOffsetMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 4,
         },
         "length": {
@@ -38768,14 +38600,12 @@ class PatternFlowIpv4TimeToLive(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
         "increment": {"type": "PatternFlowIpv4TimeToLiveCounter"},
@@ -38930,19 +38760,16 @@ class PatternFlowIpv4TimeToLiveCounter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
     }  # type: Dict[str, str]
@@ -39041,7 +38868,6 @@ class PatternFlowIpv4TimeToLiveMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 7,
         },
         "length": {
@@ -39217,20 +39043,17 @@ class PatternFlowIpv4Protocol(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
         "auto": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
         "increment": {"type": "PatternFlowIpv4ProtocolCounter"},
@@ -39399,19 +39222,16 @@ class PatternFlowIpv4ProtocolCounter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
     }  # type: Dict[str, str]
@@ -39510,7 +39330,6 @@ class PatternFlowIpv4ProtocolMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 7,
         },
         "length": {
@@ -39690,7 +39509,6 @@ class PatternFlowIpv4HeaderChecksum(OpenApiObject):
         "custom": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
     }  # type: Dict[str, str]
@@ -40069,7 +39887,6 @@ class PatternFlowIpv4SrcMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 31,
         },
         "length": {
@@ -40502,7 +40319,6 @@ class PatternFlowIpv4DstMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 31,
         },
         "length": {
@@ -40788,14 +40604,12 @@ class PatternFlowIpv6Version(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 15,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 15,
         },
         "increment": {"type": "PatternFlowIpv6VersionCounter"},
@@ -40950,19 +40764,16 @@ class PatternFlowIpv6VersionCounter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 15,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 15,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 15,
         },
     }  # type: Dict[str, str]
@@ -41061,7 +40872,6 @@ class PatternFlowIpv6VersionMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 3,
         },
         "length": {
@@ -41236,14 +41046,12 @@ class PatternFlowIpv6TrafficClass(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
         "increment": {"type": "PatternFlowIpv6TrafficClassCounter"},
@@ -41398,19 +41206,16 @@ class PatternFlowIpv6TrafficClassCounter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
     }  # type: Dict[str, str]
@@ -41509,7 +41314,6 @@ class PatternFlowIpv6TrafficClassMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 7,
         },
         "length": {
@@ -41684,14 +41488,12 @@ class PatternFlowIpv6FlowLabel(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1048575,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 1048575,
         },
         "increment": {"type": "PatternFlowIpv6FlowLabelCounter"},
@@ -41846,19 +41648,16 @@ class PatternFlowIpv6FlowLabelCounter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1048575,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1048575,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1048575,
         },
     }  # type: Dict[str, str]
@@ -41957,7 +41756,6 @@ class PatternFlowIpv6FlowLabelMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 19,
         },
         "length": {
@@ -42133,20 +41931,17 @@ class PatternFlowIpv6PayloadLength(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "auto": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "increment": {"type": "PatternFlowIpv6PayloadLengthCounter"},
@@ -42315,19 +42110,16 @@ class PatternFlowIpv6PayloadLengthCounter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
     }  # type: Dict[str, str]
@@ -42426,7 +42218,6 @@ class PatternFlowIpv6PayloadLengthMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 15,
         },
         "length": {
@@ -42602,20 +42393,17 @@ class PatternFlowIpv6NextHeader(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
         "auto": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
         "increment": {"type": "PatternFlowIpv6NextHeaderCounter"},
@@ -42796,19 +42584,16 @@ class PatternFlowIpv6NextHeaderCounter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
     }  # type: Dict[str, str]
@@ -42919,7 +42704,6 @@ class PatternFlowIpv6NextHeaderMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 7,
         },
         "length": {
@@ -43094,14 +42878,12 @@ class PatternFlowIpv6HopLimit(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
         "increment": {"type": "PatternFlowIpv6HopLimitCounter"},
@@ -43256,19 +43038,16 @@ class PatternFlowIpv6HopLimitCounter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
     }  # type: Dict[str, str]
@@ -43367,7 +43146,6 @@ class PatternFlowIpv6HopLimitMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 7,
         },
         "length": {
@@ -43802,7 +43580,6 @@ class PatternFlowIpv6SrcMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 127,
         },
         "length": {
@@ -44235,7 +44012,6 @@ class PatternFlowIpv6DstMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 127,
         },
         "length": {
@@ -44854,7 +44630,6 @@ class PatternFlowPfcPauseDstMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 47,
         },
         "length": {
@@ -45300,7 +45075,6 @@ class PatternFlowPfcPauseSrcMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 47,
         },
         "length": {
@@ -45475,14 +45249,12 @@ class PatternFlowPfcPauseEtherType(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "increment": {"type": "PatternFlowPfcPauseEtherTypeCounter"},
@@ -45639,19 +45411,16 @@ class PatternFlowPfcPauseEtherTypeCounter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
     }  # type: Dict[str, str]
@@ -45752,7 +45521,6 @@ class PatternFlowPfcPauseEtherTypeMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 15,
         },
         "length": {
@@ -45927,14 +45695,12 @@ class PatternFlowPfcPauseControlOpCode(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "increment": {"type": "PatternFlowPfcPauseControlOpCodeCounter"},
@@ -46089,19 +45855,16 @@ class PatternFlowPfcPauseControlOpCodeCounter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
     }  # type: Dict[str, str]
@@ -46200,7 +45963,6 @@ class PatternFlowPfcPauseControlOpCodeMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 15,
         },
         "length": {
@@ -46375,14 +46137,12 @@ class PatternFlowPfcPauseClassEnableVector(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "increment": {"type": "PatternFlowPfcPauseClassEnableVectorCounter"},
@@ -46537,19 +46297,16 @@ class PatternFlowPfcPauseClassEnableVectorCounter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
     }  # type: Dict[str, str]
@@ -46648,7 +46405,6 @@ class PatternFlowPfcPauseClassEnableVectorMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 15,
         },
         "length": {
@@ -46823,14 +46579,12 @@ class PatternFlowPfcPausePauseClass0(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "increment": {"type": "PatternFlowPfcPausePauseClass0Counter"},
@@ -46985,19 +46739,16 @@ class PatternFlowPfcPausePauseClass0Counter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
     }  # type: Dict[str, str]
@@ -47096,7 +46847,6 @@ class PatternFlowPfcPausePauseClass0MetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 15,
         },
         "length": {
@@ -47271,14 +47021,12 @@ class PatternFlowPfcPausePauseClass1(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "increment": {"type": "PatternFlowPfcPausePauseClass1Counter"},
@@ -47433,19 +47181,16 @@ class PatternFlowPfcPausePauseClass1Counter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
     }  # type: Dict[str, str]
@@ -47544,7 +47289,6 @@ class PatternFlowPfcPausePauseClass1MetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 15,
         },
         "length": {
@@ -47719,14 +47463,12 @@ class PatternFlowPfcPausePauseClass2(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "increment": {"type": "PatternFlowPfcPausePauseClass2Counter"},
@@ -47881,19 +47623,16 @@ class PatternFlowPfcPausePauseClass2Counter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
     }  # type: Dict[str, str]
@@ -47992,7 +47731,6 @@ class PatternFlowPfcPausePauseClass2MetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 15,
         },
         "length": {
@@ -48167,14 +47905,12 @@ class PatternFlowPfcPausePauseClass3(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "increment": {"type": "PatternFlowPfcPausePauseClass3Counter"},
@@ -48329,19 +48065,16 @@ class PatternFlowPfcPausePauseClass3Counter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
     }  # type: Dict[str, str]
@@ -48440,7 +48173,6 @@ class PatternFlowPfcPausePauseClass3MetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 15,
         },
         "length": {
@@ -48615,14 +48347,12 @@ class PatternFlowPfcPausePauseClass4(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "increment": {"type": "PatternFlowPfcPausePauseClass4Counter"},
@@ -48777,19 +48507,16 @@ class PatternFlowPfcPausePauseClass4Counter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
     }  # type: Dict[str, str]
@@ -48888,7 +48615,6 @@ class PatternFlowPfcPausePauseClass4MetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 15,
         },
         "length": {
@@ -49063,14 +48789,12 @@ class PatternFlowPfcPausePauseClass5(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "increment": {"type": "PatternFlowPfcPausePauseClass5Counter"},
@@ -49225,19 +48949,16 @@ class PatternFlowPfcPausePauseClass5Counter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
     }  # type: Dict[str, str]
@@ -49336,7 +49057,6 @@ class PatternFlowPfcPausePauseClass5MetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 15,
         },
         "length": {
@@ -49511,14 +49231,12 @@ class PatternFlowPfcPausePauseClass6(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "increment": {"type": "PatternFlowPfcPausePauseClass6Counter"},
@@ -49673,19 +49391,16 @@ class PatternFlowPfcPausePauseClass6Counter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
     }  # type: Dict[str, str]
@@ -49784,7 +49499,6 @@ class PatternFlowPfcPausePauseClass6MetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 15,
         },
         "length": {
@@ -49959,14 +49673,12 @@ class PatternFlowPfcPausePauseClass7(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "increment": {"type": "PatternFlowPfcPausePauseClass7Counter"},
@@ -50121,19 +49833,16 @@ class PatternFlowPfcPausePauseClass7Counter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
     }  # type: Dict[str, str]
@@ -50232,7 +49941,6 @@ class PatternFlowPfcPausePauseClass7MetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 15,
         },
         "length": {
@@ -50757,7 +50465,6 @@ class PatternFlowEthernetPauseDstMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 47,
         },
         "length": {
@@ -51203,7 +50910,6 @@ class PatternFlowEthernetPauseSrcMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 47,
         },
         "length": {
@@ -51378,14 +51084,12 @@ class PatternFlowEthernetPauseEtherType(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "increment": {"type": "PatternFlowEthernetPauseEtherTypeCounter"},
@@ -51542,19 +51246,16 @@ class PatternFlowEthernetPauseEtherTypeCounter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
     }  # type: Dict[str, str]
@@ -51655,7 +51356,6 @@ class PatternFlowEthernetPauseEtherTypeMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 15,
         },
         "length": {
@@ -51830,14 +51530,12 @@ class PatternFlowEthernetPauseControlOpCode(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "increment": {"type": "PatternFlowEthernetPauseControlOpCodeCounter"},
@@ -51992,19 +51690,16 @@ class PatternFlowEthernetPauseControlOpCodeCounter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
     }  # type: Dict[str, str]
@@ -52103,7 +51798,6 @@ class PatternFlowEthernetPauseControlOpCodeMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 15,
         },
         "length": {
@@ -52278,14 +51972,12 @@ class PatternFlowEthernetPauseTime(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "increment": {"type": "PatternFlowEthernetPauseTimeCounter"},
@@ -52440,19 +52132,16 @@ class PatternFlowEthernetPauseTimeCounter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
     }  # type: Dict[str, str]
@@ -52551,7 +52240,6 @@ class PatternFlowEthernetPauseTimeMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 15,
         },
         "length": {
@@ -52923,14 +52611,12 @@ class PatternFlowTcpSrcPort(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "increment": {"type": "PatternFlowTcpSrcPortCounter"},
@@ -53085,19 +52771,16 @@ class PatternFlowTcpSrcPortCounter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
     }  # type: Dict[str, str]
@@ -53196,7 +52879,6 @@ class PatternFlowTcpSrcPortMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 15,
         },
         "length": {
@@ -53369,14 +53051,12 @@ class PatternFlowTcpDstPort(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "increment": {"type": "PatternFlowTcpDstPortCounter"},
@@ -53531,19 +53211,16 @@ class PatternFlowTcpDstPortCounter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
     }  # type: Dict[str, str]
@@ -53642,7 +53319,6 @@ class PatternFlowTcpDstPortMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 15,
         },
         "length": {
@@ -54075,7 +53751,6 @@ class PatternFlowTcpSeqNumMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 31,
         },
         "length": {
@@ -54508,7 +54183,6 @@ class PatternFlowTcpAckNumMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 31,
         },
         "length": {
@@ -54681,14 +54355,12 @@ class PatternFlowTcpDataOffset(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 15,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 15,
         },
         "increment": {"type": "PatternFlowTcpDataOffsetCounter"},
@@ -54843,19 +54515,16 @@ class PatternFlowTcpDataOffsetCounter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 15,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 15,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 15,
         },
     }  # type: Dict[str, str]
@@ -54954,7 +54623,6 @@ class PatternFlowTcpDataOffsetMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 3,
         },
         "length": {
@@ -55129,14 +54797,12 @@ class PatternFlowTcpEcnNs(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "increment": {"type": "PatternFlowTcpEcnNsCounter"},
@@ -55288,19 +54954,16 @@ class PatternFlowTcpEcnNsCounter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
     }  # type: Dict[str, str]
@@ -55399,7 +55062,6 @@ class PatternFlowTcpEcnNsMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 0,
         },
         "length": {
@@ -55572,14 +55234,12 @@ class PatternFlowTcpEcnCwr(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "increment": {"type": "PatternFlowTcpEcnCwrCounter"},
@@ -55731,19 +55391,16 @@ class PatternFlowTcpEcnCwrCounter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
     }  # type: Dict[str, str]
@@ -55842,7 +55499,6 @@ class PatternFlowTcpEcnCwrMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 0,
         },
         "length": {
@@ -56015,14 +55671,12 @@ class PatternFlowTcpEcnEcho(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "increment": {"type": "PatternFlowTcpEcnEchoCounter"},
@@ -56177,19 +55831,16 @@ class PatternFlowTcpEcnEchoCounter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
     }  # type: Dict[str, str]
@@ -56288,7 +55939,6 @@ class PatternFlowTcpEcnEchoMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 0,
         },
         "length": {
@@ -56461,14 +56111,12 @@ class PatternFlowTcpCtlUrg(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "increment": {"type": "PatternFlowTcpCtlUrgCounter"},
@@ -56620,19 +56268,16 @@ class PatternFlowTcpCtlUrgCounter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
     }  # type: Dict[str, str]
@@ -56731,7 +56376,6 @@ class PatternFlowTcpCtlUrgMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 0,
         },
         "length": {
@@ -56904,14 +56548,12 @@ class PatternFlowTcpCtlAck(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "increment": {"type": "PatternFlowTcpCtlAckCounter"},
@@ -57063,19 +56705,16 @@ class PatternFlowTcpCtlAckCounter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
     }  # type: Dict[str, str]
@@ -57174,7 +56813,6 @@ class PatternFlowTcpCtlAckMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 0,
         },
         "length": {
@@ -57347,14 +56985,12 @@ class PatternFlowTcpCtlPsh(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "increment": {"type": "PatternFlowTcpCtlPshCounter"},
@@ -57506,19 +57142,16 @@ class PatternFlowTcpCtlPshCounter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
     }  # type: Dict[str, str]
@@ -57617,7 +57250,6 @@ class PatternFlowTcpCtlPshMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 0,
         },
         "length": {
@@ -57790,14 +57422,12 @@ class PatternFlowTcpCtlRst(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "increment": {"type": "PatternFlowTcpCtlRstCounter"},
@@ -57949,19 +57579,16 @@ class PatternFlowTcpCtlRstCounter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
     }  # type: Dict[str, str]
@@ -58060,7 +57687,6 @@ class PatternFlowTcpCtlRstMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 0,
         },
         "length": {
@@ -58233,14 +57859,12 @@ class PatternFlowTcpCtlSyn(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "increment": {"type": "PatternFlowTcpCtlSynCounter"},
@@ -58392,19 +58016,16 @@ class PatternFlowTcpCtlSynCounter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
     }  # type: Dict[str, str]
@@ -58503,7 +58124,6 @@ class PatternFlowTcpCtlSynMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 0,
         },
         "length": {
@@ -58676,14 +58296,12 @@ class PatternFlowTcpCtlFin(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "increment": {"type": "PatternFlowTcpCtlFinCounter"},
@@ -58835,19 +58453,16 @@ class PatternFlowTcpCtlFinCounter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
     }  # type: Dict[str, str]
@@ -58946,7 +58561,6 @@ class PatternFlowTcpCtlFinMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 0,
         },
         "length": {
@@ -59119,14 +58733,12 @@ class PatternFlowTcpWindow(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "increment": {"type": "PatternFlowTcpWindowCounter"},
@@ -59278,19 +58890,16 @@ class PatternFlowTcpWindowCounter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
     }  # type: Dict[str, str]
@@ -59389,7 +58998,6 @@ class PatternFlowTcpWindowMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 15,
         },
         "length": {
@@ -59627,14 +59235,12 @@ class PatternFlowUdpSrcPort(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "increment": {"type": "PatternFlowUdpSrcPortCounter"},
@@ -59789,19 +59395,16 @@ class PatternFlowUdpSrcPortCounter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
     }  # type: Dict[str, str]
@@ -59900,7 +59503,6 @@ class PatternFlowUdpSrcPortMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 15,
         },
         "length": {
@@ -60073,14 +59675,12 @@ class PatternFlowUdpDstPort(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "increment": {"type": "PatternFlowUdpDstPortCounter"},
@@ -60235,19 +59835,16 @@ class PatternFlowUdpDstPortCounter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
     }  # type: Dict[str, str]
@@ -60346,7 +59943,6 @@ class PatternFlowUdpDstPortMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 15,
         },
         "length": {
@@ -60519,14 +60115,12 @@ class PatternFlowUdpLength(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "increment": {"type": "PatternFlowUdpLengthCounter"},
@@ -60678,19 +60272,16 @@ class PatternFlowUdpLengthCounter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
     }  # type: Dict[str, str]
@@ -60789,7 +60380,6 @@ class PatternFlowUdpLengthMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 15,
         },
         "length": {
@@ -60967,7 +60557,6 @@ class PatternFlowUdpChecksum(OpenApiObject):
         "custom": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
     }  # type: Dict[str, str]
@@ -61175,14 +60764,12 @@ class PatternFlowGreChecksumPresent(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "increment": {"type": "PatternFlowGreChecksumPresentCounter"},
@@ -61337,19 +60924,16 @@ class PatternFlowGreChecksumPresentCounter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
     }  # type: Dict[str, str]
@@ -61448,7 +61032,6 @@ class PatternFlowGreChecksumPresentMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 0,
         },
         "length": {
@@ -61623,14 +61206,12 @@ class PatternFlowGreReserved0(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 4095,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 4095,
         },
         "increment": {"type": "PatternFlowGreReserved0Counter"},
@@ -61785,19 +61366,16 @@ class PatternFlowGreReserved0Counter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 4095,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 4095,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 4095,
         },
     }  # type: Dict[str, str]
@@ -61896,7 +61474,6 @@ class PatternFlowGreReserved0MetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 11,
         },
         "length": {
@@ -62071,14 +61648,12 @@ class PatternFlowGreVersion(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 7,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 7,
         },
         "increment": {"type": "PatternFlowGreVersionCounter"},
@@ -62233,19 +61808,16 @@ class PatternFlowGreVersionCounter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 7,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 7,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 7,
         },
     }  # type: Dict[str, str]
@@ -62344,7 +61916,6 @@ class PatternFlowGreVersionMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 2,
         },
         "length": {
@@ -62517,14 +62088,12 @@ class PatternFlowGreProtocol(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "increment": {"type": "PatternFlowGreProtocolCounter"},
@@ -62682,19 +62251,16 @@ class PatternFlowGreProtocolCounter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
     }  # type: Dict[str, str]
@@ -62796,7 +62362,6 @@ class PatternFlowGreProtocolMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 15,
         },
         "length": {
@@ -62976,7 +62541,6 @@ class PatternFlowGreChecksum(OpenApiObject):
         "custom": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
     }  # type: Dict[str, str]
@@ -63095,14 +62659,12 @@ class PatternFlowGreReserved1(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "increment": {"type": "PatternFlowGreReserved1Counter"},
@@ -63257,19 +62819,16 @@ class PatternFlowGreReserved1Counter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
     }  # type: Dict[str, str]
@@ -63368,7 +62927,6 @@ class PatternFlowGreReserved1MetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 15,
         },
         "length": {
@@ -63722,14 +63280,12 @@ class PatternFlowGtpv1Version(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 7,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 7,
         },
         "increment": {"type": "PatternFlowGtpv1VersionCounter"},
@@ -63884,19 +63440,16 @@ class PatternFlowGtpv1VersionCounter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 7,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 7,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 7,
         },
     }  # type: Dict[str, str]
@@ -63995,7 +63548,6 @@ class PatternFlowGtpv1VersionMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 2,
         },
         "length": {
@@ -64170,14 +63722,12 @@ class PatternFlowGtpv1ProtocolType(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "increment": {"type": "PatternFlowGtpv1ProtocolTypeCounter"},
@@ -64332,19 +63882,16 @@ class PatternFlowGtpv1ProtocolTypeCounter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
     }  # type: Dict[str, str]
@@ -64443,7 +63990,6 @@ class PatternFlowGtpv1ProtocolTypeMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 0,
         },
         "length": {
@@ -64618,14 +64164,12 @@ class PatternFlowGtpv1Reserved(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "increment": {"type": "PatternFlowGtpv1ReservedCounter"},
@@ -64780,19 +64324,16 @@ class PatternFlowGtpv1ReservedCounter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
     }  # type: Dict[str, str]
@@ -64891,7 +64432,6 @@ class PatternFlowGtpv1ReservedMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 0,
         },
         "length": {
@@ -65066,14 +64606,12 @@ class PatternFlowGtpv1EFlag(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "increment": {"type": "PatternFlowGtpv1EFlagCounter"},
@@ -65228,19 +64766,16 @@ class PatternFlowGtpv1EFlagCounter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
     }  # type: Dict[str, str]
@@ -65339,7 +64874,6 @@ class PatternFlowGtpv1EFlagMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 0,
         },
         "length": {
@@ -65512,14 +65046,12 @@ class PatternFlowGtpv1SFlag(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "increment": {"type": "PatternFlowGtpv1SFlagCounter"},
@@ -65674,19 +65206,16 @@ class PatternFlowGtpv1SFlagCounter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
     }  # type: Dict[str, str]
@@ -65785,7 +65314,6 @@ class PatternFlowGtpv1SFlagMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 0,
         },
         "length": {
@@ -65958,14 +65486,12 @@ class PatternFlowGtpv1PnFlag(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "increment": {"type": "PatternFlowGtpv1PnFlagCounter"},
@@ -66120,19 +65646,16 @@ class PatternFlowGtpv1PnFlagCounter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
     }  # type: Dict[str, str]
@@ -66231,7 +65754,6 @@ class PatternFlowGtpv1PnFlagMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 0,
         },
         "length": {
@@ -66406,14 +65928,12 @@ class PatternFlowGtpv1MessageType(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
         "increment": {"type": "PatternFlowGtpv1MessageTypeCounter"},
@@ -66568,19 +66088,16 @@ class PatternFlowGtpv1MessageTypeCounter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
     }  # type: Dict[str, str]
@@ -66679,7 +66196,6 @@ class PatternFlowGtpv1MessageTypeMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 7,
         },
         "length": {
@@ -66854,14 +66370,12 @@ class PatternFlowGtpv1MessageLength(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "increment": {"type": "PatternFlowGtpv1MessageLengthCounter"},
@@ -67016,19 +66530,16 @@ class PatternFlowGtpv1MessageLengthCounter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
     }  # type: Dict[str, str]
@@ -67127,7 +66638,6 @@ class PatternFlowGtpv1MessageLengthMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 15,
         },
         "length": {
@@ -67562,7 +67072,6 @@ class PatternFlowGtpv1TeidMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 31,
         },
         "length": {
@@ -67735,14 +67244,12 @@ class PatternFlowGtpv1SquenceNumber(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "increment": {"type": "PatternFlowGtpv1SquenceNumberCounter"},
@@ -67897,19 +67404,16 @@ class PatternFlowGtpv1SquenceNumberCounter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
     }  # type: Dict[str, str]
@@ -68008,7 +67512,6 @@ class PatternFlowGtpv1SquenceNumberMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 15,
         },
         "length": {
@@ -68183,14 +67686,12 @@ class PatternFlowGtpv1NPduNumber(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
         "increment": {"type": "PatternFlowGtpv1NPduNumberCounter"},
@@ -68345,19 +67846,16 @@ class PatternFlowGtpv1NPduNumberCounter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
     }  # type: Dict[str, str]
@@ -68456,7 +67954,6 @@ class PatternFlowGtpv1NPduNumberMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 7,
         },
         "length": {
@@ -68631,14 +68128,12 @@ class PatternFlowGtpv1NextExtensionHeaderType(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
         "increment": {"type": "PatternFlowGtpv1NextExtensionHeaderTypeCounter"},
@@ -68799,19 +68294,16 @@ class PatternFlowGtpv1NextExtensionHeaderTypeCounter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
     }  # type: Dict[str, str]
@@ -68910,7 +68402,6 @@ class PatternFlowGtpv1NextExtensionHeaderTypeMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 7,
         },
         "length": {
@@ -69142,14 +68633,12 @@ class PatternFlowGtpExtensionExtensionLength(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
         "increment": {"type": "PatternFlowGtpExtensionExtensionLengthCounter"},
@@ -69310,19 +68799,16 @@ class PatternFlowGtpExtensionExtensionLengthCounter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
     }  # type: Dict[str, str]
@@ -69421,7 +68907,6 @@ class PatternFlowGtpExtensionExtensionLengthMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 7,
         },
         "length": {
@@ -69596,14 +69081,12 @@ class PatternFlowGtpExtensionContents(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint64",
-            "minimum": 0,
             "maximum": 281474976710655,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint64",
-            "minimum": 0,
             "maximum": 281474976710655,
         },
         "increment": {"type": "PatternFlowGtpExtensionContentsCounter"},
@@ -69758,19 +69241,16 @@ class PatternFlowGtpExtensionContentsCounter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint64",
-            "minimum": 0,
             "maximum": 281474976710655,
         },
         "step": {
             "type": int,
             "format": "uint64",
-            "minimum": 0,
             "maximum": 281474976710655,
         },
         "count": {
             "type": int,
             "format": "uint64",
-            "minimum": 0,
             "maximum": 281474976710655,
         },
     }  # type: Dict[str, str]
@@ -69869,7 +69349,6 @@ class PatternFlowGtpExtensionContentsMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint64",
-            "minimum": 0,
             "maximum": 47,
         },
         "length": {
@@ -70044,14 +69523,12 @@ class PatternFlowGtpExtensionNextExtensionHeader(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
         "increment": {"type": "PatternFlowGtpExtensionNextExtensionHeaderCounter"},
@@ -70214,19 +69691,16 @@ class PatternFlowGtpExtensionNextExtensionHeaderCounter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
     }  # type: Dict[str, str]
@@ -70325,7 +69799,6 @@ class PatternFlowGtpExtensionNextExtensionHeaderMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 7,
         },
         "length": {
@@ -70680,14 +70153,12 @@ class PatternFlowGtpv2Version(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 7,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 7,
         },
         "increment": {"type": "PatternFlowGtpv2VersionCounter"},
@@ -70842,19 +70313,16 @@ class PatternFlowGtpv2VersionCounter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 7,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 7,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 7,
         },
     }  # type: Dict[str, str]
@@ -70953,7 +70421,6 @@ class PatternFlowGtpv2VersionMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 2,
         },
         "length": {
@@ -71128,14 +70595,12 @@ class PatternFlowGtpv2PiggybackingFlag(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "increment": {"type": "PatternFlowGtpv2PiggybackingFlagCounter"},
@@ -71290,19 +70755,16 @@ class PatternFlowGtpv2PiggybackingFlagCounter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
     }  # type: Dict[str, str]
@@ -71401,7 +70863,6 @@ class PatternFlowGtpv2PiggybackingFlagMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 0,
         },
         "length": {
@@ -71576,14 +71037,12 @@ class PatternFlowGtpv2TeidFlag(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "increment": {"type": "PatternFlowGtpv2TeidFlagCounter"},
@@ -71738,19 +71197,16 @@ class PatternFlowGtpv2TeidFlagCounter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
     }  # type: Dict[str, str]
@@ -71849,7 +71305,6 @@ class PatternFlowGtpv2TeidFlagMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 0,
         },
         "length": {
@@ -72024,14 +71479,12 @@ class PatternFlowGtpv2Spare1(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 7,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 7,
         },
         "increment": {"type": "PatternFlowGtpv2Spare1Counter"},
@@ -72186,19 +71639,16 @@ class PatternFlowGtpv2Spare1Counter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 7,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 7,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 7,
         },
     }  # type: Dict[str, str]
@@ -72297,7 +71747,6 @@ class PatternFlowGtpv2Spare1MetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 2,
         },
         "length": {
@@ -72472,14 +71921,12 @@ class PatternFlowGtpv2MessageType(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
         "increment": {"type": "PatternFlowGtpv2MessageTypeCounter"},
@@ -72634,19 +72081,16 @@ class PatternFlowGtpv2MessageTypeCounter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
     }  # type: Dict[str, str]
@@ -72745,7 +72189,6 @@ class PatternFlowGtpv2MessageTypeMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 7,
         },
         "length": {
@@ -72920,14 +72363,12 @@ class PatternFlowGtpv2MessageLength(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "increment": {"type": "PatternFlowGtpv2MessageLengthCounter"},
@@ -73082,19 +72523,16 @@ class PatternFlowGtpv2MessageLengthCounter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
     }  # type: Dict[str, str]
@@ -73193,7 +72631,6 @@ class PatternFlowGtpv2MessageLengthMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 15,
         },
         "length": {
@@ -73628,7 +73065,6 @@ class PatternFlowGtpv2TeidMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 31,
         },
         "length": {
@@ -73801,14 +73237,12 @@ class PatternFlowGtpv2SequenceNumber(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 16777215,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 16777215,
         },
         "increment": {"type": "PatternFlowGtpv2SequenceNumberCounter"},
@@ -73963,19 +73397,16 @@ class PatternFlowGtpv2SequenceNumberCounter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 16777215,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 16777215,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 16777215,
         },
     }  # type: Dict[str, str]
@@ -74074,7 +73505,6 @@ class PatternFlowGtpv2SequenceNumberMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 23,
         },
         "length": {
@@ -74249,14 +73679,12 @@ class PatternFlowGtpv2Spare2(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
         "increment": {"type": "PatternFlowGtpv2Spare2Counter"},
@@ -74411,19 +73839,16 @@ class PatternFlowGtpv2Spare2Counter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
     }  # type: Dict[str, str]
@@ -74522,7 +73947,6 @@ class PatternFlowGtpv2Spare2MetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 7,
         },
         "length": {
@@ -74830,14 +74254,12 @@ class PatternFlowArpHardwareType(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "increment": {"type": "PatternFlowArpHardwareTypeCounter"},
@@ -74994,19 +74416,16 @@ class PatternFlowArpHardwareTypeCounter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
     }  # type: Dict[str, str]
@@ -75107,7 +74526,6 @@ class PatternFlowArpHardwareTypeMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 15,
         },
         "length": {
@@ -75282,14 +74700,12 @@ class PatternFlowArpProtocolType(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "increment": {"type": "PatternFlowArpProtocolTypeCounter"},
@@ -75447,19 +74863,16 @@ class PatternFlowArpProtocolTypeCounter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
     }  # type: Dict[str, str]
@@ -75561,7 +74974,6 @@ class PatternFlowArpProtocolTypeMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 15,
         },
         "length": {
@@ -75736,14 +75148,12 @@ class PatternFlowArpHardwareLength(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
         "increment": {"type": "PatternFlowArpHardwareLengthCounter"},
@@ -75898,19 +75308,16 @@ class PatternFlowArpHardwareLengthCounter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
     }  # type: Dict[str, str]
@@ -76009,7 +75416,6 @@ class PatternFlowArpHardwareLengthMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 7,
         },
         "length": {
@@ -76184,14 +75590,12 @@ class PatternFlowArpProtocolLength(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
         "increment": {"type": "PatternFlowArpProtocolLengthCounter"},
@@ -76346,19 +75750,16 @@ class PatternFlowArpProtocolLengthCounter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
     }  # type: Dict[str, str]
@@ -76457,7 +75858,6 @@ class PatternFlowArpProtocolLengthMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 7,
         },
         "length": {
@@ -76632,14 +76032,12 @@ class PatternFlowArpOperation(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "increment": {"type": "PatternFlowArpOperationCounter"},
@@ -76797,19 +76195,16 @@ class PatternFlowArpOperationCounter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
     }  # type: Dict[str, str]
@@ -76911,7 +76306,6 @@ class PatternFlowArpOperationMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 15,
         },
         "length": {
@@ -77357,7 +76751,6 @@ class PatternFlowArpSenderHardwareAddrMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 47,
         },
         "length": {
@@ -77795,7 +77188,6 @@ class PatternFlowArpSenderProtocolAddrMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 31,
         },
         "length": {
@@ -78241,7 +77633,6 @@ class PatternFlowArpTargetHardwareAddrMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 47,
         },
         "length": {
@@ -78679,7 +78070,6 @@ class PatternFlowArpTargetProtocolAddrMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 31,
         },
         "length": {
@@ -78999,14 +78389,12 @@ class PatternFlowIcmpEchoType(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
         "increment": {"type": "PatternFlowIcmpEchoTypeCounter"},
@@ -79164,19 +78552,16 @@ class PatternFlowIcmpEchoTypeCounter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
     }  # type: Dict[str, str]
@@ -79278,7 +78663,6 @@ class PatternFlowIcmpEchoTypeMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 7,
         },
         "length": {
@@ -79453,14 +78837,12 @@ class PatternFlowIcmpEchoCode(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
         "increment": {"type": "PatternFlowIcmpEchoCodeCounter"},
@@ -79615,19 +78997,16 @@ class PatternFlowIcmpEchoCodeCounter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
     }  # type: Dict[str, str]
@@ -79726,7 +79105,6 @@ class PatternFlowIcmpEchoCodeMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 7,
         },
         "length": {
@@ -79906,7 +79284,6 @@ class PatternFlowIcmpEchoChecksum(OpenApiObject):
         "custom": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
     }  # type: Dict[str, str]
@@ -80025,14 +79402,12 @@ class PatternFlowIcmpEchoIdentifier(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "increment": {"type": "PatternFlowIcmpEchoIdentifierCounter"},
@@ -80187,19 +79562,16 @@ class PatternFlowIcmpEchoIdentifierCounter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
     }  # type: Dict[str, str]
@@ -80298,7 +79670,6 @@ class PatternFlowIcmpEchoIdentifierMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 15,
         },
         "length": {
@@ -80473,14 +79844,12 @@ class PatternFlowIcmpEchoSequenceNumber(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "increment": {"type": "PatternFlowIcmpEchoSequenceNumberCounter"},
@@ -80635,19 +80004,16 @@ class PatternFlowIcmpEchoSequenceNumberCounter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
     }  # type: Dict[str, str]
@@ -80746,7 +80112,6 @@ class PatternFlowIcmpEchoSequenceNumberMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 15,
         },
         "length": {
@@ -81068,14 +80433,12 @@ class PatternFlowIcmpv6EchoType(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
         "increment": {"type": "PatternFlowIcmpv6EchoTypeCounter"},
@@ -81233,19 +80596,16 @@ class PatternFlowIcmpv6EchoTypeCounter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
     }  # type: Dict[str, str]
@@ -81347,7 +80707,6 @@ class PatternFlowIcmpv6EchoTypeMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 7,
         },
         "length": {
@@ -81522,14 +80881,12 @@ class PatternFlowIcmpv6EchoCode(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
         "increment": {"type": "PatternFlowIcmpv6EchoCodeCounter"},
@@ -81684,19 +81041,16 @@ class PatternFlowIcmpv6EchoCodeCounter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
     }  # type: Dict[str, str]
@@ -81795,7 +81149,6 @@ class PatternFlowIcmpv6EchoCodeMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 7,
         },
         "length": {
@@ -81970,14 +81323,12 @@ class PatternFlowIcmpv6EchoIdentifier(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "increment": {"type": "PatternFlowIcmpv6EchoIdentifierCounter"},
@@ -82132,19 +81483,16 @@ class PatternFlowIcmpv6EchoIdentifierCounter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
     }  # type: Dict[str, str]
@@ -82243,7 +81591,6 @@ class PatternFlowIcmpv6EchoIdentifierMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 15,
         },
         "length": {
@@ -82418,14 +81765,12 @@ class PatternFlowIcmpv6EchoSequenceNumber(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "increment": {"type": "PatternFlowIcmpv6EchoSequenceNumberCounter"},
@@ -82580,19 +81925,16 @@ class PatternFlowIcmpv6EchoSequenceNumberCounter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
     }  # type: Dict[str, str]
@@ -82691,7 +82033,6 @@ class PatternFlowIcmpv6EchoSequenceNumberMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 15,
         },
         "length": {
@@ -82871,7 +82212,6 @@ class PatternFlowIcmpv6EchoChecksum(OpenApiObject):
         "custom": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
     }  # type: Dict[str, str]
@@ -83043,14 +82383,12 @@ class PatternFlowPppAddress(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
         "increment": {"type": "PatternFlowPppAddressCounter"},
@@ -83207,19 +82545,16 @@ class PatternFlowPppAddressCounter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
     }  # type: Dict[str, str]
@@ -83320,7 +82655,6 @@ class PatternFlowPppAddressMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 7,
         },
         "length": {
@@ -83493,14 +82827,12 @@ class PatternFlowPppControl(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
         "increment": {"type": "PatternFlowPppControlCounter"},
@@ -83657,19 +82989,16 @@ class PatternFlowPppControlCounter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
     }  # type: Dict[str, str]
@@ -83770,7 +83099,6 @@ class PatternFlowPppControlMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 7,
         },
         "length": {
@@ -83944,20 +83272,17 @@ class PatternFlowPppProtocolType(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "auto": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "increment": {"type": "PatternFlowPppProtocolTypeCounter"},
@@ -84126,19 +83451,16 @@ class PatternFlowPppProtocolTypeCounter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
     }  # type: Dict[str, str]
@@ -84237,7 +83559,6 @@ class PatternFlowPppProtocolTypeMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 15,
         },
         "length": {
@@ -84489,14 +83810,12 @@ class PatternFlowIgmpv1Version(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 15,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 15,
         },
         "increment": {"type": "PatternFlowIgmpv1VersionCounter"},
@@ -84651,19 +83970,16 @@ class PatternFlowIgmpv1VersionCounter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 15,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 15,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 15,
         },
     }  # type: Dict[str, str]
@@ -84762,7 +84078,6 @@ class PatternFlowIgmpv1VersionMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 3,
         },
         "length": {
@@ -84937,14 +84252,12 @@ class PatternFlowIgmpv1Type(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 15,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 15,
         },
         "increment": {"type": "PatternFlowIgmpv1TypeCounter"},
@@ -85102,19 +84415,16 @@ class PatternFlowIgmpv1TypeCounter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 15,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 15,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 15,
         },
     }  # type: Dict[str, str]
@@ -85216,7 +84526,6 @@ class PatternFlowIgmpv1TypeMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 3,
         },
         "length": {
@@ -85389,14 +84698,12 @@ class PatternFlowIgmpv1Unused(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
         "increment": {"type": "PatternFlowIgmpv1UnusedCounter"},
@@ -85551,19 +84858,16 @@ class PatternFlowIgmpv1UnusedCounter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
     }  # type: Dict[str, str]
@@ -85662,7 +84966,6 @@ class PatternFlowIgmpv1UnusedMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 7,
         },
         "length": {
@@ -85842,7 +85145,6 @@ class PatternFlowIgmpv1Checksum(OpenApiObject):
         "custom": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 65535,
         },
     }  # type: Dict[str, str]
@@ -86224,7 +85526,6 @@ class PatternFlowIgmpv1GroupAddressMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 31,
         },
         "length": {
@@ -86465,20 +85766,17 @@ class PatternFlowMplsLabel(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1048575,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 1048575,
         },
         "auto": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1048575,
         },
         "increment": {"type": "PatternFlowMplsLabelCounter"},
@@ -86644,19 +85942,16 @@ class PatternFlowMplsLabelCounter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1048575,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1048575,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1048575,
         },
     }  # type: Dict[str, str]
@@ -86755,7 +86050,6 @@ class PatternFlowMplsLabelMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 19,
         },
         "length": {
@@ -86928,14 +86222,12 @@ class PatternFlowMplsTrafficClass(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 7,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 7,
         },
         "increment": {"type": "PatternFlowMplsTrafficClassCounter"},
@@ -87090,19 +86382,16 @@ class PatternFlowMplsTrafficClassCounter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 7,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 7,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 7,
         },
     }  # type: Dict[str, str]
@@ -87201,7 +86490,6 @@ class PatternFlowMplsTrafficClassMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 2,
         },
         "length": {
@@ -87377,20 +86665,17 @@ class PatternFlowMplsBottomOfStack(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "auto": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "increment": {"type": "PatternFlowMplsBottomOfStackCounter"},
@@ -87559,19 +86844,16 @@ class PatternFlowMplsBottomOfStackCounter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 1,
         },
     }  # type: Dict[str, str]
@@ -87670,7 +86952,6 @@ class PatternFlowMplsBottomOfStackMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 0,
         },
         "length": {
@@ -87845,14 +87126,12 @@ class PatternFlowMplsTimeToLive(OpenApiObject):
         "value": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
         "values": {
             "type": list,
             "itemtype": int,
             "itemformat": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
         "increment": {"type": "PatternFlowMplsTimeToLiveCounter"},
@@ -88007,19 +87286,16 @@ class PatternFlowMplsTimeToLiveCounter(OpenApiObject):
         "start": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
         "step": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
         "count": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 255,
         },
     }  # type: Dict[str, str]
@@ -88118,7 +87394,6 @@ class PatternFlowMplsTimeToLiveMetricTag(OpenApiObject):
         "offset": {
             "type": int,
             "format": "uint32",
-            "minimum": 0,
             "maximum": 7,
         },
         "length": {
