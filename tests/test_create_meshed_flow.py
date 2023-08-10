@@ -10,7 +10,7 @@ def test_create_meshed_flow(api):
         config.ports.port(name='Port %s' % i, location='localhost/%s' % i)
         device = config.devices.device(name='Device %s' % i)[-1]
         device.ethernets.ethernet()
-        device.ethernets[-1].port_name = 'Port %s' % i
+        device.ethernets[-1].connection.port_name = 'Port %s' % i
         device.ethernets[-1].name = 'Eth %s' % i
         device.ethernets[-1].mac = '00:00:00:00:00:{:02x}'.format(i)
         device.ethernets[-1].ipv4_addresses.ipv4()

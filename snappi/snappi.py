@@ -1,4 +1,4 @@
-# Open Traffic Generator API 0.11.11
+# Open Traffic Generator API 0.12.1
 # License: MIT
 
 import importlib
@@ -164,6 +164,7 @@ class HttpTransport(object):
         payload=None,
         return_object=None,
         headers=None,
+        request_class=None,
     ):
         url = "%s%s" % (self.location, relative_url)
         data = None
@@ -173,6 +174,8 @@ class HttpTransport(object):
                 data = payload
                 headers["Content-Type"] = "application/octet-stream"
             elif isinstance(payload, (str, unicode)):
+                if request_class is not None:
+                    request_class().deserialize(payload)
                 data = payload
             elif isinstance(payload, OpenApiBase):
                 data = payload.serialize()
@@ -416,14 +419,23 @@ class OpenApiValidator(object):
     def validate_integer(self, value, min, max, type_format=None):
         if value is None or not isinstance(value, int):
             return False
-        if type_format == "uint32" and value < 0:
-            return False
-        if type_format == "uint64" and value < 0:
-            return False
         if min is not None and value < min:
             return False
         if max is not None and value > max:
             return False
+        if type_format is not None:
+            if type_format == "uint32" and (value < 0 or value > 4294967295):
+                return False
+            elif type_format == "uint64" and (
+                value < 0 or value > 18446744073709551615
+            ):
+                return False
+            elif type_format == "int32" and (value < -2147483648 or value > 2147483647):
+                return False
+            elif type_format == "int64" and (
+                value < -9223372036854775808 or value > 9223372036854775807
+            ):
+                return False
         return True
 
     def validate_float(self, value):
@@ -865,11 +877,17 @@ class OpenApiObject(OpenApiBase, OpenApiValidator):
             msg = "property {} shall be of type {} at {}".format(
                 property_name, details["type"], self.__class__
             )
+
+            itemtype = (
+                details.get("itemformat")
+                if "itemformat" in details
+                else details.get("itemtype")
+            )
             self.types_validation(
                 property_value,
                 details["type"],
                 msg,
-                details.get("itemtype"),
+                itemtype,
                 details.get("minimum"),
                 details.get("maximum"),
                 details.get("minLength"),
@@ -1326,8 +1344,7 @@ class Lag(OpenApiObject):
         "protocol": {"type": "LagProtocol"},
         "min_links": {
             "type": int,
-            "format": "int32",
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 32,
         },
         "name": {"type": str},
@@ -1496,12 +1513,12 @@ class LagPortLacp(OpenApiObject):
     _TYPES = {
         "actor_port_number": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
         "actor_port_priority": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
         "actor_activity": {
@@ -1513,12 +1530,12 @@ class LagPortLacp(OpenApiObject):
         },
         "lacpdu_periodic_time_interval": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
         "lacpdu_timeout": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
     }  # type: Dict[str, str]
@@ -1693,7 +1710,7 @@ class DeviceEthernetBase(OpenApiObject):
         },
         "mtu": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
         "vlans": {"type": "DeviceVlanIter"},
@@ -1815,12 +1832,12 @@ class DeviceVlan(OpenApiObject):
         },
         "priority": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 3,
         },
         "id": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 4095,
         },
         "name": {"type": str},
@@ -2148,12 +2165,12 @@ class LagProtocolLacp(OpenApiObject):
         },
         "actor_system_priority": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
         "actor_key": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
     }  # type: Dict[str, str]
@@ -2256,7 +2273,7 @@ class LagProtocolStatic(OpenApiObject):
     _TYPES = {
         "lag_id": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
     }  # type: Dict[str, str]
@@ -2392,6 +2409,7 @@ class Layer1(OpenApiObject):
         "promiscuous": {"type": bool},
         "mtu": {
             "type": int,
+            "format": "uint32",
             "minimum": 64,
             "maximum": 9000,
         },
@@ -2992,15 +3010,51 @@ class Layer1Ieee8021qbb(OpenApiObject):
     __slots__ = "_parent"
 
     _TYPES = {
-        "pfc_delay": {"type": int},
-        "pfc_class_0": {"type": int},
-        "pfc_class_1": {"type": int},
-        "pfc_class_2": {"type": int},
-        "pfc_class_3": {"type": int},
-        "pfc_class_4": {"type": int},
-        "pfc_class_5": {"type": int},
-        "pfc_class_6": {"type": int},
-        "pfc_class_7": {"type": int},
+        "pfc_delay": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+        "pfc_class_0": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 7,
+        },
+        "pfc_class_1": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 7,
+        },
+        "pfc_class_2": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 7,
+        },
+        "pfc_class_3": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 7,
+        },
+        "pfc_class_4": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 7,
+        },
+        "pfc_class_5": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 7,
+        },
+        "pfc_class_6": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 7,
+        },
+        "pfc_class_7": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 7,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -3371,7 +3425,11 @@ class Capture(OpenApiObject):
         },
         "filters": {"type": "CaptureFilterIter"},
         "overwrite": {"type": bool},
-        "packet_size": {"type": int},
+        "packet_size": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
         "format": {
             "type": str,
             "enum": [
@@ -3393,7 +3451,7 @@ class Capture(OpenApiObject):
     PCAPNG = "pcapng"  # type: str
 
     _STATUS = {
-        "self": "Capture is under_review, Information TBD",
+        "self": "Capture is under_review, There may be changes in filter configuration",
     }  # type: Dict[str, Union(type)]
 
     def __init__(
@@ -3671,8 +3729,14 @@ class CaptureCustom(OpenApiObject):
     __slots__ = "_parent"
 
     _TYPES = {
-        "offset": {"type": int},
-        "bit_length": {"type": int},
+        "offset": {
+            "type": int,
+            "format": "uint32",
+        },
+        "bit_length": {
+            "type": int,
+            "format": "uint32",
+        },
         "value": {
             "type": str,
             "format": "hex",
@@ -3687,7 +3751,6 @@ class CaptureCustom(OpenApiObject):
     _REQUIRED = ()  # type: tuple(str)
 
     _DEFAULTS = {
-        "offset": 0,
         "bit_length": 8,
         "value": "00",
         "mask": "00",
@@ -3697,7 +3760,13 @@ class CaptureCustom(OpenApiObject):
     _STATUS = {}  # type: Dict[str, Union(type)]
 
     def __init__(
-        self, parent=None, offset=0, bit_length=8, value="00", mask="00", negate=False
+        self,
+        parent=None,
+        offset=None,
+        bit_length=8,
+        value="00",
+        mask="00",
+        negate=False,
     ):
         super(CaptureCustom, self).__init__()
         self._parent = parent
@@ -4401,7 +4470,7 @@ class CaptureFilterIter(OpenApiIter):
         self._add(item)
         return item
 
-    def custom(self, offset=0, bit_length=8, value="00", mask="00", negate=False):
+    def custom(self, offset=None, bit_length=8, value="00", mask="00", negate=False):
         # type: (int,int,str,str,bool) -> CaptureFilterIter
         """Factory method that creates an instance of the CaptureCustom class
 
@@ -4513,7 +4582,7 @@ class CaptureIter(OpenApiIter):
         # type: (List[str],bool,int,Union[Literal["pcap"], Literal["pcapng"]],str) -> CaptureIter
         """Factory method that creates an instance of the Capture class
 
-        Under Review: Information TBD. Under Review: Information TBD. Configuration for capture settings.
+        Under Review: There may be changes in filter configuration. Under Review: There may be changes in filter configuration. Configuration for capture settings.
 
         Returns: CaptureIter
         """
@@ -4539,7 +4608,7 @@ class CaptureIter(OpenApiIter):
         # type: (List[str],bool,int,Union[Literal["pcap"], Literal["pcapng"]],str) -> Capture
         """Add method that creates and returns an instance of the Capture class
 
-        Under Review: Information TBD. Under Review: Information TBD. Configuration for capture settings.
+        Under Review: There may be changes in filter configuration. Under Review: There may be changes in filter configuration. Configuration for capture settings.
 
         Returns: Capture
         """
@@ -4696,7 +4765,6 @@ class DeviceEthernet(OpenApiObject):
     __slots__ = "_parent"
 
     _TYPES = {
-        "port_name": {"type": str},
         "connection": {"type": "EthernetConnection"},
         "ipv4_addresses": {"type": "DeviceIpv4Iter"},
         "ipv6_addresses": {"type": "DeviceIpv6Iter"},
@@ -4706,7 +4774,7 @@ class DeviceEthernet(OpenApiObject):
         },
         "mtu": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
         "vlans": {"type": "DeviceVlanIter"},
@@ -4719,43 +4787,19 @@ class DeviceEthernet(OpenApiObject):
         "mtu": 1500,
     }  # type: Dict[str, Union(type)]
 
-    _STATUS = {
-        "port_name": "port_name property in schema DeviceEthernet is deprecated, This property is deprecated in favor of property connection.port_name",
-    }  # type: Dict[str, Union(type)]
+    _STATUS = {}  # type: Dict[str, Union(type)]
 
-    def __init__(self, parent=None, port_name=None, mac=None, mtu=1500, name=None):
+    def __init__(self, parent=None, mac=None, mtu=1500, name=None):
         super(DeviceEthernet, self).__init__()
         self._parent = parent
-        self._set_property("port_name", port_name)
         self._set_property("mac", mac)
         self._set_property("mtu", mtu)
         self._set_property("name", name)
 
-    def set(self, port_name=None, mac=None, mtu=None, name=None):
+    def set(self, mac=None, mtu=None, name=None):
         for property_name, property_value in locals().items():
             if property_name != "self" and property_value is not None:
                 self._set_property(property_name, property_value)
-
-    @property
-    def port_name(self):
-        # type: () -> str
-        """port_name getter
-
-        Deprecated: This property is deprecated in favor of property connection.port_name. Deprecated: This property is deprecated in favor of property connection.port_name. The unique name of Port or LAG that will emulate this interface.. port_name is deprecated and will be removed in future release.port_name and connection can't be used together, use either port_name or connection.. x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name. . x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name.
-
-        Returns: str
-        """
-        return self._get_property("port_name")
-
-    @port_name.setter
-    def port_name(self, value):
-        """port_name setter
-
-        Deprecated: This property is deprecated in favor of property connection.port_name. Deprecated: This property is deprecated in favor of property connection.port_name. The unique name of Port or LAG that will emulate this interface.. port_name is deprecated and will be removed in future release.port_name and connection can't be used together, use either port_name or connection.. x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name. . x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name.
-
-        value: str
-        """
-        self._set_property("port_name", value)
 
     @property
     def connection(self):
@@ -5022,6 +5066,7 @@ class DeviceIpv4(OpenApiObject):
         },
         "prefix": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 32,
         },
@@ -5346,6 +5391,7 @@ class DeviceIpv6(OpenApiObject):
         },
         "prefix": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 128,
         },
@@ -5685,31 +5731,27 @@ class DeviceEthernetIter(OpenApiIter):
         if not isinstance(item, DeviceEthernet):
             raise Exception("Item is not an instance of DeviceEthernet")
 
-    def ethernet(self, port_name=None, mac=None, mtu=1500, name=None):
-        # type: (str,str,int,str) -> DeviceEthernetIter
+    def ethernet(self, mac=None, mtu=1500, name=None):
+        # type: (str,int,str) -> DeviceEthernetIter
         """Factory method that creates an instance of the DeviceEthernet class
 
         An Ethernet interface with IPv4 and IPv6 addresses.
 
         Returns: DeviceEthernetIter
         """
-        item = DeviceEthernet(
-            parent=self._parent, port_name=port_name, mac=mac, mtu=mtu, name=name
-        )
+        item = DeviceEthernet(parent=self._parent, mac=mac, mtu=mtu, name=name)
         self._add(item)
         return self
 
-    def add(self, port_name=None, mac=None, mtu=1500, name=None):
-        # type: (str,str,int,str) -> DeviceEthernet
+    def add(self, mac=None, mtu=1500, name=None):
+        # type: (str,int,str) -> DeviceEthernet
         """Add method that creates and returns an instance of the DeviceEthernet class
 
         An Ethernet interface with IPv4 and IPv6 addresses.
 
         Returns: DeviceEthernet
         """
-        item = DeviceEthernet(
-            parent=self._parent, port_name=port_name, mac=mac, mtu=mtu, name=name
-        )
+        item = DeviceEthernet(parent=self._parent, mac=mac, mtu=mtu, name=name)
         self._add(item)
         return item
 
@@ -6203,12 +6245,14 @@ class DeviceIsisMultiInstance(OpenApiObject):
     _TYPES = {
         "iid": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
         "itids": {
             "type": list,
             "itemtype": int,
+            "itemformat": "uint32",
+            "maximum": 65535,
         },
     }  # type: Dict[str, str]
 
@@ -6279,7 +6323,11 @@ class IsisInterface(OpenApiObject):
 
     _TYPES = {
         "eth_name": {"type": str},
-        "metric": {"type": int},
+        "metric": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 16777215,
+        },
         "network_type": {
             "type": str,
             "enum": [
@@ -6305,6 +6353,8 @@ class IsisInterface(OpenApiObject):
         "srlg_values": {
             "type": list,
             "itemtype": int,
+            "itemformat": "uint32",
+            "maximum": 16777215,
         },
         "name": {"type": str},
     }  # type: Dict[str, str]
@@ -6574,9 +6624,18 @@ class IsisInterfaceLevel(OpenApiObject):
     __slots__ = "_parent"
 
     _TYPES = {
-        "priority": {"type": int},
-        "hello_interval": {"type": int},
-        "dead_interval": {"type": int},
+        "priority": {
+            "type": int,
+            "format": "uint32",
+        },
+        "hello_interval": {
+            "type": int,
+            "format": "uint32",
+        },
+        "dead_interval": {
+            "type": int,
+            "format": "uint32",
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -6671,12 +6730,12 @@ class IsisMT(OpenApiObject):
     _TYPES = {
         "mt_id": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
         "link_metric": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 16777215,
         },
     }  # type: Dict[str, str]
@@ -6809,21 +6868,15 @@ class LinkStateTE(OpenApiObject):
         },
         "metric_level": {
             "type": int,
-            "format": "int64",
-            "minimum": 0,
-            "maximum": 4261412864,
+            "format": "uint32",
         },
         "max_bandwith": {
             "type": int,
-            "format": "int64",
-            "minimum": 0,
-            "maximum": 4294967295,
+            "format": "uint32",
         },
         "max_reservable_bandwidth": {
             "type": int,
-            "format": "int64",
-            "minimum": 0,
-            "maximum": 4294967295,
+            "format": "uint32",
         },
         "priority_bandwidths": {"type": "LinkStatepriorityBandwidths"},
     }  # type: Dict[str, str]
@@ -6967,51 +7020,35 @@ class LinkStatepriorityBandwidths(OpenApiObject):
     _TYPES = {
         "pb0": {
             "type": int,
-            "format": "int64",
-            "minimum": 0,
-            "maximum": 4294967295,
+            "format": "uint32",
         },
         "pb1": {
             "type": int,
-            "format": "int64",
-            "minimum": 0,
-            "maximum": 4294967295,
+            "format": "uint32",
         },
         "pb2": {
             "type": int,
-            "format": "int64",
-            "minimum": 0,
-            "maximum": 4294967295,
+            "format": "uint32",
         },
         "pb3": {
             "type": int,
-            "format": "int64",
-            "minimum": 0,
-            "maximum": 4294967295,
+            "format": "uint32",
         },
         "pb4": {
             "type": int,
-            "format": "int64",
-            "minimum": 0,
-            "maximum": 4294967295,
+            "format": "uint32",
         },
         "pb5": {
             "type": int,
-            "format": "int64",
-            "minimum": 0,
-            "maximum": 4294967295,
+            "format": "uint32",
         },
         "pb6": {
             "type": int,
-            "format": "int64",
-            "minimum": 0,
-            "maximum": 4294967295,
+            "format": "uint32",
         },
         "pb7": {
             "type": int,
-            "format": "int64",
-            "minimum": 0,
-            "maximum": 4294967295,
+            "format": "uint32",
         },
     }  # type: Dict[str, str]
 
@@ -8049,7 +8086,7 @@ class IsisAdvanced(OpenApiObject):
         "enable_hello_padding": {"type": bool},
         "max_area_addresses": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 254,
         },
         "area_addresses": {
@@ -8059,31 +8096,34 @@ class IsisAdvanced(OpenApiObject):
         },
         "lsp_refresh_rate": {
             "type": int,
-            "minimum": 1,
+            "format": "uint32",
             "maximum": 65535,
         },
         "lsp_lifetime": {
             "type": int,
-            "minimum": 1,
+            "format": "uint32",
             "maximum": 65535,
         },
         "psnp_interval": {
             "type": int,
-            "minimum": 1,
+            "format": "uint32",
             "maximum": 60000,
         },
         "csnp_interval": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 65535000,
         },
         "max_lsp_size": {
             "type": int,
+            "format": "uint32",
             "minimum": 64,
             "maximum": 9216,
         },
         "lsp_mgroup_min_trans_interval": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 60000,
         },
@@ -8551,6 +8591,7 @@ class IsisV4RouteRange(OpenApiObject):
         "addresses": {"type": "V4RouteAddressIter"},
         "link_metric": {
             "type": int,
+            "format": "uint32",
             "minimum": 0,
             "maximum": 16777215,
         },
@@ -8827,15 +8868,17 @@ class V4RouteAddress(OpenApiObject):
         },
         "prefix": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 32,
         },
         "count": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
         },
         "step": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
         },
     }  # type: Dict[str, str]
@@ -9111,6 +9154,7 @@ class IsisV6RouteRange(OpenApiObject):
         "addresses": {"type": "V6RouteAddressIter"},
         "link_metric": {
             "type": int,
+            "format": "uint32",
             "minimum": 0,
             "maximum": 16777215,
         },
@@ -9387,15 +9431,17 @@ class V6RouteAddress(OpenApiObject):
         },
         "prefix": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 128,
         },
         "count": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
         },
         "step": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
         },
     }  # type: Dict[str, str]
@@ -9817,7 +9863,10 @@ class BgpV4Peer(OpenApiObject):
                 "ebgp",
             ],
         },
-        "as_number": {"type": int},
+        "as_number": {
+            "type": int,
+            "format": "uint32",
+        },
         "as_number_width": {
             "type": str,
             "enum": [
@@ -10126,7 +10175,7 @@ class BgpV4EthernetSegment(OpenApiObject):
         },
         "esi_label": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 16777215,
         },
         "advanced": {"type": "BgpRouteAdvanced"},
@@ -10306,7 +10355,7 @@ class BgpEthernetSegmentDfElection(OpenApiObject):
     _TYPES = {
         "election_timer": {
             "type": int,
-            "minimum": 1,
+            "format": "uint32",
             "maximum": 300,
         },
     }  # type: Dict[str, str]
@@ -10432,12 +10481,12 @@ class BgpV4EviVxlan(OpenApiObject):
         },
         "pmsi_label": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 16777215,
         },
         "ad_label": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 16777215,
         },
         "route_distinguisher": {"type": "BgpRouteDistinguisher"},
@@ -10679,9 +10728,7 @@ class BgpV4EviVxlanBroadcastDomain(OpenApiObject):
         "cmac_ip_range": {"type": "BgpCMacIpRangeIter"},
         "ethernet_tag_id": {
             "type": int,
-            "format": "int64",
-            "minimum": 0,
-            "maximum": 4294967295,
+            "format": "uint32",
         },
         "vlan_aware_service": {"type": bool},
     }  # type: Dict[str, str]
@@ -10769,14 +10816,14 @@ class BgpCMacIpRange(OpenApiObject):
         "mac_addresses": {"type": "MACRouteAddress"},
         "l2vni": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 16777215,
         },
         "ipv4_addresses": {"type": "V4RouteAddress"},
         "ipv6_addresses": {"type": "V6RouteAddress"},
         "l3vni": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 16777215,
         },
         "include_default_gateway": {"type": bool},
@@ -10990,15 +11037,18 @@ class MACRouteAddress(OpenApiObject):
         },
         "prefix": {
             "type": int,
+            "format": "uint32",
             "minimum": 0,
             "maximum": 48,
         },
         "count": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
         },
         "step": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
         },
     }  # type: Dict[str, str]
@@ -11118,7 +11168,10 @@ class BgpRouteAdvanced(OpenApiObject):
 
     _TYPES = {
         "include_multi_exit_discriminator": {"type": bool},
-        "multi_exit_discriminator": {"type": int},
+        "multi_exit_discriminator": {
+            "type": int,
+            "format": "uint32",
+        },
         "include_origin": {"type": bool},
         "origin": {
             "type": str,
@@ -11129,7 +11182,10 @@ class BgpRouteAdvanced(OpenApiObject):
             ],
         },
         "include_local_preference": {"type": bool},
-        "local_preference": {"type": int},
+        "local_preference": {
+            "type": int,
+            "format": "uint32",
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -11326,12 +11382,12 @@ class BgpCommunity(OpenApiObject):
         },
         "as_number": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
         "as_custom": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
     }  # type: Dict[str, str]
@@ -11770,7 +11826,7 @@ class BgpAsPathSegment(OpenApiObject):
         "as_numbers": {
             "type": list,
             "itemtype": int,
-            "itemformat": "int64",
+            "itemformat": "uint32",
         },
     }  # type: Dict[str, str]
 
@@ -12407,10 +12463,23 @@ class BgpAdvanced(OpenApiObject):
     __slots__ = "_parent"
 
     _TYPES = {
-        "hold_time_interval": {"type": int},
-        "keep_alive_interval": {"type": int},
-        "update_interval": {"type": int},
-        "time_to_live": {"type": int},
+        "hold_time_interval": {
+            "type": int,
+            "format": "uint32",
+        },
+        "keep_alive_interval": {
+            "type": int,
+            "format": "uint32",
+        },
+        "update_interval": {
+            "type": int,
+            "format": "uint32",
+        },
+        "time_to_live": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
         "md5_key": {"type": str},
     }  # type: Dict[str, str]
 
@@ -13576,7 +13645,10 @@ class BgpAddPath(OpenApiObject):
     __slots__ = "_parent"
 
     _TYPES = {
-        "path_id": {"type": int},
+        "path_id": {
+            "type": int,
+            "format": "uint32",
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -14052,15 +14124,11 @@ class BgpSrteV4Policy(OpenApiObject):
     _TYPES = {
         "distinguisher": {
             "type": int,
-            "format": "int64",
-            "minimum": 0,
-            "maximum": 4294967295,
+            "format": "uint32",
         },
         "color": {
             "type": int,
-            "format": "int64",
-            "minimum": 0,
-            "maximum": 4294967295,
+            "format": "uint32",
         },
         "ipv4_endpoint": {
             "type": str,
@@ -14607,9 +14675,7 @@ class BgpSrteRemoteEndpointSubTlv(OpenApiObject):
     _TYPES = {
         "as_number": {
             "type": int,
-            "format": "int64",
-            "minimum": 0,
-            "maximum": 4294967295,
+            "format": "uint32",
         },
         "address_family": {
             "type": str,
@@ -14809,7 +14875,10 @@ class BgpSrteBindingSubTlv(OpenApiObject):
                 "ipv6_sid",
             ],
         },
-        "four_octet_sid": {"type": int},
+        "four_octet_sid": {
+            "type": int,
+            "format": "uint32",
+        },
         "ipv6_sid": {
             "type": str,
             "format": "ipv6",
@@ -14973,9 +15042,7 @@ class BgpSrtePreferenceSubTlv(OpenApiObject):
     _TYPES = {
         "preference": {
             "type": int,
-            "format": "int64",
-            "minimum": 0,
-            "maximum": 4294967295,
+            "format": "uint32",
         },
     }  # type: Dict[str, str]
 
@@ -15025,7 +15092,7 @@ class BgpSrtePolicyPrioritySubTlv(OpenApiObject):
     _TYPES = {
         "policy_priority": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 255,
         },
     }  # type: Dict[str, str]
@@ -15185,9 +15252,7 @@ class BgpSrteSegmentList(OpenApiObject):
     _TYPES = {
         "weight": {
             "type": int,
-            "format": "int64",
-            "minimum": 0,
-            "maximum": 4294967295,
+            "format": "uint32",
         },
         "segments": {"type": "BgpSrteSegmentIter"},
         "name": {"type": str},
@@ -15560,19 +15625,19 @@ class BgpSrteSegmentATypeSubTlv(OpenApiObject):
         },
         "label": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 1048575,
         },
         "tc": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 7,
         },
         "s_bit": {"type": bool},
         "ttl": {
             "type": int,
-            "minimum": 0,
-            "maximum": 255,
+            "format": "uint32",
+            "maximum": 225,
         },
     }  # type: Dict[str, str]
 
@@ -15802,22 +15867,22 @@ class BgpSrteSRv6SIDEndpointBehaviorAndStructure(OpenApiObject):
     _TYPES = {
         "lb_length": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 128,
         },
         "ln_length": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 128,
         },
         "func_length": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 128,
         },
         "arg_length": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 128,
         },
     }  # type: Dict[str, str]
@@ -15943,7 +16008,7 @@ class BgpSrteSegmentCTypeSubTlv(OpenApiObject):
         },
         "sr_algorithm": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 255,
         },
         "ipv4_node_address": {
@@ -16056,19 +16121,19 @@ class BgpSrteSrMplsSid(OpenApiObject):
     _TYPES = {
         "label": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 1048575,
         },
         "tc": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 7,
         },
         "s_bit": {"type": bool},
         "ttl": {
             "type": int,
-            "minimum": 0,
-            "maximum": 255,
+            "format": "uint32",
+            "maximum": 225,
         },
     }  # type: Dict[str, str]
 
@@ -16186,7 +16251,7 @@ class BgpSrteSegmentDTypeSubTlv(OpenApiObject):
         },
         "sr_algorithm": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 255,
         },
         "ipv6_node_address": {
@@ -16303,8 +16368,7 @@ class BgpSrteSegmentETypeSubTlv(OpenApiObject):
         },
         "local_interface_id": {
             "type": int,
-            "minimum": 0,
-            "maximum": 2147483647,
+            "format": "uint32",
         },
         "ipv4_node_address": {
             "type": str,
@@ -16540,8 +16604,7 @@ class BgpSrteSegmentGTypeSubTlv(OpenApiObject):
         },
         "local_interface_id": {
             "type": int,
-            "minimum": 0,
-            "maximum": 2147483647,
+            "format": "uint32",
         },
         "local_ipv6_node_address": {
             "type": str,
@@ -16549,8 +16612,7 @@ class BgpSrteSegmentGTypeSubTlv(OpenApiObject):
         },
         "remote_interface_id": {
             "type": int,
-            "minimum": 0,
-            "maximum": 2147483647,
+            "format": "uint32",
         },
         "remote_ipv6_node_address": {
             "type": str,
@@ -16971,13 +17033,11 @@ class BgpSrteSegmentJTypeSubTlv(OpenApiObject):
         },
         "sr_algorithm": {
             "type": int,
-            "minimum": 0,
-            "maximum": 255,
+            "format": "uint32",
         },
         "local_interface_id": {
             "type": int,
-            "minimum": 0,
-            "maximum": 2147483647,
+            "format": "uint32",
         },
         "local_ipv6_node_address": {
             "type": str,
@@ -16985,8 +17045,7 @@ class BgpSrteSegmentJTypeSubTlv(OpenApiObject):
         },
         "remote_interface_id": {
             "type": int,
-            "minimum": 0,
-            "maximum": 2147483647,
+            "format": "uint32",
         },
         "remote_ipv6_node_address": {
             "type": str,
@@ -17228,8 +17287,7 @@ class BgpSrteSegmentKTypeSubTlv(OpenApiObject):
         },
         "sr_algorithm": {
             "type": int,
-            "minimum": 0,
-            "maximum": 255,
+            "format": "uint32",
         },
         "local_ipv6_address": {
             "type": str,
@@ -17686,15 +17744,11 @@ class BgpSrteV6Policy(OpenApiObject):
     _TYPES = {
         "distinguisher": {
             "type": int,
-            "format": "int64",
-            "minimum": 0,
-            "maximum": 4294967295,
+            "format": "uint32",
         },
         "color": {
             "type": int,
-            "format": "int64",
-            "minimum": 0,
-            "maximum": 4294967295,
+            "format": "uint32",
         },
         "ipv6_endpoint": {
             "type": str,
@@ -18739,7 +18793,10 @@ class BgpV6Peer(OpenApiObject):
                 "ebgp",
             ],
         },
-        "as_number": {"type": int},
+        "as_number": {
+            "type": int,
+            "format": "uint32",
+        },
         "as_number_width": {
             "type": str,
             "enum": [
@@ -19047,10 +19104,20 @@ class BgpV6SegmentRouting(OpenApiObject):
         "ingress_supports_vpn": {"type": bool},
         "reduced_encapsulation": {"type": bool},
         "copy_time_to_live": {"type": bool},
-        "time_to_live": {"type": int},
-        "max_sids_per_srh": {"type": int},
+        "time_to_live": {
+            "type": int,
+            "format": "uint32",
+        },
+        "max_sids_per_srh": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
         "auto_generate_segment_left_value": {"type": bool},
-        "segment_left_value": {"type": int},
+        "segment_left_value": {
+            "type": int,
+            "format": "uint32",
+        },
         "advertise_sr_te_policy": {"type": bool},
     }  # type: Dict[str, str]
 
@@ -19297,7 +19364,7 @@ class BgpV6EthernetSegment(OpenApiObject):
         },
         "esi_label": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 16777215,
         },
         "advanced": {"type": "BgpRouteAdvanced"},
@@ -19552,12 +19619,12 @@ class BgpV6EviVxlan(OpenApiObject):
         },
         "pmsi_label": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 16777215,
         },
         "ad_label": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 16777215,
         },
         "route_distinguisher": {"type": "BgpRouteDistinguisher"},
@@ -19799,9 +19866,7 @@ class BgpV6EviVxlanBroadcastDomain(OpenApiObject):
         "cmac_ip_range": {"type": "BgpCMacIpRangeIter"},
         "ethernet_tag_id": {
             "type": int,
-            "format": "int64",
-            "minimum": 0,
-            "maximum": 4294967295,
+            "format": "uint32",
         },
         "vlan_aware_service": {"type": bool},
     }  # type: Dict[str, str]
@@ -20268,6 +20333,7 @@ class VxlanV4Tunnel(OpenApiObject):
         "destination_ip_mode": {"type": "VxlanV4TunnelDestinationIPMode"},
         "vni": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 16777215,
         },
@@ -20877,6 +20943,7 @@ class VxlanV6Tunnel(OpenApiObject):
         "destination_ip_mode": {"type": "VxlanV6TunnelDestinationIPMode"},
         "vni": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 16777215,
         },
@@ -21421,35 +21488,35 @@ class RsvpIpv4Interface(OpenApiObject):
         },
         "label_space_start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 1048575,
         },
         "label_space_end": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 1048575,
         },
         "enable_refresh_reduction": {"type": bool},
         "summary_refresh_interval": {
             "type": int,
-            "minimum": 1,
+            "format": "uint32",
             "maximum": 3600,
         },
         "send_bundle": {"type": bool},
         "bundle_threshold": {
             "type": int,
-            "minimum": 20,
+            "format": "uint32",
             "maximum": 1000,
         },
         "enable_hello": {"type": bool},
         "hello_interval": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 3600,
         },
         "timeout_multiplier": {
             "type": int,
-            "minimum": 1,
+            "format": "uint32",
             "maximum": 10,
         },
     }  # type: Dict[str, str]
@@ -21945,12 +22012,12 @@ class RsvpLspIpv4InterfaceP2PEgressIpv4Lsp(OpenApiObject):
         "name": {"type": str},
         "refresh_interval": {
             "type": int,
-            "minimum": 1,
+            "format": "uint32",
             "maximum": 3600,
         },
         "timeout_multiplier": {
             "type": int,
-            "minimum": 1,
+            "format": "uint32",
             "maximum": 10,
         },
         "reservation_style": {
@@ -21964,7 +22031,7 @@ class RsvpLspIpv4InterfaceP2PEgressIpv4Lsp(OpenApiObject):
         "enable_fixed_label": {"type": bool},
         "fixed_label_value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 1048575,
         },
     }  # type: Dict[str, str]
@@ -22157,31 +22224,37 @@ class RsvpLspIpv4InterfaceP2PIngressIpv4Lsp(OpenApiObject):
         },
         "tunnel_id": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 65535,
         },
         "lsp_id": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 65535,
         },
         "refresh_interval": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 3600,
         },
         "timeout_multiplier": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 10,
         },
         "backup_lsp_id": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 65535,
         },
         "lsp_switchover_delay": {
             "type": int,
+            "format": "uint32",
             "minimum": 0,
             "maximum": 60000,
         },
@@ -22471,12 +22544,12 @@ class RsvpSessionAttribute(OpenApiObject):
         },
         "setup_priority": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 7,
         },
         "holding_priority": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 7,
         },
         "local_protection_desired": {"type": bool},
@@ -22872,12 +22945,12 @@ class RsvpTspec(OpenApiObject):
         },
         "minimum_policed_unit": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
         "maximum_policed_unit": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
     }  # type: Dict[str, str]
@@ -23035,17 +23108,17 @@ class RsvpFastReroute(OpenApiObject):
     _TYPES = {
         "setup_priority": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 7,
         },
         "holding_priority": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 7,
         },
         "hop_limit": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 255,
         },
         "bandwidth": {
@@ -23335,7 +23408,7 @@ class RsvpEro(OpenApiObject):
         },
         "prefix_length": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 32,
         },
         "subobjects": {"type": "RsvpEroSubobjectIter"},
@@ -23440,12 +23513,12 @@ class RsvpEroSubobject(OpenApiObject):
         },
         "prefix_length": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 32,
         },
         "as_number": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
         "hop_type": {
@@ -24717,10 +24790,11 @@ class FlowCustomMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
         },
     }  # type: Dict[str, str]
@@ -24956,8 +25030,8 @@ class PatternFlowEthernetDst(OpenApiObject):
         },
         "values": {
             "type": list,
-            "format": "mac",
             "itemtype": str,
+            "itemformat": "mac",
         },
         "auto": {
             "type": str,
@@ -25141,7 +25215,10 @@ class PatternFlowEthernetDstCounter(OpenApiObject):
             "type": str,
             "format": "mac",
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -25239,11 +25316,12 @@ class PatternFlowEthernetDstMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 47,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 48,
         },
@@ -25416,8 +25494,8 @@ class PatternFlowEthernetSrc(OpenApiObject):
         },
         "values": {
             "type": list,
-            "format": "mac",
             "itemtype": str,
+            "itemformat": "mac",
         },
         "increment": {"type": "PatternFlowEthernetSrcCounter"},
         "decrement": {"type": "PatternFlowEthernetSrcCounter"},
@@ -25582,7 +25660,10 @@ class PatternFlowEthernetSrcCounter(OpenApiObject):
             "type": str,
             "format": "mac",
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -25680,11 +25761,12 @@ class PatternFlowEthernetSrcMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 47,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 48,
         },
@@ -25854,18 +25936,18 @@ class PatternFlowEthernetEtherType(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 65535,
         },
         "auto": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
         "increment": {"type": "PatternFlowEthernetEtherTypeCounter"},
@@ -26041,15 +26123,19 @@ class PatternFlowEthernetEtherTypeCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -26151,11 +26237,12 @@ class PatternFlowEthernetEtherTypeMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 15,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 16,
         },
@@ -26324,13 +26411,13 @@ class PatternFlowEthernetPfcQueue(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 7,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 7,
         },
         "increment": {"type": "PatternFlowEthernetPfcQueueCounter"},
@@ -26484,15 +26571,19 @@ class PatternFlowEthernetPfcQueueCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 7,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 7,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 7,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -26588,11 +26679,12 @@ class PatternFlowEthernetPfcQueueMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 2,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 3,
         },
@@ -26826,13 +26918,13 @@ class PatternFlowVlanPriority(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 7,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 7,
         },
         "increment": {"type": "PatternFlowVlanPriorityCounter"},
@@ -26986,15 +27078,19 @@ class PatternFlowVlanPriorityCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 7,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 7,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 7,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -27090,11 +27186,12 @@ class PatternFlowVlanPriorityMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 2,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 3,
         },
@@ -27263,13 +27360,13 @@ class PatternFlowVlanCfi(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 1,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 1,
         },
         "increment": {"type": "PatternFlowVlanCfiCounter"},
@@ -27420,15 +27517,19 @@ class PatternFlowVlanCfiCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 1,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 1,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 1,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -27524,11 +27625,12 @@ class PatternFlowVlanCfiMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 0,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 1,
         },
@@ -27695,13 +27797,13 @@ class PatternFlowVlanId(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 4095,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 4095,
         },
         "increment": {"type": "PatternFlowVlanIdCounter"},
@@ -27852,15 +27954,19 @@ class PatternFlowVlanIdCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 4095,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 4095,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 4095,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -27956,11 +28062,12 @@ class PatternFlowVlanIdMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 11,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 12,
         },
@@ -28127,13 +28234,13 @@ class PatternFlowVlanTpid(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 65535,
         },
         "increment": {"type": "PatternFlowVlanTpidCounter"},
@@ -28290,15 +28397,19 @@ class PatternFlowVlanTpidCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -28400,11 +28511,12 @@ class PatternFlowVlanTpidMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 15,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 16,
         },
@@ -28636,13 +28748,13 @@ class PatternFlowVxlanFlags(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 255,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 255,
         },
         "increment": {"type": "PatternFlowVxlanFlagsCounter"},
@@ -28796,15 +28908,19 @@ class PatternFlowVxlanFlagsCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 255,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 255,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -28900,11 +29016,12 @@ class PatternFlowVxlanFlagsMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 7,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 8,
         },
@@ -29071,13 +29188,13 @@ class PatternFlowVxlanReserved0(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 16777215,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 16777215,
         },
         "increment": {"type": "PatternFlowVxlanReserved0Counter"},
@@ -29231,15 +29348,19 @@ class PatternFlowVxlanReserved0Counter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 16777215,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 16777215,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 16777215,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -29335,11 +29456,12 @@ class PatternFlowVxlanReserved0MetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 23,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 24,
         },
@@ -29509,18 +29631,18 @@ class PatternFlowVxlanVni(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 16777215,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 16777215,
         },
         "auto": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 16777215,
         },
         "increment": {"type": "PatternFlowVxlanVniCounter"},
@@ -29685,15 +29807,19 @@ class PatternFlowVxlanVniCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 16777215,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 16777215,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 16777215,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -29789,11 +29915,12 @@ class PatternFlowVxlanVniMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 23,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 24,
         },
@@ -29960,13 +30087,13 @@ class PatternFlowVxlanReserved1(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 255,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 255,
         },
         "increment": {"type": "PatternFlowVxlanReserved1Counter"},
@@ -30120,15 +30247,19 @@ class PatternFlowVxlanReserved1Counter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 255,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 255,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -30224,11 +30355,12 @@ class PatternFlowVxlanReserved1MetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 7,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 8,
         },
@@ -30582,13 +30714,13 @@ class PatternFlowIpv4Version(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 15,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 15,
         },
         "increment": {"type": "PatternFlowIpv4VersionCounter"},
@@ -30742,15 +30874,19 @@ class PatternFlowIpv4VersionCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 15,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 15,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 15,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -30846,11 +30982,12 @@ class PatternFlowIpv4VersionMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 3,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 4,
         },
@@ -31020,18 +31157,18 @@ class PatternFlowIpv4HeaderLength(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 15,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 15,
         },
         "auto": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 15,
         },
         "increment": {"type": "PatternFlowIpv4HeaderLengthCounter"},
@@ -31199,15 +31336,19 @@ class PatternFlowIpv4HeaderLengthCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 15,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 15,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 15,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -31303,11 +31444,12 @@ class PatternFlowIpv4HeaderLengthMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 3,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 4,
         },
@@ -31572,13 +31714,13 @@ class PatternFlowIpv4PriorityRaw(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 255,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 255,
         },
         "increment": {"type": "PatternFlowIpv4PriorityRawCounter"},
@@ -31732,15 +31874,19 @@ class PatternFlowIpv4PriorityRawCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 255,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 255,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -31836,11 +31982,12 @@ class PatternFlowIpv4PriorityRawMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 7,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 8,
         },
@@ -32098,13 +32245,13 @@ class PatternFlowIpv4TosPrecedence(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 7,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 7,
         },
         "increment": {"type": "PatternFlowIpv4TosPrecedenceCounter"},
@@ -32267,15 +32414,19 @@ class PatternFlowIpv4TosPrecedenceCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 7,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 7,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 7,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -32380,11 +32531,12 @@ class PatternFlowIpv4TosPrecedenceMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 2,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 3,
         },
@@ -32553,13 +32705,13 @@ class PatternFlowIpv4TosDelay(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 1,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 1,
         },
         "increment": {"type": "PatternFlowIpv4TosDelayCounter"},
@@ -32716,15 +32868,19 @@ class PatternFlowIpv4TosDelayCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 1,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 1,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 1,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -32823,11 +32979,12 @@ class PatternFlowIpv4TosDelayMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 0,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 1,
         },
@@ -32996,13 +33153,13 @@ class PatternFlowIpv4TosThroughput(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 1,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 1,
         },
         "increment": {"type": "PatternFlowIpv4TosThroughputCounter"},
@@ -33159,15 +33316,19 @@ class PatternFlowIpv4TosThroughputCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 1,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 1,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 1,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -33266,11 +33427,12 @@ class PatternFlowIpv4TosThroughputMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 0,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 1,
         },
@@ -33439,13 +33601,13 @@ class PatternFlowIpv4TosReliability(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 1,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 1,
         },
         "increment": {"type": "PatternFlowIpv4TosReliabilityCounter"},
@@ -33602,15 +33764,19 @@ class PatternFlowIpv4TosReliabilityCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 1,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 1,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 1,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -33709,11 +33875,12 @@ class PatternFlowIpv4TosReliabilityMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 0,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 1,
         },
@@ -33882,13 +34049,13 @@ class PatternFlowIpv4TosMonetary(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 1,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 1,
         },
         "increment": {"type": "PatternFlowIpv4TosMonetaryCounter"},
@@ -34045,15 +34212,19 @@ class PatternFlowIpv4TosMonetaryCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 1,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 1,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 1,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -34152,11 +34323,12 @@ class PatternFlowIpv4TosMonetaryMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 0,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 1,
         },
@@ -34325,13 +34497,13 @@ class PatternFlowIpv4TosUnused(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 1,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 1,
         },
         "increment": {"type": "PatternFlowIpv4TosUnusedCounter"},
@@ -34485,15 +34657,19 @@ class PatternFlowIpv4TosUnusedCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 1,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 1,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 1,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -34589,11 +34765,12 @@ class PatternFlowIpv4TosUnusedMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 0,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 1,
         },
@@ -34803,13 +34980,13 @@ class PatternFlowIpv4DscpPhb(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 63,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 63,
         },
         "increment": {"type": "PatternFlowIpv4DscpPhbCounter"},
@@ -34985,15 +35162,19 @@ class PatternFlowIpv4DscpPhbCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 63,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 63,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 63,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -35111,11 +35292,12 @@ class PatternFlowIpv4DscpPhbMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 5,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 6,
         },
@@ -35284,13 +35466,13 @@ class PatternFlowIpv4DscpEcn(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 3,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 3,
         },
         "increment": {"type": "PatternFlowIpv4DscpEcnCounter"},
@@ -35449,15 +35631,19 @@ class PatternFlowIpv4DscpEcnCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 3,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 3,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 3,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -35558,11 +35744,12 @@ class PatternFlowIpv4DscpEcnMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 1,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 2,
         },
@@ -35732,18 +35919,18 @@ class PatternFlowIpv4TotalLength(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 65535,
         },
         "auto": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
         "increment": {"type": "PatternFlowIpv4TotalLengthCounter"},
@@ -35911,15 +36098,19 @@ class PatternFlowIpv4TotalLengthCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -36015,11 +36206,12 @@ class PatternFlowIpv4TotalLengthMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 15,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 16,
         },
@@ -36188,13 +36380,13 @@ class PatternFlowIpv4Identification(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 65535,
         },
         "increment": {"type": "PatternFlowIpv4IdentificationCounter"},
@@ -36348,15 +36540,19 @@ class PatternFlowIpv4IdentificationCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -36452,11 +36648,12 @@ class PatternFlowIpv4IdentificationMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 15,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 16,
         },
@@ -36625,13 +36822,13 @@ class PatternFlowIpv4Reserved(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 1,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 1,
         },
         "increment": {"type": "PatternFlowIpv4ReservedCounter"},
@@ -36785,15 +36982,19 @@ class PatternFlowIpv4ReservedCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 1,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 1,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 1,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -36889,11 +37090,12 @@ class PatternFlowIpv4ReservedMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 0,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 1,
         },
@@ -37062,13 +37264,13 @@ class PatternFlowIpv4DontFragment(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 1,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 1,
         },
         "increment": {"type": "PatternFlowIpv4DontFragmentCounter"},
@@ -37222,15 +37424,19 @@ class PatternFlowIpv4DontFragmentCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 1,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 1,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 1,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -37326,11 +37532,12 @@ class PatternFlowIpv4DontFragmentMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 0,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 1,
         },
@@ -37499,13 +37706,13 @@ class PatternFlowIpv4MoreFragments(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 1,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 1,
         },
         "increment": {"type": "PatternFlowIpv4MoreFragmentsCounter"},
@@ -37659,15 +37866,19 @@ class PatternFlowIpv4MoreFragmentsCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 1,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 1,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 1,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -37763,11 +37974,12 @@ class PatternFlowIpv4MoreFragmentsMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 0,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 1,
         },
@@ -37936,13 +38148,13 @@ class PatternFlowIpv4FragmentOffset(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 31,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 31,
         },
         "increment": {"type": "PatternFlowIpv4FragmentOffsetCounter"},
@@ -38096,15 +38308,19 @@ class PatternFlowIpv4FragmentOffsetCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 31,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 31,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 31,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -38200,11 +38416,12 @@ class PatternFlowIpv4FragmentOffsetMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 4,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 5,
         },
@@ -38373,13 +38590,13 @@ class PatternFlowIpv4TimeToLive(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 255,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 255,
         },
         "increment": {"type": "PatternFlowIpv4TimeToLiveCounter"},
@@ -38533,15 +38750,19 @@ class PatternFlowIpv4TimeToLiveCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 255,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 255,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -38637,11 +38858,12 @@ class PatternFlowIpv4TimeToLiveMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 7,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 8,
         },
@@ -38811,18 +39033,18 @@ class PatternFlowIpv4Protocol(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 255,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 255,
         },
         "auto": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 255,
         },
         "increment": {"type": "PatternFlowIpv4ProtocolCounter"},
@@ -38990,15 +39212,19 @@ class PatternFlowIpv4ProtocolCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 255,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 255,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -39094,11 +39320,12 @@ class PatternFlowIpv4ProtocolMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 7,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 8,
         },
@@ -39272,7 +39499,7 @@ class PatternFlowIpv4HeaderChecksum(OpenApiObject):
         },
         "custom": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
     }  # type: Dict[str, str]
@@ -39394,8 +39621,8 @@ class PatternFlowIpv4Src(OpenApiObject):
         },
         "values": {
             "type": list,
-            "format": "ipv4",
             "itemtype": str,
+            "itemformat": "ipv4",
         },
         "increment": {"type": "PatternFlowIpv4SrcCounter"},
         "decrement": {"type": "PatternFlowIpv4SrcCounter"},
@@ -39551,7 +39778,10 @@ class PatternFlowIpv4SrcCounter(OpenApiObject):
             "type": str,
             "format": "ipv4",
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -39647,11 +39877,12 @@ class PatternFlowIpv4SrcMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 31,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 32,
         },
@@ -39822,8 +40053,8 @@ class PatternFlowIpv4Dst(OpenApiObject):
         },
         "values": {
             "type": list,
-            "format": "ipv4",
             "itemtype": str,
+            "itemformat": "ipv4",
         },
         "increment": {"type": "PatternFlowIpv4DstCounter"},
         "decrement": {"type": "PatternFlowIpv4DstCounter"},
@@ -39979,7 +40210,10 @@ class PatternFlowIpv4DstCounter(OpenApiObject):
             "type": str,
             "format": "ipv4",
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -40075,11 +40309,12 @@ class PatternFlowIpv4DstMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 31,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 32,
         },
@@ -40359,13 +40594,13 @@ class PatternFlowIpv6Version(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 15,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 15,
         },
         "increment": {"type": "PatternFlowIpv6VersionCounter"},
@@ -40519,15 +40754,19 @@ class PatternFlowIpv6VersionCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 15,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 15,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 15,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -40623,11 +40862,12 @@ class PatternFlowIpv6VersionMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 3,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 4,
         },
@@ -40796,13 +41036,13 @@ class PatternFlowIpv6TrafficClass(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 255,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 255,
         },
         "increment": {"type": "PatternFlowIpv6TrafficClassCounter"},
@@ -40956,15 +41196,19 @@ class PatternFlowIpv6TrafficClassCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 255,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 255,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -41060,11 +41304,12 @@ class PatternFlowIpv6TrafficClassMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 7,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 8,
         },
@@ -41233,13 +41478,13 @@ class PatternFlowIpv6FlowLabel(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 1048575,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 1048575,
         },
         "increment": {"type": "PatternFlowIpv6FlowLabelCounter"},
@@ -41393,15 +41638,19 @@ class PatternFlowIpv6FlowLabelCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 1048575,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 1048575,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 1048575,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -41497,11 +41746,12 @@ class PatternFlowIpv6FlowLabelMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 19,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 20,
         },
@@ -41671,18 +41921,18 @@ class PatternFlowIpv6PayloadLength(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 65535,
         },
         "auto": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
         "increment": {"type": "PatternFlowIpv6PayloadLengthCounter"},
@@ -41850,15 +42100,19 @@ class PatternFlowIpv6PayloadLengthCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -41954,11 +42208,12 @@ class PatternFlowIpv6PayloadLengthMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 15,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 16,
         },
@@ -42128,18 +42383,18 @@ class PatternFlowIpv6NextHeader(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 255,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 255,
         },
         "auto": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 255,
         },
         "increment": {"type": "PatternFlowIpv6NextHeaderCounter"},
@@ -42319,15 +42574,19 @@ class PatternFlowIpv6NextHeaderCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 255,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 255,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -42435,11 +42694,12 @@ class PatternFlowIpv6NextHeaderMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 7,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 8,
         },
@@ -42608,13 +42868,13 @@ class PatternFlowIpv6HopLimit(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 255,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 255,
         },
         "increment": {"type": "PatternFlowIpv6HopLimitCounter"},
@@ -42768,15 +43028,19 @@ class PatternFlowIpv6HopLimitCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 255,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 255,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -42872,11 +43136,12 @@ class PatternFlowIpv6HopLimitMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 7,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 8,
         },
@@ -43049,8 +43314,8 @@ class PatternFlowIpv6Src(OpenApiObject):
         },
         "values": {
             "type": list,
-            "format": "ipv6",
             "itemtype": str,
+            "itemformat": "ipv6",
         },
         "increment": {"type": "PatternFlowIpv6SrcCounter"},
         "decrement": {"type": "PatternFlowIpv6SrcCounter"},
@@ -43206,7 +43471,10 @@ class PatternFlowIpv6SrcCounter(OpenApiObject):
             "type": str,
             "format": "ipv6",
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -43302,11 +43570,12 @@ class PatternFlowIpv6SrcMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 127,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 128,
         },
@@ -43477,8 +43746,8 @@ class PatternFlowIpv6Dst(OpenApiObject):
         },
         "values": {
             "type": list,
-            "format": "ipv6",
             "itemtype": str,
+            "itemformat": "ipv6",
         },
         "increment": {"type": "PatternFlowIpv6DstCounter"},
         "decrement": {"type": "PatternFlowIpv6DstCounter"},
@@ -43634,7 +43903,10 @@ class PatternFlowIpv6DstCounter(OpenApiObject):
             "type": str,
             "format": "ipv6",
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -43730,11 +44002,12 @@ class PatternFlowIpv6DstMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 127,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 128,
         },
@@ -44080,8 +44353,8 @@ class PatternFlowPfcPauseDst(OpenApiObject):
         },
         "values": {
             "type": list,
-            "format": "mac",
             "itemtype": str,
+            "itemformat": "mac",
         },
         "increment": {"type": "PatternFlowPfcPauseDstCounter"},
         "decrement": {"type": "PatternFlowPfcPauseDstCounter"},
@@ -44246,7 +44519,10 @@ class PatternFlowPfcPauseDstCounter(OpenApiObject):
             "type": str,
             "format": "mac",
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -44344,11 +44620,12 @@ class PatternFlowPfcPauseDstMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 47,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 48,
         },
@@ -44521,8 +44798,8 @@ class PatternFlowPfcPauseSrc(OpenApiObject):
         },
         "values": {
             "type": list,
-            "format": "mac",
             "itemtype": str,
+            "itemformat": "mac",
         },
         "increment": {"type": "PatternFlowPfcPauseSrcCounter"},
         "decrement": {"type": "PatternFlowPfcPauseSrcCounter"},
@@ -44687,7 +44964,10 @@ class PatternFlowPfcPauseSrcCounter(OpenApiObject):
             "type": str,
             "format": "mac",
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -44785,11 +45065,12 @@ class PatternFlowPfcPauseSrcMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 47,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 48,
         },
@@ -44958,13 +45239,13 @@ class PatternFlowPfcPauseEtherType(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 65535,
         },
         "increment": {"type": "PatternFlowPfcPauseEtherTypeCounter"},
@@ -45120,15 +45401,19 @@ class PatternFlowPfcPauseEtherTypeCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -45226,11 +45511,12 @@ class PatternFlowPfcPauseEtherTypeMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 15,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 16,
         },
@@ -45399,13 +45685,13 @@ class PatternFlowPfcPauseControlOpCode(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 65535,
         },
         "increment": {"type": "PatternFlowPfcPauseControlOpCodeCounter"},
@@ -45559,15 +45845,19 @@ class PatternFlowPfcPauseControlOpCodeCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -45663,11 +45953,12 @@ class PatternFlowPfcPauseControlOpCodeMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 15,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 16,
         },
@@ -45836,13 +46127,13 @@ class PatternFlowPfcPauseClassEnableVector(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 65535,
         },
         "increment": {"type": "PatternFlowPfcPauseClassEnableVectorCounter"},
@@ -45996,15 +46287,19 @@ class PatternFlowPfcPauseClassEnableVectorCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -46100,11 +46395,12 @@ class PatternFlowPfcPauseClassEnableVectorMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 15,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 16,
         },
@@ -46273,13 +46569,13 @@ class PatternFlowPfcPausePauseClass0(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 65535,
         },
         "increment": {"type": "PatternFlowPfcPausePauseClass0Counter"},
@@ -46433,15 +46729,19 @@ class PatternFlowPfcPausePauseClass0Counter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -46537,11 +46837,12 @@ class PatternFlowPfcPausePauseClass0MetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 15,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 16,
         },
@@ -46710,13 +47011,13 @@ class PatternFlowPfcPausePauseClass1(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 65535,
         },
         "increment": {"type": "PatternFlowPfcPausePauseClass1Counter"},
@@ -46870,15 +47171,19 @@ class PatternFlowPfcPausePauseClass1Counter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -46974,11 +47279,12 @@ class PatternFlowPfcPausePauseClass1MetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 15,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 16,
         },
@@ -47147,13 +47453,13 @@ class PatternFlowPfcPausePauseClass2(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 65535,
         },
         "increment": {"type": "PatternFlowPfcPausePauseClass2Counter"},
@@ -47307,15 +47613,19 @@ class PatternFlowPfcPausePauseClass2Counter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -47411,11 +47721,12 @@ class PatternFlowPfcPausePauseClass2MetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 15,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 16,
         },
@@ -47584,13 +47895,13 @@ class PatternFlowPfcPausePauseClass3(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 65535,
         },
         "increment": {"type": "PatternFlowPfcPausePauseClass3Counter"},
@@ -47744,15 +48055,19 @@ class PatternFlowPfcPausePauseClass3Counter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -47848,11 +48163,12 @@ class PatternFlowPfcPausePauseClass3MetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 15,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 16,
         },
@@ -48021,13 +48337,13 @@ class PatternFlowPfcPausePauseClass4(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 65535,
         },
         "increment": {"type": "PatternFlowPfcPausePauseClass4Counter"},
@@ -48181,15 +48497,19 @@ class PatternFlowPfcPausePauseClass4Counter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -48285,11 +48605,12 @@ class PatternFlowPfcPausePauseClass4MetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 15,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 16,
         },
@@ -48458,13 +48779,13 @@ class PatternFlowPfcPausePauseClass5(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 65535,
         },
         "increment": {"type": "PatternFlowPfcPausePauseClass5Counter"},
@@ -48618,15 +48939,19 @@ class PatternFlowPfcPausePauseClass5Counter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -48722,11 +49047,12 @@ class PatternFlowPfcPausePauseClass5MetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 15,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 16,
         },
@@ -48895,13 +49221,13 @@ class PatternFlowPfcPausePauseClass6(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 65535,
         },
         "increment": {"type": "PatternFlowPfcPausePauseClass6Counter"},
@@ -49055,15 +49381,19 @@ class PatternFlowPfcPausePauseClass6Counter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -49159,11 +49489,12 @@ class PatternFlowPfcPausePauseClass6MetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 15,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 16,
         },
@@ -49332,13 +49663,13 @@ class PatternFlowPfcPausePauseClass7(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 65535,
         },
         "increment": {"type": "PatternFlowPfcPausePauseClass7Counter"},
@@ -49492,15 +49823,19 @@ class PatternFlowPfcPausePauseClass7Counter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -49596,11 +49931,12 @@ class PatternFlowPfcPausePauseClass7MetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 15,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 16,
         },
@@ -49852,8 +50188,8 @@ class PatternFlowEthernetPauseDst(OpenApiObject):
         },
         "values": {
             "type": list,
-            "format": "mac",
             "itemtype": str,
+            "itemformat": "mac",
         },
         "increment": {"type": "PatternFlowEthernetPauseDstCounter"},
         "decrement": {"type": "PatternFlowEthernetPauseDstCounter"},
@@ -50018,7 +50354,10 @@ class PatternFlowEthernetPauseDstCounter(OpenApiObject):
             "type": str,
             "format": "mac",
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -50116,11 +50455,12 @@ class PatternFlowEthernetPauseDstMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 47,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 48,
         },
@@ -50293,8 +50633,8 @@ class PatternFlowEthernetPauseSrc(OpenApiObject):
         },
         "values": {
             "type": list,
-            "format": "mac",
             "itemtype": str,
+            "itemformat": "mac",
         },
         "increment": {"type": "PatternFlowEthernetPauseSrcCounter"},
         "decrement": {"type": "PatternFlowEthernetPauseSrcCounter"},
@@ -50459,7 +50799,10 @@ class PatternFlowEthernetPauseSrcCounter(OpenApiObject):
             "type": str,
             "format": "mac",
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -50557,11 +50900,12 @@ class PatternFlowEthernetPauseSrcMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 47,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 48,
         },
@@ -50730,13 +51074,13 @@ class PatternFlowEthernetPauseEtherType(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 65535,
         },
         "increment": {"type": "PatternFlowEthernetPauseEtherTypeCounter"},
@@ -50892,15 +51236,19 @@ class PatternFlowEthernetPauseEtherTypeCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -50998,11 +51346,12 @@ class PatternFlowEthernetPauseEtherTypeMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 15,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 16,
         },
@@ -51171,13 +51520,13 @@ class PatternFlowEthernetPauseControlOpCode(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 65535,
         },
         "increment": {"type": "PatternFlowEthernetPauseControlOpCodeCounter"},
@@ -51331,15 +51680,19 @@ class PatternFlowEthernetPauseControlOpCodeCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -51435,11 +51788,12 @@ class PatternFlowEthernetPauseControlOpCodeMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 15,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 16,
         },
@@ -51608,13 +51962,13 @@ class PatternFlowEthernetPauseTime(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 65535,
         },
         "increment": {"type": "PatternFlowEthernetPauseTimeCounter"},
@@ -51768,15 +52122,19 @@ class PatternFlowEthernetPauseTimeCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -51872,11 +52230,12 @@ class PatternFlowEthernetPauseTimeMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 15,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 16,
         },
@@ -52242,13 +52601,13 @@ class PatternFlowTcpSrcPort(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 65535,
         },
         "increment": {"type": "PatternFlowTcpSrcPortCounter"},
@@ -52402,15 +52761,19 @@ class PatternFlowTcpSrcPortCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -52506,11 +52869,12 @@ class PatternFlowTcpSrcPortMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 15,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 16,
         },
@@ -52677,13 +53041,13 @@ class PatternFlowTcpDstPort(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 65535,
         },
         "increment": {"type": "PatternFlowTcpDstPortCounter"},
@@ -52837,15 +53201,19 @@ class PatternFlowTcpDstPortCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -52941,11 +53309,12 @@ class PatternFlowTcpDstPortMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 15,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 16,
         },
@@ -53112,16 +53481,12 @@ class PatternFlowTcpSeqNum(OpenApiObject):
         },
         "value": {
             "type": int,
-            "format": "int64",
-            "minimum": 0,
-            "maximum": 4294967295,
+            "format": "uint32",
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "itemformat": "int64",
-            "minimum": 0,
-            "maximum": 4294967295,
+            "itemformat": "uint32",
         },
         "increment": {"type": "PatternFlowTcpSeqNumCounter"},
         "decrement": {"type": "PatternFlowTcpSeqNumCounter"},
@@ -53271,17 +53636,16 @@ class PatternFlowTcpSeqNumCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "format": "int64",
-            "minimum": 0,
-            "maximum": 4294967295,
+            "format": "uint32",
         },
         "step": {
             "type": int,
-            "format": "int64",
-            "minimum": 0,
-            "maximum": 4294967295,
+            "format": "uint32",
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -53377,11 +53741,12 @@ class PatternFlowTcpSeqNumMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 31,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 32,
         },
@@ -53548,16 +53913,12 @@ class PatternFlowTcpAckNum(OpenApiObject):
         },
         "value": {
             "type": int,
-            "format": "int64",
-            "minimum": 0,
-            "maximum": 4294967295,
+            "format": "uint32",
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "itemformat": "int64",
-            "minimum": 0,
-            "maximum": 4294967295,
+            "itemformat": "uint32",
         },
         "increment": {"type": "PatternFlowTcpAckNumCounter"},
         "decrement": {"type": "PatternFlowTcpAckNumCounter"},
@@ -53707,17 +54068,16 @@ class PatternFlowTcpAckNumCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "format": "int64",
-            "minimum": 0,
-            "maximum": 4294967295,
+            "format": "uint32",
         },
         "step": {
             "type": int,
-            "format": "int64",
-            "minimum": 0,
-            "maximum": 4294967295,
+            "format": "uint32",
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -53813,11 +54173,12 @@ class PatternFlowTcpAckNumMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 31,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 32,
         },
@@ -53984,13 +54345,13 @@ class PatternFlowTcpDataOffset(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 15,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 15,
         },
         "increment": {"type": "PatternFlowTcpDataOffsetCounter"},
@@ -54144,15 +54505,19 @@ class PatternFlowTcpDataOffsetCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 15,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 15,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 15,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -54248,11 +54613,12 @@ class PatternFlowTcpDataOffsetMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 3,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 4,
         },
@@ -54421,13 +54787,13 @@ class PatternFlowTcpEcnNs(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 1,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 1,
         },
         "increment": {"type": "PatternFlowTcpEcnNsCounter"},
@@ -54578,15 +54944,19 @@ class PatternFlowTcpEcnNsCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 1,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 1,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 1,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -54682,11 +55052,12 @@ class PatternFlowTcpEcnNsMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 0,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 1,
         },
@@ -54853,13 +55224,13 @@ class PatternFlowTcpEcnCwr(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 1,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 1,
         },
         "increment": {"type": "PatternFlowTcpEcnCwrCounter"},
@@ -55010,15 +55381,19 @@ class PatternFlowTcpEcnCwrCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 1,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 1,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 1,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -55114,11 +55489,12 @@ class PatternFlowTcpEcnCwrMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 0,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 1,
         },
@@ -55285,13 +55661,13 @@ class PatternFlowTcpEcnEcho(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 1,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 1,
         },
         "increment": {"type": "PatternFlowTcpEcnEchoCounter"},
@@ -55445,15 +55821,19 @@ class PatternFlowTcpEcnEchoCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 1,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 1,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 1,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -55549,11 +55929,12 @@ class PatternFlowTcpEcnEchoMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 0,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 1,
         },
@@ -55720,13 +56101,13 @@ class PatternFlowTcpCtlUrg(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 1,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 1,
         },
         "increment": {"type": "PatternFlowTcpCtlUrgCounter"},
@@ -55877,15 +56258,19 @@ class PatternFlowTcpCtlUrgCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 1,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 1,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 1,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -55981,11 +56366,12 @@ class PatternFlowTcpCtlUrgMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 0,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 1,
         },
@@ -56152,13 +56538,13 @@ class PatternFlowTcpCtlAck(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 1,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 1,
         },
         "increment": {"type": "PatternFlowTcpCtlAckCounter"},
@@ -56309,15 +56695,19 @@ class PatternFlowTcpCtlAckCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 1,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 1,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 1,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -56413,11 +56803,12 @@ class PatternFlowTcpCtlAckMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 0,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 1,
         },
@@ -56584,13 +56975,13 @@ class PatternFlowTcpCtlPsh(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 1,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 1,
         },
         "increment": {"type": "PatternFlowTcpCtlPshCounter"},
@@ -56741,15 +57132,19 @@ class PatternFlowTcpCtlPshCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 1,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 1,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 1,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -56845,11 +57240,12 @@ class PatternFlowTcpCtlPshMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 0,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 1,
         },
@@ -57016,13 +57412,13 @@ class PatternFlowTcpCtlRst(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 1,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 1,
         },
         "increment": {"type": "PatternFlowTcpCtlRstCounter"},
@@ -57173,15 +57569,19 @@ class PatternFlowTcpCtlRstCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 1,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 1,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 1,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -57277,11 +57677,12 @@ class PatternFlowTcpCtlRstMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 0,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 1,
         },
@@ -57448,13 +57849,13 @@ class PatternFlowTcpCtlSyn(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 1,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 1,
         },
         "increment": {"type": "PatternFlowTcpCtlSynCounter"},
@@ -57605,15 +58006,19 @@ class PatternFlowTcpCtlSynCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 1,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 1,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 1,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -57709,11 +58114,12 @@ class PatternFlowTcpCtlSynMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 0,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 1,
         },
@@ -57880,13 +58286,13 @@ class PatternFlowTcpCtlFin(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 1,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 1,
         },
         "increment": {"type": "PatternFlowTcpCtlFinCounter"},
@@ -58037,15 +58443,19 @@ class PatternFlowTcpCtlFinCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 1,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 1,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 1,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -58141,11 +58551,12 @@ class PatternFlowTcpCtlFinMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 0,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 1,
         },
@@ -58312,13 +58723,13 @@ class PatternFlowTcpWindow(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 65535,
         },
         "increment": {"type": "PatternFlowTcpWindowCounter"},
@@ -58469,15 +58880,19 @@ class PatternFlowTcpWindowCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -58573,11 +58988,12 @@ class PatternFlowTcpWindowMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 15,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 16,
         },
@@ -58809,13 +59225,13 @@ class PatternFlowUdpSrcPort(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 65535,
         },
         "increment": {"type": "PatternFlowUdpSrcPortCounter"},
@@ -58969,15 +59385,19 @@ class PatternFlowUdpSrcPortCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -59073,11 +59493,12 @@ class PatternFlowUdpSrcPortMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 15,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 16,
         },
@@ -59244,13 +59665,13 @@ class PatternFlowUdpDstPort(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 65535,
         },
         "increment": {"type": "PatternFlowUdpDstPortCounter"},
@@ -59404,15 +59825,19 @@ class PatternFlowUdpDstPortCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -59508,11 +59933,12 @@ class PatternFlowUdpDstPortMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 15,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 16,
         },
@@ -59679,13 +60105,13 @@ class PatternFlowUdpLength(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 65535,
         },
         "increment": {"type": "PatternFlowUdpLengthCounter"},
@@ -59836,15 +60262,19 @@ class PatternFlowUdpLengthCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -59940,11 +60370,12 @@ class PatternFlowUdpLengthMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 15,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 16,
         },
@@ -60116,7 +60547,7 @@ class PatternFlowUdpChecksum(OpenApiObject):
         },
         "custom": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
     }  # type: Dict[str, str]
@@ -60323,13 +60754,13 @@ class PatternFlowGreChecksumPresent(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 1,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 1,
         },
         "increment": {"type": "PatternFlowGreChecksumPresentCounter"},
@@ -60483,15 +60914,19 @@ class PatternFlowGreChecksumPresentCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 1,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 1,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 1,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -60587,11 +61022,12 @@ class PatternFlowGreChecksumPresentMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 0,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 1,
         },
@@ -60760,13 +61196,13 @@ class PatternFlowGreReserved0(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 4095,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 4095,
         },
         "increment": {"type": "PatternFlowGreReserved0Counter"},
@@ -60920,15 +61356,19 @@ class PatternFlowGreReserved0Counter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 4095,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 4095,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 4095,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -61024,11 +61464,12 @@ class PatternFlowGreReserved0MetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 11,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 12,
         },
@@ -61197,13 +61638,13 @@ class PatternFlowGreVersion(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 7,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 7,
         },
         "increment": {"type": "PatternFlowGreVersionCounter"},
@@ -61357,15 +61798,19 @@ class PatternFlowGreVersionCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 7,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 7,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 7,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -61461,11 +61906,12 @@ class PatternFlowGreVersionMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 2,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 3,
         },
@@ -61632,13 +62078,13 @@ class PatternFlowGreProtocol(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 65535,
         },
         "increment": {"type": "PatternFlowGreProtocolCounter"},
@@ -61795,15 +62241,19 @@ class PatternFlowGreProtocolCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -61902,11 +62352,12 @@ class PatternFlowGreProtocolMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 15,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 16,
         },
@@ -62080,7 +62531,7 @@ class PatternFlowGreChecksum(OpenApiObject):
         },
         "custom": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
     }  # type: Dict[str, str]
@@ -62198,13 +62649,13 @@ class PatternFlowGreReserved1(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 65535,
         },
         "increment": {"type": "PatternFlowGreReserved1Counter"},
@@ -62358,15 +62809,19 @@ class PatternFlowGreReserved1Counter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -62462,11 +62917,12 @@ class PatternFlowGreReserved1MetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 15,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 16,
         },
@@ -62814,13 +63270,13 @@ class PatternFlowGtpv1Version(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 7,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 7,
         },
         "increment": {"type": "PatternFlowGtpv1VersionCounter"},
@@ -62974,15 +63430,19 @@ class PatternFlowGtpv1VersionCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 7,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 7,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 7,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -63078,11 +63538,12 @@ class PatternFlowGtpv1VersionMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 2,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 3,
         },
@@ -63251,13 +63712,13 @@ class PatternFlowGtpv1ProtocolType(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 1,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 1,
         },
         "increment": {"type": "PatternFlowGtpv1ProtocolTypeCounter"},
@@ -63411,15 +63872,19 @@ class PatternFlowGtpv1ProtocolTypeCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 1,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 1,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 1,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -63515,11 +63980,12 @@ class PatternFlowGtpv1ProtocolTypeMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 0,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 1,
         },
@@ -63688,13 +64154,13 @@ class PatternFlowGtpv1Reserved(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 1,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 1,
         },
         "increment": {"type": "PatternFlowGtpv1ReservedCounter"},
@@ -63848,15 +64314,19 @@ class PatternFlowGtpv1ReservedCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 1,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 1,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 1,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -63952,11 +64422,12 @@ class PatternFlowGtpv1ReservedMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 0,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 1,
         },
@@ -64125,13 +64596,13 @@ class PatternFlowGtpv1EFlag(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 1,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 1,
         },
         "increment": {"type": "PatternFlowGtpv1EFlagCounter"},
@@ -64285,15 +64756,19 @@ class PatternFlowGtpv1EFlagCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 1,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 1,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 1,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -64389,11 +64864,12 @@ class PatternFlowGtpv1EFlagMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 0,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 1,
         },
@@ -64560,13 +65036,13 @@ class PatternFlowGtpv1SFlag(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 1,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 1,
         },
         "increment": {"type": "PatternFlowGtpv1SFlagCounter"},
@@ -64720,15 +65196,19 @@ class PatternFlowGtpv1SFlagCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 1,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 1,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 1,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -64824,11 +65304,12 @@ class PatternFlowGtpv1SFlagMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 0,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 1,
         },
@@ -64995,13 +65476,13 @@ class PatternFlowGtpv1PnFlag(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 1,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 1,
         },
         "increment": {"type": "PatternFlowGtpv1PnFlagCounter"},
@@ -65155,15 +65636,19 @@ class PatternFlowGtpv1PnFlagCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 1,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 1,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 1,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -65259,11 +65744,12 @@ class PatternFlowGtpv1PnFlagMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 0,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 1,
         },
@@ -65432,13 +65918,13 @@ class PatternFlowGtpv1MessageType(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 255,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 255,
         },
         "increment": {"type": "PatternFlowGtpv1MessageTypeCounter"},
@@ -65592,15 +66078,19 @@ class PatternFlowGtpv1MessageTypeCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 255,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 255,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -65696,11 +66186,12 @@ class PatternFlowGtpv1MessageTypeMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 7,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 8,
         },
@@ -65869,13 +66360,13 @@ class PatternFlowGtpv1MessageLength(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 65535,
         },
         "increment": {"type": "PatternFlowGtpv1MessageLengthCounter"},
@@ -66029,15 +66520,19 @@ class PatternFlowGtpv1MessageLengthCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -66133,11 +66628,12 @@ class PatternFlowGtpv1MessageLengthMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 15,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 16,
         },
@@ -66306,16 +66802,12 @@ class PatternFlowGtpv1Teid(OpenApiObject):
         },
         "value": {
             "type": int,
-            "format": "int64",
-            "minimum": 0,
-            "maximum": 4294967295,
+            "format": "uint32",
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "itemformat": "int64",
-            "minimum": 0,
-            "maximum": 4294967295,
+            "itemformat": "uint32",
         },
         "increment": {"type": "PatternFlowGtpv1TeidCounter"},
         "decrement": {"type": "PatternFlowGtpv1TeidCounter"},
@@ -66465,17 +66957,16 @@ class PatternFlowGtpv1TeidCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "format": "int64",
-            "minimum": 0,
-            "maximum": 4294967295,
+            "format": "uint32",
         },
         "step": {
             "type": int,
-            "format": "int64",
-            "minimum": 0,
-            "maximum": 4294967295,
+            "format": "uint32",
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -66571,11 +67062,12 @@ class PatternFlowGtpv1TeidMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 31,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 32,
         },
@@ -66742,13 +67234,13 @@ class PatternFlowGtpv1SquenceNumber(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 65535,
         },
         "increment": {"type": "PatternFlowGtpv1SquenceNumberCounter"},
@@ -66902,15 +67394,19 @@ class PatternFlowGtpv1SquenceNumberCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -67006,11 +67502,12 @@ class PatternFlowGtpv1SquenceNumberMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 15,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 16,
         },
@@ -67179,13 +67676,13 @@ class PatternFlowGtpv1NPduNumber(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 255,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 255,
         },
         "increment": {"type": "PatternFlowGtpv1NPduNumberCounter"},
@@ -67339,15 +67836,19 @@ class PatternFlowGtpv1NPduNumberCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 255,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 255,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -67443,11 +67944,12 @@ class PatternFlowGtpv1NPduNumberMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 7,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 8,
         },
@@ -67616,13 +68118,13 @@ class PatternFlowGtpv1NextExtensionHeaderType(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 255,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 255,
         },
         "increment": {"type": "PatternFlowGtpv1NextExtensionHeaderTypeCounter"},
@@ -67782,15 +68284,19 @@ class PatternFlowGtpv1NextExtensionHeaderTypeCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 255,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 255,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -67886,11 +68392,12 @@ class PatternFlowGtpv1NextExtensionHeaderTypeMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 7,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 8,
         },
@@ -68116,13 +68623,13 @@ class PatternFlowGtpExtensionExtensionLength(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 255,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 255,
         },
         "increment": {"type": "PatternFlowGtpExtensionExtensionLengthCounter"},
@@ -68282,15 +68789,19 @@ class PatternFlowGtpExtensionExtensionLengthCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 255,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 255,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -68386,11 +68897,12 @@ class PatternFlowGtpExtensionExtensionLengthMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 7,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 8,
         },
@@ -68559,15 +69071,13 @@ class PatternFlowGtpExtensionContents(OpenApiObject):
         },
         "value": {
             "type": int,
-            "format": "int64",
-            "minimum": 0,
+            "format": "uint64",
             "maximum": 281474976710655,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "itemformat": "int64",
-            "minimum": 0,
+            "itemformat": "uint64",
             "maximum": 281474976710655,
         },
         "increment": {"type": "PatternFlowGtpExtensionContentsCounter"},
@@ -68721,17 +69231,19 @@ class PatternFlowGtpExtensionContentsCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "format": "int64",
-            "minimum": 0,
+            "format": "uint64",
             "maximum": 281474976710655,
         },
         "step": {
             "type": int,
-            "format": "int64",
-            "minimum": 0,
+            "format": "uint64",
             "maximum": 281474976710655,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint64",
+            "maximum": 281474976710655,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -68827,11 +69339,12 @@ class PatternFlowGtpExtensionContentsMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint64",
             "maximum": 47,
         },
         "length": {
             "type": int,
+            "format": "uint64",
             "minimum": 1,
             "maximum": 48,
         },
@@ -69000,13 +69513,13 @@ class PatternFlowGtpExtensionNextExtensionHeader(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 255,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 255,
         },
         "increment": {"type": "PatternFlowGtpExtensionNextExtensionHeaderCounter"},
@@ -69168,15 +69681,19 @@ class PatternFlowGtpExtensionNextExtensionHeaderCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 255,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 255,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -69272,11 +69789,12 @@ class PatternFlowGtpExtensionNextExtensionHeaderMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 7,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 8,
         },
@@ -69625,13 +70143,13 @@ class PatternFlowGtpv2Version(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 7,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 7,
         },
         "increment": {"type": "PatternFlowGtpv2VersionCounter"},
@@ -69785,15 +70303,19 @@ class PatternFlowGtpv2VersionCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 7,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 7,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 7,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -69889,11 +70411,12 @@ class PatternFlowGtpv2VersionMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 2,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 3,
         },
@@ -70062,13 +70585,13 @@ class PatternFlowGtpv2PiggybackingFlag(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 1,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 1,
         },
         "increment": {"type": "PatternFlowGtpv2PiggybackingFlagCounter"},
@@ -70222,15 +70745,19 @@ class PatternFlowGtpv2PiggybackingFlagCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 1,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 1,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 1,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -70326,11 +70853,12 @@ class PatternFlowGtpv2PiggybackingFlagMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 0,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 1,
         },
@@ -70499,13 +71027,13 @@ class PatternFlowGtpv2TeidFlag(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 1,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 1,
         },
         "increment": {"type": "PatternFlowGtpv2TeidFlagCounter"},
@@ -70659,15 +71187,19 @@ class PatternFlowGtpv2TeidFlagCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 1,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 1,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 1,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -70763,11 +71295,12 @@ class PatternFlowGtpv2TeidFlagMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 0,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 1,
         },
@@ -70936,13 +71469,13 @@ class PatternFlowGtpv2Spare1(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 7,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 7,
         },
         "increment": {"type": "PatternFlowGtpv2Spare1Counter"},
@@ -71096,15 +71629,19 @@ class PatternFlowGtpv2Spare1Counter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 7,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 7,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 7,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -71200,11 +71737,12 @@ class PatternFlowGtpv2Spare1MetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 2,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 3,
         },
@@ -71373,13 +71911,13 @@ class PatternFlowGtpv2MessageType(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 255,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 255,
         },
         "increment": {"type": "PatternFlowGtpv2MessageTypeCounter"},
@@ -71533,15 +72071,19 @@ class PatternFlowGtpv2MessageTypeCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 255,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 255,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -71637,11 +72179,12 @@ class PatternFlowGtpv2MessageTypeMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 7,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 8,
         },
@@ -71810,13 +72353,13 @@ class PatternFlowGtpv2MessageLength(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 65535,
         },
         "increment": {"type": "PatternFlowGtpv2MessageLengthCounter"},
@@ -71970,15 +72513,19 @@ class PatternFlowGtpv2MessageLengthCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -72074,11 +72621,12 @@ class PatternFlowGtpv2MessageLengthMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 15,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 16,
         },
@@ -72247,16 +72795,12 @@ class PatternFlowGtpv2Teid(OpenApiObject):
         },
         "value": {
             "type": int,
-            "format": "int64",
-            "minimum": 0,
-            "maximum": 4294967295,
+            "format": "uint32",
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "itemformat": "int64",
-            "minimum": 0,
-            "maximum": 4294967295,
+            "itemformat": "uint32",
         },
         "increment": {"type": "PatternFlowGtpv2TeidCounter"},
         "decrement": {"type": "PatternFlowGtpv2TeidCounter"},
@@ -72406,17 +72950,16 @@ class PatternFlowGtpv2TeidCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "format": "int64",
-            "minimum": 0,
-            "maximum": 4294967295,
+            "format": "uint32",
         },
         "step": {
             "type": int,
-            "format": "int64",
-            "minimum": 0,
-            "maximum": 4294967295,
+            "format": "uint32",
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -72512,11 +73055,12 @@ class PatternFlowGtpv2TeidMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 31,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 32,
         },
@@ -72683,13 +73227,13 @@ class PatternFlowGtpv2SequenceNumber(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 16777215,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 16777215,
         },
         "increment": {"type": "PatternFlowGtpv2SequenceNumberCounter"},
@@ -72843,15 +73387,19 @@ class PatternFlowGtpv2SequenceNumberCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 16777215,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 16777215,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 16777215,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -72947,11 +73495,12 @@ class PatternFlowGtpv2SequenceNumberMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 23,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 24,
         },
@@ -73120,13 +73669,13 @@ class PatternFlowGtpv2Spare2(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 255,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 255,
         },
         "increment": {"type": "PatternFlowGtpv2Spare2Counter"},
@@ -73280,15 +73829,19 @@ class PatternFlowGtpv2Spare2Counter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 255,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 255,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -73384,11 +73937,12 @@ class PatternFlowGtpv2Spare2MetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 7,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 8,
         },
@@ -73690,13 +74244,13 @@ class PatternFlowArpHardwareType(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 65535,
         },
         "increment": {"type": "PatternFlowArpHardwareTypeCounter"},
@@ -73852,15 +74406,19 @@ class PatternFlowArpHardwareTypeCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -73958,11 +74516,12 @@ class PatternFlowArpHardwareTypeMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 15,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 16,
         },
@@ -74131,13 +74690,13 @@ class PatternFlowArpProtocolType(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 65535,
         },
         "increment": {"type": "PatternFlowArpProtocolTypeCounter"},
@@ -74294,15 +74853,19 @@ class PatternFlowArpProtocolTypeCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -74401,11 +74964,12 @@ class PatternFlowArpProtocolTypeMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 15,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 16,
         },
@@ -74574,13 +75138,13 @@ class PatternFlowArpHardwareLength(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 255,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 255,
         },
         "increment": {"type": "PatternFlowArpHardwareLengthCounter"},
@@ -74734,15 +75298,19 @@ class PatternFlowArpHardwareLengthCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 255,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 255,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -74838,11 +75406,12 @@ class PatternFlowArpHardwareLengthMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 7,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 8,
         },
@@ -75011,13 +75580,13 @@ class PatternFlowArpProtocolLength(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 255,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 255,
         },
         "increment": {"type": "PatternFlowArpProtocolLengthCounter"},
@@ -75171,15 +75740,19 @@ class PatternFlowArpProtocolLengthCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 255,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 255,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -75275,11 +75848,12 @@ class PatternFlowArpProtocolLengthMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 7,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 8,
         },
@@ -75448,13 +76022,13 @@ class PatternFlowArpOperation(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 65535,
         },
         "increment": {"type": "PatternFlowArpOperationCounter"},
@@ -75611,15 +76185,19 @@ class PatternFlowArpOperationCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -75718,11 +76296,12 @@ class PatternFlowArpOperationMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 15,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 16,
         },
@@ -75895,8 +76474,8 @@ class PatternFlowArpSenderHardwareAddr(OpenApiObject):
         },
         "values": {
             "type": list,
-            "format": "mac",
             "itemtype": str,
+            "itemformat": "mac",
         },
         "increment": {"type": "PatternFlowArpSenderHardwareAddrCounter"},
         "decrement": {"type": "PatternFlowArpSenderHardwareAddrCounter"},
@@ -76061,7 +76640,10 @@ class PatternFlowArpSenderHardwareAddrCounter(OpenApiObject):
             "type": str,
             "format": "mac",
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -76159,11 +76741,12 @@ class PatternFlowArpSenderHardwareAddrMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 47,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 48,
         },
@@ -76336,8 +76919,8 @@ class PatternFlowArpSenderProtocolAddr(OpenApiObject):
         },
         "values": {
             "type": list,
-            "format": "ipv4",
             "itemtype": str,
+            "itemformat": "ipv4",
         },
         "increment": {"type": "PatternFlowArpSenderProtocolAddrCounter"},
         "decrement": {"type": "PatternFlowArpSenderProtocolAddrCounter"},
@@ -76496,7 +77079,10 @@ class PatternFlowArpSenderProtocolAddrCounter(OpenApiObject):
             "type": str,
             "format": "ipv4",
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -76592,11 +77178,12 @@ class PatternFlowArpSenderProtocolAddrMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 31,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 32,
         },
@@ -76769,8 +77356,8 @@ class PatternFlowArpTargetHardwareAddr(OpenApiObject):
         },
         "values": {
             "type": list,
-            "format": "mac",
             "itemtype": str,
+            "itemformat": "mac",
         },
         "increment": {"type": "PatternFlowArpTargetHardwareAddrCounter"},
         "decrement": {"type": "PatternFlowArpTargetHardwareAddrCounter"},
@@ -76935,7 +77522,10 @@ class PatternFlowArpTargetHardwareAddrCounter(OpenApiObject):
             "type": str,
             "format": "mac",
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -77033,11 +77623,12 @@ class PatternFlowArpTargetHardwareAddrMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 47,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 48,
         },
@@ -77210,8 +77801,8 @@ class PatternFlowArpTargetProtocolAddr(OpenApiObject):
         },
         "values": {
             "type": list,
-            "format": "ipv4",
             "itemtype": str,
+            "itemformat": "ipv4",
         },
         "increment": {"type": "PatternFlowArpTargetProtocolAddrCounter"},
         "decrement": {"type": "PatternFlowArpTargetProtocolAddrCounter"},
@@ -77370,7 +77961,10 @@ class PatternFlowArpTargetProtocolAddrCounter(OpenApiObject):
             "type": str,
             "format": "ipv4",
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -77466,11 +78060,12 @@ class PatternFlowArpTargetProtocolAddrMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 31,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 32,
         },
@@ -77784,13 +78379,13 @@ class PatternFlowIcmpEchoType(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 255,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 255,
         },
         "increment": {"type": "PatternFlowIcmpEchoTypeCounter"},
@@ -77947,15 +78542,19 @@ class PatternFlowIcmpEchoTypeCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 255,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 255,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -78054,11 +78653,12 @@ class PatternFlowIcmpEchoTypeMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 7,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 8,
         },
@@ -78227,13 +78827,13 @@ class PatternFlowIcmpEchoCode(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 255,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 255,
         },
         "increment": {"type": "PatternFlowIcmpEchoCodeCounter"},
@@ -78387,15 +78987,19 @@ class PatternFlowIcmpEchoCodeCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 255,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 255,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -78491,11 +79095,12 @@ class PatternFlowIcmpEchoCodeMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 7,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 8,
         },
@@ -78669,7 +79274,7 @@ class PatternFlowIcmpEchoChecksum(OpenApiObject):
         },
         "custom": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
     }  # type: Dict[str, str]
@@ -78787,13 +79392,13 @@ class PatternFlowIcmpEchoIdentifier(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 65535,
         },
         "increment": {"type": "PatternFlowIcmpEchoIdentifierCounter"},
@@ -78947,15 +79552,19 @@ class PatternFlowIcmpEchoIdentifierCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -79051,11 +79660,12 @@ class PatternFlowIcmpEchoIdentifierMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 15,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 16,
         },
@@ -79224,13 +79834,13 @@ class PatternFlowIcmpEchoSequenceNumber(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 65535,
         },
         "increment": {"type": "PatternFlowIcmpEchoSequenceNumberCounter"},
@@ -79384,15 +79994,19 @@ class PatternFlowIcmpEchoSequenceNumberCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -79488,11 +80102,12 @@ class PatternFlowIcmpEchoSequenceNumberMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 15,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 16,
         },
@@ -79808,13 +80423,13 @@ class PatternFlowIcmpv6EchoType(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 255,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 255,
         },
         "increment": {"type": "PatternFlowIcmpv6EchoTypeCounter"},
@@ -79971,15 +80586,19 @@ class PatternFlowIcmpv6EchoTypeCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 255,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 255,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -80078,11 +80697,12 @@ class PatternFlowIcmpv6EchoTypeMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 7,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 8,
         },
@@ -80251,13 +80871,13 @@ class PatternFlowIcmpv6EchoCode(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 255,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 255,
         },
         "increment": {"type": "PatternFlowIcmpv6EchoCodeCounter"},
@@ -80411,15 +81031,19 @@ class PatternFlowIcmpv6EchoCodeCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 255,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 255,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -80515,11 +81139,12 @@ class PatternFlowIcmpv6EchoCodeMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 7,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 8,
         },
@@ -80688,13 +81313,13 @@ class PatternFlowIcmpv6EchoIdentifier(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 65535,
         },
         "increment": {"type": "PatternFlowIcmpv6EchoIdentifierCounter"},
@@ -80848,15 +81473,19 @@ class PatternFlowIcmpv6EchoIdentifierCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -80952,11 +81581,12 @@ class PatternFlowIcmpv6EchoIdentifierMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 15,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 16,
         },
@@ -81125,13 +81755,13 @@ class PatternFlowIcmpv6EchoSequenceNumber(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 65535,
         },
         "increment": {"type": "PatternFlowIcmpv6EchoSequenceNumberCounter"},
@@ -81285,15 +81915,19 @@ class PatternFlowIcmpv6EchoSequenceNumberCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -81389,11 +82023,12 @@ class PatternFlowIcmpv6EchoSequenceNumberMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 15,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 16,
         },
@@ -81567,7 +82202,7 @@ class PatternFlowIcmpv6EchoChecksum(OpenApiObject):
         },
         "custom": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
     }  # type: Dict[str, str]
@@ -81738,13 +82373,13 @@ class PatternFlowPppAddress(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 255,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 255,
         },
         "increment": {"type": "PatternFlowPppAddressCounter"},
@@ -81900,15 +82535,19 @@ class PatternFlowPppAddressCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 255,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 255,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -82006,11 +82645,12 @@ class PatternFlowPppAddressMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 7,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 8,
         },
@@ -82177,13 +82817,13 @@ class PatternFlowPppControl(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 255,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 255,
         },
         "increment": {"type": "PatternFlowPppControlCounter"},
@@ -82339,15 +82979,19 @@ class PatternFlowPppControlCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 255,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 255,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -82445,11 +83089,12 @@ class PatternFlowPppControlMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 7,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 8,
         },
@@ -82617,18 +83262,18 @@ class PatternFlowPppProtocolType(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 65535,
         },
         "auto": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
         "increment": {"type": "PatternFlowPppProtocolTypeCounter"},
@@ -82796,15 +83441,19 @@ class PatternFlowPppProtocolTypeCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -82900,11 +83549,12 @@ class PatternFlowPppProtocolTypeMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 15,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 16,
         },
@@ -83150,13 +83800,13 @@ class PatternFlowIgmpv1Version(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 15,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 15,
         },
         "increment": {"type": "PatternFlowIgmpv1VersionCounter"},
@@ -83310,15 +83960,19 @@ class PatternFlowIgmpv1VersionCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 15,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 15,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 15,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -83414,11 +84068,12 @@ class PatternFlowIgmpv1VersionMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 3,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 4,
         },
@@ -83587,13 +84242,13 @@ class PatternFlowIgmpv1Type(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 15,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 15,
         },
         "increment": {"type": "PatternFlowIgmpv1TypeCounter"},
@@ -83750,15 +84405,19 @@ class PatternFlowIgmpv1TypeCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 15,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 15,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 15,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -83857,11 +84516,12 @@ class PatternFlowIgmpv1TypeMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 3,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 4,
         },
@@ -84028,13 +84688,13 @@ class PatternFlowIgmpv1Unused(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 255,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 255,
         },
         "increment": {"type": "PatternFlowIgmpv1UnusedCounter"},
@@ -84188,15 +84848,19 @@ class PatternFlowIgmpv1UnusedCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 255,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 255,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -84292,11 +84956,12 @@ class PatternFlowIgmpv1UnusedMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 7,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 8,
         },
@@ -84470,7 +85135,7 @@ class PatternFlowIgmpv1Checksum(OpenApiObject):
         },
         "custom": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
     }  # type: Dict[str, str]
@@ -84592,8 +85257,8 @@ class PatternFlowIgmpv1GroupAddress(OpenApiObject):
         },
         "values": {
             "type": list,
-            "format": "ipv4",
             "itemtype": str,
+            "itemformat": "ipv4",
         },
         "increment": {"type": "PatternFlowIgmpv1GroupAddressCounter"},
         "decrement": {"type": "PatternFlowIgmpv1GroupAddressCounter"},
@@ -84752,7 +85417,10 @@ class PatternFlowIgmpv1GroupAddressCounter(OpenApiObject):
             "type": str,
             "format": "ipv4",
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -84848,11 +85516,12 @@ class PatternFlowIgmpv1GroupAddressMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 31,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 32,
         },
@@ -85087,18 +85756,18 @@ class PatternFlowMplsLabel(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 1048575,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 1048575,
         },
         "auto": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 1048575,
         },
         "increment": {"type": "PatternFlowMplsLabelCounter"},
@@ -85263,15 +85932,19 @@ class PatternFlowMplsLabelCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 1048575,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 1048575,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 1048575,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -85367,11 +86040,12 @@ class PatternFlowMplsLabelMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 19,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 20,
         },
@@ -85538,13 +86212,13 @@ class PatternFlowMplsTrafficClass(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 7,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 7,
         },
         "increment": {"type": "PatternFlowMplsTrafficClassCounter"},
@@ -85698,15 +86372,19 @@ class PatternFlowMplsTrafficClassCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 7,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 7,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 7,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -85802,11 +86480,12 @@ class PatternFlowMplsTrafficClassMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 2,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 3,
         },
@@ -85976,18 +86655,18 @@ class PatternFlowMplsBottomOfStack(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 1,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 1,
         },
         "auto": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 1,
         },
         "increment": {"type": "PatternFlowMplsBottomOfStackCounter"},
@@ -86155,15 +86834,19 @@ class PatternFlowMplsBottomOfStackCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 1,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 1,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 1,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -86259,11 +86942,12 @@ class PatternFlowMplsBottomOfStackMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 0,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 1,
         },
@@ -86432,13 +87116,13 @@ class PatternFlowMplsTimeToLive(OpenApiObject):
         },
         "value": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 255,
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "minimum": 0,
+            "itemformat": "uint32",
             "maximum": 255,
         },
         "increment": {"type": "PatternFlowMplsTimeToLiveCounter"},
@@ -86592,15 +87276,19 @@ class PatternFlowMplsTimeToLiveCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 255,
         },
         "step": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 255,
         },
-        "count": {"type": int},
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -86696,11 +87384,12 @@ class PatternFlowMplsTimeToLiveMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 7,
         },
         "length": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
             "maximum": 8,
         },
@@ -87188,7 +87877,10 @@ class FlowSize(OpenApiObject):
                 "weight_pairs",
             ],
         },
-        "fixed": {"type": int},
+        "fixed": {
+            "type": int,
+            "format": "uint32",
+        },
         "increment": {"type": "FlowSizeIncrement"},
         "random": {"type": "FlowSizeRandom"},
         "weight_pairs": {"type": "FlowSizeWeightPairs"},
@@ -87310,13 +88002,18 @@ class FlowSizeIncrement(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
         },
         "end": {
             "type": int,
+            "format": "uint32",
             "minimum": 64,
         },
-        "step": {"type": int},
+        "step": {
+            "type": int,
+            "format": "uint32",
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -87409,8 +88106,14 @@ class FlowSizeRandom(OpenApiObject):
     __slots__ = "_parent"
 
     _TYPES = {
-        "min": {"type": int},
-        "max": {"type": int},
+        "min": {
+            "type": int,
+            "format": "uint32",
+        },
+        "max": {
+            "type": int,
+            "format": "uint32",
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -87743,27 +88446,27 @@ class FlowRate(OpenApiObject):
         },
         "pps": {
             "type": int,
-            "format": "int64",
+            "format": "uint64",
             "minimum": 1,
         },
         "bps": {
             "type": int,
-            "format": "int64",
+            "format": "uint64",
             "minimum": 672,
         },
         "kbps": {
             "type": int,
-            "format": "int64",
+            "format": "uint64",
             "minimum": 1,
         },
         "mbps": {
             "type": int,
-            "format": "int64",
+            "format": "uint64",
             "minimum": 1,
         },
         "gbps": {
             "type": int,
-            "format": "int32",
+            "format": "uint32",
             "minimum": 1,
         },
         "percentage": {
@@ -88096,11 +88799,12 @@ class FlowFixedPackets(OpenApiObject):
     _TYPES = {
         "packets": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
         },
         "gap": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
         },
         "delay": {"type": "FlowDelay"},
     }  # type: Dict[str, str]
@@ -88340,7 +89044,7 @@ class FlowFixedSeconds(OpenApiObject):
         },
         "gap": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
         },
         "delay": {"type": "FlowDelay"},
     }  # type: Dict[str, str]
@@ -88425,15 +89129,16 @@ class FlowBurst(OpenApiObject):
     _TYPES = {
         "bursts": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
         },
         "packets": {
             "type": int,
+            "format": "uint32",
             "minimum": 1,
         },
         "gap": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
         },
         "inter_burst_gap": {"type": "FlowDurationInterBurstGap"},
     }  # type: Dict[str, str]
@@ -88692,7 +89397,7 @@ class FlowContinuous(OpenApiObject):
     _TYPES = {
         "gap": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
         },
         "delay": {"type": "FlowDelay"},
     }  # type: Dict[str, str]
@@ -89579,11 +90284,13 @@ class Lldp(OpenApiObject):
         "system_name": {"type": "LldpSystemName"},
         "hold_time": {
             "type": int,
+            "format": "uint32",
             "minimum": 10,
             "maximum": 65535,
         },
         "advertisement_interval": {
             "type": int,
+            "format": "uint32",
             "minimum": 5,
             "maximum": 65534,
         },
@@ -90482,7 +91189,10 @@ class Error(OpenApiObject):
     __slots__ = "_parent"
 
     _TYPES = {
-        "code": {"type": int},
+        "code": {
+            "type": int,
+            "format": "int32",
+        },
         "kind": {
             "type": str,
             "enum": [
@@ -92853,8 +93563,14 @@ class DeviceBgpCustomError(OpenApiObject):
     __slots__ = "_parent"
 
     _TYPES = {
-        "code": {"type": int},
-        "subcode": {"type": int},
+        "code": {
+            "type": int,
+            "format": "uint32",
+        },
+        "subcode": {
+            "type": int,
+            "format": "uint32",
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -93746,1084 +94462,6 @@ class ActionResponseProtocolIpv6PingResponseIter(OpenApiIter):
         )
         self._add(item)
         return item
-
-
-class TransmitState(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "flow_names": {
-            "type": list,
-            "itemtype": str,
-        },
-        "state": {
-            "type": str,
-            "enum": [
-                "start",
-                "stop",
-                "pause",
-                "resume",
-            ],
-        },
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ("state",)  # type: tuple(str)
-
-    _DEFAULTS = {}  # type: Dict[str, Union(type)]
-
-    START = "start"  # type: str
-    STOP = "stop"  # type: str
-    PAUSE = "pause"  # type: str
-    RESUME = "resume"  # type: str
-
-    _STATUS = {
-        "self": "TransmitState is deprecated, Please use `StateTrafficFlowTransmit` instead",
-    }  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, flow_names=None, state=None):
-        super(TransmitState, self).__init__()
-        self._parent = parent
-        self._set_property("flow_names", flow_names)
-        self._set_property("state", state)
-
-    def set(self, flow_names=None, state=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def flow_names(self):
-        # type: () -> List[str]
-        """flow_names getter
-
-        The names of flows to which the transmit state will be applied to. If the list of flow_names is empty or null the state will be applied to all configured flows.. If the list is not empty any flow that is not included in the list of flow_names MUST be ignored and not included in the state change.. x-constraint:. /components/schemas/Flow/properties/name. . x-constraint:. /components/schemas/Flow/properties/name.
-
-        Returns: List[str]
-        """
-        return self._get_property("flow_names")
-
-    @flow_names.setter
-    def flow_names(self, value):
-        """flow_names setter
-
-        The names of flows to which the transmit state will be applied to. If the list of flow_names is empty or null the state will be applied to all configured flows.. If the list is not empty any flow that is not included in the list of flow_names MUST be ignored and not included in the state change.. x-constraint:. /components/schemas/Flow/properties/name. . x-constraint:. /components/schemas/Flow/properties/name.
-
-        value: List[str]
-        """
-        self._set_property("flow_names", value)
-
-    @property
-    def state(self):
-        # type: () -> Union[Literal["pause"], Literal["resume"], Literal["start"], Literal["stop"]]
-        """state getter
-
-        The transmit state.. If the value of the state property is 'start' then all flows defined by the 'flow_names' property will be started and the metric counters MUST be cleared prior to starting the flow(s).. If the value of the state property is 'stop' then all flows defined by the 'flow_names' property will be stopped and the metric counters MUST NOT be cleared.. If the value of the state property is 'pause' then all flows defined by the 'flow_names' property will be paused and the metric counters MUST NOT be cleared.. If the value of the state property is 'resume' then any paused flows defined by the 'flow_names' property will start transmit at the point at which they were paused. Any flow that is stopped will start transmit at the beginning of the flow. The flow(s) MUST NOT have their metric counters cleared.
-
-        Returns: Union[Literal["pause"], Literal["resume"], Literal["start"], Literal["stop"]]
-        """
-        return self._get_property("state")
-
-    @state.setter
-    def state(self, value):
-        """state setter
-
-        The transmit state.. If the value of the state property is 'start' then all flows defined by the 'flow_names' property will be started and the metric counters MUST be cleared prior to starting the flow(s).. If the value of the state property is 'stop' then all flows defined by the 'flow_names' property will be stopped and the metric counters MUST NOT be cleared.. If the value of the state property is 'pause' then all flows defined by the 'flow_names' property will be paused and the metric counters MUST NOT be cleared.. If the value of the state property is 'resume' then any paused flows defined by the 'flow_names' property will start transmit at the point at which they were paused. Any flow that is stopped will start transmit at the beginning of the flow. The flow(s) MUST NOT have their metric counters cleared.
-
-        value: Union[Literal["pause"], Literal["resume"], Literal["start"], Literal["stop"]]
-        """
-        if value is None:
-            raise TypeError("Cannot set required property state as None")
-        self._set_property("state", value)
-
-
-class LinkState(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "port_names": {
-            "type": list,
-            "itemtype": str,
-        },
-        "state": {
-            "type": str,
-            "enum": [
-                "up",
-                "down",
-            ],
-        },
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ("state",)  # type: tuple(str)
-
-    _DEFAULTS = {}  # type: Dict[str, Union(type)]
-
-    UP = "up"  # type: str
-    DOWN = "down"  # type: str
-
-    _STATUS = {
-        "self": "LinkState is deprecated, Please use `StatePortLink` instead",
-    }  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, port_names=None, state=None):
-        super(LinkState, self).__init__()
-        self._parent = parent
-        self._set_property("port_names", port_names)
-        self._set_property("state", state)
-
-    def set(self, port_names=None, state=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def port_names(self):
-        # type: () -> List[str]
-        """port_names getter
-
-        The names of port objects to. An empty or null list will control all port objects.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
-
-        Returns: List[str]
-        """
-        return self._get_property("port_names")
-
-    @port_names.setter
-    def port_names(self, value):
-        """port_names setter
-
-        The names of port objects to. An empty or null list will control all port objects.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
-
-        value: List[str]
-        """
-        self._set_property("port_names", value)
-
-    @property
-    def state(self):
-        # type: () -> Union[Literal["down"], Literal["up"]]
-        """state getter
-
-        The link state.
-
-        Returns: Union[Literal["down"], Literal["up"]]
-        """
-        return self._get_property("state")
-
-    @state.setter
-    def state(self, value):
-        """state setter
-
-        The link state.
-
-        value: Union[Literal["down"], Literal["up"]]
-        """
-        if value is None:
-            raise TypeError("Cannot set required property state as None")
-        self._set_property("state", value)
-
-
-class CaptureState(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "port_names": {
-            "type": list,
-            "itemtype": str,
-        },
-        "state": {
-            "type": str,
-            "enum": [
-                "start",
-                "stop",
-            ],
-        },
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ("state",)  # type: tuple(str)
-
-    _DEFAULTS = {}  # type: Dict[str, Union(type)]
-
-    START = "start"  # type: str
-    STOP = "stop"  # type: str
-
-    _STATUS = {
-        "self": "CaptureState is deprecated, Please use `StatePortCapture` instead",
-    }  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, port_names=None, state=None):
-        super(CaptureState, self).__init__()
-        self._parent = parent
-        self._set_property("port_names", port_names)
-        self._set_property("state", state)
-
-    def set(self, port_names=None, state=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def port_names(self):
-        # type: () -> List[str]
-        """port_names getter
-
-        The names of ports to which the capture state will be applied to. If the list of port_names is empty or null the state will be applied to all configured ports.. If the list is not empty any port that is not included in the list of port_names MUST be ignored and not included in the state change.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
-
-        Returns: List[str]
-        """
-        return self._get_property("port_names")
-
-    @port_names.setter
-    def port_names(self, value):
-        """port_names setter
-
-        The names of ports to which the capture state will be applied to. If the list of port_names is empty or null the state will be applied to all configured ports.. If the list is not empty any port that is not included in the list of port_names MUST be ignored and not included in the state change.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
-
-        value: List[str]
-        """
-        self._set_property("port_names", value)
-
-    @property
-    def state(self):
-        # type: () -> Union[Literal["start"], Literal["stop"]]
-        """state getter
-
-        The capture state.
-
-        Returns: Union[Literal["start"], Literal["stop"]]
-        """
-        return self._get_property("state")
-
-    @state.setter
-    def state(self, value):
-        """state setter
-
-        The capture state.
-
-        value: Union[Literal["start"], Literal["stop"]]
-        """
-        if value is None:
-            raise TypeError("Cannot set required property state as None")
-        self._set_property("state", value)
-
-
-class RouteState(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "names": {
-            "type": list,
-            "itemtype": str,
-        },
-        "state": {
-            "type": str,
-            "enum": [
-                "withdraw",
-                "advertise",
-            ],
-        },
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ("state",)  # type: tuple(str)
-
-    _DEFAULTS = {}  # type: Dict[str, Union(type)]
-
-    WITHDRAW = "withdraw"  # type: str
-    ADVERTISE = "advertise"  # type: str
-
-    _STATUS = {
-        "self": "RouteState is deprecated, Please use `StateProtocolRoute` instead",
-    }  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, names=None, state=None):
-        super(RouteState, self).__init__()
-        self._parent = parent
-        self._set_property("names", names)
-        self._set_property("state", state)
-
-    def set(self, names=None, state=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def names(self):
-        # type: () -> List[str]
-        """names getter
-
-        The names of device route objects to control. If no names are specified then all route objects that match the x-constraint will be affected.. x-constraint:. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name. . x-constraint:. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name.
-
-        Returns: List[str]
-        """
-        return self._get_property("names")
-
-    @names.setter
-    def names(self, value):
-        """names setter
-
-        The names of device route objects to control. If no names are specified then all route objects that match the x-constraint will be affected.. x-constraint:. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name. . x-constraint:. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name.
-
-        value: List[str]
-        """
-        self._set_property("names", value)
-
-    @property
-    def state(self):
-        # type: () -> Union[Literal["advertise"], Literal["withdraw"]]
-        """state getter
-
-        Route specific states
-
-        Returns: Union[Literal["advertise"], Literal["withdraw"]]
-        """
-        return self._get_property("state")
-
-    @state.setter
-    def state(self, value):
-        """state setter
-
-        Route specific states
-
-        value: Union[Literal["advertise"], Literal["withdraw"]]
-        """
-        if value is None:
-            raise TypeError("Cannot set required property state as None")
-        self._set_property("state", value)
-
-
-class PingRequest(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "endpoints": {"type": "PingIter"},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {}  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None):
-        super(PingRequest, self).__init__()
-        self._parent = parent
-
-    @property
-    def endpoints(self):
-        # type: () -> PingIter
-        """endpoints getter
-
-        Array of ping requests
-
-        Returns: PingIter
-        """
-        return self._get_property("endpoints", PingIter, self._parent, self._choice)
-
-
-class Ping(OpenApiObject):
-    __slots__ = ("_parent", "_choice")
-
-    _TYPES = {
-        "choice": {
-            "type": str,
-            "enum": [
-                "ipv4",
-                "ipv6",
-            ],
-        },
-        "ipv4": {"type": "PingIpv4"},
-        "ipv6": {"type": "PingIpv6"},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "choice": "ipv4",
-    }  # type: Dict[str, Union(type)]
-
-    IPV4 = "ipv4"  # type: str
-    IPV6 = "ipv6"  # type: str
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, choice=None):
-        super(Ping, self).__init__()
-        self._parent = parent
-        if (
-            "choice" in self._DEFAULTS
-            and choice is None
-            and self._DEFAULTS["choice"] in self._TYPES
-        ):
-            getattr(self, self._DEFAULTS["choice"])
-        else:
-            self._set_property("choice", choice)
-
-    @property
-    def ipv4(self):
-        # type: () -> PingIpv4
-        """Factory property that returns an instance of the PingIpv4 class
-
-        TBD
-
-        Returns: PingIpv4
-        """
-        return self._get_property("ipv4", PingIpv4, self, "ipv4")
-
-    @property
-    def ipv6(self):
-        # type: () -> PingIpv6
-        """Factory property that returns an instance of the PingIpv6 class
-
-        TBD
-
-        Returns: PingIpv6
-        """
-        return self._get_property("ipv6", PingIpv6, self, "ipv6")
-
-    @property
-    def choice(self):
-        # type: () -> Union[Literal["ipv4"], Literal["ipv6"]]
-        """choice getter
-
-        IPv4 or IPv6 ping.
-
-        Returns: Union[Literal["ipv4"], Literal["ipv6"]]
-        """
-        return self._get_property("choice")
-
-    @choice.setter
-    def choice(self, value):
-        """choice setter
-
-        IPv4 or IPv6 ping.
-
-        value: Union[Literal["ipv4"], Literal["ipv6"]]
-        """
-        self._set_property("choice", value)
-
-
-class PingIpv4(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "src_name": {"type": str},
-        "dst_ip": {
-            "type": str,
-            "format": "ipv4",
-        },
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {}  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, src_name=None, dst_ip=None):
-        super(PingIpv4, self).__init__()
-        self._parent = parent
-        self._set_property("src_name", src_name)
-        self._set_property("dst_ip", dst_ip)
-
-    def set(self, src_name=None, dst_ip=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def src_name(self):
-        # type: () -> str
-        """src_name getter
-
-        A base IPv4 interface. x-constraint:. /components/schemas/Device.Ipv4/properties/name. . x-constraint:. /components/schemas/Device.Ipv4/properties/name.
-
-        Returns: str
-        """
-        return self._get_property("src_name")
-
-    @src_name.setter
-    def src_name(self, value):
-        """src_name setter
-
-        A base IPv4 interface. x-constraint:. /components/schemas/Device.Ipv4/properties/name. . x-constraint:. /components/schemas/Device.Ipv4/properties/name.
-
-        value: str
-        """
-        self._set_property("src_name", value)
-
-    @property
-    def dst_ip(self):
-        # type: () -> str
-        """dst_ip getter
-
-        IPv4 address to ping
-
-        Returns: str
-        """
-        return self._get_property("dst_ip")
-
-    @dst_ip.setter
-    def dst_ip(self, value):
-        """dst_ip setter
-
-        IPv4 address to ping
-
-        value: str
-        """
-        self._set_property("dst_ip", value)
-
-
-class PingIpv6(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "src_name": {"type": str},
-        "dst_ip": {
-            "type": str,
-            "format": "ipv6",
-        },
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {}  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, src_name=None, dst_ip=None):
-        super(PingIpv6, self).__init__()
-        self._parent = parent
-        self._set_property("src_name", src_name)
-        self._set_property("dst_ip", dst_ip)
-
-    def set(self, src_name=None, dst_ip=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def src_name(self):
-        # type: () -> str
-        """src_name getter
-
-        A base IPv6 interface. x-constraint:. /components/schemas/Device.Ipv6/properties/name. . x-constraint:. /components/schemas/Device.Ipv6/properties/name.
-
-        Returns: str
-        """
-        return self._get_property("src_name")
-
-    @src_name.setter
-    def src_name(self, value):
-        """src_name setter
-
-        A base IPv6 interface. x-constraint:. /components/schemas/Device.Ipv6/properties/name. . x-constraint:. /components/schemas/Device.Ipv6/properties/name.
-
-        value: str
-        """
-        self._set_property("src_name", value)
-
-    @property
-    def dst_ip(self):
-        # type: () -> str
-        """dst_ip getter
-
-        IPv6 addresses to ping.
-
-        Returns: str
-        """
-        return self._get_property("dst_ip")
-
-    @dst_ip.setter
-    def dst_ip(self, value):
-        """dst_ip setter
-
-        IPv6 addresses to ping.
-
-        value: str
-        """
-        self._set_property("dst_ip", value)
-
-
-class PingIter(OpenApiIter):
-    __slots__ = ("_parent", "_choice")
-
-    _GETITEM_RETURNS_CHOICE_OBJECT = True
-
-    def __init__(self, parent=None, choice=None):
-        super(PingIter, self).__init__()
-        self._parent = parent
-        self._choice = choice
-
-    def __getitem__(self, key):
-        # type: (str) -> Union[Ping, PingIpv4, PingIpv6]
-        return self._getitem(key)
-
-    def __iter__(self):
-        # type: () -> PingIter
-        return self._iter()
-
-    def __next__(self):
-        # type: () -> Ping
-        return self._next()
-
-    def next(self):
-        # type: () -> Ping
-        return self._next()
-
-    def _instanceOf(self, item):
-        if not isinstance(item, Ping):
-            raise Exception("Item is not an instance of Ping")
-
-    def ping(self):
-        # type: () -> PingIter
-        """Factory method that creates an instance of the Ping class
-
-        TBD
-
-        Returns: PingIter
-        """
-        item = Ping(parent=self._parent, choice=self._choice)
-        self._add(item)
-        return self
-
-    def add(self):
-        # type: () -> Ping
-        """Add method that creates and returns an instance of the Ping class
-
-        TBD
-
-        Returns: Ping
-        """
-        item = Ping(parent=self._parent, choice=self._choice)
-        self._add(item)
-        return item
-
-    def ipv4(self, src_name=None, dst_ip=None):
-        # type: (str,str) -> PingIter
-        """Factory method that creates an instance of the PingIpv4 class
-
-        TBD
-
-        Returns: PingIter
-        """
-        item = Ping()
-        item.ipv4
-        item.choice = "ipv4"
-        self._add(item)
-        return self
-
-    def ipv6(self, src_name=None, dst_ip=None):
-        # type: (str,str) -> PingIter
-        """Factory method that creates an instance of the PingIpv6 class
-
-        TBD
-
-        Returns: PingIter
-        """
-        item = Ping()
-        item.ipv6
-        item.choice = "ipv6"
-        self._add(item)
-        return self
-
-
-class PingResponse(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "responses": {"type": "ResponseIter"},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {}  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None):
-        super(PingResponse, self).__init__()
-        self._parent = parent
-
-    @property
-    def responses(self):
-        # type: () -> ResponseIter
-        """responses getter
-
-        TBD
-
-        Returns: ResponseIter
-        """
-        return self._get_property("responses", ResponseIter, self._parent, self._choice)
-
-
-class Response(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "src_name": {"type": str},
-        "dst_ip": {"type": str},
-        "result": {
-            "type": str,
-            "enum": [
-                "success",
-                "failure",
-            ],
-        },
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "result": "failure",
-    }  # type: Dict[str, Union(type)]
-
-    SUCCESS = "success"  # type: str
-    FAILURE = "failure"  # type: str
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, src_name=None, dst_ip=None, result="failure"):
-        super(Response, self).__init__()
-        self._parent = parent
-        self._set_property("src_name", src_name)
-        self._set_property("dst_ip", dst_ip)
-        self._set_property("result", result)
-
-    def set(self, src_name=None, dst_ip=None, result=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def src_name(self):
-        # type: () -> str
-        """src_name getter
-
-        The name of the source IPv4 or IPv6 interface from which ping was sent.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv6/properties/name. . x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv6/properties/name.
-
-        Returns: str
-        """
-        return self._get_property("src_name")
-
-    @src_name.setter
-    def src_name(self, value):
-        """src_name setter
-
-        The name of the source IPv4 or IPv6 interface from which ping was sent.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv6/properties/name. . x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv6/properties/name.
-
-        value: str
-        """
-        self._set_property("src_name", value)
-
-    @property
-    def dst_ip(self):
-        # type: () -> str
-        """dst_ip getter
-
-        Destination address.
-
-        Returns: str
-        """
-        return self._get_property("dst_ip")
-
-    @dst_ip.setter
-    def dst_ip(self, value):
-        """dst_ip setter
-
-        Destination address.
-
-        value: str
-        """
-        self._set_property("dst_ip", value)
-
-    @property
-    def result(self):
-        # type: () -> Union[Literal["failure"], Literal["success"]]
-        """result getter
-
-        Result of the ping request.
-
-        Returns: Union[Literal["failure"], Literal["success"]]
-        """
-        return self._get_property("result")
-
-    @result.setter
-    def result(self, value):
-        """result setter
-
-        Result of the ping request.
-
-        value: Union[Literal["failure"], Literal["success"]]
-        """
-        self._set_property("result", value)
-
-
-class ResponseIter(OpenApiIter):
-    __slots__ = ("_parent", "_choice")
-
-    _GETITEM_RETURNS_CHOICE_OBJECT = False
-
-    def __init__(self, parent=None, choice=None):
-        super(ResponseIter, self).__init__()
-        self._parent = parent
-        self._choice = choice
-
-    def __getitem__(self, key):
-        # type: (str) -> Union[Response]
-        return self._getitem(key)
-
-    def __iter__(self):
-        # type: () -> ResponseIter
-        return self._iter()
-
-    def __next__(self):
-        # type: () -> Response
-        return self._next()
-
-    def next(self):
-        # type: () -> Response
-        return self._next()
-
-    def _instanceOf(self, item):
-        if not isinstance(item, Response):
-            raise Exception("Item is not an instance of Response")
-
-    def response(self, src_name=None, dst_ip=None, result="failure"):
-        # type: (str,str,Union[Literal["failure"], Literal["success"]]) -> ResponseIter
-        """Factory method that creates an instance of the Response class
-
-        TBD
-
-        Returns: ResponseIter
-        """
-        item = Response(
-            parent=self._parent, src_name=src_name, dst_ip=dst_ip, result=result
-        )
-        self._add(item)
-        return self
-
-    def add(self, src_name=None, dst_ip=None, result="failure"):
-        # type: (str,str,Union[Literal["failure"], Literal["success"]]) -> Response
-        """Add method that creates and returns an instance of the Response class
-
-        TBD
-
-        Returns: Response
-        """
-        item = Response(
-            parent=self._parent, src_name=src_name, dst_ip=dst_ip, result=result
-        )
-        self._add(item)
-        return item
-
-
-class ProtocolState(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "state": {
-            "type": str,
-            "enum": [
-                "start",
-                "stop",
-            ],
-        },
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ("state",)  # type: tuple(str)
-
-    _DEFAULTS = {}  # type: Dict[str, Union(type)]
-
-    START = "start"  # type: str
-    STOP = "stop"  # type: str
-
-    _STATUS = {
-        "self": "ProtocolState is deprecated, Please use `StateProtocolAll` instead",
-    }  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, state=None):
-        super(ProtocolState, self).__init__()
-        self._parent = parent
-        self._set_property("state", state)
-
-    def set(self, state=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def state(self):
-        # type: () -> Union[Literal["start"], Literal["stop"]]
-        """state getter
-
-        Protocol specific states
-
-        Returns: Union[Literal["start"], Literal["stop"]]
-        """
-        return self._get_property("state")
-
-    @state.setter
-    def state(self, value):
-        """state setter
-
-        Protocol specific states
-
-        value: Union[Literal["start"], Literal["stop"]]
-        """
-        if value is None:
-            raise TypeError("Cannot set required property state as None")
-        self._set_property("state", value)
-
-
-class DeviceState(OpenApiObject):
-    __slots__ = ("_parent", "_choice")
-
-    _TYPES = {
-        "choice": {
-            "type": str,
-            "enum": [
-                "lacp_member_state",
-            ],
-        },
-        "lacp_member_state": {"type": "LacpMemberState"},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {}  # type: Dict[str, Union(type)]
-
-    LACP_MEMBER_STATE = "lacp_member_state"  # type: str
-
-    _STATUS = {
-        "self": "DeviceState is deprecated, Please use `State.Protocol` instead",
-    }  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, choice=None):
-        super(DeviceState, self).__init__()
-        self._parent = parent
-        if (
-            "choice" in self._DEFAULTS
-            and choice is None
-            and self._DEFAULTS["choice"] in self._TYPES
-        ):
-            getattr(self, self._DEFAULTS["choice"])
-        else:
-            self._set_property("choice", choice)
-
-    @property
-    def lacp_member_state(self):
-        # type: () -> LacpMemberState
-        """Factory property that returns an instance of the LacpMemberState class
-
-        Deprecated: Please use `StateProtocolLacpAdmin` instead. Deprecated: Please use `StateProtocolLacpAdmin` instead. Set LACP state for specified LAG Member Port(s).
-
-        Returns: LacpMemberState
-        """
-        return self._get_property(
-            "lacp_member_state", LacpMemberState, self, "lacp_member_state"
-        )
-
-    @property
-    def choice(self):
-        # type: () -> Union[Literal["lacp_member_state"]]
-        """choice getter
-
-        TBD
-
-        Returns: Union[Literal["lacp_member_state"]]
-        """
-        return self._get_property("choice")
-
-    @choice.setter
-    def choice(self, value):
-        """choice setter
-
-        TBD
-
-        value: Union[Literal["lacp_member_state"]]
-        """
-        self._set_property("choice", value)
-
-
-class LacpMemberState(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "lag_member_port_names": {
-            "type": list,
-            "itemtype": str,
-        },
-        "state": {
-            "type": str,
-            "enum": [
-                "down",
-                "up",
-            ],
-        },
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ("state",)  # type: tuple(str)
-
-    _DEFAULTS = {}  # type: Dict[str, Union(type)]
-
-    DOWN = "down"  # type: str
-    UP = "up"  # type: str
-
-    _STATUS = {
-        "self": "LacpMemberState is deprecated, Please use `StateProtocolLacpAdmin` instead",
-    }  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, lag_member_port_names=None, state=None):
-        super(LacpMemberState, self).__init__()
-        self._parent = parent
-        self._set_property("lag_member_port_names", lag_member_port_names)
-        self._set_property("state", state)
-
-    def set(self, lag_member_port_names=None, state=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def lag_member_port_names(self):
-        # type: () -> List[str]
-        """lag_member_port_names getter
-
-        The names of LAG members (ports) for which the state has to be applied. An empty or null list will control all LAG members.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
-
-        Returns: List[str]
-        """
-        return self._get_property("lag_member_port_names")
-
-    @lag_member_port_names.setter
-    def lag_member_port_names(self, value):
-        """lag_member_port_names setter
-
-        The names of LAG members (ports) for which the state has to be applied. An empty or null list will control all LAG members.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
-
-        value: List[str]
-        """
-        self._set_property("lag_member_port_names", value)
-
-    @property
-    def state(self):
-        # type: () -> Union[Literal["down"], Literal["up"]]
-        """state getter
-
-        The LACP Member admin state. 'up' will send LACPDUs with 'sync' flag set on selected member ports. 'down' will send LACPDUs with 'sync' flag unset on selected member ports.
-
-        Returns: Union[Literal["down"], Literal["up"]]
-        """
-        return self._get_property("state")
-
-    @state.setter
-    def state(self, value):
-        """state setter
-
-        The LACP Member admin state. 'up' will send LACPDUs with 'sync' flag set on selected member ports. 'down' will send LACPDUs with 'sync' flag unset on selected member ports.
-
-        value: Union[Literal["down"], Literal["up"]]
-        """
-        if value is None:
-            raise TypeError("Cannot set required property state as None")
-        self._set_property("state", value)
 
 
 class MetricsRequest(OpenApiObject):
@@ -96325,23 +95963,19 @@ class PortMetric(OpenApiObject):
         },
         "frames_tx": {
             "type": int,
-            "format": "int64",
-            "minimum": 0,
+            "format": "uint64",
         },
         "frames_rx": {
             "type": int,
-            "format": "int64",
-            "minimum": 0,
+            "format": "uint64",
         },
         "bytes_tx": {
             "type": int,
-            "format": "int64",
-            "minimum": 0,
+            "format": "uint64",
         },
         "bytes_rx": {
             "type": int,
-            "format": "int64",
-            "minimum": 0,
+            "format": "uint64",
         },
         "frames_tx_rate": {"type": float},
         "frames_rx_rate": {"type": float},
@@ -96830,23 +96464,19 @@ class FlowMetric(OpenApiObject):
         },
         "frames_tx": {
             "type": int,
-            "format": "int64",
-            "minimum": 0,
+            "format": "uint64",
         },
         "frames_rx": {
             "type": int,
-            "format": "int64",
-            "minimum": 0,
+            "format": "uint64",
         },
         "bytes_tx": {
             "type": int,
-            "format": "int64",
-            "minimum": 0,
+            "format": "uint64",
         },
         "bytes_rx": {
             "type": int,
-            "format": "int64",
-            "minimum": 0,
+            "format": "uint64",
         },
         "frames_tx_rate": {"type": float},
         "frames_rx_rate": {"type": float},
@@ -98038,19 +97668,58 @@ class Bgpv4Metric(OpenApiObject):
                 "down",
             ],
         },
-        "session_flap_count": {"type": int},
-        "routes_advertised": {"type": int},
-        "routes_received": {"type": int},
-        "route_withdraws_sent": {"type": int},
-        "route_withdraws_received": {"type": int},
-        "updates_sent": {"type": int},
-        "updates_received": {"type": int},
-        "opens_sent": {"type": int},
-        "opens_received": {"type": int},
-        "keepalives_sent": {"type": int},
-        "keepalives_received": {"type": int},
-        "notifications_sent": {"type": int},
-        "notifications_received": {"type": int},
+        "session_flap_count": {
+            "type": int,
+            "format": "uint64",
+        },
+        "routes_advertised": {
+            "type": int,
+            "format": "uint64",
+        },
+        "routes_received": {
+            "type": int,
+            "format": "uint64",
+        },
+        "route_withdraws_sent": {
+            "type": int,
+            "format": "uint64",
+        },
+        "route_withdraws_received": {
+            "type": int,
+            "format": "uint64",
+        },
+        "updates_sent": {
+            "type": int,
+            "format": "uint64",
+        },
+        "updates_received": {
+            "type": int,
+            "format": "uint64",
+        },
+        "opens_sent": {
+            "type": int,
+            "format": "uint64",
+        },
+        "opens_received": {
+            "type": int,
+            "format": "uint64",
+        },
+        "keepalives_sent": {
+            "type": int,
+            "format": "uint64",
+        },
+        "keepalives_received": {
+            "type": int,
+            "format": "uint64",
+        },
+        "notifications_sent": {
+            "type": int,
+            "format": "uint64",
+        },
+        "notifications_received": {
+            "type": int,
+            "format": "uint64",
+        },
         "fsm_state": {
             "type": str,
             "enum": [
@@ -98650,19 +98319,58 @@ class Bgpv6Metric(OpenApiObject):
                 "down",
             ],
         },
-        "session_flap_count": {"type": int},
-        "routes_advertised": {"type": int},
-        "routes_received": {"type": int},
-        "route_withdraws_sent": {"type": int},
-        "route_withdraws_received": {"type": int},
-        "updates_sent": {"type": int},
-        "updates_received": {"type": int},
-        "opens_sent": {"type": int},
-        "opens_received": {"type": int},
-        "keepalives_sent": {"type": int},
-        "keepalives_received": {"type": int},
-        "notifications_sent": {"type": int},
-        "notifications_received": {"type": int},
+        "session_flap_count": {
+            "type": int,
+            "format": "uint64",
+        },
+        "routes_advertised": {
+            "type": int,
+            "format": "uint64",
+        },
+        "routes_received": {
+            "type": int,
+            "format": "uint64",
+        },
+        "route_withdraws_sent": {
+            "type": int,
+            "format": "uint64",
+        },
+        "route_withdraws_received": {
+            "type": int,
+            "format": "uint64",
+        },
+        "updates_sent": {
+            "type": int,
+            "format": "uint64",
+        },
+        "updates_received": {
+            "type": int,
+            "format": "uint64",
+        },
+        "opens_sent": {
+            "type": int,
+            "format": "uint64",
+        },
+        "opens_received": {
+            "type": int,
+            "format": "uint64",
+        },
+        "keepalives_sent": {
+            "type": int,
+            "format": "uint64",
+        },
+        "keepalives_received": {
+            "type": int,
+            "format": "uint64",
+        },
+        "notifications_sent": {
+            "type": int,
+            "format": "uint64",
+        },
+        "notifications_received": {
+            "type": int,
+            "format": "uint64",
+        },
         "fsm_state": {
             "type": str,
             "enum": [
@@ -99255,32 +98963,110 @@ class IsisMetric(OpenApiObject):
 
     _TYPES = {
         "name": {"type": str},
-        "l1_sessions_up": {"type": int},
-        "l1_session_flap": {"type": int},
-        "l1_broadcast_hellos_sent": {"type": int},
-        "l1_broadcast_hellos_received": {"type": int},
-        "l1_point_to_point_hellos_sent": {"type": int},
-        "l1_point_to_point_hellos_received": {"type": int},
-        "l1_database_size": {"type": int},
-        "l1_psnp_sent": {"type": int},
-        "l1_psnp_received": {"type": int},
-        "l1_csnp_sent": {"type": int},
-        "l1_csnp_received": {"type": int},
-        "l1_lsp_sent": {"type": int},
-        "l1_lsp_received": {"type": int},
-        "l2_sessions_up": {"type": int},
-        "l2_session_flap": {"type": int},
-        "l2_broadcast_hellos_sent": {"type": int},
-        "l2_broadcast_hellos_received": {"type": int},
-        "l2_point_to_point_hellos_sent": {"type": int},
-        "l2_point_to_point_hellos_received": {"type": int},
-        "l2_database_size": {"type": int},
-        "l2_psnp_sent": {"type": int},
-        "l2_psnp_received": {"type": int},
-        "l2_csnp_sent": {"type": int},
-        "l2_csnp_received": {"type": int},
-        "l2_lsp_sent": {"type": int},
-        "l2_lsp_received": {"type": int},
+        "l1_sessions_up": {
+            "type": int,
+            "format": "uint32",
+        },
+        "l1_session_flap": {
+            "type": int,
+            "format": "uint64",
+        },
+        "l1_broadcast_hellos_sent": {
+            "type": int,
+            "format": "uint64",
+        },
+        "l1_broadcast_hellos_received": {
+            "type": int,
+            "format": "uint64",
+        },
+        "l1_point_to_point_hellos_sent": {
+            "type": int,
+            "format": "uint64",
+        },
+        "l1_point_to_point_hellos_received": {
+            "type": int,
+            "format": "uint64",
+        },
+        "l1_database_size": {
+            "type": int,
+            "format": "uint64",
+        },
+        "l1_psnp_sent": {
+            "type": int,
+            "format": "uint64",
+        },
+        "l1_psnp_received": {
+            "type": int,
+            "format": "uint64",
+        },
+        "l1_csnp_sent": {
+            "type": int,
+            "format": "uint64",
+        },
+        "l1_csnp_received": {
+            "type": int,
+            "format": "uint64",
+        },
+        "l1_lsp_sent": {
+            "type": int,
+            "format": "uint64",
+        },
+        "l1_lsp_received": {
+            "type": int,
+            "format": "uint64",
+        },
+        "l2_sessions_up": {
+            "type": int,
+            "format": "uint32",
+        },
+        "l2_session_flap": {
+            "type": int,
+            "format": "uint64",
+        },
+        "l2_broadcast_hellos_sent": {
+            "type": int,
+            "format": "uint64",
+        },
+        "l2_broadcast_hellos_received": {
+            "type": int,
+            "format": "uint64",
+        },
+        "l2_point_to_point_hellos_sent": {
+            "type": int,
+            "format": "uint64",
+        },
+        "l2_point_to_point_hellos_received": {
+            "type": int,
+            "format": "uint64",
+        },
+        "l2_database_size": {
+            "type": int,
+            "format": "uint64",
+        },
+        "l2_psnp_sent": {
+            "type": int,
+            "format": "uint64",
+        },
+        "l2_psnp_received": {
+            "type": int,
+            "format": "uint64",
+        },
+        "l2_csnp_sent": {
+            "type": int,
+            "format": "uint64",
+        },
+        "l2_csnp_received": {
+            "type": int,
+            "format": "uint64",
+        },
+        "l2_lsp_sent": {
+            "type": int,
+            "format": "uint64",
+        },
+        "l2_lsp_received": {
+            "type": int,
+            "format": "uint64",
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -100143,25 +99929,25 @@ class LagMetric(OpenApiObject):
                 "down",
             ],
         },
-        "member_ports_up": {"type": int},
+        "member_ports_up": {
+            "type": int,
+            "format": "uint32",
+        },
         "frames_tx": {
             "type": int,
-            "format": "int64",
-            "minimum": 0,
+            "format": "uint64",
         },
         "frames_rx": {
             "type": int,
-            "format": "int64",
-            "minimum": 0,
+            "format": "uint64",
         },
         "bytes_tx": {
             "type": int,
-            "format": "int64",
-            "minimum": 0,
+            "format": "uint64",
         },
         "bytes_rx": {
             "type": int,
-            "format": "int64",
+            "format": "uint64",
             "minimum": 0,
         },
         "frames_tx_rate": {"type": float},
@@ -100573,18 +100359,15 @@ class LacpMetric(OpenApiObject):
         "lag_member_port_name": {"type": str},
         "lacp_packets_rx": {
             "type": int,
-            "format": "int64",
-            "minimum": 0,
+            "format": "uint64",
         },
         "lacp_packets_tx": {
             "type": int,
-            "format": "int64",
-            "minimum": 0,
+            "format": "uint64",
         },
         "lacp_rx_errors": {
             "type": int,
-            "format": "int64",
-            "minimum": 0,
+            "format": "uint64",
         },
         "activity": {
             "type": str,
@@ -100616,7 +100399,7 @@ class LacpMetric(OpenApiObject):
         },
         "oper_key": {
             "type": int,
-            "format": "int32",
+            "format": "uint32",
         },
         "partner_id": {
             "type": str,
@@ -100624,15 +100407,15 @@ class LacpMetric(OpenApiObject):
         },
         "partner_key": {
             "type": int,
-            "format": "int32",
+            "format": "uint32",
         },
         "port_num": {
             "type": int,
-            "format": "int32",
+            "format": "uint32",
         },
         "partner_port_num": {
             "type": int,
-            "format": "int32",
+            "format": "uint32",
         },
     }  # type: Dict[str, str]
 
@@ -101212,27 +100995,27 @@ class LldpMetric(OpenApiObject):
         "name": {"type": str},
         "frames_rx": {
             "type": int,
-            "format": "int64",
+            "format": "uint64",
         },
         "frames_tx": {
             "type": int,
-            "format": "int64",
+            "format": "uint64",
         },
         "frames_error_rx": {
             "type": int,
-            "format": "int64",
+            "format": "uint64",
         },
         "frames_discard": {
             "type": int,
-            "format": "int64",
+            "format": "uint64",
         },
         "tlvs_discard": {
             "type": int,
-            "format": "int64",
+            "format": "uint64",
         },
         "tlvs_unknown": {
             "type": int,
-            "format": "int64",
+            "format": "uint64",
         },
     }  # type: Dict[str, str]
 
@@ -101521,36 +101304,126 @@ class RsvpMetric(OpenApiObject):
 
     _TYPES = {
         "name": {"type": str},
-        "ingress_p2p_lsps_configured": {"type": int},
-        "ingress_p2p_lsps_up": {"type": int},
-        "egress_p2p_lsps_up": {"type": int},
-        "lsp_flap_count": {"type": int},
-        "paths_tx": {"type": int},
-        "paths_rx": {"type": int},
-        "resvs_tx": {"type": int},
-        "resvs_rx": {"type": int},
-        "path_tears_tx": {"type": int},
-        "path_tears_rx": {"type": int},
-        "resv_tears_tx": {"type": int},
-        "resv_tears_rx": {"type": int},
-        "path_errors_tx": {"type": int},
-        "path_errors_rx": {"type": int},
-        "resv_errors_tx": {"type": int},
-        "resv_errors_rx": {"type": int},
-        "resv_conf_tx": {"type": int},
-        "resv_conf_rx": {"type": int},
-        "hellos_tx": {"type": int},
-        "hellos_rx": {"type": int},
-        "acks_tx": {"type": int},
-        "acks_rx": {"type": int},
-        "nacks_tx": {"type": int},
-        "nacks_rx": {"type": int},
-        "srefresh_tx": {"type": int},
-        "srefresh_rx": {"type": int},
-        "bundle_tx": {"type": int},
-        "bundle_rx": {"type": int},
-        "path_reevaluation_request_tx": {"type": int},
-        "path_reoptimizations": {"type": int},
+        "ingress_p2p_lsps_configured": {
+            "type": int,
+            "format": "uint32",
+        },
+        "ingress_p2p_lsps_up": {
+            "type": int,
+            "format": "uint32",
+        },
+        "egress_p2p_lsps_up": {
+            "type": int,
+            "format": "uint32",
+        },
+        "lsp_flap_count": {
+            "type": int,
+            "format": "uint64",
+        },
+        "paths_tx": {
+            "type": int,
+            "format": "uint64",
+        },
+        "paths_rx": {
+            "type": int,
+            "format": "uint64",
+        },
+        "resvs_tx": {
+            "type": int,
+            "format": "uint64",
+        },
+        "resvs_rx": {
+            "type": int,
+            "format": "uint64",
+        },
+        "path_tears_tx": {
+            "type": int,
+            "format": "uint64",
+        },
+        "path_tears_rx": {
+            "type": int,
+            "format": "uint64",
+        },
+        "resv_tears_tx": {
+            "type": int,
+            "format": "uint64",
+        },
+        "resv_tears_rx": {
+            "type": int,
+            "format": "uint64",
+        },
+        "path_errors_tx": {
+            "type": int,
+            "format": "uint64",
+        },
+        "path_errors_rx": {
+            "type": int,
+            "format": "uint64",
+        },
+        "resv_errors_tx": {
+            "type": int,
+            "format": "uint64",
+        },
+        "resv_errors_rx": {
+            "type": int,
+            "format": "uint64",
+        },
+        "resv_conf_tx": {
+            "type": int,
+            "format": "uint64",
+        },
+        "resv_conf_rx": {
+            "type": int,
+            "format": "uint64",
+        },
+        "hellos_tx": {
+            "type": int,
+            "format": "uint64",
+        },
+        "hellos_rx": {
+            "type": int,
+            "format": "uint64",
+        },
+        "acks_tx": {
+            "type": int,
+            "format": "uint64",
+        },
+        "acks_rx": {
+            "type": int,
+            "format": "uint64",
+        },
+        "nacks_tx": {
+            "type": int,
+            "format": "uint64",
+        },
+        "nacks_rx": {
+            "type": int,
+            "format": "uint64",
+        },
+        "srefresh_tx": {
+            "type": int,
+            "format": "uint64",
+        },
+        "srefresh_rx": {
+            "type": int,
+            "format": "uint64",
+        },
+        "bundle_tx": {
+            "type": int,
+            "format": "uint64",
+        },
+        "bundle_rx": {
+            "type": int,
+            "format": "uint64",
+        },
+        "path_reevaluation_request_tx": {
+            "type": int,
+            "format": "uint64",
+        },
+        "path_reoptimizations": {
+            "type": int,
+            "format": "uint64",
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -102867,7 +102740,11 @@ class BgpPrefixIpv4UnicastFilter(OpenApiObject):
             "itemtype": str,
             "itemformat": "ipv4",
         },
-        "prefix_length": {"type": int},
+        "prefix_length": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 128,
+        },
         "origin": {
             "type": str,
             "enum": [
@@ -102876,7 +102753,10 @@ class BgpPrefixIpv4UnicastFilter(OpenApiObject):
                 "incomplete",
             ],
         },
-        "path_id": {"type": int},
+        "path_id": {
+            "type": int,
+            "format": "uint32",
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -103065,7 +102945,11 @@ class BgpPrefixIpv6UnicastFilter(OpenApiObject):
             "itemtype": str,
             "itemformat": "ipv6",
         },
-        "prefix_length": {"type": int},
+        "prefix_length": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 128,
+        },
         "origin": {
             "type": str,
             "enum": [
@@ -103074,7 +102958,10 @@ class BgpPrefixIpv6UnicastFilter(OpenApiObject):
                 "incomplete",
             ],
         },
-        "path_id": {"type": int},
+        "path_id": {
+            "type": int,
+            "format": "uint32",
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -104002,7 +103889,11 @@ class BgpPrefixIpv4UnicastState(OpenApiObject):
 
     _TYPES = {
         "ipv4_address": {"type": str},
-        "prefix_length": {"type": int},
+        "prefix_length": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 128,
+        },
         "origin": {
             "type": str,
             "enum": [
@@ -104011,7 +103902,10 @@ class BgpPrefixIpv4UnicastState(OpenApiObject):
                 "incomplete",
             ],
         },
-        "path_id": {"type": int},
+        "path_id": {
+            "type": int,
+            "format": "uint32",
+        },
         "ipv4_next_hop": {
             "type": str,
             "format": "ipv4",
@@ -104290,12 +104184,12 @@ class ResultBgpCommunity(OpenApiObject):
         },
         "as_number": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
         "as_custom": {
             "type": int,
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 65535,
         },
     }  # type: Dict[str, str]
@@ -104495,7 +104389,7 @@ class ResultBgpAsPathSegment(OpenApiObject):
         "as_numbers": {
             "type": list,
             "itemtype": int,
-            "itemformat": "int64",
+            "itemformat": "uint32",
         },
     }  # type: Dict[str, str]
 
@@ -104723,7 +104617,11 @@ class BgpPrefixIpv6UnicastState(OpenApiObject):
 
     _TYPES = {
         "ipv6_address": {"type": str},
-        "prefix_length": {"type": int},
+        "prefix_length": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 128,
+        },
         "origin": {
             "type": str,
             "enum": [
@@ -104732,7 +104630,10 @@ class BgpPrefixIpv6UnicastState(OpenApiObject):
                 "incomplete",
             ],
         },
-        "path_id": {"type": int},
+        "path_id": {
+            "type": int,
+            "format": "uint32",
+        },
         "ipv4_next_hop": {
             "type": str,
             "format": "ipv4",
@@ -105215,15 +105116,23 @@ class IsisLspState(OpenApiObject):
         },
         "remaining_lifetime": {
             "type": int,
-            "format": "int64",
+            "format": "uint32",
         },
         "sequence_number": {
             "type": int,
-            "format": "int64",
+            "format": "uint64",
         },
-        "pdu_length": {"type": int},
+        "pdu_length": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
         "flags": {"type": "IsisLspFlags"},
-        "is_type": {"type": int},
+        "is_type": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 3,
+        },
         "tlvs": {"type": "IsisLspTlvs"},
     }  # type: Dict[str, str]
 
@@ -106150,7 +106059,11 @@ class IsisLspV4Prefix(OpenApiObject):
 
     _TYPES = {
         "ipv4_address": {"type": str},
-        "prefix_length": {"type": int},
+        "prefix_length": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 32,
+        },
         "redistribution_type": {
             "type": str,
             "enum": [
@@ -106158,7 +106071,10 @@ class IsisLspV4Prefix(OpenApiObject):
                 "down",
             ],
         },
-        "default_metric": {"type": int},
+        "default_metric": {
+            "type": int,
+            "format": "uint32",
+        },
         "origin_type": {
             "type": str,
             "enum": [
@@ -106582,8 +106498,15 @@ class IsisLspExtendedV4Prefix(OpenApiObject):
             "type": str,
             "format": "ipv4",
         },
-        "prefix_length": {"type": int},
-        "metric": {"type": int},
+        "prefix_length": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 32,
+        },
+        "metric": {
+            "type": int,
+            "format": "uint32",
+        },
         "redistribution_type": {
             "type": str,
             "enum": [
@@ -106991,8 +106914,15 @@ class IsisLspV6Prefix(OpenApiObject):
             "type": str,
             "format": "ipv6",
         },
-        "prefix_length": {"type": int},
-        "metric": {"type": int},
+        "prefix_length": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 128,
+        },
+        "metric": {
+            "type": int,
+            "format": "uint32",
+        },
         "redistribution_type": {
             "type": str,
             "enum": [
@@ -107471,13 +107401,16 @@ class LldpNeighborsState(OpenApiObject):
         "neighbor_id": {"type": str},
         "age": {
             "type": int,
-            "format": "int64",
+            "format": "uint32",
         },
         "last_update": {
             "type": int,
-            "format": "int64",
+            "format": "uint32",
         },
-        "ttl": {"type": int},
+        "ttl": {
+            "type": int,
+            "format": "uint32",
+        },
         "port_id": {"type": str},
         "port_id_type": {
             "type": str,
@@ -107901,7 +107834,10 @@ class LldpCustomTLVState(OpenApiObject):
     __slots__ = "_parent"
 
     _TYPES = {
-        "custom_type": {"type": int},
+        "custom_type": {
+            "type": int,
+            "format": "uint32",
+        },
         "oui": {"type": str},
         "oui_subtype": {"type": str},
     }  # type: Dict[str, str]
@@ -108507,11 +108443,23 @@ class RsvpLspState(OpenApiObject):
     __slots__ = "_parent"
 
     _TYPES = {
-        "tunnel_id": {"type": int},
-        "lsp_id": {"type": int},
+        "tunnel_id": {
+            "type": int,
+            "format": "uint32",
+        },
+        "lsp_id": {
+            "type": int,
+            "format": "uint32",
+        },
         "session_name": {"type": str},
-        "label_in": {"type": int},
-        "label_out": {"type": int},
+        "label_in": {
+            "type": int,
+            "format": "uint32",
+        },
+        "label_out": {
+            "type": int,
+            "format": "uint32",
+        },
         "session_status": {
             "type": str,
             "enum": [
@@ -108529,7 +108477,7 @@ class RsvpLspState(OpenApiObject):
         },
         "up_time": {
             "type": int,
-            "format": "int64",
+            "format": "uint64",
         },
     }  # type: Dict[str, str]
 
@@ -108761,7 +108709,10 @@ class RsvpLspIpv4Rro(OpenApiObject):
             "type": str,
             "format": "ipv4",
         },
-        "reported_label": {"type": int},
+        "reported_label": {
+            "type": int,
+            "format": "uint32",
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -108891,7 +108842,10 @@ class RsvpLspIpv4Ero(OpenApiObject):
             "type": str,
             "format": "ipv4",
         },
-        "asn": {"type": int},
+        "asn": {
+            "type": int,
+            "format": "uint32",
+        },
         "type": {
             "type": str,
             "enum": [
@@ -109318,8 +109272,8 @@ class Api(object):
 
     def __init__(self, **kwargs):
         self._version_meta = self.version()
-        self._version_meta.api_spec_version = "0.11.11"
-        self._version_meta.sdk_version = "0.11.17"
+        self._version_meta.api_spec_version = "0.12.1"
+        self._version_meta.sdk_version = "0.12.1"
         self._version_check = kwargs.get("version_check")
         if self._version_check is None:
             self._version_check = False
@@ -109402,78 +109356,6 @@ class Api(object):
         Return: control_action_response
         """
         raise NotImplementedError("set_control_action")
-
-    def set_transmit_state(self, payload):
-        """POST /control/transmit
-
-        Deprecated: Please use `set_control_state` with `traffic.flow_transmit` choice instead. Deprecated: Please use `set_control_state` with `traffic.flow_transmit` choice instead. Updates the state of configuration resources on the traffic generator.. The Response.Warnings in the Success response is available for implementers to disclose additional information about state change including any implicit changes that are outside the scope of the state change.
-
-        Return: warning
-        """
-        raise NotImplementedError("set_transmit_state")
-
-    def set_link_state(self, payload):
-        """POST /control/link
-
-        Deprecated: Please use `set_control_state` with `port.link` choice instead. Deprecated: Please use `set_control_state` with `port.link` choice instead. Updates the state of configuration resources on the traffic generator.
-
-        Return: warning
-        """
-        raise NotImplementedError("set_link_state")
-
-    def set_capture_state(self, payload):
-        """POST /control/capture
-
-        Deprecated: Please use `set_control_state` with `port.capture` choice instead. Deprecated: Please use `set_control_state` with `port.capture` choice instead. Updates the state of configuration resources on the traffic generator.
-
-        Return: warning
-        """
-        raise NotImplementedError("set_capture_state")
-
-    def update_flows(self, payload):
-        """POST /control/flows
-
-        Deprecated: Please use `update_config` with `flow` choice instead. Deprecated: Please use `update_config` with `flow` choice instead. Updates flow properties without disruption of transmit state.
-
-        Return: config
-        """
-        raise NotImplementedError("update_flows")
-
-    def set_route_state(self, payload):
-        """POST /control/routes
-
-        Deprecated: Please use `set_control_state` with `protocol.route` choice instead. Deprecated: Please use `set_control_state` with `protocol.route` choice instead. Updates the state of configuration resources on the traffic generator.
-
-        Return: warning
-        """
-        raise NotImplementedError("set_route_state")
-
-    def send_ping(self, payload):
-        """POST /control/ping
-
-        Deprecated: Please use `set_control_action` with `protocol.ipv*.ping` choice instead. Deprecated: Please use `set_control_action` with `protocol.ipv*.ping` choice instead. API to send an IPv4 and/or IPv6 ICMP Echo Request(s) between endpoints. For each endpoint ping packet will be sent and API shall wait for ping response to either be successful or timeout. The API wait timeout for each request is 300ms.
-
-        Return: ping_response
-        """
-        raise NotImplementedError("send_ping")
-
-    def set_protocol_state(self, payload):
-        """POST /control/protocols
-
-        Deprecated: Please use `set_control_state` with `protocol.all` choice instead. Deprecated: Please use `set_control_state` with `protocol.all` choice instead. Sets all configured protocols to `start` or `stop` state.
-
-        Return: warning
-        """
-        raise NotImplementedError("set_protocol_state")
-
-    def set_device_state(self, payload):
-        """POST /control/devices
-
-        Deprecated: Please use `set_control_state` with `protocol` choice instead. Deprecated: Please use `set_control_state` with `protocol` choice instead. Set specific state/actions on device configuration resources on the traffic generator.
-
-        Return: warning
-        """
-        raise NotImplementedError("set_device_state")
 
     def get_metrics(self, payload):
         """POST /monitor/metrics
@@ -109559,69 +109441,6 @@ class Api(object):
         Return: ControlActionResponse
         """
         return ControlActionResponse()
-
-    def transmit_state(self):
-        """Factory method that creates an instance of TransmitState
-
-        Return: TransmitState
-        """
-        return TransmitState()
-
-    def link_state(self):
-        """Factory method that creates an instance of LinkState
-
-        Return: LinkState
-        """
-        return LinkState()
-
-    def capture_state(self):
-        """Factory method that creates an instance of CaptureState
-
-        Return: CaptureState
-        """
-        return CaptureState()
-
-    def flows_update(self):
-        """Factory method that creates an instance of FlowsUpdate
-
-        Return: FlowsUpdate
-        """
-        return FlowsUpdate()
-
-    def route_state(self):
-        """Factory method that creates an instance of RouteState
-
-        Return: RouteState
-        """
-        return RouteState()
-
-    def ping_request(self):
-        """Factory method that creates an instance of PingRequest
-
-        Return: PingRequest
-        """
-        return PingRequest()
-
-    def ping_response(self):
-        """Factory method that creates an instance of PingResponse
-
-        Return: PingResponse
-        """
-        return PingResponse()
-
-    def protocol_state(self):
-        """Factory method that creates an instance of ProtocolState
-
-        Return: ProtocolState
-        """
-        return ProtocolState()
-
-    def device_state(self):
-        """Factory method that creates an instance of DeviceState
-
-        Return: DeviceState
-        """
-        return DeviceState()
 
     def metrics_request(self):
         """Factory method that creates an instance of MetricsRequest
@@ -109775,6 +109594,7 @@ class HttpApi(Api):
             "/config",
             payload=payload,
             return_object=self.warning(),
+            request_class=Config,
         )
 
     def get_config(self):
@@ -109805,6 +109625,7 @@ class HttpApi(Api):
             "/config",
             payload=payload,
             return_object=self.warning(),
+            request_class=ConfigUpdate,
         )
 
     def set_control_state(self, payload):
@@ -109820,6 +109641,7 @@ class HttpApi(Api):
             "/control/state",
             payload=payload,
             return_object=self.warning(),
+            request_class=ControlState,
         )
 
     def set_control_action(self, payload):
@@ -109835,150 +109657,7 @@ class HttpApi(Api):
             "/control/action",
             payload=payload,
             return_object=self.control_action_response(),
-        )
-
-    def set_transmit_state(self, payload):
-        """POST /control/transmit
-
-        Deprecated: Please use `set_control_state` with `traffic.flow_transmit` choice instead. Deprecated: Please use `set_control_state` with `traffic.flow_transmit` choice instead. Updates the state of configuration resources on the traffic generator.. The Response.Warnings in the Success response is available for implementers to disclose additional information about state change including any implicit changes that are outside the scope of the state change.
-
-        Return: warning
-        """
-        self.add_warnings(
-            "set_transmit_state api is deprecated, Please use `set_control_state` with `traffic.flow_transmit` choice instead"
-        )
-        self._do_version_check_once()
-        return self._transport.send_recv(
-            "post",
-            "/control/transmit",
-            payload=payload,
-            return_object=self.warning(),
-        )
-
-    def set_link_state(self, payload):
-        """POST /control/link
-
-        Deprecated: Please use `set_control_state` with `port.link` choice instead. Deprecated: Please use `set_control_state` with `port.link` choice instead. Updates the state of configuration resources on the traffic generator.
-
-        Return: warning
-        """
-        self.add_warnings(
-            "set_link_state api is deprecated, Please use `set_control_state` with `port.link` choice instead"
-        )
-        self._do_version_check_once()
-        return self._transport.send_recv(
-            "post",
-            "/control/link",
-            payload=payload,
-            return_object=self.warning(),
-        )
-
-    def set_capture_state(self, payload):
-        """POST /control/capture
-
-        Deprecated: Please use `set_control_state` with `port.capture` choice instead. Deprecated: Please use `set_control_state` with `port.capture` choice instead. Updates the state of configuration resources on the traffic generator.
-
-        Return: warning
-        """
-        self.add_warnings(
-            "set_capture_state api is deprecated, Please use `set_control_state` with `port.capture` choice instead"
-        )
-        self._do_version_check_once()
-        return self._transport.send_recv(
-            "post",
-            "/control/capture",
-            payload=payload,
-            return_object=self.warning(),
-        )
-
-    def update_flows(self, payload):
-        """POST /control/flows
-
-        Deprecated: Please use `update_config` with `flow` choice instead. Deprecated: Please use `update_config` with `flow` choice instead. Updates flow properties without disruption of transmit state.
-
-        Return: config
-        """
-        self.add_warnings(
-            "update_flows api is deprecated, Please use `update_config` with `flow` choice instead"
-        )
-        self._do_version_check_once()
-        return self._transport.send_recv(
-            "post",
-            "/control/flows",
-            payload=payload,
-            return_object=self.config(),
-        )
-
-    def set_route_state(self, payload):
-        """POST /control/routes
-
-        Deprecated: Please use `set_control_state` with `protocol.route` choice instead. Deprecated: Please use `set_control_state` with `protocol.route` choice instead. Updates the state of configuration resources on the traffic generator.
-
-        Return: warning
-        """
-        self.add_warnings(
-            "set_route_state api is deprecated, Please use `set_control_state` with `protocol.route` choice instead"
-        )
-        self._do_version_check_once()
-        return self._transport.send_recv(
-            "post",
-            "/control/routes",
-            payload=payload,
-            return_object=self.warning(),
-        )
-
-    def send_ping(self, payload):
-        """POST /control/ping
-
-        Deprecated: Please use `set_control_action` with `protocol.ipv*.ping` choice instead. Deprecated: Please use `set_control_action` with `protocol.ipv*.ping` choice instead. API to send an IPv4 and/or IPv6 ICMP Echo Request(s) between endpoints. For each endpoint ping packet will be sent and API shall wait for ping response to either be successful or timeout. The API wait timeout for each request is 300ms.
-
-        Return: ping_response
-        """
-        self.add_warnings(
-            "send_ping api is deprecated, Please use `set_control_action` with `protocol.ipv*.ping` choice instead"
-        )
-        self._do_version_check_once()
-        return self._transport.send_recv(
-            "post",
-            "/control/ping",
-            payload=payload,
-            return_object=self.ping_response(),
-        )
-
-    def set_protocol_state(self, payload):
-        """POST /control/protocols
-
-        Deprecated: Please use `set_control_state` with `protocol.all` choice instead. Deprecated: Please use `set_control_state` with `protocol.all` choice instead. Sets all configured protocols to `start` or `stop` state.
-
-        Return: warning
-        """
-        self.add_warnings(
-            "set_protocol_state api is deprecated, Please use `set_control_state` with `protocol.all` choice instead"
-        )
-        self._do_version_check_once()
-        return self._transport.send_recv(
-            "post",
-            "/control/protocols",
-            payload=payload,
-            return_object=self.warning(),
-        )
-
-    def set_device_state(self, payload):
-        """POST /control/devices
-
-        Deprecated: Please use `set_control_state` with `protocol` choice instead. Deprecated: Please use `set_control_state` with `protocol` choice instead. Set specific state/actions on device configuration resources on the traffic generator.
-
-        Return: warning
-        """
-        self.add_warnings(
-            "set_device_state api is deprecated, Please use `set_control_state` with `protocol` choice instead"
-        )
-        self._do_version_check_once()
-        return self._transport.send_recv(
-            "post",
-            "/control/devices",
-            payload=payload,
-            return_object=self.warning(),
+            request_class=ControlAction,
         )
 
     def get_metrics(self, payload):
@@ -109994,6 +109673,7 @@ class HttpApi(Api):
             "/monitor/metrics",
             payload=payload,
             return_object=self.metrics_response(),
+            request_class=MetricsRequest,
         )
 
     def get_states(self, payload):
@@ -110009,6 +109689,7 @@ class HttpApi(Api):
             "/monitor/states",
             payload=payload,
             return_object=self.states_response(),
+            request_class=StatesRequest,
         )
 
     def get_capture(self, payload):
@@ -110024,6 +109705,7 @@ class HttpApi(Api):
             "/monitor/capture",
             payload=payload,
             return_object=None,
+            request_class=CaptureRequest,
         )
 
     def get_version(self):
@@ -110092,6 +109774,8 @@ class GrpcApi(Api):
             payload = payload.serialize()
         if isinstance(payload, dict):
             payload = json.dumps(payload)
+        elif isinstance(payload, (str, unicode)):
+            payload = json.dumps(yaml.safe_load(payload))
         return payload
 
     def _raise_exception(self, grpc_error):
@@ -110216,182 +109900,6 @@ class GrpcApi(Api):
                     including_default_value_fields=True,
                 )
             return self.control_action_response().deserialize(result)
-
-    def set_transmit_state(self, payload):
-        self.add_warnings(
-            "set_transmit_state api is deprecated, Please use `set_control_state` with `traffic.flow_transmit` choice instead"
-        )
-        pb_obj = json_format.Parse(
-            self._serialize_payload(payload), pb2.TransmitState()
-        )
-        self._do_version_check_once()
-        req_obj = pb2.SetTransmitStateRequest(transmit_state=pb_obj)
-        stub = self._get_stub()
-        try:
-            res_obj = stub.SetTransmitState(req_obj, timeout=self._request_timeout)
-        except grpc.RpcError as grpc_error:
-            self._raise_exception(grpc_error)
-        response = json_format.MessageToDict(res_obj, preserving_proto_field_name=True)
-        result = response.get("warning")
-        if result is not None:
-            if len(result) == 0:
-                result = json_format.MessageToDict(
-                    res_obj.warning,
-                    preserving_proto_field_name=True,
-                    including_default_value_fields=True,
-                )
-            return self.warning().deserialize(result)
-
-    def set_link_state(self, payload):
-        self.add_warnings(
-            "set_link_state api is deprecated, Please use `set_control_state` with `port.link` choice instead"
-        )
-        pb_obj = json_format.Parse(self._serialize_payload(payload), pb2.LinkState())
-        self._do_version_check_once()
-        req_obj = pb2.SetLinkStateRequest(link_state=pb_obj)
-        stub = self._get_stub()
-        try:
-            res_obj = stub.SetLinkState(req_obj, timeout=self._request_timeout)
-        except grpc.RpcError as grpc_error:
-            self._raise_exception(grpc_error)
-        response = json_format.MessageToDict(res_obj, preserving_proto_field_name=True)
-        result = response.get("warning")
-        if result is not None:
-            if len(result) == 0:
-                result = json_format.MessageToDict(
-                    res_obj.warning,
-                    preserving_proto_field_name=True,
-                    including_default_value_fields=True,
-                )
-            return self.warning().deserialize(result)
-
-    def set_capture_state(self, payload):
-        self.add_warnings(
-            "set_capture_state api is deprecated, Please use `set_control_state` with `port.capture` choice instead"
-        )
-        pb_obj = json_format.Parse(self._serialize_payload(payload), pb2.CaptureState())
-        self._do_version_check_once()
-        req_obj = pb2.SetCaptureStateRequest(capture_state=pb_obj)
-        stub = self._get_stub()
-        try:
-            res_obj = stub.SetCaptureState(req_obj, timeout=self._request_timeout)
-        except grpc.RpcError as grpc_error:
-            self._raise_exception(grpc_error)
-        response = json_format.MessageToDict(res_obj, preserving_proto_field_name=True)
-        result = response.get("warning")
-        if result is not None:
-            if len(result) == 0:
-                result = json_format.MessageToDict(
-                    res_obj.warning,
-                    preserving_proto_field_name=True,
-                    including_default_value_fields=True,
-                )
-            return self.warning().deserialize(result)
-
-    def update_flows(self, payload):
-        self.add_warnings(
-            "update_flows api is deprecated, Please use `update_config` with `flow` choice instead"
-        )
-        pb_obj = json_format.Parse(self._serialize_payload(payload), pb2.FlowsUpdate())
-        self._do_version_check_once()
-        req_obj = pb2.UpdateFlowsRequest(flows_update=pb_obj)
-        stub = self._get_stub()
-        try:
-            res_obj = stub.UpdateFlows(req_obj, timeout=self._request_timeout)
-        except grpc.RpcError as grpc_error:
-            self._raise_exception(grpc_error)
-        response = json_format.MessageToDict(res_obj, preserving_proto_field_name=True)
-        result = response.get("config")
-        if result is not None:
-            return self.config().deserialize(result)
-
-    def set_route_state(self, payload):
-        self.add_warnings(
-            "set_route_state api is deprecated, Please use `set_control_state` with `protocol.route` choice instead"
-        )
-        pb_obj = json_format.Parse(self._serialize_payload(payload), pb2.RouteState())
-        self._do_version_check_once()
-        req_obj = pb2.SetRouteStateRequest(route_state=pb_obj)
-        stub = self._get_stub()
-        try:
-            res_obj = stub.SetRouteState(req_obj, timeout=self._request_timeout)
-        except grpc.RpcError as grpc_error:
-            self._raise_exception(grpc_error)
-        response = json_format.MessageToDict(res_obj, preserving_proto_field_name=True)
-        result = response.get("warning")
-        if result is not None:
-            if len(result) == 0:
-                result = json_format.MessageToDict(
-                    res_obj.warning,
-                    preserving_proto_field_name=True,
-                    including_default_value_fields=True,
-                )
-            return self.warning().deserialize(result)
-
-    def send_ping(self, payload):
-        self.add_warnings(
-            "send_ping api is deprecated, Please use `set_control_action` with `protocol.ipv*.ping` choice instead"
-        )
-        pb_obj = json_format.Parse(self._serialize_payload(payload), pb2.PingRequest())
-        self._do_version_check_once()
-        req_obj = pb2.SendPingRequest(ping_request=pb_obj)
-        stub = self._get_stub()
-        try:
-            res_obj = stub.SendPing(req_obj, timeout=self._request_timeout)
-        except grpc.RpcError as grpc_error:
-            self._raise_exception(grpc_error)
-        response = json_format.MessageToDict(res_obj, preserving_proto_field_name=True)
-        result = response.get("ping_response")
-        if result is not None:
-            return self.ping_response().deserialize(result)
-
-    def set_protocol_state(self, payload):
-        self.add_warnings(
-            "set_protocol_state api is deprecated, Please use `set_control_state` with `protocol.all` choice instead"
-        )
-        pb_obj = json_format.Parse(
-            self._serialize_payload(payload), pb2.ProtocolState()
-        )
-        self._do_version_check_once()
-        req_obj = pb2.SetProtocolStateRequest(protocol_state=pb_obj)
-        stub = self._get_stub()
-        try:
-            res_obj = stub.SetProtocolState(req_obj, timeout=self._request_timeout)
-        except grpc.RpcError as grpc_error:
-            self._raise_exception(grpc_error)
-        response = json_format.MessageToDict(res_obj, preserving_proto_field_name=True)
-        result = response.get("warning")
-        if result is not None:
-            if len(result) == 0:
-                result = json_format.MessageToDict(
-                    res_obj.warning,
-                    preserving_proto_field_name=True,
-                    including_default_value_fields=True,
-                )
-            return self.warning().deserialize(result)
-
-    def set_device_state(self, payload):
-        self.add_warnings(
-            "set_device_state api is deprecated, Please use `set_control_state` with `protocol` choice instead"
-        )
-        pb_obj = json_format.Parse(self._serialize_payload(payload), pb2.DeviceState())
-        self._do_version_check_once()
-        req_obj = pb2.SetDeviceStateRequest(device_state=pb_obj)
-        stub = self._get_stub()
-        try:
-            res_obj = stub.SetDeviceState(req_obj, timeout=self._request_timeout)
-        except grpc.RpcError as grpc_error:
-            self._raise_exception(grpc_error)
-        response = json_format.MessageToDict(res_obj, preserving_proto_field_name=True)
-        result = response.get("warning")
-        if result is not None:
-            if len(result) == 0:
-                result = json_format.MessageToDict(
-                    res_obj.warning,
-                    preserving_proto_field_name=True,
-                    including_default_value_fields=True,
-                )
-            return self.warning().deserialize(result)
 
     def get_metrics(self, payload):
         pb_obj = json_format.Parse(

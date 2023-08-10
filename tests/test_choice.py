@@ -14,8 +14,8 @@ def test_choice(api):
     p1, p2 = config.ports.port(name='p1').port(name='p2')
     d1 = config.devices.device(name='d1')[-1]
     eth1, eth2 = d1.ethernets.ethernet().ethernet()
-    eth1.port_name = p1.name
-    eth2.port_name = p2.name
+    eth1.connection.port_name = p1.name
+    eth2.connection.port_name = p2.name
     eth1.name, eth2.name = 'eth1', 'eth2'
     eth1.mac, eth2.mac = '00:00:00:00:00:aa', '00:00:00:00:00:bb'
     flow = config.flows.flow(name='f')[-1]
