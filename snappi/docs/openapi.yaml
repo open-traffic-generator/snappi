@@ -853,6 +853,7 @@ components:
           description: |-
             The network prefix.
           type: integer
+          format: uint32
           minimum: 1
           maximum: 128
           default: 64
@@ -1012,6 +1013,7 @@ components:
           description: |-
             Set the maximum transmission unit size if supported.
           type: integer
+          format: uint32
           minimum: 64
           maximum: 9000
           default: 1500
@@ -1150,7 +1152,7 @@ components:
             The valid values are null, 0 - 7.
             A null value indicates there is no setting for this pfc class.
           type: integer
-          minimum: 0
+          format: uint32
           maximum: 7
           default: 0
           x-field-uid: 2
@@ -1159,7 +1161,7 @@ components:
             The valid values are null, 0 - 7.
             A null value indicates there is no setting for this pfc class.
           type: integer
-          minimum: 0
+          format: uint32
           maximum: 7
           default: 1
           x-field-uid: 3
@@ -1168,7 +1170,7 @@ components:
             The valid values are null, 0 - 7.
             A null value indicates there is no setting for this pfc class.
           type: integer
-          minimum: 0
+          format: uint32
           maximum: 7
           default: 2
           x-field-uid: 4
@@ -1177,7 +1179,7 @@ components:
             The valid values are null, 0 - 7.
             A null value indicates there is no setting for this pfc class.
           type: integer
-          minimum: 0
+          format: uint32
           maximum: 7
           default: 3
           x-field-uid: 5
@@ -1186,7 +1188,7 @@ components:
             The valid values are null, 0 - 7.
             A null value indicates there is no setting for this pfc class.
           type: integer
-          minimum: 0
+          format: uint32
           maximum: 7
           default: 4
           x-field-uid: 6
@@ -1195,7 +1197,7 @@ components:
             The valid values are null, 0 - 7.
             A null value indicates there is no setting for this pfc class.
           type: integer
-          minimum: 0
+          format: uint32
           maximum: 7
           default: 5
           x-field-uid: 7
@@ -1204,7 +1206,7 @@ components:
             The valid values are null, 0 - 7.
             A null value indicates there is no setting for this pfc class.
           type: integer
-          minimum: 0
+          format: uint32
           maximum: 7
           default: 6
           x-field-uid: 8
@@ -1213,16 +1215,16 @@ components:
             The valid values are null, 0 - 7.
             A null value indicates there is no setting for this pfc class.
           type: integer
-          minimum: 0
+          format: uint32
           maximum: 7
           default: 7
           x-field-uid: 9
     Capture:
       x-status:
         status: under_review
-        information: Information TBD
+        information: There may be changes in filter configuration
       description: |-
-        Under Review: Information TBD
+        Under Review: There may be changes in filter configuration
 
         Configuration for capture settings.
       type: object
@@ -6696,14 +6698,15 @@ components:
           description: |-
             Offset in bits relative to start of corresponding header field
           type: integer
+          format: uint32
           default: 0
-          minimum: 0
           x-field-uid: 2
         length:
           description: |-
             Number of bits to track for metrics starting from configured offset
             of corresponding header field
           type: integer
+          format: uint32
           default: 1
           minimum: 1
           x-field-uid: 3
@@ -8252,6 +8255,7 @@ components:
               - HTTP 5xx errors: https://datatracker.ietf.org/doc/html/rfc9110#section-15.6
               - gRPC errors: https://grpc.github.io/grpc/core/md_doc_statuscodes.html
           type: integer
+          format: int32
           x-field-uid: 1
         kind:
           description: |-
@@ -9893,7 +9897,7 @@ components:
           description: |-
             Number of times the session went from Up to Down state.
           type: integer
-          format: uint32
+          format: uint64
           x-field-uid: 3
         routes_advertised:
           description: |-
@@ -10099,7 +10103,7 @@ components:
           description: |-
             Number of times the session went from Up to Down state.
           type: integer
-          format: uint32
+          format: uint64
           x-field-uid: 3
         routes_advertised:
           description: |-
@@ -10328,7 +10332,7 @@ components:
           description: |-
             The number of Level 1 Sessions Flap.
           type: integer
-          format: uint32
+          format: uint64
           x-field-uid: 3
         l1_broadcast_hellos_sent:
           description: |-
@@ -10358,7 +10362,7 @@ components:
           description: |-
             Number of Link State Updates (LSPs) in the Level 1 LSP Databases.
           type: integer
-          format: uint32
+          format: uint64
           x-field-uid: 8
         l1_psnp_sent:
           description: |-
@@ -10388,13 +10392,13 @@ components:
           description: |-
             Number of Level 1 (L1) Link State Protocol Data Units (LSPs) sent.
           type: integer
-          format: uint32
+          format: uint64
           x-field-uid: 13
         l1_lsp_received:
           description: |-
             Number of Level 1 (L1) Link State Protocol Data Units (LSPs) received.
           type: integer
-          format: uint32
+          format: uint64
           x-field-uid: 14
         l2_sessions_up:
           description: |-
@@ -10406,7 +10410,7 @@ components:
           description: |-
             The number of Level 2 Sessions Flap.
           type: integer
-          format: uint32
+          format: uint64
           x-field-uid: 16
         l2_broadcast_hellos_sent:
           description: |-
@@ -10436,7 +10440,7 @@ components:
           description: |-
             Number of Link State Updates (LSPs) in the Level 2 LSP Databases.
           type: integer
-          format: uint32
+          format: uint64
           x-field-uid: 21
         l2_psnp_sent:
           description: |-
@@ -10466,13 +10470,13 @@ components:
           description: |-
             Number of Level 2 (L2) Link State Protocol Data Units (LSPs) sent.
           type: integer
-          format: uint32
+          format: uint64
           x-field-uid: 26
         l2_lsp_received:
           description: |-
             Number of Level 2 (L2) Link State Protocol Data Units (LSPs) received.
           type: integer
-          format: uint32
+          format: uint64
           x-field-uid: 27
     Lag.Metrics.Request:
       description: |-
@@ -10560,7 +10564,7 @@ components:
           description: |-
             The number of LAG member ports up.
           type: integer
-          format: uint64
+          format: uint32
           x-field-uid: 3
         frames_tx:
           description: |-
@@ -11052,7 +11056,7 @@ components:
           description: |-
             The number of times an LSP went from up to down state either because it timed out while waiting for Refreshes or  a PathTear or ResvTear message was received which caused the LSP to flap.
           type: integer
-          format: uint32
+          format: uint64
           x-field-uid: 5
         paths_tx:
           description: |-
@@ -11834,7 +11838,7 @@ components:
           description: |-
             Remaining lifetime in seconds before LSP expires.
           type: integer
-          format: uint64
+          format: uint32
           x-field-uid: 3
         sequence_number:
           description: |-
@@ -12317,13 +12321,13 @@ components:
           description: |-
             Age since discovery in seconds.
           type: integer
-          format: uint64
+          format: uint32
           x-field-uid: 7
         last_update:
           description: |-
             Seconds since last update received.
           type: integer
-          format: uint64
+          format: uint32
           x-field-uid: 8
         ttl:
           description: |-

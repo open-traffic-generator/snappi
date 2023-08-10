@@ -2409,7 +2409,7 @@ class Layer1(OpenApiObject):
         "promiscuous": {"type": bool},
         "mtu": {
             "type": int,
-            "format": "int32",
+            "format": "uint32",
             "minimum": 64,
             "maximum": 9000,
         },
@@ -3017,50 +3017,42 @@ class Layer1Ieee8021qbb(OpenApiObject):
         },
         "pfc_class_0": {
             "type": int,
-            "format": "int32",
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 7,
         },
         "pfc_class_1": {
             "type": int,
-            "format": "int32",
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 7,
         },
         "pfc_class_2": {
             "type": int,
-            "format": "int32",
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 7,
         },
         "pfc_class_3": {
             "type": int,
-            "format": "int32",
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 7,
         },
         "pfc_class_4": {
             "type": int,
-            "format": "int32",
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 7,
         },
         "pfc_class_5": {
             "type": int,
-            "format": "int32",
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 7,
         },
         "pfc_class_6": {
             "type": int,
-            "format": "int32",
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 7,
         },
         "pfc_class_7": {
             "type": int,
-            "format": "int32",
-            "minimum": 0,
+            "format": "uint32",
             "maximum": 7,
         },
     }  # type: Dict[str, str]
@@ -3459,7 +3451,7 @@ class Capture(OpenApiObject):
     PCAPNG = "pcapng"  # type: str
 
     _STATUS = {
-        "self": "Capture is under_review, Information TBD",
+        "self": "Capture is under_review, There may be changes in filter configuration",
     }  # type: Dict[str, Union(type)]
 
     def __init__(
@@ -4590,7 +4582,7 @@ class CaptureIter(OpenApiIter):
         # type: (List[str],bool,int,Union[Literal["pcap"], Literal["pcapng"]],str) -> CaptureIter
         """Factory method that creates an instance of the Capture class
 
-        Under Review: Information TBD. Configuration for capture settings.
+        Under Review: There may be changes in filter configuration. Configuration for capture settings.
 
         Returns: CaptureIter
         """
@@ -4616,7 +4608,7 @@ class CaptureIter(OpenApiIter):
         # type: (List[str],bool,int,Union[Literal["pcap"], Literal["pcapng"]],str) -> Capture
         """Add method that creates and returns an instance of the Capture class
 
-        Under Review: Information TBD. Configuration for capture settings.
+        Under Review: There may be changes in filter configuration. Configuration for capture settings.
 
         Returns: Capture
         """
@@ -5399,7 +5391,7 @@ class DeviceIpv6(OpenApiObject):
         },
         "prefix": {
             "type": int,
-            "format": "int32",
+            "format": "uint32",
             "minimum": 1,
             "maximum": 128,
         },
@@ -24798,12 +24790,11 @@ class FlowCustomMetricTag(OpenApiObject):
         "name": {"type": str},
         "offset": {
             "type": int,
-            "format": "int32",
-            "minimum": 0,
+            "format": "uint32",
         },
         "length": {
             "type": int,
-            "format": "int32",
+            "format": "uint32",
             "minimum": 1,
         },
     }  # type: Dict[str, str]
@@ -97679,7 +97670,7 @@ class Bgpv4Metric(OpenApiObject):
         },
         "session_flap_count": {
             "type": int,
-            "format": "uint32",
+            "format": "uint64",
         },
         "routes_advertised": {
             "type": int,
@@ -98330,7 +98321,7 @@ class Bgpv6Metric(OpenApiObject):
         },
         "session_flap_count": {
             "type": int,
-            "format": "uint32",
+            "format": "uint64",
         },
         "routes_advertised": {
             "type": int,
@@ -98978,7 +98969,7 @@ class IsisMetric(OpenApiObject):
         },
         "l1_session_flap": {
             "type": int,
-            "format": "uint32",
+            "format": "uint64",
         },
         "l1_broadcast_hellos_sent": {
             "type": int,
@@ -98998,7 +98989,7 @@ class IsisMetric(OpenApiObject):
         },
         "l1_database_size": {
             "type": int,
-            "format": "uint32",
+            "format": "uint64",
         },
         "l1_psnp_sent": {
             "type": int,
@@ -99018,11 +99009,11 @@ class IsisMetric(OpenApiObject):
         },
         "l1_lsp_sent": {
             "type": int,
-            "format": "uint32",
+            "format": "uint64",
         },
         "l1_lsp_received": {
             "type": int,
-            "format": "uint32",
+            "format": "uint64",
         },
         "l2_sessions_up": {
             "type": int,
@@ -99030,7 +99021,7 @@ class IsisMetric(OpenApiObject):
         },
         "l2_session_flap": {
             "type": int,
-            "format": "uint32",
+            "format": "uint64",
         },
         "l2_broadcast_hellos_sent": {
             "type": int,
@@ -99050,7 +99041,7 @@ class IsisMetric(OpenApiObject):
         },
         "l2_database_size": {
             "type": int,
-            "format": "uint32",
+            "format": "uint64",
         },
         "l2_psnp_sent": {
             "type": int,
@@ -99070,11 +99061,11 @@ class IsisMetric(OpenApiObject):
         },
         "l2_lsp_sent": {
             "type": int,
-            "format": "uint32",
+            "format": "uint64",
         },
         "l2_lsp_received": {
             "type": int,
-            "format": "uint32",
+            "format": "uint64",
         },
     }  # type: Dict[str, str]
 
@@ -99940,7 +99931,7 @@ class LagMetric(OpenApiObject):
         },
         "member_ports_up": {
             "type": int,
-            "format": "uint64",
+            "format": "uint32",
         },
         "frames_tx": {
             "type": int,
@@ -101327,7 +101318,7 @@ class RsvpMetric(OpenApiObject):
         },
         "lsp_flap_count": {
             "type": int,
-            "format": "uint32",
+            "format": "uint64",
         },
         "paths_tx": {
             "type": int,
@@ -105125,7 +105116,7 @@ class IsisLspState(OpenApiObject):
         },
         "remaining_lifetime": {
             "type": int,
-            "format": "uint64",
+            "format": "uint32",
         },
         "sequence_number": {
             "type": int,
@@ -107410,11 +107401,11 @@ class LldpNeighborsState(OpenApiObject):
         "neighbor_id": {"type": str},
         "age": {
             "type": int,
-            "format": "uint64",
+            "format": "uint32",
         },
         "last_update": {
             "type": int,
-            "format": "uint64",
+            "format": "uint32",
         },
         "ttl": {
             "type": int,
