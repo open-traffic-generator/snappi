@@ -172,7 +172,7 @@ func TestTransmitStateIncorrectFormat(t *testing.T) {
 			"e_b" : 2
 	    }`
 
-	object := gosnappi.NewTransmitState()
+	object := gosnappi.NewControlState().Traffic().FlowTransmit()
 	assert.NotNil(t, object.FromYaml(incorrect_format))
 	assert.NotNil(t, object.FromJson(incorrect_format))
 	assert.NotNil(t, object.FromPbText(incorrect_format))
@@ -189,7 +189,7 @@ func TestLinkStateIncorrectFormat(t *testing.T) {
 			"e_b" : 2
 	    }`
 
-	object := gosnappi.NewLinkState()
+	object := gosnappi.NewControlState().Port().Link()
 	assert.NotNil(t, object.FromYaml(incorrect_format))
 	assert.NotNil(t, object.FromJson(incorrect_format))
 	assert.NotNil(t, object.FromPbText(incorrect_format))
@@ -206,7 +206,7 @@ func TestCaptureStateIncorrectFormat(t *testing.T) {
 			"e_b" : 2
 	    }`
 
-	object := gosnappi.NewCaptureState()
+	object := gosnappi.NewControlState().Port().Capture()
 	assert.NotNil(t, object.FromYaml(incorrect_format))
 	assert.NotNil(t, object.FromJson(incorrect_format))
 	assert.NotNil(t, object.FromPbText(incorrect_format))
@@ -223,7 +223,7 @@ func TestFlowsUpdateIncorrectFormat(t *testing.T) {
 			"e_b" : 2
 	    }`
 
-	object := gosnappi.NewFlowsUpdate()
+	object := gosnappi.NewControlState().Traffic().FlowTransmit()
 	assert.NotNil(t, object.FromYaml(incorrect_format))
 	assert.NotNil(t, object.FromJson(incorrect_format))
 	assert.NotNil(t, object.FromPbText(incorrect_format))
@@ -240,7 +240,7 @@ func TestRouteStateIncorrectFormat(t *testing.T) {
 			"e_b" : 2
 	    }`
 
-	object := gosnappi.NewRouteState()
+	object := gosnappi.NewControlState().Protocol().Route()
 	assert.NotNil(t, object.FromYaml(incorrect_format))
 	assert.NotNil(t, object.FromJson(incorrect_format))
 	assert.NotNil(t, object.FromPbText(incorrect_format))
@@ -257,7 +257,7 @@ func TestPingRequestIncorrectFormat(t *testing.T) {
 			"e_b" : 2
 	    }`
 
-	object := gosnappi.NewPingRequest()
+	object := gosnappi.NewControlAction().Protocol().Ipv4().Ping()
 	assert.NotNil(t, object.FromYaml(incorrect_format))
 	assert.NotNil(t, object.FromJson(incorrect_format))
 	assert.NotNil(t, object.FromPbText(incorrect_format))
@@ -274,7 +274,7 @@ func TestPingIncorrectFormat(t *testing.T) {
 			"e_b" : 2
 	    }`
 
-	object := gosnappi.NewPing()
+	object := gosnappi.NewControlAction().Protocol().Ipv6().Ping()
 	assert.NotNil(t, object.FromYaml(incorrect_format))
 	assert.NotNil(t, object.FromJson(incorrect_format))
 	assert.NotNil(t, object.FromPbText(incorrect_format))
@@ -291,7 +291,7 @@ func TestProtocolStateIncorrectFormat(t *testing.T) {
 			"e_b" : 2
 	    }`
 
-	object := gosnappi.NewProtocolState()
+	object := gosnappi.NewControlState().Protocol().All()
 	assert.NotNil(t, object.FromYaml(incorrect_format))
 	assert.NotNil(t, object.FromJson(incorrect_format))
 	assert.NotNil(t, object.FromPbText(incorrect_format))
@@ -546,7 +546,7 @@ func TestSetTransmitStateResponseIncorrectFormat(t *testing.T) {
 			"e_b" : 2
 	    }`
 
-	object := gosnappi.NewSetTransmitStateResponse()
+	object := gosnappi.NewSetControlStateResponse()
 	assert.NotNil(t, object.FromYaml(incorrect_format))
 	assert.NotNil(t, object.FromJson(incorrect_format))
 	assert.NotNil(t, object.FromPbText(incorrect_format))
@@ -563,7 +563,7 @@ func TestSetLinkStateResponseIncorrectFormat(t *testing.T) {
 			"e_b" : 2
 	    }`
 
-	object := gosnappi.NewSetLinkStateResponse()
+	object := gosnappi.NewSetControlStateResponse()
 	assert.NotNil(t, object.FromYaml(incorrect_format))
 	assert.NotNil(t, object.FromJson(incorrect_format))
 	assert.NotNil(t, object.FromPbText(incorrect_format))
@@ -580,7 +580,7 @@ func TestSetCaptureStateResponseIncorrectFormat(t *testing.T) {
 			"e_b" : 2
 	    }`
 
-	object := gosnappi.NewSetCaptureStateResponse()
+	object := gosnappi.NewSetControlStateResponse()
 	assert.NotNil(t, object.FromYaml(incorrect_format))
 	assert.NotNil(t, object.FromJson(incorrect_format))
 	assert.NotNil(t, object.FromPbText(incorrect_format))
@@ -597,7 +597,7 @@ func TestUpdateFlowsResponseIncorrectFormat(t *testing.T) {
 			"e_b" : 2
 	    }`
 
-	object := gosnappi.NewUpdateFlowsResponse()
+	object := gosnappi.NewSetControlStateResponse()
 	assert.NotNil(t, object.FromYaml(incorrect_format))
 	assert.NotNil(t, object.FromJson(incorrect_format))
 	assert.NotNil(t, object.FromPbText(incorrect_format))
@@ -614,7 +614,7 @@ func TestSetRouteStateResponseIncorrectFormat(t *testing.T) {
 			"e_b" : 2
 	    }`
 
-	object := gosnappi.NewSetRouteStateResponse()
+	object := gosnappi.NewSetControlStateResponse()
 	assert.NotNil(t, object.FromYaml(incorrect_format))
 	assert.NotNil(t, object.FromJson(incorrect_format))
 	assert.NotNil(t, object.FromPbText(incorrect_format))
@@ -631,7 +631,7 @@ func TestSendPingResponseIncorrectFormat(t *testing.T) {
 			"e_b" : 2
 	    }`
 
-	object := gosnappi.NewSendPingResponse()
+	object := gosnappi.NewControlActionResponse()
 	assert.NotNil(t, object.FromYaml(incorrect_format))
 	assert.NotNil(t, object.FromJson(incorrect_format))
 	assert.NotNil(t, object.FromPbText(incorrect_format))
@@ -648,7 +648,7 @@ func TestPingResponseIncorrectFormat(t *testing.T) {
 			"e_b" : 2
 	    }`
 
-	object := gosnappi.NewPingResponse()
+	object := gosnappi.NewControlActionResponse()
 	assert.NotNil(t, object.FromYaml(incorrect_format))
 	assert.NotNil(t, object.FromJson(incorrect_format))
 	assert.NotNil(t, object.FromPbText(incorrect_format))
@@ -665,7 +665,7 @@ func TestSetProtocolStateResponseIncorrectFormat(t *testing.T) {
 			"e_b" : 2
 	    }`
 
-	object := gosnappi.NewSetProtocolStateResponse()
+	object := gosnappi.NewControlActionResponse()
 	assert.NotNil(t, object.FromYaml(incorrect_format))
 	assert.NotNil(t, object.FromJson(incorrect_format))
 	assert.NotNil(t, object.FromPbText(incorrect_format))
@@ -1090,7 +1090,7 @@ func TestPingIpv4IncorrectFormat(t *testing.T) {
 			"e_b" : 2
 	    }`
 
-	object := gosnappi.NewPingIpv4()
+	object := gosnappi.NewControlActionResponse()
 	assert.NotNil(t, object.FromYaml(incorrect_format))
 	assert.NotNil(t, object.FromJson(incorrect_format))
 	assert.NotNil(t, object.FromPbText(incorrect_format))
@@ -1107,7 +1107,7 @@ func TestPingIpv6IncorrectFormat(t *testing.T) {
 			"e_b" : 2
 	    }`
 
-	object := gosnappi.NewPingIpv6()
+	object := gosnappi.NewControlActionResponse()
 	assert.NotNil(t, object.FromYaml(incorrect_format))
 	assert.NotNil(t, object.FromJson(incorrect_format))
 	assert.NotNil(t, object.FromPbText(incorrect_format))
@@ -1141,7 +1141,7 @@ func TestResponseIncorrectFormat(t *testing.T) {
 			"e_b" : 2
 	    }`
 
-	object := gosnappi.NewResponse()
+	object := gosnappi.NewControlActionResponse()
 	assert.NotNil(t, object.FromYaml(incorrect_format))
 	assert.NotNil(t, object.FromJson(incorrect_format))
 	assert.NotNil(t, object.FromPbText(incorrect_format))

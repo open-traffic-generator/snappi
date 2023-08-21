@@ -182,7 +182,7 @@ func TestTransmitStateIncorrectKey(t *testing.T) {
             }
         }`
 
-	object := gosnappi.NewTransmitState()
+	object := gosnappi.NewControlState().Traffic().FlowTransmit()
 	assert.NotNil(t, object.FromYaml(incorrect_key))
 	assert.NotNil(t, object.FromJson(incorrect_key))
 	assert.NotNil(t, object.FromPbText(incorrect_key))
@@ -200,7 +200,7 @@ func TestLinkStateIncorrectKey(t *testing.T) {
             }
         }`
 
-	object := gosnappi.NewLinkState()
+	object := gosnappi.NewControlState().Port().Link()
 	assert.NotNil(t, object.FromYaml(incorrect_key))
 	assert.NotNil(t, object.FromJson(incorrect_key))
 	assert.NotNil(t, object.FromPbText(incorrect_key))
@@ -218,7 +218,7 @@ func TestCaptureStateIncorrectKey(t *testing.T) {
             }
         }`
 
-	object := gosnappi.NewCaptureState()
+	object := gosnappi.NewControlState().Port().Capture()
 	assert.NotNil(t, object.FromYaml(incorrect_key))
 	assert.NotNil(t, object.FromJson(incorrect_key))
 	assert.NotNil(t, object.FromPbText(incorrect_key))
@@ -254,7 +254,7 @@ func TestRouteStateIncorrectKey(t *testing.T) {
             }
         }`
 
-	object := gosnappi.NewRouteState()
+	object := gosnappi.NewControlState().Protocol().Route()
 	assert.NotNil(t, object.FromYaml(incorrect_key))
 	assert.NotNil(t, object.FromJson(incorrect_key))
 	assert.NotNil(t, object.FromPbText(incorrect_key))
@@ -272,7 +272,7 @@ func TestPingRequestIncorrectKey(t *testing.T) {
             }
         }`
 
-	object := gosnappi.NewPingRequest()
+	object := gosnappi.NewControlAction().Protocol().Ipv4().Ping()
 	assert.NotNil(t, object.FromYaml(incorrect_key))
 	assert.NotNil(t, object.FromJson(incorrect_key))
 	assert.NotNil(t, object.FromPbText(incorrect_key))
@@ -290,7 +290,7 @@ func TestPingIncorrectKey(t *testing.T) {
             }
         }`
 
-	object := gosnappi.NewPing()
+	object := gosnappi.NewControlAction().Protocol().Ipv6().Ping()
 	assert.NotNil(t, object.FromYaml(incorrect_key))
 	assert.NotNil(t, object.FromJson(incorrect_key))
 	assert.NotNil(t, object.FromPbText(incorrect_key))
@@ -308,7 +308,7 @@ func TestProtocolStateIncorrectKey(t *testing.T) {
             }
         }`
 
-	object := gosnappi.NewProtocolState()
+	object := gosnappi.NewControlState().Protocol().All()
 	assert.NotNil(t, object.FromYaml(incorrect_key))
 	assert.NotNil(t, object.FromJson(incorrect_key))
 	assert.NotNil(t, object.FromPbText(incorrect_key))
@@ -578,7 +578,7 @@ func TestSetTransmitStateResponseIncorrectKey(t *testing.T) {
             }
         }`
 
-	object := gosnappi.NewSetTransmitStateResponse()
+	object := gosnappi.NewSetControlStateResponse()
 	assert.NotNil(t, object.FromYaml(incorrect_key))
 	assert.NotNil(t, object.FromJson(incorrect_key))
 	assert.NotNil(t, object.FromPbText(incorrect_key))
@@ -596,7 +596,7 @@ func TestSetLinkStateResponseIncorrectKey(t *testing.T) {
             }
         }`
 
-	object := gosnappi.NewSetLinkStateResponse()
+	object := gosnappi.NewSetControlStateResponse()
 	assert.NotNil(t, object.FromYaml(incorrect_key))
 	assert.NotNil(t, object.FromJson(incorrect_key))
 	assert.NotNil(t, object.FromPbText(incorrect_key))
@@ -614,7 +614,7 @@ func TestSetCaptureStateResponseIncorrectKey(t *testing.T) {
             }
         }`
 
-	object := gosnappi.NewSetCaptureStateResponse()
+	object := gosnappi.NewSetControlStateResponse()
 	assert.NotNil(t, object.FromYaml(incorrect_key))
 	assert.NotNil(t, object.FromJson(incorrect_key))
 	assert.NotNil(t, object.FromPbText(incorrect_key))
@@ -632,7 +632,7 @@ func TestUpdateFlowsResponseIncorrectKey(t *testing.T) {
             }
         }`
 
-	object := gosnappi.NewUpdateFlowsResponse()
+	object := gosnappi.NewSetControlStateResponse()
 	assert.NotNil(t, object.FromYaml(incorrect_key))
 	assert.NotNil(t, object.FromJson(incorrect_key))
 	assert.NotNil(t, object.FromPbText(incorrect_key))
@@ -650,7 +650,7 @@ func TestSetRouteStateResponseIncorrectKey(t *testing.T) {
             }
         }`
 
-	object := gosnappi.NewSetRouteStateResponse()
+	object := gosnappi.NewSetControlStateResponse()
 	assert.NotNil(t, object.FromYaml(incorrect_key))
 	assert.NotNil(t, object.FromJson(incorrect_key))
 	assert.NotNil(t, object.FromPbText(incorrect_key))
@@ -668,7 +668,7 @@ func TestSendPingResponseIncorrectKey(t *testing.T) {
             }
         }`
 
-	object := gosnappi.NewSendPingResponse()
+	object := gosnappi.NewControlActionResponse()
 	assert.NotNil(t, object.FromYaml(incorrect_key))
 	assert.NotNil(t, object.FromJson(incorrect_key))
 	assert.NotNil(t, object.FromPbText(incorrect_key))
@@ -686,7 +686,7 @@ func TestPingResponseIncorrectKey(t *testing.T) {
             }
         }`
 
-	object := gosnappi.NewPingResponse()
+	object := gosnappi.NewControlActionResponse()
 	assert.NotNil(t, object.FromYaml(incorrect_key))
 	assert.NotNil(t, object.FromJson(incorrect_key))
 	assert.NotNil(t, object.FromPbText(incorrect_key))
@@ -704,7 +704,7 @@ func TestSetProtocolStateResponseIncorrectKey(t *testing.T) {
             }
         }`
 
-	object := gosnappi.NewSetProtocolStateResponse()
+	object := gosnappi.NewControlActionResponse()
 	assert.NotNil(t, object.FromYaml(incorrect_key))
 	assert.NotNil(t, object.FromJson(incorrect_key))
 	assert.NotNil(t, object.FromPbText(incorrect_key))
@@ -1154,7 +1154,7 @@ func TestPingIpv4IncorrectKey(t *testing.T) {
             }
         }`
 
-	object := gosnappi.NewPingIpv4()
+	object := gosnappi.NewControlAction().Protocol().Ipv4().Ping()
 	assert.NotNil(t, object.FromYaml(incorrect_key))
 	assert.NotNil(t, object.FromJson(incorrect_key))
 	assert.NotNil(t, object.FromPbText(incorrect_key))
@@ -1172,7 +1172,7 @@ func TestPingIpv6IncorrectKey(t *testing.T) {
             }
         }`
 
-	object := gosnappi.NewPingIpv6()
+	object := gosnappi.NewControlAction().Protocol().Ipv4().Ping()
 	assert.NotNil(t, object.FromYaml(incorrect_key))
 	assert.NotNil(t, object.FromJson(incorrect_key))
 	assert.NotNil(t, object.FromPbText(incorrect_key))
@@ -1208,7 +1208,7 @@ func TestResponseIncorrectKey(t *testing.T) {
             }
         }`
 
-	object := gosnappi.NewResponse()
+	object := gosnappi.NewControlAction()
 	assert.NotNil(t, object.FromYaml(incorrect_key))
 	assert.NotNil(t, object.FromJson(incorrect_key))
 	assert.NotNil(t, object.FromPbText(incorrect_key))

@@ -59,8 +59,10 @@ def b2b_config(api):
         name="Rx Devices"
     )
 
-    tx_device.ethernets.ethernet(port_name=tx_port.name)
-    rx_device.ethernets.ethernet(port_name=rx_port.name)
+    eth1 = tx_device.ethernets.ethernet()[-1]
+    eth1.connection.port_name = tx_port.name
+    eth2 = rx_device.ethernets.ethernet()[-1]
+    eth1.connection.port_name = rx_port.name
 
     tx_device.ethernets[-1].name = "Tx Eth"
     tx_device.ethernets[-1].mac = "00:00:01:00:00:01"

@@ -49,9 +49,10 @@ def test_e2e_port_flow_config(api):
     print(api.get_config())
 
     # start transmit
-    transmit_state = api.transmit_state()
-    transmit_state.state = "start"
-    api.set_transmit_state(transmit_state)
+    control_state = api.control_state()
+    fs = control_state.traffic.flow_transmit
+    fs.state = "start"
+    api.set_control_state(control_state)
 
     # get port metrics
     req = api.metrics_request()
