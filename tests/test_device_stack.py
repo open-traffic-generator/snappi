@@ -8,7 +8,7 @@ def test_device_stack(api):
     p1, p2 = config.ports.port(name='p1').port(name='p2')
     d = config.devices.device(name='d')[-1]
     e = d.ethernets.ethernet()[-1]
-    e.port_name = p1.name
+    e.connection.port_name = p1.name
     e.name = 'e'
     e.mac = '00:01:00:00:00:01'
     i4 = e.ipv4_addresses.ipv4()[-1]

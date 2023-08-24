@@ -138,7 +138,7 @@ func isFlowMetricsDisabled(cfg *otg.Config) []string {
 func (s *server) GetMetrics(ctx context.Context, req *otg.GetMetricsRequest) (*otg.GetMetricsResponse, error) {
 	var resp *otg.GetMetricsResponse
 	var err error
-	var tx int64 = 100
+	var tx uint64 = 100
 	metricsDisabledFlows := isFlowMetricsDisabled(mockConfig)
 	if req.MetricsRequest.Flow != nil {
 		f := &otg.FlowMetric{FramesTx: &tx}
@@ -203,8 +203,8 @@ func (s *server) GetMetrics(ctx context.Context, req *otg.GetMetricsRequest) (*o
 		metrics := []*otg.Bgpv4Metric{}
 
 		for _, name := range someNames {
-			one := int32(1)
-			zero := int32(0)
+			one := uint64(1)
+			zero := uint64(0)
 			up := otg.Bgpv4Metric_SessionState_up
 			metrics = append(metrics, &otg.Bgpv4Metric{
 				Name:               &name,
@@ -224,17 +224,44 @@ func (s *server) GetMetrics(ctx context.Context, req *otg.GetMetricsRequest) (*o
 	return resp, err
 }
 
-func (s *server) SetTransmitState(ctx context.Context, req *otg.SetTransmitStateRequest) (*otg.SetTransmitStateResponse, error) {
-	var resp *otg.SetTransmitStateResponse
+func (s *server) SetControlState(ctx context.Context, req *otg.SetControlStateRequest) (*otg.SetControlStateResponse, error) {
+	switch choice := req.ControlState.Choice; choice {
+	case otg.ControlState_Choice_port:
+		switch portChoice := req.ControlState.Port.Choice; portChoice {
+		case otg.StatePort_Choice_link:
+			return s.SetLinkState(ctx, req)
+		case otg.StatePort_Choice_capture:
+			return s.SetCaptureState(ctx, req)
+		case otg.StatePort_Choice_unspecified:
+			return nil, fmt.Errorf("unspecified choice")
+		}
+	case otg.ControlState_Choice_protocol:
+		switch protocolChoice := req.ControlState.Protocol.Choice; protocolChoice {
+		case otg.StateProtocol_Choice_route:
+			return s.SetRouteState(ctx, req)
+		case otg.StateProtocol_Choice_unspecified:
+			return nil, fmt.Errorf("unspecified choice")
+		}
+	case otg.ControlState_Choice_traffic:
+		return s.SetTransmitState(ctx, req)
+	case otg.ControlState_Choice_unspecified:
+		return nil, fmt.Errorf("unspecified choice")
+	}
+
+	return nil, fmt.Errorf("error in implementation")
+}
+
+func (s *server) SetTransmitState(ctx context.Context, req *otg.SetControlStateRequest) (*otg.SetControlStateResponse, error) {
+	var resp *otg.SetControlStateResponse
 	var err error
 	flowNames := getFlowNames(mockConfig)
-	for _, req_flow := range req.TransmitState.FlowNames {
+	for _, req_flow := range req.ControlState.Traffic.FlowTransmit.FlowNames {
 		res := contains(flowNames, req_flow)
 		if !res {
 			resp = nil
 			err = fmt.Errorf("requested flow is not available in configured flows to start")
 		} else {
-			resp = &otg.SetTransmitStateResponse{
+			resp = &otg.SetControlStateResponse{
 				Warning: &otg.Warning{
 					Warnings: []string{},
 				},
@@ -245,17 +272,17 @@ func (s *server) SetTransmitState(ctx context.Context, req *otg.SetTransmitState
 	return resp, err
 }
 
-func (s *server) SetLinkState(ctx context.Context, req *otg.SetLinkStateRequest) (*otg.SetLinkStateResponse, error) {
-	var resp *otg.SetLinkStateResponse
+func (s *server) SetLinkState(ctx context.Context, req *otg.SetControlStateRequest) (*otg.SetControlStateResponse, error) {
+	var resp *otg.SetControlStateResponse
 	var err error
 	portNames := getPortNames(mockConfig)
-	for _, req_port := range req.LinkState.PortNames {
+	for _, req_port := range req.ControlState.Port.Link.PortNames {
 		res := contains(portNames, req_port)
 		if !res {
 			resp = nil
 			err = fmt.Errorf("requested port is not available in configured ports to do link down")
 		} else {
-			resp = &otg.SetLinkStateResponse{
+			resp = &otg.SetControlStateResponse{
 				Warning: &otg.Warning{
 					Warnings: []string{},
 				},
@@ -266,17 +293,17 @@ func (s *server) SetLinkState(ctx context.Context, req *otg.SetLinkStateRequest)
 	return resp, err
 }
 
-func (s *server) SetCaptureState(ctx context.Context, req *otg.SetCaptureStateRequest) (*otg.SetCaptureStateResponse, error) {
-	var resp *otg.SetCaptureStateResponse
+func (s *server) SetCaptureState(ctx context.Context, req *otg.SetControlStateRequest) (*otg.SetControlStateResponse, error) {
+	var resp *otg.SetControlStateResponse
 	var err error
 	portNames := getPortNames(mockConfig)
-	for _, req_port := range req.CaptureState.PortNames {
+	for _, req_port := range req.ControlState.Port.Capture.PortNames {
 		res := contains(portNames, req_port)
 		if !res {
 			resp = nil
 			err = fmt.Errorf("requested port is not available in configured ports to start capture")
 		} else {
-			resp = &otg.SetCaptureStateResponse{
+			resp = &otg.SetControlStateResponse{
 				Warning: &otg.Warning{
 					Warnings: []string{},
 				},
@@ -287,17 +314,18 @@ func (s *server) SetCaptureState(ctx context.Context, req *otg.SetCaptureStateRe
 	return resp, err
 }
 
-func (s *server) SetRouteState(ctx context.Context, req *otg.SetRouteStateRequest) (*otg.SetRouteStateResponse, error) {
-	var resp *otg.SetRouteStateResponse
+func (s *server) SetRouteState(ctx context.Context, req *otg.SetControlStateRequest) (*otg.SetControlStateResponse, error) {
+	var resp *otg.SetControlStateResponse
 	var err error
+	fmt.Println(req.ControlState.Protocol.Route.Names)
 	routeNames := getRouteNames(mockConfig)
-	for _, req_route := range req.RouteState.Names {
+	for _, req_route := range req.ControlState.Protocol.Route.Names {
 		res := contains(routeNames, req_route)
 		if !res {
 			resp = nil
 			err = fmt.Errorf("requested route is not available in configured routes to advertise")
 		} else {
-			resp = &otg.SetRouteStateResponse{
+			resp = &otg.SetControlStateResponse{
 				Warning: &otg.Warning{
 					Warnings: []string{},
 				},

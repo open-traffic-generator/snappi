@@ -15,7 +15,7 @@ def test_device_factory_methods(api):
     name = 'eth name'
     eth = device.ethernets.ethernet()[-1]
     eth.name = name
-    eth.port_name = "p1"
+    eth.connection.port_name = "p1"
     assert (eth.name == name)
     eth.mac = '00:00:00:00:00:00'
 

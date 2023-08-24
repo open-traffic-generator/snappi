@@ -31,7 +31,7 @@ def get_config():
                     status=200)
 
 
-@app.route('/control/transmit', methods=['POST'])
+@app.route('/control/state', methods=['POST'])
 def set_transmit_state():
     global CONFIG
     return Response(status=200)
