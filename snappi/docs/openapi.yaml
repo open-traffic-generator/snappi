@@ -1226,8 +1226,6 @@ components:
       description: |-
         Under Review: There may be changes in filter configuration
 
-        Under Review: There may be changes in filter configuration
-
         Configuration for capture settings.
       type: object
       required:
@@ -6461,8 +6459,6 @@ components:
           description: |
             Deprecated: This property is deprecated in favor of property rx_names
 
-            Deprecated: This property is deprecated in favor of property rx_names
-
             The unique name of a port that is the intended receive port.
 
             x-constraint:
@@ -6479,26 +6475,6 @@ components:
         rx_names:
           description: |
             Unique name of ports or lags that are intended receive endpoints.
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
-            - /components/schemas/Lag/properties/name
-          x-status:
-            status: deprecated
-            information: This property is deprecated in favor of property rx_names
-          type: string
-          x-constraint:
-          - /components/schemas/Port/properties/name
-          - /components/schemas/Lag/properties/name
-          x-field-uid: 2
-        rx_names:
-          description: |
-            Unique name of ports or lags that are intended receive endpoints.
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
-            - /components/schemas/Lag/properties/name
-
 
             x-constraint:
             - /components/schemas/Port/properties/name
@@ -9353,6 +9329,129 @@ components:
           maximum: 3600
           default: 30
           x-field-uid: 2
+    Action.Protocol.Bgp.ImportRoutes:
+      description: |-
+        Import V4 and V6 routes installed on and exported from a DUT,
+        the format for which could be different across vendors, and convert
+        those to OTG V4 or V6 routes configured across corresponding BGP peers.
+        Following additional details need to be considered:
+        - The exported routes may be provided in variety of file formats
+        - A given file may contain both V4 and V6 route entries
+        - Each route entry shall correspond to `Bgp.V4RouteRange` or `Bgp.V6RouteRange`
+          with exactly one entry of `V4RouteAddress` or `V6RouteAddress` respectively
+        - The name of resultant OTG V4 or V6 routes shall be a constituent of
+          an alias associated with import file, name of corresponding BGP peer
+          and the sequence number corresponding to its order of entry in the file
+      type: object
+      properties:
+        imports:
+          type: array
+          items:
+            $ref: '#/components/schemas/Action.Protocol.Bgp.RouteImport'
+          x-field-uid: 1
+    Action.Protocol.Bgp.RouteImport:
+      description: |-
+        Configuration for specifying the format and corresponding characteristics of V4 or V6 routes to be imported.
+      type: object
+      required:
+      - name
+      properties:
+        name:
+          x-field-uid: 1
+          description: |-
+            Globally unique name of an object. It also serves as the primary key for arrays of objects.
+          type: string
+          pattern: ^[\sa-zA-Z0-9-_()><\[\]]+$
+          x-unique: global
+        routes:
+          $ref: '#/components/schemas/Action.Protocol.Bgp.Routes'
+          x-field-uid: 2
+        targets:
+          description: |-
+            List of import targets (i.e. corresponding V4 or V6 route groups) and
+            associated import properties
+          type: array
+          items:
+            $ref: '#/components/schemas/Action.Protocol.Bgp.RouteImport.Target'
+          x-field-uid: 3
+    Action.Protocol.Bgp.Routes:
+      description: |-
+        Routes to be imported in a given format.
+      type: object
+      properties:
+        choice:
+          description: |-
+            Format of routes to be imported.
+          type: string
+          x-field-uid: 1
+          x-enum:
+            v4_routes:
+              x-field-uid: 1
+            v6_routes:
+              x-field-uid: 2
+            cisco_routes:
+              x-field-uid: 3
+            juniper_routes:
+              x-field-uid: 4
+          enum:
+          - v4_routes
+          - v6_routes
+          - cisco_routes
+          - juniper_routes
+        v4_routes:
+          type: array
+          items:
+            $ref: '#/components/schemas/Bgp.V4RouteRange'
+          x-field-uid: 2
+        v6_routes:
+          type: array
+          items:
+            $ref: '#/components/schemas/Bgp.V6RouteRange'
+          x-field-uid: 3
+        cisco_routes:
+          description: |-
+            Binary containing routes in Cisco format
+          type: string
+          format: binary
+          x-field-uid: 4
+        juniper_routes:
+          description: |-
+            Binary containing routes in Juniper format
+          type: string
+          format: binary
+          x-field-uid: 5
+    Action.Protocol.Bgp.RouteImport.Target:
+      description: |-
+        Import target (i.e. corresponding V4 or V6 route group) and associated import properties
+      type: object
+      required:
+      - route_group_name
+      properties:
+        route_group_name:
+          description: |
+            The names of configured V4 or V6 route group
+
+            x-constraint:
+            - /components/schemas/Bgp.V4RouteGroup/properties/name
+            - /components/schemas/Bgp.V6RouteGroup/properties/name
+          type: string
+          x-constraint:
+          - /components/schemas/Bgp.V4RouteGroup/properties/name
+          - /components/schemas/Bgp.V6RouteGroup/properties/name
+          x-field-uid: 1
+        use_best_routes:
+          description: |-
+            When set to false, all routes available shall be advertised.
+          type: boolean
+          default: true
+          x-field-uid: 2
+        retain_next_hop:
+          description: |-
+            When set to false, the next hop address present against each route to be advertised
+            is replaced with next hop address of the corresponding test port.
+          type: boolean
+          default: false
+          x-field-uid: 3
     Metrics.Request:
       description: |-
         Request to traffic generator for metrics of choice.

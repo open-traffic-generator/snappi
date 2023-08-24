@@ -4582,7 +4582,7 @@ class CaptureIter(OpenApiIter):
         # type: (List[str],bool,int,Union[Literal["pcap"], Literal["pcapng"]],str) -> CaptureIter
         """Factory method that creates an instance of the Capture class
 
-        Under Review: There may be changes in filter configuration. Under Review: There may be changes in filter configuration. Configuration for capture settings.
+        Under Review: There may be changes in filter configuration. Configuration for capture settings.
 
         Returns: CaptureIter
         """
@@ -4608,7 +4608,7 @@ class CaptureIter(OpenApiIter):
         # type: (List[str],bool,int,Union[Literal["pcap"], Literal["pcapng"]],str) -> Capture
         """Add method that creates and returns an instance of the Capture class
 
-        Under Review: There may be changes in filter configuration. Under Review: There may be changes in filter configuration. Configuration for capture settings.
+        Under Review: There may be changes in filter configuration. Configuration for capture settings.
 
         Returns: Capture
         """
@@ -24570,7 +24570,7 @@ class FlowPort(OpenApiObject):
         # type: () -> str
         """rx_name getter
 
-        Deprecated: This property is deprecated in favor of property rx_names. Deprecated: This property is deprecated in favor of property rx_names. The unique name of port that is the intended receive port.. x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name. . x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name.
+        Deprecated: This property is deprecated in favor of property rx_names. The unique name of port that is the intended receive port.. x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name.
 
         Returns: str
         """
@@ -24580,7 +24580,7 @@ class FlowPort(OpenApiObject):
     def rx_name(self, value):
         """rx_name setter
 
-        Deprecated: This property is deprecated in favor of property rx_names. Deprecated: This property is deprecated in favor of property rx_names. The unique name of port that is the intended receive port.. x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name. . x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name.
+        Deprecated: This property is deprecated in favor of property rx_names. The unique name of port that is the intended receive port.. x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name.
 
         value: str
         """
@@ -24591,7 +24591,7 @@ class FlowPort(OpenApiObject):
         # type: () -> List[str]
         """rx_names getter
 
-        Unique name of ports or lags that are intended receive endpoints.. x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name. . x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name.
+        Unique name of ports or lags that are intended receive endpoints.. x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name.
 
         Returns: List[str]
         """
@@ -24601,7 +24601,7 @@ class FlowPort(OpenApiObject):
     def rx_names(self, value):
         """rx_names setter
 
-        Unique name of ports or lags that are intended receive endpoints.. x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name. . x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name.
+        Unique name of ports or lags that are intended receive endpoints.. x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name.
 
         value: List[str]
         """
@@ -94520,17 +94520,12 @@ class ActionProtocolBgpRoutes(OpenApiObject):
             "enum": [
                 "v4_routes",
                 "v6_routes",
-                "openconfig_routes",
                 "cisco_routes",
                 "juniper_routes",
             ],
         },
         "v4_routes": {"type": "BgpV4RouteRangeIter"},
         "v6_routes": {"type": "BgpV6RouteRangeIter"},
-        "openconfig_routes": {
-            "type": str,
-            "format": "binary",
-        },
         "cisco_routes": {
             "type": str,
             "format": "binary",
@@ -94547,23 +94542,16 @@ class ActionProtocolBgpRoutes(OpenApiObject):
 
     V4_ROUTES = "v4_routes"  # type: str
     V6_ROUTES = "v6_routes"  # type: str
-    OPENCONFIG_ROUTES = "openconfig_routes"  # type: str
     CISCO_ROUTES = "cisco_routes"  # type: str
     JUNIPER_ROUTES = "juniper_routes"  # type: str
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
     def __init__(
-        self,
-        parent=None,
-        choice=None,
-        openconfig_routes=None,
-        cisco_routes=None,
-        juniper_routes=None,
+        self, parent=None, choice=None, cisco_routes=None, juniper_routes=None
     ):
         super(ActionProtocolBgpRoutes, self).__init__()
         self._parent = parent
-        self._set_property("openconfig_routes", openconfig_routes)
         self._set_property("cisco_routes", cisco_routes)
         self._set_property("juniper_routes", juniper_routes)
         if (
@@ -94575,19 +94563,19 @@ class ActionProtocolBgpRoutes(OpenApiObject):
         else:
             self._set_property("choice", choice)
 
-    def set(self, openconfig_routes=None, cisco_routes=None, juniper_routes=None):
+    def set(self, cisco_routes=None, juniper_routes=None):
         for property_name, property_value in locals().items():
             if property_name != "self" and property_value is not None:
                 self._set_property(property_name, property_value)
 
     @property
     def choice(self):
-        # type: () -> Union[Literal["cisco_routes"], Literal["juniper_routes"], Literal["openconfig_routes"], Literal["v4_routes"], Literal["v6_routes"]]
+        # type: () -> Union[Literal["cisco_routes"], Literal["juniper_routes"], Literal["v4_routes"], Literal["v6_routes"]]
         """choice getter
 
         Format of routes to be imported.
 
-        Returns: Union[Literal["cisco_routes"], Literal["juniper_routes"], Literal["openconfig_routes"], Literal["v4_routes"], Literal["v6_routes"]]
+        Returns: Union[Literal["cisco_routes"], Literal["juniper_routes"], Literal["v4_routes"], Literal["v6_routes"]]
         """
         return self._get_property("choice")
 
@@ -94597,7 +94585,7 @@ class ActionProtocolBgpRoutes(OpenApiObject):
 
         Format of routes to be imported.
 
-        value: Union[Literal["cisco_routes"], Literal["juniper_routes"], Literal["openconfig_routes"], Literal["v4_routes"], Literal["v6_routes"]]
+        value: Union[Literal["cisco_routes"], Literal["juniper_routes"], Literal["v4_routes"], Literal["v6_routes"]]
         """
         self._set_property("choice", value)
 
@@ -94626,27 +94614,6 @@ class ActionProtocolBgpRoutes(OpenApiObject):
         return self._get_property(
             "v6_routes", BgpV6RouteRangeIter, self._parent, self._choice
         )
-
-    @property
-    def openconfig_routes(self):
-        # type: () -> str
-        """openconfig_routes getter
-
-        Binary containing routes in OpenConfig format
-
-        Returns: str
-        """
-        return self._get_property("openconfig_routes")
-
-    @openconfig_routes.setter
-    def openconfig_routes(self, value):
-        """openconfig_routes setter
-
-        Binary containing routes in OpenConfig format
-
-        value: str
-        """
-        self._set_property("openconfig_routes", value, "openconfig_routes")
 
     @property
     def cisco_routes(self):
@@ -95545,7 +95512,7 @@ class ActionResponseProtocolIpv6PingResponse(OpenApiObject):
         # type: () -> str
         """src_name getter
 
-        Name of source IPv6 interface used for ping.. x-constraint:. /components/schemas/Device.Ipv6/properties/name. . x-constraint:. /components/schemas/Device.Ipv6/properties/name.
+        Name of source IPv6 interface used for ping.. x-constraint:. /components/schemas/Device.Ipv6/properties/name.
 
         Returns: str
         """
@@ -95555,7 +95522,7 @@ class ActionResponseProtocolIpv6PingResponse(OpenApiObject):
     def src_name(self, value):
         """src_name setter
 
-        Name of source IPv6 interface used for ping.. x-constraint:. /components/schemas/Device.Ipv6/properties/name. . x-constraint:. /components/schemas/Device.Ipv6/properties/name.
+        Name of source IPv6 interface used for ping.. x-constraint:. /components/schemas/Device.Ipv6/properties/name.
 
         value: str
         """
