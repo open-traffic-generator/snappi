@@ -7,7 +7,7 @@ info:
     \ issue](https://github.com/open-traffic-generator/models/issues) in the models\
     \ repository\n- [fork the models repository](https://github.com/open-traffic-generator/models)\
     \ and submit a PR"
-  version: 0.12.1
+  version: 0.12.2
   contact:
     url: https://github.com/open-traffic-generator/models
   license:
@@ -8617,6 +8617,8 @@ components:
       description: |-
         Provides state control of flow transmission.
       type: object
+      required:
+      - state
       properties:
         flow_names:
           description: |
@@ -8745,6 +8747,8 @@ components:
     State.Protocol.Lacp.Admin:
       description: |-
         Sets admin state of LACP configured on LAG members
+      required:
+      - state
       properties:
         lag_member_names:
           description: |
