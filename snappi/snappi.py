@@ -1,4 +1,4 @@
-# Open Traffic Generator API 0.12.1
+# Open Traffic Generator API 0.12.2
 # License: MIT
 
 import importlib
@@ -92226,7 +92226,7 @@ class StateProtocolLacpAdmin(OpenApiObject):
         },
     }  # type: Dict[str, str]
 
-    _REQUIRED = ()  # type: tuple(str)
+    _REQUIRED = ("state",)  # type: tuple(str)
 
     _DEFAULTS = {}  # type: Dict[str, Union(type)]
 
@@ -92286,6 +92286,8 @@ class StateProtocolLacpAdmin(OpenApiObject):
 
         value: Union[Literal["down"], Literal["up"]]
         """
+        if value is None:
+            raise TypeError("Cannot set required property state as None")
         self._set_property("state", value)
 
 
@@ -92378,7 +92380,7 @@ class StateTrafficFlowTransmit(OpenApiObject):
         },
     }  # type: Dict[str, str]
 
-    _REQUIRED = ()  # type: tuple(str)
+    _REQUIRED = ("state",)  # type: tuple(str)
 
     _DEFAULTS = {}  # type: Dict[str, Union(type)]
 
@@ -92440,6 +92442,8 @@ class StateTrafficFlowTransmit(OpenApiObject):
 
         value: Union[Literal["pause"], Literal["resume"], Literal["start"], Literal["stop"]]
         """
+        if value is None:
+            raise TypeError("Cannot set required property state as None")
         self._set_property("state", value)
 
 
@@ -109411,8 +109415,8 @@ class Api(object):
 
     def __init__(self, **kwargs):
         self._version_meta = self.version()
-        self._version_meta.api_spec_version = "0.12.1"
-        self._version_meta.sdk_version = "0.12.1"
+        self._version_meta.api_spec_version = "0.12.2"
+        self._version_meta.sdk_version = "0.12.2"
         self._version_check = kwargs.get("version_check")
         if self._version_check is None:
             self._version_check = False
