@@ -1,4 +1,4 @@
-# Open Traffic Generator API 0.12.2
+# Open Traffic Generator API 0.12.3
 # License: MIT
 
 import importlib
@@ -13413,6 +13413,7 @@ class BgpV4RouteRange(OpenApiObject):
         "add_path": {"type": "BgpAddPath"},
         "name": {"type": str},
         "ext_communities": {"type": "BgpExtCommunityIter"},
+        "extended_communities": {"type": "BgpExtendedCommunityIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ("name",)  # type: tuple(str)
@@ -13430,7 +13431,9 @@ class BgpV4RouteRange(OpenApiObject):
     IPV4 = "ipv4"  # type: str
     IPV6 = "ipv6"  # type: str
 
-    _STATUS = {}  # type: Dict[str, Union(type)]
+    _STATUS = {
+        "ext_communities": "ext_communities property in schema BgpV4RouteRange is deprecated, This property is deprecated in favor of property extended_communities",
+    }  # type: Dict[str, Union(type)]
 
     def __init__(
         self,
@@ -13632,12 +13635,25 @@ class BgpV4RouteRange(OpenApiObject):
         # type: () -> BgpExtCommunityIter
         """ext_communities getter
 
-        Optional Extended Community settings. The Extended Communities Attribute is transitive optional BGP attribute, with the Type Code 16. Community and Extended Communities attributes are utilized to trigger routing decisions, such as acceptance, rejection, preference, or redistribution. An extended community is an 8-Bytes value. It is divided into two main parts. The first Bytes of the community encode type and sub-type fields and the last Bytes carry unique set of data in format defined by the type and sub-type field. Extended communities provide larger range for grouping or categorizing communities. When type is administrator_as_2octet or administrator_as_4octet, the valid sub types are route target and origin. The valid value for administrator_as_2octet and administrator_as_4octet type is either two byte AS followed by four byte local administrator id or four byte AS followed by two byte local administrator id. When type is administrator_ipv4_address the valid sub types are route target and origin. The valid value for administrator_ipv4_address is four byte IPv4 address followed by two byte local administrator id. When type is opaque, valid sub types are color and encapsulation. When sub type is color, first two bytes of the value field contain flags and last four bytes contains the value of the color. When sub type is encapsulation the first four bytes of value field are reserved and last two bytes carries the tunnel type from IANA's "ETHER TYPES" registry e.g IPv4 (protocol type 0x0800), IPv6 (protocol type 0x86dd), and MPLS (protocol type 0x8847). When type is administrator_as_2octet_link_bandwidth the valid sub type is extended_bandwidth. The first two bytes of the value field contains the AS number and the last four bytes contains the bandwidth in IEEE floating point format. When type is evpn the valid subtype is mac_address. In the value field the low-order bit of the first byte(Flags) is defined as the "Sticky/static" flag and may be set to 1, indicating the MAC address is static and cannot move. The second byte is reserved and the last four bytes contain the sequence number which is used to ensure that PEs retain the correct MAC/IP Advertisement route when multiple updates occur for the same MAC address. Note evpn type is defined mainly for use with evpn route updates and not for IPv4 and IPv6 route updates.
+        Deprecated: This property is deprecated in favor of property extended_communities. Deprecated: This property is deprecated in favor of property extended_communities. Optional Extended Community settings. The Extended Communities Attribute is transitive optional BGP attribute, with the Type Code 16. Community and Extended Communities attributes are utilized to trigger routing decisions, such as acceptance, rejection, preference, or redistribution. An extended community is an 8-Bytes value. It is divided into two main parts. The first Bytes of the community encode type and sub-type fields and the last Bytes carry unique set of data in format defined by the type and sub-type field. Extended communities provide larger range for grouping or categorizing communities. When type is administrator_as_2octet or administrator_as_4octet, the valid sub types are route target and origin. The valid value for administrator_as_2octet and administrator_as_4octet type is either two byte AS followed by four byte local administrator id or four byte AS followed by two byte local administrator id. When type is administrator_ipv4_address the valid sub types are route target and origin. The valid value for administrator_ipv4_address is four byte IPv4 address followed by two byte local administrator id. When type is opaque, valid sub types are color and encapsulation. When sub type is color, first two bytes of the value field contain flags and last four bytes contains the value of the color. When sub type is encapsulation the first four bytes of value field are reserved and last two bytes carries the tunnel type from IANA's "ETHER TYPES" registry e.g IPv4 (protocol type 0x0800), IPv6 (protocol type 0x86dd), and MPLS (protocol type 0x8847). When type is administrator_as_2octet_link_bandwidth the valid sub type is extended_bandwidth. The first two bytes of the value field contains the AS number and the last four bytes contains the bandwidth in IEEE floating point format. When type is evpn the valid subtype is mac_address. In the value field the low-order bit of the first byte(Flags) is defined as the "Sticky/static" flag and may be set to 1, indicating the MAC address is static and cannot move. The second byte is reserved and the last four bytes contain the sequence number which is used to ensure that PEs retain the correct MAC/IP Advertisement route when multiple updates occur for the same MAC address. Note evpn type is defined mainly for use with evpn route updates and not for IPv4 and IPv6 route updates.
 
         Returns: BgpExtCommunityIter
         """
         return self._get_property(
             "ext_communities", BgpExtCommunityIter, self._parent, self._choice
+        )
+
+    @property
+    def extended_communities(self):
+        # type: () -> BgpExtendedCommunityIter
+        """extended_communities getter
+
+        Optional Extended Community settings. The Extended Communities Attribute is transitive optional BGP attribute, with the Type Code 16. Community and Extended Communities attributes are utilized to trigger routing decisions, such as acceptance, rejection, preference, or redistribution. An extended community is an eight byte value. It is divided into two main parts. The first two bytes of the community encode type and sub-type fields and the last six bytes carry unique set of data in format defined by the type and sub-type field. Extended communities provide larger range for grouping or categorizing communities.
+
+        Returns: BgpExtendedCommunityIter
+        """
+        return self._get_property(
+            "extended_communities", BgpExtendedCommunityIter, self._parent, self._choice
         )
 
 
@@ -13689,6 +13705,1750 @@ class BgpAddPath(OpenApiObject):
         value: int
         """
         self._set_property("path_id", value)
+
+
+class BgpExtendedCommunity(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "transitive_2octet_as_type",
+                "transitive_ipv4_address_type",
+                "transitive_4octet_as_type",
+                "transitive_opaque_type",
+                "transitive_evpn_type",
+                "non_transitive_2octet_as_type",
+                "custom",
+            ],
+        },
+        "transitive_2octet_as_type": {
+            "type": "BgpExtendedCommunityTransitive2OctetAsType"
+        },
+        "transitive_ipv4_address_type": {
+            "type": "BgpExtendedCommunityTransitiveIpv4AddressType"
+        },
+        "transitive_4octet_as_type": {
+            "type": "BgpExtendedCommunityTransitive4OctetAsType"
+        },
+        "transitive_opaque_type": {"type": "BgpExtendedCommunityTransitiveOpaqueType"},
+        "transitive_evpn_type": {"type": "BgpExtendedCommunityTransitiveEvpnType"},
+        "non_transitive_2octet_as_type": {
+            "type": "BgpExtendedCommunityNonTransitive2OctetAsType"
+        },
+        "custom": {"type": "BgpExtendedCommunityCustomType"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "transitive_2octet_as_type",
+    }  # type: Dict[str, Union(type)]
+
+    TRANSITIVE_2OCTET_AS_TYPE = "transitive_2octet_as_type"  # type: str
+    TRANSITIVE_IPV4_ADDRESS_TYPE = "transitive_ipv4_address_type"  # type: str
+    TRANSITIVE_4OCTET_AS_TYPE = "transitive_4octet_as_type"  # type: str
+    TRANSITIVE_OPAQUE_TYPE = "transitive_opaque_type"  # type: str
+    TRANSITIVE_EVPN_TYPE = "transitive_evpn_type"  # type: str
+    NON_TRANSITIVE_2OCTET_AS_TYPE = "non_transitive_2octet_as_type"  # type: str
+    CUSTOM = "custom"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None):
+        super(BgpExtendedCommunity, self).__init__()
+        self._parent = parent
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    @property
+    def transitive_2octet_as_type(self):
+        # type: () -> BgpExtendedCommunityTransitive2OctetAsType
+        """Factory property that returns an instance of the BgpExtendedCommunityTransitive2OctetAsType class
+
+        The Transitive Two-Octet AS-Specific Extended Community is sent as type 0x00
+
+        Returns: BgpExtendedCommunityTransitive2OctetAsType
+        """
+        return self._get_property(
+            "transitive_2octet_as_type",
+            BgpExtendedCommunityTransitive2OctetAsType,
+            self,
+            "transitive_2octet_as_type",
+        )
+
+    @property
+    def transitive_ipv4_address_type(self):
+        # type: () -> BgpExtendedCommunityTransitiveIpv4AddressType
+        """Factory property that returns an instance of the BgpExtendedCommunityTransitiveIpv4AddressType class
+
+        The Transitive IPv4 Address Specific Extended Community is sent as type 0x01.
+
+        Returns: BgpExtendedCommunityTransitiveIpv4AddressType
+        """
+        return self._get_property(
+            "transitive_ipv4_address_type",
+            BgpExtendedCommunityTransitiveIpv4AddressType,
+            self,
+            "transitive_ipv4_address_type",
+        )
+
+    @property
+    def transitive_4octet_as_type(self):
+        # type: () -> BgpExtendedCommunityTransitive4OctetAsType
+        """Factory property that returns an instance of the BgpExtendedCommunityTransitive4OctetAsType class
+
+        The Transitive Four-Octet AS-Specific Extended Community is sent as type 0x02. It is defined in RFC 5668.
+
+        Returns: BgpExtendedCommunityTransitive4OctetAsType
+        """
+        return self._get_property(
+            "transitive_4octet_as_type",
+            BgpExtendedCommunityTransitive4OctetAsType,
+            self,
+            "transitive_4octet_as_type",
+        )
+
+    @property
+    def transitive_opaque_type(self):
+        # type: () -> BgpExtendedCommunityTransitiveOpaqueType
+        """Factory property that returns an instance of the BgpExtendedCommunityTransitiveOpaqueType class
+
+        The Transitive Opaque Extended Community is sent as type 0x03.
+
+        Returns: BgpExtendedCommunityTransitiveOpaqueType
+        """
+        return self._get_property(
+            "transitive_opaque_type",
+            BgpExtendedCommunityTransitiveOpaqueType,
+            self,
+            "transitive_opaque_type",
+        )
+
+    @property
+    def transitive_evpn_type(self):
+        # type: () -> BgpExtendedCommunityTransitiveEvpnType
+        """Factory property that returns an instance of the BgpExtendedCommunityTransitiveEvpnType class
+
+        The Transitive EVPN Extended Community is sent as type 0x06
+
+        Returns: BgpExtendedCommunityTransitiveEvpnType
+        """
+        return self._get_property(
+            "transitive_evpn_type",
+            BgpExtendedCommunityTransitiveEvpnType,
+            self,
+            "transitive_evpn_type",
+        )
+
+    @property
+    def non_transitive_2octet_as_type(self):
+        # type: () -> BgpExtendedCommunityNonTransitive2OctetAsType
+        """Factory property that returns an instance of the BgpExtendedCommunityNonTransitive2OctetAsType class
+
+        The Non-Transitive Two-Octet AS-Specific Extended Community is sent as type 0x40.
+
+        Returns: BgpExtendedCommunityNonTransitive2OctetAsType
+        """
+        return self._get_property(
+            "non_transitive_2octet_as_type",
+            BgpExtendedCommunityNonTransitive2OctetAsType,
+            self,
+            "non_transitive_2octet_as_type",
+        )
+
+    @property
+    def custom(self):
+        # type: () -> BgpExtendedCommunityCustomType
+        """Factory property that returns an instance of the BgpExtendedCommunityCustomType class
+
+        Add custom Extended Community with combination of types sub-types and values not explicitly specified above or not defined yet.
+
+        Returns: BgpExtendedCommunityCustomType
+        """
+        return self._get_property(
+            "custom", BgpExtendedCommunityCustomType, self, "custom"
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["custom"], Literal["non_transitive_2octet_as_type"], Literal["transitive_2octet_as_type"], Literal["transitive_4octet_as_type"], Literal["transitive_evpn_type"], Literal["transitive_ipv4_address_type"], Literal["transitive_opaque_type"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["custom"], Literal["non_transitive_2octet_as_type"], Literal["transitive_2octet_as_type"], Literal["transitive_4octet_as_type"], Literal["transitive_evpn_type"], Literal["transitive_ipv4_address_type"], Literal["transitive_opaque_type"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["custom"], Literal["non_transitive_2octet_as_type"], Literal["transitive_2octet_as_type"], Literal["transitive_4octet_as_type"], Literal["transitive_evpn_type"], Literal["transitive_ipv4_address_type"], Literal["transitive_opaque_type"]]
+        """
+        self._set_property("choice", value)
+
+
+class BgpExtendedCommunityTransitive2OctetAsType(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "route_target_subtype",
+                "route_origin_subtype",
+            ],
+        },
+        "route_target_subtype": {
+            "type": "BgpExtendedCommunityTransitive2OctetAsTypeRouteTarget"
+        },
+        "route_origin_subtype": {
+            "type": "BgpExtendedCommunityTransitive2OctetAsTypeRouteOrigin"
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "route_target_subtype",
+    }  # type: Dict[str, Union(type)]
+
+    ROUTE_TARGET_SUBTYPE = "route_target_subtype"  # type: str
+    ROUTE_ORIGIN_SUBTYPE = "route_origin_subtype"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None):
+        super(BgpExtendedCommunityTransitive2OctetAsType, self).__init__()
+        self._parent = parent
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    @property
+    def route_target_subtype(self):
+        # type: () -> BgpExtendedCommunityTransitive2OctetAsTypeRouteTarget
+        """Factory property that returns an instance of the BgpExtendedCommunityTransitive2OctetAsTypeRouteTarget class
+
+        The Route Target Community identifies one or more routers that may receive set of routes (that carry this Community) carried by BGP. It is sent with sub-type as 0x02.
+
+        Returns: BgpExtendedCommunityTransitive2OctetAsTypeRouteTarget
+        """
+        return self._get_property(
+            "route_target_subtype",
+            BgpExtendedCommunityTransitive2OctetAsTypeRouteTarget,
+            self,
+            "route_target_subtype",
+        )
+
+    @property
+    def route_origin_subtype(self):
+        # type: () -> BgpExtendedCommunityTransitive2OctetAsTypeRouteOrigin
+        """Factory property that returns an instance of the BgpExtendedCommunityTransitive2OctetAsTypeRouteOrigin class
+
+        The Route Origin Community identifies one or more routers that inject set of routes (that carry this Community) into BGP. It is sent with sub-type as 0x03 .
+
+        Returns: BgpExtendedCommunityTransitive2OctetAsTypeRouteOrigin
+        """
+        return self._get_property(
+            "route_origin_subtype",
+            BgpExtendedCommunityTransitive2OctetAsTypeRouteOrigin,
+            self,
+            "route_origin_subtype",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["route_origin_subtype"], Literal["route_target_subtype"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["route_origin_subtype"], Literal["route_target_subtype"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["route_origin_subtype"], Literal["route_target_subtype"]]
+        """
+        self._set_property("choice", value)
+
+
+class BgpExtendedCommunityTransitive2OctetAsTypeRouteTarget(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "global_2byte_as": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+        "local_4byte_admin": {
+            "type": int,
+            "format": "uint32",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "global_2byte_as": 100,
+        "local_4byte_admin": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, global_2byte_as=100, local_4byte_admin=1):
+        super(BgpExtendedCommunityTransitive2OctetAsTypeRouteTarget, self).__init__()
+        self._parent = parent
+        self._set_property("global_2byte_as", global_2byte_as)
+        self._set_property("local_4byte_admin", local_4byte_admin)
+
+    def set(self, global_2byte_as=None, local_4byte_admin=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def global_2byte_as(self):
+        # type: () -> int
+        """global_2byte_as getter
+
+        The two octet IANA assigned AS value assigned to the Autonomous System.
+
+        Returns: int
+        """
+        return self._get_property("global_2byte_as")
+
+    @global_2byte_as.setter
+    def global_2byte_as(self, value):
+        """global_2byte_as setter
+
+        The two octet IANA assigned AS value assigned to the Autonomous System.
+
+        value: int
+        """
+        self._set_property("global_2byte_as", value)
+
+    @property
+    def local_4byte_admin(self):
+        # type: () -> int
+        """local_4byte_admin getter
+
+        The Local Administrator sub-field contains number from numbering space that is administered by the organization to which the Autonomous System number carried in the Global Administrator sub-field has been assigned by an appropriate authority.
+
+        Returns: int
+        """
+        return self._get_property("local_4byte_admin")
+
+    @local_4byte_admin.setter
+    def local_4byte_admin(self, value):
+        """local_4byte_admin setter
+
+        The Local Administrator sub-field contains number from numbering space that is administered by the organization to which the Autonomous System number carried in the Global Administrator sub-field has been assigned by an appropriate authority.
+
+        value: int
+        """
+        self._set_property("local_4byte_admin", value)
+
+
+class BgpExtendedCommunityTransitive2OctetAsTypeRouteOrigin(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "global_2byte_as": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+        "local_4byte_admin": {
+            "type": int,
+            "format": "uint32",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "global_2byte_as": 100,
+        "local_4byte_admin": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, global_2byte_as=100, local_4byte_admin=1):
+        super(BgpExtendedCommunityTransitive2OctetAsTypeRouteOrigin, self).__init__()
+        self._parent = parent
+        self._set_property("global_2byte_as", global_2byte_as)
+        self._set_property("local_4byte_admin", local_4byte_admin)
+
+    def set(self, global_2byte_as=None, local_4byte_admin=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def global_2byte_as(self):
+        # type: () -> int
+        """global_2byte_as getter
+
+        The two octet IANA assigned AS value assigned to the Autonomous System.
+
+        Returns: int
+        """
+        return self._get_property("global_2byte_as")
+
+    @global_2byte_as.setter
+    def global_2byte_as(self, value):
+        """global_2byte_as setter
+
+        The two octet IANA assigned AS value assigned to the Autonomous System.
+
+        value: int
+        """
+        self._set_property("global_2byte_as", value)
+
+    @property
+    def local_4byte_admin(self):
+        # type: () -> int
+        """local_4byte_admin getter
+
+        The Local Administrator sub-field contains number from numbering space that is administered by the organization to which the Autonomous System number carried in the Global Administrator sub-field has been assigned by an appropriate authority.
+
+        Returns: int
+        """
+        return self._get_property("local_4byte_admin")
+
+    @local_4byte_admin.setter
+    def local_4byte_admin(self, value):
+        """local_4byte_admin setter
+
+        The Local Administrator sub-field contains number from numbering space that is administered by the organization to which the Autonomous System number carried in the Global Administrator sub-field has been assigned by an appropriate authority.
+
+        value: int
+        """
+        self._set_property("local_4byte_admin", value)
+
+
+class BgpExtendedCommunityTransitiveIpv4AddressType(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "route_target_subtype",
+                "route_origin_subtype",
+            ],
+        },
+        "route_target_subtype": {
+            "type": "BgpExtendedCommunityTransitiveIpv4AddressTypeRouteTarget"
+        },
+        "route_origin_subtype": {
+            "type": "BgpExtendedCommunityTransitiveIpv4AddressTypeRouteOrigin"
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "route_target_subtype",
+    }  # type: Dict[str, Union(type)]
+
+    ROUTE_TARGET_SUBTYPE = "route_target_subtype"  # type: str
+    ROUTE_ORIGIN_SUBTYPE = "route_origin_subtype"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None):
+        super(BgpExtendedCommunityTransitiveIpv4AddressType, self).__init__()
+        self._parent = parent
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    @property
+    def route_target_subtype(self):
+        # type: () -> BgpExtendedCommunityTransitiveIpv4AddressTypeRouteTarget
+        """Factory property that returns an instance of the BgpExtendedCommunityTransitiveIpv4AddressTypeRouteTarget class
+
+        The Route Target Community identifies one or more routers that may receive set of routes (that carry this Community) carried by BGP. It is sent with sub-type as 0x02.
+
+        Returns: BgpExtendedCommunityTransitiveIpv4AddressTypeRouteTarget
+        """
+        return self._get_property(
+            "route_target_subtype",
+            BgpExtendedCommunityTransitiveIpv4AddressTypeRouteTarget,
+            self,
+            "route_target_subtype",
+        )
+
+    @property
+    def route_origin_subtype(self):
+        # type: () -> BgpExtendedCommunityTransitiveIpv4AddressTypeRouteOrigin
+        """Factory property that returns an instance of the BgpExtendedCommunityTransitiveIpv4AddressTypeRouteOrigin class
+
+        The Route Origin Community identifies one or more routers that inject set of routes (that carry this Community) into BGP It is sent with sub-type as 0x03.
+
+        Returns: BgpExtendedCommunityTransitiveIpv4AddressTypeRouteOrigin
+        """
+        return self._get_property(
+            "route_origin_subtype",
+            BgpExtendedCommunityTransitiveIpv4AddressTypeRouteOrigin,
+            self,
+            "route_origin_subtype",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["route_origin_subtype"], Literal["route_target_subtype"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["route_origin_subtype"], Literal["route_target_subtype"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["route_origin_subtype"], Literal["route_target_subtype"]]
+        """
+        self._set_property("choice", value)
+
+
+class BgpExtendedCommunityTransitiveIpv4AddressTypeRouteTarget(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "global_ipv4_admin": {
+            "type": str,
+            "format": "ipv4",
+        },
+        "local_2byte_admin": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "global_ipv4_admin": "0.0.0.0",
+        "local_2byte_admin": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, global_ipv4_admin="0.0.0.0", local_2byte_admin=1):
+        super(BgpExtendedCommunityTransitiveIpv4AddressTypeRouteTarget, self).__init__()
+        self._parent = parent
+        self._set_property("global_ipv4_admin", global_ipv4_admin)
+        self._set_property("local_2byte_admin", local_2byte_admin)
+
+    def set(self, global_ipv4_admin=None, local_2byte_admin=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def global_ipv4_admin(self):
+        # type: () -> str
+        """global_ipv4_admin getter
+
+        An IPv4 unicast address assigned by one of the Internet registries.
+
+        Returns: str
+        """
+        return self._get_property("global_ipv4_admin")
+
+    @global_ipv4_admin.setter
+    def global_ipv4_admin(self, value):
+        """global_ipv4_admin setter
+
+        An IPv4 unicast address assigned by one of the Internet registries.
+
+        value: str
+        """
+        self._set_property("global_ipv4_admin", value)
+
+    @property
+    def local_2byte_admin(self):
+        # type: () -> int
+        """local_2byte_admin getter
+
+        The Local Administrator sub-field contains number from numbering space that is administered by the organization to which the IP address carried in the Global Administrator sub-field has been assigned by an appropriate authority.
+
+        Returns: int
+        """
+        return self._get_property("local_2byte_admin")
+
+    @local_2byte_admin.setter
+    def local_2byte_admin(self, value):
+        """local_2byte_admin setter
+
+        The Local Administrator sub-field contains number from numbering space that is administered by the organization to which the IP address carried in the Global Administrator sub-field has been assigned by an appropriate authority.
+
+        value: int
+        """
+        self._set_property("local_2byte_admin", value)
+
+
+class BgpExtendedCommunityTransitiveIpv4AddressTypeRouteOrigin(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "global_ipv4_admin": {
+            "type": str,
+            "format": "ipv4",
+        },
+        "local_2byte_admin": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "global_ipv4_admin": "0.0.0.0",
+        "local_2byte_admin": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, global_ipv4_admin="0.0.0.0", local_2byte_admin=1):
+        super(BgpExtendedCommunityTransitiveIpv4AddressTypeRouteOrigin, self).__init__()
+        self._parent = parent
+        self._set_property("global_ipv4_admin", global_ipv4_admin)
+        self._set_property("local_2byte_admin", local_2byte_admin)
+
+    def set(self, global_ipv4_admin=None, local_2byte_admin=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def global_ipv4_admin(self):
+        # type: () -> str
+        """global_ipv4_admin getter
+
+        An IPv4 unicast address assigned by one of the Internet registries.
+
+        Returns: str
+        """
+        return self._get_property("global_ipv4_admin")
+
+    @global_ipv4_admin.setter
+    def global_ipv4_admin(self, value):
+        """global_ipv4_admin setter
+
+        An IPv4 unicast address assigned by one of the Internet registries.
+
+        value: str
+        """
+        self._set_property("global_ipv4_admin", value)
+
+    @property
+    def local_2byte_admin(self):
+        # type: () -> int
+        """local_2byte_admin getter
+
+        The Local Administrator sub-field contains number from numbering space that is administered by the organization to which the IP address carried in the Global Administrator sub-field has been assigned by an appropriate authority.
+
+        Returns: int
+        """
+        return self._get_property("local_2byte_admin")
+
+    @local_2byte_admin.setter
+    def local_2byte_admin(self, value):
+        """local_2byte_admin setter
+
+        The Local Administrator sub-field contains number from numbering space that is administered by the organization to which the IP address carried in the Global Administrator sub-field has been assigned by an appropriate authority.
+
+        value: int
+        """
+        self._set_property("local_2byte_admin", value)
+
+
+class BgpExtendedCommunityTransitive4OctetAsType(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "route_target_subtype",
+                "route_origin_subtype",
+            ],
+        },
+        "route_target_subtype": {
+            "type": "BgpExtendedCommunityTransitive4OctetAsTypeRouteTarget"
+        },
+        "route_origin_subtype": {
+            "type": "BgpExtendedCommunityTransitive4OctetAsTypeRouteOrigin"
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "route_target_subtype",
+    }  # type: Dict[str, Union(type)]
+
+    ROUTE_TARGET_SUBTYPE = "route_target_subtype"  # type: str
+    ROUTE_ORIGIN_SUBTYPE = "route_origin_subtype"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None):
+        super(BgpExtendedCommunityTransitive4OctetAsType, self).__init__()
+        self._parent = parent
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    @property
+    def route_target_subtype(self):
+        # type: () -> BgpExtendedCommunityTransitive4OctetAsTypeRouteTarget
+        """Factory property that returns an instance of the BgpExtendedCommunityTransitive4OctetAsTypeRouteTarget class
+
+        The Route Target Community identifies one or more routers that may receive set of routes (that carry this Community) carried by BGP. It is sent with sub-type as 0x02
+
+        Returns: BgpExtendedCommunityTransitive4OctetAsTypeRouteTarget
+        """
+        return self._get_property(
+            "route_target_subtype",
+            BgpExtendedCommunityTransitive4OctetAsTypeRouteTarget,
+            self,
+            "route_target_subtype",
+        )
+
+    @property
+    def route_origin_subtype(self):
+        # type: () -> BgpExtendedCommunityTransitive4OctetAsTypeRouteOrigin
+        """Factory property that returns an instance of the BgpExtendedCommunityTransitive4OctetAsTypeRouteOrigin class
+
+        The Route Origin Community identifies one or more routers that inject set of routes (that carry this Community) into BGP. It is sent with sub-type as 0x03.
+
+        Returns: BgpExtendedCommunityTransitive4OctetAsTypeRouteOrigin
+        """
+        return self._get_property(
+            "route_origin_subtype",
+            BgpExtendedCommunityTransitive4OctetAsTypeRouteOrigin,
+            self,
+            "route_origin_subtype",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["route_origin_subtype"], Literal["route_target_subtype"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["route_origin_subtype"], Literal["route_target_subtype"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["route_origin_subtype"], Literal["route_target_subtype"]]
+        """
+        self._set_property("choice", value)
+
+
+class BgpExtendedCommunityTransitive4OctetAsTypeRouteTarget(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "global_4byte_as": {
+            "type": int,
+            "format": "uint32",
+        },
+        "local_2byte_admin": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "global_4byte_as": 100,
+        "local_2byte_admin": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, global_4byte_as=100, local_2byte_admin=1):
+        super(BgpExtendedCommunityTransitive4OctetAsTypeRouteTarget, self).__init__()
+        self._parent = parent
+        self._set_property("global_4byte_as", global_4byte_as)
+        self._set_property("local_2byte_admin", local_2byte_admin)
+
+    def set(self, global_4byte_as=None, local_2byte_admin=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def global_4byte_as(self):
+        # type: () -> int
+        """global_4byte_as getter
+
+        The four octet IANA assigned AS value assigned to the Autonomous System.
+
+        Returns: int
+        """
+        return self._get_property("global_4byte_as")
+
+    @global_4byte_as.setter
+    def global_4byte_as(self, value):
+        """global_4byte_as setter
+
+        The four octet IANA assigned AS value assigned to the Autonomous System.
+
+        value: int
+        """
+        self._set_property("global_4byte_as", value)
+
+    @property
+    def local_2byte_admin(self):
+        # type: () -> int
+        """local_2byte_admin getter
+
+        The Local Administrator sub-field contains number from numbering space that is administered by the organization to which the Autonomous System number carried in the Global Administrator sub-field has been assigned by an appropriate authority.
+
+        Returns: int
+        """
+        return self._get_property("local_2byte_admin")
+
+    @local_2byte_admin.setter
+    def local_2byte_admin(self, value):
+        """local_2byte_admin setter
+
+        The Local Administrator sub-field contains number from numbering space that is administered by the organization to which the Autonomous System number carried in the Global Administrator sub-field has been assigned by an appropriate authority.
+
+        value: int
+        """
+        self._set_property("local_2byte_admin", value)
+
+
+class BgpExtendedCommunityTransitive4OctetAsTypeRouteOrigin(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "global_4byte_as": {
+            "type": int,
+            "format": "uint32",
+        },
+        "local_2byte_admin": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "global_4byte_as": 100,
+        "local_2byte_admin": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, global_4byte_as=100, local_2byte_admin=1):
+        super(BgpExtendedCommunityTransitive4OctetAsTypeRouteOrigin, self).__init__()
+        self._parent = parent
+        self._set_property("global_4byte_as", global_4byte_as)
+        self._set_property("local_2byte_admin", local_2byte_admin)
+
+    def set(self, global_4byte_as=None, local_2byte_admin=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def global_4byte_as(self):
+        # type: () -> int
+        """global_4byte_as getter
+
+        The four octet IANA assigned AS value assigned to the Autonomous System.
+
+        Returns: int
+        """
+        return self._get_property("global_4byte_as")
+
+    @global_4byte_as.setter
+    def global_4byte_as(self, value):
+        """global_4byte_as setter
+
+        The four octet IANA assigned AS value assigned to the Autonomous System.
+
+        value: int
+        """
+        self._set_property("global_4byte_as", value)
+
+    @property
+    def local_2byte_admin(self):
+        # type: () -> int
+        """local_2byte_admin getter
+
+        The Local Administrator sub-field contains number from numbering space that is administered by the organization to which the Autonomous System number carried in the Global Administrator sub-field has been assigned by an appropriate authority.
+
+        Returns: int
+        """
+        return self._get_property("local_2byte_admin")
+
+    @local_2byte_admin.setter
+    def local_2byte_admin(self, value):
+        """local_2byte_admin setter
+
+        The Local Administrator sub-field contains number from numbering space that is administered by the organization to which the Autonomous System number carried in the Global Administrator sub-field has been assigned by an appropriate authority.
+
+        value: int
+        """
+        self._set_property("local_2byte_admin", value)
+
+
+class BgpExtendedCommunityTransitiveOpaqueType(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "color_subtype",
+                "encapsulation_subtype",
+            ],
+        },
+        "color_subtype": {"type": "BgpExtendedCommunityTransitiveOpaqueTypeColor"},
+        "encapsulation_subtype": {
+            "type": "BgpExtendedCommunityTransitiveOpaqueTypeEncapsulation"
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "color_subtype",
+    }  # type: Dict[str, Union(type)]
+
+    COLOR_SUBTYPE = "color_subtype"  # type: str
+    ENCAPSULATION_SUBTYPE = "encapsulation_subtype"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None):
+        super(BgpExtendedCommunityTransitiveOpaqueType, self).__init__()
+        self._parent = parent
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    @property
+    def color_subtype(self):
+        # type: () -> BgpExtendedCommunityTransitiveOpaqueTypeColor
+        """Factory property that returns an instance of the BgpExtendedCommunityTransitiveOpaqueTypeColor class
+
+        The Color Community contains locally administrator defined 'color' value which is used in conjunction with Encapsulation attribute to decide whether data packet can be transmitted on certain tunnel or not. It is defined in RFC9012 and sent with sub-type as 0x0b.
+
+        Returns: BgpExtendedCommunityTransitiveOpaqueTypeColor
+        """
+        return self._get_property(
+            "color_subtype",
+            BgpExtendedCommunityTransitiveOpaqueTypeColor,
+            self,
+            "color_subtype",
+        )
+
+    @property
+    def encapsulation_subtype(self):
+        # type: () -> BgpExtendedCommunityTransitiveOpaqueTypeEncapsulation
+        """Factory property that returns an instance of the BgpExtendedCommunityTransitiveOpaqueTypeEncapsulation class
+
+        This identifies the type of tunneling technology being signalled. It is defined in RFC9012 and sent with sub-type as 0x0c.
+
+        Returns: BgpExtendedCommunityTransitiveOpaqueTypeEncapsulation
+        """
+        return self._get_property(
+            "encapsulation_subtype",
+            BgpExtendedCommunityTransitiveOpaqueTypeEncapsulation,
+            self,
+            "encapsulation_subtype",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["color_subtype"], Literal["encapsulation_subtype"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["color_subtype"], Literal["encapsulation_subtype"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["color_subtype"], Literal["encapsulation_subtype"]]
+        """
+        self._set_property("choice", value)
+
+
+class BgpExtendedCommunityTransitiveOpaqueTypeColor(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "flags": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+        "color": {
+            "type": int,
+            "format": "uint32",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "flags": 0,
+        "color": 0,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, flags=0, color=0):
+        super(BgpExtendedCommunityTransitiveOpaqueTypeColor, self).__init__()
+        self._parent = parent
+        self._set_property("flags", flags)
+        self._set_property("color", color)
+
+    def set(self, flags=None, color=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def flags(self):
+        # type: () -> int
+        """flags getter
+
+        Two octet flag values.
+
+        Returns: int
+        """
+        return self._get_property("flags")
+
+    @flags.setter
+    def flags(self, value):
+        """flags setter
+
+        Two octet flag values.
+
+        value: int
+        """
+        self._set_property("flags", value)
+
+    @property
+    def color(self):
+        # type: () -> int
+        """color getter
+
+        The color value is user defined and configured locally and used to determine whether data packet can be transmitted on certain tunnel or not in conjunction with the Encapsulation attribute. It is defined in RFC9012.
+
+        Returns: int
+        """
+        return self._get_property("color")
+
+    @color.setter
+    def color(self, value):
+        """color setter
+
+        The color value is user defined and configured locally and used to determine whether data packet can be transmitted on certain tunnel or not in conjunction with the Encapsulation attribute. It is defined in RFC9012.
+
+        value: int
+        """
+        self._set_property("color", value)
+
+
+class BgpExtendedCommunityTransitiveOpaqueTypeEncapsulation(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "reserved": {
+            "type": int,
+            "format": "uint32",
+        },
+        "tunnel_type": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "reserved": 0,
+        "tunnel_type": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, reserved=0, tunnel_type=1):
+        super(BgpExtendedCommunityTransitiveOpaqueTypeEncapsulation, self).__init__()
+        self._parent = parent
+        self._set_property("reserved", reserved)
+        self._set_property("tunnel_type", tunnel_type)
+
+    def set(self, reserved=None, tunnel_type=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def reserved(self):
+        # type: () -> int
+        """reserved getter
+
+        Four bytes of reserved values. Normally set to on transmit and ignored on receive.
+
+        Returns: int
+        """
+        return self._get_property("reserved")
+
+    @reserved.setter
+    def reserved(self, value):
+        """reserved setter
+
+        Four bytes of reserved values. Normally set to on transmit and ignored on receive.
+
+        value: int
+        """
+        self._set_property("reserved", value)
+
+    @property
+    def tunnel_type(self):
+        # type: () -> int
+        """tunnel_type getter
+
+        Identifies the type of tunneling technology being signalled. Initially defined in RFC5512 and extended in RFC9012. Some of the important tunnel types include L2TPv3 over IP [RFC9012], 2 GRE [RFC9012]. IP in IP [RFC9012]. VXLAN Encapsulation [RFC8365]. NVGRE Encapsulation [RFC8365]. 10 MPLS Encapsulation [RFC8365]. 15 SR TE Policy Type [draft-ietf-idr-segment-routing-te-policy]. 19 Geneve Encapsulation [RFC8926]
+
+        Returns: int
+        """
+        return self._get_property("tunnel_type")
+
+    @tunnel_type.setter
+    def tunnel_type(self, value):
+        """tunnel_type setter
+
+        Identifies the type of tunneling technology being signalled. Initially defined in RFC5512 and extended in RFC9012. Some of the important tunnel types include L2TPv3 over IP [RFC9012], 2 GRE [RFC9012]. IP in IP [RFC9012]. VXLAN Encapsulation [RFC8365]. NVGRE Encapsulation [RFC8365]. 10 MPLS Encapsulation [RFC8365]. 15 SR TE Policy Type [draft-ietf-idr-segment-routing-te-policy]. 19 Geneve Encapsulation [RFC8926]
+
+        value: int
+        """
+        self._set_property("tunnel_type", value)
+
+
+class BgpExtendedCommunityTransitiveEvpnType(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "router_mac_subtype",
+            ],
+        },
+        "router_mac_subtype": {
+            "type": "BgpExtendedCommunityTransitiveEvpnTypeRouterMac"
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "router_mac_subtype",
+    }  # type: Dict[str, Union(type)]
+
+    ROUTER_MAC_SUBTYPE = "router_mac_subtype"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None):
+        super(BgpExtendedCommunityTransitiveEvpnType, self).__init__()
+        self._parent = parent
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    @property
+    def router_mac_subtype(self):
+        # type: () -> BgpExtendedCommunityTransitiveEvpnTypeRouterMac
+        """Factory property that returns an instance of the BgpExtendedCommunityTransitiveEvpnTypeRouterMac class
+
+        The Router MAC EVPN Community is defined in RFC9135 and normally sent only for EVPN Type-2 Routes It is sent with sub-type 0x03.
+
+        Returns: BgpExtendedCommunityTransitiveEvpnTypeRouterMac
+        """
+        return self._get_property(
+            "router_mac_subtype",
+            BgpExtendedCommunityTransitiveEvpnTypeRouterMac,
+            self,
+            "router_mac_subtype",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["router_mac_subtype"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["router_mac_subtype"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["router_mac_subtype"]]
+        """
+        self._set_property("choice", value)
+
+
+class BgpExtendedCommunityTransitiveEvpnTypeRouterMac(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "router_mac": {
+            "type": str,
+            "format": "mac",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "router_mac": "0:0:0:0:0:0",
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, router_mac="0:0:0:0:0:0"):
+        super(BgpExtendedCommunityTransitiveEvpnTypeRouterMac, self).__init__()
+        self._parent = parent
+        self._set_property("router_mac", router_mac)
+
+    def set(self, router_mac=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def router_mac(self):
+        # type: () -> str
+        """router_mac getter
+
+        MAC Address of the PE Router.
+
+        Returns: str
+        """
+        return self._get_property("router_mac")
+
+    @router_mac.setter
+    def router_mac(self, value):
+        """router_mac setter
+
+        MAC Address of the PE Router.
+
+        value: str
+        """
+        self._set_property("router_mac", value)
+
+
+class BgpExtendedCommunityNonTransitive2OctetAsType(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "link_bandwidth_subtype",
+            ],
+        },
+        "link_bandwidth_subtype": {
+            "type": "BgpExtendedCommunityNonTransitive2OctetAsTypeLinkBandwidth"
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "link_bandwidth_subtype",
+    }  # type: Dict[str, Union(type)]
+
+    LINK_BANDWIDTH_SUBTYPE = "link_bandwidth_subtype"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None):
+        super(BgpExtendedCommunityNonTransitive2OctetAsType, self).__init__()
+        self._parent = parent
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    @property
+    def link_bandwidth_subtype(self):
+        # type: () -> BgpExtendedCommunityNonTransitive2OctetAsTypeLinkBandwidth
+        """Factory property that returns an instance of the BgpExtendedCommunityNonTransitive2OctetAsTypeLinkBandwidth class
+
+        The Link Bandwidth Extended Community attribute is defined in draft-ietf-idr-link-bandwidth. It is sent with sub-type as 0x04.
+
+        Returns: BgpExtendedCommunityNonTransitive2OctetAsTypeLinkBandwidth
+        """
+        return self._get_property(
+            "link_bandwidth_subtype",
+            BgpExtendedCommunityNonTransitive2OctetAsTypeLinkBandwidth,
+            self,
+            "link_bandwidth_subtype",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["link_bandwidth_subtype"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["link_bandwidth_subtype"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["link_bandwidth_subtype"]]
+        """
+        self._set_property("choice", value)
+
+
+class BgpExtendedCommunityNonTransitive2OctetAsTypeLinkBandwidth(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "global_2byte_as": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+        "bandwidth": {
+            "type": float,
+            "format": "float",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "global_2byte_as": 100,
+        "bandwidth": 0.0,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, global_2byte_as=100, bandwidth=0):
+        super(
+            BgpExtendedCommunityNonTransitive2OctetAsTypeLinkBandwidth, self
+        ).__init__()
+        self._parent = parent
+        self._set_property("global_2byte_as", global_2byte_as)
+        self._set_property("bandwidth", bandwidth)
+
+    def set(self, global_2byte_as=None, bandwidth=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def global_2byte_as(self):
+        # type: () -> int
+        """global_2byte_as getter
+
+        The value of the Global Administrator subfield should represent the Autonomous System of the router that attaches the Link Bandwidth Community. If four octet AS numbering scheme is used, AS_TRANS (23456) should be used.
+
+        Returns: int
+        """
+        return self._get_property("global_2byte_as")
+
+    @global_2byte_as.setter
+    def global_2byte_as(self, value):
+        """global_2byte_as setter
+
+        The value of the Global Administrator subfield should represent the Autonomous System of the router that attaches the Link Bandwidth Community. If four octet AS numbering scheme is used, AS_TRANS (23456) should be used.
+
+        value: int
+        """
+        self._set_property("global_2byte_as", value)
+
+    @property
+    def bandwidth(self):
+        # type: () -> float
+        """bandwidth getter
+
+        Bandwidth of the link in bytes per second. 1 Kbps is 1000 bytes per second and Mbps is 1000 Kbps per second )
+
+        Returns: float
+        """
+        return self._get_property("bandwidth")
+
+    @bandwidth.setter
+    def bandwidth(self, value):
+        """bandwidth setter
+
+        Bandwidth of the link in bytes per second. 1 Kbps is 1000 bytes per second and Mbps is 1000 Kbps per second )
+
+        value: float
+        """
+        self._set_property("bandwidth", value)
+
+
+class BgpExtendedCommunityCustomType(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "community_type": {
+            "type": str,
+            "format": "hex",
+            "maxLength": 2,
+        },
+        "community_subtype": {
+            "type": str,
+            "format": "hex",
+            "maxLength": 2,
+        },
+        "value": {
+            "type": str,
+            "format": "hex",
+            "maxLength": 12,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "community_type": "00",
+        "community_subtype": "00",
+        "value": "000000000000",
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self,
+        parent=None,
+        community_type="00",
+        community_subtype="00",
+        value="000000000000",
+    ):
+        super(BgpExtendedCommunityCustomType, self).__init__()
+        self._parent = parent
+        self._set_property("community_type", community_type)
+        self._set_property("community_subtype", community_subtype)
+        self._set_property("value", value)
+
+    def set(self, community_type=None, community_subtype=None, value=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def community_type(self):
+        # type: () -> str
+        """community_type getter
+
+        The type to be set in the Extended Community attribute. Accepts hexadecimal input upto ff
+
+        Returns: str
+        """
+        return self._get_property("community_type")
+
+    @community_type.setter
+    def community_type(self, value):
+        """community_type setter
+
+        The type to be set in the Extended Community attribute. Accepts hexadecimal input upto ff
+
+        value: str
+        """
+        self._set_property("community_type", value)
+
+    @property
+    def community_subtype(self):
+        # type: () -> str
+        """community_subtype getter
+
+        The sub-type to be set in the Extended Community attribute. For certain types with no sub-type this byte can also be used as part of an extended value field. Accepts hexadecimal input upto ff.
+
+        Returns: str
+        """
+        return self._get_property("community_subtype")
+
+    @community_subtype.setter
+    def community_subtype(self, value):
+        """community_subtype setter
+
+        The sub-type to be set in the Extended Community attribute. For certain types with no sub-type this byte can also be used as part of an extended value field. Accepts hexadecimal input upto ff.
+
+        value: str
+        """
+        self._set_property("community_subtype", value)
+
+    @property
+    def value(self):
+        # type: () -> str
+        """value getter
+
+        6 byte hex value to be carried in the last bytes of the Extended Community. Accepts hexadecimal input upto ffffffffffff.
+
+        Returns: str
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        6 byte hex value to be carried in the last bytes of the Extended Community. Accepts hexadecimal input upto ffffffffffff.
+
+        value: str
+        """
+        self._set_property("value", value)
+
+
+class BgpExtendedCommunityIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = True
+
+    def __init__(self, parent=None, choice=None):
+        super(BgpExtendedCommunityIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[BgpExtendedCommunity, BgpExtendedCommunityCustomType, BgpExtendedCommunityNonTransitive2OctetAsType, BgpExtendedCommunityTransitive2OctetAsType, BgpExtendedCommunityTransitive4OctetAsType, BgpExtendedCommunityTransitiveEvpnType, BgpExtendedCommunityTransitiveIpv4AddressType, BgpExtendedCommunityTransitiveOpaqueType]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> BgpExtendedCommunityIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> BgpExtendedCommunity
+        return self._next()
+
+    def next(self):
+        # type: () -> BgpExtendedCommunity
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, BgpExtendedCommunity):
+            raise Exception("Item is not an instance of BgpExtendedCommunity")
+
+    def extendedcommunity(self):
+        # type: () -> BgpExtendedCommunityIter
+        """Factory method that creates an instance of the BgpExtendedCommunity class
+
+        The Extended Communities Attribute is optional BGP attribute,defined in RFC4360 with the Type Code 16. Community and Extended Communities attributes are utilized to trigger routing decisions, such as acceptance, rejection, preference, or redistribution. An extended community is an 8-Bytes value.It is divided into two main parts. The first Bytes of the community encode type and optonal sub-type field. The last bytes (or bytes for types without sub-type) carry unique set of data in format defined by the type and optional sub-type field. Extended communities provide larger range for grouping or categorizing communities.
+
+        Returns: BgpExtendedCommunityIter
+        """
+        item = BgpExtendedCommunity(parent=self._parent, choice=self._choice)
+        self._add(item)
+        return self
+
+    def add(self):
+        # type: () -> BgpExtendedCommunity
+        """Add method that creates and returns an instance of the BgpExtendedCommunity class
+
+        The Extended Communities Attribute is optional BGP attribute,defined in RFC4360 with the Type Code 16. Community and Extended Communities attributes are utilized to trigger routing decisions, such as acceptance, rejection, preference, or redistribution. An extended community is an 8-Bytes value.It is divided into two main parts. The first Bytes of the community encode type and optonal sub-type field. The last bytes (or bytes for types without sub-type) carry unique set of data in format defined by the type and optional sub-type field. Extended communities provide larger range for grouping or categorizing communities.
+
+        Returns: BgpExtendedCommunity
+        """
+        item = BgpExtendedCommunity(parent=self._parent, choice=self._choice)
+        self._add(item)
+        return item
+
+    def transitive_2octet_as_type(self):
+        # type: () -> BgpExtendedCommunityIter
+        """Factory method that creates an instance of the BgpExtendedCommunityTransitive2OctetAsType class
+
+        The Transitive Two-Octet AS-Specific Extended Community is sent as type 0x00
+
+        Returns: BgpExtendedCommunityIter
+        """
+        item = BgpExtendedCommunity()
+        item.transitive_2octet_as_type
+        item.choice = "transitive_2octet_as_type"
+        self._add(item)
+        return self
+
+    def transitive_ipv4_address_type(self):
+        # type: () -> BgpExtendedCommunityIter
+        """Factory method that creates an instance of the BgpExtendedCommunityTransitiveIpv4AddressType class
+
+        The Transitive IPv4 Address Specific Extended Community is sent as type 0x01.
+
+        Returns: BgpExtendedCommunityIter
+        """
+        item = BgpExtendedCommunity()
+        item.transitive_ipv4_address_type
+        item.choice = "transitive_ipv4_address_type"
+        self._add(item)
+        return self
+
+    def transitive_4octet_as_type(self):
+        # type: () -> BgpExtendedCommunityIter
+        """Factory method that creates an instance of the BgpExtendedCommunityTransitive4OctetAsType class
+
+        The Transitive Four-Octet AS-Specific Extended Community is sent as type 0x02. It is defined in RFC 5668.
+
+        Returns: BgpExtendedCommunityIter
+        """
+        item = BgpExtendedCommunity()
+        item.transitive_4octet_as_type
+        item.choice = "transitive_4octet_as_type"
+        self._add(item)
+        return self
+
+    def transitive_opaque_type(self):
+        # type: () -> BgpExtendedCommunityIter
+        """Factory method that creates an instance of the BgpExtendedCommunityTransitiveOpaqueType class
+
+        The Transitive Opaque Extended Community is sent as type 0x03.
+
+        Returns: BgpExtendedCommunityIter
+        """
+        item = BgpExtendedCommunity()
+        item.transitive_opaque_type
+        item.choice = "transitive_opaque_type"
+        self._add(item)
+        return self
+
+    def transitive_evpn_type(self):
+        # type: () -> BgpExtendedCommunityIter
+        """Factory method that creates an instance of the BgpExtendedCommunityTransitiveEvpnType class
+
+        The Transitive EVPN Extended Community is sent as type 0x06
+
+        Returns: BgpExtendedCommunityIter
+        """
+        item = BgpExtendedCommunity()
+        item.transitive_evpn_type
+        item.choice = "transitive_evpn_type"
+        self._add(item)
+        return self
+
+    def non_transitive_2octet_as_type(self):
+        # type: () -> BgpExtendedCommunityIter
+        """Factory method that creates an instance of the BgpExtendedCommunityNonTransitive2OctetAsType class
+
+        The Non-Transitive Two-Octet AS-Specific Extended Community is sent as type 0x40.
+
+        Returns: BgpExtendedCommunityIter
+        """
+        item = BgpExtendedCommunity()
+        item.non_transitive_2octet_as_type
+        item.choice = "non_transitive_2octet_as_type"
+        self._add(item)
+        return self
+
+    def custom(self, community_type="00", community_subtype="00", value="000000000000"):
+        # type: (str,str,str) -> BgpExtendedCommunityIter
+        """Factory method that creates an instance of the BgpExtendedCommunityCustomType class
+
+        Add custom Extended Community with combination of types sub-types and values not explicitly specified above or not defined yet.
+
+        Returns: BgpExtendedCommunityIter
+        """
+        item = BgpExtendedCommunity()
+        item.custom
+        item.choice = "custom"
+        self._add(item)
+        return self
 
 
 class BgpV4RouteRangeIter(OpenApiIter):
@@ -13807,6 +15567,7 @@ class BgpV6RouteRange(OpenApiObject):
         "add_path": {"type": "BgpAddPath"},
         "name": {"type": str},
         "ext_communities": {"type": "BgpExtCommunityIter"},
+        "extended_communities": {"type": "BgpExtendedCommunityIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ("name",)  # type: tuple(str)
@@ -13824,7 +15585,9 @@ class BgpV6RouteRange(OpenApiObject):
     IPV4 = "ipv4"  # type: str
     IPV6 = "ipv6"  # type: str
 
-    _STATUS = {}  # type: Dict[str, Union(type)]
+    _STATUS = {
+        "ext_communities": "ext_communities property in schema BgpV6RouteRange is deprecated, This property is deprecated in favor of property extended_communities",
+    }  # type: Dict[str, Union(type)]
 
     def __init__(
         self,
@@ -14026,12 +15789,25 @@ class BgpV6RouteRange(OpenApiObject):
         # type: () -> BgpExtCommunityIter
         """ext_communities getter
 
-        Optional Extended Community settings. The Extended Communities Attribute is transitive optional BGP attribute, with the Type Code 16. Community and Extended Communities attributes are utilized to trigger routing decisions, such as acceptance, rejection, preference, or redistribution. An extended community is an 8-Bytes value. It is divided into two main parts. The first Bytes of the community encode type and sub-type fields and the last Bytes carry unique set of data in format defined by the type and sub-type field. Extended communities provide larger range for grouping or categorizing communities. When type is administrator_as_2octet or administrator_as_4octet, the valid sub types are route target and origin. The valid value for administrator_as_2octet and administrator_as_4octet type is either two byte AS followed by four byte local administrator id or four byte AS followed by two byte local administrator id. When type is administrator_ipv4_address the valid sub types are route target and origin. The valid value for administrator_ipv4_address is four byte IPv4 address followed by two byte local administrator id. When type is opaque, valid sub types are color and encapsulation. When sub type is color, first two bytes of the value field contain flags and last four bytes contains the value of the color. When sub type is encapsulation the first four bytes of value field are reserved and last two bytes carries the tunnel type from IANA's "ETHER TYPES" registry e.g IPv4 (protocol type 0x0800), IPv6 (protocol type 0x86dd), and MPLS (protocol type 0x8847). When type is administrator_as_2octet_link_bandwidth the valid sub type is extended_bandwidth. The first two bytes of the value field contains the AS number and the last four bytes contains the bandwidth in IEEE floating point format. When type is evpn the valid subtype is mac_address. In the value field the low-order bit of the first byte(Flags) is defined as the "Sticky/static" flag and may be set to 1, indicating the MAC address is static and cannot move. The second byte is reserved and the last four bytes contain the sequence number which is used to ensure that PEs retain the correct MAC/IP Advertisement route when multiple updates occur for the same MAC address. Note evpn type is defined mainly for use with evpn route updates and not for IPv4 and IPv6 route updates.
+        Deprecated: This property is deprecated in favor of property extended_communities. Deprecated: This property is deprecated in favor of property extended_communities. Optional Extended Community settings. The Extended Communities Attribute is transitive optional BGP attribute, with the Type Code 16. Community and Extended Communities attributes are utilized to trigger routing decisions, such as acceptance, rejection, preference, or redistribution. An extended community is an 8-Bytes value. It is divided into two main parts. The first Bytes of the community encode type and sub-type fields and the last Bytes carry unique set of data in format defined by the type and sub-type field. Extended communities provide larger range for grouping or categorizing communities. When type is administrator_as_2octet or administrator_as_4octet, the valid sub types are route target and origin. The valid value for administrator_as_2octet and administrator_as_4octet type is either two byte AS followed by four byte local administrator id or four byte AS followed by two byte local administrator id. When type is administrator_ipv4_address the valid sub types are route target and origin. The valid value for administrator_ipv4_address is four byte IPv4 address followed by two byte local administrator id. When type is opaque, valid sub types are color and encapsulation. When sub type is color, first two bytes of the value field contain flags and last four bytes contains the value of the color. When sub type is encapsulation the first four bytes of value field are reserved and last two bytes carries the tunnel type from IANA's "ETHER TYPES" registry e.g IPv4 (protocol type 0x0800), IPv6 (protocol type 0x86dd), and MPLS (protocol type 0x8847). When type is administrator_as_2octet_link_bandwidth the valid sub type is extended_bandwidth. The first two bytes of the value field contains the AS number and the last four bytes contains the bandwidth in IEEE floating point format. When type is evpn the valid subtype is mac_address. In the value field the low-order bit of the first byte(Flags) is defined as the "Sticky/static" flag and may be set to 1, indicating the MAC address is static and cannot move. The second byte is reserved and the last four bytes contain the sequence number which is used to ensure that PEs retain the correct MAC/IP Advertisement route when multiple updates occur for the same MAC address. Note evpn type is defined mainly for use with evpn route updates and not for IPv4 and IPv6 route updates.
 
         Returns: BgpExtCommunityIter
         """
         return self._get_property(
             "ext_communities", BgpExtCommunityIter, self._parent, self._choice
+        )
+
+    @property
+    def extended_communities(self):
+        # type: () -> BgpExtendedCommunityIter
+        """extended_communities getter
+
+        Optional Extended Community settings. The Extended Communities Attribute is transitive optional BGP attribute, with the Type Code 16. Community and Extended Communities attributes are utilized to trigger routing decisions, such as acceptance, rejection, preference, or redistribution. An extended community is an eight byte value. It is divided into two main parts. The first two bytes of the community encode type and sub-type fields and the last six bytes carry unique set of data in format defined by the type and sub-type field. Extended communities provide larger range for grouping or categorizing communities.
+
+        Returns: BgpExtendedCommunityIter
+        """
+        return self._get_property(
+            "extended_communities", BgpExtendedCommunityIter, self._parent, self._choice
         )
 
 
@@ -109276,8 +111052,8 @@ class Api(object):
 
     def __init__(self, **kwargs):
         self._version_meta = self.version()
-        self._version_meta.api_spec_version = "0.12.2"
-        self._version_meta.sdk_version = "0.12.2"
+        self._version_meta.api_spec_version = "0.12.3"
+        self._version_meta.sdk_version = "0.12.3"
         self._version_check = kwargs.get("version_check")
         if self._version_check is None:
             self._version_check = False

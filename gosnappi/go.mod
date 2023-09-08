@@ -7,6 +7,6 @@ require (
 	github.com/ghodss/yaml v1.0.0
 	github.com/gorilla/mux v1.8.0
 	github.com/stretchr/testify v1.8.4
-	google.golang.org/grpc v1.57.0
+	google.golang.org/grpc v1.58.0
 	google.golang.org/protobuf v1.31.0
 )
