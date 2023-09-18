@@ -86,7 +86,7 @@ def test_defaults(api):
                 'auto_negotiate': True,
                 'ieee_media_defaults': True,
                 'mtu': 1500,
-                'name': "abc",
+                'name': "def",
                 'port_names': ["test"],
                 'promiscuous': True,
                 'speed': 'speed_10_gbps',
@@ -110,7 +110,7 @@ def test_defaults(api):
     }
     config = api.config()
     layer1 = config.layer1.layer1()[-1]
-    layer1.name = "abc"
+    layer1.name = "def"
     layer1.port_names = ["test"]
     layer1.ieee_media_defaults = True
     layer1.auto_negotiate = True
@@ -192,7 +192,7 @@ def test_defaults_by_deserialize(api):
                 'auto_negotiate': True,
                 'ieee_media_defaults': True,
                 'mtu': 1500,
-                'name': "abc",
+                'name': "def",
                 'port_names': ["test"],
                 'promiscuous': True,
                 'speed': 'speed_10_gbps',
