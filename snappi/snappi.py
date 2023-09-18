@@ -546,10 +546,11 @@ class OpenApiValidator(object):
             return
 
         unique_type = self._TYPES[name]["unique"]
+        class_name = self.__class__.__name__
 
         if latter is True:
-            if unique_type == "local" and "local_unique" in self.__validate_latter__:
-                key = "local_unique"
+            if unique_type == "local" and class_name in self.__validate_latter__:
+                key = class_name
             else:
                 key = "unique"
             self.__validate_latter__[key].append(
@@ -565,8 +566,8 @@ class OpenApiValidator(object):
         values = None
         if unique_type == "global":
             values = self.__constraints__["global"]
-        elif "local" in self.__constraints__:
-            values = self.__constraints__["local"]
+        elif class_name in self.__constraints__:
+            values = self.__constraints__[class_name]
         # else:
         #     values = self.__constraints__["class_name"]
         if value in values:
@@ -601,14 +602,14 @@ class OpenApiValidator(object):
             )
             return
 
-    def _validate_coded(self, check_local_unique=False):
+    def _validate_coded(self, check_local_unique=False, class_name=None):
         if check_local_unique:
-            for item in self.__validate_latter__["local_unique"]:
+            for item in self.__validate_latter__[class_name]:
                 item[0](item[1], item[2])
-            if "local" in self.__constraints__:
-                del self.__constraints__["local"]
-            elif "local_unique" in self.__validate_latter__:
-                del self.__validate_latter__["local_unique"]
+            if class_name in self.__constraints__:
+                del self.__constraints__[class_name]
+            elif class_name in self.__validate_latter__:
+                del self.__validate_latter__[class_name]
             return
         else:
             for item in self.__validate_latter__["unique"]:
@@ -788,16 +789,16 @@ class OpenApiObject(OpenApiBase, OpenApiValidator):
                     child = self._get_child_class(property_name, True)
 
                     # placeholders added for checking local unique
-                    self.__constraints__["local"] = []
-                    self.__validate_latter__["local_unique"] = []
-
+                    class_name = child[1].__name__
+                    self.__constraints__[class_name] = []
+                    self.__validate_latter__[class_name] = []
                     openapi_list = child[0]()
                     for item in property_value:
                         item = child[1]()._decode(item)
                         openapi_list._items.append(item)
 
                     # checking local unique
-                    self._validate_coded(check_local_unique=True)
+                    self._validate_coded(check_local_unique=True, class_name=class_name)
 
                     property_value = openapi_list
                     ignore_warnings = True
@@ -1080,11 +1081,13 @@ class OpenApiIter(OpenApiBase, OpenApiValidator):
         return self
 
     def _encode(self):
-        self.__constraints__["local"] = []
-        self.__validate_latter__["local_unique"] = []
-        items = [item._encode() for item in self._items]
-        self._validate_coded(check_local_unique=True)
-        return items
+        if len(self._items) > 0:
+            class_name = self._items[0].__class__.__name__
+            self.__constraints__[class_name] = []
+            self.__validate_latter__[class_name] = []
+            items = [item._encode() for item in self._items]
+            self._validate_coded(check_local_unique=True, class_name=class_name)
+            return items
 
     def _decode(self, encoded_list):
         item_class_name = self.__class__.__name__.replace("Iter", "")
