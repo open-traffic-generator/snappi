@@ -1,4 +1,4 @@
-/* Open Traffic Generator API 0.12.3
+/* Open Traffic Generator API 0.12.4
  * Open Traffic Generator API defines a model-driven, vendor-neutral and standard
  * interface for emulating layer 2-7 network devices and generating test traffic.
  * 
@@ -326,7 +326,7 @@ message DeviceVlan {
     enum Enum {
       unspecified = 0;
       x8100 = 1;
-      x88a8 = 2;
+      x88A8 = 2;
       x9100 = 3;
       x9200 = 4;
       x9300 = 5;
