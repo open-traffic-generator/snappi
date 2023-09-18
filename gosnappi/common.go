@@ -254,7 +254,7 @@ type httpClient struct {
 // All methods that perform validation will add errors here
 // All api rpcs MUST call Validate
 type Constraints interface {
-	ValueOf(name string) interface{}
+	Warnings() []string
 }
 
 type validation struct {
@@ -428,34 +428,32 @@ func (obj *validation) validateHexSlice(hex []string) error {
 	return obj.validateSlice(hex, "hex")
 }
 
-// TODO: restore behavior
-// func (obj *validation) createMap(objName string) {
-// 	if obj.constraints == nil {
-// 		obj.constraints = make(map[string]map[string]Constraints)
-// 	}
-// 	_, ok := obj.constraints[objName]
-// 	if !ok {
-// 		obj.constraints[objName] = make(map[string]Constraints)
-// 	}
-// }
+func (obj *validation) createMap(objName string) {
+	if obj.constraints == nil {
+		obj.constraints = make(map[string]map[string]Constraints)
+	}
+	_, ok := obj.constraints[objName]
+	if !ok {
+		obj.constraints[objName] = make(map[string]Constraints)
+	}
+}
 
-// TODO: restore behavior
-// func (obj *validation) isUnique(objectName, value string, object Constraints) bool {
-// 	if value == "" {
-// 		return true
-// 	}
+func (obj *validation) isUnique(objectName, value string, scope string, object Constraints) bool {
+	if value == "" {
+		return true
+	}
 
-// 	obj.createMap("globals")
-// 	_, ok := obj.constraints["globals"][value]
-// 	unique := false
-// 	if !ok {
-// 		obj.constraints["globals"][value] = object
-// 		obj.createMap(objectName)
-// 		obj.constraints[objectName][value] = object
-// 		unique = true
-// 	}
-// 	return unique
-// }
+	obj.createMap(scope)
+	_, ok := obj.constraints[scope][value]
+	unique := false
+	if !ok {
+		obj.constraints[scope][value] = object
+		// obj.createMap(objectName)
+		// obj.constraints[objectName][value] = object
+		unique = true
+	}
+	return unique
+}
 
 // TODO: restore behavior
 // func (obj *validation) validateConstraint(objectName []string, value string) bool {
