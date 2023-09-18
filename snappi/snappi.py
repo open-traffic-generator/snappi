@@ -16,6 +16,7 @@ import semantic_version
 import types
 import platform
 from google.protobuf import json_format
+from inspect import stack
 
 try:
     from snappi import otg_pb2_grpc as pb2_grpc
@@ -638,6 +639,11 @@ class OpenApiValidator(object):
                 continue
             del self.__constraints__[k]
 
+        keys = list(self.__validate_latter__.keys())
+        for k in keys:
+            if k not in ["unique", "constraint"]:
+                del self.__validate_latter__[k]
+
 
 class OpenApiObject(OpenApiBase, OpenApiValidator):
     """Base class for any /components/schemas object
@@ -888,15 +894,25 @@ class OpenApiObject(OpenApiBase, OpenApiValidator):
         ):
             return
         if "enum" in details and property_value not in details["enum"]:
-            msg = "property {} shall be one of these" " {} enum, but got {} at {}"
-            raise TypeError(
-                msg.format(
-                    property_name,
-                    details["enum"],
-                    property_value,
-                    self.__class__,
+            raise_error = False
+            if isinstance(property_value, list):
+                for value in property_value:
+                    if value not in details["enum"]:
+                        raise_error = True
+                        break
+            elif property_value not in details["enum"]:
+                raise_error = True
+
+            if raise_error is True:
+                msg = "property {} shall be one of these" " {} enum, but got {} at {}"
+                raise TypeError(
+                    msg.format(
+                        property_name,
+                        details["enum"],
+                        property_value,
+                        self.__class__,
+                    )
                 )
-            )
         if details["type"] in common_data_types and "format" not in details:
             msg = "property {} shall be of type {} at {}".format(
                 property_name, details["type"], self.__class__
@@ -982,7 +998,9 @@ class OpenApiObject(OpenApiBase, OpenApiValidator):
 
                 return
 
-            enum_key = "%s.%s" % (property_name, property_value)
+            enum_key = ""
+            if not isinstance(property_value, OpenApiObject):
+                enum_key = "%s.%s" % (property_name, property_value)
             if property_name in self._STATUS:
                 print("[WARNING]: %s" % self._STATUS[property_name])
             elif enum_key in self._STATUS:
@@ -1087,6 +1105,8 @@ class OpenApiIter(OpenApiBase, OpenApiValidator):
             self.__validate_latter__[class_name] = []
             items = [item._encode() for item in self._items]
             self._validate_coded(check_local_unique=True, class_name=class_name)
+            if stack()[1][3] == "__str__":
+                self._clear_vars()
             return items
 
     def _decode(self, encoded_list):
@@ -93274,6 +93294,10 @@ class FlowsUpdate(OpenApiObject):
     _TYPES = {
         "property_names": {
             "type": list,
+            "enum": [
+                "rate",
+                "size",
+            ],
             "itemtype": str,
         },
         "flows": {"type": "FlowIter"},
@@ -96565,6 +96589,20 @@ class PortMetricsRequest(OpenApiObject):
         },
         "column_names": {
             "type": list,
+            "enum": [
+                "bytes_rx",
+                "bytes_rx_rate",
+                "bytes_tx",
+                "bytes_tx_rate",
+                "capture",
+                "frames_rx",
+                "frames_rx_rate",
+                "frames_tx",
+                "frames_tx_rate",
+                "link",
+                "location",
+                "transmit",
+            ],
             "itemtype": str,
         },
     }  # type: Dict[str, str]
@@ -96652,6 +96690,15 @@ class FlowMetricsRequest(OpenApiObject):
         },
         "metric_names": {
             "type": list,
+            "enum": [
+                "bytes_rx",
+                "bytes_tx",
+                "frames_rx",
+                "frames_rx_rate",
+                "frames_tx",
+                "frames_tx_rate",
+                "transmit",
+            ],
             "itemtype": str,
         },
         "tagged_metrics": {"type": "FlowTaggedMetricsFilter"},
@@ -96744,6 +96791,14 @@ class FlowTaggedMetricsFilter(OpenApiObject):
         "include_empty_metrics": {"type": bool},
         "metric_names": {
             "type": list,
+            "enum": [
+                "frames_tx",
+                "frames_rx",
+                "bytes_tx",
+                "bytes_rx",
+                "frames_tx_rate",
+                "frames_rx_rate",
+            ],
             "itemtype": str,
         },
         "filters": {"type": "FlowMetricTagFilterIter"},
@@ -96992,6 +97047,24 @@ class Bgpv4MetricsRequest(OpenApiObject):
         },
         "column_names": {
             "type": list,
+            "enum": [
+                "end_of_rib_received",
+                "fsm_state",
+                "keepalives_received",
+                "keepalives_sent",
+                "notifications_received",
+                "notifications_sent",
+                "opens_received",
+                "opens_sent",
+                "route_withdraws_received",
+                "route_withdraws_sent",
+                "routes_advertised",
+                "routes_received",
+                "session_flap_count",
+                "session_state",
+                "updates_received",
+                "updates_sent",
+            ],
             "itemtype": str,
         },
     }  # type: Dict[str, str]
@@ -97083,6 +97156,24 @@ class Bgpv6MetricsRequest(OpenApiObject):
         },
         "column_names": {
             "type": list,
+            "enum": [
+                "end_of_rib_received",
+                "fsm_state",
+                "keepalives_received",
+                "keepalives_sent",
+                "notifications_received",
+                "notifications_sent",
+                "opens_received",
+                "opens_sent",
+                "route_withdraws_received",
+                "route_withdraws_sent",
+                "routes_advertised",
+                "routes_received",
+                "session_flap_count",
+                "session_state",
+                "updates_received",
+                "updates_sent",
+            ],
             "itemtype": str,
         },
     }  # type: Dict[str, str]
@@ -97174,6 +97265,34 @@ class IsisMetricsRequest(OpenApiObject):
         },
         "column_names": {
             "type": list,
+            "enum": [
+                "l1_broadcast_hellos_received",
+                "l1_broadcast_hellos_sent",
+                "l1_csnp_received",
+                "l1_csnp_sent",
+                "l1_database_size",
+                "l1_lsp_received",
+                "l1_lsp_sent",
+                "l1_point_to_point_hellos_received",
+                "l1_point_to_point_hellos_sent",
+                "l1_psnp_received",
+                "l1_psnp_sent",
+                "l1_session_flap",
+                "l1_sessions_up",
+                "l2_broadcast_hellos_received",
+                "l2_broadcast_hellos_sent",
+                "l2_csnp_received",
+                "l2_csnp_sent",
+                "l2_database_size",
+                "l2_lsp_received",
+                "l2_lsp_sent",
+                "l2_point_to_point_hellos_received",
+                "l2_point_to_point_hellos_sent",
+                "l2_psnp_received",
+                "l2_psnp_sent",
+                "l2_session_flap",
+                "l2_sessions_up",
+            ],
             "itemtype": str,
         },
     }  # type: Dict[str, str]
@@ -97275,6 +97394,18 @@ class LagMetricsRequest(OpenApiObject):
         },
         "column_names": {
             "type": list,
+            "enum": [
+                "bytes_rx",
+                "bytes_rx_rate",
+                "bytes_tx",
+                "bytes_tx_rate",
+                "frames_rx",
+                "frames_rx_rate",
+                "frames_tx",
+                "frames_tx_rate",
+                "member_ports_up",
+                "oper_status",
+            ],
             "itemtype": str,
         },
     }  # type: Dict[str, str]
@@ -97364,6 +97495,23 @@ class LacpMetricsRequest(OpenApiObject):
         },
         "column_names": {
             "type": list,
+            "enum": [
+                "activity",
+                "aggregatable",
+                "collecting",
+                "distributing",
+                "lacp_packets_rx",
+                "lacp_packets_tx",
+                "lacp_rx_errors",
+                "oper_key",
+                "partner_id",
+                "partner_key",
+                "partner_port_num",
+                "port_num",
+                "synchronization",
+                "system_id",
+                "timeout",
+            ],
             "itemtype": str,
         },
     }  # type: Dict[str, str]
@@ -97478,6 +97626,14 @@ class LldpMetricsRequest(OpenApiObject):
         },
         "column_names": {
             "type": list,
+            "enum": [
+                "frames_discard",
+                "frames_error_rx",
+                "frames_rx",
+                "frames_tx",
+                "tlvs_discard",
+                "tlvs_unknown",
+            ],
             "itemtype": str,
         },
     }  # type: Dict[str, str]
@@ -97559,6 +97715,38 @@ class RsvpMetricsRequest(OpenApiObject):
         },
         "column_names": {
             "type": list,
+            "enum": [
+                "acks_rx",
+                "acks_tx",
+                "bundle_rx",
+                "bundle_tx",
+                "egress_p2p_lsps_up",
+                "hellos_rx",
+                "hellos_tx",
+                "ingress_p2p_lsps_configured",
+                "ingress_p2p_lsps_up",
+                "lsp_flap_count",
+                "nacks_rx",
+                "nacks_tx",
+                "path_errors_rx",
+                "path_errors_tx",
+                "path_reevaluation_request_tx",
+                "path_reoptimizations",
+                "path_tears_rx",
+                "path_tears_tx",
+                "paths_rx",
+                "paths_tx",
+                "resv_conf_rx",
+                "resv_conf_tx",
+                "resv_errors_rx",
+                "resv_errors_tx",
+                "resv_tears_rx",
+                "resv_tears_tx",
+                "resvs_rx",
+                "resvs_tx",
+                "srefresh_rx",
+                "srefresh_tx",
+            ],
             "itemtype": str,
         },
     }  # type: Dict[str, str]
@@ -104541,6 +104729,10 @@ class BgpPrefixStateRequest(OpenApiObject):
         },
         "prefix_filters": {
             "type": list,
+            "enum": [
+                "ipv4_unicast",
+                "ipv6_unicast",
+            ],
             "itemtype": str,
         },
         "ipv4_unicast_filters": {"type": "BgpPrefixIpv4UnicastFilterIter"},
