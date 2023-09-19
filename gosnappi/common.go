@@ -442,12 +442,17 @@ func (obj *validation) isUnique(objectName, value string, scope string, object C
 	if value == "" {
 		return true
 	}
-
-	obj.createMap(scope)
-	_, ok := obj.constraints[scope][value]
+	key := ""
+	if scope == "global" {
+		key = scope
+	} else {
+		key = objectName
+	}
+	obj.createMap(key)
+	_, ok := obj.constraints[key][value]
 	unique := false
 	if !ok {
-		obj.constraints[scope][value] = object
+		obj.constraints[key][value] = object
 		// obj.createMap(objectName)
 		// obj.constraints[objectName][value] = object
 		unique = true
