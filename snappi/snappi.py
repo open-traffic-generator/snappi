@@ -1,4 +1,4 @@
-# Open Traffic Generator API 0.12.3
+# Open Traffic Generator API 0.12.4
 # License: MIT
 
 import importlib
@@ -111375,8 +111375,8 @@ class Api(object):
 
     def __init__(self, **kwargs):
         self._version_meta = self.version()
-        self._version_meta.api_spec_version = "0.12.3"
-        self._version_meta.sdk_version = "0.12.4"
+        self._version_meta.api_spec_version = "0.12.4"
+        self._version_meta.sdk_version = "0.12.5"
         self._version_check = kwargs.get("version_check")
         if self._version_check is None:
             self._version_check = False
