@@ -44,18 +44,9 @@ type Telemetry interface {
 	SetSpanAttributes(span trace.Span, attrs []attribute.KeyValue)
 	SetSpanEvent(span trace.Span, eventStr string)
 	CloseSpan(span trace.Span)
-	View()
 }
 
-var tracer = otel.Tracer("gosnappi-tracer")
-
-// just a debug function to view the telemetry struct
-// TODO: Remove this.
-func (t *telemetry) View() {
-	fmt.Println("fetching the tracer")
-	fmt.Printf("tel is %v\n", t)
-	fmt.Println(t.transport)
-}
+var tracer trace.Tracer
 
 // Internal fucntion to check wheather telemetry is enabled or not.
 // Used by rest of the functions to become no-ops.
@@ -197,6 +188,7 @@ func (t *telemetry) Start() (Telemetry, error) {
 
 		otel.SetTracerProvider(traceProvider)
 		t.traceProvider = traceProvider
+		tracer = otel.Tracer("gosnappi-tracer")
 
 		return t, nil
 	}
@@ -210,7 +202,7 @@ func (t *telemetry) Stop() {
 		if err := t.traceProvider.Shutdown(context.Background()); err != nil {
 			GlobalLogger.Error().Msg("Failed shutting down trace provider")
 		}
-		GlobalLogger.Info().Msg("shut down successful !!!!")
+		GlobalLogger.Info().Msg("Stopping tracing")
 	}
 }
 

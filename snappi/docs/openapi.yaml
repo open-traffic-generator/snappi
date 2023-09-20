@@ -7,7 +7,7 @@ info:
     \ issue](https://github.com/open-traffic-generator/models/issues) in the models\
     \ repository\n- [fork the models repository](https://github.com/open-traffic-generator/models)\
     \ and submit a PR"
-  version: 0.12.2
+  version: 0.12.3
   contact:
     url: https://github.com/open-traffic-generator/models
   license:
@@ -3739,12 +3739,33 @@ components:
           pattern: ^[\sa-zA-Z0-9-_()><\[\]]+$
           x-unique: global
         ext_communities:
+          x-status:
+            status: deprecated
+            information: This property is deprecated in favor of property extended_communities
           x-field-uid: 11
           description: |-
+            Deprecated: This property is deprecated in favor of property extended_communities
+
+            Deprecated: This property is deprecated in favor of property extended_communities
+
             Optional Extended Community settings. The Extended Communities Attribute is a transitive optional BGP attribute, with the Type Code 16. Community and Extended Communities  attributes are utilized to trigger routing decisions, such as acceptance, rejection,  preference, or redistribution. An extended community is an 8-Bytes value. It is divided into two main parts. The first 2 Bytes of the community encode a type and sub-type fields and the last 6 Bytes carry a unique set of data in a format defined by the type and sub-type field. Extended communities provide a larger  range for grouping or categorizing communities. When type is administrator_as_2octet or administrator_as_4octet, the valid sub types are route target and origin. The valid value for  administrator_as_2octet and administrator_as_4octet type is either two byte AS followed by four byte local administrator id or four byte AS followed by two  byte local administrator id.  When type is administrator_ipv4_address the valid sub types are route target and origin. The valid value for  administrator_ipv4_address is a four byte IPv4 address followed by a two byte local administrator id.  When type is opaque, valid sub types are color and encapsulation. When sub type is color, first two bytes of the value field contain flags and last four bytes  contains the value of the color. When sub type is encapsulation the first four bytes of value field are reserved and last two bytes carries the tunnel type from  IANA's "ETHER TYPES" registry e.g IPv4 (protocol type = 0x0800), IPv6 (protocol type = 0x86dd), and MPLS (protocol type = 0x8847). When type is administrator_as_2octet_link_bandwidth the valid sub type is extended_bandwidth. The first two bytes of the value field contains the AS number and the last four bytes contains the bandwidth in IEEE floating point format.  When type is evpn the valid subtype is mac_address. In the value field the low-order bit of the first byte(Flags) is defined as the "Sticky/static" flag and may be set to 1, indicating the MAC address is static and cannot move. The second byte is reserved and the  last four bytes contain the sequence number which is used to ensure that PEs retain the correct MAC/IP Advertisement route when multiple updates  occur for the same MAC address.  Note evpn type is defined mainly for use with evpn route updates and not for IPv4 and IPv6 route updates.
           type: array
           items:
             $ref: '#/components/schemas/Bgp.ExtCommunity'
+        extended_communities:
+          x-field-uid: 12
+          description: "Optional Extended Community settings. The Extended Communities\
+            \ Attribute is a transitive optional BGP attribute, with the Type Code\
+            \ 16. Community and Extended Communities  attributes are utilized to trigger\
+            \ routing decisions, such as acceptance, rejection,  preference, or redistribution.\
+            \ An extended community is an eight byte value. It is divided into two\
+            \ main parts. The first two bytes of the community encode a type and sub-type\
+            \ fields and the last six bytes carry a unique set of data in a format\
+            \ defined by the type and sub-type field. Extended communities provide\
+            \ a larger range for grouping or categorizing communities.            "
+          type: array
+          items:
+            $ref: '#/components/schemas/Bgp.ExtendedCommunity'
       required:
       - name
     Bgp.AddPath:
@@ -3759,6 +3780,417 @@ components:
           format: uint32
           default: 1
           x-field-uid: 1
+    Bgp.ExtendedCommunity:
+      description: |-
+        The Extended Communities Attribute is a optional BGP attribute,defined in RFC4360 with the Type Code 16.  Community and Extended Communities  attributes are utilized to trigger routing decisions, such as acceptance, rejection,  preference, or redistribution.  An extended community is an 8-Bytes value.It is divided into two main parts. The first 2 Bytes of the community  encode a type and optonal sub-type field. The last 6 bytes (or 7 bytes for types without a sub-type) carry a unique set of data in a format defined by the type and optional sub-type field.  Extended communities provide a larger  range for grouping or categorizing communities.
+      type: object
+      properties:
+        choice:
+          type: string
+          default: transitive_2octet_as_type
+          x-enum:
+            transitive_2octet_as_type:
+              x-field-uid: 1
+            transitive_ipv4_address_type:
+              x-field-uid: 2
+            transitive_4octet_as_type:
+              x-field-uid: 3
+            transitive_opaque_type:
+              x-field-uid: 4
+            transitive_evpn_type:
+              x-field-uid: 5
+            non_transitive_2octet_as_type:
+              x-field-uid: 6
+            custom:
+              x-field-uid: 7
+          x-field-uid: 1
+          enum:
+          - transitive_2octet_as_type
+          - transitive_ipv4_address_type
+          - transitive_4octet_as_type
+          - transitive_opaque_type
+          - transitive_evpn_type
+          - non_transitive_2octet_as_type
+          - custom
+        transitive_2octet_as_type:
+          x-field-uid: 2
+          $ref: '#/components/schemas/Bgp.ExtendedCommunity.Transitive2OctetAsType'
+        transitive_ipv4_address_type:
+          x-field-uid: 3
+          $ref: '#/components/schemas/Bgp.ExtendedCommunity.TransitiveIpv4AddressType'
+        transitive_4octet_as_type:
+          x-field-uid: 4
+          $ref: '#/components/schemas/Bgp.ExtendedCommunity.Transitive4OctetAsType'
+        transitive_opaque_type:
+          x-field-uid: 5
+          $ref: '#/components/schemas/Bgp.ExtendedCommunity.TransitiveOpaqueType'
+        transitive_evpn_type:
+          x-field-uid: 6
+          $ref: '#/components/schemas/Bgp.ExtendedCommunity.TransitiveEvpnType'
+        non_transitive_2octet_as_type:
+          x-field-uid: 7
+          $ref: '#/components/schemas/Bgp.ExtendedCommunity.NonTransitive2OctetAsType'
+        custom:
+          x-field-uid: 8
+          $ref: '#/components/schemas/Bgp.ExtendedCommunity.CustomType'
+    Bgp.ExtendedCommunity.Transitive2OctetAsType.RouteTarget:
+      description: "The Route Target Community identifies one or more routers that\
+        \ may receive a set of routes (that carry this Community) carried by BGP.\
+        \  It is sent with sub-type as 0x02.            "
+      type: object
+      properties:
+        global_2byte_as:
+          description: |-
+            The two octet IANA assigned AS value assigned to the Autonomous System.
+          type: integer
+          format: uint32
+          maximum: 65535
+          default: 100
+          x-field-uid: 1
+        local_4byte_admin:
+          type: integer
+          format: uint32
+          default: 1
+          description: |-
+            The Local Administrator sub-field contains a number from a numbering space that is administered by the organization to which the Autonomous System number carried in the Global Administrator sub-field has been assigned by an appropriate authority.
+          x-field-uid: 2
+    Bgp.ExtendedCommunity.Transitive2OctetAsType.RouteOrigin:
+      description: |-
+        The Route Origin Community identifies one or more routers that inject a set of routes (that carry this Community) into BGP. It is sent with sub-type as 0x03 .
+      type: object
+      properties:
+        global_2byte_as:
+          description: |-
+            The two octet IANA assigned AS value assigned to the Autonomous System.
+          type: integer
+          format: uint32
+          maximum: 65535
+          default: 100
+          x-field-uid: 1
+        local_4byte_admin:
+          description: |-
+            The Local Administrator sub-field contains a number from a numbering space that is administered by the organization to which the Autonomous System number carried in the Global Administrator sub-field has been assigned by an appropriate authority.
+          type: integer
+          format: uint32
+          default: 1
+          x-field-uid: 2
+    Bgp.ExtendedCommunity.Transitive2OctetAsType:
+      description: "The Transitive Two-Octet AS-Specific Extended Community is sent\
+        \ as type 0x00 .         "
+      type: object
+      properties:
+        choice:
+          type: string
+          default: route_target_subtype
+          x-enum:
+            route_target_subtype:
+              x-field-uid: 1
+            route_origin_subtype:
+              x-field-uid: 2
+          x-field-uid: 1
+          enum:
+          - route_target_subtype
+          - route_origin_subtype
+        route_target_subtype:
+          x-field-uid: 2
+          $ref: '#/components/schemas/Bgp.ExtendedCommunity.Transitive2OctetAsType.RouteTarget'
+        route_origin_subtype:
+          x-field-uid: 3
+          $ref: '#/components/schemas/Bgp.ExtendedCommunity.Transitive2OctetAsType.RouteOrigin'
+    Bgp.ExtendedCommunity.TransitiveIpv4AddressType.RouteOrigin:
+      description: |-
+        The Route Origin Community identifies one or more routers that inject a set of routes (that carry this Community) into BGP It is sent with sub-type as 0x03.
+      type: object
+      properties:
+        global_ipv4_admin:
+          description: "An IPv4 unicast address assigned by one of the Internet registries.\
+            \            "
+          type: string
+          format: ipv4
+          default: 0.0.0.0
+          x-field-uid: 1
+        local_2byte_admin:
+          description: |-
+            The Local Administrator sub-field contains a number from a numbering space that is administered by the organization to which  the IP address carried in the Global Administrator sub-field has been assigned by an appropriate authority.
+          type: integer
+          format: uint32
+          default: 1
+          maximum: 65535
+          x-field-uid: 2
+    Bgp.ExtendedCommunity.TransitiveIpv4AddressType.RouteTarget:
+      description: "The Route Target Community identifies one or more routers that\
+        \ may receive a set of routes (that carry this Community) carried by BGP.\
+        \  It is sent with sub-type as 0x02.             "
+      type: object
+      properties:
+        global_ipv4_admin:
+          description: "An IPv4 unicast address assigned by one of the Internet registries. "
+          type: string
+          format: ipv4
+          default: 0.0.0.0
+          x-field-uid: 1
+        local_2byte_admin:
+          type: integer
+          format: uint32
+          maximum: 65535
+          default: 1
+          description: |-
+            The Local Administrator sub-field contains a number from a numbering space that is administered by the organization to which  the IP address carried in the Global Administrator sub-field has been assigned by an appropriate authority.
+          x-field-uid: 2
+    Bgp.ExtendedCommunity.TransitiveIpv4AddressType:
+      description: |-
+        The Transitive IPv4 Address Specific Extended Community is sent as type 0x01.
+      type: object
+      properties:
+        choice:
+          type: string
+          default: route_target_subtype
+          x-enum:
+            route_target_subtype:
+              x-field-uid: 1
+            route_origin_subtype:
+              x-field-uid: 2
+          x-field-uid: 1
+          enum:
+          - route_target_subtype
+          - route_origin_subtype
+        route_target_subtype:
+          x-field-uid: 2
+          $ref: '#/components/schemas/Bgp.ExtendedCommunity.TransitiveIpv4AddressType.RouteTarget'
+        route_origin_subtype:
+          x-field-uid: 3
+          $ref: '#/components/schemas/Bgp.ExtendedCommunity.TransitiveIpv4AddressType.RouteOrigin'
+    Bgp.ExtendedCommunity.Transitive4OctetAsType.RouteTarget:
+      description: "The Route Target Community identifies one or more routers that\
+        \ may receive a set of routes (that carry this Community) carried by BGP.\
+        \  It is sent with sub-type as 0x02              "
+      type: object
+      properties:
+        global_4byte_as:
+          description: |-
+            The four octet IANA assigned AS value assigned to the Autonomous System.
+          type: integer
+          format: uint32
+          default: 100
+          x-field-uid: 1
+        local_2byte_admin:
+          type: integer
+          format: uint32
+          default: 1
+          maximum: 65535
+          description: |-
+            The Local Administrator sub-field contains a number from a numbering space that is administered by the organization to which the Autonomous System number carried in the Global Administrator sub-field has been assigned by an appropriate authority.
+          x-field-uid: 2
+    Bgp.ExtendedCommunity.Transitive4OctetAsType.RouteOrigin:
+      description: |-
+        The Route Origin Community identifies one or more routers that inject a set of routes (that carry this Community) into BGP. It is sent with sub-type as 0x03.
+      type: object
+      properties:
+        global_4byte_as:
+          description: |-
+            The four octet IANA assigned AS value assigned to the Autonomous System.
+          type: integer
+          format: uint32
+          default: 100
+          x-field-uid: 1
+        local_2byte_admin:
+          description: |-
+            The Local Administrator sub-field contains a number from a numbering space that is administered by the organization to which the Autonomous System number carried in the Global Administrator sub-field has been assigned by an appropriate authority.
+          type: integer
+          format: uint32
+          default: 1
+          maximum: 65535
+          x-field-uid: 2
+    Bgp.ExtendedCommunity.Transitive4OctetAsType:
+      description: "The Transitive Four-Octet AS-Specific Extended Community is sent\
+        \ as type 0x02. It is defined in RFC 5668.       "
+      type: object
+      properties:
+        choice:
+          type: string
+          default: route_target_subtype
+          x-enum:
+            route_target_subtype:
+              x-field-uid: 1
+            route_origin_subtype:
+              x-field-uid: 2
+          x-field-uid: 1
+          enum:
+          - route_target_subtype
+          - route_origin_subtype
+        route_target_subtype:
+          x-field-uid: 2
+          $ref: '#/components/schemas/Bgp.ExtendedCommunity.Transitive4OctetAsType.RouteTarget'
+        route_origin_subtype:
+          x-field-uid: 3
+          $ref: '#/components/schemas/Bgp.ExtendedCommunity.Transitive4OctetAsType.RouteOrigin'
+    Bgp.ExtendedCommunity.TransitiveOpaqueType.Color:
+      description: "The Color Community contains locally administrator defined 'color'\
+        \ value which is used in conjunction with Encapsulation  attribute to decide\
+        \ whether a data packet can be transmitted on a certain tunnel or not. It\
+        \ is defined in RFC9012 and sent with sub-type as 0x0b.             "
+      type: object
+      properties:
+        flags:
+          description: "Two octet flag values. "
+          type: integer
+          format: uint32
+          maximum: 65535
+          default: 0
+          x-field-uid: 1
+        color:
+          type: integer
+          format: uint32
+          default: 0
+          description: "The color value is user defined and configured locally and\
+            \ used to determine whether a data packet can be transmitted on a certain\
+            \ tunnel or not in conjunction with the Encapsulation attribute. It is\
+            \ defined in RFC9012.           "
+          x-field-uid: 2
+    Bgp.ExtendedCommunity.TransitiveOpaqueType.Encapsulation:
+      description: |-
+        This identifies the type of tunneling technology being signalled. It is defined in RFC9012 and sent with sub-type as 0x0c.
+      type: object
+      properties:
+        reserved:
+          description: "Four bytes of reserved values. Normally set to 0 on transmit\
+            \ and ignored on receive. "
+          type: integer
+          format: uint32
+          default: 0
+          x-field-uid: 1
+        tunnel_type:
+          description: "Identifies the type of tunneling technology being signalled.\
+            \ Initially defined in RFC5512 and extended in RFC9012. Some of the important\
+            \ tunnel types include  1 L2TPv3 over IP\t[RFC9012], \n2\tGRE\t[RFC9012]\n\
+            7\tIP in IP\t[RFC9012]\n8\tVXLAN Encapsulation\t[RFC8365]\n9\tNVGRE Encapsulation\t\
+            [RFC8365]\n10\tMPLS Encapsulation\t[RFC8365]\n15\tSR TE Policy Type\t\
+            [draft-ietf-idr-segment-routing-te-policy]\n19\tGeneve Encapsulation\t\
+            [RFC8926]"
+          type: integer
+          format: uint32
+          maximum: 65535
+          default: 1
+          x-field-uid: 2
+    Bgp.ExtendedCommunity.TransitiveOpaqueType:
+      description: |-
+        The Transitive Opaque Extended Community is sent as type 0x03.
+      type: object
+      properties:
+        choice:
+          type: string
+          default: color_subtype
+          x-enum:
+            color_subtype:
+              x-field-uid: 1
+            encapsulation_subtype:
+              x-field-uid: 2
+          x-field-uid: 1
+          enum:
+          - color_subtype
+          - encapsulation_subtype
+        color_subtype:
+          x-field-uid: 2
+          $ref: '#/components/schemas/Bgp.ExtendedCommunity.TransitiveOpaqueType.Color'
+        encapsulation_subtype:
+          x-field-uid: 3
+          $ref: '#/components/schemas/Bgp.ExtendedCommunity.TransitiveOpaqueType.Encapsulation'
+    Bgp.ExtendedCommunity.TransitiveEvpnType.RouterMac:
+      description: |-
+        The Router MAC EVPN Community is defined in RFC9135 and normally sent only for EVPN Type-2 Routes . It is sent with sub-type 0x03.
+      type: object
+      properties:
+        router_mac:
+          description: "MAC Address of the PE Router.           "
+          type: string
+          format: mac
+          default: 0:0:0:0:0:0
+          x-field-uid: 1
+    Bgp.ExtendedCommunity.TransitiveEvpnType:
+      description: "The Transitive EVPN Extended Community is sent as type 0x06 .\
+        \        "
+      type: object
+      properties:
+        choice:
+          type: string
+          default: router_mac_subtype
+          x-enum:
+            router_mac_subtype:
+              x-field-uid: 1
+          x-field-uid: 1
+          enum:
+          - router_mac_subtype
+        router_mac_subtype:
+          x-field-uid: 2
+          $ref: '#/components/schemas/Bgp.ExtendedCommunity.TransitiveEvpnType.RouterMac'
+    Bgp.ExtendedCommunity.NonTransitive2OctetAsType.LinkBandwidth:
+      description: |-
+        The Link Bandwidth Extended Community attribute is defined in draft-ietf-idr-link-bandwidth. It is sent with sub-type as 0x04.
+      type: object
+      properties:
+        global_2byte_as:
+          description: |-
+            The value of the Global Administrator subfield should represent the Autonomous System of the router that attaches the Link Bandwidth Community. If four octet AS numbering scheme is used, AS_TRANS (23456) should be used.
+          type: integer
+          format: uint32
+          default: 100
+          maximum: 65535
+          x-field-uid: 1
+        bandwidth:
+          description: |-
+            Bandwidth of the link in bytes per second. ( 1 Kbps is 1000 bytes per second and 1 Mbps is 1000 Kbps per second )
+          type: number
+          format: float
+          default: 0
+          x-field-uid: 2
+    Bgp.ExtendedCommunity.NonTransitive2OctetAsType:
+      description: "The Non-Transitive Two-Octet AS-Specific Extended Community is\
+        \ sent as type 0x40.         "
+      type: object
+      properties:
+        choice:
+          type: string
+          default: link_bandwidth_subtype
+          x-enum:
+            link_bandwidth_subtype:
+              x-field-uid: 1
+          x-field-uid: 1
+          enum:
+          - link_bandwidth_subtype
+        link_bandwidth_subtype:
+          x-field-uid: 2
+          $ref: '#/components/schemas/Bgp.ExtendedCommunity.NonTransitive2OctetAsType.LinkBandwidth'
+    Bgp.ExtendedCommunity.CustomType:
+      description: "Add a custom Extended Community with a combination of types ,\
+        \ sub-types and values not explicitly specified above or not defined yet.\
+        \         "
+      type: object
+      properties:
+        community_type:
+          description: "The type to be set in the Extended Community attribute. Accepts\
+            \ hexadecimal input upto ff .         "
+          type: string
+          format: hex
+          maxLength: 2
+          default: '00'
+          x-field-uid: 1
+        community_subtype:
+          description: |-
+            The sub-type to be set in the Extended Community attribute. For certain types with no sub-type this byte can also be used as part of an extended value field. Accepts hexadecimal input upto ff.
+          type: string
+          format: hex
+          maxLength: 2
+          default: '00'
+          x-field-uid: 2
+        value:
+          description: "6 byte hex value to be carried in the last 6 bytes of the\
+            \ Extended Community. Accepts hexadecimal input upto ffffffffffff.   \
+            \   "
+          type: string
+          format: hex
+          maxLength: 12
+          default: '000000000000'
+          x-field-uid: 3
     Bgp.V6RouteRange:
       description: |-
         Emulated BGPv6 route range.
@@ -3841,12 +4273,33 @@ components:
           pattern: ^[\sa-zA-Z0-9-_()><\[\]]+$
           x-unique: global
         ext_communities:
+          x-status:
+            status: deprecated
+            information: This property is deprecated in favor of property extended_communities
           x-field-uid: 11
           description: |-
+            Deprecated: This property is deprecated in favor of property extended_communities
+
+            Deprecated: This property is deprecated in favor of property extended_communities
+
             Optional Extended Community settings. The Extended Communities Attribute is a transitive optional BGP attribute, with the Type Code 16. Community and Extended Communities  attributes are utilized to trigger routing decisions, such as acceptance, rejection,  preference, or redistribution. An extended community is an 8-Bytes value. It is divided into two main parts. The first 2 Bytes of the community encode a type and sub-type fields and the last 6 Bytes carry a unique set of data in a format defined by the type and sub-type field. Extended communities provide a larger  range for grouping or categorizing communities. When type is administrator_as_2octet or administrator_as_4octet, the valid sub types are route target and origin. The valid value for  administrator_as_2octet and administrator_as_4octet type is either two byte AS followed by four byte local administrator id or four byte AS followed by two  byte local administrator id.  When type is administrator_ipv4_address the valid sub types are route target and origin. The valid value for  administrator_ipv4_address is a four byte IPv4 address followed by a two byte local administrator id.  When type is opaque, valid sub types are color and encapsulation. When sub type is color, first two bytes of the value field contain flags and last four bytes  contains the value of the color. When sub type is encapsulation the first four bytes of value field are reserved and last two bytes carries the tunnel type from  IANA's "ETHER TYPES" registry e.g IPv4 (protocol type = 0x0800), IPv6 (protocol type = 0x86dd), and MPLS (protocol type = 0x8847). When type is administrator_as_2octet_link_bandwidth the valid sub type is extended_bandwidth. The first two bytes of the value field contains the AS number and the last four bytes contains the bandwidth in IEEE floating point format.  When type is evpn the valid subtype is mac_address. In the value field the low-order bit of the first byte(Flags) is defined as the "Sticky/static" flag and may be set to 1, indicating the MAC address is static and cannot move. The second byte is reserved and the  last four bytes contain the sequence number which is used to ensure that PEs retain the correct MAC/IP Advertisement route when multiple updates  occur for the same MAC address.  Note evpn type is defined mainly for use with evpn route updates and not for IPv4 and IPv6 route updates.
           type: array
           items:
             $ref: '#/components/schemas/Bgp.ExtCommunity'
+        extended_communities:
+          x-field-uid: 12
+          description: "Optional Extended Community settings. The Extended Communities\
+            \ Attribute is a transitive optional BGP attribute, with the Type Code\
+            \ 16. Community and Extended Communities  attributes are utilized to trigger\
+            \ routing decisions, such as acceptance, rejection,  preference, or redistribution.\
+            \ An extended community is an eight byte value. It is divided into two\
+            \ main parts. The first two bytes of the community encode a type and sub-type\
+            \ fields and the last six bytes carry a unique set of data in a format\
+            \ defined by the type and sub-type field. Extended communities provide\
+            \ a larger range for grouping or categorizing communities.            "
+          type: array
+          items:
+            $ref: '#/components/schemas/Bgp.ExtendedCommunity'
       required:
       - name
     BgpSrte.V4Policy:

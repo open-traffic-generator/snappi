@@ -1,4 +1,4 @@
-/* Open Traffic Generator API 0.12.2
+/* Open Traffic Generator API 0.12.3
  * Open Traffic Generator API defines a model-driven, vendor-neutral and standard
  * interface for emulating layer 2-7 network devices and generating test traffic.
  * 
@@ -326,7 +326,7 @@ message DeviceVlan {
     enum Enum {
       unspecified = 0;
       x8100 = 1;
-      x88a8 = 2;
+      x88A8 = 2;
       x9100 = 3;
       x9200 = 4;
       x9300 = 5;
@@ -2595,6 +2595,10 @@ message BgpV4RouteRange {
   // required = true
   string name = 10;
 
+  // Deprecated: This property is deprecated in favor of property extended_communities
+  // 
+  // Deprecated: This property is deprecated in favor of property extended_communities
+  // 
   // Optional Extended Community settings. The Extended Communities Attribute is a transitive
   // optional BGP attribute, with the Type Code 16. Community and Extended Communities
   // attributes are utilized to trigger routing decisions, such as acceptance, rejection,
@@ -2624,6 +2628,16 @@ message BgpV4RouteRange {
   // occur for the same MAC address.  Note evpn type is defined mainly for use with evpn
   // route updates and not for IPv4 and IPv6 route updates.
   repeated BgpExtCommunity ext_communities = 11;
+
+  // Optional Extended Community settings. The Extended Communities Attribute is a transitive
+  // optional BGP attribute, with the Type Code 16. Community and Extended Communities
+  // attributes are utilized to trigger routing decisions, such as acceptance, rejection,
+  // preference, or redistribution. An extended community is an eight byte value. It
+  // is divided into two main parts. The first two bytes of the community encode a type
+  // and sub-type fields and the last six bytes carry a unique set of data in a format
+  // defined by the type and sub-type field. Extended communities provide a larger range
+  // for grouping or categorizing communities.
+  repeated BgpExtendedCommunity extended_communities = 12;
 }
 
 // The BGP Additional Paths feature is a BGP extension that allows the  advertisement
@@ -2634,6 +2648,354 @@ message BgpAddPath {
   // The id of the additional path.
   // default = 1
   optional uint32 path_id = 1;
+}
+
+// The Extended Communities Attribute is a optional BGP attribute,defined in RFC4360
+// with the Type Code 16.  Community and Extended Communities  attributes are utilized
+// to trigger routing decisions, such as acceptance, rejection,  preference, or redistribution.
+// An extended community is an 8-Bytes value.It is divided into two main parts. The
+// first 2 Bytes of the community  encode a type and optonal sub-type field. The last
+// 6 bytes (or 7 bytes for types without a sub-type) carry a unique set of data in a
+// format defined by the type and optional sub-type field.  Extended communities provide
+// a larger  range for grouping or categorizing communities.
+message BgpExtendedCommunity {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      transitive_2octet_as_type = 1;
+      transitive_ipv4_address_type = 2;
+      transitive_4octet_as_type = 3;
+      transitive_opaque_type = 4;
+      transitive_evpn_type = 5;
+      non_transitive_2octet_as_type = 6;
+      custom = 7;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.transitive_2octet_as_type
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  optional BgpExtendedCommunityTransitive2OctetAsType transitive_2octet_as_type = 2;
+
+  // Description missing in models
+  optional BgpExtendedCommunityTransitiveIpv4AddressType transitive_ipv4_address_type = 3;
+
+  // Description missing in models
+  optional BgpExtendedCommunityTransitive4OctetAsType transitive_4octet_as_type = 4;
+
+  // Description missing in models
+  optional BgpExtendedCommunityTransitiveOpaqueType transitive_opaque_type = 5;
+
+  // Description missing in models
+  optional BgpExtendedCommunityTransitiveEvpnType transitive_evpn_type = 6;
+
+  // Description missing in models
+  optional BgpExtendedCommunityNonTransitive2OctetAsType non_transitive_2octet_as_type = 7;
+
+  // Description missing in models
+  optional BgpExtendedCommunityCustomType custom = 8;
+}
+
+// The Route Target Community identifies one or more routers that may receive a set
+// of routes (that carry this Community) carried by BGP.  It is sent with sub-type as
+// 0x02.
+message BgpExtendedCommunityTransitive2OctetAsTypeRouteTarget {
+
+  // The two octet IANA assigned AS value assigned to the Autonomous System.
+  // default = 100
+  optional uint32 global_2byte_as = 1;
+
+  // The Local Administrator sub-field contains a number from a numbering space that is
+  // administered by the organization to which the Autonomous System number carried in
+  // the Global Administrator sub-field has been assigned by an appropriate authority.
+  // default = 1
+  optional uint32 local_4byte_admin = 2;
+}
+
+// The Route Origin Community identifies one or more routers that inject a set of routes
+// (that carry this Community) into BGP. It is sent with sub-type as 0x03 .
+message BgpExtendedCommunityTransitive2OctetAsTypeRouteOrigin {
+
+  // The two octet IANA assigned AS value assigned to the Autonomous System.
+  // default = 100
+  optional uint32 global_2byte_as = 1;
+
+  // The Local Administrator sub-field contains a number from a numbering space that is
+  // administered by the organization to which the Autonomous System number carried in
+  // the Global Administrator sub-field has been assigned by an appropriate authority.
+  // default = 1
+  optional uint32 local_4byte_admin = 2;
+}
+
+// The Transitive Two-Octet AS-Specific Extended Community is sent as type 0x00 .
+// 
+message BgpExtendedCommunityTransitive2OctetAsType {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      route_target_subtype = 1;
+      route_origin_subtype = 2;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.route_target_subtype
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  optional BgpExtendedCommunityTransitive2OctetAsTypeRouteTarget route_target_subtype = 2;
+
+  // Description missing in models
+  optional BgpExtendedCommunityTransitive2OctetAsTypeRouteOrigin route_origin_subtype = 3;
+}
+
+// The Route Origin Community identifies one or more routers that inject a set of routes
+// (that carry this Community) into BGP It is sent with sub-type as 0x03.
+message BgpExtendedCommunityTransitiveIpv4AddressTypeRouteOrigin {
+
+  // An IPv4 unicast address assigned by one of the Internet registries.
+  // default = 0.0.0.0
+  optional string global_ipv4_admin = 1;
+
+  // The Local Administrator sub-field contains a number from a numbering space that is
+  // administered by the organization to which  the IP address carried in the Global Administrator
+  // sub-field has been assigned by an appropriate authority.
+  // default = 1
+  optional uint32 local_2byte_admin = 2;
+}
+
+// The Route Target Community identifies one or more routers that may receive a set
+// of routes (that carry this Community) carried by BGP.  It is sent with sub-type as
+// 0x02.
+message BgpExtendedCommunityTransitiveIpv4AddressTypeRouteTarget {
+
+  // An IPv4 unicast address assigned by one of the Internet registries.
+  // default = 0.0.0.0
+  optional string global_ipv4_admin = 1;
+
+  // The Local Administrator sub-field contains a number from a numbering space that is
+  // administered by the organization to which  the IP address carried in the Global Administrator
+  // sub-field has been assigned by an appropriate authority.
+  // default = 1
+  optional uint32 local_2byte_admin = 2;
+}
+
+// The Transitive IPv4 Address Specific Extended Community is sent as type 0x01.
+message BgpExtendedCommunityTransitiveIpv4AddressType {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      route_target_subtype = 1;
+      route_origin_subtype = 2;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.route_target_subtype
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  optional BgpExtendedCommunityTransitiveIpv4AddressTypeRouteTarget route_target_subtype = 2;
+
+  // Description missing in models
+  optional BgpExtendedCommunityTransitiveIpv4AddressTypeRouteOrigin route_origin_subtype = 3;
+}
+
+// The Route Target Community identifies one or more routers that may receive a set
+// of routes (that carry this Community) carried by BGP.  It is sent with sub-type as
+// 0x02
+message BgpExtendedCommunityTransitive4OctetAsTypeRouteTarget {
+
+  // The four octet IANA assigned AS value assigned to the Autonomous System.
+  // default = 100
+  optional uint32 global_4byte_as = 1;
+
+  // The Local Administrator sub-field contains a number from a numbering space that is
+  // administered by the organization to which the Autonomous System number carried in
+  // the Global Administrator sub-field has been assigned by an appropriate authority.
+  // default = 1
+  optional uint32 local_2byte_admin = 2;
+}
+
+// The Route Origin Community identifies one or more routers that inject a set of routes
+// (that carry this Community) into BGP. It is sent with sub-type as 0x03.
+message BgpExtendedCommunityTransitive4OctetAsTypeRouteOrigin {
+
+  // The four octet IANA assigned AS value assigned to the Autonomous System.
+  // default = 100
+  optional uint32 global_4byte_as = 1;
+
+  // The Local Administrator sub-field contains a number from a numbering space that is
+  // administered by the organization to which the Autonomous System number carried in
+  // the Global Administrator sub-field has been assigned by an appropriate authority.
+  // default = 1
+  optional uint32 local_2byte_admin = 2;
+}
+
+// The Transitive Four-Octet AS-Specific Extended Community is sent as type 0x02. It
+// is defined in RFC 5668.
+message BgpExtendedCommunityTransitive4OctetAsType {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      route_target_subtype = 1;
+      route_origin_subtype = 2;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.route_target_subtype
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  optional BgpExtendedCommunityTransitive4OctetAsTypeRouteTarget route_target_subtype = 2;
+
+  // Description missing in models
+  optional BgpExtendedCommunityTransitive4OctetAsTypeRouteOrigin route_origin_subtype = 3;
+}
+
+// The Color Community contains locally administrator defined 'color' value which is
+// used in conjunction with Encapsulation  attribute to decide whether a data packet
+// can be transmitted on a certain tunnel or not. It is defined in RFC9012 and sent
+// with sub-type as 0x0b.
+message BgpExtendedCommunityTransitiveOpaqueTypeColor {
+
+  // Two octet flag values.
+  // default = 0
+  optional uint32 flags = 1;
+
+  // The color value is user defined and configured locally and used to determine whether
+  // a data packet can be transmitted on a certain tunnel or not in conjunction with the
+  // Encapsulation attribute. It is defined in RFC9012.
+  // default = 0
+  optional uint32 color = 2;
+}
+
+// This identifies the type of tunneling technology being signalled. It is defined in
+// RFC9012 and sent with sub-type as 0x0c.
+message BgpExtendedCommunityTransitiveOpaqueTypeEncapsulation {
+
+  // Four bytes of reserved values. Normally set to 0 on transmit and ignored on receive.
+  // 
+  // default = 0
+  optional uint32 reserved = 1;
+
+  // Identifies the type of tunneling technology being signalled. Initially defined in
+  // RFC5512 and extended in RFC9012. Some of the important tunnel types include  1 L2TPv3
+  // over IP	[RFC9012],
+  // 2	GRE	[RFC9012]
+  // 7	IP in IP	[RFC9012]
+  // 8	VXLAN Encapsulation	[RFC8365]
+  // 9	NVGRE Encapsulation	[RFC8365]
+  // 10	MPLS Encapsulation	[RFC8365]
+  // 15	SR TE Policy Type	[draft-ietf-idr-segment-routing-te-policy]
+  // 19	Geneve Encapsulation	[RFC8926]
+  // default = 1
+  optional uint32 tunnel_type = 2;
+}
+
+// The Transitive Opaque Extended Community is sent as type 0x03.
+message BgpExtendedCommunityTransitiveOpaqueType {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      color_subtype = 1;
+      encapsulation_subtype = 2;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.color_subtype
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  optional BgpExtendedCommunityTransitiveOpaqueTypeColor color_subtype = 2;
+
+  // Description missing in models
+  optional BgpExtendedCommunityTransitiveOpaqueTypeEncapsulation encapsulation_subtype = 3;
+}
+
+// The Router MAC EVPN Community is defined in RFC9135 and normally sent only for EVPN
+// Type-2 Routes . It is sent with sub-type 0x03.
+message BgpExtendedCommunityTransitiveEvpnTypeRouterMac {
+
+  // MAC Address of the PE Router.
+  // default = 0:0:0:0:0:0
+  optional string router_mac = 1;
+}
+
+// The Transitive EVPN Extended Community is sent as type 0x06 .
+message BgpExtendedCommunityTransitiveEvpnType {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      router_mac_subtype = 1;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.router_mac_subtype
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  optional BgpExtendedCommunityTransitiveEvpnTypeRouterMac router_mac_subtype = 2;
+}
+
+// The Link Bandwidth Extended Community attribute is defined in draft-ietf-idr-link-bandwidth.
+// It is sent with sub-type as 0x04.
+message BgpExtendedCommunityNonTransitive2OctetAsTypeLinkBandwidth {
+
+  // The value of the Global Administrator subfield should represent the Autonomous System
+  // of the router that attaches the Link Bandwidth Community. If four octet AS numbering
+  // scheme is used, AS_TRANS (23456) should be used.
+  // default = 100
+  optional uint32 global_2byte_as = 1;
+
+  // Bandwidth of the link in bytes per second. ( 1 Kbps is 1000 bytes per second and
+  // 1 Mbps is 1000 Kbps per second )
+  // default = 0
+  optional float bandwidth = 2;
+}
+
+// The Non-Transitive Two-Octet AS-Specific Extended Community is sent as type 0x40.
+// 
+message BgpExtendedCommunityNonTransitive2OctetAsType {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      link_bandwidth_subtype = 1;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.link_bandwidth_subtype
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  optional BgpExtendedCommunityNonTransitive2OctetAsTypeLinkBandwidth link_bandwidth_subtype = 2;
+}
+
+// Add a custom Extended Community with a combination of types , sub-types and values
+// not explicitly specified above or not defined yet.
+message BgpExtendedCommunityCustomType {
+
+  // The type to be set in the Extended Community attribute. Accepts hexadecimal input
+  // upto ff .
+  // default = 00
+  optional string community_type = 1;
+
+  // The sub-type to be set in the Extended Community attribute. For certain types with
+  // no sub-type this byte can also be used as part of an extended value field. Accepts
+  // hexadecimal input upto ff.
+  // default = 00
+  optional string community_subtype = 2;
+
+  // 6 byte hex value to be carried in the last 6 bytes of the Extended Community. Accepts
+  // hexadecimal input upto ffffffffffff.
+  // default = 000000000000
+  optional string value = 3;
 }
 
 // Emulated BGPv6 route range.
@@ -2696,6 +3058,10 @@ message BgpV6RouteRange {
   // required = true
   string name = 10;
 
+  // Deprecated: This property is deprecated in favor of property extended_communities
+  // 
+  // Deprecated: This property is deprecated in favor of property extended_communities
+  // 
   // Optional Extended Community settings. The Extended Communities Attribute is a transitive
   // optional BGP attribute, with the Type Code 16. Community and Extended Communities
   // attributes are utilized to trigger routing decisions, such as acceptance, rejection,
@@ -2725,6 +3091,16 @@ message BgpV6RouteRange {
   // occur for the same MAC address.  Note evpn type is defined mainly for use with evpn
   // route updates and not for IPv4 and IPv6 route updates.
   repeated BgpExtCommunity ext_communities = 11;
+
+  // Optional Extended Community settings. The Extended Communities Attribute is a transitive
+  // optional BGP attribute, with the Type Code 16. Community and Extended Communities
+  // attributes are utilized to trigger routing decisions, such as acceptance, rejection,
+  // preference, or redistribution. An extended community is an eight byte value. It
+  // is divided into two main parts. The first two bytes of the community encode a type
+  // and sub-type fields and the last six bytes carry a unique set of data in a format
+  // defined by the type and sub-type field. Extended communities provide a larger range
+  // for grouping or categorizing communities.
+  repeated BgpExtendedCommunity extended_communities = 12;
 }
 
 // Configuration for BGP Segment Routing Traffic Engineering(SRTE)
