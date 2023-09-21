@@ -58,7 +58,7 @@ func NewOpenapiClient(cc grpc.ClientConnInterface) OpenapiClient {
 
 func (c *openapiClient) SetConfig(ctx context.Context, in *SetConfigRequest, opts ...grpc.CallOption) (*SetConfigResponse, error) {
 	out := new(SetConfigResponse)
-	err := c.cc.Invoke(ctx, "/otg.openapi/SetConfig", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/otg.Openapi/SetConfig", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -67,7 +67,7 @@ func (c *openapiClient) SetConfig(ctx context.Context, in *SetConfigRequest, opt
 
 func (c *openapiClient) GetConfig(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*GetConfigResponse, error) {
 	out := new(GetConfigResponse)
-	err := c.cc.Invoke(ctx, "/otg.openapi/GetConfig", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/otg.Openapi/GetConfig", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -76,7 +76,7 @@ func (c *openapiClient) GetConfig(ctx context.Context, in *emptypb.Empty, opts .
 
 func (c *openapiClient) UpdateConfig(ctx context.Context, in *UpdateConfigRequest, opts ...grpc.CallOption) (*UpdateConfigResponse, error) {
 	out := new(UpdateConfigResponse)
-	err := c.cc.Invoke(ctx, "/otg.openapi/UpdateConfig", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/otg.Openapi/UpdateConfig", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -85,7 +85,7 @@ func (c *openapiClient) UpdateConfig(ctx context.Context, in *UpdateConfigReques
 
 func (c *openapiClient) SetControlState(ctx context.Context, in *SetControlStateRequest, opts ...grpc.CallOption) (*SetControlStateResponse, error) {
 	out := new(SetControlStateResponse)
-	err := c.cc.Invoke(ctx, "/otg.openapi/SetControlState", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/otg.Openapi/SetControlState", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -94,7 +94,7 @@ func (c *openapiClient) SetControlState(ctx context.Context, in *SetControlState
 
 func (c *openapiClient) SetControlAction(ctx context.Context, in *SetControlActionRequest, opts ...grpc.CallOption) (*SetControlActionResponse, error) {
 	out := new(SetControlActionResponse)
-	err := c.cc.Invoke(ctx, "/otg.openapi/SetControlAction", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/otg.Openapi/SetControlAction", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -103,7 +103,7 @@ func (c *openapiClient) SetControlAction(ctx context.Context, in *SetControlActi
 
 func (c *openapiClient) GetMetrics(ctx context.Context, in *GetMetricsRequest, opts ...grpc.CallOption) (*GetMetricsResponse, error) {
 	out := new(GetMetricsResponse)
-	err := c.cc.Invoke(ctx, "/otg.openapi/GetMetrics", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/otg.Openapi/GetMetrics", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -112,7 +112,7 @@ func (c *openapiClient) GetMetrics(ctx context.Context, in *GetMetricsRequest, o
 
 func (c *openapiClient) GetStates(ctx context.Context, in *GetStatesRequest, opts ...grpc.CallOption) (*GetStatesResponse, error) {
 	out := new(GetStatesResponse)
-	err := c.cc.Invoke(ctx, "/otg.openapi/GetStates", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/otg.Openapi/GetStates", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -121,7 +121,7 @@ func (c *openapiClient) GetStates(ctx context.Context, in *GetStatesRequest, opt
 
 func (c *openapiClient) GetCapture(ctx context.Context, in *GetCaptureRequest, opts ...grpc.CallOption) (*GetCaptureResponse, error) {
 	out := new(GetCaptureResponse)
-	err := c.cc.Invoke(ctx, "/otg.openapi/GetCapture", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/otg.Openapi/GetCapture", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -130,7 +130,7 @@ func (c *openapiClient) GetCapture(ctx context.Context, in *GetCaptureRequest, o
 
 func (c *openapiClient) GetVersion(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*GetVersionResponse, error) {
 	out := new(GetVersionResponse)
-	err := c.cc.Invoke(ctx, "/otg.openapi/GetVersion", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/otg.Openapi/GetVersion", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -220,7 +220,7 @@ func _Openapi_SetConfig_Handler(srv interface{}, ctx context.Context, dec func(i
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/otg.openapi/SetConfig",
+		FullMethod: "/otg.Openapi/SetConfig",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(OpenapiServer).SetConfig(ctx, req.(*SetConfigRequest))
@@ -238,7 +238,7 @@ func _Openapi_GetConfig_Handler(srv interface{}, ctx context.Context, dec func(i
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/otg.openapi/GetConfig",
+		FullMethod: "/otg.Openapi/GetConfig",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(OpenapiServer).GetConfig(ctx, req.(*emptypb.Empty))
@@ -256,7 +256,7 @@ func _Openapi_UpdateConfig_Handler(srv interface{}, ctx context.Context, dec fun
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/otg.openapi/UpdateConfig",
+		FullMethod: "/otg.Openapi/UpdateConfig",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(OpenapiServer).UpdateConfig(ctx, req.(*UpdateConfigRequest))
@@ -274,7 +274,7 @@ func _Openapi_SetControlState_Handler(srv interface{}, ctx context.Context, dec 
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/otg.openapi/SetControlState",
+		FullMethod: "/otg.Openapi/SetControlState",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(OpenapiServer).SetControlState(ctx, req.(*SetControlStateRequest))
@@ -292,7 +292,7 @@ func _Openapi_SetControlAction_Handler(srv interface{}, ctx context.Context, dec
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/otg.openapi/SetControlAction",
+		FullMethod: "/otg.Openapi/SetControlAction",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(OpenapiServer).SetControlAction(ctx, req.(*SetControlActionRequest))
@@ -310,7 +310,7 @@ func _Openapi_GetMetrics_Handler(srv interface{}, ctx context.Context, dec func(
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/otg.openapi/GetMetrics",
+		FullMethod: "/otg.Openapi/GetMetrics",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(OpenapiServer).GetMetrics(ctx, req.(*GetMetricsRequest))
@@ -328,7 +328,7 @@ func _Openapi_GetStates_Handler(srv interface{}, ctx context.Context, dec func(i
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/otg.openapi/GetStates",
+		FullMethod: "/otg.Openapi/GetStates",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(OpenapiServer).GetStates(ctx, req.(*GetStatesRequest))
@@ -346,7 +346,7 @@ func _Openapi_GetCapture_Handler(srv interface{}, ctx context.Context, dec func(
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/otg.openapi/GetCapture",
+		FullMethod: "/otg.Openapi/GetCapture",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(OpenapiServer).GetCapture(ctx, req.(*GetCaptureRequest))
@@ -364,7 +364,7 @@ func _Openapi_GetVersion_Handler(srv interface{}, ctx context.Context, dec func(
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/otg.openapi/GetVersion",
+		FullMethod: "/otg.Openapi/GetVersion",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(OpenapiServer).GetVersion(ctx, req.(*emptypb.Empty))
@@ -376,7 +376,7 @@ func _Openapi_GetVersion_Handler(srv interface{}, ctx context.Context, dec func(
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var Openapi_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "otg.openapi",
+	ServiceName: "otg.Openapi",
 	HandlerType: (*OpenapiServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{

@@ -19924,7 +19924,7 @@ message GetVersionResponse {
 // representation of `Error` message as an error string upon failure, ensuring
 // name of enum constants (instead of value) for `kind` property is present
 // in the representation
-service openapi {
+service Openapi {
 
   // Sets configuration resources on the traffic generator.
   rpc SetConfig(SetConfigRequest) returns (SetConfigResponse);

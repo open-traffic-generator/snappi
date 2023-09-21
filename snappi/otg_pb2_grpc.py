@@ -9,7 +9,7 @@ except ImportError:
     from snappi import otg_pb2 as otg__pb2
 
 
-class openapiStub(object):
+class OpenapiStub(object):
     """Description missing in models
 
     For all RPCs defined in this service, API Server SHOULD provide JSON
@@ -25,53 +25,53 @@ class openapiStub(object):
             channel: A grpc.Channel.
         """
         self.SetConfig = channel.unary_unary(
-                '/otg.openapi/SetConfig',
+                '/otg.Openapi/SetConfig',
                 request_serializer=otg__pb2.SetConfigRequest.SerializeToString,
                 response_deserializer=otg__pb2.SetConfigResponse.FromString,
                 )
         self.GetConfig = channel.unary_unary(
-                '/otg.openapi/GetConfig',
+                '/otg.Openapi/GetConfig',
                 request_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
                 response_deserializer=otg__pb2.GetConfigResponse.FromString,
                 )
         self.UpdateConfig = channel.unary_unary(
-                '/otg.openapi/UpdateConfig',
+                '/otg.Openapi/UpdateConfig',
                 request_serializer=otg__pb2.UpdateConfigRequest.SerializeToString,
                 response_deserializer=otg__pb2.UpdateConfigResponse.FromString,
                 )
         self.SetControlState = channel.unary_unary(
-                '/otg.openapi/SetControlState',
+                '/otg.Openapi/SetControlState',
                 request_serializer=otg__pb2.SetControlStateRequest.SerializeToString,
                 response_deserializer=otg__pb2.SetControlStateResponse.FromString,
                 )
         self.SetControlAction = channel.unary_unary(
-                '/otg.openapi/SetControlAction',
+                '/otg.Openapi/SetControlAction',
                 request_serializer=otg__pb2.SetControlActionRequest.SerializeToString,
                 response_deserializer=otg__pb2.SetControlActionResponse.FromString,
                 )
         self.GetMetrics = channel.unary_unary(
-                '/otg.openapi/GetMetrics',
+                '/otg.Openapi/GetMetrics',
                 request_serializer=otg__pb2.GetMetricsRequest.SerializeToString,
                 response_deserializer=otg__pb2.GetMetricsResponse.FromString,
                 )
         self.GetStates = channel.unary_unary(
-                '/otg.openapi/GetStates',
+                '/otg.Openapi/GetStates',
                 request_serializer=otg__pb2.GetStatesRequest.SerializeToString,
                 response_deserializer=otg__pb2.GetStatesResponse.FromString,
                 )
         self.GetCapture = channel.unary_unary(
-                '/otg.openapi/GetCapture',
+                '/otg.Openapi/GetCapture',
                 request_serializer=otg__pb2.GetCaptureRequest.SerializeToString,
                 response_deserializer=otg__pb2.GetCaptureResponse.FromString,
                 )
         self.GetVersion = channel.unary_unary(
-                '/otg.openapi/GetVersion',
+                '/otg.Openapi/GetVersion',
                 request_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
                 response_deserializer=otg__pb2.GetVersionResponse.FromString,
                 )
 
 
-class openapiServicer(object):
+class OpenapiServicer(object):
     """Description missing in models
 
     For all RPCs defined in this service, API Server SHOULD provide JSON
@@ -148,7 +148,7 @@ class openapiServicer(object):
         raise NotImplementedError('Method not implemented!')
 
 
-def add_openapiServicer_to_server(servicer, server):
+def add_OpenapiServicer_to_server(servicer, server):
     rpc_method_handlers = {
             'SetConfig': grpc.unary_unary_rpc_method_handler(
                     servicer.SetConfig,
@@ -197,12 +197,12 @@ def add_openapiServicer_to_server(servicer, server):
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
-            'otg.openapi', rpc_method_handlers)
+            'otg.Openapi', rpc_method_handlers)
     server.add_generic_rpc_handlers((generic_handler,))
 
 
  # This class is part of an EXPERIMENTAL API.
-class openapi(object):
+class Openapi(object):
     """Description missing in models
 
     For all RPCs defined in this service, API Server SHOULD provide JSON
@@ -222,7 +222,7 @@ class openapi(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/otg.openapi/SetConfig',
+        return grpc.experimental.unary_unary(request, target, '/otg.Openapi/SetConfig',
             otg__pb2.SetConfigRequest.SerializeToString,
             otg__pb2.SetConfigResponse.FromString,
             options, channel_credentials,
@@ -239,7 +239,7 @@ class openapi(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/otg.openapi/GetConfig',
+        return grpc.experimental.unary_unary(request, target, '/otg.Openapi/GetConfig',
             google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
             otg__pb2.GetConfigResponse.FromString,
             options, channel_credentials,
@@ -256,7 +256,7 @@ class openapi(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/otg.openapi/UpdateConfig',
+        return grpc.experimental.unary_unary(request, target, '/otg.Openapi/UpdateConfig',
             otg__pb2.UpdateConfigRequest.SerializeToString,
             otg__pb2.UpdateConfigResponse.FromString,
             options, channel_credentials,
@@ -273,7 +273,7 @@ class openapi(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/otg.openapi/SetControlState',
+        return grpc.experimental.unary_unary(request, target, '/otg.Openapi/SetControlState',
             otg__pb2.SetControlStateRequest.SerializeToString,
             otg__pb2.SetControlStateResponse.FromString,
             options, channel_credentials,
@@ -290,7 +290,7 @@ class openapi(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/otg.openapi/SetControlAction',
+        return grpc.experimental.unary_unary(request, target, '/otg.Openapi/SetControlAction',
             otg__pb2.SetControlActionRequest.SerializeToString,
             otg__pb2.SetControlActionResponse.FromString,
             options, channel_credentials,
@@ -307,7 +307,7 @@ class openapi(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/otg.openapi/GetMetrics',
+        return grpc.experimental.unary_unary(request, target, '/otg.Openapi/GetMetrics',
             otg__pb2.GetMetricsRequest.SerializeToString,
             otg__pb2.GetMetricsResponse.FromString,
             options, channel_credentials,
@@ -324,7 +324,7 @@ class openapi(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/otg.openapi/GetStates',
+        return grpc.experimental.unary_unary(request, target, '/otg.Openapi/GetStates',
             otg__pb2.GetStatesRequest.SerializeToString,
             otg__pb2.GetStatesResponse.FromString,
             options, channel_credentials,
@@ -341,7 +341,7 @@ class openapi(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/otg.openapi/GetCapture',
+        return grpc.experimental.unary_unary(request, target, '/otg.Openapi/GetCapture',
             otg__pb2.GetCaptureRequest.SerializeToString,
             otg__pb2.GetCaptureResponse.FromString,
             options, channel_credentials,
@@ -358,7 +358,7 @@ class openapi(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/otg.openapi/GetVersion',
+        return grpc.experimental.unary_unary(request, target, '/otg.Openapi/GetVersion',
             google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
             otg__pb2.GetVersionResponse.FromString,
             options, channel_credentials,
