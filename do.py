@@ -32,7 +32,7 @@ models_version = Version.models_version
 sdk_version = Version.version
 
 # supported values - local openapiart path or None
-USE_OPENAPIART_DIR = None
+USE_OPENAPIART_DIR = "changed-required-field-to-optional"
 USE_MODELS_DIR = None
 
 # supported values - branch name or None
