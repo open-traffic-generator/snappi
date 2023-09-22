@@ -1,4 +1,4 @@
-/* Open Traffic Generator API 0.12.4
+/* Open Traffic Generator API 0.12.5
  * Open Traffic Generator API defines a model-driven, vendor-neutral and standard
  * interface for emulating layer 2-7 network devices and generating test traffic.
  * 
@@ -10229,7 +10229,7 @@ message PatternFlowVlanId {
 message PatternFlowVlanTpidCounter {
 
   // Description missing in models
-  // default = 33024
+  // default = 65535
   optional uint32 start = 1;
 
   // Description missing in models
@@ -10278,11 +10278,11 @@ message PatternFlowVlanTpid {
   optional Choice.Enum choice = 1;
 
   // Description missing in models
-  // default = 33024
+  // default = 65535
   optional uint32 value = 2;
 
   // Description missing in models
-  // default = [33024]
+  // default = [65535]
   repeated uint32 values = 3;
 
   // Description missing in models

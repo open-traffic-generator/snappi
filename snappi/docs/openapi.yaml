@@ -7,7 +7,7 @@ info:
     \ issue](https://github.com/open-traffic-generator/models/issues) in the models\
     \ repository\n- [fork the models repository](https://github.com/open-traffic-generator/models)\
     \ and submit a PR"
-  version: 0.12.4
+  version: 0.12.5
   contact:
     url: https://github.com/open-traffic-generator/models
   license:
@@ -14135,7 +14135,7 @@ components:
         start:
           type: integer
           x-field-uid: 1
-          default: 33024
+          default: 65535
           format: uint32
           maximum: 65535
         step:
@@ -14212,7 +14212,7 @@ components:
         value:
           type: integer
           x-field-uid: 2
-          default: 33024
+          default: 65535
           format: uint32
           maximum: 65535
         values:
@@ -14223,7 +14223,7 @@ components:
             maximum: 65535
           x-field-uid: 3
           default:
-          - 33024
+          - 65535
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Vlan.Tpid.Counter'
           x-field-uid: 5
