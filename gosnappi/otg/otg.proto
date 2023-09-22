@@ -42,10 +42,10 @@ message Config {
   repeated Flow flows = 6;
 
   // Description missing in models
-  optional Event events = 7;
+  Event events = 7;
 
   // Description missing in models
-  optional ConfigOptions options = 8;
+  ConfigOptions options = 8;
 
   // LLDP protocol that will be configured on traffic generator.
   repeated Lldp lldp = 9;
@@ -55,10 +55,10 @@ message Config {
 message ConfigOptions {
 
   // Description missing in models
-  optional PortOptions port_options = 1;
+  PortOptions port_options = 1;
 
   // Description missing in models
-  optional ProtocolOptions protocol_options = 2;
+  ProtocolOptions protocol_options = 2;
 }
 
 // An abstract test port.
@@ -99,7 +99,7 @@ message Lag {
   repeated LagPort ports = 1;
 
   // Description missing in models
-  optional LagProtocol protocol = 2;
+  LagProtocol protocol = 2;
 
   // Specifies the mininum number of member interfaces that must be active for the aggregate
   // interface to be available.
@@ -127,11 +127,11 @@ message LagPort {
   optional string port_name = 1;
 
   // Description missing in models
-  optional LagPortLacp lacp = 2;
+  LagPortLacp lacp = 2;
 
   // Description missing in models
   // required = true
-  optional DeviceEthernetBase ethernet = 3;
+  DeviceEthernetBase ethernet = 3;
 }
 
 // Description missing in models
@@ -149,10 +149,10 @@ message LagProtocol {
   optional Choice.Enum choice = 1;
 
   // Description missing in models
-  optional LagProtocolLacp lacp = 2;
+  LagProtocolLacp lacp = 2;
 
   // Description missing in models
-  optional LagProtocolStatic static = 3;
+  LagProtocolStatic static = 3;
 }
 
 // The container for static link aggregation protocol settings.
@@ -238,7 +238,7 @@ message DeviceEthernetBase {
 message DeviceEthernet {
 
   // Device connection to physical, LAG or another device.
-  optional EthernetConnection connection = 2;
+  EthernetConnection connection = 2;
 
   // List of IPv4 addresses and their gateways.
   repeated DeviceIpv4 ipv4_addresses = 3;
@@ -341,7 +341,7 @@ message DeviceIpv4 {
   optional string gateway = 1;
 
   // Description missing in models
-  optional DeviceIpv4GatewayMAC gateway_mac = 2;
+  DeviceIpv4GatewayMAC gateway_mac = 2;
 
   // The IPv4 address
   // required = true
@@ -415,7 +415,7 @@ message DeviceIpv6 {
   optional string gateway = 1;
 
   // Description missing in models
-  optional DeviceIpv6GatewayMAC gateway_mac = 2;
+  DeviceIpv6GatewayMAC gateway_mac = 2;
 
   // The IPv6 address.
   // required = true
@@ -540,10 +540,10 @@ message Layer1 {
   optional bool auto_negotiate = 7;
 
   // Description missing in models
-  optional Layer1AutoNegotiation auto_negotiation = 8;
+  Layer1AutoNegotiation auto_negotiation = 8;
 
   // Description missing in models
-  optional Layer1FlowControl flow_control = 9;
+  Layer1FlowControl flow_control = 9;
 
   // Globally unique name of an object. It also serves as the primary key for arrays of
   // objects.
@@ -610,10 +610,10 @@ message Layer1FlowControl {
   optional Choice.Enum choice = 2;
 
   // Description missing in models
-  optional Layer1Ieee8021qbb ieee_802_1qbb = 3;
+  Layer1Ieee8021qbb ieee_802_1qbb = 3;
 
   // Description missing in models
-  optional Layer1Ieee8023x ieee_802_3x = 4;
+  Layer1Ieee8023x ieee_802_3x = 4;
 }
 
 // A container for ieee 802.3x rx pause settings
@@ -737,19 +737,19 @@ message CaptureFilter {
   // Offset from last filter in the list. If no filters are present it is offset from
   // position 0. Multiple custom filters can be present, the length of each custom filter
   // is the length of the value being filtered.
-  optional CaptureCustom custom = 2;
+  CaptureCustom custom = 2;
 
   // Description missing in models
-  optional CaptureEthernet ethernet = 3;
+  CaptureEthernet ethernet = 3;
 
   // Description missing in models
-  optional CaptureVlan vlan = 4;
+  CaptureVlan vlan = 4;
 
   // Description missing in models
-  optional CaptureIpv4 ipv4 = 5;
+  CaptureIpv4 ipv4 = 5;
 
   // Description missing in models
-  optional CaptureIpv6 ipv6 = 6;
+  CaptureIpv6 ipv6 = 6;
 }
 
 // Description missing in models
@@ -795,106 +795,106 @@ message CaptureField {
 message CaptureEthernet {
 
   // Description missing in models
-  optional CaptureField src = 1;
+  CaptureField src = 1;
 
   // Description missing in models
-  optional CaptureField dst = 2;
+  CaptureField dst = 2;
 
   // Description missing in models
-  optional CaptureField ether_type = 3;
+  CaptureField ether_type = 3;
 
   // Description missing in models
-  optional CaptureField pfc_queue = 4;
+  CaptureField pfc_queue = 4;
 }
 
 // Description missing in models
 message CaptureVlan {
 
   // Description missing in models
-  optional CaptureField priority = 1;
+  CaptureField priority = 1;
 
   // Description missing in models
-  optional CaptureField cfi = 2;
+  CaptureField cfi = 2;
 
   // Description missing in models
-  optional CaptureField id = 3;
+  CaptureField id = 3;
 
   // Description missing in models
-  optional CaptureField protocol = 4;
+  CaptureField protocol = 4;
 }
 
 // Description missing in models
 message CaptureIpv4 {
 
   // Description missing in models
-  optional CaptureField version = 1;
+  CaptureField version = 1;
 
   // Description missing in models
-  optional CaptureField header_length = 2;
+  CaptureField header_length = 2;
 
   // Description missing in models
-  optional CaptureField priority = 3;
+  CaptureField priority = 3;
 
   // Description missing in models
-  optional CaptureField total_length = 4;
+  CaptureField total_length = 4;
 
   // Description missing in models
-  optional CaptureField identification = 5;
+  CaptureField identification = 5;
 
   // Description missing in models
-  optional CaptureField reserved = 6;
+  CaptureField reserved = 6;
 
   // Description missing in models
-  optional CaptureField dont_fragment = 7;
+  CaptureField dont_fragment = 7;
 
   // Description missing in models
-  optional CaptureField more_fragments = 8;
+  CaptureField more_fragments = 8;
 
   // Description missing in models
-  optional CaptureField fragment_offset = 9;
+  CaptureField fragment_offset = 9;
 
   // Description missing in models
-  optional CaptureField time_to_live = 10;
+  CaptureField time_to_live = 10;
 
   // Description missing in models
-  optional CaptureField protocol = 11;
+  CaptureField protocol = 11;
 
   // Description missing in models
-  optional CaptureField header_checksum = 12;
+  CaptureField header_checksum = 12;
 
   // Description missing in models
-  optional CaptureField src = 13;
+  CaptureField src = 13;
 
   // Description missing in models
-  optional CaptureField dst = 14;
+  CaptureField dst = 14;
 }
 
 // Description missing in models
 message CaptureIpv6 {
 
   // Description missing in models
-  optional CaptureField version = 1;
+  CaptureField version = 1;
 
   // Description missing in models
-  optional CaptureField traffic_class = 2;
+  CaptureField traffic_class = 2;
 
   // Description missing in models
-  optional CaptureField flow_label = 3;
+  CaptureField flow_label = 3;
 
   // Description missing in models
-  optional CaptureField payload_length = 4;
+  CaptureField payload_length = 4;
 
   // Description missing in models
-  optional CaptureField next_header = 5;
+  CaptureField next_header = 5;
 
   // Description missing in models
-  optional CaptureField hop_limit = 6;
+  CaptureField hop_limit = 6;
 
   // Description missing in models
-  optional CaptureField src = 7;
+  CaptureField src = 7;
 
   // Description missing in models
-  optional CaptureField dst = 8;
+  CaptureField dst = 8;
 }
 
 // A container for emulated interfaces, loopback interfaces and protocol configurations.
@@ -913,14 +913,14 @@ message Device {
 
   // The properties of an IS-IS router and its children,  such as IS-IS interfaces and
   // route ranges.
-  optional DeviceIsisRouter isis = 4;
+  DeviceIsisRouter isis = 4;
 
   // The properties of BGP router and its children,  such as BGPv4, BGPv6 peers and their
   // route ranges.
-  optional DeviceBgpRouter bgp = 5;
+  DeviceBgpRouter bgp = 5;
 
   // Configuration of VXLAN tunnel interfaces RFC Ref: https://datatracker.ietf.org/doc/html/rfc7348
-  optional DeviceVxlan vxlan = 6;
+  DeviceVxlan vxlan = 6;
 
   // Globally unique name of an object. It also serves as the primary key for arrays of
   // objects.
@@ -928,7 +928,7 @@ message Device {
   optional string name = 7;
 
   // The properties of an RSVP router and its children.
-  optional DeviceRsvp rsvp = 8;
+  DeviceRsvp rsvp = 8;
 }
 
 // Common options that apply to all configured protocols and interfaces.
@@ -947,7 +947,7 @@ message DeviceIsisRouter {
 
   // This contains the properties of a Multi-Instance-capable routers or MI-RTR. Each
   // router can emulate one ISIS instance at a time.
-  optional DeviceIsisMultiInstance instance = 1;
+  DeviceIsisMultiInstance instance = 1;
 
   // The System ID for this emulated ISIS router, e.g. 640100010000.
   // required = true
@@ -957,13 +957,13 @@ message DeviceIsisRouter {
   repeated IsisInterface interfaces = 3;
 
   // Contains basic properties of an ISIS Router.
-  optional IsisBasic basic = 4;
+  IsisBasic basic = 4;
 
   // Contains advance properties of an ISIS Router..
-  optional IsisAdvanced advanced = 5;
+  IsisAdvanced advanced = 5;
 
   // ISIS Router authentication properties.
-  optional IsisAuthentication router_auth = 6;
+  IsisAuthentication router_auth = 6;
 
   // Emulated ISIS IPv4 routes.
   repeated IsisV4RouteRange v4_routes = 7;
@@ -1031,10 +1031,10 @@ message IsisInterface {
   optional LevelType.Enum level_type = 4;
 
   // Settings of Level 1 Hello.
-  optional IsisInterfaceLevel l1_settings = 5;
+  IsisInterfaceLevel l1_settings = 5;
 
   // Settings of Level 2 Hello.
-  optional IsisInterfaceLevel l2_settings = 6;
+  IsisInterfaceLevel l2_settings = 6;
 
   // Contains the properties of multiple topologies.
   repeated IsisMT multi_topology_ids = 7;
@@ -1044,13 +1044,13 @@ message IsisInterface {
 
   // The Circuit authentication method used for the interfaces on this emulated ISIS v4/v6
   // router.
-  optional IsisInterfaceAuthentication authentication = 9;
+  IsisInterfaceAuthentication authentication = 9;
 
   // Optional container for advanced interface properties.
-  optional IsisInterfaceAdvanced advanced = 10;
+  IsisInterfaceAdvanced advanced = 10;
 
   // Link protection on the ISIS link between two interfaces.
-  optional IsisInterfaceLinkProtection link_protection = 11;
+  IsisInterfaceLinkProtection link_protection = 11;
 
   // This contains list of SRLG values for the link between two interfaces.
   repeated uint32 srlg_values = 12;
@@ -1118,7 +1118,7 @@ message LinkStateTE {
   optional uint32 max_reservable_bandwidth = 4;
 
   // Configuration of bandwidths of priority 0 through priority 7.
-  optional LinkStatepriorityBandwidths priority_bandwidths = 5;
+  LinkStatepriorityBandwidths priority_bandwidths = 5;
 }
 
 // Specifies the amount of bandwidth that can be reserved with a setup priority of 0
@@ -1344,11 +1344,11 @@ message IsisAuthentication {
 
   // The Area authentication method used for the emulated ISIS router.
   // This is used for L1 LSPs.
-  optional IsisAuthenticationBase area_auth = 2;
+  IsisAuthenticationBase area_auth = 2;
 
   // The Domain authentication method used for the emulated ISIS router.
   // This is used for L2 LSPs.
-  optional IsisAuthenticationBase domain_auth = 3;
+  IsisAuthenticationBase domain_auth = 3;
 }
 
 // Optional container for ISIS authentication properties.
@@ -1767,13 +1767,13 @@ message BgpV4Peer {
   optional AsNumberWidth.Enum as_number_width = 5;
 
   // Description missing in models
-  optional BgpAdvanced advanced = 6;
+  BgpAdvanced advanced = 6;
 
   // Description missing in models
-  optional BgpCapability capability = 7;
+  BgpCapability capability = 7;
 
   // Description missing in models
-  optional BgpLearnedInformationFilter learned_information_filter = 8;
+  BgpLearnedInformationFilter learned_information_filter = 8;
 
   // Emulated BGPv4 route ranges.
   repeated BgpV4RouteRange v4_routes = 9;
@@ -1797,7 +1797,7 @@ message BgpV4Peer {
   optional string name = 13;
 
   // Description missing in models
-  optional BgpGracefulRestart graceful_restart = 14;
+  BgpGracefulRestart graceful_restart = 14;
 }
 
 // Configuration for emulated BGPv4 peers and routes on a single IPv4 interface.
@@ -1823,7 +1823,7 @@ message BgpV4Interface {
 message BgpV4EthernetSegment {
 
   // Designated Forwarder (DF) election configuration.
-  optional BgpEthernetSegmentDfElection df_election = 1;
+  BgpEthernetSegmentDfElection df_election = 1;
 
   // This contains the list of EVIs.
   repeated BgpV4EvpnEvis evis = 2;
@@ -1850,7 +1850,7 @@ message BgpV4EthernetSegment {
   optional uint32 esi_label = 5;
 
   // Description missing in models
-  optional BgpRouteAdvanced advanced = 6;
+  BgpRouteAdvanced advanced = 6;
 
   // Optional community settings.
   repeated BgpCommunity communities = 7;
@@ -1885,7 +1885,7 @@ message BgpV4EthernetSegment {
   repeated BgpExtCommunity ext_communities = 8;
 
   // Optional AS PATH settings.
-  optional BgpAsPath as_path = 9;
+  BgpAsPath as_path = 9;
 }
 
 // Configuration for Designated Forwarder (DF) election among the Provider Edge (PE)
@@ -2099,7 +2099,7 @@ message BgpV4EvpnEvis {
   optional Choice.Enum choice = 1;
 
   // EVPN VXLAN instance to be configured per Ethernet Segment.
-  optional BgpV4EviVxlan evi_vxlan = 2;
+  BgpV4EviVxlan evi_vxlan = 2;
 }
 
 // Configuration for BGP EVPN EVI. Advertises following routes -
@@ -2136,7 +2136,7 @@ message BgpV4EviVxlan {
 
   // Colon separated Extended Community value of 6 Bytes - AS number: Value identifying
   // an EVI.            Example - for the as_2octet 60005:100.
-  optional BgpRouteDistinguisher route_distinguisher = 5;
+  BgpRouteDistinguisher route_distinguisher = 5;
 
   // List of Layer 2 Virtual Network Identifier (L2VNI) export targets associated with
   // this EVI.
@@ -2152,7 +2152,7 @@ message BgpV4EviVxlan {
   repeated BgpRouteTarget l3_route_target_import = 9;
 
   // Description missing in models
-  optional BgpRouteAdvanced advanced = 10;
+  BgpRouteAdvanced advanced = 10;
 
   // Optional community settings.
   repeated BgpCommunity communities = 11;
@@ -2187,7 +2187,7 @@ message BgpV4EviVxlan {
   repeated BgpExtCommunity ext_communities = 12;
 
   // Optional AS PATH settings.
-  optional BgpAsPath as_path = 13;
+  BgpAsPath as_path = 13;
 }
 
 // Configuration for Broadcast Domains per EVI.
@@ -2217,7 +2217,7 @@ message BgpV4EviVxlanBroadcastDomain {
 message BgpCMacIpRange {
 
   // Host MAC address range per Broadcast Domain.
-  optional MACRouteAddress mac_addresses = 1;
+  MACRouteAddress mac_addresses = 1;
 
   // Layer 2 Virtual Network Identifier (L2VNI) to be advertised with MAC/IP Advertisement
   // Route (Type 2)
@@ -2225,10 +2225,10 @@ message BgpCMacIpRange {
   optional uint32 l2vni = 2;
 
   // Host IPv4 address range per Broadcast Domain.
-  optional V4RouteAddress ipv4_addresses = 3;
+  V4RouteAddress ipv4_addresses = 3;
 
   // Host IPv6 address range per Broadcast Domain.
-  optional V6RouteAddress ipv6_addresses = 4;
+  V6RouteAddress ipv6_addresses = 4;
 
   // Layer 3 Virtual Network Identifier (L3VNI) to be advertised with MAC/IP Advertisement
   // Route (Type 2).
@@ -2240,7 +2240,7 @@ message BgpCMacIpRange {
   optional bool include_default_gateway = 6;
 
   // Description missing in models
-  optional BgpRouteAdvanced advanced = 7;
+  BgpRouteAdvanced advanced = 7;
 
   // Optional community settings.
   repeated BgpCommunity communities = 8;
@@ -2275,7 +2275,7 @@ message BgpCMacIpRange {
   repeated BgpExtCommunity ext_communities = 9;
 
   // Optional AS PATH settings.
-  optional BgpAsPath as_path = 10;
+  BgpAsPath as_path = 10;
 
   // Globally unique name of an object. It also serves as the primary key for arrays of
   // objects.
@@ -2535,16 +2535,16 @@ message BgpV4RouteRange {
   optional string next_hop_ipv6_address = 5;
 
   // Description missing in models
-  optional BgpRouteAdvanced advanced = 6;
+  BgpRouteAdvanced advanced = 6;
 
   // Optional community settings.
   repeated BgpCommunity communities = 7;
 
   // Description missing in models
-  optional BgpAsPath as_path = 8;
+  BgpAsPath as_path = 8;
 
   // Description missing in models
-  optional BgpAddPath add_path = 9;
+  BgpAddPath add_path = 9;
 
   // Globally unique name of an object. It also serves as the primary key for arrays of
   // objects.
@@ -2631,25 +2631,25 @@ message BgpExtendedCommunity {
   optional Choice.Enum choice = 1;
 
   // Description missing in models
-  optional BgpExtendedCommunityTransitive2OctetAsType transitive_2octet_as_type = 2;
+  BgpExtendedCommunityTransitive2OctetAsType transitive_2octet_as_type = 2;
 
   // Description missing in models
-  optional BgpExtendedCommunityTransitiveIpv4AddressType transitive_ipv4_address_type = 3;
+  BgpExtendedCommunityTransitiveIpv4AddressType transitive_ipv4_address_type = 3;
 
   // Description missing in models
-  optional BgpExtendedCommunityTransitive4OctetAsType transitive_4octet_as_type = 4;
+  BgpExtendedCommunityTransitive4OctetAsType transitive_4octet_as_type = 4;
 
   // Description missing in models
-  optional BgpExtendedCommunityTransitiveOpaqueType transitive_opaque_type = 5;
+  BgpExtendedCommunityTransitiveOpaqueType transitive_opaque_type = 5;
 
   // Description missing in models
-  optional BgpExtendedCommunityTransitiveEvpnType transitive_evpn_type = 6;
+  BgpExtendedCommunityTransitiveEvpnType transitive_evpn_type = 6;
 
   // Description missing in models
-  optional BgpExtendedCommunityNonTransitive2OctetAsType non_transitive_2octet_as_type = 7;
+  BgpExtendedCommunityNonTransitive2OctetAsType non_transitive_2octet_as_type = 7;
 
   // Description missing in models
-  optional BgpExtendedCommunityCustomType custom = 8;
+  BgpExtendedCommunityCustomType custom = 8;
 }
 
 // The Route Target Community identifies one or more routers that may receive a set
@@ -2699,10 +2699,10 @@ message BgpExtendedCommunityTransitive2OctetAsType {
   optional Choice.Enum choice = 1;
 
   // Description missing in models
-  optional BgpExtendedCommunityTransitive2OctetAsTypeRouteTarget route_target_subtype = 2;
+  BgpExtendedCommunityTransitive2OctetAsTypeRouteTarget route_target_subtype = 2;
 
   // Description missing in models
-  optional BgpExtendedCommunityTransitive2OctetAsTypeRouteOrigin route_origin_subtype = 3;
+  BgpExtendedCommunityTransitive2OctetAsTypeRouteOrigin route_origin_subtype = 3;
 }
 
 // The Route Origin Community identifies one or more routers that inject a set of routes
@@ -2751,10 +2751,10 @@ message BgpExtendedCommunityTransitiveIpv4AddressType {
   optional Choice.Enum choice = 1;
 
   // Description missing in models
-  optional BgpExtendedCommunityTransitiveIpv4AddressTypeRouteTarget route_target_subtype = 2;
+  BgpExtendedCommunityTransitiveIpv4AddressTypeRouteTarget route_target_subtype = 2;
 
   // Description missing in models
-  optional BgpExtendedCommunityTransitiveIpv4AddressTypeRouteOrigin route_origin_subtype = 3;
+  BgpExtendedCommunityTransitiveIpv4AddressTypeRouteOrigin route_origin_subtype = 3;
 }
 
 // The Route Target Community identifies one or more routers that may receive a set
@@ -2804,10 +2804,10 @@ message BgpExtendedCommunityTransitive4OctetAsType {
   optional Choice.Enum choice = 1;
 
   // Description missing in models
-  optional BgpExtendedCommunityTransitive4OctetAsTypeRouteTarget route_target_subtype = 2;
+  BgpExtendedCommunityTransitive4OctetAsTypeRouteTarget route_target_subtype = 2;
 
   // Description missing in models
-  optional BgpExtendedCommunityTransitive4OctetAsTypeRouteOrigin route_origin_subtype = 3;
+  BgpExtendedCommunityTransitive4OctetAsTypeRouteOrigin route_origin_subtype = 3;
 }
 
 // The Color Community contains locally administrator defined 'color' value which is
@@ -2865,10 +2865,10 @@ message BgpExtendedCommunityTransitiveOpaqueType {
   optional Choice.Enum choice = 1;
 
   // Description missing in models
-  optional BgpExtendedCommunityTransitiveOpaqueTypeColor color_subtype = 2;
+  BgpExtendedCommunityTransitiveOpaqueTypeColor color_subtype = 2;
 
   // Description missing in models
-  optional BgpExtendedCommunityTransitiveOpaqueTypeEncapsulation encapsulation_subtype = 3;
+  BgpExtendedCommunityTransitiveOpaqueTypeEncapsulation encapsulation_subtype = 3;
 }
 
 // The Router MAC EVPN Community is defined in RFC9135 and normally sent only for EVPN
@@ -2894,7 +2894,7 @@ message BgpExtendedCommunityTransitiveEvpnType {
   optional Choice.Enum choice = 1;
 
   // Description missing in models
-  optional BgpExtendedCommunityTransitiveEvpnTypeRouterMac router_mac_subtype = 2;
+  BgpExtendedCommunityTransitiveEvpnTypeRouterMac router_mac_subtype = 2;
 }
 
 // The Link Bandwidth Extended Community attribute is defined in draft-ietf-idr-link-bandwidth.
@@ -2928,7 +2928,7 @@ message BgpExtendedCommunityNonTransitive2OctetAsType {
   optional Choice.Enum choice = 1;
 
   // Description missing in models
-  optional BgpExtendedCommunityNonTransitive2OctetAsTypeLinkBandwidth link_bandwidth_subtype = 2;
+  BgpExtendedCommunityNonTransitive2OctetAsTypeLinkBandwidth link_bandwidth_subtype = 2;
 }
 
 // Add a custom Extended Community with a combination of types , sub-types and values
@@ -2996,16 +2996,16 @@ message BgpV6RouteRange {
   optional string next_hop_ipv6_address = 5;
 
   // Description missing in models
-  optional BgpRouteAdvanced advanced = 6;
+  BgpRouteAdvanced advanced = 6;
 
   // Optional community settings.
   repeated BgpCommunity communities = 7;
 
   // Description missing in models
-  optional BgpAsPath as_path = 8;
+  BgpAsPath as_path = 8;
 
   // Description missing in models
-  optional BgpAddPath add_path = 9;
+  BgpAddPath add_path = 9;
 
   // Globally unique name of an object. It also serves as the primary key for arrays of
   // objects.
@@ -3113,13 +3113,13 @@ message BgpSrteV4Policy {
   optional string next_hop_ipv6_address = 7;
 
   // Description missing in models
-  optional BgpRouteAdvanced advanced = 8;
+  BgpRouteAdvanced advanced = 8;
 
   // Description missing in models
-  optional BgpAddPath add_path = 9;
+  BgpAddPath add_path = 9;
 
   // Description missing in models
-  optional BgpAsPath as_path = 10;
+  BgpAsPath as_path = 10;
 
   // Optional Community settings.
   repeated BgpCommunity communities = 11;
@@ -3173,25 +3173,25 @@ message BgpSrteV4Policy {
 message BgpSrteV4TunnelTlv {
 
   // Description missing in models
-  optional BgpSrteRemoteEndpointSubTlv remote_endpoint_sub_tlv = 1;
+  BgpSrteRemoteEndpointSubTlv remote_endpoint_sub_tlv = 1;
 
   // Description missing in models
-  optional BgpSrteColorSubTlv color_sub_tlv = 2;
+  BgpSrteColorSubTlv color_sub_tlv = 2;
 
   // Description missing in models
-  optional BgpSrteBindingSubTlv binding_sub_tlv = 3;
+  BgpSrteBindingSubTlv binding_sub_tlv = 3;
 
   // Description missing in models
-  optional BgpSrtePreferenceSubTlv preference_sub_tlv = 4;
+  BgpSrtePreferenceSubTlv preference_sub_tlv = 4;
 
   // Description missing in models
-  optional BgpSrtePolicyPrioritySubTlv policy_priority_sub_tlv = 5;
+  BgpSrtePolicyPrioritySubTlv policy_priority_sub_tlv = 5;
 
   // Description missing in models
-  optional BgpSrtePolicyNameSubTlv policy_name_sub_tlv = 6;
+  BgpSrtePolicyNameSubTlv policy_name_sub_tlv = 6;
 
   // Description missing in models
-  optional BgpSrteExplicitNullLabelPolicySubTlv explicit_null_label_policy_sub_tlv = 7;
+  BgpSrteExplicitNullLabelPolicySubTlv explicit_null_label_policy_sub_tlv = 7;
 
   // Description missing in models
   repeated BgpSrteSegmentList segment_lists = 8;
@@ -3385,37 +3385,37 @@ message BgpSrteSegment {
   optional SegmentType.Enum segment_type = 1;
 
   // Description missing in models
-  optional BgpSrteSegmentATypeSubTlv type_a = 2;
+  BgpSrteSegmentATypeSubTlv type_a = 2;
 
   // Description missing in models
-  optional BgpSrteSegmentBTypeSubTlv type_b = 3;
+  BgpSrteSegmentBTypeSubTlv type_b = 3;
 
   // Description missing in models
-  optional BgpSrteSegmentCTypeSubTlv type_c = 4;
+  BgpSrteSegmentCTypeSubTlv type_c = 4;
 
   // Description missing in models
-  optional BgpSrteSegmentDTypeSubTlv type_d = 5;
+  BgpSrteSegmentDTypeSubTlv type_d = 5;
 
   // Description missing in models
-  optional BgpSrteSegmentETypeSubTlv type_e = 6;
+  BgpSrteSegmentETypeSubTlv type_e = 6;
 
   // Description missing in models
-  optional BgpSrteSegmentFTypeSubTlv type_f = 7;
+  BgpSrteSegmentFTypeSubTlv type_f = 7;
 
   // Description missing in models
-  optional BgpSrteSegmentGTypeSubTlv type_g = 8;
+  BgpSrteSegmentGTypeSubTlv type_g = 8;
 
   // Description missing in models
-  optional BgpSrteSegmentHTypeSubTlv type_h = 9;
+  BgpSrteSegmentHTypeSubTlv type_h = 9;
 
   // Description missing in models
-  optional BgpSrteSegmentITypeSubTlv type_i = 10;
+  BgpSrteSegmentITypeSubTlv type_i = 10;
 
   // Description missing in models
-  optional BgpSrteSegmentJTypeSubTlv type_j = 11;
+  BgpSrteSegmentJTypeSubTlv type_j = 11;
 
   // Description missing in models
-  optional BgpSrteSegmentKTypeSubTlv type_k = 12;
+  BgpSrteSegmentKTypeSubTlv type_k = 12;
 
   // Globally unique name of an object. It also serves as the primary key for arrays of
   // objects.
@@ -3500,7 +3500,7 @@ message BgpSrteSegmentBTypeSubTlv {
   optional string srv6_sid = 2;
 
   // Optional SRv6 Endpoint Behavior and SID Structure.
-  optional BgpSrteSRv6SIDEndpointBehaviorAndStructure srv6_sid_endpoint_behavior = 3;
+  BgpSrteSRv6SIDEndpointBehaviorAndStructure srv6_sid_endpoint_behavior = 3;
 }
 
 // Type C: IPv4 Node Address with optional SID.
@@ -3519,7 +3519,7 @@ message BgpSrteSegmentCTypeSubTlv {
   optional string ipv4_node_address = 3;
 
   // Optional SR-MPLS SID.
-  optional BgpSrteSrMplsSid sr_mpls_sid = 4;
+  BgpSrteSrMplsSid sr_mpls_sid = 4;
 }
 
 // Type D: IPv6 Node Address with optional SID for SR MPLS.
@@ -3538,7 +3538,7 @@ message BgpSrteSegmentDTypeSubTlv {
   optional string ipv6_node_address = 3;
 
   // Optional SR-MPLS SID.
-  optional BgpSrteSrMplsSid sr_mpls_sid = 4;
+  BgpSrteSrMplsSid sr_mpls_sid = 4;
 }
 
 // Type E: IPv4 Address and Local Interface ID with optional SID
@@ -3557,7 +3557,7 @@ message BgpSrteSegmentETypeSubTlv {
   optional string ipv4_node_address = 3;
 
   // Optional SR-MPLS SID.
-  optional BgpSrteSrMplsSid sr_mpls_sid = 4;
+  BgpSrteSrMplsSid sr_mpls_sid = 4;
 }
 
 // Type F: IPv4 Local and Remote addresses with optional SID.
@@ -3576,7 +3576,7 @@ message BgpSrteSegmentFTypeSubTlv {
   optional string remote_ipv4_address = 3;
 
   // Optional SR-MPLS SID.
-  optional BgpSrteSrMplsSid sr_mpls_sid = 4;
+  BgpSrteSrMplsSid sr_mpls_sid = 4;
 }
 
 // Type G: IPv6 Address, Interface ID for local and remote pair with optional SID for
@@ -3604,7 +3604,7 @@ message BgpSrteSegmentGTypeSubTlv {
   optional string remote_ipv6_node_address = 5;
 
   // Optional SR-MPLS SID.
-  optional BgpSrteSrMplsSid sr_mpls_sid = 6;
+  BgpSrteSrMplsSid sr_mpls_sid = 6;
 }
 
 // Type H: IPv6 Local and Remote addresses with optional SID for SR MPLS.
@@ -3623,7 +3623,7 @@ message BgpSrteSegmentHTypeSubTlv {
   optional string remote_ipv6_address = 3;
 
   // Optional SR-MPLS SID.
-  optional BgpSrteSrMplsSid sr_mpls_sid = 4;
+  BgpSrteSrMplsSid sr_mpls_sid = 4;
 }
 
 // Type I: IPv6 Node Address with optional SRv6 SID.
@@ -3641,7 +3641,7 @@ message BgpSrteSegmentITypeSubTlv {
   optional string srv6_sid = 3;
 
   // Optional SRv6 Endpoint Behavior and SID Structure.
-  optional BgpSrteSRv6SIDEndpointBehaviorAndStructure srv6_sid_endpoint_behavior = 4;
+  BgpSrteSRv6SIDEndpointBehaviorAndStructure srv6_sid_endpoint_behavior = 4;
 }
 
 // Type J: IPv6 Address, Interface ID for local and remote pair for SRv6 with optional
@@ -3676,7 +3676,7 @@ message BgpSrteSegmentJTypeSubTlv {
   optional string srv6_sid = 7;
 
   // Optional SRv6 Endpoint Behavior and SID Structure.
-  optional BgpSrteSRv6SIDEndpointBehaviorAndStructure srv6_sid_endpoint_behavior = 8;
+  BgpSrteSRv6SIDEndpointBehaviorAndStructure srv6_sid_endpoint_behavior = 8;
 }
 
 // Type K: IPv6 Local and Remote addresses for SRv6 with optional SID.
@@ -3702,7 +3702,7 @@ message BgpSrteSegmentKTypeSubTlv {
   optional string srv6_sid = 5;
 
   // Optional SRv6 Endpoint Behavior and SID Structure.
-  optional BgpSrteSRv6SIDEndpointBehaviorAndStructure srv6_sid_endpoint_behavior = 6;
+  BgpSrteSRv6SIDEndpointBehaviorAndStructure srv6_sid_endpoint_behavior = 6;
 }
 
 // Configuration for BGP Segment Routing Traffic Engineering policy.
@@ -3761,13 +3761,13 @@ message BgpSrteV6Policy {
   optional string next_hop_ipv6_address = 7;
 
   // Description missing in models
-  optional BgpRouteAdvanced advanced = 8;
+  BgpRouteAdvanced advanced = 8;
 
   // Description missing in models
-  optional BgpAddPath add_path = 9;
+  BgpAddPath add_path = 9;
 
   // Description missing in models
-  optional BgpAsPath as_path = 10;
+  BgpAsPath as_path = 10;
 
   // Optional community settings.
   repeated BgpCommunity communities = 11;
@@ -3821,25 +3821,25 @@ message BgpSrteV6Policy {
 message BgpSrteV6TunnelTlv {
 
   // Description missing in models
-  optional BgpSrteRemoteEndpointSubTlv remote_endpoint_sub_tlv = 1;
+  BgpSrteRemoteEndpointSubTlv remote_endpoint_sub_tlv = 1;
 
   // Description missing in models
-  optional BgpSrteColorSubTlv color_sub_tlv = 2;
+  BgpSrteColorSubTlv color_sub_tlv = 2;
 
   // Description missing in models
-  optional BgpSrteBindingSubTlv binding_sub_tlv = 3;
+  BgpSrteBindingSubTlv binding_sub_tlv = 3;
 
   // Description missing in models
-  optional BgpSrtePreferenceSubTlv preference_sub_tlv = 4;
+  BgpSrtePreferenceSubTlv preference_sub_tlv = 4;
 
   // Description missing in models
-  optional BgpSrtePolicyPrioritySubTlv policy_priority_sub_tlv = 5;
+  BgpSrtePolicyPrioritySubTlv policy_priority_sub_tlv = 5;
 
   // Description missing in models
-  optional BgpSrtePolicyNameSubTlv policy_name_sub_tlv = 6;
+  BgpSrtePolicyNameSubTlv policy_name_sub_tlv = 6;
 
   // Description missing in models
-  optional BgpSrteExplicitNullLabelPolicySubTlv explicit_null_label_policy_sub_tlv = 7;
+  BgpSrteExplicitNullLabelPolicySubTlv explicit_null_label_policy_sub_tlv = 7;
 
   // Description missing in models
   repeated BgpSrteSegmentList segment_lists = 8;
@@ -3897,7 +3897,7 @@ message BgpV6Peer {
   optional string peer_address = 1;
 
   // Description missing in models
-  optional BgpV6SegmentRouting segment_routing = 2;
+  BgpV6SegmentRouting segment_routing = 2;
 
   // This contains the list of Ethernet Virtual Private Network (EVPN) Ethernet Segments
   // (ES) Per BGP Peer for IPv6 Address Family Identifier (AFI).
@@ -3955,13 +3955,13 @@ message BgpV6Peer {
   optional AsNumberWidth.Enum as_number_width = 6;
 
   // Description missing in models
-  optional BgpAdvanced advanced = 7;
+  BgpAdvanced advanced = 7;
 
   // Description missing in models
-  optional BgpCapability capability = 8;
+  BgpCapability capability = 8;
 
   // Description missing in models
-  optional BgpLearnedInformationFilter learned_information_filter = 9;
+  BgpLearnedInformationFilter learned_information_filter = 9;
 
   // Emulated BGPv4 route ranges.
   repeated BgpV4RouteRange v4_routes = 10;
@@ -3985,7 +3985,7 @@ message BgpV6Peer {
   optional string name = 14;
 
   // Description missing in models
-  optional BgpGracefulRestart graceful_restart = 15;
+  BgpGracefulRestart graceful_restart = 15;
 }
 
 // Configuration for emulated BGPv6 peers and routes on a single IPv6 interface.
@@ -4047,7 +4047,7 @@ message BgpV6SegmentRouting {
 message BgpV6EthernetSegment {
 
   // Designated Forwarder (DF) election configuration.
-  optional BgpEthernetSegmentDfElection df_election = 1;
+  BgpEthernetSegmentDfElection df_election = 1;
 
   // This contains the list of EVIs.
   repeated BgpV6EvpnEvis evis = 2;
@@ -4074,7 +4074,7 @@ message BgpV6EthernetSegment {
   optional uint32 esi_label = 5;
 
   // Description missing in models
-  optional BgpRouteAdvanced advanced = 6;
+  BgpRouteAdvanced advanced = 6;
 
   // Optional community settings.
   repeated BgpCommunity communities = 7;
@@ -4109,7 +4109,7 @@ message BgpV6EthernetSegment {
   repeated BgpExtCommunity ext_communities = 8;
 
   // Optional AS PATH settings.
-  optional BgpAsPath as_path = 9;
+  BgpAsPath as_path = 9;
 }
 
 // This contains a list of different flavors of EVPN.
@@ -4129,7 +4129,7 @@ message BgpV6EvpnEvis {
   optional Choice.Enum choice = 1;
 
   // EVPN VXLAN instance to be configured per Ethernet Segment.
-  optional BgpV6EviVxlan evi_vxlan = 2;
+  BgpV6EviVxlan evi_vxlan = 2;
 }
 
 // Configuration for BGP EVPN EVI. Advertises following routes -
@@ -4166,7 +4166,7 @@ message BgpV6EviVxlan {
 
   // Colon separated Extended Community value of 6 Bytes - AS number: Value identifying
   // an EVI.            Example - for the as_2octet 60005:100.
-  optional BgpRouteDistinguisher route_distinguisher = 5;
+  BgpRouteDistinguisher route_distinguisher = 5;
 
   // List of Layer 2 Virtual Network Identifier (L2VNI) export targets associated with
   // this EVI.
@@ -4182,7 +4182,7 @@ message BgpV6EviVxlan {
   repeated BgpRouteTarget l3_route_target_import = 9;
 
   // Description missing in models
-  optional BgpRouteAdvanced advanced = 10;
+  BgpRouteAdvanced advanced = 10;
 
   // Optional community settings.
   repeated BgpCommunity communities = 11;
@@ -4217,7 +4217,7 @@ message BgpV6EviVxlan {
   repeated BgpExtCommunity ext_communities = 12;
 
   // Optional AS PATH settings.
-  optional BgpAsPath as_path = 13;
+  BgpAsPath as_path = 13;
 }
 
 // Configuration for Broadcast Domains per EVI.
@@ -4263,7 +4263,7 @@ message VxlanV4Tunnel {
   optional string source_interface = 1;
 
   // Description missing in models
-  optional VxlanV4TunnelDestinationIPMode destination_ip_mode = 2;
+  VxlanV4TunnelDestinationIPMode destination_ip_mode = 2;
 
   // VXLAN Network Identifier (VNI) to distinguish network instances on the wire
   // required = true
@@ -4291,7 +4291,7 @@ message VxlanV6Tunnel {
   optional string source_interface = 1;
 
   // Description missing in models
-  optional VxlanV6TunnelDestinationIPMode destination_ip_mode = 2;
+  VxlanV6TunnelDestinationIPMode destination_ip_mode = 2;
 
   // VXLAN Network Identifier (VNI) to distinguish network instances on the wire
   // required = true
@@ -4320,10 +4320,10 @@ message VxlanV4TunnelDestinationIPMode {
   optional Choice.Enum choice = 1;
 
   // Description missing in models
-  optional VxlanV4TunnelDestinationIPModeUnicast unicast = 2;
+  VxlanV4TunnelDestinationIPModeUnicast unicast = 2;
 
   // Description missing in models
-  optional VxlanV4TunnelDestinationIPModeMulticast multicast = 3;
+  VxlanV4TunnelDestinationIPModeMulticast multicast = 3;
 }
 
 // Communication mode between the VTEPs, either unicast or multicast.
@@ -4341,10 +4341,10 @@ message VxlanV6TunnelDestinationIPMode {
   optional Choice.Enum choice = 1;
 
   // Description missing in models
-  optional VxlanV6TunnelDestinationIPModeUnicast unicast = 2;
+  VxlanV6TunnelDestinationIPModeUnicast unicast = 2;
 
   // Description missing in models
-  optional VxlanV6TunnelDestinationIPModeMulticast multicast = 3;
+  VxlanV6TunnelDestinationIPModeMulticast multicast = 3;
 }
 
 // Description missing in models
@@ -4515,7 +4515,7 @@ message RsvpLspIpv4Interface {
   optional string ipv4_name = 1;
 
   // Contains properties of Tail(Egress) LSPs.
-  optional RsvpLspIpv4InterfaceP2PEgressIpv4Lsp p2p_egress_ipv4_lsps = 2;
+  RsvpLspIpv4InterfaceP2PEgressIpv4Lsp p2p_egress_ipv4_lsps = 2;
 
   // Array of point-to-point RSVP-TE P2P LSPs originating from this interface.
   repeated RsvpLspIpv4InterfaceP2PIngressIpv4Lsp p2p_ingress_ipv4_lsps = 3;
@@ -4623,23 +4623,23 @@ message RsvpLspIpv4InterfaceP2PIngressIpv4Lsp {
 
   // This contains the values of the fields to be included in the SESSION_ATTRIBUTE object
   // in the Path Message sent for the LSP.
-  optional RsvpSessionAttribute session_attribute = 9;
+  RsvpSessionAttribute session_attribute = 9;
 
   // This contains the values of the fields to be included in the TSPEC object in the
   // Path Message sent for the LSP.
-  optional RsvpTspec tspec = 10;
+  RsvpTspec tspec = 10;
 
   // This contains the values of the fields to be included in the FAST_REROUTE object
   // in the Path Message sent for the LSP.
   // This is an optional object . If this attribute is not included , the FAST_REROUTE
   // object will not be included.
-  optional RsvpFastReroute fast_reroute = 11;
+  RsvpFastReroute fast_reroute = 11;
 
   // This contains the values of the fields to be included in the ERO object in the Path
   // Message sent for the LSP.
   // This is an optional object . If this attribute is not included , the ERO object will
   // not be included.
-  optional RsvpEro ero = 12;
+  RsvpEro ero = 12;
 }
 
 // Configuration for RSVP-TE SESSION_ATTRIBUTE object included in Path Messages as defined
@@ -4710,7 +4710,7 @@ message RsvpSessionAttribute {
   // using which further constraints can be
   // set on the path calculated for the LSP based on the Admin Group settings in the IGP
   // (e.g ISIS or OSPF interface).
-  optional RsvpResourceAffinities resource_affinities = 10;
+  RsvpResourceAffinities resource_affinities = 10;
 }
 
 // This is an optional object. If included, the extended SESSION_ATTRIBUTE object is
@@ -4915,7 +4915,7 @@ message Flow {
 
   // The transmit and receive endpoints.
   // required = true
-  optional FlowTxRx tx_rx = 1;
+  FlowTxRx tx_rx = 1;
 
   // The list of protocol headers defining the shape of all
   // intended packets in corresponding flow as it is transmitted
@@ -4945,16 +4945,16 @@ message Flow {
   repeated FlowHeader egress_packet = 9;
 
   // The size of the packets.
-  optional FlowSize size = 3;
+  FlowSize size = 3;
 
   // The transmit rate of the packets.
-  optional FlowRate rate = 4;
+  FlowRate rate = 4;
 
   // The transmit duration of the packets.
-  optional FlowDuration duration = 5;
+  FlowDuration duration = 5;
 
   // Flow metrics.
-  optional FlowMetrics metrics = 6;
+  FlowMetrics metrics = 6;
 
   // Globally unique name of an object. It also serves as the primary key for arrays of
   // objects.
@@ -4978,10 +4978,10 @@ message FlowTxRx {
   optional Choice.Enum choice = 1;
 
   // Description missing in models
-  optional FlowPort port = 2;
+  FlowPort port = 2;
 
   // Description missing in models
-  optional FlowRouter device = 3;
+  FlowRouter device = 3;
 }
 
 // A container for a transmit port and 0..n intended receive ports.
@@ -5140,61 +5140,61 @@ message FlowHeader {
   optional Choice.Enum choice = 1;
 
   // Description missing in models
-  optional FlowCustom custom = 2;
+  FlowCustom custom = 2;
 
   // Description missing in models
-  optional FlowEthernet ethernet = 3;
+  FlowEthernet ethernet = 3;
 
   // Description missing in models
-  optional FlowVlan vlan = 4;
+  FlowVlan vlan = 4;
 
   // Description missing in models
-  optional FlowVxlan vxlan = 5;
+  FlowVxlan vxlan = 5;
 
   // Description missing in models
-  optional FlowIpv4 ipv4 = 6;
+  FlowIpv4 ipv4 = 6;
 
   // Description missing in models
-  optional FlowIpv6 ipv6 = 7;
+  FlowIpv6 ipv6 = 7;
 
   // Description missing in models
-  optional FlowPfcPause pfcpause = 8;
+  FlowPfcPause pfcpause = 8;
 
   // Description missing in models
-  optional FlowEthernetPause ethernetpause = 9;
+  FlowEthernetPause ethernetpause = 9;
 
   // Description missing in models
-  optional FlowTcp tcp = 10;
+  FlowTcp tcp = 10;
 
   // Description missing in models
-  optional FlowUdp udp = 11;
+  FlowUdp udp = 11;
 
   // Description missing in models
-  optional FlowGre gre = 12;
+  FlowGre gre = 12;
 
   // Description missing in models
-  optional FlowGtpv1 gtpv1 = 13;
+  FlowGtpv1 gtpv1 = 13;
 
   // Description missing in models
-  optional FlowGtpv2 gtpv2 = 14;
+  FlowGtpv2 gtpv2 = 14;
 
   // Description missing in models
-  optional FlowArp arp = 15;
+  FlowArp arp = 15;
 
   // Description missing in models
-  optional FlowIcmp icmp = 16;
+  FlowIcmp icmp = 16;
 
   // Description missing in models
-  optional FlowIcmpv6 icmpv6 = 17;
+  FlowIcmpv6 icmpv6 = 17;
 
   // Description missing in models
-  optional FlowPpp ppp = 18;
+  FlowPpp ppp = 18;
 
   // Description missing in models
-  optional FlowIgmpv1 igmpv1 = 19;
+  FlowIgmpv1 igmpv1 = 19;
 
   // Description missing in models
-  optional FlowMpls mpls = 20;
+  FlowMpls mpls = 20;
 }
 
 // Custom packet header
@@ -5236,94 +5236,94 @@ message FlowCustomMetricTag {
 message FlowEthernet {
 
   // Description missing in models
-  optional PatternFlowEthernetDst dst = 1;
+  PatternFlowEthernetDst dst = 1;
 
   // Description missing in models
-  optional PatternFlowEthernetSrc src = 2;
+  PatternFlowEthernetSrc src = 2;
 
   // Description missing in models
-  optional PatternFlowEthernetEtherType ether_type = 3;
+  PatternFlowEthernetEtherType ether_type = 3;
 
   // Description missing in models
-  optional PatternFlowEthernetPfcQueue pfc_queue = 4;
+  PatternFlowEthernetPfcQueue pfc_queue = 4;
 }
 
 // VLAN packet header
 message FlowVlan {
 
   // Description missing in models
-  optional PatternFlowVlanPriority priority = 1;
+  PatternFlowVlanPriority priority = 1;
 
   // Description missing in models
-  optional PatternFlowVlanCfi cfi = 2;
+  PatternFlowVlanCfi cfi = 2;
 
   // Description missing in models
-  optional PatternFlowVlanId id = 3;
+  PatternFlowVlanId id = 3;
 
   // Description missing in models
-  optional PatternFlowVlanTpid tpid = 4;
+  PatternFlowVlanTpid tpid = 4;
 }
 
 // VXLAN packet header
 message FlowVxlan {
 
   // Description missing in models
-  optional PatternFlowVxlanFlags flags = 1;
+  PatternFlowVxlanFlags flags = 1;
 
   // Description missing in models
-  optional PatternFlowVxlanReserved0 reserved0 = 2;
+  PatternFlowVxlanReserved0 reserved0 = 2;
 
   // Description missing in models
-  optional PatternFlowVxlanVni vni = 3;
+  PatternFlowVxlanVni vni = 3;
 
   // Description missing in models
-  optional PatternFlowVxlanReserved1 reserved1 = 4;
+  PatternFlowVxlanReserved1 reserved1 = 4;
 }
 
 // IPv4 packet header
 message FlowIpv4 {
 
   // Description missing in models
-  optional PatternFlowIpv4Version version = 1;
+  PatternFlowIpv4Version version = 1;
 
   // Description missing in models
-  optional PatternFlowIpv4HeaderLength header_length = 2;
+  PatternFlowIpv4HeaderLength header_length = 2;
 
   // Description missing in models
-  optional FlowIpv4Priority priority = 3;
+  FlowIpv4Priority priority = 3;
 
   // Description missing in models
-  optional PatternFlowIpv4TotalLength total_length = 4;
+  PatternFlowIpv4TotalLength total_length = 4;
 
   // Description missing in models
-  optional PatternFlowIpv4Identification identification = 5;
+  PatternFlowIpv4Identification identification = 5;
 
   // Description missing in models
-  optional PatternFlowIpv4Reserved reserved = 6;
+  PatternFlowIpv4Reserved reserved = 6;
 
   // Description missing in models
-  optional PatternFlowIpv4DontFragment dont_fragment = 7;
+  PatternFlowIpv4DontFragment dont_fragment = 7;
 
   // Description missing in models
-  optional PatternFlowIpv4MoreFragments more_fragments = 8;
+  PatternFlowIpv4MoreFragments more_fragments = 8;
 
   // Description missing in models
-  optional PatternFlowIpv4FragmentOffset fragment_offset = 9;
+  PatternFlowIpv4FragmentOffset fragment_offset = 9;
 
   // Description missing in models
-  optional PatternFlowIpv4TimeToLive time_to_live = 10;
+  PatternFlowIpv4TimeToLive time_to_live = 10;
 
   // Description missing in models
-  optional PatternFlowIpv4Protocol protocol = 11;
+  PatternFlowIpv4Protocol protocol = 11;
 
   // Description missing in models
-  optional PatternFlowIpv4HeaderChecksum header_checksum = 12;
+  PatternFlowIpv4HeaderChecksum header_checksum = 12;
 
   // Description missing in models
-  optional PatternFlowIpv4Src src = 13;
+  PatternFlowIpv4Src src = 13;
 
   // Description missing in models
-  optional PatternFlowIpv4Dst dst = 14;
+  PatternFlowIpv4Dst dst = 14;
 }
 
 // A container for ipv4 raw, tos, dscp ip priorities.
@@ -5342,262 +5342,262 @@ message FlowIpv4Priority {
   optional Choice.Enum choice = 1;
 
   // Description missing in models
-  optional PatternFlowIpv4PriorityRaw raw = 2;
+  PatternFlowIpv4PriorityRaw raw = 2;
 
   // Description missing in models
-  optional FlowIpv4Tos tos = 3;
+  FlowIpv4Tos tos = 3;
 
   // Description missing in models
-  optional FlowIpv4Dscp dscp = 4;
+  FlowIpv4Dscp dscp = 4;
 }
 
 // Differentiated services code point (DSCP) packet field.
 message FlowIpv4Dscp {
 
   // Description missing in models
-  optional PatternFlowIpv4DscpPhb phb = 1;
+  PatternFlowIpv4DscpPhb phb = 1;
 
   // Description missing in models
-  optional PatternFlowIpv4DscpEcn ecn = 2;
+  PatternFlowIpv4DscpEcn ecn = 2;
 }
 
 // Type of service (TOS) packet field.
 message FlowIpv4Tos {
 
   // Description missing in models
-  optional PatternFlowIpv4TosPrecedence precedence = 1;
+  PatternFlowIpv4TosPrecedence precedence = 1;
 
   // Description missing in models
-  optional PatternFlowIpv4TosDelay delay = 2;
+  PatternFlowIpv4TosDelay delay = 2;
 
   // Description missing in models
-  optional PatternFlowIpv4TosThroughput throughput = 3;
+  PatternFlowIpv4TosThroughput throughput = 3;
 
   // Description missing in models
-  optional PatternFlowIpv4TosReliability reliability = 4;
+  PatternFlowIpv4TosReliability reliability = 4;
 
   // Description missing in models
-  optional PatternFlowIpv4TosMonetary monetary = 5;
+  PatternFlowIpv4TosMonetary monetary = 5;
 
   // Description missing in models
-  optional PatternFlowIpv4TosUnused unused = 6;
+  PatternFlowIpv4TosUnused unused = 6;
 }
 
 // IPv6 packet header
 message FlowIpv6 {
 
   // Description missing in models
-  optional PatternFlowIpv6Version version = 1;
+  PatternFlowIpv6Version version = 1;
 
   // Description missing in models
-  optional PatternFlowIpv6TrafficClass traffic_class = 2;
+  PatternFlowIpv6TrafficClass traffic_class = 2;
 
   // Description missing in models
-  optional PatternFlowIpv6FlowLabel flow_label = 3;
+  PatternFlowIpv6FlowLabel flow_label = 3;
 
   // Description missing in models
-  optional PatternFlowIpv6PayloadLength payload_length = 4;
+  PatternFlowIpv6PayloadLength payload_length = 4;
 
   // Description missing in models
-  optional PatternFlowIpv6NextHeader next_header = 5;
+  PatternFlowIpv6NextHeader next_header = 5;
 
   // Description missing in models
-  optional PatternFlowIpv6HopLimit hop_limit = 6;
+  PatternFlowIpv6HopLimit hop_limit = 6;
 
   // Description missing in models
-  optional PatternFlowIpv6Src src = 7;
+  PatternFlowIpv6Src src = 7;
 
   // Description missing in models
-  optional PatternFlowIpv6Dst dst = 8;
+  PatternFlowIpv6Dst dst = 8;
 }
 
 // IEEE 802.1Qbb PFC Pause packet header.
 message FlowPfcPause {
 
   // Description missing in models
-  optional PatternFlowPfcPauseDst dst = 1;
+  PatternFlowPfcPauseDst dst = 1;
 
   // Description missing in models
-  optional PatternFlowPfcPauseSrc src = 2;
+  PatternFlowPfcPauseSrc src = 2;
 
   // Description missing in models
-  optional PatternFlowPfcPauseEtherType ether_type = 3;
+  PatternFlowPfcPauseEtherType ether_type = 3;
 
   // Description missing in models
-  optional PatternFlowPfcPauseControlOpCode control_op_code = 4;
+  PatternFlowPfcPauseControlOpCode control_op_code = 4;
 
   // Description missing in models
-  optional PatternFlowPfcPauseClassEnableVector class_enable_vector = 5;
+  PatternFlowPfcPauseClassEnableVector class_enable_vector = 5;
 
   // Description missing in models
-  optional PatternFlowPfcPausePauseClass0 pause_class_0 = 6;
+  PatternFlowPfcPausePauseClass0 pause_class_0 = 6;
 
   // Description missing in models
-  optional PatternFlowPfcPausePauseClass1 pause_class_1 = 7;
+  PatternFlowPfcPausePauseClass1 pause_class_1 = 7;
 
   // Description missing in models
-  optional PatternFlowPfcPausePauseClass2 pause_class_2 = 8;
+  PatternFlowPfcPausePauseClass2 pause_class_2 = 8;
 
   // Description missing in models
-  optional PatternFlowPfcPausePauseClass3 pause_class_3 = 9;
+  PatternFlowPfcPausePauseClass3 pause_class_3 = 9;
 
   // Description missing in models
-  optional PatternFlowPfcPausePauseClass4 pause_class_4 = 10;
+  PatternFlowPfcPausePauseClass4 pause_class_4 = 10;
 
   // Description missing in models
-  optional PatternFlowPfcPausePauseClass5 pause_class_5 = 11;
+  PatternFlowPfcPausePauseClass5 pause_class_5 = 11;
 
   // Description missing in models
-  optional PatternFlowPfcPausePauseClass6 pause_class_6 = 12;
+  PatternFlowPfcPausePauseClass6 pause_class_6 = 12;
 
   // Description missing in models
-  optional PatternFlowPfcPausePauseClass7 pause_class_7 = 13;
+  PatternFlowPfcPausePauseClass7 pause_class_7 = 13;
 }
 
 // IEEE 802.3x global ethernet pause packet header
 message FlowEthernetPause {
 
   // Description missing in models
-  optional PatternFlowEthernetPauseDst dst = 1;
+  PatternFlowEthernetPauseDst dst = 1;
 
   // Description missing in models
-  optional PatternFlowEthernetPauseSrc src = 2;
+  PatternFlowEthernetPauseSrc src = 2;
 
   // Description missing in models
-  optional PatternFlowEthernetPauseEtherType ether_type = 3;
+  PatternFlowEthernetPauseEtherType ether_type = 3;
 
   // Description missing in models
-  optional PatternFlowEthernetPauseControlOpCode control_op_code = 4;
+  PatternFlowEthernetPauseControlOpCode control_op_code = 4;
 
   // Description missing in models
-  optional PatternFlowEthernetPauseTime time = 5;
+  PatternFlowEthernetPauseTime time = 5;
 }
 
 // TCP packet header
 message FlowTcp {
 
   // Description missing in models
-  optional PatternFlowTcpSrcPort src_port = 1;
+  PatternFlowTcpSrcPort src_port = 1;
 
   // Description missing in models
-  optional PatternFlowTcpDstPort dst_port = 2;
+  PatternFlowTcpDstPort dst_port = 2;
 
   // Description missing in models
-  optional PatternFlowTcpSeqNum seq_num = 3;
+  PatternFlowTcpSeqNum seq_num = 3;
 
   // Description missing in models
-  optional PatternFlowTcpAckNum ack_num = 4;
+  PatternFlowTcpAckNum ack_num = 4;
 
   // Description missing in models
-  optional PatternFlowTcpDataOffset data_offset = 5;
+  PatternFlowTcpDataOffset data_offset = 5;
 
   // Description missing in models
-  optional PatternFlowTcpEcnNs ecn_ns = 6;
+  PatternFlowTcpEcnNs ecn_ns = 6;
 
   // Description missing in models
-  optional PatternFlowTcpEcnCwr ecn_cwr = 7;
+  PatternFlowTcpEcnCwr ecn_cwr = 7;
 
   // Description missing in models
-  optional PatternFlowTcpEcnEcho ecn_echo = 8;
+  PatternFlowTcpEcnEcho ecn_echo = 8;
 
   // Description missing in models
-  optional PatternFlowTcpCtlUrg ctl_urg = 9;
+  PatternFlowTcpCtlUrg ctl_urg = 9;
 
   // Description missing in models
-  optional PatternFlowTcpCtlAck ctl_ack = 10;
+  PatternFlowTcpCtlAck ctl_ack = 10;
 
   // Description missing in models
-  optional PatternFlowTcpCtlPsh ctl_psh = 11;
+  PatternFlowTcpCtlPsh ctl_psh = 11;
 
   // Description missing in models
-  optional PatternFlowTcpCtlRst ctl_rst = 12;
+  PatternFlowTcpCtlRst ctl_rst = 12;
 
   // Description missing in models
-  optional PatternFlowTcpCtlSyn ctl_syn = 13;
+  PatternFlowTcpCtlSyn ctl_syn = 13;
 
   // Description missing in models
-  optional PatternFlowTcpCtlFin ctl_fin = 14;
+  PatternFlowTcpCtlFin ctl_fin = 14;
 
   // Description missing in models
-  optional PatternFlowTcpWindow window = 15;
+  PatternFlowTcpWindow window = 15;
 }
 
 // UDP packet header
 message FlowUdp {
 
   // Description missing in models
-  optional PatternFlowUdpSrcPort src_port = 1;
+  PatternFlowUdpSrcPort src_port = 1;
 
   // Description missing in models
-  optional PatternFlowUdpDstPort dst_port = 2;
+  PatternFlowUdpDstPort dst_port = 2;
 
   // Description missing in models
-  optional PatternFlowUdpLength length = 3;
+  PatternFlowUdpLength length = 3;
 
   // Description missing in models
-  optional PatternFlowUdpChecksum checksum = 4;
+  PatternFlowUdpChecksum checksum = 4;
 }
 
 // Standard GRE packet header (RFC2784)
 message FlowGre {
 
   // Description missing in models
-  optional PatternFlowGreChecksumPresent checksum_present = 1;
+  PatternFlowGreChecksumPresent checksum_present = 1;
 
   // Description missing in models
-  optional PatternFlowGreReserved0 reserved0 = 2;
+  PatternFlowGreReserved0 reserved0 = 2;
 
   // Description missing in models
-  optional PatternFlowGreVersion version = 3;
+  PatternFlowGreVersion version = 3;
 
   // Description missing in models
-  optional PatternFlowGreProtocol protocol = 4;
+  PatternFlowGreProtocol protocol = 4;
 
   // Description missing in models
-  optional PatternFlowGreChecksum checksum = 5;
+  PatternFlowGreChecksum checksum = 5;
 
   // Description missing in models
-  optional PatternFlowGreReserved1 reserved1 = 6;
+  PatternFlowGreReserved1 reserved1 = 6;
 }
 
 // GTPv1 packet header
 message FlowGtpv1 {
 
   // Description missing in models
-  optional PatternFlowGtpv1Version version = 1;
+  PatternFlowGtpv1Version version = 1;
 
   // Description missing in models
-  optional PatternFlowGtpv1ProtocolType protocol_type = 2;
+  PatternFlowGtpv1ProtocolType protocol_type = 2;
 
   // Description missing in models
-  optional PatternFlowGtpv1Reserved reserved = 3;
+  PatternFlowGtpv1Reserved reserved = 3;
 
   // Description missing in models
-  optional PatternFlowGtpv1EFlag e_flag = 4;
+  PatternFlowGtpv1EFlag e_flag = 4;
 
   // Description missing in models
-  optional PatternFlowGtpv1SFlag s_flag = 5;
+  PatternFlowGtpv1SFlag s_flag = 5;
 
   // Description missing in models
-  optional PatternFlowGtpv1PnFlag pn_flag = 6;
+  PatternFlowGtpv1PnFlag pn_flag = 6;
 
   // Description missing in models
-  optional PatternFlowGtpv1MessageType message_type = 7;
+  PatternFlowGtpv1MessageType message_type = 7;
 
   // Description missing in models
-  optional PatternFlowGtpv1MessageLength message_length = 8;
+  PatternFlowGtpv1MessageLength message_length = 8;
 
   // Description missing in models
-  optional PatternFlowGtpv1Teid teid = 9;
+  PatternFlowGtpv1Teid teid = 9;
 
   // Description missing in models
-  optional PatternFlowGtpv1SquenceNumber squence_number = 10;
+  PatternFlowGtpv1SquenceNumber squence_number = 10;
 
   // Description missing in models
-  optional PatternFlowGtpv1NPduNumber n_pdu_number = 11;
+  PatternFlowGtpv1NPduNumber n_pdu_number = 11;
 
   // Description missing in models
-  optional PatternFlowGtpv1NextExtensionHeaderType next_extension_header_type = 12;
+  PatternFlowGtpv1NextExtensionHeaderType next_extension_header_type = 12;
 
   // A list of optional extension headers.
   repeated FlowGtpExtension extension_headers = 13;
@@ -5607,75 +5607,75 @@ message FlowGtpv1 {
 message FlowGtpExtension {
 
   // Description missing in models
-  optional PatternFlowGtpExtensionExtensionLength extension_length = 1;
+  PatternFlowGtpExtensionExtensionLength extension_length = 1;
 
   // Description missing in models
-  optional PatternFlowGtpExtensionContents contents = 2;
+  PatternFlowGtpExtensionContents contents = 2;
 
   // Description missing in models
-  optional PatternFlowGtpExtensionNextExtensionHeader next_extension_header = 3;
+  PatternFlowGtpExtensionNextExtensionHeader next_extension_header = 3;
 }
 
 // GTPv2 packet header
 message FlowGtpv2 {
 
   // Description missing in models
-  optional PatternFlowGtpv2Version version = 1;
+  PatternFlowGtpv2Version version = 1;
 
   // Description missing in models
-  optional PatternFlowGtpv2PiggybackingFlag piggybacking_flag = 2;
+  PatternFlowGtpv2PiggybackingFlag piggybacking_flag = 2;
 
   // Description missing in models
-  optional PatternFlowGtpv2TeidFlag teid_flag = 3;
+  PatternFlowGtpv2TeidFlag teid_flag = 3;
 
   // Description missing in models
-  optional PatternFlowGtpv2Spare1 spare1 = 4;
+  PatternFlowGtpv2Spare1 spare1 = 4;
 
   // Description missing in models
-  optional PatternFlowGtpv2MessageType message_type = 5;
+  PatternFlowGtpv2MessageType message_type = 5;
 
   // Description missing in models
-  optional PatternFlowGtpv2MessageLength message_length = 6;
+  PatternFlowGtpv2MessageLength message_length = 6;
 
   // Description missing in models
-  optional PatternFlowGtpv2Teid teid = 7;
+  PatternFlowGtpv2Teid teid = 7;
 
   // Description missing in models
-  optional PatternFlowGtpv2SequenceNumber sequence_number = 8;
+  PatternFlowGtpv2SequenceNumber sequence_number = 8;
 
   // Description missing in models
-  optional PatternFlowGtpv2Spare2 spare2 = 9;
+  PatternFlowGtpv2Spare2 spare2 = 9;
 }
 
 // ARP packet header
 message FlowArp {
 
   // Description missing in models
-  optional PatternFlowArpHardwareType hardware_type = 1;
+  PatternFlowArpHardwareType hardware_type = 1;
 
   // Description missing in models
-  optional PatternFlowArpProtocolType protocol_type = 2;
+  PatternFlowArpProtocolType protocol_type = 2;
 
   // Description missing in models
-  optional PatternFlowArpHardwareLength hardware_length = 3;
+  PatternFlowArpHardwareLength hardware_length = 3;
 
   // Description missing in models
-  optional PatternFlowArpProtocolLength protocol_length = 4;
+  PatternFlowArpProtocolLength protocol_length = 4;
 
   // Description missing in models
-  optional PatternFlowArpOperation operation = 5;
+  PatternFlowArpOperation operation = 5;
 
   // Description missing in models
-  optional PatternFlowArpSenderHardwareAddr sender_hardware_addr = 6;
+  PatternFlowArpSenderHardwareAddr sender_hardware_addr = 6;
 
   // Description missing in models
-  optional PatternFlowArpSenderProtocolAddr sender_protocol_addr = 7;
+  PatternFlowArpSenderProtocolAddr sender_protocol_addr = 7;
 
   // Description missing in models
-  optional PatternFlowArpTargetHardwareAddr target_hardware_addr = 8;
+  PatternFlowArpTargetHardwareAddr target_hardware_addr = 8;
 
   // Description missing in models
-  optional PatternFlowArpTargetProtocolAddr target_protocol_addr = 9;
+  PatternFlowArpTargetProtocolAddr target_protocol_addr = 9;
 }
 
 // ICMP packet header
@@ -5692,26 +5692,26 @@ message FlowIcmp {
   optional Choice.Enum choice = 1;
 
   // Description missing in models
-  optional FlowIcmpEcho echo = 2;
+  FlowIcmpEcho echo = 2;
 }
 
 // Packet Header for ICMP echo request
 message FlowIcmpEcho {
 
   // Description missing in models
-  optional PatternFlowIcmpEchoType type = 1;
+  PatternFlowIcmpEchoType type = 1;
 
   // Description missing in models
-  optional PatternFlowIcmpEchoCode code = 2;
+  PatternFlowIcmpEchoCode code = 2;
 
   // Description missing in models
-  optional PatternFlowIcmpEchoChecksum checksum = 3;
+  PatternFlowIcmpEchoChecksum checksum = 3;
 
   // Description missing in models
-  optional PatternFlowIcmpEchoIdentifier identifier = 4;
+  PatternFlowIcmpEchoIdentifier identifier = 4;
 
   // Description missing in models
-  optional PatternFlowIcmpEchoSequenceNumber sequence_number = 5;
+  PatternFlowIcmpEchoSequenceNumber sequence_number = 5;
 }
 
 // ICMPv6 packet header
@@ -5728,58 +5728,58 @@ message FlowIcmpv6 {
   optional Choice.Enum choice = 1;
 
   // Description missing in models
-  optional FlowIcmpv6Echo echo = 2;
+  FlowIcmpv6Echo echo = 2;
 }
 
 // Packet Header for ICMPv6 Echo
 message FlowIcmpv6Echo {
 
   // Description missing in models
-  optional PatternFlowIcmpv6EchoType type = 1;
+  PatternFlowIcmpv6EchoType type = 1;
 
   // Description missing in models
-  optional PatternFlowIcmpv6EchoCode code = 2;
+  PatternFlowIcmpv6EchoCode code = 2;
 
   // Description missing in models
-  optional PatternFlowIcmpv6EchoIdentifier identifier = 3;
+  PatternFlowIcmpv6EchoIdentifier identifier = 3;
 
   // Description missing in models
-  optional PatternFlowIcmpv6EchoSequenceNumber sequence_number = 4;
+  PatternFlowIcmpv6EchoSequenceNumber sequence_number = 4;
 
   // Description missing in models
-  optional PatternFlowIcmpv6EchoChecksum checksum = 5;
+  PatternFlowIcmpv6EchoChecksum checksum = 5;
 }
 
 // PPP packet header
 message FlowPpp {
 
   // Description missing in models
-  optional PatternFlowPppAddress address = 1;
+  PatternFlowPppAddress address = 1;
 
   // Description missing in models
-  optional PatternFlowPppControl control = 2;
+  PatternFlowPppControl control = 2;
 
   // Description missing in models
-  optional PatternFlowPppProtocolType protocol_type = 3;
+  PatternFlowPppProtocolType protocol_type = 3;
 }
 
 // IGMPv1 packet header
 message FlowIgmpv1 {
 
   // Description missing in models
-  optional PatternFlowIgmpv1Version version = 1;
+  PatternFlowIgmpv1Version version = 1;
 
   // Description missing in models
-  optional PatternFlowIgmpv1Type type = 2;
+  PatternFlowIgmpv1Type type = 2;
 
   // Description missing in models
-  optional PatternFlowIgmpv1Unused unused = 3;
+  PatternFlowIgmpv1Unused unused = 3;
 
   // Description missing in models
-  optional PatternFlowIgmpv1Checksum checksum = 4;
+  PatternFlowIgmpv1Checksum checksum = 4;
 
   // Description missing in models
-  optional PatternFlowIgmpv1GroupAddress group_address = 5;
+  PatternFlowIgmpv1GroupAddress group_address = 5;
 }
 
 // MPLS packet header; When configuring multiple such headers, the count shall not exceed
@@ -5787,16 +5787,16 @@ message FlowIgmpv1 {
 message FlowMpls {
 
   // Description missing in models
-  optional PatternFlowMplsLabel label = 1;
+  PatternFlowMplsLabel label = 1;
 
   // Description missing in models
-  optional PatternFlowMplsTrafficClass traffic_class = 2;
+  PatternFlowMplsTrafficClass traffic_class = 2;
 
   // Description missing in models
-  optional PatternFlowMplsBottomOfStack bottom_of_stack = 3;
+  PatternFlowMplsBottomOfStack bottom_of_stack = 3;
 
   // Description missing in models
-  optional PatternFlowMplsTimeToLive time_to_live = 4;
+  PatternFlowMplsTimeToLive time_to_live = 4;
 }
 
 // The frame size which overrides the total length of the packet
@@ -5820,13 +5820,13 @@ message FlowSize {
   optional uint32 fixed = 2;
 
   // Description missing in models
-  optional FlowSizeIncrement increment = 3;
+  FlowSizeIncrement increment = 3;
 
   // Description missing in models
-  optional FlowSizeRandom random = 4;
+  FlowSizeRandom random = 4;
 
   // Description missing in models
-  optional FlowSizeWeightPairs weight_pairs = 5;
+  FlowSizeWeightPairs weight_pairs = 5;
 }
 
 // Frame size that increments from a starting size to
@@ -5978,16 +5978,16 @@ message FlowDuration {
   optional Choice.Enum choice = 1;
 
   // Description missing in models
-  optional FlowFixedPackets fixed_packets = 2;
+  FlowFixedPackets fixed_packets = 2;
 
   // Description missing in models
-  optional FlowFixedSeconds fixed_seconds = 3;
+  FlowFixedSeconds fixed_seconds = 3;
 
   // Description missing in models
-  optional FlowBurst burst = 4;
+  FlowBurst burst = 4;
 
   // Description missing in models
-  optional FlowContinuous continuous = 5;
+  FlowContinuous continuous = 5;
 }
 
 // Transmit will be continuous and will not stop automatically.
@@ -5998,7 +5998,7 @@ message FlowContinuous {
   optional uint32 gap = 1;
 
   // Description missing in models
-  optional FlowDelay delay = 2;
+  FlowDelay delay = 2;
 }
 
 // The optional container to specify the delay before starting
@@ -6045,7 +6045,7 @@ message FlowFixedPackets {
   optional uint32 gap = 2;
 
   // Description missing in models
-  optional FlowDelay delay = 3;
+  FlowDelay delay = 3;
 }
 
 // Transmit for a fixed number of seconds after which the flow will stop.
@@ -6060,7 +6060,7 @@ message FlowFixedSeconds {
   optional uint32 gap = 2;
 
   // Description missing in models
-  optional FlowDelay delay = 3;
+  FlowDelay delay = 3;
 }
 
 // Transmits continuous or fixed burst of packets.
@@ -6083,7 +6083,7 @@ message FlowBurst {
   optional uint32 gap = 3;
 
   // Description missing in models
-  optional FlowDurationInterBurstGap inter_burst_gap = 4;
+  FlowDurationInterBurstGap inter_burst_gap = 4;
 }
 
 // The optional container for specifying a gap between bursts.
@@ -6131,17 +6131,17 @@ message FlowMetrics {
   optional bool loss = 2;
 
   // Rx Tx ratio.
-  optional FlowRxTxRatio rx_tx_ratio = 6;
+  FlowRxTxRatio rx_tx_ratio = 6;
 
   // Enables additional flow metric first and last timestamps.
   // default = False
   optional bool timestamps = 3;
 
   // Latency metrics.
-  optional FlowLatencyMetrics latency = 4;
+  FlowLatencyMetrics latency = 4;
 
   // Predefined metric tags
-  optional FlowPredefinedTags predefined_metric_tags = 5;
+  FlowPredefinedTags predefined_metric_tags = 5;
 }
 
 // The optional container for per flow latency metric configuration.
@@ -6212,7 +6212,7 @@ message FlowRxTxRatio {
   optional Choice.Enum choice = 1;
 
   // Description missing in models
-  optional FlowRxTxRatioRxCount rx_count = 2;
+  FlowRxTxRatioRxCount rx_count = 2;
 
   // Should be a positive, non-zero value. The default value of 1, is when the Rx packet
   // count across
@@ -6245,13 +6245,13 @@ message Event {
   optional bool enable = 1;
 
   // Description missing in models
-  optional EventLink link = 2;
+  EventLink link = 2;
 
   // Description missing in models
-  optional EventRxRateThreshold rx_rate_threshold = 3;
+  EventRxRateThreshold rx_rate_threshold = 3;
 
   // Description missing in models
-  optional EventRouteAdvertiseWithdraw route_advertise_withdraw = 4;
+  EventRouteAdvertiseWithdraw route_advertise_withdraw = 4;
 }
 
 // The optional container for rx rate threshold event configuration.
@@ -6320,7 +6320,7 @@ message EventRequest {
 message EventSubscription {
 
   // Description missing in models
-  optional EventRequest events = 1;
+  EventRequest events = 1;
 
   // Indicates where a client wants to be notified of the events set in
   // the events property.
@@ -6334,23 +6334,23 @@ message Lldp {
 
   // The unique name of the object on which LLDP is running.
   // required = true
-  optional LldpConnection connection = 1;
+  LldpConnection connection = 1;
 
   // The Chassis ID is a mandatory TLV which identifies the chassis component of the endpoint
   // identifier associated  with the transmitting LLDP agent. If mac address is specified
   // it should be in colon seperated mac address format.
-  optional LldpChassisId chassis_id = 2;
+  LldpChassisId chassis_id = 2;
 
   // The Port ID is a mandatory TLV which identifies the port component of the endpoint
   // identifier associated with  the transmitting LLDP agent. If the specified port is
   // an IEEE 802.3 Repeater port, then this TLV is optional.
-  optional LldpPortId port_id = 3;
+  LldpPortId port_id = 3;
 
   // The system name field shall contain an alpha-numeric string that indicates the system's
   // administratively assigned  name. The system name should be the system's fully qualified
   // domain name. If implementations support IETF RFC  3418, the sysName object should
   // be used for this field.
-  optional LldpSystemName system_name = 4;
+  LldpSystemName system_name = 4;
 
   // Specifies the amount of time in seconds a receiving device should maintain LLDP information
   // sent  by the device before discarding it.
@@ -6407,7 +6407,7 @@ message LldpChassisId {
   optional Choice.Enum choice = 1;
 
   // Description missing in models
-  optional LldpChassisMacSubType mac_address_subtype = 2;
+  LldpChassisMacSubType mac_address_subtype = 2;
 
   // Name of an interface of the chassis that uniquely identifies the chassis.
   optional string interface_name_subtype = 3;
@@ -6438,7 +6438,7 @@ message LldpPortId {
   optional string mac_address_subtype = 2;
 
   // Description missing in models
-  optional LldpPortInterfaceNameSubType interface_name_subtype = 3;
+  LldpPortInterfaceNameSubType interface_name_subtype = 3;
 
   // The Locally assigned name configured in the Port ID TLV.
   optional string local_subtype = 4;
@@ -6559,7 +6559,7 @@ message ConfigUpdate {
   optional Choice.Enum choice = 1;
 
   // Description missing in models
-  optional FlowsUpdate flows = 2;
+  FlowsUpdate flows = 2;
 }
 
 // A container of flows with associated properties to be updated without affecting the
@@ -6596,13 +6596,13 @@ message ControlState {
   optional Choice.Enum choice = 1;
 
   // Description missing in models
-  optional StatePort port = 2;
+  StatePort port = 2;
 
   // Description missing in models
-  optional StateProtocol protocol = 3;
+  StateProtocol protocol = 3;
 
   // Description missing in models
-  optional StateTraffic traffic = 4;
+  StateTraffic traffic = 4;
 }
 
 // States associated with configured ports.
@@ -6620,10 +6620,10 @@ message StatePort {
   optional Choice.Enum choice = 1;
 
   // Description missing in models
-  optional StatePortLink link = 2;
+  StatePortLink link = 2;
 
   // Description missing in models
-  optional StatePortCapture capture = 3;
+  StatePortCapture capture = 3;
 }
 
 // States associated with configured flows
@@ -6640,7 +6640,7 @@ message StateTraffic {
   optional Choice.Enum choice = 1;
 
   // Description missing in models
-  optional StateTrafficFlowTransmit flow_transmit = 2;
+  StateTrafficFlowTransmit flow_transmit = 2;
 }
 
 // States associated with protocols on configured resources.
@@ -6659,13 +6659,13 @@ message StateProtocol {
   optional Choice.Enum choice = 1;
 
   // Description missing in models
-  optional StateProtocolAll all = 2;
+  StateProtocolAll all = 2;
 
   // Description missing in models
-  optional StateProtocolRoute route = 3;
+  StateProtocolRoute route = 3;
 
   // Description missing in models
-  optional StateProtocolLacp lacp = 4;
+  StateProtocolLacp lacp = 4;
 }
 
 // Sets the link of configured ports.
@@ -6811,7 +6811,7 @@ message StateProtocolLacp {
   optional Choice.Enum choice = 1;
 
   // Description missing in models
-  optional StateProtocolLacpAdmin admin = 2;
+  StateProtocolLacpAdmin admin = 2;
 }
 
 // Sets admin state of LACP configured on LAG members
@@ -6853,7 +6853,7 @@ message ControlAction {
   optional Choice.Enum choice = 1;
 
   // Description missing in models
-  optional ActionProtocol protocol = 2;
+  ActionProtocol protocol = 2;
 }
 
 // Response for action triggered against configured resources along with warnings.
@@ -6863,7 +6863,7 @@ message ControlActionResponse {
   repeated string warnings = 1;
 
   // Description missing in models
-  optional ActionResponse response = 2;
+  ActionResponse response = 2;
 }
 
 // Response for action triggered against configured resources.
@@ -6880,7 +6880,7 @@ message ActionResponse {
   optional Choice.Enum choice = 1;
 
   // Description missing in models
-  optional ActionResponseProtocol protocol = 2;
+  ActionResponseProtocol protocol = 2;
 }
 
 // Actions associated with protocols on configured resources.
@@ -6899,13 +6899,13 @@ message ActionProtocol {
   optional Choice.Enum choice = 1;
 
   // Description missing in models
-  optional ActionProtocolIpv4 ipv4 = 2;
+  ActionProtocolIpv4 ipv4 = 2;
 
   // Description missing in models
-  optional ActionProtocolIpv6 ipv6 = 3;
+  ActionProtocolIpv6 ipv6 = 3;
 
   // Description missing in models
-  optional ActionProtocolBgp bgp = 4;
+  ActionProtocolBgp bgp = 4;
 }
 
 // Response for actions associated with protocols on configured resources.
@@ -6923,10 +6923,10 @@ message ActionResponseProtocol {
   optional Choice.Enum choice = 1;
 
   // Description missing in models
-  optional ActionResponseProtocolIpv4 ipv4 = 2;
+  ActionResponseProtocolIpv4 ipv4 = 2;
 
   // Description missing in models
-  optional ActionResponseProtocolIpv6 ipv6 = 3;
+  ActionResponseProtocolIpv6 ipv6 = 3;
 }
 
 // Actions associated with IPv4 on configured resources.
@@ -6943,7 +6943,7 @@ message ActionProtocolIpv4 {
   optional Choice.Enum choice = 1;
 
   // Description missing in models
-  optional ActionProtocolIpv4Ping ping = 2;
+  ActionProtocolIpv4Ping ping = 2;
 }
 
 // Response for actions associated with IPv4 on configured resources.
@@ -6960,7 +6960,7 @@ message ActionResponseProtocolIpv4 {
   optional Choice.Enum choice = 1;
 
   // Description missing in models
-  optional ActionResponseProtocolIpv4Ping ping = 2;
+  ActionResponseProtocolIpv4Ping ping = 2;
 }
 
 // Request for initiating ping between multiple source and destination pairs.
@@ -7036,7 +7036,7 @@ message ActionProtocolIpv6 {
   optional Choice.Enum choice = 1;
 
   // Description missing in models
-  optional ActionProtocolIpv6Ping ping = 2;
+  ActionProtocolIpv6Ping ping = 2;
 }
 
 // Response for actions associated with IPv6 on configured resources.
@@ -7053,7 +7053,7 @@ message ActionResponseProtocolIpv6 {
   optional Choice.Enum choice = 1;
 
   // Description missing in models
-  optional ActionResponseProtocolIpv6Ping ping = 2;
+  ActionResponseProtocolIpv6Ping ping = 2;
 }
 
 // Request for initiating ping between multiple source and destination pairs.
@@ -7130,10 +7130,10 @@ message ActionProtocolBgp {
   optional Choice.Enum choice = 1;
 
   // Description missing in models
-  optional ActionProtocolBgpNotification notification = 2;
+  ActionProtocolBgpNotification notification = 2;
 
   // Description missing in models
-  optional ActionProtocolBgpInitiateGracefulRestart initiate_graceful_restart = 3;
+  ActionProtocolBgpInitiateGracefulRestart initiate_graceful_restart = 3;
 }
 
 // A NOTIFICATION message is sent when an error is detected with the BGP session, such
@@ -7176,25 +7176,25 @@ message ActionProtocolBgpNotification {
   optional Choice.Enum choice = 2;
 
   // Description missing in models
-  optional DeviceBgpCeaseError cease = 3;
+  DeviceBgpCeaseError cease = 3;
 
   // Description missing in models
-  optional DeviceBgpMessageHeaderError message_header_error = 4;
+  DeviceBgpMessageHeaderError message_header_error = 4;
 
   // Description missing in models
-  optional DeviceBgpOpenMessageError open_message_error = 5;
+  DeviceBgpOpenMessageError open_message_error = 5;
 
   // Description missing in models
-  optional DeviceBgpUpdateMessageError update_message_error = 6;
+  DeviceBgpUpdateMessageError update_message_error = 6;
 
   // Description missing in models
-  optional DeviceBgpHoldTimerExpired hold_timer_expired = 7;
+  DeviceBgpHoldTimerExpired hold_timer_expired = 7;
 
   // Description missing in models
-  optional DeviceBgpFiniteStateMachineError finite_state_machine_error = 8;
+  DeviceBgpFiniteStateMachineError finite_state_machine_error = 8;
 
   // Description missing in models
-  optional DeviceBgpCustomError custom = 9;
+  DeviceBgpCustomError custom = 9;
 }
 
 // Initiates BGP Graceful Restart process for the selected BGP peers. If no name is
@@ -7237,31 +7237,31 @@ message MetricsRequest {
   optional Choice.Enum choice = 1;
 
   // Description missing in models
-  optional PortMetricsRequest port = 2;
+  PortMetricsRequest port = 2;
 
   // Description missing in models
-  optional FlowMetricsRequest flow = 3;
+  FlowMetricsRequest flow = 3;
 
   // Description missing in models
-  optional Bgpv4MetricsRequest bgpv4 = 4;
+  Bgpv4MetricsRequest bgpv4 = 4;
 
   // Description missing in models
-  optional Bgpv6MetricsRequest bgpv6 = 5;
+  Bgpv6MetricsRequest bgpv6 = 5;
 
   // Description missing in models
-  optional IsisMetricsRequest isis = 6;
+  IsisMetricsRequest isis = 6;
 
   // Description missing in models
-  optional LagMetricsRequest lag = 7;
+  LagMetricsRequest lag = 7;
 
   // Description missing in models
-  optional LacpMetricsRequest lacp = 8;
+  LacpMetricsRequest lacp = 8;
 
   // Description missing in models
-  optional LldpMetricsRequest lldp = 9;
+  LldpMetricsRequest lldp = 9;
 
   // Description missing in models
-  optional RsvpMetricsRequest rsvp = 10;
+  RsvpMetricsRequest rsvp = 10;
 }
 
 // Response containing chosen traffic generator metrics.
@@ -7444,7 +7444,7 @@ message FlowMetricsRequest {
   repeated MetricNames.Enum metric_names = 3;
 
   // Description missing in models
-  optional FlowTaggedMetricsFilter tagged_metrics = 4;
+  FlowTaggedMetricsFilter tagged_metrics = 4;
 }
 
 // Filter for tagged metrics
@@ -7538,10 +7538,10 @@ message FlowMetric {
   optional float loss = 12;
 
   // Description missing in models
-  optional MetricTimestamp timestamps = 13;
+  MetricTimestamp timestamps = 13;
 
   // Description missing in models
-  optional MetricLatency latency = 14;
+  MetricLatency latency = 14;
 
   // List of metrics corresponding to a set of values applicable
   // for configured metric tags in ingress or egress packet header fields of corresponding
@@ -7580,10 +7580,10 @@ message FlowTaggedMetric {
   optional float loss = 8;
 
   // Description missing in models
-  optional MetricTimestamp timestamps = 9;
+  MetricTimestamp timestamps = 9;
 
   // Description missing in models
-  optional MetricLatency latency = 10;
+  MetricLatency latency = 10;
 }
 
 // Description missing in models
@@ -7593,7 +7593,7 @@ message FlowMetricTag {
   optional string name = 1;
 
   // Description missing in models
-  optional FlowMetricTagValue value = 2;
+  FlowMetricTagValue value = 2;
 }
 
 // A container for metric tag value
@@ -8472,22 +8472,22 @@ message StatesRequest {
   optional Choice.Enum choice = 1;
 
   // Description missing in models
-  optional Neighborsv4StatesRequest ipv4_neighbors = 2;
+  Neighborsv4StatesRequest ipv4_neighbors = 2;
 
   // Description missing in models
-  optional Neighborsv6StatesRequest ipv6_neighbors = 3;
+  Neighborsv6StatesRequest ipv6_neighbors = 3;
 
   // Description missing in models
-  optional BgpPrefixStateRequest bgp_prefixes = 4;
+  BgpPrefixStateRequest bgp_prefixes = 4;
 
   // Description missing in models
-  optional IsisLspsStateRequest isis_lsps = 5;
+  IsisLspsStateRequest isis_lsps = 5;
 
   // Description missing in models
-  optional LldpNeighborsStateRequest lldp_neighbors = 6;
+  LldpNeighborsStateRequest lldp_neighbors = 6;
 
   // Description missing in models
-  optional RsvpLspsStateRequest rsvp_lsps = 7;
+  RsvpLspsStateRequest rsvp_lsps = 7;
 }
 
 // Response containing chosen traffic generator states
@@ -8718,7 +8718,7 @@ message BgpPrefixIpv4UnicastState {
   repeated ResultBgpCommunity communities = 7;
 
   // Description missing in models
-  optional ResultBgpAsPath as_path = 8;
+  ResultBgpAsPath as_path = 8;
 
   // The local preference is a well-known attribute and the value is used for route selection.
   // The route with the highest local preference value is preferred.
@@ -8762,7 +8762,7 @@ message BgpPrefixIpv6UnicastState {
   repeated ResultBgpCommunity communities = 7;
 
   // Description missing in models
-  optional ResultBgpAsPath as_path = 8;
+  ResultBgpAsPath as_path = 8;
 
   // The local preference is a well-known attribute and the value is used for route selection.
   // The route with the highest local preference value is preferred.
@@ -8889,7 +8889,7 @@ message IsisLspState {
   optional uint32 pdu_length = 5;
 
   // LSP Type-Block flags.
-  optional IsisLspFlags flags = 6;
+  IsisLspFlags flags = 6;
 
   // IS Type - bits 1 and 2 indicate the type of Intermediate System.
   // 1 - ( i.e. bit 1 set) Level 1 Intermediate system.
@@ -8898,7 +8898,7 @@ message IsisLspState {
   optional uint32 is_type = 7;
 
   // It refers to Link State PDU State TLVs container.
-  optional IsisLspTlvs tlvs = 8;
+  IsisLspTlvs tlvs = 8;
 }
 
 // This contains the list of TLVs present in one LSP.
@@ -9077,7 +9077,7 @@ message IsisLspExtendedV4Prefix {
   optional RedistributionType.Enum redistribution_type = 4;
 
   // Description missing in models
-  optional IsisLspPrefixAttributes prefix_attributes = 5;
+  IsisLspPrefixAttributes prefix_attributes = 5;
 }
 
 // It defines list of IPv6 extended reachability information in one IPv6 Reachability
@@ -9129,7 +9129,7 @@ message IsisLspV6Prefix {
   optional OriginType.Enum origin_type = 5;
 
   // Description missing in models
-  optional IsisLspPrefixAttributes prefix_attributes = 6;
+  IsisLspPrefixAttributes prefix_attributes = 6;
 }
 
 // This contains the properties of ISIS Prefix attributes for  the extended IPv4 and
@@ -9337,7 +9337,7 @@ message RsvpIPv4LspState {
   optional string destination_address = 2;
 
   // It refers to the RSVP LSP properties.
-  optional RsvpLspState lsp = 3;
+  RsvpLspState lsp = 3;
 
   // It refers to RSVP RRO objects container.
   repeated RsvpLspIpv4Rro rros = 4;
@@ -9520,10 +9520,10 @@ message PatternFlowEthernetDst {
   optional string auto = 4;
 
   // Description missing in models
-  optional PatternFlowEthernetDstCounter increment = 6;
+  PatternFlowEthernetDstCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowEthernetDstCounter decrement = 7;
+  PatternFlowEthernetDstCounter decrement = 7;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -9592,10 +9592,10 @@ message PatternFlowEthernetSrc {
   repeated string values = 3;
 
   // Description missing in models
-  optional PatternFlowEthernetSrcCounter increment = 5;
+  PatternFlowEthernetSrcCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowEthernetSrcCounter decrement = 6;
+  PatternFlowEthernetSrcCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -9671,10 +9671,10 @@ message PatternFlowEthernetEtherType {
   optional uint32 auto = 4;
 
   // Description missing in models
-  optional PatternFlowEthernetEtherTypeCounter increment = 6;
+  PatternFlowEthernetEtherTypeCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowEthernetEtherTypeCounter decrement = 7;
+  PatternFlowEthernetEtherTypeCounter decrement = 7;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -9743,10 +9743,10 @@ message PatternFlowEthernetPfcQueue {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowEthernetPfcQueueCounter increment = 5;
+  PatternFlowEthernetPfcQueueCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowEthernetPfcQueueCounter decrement = 6;
+  PatternFlowEthernetPfcQueueCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -9815,10 +9815,10 @@ message PatternFlowVlanPriority {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowVlanPriorityCounter increment = 5;
+  PatternFlowVlanPriorityCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowVlanPriorityCounter decrement = 6;
+  PatternFlowVlanPriorityCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -9887,10 +9887,10 @@ message PatternFlowVlanCfi {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowVlanCfiCounter increment = 5;
+  PatternFlowVlanCfiCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowVlanCfiCounter decrement = 6;
+  PatternFlowVlanCfiCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -9959,10 +9959,10 @@ message PatternFlowVlanId {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowVlanIdCounter increment = 5;
+  PatternFlowVlanIdCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowVlanIdCounter decrement = 6;
+  PatternFlowVlanIdCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -10031,10 +10031,10 @@ message PatternFlowVlanTpid {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowVlanTpidCounter increment = 5;
+  PatternFlowVlanTpidCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowVlanTpidCounter decrement = 6;
+  PatternFlowVlanTpidCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -10105,10 +10105,10 @@ message PatternFlowVxlanFlags {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowVxlanFlagsCounter increment = 5;
+  PatternFlowVxlanFlagsCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowVxlanFlagsCounter decrement = 6;
+  PatternFlowVxlanFlagsCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -10177,10 +10177,10 @@ message PatternFlowVxlanReserved0 {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowVxlanReserved0Counter increment = 5;
+  PatternFlowVxlanReserved0Counter increment = 5;
 
   // Description missing in models
-  optional PatternFlowVxlanReserved0Counter decrement = 6;
+  PatternFlowVxlanReserved0Counter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -10256,10 +10256,10 @@ message PatternFlowVxlanVni {
   optional uint32 auto = 4;
 
   // Description missing in models
-  optional PatternFlowVxlanVniCounter increment = 6;
+  PatternFlowVxlanVniCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowVxlanVniCounter decrement = 7;
+  PatternFlowVxlanVniCounter decrement = 7;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -10328,10 +10328,10 @@ message PatternFlowVxlanReserved1 {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowVxlanReserved1Counter increment = 5;
+  PatternFlowVxlanReserved1Counter increment = 5;
 
   // Description missing in models
-  optional PatternFlowVxlanReserved1Counter decrement = 6;
+  PatternFlowVxlanReserved1Counter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -10400,10 +10400,10 @@ message PatternFlowIpv4Version {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowIpv4VersionCounter increment = 5;
+  PatternFlowIpv4VersionCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowIpv4VersionCounter decrement = 6;
+  PatternFlowIpv4VersionCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -10479,10 +10479,10 @@ message PatternFlowIpv4HeaderLength {
   optional uint32 auto = 4;
 
   // Description missing in models
-  optional PatternFlowIpv4HeaderLengthCounter increment = 6;
+  PatternFlowIpv4HeaderLengthCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowIpv4HeaderLengthCounter decrement = 7;
+  PatternFlowIpv4HeaderLengthCounter decrement = 7;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -10558,10 +10558,10 @@ message PatternFlowIpv4TotalLength {
   optional uint32 auto = 4;
 
   // Description missing in models
-  optional PatternFlowIpv4TotalLengthCounter increment = 6;
+  PatternFlowIpv4TotalLengthCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowIpv4TotalLengthCounter decrement = 7;
+  PatternFlowIpv4TotalLengthCounter decrement = 7;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -10630,10 +10630,10 @@ message PatternFlowIpv4Identification {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowIpv4IdentificationCounter increment = 5;
+  PatternFlowIpv4IdentificationCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowIpv4IdentificationCounter decrement = 6;
+  PatternFlowIpv4IdentificationCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -10702,10 +10702,10 @@ message PatternFlowIpv4Reserved {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowIpv4ReservedCounter increment = 5;
+  PatternFlowIpv4ReservedCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowIpv4ReservedCounter decrement = 6;
+  PatternFlowIpv4ReservedCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -10775,10 +10775,10 @@ message PatternFlowIpv4DontFragment {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowIpv4DontFragmentCounter increment = 5;
+  PatternFlowIpv4DontFragmentCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowIpv4DontFragmentCounter decrement = 6;
+  PatternFlowIpv4DontFragmentCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -10847,10 +10847,10 @@ message PatternFlowIpv4MoreFragments {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowIpv4MoreFragmentsCounter increment = 5;
+  PatternFlowIpv4MoreFragmentsCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowIpv4MoreFragmentsCounter decrement = 6;
+  PatternFlowIpv4MoreFragmentsCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -10919,10 +10919,10 @@ message PatternFlowIpv4FragmentOffset {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowIpv4FragmentOffsetCounter increment = 5;
+  PatternFlowIpv4FragmentOffsetCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowIpv4FragmentOffsetCounter decrement = 6;
+  PatternFlowIpv4FragmentOffsetCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -10991,10 +10991,10 @@ message PatternFlowIpv4TimeToLive {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowIpv4TimeToLiveCounter increment = 5;
+  PatternFlowIpv4TimeToLiveCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowIpv4TimeToLiveCounter decrement = 6;
+  PatternFlowIpv4TimeToLiveCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -11070,10 +11070,10 @@ message PatternFlowIpv4Protocol {
   optional uint32 auto = 4;
 
   // Description missing in models
-  optional PatternFlowIpv4ProtocolCounter increment = 6;
+  PatternFlowIpv4ProtocolCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowIpv4ProtocolCounter decrement = 7;
+  PatternFlowIpv4ProtocolCounter decrement = 7;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -11171,10 +11171,10 @@ message PatternFlowIpv4Src {
   repeated string values = 3;
 
   // Description missing in models
-  optional PatternFlowIpv4SrcCounter increment = 5;
+  PatternFlowIpv4SrcCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowIpv4SrcCounter decrement = 6;
+  PatternFlowIpv4SrcCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -11243,10 +11243,10 @@ message PatternFlowIpv4Dst {
   repeated string values = 3;
 
   // Description missing in models
-  optional PatternFlowIpv4DstCounter increment = 5;
+  PatternFlowIpv4DstCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowIpv4DstCounter decrement = 6;
+  PatternFlowIpv4DstCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -11315,10 +11315,10 @@ message PatternFlowIpv4PriorityRaw {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowIpv4PriorityRawCounter increment = 5;
+  PatternFlowIpv4PriorityRawCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowIpv4PriorityRawCounter decrement = 6;
+  PatternFlowIpv4PriorityRawCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -11387,10 +11387,10 @@ message PatternFlowIpv4DscpPhb {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowIpv4DscpPhbCounter increment = 5;
+  PatternFlowIpv4DscpPhbCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowIpv4DscpPhbCounter decrement = 6;
+  PatternFlowIpv4DscpPhbCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -11459,10 +11459,10 @@ message PatternFlowIpv4DscpEcn {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowIpv4DscpEcnCounter increment = 5;
+  PatternFlowIpv4DscpEcnCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowIpv4DscpEcnCounter decrement = 6;
+  PatternFlowIpv4DscpEcnCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -11531,10 +11531,10 @@ message PatternFlowIpv4TosPrecedence {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowIpv4TosPrecedenceCounter increment = 5;
+  PatternFlowIpv4TosPrecedenceCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowIpv4TosPrecedenceCounter decrement = 6;
+  PatternFlowIpv4TosPrecedenceCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -11603,10 +11603,10 @@ message PatternFlowIpv4TosDelay {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowIpv4TosDelayCounter increment = 5;
+  PatternFlowIpv4TosDelayCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowIpv4TosDelayCounter decrement = 6;
+  PatternFlowIpv4TosDelayCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -11675,10 +11675,10 @@ message PatternFlowIpv4TosThroughput {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowIpv4TosThroughputCounter increment = 5;
+  PatternFlowIpv4TosThroughputCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowIpv4TosThroughputCounter decrement = 6;
+  PatternFlowIpv4TosThroughputCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -11747,10 +11747,10 @@ message PatternFlowIpv4TosReliability {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowIpv4TosReliabilityCounter increment = 5;
+  PatternFlowIpv4TosReliabilityCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowIpv4TosReliabilityCounter decrement = 6;
+  PatternFlowIpv4TosReliabilityCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -11819,10 +11819,10 @@ message PatternFlowIpv4TosMonetary {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowIpv4TosMonetaryCounter increment = 5;
+  PatternFlowIpv4TosMonetaryCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowIpv4TosMonetaryCounter decrement = 6;
+  PatternFlowIpv4TosMonetaryCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -11891,10 +11891,10 @@ message PatternFlowIpv4TosUnused {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowIpv4TosUnusedCounter increment = 5;
+  PatternFlowIpv4TosUnusedCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowIpv4TosUnusedCounter decrement = 6;
+  PatternFlowIpv4TosUnusedCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -11963,10 +11963,10 @@ message PatternFlowIpv6Version {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowIpv6VersionCounter increment = 5;
+  PatternFlowIpv6VersionCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowIpv6VersionCounter decrement = 6;
+  PatternFlowIpv6VersionCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -12035,10 +12035,10 @@ message PatternFlowIpv6TrafficClass {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowIpv6TrafficClassCounter increment = 5;
+  PatternFlowIpv6TrafficClassCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowIpv6TrafficClassCounter decrement = 6;
+  PatternFlowIpv6TrafficClassCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -12107,10 +12107,10 @@ message PatternFlowIpv6FlowLabel {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowIpv6FlowLabelCounter increment = 5;
+  PatternFlowIpv6FlowLabelCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowIpv6FlowLabelCounter decrement = 6;
+  PatternFlowIpv6FlowLabelCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -12186,10 +12186,10 @@ message PatternFlowIpv6PayloadLength {
   optional uint32 auto = 4;
 
   // Description missing in models
-  optional PatternFlowIpv6PayloadLengthCounter increment = 6;
+  PatternFlowIpv6PayloadLengthCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowIpv6PayloadLengthCounter decrement = 7;
+  PatternFlowIpv6PayloadLengthCounter decrement = 7;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -12265,10 +12265,10 @@ message PatternFlowIpv6NextHeader {
   optional uint32 auto = 4;
 
   // Description missing in models
-  optional PatternFlowIpv6NextHeaderCounter increment = 6;
+  PatternFlowIpv6NextHeaderCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowIpv6NextHeaderCounter decrement = 7;
+  PatternFlowIpv6NextHeaderCounter decrement = 7;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -12337,10 +12337,10 @@ message PatternFlowIpv6HopLimit {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowIpv6HopLimitCounter increment = 5;
+  PatternFlowIpv6HopLimitCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowIpv6HopLimitCounter decrement = 6;
+  PatternFlowIpv6HopLimitCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -12409,10 +12409,10 @@ message PatternFlowIpv6Src {
   repeated string values = 3;
 
   // Description missing in models
-  optional PatternFlowIpv6SrcCounter increment = 5;
+  PatternFlowIpv6SrcCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowIpv6SrcCounter decrement = 6;
+  PatternFlowIpv6SrcCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -12481,10 +12481,10 @@ message PatternFlowIpv6Dst {
   repeated string values = 3;
 
   // Description missing in models
-  optional PatternFlowIpv6DstCounter increment = 5;
+  PatternFlowIpv6DstCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowIpv6DstCounter decrement = 6;
+  PatternFlowIpv6DstCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -12553,10 +12553,10 @@ message PatternFlowPfcPauseDst {
   repeated string values = 3;
 
   // Description missing in models
-  optional PatternFlowPfcPauseDstCounter increment = 5;
+  PatternFlowPfcPauseDstCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowPfcPauseDstCounter decrement = 6;
+  PatternFlowPfcPauseDstCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -12625,10 +12625,10 @@ message PatternFlowPfcPauseSrc {
   repeated string values = 3;
 
   // Description missing in models
-  optional PatternFlowPfcPauseSrcCounter increment = 5;
+  PatternFlowPfcPauseSrcCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowPfcPauseSrcCounter decrement = 6;
+  PatternFlowPfcPauseSrcCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -12697,10 +12697,10 @@ message PatternFlowPfcPauseEtherType {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowPfcPauseEtherTypeCounter increment = 5;
+  PatternFlowPfcPauseEtherTypeCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowPfcPauseEtherTypeCounter decrement = 6;
+  PatternFlowPfcPauseEtherTypeCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -12769,10 +12769,10 @@ message PatternFlowPfcPauseControlOpCode {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowPfcPauseControlOpCodeCounter increment = 5;
+  PatternFlowPfcPauseControlOpCodeCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowPfcPauseControlOpCodeCounter decrement = 6;
+  PatternFlowPfcPauseControlOpCodeCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -12841,10 +12841,10 @@ message PatternFlowPfcPauseClassEnableVector {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowPfcPauseClassEnableVectorCounter increment = 5;
+  PatternFlowPfcPauseClassEnableVectorCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowPfcPauseClassEnableVectorCounter decrement = 6;
+  PatternFlowPfcPauseClassEnableVectorCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -12913,10 +12913,10 @@ message PatternFlowPfcPausePauseClass0 {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowPfcPausePauseClass0Counter increment = 5;
+  PatternFlowPfcPausePauseClass0Counter increment = 5;
 
   // Description missing in models
-  optional PatternFlowPfcPausePauseClass0Counter decrement = 6;
+  PatternFlowPfcPausePauseClass0Counter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -12985,10 +12985,10 @@ message PatternFlowPfcPausePauseClass1 {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowPfcPausePauseClass1Counter increment = 5;
+  PatternFlowPfcPausePauseClass1Counter increment = 5;
 
   // Description missing in models
-  optional PatternFlowPfcPausePauseClass1Counter decrement = 6;
+  PatternFlowPfcPausePauseClass1Counter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -13057,10 +13057,10 @@ message PatternFlowPfcPausePauseClass2 {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowPfcPausePauseClass2Counter increment = 5;
+  PatternFlowPfcPausePauseClass2Counter increment = 5;
 
   // Description missing in models
-  optional PatternFlowPfcPausePauseClass2Counter decrement = 6;
+  PatternFlowPfcPausePauseClass2Counter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -13129,10 +13129,10 @@ message PatternFlowPfcPausePauseClass3 {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowPfcPausePauseClass3Counter increment = 5;
+  PatternFlowPfcPausePauseClass3Counter increment = 5;
 
   // Description missing in models
-  optional PatternFlowPfcPausePauseClass3Counter decrement = 6;
+  PatternFlowPfcPausePauseClass3Counter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -13201,10 +13201,10 @@ message PatternFlowPfcPausePauseClass4 {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowPfcPausePauseClass4Counter increment = 5;
+  PatternFlowPfcPausePauseClass4Counter increment = 5;
 
   // Description missing in models
-  optional PatternFlowPfcPausePauseClass4Counter decrement = 6;
+  PatternFlowPfcPausePauseClass4Counter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -13273,10 +13273,10 @@ message PatternFlowPfcPausePauseClass5 {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowPfcPausePauseClass5Counter increment = 5;
+  PatternFlowPfcPausePauseClass5Counter increment = 5;
 
   // Description missing in models
-  optional PatternFlowPfcPausePauseClass5Counter decrement = 6;
+  PatternFlowPfcPausePauseClass5Counter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -13345,10 +13345,10 @@ message PatternFlowPfcPausePauseClass6 {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowPfcPausePauseClass6Counter increment = 5;
+  PatternFlowPfcPausePauseClass6Counter increment = 5;
 
   // Description missing in models
-  optional PatternFlowPfcPausePauseClass6Counter decrement = 6;
+  PatternFlowPfcPausePauseClass6Counter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -13417,10 +13417,10 @@ message PatternFlowPfcPausePauseClass7 {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowPfcPausePauseClass7Counter increment = 5;
+  PatternFlowPfcPausePauseClass7Counter increment = 5;
 
   // Description missing in models
-  optional PatternFlowPfcPausePauseClass7Counter decrement = 6;
+  PatternFlowPfcPausePauseClass7Counter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -13489,10 +13489,10 @@ message PatternFlowEthernetPauseDst {
   repeated string values = 3;
 
   // Description missing in models
-  optional PatternFlowEthernetPauseDstCounter increment = 5;
+  PatternFlowEthernetPauseDstCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowEthernetPauseDstCounter decrement = 6;
+  PatternFlowEthernetPauseDstCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -13561,10 +13561,10 @@ message PatternFlowEthernetPauseSrc {
   repeated string values = 3;
 
   // Description missing in models
-  optional PatternFlowEthernetPauseSrcCounter increment = 5;
+  PatternFlowEthernetPauseSrcCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowEthernetPauseSrcCounter decrement = 6;
+  PatternFlowEthernetPauseSrcCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -13633,10 +13633,10 @@ message PatternFlowEthernetPauseEtherType {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowEthernetPauseEtherTypeCounter increment = 5;
+  PatternFlowEthernetPauseEtherTypeCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowEthernetPauseEtherTypeCounter decrement = 6;
+  PatternFlowEthernetPauseEtherTypeCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -13705,10 +13705,10 @@ message PatternFlowEthernetPauseControlOpCode {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowEthernetPauseControlOpCodeCounter increment = 5;
+  PatternFlowEthernetPauseControlOpCodeCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowEthernetPauseControlOpCodeCounter decrement = 6;
+  PatternFlowEthernetPauseControlOpCodeCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -13777,10 +13777,10 @@ message PatternFlowEthernetPauseTime {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowEthernetPauseTimeCounter increment = 5;
+  PatternFlowEthernetPauseTimeCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowEthernetPauseTimeCounter decrement = 6;
+  PatternFlowEthernetPauseTimeCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -13849,10 +13849,10 @@ message PatternFlowTcpSrcPort {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowTcpSrcPortCounter increment = 5;
+  PatternFlowTcpSrcPortCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowTcpSrcPortCounter decrement = 6;
+  PatternFlowTcpSrcPortCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -13921,10 +13921,10 @@ message PatternFlowTcpDstPort {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowTcpDstPortCounter increment = 5;
+  PatternFlowTcpDstPortCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowTcpDstPortCounter decrement = 6;
+  PatternFlowTcpDstPortCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -13993,10 +13993,10 @@ message PatternFlowTcpSeqNum {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowTcpSeqNumCounter increment = 5;
+  PatternFlowTcpSeqNumCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowTcpSeqNumCounter decrement = 6;
+  PatternFlowTcpSeqNumCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -14065,10 +14065,10 @@ message PatternFlowTcpAckNum {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowTcpAckNumCounter increment = 5;
+  PatternFlowTcpAckNumCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowTcpAckNumCounter decrement = 6;
+  PatternFlowTcpAckNumCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -14137,10 +14137,10 @@ message PatternFlowTcpDataOffset {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowTcpDataOffsetCounter increment = 5;
+  PatternFlowTcpDataOffsetCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowTcpDataOffsetCounter decrement = 6;
+  PatternFlowTcpDataOffsetCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -14209,10 +14209,10 @@ message PatternFlowTcpEcnNs {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowTcpEcnNsCounter increment = 5;
+  PatternFlowTcpEcnNsCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowTcpEcnNsCounter decrement = 6;
+  PatternFlowTcpEcnNsCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -14281,10 +14281,10 @@ message PatternFlowTcpEcnCwr {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowTcpEcnCwrCounter increment = 5;
+  PatternFlowTcpEcnCwrCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowTcpEcnCwrCounter decrement = 6;
+  PatternFlowTcpEcnCwrCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -14354,10 +14354,10 @@ message PatternFlowTcpEcnEcho {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowTcpEcnEchoCounter increment = 5;
+  PatternFlowTcpEcnEchoCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowTcpEcnEchoCounter decrement = 6;
+  PatternFlowTcpEcnEchoCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -14426,10 +14426,10 @@ message PatternFlowTcpCtlUrg {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowTcpCtlUrgCounter increment = 5;
+  PatternFlowTcpCtlUrgCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowTcpCtlUrgCounter decrement = 6;
+  PatternFlowTcpCtlUrgCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -14498,10 +14498,10 @@ message PatternFlowTcpCtlAck {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowTcpCtlAckCounter increment = 5;
+  PatternFlowTcpCtlAckCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowTcpCtlAckCounter decrement = 6;
+  PatternFlowTcpCtlAckCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -14570,10 +14570,10 @@ message PatternFlowTcpCtlPsh {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowTcpCtlPshCounter increment = 5;
+  PatternFlowTcpCtlPshCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowTcpCtlPshCounter decrement = 6;
+  PatternFlowTcpCtlPshCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -14642,10 +14642,10 @@ message PatternFlowTcpCtlRst {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowTcpCtlRstCounter increment = 5;
+  PatternFlowTcpCtlRstCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowTcpCtlRstCounter decrement = 6;
+  PatternFlowTcpCtlRstCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -14714,10 +14714,10 @@ message PatternFlowTcpCtlSyn {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowTcpCtlSynCounter increment = 5;
+  PatternFlowTcpCtlSynCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowTcpCtlSynCounter decrement = 6;
+  PatternFlowTcpCtlSynCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -14786,10 +14786,10 @@ message PatternFlowTcpCtlFin {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowTcpCtlFinCounter increment = 5;
+  PatternFlowTcpCtlFinCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowTcpCtlFinCounter decrement = 6;
+  PatternFlowTcpCtlFinCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -14858,10 +14858,10 @@ message PatternFlowTcpWindow {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowTcpWindowCounter increment = 5;
+  PatternFlowTcpWindowCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowTcpWindowCounter decrement = 6;
+  PatternFlowTcpWindowCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -14930,10 +14930,10 @@ message PatternFlowUdpSrcPort {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowUdpSrcPortCounter increment = 5;
+  PatternFlowUdpSrcPortCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowUdpSrcPortCounter decrement = 6;
+  PatternFlowUdpSrcPortCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -15002,10 +15002,10 @@ message PatternFlowUdpDstPort {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowUdpDstPortCounter increment = 5;
+  PatternFlowUdpDstPortCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowUdpDstPortCounter decrement = 6;
+  PatternFlowUdpDstPortCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -15074,10 +15074,10 @@ message PatternFlowUdpLength {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowUdpLengthCounter increment = 5;
+  PatternFlowUdpLengthCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowUdpLengthCounter decrement = 6;
+  PatternFlowUdpLengthCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -15175,10 +15175,10 @@ message PatternFlowGreChecksumPresent {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowGreChecksumPresentCounter increment = 5;
+  PatternFlowGreChecksumPresentCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowGreChecksumPresentCounter decrement = 6;
+  PatternFlowGreChecksumPresentCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -15247,10 +15247,10 @@ message PatternFlowGreReserved0 {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowGreReserved0Counter increment = 5;
+  PatternFlowGreReserved0Counter increment = 5;
 
   // Description missing in models
-  optional PatternFlowGreReserved0Counter decrement = 6;
+  PatternFlowGreReserved0Counter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -15319,10 +15319,10 @@ message PatternFlowGreVersion {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowGreVersionCounter increment = 5;
+  PatternFlowGreVersionCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowGreVersionCounter decrement = 6;
+  PatternFlowGreVersionCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -15391,10 +15391,10 @@ message PatternFlowGreProtocol {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowGreProtocolCounter increment = 5;
+  PatternFlowGreProtocolCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowGreProtocolCounter decrement = 6;
+  PatternFlowGreProtocolCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -15493,10 +15493,10 @@ message PatternFlowGreReserved1 {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowGreReserved1Counter increment = 5;
+  PatternFlowGreReserved1Counter increment = 5;
 
   // Description missing in models
-  optional PatternFlowGreReserved1Counter decrement = 6;
+  PatternFlowGreReserved1Counter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -15565,10 +15565,10 @@ message PatternFlowGtpv1Version {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowGtpv1VersionCounter increment = 5;
+  PatternFlowGtpv1VersionCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowGtpv1VersionCounter decrement = 6;
+  PatternFlowGtpv1VersionCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -15637,10 +15637,10 @@ message PatternFlowGtpv1ProtocolType {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowGtpv1ProtocolTypeCounter increment = 5;
+  PatternFlowGtpv1ProtocolTypeCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowGtpv1ProtocolTypeCounter decrement = 6;
+  PatternFlowGtpv1ProtocolTypeCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -15709,10 +15709,10 @@ message PatternFlowGtpv1Reserved {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowGtpv1ReservedCounter increment = 5;
+  PatternFlowGtpv1ReservedCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowGtpv1ReservedCounter decrement = 6;
+  PatternFlowGtpv1ReservedCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -15781,10 +15781,10 @@ message PatternFlowGtpv1EFlag {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowGtpv1EFlagCounter increment = 5;
+  PatternFlowGtpv1EFlagCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowGtpv1EFlagCounter decrement = 6;
+  PatternFlowGtpv1EFlagCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -15853,10 +15853,10 @@ message PatternFlowGtpv1SFlag {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowGtpv1SFlagCounter increment = 5;
+  PatternFlowGtpv1SFlagCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowGtpv1SFlagCounter decrement = 6;
+  PatternFlowGtpv1SFlagCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -15925,10 +15925,10 @@ message PatternFlowGtpv1PnFlag {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowGtpv1PnFlagCounter increment = 5;
+  PatternFlowGtpv1PnFlagCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowGtpv1PnFlagCounter decrement = 6;
+  PatternFlowGtpv1PnFlagCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -15998,10 +15998,10 @@ message PatternFlowGtpv1MessageType {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowGtpv1MessageTypeCounter increment = 5;
+  PatternFlowGtpv1MessageTypeCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowGtpv1MessageTypeCounter decrement = 6;
+  PatternFlowGtpv1MessageTypeCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -16071,10 +16071,10 @@ message PatternFlowGtpv1MessageLength {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowGtpv1MessageLengthCounter increment = 5;
+  PatternFlowGtpv1MessageLengthCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowGtpv1MessageLengthCounter decrement = 6;
+  PatternFlowGtpv1MessageLengthCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -16143,10 +16143,10 @@ message PatternFlowGtpv1Teid {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowGtpv1TeidCounter increment = 5;
+  PatternFlowGtpv1TeidCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowGtpv1TeidCounter decrement = 6;
+  PatternFlowGtpv1TeidCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -16216,10 +16216,10 @@ message PatternFlowGtpv1SquenceNumber {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowGtpv1SquenceNumberCounter increment = 5;
+  PatternFlowGtpv1SquenceNumberCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowGtpv1SquenceNumberCounter decrement = 6;
+  PatternFlowGtpv1SquenceNumberCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -16289,10 +16289,10 @@ message PatternFlowGtpv1NPduNumber {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowGtpv1NPduNumberCounter increment = 5;
+  PatternFlowGtpv1NPduNumberCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowGtpv1NPduNumberCounter decrement = 6;
+  PatternFlowGtpv1NPduNumberCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -16362,10 +16362,10 @@ message PatternFlowGtpv1NextExtensionHeaderType {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowGtpv1NextExtensionHeaderTypeCounter increment = 5;
+  PatternFlowGtpv1NextExtensionHeaderTypeCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowGtpv1NextExtensionHeaderTypeCounter decrement = 6;
+  PatternFlowGtpv1NextExtensionHeaderTypeCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -16436,10 +16436,10 @@ message PatternFlowGtpExtensionExtensionLength {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowGtpExtensionExtensionLengthCounter increment = 5;
+  PatternFlowGtpExtensionExtensionLengthCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowGtpExtensionExtensionLengthCounter decrement = 6;
+  PatternFlowGtpExtensionExtensionLengthCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -16508,10 +16508,10 @@ message PatternFlowGtpExtensionContents {
   repeated uint64 values = 3;
 
   // Description missing in models
-  optional PatternFlowGtpExtensionContentsCounter increment = 5;
+  PatternFlowGtpExtensionContentsCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowGtpExtensionContentsCounter decrement = 6;
+  PatternFlowGtpExtensionContentsCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -16581,10 +16581,10 @@ message PatternFlowGtpExtensionNextExtensionHeader {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowGtpExtensionNextExtensionHeaderCounter increment = 5;
+  PatternFlowGtpExtensionNextExtensionHeaderCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowGtpExtensionNextExtensionHeaderCounter decrement = 6;
+  PatternFlowGtpExtensionNextExtensionHeaderCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -16653,10 +16653,10 @@ message PatternFlowGtpv2Version {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowGtpv2VersionCounter increment = 5;
+  PatternFlowGtpv2VersionCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowGtpv2VersionCounter decrement = 6;
+  PatternFlowGtpv2VersionCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -16726,10 +16726,10 @@ message PatternFlowGtpv2PiggybackingFlag {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowGtpv2PiggybackingFlagCounter increment = 5;
+  PatternFlowGtpv2PiggybackingFlagCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowGtpv2PiggybackingFlagCounter decrement = 6;
+  PatternFlowGtpv2PiggybackingFlagCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -16800,10 +16800,10 @@ message PatternFlowGtpv2TeidFlag {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowGtpv2TeidFlagCounter increment = 5;
+  PatternFlowGtpv2TeidFlagCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowGtpv2TeidFlagCounter decrement = 6;
+  PatternFlowGtpv2TeidFlagCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -16872,10 +16872,10 @@ message PatternFlowGtpv2Spare1 {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowGtpv2Spare1Counter increment = 5;
+  PatternFlowGtpv2Spare1Counter increment = 5;
 
   // Description missing in models
-  optional PatternFlowGtpv2Spare1Counter decrement = 6;
+  PatternFlowGtpv2Spare1Counter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -16945,10 +16945,10 @@ message PatternFlowGtpv2MessageType {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowGtpv2MessageTypeCounter increment = 5;
+  PatternFlowGtpv2MessageTypeCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowGtpv2MessageTypeCounter decrement = 6;
+  PatternFlowGtpv2MessageTypeCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -17018,10 +17018,10 @@ message PatternFlowGtpv2MessageLength {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowGtpv2MessageLengthCounter increment = 5;
+  PatternFlowGtpv2MessageLengthCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowGtpv2MessageLengthCounter decrement = 6;
+  PatternFlowGtpv2MessageLengthCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -17091,10 +17091,10 @@ message PatternFlowGtpv2Teid {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowGtpv2TeidCounter increment = 5;
+  PatternFlowGtpv2TeidCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowGtpv2TeidCounter decrement = 6;
+  PatternFlowGtpv2TeidCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -17163,10 +17163,10 @@ message PatternFlowGtpv2SequenceNumber {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowGtpv2SequenceNumberCounter increment = 5;
+  PatternFlowGtpv2SequenceNumberCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowGtpv2SequenceNumberCounter decrement = 6;
+  PatternFlowGtpv2SequenceNumberCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -17235,10 +17235,10 @@ message PatternFlowGtpv2Spare2 {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowGtpv2Spare2Counter increment = 5;
+  PatternFlowGtpv2Spare2Counter increment = 5;
 
   // Description missing in models
-  optional PatternFlowGtpv2Spare2Counter decrement = 6;
+  PatternFlowGtpv2Spare2Counter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -17307,10 +17307,10 @@ message PatternFlowArpHardwareType {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowArpHardwareTypeCounter increment = 5;
+  PatternFlowArpHardwareTypeCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowArpHardwareTypeCounter decrement = 6;
+  PatternFlowArpHardwareTypeCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -17379,10 +17379,10 @@ message PatternFlowArpProtocolType {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowArpProtocolTypeCounter increment = 5;
+  PatternFlowArpProtocolTypeCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowArpProtocolTypeCounter decrement = 6;
+  PatternFlowArpProtocolTypeCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -17451,10 +17451,10 @@ message PatternFlowArpHardwareLength {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowArpHardwareLengthCounter increment = 5;
+  PatternFlowArpHardwareLengthCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowArpHardwareLengthCounter decrement = 6;
+  PatternFlowArpHardwareLengthCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -17523,10 +17523,10 @@ message PatternFlowArpProtocolLength {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowArpProtocolLengthCounter increment = 5;
+  PatternFlowArpProtocolLengthCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowArpProtocolLengthCounter decrement = 6;
+  PatternFlowArpProtocolLengthCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -17595,10 +17595,10 @@ message PatternFlowArpOperation {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowArpOperationCounter increment = 5;
+  PatternFlowArpOperationCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowArpOperationCounter decrement = 6;
+  PatternFlowArpOperationCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -17667,10 +17667,10 @@ message PatternFlowArpSenderHardwareAddr {
   repeated string values = 3;
 
   // Description missing in models
-  optional PatternFlowArpSenderHardwareAddrCounter increment = 5;
+  PatternFlowArpSenderHardwareAddrCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowArpSenderHardwareAddrCounter decrement = 6;
+  PatternFlowArpSenderHardwareAddrCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -17739,10 +17739,10 @@ message PatternFlowArpSenderProtocolAddr {
   repeated string values = 3;
 
   // Description missing in models
-  optional PatternFlowArpSenderProtocolAddrCounter increment = 5;
+  PatternFlowArpSenderProtocolAddrCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowArpSenderProtocolAddrCounter decrement = 6;
+  PatternFlowArpSenderProtocolAddrCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -17811,10 +17811,10 @@ message PatternFlowArpTargetHardwareAddr {
   repeated string values = 3;
 
   // Description missing in models
-  optional PatternFlowArpTargetHardwareAddrCounter increment = 5;
+  PatternFlowArpTargetHardwareAddrCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowArpTargetHardwareAddrCounter decrement = 6;
+  PatternFlowArpTargetHardwareAddrCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -17883,10 +17883,10 @@ message PatternFlowArpTargetProtocolAddr {
   repeated string values = 3;
 
   // Description missing in models
-  optional PatternFlowArpTargetProtocolAddrCounter increment = 5;
+  PatternFlowArpTargetProtocolAddrCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowArpTargetProtocolAddrCounter decrement = 6;
+  PatternFlowArpTargetProtocolAddrCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -17955,10 +17955,10 @@ message PatternFlowIcmpEchoType {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowIcmpEchoTypeCounter increment = 5;
+  PatternFlowIcmpEchoTypeCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowIcmpEchoTypeCounter decrement = 6;
+  PatternFlowIcmpEchoTypeCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -18027,10 +18027,10 @@ message PatternFlowIcmpEchoCode {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowIcmpEchoCodeCounter increment = 5;
+  PatternFlowIcmpEchoCodeCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowIcmpEchoCodeCounter decrement = 6;
+  PatternFlowIcmpEchoCodeCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -18128,10 +18128,10 @@ message PatternFlowIcmpEchoIdentifier {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowIcmpEchoIdentifierCounter increment = 5;
+  PatternFlowIcmpEchoIdentifierCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowIcmpEchoIdentifierCounter decrement = 6;
+  PatternFlowIcmpEchoIdentifierCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -18200,10 +18200,10 @@ message PatternFlowIcmpEchoSequenceNumber {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowIcmpEchoSequenceNumberCounter increment = 5;
+  PatternFlowIcmpEchoSequenceNumberCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowIcmpEchoSequenceNumberCounter decrement = 6;
+  PatternFlowIcmpEchoSequenceNumberCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -18301,10 +18301,10 @@ message PatternFlowIcmpNextFieldsIdentifier {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowIcmpNextFieldsIdentifierCounter increment = 5;
+  PatternFlowIcmpNextFieldsIdentifierCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowIcmpNextFieldsIdentifierCounter decrement = 6;
+  PatternFlowIcmpNextFieldsIdentifierCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -18373,10 +18373,10 @@ message PatternFlowIcmpNextFieldsSequenceNumber {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowIcmpNextFieldsSequenceNumberCounter increment = 5;
+  PatternFlowIcmpNextFieldsSequenceNumberCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowIcmpNextFieldsSequenceNumberCounter decrement = 6;
+  PatternFlowIcmpNextFieldsSequenceNumberCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -18445,10 +18445,10 @@ message PatternFlowIcmpv6EchoType {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowIcmpv6EchoTypeCounter increment = 5;
+  PatternFlowIcmpv6EchoTypeCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowIcmpv6EchoTypeCounter decrement = 6;
+  PatternFlowIcmpv6EchoTypeCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -18517,10 +18517,10 @@ message PatternFlowIcmpv6EchoCode {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowIcmpv6EchoCodeCounter increment = 5;
+  PatternFlowIcmpv6EchoCodeCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowIcmpv6EchoCodeCounter decrement = 6;
+  PatternFlowIcmpv6EchoCodeCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -18589,10 +18589,10 @@ message PatternFlowIcmpv6EchoIdentifier {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowIcmpv6EchoIdentifierCounter increment = 5;
+  PatternFlowIcmpv6EchoIdentifierCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowIcmpv6EchoIdentifierCounter decrement = 6;
+  PatternFlowIcmpv6EchoIdentifierCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -18661,10 +18661,10 @@ message PatternFlowIcmpv6EchoSequenceNumber {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowIcmpv6EchoSequenceNumberCounter increment = 5;
+  PatternFlowIcmpv6EchoSequenceNumberCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowIcmpv6EchoSequenceNumberCounter decrement = 6;
+  PatternFlowIcmpv6EchoSequenceNumberCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -18791,10 +18791,10 @@ message PatternFlowPppAddress {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowPppAddressCounter increment = 5;
+  PatternFlowPppAddressCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowPppAddressCounter decrement = 6;
+  PatternFlowPppAddressCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -18863,10 +18863,10 @@ message PatternFlowPppControl {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowPppControlCounter increment = 5;
+  PatternFlowPppControlCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowPppControlCounter decrement = 6;
+  PatternFlowPppControlCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -18942,10 +18942,10 @@ message PatternFlowPppProtocolType {
   optional uint32 auto = 4;
 
   // Description missing in models
-  optional PatternFlowPppProtocolTypeCounter increment = 6;
+  PatternFlowPppProtocolTypeCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowPppProtocolTypeCounter decrement = 7;
+  PatternFlowPppProtocolTypeCounter decrement = 7;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -19014,10 +19014,10 @@ message PatternFlowIgmpv1Version {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowIgmpv1VersionCounter increment = 5;
+  PatternFlowIgmpv1VersionCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowIgmpv1VersionCounter decrement = 6;
+  PatternFlowIgmpv1VersionCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -19086,10 +19086,10 @@ message PatternFlowIgmpv1Type {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowIgmpv1TypeCounter increment = 5;
+  PatternFlowIgmpv1TypeCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowIgmpv1TypeCounter decrement = 6;
+  PatternFlowIgmpv1TypeCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -19158,10 +19158,10 @@ message PatternFlowIgmpv1Unused {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowIgmpv1UnusedCounter increment = 5;
+  PatternFlowIgmpv1UnusedCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowIgmpv1UnusedCounter decrement = 6;
+  PatternFlowIgmpv1UnusedCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -19259,10 +19259,10 @@ message PatternFlowIgmpv1GroupAddress {
   repeated string values = 3;
 
   // Description missing in models
-  optional PatternFlowIgmpv1GroupAddressCounter increment = 5;
+  PatternFlowIgmpv1GroupAddressCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowIgmpv1GroupAddressCounter decrement = 6;
+  PatternFlowIgmpv1GroupAddressCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -19338,10 +19338,10 @@ message PatternFlowMplsLabel {
   optional uint32 auto = 4;
 
   // Description missing in models
-  optional PatternFlowMplsLabelCounter increment = 6;
+  PatternFlowMplsLabelCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowMplsLabelCounter decrement = 7;
+  PatternFlowMplsLabelCounter decrement = 7;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -19410,10 +19410,10 @@ message PatternFlowMplsTrafficClass {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowMplsTrafficClassCounter increment = 5;
+  PatternFlowMplsTrafficClassCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowMplsTrafficClassCounter decrement = 6;
+  PatternFlowMplsTrafficClassCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -19489,10 +19489,10 @@ message PatternFlowMplsBottomOfStack {
   optional uint32 auto = 4;
 
   // Description missing in models
-  optional PatternFlowMplsBottomOfStackCounter increment = 6;
+  PatternFlowMplsBottomOfStackCounter increment = 6;
 
   // Description missing in models
-  optional PatternFlowMplsBottomOfStackCounter decrement = 7;
+  PatternFlowMplsBottomOfStackCounter decrement = 7;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
@@ -19561,10 +19561,10 @@ message PatternFlowMplsTimeToLive {
   repeated uint32 values = 3;
 
   // Description missing in models
-  optional PatternFlowMplsTimeToLiveCounter increment = 5;
+  PatternFlowMplsTimeToLiveCounter increment = 5;
 
   // Description missing in models
-  optional PatternFlowMplsTimeToLiveCounter decrement = 6;
+  PatternFlowMplsTimeToLiveCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
