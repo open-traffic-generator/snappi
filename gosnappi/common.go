@@ -15,6 +15,8 @@ import (
 	"google.golang.org/grpc/status"
 )
 
+var globalConstraints map[string]map[string][]string
+
 type grpcTransport struct {
 	clientConnection *grpc.ClientConn
 	location         string
@@ -251,16 +253,10 @@ type httpClient struct {
 	ctx    context.Context
 }
 
-// All methods that perform validation will add errors here
-// All api rpcs MUST call Validate
-type Constraints interface {
-	ValueOf(name string) interface{}
-}
-
 type validation struct {
 	validationErrors []string
 	warnings         []string
-	constraints      map[string]map[string]Constraints
+	constraints      map[string]map[string]string
 }
 
 type Validation interface {
@@ -272,7 +268,7 @@ type Validation interface {
 }
 
 func (obj *validation) validationResult() error {
-	obj.constraints = make(map[string]map[string]Constraints)
+	obj.constraints = make(map[string]map[string]string)
 	if len(obj.validationErrors) > 0 {
 		errors := strings.Join(obj.validationErrors, "\n")
 		obj.validationErrors = nil
@@ -428,63 +424,94 @@ func (obj *validation) validateHexSlice(hex []string) error {
 	return obj.validateSlice(hex, "hex")
 }
 
-// TODO: restore behavior
-// func (obj *validation) createMap(objName string) {
-// 	if obj.constraints == nil {
-// 		obj.constraints = make(map[string]map[string]Constraints)
-// 	}
-// 	_, ok := obj.constraints[objName]
-// 	if !ok {
-// 		obj.constraints[objName] = make(map[string]Constraints)
-// 	}
-// }
+func (obj *validation) createMap(objName string) {
+	if obj.constraints == nil {
+		obj.constraints = make(map[string]map[string]string)
+	}
+	_, ok := obj.constraints[objName]
+	if !ok {
+		obj.constraints[objName] = make(map[string]string)
+	}
+}
+
+func (obj *validation) isUnique(objectName, value string, scope string, propertyName string) bool {
+	if value == "" {
+		return true
+	}
+	key := ""
+	if scope == "global" {
+		key = scope
+	} else {
+		key = objectName
+	}
+	obj.createMap(key)
+	_, ok := obj.constraints[key][value]
+	unique := false
+	if !ok {
+		obj.constraints[key][value] = propertyName
+		unique = true
+	}
+
+	// code for maintaining map for x-constraints
+	if _, ok := globalConstraints[objectName]; !ok {
+		globalConstraints[objectName] = make(map[string][]string)
+		globalConstraints[objectName][propertyName] = []string{value}
+	} else if _, ok := globalConstraints[objectName][propertyName]; !ok {
+		globalConstraints[objectName][propertyName] = []string{value}
+	} else {
+		valuePresent := false
+		for _, v := range globalConstraints[objectName][propertyName] {
+			if v == value {
+				valuePresent = true
+				break
+			}
+		}
+		if !valuePresent {
+			globalConstraints[objectName][propertyName] = append(globalConstraints[objectName][propertyName], value)
+		}
+	}
+
+	return unique
+}
 
 // TODO: restore behavior
-// func (obj *validation) isUnique(objectName, value string, object Constraints) bool {
-// 	if value == "" {
-// 		return true
-// 	}
-
-// 	obj.createMap("globals")
-// 	_, ok := obj.constraints["globals"][value]
-// 	unique := false
-// 	if !ok {
-// 		obj.constraints["globals"][value] = object
-// 		obj.createMap(objectName)
-// 		obj.constraints[objectName][value] = object
-// 		unique = true
-// 	}
-// 	return unique
-// }
-
-// TODO: restore behavior
-// func (obj *validation) validateConstraint(objectName []string, value string) bool {
-// 	if value == "" {
-// 		return false
-// 	}
-// 	found := false
-// 	for _, object := range objectName {
-// 		obj_ := strings.Split(object, ".")
-// 		strukt, ok := obj.constraints[obj_[0]]
-// 		if !ok {
-// 			continue
-// 		}
-// 		for _, object := range strukt {
-// 			intf := object.ValueOf(obj_[1])
-// 			if intf == nil {
-// 				continue
-// 			}
-// 			if value == fmt.Sprintf("%v", intf) {
-// 				found = true
-// 				break
-// 			}
-// 		}
-// 		if found {
-// 			break
-// 		}
-// 	}
-// 	return found
-// }
+func (obj *validation) validateConstraint(objectName []string, value string) bool {
+	if value == "" {
+		return false
+	}
+	found := false
+	for _, object := range objectName {
+		obj_ := strings.Split(object, ".")
+		prop, ok := globalConstraints[obj_[0]]
+		if !ok {
+			continue
+		}
+		values, ok := prop[obj_[1]]
+		if !ok {
+			continue
+		}
+		for _, v := range values {
+			if v == value {
+				found = true
+				break
+			}
+		}
+		// for _, object := range strukt {
+		// 	intf := object.ValueOf(obj_[1])
+		// 	if intf == nil {
+		// 		continue
+		// 	}
+		// 	if value == fmt.Sprintf("%v", intf) {
+		// 		found = true
+		// 		break
+		// 	}
+		// }
+		if found {
+			break
+		}
+	}
+	return found
+}
 
 func checkClientServerVersionCompatibility(clientVer string, serverVer string, componentName string) error {
 

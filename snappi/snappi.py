@@ -16,6 +16,7 @@ import semantic_version
 import types
 import platform
 from google.protobuf import json_format
+from inspect import stack
 
 try:
     from snappi import otg_pb2_grpc as pb2_grpc
@@ -37,6 +38,7 @@ if sys.version_info[0] == 3:
 
 
 openapi_warnings = []
+global_constraints = {}
 
 
 class Transport:
@@ -282,8 +284,7 @@ class OpenApiBase(object):
             encoding. The json and yaml encodings will return a str object and
             the dict encoding will return a python dict object.
         """
-        # TODO: restore behavior
-        # self._clear_globals()
+        self._clear_globals()
         if encoding == OpenApiBase.JSON:
             data = json.dumps(self._encode(), indent=2, sort_keys=True)
         elif encoding == OpenApiBase.YAML:
@@ -292,8 +293,7 @@ class OpenApiBase(object):
             data = self._encode()
         else:
             raise NotImplementedError("Encoding %s not supported" % encoding)
-        # TODO: restore behavior
-        # self._validate_coded()
+        self._validate_coded()
         return data
 
     def _encode(self):
@@ -316,13 +316,11 @@ class OpenApiBase(object):
         - obj(OpenApiObject): This object with all the
             serialized_object deserialized within.
         """
-        # TODO: restore behavior
-        # self._clear_globals()
+        self._clear_globals()
         if isinstance(serialized_object, (str, unicode)):
             serialized_object = yaml.safe_load(serialized_object)
         self._decode(serialized_object)
-        # TODO: restore behavior
-        # self._validate_coded()
+        self._validate_coded()
         return self
 
     def _decode(self, dict_object):
@@ -545,21 +543,37 @@ class OpenApiValidator(object):
             raise TypeError(err_msg)
 
     def _validate_unique_and_name(self, name, value, latter=False):
+
         if self._TYPES[name].get("unique") is None or value is None:
             return
+
+        unique_type = self._TYPES[name]["unique"]
+        class_name = self.__class__.__name__
+
         if latter is True:
-            self.__validate_latter__["unique"].append(
+            if unique_type == "local" and class_name in self.__validate_latter__:
+                key = class_name
+            else:
+                key = "unique"
+            self.__validate_latter__[key].append(
                 (self._validate_unique_and_name, name, value)
             )
+
+            if unique_type == "global":
+                if class_name not in global_constraints:
+                    global_constraints[class_name] = {name: [value]}
+                elif name not in global_constraints[class_name]:
+                    global_constraints[class_name][name] = [value]
+                elif value not in global_constraints[class_name][name]:
+                    global_constraints[class_name][name].append(value)
             return
-        class_name = type(self).__name__
-        unique_type = self._TYPES[name]["unique"]
-        if class_name not in self.__constraints__:
-            self.__constraints__[class_name] = dict()
+
+        values = None
         if unique_type == "global":
             values = self.__constraints__["global"]
-        else:
+        elif class_name in self.__constraints__:
             values = self.__constraints__[class_name]
+
         if value in values:
             self._validation_errors.append(
                 "{} with {} already exists".format(name, value)
@@ -567,7 +581,6 @@ class OpenApiValidator(object):
             return
         if isinstance(values, list):
             values.append(value)
-        self.__constraints__[class_name].update({value: self})
 
     def _validate_constraint(self, name, value, latter=False):
         cons = self._TYPES[name].get("constraint")
@@ -581,9 +594,9 @@ class OpenApiValidator(object):
         found = False
         for c in cons:
             klass, prop = c.split(".")
-            names = self.__constraints__.get(klass, {})
-            props = [obj._properties.get(prop) for obj in names.values()]
-            if value in props:
+            names = global_constraints.get(klass, {})
+            values = names.get(prop, [])
+            if value in values:
                 found = True
                 break
         if found is not True:
@@ -592,12 +605,21 @@ class OpenApiValidator(object):
             )
             return
 
-    def _validate_coded(self):
-        for item in self.__validate_latter__["unique"]:
-            item[0](item[1], item[2])
-        for item in self.__validate_latter__["constraint"]:
-            item[0](item[1], item[2])
-        self._clear_vars()
+    def _validate_coded(self, check_local_unique=False, class_name=None):
+        if check_local_unique:
+            for item in self.__validate_latter__[class_name]:
+                item[0](item[1], item[2])
+            if class_name in self.__constraints__:
+                del self.__constraints__[class_name]
+            elif class_name in self.__validate_latter__:
+                del self.__validate_latter__[class_name]
+            return
+        else:
+            for item in self.__validate_latter__["unique"]:
+                item[0](item[1], item[2])
+            for item in self.__validate_latter__["constraint"]:
+                item[0](item[1], item[2])
+            self._clear_vars()
         if len(self._validation_errors) > 0:
             errors = "\n".join(self._validation_errors)
             self._clear_errors()
@@ -618,6 +640,11 @@ class OpenApiValidator(object):
                 self.__constraints__["global"] = []
                 continue
             del self.__constraints__[k]
+
+        keys = list(self.__validate_latter__.keys())
+        for k in keys:
+            if k not in ["unique", "constraint"]:
+                del self.__validate_latter__[k]
 
 
 class OpenApiObject(OpenApiBase, OpenApiValidator):
@@ -724,9 +751,9 @@ class OpenApiObject(OpenApiBase, OpenApiValidator):
         self._validate_required()
         for key, value in self._properties.items():
             self._validate_types(key, value)
+            self._validate_unique_and_name(key, value, True)
             # TODO: restore behavior
-            # self._validate_unique_and_name(key, value, True)
-            # self._validate_constraint(key, value, True)
+            self._validate_constraint(key, value, True)
             if isinstance(value, (OpenApiObject, OpenApiIter)):
                 output[key] = value._encode()
                 if isinstance(value, OpenApiObject):
@@ -768,10 +795,19 @@ class OpenApiObject(OpenApiBase, OpenApiValidator):
                     and self._TYPES[property_name]["type"] not in dtypes
                 ):
                     child = self._get_child_class(property_name, True)
+
+                    # placeholders added for checking local unique
+                    class_name = child[1].__name__
+                    self.__constraints__[class_name] = []
+                    self.__validate_latter__[class_name] = []
                     openapi_list = child[0]()
                     for item in property_value:
                         item = child[1]()._decode(item)
                         openapi_list._items.append(item)
+
+                    # checking local unique
+                    self._validate_coded(check_local_unique=True, class_name=class_name)
+
                     property_value = openapi_list
                     ignore_warnings = True
                 elif property_name in self._DEFAULTS and property_value is None:
@@ -790,16 +826,12 @@ class OpenApiObject(OpenApiBase, OpenApiValidator):
                 ):
                     property_value = [int(v) for v in property_value]
                 self._properties[property_name] = property_value
-                # TODO: restore behavior
-                # OpenApiStatus.warn(
-                #     "{}.{}".format(type(self).__name__, property_name), self
-                # )
                 if not ignore_warnings:
                     self._raise_status_warnings(property_name, property_value)
             self._validate_types(property_name, property_value)
+            self._validate_unique_and_name(property_name, property_value, True)
             # TODO: restore behavior
-            # self._validate_unique_and_name(property_name, property_value, True)
-            # self._validate_constraint(property_name, property_value, True)
+            self._validate_constraint(property_name, property_value, True)
         self._validate_required()
         return self
 
@@ -939,8 +971,7 @@ class OpenApiObject(OpenApiBase, OpenApiValidator):
         self._validate_required()
         for key, value in self._properties.items():
             self._validate_types(key, value)
-        # TODO: restore behavior
-        # self._validate_coded()
+        self._validate_coded()
 
     def get(self, name, with_default=False):
         """
@@ -969,14 +1000,16 @@ class OpenApiObject(OpenApiBase, OpenApiValidator):
 
                 return
 
-            enum_key = "%s.%s" % (property_name, property_value)
+            enum_key = ""
+            if not isinstance(property_value, OpenApiObject):
+                enum_key = "%s.%s" % (property_name, property_value)
             if property_name in self._STATUS:
                 print("[WARNING]: %s" % self._STATUS[property_name])
             elif enum_key in self._STATUS:
                 print("[WARNING]: %s" % self._STATUS[enum_key])
 
 
-class OpenApiIter(OpenApiBase):
+class OpenApiIter(OpenApiBase, OpenApiValidator):
     """Container class for OpenApiObject
 
     Inheriting classes contain 0..n instances of an OpenAPI components/schemas
@@ -1068,7 +1101,15 @@ class OpenApiIter(OpenApiBase):
         return self
 
     def _encode(self):
-        return [item._encode() for item in self._items]
+        if len(self._items) > 0:
+            class_name = self._items[0].__class__.__name__
+            self.__constraints__[class_name] = []
+            self.__validate_latter__[class_name] = []
+            items = [item._encode() for item in self._items]
+            self._validate_coded(check_local_unique=True, class_name=class_name)
+            if stack()[1][3] == "__str__":
+                self._clear_vars()
+            return items
 
     def _decode(self, encoded_list):
         item_class_name = self.__class__.__name__.replace("Iter", "")
@@ -1226,7 +1267,10 @@ class Port(OpenApiObject):
 
     _TYPES = {
         "location": {"type": str},
-        "name": {"type": str},
+        "name": {
+            "type": str,
+            "unique": "global",
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ("name",)  # type: tuple(str)
@@ -1357,7 +1401,10 @@ class Lag(OpenApiObject):
             "format": "uint32",
             "maximum": 32,
         },
-        "name": {"type": str},
+        "name": {
+            "type": str,
+            "unique": "global",
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ("name",)  # type: tuple(str)
@@ -1450,7 +1497,12 @@ class LagPort(OpenApiObject):
     __slots__ = "_parent"
 
     _TYPES = {
-        "port_name": {"type": str},
+        "port_name": {
+            "type": str,
+            "constraint": [
+                "Port.name",
+            ],
+        },
         "lacp": {"type": "LagPortLacp"},
         "ethernet": {"type": "DeviceEthernetBase"},
     }  # type: Dict[str, str]
@@ -1724,7 +1776,10 @@ class DeviceEthernetBase(OpenApiObject):
             "maximum": 65535,
         },
         "vlans": {"type": "DeviceVlanIter"},
-        "name": {"type": str},
+        "name": {
+            "type": str,
+            "unique": "global",
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ("mac", "name")  # type: tuple(str)
@@ -1850,7 +1905,10 @@ class DeviceVlan(OpenApiObject):
             "format": "uint32",
             "maximum": 4095,
         },
-        "name": {"type": str},
+        "name": {
+            "type": str,
+            "unique": "global",
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ("name",)  # type: tuple(str)
@@ -2390,6 +2448,9 @@ class Layer1(OpenApiObject):
         "port_names": {
             "type": list,
             "itemtype": str,
+            "constraint": [
+                "Port.name",
+            ],
         },
         "speed": {
             "type": str,
@@ -2427,7 +2488,10 @@ class Layer1(OpenApiObject):
         "auto_negotiate": {"type": bool},
         "auto_negotiation": {"type": "Layer1AutoNegotiation"},
         "flow_control": {"type": "Layer1FlowControl"},
-        "name": {"type": str},
+        "name": {
+            "type": str,
+            "unique": "global",
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ("port_names", "name")  # type: tuple(str)
@@ -3432,6 +3496,9 @@ class Capture(OpenApiObject):
         "port_names": {
             "type": list,
             "itemtype": str,
+            "constraint": [
+                "Port.name",
+            ],
         },
         "filters": {"type": "CaptureFilterIter"},
         "overwrite": {"type": bool},
@@ -3447,7 +3514,10 @@ class Capture(OpenApiObject):
                 "pcapng",
             ],
         },
-        "name": {"type": str},
+        "name": {
+            "type": str,
+            "unique": "global",
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ("port_names", "name")  # type: tuple(str)
@@ -4644,7 +4714,10 @@ class Device(OpenApiObject):
         "isis": {"type": "DeviceIsisRouter"},
         "bgp": {"type": "DeviceBgpRouter"},
         "vxlan": {"type": "DeviceVxlan"},
-        "name": {"type": str},
+        "name": {
+            "type": str,
+            "unique": "global",
+        },
         "rsvp": {"type": "DeviceRsvp"},
     }  # type: Dict[str, str]
 
@@ -4788,7 +4861,10 @@ class DeviceEthernet(OpenApiObject):
             "maximum": 65535,
         },
         "vlans": {"type": "DeviceVlanIter"},
-        "name": {"type": str},
+        "name": {
+            "type": str,
+            "unique": "global",
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ("mac", "name")  # type: tuple(str)
@@ -4939,9 +5015,25 @@ class EthernetConnection(OpenApiObject):
                 "vxlan_name",
             ],
         },
-        "port_name": {"type": str},
-        "lag_name": {"type": str},
-        "vxlan_name": {"type": str},
+        "port_name": {
+            "type": str,
+            "constraint": [
+                "Port.name",
+            ],
+        },
+        "lag_name": {
+            "type": str,
+            "constraint": [
+                "Lag.name",
+            ],
+        },
+        "vxlan_name": {
+            "type": str,
+            "constraint": [
+                "V4Tunnel.name",
+                "V6Tunnel.name",
+            ],
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -5080,7 +5172,10 @@ class DeviceIpv4(OpenApiObject):
             "minimum": 1,
             "maximum": 32,
         },
-        "name": {"type": str},
+        "name": {
+            "type": str,
+            "unique": "global",
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ("gateway", "address", "name")  # type: tuple(str)
@@ -5405,7 +5500,10 @@ class DeviceIpv6(OpenApiObject):
             "minimum": 1,
             "maximum": 128,
         },
-        "name": {"type": str},
+        "name": {
+            "type": str,
+            "unique": "global",
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ("gateway", "address", "name")  # type: tuple(str)
@@ -5770,12 +5868,20 @@ class DeviceIpv4Loopback(OpenApiObject):
     __slots__ = "_parent"
 
     _TYPES = {
-        "eth_name": {"type": str},
+        "eth_name": {
+            "type": str,
+            "constraint": [
+                "Ethernet.name",
+            ],
+        },
         "address": {
             "type": str,
             "format": "ipv4",
         },
-        "name": {"type": str},
+        "name": {
+            "type": str,
+            "unique": "global",
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ("eth_name", "name")  # type: tuple(str)
@@ -5929,12 +6035,20 @@ class DeviceIpv6Loopback(OpenApiObject):
     __slots__ = "_parent"
 
     _TYPES = {
-        "eth_name": {"type": str},
+        "eth_name": {
+            "type": str,
+            "constraint": [
+                "Ethernet.name",
+            ],
+        },
         "address": {
             "type": str,
             "format": "ipv6",
         },
-        "name": {"type": str},
+        "name": {
+            "type": str,
+            "unique": "global",
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ("eth_name", "name")  # type: tuple(str)
@@ -6099,7 +6213,10 @@ class DeviceIsisRouter(OpenApiObject):
         "router_auth": {"type": "IsisAuthentication"},
         "v4_routes": {"type": "IsisV4RouteRangeIter"},
         "v6_routes": {"type": "IsisV6RouteRangeIter"},
-        "name": {"type": str},
+        "name": {
+            "type": str,
+            "unique": "global",
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ("system_id", "interfaces", "name")  # type: tuple(str)
@@ -6332,7 +6449,12 @@ class IsisInterface(OpenApiObject):
     __slots__ = "_parent"
 
     _TYPES = {
-        "eth_name": {"type": str},
+        "eth_name": {
+            "type": str,
+            "constraint": [
+                "Ethernet.name",
+            ],
+        },
         "metric": {
             "type": int,
             "format": "uint32",
@@ -6366,7 +6488,10 @@ class IsisInterface(OpenApiObject):
             "itemformat": "uint32",
             "maximum": 16777215,
         },
-        "name": {"type": str},
+        "name": {
+            "type": str,
+            "unique": "global",
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ("eth_name", "name")  # type: tuple(str)
@@ -8619,7 +8744,10 @@ class IsisV4RouteRange(OpenApiObject):
                 "down",
             ],
         },
-        "name": {"type": str},
+        "name": {
+            "type": str,
+            "unique": "global",
+        },
         "prefix_attr_enabled": {"type": bool},
         "x_flag": {"type": bool},
         "r_flag": {"type": bool},
@@ -9182,7 +9310,10 @@ class IsisV6RouteRange(OpenApiObject):
                 "down",
             ],
         },
-        "name": {"type": str},
+        "name": {
+            "type": str,
+            "unique": "global",
+        },
         "prefix_attr_enabled": {"type": bool},
         "x_flag": {"type": bool},
         "r_flag": {"type": bool},
@@ -9802,7 +9933,13 @@ class BgpV4Interface(OpenApiObject):
     __slots__ = "_parent"
 
     _TYPES = {
-        "ipv4_name": {"type": str},
+        "ipv4_name": {
+            "type": str,
+            "constraint": [
+                "Ipv4.name",
+                "Ipv4Loopback.name",
+            ],
+        },
         "peers": {"type": "BgpV4PeerIter"},
     }  # type: Dict[str, str]
 
@@ -9891,7 +10028,10 @@ class BgpV4Peer(OpenApiObject):
         "v6_routes": {"type": "BgpV6RouteRangeIter"},
         "v4_srte_policies": {"type": "BgpSrteV4PolicyIter"},
         "v6_srte_policies": {"type": "BgpSrteV6PolicyIter"},
-        "name": {"type": str},
+        "name": {
+            "type": str,
+            "unique": "global",
+        },
         "graceful_restart": {"type": "BgpGracefulRestart"},
     }  # type: Dict[str, str]
 
@@ -10841,7 +10981,10 @@ class BgpCMacIpRange(OpenApiObject):
         "communities": {"type": "BgpCommunityIter"},
         "ext_communities": {"type": "BgpExtCommunityIter"},
         "as_path": {"type": "BgpAsPath"},
-        "name": {"type": str},
+        "name": {
+            "type": str,
+            "unique": "global",
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ("name",)  # type: tuple(str)
@@ -13421,7 +13564,10 @@ class BgpV4RouteRange(OpenApiObject):
         "communities": {"type": "BgpCommunityIter"},
         "as_path": {"type": "BgpAsPath"},
         "add_path": {"type": "BgpAddPath"},
-        "name": {"type": str},
+        "name": {
+            "type": str,
+            "unique": "global",
+        },
         "ext_communities": {"type": "BgpExtCommunityIter"},
         "extended_communities": {"type": "BgpExtendedCommunityIter"},
     }  # type: Dict[str, str]
@@ -15575,7 +15721,10 @@ class BgpV6RouteRange(OpenApiObject):
         "communities": {"type": "BgpCommunityIter"},
         "as_path": {"type": "BgpAsPath"},
         "add_path": {"type": "BgpAddPath"},
-        "name": {"type": str},
+        "name": {
+            "type": str,
+            "unique": "global",
+        },
         "ext_communities": {"type": "BgpExtCommunityIter"},
         "extended_communities": {"type": "BgpExtendedCommunityIter"},
     }  # type: Dict[str, str]
@@ -15948,7 +16097,10 @@ class BgpSrteV4Policy(OpenApiObject):
         "communities": {"type": "BgpCommunityIter"},
         "ext_communities": {"type": "BgpExtCommunityIter"},
         "tunnel_tlvs": {"type": "BgpSrteV4TunnelTlvIter"},
-        "name": {"type": str},
+        "name": {
+            "type": str,
+            "unique": "global",
+        },
         "active": {"type": bool},
     }  # type: Dict[str, str]
 
@@ -16291,7 +16443,10 @@ class BgpSrteV4TunnelTlv(OpenApiObject):
             "type": "BgpSrteExplicitNullLabelPolicySubTlv"
         },
         "segment_lists": {"type": "BgpSrteSegmentListIter"},
-        "name": {"type": str},
+        "name": {
+            "type": str,
+            "unique": "global",
+        },
         "active": {"type": bool},
     }  # type: Dict[str, str]
 
@@ -17041,7 +17196,10 @@ class BgpSrteSegmentList(OpenApiObject):
             "format": "uint32",
         },
         "segments": {"type": "BgpSrteSegmentIter"},
-        "name": {"type": str},
+        "name": {
+            "type": str,
+            "unique": "global",
+        },
         "active": {"type": bool},
     }  # type: Dict[str, str]
 
@@ -17176,7 +17334,10 @@ class BgpSrteSegment(OpenApiObject):
         "type_i": {"type": "BgpSrteSegmentITypeSubTlv"},
         "type_j": {"type": "BgpSrteSegmentJTypeSubTlv"},
         "type_k": {"type": "BgpSrteSegmentKTypeSubTlv"},
-        "name": {"type": str},
+        "name": {
+            "type": str,
+            "unique": "global",
+        },
         "active": {"type": bool},
     }  # type: Dict[str, str]
 
@@ -19568,7 +19729,10 @@ class BgpSrteV6Policy(OpenApiObject):
         "communities": {"type": "BgpCommunityIter"},
         "extcommunities": {"type": "BgpExtCommunityIter"},
         "tunnel_tlvs": {"type": "BgpSrteV6TunnelTlvIter"},
-        "name": {"type": str},
+        "name": {
+            "type": str,
+            "unique": "global",
+        },
         "active": {"type": bool},
     }  # type: Dict[str, str]
 
@@ -19913,7 +20077,10 @@ class BgpSrteV6TunnelTlv(OpenApiObject):
             "type": "BgpSrteExplicitNullLabelPolicySubTlv"
         },
         "segment_lists": {"type": "BgpSrteSegmentListIter"},
-        "name": {"type": str},
+        "name": {
+            "type": str,
+            "unique": "global",
+        },
         "active": {"type": bool},
     }  # type: Dict[str, str]
 
@@ -20507,7 +20674,13 @@ class BgpV6Interface(OpenApiObject):
     __slots__ = "_parent"
 
     _TYPES = {
-        "ipv6_name": {"type": str},
+        "ipv6_name": {
+            "type": str,
+            "constraint": [
+                "Ipv6.name",
+                "Ipv6Loopback.name",
+            ],
+        },
         "peers": {"type": "BgpV6PeerIter"},
     }  # type: Dict[str, str]
 
@@ -20597,7 +20770,10 @@ class BgpV6Peer(OpenApiObject):
         "v6_routes": {"type": "BgpV6RouteRangeIter"},
         "v4_srte_policies": {"type": "BgpSrteV4PolicyIter"},
         "v6_srte_policies": {"type": "BgpSrteV6PolicyIter"},
-        "name": {"type": str},
+        "name": {
+            "type": str,
+            "unique": "global",
+        },
         "graceful_restart": {"type": "BgpGracefulRestart"},
     }  # type: Dict[str, str]
 
@@ -22115,7 +22291,13 @@ class VxlanV4Tunnel(OpenApiObject):
     __slots__ = "_parent"
 
     _TYPES = {
-        "source_interface": {"type": str},
+        "source_interface": {
+            "type": str,
+            "constraint": [
+                "Ipv4.name",
+                "Ipv4Loopback.name",
+            ],
+        },
         "destination_ip_mode": {"type": "VxlanV4TunnelDestinationIPMode"},
         "vni": {
             "type": int,
@@ -22123,7 +22305,10 @@ class VxlanV4Tunnel(OpenApiObject):
             "minimum": 1,
             "maximum": 16777215,
         },
-        "name": {"type": str},
+        "name": {
+            "type": str,
+            "unique": "global",
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ("source_interface", "vni", "name")  # type: tuple(str)
@@ -22725,7 +22910,13 @@ class VxlanV6Tunnel(OpenApiObject):
     __slots__ = "_parent"
 
     _TYPES = {
-        "source_interface": {"type": str},
+        "source_interface": {
+            "type": str,
+            "constraint": [
+                "Ipv6.name",
+                "Ipv6Loopback.name",
+            ],
+        },
         "destination_ip_mode": {"type": "VxlanV6TunnelDestinationIPMode"},
         "vni": {
             "type": int,
@@ -22733,7 +22924,10 @@ class VxlanV6Tunnel(OpenApiObject):
             "minimum": 1,
             "maximum": 16777215,
         },
-        "name": {"type": str},
+        "name": {
+            "type": str,
+            "unique": "global",
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ("source_interface", "vni", "name")  # type: tuple(str)
@@ -23196,7 +23390,10 @@ class DeviceRsvp(OpenApiObject):
     _TYPES = {
         "ipv4_interfaces": {"type": "RsvpIpv4InterfaceIter"},
         "lsp_ipv4_interfaces": {"type": "RsvpLspIpv4InterfaceIter"},
-        "name": {"type": str},
+        "name": {
+            "type": str,
+            "unique": "global",
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -23267,7 +23464,12 @@ class RsvpIpv4Interface(OpenApiObject):
     __slots__ = "_parent"
 
     _TYPES = {
-        "ipv4_name": {"type": str},
+        "ipv4_name": {
+            "type": str,
+            "constraint": [
+                "Ipv4.name",
+            ],
+        },
         "neighbor_ip": {
             "type": str,
             "format": "ipv4",
@@ -23717,7 +23919,13 @@ class RsvpLspIpv4Interface(OpenApiObject):
     __slots__ = "_parent"
 
     _TYPES = {
-        "ipv4_name": {"type": str},
+        "ipv4_name": {
+            "type": str,
+            "constraint": [
+                "Ipv4.name",
+                "Ipv4Loopback.name",
+            ],
+        },
         "p2p_egress_ipv4_lsps": {"type": "RsvpLspIpv4InterfaceP2PEgressIpv4Lsp"},
         "p2p_ingress_ipv4_lsps": {"type": "RsvpLspIpv4InterfaceP2PIngressIpv4LspIter"},
     }  # type: Dict[str, str]
@@ -23795,7 +24003,10 @@ class RsvpLspIpv4InterfaceP2PEgressIpv4Lsp(OpenApiObject):
     __slots__ = "_parent"
 
     _TYPES = {
-        "name": {"type": str},
+        "name": {
+            "type": str,
+            "unique": "global",
+        },
         "refresh_interval": {
             "type": int,
             "format": "uint32",
@@ -24003,7 +24214,10 @@ class RsvpLspIpv4InterfaceP2PIngressIpv4Lsp(OpenApiObject):
     __slots__ = "_parent"
 
     _TYPES = {
-        "name": {"type": str},
+        "name": {
+            "type": str,
+            "unique": "global",
+        },
         "remote_address": {
             "type": str,
             "format": "ipv4",
@@ -25770,7 +25984,10 @@ class Flow(OpenApiObject):
         "rate": {"type": "FlowRate"},
         "duration": {"type": "FlowDuration"},
         "metrics": {"type": "FlowMetrics"},
-        "name": {"type": str},
+        "name": {
+            "type": str,
+            "unique": "global",
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ("tx_rx", "name")  # type: tuple(str)
@@ -25980,11 +26197,27 @@ class FlowPort(OpenApiObject):
     __slots__ = "_parent"
 
     _TYPES = {
-        "tx_name": {"type": str},
-        "rx_name": {"type": str},
+        "tx_name": {
+            "type": str,
+            "constraint": [
+                "Port.name",
+                "Lag.name",
+            ],
+        },
+        "rx_name": {
+            "type": str,
+            "constraint": [
+                "Port.name",
+                "Lag.name",
+            ],
+        },
         "rx_names": {
             "type": list,
             "itemtype": str,
+            "constraint": [
+                "Port.name",
+                "Lag.name",
+            ],
         },
     }  # type: Dict[str, str]
 
@@ -26088,10 +26321,32 @@ class FlowRouter(OpenApiObject):
         "tx_names": {
             "type": list,
             "itemtype": str,
+            "constraint": [
+                "Ethernet.name",
+                "Ipv4.name",
+                "Ipv6.name",
+                "V4RouteRange.name",
+                "V6RouteRange.name",
+                "CMacIpRange.name",
+                "P2PIngressIpv4Lsp.name",
+                "V4RouteRange.name",
+                "V6RouteRange.name",
+            ],
         },
         "rx_names": {
             "type": list,
             "itemtype": str,
+            "constraint": [
+                "Ethernet.name",
+                "Ipv4.name",
+                "Ipv6.name",
+                "V4RouteRange.name",
+                "V6RouteRange.name",
+                "CMacIpRange.name",
+                "P2PEgressIpv4Lsp.name",
+                "V4RouteRange.name",
+                "V6RouteRange.name",
+            ],
         },
     }  # type: Dict[str, str]
 
@@ -92080,7 +92335,10 @@ class Lldp(OpenApiObject):
             "minimum": 5,
             "maximum": 65534,
         },
-        "name": {"type": str},
+        "name": {
+            "type": str,
+            "unique": "global",
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ("connection", "name")  # type: tuple(str)
@@ -92226,7 +92484,12 @@ class LldpConnection(OpenApiObject):
                 "port_name",
             ],
         },
-        "port_name": {"type": str},
+        "port_name": {
+            "type": str,
+            "constraint": [
+                "Port.name",
+            ],
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -93401,6 +93664,9 @@ class StatePortLink(OpenApiObject):
         "port_names": {
             "type": list,
             "itemtype": str,
+            "constraint": [
+                "Port.name",
+            ],
         },
         "state": {
             "type": str,
@@ -93483,6 +93749,9 @@ class StatePortCapture(OpenApiObject):
         "port_names": {
             "type": list,
             "itemtype": str,
+            "constraint": [
+                "Port.name",
+            ],
         },
         "state": {
             "type": str,
@@ -93717,6 +93986,12 @@ class StateProtocolRoute(OpenApiObject):
         "names": {
             "type": list,
             "itemtype": str,
+            "constraint": [
+                "V4RouteRange.name",
+                "V6RouteRange.name",
+                "V4RouteRange.name",
+                "V6RouteRange.name",
+            ],
         },
         "state": {
             "type": str,
@@ -93867,6 +94142,9 @@ class StateProtocolLacpAdmin(OpenApiObject):
         "lag_member_names": {
             "type": list,
             "itemtype": str,
+            "constraint": [
+                "Port.name",
+            ],
         },
         "state": {
             "type": str,
@@ -94019,6 +94297,9 @@ class StateTrafficFlowTransmit(OpenApiObject):
         "flow_names": {
             "type": list,
             "itemtype": str,
+            "constraint": [
+                "Flow.name",
+            ],
         },
         "state": {
             "type": str,
@@ -94365,7 +94646,12 @@ class ActionProtocolIpv4PingRequest(OpenApiObject):
     __slots__ = "_parent"
 
     _TYPES = {
-        "src_name": {"type": str},
+        "src_name": {
+            "type": str,
+            "constraint": [
+                "Ipv4.name",
+            ],
+        },
         "dst_ip": {
             "type": str,
             "format": "ipv4",
@@ -94596,7 +94882,12 @@ class ActionProtocolIpv6PingRequest(OpenApiObject):
     __slots__ = "_parent"
 
     _TYPES = {
-        "src_name": {"type": str},
+        "src_name": {
+            "type": str,
+            "constraint": [
+                "Ipv6.name",
+            ],
+        },
         "dst_ip": {
             "type": str,
             "format": "ipv6",
@@ -94822,6 +95113,9 @@ class ActionProtocolBgpNotification(OpenApiObject):
         "names": {
             "type": list,
             "itemtype": str,
+            "constraint": [
+                "Bgp.name",
+            ],
         },
         "choice": {
             "type": str,
@@ -95434,6 +95728,9 @@ class ActionProtocolBgpInitiateGracefulRestart(OpenApiObject):
         "peer_names": {
             "type": list,
             "itemtype": str,
+            "constraint": [
+                "Bgp.name",
+            ],
         },
         "restart_delay": {
             "type": int,
@@ -95820,7 +96117,12 @@ class ActionResponseProtocolIpv4PingResponse(OpenApiObject):
     __slots__ = "_parent"
 
     _TYPES = {
-        "src_name": {"type": str},
+        "src_name": {
+            "type": str,
+            "constraint": [
+                "Ipv4.name",
+            ],
+        },
         "dst_ip": {
             "type": str,
             "format": "ipv4",
@@ -96092,7 +96394,12 @@ class ActionResponseProtocolIpv6PingResponse(OpenApiObject):
     __slots__ = "_parent"
 
     _TYPES = {
-        "src_name": {"type": str},
+        "src_name": {
+            "type": str,
+            "constraint": [
+                "Ipv6.name",
+            ],
+        },
         "dst_ip": {
             "type": str,
             "format": "ipv6",
@@ -96445,6 +96752,9 @@ class PortMetricsRequest(OpenApiObject):
         "port_names": {
             "type": list,
             "itemtype": str,
+            "constraint": [
+                "Port.name",
+            ],
         },
         "column_names": {
             "type": list,
@@ -96546,6 +96856,9 @@ class FlowMetricsRequest(OpenApiObject):
         "flow_names": {
             "type": list,
             "itemtype": str,
+            "constraint": [
+                "Flow.name",
+            ],
         },
         "metric_names": {
             "type": list,
@@ -96903,6 +97216,9 @@ class Bgpv4MetricsRequest(OpenApiObject):
         "peer_names": {
             "type": list,
             "itemtype": str,
+            "constraint": [
+                "V4peer.name",
+            ],
         },
         "column_names": {
             "type": list,
@@ -97012,6 +97328,9 @@ class Bgpv6MetricsRequest(OpenApiObject):
         "peer_names": {
             "type": list,
             "itemtype": str,
+            "constraint": [
+                "V6peer.name",
+            ],
         },
         "column_names": {
             "type": list,
@@ -97121,6 +97440,9 @@ class IsisMetricsRequest(OpenApiObject):
         "router_names": {
             "type": list,
             "itemtype": str,
+            "constraint": [
+                "IsisRouter.name",
+            ],
         },
         "column_names": {
             "type": list,
@@ -97250,6 +97572,9 @@ class LagMetricsRequest(OpenApiObject):
         "lag_names": {
             "type": list,
             "itemtype": str,
+            "constraint": [
+                "Lag.name",
+            ],
         },
         "column_names": {
             "type": list,
@@ -97347,10 +97672,16 @@ class LacpMetricsRequest(OpenApiObject):
         "lag_names": {
             "type": list,
             "itemtype": str,
+            "constraint": [
+                "Lag.name",
+            ],
         },
         "lag_member_port_names": {
             "type": list,
             "itemtype": str,
+            "constraint": [
+                "Port.name",
+            ],
         },
         "column_names": {
             "type": list,
@@ -97482,6 +97813,9 @@ class LldpMetricsRequest(OpenApiObject):
         "lldp_names": {
             "type": list,
             "itemtype": str,
+            "constraint": [
+                "Lldp.name",
+            ],
         },
         "column_names": {
             "type": list,
@@ -97571,6 +97905,9 @@ class RsvpMetricsRequest(OpenApiObject):
         "router_names": {
             "type": list,
             "itemtype": str,
+            "constraint": [
+                "Rsvp.name",
+            ],
         },
         "column_names": {
             "type": list,
@@ -97903,7 +98240,12 @@ class PortMetric(OpenApiObject):
     __slots__ = "_parent"
 
     _TYPES = {
-        "name": {"type": str},
+        "name": {
+            "type": str,
+            "constraint": [
+                "Port.name",
+            ],
+        },
         "location": {"type": str},
         "link": {
             "type": str,
@@ -101879,7 +102221,12 @@ class LagMetric(OpenApiObject):
     __slots__ = "_parent"
 
     _TYPES = {
-        "name": {"type": str},
+        "name": {
+            "type": str,
+            "constraint": [
+                "Lag.name",
+            ],
+        },
         "oper_status": {
             "type": str,
             "enum": [
@@ -104489,6 +104836,9 @@ class Neighborsv4StatesRequest(OpenApiObject):
         "ethernet_names": {
             "type": list,
             "itemtype": str,
+            "constraint": [
+                "Ethernet.name",
+            ],
         },
     }  # type: Dict[str, str]
 
@@ -104537,6 +104887,9 @@ class Neighborsv6StatesRequest(OpenApiObject):
         "ethernet_names": {
             "type": list,
             "itemtype": str,
+            "constraint": [
+                "Ethernet.name",
+            ],
         },
     }  # type: Dict[str, str]
 
@@ -104585,6 +104938,10 @@ class BgpPrefixStateRequest(OpenApiObject):
         "bgp_peer_names": {
             "type": list,
             "itemtype": str,
+            "constraint": [
+                "V4Peer.name",
+                "V6Peer.name",
+            ],
         },
         "prefix_filters": {
             "type": list,
@@ -105110,6 +105467,9 @@ class IsisLspsStateRequest(OpenApiObject):
         "isis_router_names": {
             "type": list,
             "itemtype": str,
+            "constraint": [
+                "IsisRouter.name",
+            ],
         },
     }  # type: Dict[str, str]
 
@@ -105158,6 +105518,9 @@ class LldpNeighborsStateRequest(OpenApiObject):
         "lldp_names": {
             "type": list,
             "itemtype": str,
+            "constraint": [
+                "Lldp.name",
+            ],
         },
         "neighbor_id_filters": {
             "type": list,
@@ -105232,6 +105595,9 @@ class RsvpLspsStateRequest(OpenApiObject):
         "rsvp_router_names": {
             "type": list,
             "itemtype": str,
+            "constraint": [
+                "Rsvp.name",
+            ],
         },
     }  # type: Dict[str, str]
 
@@ -111087,7 +111453,12 @@ class CaptureRequest(OpenApiObject):
     __slots__ = "_parent"
 
     _TYPES = {
-        "port_name": {"type": str},
+        "port_name": {
+            "type": str,
+            "constraint": [
+                "Port.name",
+            ],
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ("port_name",)  # type: tuple(str)
