@@ -592,16 +592,23 @@ class OpenApiValidator(object):
             )
             return
         found = False
-        for c in cons:
-            klass, prop = c.split(".")
-            names = global_constraints.get(klass, {})
-            values = names.get(prop, [])
-            if value in values:
-                found = True
+        value_list = value if isinstance(value, list) else [value]
+        err_val = []
+        for val in value_list:
+            for c in cons:
+                klass, prop = c.split(".")
+                names = global_constraints.get(klass, {})
+                values = names.get(prop, [])
+                if val in values:
+                    found = True
+                    break
+            if found:
                 break
-        if found is not True:
+            err_val.append(val)
+        if len(err_val) > 0:
+            err_val = err_val[0] if len(err_val) == 1 else err_val
             self._validation_errors.append(
-                "{} is not a valid type of {}".format(value, "||".join(cons))
+                "{} is not a valid type of {}".format(err_val, "||".join(cons))
             )
             return
 
