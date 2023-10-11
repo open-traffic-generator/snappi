@@ -5037,8 +5037,8 @@ class EthernetConnection(OpenApiObject):
         "vxlan_name": {
             "type": str,
             "constraint": [
-                "V4Tunnel.name",
-                "V6Tunnel.name",
+                "VxlanV4Tunnel.name",
+                "VxlanV6Tunnel.name",
             ],
         },
     }  # type: Dict[str, str]
@@ -5878,7 +5878,7 @@ class DeviceIpv4Loopback(OpenApiObject):
         "eth_name": {
             "type": str,
             "constraint": [
-                "Ethernet.name",
+                "DeviceEthernet.name",
             ],
         },
         "address": {
@@ -6045,7 +6045,7 @@ class DeviceIpv6Loopback(OpenApiObject):
         "eth_name": {
             "type": str,
             "constraint": [
-                "Ethernet.name",
+                "DeviceEthernet.name",
             ],
         },
         "address": {
@@ -6459,7 +6459,7 @@ class IsisInterface(OpenApiObject):
         "eth_name": {
             "type": str,
             "constraint": [
-                "Ethernet.name",
+                "DeviceEthernet.name",
             ],
         },
         "metric": {
@@ -9943,8 +9943,8 @@ class BgpV4Interface(OpenApiObject):
         "ipv4_name": {
             "type": str,
             "constraint": [
-                "Ipv4.name",
-                "Ipv4Loopback.name",
+                "DeviceIpv4.name",
+                "DeviceIpv4Loopback.name",
             ],
         },
         "peers": {"type": "BgpV4PeerIter"},
@@ -20684,8 +20684,8 @@ class BgpV6Interface(OpenApiObject):
         "ipv6_name": {
             "type": str,
             "constraint": [
-                "Ipv6.name",
-                "Ipv6Loopback.name",
+                "DeviceIpv6.name",
+                "DeviceIpv6Loopback.name",
             ],
         },
         "peers": {"type": "BgpV6PeerIter"},
@@ -22301,8 +22301,8 @@ class VxlanV4Tunnel(OpenApiObject):
         "source_interface": {
             "type": str,
             "constraint": [
-                "Ipv4.name",
-                "Ipv4Loopback.name",
+                "DeviceIpv4.name",
+                "DeviceIpv4Loopback.name",
             ],
         },
         "destination_ip_mode": {"type": "VxlanV4TunnelDestinationIPMode"},
@@ -22920,8 +22920,8 @@ class VxlanV6Tunnel(OpenApiObject):
         "source_interface": {
             "type": str,
             "constraint": [
-                "Ipv6.name",
-                "Ipv6Loopback.name",
+                "DeviceIpv6.name",
+                "DeviceIpv6Loopback.name",
             ],
         },
         "destination_ip_mode": {"type": "VxlanV6TunnelDestinationIPMode"},
@@ -23474,7 +23474,7 @@ class RsvpIpv4Interface(OpenApiObject):
         "ipv4_name": {
             "type": str,
             "constraint": [
-                "Ipv4.name",
+                "DeviceIpv4.name",
             ],
         },
         "neighbor_ip": {
@@ -23929,8 +23929,8 @@ class RsvpLspIpv4Interface(OpenApiObject):
         "ipv4_name": {
             "type": str,
             "constraint": [
-                "Ipv4.name",
-                "Ipv4Loopback.name",
+                "DeviceIpv4.name",
+                "DeviceIpv4Loopback.name",
             ],
         },
         "p2p_egress_ipv4_lsps": {"type": "RsvpLspIpv4InterfaceP2PEgressIpv4Lsp"},
@@ -26329,30 +26329,30 @@ class FlowRouter(OpenApiObject):
             "type": list,
             "itemtype": str,
             "constraint": [
-                "Ethernet.name",
-                "Ipv4.name",
-                "Ipv6.name",
-                "V4RouteRange.name",
-                "V6RouteRange.name",
-                "CMacIpRange.name",
-                "P2PIngressIpv4Lsp.name",
-                "V4RouteRange.name",
-                "V6RouteRange.name",
+                "DeviceEthernet.name",
+                "DeviceIpv4.name",
+                "DeviceIpv6.name",
+                "BgpV4RouteRange.name",
+                "BgpV6RouteRange.name",
+                "BgpCMacIpRange.name",
+                "RsvpLspIpv4InterfaceP2PIngressIpv4Lsp.name",
+                "IsisV4RouteRange.name",
+                "IsisV6RouteRange.name",
             ],
         },
         "rx_names": {
             "type": list,
             "itemtype": str,
             "constraint": [
-                "Ethernet.name",
-                "Ipv4.name",
-                "Ipv6.name",
-                "V4RouteRange.name",
-                "V6RouteRange.name",
-                "CMacIpRange.name",
-                "P2PEgressIpv4Lsp.name",
-                "V4RouteRange.name",
-                "V6RouteRange.name",
+                "DeviceEthernet.name",
+                "DeviceIpv4.name",
+                "DeviceIpv6.name",
+                "BgpV4RouteRange.name",
+                "BgpV6RouteRange.name",
+                "BgpCMacIpRange.name",
+                "RsvpLspIpv4InterfaceP2PEgressIpv4Lsp.name",
+                "IsisV4RouteRange.name",
+                "IsisV6RouteRange.name",
             ],
         },
     }  # type: Dict[str, str]
@@ -93994,10 +93994,10 @@ class StateProtocolRoute(OpenApiObject):
             "type": list,
             "itemtype": str,
             "constraint": [
-                "V4RouteRange.name",
-                "V6RouteRange.name",
-                "V4RouteRange.name",
-                "V6RouteRange.name",
+                "BgpV4RouteRange.name",
+                "BgpV6RouteRange.name",
+                "IsisV4RouteRange.name",
+                "IsisV6RouteRange.name",
             ],
         },
         "state": {
@@ -94656,7 +94656,7 @@ class ActionProtocolIpv4PingRequest(OpenApiObject):
         "src_name": {
             "type": str,
             "constraint": [
-                "Ipv4.name",
+                "DeviceIpv4.name",
             ],
         },
         "dst_ip": {
@@ -94892,7 +94892,7 @@ class ActionProtocolIpv6PingRequest(OpenApiObject):
         "src_name": {
             "type": str,
             "constraint": [
-                "Ipv6.name",
+                "DeviceIpv6.name",
             ],
         },
         "dst_ip": {
@@ -95121,7 +95121,7 @@ class ActionProtocolBgpNotification(OpenApiObject):
             "type": list,
             "itemtype": str,
             "constraint": [
-                "Bgp.name",
+                "DeviceBgp.name",
             ],
         },
         "choice": {
@@ -95736,7 +95736,7 @@ class ActionProtocolBgpInitiateGracefulRestart(OpenApiObject):
             "type": list,
             "itemtype": str,
             "constraint": [
-                "Bgp.name",
+                "DeviceBgp.name",
             ],
         },
         "restart_delay": {
@@ -96127,7 +96127,7 @@ class ActionResponseProtocolIpv4PingResponse(OpenApiObject):
         "src_name": {
             "type": str,
             "constraint": [
-                "Ipv4.name",
+                "DeviceIpv4.name",
             ],
         },
         "dst_ip": {
@@ -96404,7 +96404,7 @@ class ActionResponseProtocolIpv6PingResponse(OpenApiObject):
         "src_name": {
             "type": str,
             "constraint": [
-                "Ipv6.name",
+                "DeviceIpv6.name",
             ],
         },
         "dst_ip": {
@@ -97224,7 +97224,7 @@ class Bgpv4MetricsRequest(OpenApiObject):
             "type": list,
             "itemtype": str,
             "constraint": [
-                "V4peer.name",
+                "BgpV4peer.name",
             ],
         },
         "column_names": {
@@ -97336,7 +97336,7 @@ class Bgpv6MetricsRequest(OpenApiObject):
             "type": list,
             "itemtype": str,
             "constraint": [
-                "V6peer.name",
+                "BgpV6peer.name",
             ],
         },
         "column_names": {
@@ -97448,7 +97448,7 @@ class IsisMetricsRequest(OpenApiObject):
             "type": list,
             "itemtype": str,
             "constraint": [
-                "IsisRouter.name",
+                "DeviceIsisRouter.name",
             ],
         },
         "column_names": {
@@ -97913,7 +97913,7 @@ class RsvpMetricsRequest(OpenApiObject):
             "type": list,
             "itemtype": str,
             "constraint": [
-                "Rsvp.name",
+                "DeviceRsvp.name",
             ],
         },
         "column_names": {
@@ -104844,7 +104844,7 @@ class Neighborsv4StatesRequest(OpenApiObject):
             "type": list,
             "itemtype": str,
             "constraint": [
-                "Ethernet.name",
+                "DeviceEthernet.name",
             ],
         },
     }  # type: Dict[str, str]
@@ -104895,7 +104895,7 @@ class Neighborsv6StatesRequest(OpenApiObject):
             "type": list,
             "itemtype": str,
             "constraint": [
-                "Ethernet.name",
+                "DeviceEthernet.name",
             ],
         },
     }  # type: Dict[str, str]
@@ -104946,8 +104946,8 @@ class BgpPrefixStateRequest(OpenApiObject):
             "type": list,
             "itemtype": str,
             "constraint": [
-                "V4Peer.name",
-                "V6Peer.name",
+                "BgpV4Peer.name",
+                "BgpV6Peer.name",
             ],
         },
         "prefix_filters": {
@@ -105475,7 +105475,7 @@ class IsisLspsStateRequest(OpenApiObject):
             "type": list,
             "itemtype": str,
             "constraint": [
-                "IsisRouter.name",
+                "DeviceIsisRouter.name",
             ],
         },
     }  # type: Dict[str, str]
@@ -105603,7 +105603,7 @@ class RsvpLspsStateRequest(OpenApiObject):
             "type": list,
             "itemtype": str,
             "constraint": [
-                "Rsvp.name",
+                "DeviceRsvp.name",
             ],
         },
     }  # type: Dict[str, str]
