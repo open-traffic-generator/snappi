@@ -120,9 +120,12 @@ def test_defaults(api):
         ]
     }
     config = api.config()
+    config.ports.port(name="ptest")
+    config.ports.port(name="lagport")
+    config.ports.port(name="testport")
     layer1 = config.layer1.layer1()[-1]
-    layer1.name = "abc"
-    layer1.port_names = ["test"]
+    layer1.name = "def"
+    layer1.port_names = ["testport"]
     layer1.ieee_media_defaults = True
     layer1.auto_negotiate = True
     layer1.flow_control
