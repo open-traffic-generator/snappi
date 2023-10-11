@@ -485,11 +485,11 @@ func (obj *validation) validateConstraint(objectName []string, value string) boo
 		obj_ := strings.Split(object, ".")
 		prop, ok := globalConstraints[obj_[0]]
 		if !ok {
+			objNotConfigured += 1
 			continue
 		}
 		values, ok := prop[obj_[1]]
 		if !ok {
-			objNotConfigured += 1
 			continue
 		}
 		for _, v := range values {
