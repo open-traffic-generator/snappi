@@ -14,7 +14,7 @@ def test_defaults(api):
                     'fixed': 64
                 },
                 'rate': {
-                    'choice': 'pps', # default choice is pps
+                    'choice': 'pps',  # default choice is pps
                     'pps': "1000"
                 },
                 'packet': [
@@ -56,7 +56,7 @@ def test_defaults(api):
             {
                 'name': "abc",
                 'protocol': {
-                    'choice': 'lacp', # default choice is lacp
+                    'choice': 'lacp',  # default choice is lacp
                     'lacp': {
                         'actor_key': 0,
                         'actor_system_id': '00:00:00:00:00:00',
@@ -70,7 +70,7 @@ def test_defaults(api):
                             'actor_activity': 'active',
                             'actor_port_number': 0,
                             'actor_port_priority': 1,
-                            'lacpdu_periodic_time_interval': 0,    
+                            'lacpdu_periodic_time_interval': 0,
                             'lacpdu_timeout': 0
                         },
                         'ethernet': {
@@ -86,8 +86,8 @@ def test_defaults(api):
                 'auto_negotiate': True,
                 'ieee_media_defaults': True,
                 'mtu': 1500,
-                'name': "abc",
-                'port_names': ["test"],
+                'name': "def",
+                'port_names': ["testport"],
                 'promiscuous': True,
                 'speed': 'speed_10_gbps',
                 'flow_control': {
@@ -105,6 +105,17 @@ def test_defaults(api):
                         'pfc_delay': 0
                     }
                 }
+            }
+        ],
+        'ports': [
+            {
+                'name': 'ptest'
+            },
+            {
+                'name': 'lagport'
+            },
+            {
+                'name': 'testport'
             }
         ]
     }
@@ -192,13 +203,24 @@ def test_defaults_by_deserialize(api):
                 'auto_negotiate': True,
                 'ieee_media_defaults': True,
                 'mtu': 1500,
-                'name': "abc",
-                'port_names': ["test"],
+                'name': "def",
+                'port_names': ["testport"],
                 'promiscuous': True,
                 'speed': 'speed_10_gbps',
                 'flow_control': {
                     'directed_address': '01:80:C2:00:00:01'
                 }
+            }
+        ],
+        'ports': [
+            {
+                'name': 'ptest'
+            },
+            {
+                'name': 'lagport'
+            },
+            {
+                'name': 'testport'
             }
         ]
     }
