@@ -97,7 +97,7 @@ func getBgpPeerNames(cfg *otg.Config) []string {
 func getFlowNames(cfg *otg.Config) []string {
 	names := []string{}
 	for _, flow := range mockConfig.Flows {
-		names = append(names, flow.Name)
+		names = append(names, *flow.Name)
 	}
 
 	return names
@@ -106,7 +106,7 @@ func getFlowNames(cfg *otg.Config) []string {
 func getPortNames(cfg *otg.Config) []string {
 	names := []string{}
 	for _, port := range mockConfig.Ports {
-		names = append(names, port.Name)
+		names = append(names, *port.Name)
 	}
 
 	return names
@@ -119,7 +119,7 @@ func getRouteNames(cfg *otg.Config) []string {
 			continue
 		}
 		for _, r := range d.Bgp.Ipv4Interfaces[0].Peers[0].GetV4Routes() {
-			names = append(names, r.Name)
+			names = append(names, *r.Name)
 		}
 	}
 	return names
@@ -129,7 +129,7 @@ func isFlowMetricsDisabled(cfg *otg.Config) []string {
 	names := []string{}
 	for _, flow := range cfg.Flows {
 		if flow.Metrics == nil || !*flow.Metrics.Enable {
-			names = append(names, flow.Name)
+			names = append(names, *flow.Name)
 		}
 	}
 	return names
@@ -139,6 +139,7 @@ func (s *server) GetMetrics(ctx context.Context, req *otg.GetMetricsRequest) (*o
 	var resp *otg.GetMetricsResponse
 	var err error
 	var tx uint64 = 100
+	var errCode int32 = 13
 	metricsDisabledFlows := isFlowMetricsDisabled(mockConfig)
 	if req.MetricsRequest.Flow != nil {
 		f := &otg.FlowMetric{FramesTx: &tx}
@@ -148,13 +149,13 @@ func (s *server) GetMetrics(ctx context.Context, req *otg.GetMetricsRequest) (*o
 			if !res {
 				resp = nil
 				errObj := NewError()
-				errObj.Msg().Code = 13
+				errObj.Msg().Code = &errCode
 				errObj.Msg().Errors = []string{"requested flow is not available in configured flows"}
 				err = errObj
 			} else if len(metricsDisabledFlows) > 0 {
 				resp = nil
 				errObj := NewError()
-				errObj.Msg().Code = 13
+				errObj.Msg().Code = &errCode
 				errObj.Msg().Errors = []string{"metrics not enabled for all the flows"}
 				err = errObj
 			} else {
@@ -175,7 +176,7 @@ func (s *server) GetMetrics(ctx context.Context, req *otg.GetMetricsRequest) (*o
 				resp = nil
 				resp = nil
 				errObj := NewError()
-				errObj.Msg().Code = 13
+				errObj.Msg().Code = &errCode
 				errObj.Msg().Errors = []string{"requested port is not available in configured ports"}
 				err = errObj
 			} else {
@@ -225,9 +226,9 @@ func (s *server) GetMetrics(ctx context.Context, req *otg.GetMetricsRequest) (*o
 }
 
 func (s *server) SetControlState(ctx context.Context, req *otg.SetControlStateRequest) (*otg.SetControlStateResponse, error) {
-	switch choice := req.ControlState.Choice; choice {
+	switch choice := *req.ControlState.Choice; choice {
 	case otg.ControlState_Choice_port:
-		switch portChoice := req.ControlState.Port.Choice; portChoice {
+		switch portChoice := *req.ControlState.Port.Choice; portChoice {
 		case otg.StatePort_Choice_link:
 			return s.SetLinkState(ctx, req)
 		case otg.StatePort_Choice_capture:
@@ -236,7 +237,7 @@ func (s *server) SetControlState(ctx context.Context, req *otg.SetControlStateRe
 			return nil, fmt.Errorf("unspecified choice")
 		}
 	case otg.ControlState_Choice_protocol:
-		switch protocolChoice := req.ControlState.Protocol.Choice; protocolChoice {
+		switch protocolChoice := *req.ControlState.Protocol.Choice; protocolChoice {
 		case otg.StateProtocol_Choice_route:
 			return s.SetRouteState(ctx, req)
 		case otg.StateProtocol_Choice_unspecified:

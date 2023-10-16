@@ -211,7 +211,7 @@ func (api *api) FromError(err error) (Error, bool) {
 func (api *api) setResponseErr(obj Error, code int32, message string) {
 	errors := []string{}
 	errors = append(errors, message)
-	obj.Msg().Code = code
+	obj.Msg().Code = &code
 	obj.Msg().Errors = errors
 }
 
@@ -220,7 +220,8 @@ func (api *api) fromGrpcError(err error) (Error, bool) {
 	if ok {
 		rErr := NewError()
 		if err := rErr.FromJson(st.Message()); err == nil {
-			rErr.Msg().Code = int32(st.Code())
+			var code = int32(st.Code())
+			rErr.Msg().Code = &code
 			return rErr, true
 		}
 
