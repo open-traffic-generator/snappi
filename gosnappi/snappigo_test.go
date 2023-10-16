@@ -233,8 +233,8 @@ func TestHttpGetMetricsPortResponse(t *testing.T) {
 	assert.NotNil(t, resp)
 	assert.Nil(t, err)
 	assert.Equal(t, resp.PortMetrics().Items()[0].Name(), string("port1"))
-	assert.Equal(t, resp.PortMetrics().Items()[0].BytesTx(), int64(2000))
-	assert.Equal(t, resp.PortMetrics().Items()[0].BytesRx(), int64(2000))
+	assert.Equal(t, resp.PortMetrics().Items()[0].BytesTx(), uint64(2000))
+	assert.Equal(t, resp.PortMetrics().Items()[0].BytesRx(), uint64(2000))
 }
 
 func TestGetMetricsPortResponseError(t *testing.T) {
@@ -283,7 +283,7 @@ func TestHttpGetMetricsBgpv4Response(t *testing.T) {
 	assert.NotNil(t, resp)
 	assert.Nil(t, err)
 	assert.Equal(t, resp.Bgpv4Metrics().Items()[0].Name(), string("BGP-1"))
-	assert.Equal(t, resp.Bgpv4Metrics().Items()[0].RoutesAdvertised(), int32(80))
+	assert.Equal(t, resp.Bgpv4Metrics().Items()[0].RoutesAdvertised(), uint32(80))
 }
 
 func TestGetMetricsBgpv4ResponseError(t *testing.T) {
