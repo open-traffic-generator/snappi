@@ -1,4 +1,4 @@
-# Open Traffic Generator API 0.12.3
+# Open Traffic Generator API 0.13.0
 # License: MIT
 
 import importlib
@@ -30177,8 +30177,8 @@ class PatternFlowVlanTpid(OpenApiObject):
 
     _DEFAULTS = {
         "choice": "value",
-        "value": 33024,
-        "values": [33024],
+        "value": 65535,
+        "values": [65535],
     }  # type: Dict[str, Union(type)]
 
     X8100 = 33024  #
@@ -30194,7 +30194,7 @@ class PatternFlowVlanTpid(OpenApiObject):
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
-    def __init__(self, parent=None, choice=None, value=33024, values=[33024]):
+    def __init__(self, parent=None, choice=None, value=65535, values=[65535]):
         super(PatternFlowVlanTpid, self).__init__()
         self._parent = parent
         self._set_property("value", value)
@@ -30340,7 +30340,7 @@ class PatternFlowVlanTpidCounter(OpenApiObject):
     _REQUIRED = ()  # type: tuple(str)
 
     _DEFAULTS = {
-        "start": 33024,
+        "start": 65535,
         "step": 1,
         "count": 1,
     }  # type: Dict[str, Union(type)]
@@ -30353,7 +30353,7 @@ class PatternFlowVlanTpidCounter(OpenApiObject):
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
-    def __init__(self, parent=None, start=33024, step=1, count=1):
+    def __init__(self, parent=None, start=65535, step=1, count=1):
         super(PatternFlowVlanTpidCounter, self).__init__()
         self._parent = parent
         self._set_property("start", start)
@@ -111373,8 +111373,8 @@ class Api(object):
 
     def __init__(self, **kwargs):
         self._version_meta = self.version()
-        self._version_meta.api_spec_version = "0.12.3"
-        self._version_meta.sdk_version = "0.12.3"
+        self._version_meta.api_spec_version = "0.13.0"
+        self._version_meta.sdk_version = "0.13.0"
         self._version_check = kwargs.get("version_check")
         if self._version_check is None:
             self._version_check = False
