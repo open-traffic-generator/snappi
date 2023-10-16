@@ -823,6 +823,8 @@ from .snappi import StateProtocolAll
 from .snappi import StateProtocolRoute
 from .snappi import StateProtocolLacp
 from .snappi import StateProtocolLacpAdmin
+from .snappi import StateProtocolBgp
+from .snappi import StateProtocolBgpPeers
 from .snappi import StateTraffic
 from .snappi import StateTrafficFlowTransmit
 from .snappi import ControlAction
