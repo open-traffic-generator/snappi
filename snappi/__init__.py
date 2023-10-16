@@ -814,6 +814,9 @@ from .snappi import Warning
 from .snappi import Error
 from .snappi import ConfigUpdate
 from .snappi import FlowsUpdate
+from .snappi import DevicesUpdate
+from .snappi import UpdateDeviceBgp
+from .snappi import DeviceBgpRouterIter
 from .snappi import ControlState
 from .snappi import StatePort
 from .snappi import StatePortLink
