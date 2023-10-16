@@ -86,7 +86,7 @@ func (ctrl *configurationController) responseSetConfigError(w http.ResponseWrite
 		result = gosnappi.NewError()
 		err := result.FromJson(rsp_err.Error())
 		if err != nil {
-			result.Msg().Code = statusCode
+			result.Msg().Code = &statusCode
 			err = result.SetKind(errorKind)
 			if err != nil {
 				log.Print(err.Error())
@@ -135,7 +135,7 @@ func (ctrl *configurationController) responseGetConfigError(w http.ResponseWrite
 		result = gosnappi.NewError()
 		err := result.FromJson(rsp_err.Error())
 		if err != nil {
-			result.Msg().Code = statusCode
+			result.Msg().Code = &statusCode
 			err = result.SetKind(errorKind)
 			if err != nil {
 				log.Print(err.Error())
@@ -204,7 +204,7 @@ func (ctrl *configurationController) responseUpdateConfigError(w http.ResponseWr
 		result = gosnappi.NewError()
 		err := result.FromJson(rsp_err.Error())
 		if err != nil {
-			result.Msg().Code = statusCode
+			result.Msg().Code = &statusCode
 			err = result.SetKind(errorKind)
 			if err != nil {
 				log.Print(err.Error())
