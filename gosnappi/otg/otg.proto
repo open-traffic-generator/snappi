@@ -9987,7 +9987,7 @@ message PatternFlowVlanId {
 message PatternFlowVlanTpidCounter {
 
   // Description missing in models
-  // default = 33024
+  // default = 65535
   optional uint32 start = 1;
 
   // Description missing in models
@@ -10036,11 +10036,11 @@ message PatternFlowVlanTpid {
   optional Choice.Enum choice = 1;
 
   // Description missing in models
-  // default = 33024
+  // default = 65535
   optional uint32 value = 2;
 
   // Description missing in models
-  // default = [33024]
+  // default = [65535]
   repeated uint32 values = 3;
 
   // Description missing in models

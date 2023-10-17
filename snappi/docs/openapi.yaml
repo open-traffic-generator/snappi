@@ -13921,7 +13921,7 @@ components:
         start:
           type: integer
           x-field-uid: 1
-          default: 33024
+          default: 65535
           format: uint32
           maximum: 65535
         step:
@@ -13998,7 +13998,7 @@ components:
         value:
           type: integer
           x-field-uid: 2
-          default: 33024
+          default: 65535
           format: uint32
           maximum: 65535
         values:
@@ -14009,7 +14009,7 @@ components:
             maximum: 65535
           x-field-uid: 3
           default:
-          - 33024
+          - 65535
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Vlan.Tpid.Counter'
           x-field-uid: 5
