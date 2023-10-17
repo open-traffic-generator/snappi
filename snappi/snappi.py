@@ -94066,7 +94066,7 @@ class StateProtocolBgpPeers(OpenApiObject):
         # type: () -> List[str]
         """peer_names getter
 
-        The names of BGP peers for which the state has to be applied. An empty or null list will control all BGP peers.. x-constraint:. /components/schemas/Port/properties/name.
+        The names of BGP peers for which the state has to be applied. An empty or null list will control all BGP peers.. x-constraint:. /components/schemas/Bgp.V4Peer/properties/name. /components/schemas/Bgp.V6Peer/properties/name.
 
         Returns: List[str]
         """
@@ -94076,7 +94076,7 @@ class StateProtocolBgpPeers(OpenApiObject):
     def peer_names(self, value):
         """peer_names setter
 
-        The names of BGP peers for which the state has to be applied. An empty or null list will control all BGP peers.. x-constraint:. /components/schemas/Port/properties/name.
+        The names of BGP peers for which the state has to be applied. An empty or null list will control all BGP peers.. x-constraint:. /components/schemas/Bgp.V4Peer/properties/name. /components/schemas/Bgp.V6Peer/properties/name.
 
         value: List[str]
         """

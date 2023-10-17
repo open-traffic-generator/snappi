@@ -6867,7 +6867,8 @@ message StateProtocolBgpPeers {
   // will control all BGP peers.
   // 
   // x-constraint:
-  // - /components/schemas/Port/properties/name
+  // - /components/schemas/Bgp.V4Peer/properties/name
+  // - /components/schemas/Bgp.V6Peer/properties/name
   // 
   repeated string peer_names = 1;
 

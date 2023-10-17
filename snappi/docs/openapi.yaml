@@ -9138,12 +9138,14 @@ components:
             The names of BGP peers for which the state has to be applied. An empty or null list will control all BGP peers.
 
             x-constraint:
-            - /components/schemas/Port/properties/name
+            - /components/schemas/Bgp.V4Peer/properties/name
+            - /components/schemas/Bgp.V6Peer/properties/name
           type: array
           items:
             type: string
           x-constraint:
-          - /components/schemas/Port/properties/name
+          - /components/schemas/Bgp.V4Peer/properties/name
+          - /components/schemas/Bgp.V6Peer/properties/name
           x-field-uid: 1
         state:
           description: |-
