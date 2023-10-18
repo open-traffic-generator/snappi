@@ -60,7 +60,12 @@ func (ctrl *configurationController) SetConfig(w http.ResponseWriter, r *http.Re
 	}
 
 	if result.HasWarning() {
-		data, err := configurationMrlOpts.Marshal(result.Warning().Msg())
+
+		proto, err := result.Warning().Marshaller().ToProto()
+		if err != nil {
+			ctrl.responseSetConfigError(w, "validation", err)
+		}
+		data, err := configurationMrlOpts.Marshal(proto)
 		if err != nil {
 			ctrl.responseSetConfigError(w, "validation", err)
 		}

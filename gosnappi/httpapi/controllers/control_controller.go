@@ -59,7 +59,12 @@ func (ctrl *controlController) SetControlState(w http.ResponseWriter, r *http.Re
 	}
 
 	if result.HasWarning() {
-		data, err := controlMrlOpts.Marshal(result.Warning().Msg())
+
+		proto, err := result.Warning().Marshaller().ToProto()
+		if err != nil {
+			ctrl.responseSetControlStateError(w, "validation", err)
+		}
+		data, err := controlMrlOpts.Marshal(proto)
 		if err != nil {
 			ctrl.responseSetControlStateError(w, "validation", err)
 		}
@@ -130,7 +135,12 @@ func (ctrl *controlController) SetControlAction(w http.ResponseWriter, r *http.R
 	}
 
 	if result.HasControlActionResponse() {
-		data, err := controlMrlOpts.Marshal(result.ControlActionResponse().Msg())
+
+		proto, err := result.ControlActionResponse().Marshaller().ToProto()
+		if err != nil {
+			ctrl.responseSetControlActionError(w, "validation", err)
+		}
+		data, err := controlMrlOpts.Marshal(proto)
 		if err != nil {
 			ctrl.responseSetControlActionError(w, "validation", err)
 		}
