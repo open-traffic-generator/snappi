@@ -9,8 +9,7 @@ import (
 )
 
 func TestIngressEgress(t *testing.T) {
-	api := gosnappi.NewApi()
-	config := api.NewConfig()
+	config := gosnappi.NewConfig()
 	port1 := config.Ports().Add()
 	port2 := config.Ports().Add()
 	port1.SetName("port1")

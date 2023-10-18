@@ -8,7 +8,7 @@ import (
 
 type HttpServer struct {
 	serverLocation string
-	Api            GosnappiApi
+	Api            Api
 	Config         Config
 }
 
@@ -19,26 +19,26 @@ var (
 func StartMockHttpServer(location string) {
 	httpServer.serverLocation = location
 	httpServer.Api = NewApi()
-	httpServer.Config = httpServer.Api.NewConfig()
+	httpServer.Config = NewConfig()
 
 	http.HandleFunc("/config", func(w http.ResponseWriter, r *http.Request) {
 		switch r.Method {
 		case http.MethodPost:
 			body, _ := ioutil.ReadAll(r.Body)
-			httpServer.Config.FromJson(string(body))
-			response := httpServer.Api.NewSetConfigResponse()
+			httpServer.Config.Marshaller().FromJson(string(body))
+			response := NewSetConfigResponse()
 			w.Header().Set("Content-Type", "application/json")
 			w.WriteHeader(http.StatusOK)
-			resp, _ := response.Warning().ToJson()
+			resp, _ := response.Warning().Marshaller().ToJson()
 			w.Write([]byte(resp))
 		case http.MethodGet:
 			// config := httpServer.Config
-			response := httpServer.Api.NewGetConfigResponse()
-			httpServerConfig, _ := httpServer.Config.ToJson()
-			response.Config().FromJson(httpServerConfig)
+			response := NewGetConfigResponse()
+			httpServerConfig, _ := httpServer.Config.Marshaller().ToJson()
+			response.Config().Marshaller().FromJson(httpServerConfig)
 			w.Header().Set("Content-Type", "application/json")
 			w.WriteHeader(http.StatusOK)
-			resp, _ := response.Config().ToJson()
+			resp, _ := response.Config().Marshaller().ToJson()
 			w.Write([]byte(resp))
 		}
 	})
@@ -48,44 +48,44 @@ func StartMockHttpServer(location string) {
 		switch r.Method {
 		case http.MethodPost:
 			body, _ := ioutil.ReadAll(r.Body)
-			metricsReq := httpServer.Api.NewMetricsRequest()
-			metricsReq.FromJson(string(body))
+			metricsReq := NewMetricsRequest()
+			metricsReq.Marshaller().FromJson(string(body))
 			if metricsReq.Choice() == MetricsRequestChoice.FLOW {
-				flow_responses := httpServer.Api.NewGetMetricsResponse().MetricsResponse()
+				flow_responses := NewGetMetricsResponse().MetricsResponse()
 				for _, flow_name := range metricsReq.Flow().FlowNames() {
 					flow_rsp := flow_responses.FlowMetrics().Add()
 					flow_rsp.SetName(flow_name)
 					flow_rsp.SetBytesTx(1000)
 					flow_rsp.SetBytesRx(1000)
 				}
-				response := httpServer.Api.NewGetMetricsResponse().MetricsResponse()
-				flow_resp, _ := flow_responses.ToJson()
-				response.FromJson(flow_resp)
+				response := NewGetMetricsResponse().MetricsResponse()
+				flow_resp, _ := flow_responses.Marshaller().ToJson()
+				response.Marshaller().FromJson(flow_resp)
 				w.WriteHeader(http.StatusOK)
 				w.Write([]byte(flow_resp))
 			} else if metricsReq.Choice() == MetricsRequestChoice.PORT {
-				port_response := httpServer.Api.NewGetMetricsResponse().MetricsResponse()
+				port_response := NewGetMetricsResponse().MetricsResponse()
 				for _, port_name := range metricsReq.Port().PortNames() {
 					port_rsp := port_response.PortMetrics().Add()
 					port_rsp.SetName(port_name)
 					port_rsp.SetBytesTx(2000)
 					port_rsp.SetBytesRx(2000)
 				}
-				response := httpServer.Api.NewGetMetricsResponse().MetricsResponse()
-				port_resp, _ := port_response.ToJson()
-				response.FromJson(port_resp)
+				response := NewGetMetricsResponse().MetricsResponse()
+				port_resp, _ := port_response.Marshaller().ToJson()
+				response.Marshaller().FromJson(port_resp)
 				w.WriteHeader(http.StatusOK)
 				w.Write([]byte(port_resp))
 			} else if metricsReq.Choice() == MetricsRequestChoice.BGPV4 {
-				bgpv4_response := httpServer.Api.NewGetMetricsResponse().MetricsResponse()
+				bgpv4_response := NewGetMetricsResponse().MetricsResponse()
 				for _, bgpv4_name := range metricsReq.Bgpv4().PeerNames() {
 					bgpv4_rsp := bgpv4_response.Bgpv4Metrics().Add()
 					bgpv4_rsp.SetName(bgpv4_name)
 					bgpv4_rsp.SetRoutesAdvertised(80)
 				}
-				response := httpServer.Api.NewGetMetricsResponse().MetricsResponse()
-				bgpv4_resp, _ := bgpv4_response.ToJson()
-				response.FromJson(bgpv4_resp)
+				response := NewGetMetricsResponse().MetricsResponse()
+				bgpv4_resp, _ := bgpv4_response.Marshaller().ToJson()
+				response.Marshaller().FromJson(bgpv4_resp)
 				w.WriteHeader(http.StatusOK)
 				w.Write([]byte(bgpv4_resp))
 			}
