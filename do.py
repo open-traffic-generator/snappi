@@ -32,11 +32,11 @@ models_version = Version.models_version
 sdk_version = Version.version
 
 # supported values - local openapiart path or None
-USE_OPENAPIART_DIR = "refactor-go-sdk"
+USE_OPENAPIART_DIR = None
 USE_MODELS_DIR = None
 
 # supported values - branch name or None
-USE_OPENAPIART_BRANCH = None
+USE_OPENAPIART_BRANCH = "refactor-go-sdk"
 USE_MODELS_BRANCH = None
 
 OPENAPIART_REPO = "https://github.com/open-traffic-generator/openapiart.git"
