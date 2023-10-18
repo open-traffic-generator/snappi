@@ -38,7 +38,7 @@ func (ctrl *controlController) SetControlState(w http.ResponseWriter, r *http.Re
 		body, readError := io.ReadAll(r.Body)
 		if body != nil {
 			item = gosnappi.NewControlState()
-			err := item.FromJson(string(body))
+			err := item.Marshaller().FromJson(string(body))
 			if err != nil {
 				ctrl.responseSetControlStateError(w, "validation", err)
 				return
@@ -83,18 +83,18 @@ func (ctrl *controlController) responseSetControlStateError(w http.ResponseWrite
 		result = rErr
 	} else {
 		result = gosnappi.NewError()
-		err := result.FromJson(rsp_err.Error())
+		err := result.Marshaller().FromJson(rsp_err.Error())
 		if err != nil {
-			result.Msg().Code = &statusCode
+			_ = result.SetCode(statusCode)
 			err = result.SetKind(errorKind)
 			if err != nil {
 				log.Print(err.Error())
 			}
-			result.Msg().Errors = []string{rsp_err.Error()}
+			_ = result.SetErrors([]string{rsp_err.Error()})
 		}
 	}
 
-	if _, err := httpapi.WriteJSONResponse(w, int(result.Code()), result); err != nil {
+	if _, err := httpapi.WriteJSONResponse(w, int(result.Code()), result.Marshaller()); err != nil {
 		log.Print(err.Error())
 	}
 }
@@ -109,7 +109,7 @@ func (ctrl *controlController) SetControlAction(w http.ResponseWriter, r *http.R
 		body, readError := io.ReadAll(r.Body)
 		if body != nil {
 			item = gosnappi.NewControlAction()
-			err := item.FromJson(string(body))
+			err := item.Marshaller().FromJson(string(body))
 			if err != nil {
 				ctrl.responseSetControlActionError(w, "validation", err)
 				return
@@ -154,18 +154,18 @@ func (ctrl *controlController) responseSetControlActionError(w http.ResponseWrit
 		result = rErr
 	} else {
 		result = gosnappi.NewError()
-		err := result.FromJson(rsp_err.Error())
+		err := result.Marshaller().FromJson(rsp_err.Error())
 		if err != nil {
-			result.Msg().Code = &statusCode
+			_ = result.SetCode(statusCode)
 			err = result.SetKind(errorKind)
 			if err != nil {
 				log.Print(err.Error())
 			}
-			result.Msg().Errors = []string{rsp_err.Error()}
+			_ = result.SetErrors([]string{rsp_err.Error()})
 		}
 	}
 
-	if _, err := httpapi.WriteJSONResponse(w, int(result.Code()), result); err != nil {
+	if _, err := httpapi.WriteJSONResponse(w, int(result.Code()), result.Marshaller()); err != nil {
 		log.Print(err.Error())
 	}
 }
