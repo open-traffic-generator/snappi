@@ -25,20 +25,20 @@ func StartMockHttpServer(location string) {
 		switch r.Method {
 		case http.MethodPost:
 			body, _ := ioutil.ReadAll(r.Body)
-			httpServer.Config.Marshaller().FromJson(string(body))
+			httpServer.Config.Unmarshal().FromJson(string(body))
 			response := NewSetConfigResponse()
 			w.Header().Set("Content-Type", "application/json")
 			w.WriteHeader(http.StatusOK)
-			resp, _ := response.Warning().Marshaller().ToJson()
+			resp, _ := response.Warning().Marshal().ToJson()
 			w.Write([]byte(resp))
 		case http.MethodGet:
 			// config := httpServer.Config
 			response := NewGetConfigResponse()
-			httpServerConfig, _ := httpServer.Config.Marshaller().ToJson()
-			response.Config().Marshaller().FromJson(httpServerConfig)
+			httpServerConfig, _ := httpServer.Config.Marshal().ToJson()
+			response.Config().Unmarshal().FromJson(httpServerConfig)
 			w.Header().Set("Content-Type", "application/json")
 			w.WriteHeader(http.StatusOK)
-			resp, _ := response.Config().Marshaller().ToJson()
+			resp, _ := response.Config().Marshal().ToJson()
 			w.Write([]byte(resp))
 		}
 	})
@@ -49,7 +49,7 @@ func StartMockHttpServer(location string) {
 		case http.MethodPost:
 			body, _ := ioutil.ReadAll(r.Body)
 			metricsReq := NewMetricsRequest()
-			metricsReq.Marshaller().FromJson(string(body))
+			metricsReq.Unmarshal().FromJson(string(body))
 			if metricsReq.Choice() == MetricsRequestChoice.FLOW {
 				flow_responses := NewGetMetricsResponse().MetricsResponse()
 				for _, flow_name := range metricsReq.Flow().FlowNames() {
@@ -59,8 +59,8 @@ func StartMockHttpServer(location string) {
 					flow_rsp.SetBytesRx(1000)
 				}
 				response := NewGetMetricsResponse().MetricsResponse()
-				flow_resp, _ := flow_responses.Marshaller().ToJson()
-				response.Marshaller().FromJson(flow_resp)
+				flow_resp, _ := flow_responses.Marshal().ToJson()
+				response.Unmarshal().FromJson(flow_resp)
 				w.WriteHeader(http.StatusOK)
 				w.Write([]byte(flow_resp))
 			} else if metricsReq.Choice() == MetricsRequestChoice.PORT {
@@ -72,8 +72,8 @@ func StartMockHttpServer(location string) {
 					port_rsp.SetBytesRx(2000)
 				}
 				response := NewGetMetricsResponse().MetricsResponse()
-				port_resp, _ := port_response.Marshaller().ToJson()
-				response.Marshaller().FromJson(port_resp)
+				port_resp, _ := port_response.Marshal().ToJson()
+				response.Unmarshal().FromJson(port_resp)
 				w.WriteHeader(http.StatusOK)
 				w.Write([]byte(port_resp))
 			} else if metricsReq.Choice() == MetricsRequestChoice.BGPV4 {
@@ -84,8 +84,8 @@ func StartMockHttpServer(location string) {
 					bgpv4_rsp.SetRoutesAdvertised(80)
 				}
 				response := NewGetMetricsResponse().MetricsResponse()
-				bgpv4_resp, _ := bgpv4_response.Marshaller().ToJson()
-				response.Marshaller().FromJson(bgpv4_resp)
+				bgpv4_resp, _ := bgpv4_response.Marshal().ToJson()
+				response.Unmarshal().FromJson(bgpv4_resp)
 				w.WriteHeader(http.StatusOK)
 				w.Write([]byte(bgpv4_resp))
 			}

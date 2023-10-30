@@ -87,7 +87,7 @@ func TestSnappiServer(t *testing.T) {
 	api.NewHttpTransport().SetLocation("http://127.0.0.1:50071")
 	config := config1(api)
 	state, err := api.SetConfig(config)
-	data, _ := state.Marshaller().ToJson()
+	data, _ := state.Marshal().ToJson()
 	fmt.Println("state : ", data)
 	fmt.Println("err: ", err)
 }

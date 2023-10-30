@@ -46,7 +46,7 @@ func config1(api gosnappi.Api) gosnappi.Config {
 	f2.TxRx().Port().SetTxName(port2.Name())
 	f2.Metrics().SetEnable(true)
 	f1.Rate()
-	fmt.Println(config.Marshaller().ToJson())
+	fmt.Println(config.Marshal().ToJson())
 	return config
 }
 
@@ -127,12 +127,12 @@ func TestGrpcGetMetricsFlowResponse(t *testing.T) {
 	req := gosnappi.NewMetricsRequest()
 	flow_req := req.Flow()
 	flow_req.SetFlowNames([]string{"f1", "f2"})
-	flow_req_json, err := flow_req.Marshaller().ToJson()
+	flow_req_json, err := flow_req.Marshal().ToJson()
 	assert.Nil(t, err)
-	flow_req_yaml, err := flow_req.Marshaller().ToYaml()
+	flow_req_yaml, err := flow_req.Marshal().ToYaml()
 	log.Print(flow_req_json, flow_req_yaml)
 	resp, err := api.GetMetrics(req)
-	resp_json, err := resp.Marshaller().ToYaml()
+	resp_json, err := resp.Marshal().ToYaml()
 	assert.Nil(t, err)
 	log.Print("grpc flow response :", resp_json)
 	assert.NotNil(t, resp)
@@ -148,7 +148,7 @@ func TestHttpGetMetricsFlowResponse(t *testing.T) {
 	flow_req := req.Flow()
 	flow_req.SetFlowNames([]string{"f1", "f2"})
 	resp, err := api.GetMetrics(req)
-	resp_json, err := resp.Marshaller().ToJson()
+	resp_json, err := resp.Marshal().ToJson()
 	assert.Nil(t, err)
 	fmt.Println("HTTP flow response :", resp_json)
 	assert.NotNil(t, resp)
@@ -209,9 +209,9 @@ func TestGrpcGetMetricsPortResponse(t *testing.T) {
 	req := gosnappi.NewMetricsRequest()
 	flow_req := req.Port()
 	flow_req.SetPortNames([]string{"port1"})
-	flow_req_json, err := flow_req.Marshaller().ToJson()
+	flow_req_json, err := flow_req.Marshal().ToJson()
 	assert.Nil(t, err)
-	flow_req_yaml, err := flow_req.Marshaller().ToYaml()
+	flow_req_yaml, err := flow_req.Marshal().ToYaml()
 	log.Print(flow_req_json, flow_req_yaml)
 	resp, err := api.GetMetrics(req)
 	assert.NotNil(t, resp)
@@ -227,7 +227,7 @@ func TestHttpGetMetricsPortResponse(t *testing.T) {
 	flow_req := req.Port()
 	flow_req.SetPortNames([]string{"port1"})
 	resp, err := api.GetMetrics(req)
-	resp_json, err := resp.Marshaller().ToJson()
+	resp_json, err := resp.Marshal().ToJson()
 	assert.Nil(t, err)
 	fmt.Println("HTTP Port Response :", resp_json)
 	assert.NotNil(t, resp)
@@ -279,7 +279,7 @@ func TestHttpGetMetricsBgpv4Response(t *testing.T) {
 	flow_req := req.Bgpv4()
 	flow_req.SetPeerNames([]string{"BGP-1"})
 	resp, err := api.GetMetrics(req)
-	log.Print(resp.Marshaller().ToJson())
+	log.Print(resp.Marshal().ToJson())
 	assert.NotNil(t, resp)
 	assert.Nil(t, err)
 	assert.Equal(t, resp.Bgpv4Metrics().Items()[0].Name(), string("BGP-1"))
@@ -309,9 +309,9 @@ func TestSetTransmitStateResponse(t *testing.T) {
 	ft.SetFlowNames([]string{"f1", "f2"})
 	ft.SetState(gosnappi.StateTrafficFlowTransmitState.START)
 	assert.Equal(t, flow_names, ft.FlowNames())
-	req_json, err := req.Marshaller().ToJson()
+	req_json, err := req.Marshal().ToJson()
 	assert.Nil(t, err)
-	req_yaml, err := req.Marshaller().ToYaml()
+	req_yaml, err := req.Marshal().ToYaml()
 	assert.Nil(t, err)
 	log.Print(req_json, req_yaml)
 	resp, _ := api.SetControlState(req)
@@ -339,9 +339,9 @@ func TestSetLinkStateResponse(t *testing.T) {
 	ls := req.Port().Link()
 	ls.SetPortNames([]string{"port1"})
 	ls.SetState(gosnappi.StatePortLinkState.DOWN)
-	req_json, err := req.Marshaller().ToJson()
+	req_json, err := req.Marshal().ToJson()
 	assert.Nil(t, err)
-	req_yaml, err := req.Marshaller().ToYaml()
+	req_yaml, err := req.Marshal().ToYaml()
 	assert.Nil(t, err)
 	log.Print(req_json, req_yaml)
 	assert.Equal(t, port_names, ls.PortNames())
@@ -370,9 +370,9 @@ func TestSetCaptureStateResponse(t *testing.T) {
 	cp := req.Port().Capture()
 	cp.SetPortNames([]string{"port1"})
 	cp.SetState(gosnappi.StatePortCaptureState.START)
-	req_json, err := req.Marshaller().ToJson()
+	req_json, err := req.Marshal().ToJson()
 	assert.Nil(t, err)
-	req_yaml, err := req.Marshaller().ToYaml()
+	req_yaml, err := req.Marshal().ToYaml()
 	assert.Nil(t, err)
 	log.Print(req_json, req_yaml)
 	assert.Equal(t, port_names, cp.PortNames())
@@ -404,9 +404,9 @@ func TestSetRouteStateResponse(t *testing.T) {
 	rs := req.Protocol().Route()
 	rs.SetNames([]string{"RR-1"})
 	rs.SetState(gosnappi.StateProtocolRouteState.ADVERTISE)
-	req_json, err := req.Marshaller().ToJson()
+	req_json, err := req.Marshal().ToJson()
 	assert.Nil(t, err)
-	req_yaml, err := req.Marshaller().ToYaml()
+	req_yaml, err := req.Marshal().ToYaml()
 	assert.Nil(t, err)
 	log.Print(req_json, req_yaml)
 	assert.Equal(t, route_names, rs.Names())
@@ -438,11 +438,11 @@ func TestPorts(t *testing.T) {
 	data, err := json.Marshal(config_map)
 	assert.Nil(t, err)
 	config_new := gosnappi.NewConfig()
-	config_new.Marshaller().FromJson(string(data))
+	config_new.Unmarshal().FromJson(string(data))
 
-	config_json, err := config.Marshaller().ToJson()
+	config_json, err := config.Marshal().ToJson()
 	assert.Nil(t, err)
-	config_new_json, err := config_new.Marshaller().ToJson()
+	config_new_json, err := config_new.Marshal().ToJson()
 	assert.Nil(t, err)
 	// assert.Equal(t, config, config_new, "Both configs shall be equal")
 	assert.Equal(t, config_json, config_new_json, "Both json shall be equal")
@@ -453,9 +453,9 @@ func TestDevices(t *testing.T) {
 	device := config.Devices().Add().SetName("d1")
 	assert.Equal(t, device.Name(), "d1")
 	// TODO: Add validation on Json and Yaml
-	device.Marshaller().ToJson()
-	device.Marshaller().ToYaml()
-	device.Marshaller().ToPbText()
+	device.Marshal().ToJson()
+	device.Marshal().ToYaml()
+	device.Marshal().ToPbText()
 
 	eth := device.Ethernets().Add().
 		SetName("Eth").
@@ -468,18 +468,18 @@ func TestDevices(t *testing.T) {
 	assert.Equal(t, eth.Mac(), "00:00:11:11:00:00")
 	assert.Equal(t, eth.Mtu(), uint32(1500))
 	// TODO: Add validation on Json and Yaml
-	eth.Marshaller().ToJson()
-	eth.Marshaller().ToYaml()
-	eth.Marshaller().ToPbText()
+	eth.Marshal().ToJson()
+	eth.Marshal().ToYaml()
+	eth.Marshal().ToPbText()
 
 	vlan := eth.Vlans().Add().SetName("vlan1").SetId(1).SetPriority(1)
 	assert.Equal(t, vlan.Name(), "vlan1")
 	assert.Equal(t, vlan.Id(), uint32(1))
 	assert.Equal(t, vlan.Priority(), uint32(1))
 	// TODO: Add validation on Json and Yaml
-	vlan.Marshaller().ToJson()
-	vlan.Marshaller().ToYaml()
-	vlan.Marshaller().ToPbText()
+	vlan.Marshal().ToJson()
+	vlan.Marshal().ToYaml()
+	vlan.Marshal().ToPbText()
 
 	ip := eth.Ipv4Addresses().Add().
 		SetName("ipv4").
@@ -491,9 +491,9 @@ func TestDevices(t *testing.T) {
 	assert.Equal(t, ip.Gateway(), "10.1.1.2")
 	assert.Equal(t, ip.Prefix(), uint32(24))
 	// TODO: Add validation on Json and Yaml
-	ip.Marshaller().ToJson()
-	ip.Marshaller().ToYaml()
-	ip.Marshaller().ToPbText()
+	ip.Marshal().ToJson()
+	ip.Marshal().ToYaml()
+	ip.Marshal().ToPbText()
 
 	ip6 := eth.Ipv6Addresses().Add().
 		SetName("ipv6").
@@ -505,23 +505,23 @@ func TestDevices(t *testing.T) {
 	assert.Equal(t, ip6.Gateway(), "2000::2")
 	assert.Equal(t, ip6.Prefix(), uint32(64))
 	// TODO: Add validation on Json and Yaml
-	ip6.Marshaller().ToJson()
-	ip6.Marshaller().ToYaml()
-	ip6.Marshaller().ToPbText()
+	ip6.Marshal().ToJson()
+	ip6.Marshal().ToYaml()
+	ip6.Marshal().ToPbText()
 
 	bgp := device.Bgp().SetRouterId("192.12.0.1")
 	assert.Equal(t, bgp.RouterId(), "192.12.0.1")
 	// TODO: Add validation on Json and Yaml
-	bgp.Marshaller().ToJson()
-	bgp.Marshaller().ToYaml()
-	bgp.Marshaller().ToPbText()
+	bgp.Marshal().ToJson()
+	bgp.Marshal().ToYaml()
+	bgp.Marshal().ToPbText()
 
 	bgpv4Int := bgp.Ipv4Interfaces().Add().
 		SetIpv4Name("bgpv4Int")
 	assert.Equal(t, bgpv4Int.Ipv4Name(), "bgpv4Int")
-	bgpv4Int.Marshaller().ToJson()
-	bgpv4Int.Marshaller().ToYaml()
-	bgpv4Int.Marshaller().ToPbText()
+	bgpv4Int.Marshal().ToJson()
+	bgpv4Int.Marshal().ToYaml()
+	bgpv4Int.Marshal().ToPbText()
 
 	bgpv4Peer := bgpv4Int.Peers().Add().
 		SetName("bgpv4Peer").
@@ -534,16 +534,16 @@ func TestDevices(t *testing.T) {
 	assert.Equal(t, bgpv4Peer.AsNumberWidth(), gosnappi.BgpV4PeerAsNumberWidth.TWO)
 	assert.Equal(t, bgpv4Peer.AsType(), gosnappi.BgpV4PeerAsType.EBGP)
 	assert.Equal(t, bgpv4Peer.PeerAddress(), "10.2.2.2")
-	bgpv4Peer.Marshaller().ToJson()
-	bgpv4Peer.Marshaller().ToYaml()
-	bgpv4Peer.Marshaller().ToPbText()
+	bgpv4Peer.Marshal().ToJson()
+	bgpv4Peer.Marshal().ToYaml()
+	bgpv4Peer.Marshal().ToPbText()
 
 	bgpv6Int := bgp.Ipv6Interfaces().Add().
 		SetIpv6Name("bgpv6Int")
 	assert.Equal(t, bgpv6Int.Ipv6Name(), "bgpv6Int")
-	bgpv6Int.Marshaller().ToJson()
-	bgpv6Int.Marshaller().ToYaml()
-	bgpv6Int.Marshaller().ToPbText()
+	bgpv6Int.Marshal().ToJson()
+	bgpv6Int.Marshal().ToYaml()
+	bgpv6Int.Marshal().ToPbText()
 
 	bgpv6Peer := bgpv6Int.Peers().Add().
 		SetName("bgpv6Peer").
@@ -556,9 +556,9 @@ func TestDevices(t *testing.T) {
 	assert.Equal(t, bgpv6Peer.AsNumberWidth(), gosnappi.BgpV6PeerAsNumberWidth.FOUR)
 	assert.Equal(t, bgpv6Peer.AsType(), gosnappi.BgpV6PeerAsType.IBGP)
 	assert.Equal(t, bgpv6Peer.PeerAddress(), "2000::1")
-	bgpv6Peer.Marshaller().ToJson()
-	bgpv6Peer.Marshaller().ToYaml()
-	bgpv6Peer.Marshaller().ToPbText()
+	bgpv6Peer.Marshal().ToJson()
+	bgpv6Peer.Marshal().ToYaml()
+	bgpv6Peer.Marshal().ToPbText()
 
 	adv := bgpv4Peer.Advanced().
 		SetHoldTimeInterval(10).
@@ -572,9 +572,9 @@ func TestDevices(t *testing.T) {
 	assert.Equal(t, adv.TimeToLive(), uint32(10))
 	assert.Equal(t, adv.UpdateInterval(), uint32(10))
 	// TODO: Add validation on Json and Yaml
-	adv.Marshaller().ToJson()
-	adv.Marshaller().ToYaml()
-	adv.Marshaller().ToPbText()
+	adv.Marshal().ToJson()
+	adv.Marshal().ToYaml()
+	adv.Marshal().ToPbText()
 
 	adv6 := bgpv6Peer.Advanced().
 		SetHoldTimeInterval(10).
@@ -588,9 +588,9 @@ func TestDevices(t *testing.T) {
 	assert.Equal(t, adv6.TimeToLive(), uint32(10))
 	assert.Equal(t, adv6.UpdateInterval(), uint32(10))
 	// TODO: Add validation on Json and Yaml
-	adv6.Marshaller().ToJson()
-	adv6.Marshaller().ToYaml()
-	adv6.Marshaller().ToPbText()
+	adv6.Marshal().ToJson()
+	adv6.Marshal().ToYaml()
+	adv6.Marshal().ToPbText()
 
 	cap := bgpv4Peer.Capability().SetEvpn(true).SetExtendedNextHopEncoding(true).SetIpv4Mdt(true).SetIpv4MplsVpn(true).
 		SetIpv4Multicast(true).SetIpv4MulticastMplsVpn(true).SetIpv4MulticastVpn(true).SetIpv4SrTePolicy(true).
@@ -625,9 +625,9 @@ func TestDevices(t *testing.T) {
 	assert.Equal(t, cap.RouteConstraint(), false)
 	assert.Equal(t, cap.RouteRefresh(), false)
 	// TODO: Add validation on Json and Yaml
-	cap.Marshaller().ToJson()
-	cap.Marshaller().ToYaml()
-	cap.Marshaller().ToPbText()
+	cap.Marshal().ToJson()
+	cap.Marshal().ToYaml()
+	cap.Marshal().ToPbText()
 
 	cap6 := bgpv6Peer.Capability().SetEvpn(true).SetExtendedNextHopEncoding(true).SetIpv4Mdt(true).SetIpv4MplsVpn(true).
 		SetIpv4Multicast(true).SetIpv4MulticastMplsVpn(true).SetIpv4MulticastVpn(true).SetIpv4SrTePolicy(true).
@@ -663,9 +663,9 @@ func TestDevices(t *testing.T) {
 	assert.Equal(t, cap6.RouteConstraint(), false)
 	assert.Equal(t, cap6.RouteRefresh(), false)
 	// TODO: Add validation on Json and Yaml
-	cap6.Marshaller().ToJson()
-	cap6.Marshaller().ToYaml()
-	cap6.Marshaller().ToPbText()
+	cap6.Marshal().ToJson()
+	cap6.Marshal().ToYaml()
+	cap6.Marshal().ToPbText()
 }
 
 func TestFlows(t *testing.T) {
@@ -713,14 +713,14 @@ func TestFlows(t *testing.T) {
 	assert.Equal(t, uint32(2), flow1.Duration().FixedPackets().Gap())
 	assert.Equal(t, float32(8), flow1.Duration().FixedPackets().Delay().Bytes())
 	assert.Equal(t, uint64(1000), flow1.Rate().Pps())
-	log.Print(config.Marshaller().ToYaml())
+	log.Print(config.Marshal().ToYaml())
 }
 
 func TestValidation(t *testing.T) {
 	config := gosnappi.NewConfig()
 	// To Validate required field
 	p := config.Ports().Add()
-	_, err1 := p.Marshaller().ToYaml()
+	_, err1 := p.Marshal().ToYaml()
 	assert.Contains(t, err1.Error(), "Name is required")
 	d := config.Devices().Add().SetName("d1")
 
@@ -729,18 +729,18 @@ func TestValidation(t *testing.T) {
 	// Mac address Validation
 	eth := d.Ethernets().Add().SetName("Eth1")
 	eth.SetMac("10.1.1.1")
-	_, err3 := eth.Marshaller().ToYaml()
+	_, err3 := eth.Marshal().ToYaml()
 	fmt.Println(err3.Error())
 	assert.Contains(t, strings.ToLower(err3.Error()), "invalid mac address")
 
 	// Ipv4 address Validation
 	ipv4 := eth.Ipv4Addresses().Add().SetName("ipv4").SetGateway("20.1.1.1").SetAddress("ff.1.1.1")
-	_, err4 := ipv4.Marshaller().ToYaml()
+	_, err4 := ipv4.Marshal().ToYaml()
 	assert.Contains(t, strings.ToLower(err4.Error()), "invalid ipv4 address")
 
 	// Ipv6 address Validation
 	ipv6 := eth.Ipv6Addresses().Add().SetName("ipv6").SetGateway("10.1.1.1").SetAddress("abcd:::abcd")
-	_, err5 := ipv6.Marshaller().ToYaml()
+	_, err5 := ipv6.Marshal().ToYaml()
 	assert.Contains(t, strings.ToLower(err5.Error()), "invalid ipv6 address")
 
 	f := config.Flows().Add().SetName("f1")
@@ -748,24 +748,24 @@ func TestValidation(t *testing.T) {
 	floweth := f.Packet().Add().Ethernet()
 	// Mac address slice validation
 	floweth.Src().SetValues([]string{"abcd:abcd", "ab:ab:ab:ab:ac:ff"})
-	_, f_err := floweth.Src().Marshaller().ToYaml()
+	_, f_err := floweth.Src().Marshal().ToYaml()
 	fmt.Println(f_err.Error())
 	assert.Contains(t, strings.ToLower(f_err.Error()), "invalid mac addresses at")
 
 	// Ipv4 address slice validation
 	flowV4 := f.Packet().Add().Ipv4()
 	flowV4.Src().SetValues([]string{"1111", "1.1.1.1"})
-	_, v4_err := flowV4.Marshaller().ToYaml()
+	_, v4_err := flowV4.Marshal().ToYaml()
 	fmt.Println(v4_err)
 	assert.Contains(t, strings.ToLower(v4_err.Error()), "invalid ipv4 addresses at")
 
 	// Ipv6 address slice validation
 	flowV6 := f.Packet().Add().Ipv6()
 	flowV6.Dst().SetValues([]string{"abcd:abcd::1234", "::", "10.1.1.1"})
-	_, v6_err := flowV6.Marshaller().ToYaml()
+	_, v6_err := flowV6.Marshal().ToYaml()
 	assert.Contains(t, strings.ToLower(v6_err.Error()), "invalid ipv6 addresses at")
 
-	_, err := config.Marshaller().ToYaml()
+	_, err := config.Marshal().ToYaml()
 	fmt.Println(err)
 	assert.Contains(t, err.Error(), "validation errors")
 }
@@ -900,7 +900,7 @@ func TestDefaultsDevice(t *testing.T) {
 	bgpv4peer.Advanced()
 	bgpv4peer.Capability()
 
-	expected_result, err := config.Marshaller().ToJson()
+	expected_result, err := config.Marshal().ToJson()
 	assert.Nil(t, err)
 	require.JSONEq(t, expected_device_json, expected_result)
 }
@@ -971,8 +971,8 @@ func TestDefaultsDeviceFromJson(t *testing.T) {
 			}
 		]}`
 	config := gosnappi.NewConfig()
-	config.Marshaller().FromJson(input_str)
-	expected_result, err := config.Marshaller().ToJson()
+	config.Unmarshal().FromJson(input_str)
+	expected_result, err := config.Marshal().ToJson()
 	assert.Nil(t, err)
 	require.JSONEq(t, expected_device_json, expected_result)
 }
@@ -1091,7 +1091,7 @@ func TestDefaultsFlow(t *testing.T) {
 
 	flow1.Duration().Continuous()
 	flow1.Rate()
-	expected_result, err := config.Marshaller().ToJson()
+	expected_result, err := config.Marshal().ToJson()
 	assert.Nil(t, err)
 	require.JSONEq(t, expected_flow_json, expected_result)
 }
@@ -1101,7 +1101,7 @@ func TestFromJsonUnmarshalError(t *testing.T) {
 		"state": "run"
 	  }`
 	req := gosnappi.NewControlState().Protocol().All()
-	err := req.Marshaller().FromJson(input_str)
+	err := req.Unmarshal().FromJson(input_str)
 	assert.NotNil(t, err)
 	assert.Contains(t, err.Error(), `unmarshal error (line 2:12): invalid value for enum type: "run"`)
 }
