@@ -37,7 +37,7 @@ func (ctrl *capabilitiesController) GetVersion(w http.ResponseWriter, r *http.Re
 	}
 
 	if result.HasVersion() {
-		if _, err := httpapi.WriteJSONResponse(w, 200, result.Version().Marshaller()); err != nil {
+		if _, err := httpapi.WriteJSONResponse(w, 200, result.Version().Marshal()); err != nil {
 			log.Print(err.Error())
 		}
 		return
@@ -58,7 +58,7 @@ func (ctrl *capabilitiesController) responseGetVersionError(w http.ResponseWrite
 		result = rErr
 	} else {
 		result = gosnappi.NewError()
-		err := result.Marshaller().FromJson(rsp_err.Error())
+		err := result.Unmarshal().FromJson(rsp_err.Error())
 		if err != nil {
 			_ = result.SetCode(statusCode)
 			err = result.SetKind(errorKind)
@@ -69,7 +69,7 @@ func (ctrl *capabilitiesController) responseGetVersionError(w http.ResponseWrite
 		}
 	}
 
-	if _, err := httpapi.WriteJSONResponse(w, int(result.Code()), result.Marshaller()); err != nil {
+	if _, err := httpapi.WriteJSONResponse(w, int(result.Code()), result.Marshal()); err != nil {
 		log.Print(err.Error())
 	}
 }

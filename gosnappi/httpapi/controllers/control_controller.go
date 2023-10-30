@@ -38,7 +38,7 @@ func (ctrl *controlController) SetControlState(w http.ResponseWriter, r *http.Re
 		body, readError := io.ReadAll(r.Body)
 		if body != nil {
 			item = gosnappi.NewControlState()
-			err := item.Marshaller().FromJson(string(body))
+			err := item.Unmarshal().FromJson(string(body))
 			if err != nil {
 				ctrl.responseSetControlStateError(w, "validation", err)
 				return
@@ -60,7 +60,7 @@ func (ctrl *controlController) SetControlState(w http.ResponseWriter, r *http.Re
 
 	if result.HasWarning() {
 
-		proto, err := result.Warning().Marshaller().ToProto()
+		proto, err := result.Warning().Marshal().ToProto()
 		if err != nil {
 			ctrl.responseSetControlStateError(w, "validation", err)
 		}
@@ -88,7 +88,7 @@ func (ctrl *controlController) responseSetControlStateError(w http.ResponseWrite
 		result = rErr
 	} else {
 		result = gosnappi.NewError()
-		err := result.Marshaller().FromJson(rsp_err.Error())
+		err := result.Unmarshal().FromJson(rsp_err.Error())
 		if err != nil {
 			_ = result.SetCode(statusCode)
 			err = result.SetKind(errorKind)
@@ -99,7 +99,7 @@ func (ctrl *controlController) responseSetControlStateError(w http.ResponseWrite
 		}
 	}
 
-	if _, err := httpapi.WriteJSONResponse(w, int(result.Code()), result.Marshaller()); err != nil {
+	if _, err := httpapi.WriteJSONResponse(w, int(result.Code()), result.Marshal()); err != nil {
 		log.Print(err.Error())
 	}
 }
@@ -114,7 +114,7 @@ func (ctrl *controlController) SetControlAction(w http.ResponseWriter, r *http.R
 		body, readError := io.ReadAll(r.Body)
 		if body != nil {
 			item = gosnappi.NewControlAction()
-			err := item.Marshaller().FromJson(string(body))
+			err := item.Unmarshal().FromJson(string(body))
 			if err != nil {
 				ctrl.responseSetControlActionError(w, "validation", err)
 				return
@@ -136,7 +136,7 @@ func (ctrl *controlController) SetControlAction(w http.ResponseWriter, r *http.R
 
 	if result.HasControlActionResponse() {
 
-		proto, err := result.ControlActionResponse().Marshaller().ToProto()
+		proto, err := result.ControlActionResponse().Marshal().ToProto()
 		if err != nil {
 			ctrl.responseSetControlActionError(w, "validation", err)
 		}
@@ -164,7 +164,7 @@ func (ctrl *controlController) responseSetControlActionError(w http.ResponseWrit
 		result = rErr
 	} else {
 		result = gosnappi.NewError()
-		err := result.Marshaller().FromJson(rsp_err.Error())
+		err := result.Unmarshal().FromJson(rsp_err.Error())
 		if err != nil {
 			_ = result.SetCode(statusCode)
 			err = result.SetKind(errorKind)
@@ -175,7 +175,7 @@ func (ctrl *controlController) responseSetControlActionError(w http.ResponseWrit
 		}
 	}
 
-	if _, err := httpapi.WriteJSONResponse(w, int(result.Code()), result.Marshaller()); err != nil {
+	if _, err := httpapi.WriteJSONResponse(w, int(result.Code()), result.Marshal()); err != nil {
 		log.Print(err.Error())
 	}
 }
