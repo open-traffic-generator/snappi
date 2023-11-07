@@ -1476,7 +1476,7 @@ class LagPort(OpenApiObject):
         # type: () -> str
         """port_name getter
 
-        The name of port object that will be part of the LAG. . x-constraint:. /components/schemas/Port/properties/name.
+        The name of port object that will be part of the LAG. . x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
 
         Returns: str
         """
@@ -1486,7 +1486,7 @@ class LagPort(OpenApiObject):
     def port_name(self, value):
         """port_name setter
 
-        The name of port object that will be part of the LAG. . x-constraint:. /components/schemas/Port/properties/name.
+        The name of port object that will be part of the LAG. . x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
 
         value: str
         """
@@ -2500,7 +2500,7 @@ class Layer1(OpenApiObject):
         # type: () -> List[str]
         """port_names getter
 
-        A list of unique names of port objects that will share the. choice settings. . x-constraint:. /components/schemas/Port/properties/name.
+        A list of unique names of port objects that will share the. choice settings. . x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
 
         Returns: List[str]
         """
@@ -2510,7 +2510,7 @@ class Layer1(OpenApiObject):
     def port_names(self, value):
         """port_names setter
 
-        A list of unique names of port objects that will share the. choice settings. . x-constraint:. /components/schemas/Port/properties/name.
+        A list of unique names of port objects that will share the. choice settings. . x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
 
         value: List[str]
         """
@@ -3493,7 +3493,7 @@ class Capture(OpenApiObject):
         # type: () -> List[str]
         """port_names getter
 
-        The unique names of ports that the capture settings will apply to. Port_names cannot be duplicated between capture objects.. x-constraint:. /components/schemas/Port/properties/name.
+        The unique names of ports that the capture settings will apply to. Port_names cannot be duplicated between capture objects.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
 
         Returns: List[str]
         """
@@ -3503,7 +3503,7 @@ class Capture(OpenApiObject):
     def port_names(self, value):
         """port_names setter
 
-        The unique names of ports that the capture settings will apply to. Port_names cannot be duplicated between capture objects.. x-constraint:. /components/schemas/Port/properties/name.
+        The unique names of ports that the capture settings will apply to. Port_names cannot be duplicated between capture objects.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
 
         value: List[str]
         """
@@ -4592,7 +4592,7 @@ class CaptureIter(OpenApiIter):
         # type: (List[str],bool,int,Union[Literal["pcap"], Literal["pcapng"]],str) -> CaptureIter
         """Factory method that creates an instance of the Capture class
 
-        Under Review: There may be changes in filter configuration. Configuration for capture settings.
+        Under Review: There may be changes in filter configuration. Under Review: There may be changes in filter configuration. Configuration for capture settings.
 
         Returns: CaptureIter
         """
@@ -4618,7 +4618,7 @@ class CaptureIter(OpenApiIter):
         # type: (List[str],bool,int,Union[Literal["pcap"], Literal["pcapng"]],str) -> Capture
         """Add method that creates and returns an instance of the Capture class
 
-        Under Review: There may be changes in filter configuration. Configuration for capture settings.
+        Under Review: There may be changes in filter configuration. Under Review: There may be changes in filter configuration. Configuration for capture settings.
 
         Returns: Capture
         """
@@ -5002,7 +5002,7 @@ class EthernetConnection(OpenApiObject):
         # type: () -> str
         """port_name getter
 
-        Name of the port that the Ethernet interface is configured on.. x-constraint:. /components/schemas/Port/properties/name.
+        Name of the port that the Ethernet interface is configured on.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
 
         Returns: str
         """
@@ -5012,7 +5012,7 @@ class EthernetConnection(OpenApiObject):
     def port_name(self, value):
         """port_name setter
 
-        Name of the port that the Ethernet interface is configured on.. x-constraint:. /components/schemas/Port/properties/name.
+        Name of the port that the Ethernet interface is configured on.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
 
         value: str
         """
@@ -5023,7 +5023,7 @@ class EthernetConnection(OpenApiObject):
         # type: () -> str
         """lag_name getter
 
-        Name of the LAG that the Ethernet interface is configured on.. x-constraint:. /components/schemas/Lag/properties/name.
+        Name of the LAG that the Ethernet interface is configured on.. x-constraint:. /components/schemas/Lag/properties/name. . x-constraint:. /components/schemas/Lag/properties/name.
 
         Returns: str
         """
@@ -5033,7 +5033,7 @@ class EthernetConnection(OpenApiObject):
     def lag_name(self, value):
         """lag_name setter
 
-        Name of the LAG that the Ethernet interface is configured on.. x-constraint:. /components/schemas/Lag/properties/name.
+        Name of the LAG that the Ethernet interface is configured on.. x-constraint:. /components/schemas/Lag/properties/name. . x-constraint:. /components/schemas/Lag/properties/name.
 
         value: str
         """
@@ -5044,7 +5044,7 @@ class EthernetConnection(OpenApiObject):
         # type: () -> str
         """vxlan_name getter
 
-        Name of the VXLAN instance (or VXLAN tunnel) that this Ethernet interface is connected to.. x-constraint:. #/components/schemas/Vxlan.V4Tunnel/properties/name. #/components/schemas/Vxlan.V6Tunnel/properties/name.
+        Name of the VXLAN instance (or VXLAN tunnel) that this Ethernet interface is connected to.. x-constraint:. #/components/schemas/Vxlan.V4Tunnel/properties/name. #/components/schemas/Vxlan.V6Tunnel/properties/name. . x-constraint:. #/components/schemas/Vxlan.V4Tunnel/properties/name. #/components/schemas/Vxlan.V6Tunnel/properties/name.
 
         Returns: str
         """
@@ -5054,7 +5054,7 @@ class EthernetConnection(OpenApiObject):
     def vxlan_name(self, value):
         """vxlan_name setter
 
-        Name of the VXLAN instance (or VXLAN tunnel) that this Ethernet interface is connected to.. x-constraint:. #/components/schemas/Vxlan.V4Tunnel/properties/name. #/components/schemas/Vxlan.V6Tunnel/properties/name.
+        Name of the VXLAN instance (or VXLAN tunnel) that this Ethernet interface is connected to.. x-constraint:. #/components/schemas/Vxlan.V4Tunnel/properties/name. #/components/schemas/Vxlan.V6Tunnel/properties/name. . x-constraint:. #/components/schemas/Vxlan.V4Tunnel/properties/name. #/components/schemas/Vxlan.V6Tunnel/properties/name.
 
         value: str
         """
@@ -5803,7 +5803,7 @@ class DeviceIpv4Loopback(OpenApiObject):
         # type: () -> str
         """eth_name getter
 
-        The unique name of the Ethernet interface behind which this Loopback interface will be created.. x-constraint:. /components/schemas/Device.Ethernet/properties/name.
+        The unique name of the Ethernet interface behind which this Loopback interface will be created.. x-constraint:. /components/schemas/Device.Ethernet/properties/name. . x-constraint:. /components/schemas/Device.Ethernet/properties/name.
 
         Returns: str
         """
@@ -5813,7 +5813,7 @@ class DeviceIpv4Loopback(OpenApiObject):
     def eth_name(self, value):
         """eth_name setter
 
-        The unique name of the Ethernet interface behind which this Loopback interface will be created.. x-constraint:. /components/schemas/Device.Ethernet/properties/name.
+        The unique name of the Ethernet interface behind which this Loopback interface will be created.. x-constraint:. /components/schemas/Device.Ethernet/properties/name. . x-constraint:. /components/schemas/Device.Ethernet/properties/name.
 
         value: str
         """
@@ -5962,7 +5962,7 @@ class DeviceIpv6Loopback(OpenApiObject):
         # type: () -> str
         """eth_name getter
 
-        The unique name of the Ethernet interface behind which this Loopback interface will be created.. x-constraint:. /components/schemas/Device.Ethernet/properties/name.
+        The unique name of the Ethernet interface behind which this Loopback interface will be created.. x-constraint:. /components/schemas/Device.Ethernet/properties/name. . x-constraint:. /components/schemas/Device.Ethernet/properties/name.
 
         Returns: str
         """
@@ -5972,7 +5972,7 @@ class DeviceIpv6Loopback(OpenApiObject):
     def eth_name(self, value):
         """eth_name setter
 
-        The unique name of the Ethernet interface behind which this Loopback interface will be created.. x-constraint:. /components/schemas/Device.Ethernet/properties/name.
+        The unique name of the Ethernet interface behind which this Loopback interface will be created.. x-constraint:. /components/schemas/Device.Ethernet/properties/name. . x-constraint:. /components/schemas/Device.Ethernet/properties/name.
 
         value: str
         """
@@ -6423,7 +6423,7 @@ class IsisInterface(OpenApiObject):
         # type: () -> str
         """eth_name getter
 
-        The unique name of the Ethernet interface on which ISIS is running. Two ISIS interfaces cannot share the same Ethernet. . x-constraint:. /components/schemas/Device.Ethernet/properties/name.
+        The unique name of the Ethernet interface on which ISIS is running. Two ISIS interfaces cannot share the same Ethernet. . x-constraint:. /components/schemas/Device.Ethernet/properties/name. . x-constraint:. /components/schemas/Device.Ethernet/properties/name.
 
         Returns: str
         """
@@ -6433,7 +6433,7 @@ class IsisInterface(OpenApiObject):
     def eth_name(self, value):
         """eth_name setter
 
-        The unique name of the Ethernet interface on which ISIS is running. Two ISIS interfaces cannot share the same Ethernet. . x-constraint:. /components/schemas/Device.Ethernet/properties/name.
+        The unique name of the Ethernet interface on which ISIS is running. Two ISIS interfaces cannot share the same Ethernet. . x-constraint:. /components/schemas/Device.Ethernet/properties/name. . x-constraint:. /components/schemas/Device.Ethernet/properties/name.
 
         value: str
         """
@@ -9827,7 +9827,7 @@ class BgpV4Interface(OpenApiObject):
         # type: () -> str
         """ipv4_name getter
 
-        The unique name of the IPv4 or Loopback IPv4 interface used as the source IP for this list of BGP peers.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name.
+        The unique name of the IPv4 or Loopback IPv4 interface used as the source IP for this list of BGP peers.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name. . x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name.
 
         Returns: str
         """
@@ -9837,7 +9837,7 @@ class BgpV4Interface(OpenApiObject):
     def ipv4_name(self, value):
         """ipv4_name setter
 
-        The unique name of the IPv4 or Loopback IPv4 interface used as the source IP for this list of BGP peers.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name.
+        The unique name of the IPv4 or Loopback IPv4 interface used as the source IP for this list of BGP peers.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name. . x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name.
 
         value: str
         """
@@ -9893,7 +9893,6 @@ class BgpV4Peer(OpenApiObject):
         "v6_srte_policies": {"type": "BgpSrteV6PolicyIter"},
         "name": {"type": str},
         "graceful_restart": {"type": "BgpGracefulRestart"},
-        "replay_updates": {"type": "BgpUpdateReplay"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ("peer_address", "as_type", "as_number", "name")  # type: tuple(str)
@@ -10165,17 +10164,6 @@ class BgpV4Peer(OpenApiObject):
         Returns: BgpGracefulRestart
         """
         return self._get_property("graceful_restart", BgpGracefulRestart)
-
-    @property
-    def replay_updates(self):
-        # type: () -> BgpUpdateReplay
-        """replay_updates getter
-
-        Ordered BGP Updates including both Advertise and Withdraws to be sent to the peer after the BGP session is established.Ordered BGP Updates including both Advertise and Withdraws to be sent to the peer after the BGP session is established.Ordered BGP Updates including both Advertise and Withdraws to be sent to the peer after the BGP session is established.BGP Updates to be sent to the peer as specified after the session is established.
-
-        Returns: BgpUpdateReplay
-        """
-        return self._get_property("replay_updates", BgpUpdateReplay)
 
 
 class BgpV4EthernetSegment(OpenApiObject):
@@ -13657,7 +13645,7 @@ class BgpV4RouteRange(OpenApiObject):
         # type: () -> BgpExtCommunityIter
         """ext_communities getter
 
-        Deprecated: This property is deprecated in favor of property extended_communities. Optional Extended Community settings. The Extended Communities Attribute is transitive optional BGP attribute, with the Type Code 16. Community and Extended Communities attributes are utilized to trigger routing decisions, such as acceptance, rejection, preference, or redistribution. An extended community is an 8-Bytes value. It is divided into two main parts. The first Bytes of the community encode type and sub-type fields and the last Bytes carry unique set of data in format defined by the type and sub-type field. Extended communities provide larger range for grouping or categorizing communities. When type is administrator_as_2octet or administrator_as_4octet, the valid sub types are route target and origin. The valid value for administrator_as_2octet and administrator_as_4octet type is either two byte AS followed by four byte local administrator id or four byte AS followed by two byte local administrator id. When type is administrator_ipv4_address the valid sub types are route target and origin. The valid value for administrator_ipv4_address is four byte IPv4 address followed by two byte local administrator id. When type is opaque, valid sub types are color and encapsulation. When sub type is color, first two bytes of the value field contain flags and last four bytes contains the value of the color. When sub type is encapsulation the first four bytes of value field are reserved and last two bytes carries the tunnel type from IANA's "ETHER TYPES" registry e.g IPv4 (protocol type 0x0800), IPv6 (protocol type 0x86dd), and MPLS (protocol type 0x8847). When type is administrator_as_2octet_link_bandwidth the valid sub type is extended_bandwidth. The first two bytes of the value field contains the AS number and the last four bytes contains the bandwidth in IEEE floating point format. When type is evpn the valid subtype is mac_address. In the value field the low-order bit of the first byte(Flags) is defined as the "Sticky/static" flag and may be set to 1, indicating the MAC address is static and cannot move. The second byte is reserved and the last four bytes contain the sequence number which is used to ensure that PEs retain the correct MAC/IP Advertisement route when multiple updates occur for the same MAC address. Note evpn type is defined mainly for use with evpn route updates and not for IPv4 and IPv6 route updates.
+        Deprecated: This property is deprecated in favor of property extended_communities. Deprecated: This property is deprecated in favor of property extended_communities. Optional Extended Community settings. The Extended Communities Attribute is transitive optional BGP attribute, with the Type Code 16. Community and Extended Communities attributes are utilized to trigger routing decisions, such as acceptance, rejection, preference, or redistribution. An extended community is an 8-Bytes value. It is divided into two main parts. The first Bytes of the community encode type and sub-type fields and the last Bytes carry unique set of data in format defined by the type and sub-type field. Extended communities provide larger range for grouping or categorizing communities. When type is administrator_as_2octet or administrator_as_4octet, the valid sub types are route target and origin. The valid value for administrator_as_2octet and administrator_as_4octet type is either two byte AS followed by four byte local administrator id or four byte AS followed by two byte local administrator id. When type is administrator_ipv4_address the valid sub types are route target and origin. The valid value for administrator_ipv4_address is four byte IPv4 address followed by two byte local administrator id. When type is opaque, valid sub types are color and encapsulation. When sub type is color, first two bytes of the value field contain flags and last four bytes contains the value of the color. When sub type is encapsulation the first four bytes of value field are reserved and last two bytes carries the tunnel type from IANA's "ETHER TYPES" registry e.g IPv4 (protocol type 0x0800), IPv6 (protocol type 0x86dd), and MPLS (protocol type 0x8847). When type is administrator_as_2octet_link_bandwidth the valid sub type is extended_bandwidth. The first two bytes of the value field contains the AS number and the last four bytes contains the bandwidth in IEEE floating point format. When type is evpn the valid subtype is mac_address. In the value field the low-order bit of the first byte(Flags) is defined as the "Sticky/static" flag and may be set to 1, indicating the MAC address is static and cannot move. The second byte is reserved and the last four bytes contain the sequence number which is used to ensure that PEs retain the correct MAC/IP Advertisement route when multiple updates occur for the same MAC address. Note evpn type is defined mainly for use with evpn route updates and not for IPv4 and IPv6 route updates.
 
         Returns: BgpExtCommunityIter
         """
@@ -15811,7 +15799,7 @@ class BgpV6RouteRange(OpenApiObject):
         # type: () -> BgpExtCommunityIter
         """ext_communities getter
 
-        Deprecated: This property is deprecated in favor of property extended_communities. Optional Extended Community settings. The Extended Communities Attribute is transitive optional BGP attribute, with the Type Code 16. Community and Extended Communities attributes are utilized to trigger routing decisions, such as acceptance, rejection, preference, or redistribution. An extended community is an 8-Bytes value. It is divided into two main parts. The first Bytes of the community encode type and sub-type fields and the last Bytes carry unique set of data in format defined by the type and sub-type field. Extended communities provide larger range for grouping or categorizing communities. When type is administrator_as_2octet or administrator_as_4octet, the valid sub types are route target and origin. The valid value for administrator_as_2octet and administrator_as_4octet type is either two byte AS followed by four byte local administrator id or four byte AS followed by two byte local administrator id. When type is administrator_ipv4_address the valid sub types are route target and origin. The valid value for administrator_ipv4_address is four byte IPv4 address followed by two byte local administrator id. When type is opaque, valid sub types are color and encapsulation. When sub type is color, first two bytes of the value field contain flags and last four bytes contains the value of the color. When sub type is encapsulation the first four bytes of value field are reserved and last two bytes carries the tunnel type from IANA's "ETHER TYPES" registry e.g IPv4 (protocol type 0x0800), IPv6 (protocol type 0x86dd), and MPLS (protocol type 0x8847). When type is administrator_as_2octet_link_bandwidth the valid sub type is extended_bandwidth. The first two bytes of the value field contains the AS number and the last four bytes contains the bandwidth in IEEE floating point format. When type is evpn the valid subtype is mac_address. In the value field the low-order bit of the first byte(Flags) is defined as the "Sticky/static" flag and may be set to 1, indicating the MAC address is static and cannot move. The second byte is reserved and the last four bytes contain the sequence number which is used to ensure that PEs retain the correct MAC/IP Advertisement route when multiple updates occur for the same MAC address. Note evpn type is defined mainly for use with evpn route updates and not for IPv4 and IPv6 route updates.
+        Deprecated: This property is deprecated in favor of property extended_communities. Deprecated: This property is deprecated in favor of property extended_communities. Optional Extended Community settings. The Extended Communities Attribute is transitive optional BGP attribute, with the Type Code 16. Community and Extended Communities attributes are utilized to trigger routing decisions, such as acceptance, rejection, preference, or redistribution. An extended community is an 8-Bytes value. It is divided into two main parts. The first Bytes of the community encode type and sub-type fields and the last Bytes carry unique set of data in format defined by the type and sub-type field. Extended communities provide larger range for grouping or categorizing communities. When type is administrator_as_2octet or administrator_as_4octet, the valid sub types are route target and origin. The valid value for administrator_as_2octet and administrator_as_4octet type is either two byte AS followed by four byte local administrator id or four byte AS followed by two byte local administrator id. When type is administrator_ipv4_address the valid sub types are route target and origin. The valid value for administrator_ipv4_address is four byte IPv4 address followed by two byte local administrator id. When type is opaque, valid sub types are color and encapsulation. When sub type is color, first two bytes of the value field contain flags and last four bytes contains the value of the color. When sub type is encapsulation the first four bytes of value field are reserved and last two bytes carries the tunnel type from IANA's "ETHER TYPES" registry e.g IPv4 (protocol type 0x0800), IPv6 (protocol type 0x86dd), and MPLS (protocol type 0x8847). When type is administrator_as_2octet_link_bandwidth the valid sub type is extended_bandwidth. The first two bytes of the value field contains the AS number and the last four bytes contains the bandwidth in IEEE floating point format. When type is evpn the valid subtype is mac_address. In the value field the low-order bit of the first byte(Flags) is defined as the "Sticky/static" flag and may be set to 1, indicating the MAC address is static and cannot move. The second byte is reserved and the last four bytes contain the sequence number which is used to ensure that PEs retain the correct MAC/IP Advertisement route when multiple updates occur for the same MAC address. Note evpn type is defined mainly for use with evpn route updates and not for IPv4 and IPv6 route updates.
 
         Returns: BgpExtCommunityIter
         """
@@ -20377,141 +20365,6 @@ class BgpGracefulRestart(OpenApiObject):
         self._set_property("stale_time", value)
 
 
-class BgpUpdateReplay(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "updates": {"type": "BgpOneUpdateReplayIter"},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {}  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None):
-        super(BgpUpdateReplay, self).__init__()
-        self._parent = parent
-
-    @property
-    def updates(self):
-        # type: () -> BgpOneUpdateReplayIter
-        """updates getter
-
-        Array of ordered BGP Updates including both Advertise and Withdraws to be sent to the peer after the BGP session is established.
-
-        Returns: BgpOneUpdateReplayIter
-        """
-        return self._get_property(
-            "updates", BgpOneUpdateReplayIter, self._parent, self._choice
-        )
-
-
-class BgpOneUpdateReplay(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "update_bytes": {
-            "type": str,
-            "minLength": 1,
-            "maxLength": 4077,
-        },
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {}  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, update_bytes=None):
-        super(BgpOneUpdateReplay, self).__init__()
-        self._parent = parent
-        self._set_property("update_bytes", update_bytes)
-
-    def set(self, update_bytes=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def update_bytes(self):
-        # type: () -> str
-        """update_bytes getter
-
-        Bytes to be sent to peer after the BGP Update Header. The Update Header will always have the initial 16 bytes containing Marker bytes, bytes containing the Length and byte containing the Type. The bytes specified below should be appended to the Update message to be sent to the peer after the fixed 19 bytes above. The maximum length of 4077 is obtained from the maximum length allowed for BGP message in RFC4271 which is 4096 minus mandatory 19 bytes described above.
-
-        Returns: str
-        """
-        return self._get_property("update_bytes")
-
-    @update_bytes.setter
-    def update_bytes(self, value):
-        """update_bytes setter
-
-        Bytes to be sent to peer after the BGP Update Header. The Update Header will always have the initial 16 bytes containing Marker bytes, bytes containing the Length and byte containing the Type. The bytes specified below should be appended to the Update message to be sent to the peer after the fixed 19 bytes above. The maximum length of 4077 is obtained from the maximum length allowed for BGP message in RFC4271 which is 4096 minus mandatory 19 bytes described above.
-
-        value: str
-        """
-        self._set_property("update_bytes", value)
-
-
-class BgpOneUpdateReplayIter(OpenApiIter):
-    __slots__ = ("_parent", "_choice")
-
-    _GETITEM_RETURNS_CHOICE_OBJECT = False
-
-    def __init__(self, parent=None, choice=None):
-        super(BgpOneUpdateReplayIter, self).__init__()
-        self._parent = parent
-        self._choice = choice
-
-    def __getitem__(self, key):
-        # type: (str) -> Union[BgpOneUpdateReplay]
-        return self._getitem(key)
-
-    def __iter__(self):
-        # type: () -> BgpOneUpdateReplayIter
-        return self._iter()
-
-    def __next__(self):
-        # type: () -> BgpOneUpdateReplay
-        return self._next()
-
-    def next(self):
-        # type: () -> BgpOneUpdateReplay
-        return self._next()
-
-    def _instanceOf(self, item):
-        if not isinstance(item, BgpOneUpdateReplay):
-            raise Exception("Item is not an instance of BgpOneUpdateReplay")
-
-    def oneupdatereplay(self, update_bytes=None):
-        # type: (str) -> BgpOneUpdateReplayIter
-        """Factory method that creates an instance of the BgpOneUpdateReplay class
-
-        Specification of one BGP Update to be sent to the BGP peer.
-
-        Returns: BgpOneUpdateReplayIter
-        """
-        item = BgpOneUpdateReplay(parent=self._parent, update_bytes=update_bytes)
-        self._add(item)
-        return self
-
-    def add(self, update_bytes=None):
-        # type: (str) -> BgpOneUpdateReplay
-        """Add method that creates and returns an instance of the BgpOneUpdateReplay class
-
-        Specification of one BGP Update to be sent to the BGP peer.
-
-        Returns: BgpOneUpdateReplay
-        """
-        item = BgpOneUpdateReplay(parent=self._parent, update_bytes=update_bytes)
-        self._add(item)
-        return item
-
-
 class BgpV4PeerIter(OpenApiIter):
     __slots__ = ("_parent", "_choice")
 
@@ -20679,7 +20532,7 @@ class BgpV6Interface(OpenApiObject):
         # type: () -> str
         """ipv6_name getter
 
-        The unique name of IPv6 or Loopback IPv6 interface used as the source IP for this list of BGP peers.. x-constraint:. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Device.Ipv6Loopback/properties/name.
+        The unique name of IPv6 or Loopback IPv6 interface used as the source IP for this list of BGP peers.. x-constraint:. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Device.Ipv6Loopback/properties/name. . x-constraint:. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Device.Ipv6Loopback/properties/name.
 
         Returns: str
         """
@@ -20689,7 +20542,7 @@ class BgpV6Interface(OpenApiObject):
     def ipv6_name(self, value):
         """ipv6_name setter
 
-        The unique name of IPv6 or Loopback IPv6 interface used as the source IP for this list of BGP peers.. x-constraint:. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Device.Ipv6Loopback/properties/name.
+        The unique name of IPv6 or Loopback IPv6 interface used as the source IP for this list of BGP peers.. x-constraint:. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Device.Ipv6Loopback/properties/name. . x-constraint:. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Device.Ipv6Loopback/properties/name.
 
         value: str
         """
@@ -20746,7 +20599,6 @@ class BgpV6Peer(OpenApiObject):
         "v6_srte_policies": {"type": "BgpSrteV6PolicyIter"},
         "name": {"type": str},
         "graceful_restart": {"type": "BgpGracefulRestart"},
-        "replay_updates": {"type": "BgpUpdateReplay"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ("peer_address", "as_type", "as_number", "name")  # type: tuple(str)
@@ -21029,17 +20881,6 @@ class BgpV6Peer(OpenApiObject):
         Returns: BgpGracefulRestart
         """
         return self._get_property("graceful_restart", BgpGracefulRestart)
-
-    @property
-    def replay_updates(self):
-        # type: () -> BgpUpdateReplay
-        """replay_updates getter
-
-        Ordered BGP Updates including both Advertise and Withdraws to be sent to the peer after the BGP session is established.Ordered BGP Updates including both Advertise and Withdraws to be sent to the peer after the BGP session is established.Ordered BGP Updates including both Advertise and Withdraws to be sent to the peer after the BGP session is established.BGP Updates to be sent to the peer as specified after the session is established.
-
-        Returns: BgpUpdateReplay
-        """
-        return self._get_property("replay_updates", BgpUpdateReplay)
 
 
 class BgpV6SegmentRouting(OpenApiObject):
@@ -22308,7 +22149,7 @@ class VxlanV4Tunnel(OpenApiObject):
         # type: () -> str
         """source_interface getter
 
-        Determines the source interface.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name.
+        Determines the source interface.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name. . x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name.
 
         Returns: str
         """
@@ -22318,7 +22159,7 @@ class VxlanV4Tunnel(OpenApiObject):
     def source_interface(self, value):
         """source_interface setter
 
-        Determines the source interface.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name.
+        Determines the source interface.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name. . x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name.
 
         value: str
         """
@@ -22918,7 +22759,7 @@ class VxlanV6Tunnel(OpenApiObject):
         # type: () -> str
         """source_interface getter
 
-        Determines the source interface.. x-constraint:. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Device.Ipv6Loopback/properties/name.
+        Determines the source interface.. x-constraint:. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Device.Ipv6Loopback/properties/name. . x-constraint:. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Device.Ipv6Loopback/properties/name.
 
         Returns: str
         """
@@ -22928,7 +22769,7 @@ class VxlanV6Tunnel(OpenApiObject):
     def source_interface(self, value):
         """source_interface setter
 
-        Determines the source interface.. x-constraint:. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Device.Ipv6Loopback/properties/name.
+        Determines the source interface.. x-constraint:. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Device.Ipv6Loopback/properties/name. . x-constraint:. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Device.Ipv6Loopback/properties/name.
 
         value: str
         """
@@ -23534,7 +23375,7 @@ class RsvpIpv4Interface(OpenApiObject):
         # type: () -> str
         """ipv4_name getter
 
-        The globally unique name of the IPv4 interface connected to the DUT. This name must match the "name" field of the "ipv4_addresses" on top which this RSVP interface is configured. . x-constraint:. /components/schemas/Device.Ipv4/properties/name.
+        The globally unique name of the IPv4 interface connected to the DUT. This name must match the "name" field of the "ipv4_addresses" on top which this RSVP interface is configured. . x-constraint:. /components/schemas/Device.Ipv4/properties/name. . x-constraint:. /components/schemas/Device.Ipv4/properties/name.
 
         Returns: str
         """
@@ -23544,7 +23385,7 @@ class RsvpIpv4Interface(OpenApiObject):
     def ipv4_name(self, value):
         """ipv4_name setter
 
-        The globally unique name of the IPv4 interface connected to the DUT. This name must match the "name" field of the "ipv4_addresses" on top which this RSVP interface is configured. . x-constraint:. /components/schemas/Device.Ipv4/properties/name.
+        The globally unique name of the IPv4 interface connected to the DUT. This name must match the "name" field of the "ipv4_addresses" on top which this RSVP interface is configured. . x-constraint:. /components/schemas/Device.Ipv4/properties/name. . x-constraint:. /components/schemas/Device.Ipv4/properties/name.
 
         value: str
         """
@@ -23902,7 +23743,7 @@ class RsvpLspIpv4Interface(OpenApiObject):
         # type: () -> str
         """ipv4_name getter
 
-        The globally unique name of the IPv4 or Loopback IPv4 interface acting as the RSVP ingress and egress endpoint for the LSPs configured on this interface. This must match the "name" field of either "ipv4_addresses" or "ipv4_loopbacks" on which this LSP interface is configured.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name.
+        The globally unique name of the IPv4 or Loopback IPv4 interface acting as the RSVP ingress and egress endpoint for the LSPs configured on this interface. This must match the "name" field of either "ipv4_addresses" or "ipv4_loopbacks" on which this LSP interface is configured.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name. . x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name.
 
         Returns: str
         """
@@ -23912,7 +23753,7 @@ class RsvpLspIpv4Interface(OpenApiObject):
     def ipv4_name(self, value):
         """ipv4_name setter
 
-        The globally unique name of the IPv4 or Loopback IPv4 interface acting as the RSVP ingress and egress endpoint for the LSPs configured on this interface. This must match the "name" field of either "ipv4_addresses" or "ipv4_loopbacks" on which this LSP interface is configured.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name.
+        The globally unique name of the IPv4 or Loopback IPv4 interface acting as the RSVP ingress and egress endpoint for the LSPs configured on this interface. This must match the "name" field of either "ipv4_addresses" or "ipv4_loopbacks" on which this LSP interface is configured.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name. . x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name.
 
         value: str
         """
@@ -25977,7 +25818,7 @@ class Flow(OpenApiObject):
         # type: () -> FlowHeaderIter
         """egress_packet getter
 
-        Under Review: The packet header schema for egress tracking currently exposes unwanted fields. The query structure for tagged metrics inside flows metrics requires documenting expected response format.. The list of protocol headers defining the shape of all intended packets in corresponding flow as it is received. by traffic-generator port.. For all protocol headers, only the `metric_tags` property is configurable.
+        Under Review: The packet header schema for egress tracking currently exposes unwanted fields. The query structure for tagged metrics inside flows metrics requires documenting expected response format.. Under Review: The packet header schema for egress tracking currently exposes unwanted fields. The query structure for tagged metrics inside flows metrics requires documenting expected response format.. The list of protocol headers defining the shape of all intended packets in corresponding flow as it is received. by traffic-generator port.. For all protocol headers, only the `metric_tags` property is configurable.
 
         Returns: FlowHeaderIter
         """
@@ -26172,7 +26013,7 @@ class FlowPort(OpenApiObject):
         # type: () -> str
         """tx_name getter
 
-        The unique name of port that is the transmit port.. x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name.
+        The unique name of port that is the transmit port.. x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name. . x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name.
 
         Returns: str
         """
@@ -26182,7 +26023,7 @@ class FlowPort(OpenApiObject):
     def tx_name(self, value):
         """tx_name setter
 
-        The unique name of port that is the transmit port.. x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name.
+        The unique name of port that is the transmit port.. x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name. . x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name.
 
         value: str
         """
@@ -26195,7 +26036,7 @@ class FlowPort(OpenApiObject):
         # type: () -> str
         """rx_name getter
 
-        Deprecated: This property is deprecated in favor of property rx_names. The unique name of port that is the intended receive port.. x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name.
+        Deprecated: This property is deprecated in favor of property rx_names. Deprecated: This property is deprecated in favor of property rx_names. The unique name of port that is the intended receive port.. x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name. . x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name.
 
         Returns: str
         """
@@ -26205,7 +26046,7 @@ class FlowPort(OpenApiObject):
     def rx_name(self, value):
         """rx_name setter
 
-        Deprecated: This property is deprecated in favor of property rx_names. The unique name of port that is the intended receive port.. x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name.
+        Deprecated: This property is deprecated in favor of property rx_names. Deprecated: This property is deprecated in favor of property rx_names. The unique name of port that is the intended receive port.. x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name. . x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name.
 
         value: str
         """
@@ -26216,7 +26057,7 @@ class FlowPort(OpenApiObject):
         # type: () -> List[str]
         """rx_names getter
 
-        Unique name of ports or lags that are intended receive endpoints.. x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name.
+        Unique name of ports or lags that are intended receive endpoints.. x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name. . x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name.
 
         Returns: List[str]
         """
@@ -26226,7 +26067,7 @@ class FlowPort(OpenApiObject):
     def rx_names(self, value):
         """rx_names setter
 
-        Unique name of ports or lags that are intended receive endpoints.. x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name.
+        Unique name of ports or lags that are intended receive endpoints.. x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name. . x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name.
 
         value: List[str]
         """
@@ -26303,7 +26144,7 @@ class FlowRouter(OpenApiObject):
         # type: () -> List[str]
         """tx_names getter
 
-        TBD. x-constraint:. /components/schemas/Device.Ethernet/properties/name. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Bgp.CMacIpRange/properties/name. /components/schemas/Rsvp.LspIpv4Interface.P2PIngressIpv4Lsp/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name.
+        TBD. x-constraint:. /components/schemas/Device.Ethernet/properties/name. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Bgp.CMacIpRange/properties/name. /components/schemas/Rsvp.LspIpv4Interface.P2PIngressIpv4Lsp/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name. . x-constraint:. /components/schemas/Device.Ethernet/properties/name. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Bgp.CMacIpRange/properties/name. /components/schemas/Rsvp.LspIpv4Interface.P2PIngressIpv4Lsp/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name.
 
         Returns: List[str]
         """
@@ -26313,7 +26154,7 @@ class FlowRouter(OpenApiObject):
     def tx_names(self, value):
         """tx_names setter
 
-        TBD. x-constraint:. /components/schemas/Device.Ethernet/properties/name. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Bgp.CMacIpRange/properties/name. /components/schemas/Rsvp.LspIpv4Interface.P2PIngressIpv4Lsp/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name.
+        TBD. x-constraint:. /components/schemas/Device.Ethernet/properties/name. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Bgp.CMacIpRange/properties/name. /components/schemas/Rsvp.LspIpv4Interface.P2PIngressIpv4Lsp/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name. . x-constraint:. /components/schemas/Device.Ethernet/properties/name. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Bgp.CMacIpRange/properties/name. /components/schemas/Rsvp.LspIpv4Interface.P2PIngressIpv4Lsp/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name.
 
         value: List[str]
         """
@@ -26326,7 +26167,7 @@ class FlowRouter(OpenApiObject):
         # type: () -> List[str]
         """rx_names getter
 
-        TBD. x-constraint:. /components/schemas/Device.Ethernet/properties/name. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Bgp.CMacIpRange/properties/name. /components/schemas/Rsvp.LspIpv4Interface.P2PEgressIpv4Lsp/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name.
+        TBD. x-constraint:. /components/schemas/Device.Ethernet/properties/name. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Bgp.CMacIpRange/properties/name. /components/schemas/Rsvp.LspIpv4Interface.P2PEgressIpv4Lsp/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name. . x-constraint:. /components/schemas/Device.Ethernet/properties/name. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Bgp.CMacIpRange/properties/name. /components/schemas/Rsvp.LspIpv4Interface.P2PEgressIpv4Lsp/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name.
 
         Returns: List[str]
         """
@@ -26336,7 +26177,7 @@ class FlowRouter(OpenApiObject):
     def rx_names(self, value):
         """rx_names setter
 
-        TBD. x-constraint:. /components/schemas/Device.Ethernet/properties/name. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Bgp.CMacIpRange/properties/name. /components/schemas/Rsvp.LspIpv4Interface.P2PEgressIpv4Lsp/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name.
+        TBD. x-constraint:. /components/schemas/Device.Ethernet/properties/name. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Bgp.CMacIpRange/properties/name. /components/schemas/Rsvp.LspIpv4Interface.P2PEgressIpv4Lsp/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name. . x-constraint:. /components/schemas/Device.Ethernet/properties/name. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Bgp.CMacIpRange/properties/name. /components/schemas/Rsvp.LspIpv4Interface.P2PEgressIpv4Lsp/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name.
 
         value: List[str]
         """
@@ -92440,7 +92281,7 @@ class LldpConnection(OpenApiObject):
         # type: () -> str
         """port_name getter
 
-        Name of the test port on which LLDP is configured on.. x-constraint:. /components/schemas/Port/properties/name.
+        Name of the test port on which LLDP is configured on.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
 
         Returns: str
         """
@@ -92450,7 +92291,7 @@ class LldpConnection(OpenApiObject):
     def port_name(self, value):
         """port_name setter
 
-        Name of the test port on which LLDP is configured on.. x-constraint:. /components/schemas/Port/properties/name.
+        Name of the test port on which LLDP is configured on.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
 
         value: str
         """
@@ -93595,7 +93436,7 @@ class StatePortLink(OpenApiObject):
         # type: () -> List[str]
         """port_names getter
 
-        The names of target ports. An empty or null list will target all ports.. x-constraint:. /components/schemas/Port/properties/name.
+        The names of target ports. An empty or null list will target all ports.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
 
         Returns: List[str]
         """
@@ -93605,7 +93446,7 @@ class StatePortLink(OpenApiObject):
     def port_names(self, value):
         """port_names setter
 
-        The names of target ports. An empty or null list will target all ports.. x-constraint:. /components/schemas/Port/properties/name.
+        The names of target ports. An empty or null list will target all ports.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
 
         value: List[str]
         """
@@ -93677,7 +93518,7 @@ class StatePortCapture(OpenApiObject):
         # type: () -> List[str]
         """port_names getter
 
-        The names of ports to which the capture state will be applied to. If the list of port_names is empty or null the state will be applied to all configured ports.. If the list is not empty any port that is not included in the list of port_names MUST be ignored and not included in the state change.. x-constraint:. /components/schemas/Port/properties/name.
+        The names of ports to which the capture state will be applied to. If the list of port_names is empty or null the state will be applied to all configured ports.. If the list is not empty any port that is not included in the list of port_names MUST be ignored and not included in the state change.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
 
         Returns: List[str]
         """
@@ -93687,7 +93528,7 @@ class StatePortCapture(OpenApiObject):
     def port_names(self, value):
         """port_names setter
 
-        The names of ports to which the capture state will be applied to. If the list of port_names is empty or null the state will be applied to all configured ports.. If the list is not empty any port that is not included in the list of port_names MUST be ignored and not included in the state change.. x-constraint:. /components/schemas/Port/properties/name.
+        The names of ports to which the capture state will be applied to. If the list of port_names is empty or null the state will be applied to all configured ports.. If the list is not empty any port that is not included in the list of port_names MUST be ignored and not included in the state change.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
 
         value: List[str]
         """
@@ -93911,7 +93752,7 @@ class StateProtocolRoute(OpenApiObject):
         # type: () -> List[str]
         """names getter
 
-        The names of device route objects to control. If no names are specified then all route objects that match the x-constraint will be affected.. x-constraint:. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name.
+        The names of device route objects to control. If no names are specified then all route objects that match the x-constraint will be affected.. x-constraint:. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name. . x-constraint:. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name.
 
         Returns: List[str]
         """
@@ -93921,7 +93762,7 @@ class StateProtocolRoute(OpenApiObject):
     def names(self, value):
         """names setter
 
-        The names of device route objects to control. If no names are specified then all route objects that match the x-constraint will be affected.. x-constraint:. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name.
+        The names of device route objects to control. If no names are specified then all route objects that match the x-constraint will be affected.. x-constraint:. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name. . x-constraint:. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name.
 
         value: List[str]
         """
@@ -94061,7 +93902,7 @@ class StateProtocolLacpAdmin(OpenApiObject):
         # type: () -> List[str]
         """lag_member_names getter
 
-        The names of LAG members (ports) for which the state has to be applied. An empty or null list will control all LAG members.. x-constraint:. /components/schemas/Port/properties/name.
+        The names of LAG members (ports) for which the state has to be applied. An empty or null list will control all LAG members.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
 
         Returns: List[str]
         """
@@ -94071,7 +93912,7 @@ class StateProtocolLacpAdmin(OpenApiObject):
     def lag_member_names(self, value):
         """lag_member_names setter
 
-        The names of LAG members (ports) for which the state has to be applied. An empty or null list will control all LAG members.. x-constraint:. /components/schemas/Port/properties/name.
+        The names of LAG members (ports) for which the state has to be applied. An empty or null list will control all LAG members.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
 
         value: List[str]
         """
@@ -94217,7 +94058,7 @@ class StateTrafficFlowTransmit(OpenApiObject):
         # type: () -> List[str]
         """flow_names getter
 
-        The names of flows to which the transmit state will be applied to. If the list of flow_names is empty or null the state will be applied to all configured flows.. If the list is not empty any flow that is not included in the list of flow_names MUST be ignored and not included in the state change.. x-constraint:. /components/schemas/Flow/properties/name.
+        The names of flows to which the transmit state will be applied to. If the list of flow_names is empty or null the state will be applied to all configured flows.. If the list is not empty any flow that is not included in the list of flow_names MUST be ignored and not included in the state change.. x-constraint:. /components/schemas/Flow/properties/name. . x-constraint:. /components/schemas/Flow/properties/name.
 
         Returns: List[str]
         """
@@ -94227,7 +94068,7 @@ class StateTrafficFlowTransmit(OpenApiObject):
     def flow_names(self, value):
         """flow_names setter
 
-        The names of flows to which the transmit state will be applied to. If the list of flow_names is empty or null the state will be applied to all configured flows.. If the list is not empty any flow that is not included in the list of flow_names MUST be ignored and not included in the state change.. x-constraint:. /components/schemas/Flow/properties/name.
+        The names of flows to which the transmit state will be applied to. If the list of flow_names is empty or null the state will be applied to all configured flows.. If the list is not empty any flow that is not included in the list of flow_names MUST be ignored and not included in the state change.. x-constraint:. /components/schemas/Flow/properties/name. . x-constraint:. /components/schemas/Flow/properties/name.
 
         value: List[str]
         """
@@ -94555,7 +94396,7 @@ class ActionProtocolIpv4PingRequest(OpenApiObject):
         # type: () -> str
         """src_name getter
 
-        Name of source IPv4 interface to be used.. x-constraint:. /components/schemas/Device.Ipv4/properties/name.
+        Name of source IPv4 interface to be used.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. . x-constraint:. /components/schemas/Device.Ipv4/properties/name.
 
         Returns: str
         """
@@ -94565,7 +94406,7 @@ class ActionProtocolIpv4PingRequest(OpenApiObject):
     def src_name(self, value):
         """src_name setter
 
-        Name of source IPv4 interface to be used.. x-constraint:. /components/schemas/Device.Ipv4/properties/name.
+        Name of source IPv4 interface to be used.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. . x-constraint:. /components/schemas/Device.Ipv4/properties/name.
 
         value: str
         """
@@ -94627,7 +94468,7 @@ class ActionProtocolIpv4PingRequestIter(OpenApiIter):
         # type: (str,str) -> ActionProtocolIpv4PingRequestIter
         """Factory method that creates an instance of the ActionProtocolIpv4PingRequest class
 
-        Under Review: Most ping request parameters are still TBD.. Request for initiating ping between single source and destination pair.. For ping request, IPv4 ICMP Echo Request shall be sent and wait for ping response to either succeed or time out. The API wait timeout for each request shall be 300ms.
+        Under Review: Most ping request parameters are still TBD.. Under Review: Most ping request parameters are still TBD.. Request for initiating ping between single source and destination pair.. For ping request, IPv4 ICMP Echo Request shall be sent and wait for ping response to either succeed or time out. The API wait timeout for each request shall be 300ms.
 
         Returns: ActionProtocolIpv4PingRequestIter
         """
@@ -94641,7 +94482,7 @@ class ActionProtocolIpv4PingRequestIter(OpenApiIter):
         # type: (str,str) -> ActionProtocolIpv4PingRequest
         """Add method that creates and returns an instance of the ActionProtocolIpv4PingRequest class
 
-        Under Review: Most ping request parameters are still TBD.. Request for initiating ping between single source and destination pair.. For ping request, IPv4 ICMP Echo Request shall be sent and wait for ping response to either succeed or time out. The API wait timeout for each request shall be 300ms.
+        Under Review: Most ping request parameters are still TBD.. Under Review: Most ping request parameters are still TBD.. Request for initiating ping between single source and destination pair.. For ping request, IPv4 ICMP Echo Request shall be sent and wait for ping response to either succeed or time out. The API wait timeout for each request shall be 300ms.
 
         Returns: ActionProtocolIpv4PingRequest
         """
@@ -94786,7 +94627,7 @@ class ActionProtocolIpv6PingRequest(OpenApiObject):
         # type: () -> str
         """src_name getter
 
-        Name of source IPv6 interface to be used.. x-constraint:. /components/schemas/Device.Ipv6/properties/name.
+        Name of source IPv6 interface to be used.. x-constraint:. /components/schemas/Device.Ipv6/properties/name. . x-constraint:. /components/schemas/Device.Ipv6/properties/name.
 
         Returns: str
         """
@@ -94796,7 +94637,7 @@ class ActionProtocolIpv6PingRequest(OpenApiObject):
     def src_name(self, value):
         """src_name setter
 
-        Name of source IPv6 interface to be used.. x-constraint:. /components/schemas/Device.Ipv6/properties/name.
+        Name of source IPv6 interface to be used.. x-constraint:. /components/schemas/Device.Ipv6/properties/name. . x-constraint:. /components/schemas/Device.Ipv6/properties/name.
 
         value: str
         """
@@ -94858,7 +94699,7 @@ class ActionProtocolIpv6PingRequestIter(OpenApiIter):
         # type: (str,str) -> ActionProtocolIpv6PingRequestIter
         """Factory method that creates an instance of the ActionProtocolIpv6PingRequest class
 
-        Under Review: Most ping request parameters are still TBD.. Request for initiating ping between single source and destination pair.. For ping request, IPv6 ICMP Echo Request shall be sent and wait for ping response to either succeed or time out. The API wait timeout for each request shall be 300ms.
+        Under Review: Most ping request parameters are still TBD.. Under Review: Most ping request parameters are still TBD.. Request for initiating ping between single source and destination pair.. For ping request, IPv6 ICMP Echo Request shall be sent and wait for ping response to either succeed or time out. The API wait timeout for each request shall be 300ms.
 
         Returns: ActionProtocolIpv6PingRequestIter
         """
@@ -94872,7 +94713,7 @@ class ActionProtocolIpv6PingRequestIter(OpenApiIter):
         # type: (str,str) -> ActionProtocolIpv6PingRequest
         """Add method that creates and returns an instance of the ActionProtocolIpv6PingRequest class
 
-        Under Review: Most ping request parameters are still TBD.. Request for initiating ping between single source and destination pair.. For ping request, IPv6 ICMP Echo Request shall be sent and wait for ping response to either succeed or time out. The API wait timeout for each request shall be 300ms.
+        Under Review: Most ping request parameters are still TBD.. Under Review: Most ping request parameters are still TBD.. Request for initiating ping between single source and destination pair.. For ping request, IPv6 ICMP Echo Request shall be sent and wait for ping response to either succeed or time out. The API wait timeout for each request shall be 300ms.
 
         Returns: ActionProtocolIpv6PingRequest
         """
@@ -95138,7 +94979,7 @@ class ActionProtocolBgpNotification(OpenApiObject):
         # type: () -> List[str]
         """names getter
 
-        The names of BGP Peers to send NOTIFICATION to. If no name is specified then NOTIFICATION will be sent to all configured BGP peers.. x-constraint:. /components/schemas/Device.Bgp/properties/name.
+        The names of BGP Peers to send NOTIFICATION to. If no name is specified then NOTIFICATION will be sent to all configured BGP peers.. x-constraint:. /components/schemas/Device.Bgp/properties/name. . x-constraint:. /components/schemas/Device.Bgp/properties/name.
 
         Returns: List[str]
         """
@@ -95148,7 +94989,7 @@ class ActionProtocolBgpNotification(OpenApiObject):
     def names(self, value):
         """names setter
 
-        The names of BGP Peers to send NOTIFICATION to. If no name is specified then NOTIFICATION will be sent to all configured BGP peers.. x-constraint:. /components/schemas/Device.Bgp/properties/name.
+        The names of BGP Peers to send NOTIFICATION to. If no name is specified then NOTIFICATION will be sent to all configured BGP peers.. x-constraint:. /components/schemas/Device.Bgp/properties/name. . x-constraint:. /components/schemas/Device.Bgp/properties/name.
 
         value: List[str]
         """
@@ -95625,7 +95466,7 @@ class ActionProtocolBgpInitiateGracefulRestart(OpenApiObject):
         # type: () -> List[str]
         """peer_names getter
 
-        The names of device BGP peers objects to control.. x-constraint:. /components/schemas/Device.Bgp/properties/name.
+        The names of device BGP peers objects to control.. x-constraint:. /components/schemas/Device.Bgp/properties/name. . x-constraint:. /components/schemas/Device.Bgp/properties/name.
 
         Returns: List[str]
         """
@@ -95635,7 +95476,7 @@ class ActionProtocolBgpInitiateGracefulRestart(OpenApiObject):
     def peer_names(self, value):
         """peer_names setter
 
-        The names of device BGP peers objects to control.. x-constraint:. /components/schemas/Device.Bgp/properties/name.
+        The names of device BGP peers objects to control.. x-constraint:. /components/schemas/Device.Bgp/properties/name. . x-constraint:. /components/schemas/Device.Bgp/properties/name.
 
         value: List[str]
         """
@@ -96019,7 +95860,7 @@ class ActionResponseProtocolIpv4PingResponse(OpenApiObject):
         # type: () -> str
         """src_name getter
 
-        Name of source IPv4 interface used for ping.. x-constraint:. /components/schemas/Device.Ipv4/properties/name.
+        Name of source IPv4 interface used for ping.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. . x-constraint:. /components/schemas/Device.Ipv4/properties/name.
 
         Returns: str
         """
@@ -96029,7 +95870,7 @@ class ActionResponseProtocolIpv4PingResponse(OpenApiObject):
     def src_name(self, value):
         """src_name setter
 
-        Name of source IPv4 interface used for ping.. x-constraint:. /components/schemas/Device.Ipv4/properties/name.
+        Name of source IPv4 interface used for ping.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. . x-constraint:. /components/schemas/Device.Ipv4/properties/name.
 
         value: str
         """
@@ -96291,7 +96132,7 @@ class ActionResponseProtocolIpv6PingResponse(OpenApiObject):
         # type: () -> str
         """src_name getter
 
-        Name of source IPv6 interface used for ping.. x-constraint:. /components/schemas/Device.Ipv6/properties/name.
+        Name of source IPv6 interface used for ping.. x-constraint:. /components/schemas/Device.Ipv6/properties/name. . x-constraint:. /components/schemas/Device.Ipv6/properties/name.
 
         Returns: str
         """
@@ -96301,7 +96142,7 @@ class ActionResponseProtocolIpv6PingResponse(OpenApiObject):
     def src_name(self, value):
         """src_name setter
 
-        Name of source IPv6 interface used for ping.. x-constraint:. /components/schemas/Device.Ipv6/properties/name.
+        Name of source IPv6 interface used for ping.. x-constraint:. /components/schemas/Device.Ipv6/properties/name. . x-constraint:. /components/schemas/Device.Ipv6/properties/name.
 
         value: str
         """
@@ -96660,7 +96501,7 @@ class PortMetricsRequest(OpenApiObject):
         # type: () -> List[str]
         """port_names getter
 
-        The names of objects to return results for. An empty list will return all port row results.. x-constraint:. /components/schemas/Port/properties/name.
+        The names of objects to return results for. An empty list will return all port row results.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
 
         Returns: List[str]
         """
@@ -96670,7 +96511,7 @@ class PortMetricsRequest(OpenApiObject):
     def port_names(self, value):
         """port_names setter
 
-        The names of objects to return results for. An empty list will return all port row results.. x-constraint:. /components/schemas/Port/properties/name.
+        The names of objects to return results for. An empty list will return all port row results.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
 
         value: List[str]
         """
@@ -96752,7 +96593,7 @@ class FlowMetricsRequest(OpenApiObject):
         # type: () -> List[str]
         """flow_names getter
 
-        Flow metrics will be retrieved for these flow names.. If no flow names are specified then all flows will be returned.. x-constraint:. /components/schemas/Flow/properties/name.
+        Flow metrics will be retrieved for these flow names.. If no flow names are specified then all flows will be returned.. x-constraint:. /components/schemas/Flow/properties/name. . x-constraint:. /components/schemas/Flow/properties/name.
 
         Returns: List[str]
         """
@@ -96762,7 +96603,7 @@ class FlowMetricsRequest(OpenApiObject):
     def flow_names(self, value):
         """flow_names setter
 
-        Flow metrics will be retrieved for these flow names.. If no flow names are specified then all flows will be returned.. x-constraint:. /components/schemas/Flow/properties/name.
+        Flow metrics will be retrieved for these flow names.. If no flow names are specified then all flows will be returned.. x-constraint:. /components/schemas/Flow/properties/name. . x-constraint:. /components/schemas/Flow/properties/name.
 
         value: List[str]
         """
@@ -97126,7 +96967,7 @@ class Bgpv4MetricsRequest(OpenApiObject):
         # type: () -> List[str]
         """peer_names getter
 
-        The names of BGPv4 peers to return results for. An empty list will return results for all BGPv4 peers.. x-constraint:. /components/schemas/Bgp.V4peer/properties/name.
+        The names of BGPv4 peers to return results for. An empty list will return results for all BGPv4 peers.. x-constraint:. /components/schemas/Bgp.V4peer/properties/name. . x-constraint:. /components/schemas/Bgp.V4peer/properties/name.
 
         Returns: List[str]
         """
@@ -97136,7 +96977,7 @@ class Bgpv4MetricsRequest(OpenApiObject):
     def peer_names(self, value):
         """peer_names setter
 
-        The names of BGPv4 peers to return results for. An empty list will return results for all BGPv4 peers.. x-constraint:. /components/schemas/Bgp.V4peer/properties/name.
+        The names of BGPv4 peers to return results for. An empty list will return results for all BGPv4 peers.. x-constraint:. /components/schemas/Bgp.V4peer/properties/name. . x-constraint:. /components/schemas/Bgp.V4peer/properties/name.
 
         value: List[str]
         """
@@ -97235,7 +97076,7 @@ class Bgpv6MetricsRequest(OpenApiObject):
         # type: () -> List[str]
         """peer_names getter
 
-        The names of BGPv6 peers to return results for. An empty list will return results for all BGPv6 peers.. x-constraint:. /components/schemas/Bgp.V6peer/properties/name.
+        The names of BGPv6 peers to return results for. An empty list will return results for all BGPv6 peers.. x-constraint:. /components/schemas/Bgp.V6peer/properties/name. . x-constraint:. /components/schemas/Bgp.V6peer/properties/name.
 
         Returns: List[str]
         """
@@ -97245,7 +97086,7 @@ class Bgpv6MetricsRequest(OpenApiObject):
     def peer_names(self, value):
         """peer_names setter
 
-        The names of BGPv6 peers to return results for. An empty list will return results for all BGPv6 peers.. x-constraint:. /components/schemas/Bgp.V6peer/properties/name.
+        The names of BGPv6 peers to return results for. An empty list will return results for all BGPv6 peers.. x-constraint:. /components/schemas/Bgp.V6peer/properties/name. . x-constraint:. /components/schemas/Bgp.V6peer/properties/name.
 
         value: List[str]
         """
@@ -97364,7 +97205,7 @@ class IsisMetricsRequest(OpenApiObject):
         # type: () -> List[str]
         """router_names getter
 
-        The names of ISIS Routers to return results for. An empty list will return results for all ISIS router.. x-constraint:. /components/schemas/Device.IsisRouter/properties/name.
+        The names of ISIS Routers to return results for. An empty list will return results for all ISIS router.. x-constraint:. /components/schemas/Device.IsisRouter/properties/name. . x-constraint:. /components/schemas/Device.IsisRouter/properties/name.
 
         Returns: List[str]
         """
@@ -97374,7 +97215,7 @@ class IsisMetricsRequest(OpenApiObject):
     def router_names(self, value):
         """router_names setter
 
-        The names of ISIS Routers to return results for. An empty list will return results for all ISIS router.. x-constraint:. /components/schemas/Device.IsisRouter/properties/name.
+        The names of ISIS Routers to return results for. An empty list will return results for all ISIS router.. x-constraint:. /components/schemas/Device.IsisRouter/properties/name. . x-constraint:. /components/schemas/Device.IsisRouter/properties/name.
 
         value: List[str]
         """
@@ -97461,7 +97302,7 @@ class LagMetricsRequest(OpenApiObject):
         # type: () -> List[str]
         """lag_names getter
 
-        The names of LAGs to return results for. An empty list will return results for all LAGs.. x-constraint:. /components/schemas/Lag/properties/name.
+        The names of LAGs to return results for. An empty list will return results for all LAGs.. x-constraint:. /components/schemas/Lag/properties/name. . x-constraint:. /components/schemas/Lag/properties/name.
 
         Returns: List[str]
         """
@@ -97471,7 +97312,7 @@ class LagMetricsRequest(OpenApiObject):
     def lag_names(self, value):
         """lag_names setter
 
-        The names of LAGs to return results for. An empty list will return results for all LAGs.. x-constraint:. /components/schemas/Lag/properties/name.
+        The names of LAGs to return results for. An empty list will return results for all LAGs.. x-constraint:. /components/schemas/Lag/properties/name. . x-constraint:. /components/schemas/Lag/properties/name.
 
         value: List[str]
         """
@@ -97575,7 +97416,7 @@ class LacpMetricsRequest(OpenApiObject):
         # type: () -> List[str]
         """lag_names getter
 
-        The names of LAG (ports group) for which LACP metrics to be returned. An empty list will return metrics for all LAGs.. x-constraint:. /components/schemas/Lag/properties/name.
+        The names of LAG (ports group) for which LACP metrics to be returned. An empty list will return metrics for all LAGs.. x-constraint:. /components/schemas/Lag/properties/name. . x-constraint:. /components/schemas/Lag/properties/name.
 
         Returns: List[str]
         """
@@ -97585,7 +97426,7 @@ class LacpMetricsRequest(OpenApiObject):
     def lag_names(self, value):
         """lag_names setter
 
-        The names of LAG (ports group) for which LACP metrics to be returned. An empty list will return metrics for all LAGs.. x-constraint:. /components/schemas/Lag/properties/name.
+        The names of LAG (ports group) for which LACP metrics to be returned. An empty list will return metrics for all LAGs.. x-constraint:. /components/schemas/Lag/properties/name. . x-constraint:. /components/schemas/Lag/properties/name.
 
         value: List[str]
         """
@@ -97596,7 +97437,7 @@ class LacpMetricsRequest(OpenApiObject):
         # type: () -> List[str]
         """lag_member_port_names getter
 
-        The names of LAG members (ports) for which LACP metrics to be returned. An empty list will return metrics for all LAG members.. x-constraint:. /components/schemas/Port/properties/name.
+        The names of LAG members (ports) for which LACP metrics to be returned. An empty list will return metrics for all LAG members.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
 
         Returns: List[str]
         """
@@ -97606,7 +97447,7 @@ class LacpMetricsRequest(OpenApiObject):
     def lag_member_port_names(self, value):
         """lag_member_port_names setter
 
-        The names of LAG members (ports) for which LACP metrics to be returned. An empty list will return metrics for all LAG members.. x-constraint:. /components/schemas/Port/properties/name.
+        The names of LAG members (ports) for which LACP metrics to be returned. An empty list will return metrics for all LAG members.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
 
         value: List[str]
         """
@@ -97685,7 +97526,7 @@ class LldpMetricsRequest(OpenApiObject):
         # type: () -> List[str]
         """lldp_names getter
 
-        The names of LLDP instances to return results for. An empty list will return results for all LLDP instances.. x-constraint:. /components/schemas/Lldp/properties/name.
+        The names of LLDP instances to return results for. An empty list will return results for all LLDP instances.. x-constraint:. /components/schemas/Lldp/properties/name. . x-constraint:. /components/schemas/Lldp/properties/name.
 
         Returns: List[str]
         """
@@ -97695,7 +97536,7 @@ class LldpMetricsRequest(OpenApiObject):
     def lldp_names(self, value):
         """lldp_names setter
 
-        The names of LLDP instances to return results for. An empty list will return results for all LLDP instances.. x-constraint:. /components/schemas/Lldp/properties/name.
+        The names of LLDP instances to return results for. An empty list will return results for all LLDP instances.. x-constraint:. /components/schemas/Lldp/properties/name. . x-constraint:. /components/schemas/Lldp/properties/name.
 
         value: List[str]
         """
@@ -97822,7 +97663,7 @@ class RsvpMetricsRequest(OpenApiObject):
         # type: () -> List[str]
         """router_names getter
 
-        The names of RSVP-TE Routers to return results for. An empty list as input will return results for all RSVP-TE routers.. x-constraint:. /components/schemas/Device.Rsvp/properties/name.
+        The names of RSVP-TE Routers to return results for. An empty list as input will return results for all RSVP-TE routers.. x-constraint:. /components/schemas/Device.Rsvp/properties/name. . x-constraint:. /components/schemas/Device.Rsvp/properties/name.
 
         Returns: List[str]
         """
@@ -97832,7 +97673,7 @@ class RsvpMetricsRequest(OpenApiObject):
     def router_names(self, value):
         """router_names setter
 
-        The names of RSVP-TE Routers to return results for. An empty list as input will return results for all RSVP-TE routers.. x-constraint:. /components/schemas/Device.Rsvp/properties/name.
+        The names of RSVP-TE Routers to return results for. An empty list as input will return results for all RSVP-TE routers.. x-constraint:. /components/schemas/Device.Rsvp/properties/name. . x-constraint:. /components/schemas/Device.Rsvp/properties/name.
 
         value: List[str]
         """
@@ -98180,7 +98021,7 @@ class PortMetric(OpenApiObject):
         # type: () -> str
         """name getter
 
-        The name of configured port. x-constraint:. /components/schemas/Port/properties/name.
+        The name of configured port. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
 
         Returns: str
         """
@@ -98190,7 +98031,7 @@ class PortMetric(OpenApiObject):
     def name(self, value):
         """name setter
 
-        The name of configured port. x-constraint:. /components/schemas/Port/properties/name.
+        The name of configured port. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
 
         value: str
         """
@@ -102134,7 +101975,7 @@ class LagMetric(OpenApiObject):
         # type: () -> str
         """name getter
 
-        The name of configured LAG. x-constraint:. /components/schemas/Lag/properties/name.
+        The name of configured LAG. x-constraint:. /components/schemas/Lag/properties/name. . x-constraint:. /components/schemas/Lag/properties/name.
 
         Returns: str
         """
@@ -102144,7 +101985,7 @@ class LagMetric(OpenApiObject):
     def name(self, value):
         """name setter
 
-        The name of configured LAG. x-constraint:. /components/schemas/Lag/properties/name.
+        The name of configured LAG. x-constraint:. /components/schemas/Lag/properties/name. . x-constraint:. /components/schemas/Lag/properties/name.
 
         value: str
         """
@@ -104672,7 +104513,7 @@ class Neighborsv4StatesRequest(OpenApiObject):
         # type: () -> List[str]
         """ethernet_names getter
 
-        The names of Ethernet interfaces for which Neighbor state (ARP cache entries) will be retrieved. If no names are specified then the results will contain Neighbor state (ARP cache entries) for all available Ethernet interfaces.. x-constraint:. /components/schemas/Device.Ethernet/properties/name.
+        The names of Ethernet interfaces for which Neighbor state (ARP cache entries) will be retrieved. If no names are specified then the results will contain Neighbor state (ARP cache entries) for all available Ethernet interfaces.. x-constraint:. /components/schemas/Device.Ethernet/properties/name. . x-constraint:. /components/schemas/Device.Ethernet/properties/name.
 
         Returns: List[str]
         """
@@ -104682,7 +104523,7 @@ class Neighborsv4StatesRequest(OpenApiObject):
     def ethernet_names(self, value):
         """ethernet_names setter
 
-        The names of Ethernet interfaces for which Neighbor state (ARP cache entries) will be retrieved. If no names are specified then the results will contain Neighbor state (ARP cache entries) for all available Ethernet interfaces.. x-constraint:. /components/schemas/Device.Ethernet/properties/name.
+        The names of Ethernet interfaces for which Neighbor state (ARP cache entries) will be retrieved. If no names are specified then the results will contain Neighbor state (ARP cache entries) for all available Ethernet interfaces.. x-constraint:. /components/schemas/Device.Ethernet/properties/name. . x-constraint:. /components/schemas/Device.Ethernet/properties/name.
 
         value: List[str]
         """
@@ -104720,7 +104561,7 @@ class Neighborsv6StatesRequest(OpenApiObject):
         # type: () -> List[str]
         """ethernet_names getter
 
-        The names of Ethernet interfaces for which Neighbor state (NDISC cache entries) will be retrieved. If no names are specified then the results will contain Neighbor state (NDISC cache entries) for all available Ethernet interfaces.. x-constraint:. /components/schemas/Device.Ethernet/properties/name.
+        The names of Ethernet interfaces for which Neighbor state (NDISC cache entries) will be retrieved. If no names are specified then the results will contain Neighbor state (NDISC cache entries) for all available Ethernet interfaces.. x-constraint:. /components/schemas/Device.Ethernet/properties/name. . x-constraint:. /components/schemas/Device.Ethernet/properties/name.
 
         Returns: List[str]
         """
@@ -104730,7 +104571,7 @@ class Neighborsv6StatesRequest(OpenApiObject):
     def ethernet_names(self, value):
         """ethernet_names setter
 
-        The names of Ethernet interfaces for which Neighbor state (NDISC cache entries) will be retrieved. If no names are specified then the results will contain Neighbor state (NDISC cache entries) for all available Ethernet interfaces.. x-constraint:. /components/schemas/Device.Ethernet/properties/name.
+        The names of Ethernet interfaces for which Neighbor state (NDISC cache entries) will be retrieved. If no names are specified then the results will contain Neighbor state (NDISC cache entries) for all available Ethernet interfaces.. x-constraint:. /components/schemas/Device.Ethernet/properties/name. . x-constraint:. /components/schemas/Device.Ethernet/properties/name.
 
         value: List[str]
         """
@@ -104782,7 +104623,7 @@ class BgpPrefixStateRequest(OpenApiObject):
         # type: () -> List[str]
         """bgp_peer_names getter
 
-        The names of BGP peers for which prefix information will be retrieved. If no names are specified then the results will contain prefix information for all configured BGP peers.. x-constraint:. /components/schemas/Bgp.V4Peer/properties/name. /components/schemas/Bgp.V6Peer/properties/name.
+        The names of BGP peers for which prefix information will be retrieved. If no names are specified then the results will contain prefix information for all configured BGP peers.. x-constraint:. /components/schemas/Bgp.V4Peer/properties/name. /components/schemas/Bgp.V6Peer/properties/name. . x-constraint:. /components/schemas/Bgp.V4Peer/properties/name. /components/schemas/Bgp.V6Peer/properties/name.
 
         Returns: List[str]
         """
@@ -104792,7 +104633,7 @@ class BgpPrefixStateRequest(OpenApiObject):
     def bgp_peer_names(self, value):
         """bgp_peer_names setter
 
-        The names of BGP peers for which prefix information will be retrieved. If no names are specified then the results will contain prefix information for all configured BGP peers.. x-constraint:. /components/schemas/Bgp.V4Peer/properties/name. /components/schemas/Bgp.V6Peer/properties/name.
+        The names of BGP peers for which prefix information will be retrieved. If no names are specified then the results will contain prefix information for all configured BGP peers.. x-constraint:. /components/schemas/Bgp.V4Peer/properties/name. /components/schemas/Bgp.V6Peer/properties/name. . x-constraint:. /components/schemas/Bgp.V4Peer/properties/name. /components/schemas/Bgp.V6Peer/properties/name.
 
         value: List[str]
         """
@@ -105293,7 +105134,7 @@ class IsisLspsStateRequest(OpenApiObject):
         # type: () -> List[str]
         """isis_router_names getter
 
-        The names of ISIS routers for which learned information is requested. An empty list will return results for all ISIS routers.. x-constraint:. /components/schemas/Device.IsisRouter/properties/name.
+        The names of ISIS routers for which learned information is requested. An empty list will return results for all ISIS routers.. x-constraint:. /components/schemas/Device.IsisRouter/properties/name. . x-constraint:. /components/schemas/Device.IsisRouter/properties/name.
 
         Returns: List[str]
         """
@@ -105303,7 +105144,7 @@ class IsisLspsStateRequest(OpenApiObject):
     def isis_router_names(self, value):
         """isis_router_names setter
 
-        The names of ISIS routers for which learned information is requested. An empty list will return results for all ISIS routers.. x-constraint:. /components/schemas/Device.IsisRouter/properties/name.
+        The names of ISIS routers for which learned information is requested. An empty list will return results for all ISIS routers.. x-constraint:. /components/schemas/Device.IsisRouter/properties/name. . x-constraint:. /components/schemas/Device.IsisRouter/properties/name.
 
         value: List[str]
         """
@@ -105346,7 +105187,7 @@ class LldpNeighborsStateRequest(OpenApiObject):
         # type: () -> List[str]
         """lldp_names getter
 
-        The names of LLDP instances for which neighbor information will be retrieved. If no names are specified then the results will contain neighbor information for all configured LLDP instances.. x-constraint:. /components/schemas/Lldp/properties/name.
+        The names of LLDP instances for which neighbor information will be retrieved. If no names are specified then the results will contain neighbor information for all configured LLDP instances.. x-constraint:. /components/schemas/Lldp/properties/name. . x-constraint:. /components/schemas/Lldp/properties/name.
 
         Returns: List[str]
         """
@@ -105356,7 +105197,7 @@ class LldpNeighborsStateRequest(OpenApiObject):
     def lldp_names(self, value):
         """lldp_names setter
 
-        The names of LLDP instances for which neighbor information will be retrieved. If no names are specified then the results will contain neighbor information for all configured LLDP instances.. x-constraint:. /components/schemas/Lldp/properties/name.
+        The names of LLDP instances for which neighbor information will be retrieved. If no names are specified then the results will contain neighbor information for all configured LLDP instances.. x-constraint:. /components/schemas/Lldp/properties/name. . x-constraint:. /components/schemas/Lldp/properties/name.
 
         value: List[str]
         """
@@ -105415,7 +105256,7 @@ class RsvpLspsStateRequest(OpenApiObject):
         # type: () -> List[str]
         """rsvp_router_names getter
 
-        The names of RSVP-TE routers for which learned information is requested. An empty list will return results for all RSVP=TE routers.. x-constraint:. /components/schemas/Device.Rsvp/properties/name.
+        The names of RSVP-TE routers for which learned information is requested. An empty list will return results for all RSVP=TE routers.. x-constraint:. /components/schemas/Device.Rsvp/properties/name. . x-constraint:. /components/schemas/Device.Rsvp/properties/name.
 
         Returns: List[str]
         """
@@ -105425,7 +105266,7 @@ class RsvpLspsStateRequest(OpenApiObject):
     def rsvp_router_names(self, value):
         """rsvp_router_names setter
 
-        The names of RSVP-TE routers for which learned information is requested. An empty list will return results for all RSVP=TE routers.. x-constraint:. /components/schemas/Device.Rsvp/properties/name.
+        The names of RSVP-TE routers for which learned information is requested. An empty list will return results for all RSVP=TE routers.. x-constraint:. /components/schemas/Device.Rsvp/properties/name. . x-constraint:. /components/schemas/Device.Rsvp/properties/name.
 
         value: List[str]
         """
@@ -111270,7 +111111,7 @@ class CaptureRequest(OpenApiObject):
         # type: () -> str
         """port_name getter
 
-        The name of port capture is started on.. x-constraint:. /components/schemas/Port/properties/name.
+        The name of port capture is started on.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
 
         Returns: str
         """
@@ -111280,7 +111121,7 @@ class CaptureRequest(OpenApiObject):
     def port_name(self, value):
         """port_name setter
 
-        The name of port capture is started on.. x-constraint:. /components/schemas/Port/properties/name.
+        The name of port capture is started on.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
 
         value: str
         """
