@@ -152,6 +152,9 @@ from .snappi import BgpSrteV6TunnelTlv
 from .snappi import BgpSrteV6TunnelTlvIter
 from .snappi import BgpSrteV6PolicyIter
 from .snappi import BgpGracefulRestart
+from .snappi import BgpUpdateReplay
+from .snappi import BgpOneUpdateReplay
+from .snappi import BgpOneUpdateReplayIter
 from .snappi import BgpV4PeerIter
 from .snappi import BgpV4InterfaceIter
 from .snappi import BgpV6Interface
