@@ -144,7 +144,7 @@ jobs:
       - name: Publish package
         if: github.ref == 'refs/heads/main' && steps.check_tag.outputs.exists == 'false'
         run: |
-          PYPI_USERNAME=${{ secrets.PYPI_USERNAME }} PYPI_PASSWORD=${{ secrets.PYPI_PASSWORD }} python do.py release
+          PYPI_USERNAME=${{ secrets.PYPI_USERNAME }} PYPI_PASSWORD=${{ secrets.PYPI_API_TOKEN }} python do.py release
       - name: Create release and publish artifacts
         if: github.ref == 'refs/heads/main' && steps.check_tag.outputs.exists == 'false'
         uses: ncipollo/release-action@v1
