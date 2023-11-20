@@ -8900,6 +8900,9 @@ components:
         bgp:
           $ref: '#/components/schemas/State.Protocol.Bgp'
           x-field-uid: 5
+        isis:
+          $ref: '#/components/schemas/State.Protocol.Isis'
+          x-field-uid: 6
     State.Port.Link:
       description: |-
         Sets the link of configured ports.
@@ -9079,12 +9082,18 @@ components:
           x-enum:
             admin:
               x-field-uid: 1
+            member_ports:
+              x-field-uid: 2
           x-field-uid: 1
           enum:
           - admin
+          - member_ports
         admin:
           $ref: '#/components/schemas/State.Protocol.Lacp.Admin'
           x-field-uid: 2
+        member_ports:
+          $ref: '#/components/schemas/State.Protocol.Lacp.MemberPorts'
+          x-field-uid: 3
     State.Protocol.Lacp.Admin:
       description: |-
         Sets admin state of LACP configured on LAG members
@@ -9116,9 +9125,40 @@ components:
           enum:
           - up
           - down
+    State.Protocol.Lacp.MemberPorts:
+      description: |-
+        Sets state of LACP member ports configured on LAG.
+      required:
+      - state
+      properties:
+        lag_member_names:
+          description: |
+            The names of LAG members (ports) for which the state has to be applied. An empty or null list will control all LAG members.
+
+            x-constraint:
+            - /components/schemas/Port/properties/name
+          type: array
+          items:
+            type: string
+          x-constraint:
+          - /components/schemas/Port/properties/name
+          x-field-uid: 1
+        state:
+          description: |-
+            The desired LACP member port state.
+          type: string
+          x-field-uid: 2
+          x-enum:
+            up:
+              x-field-uid: 1
+            down:
+              x-field-uid: 2
+          enum:
+          - up
+          - down
     State.Protocol.Bgp:
       description: |-
-        Sets state of configured BGP
+        Sets state of configured BGP peers.
       type: object
       required:
       - choice
@@ -9136,7 +9176,7 @@ components:
           x-field-uid: 2
     State.Protocol.Bgp.Peers:
       description: |-
-        Sets state of configured BGP peers
+        Sets state of configured BGP peers.
       required:
       - state
       properties:
@@ -9157,6 +9197,55 @@ components:
         state:
           description: |-
             The desired state of BGP peer.
+          type: string
+          x-field-uid: 2
+          x-enum:
+            up:
+              x-field-uid: 1
+            down:
+              x-field-uid: 2
+          enum:
+          - up
+          - down
+    State.Protocol.Isis:
+      description: |-
+        Sets state of configured ISIS routers.
+      type: object
+      required:
+      - choice
+      properties:
+        choice:
+          type: string
+          x-enum:
+            routers:
+              x-field-uid: 1
+          x-field-uid: 1
+          enum:
+          - routers
+        routers:
+          $ref: '#/components/schemas/State.Protocol.Isis.Routers'
+          x-field-uid: 2
+    State.Protocol.Isis.Routers:
+      description: |-
+        Sets state of configured ISIS routers.
+      required:
+      - state
+      properties:
+        router_names:
+          description: |
+            The names of ISIS routers for which the state has to be applied. An empty or null list will control all ISIS routers.
+
+            x-constraint:
+            - /components/schemas/Device.IsisRouter/properties/name
+          type: array
+          items:
+            type: string
+          x-constraint:
+          - /components/schemas/Device.IsisRouter/properties/name
+          x-field-uid: 1
+        state:
+          description: |-
+            The desired state of ISIS router.
           type: string
           x-field-uid: 2
           x-enum:

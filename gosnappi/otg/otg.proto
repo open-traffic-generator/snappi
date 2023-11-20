@@ -6677,6 +6677,9 @@ message StateProtocol {
 
   // Description missing in models
   StateProtocolBgp bgp = 5;
+
+  // Description missing in models
+  StateProtocolIsis isis = 6;
 }
 
 // Sets the link of configured ports.
@@ -6815,6 +6818,7 @@ message StateProtocolLacp {
     enum Enum {
       unspecified = 0;
       admin = 1;
+      member_ports = 2;
     }
   }
   // Description missing in models
@@ -6823,6 +6827,9 @@ message StateProtocolLacp {
 
   // Description missing in models
   StateProtocolLacpAdmin admin = 2;
+
+  // Description missing in models
+  StateProtocolLacpMemberPorts member_ports = 3;
 }
 
 // Sets admin state of LACP configured on LAG members
@@ -6850,7 +6857,30 @@ message StateProtocolLacpAdmin {
   optional State.Enum state = 2;
 }
 
-// Sets state of configured BGP
+// Sets state of LACP member ports configured on LAG.
+message StateProtocolLacpMemberPorts {
+
+  // The names of LAG members (ports) for which the state has to be applied. An empty
+  // or null list will control all LAG members.
+  // 
+  // x-constraint:
+  // - /components/schemas/Port/properties/name
+  // 
+  repeated string lag_member_names = 1;
+
+  message State {
+    enum Enum {
+      unspecified = 0;
+      up = 1;
+      down = 2;
+    }
+  }
+  // The desired LACP member port state.
+  // required = true
+  optional State.Enum state = 2;
+}
+
+// Sets state of configured BGP peers.
 message StateProtocolBgp {
 
   message Choice {
@@ -6867,7 +6897,7 @@ message StateProtocolBgp {
   StateProtocolBgpPeers peers = 2;
 }
 
-// Sets state of configured BGP peers
+// Sets state of configured BGP peers.
 message StateProtocolBgpPeers {
 
   // The names of BGP peers for which the state has to be applied. An empty or null list
@@ -6887,6 +6917,46 @@ message StateProtocolBgpPeers {
     }
   }
   // The desired state of BGP peer.
+  // required = true
+  optional State.Enum state = 2;
+}
+
+// Sets state of configured ISIS routers.
+message StateProtocolIsis {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      routers = 1;
+    }
+  }
+  // Description missing in models
+  // required = true
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  StateProtocolIsisRouters routers = 2;
+}
+
+// Sets state of configured ISIS routers.
+message StateProtocolIsisRouters {
+
+  // The names of ISIS routers for which the state has to be applied. An empty or null
+  // list will control all ISIS routers.
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.IsisRouter/properties/name
+  // 
+  repeated string router_names = 1;
+
+  message State {
+    enum Enum {
+      unspecified = 0;
+      up = 1;
+      down = 2;
+    }
+  }
+  // The desired state of ISIS router.
   // required = true
   optional State.Enum state = 2;
 }
