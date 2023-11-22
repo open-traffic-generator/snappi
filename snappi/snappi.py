@@ -1,4 +1,4 @@
-# Open Traffic Generator API 0.13.0
+# Open Traffic Generator API 0.13.1
 # License: MIT
 
 import importlib
@@ -12493,6 +12493,7 @@ class BgpAdvanced(OpenApiObject):
             "maximum": 255,
         },
         "md5_key": {"type": str},
+        "passive_mode": {"type": bool},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -12502,6 +12503,7 @@ class BgpAdvanced(OpenApiObject):
         "keep_alive_interval": 30,
         "update_interval": 0,
         "time_to_live": 64,
+        "passive_mode": False,
     }  # type: Dict[str, Union(type)]
 
     _STATUS = {}  # type: Dict[str, Union(type)]
@@ -12514,6 +12516,7 @@ class BgpAdvanced(OpenApiObject):
         update_interval=0,
         time_to_live=64,
         md5_key=None,
+        passive_mode=False,
     ):
         super(BgpAdvanced, self).__init__()
         self._parent = parent
@@ -12522,6 +12525,7 @@ class BgpAdvanced(OpenApiObject):
         self._set_property("update_interval", update_interval)
         self._set_property("time_to_live", time_to_live)
         self._set_property("md5_key", md5_key)
+        self._set_property("passive_mode", passive_mode)
 
     def set(
         self,
@@ -12530,6 +12534,7 @@ class BgpAdvanced(OpenApiObject):
         update_interval=None,
         time_to_live=None,
         md5_key=None,
+        passive_mode=None,
     ):
         for property_name, property_value in locals().items():
             if property_name != "self" and property_value is not None:
@@ -12639,6 +12644,27 @@ class BgpAdvanced(OpenApiObject):
         value: str
         """
         self._set_property("md5_key", value)
+
+    @property
+    def passive_mode(self):
+        # type: () -> bool
+        """passive_mode getter
+
+        If set to true, the local BGP peer will wait for the remote peer to initiate the BGP session. by establishing the TCP connection, rather than initiating sessions from the local peer.
+
+        Returns: bool
+        """
+        return self._get_property("passive_mode")
+
+    @passive_mode.setter
+    def passive_mode(self, value):
+        """passive_mode setter
+
+        If set to true, the local BGP peer will wait for the remote peer to initiate the BGP session. by establishing the TCP connection, rather than initiating sessions from the local peer.
+
+        value: bool
+        """
+        self._set_property("passive_mode", value)
 
 
 class BgpCapability(OpenApiObject):
@@ -111236,8 +111262,8 @@ class Api(object):
 
     def __init__(self, **kwargs):
         self._version_meta = self.version()
-        self._version_meta.api_spec_version = "0.13.0"
-        self._version_meta.sdk_version = "0.13.0"
+        self._version_meta.api_spec_version = "0.13.1"
+        self._version_meta.sdk_version = "0.13.1"
         self._version_check = kwargs.get("version_check")
         if self._version_check is None:
             self._version_check = False

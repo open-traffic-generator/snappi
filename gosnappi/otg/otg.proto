@@ -1,4 +1,4 @@
-/* Open Traffic Generator API 0.13.0
+/* Open Traffic Generator API 0.13.1
  * Open Traffic Generator API defines a model-driven, vendor-neutral and standard
  * interface for emulating layer 2-7 network devices and generating test traffic.
  * 
@@ -2371,6 +2371,13 @@ message BgpAdvanced {
   // The value to be used as a secret MD5 key for authentication. If not configured, MD5
   // authentication will not be enabled.
   optional string md5_key = 5;
+
+  // If set to true, the local BGP peer will wait for the remote peer to initiate the
+  // BGP session
+  // by establishing the TCP connection, rather than initiating sessions from the local
+  // peer.
+  // default = False
+  optional bool passive_mode = 6;
 }
 
 // Configuration for BGP capability settings.

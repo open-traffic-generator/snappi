@@ -7,7 +7,7 @@ info:
     \ issue](https://github.com/open-traffic-generator/models/issues) in the models\
     \ repository\n- [fork the models repository](https://github.com/open-traffic-generator/models)\
     \ and submit a PR"
-  version: 0.13.0
+  version: 0.13.1
   contact:
     url: https://github.com/open-traffic-generator/models
   license:
@@ -3472,6 +3472,13 @@ components:
             The value to be used as a secret MD5 key for authentication. If not configured, MD5 authentication will not be enabled.
           type: string
           x-field-uid: 5
+        passive_mode:
+          description: |-
+            If set to true, the local BGP peer will wait for the remote peer to initiate the BGP session
+            by establishing the TCP connection, rather than initiating sessions from the local peer.
+          type: boolean
+          default: false
+          x-field-uid: 6
     Bgp.Capability:
       description: |-
         Configuration for BGP capability settings.
