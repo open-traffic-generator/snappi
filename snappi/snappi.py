@@ -2609,7 +2609,7 @@ class Layer1(OpenApiObject):
         # type: () -> bool
         """ieee_media_defaults getter
 
-        Under Review: This field is currently under review for pending exploration on use cases. Under Review: This field is currently under review for pending exploration on use cases. Set to true to override the auto_negotiate, link_training. and rs_fec settings for gigabit ethernet interfaces.
+        Under Review: This field is currently under review for pending exploration on use cases. Set to true to override the auto_negotiate, link_training. and rs_fec settings for gigabit ethernet interfaces.
 
         Returns: bool
         """
@@ -2619,7 +2619,7 @@ class Layer1(OpenApiObject):
     def ieee_media_defaults(self, value):
         """ieee_media_defaults setter
 
-        Under Review: This field is currently under review for pending exploration on use cases. Under Review: This field is currently under review for pending exploration on use cases. Set to true to override the auto_negotiate, link_training. and rs_fec settings for gigabit ethernet interfaces.
+        Under Review: This field is currently under review for pending exploration on use cases. Set to true to override the auto_negotiate, link_training. and rs_fec settings for gigabit ethernet interfaces.
 
         value: bool
         """
@@ -2630,7 +2630,7 @@ class Layer1(OpenApiObject):
         # type: () -> bool
         """auto_negotiate getter
 
-        Under Review: This field is currently under review for pending exploration on use cases, given that separate configuration called `AutoNegotiation` already exists.. Under Review: This field is currently under review for pending exploration on use cases, given that separate configuration called `AutoNegotiation` already exists.. Enable/disable auto negotiation.
+        Under Review: This field is currently under review for pending exploration on use cases, given that separate configuration called `AutoNegotiation` already exists.. Enable/disable auto negotiation.
 
         Returns: bool
         """
@@ -2640,7 +2640,7 @@ class Layer1(OpenApiObject):
     def auto_negotiate(self, value):
         """auto_negotiate setter
 
-        Under Review: This field is currently under review for pending exploration on use cases, given that separate configuration called `AutoNegotiation` already exists.. Under Review: This field is currently under review for pending exploration on use cases, given that separate configuration called `AutoNegotiation` already exists.. Enable/disable auto negotiation.
+        Under Review: This field is currently under review for pending exploration on use cases, given that separate configuration called `AutoNegotiation` already exists.. Enable/disable auto negotiation.
 
         value: bool
         """
@@ -93597,6 +93597,7 @@ class StateProtocol(OpenApiObject):
                 "route",
                 "lacp",
                 "bgp",
+                "isis",
             ],
         },
         "all": {"type": "StateProtocolAll"},
@@ -93614,6 +93615,7 @@ class StateProtocol(OpenApiObject):
     ROUTE = "route"  # type: str
     LACP = "lacp"  # type: str
     BGP = "bgp"  # type: str
+    ISIS = "isis"  # type: str
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
@@ -93674,13 +93676,24 @@ class StateProtocol(OpenApiObject):
         return self._get_property("bgp", StateProtocolBgp, self, "bgp")
 
     @property
+    def isis(self):
+        # type: () -> StateProtocolIsis
+        """Factory property that returns an instance of the StateProtocolIsis class
+
+        Sets state of configured ISIS routers.
+
+        Returns: StateProtocolIsis
+        """
+        return self._get_property("isis", StateProtocolIsis, self, "isis")
+
+    @property
     def choice(self):
-        # type: () -> Union[Literal["all"], Literal["bgp"], Literal["lacp"], Literal["route"]]
+        # type: () -> Union[Literal["all"], Literal["bgp"], Literal["isis"], Literal["lacp"], Literal["route"]]
         """choice getter
 
         TBD
 
-        Returns: Union[Literal["all"], Literal["bgp"], Literal["lacp"], Literal["route"]]
+        Returns: Union[Literal["all"], Literal["bgp"], Literal["isis"], Literal["lacp"], Literal["route"]]
         """
         return self._get_property("choice")
 
@@ -93690,22 +93703,11 @@ class StateProtocol(OpenApiObject):
 
         TBD
 
-        value: Union[Literal["all"], Literal["bgp"], Literal["lacp"], Literal["route"]]
+        value: Union[Literal["all"], Literal["bgp"], Literal["isis"], Literal["lacp"], Literal["route"]]
         """
         if value is None:
             raise TypeError("Cannot set required property choice as None")
         self._set_property("choice", value)
-
-    @property
-    def isis(self):
-        # type: () -> StateProtocolIsis
-        """isis getter
-
-        Sets state of configured ISIS routers.Sets state of configured ISIS routers.Sets state of configured ISIS routers.Sets state of configured ISIS routers.
-
-        Returns: StateProtocolIsis
-        """
-        return self._get_property("isis", StateProtocolIsis)
 
 
 class StateProtocolAll(OpenApiObject):
@@ -94225,7 +94227,7 @@ class StateProtocolBgpPeers(OpenApiObject):
         # type: () -> Union[Literal["down"], Literal["up"]]
         """state getter
 
-        The desired state of BGP peer.
+        The desired state of BGP peer. If the desired state is 'up', underlying IP interface(s) would be brought up automatically (if not already up) and the associated BGP peers would start advertising routes. If the desired state is 'down', the associated BGP peers would stop advertising routes.
 
         Returns: Union[Literal["down"], Literal["up"]]
         """
@@ -94235,7 +94237,7 @@ class StateProtocolBgpPeers(OpenApiObject):
     def state(self, value):
         """state setter
 
-        The desired state of BGP peer.
+        The desired state of BGP peer. If the desired state is 'up', underlying IP interface(s) would be brought up automatically (if not already up) and the associated BGP peers would start advertising routes. If the desired state is 'down', the associated BGP peers would stop advertising routes.
 
         value: Union[Literal["down"], Literal["up"]]
         """
@@ -94375,7 +94377,7 @@ class StateProtocolIsisRouters(OpenApiObject):
         # type: () -> Union[Literal["down"], Literal["up"]]
         """state getter
 
-        The desired state of ISIS router.
+        The desired state of ISIS router. If the desired state is 'up', the associated ISIS routers would start advertising routes. If the desired state is 'down', the associated ISIS routers would stop advertising routes.
 
         Returns: Union[Literal["down"], Literal["up"]]
         """
@@ -94385,7 +94387,7 @@ class StateProtocolIsisRouters(OpenApiObject):
     def state(self, value):
         """state setter
 
-        The desired state of ISIS router.
+        The desired state of ISIS router. If the desired state is 'up', the associated ISIS routers would start advertising routes. If the desired state is 'down', the associated ISIS routers would stop advertising routes.
 
         value: Union[Literal["down"], Literal["up"]]
         """

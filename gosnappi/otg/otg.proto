@@ -542,16 +542,10 @@ message Layer1 {
   // Under Review: This field is currently under review for pending exploration on use
   // cases
   // 
-  // Under Review: This field is currently under review for pending exploration on use
-  // cases
-  // 
   // Set to true to override the auto_negotiate, link_training
   // and rs_fec settings for gigabit ethernet interfaces.
   optional bool ieee_media_defaults = 6;
 
-  // Under Review: This field is currently under review for pending exploration on use
-  // cases, given that a separate configuration called `AutoNegotiation` already exists.
-  // 
   // Under Review: This field is currently under review for pending exploration on use
   // cases, given that a separate configuration called `AutoNegotiation` already exists.
   // 
@@ -6679,6 +6673,7 @@ message StateProtocol {
       route = 2;
       lacp = 3;
       bgp = 4;
+      isis = 5;
     }
   }
   // Description missing in models
@@ -6935,7 +6930,10 @@ message StateProtocolBgpPeers {
       down = 2;
     }
   }
-  // The desired state of BGP peer.
+  // The desired state of BGP peer. If the desired state is 'up', underlying IP interface(s)
+  // would be brought up automatically (if not already up) and the associated BGP peers
+  // would start advertising routes. If the desired state is 'down', the associated BGP
+  // peers would stop advertising routes.
   // required = true
   optional State.Enum state = 2;
 }
@@ -6975,7 +6973,9 @@ message StateProtocolIsisRouters {
       down = 2;
     }
   }
-  // The desired state of ISIS router.
+  // The desired state of ISIS router. If the desired state is 'up', the associated ISIS
+  // routers would start advertising routes. If the desired state is 'down', the associated
+  // ISIS routers would stop advertising routes.
   // required = true
   optional State.Enum state = 2;
 }
