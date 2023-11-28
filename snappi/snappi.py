@@ -94227,7 +94227,7 @@ class StateProtocolBgpPeers(OpenApiObject):
         # type: () -> Union[Literal["down"], Literal["up"]]
         """state getter
 
-        The desired state of BGP peer. If the desired state is 'up', underlying IP interface(s) would be brought up automatically (if not already up) and the associated BGP peers would start advertising routes. If the desired state is 'down', the associated BGP peers would stop advertising routes.
+        The desired state of BGP peer. If the desired state is 'up', underlying IP interface(s) would be brought up automatically (if not already up), would attempt to bring up the BGP session(s) and advertise route(s), if configured. If the desired state is 'down', BGP session(s) would be brought down.
 
         Returns: Union[Literal["down"], Literal["up"]]
         """
@@ -94237,7 +94237,7 @@ class StateProtocolBgpPeers(OpenApiObject):
     def state(self, value):
         """state setter
 
-        The desired state of BGP peer. If the desired state is 'up', underlying IP interface(s) would be brought up automatically (if not already up) and the associated BGP peers would start advertising routes. If the desired state is 'down', the associated BGP peers would stop advertising routes.
+        The desired state of BGP peer. If the desired state is 'up', underlying IP interface(s) would be brought up automatically (if not already up), would attempt to bring up the BGP session(s) and advertise route(s), if configured. If the desired state is 'down', BGP session(s) would be brought down.
 
         value: Union[Literal["down"], Literal["up"]]
         """
@@ -94377,7 +94377,7 @@ class StateProtocolIsisRouters(OpenApiObject):
         # type: () -> Union[Literal["down"], Literal["up"]]
         """state getter
 
-        The desired state of ISIS router. If the desired state is 'up', the associated ISIS routers would start advertising routes. If the desired state is 'down', the associated ISIS routers would stop advertising routes.
+        The desired state of ISIS router. If the desired state is 'up', would attempt to bring up the ISIS session(s) with respective peer(s) and advertise route(s), if configured. If the desired state is 'down', would bring down ISIS session(s) with respective peer(s).
 
         Returns: Union[Literal["down"], Literal["up"]]
         """
@@ -94387,7 +94387,7 @@ class StateProtocolIsisRouters(OpenApiObject):
     def state(self, value):
         """state setter
 
-        The desired state of ISIS router. If the desired state is 'up', the associated ISIS routers would start advertising routes. If the desired state is 'down', the associated ISIS routers would stop advertising routes.
+        The desired state of ISIS router. If the desired state is 'up', would attempt to bring up the ISIS session(s) with respective peer(s) and advertise route(s), if configured. If the desired state is 'down', would bring down ISIS session(s) with respective peer(s).
 
         value: Union[Literal["down"], Literal["up"]]
         """
