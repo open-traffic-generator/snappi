@@ -1,4 +1,4 @@
-/* Open Traffic Generator API 0.13.0
+/* Open Traffic Generator API 0.13.2
  * Open Traffic Generator API defines a model-driven, vendor-neutral and standard
  * interface for emulating layer 2-7 network devices and generating test traffic.
  * 
@@ -28,6 +28,8 @@ message Config {
   repeated Lag lags = 2;
 
   // The layer1 settings that will be configured on the traffic generator.
+  // Since layer1 settings usually vary across variety of test ports, these
+  // most likely won't be portable.
   repeated Layer1 layer1 = 3;
 
   // The capture settings that will be configured on the traffic generator.
@@ -538,8 +540,8 @@ message Layer1 {
       speed_400_gbps = 12;
     }
   }
-  // Set the speed if supported.
-  // default = Speed.Enum.speed_10_gbps
+  // Set the speed if supported. When no speed is explicitly set, the current
+  // speed of underlying test interface shall be assumed.
   optional Speed.Enum speed = 2;
 
   message Media {
@@ -550,21 +552,38 @@ message Layer1 {
       sgmii = 3;
     }
   }
-  // Set the type of media interface if supported.
+  // Set the type of media for test interface if supported. When no media
+  // type is explicitly set, the current media type of underlying test
+  // interface shall be assumed.
   optional Media.Enum media = 3;
 
-  // Enable promiscuous mode if supported.
+  // Enable promiscuous mode on test interface. A warning shall be raised if
+  // this field is set to `true`, even when it's not supported, ignoring
+  // the setting altogether.
   // default = True
   optional bool promiscuous = 4;
 
-  // Set the maximum transmission unit size if supported.
+  // Set the maximum transmission unit size. A warning shall be raised if
+  // the specified value is valid but not supported, ignoring the setting altogether.
   // default = 1500
   optional uint32 mtu = 5;
 
+  // Under Review: This field is currently under review for pending exploration on use
+  // cases
+  // 
+  // Under Review: This field is currently under review for pending exploration on use
+  // cases
+  // 
   // Set to true to override the auto_negotiate, link_training
   // and rs_fec settings for gigabit ethernet interfaces.
   optional bool ieee_media_defaults = 6;
 
+  // Under Review: This field is currently under review for pending exploration on use
+  // cases, given that a separate configuration called `AutoNegotiation` already exists.
+  // 
+  // Under Review: This field is currently under review for pending exploration on use
+  // cases, given that a separate configuration called `AutoNegotiation` already exists.
+  // 
   // Enable/disable auto negotiation.
   optional bool auto_negotiate = 7;
 
@@ -2402,6 +2421,13 @@ message BgpAdvanced {
   // The value to be used as a secret MD5 key for authentication. If not configured, MD5
   // authentication will not be enabled.
   optional string md5_key = 5;
+
+  // If set to true, the local BGP peer will wait for the remote peer to initiate the
+  // BGP session
+  // by establishing the TCP connection, rather than initiating sessions from the local
+  // peer.
+  // default = False
+  optional bool passive_mode = 6;
 }
 
 // Configuration for BGP capability settings.

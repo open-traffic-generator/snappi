@@ -1,4 +1,4 @@
-# Open Traffic Generator API 0.13.0
+# Open Traffic Generator API 0.13.2
 # License: MIT
 
 import importlib
@@ -1148,7 +1148,7 @@ class Config(OpenApiObject):
         # type: () -> Layer1Iter
         """layer1 getter
 
-        The layer1 settings that will be configured on the traffic generator.
+        The layer1 settings that will be configured on the traffic generator.. Since layer1 settings usually vary across variety of test ports, these. most likely won't be portable.
 
         Returns: Layer1Iter
         """
@@ -2433,7 +2433,6 @@ class Layer1(OpenApiObject):
     _REQUIRED = ("port_names", "name")  # type: tuple(str)
 
     _DEFAULTS = {
-        "speed": "speed_10_gbps",
         "promiscuous": True,
         "mtu": 1500,
     }  # type: Dict[str, Union(type)]
@@ -2455,13 +2454,16 @@ class Layer1(OpenApiObject):
     FIBER = "fiber"  # type: str
     SGMII = "sgmii"  # type: str
 
-    _STATUS = {}  # type: Dict[str, Union(type)]
+    _STATUS = {
+        "ieee_media_defaults": "ieee_media_defaults property in schema Layer1 is under-review, This field is currently under review for pending exploration on use cases",
+        "auto_negotiate": "auto_negotiate property in schema Layer1 is under-review, This field is currently under review for pending exploration on use cases, given that a separate configuration called `AutoNegotiation` already exists.",
+    }  # type: Dict[str, Union(type)]
 
     def __init__(
         self,
         parent=None,
         port_names=None,
-        speed="speed_10_gbps",
+        speed=None,
         media=None,
         promiscuous=True,
         mtu=1500,
@@ -2523,7 +2525,7 @@ class Layer1(OpenApiObject):
         # type: () -> Union[Literal["speed_100_fd_mbps"], Literal["speed_100_gbps"], Literal["speed_100_hd_mbps"], Literal["speed_10_fd_mbps"], Literal["speed_10_gbps"], Literal["speed_10_hd_mbps"], Literal["speed_1_gbps"], Literal["speed_200_gbps"], Literal["speed_25_gbps"], Literal["speed_400_gbps"], Literal["speed_40_gbps"], Literal["speed_50_gbps"]]
         """speed getter
 
-        Set the speed if supported.
+        Set the speed if supported. When no speed is explicitly set, the current. speed of underlying test interface shall be assumed.
 
         Returns: Union[Literal["speed_100_fd_mbps"], Literal["speed_100_gbps"], Literal["speed_100_hd_mbps"], Literal["speed_10_fd_mbps"], Literal["speed_10_gbps"], Literal["speed_10_hd_mbps"], Literal["speed_1_gbps"], Literal["speed_200_gbps"], Literal["speed_25_gbps"], Literal["speed_400_gbps"], Literal["speed_40_gbps"], Literal["speed_50_gbps"]]
         """
@@ -2533,7 +2535,7 @@ class Layer1(OpenApiObject):
     def speed(self, value):
         """speed setter
 
-        Set the speed if supported.
+        Set the speed if supported. When no speed is explicitly set, the current. speed of underlying test interface shall be assumed.
 
         value: Union[Literal["speed_100_fd_mbps"], Literal["speed_100_gbps"], Literal["speed_100_hd_mbps"], Literal["speed_10_fd_mbps"], Literal["speed_10_gbps"], Literal["speed_10_hd_mbps"], Literal["speed_1_gbps"], Literal["speed_200_gbps"], Literal["speed_25_gbps"], Literal["speed_400_gbps"], Literal["speed_40_gbps"], Literal["speed_50_gbps"]]
         """
@@ -2544,7 +2546,7 @@ class Layer1(OpenApiObject):
         # type: () -> Union[Literal["copper"], Literal["fiber"], Literal["sgmii"]]
         """media getter
 
-        Set the type of media interface if supported.
+        Set the type of media for test interface if supported. When no media. type is explicitly set, the current media type of underlying test. interface shall be assumed.
 
         Returns: Union[Literal["copper"], Literal["fiber"], Literal["sgmii"]]
         """
@@ -2554,7 +2556,7 @@ class Layer1(OpenApiObject):
     def media(self, value):
         """media setter
 
-        Set the type of media interface if supported.
+        Set the type of media for test interface if supported. When no media. type is explicitly set, the current media type of underlying test. interface shall be assumed.
 
         value: Union[Literal["copper"], Literal["fiber"], Literal["sgmii"]]
         """
@@ -2565,7 +2567,7 @@ class Layer1(OpenApiObject):
         # type: () -> bool
         """promiscuous getter
 
-        Enable promiscuous mode if supported.
+        Enable promiscuous mode on test interface. warning shall be raised if. this field is set to `true`, even when it's not supported, ignoring. the setting altogether.
 
         Returns: bool
         """
@@ -2575,7 +2577,7 @@ class Layer1(OpenApiObject):
     def promiscuous(self, value):
         """promiscuous setter
 
-        Enable promiscuous mode if supported.
+        Enable promiscuous mode on test interface. warning shall be raised if. this field is set to `true`, even when it's not supported, ignoring. the setting altogether.
 
         value: bool
         """
@@ -2586,7 +2588,7 @@ class Layer1(OpenApiObject):
         # type: () -> int
         """mtu getter
 
-        Set the maximum transmission unit size if supported.
+        Set the maximum transmission unit size. warning shall be raised if. the specified value is valid but not supported, ignoring the setting altogether.
 
         Returns: int
         """
@@ -2596,7 +2598,7 @@ class Layer1(OpenApiObject):
     def mtu(self, value):
         """mtu setter
 
-        Set the maximum transmission unit size if supported.
+        Set the maximum transmission unit size. warning shall be raised if. the specified value is valid but not supported, ignoring the setting altogether.
 
         value: int
         """
@@ -2607,7 +2609,7 @@ class Layer1(OpenApiObject):
         # type: () -> bool
         """ieee_media_defaults getter
 
-        Set to true to override the auto_negotiate, link_training. and rs_fec settings for gigabit ethernet interfaces.
+        Under Review: This field is currently under review for pending exploration on use cases. Under Review: This field is currently under review for pending exploration on use cases. Set to true to override the auto_negotiate, link_training. and rs_fec settings for gigabit ethernet interfaces.
 
         Returns: bool
         """
@@ -2617,7 +2619,7 @@ class Layer1(OpenApiObject):
     def ieee_media_defaults(self, value):
         """ieee_media_defaults setter
 
-        Set to true to override the auto_negotiate, link_training. and rs_fec settings for gigabit ethernet interfaces.
+        Under Review: This field is currently under review for pending exploration on use cases. Under Review: This field is currently under review for pending exploration on use cases. Set to true to override the auto_negotiate, link_training. and rs_fec settings for gigabit ethernet interfaces.
 
         value: bool
         """
@@ -2628,7 +2630,7 @@ class Layer1(OpenApiObject):
         # type: () -> bool
         """auto_negotiate getter
 
-        Enable/disable auto negotiation.
+        Under Review: This field is currently under review for pending exploration on use cases, given that separate configuration called `AutoNegotiation` already exists.. Under Review: This field is currently under review for pending exploration on use cases, given that separate configuration called `AutoNegotiation` already exists.. Enable/disable auto negotiation.
 
         Returns: bool
         """
@@ -2638,7 +2640,7 @@ class Layer1(OpenApiObject):
     def auto_negotiate(self, value):
         """auto_negotiate setter
 
-        Enable/disable auto negotiation.
+        Under Review: This field is currently under review for pending exploration on use cases, given that separate configuration called `AutoNegotiation` already exists.. Under Review: This field is currently under review for pending exploration on use cases, given that separate configuration called `AutoNegotiation` already exists.. Enable/disable auto negotiation.
 
         value: bool
         """
@@ -3363,7 +3365,7 @@ class Layer1Iter(OpenApiIter):
     def layer1(
         self,
         port_names=None,
-        speed="speed_10_gbps",
+        speed=None,
         media=None,
         promiscuous=True,
         mtu=1500,
@@ -3395,7 +3397,7 @@ class Layer1Iter(OpenApiIter):
     def add(
         self,
         port_names=None,
-        speed="speed_10_gbps",
+        speed=None,
         media=None,
         promiscuous=True,
         mtu=1500,
@@ -12491,6 +12493,7 @@ class BgpAdvanced(OpenApiObject):
             "maximum": 255,
         },
         "md5_key": {"type": str},
+        "passive_mode": {"type": bool},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -12500,6 +12503,7 @@ class BgpAdvanced(OpenApiObject):
         "keep_alive_interval": 30,
         "update_interval": 0,
         "time_to_live": 64,
+        "passive_mode": False,
     }  # type: Dict[str, Union(type)]
 
     _STATUS = {}  # type: Dict[str, Union(type)]
@@ -12512,6 +12516,7 @@ class BgpAdvanced(OpenApiObject):
         update_interval=0,
         time_to_live=64,
         md5_key=None,
+        passive_mode=False,
     ):
         super(BgpAdvanced, self).__init__()
         self._parent = parent
@@ -12520,6 +12525,7 @@ class BgpAdvanced(OpenApiObject):
         self._set_property("update_interval", update_interval)
         self._set_property("time_to_live", time_to_live)
         self._set_property("md5_key", md5_key)
+        self._set_property("passive_mode", passive_mode)
 
     def set(
         self,
@@ -12528,6 +12534,7 @@ class BgpAdvanced(OpenApiObject):
         update_interval=None,
         time_to_live=None,
         md5_key=None,
+        passive_mode=None,
     ):
         for property_name, property_value in locals().items():
             if property_name != "self" and property_value is not None:
@@ -12637,6 +12644,27 @@ class BgpAdvanced(OpenApiObject):
         value: str
         """
         self._set_property("md5_key", value)
+
+    @property
+    def passive_mode(self):
+        # type: () -> bool
+        """passive_mode getter
+
+        If set to true, the local BGP peer will wait for the remote peer to initiate the BGP session. by establishing the TCP connection, rather than initiating sessions from the local peer.
+
+        Returns: bool
+        """
+        return self._get_property("passive_mode")
+
+    @passive_mode.setter
+    def passive_mode(self, value):
+        """passive_mode setter
+
+        If set to true, the local BGP peer will wait for the remote peer to initiate the BGP session. by establishing the TCP connection, rather than initiating sessions from the local peer.
+
+        value: bool
+        """
+        self._set_property("passive_mode", value)
 
 
 class BgpCapability(OpenApiObject):
@@ -111234,8 +111262,8 @@ class Api(object):
 
     def __init__(self, **kwargs):
         self._version_meta = self.version()
-        self._version_meta.api_spec_version = "0.13.0"
-        self._version_meta.sdk_version = "0.13.0"
+        self._version_meta.api_spec_version = "0.13.2"
+        self._version_meta.sdk_version = "0.13.2"
         self._version_check = kwargs.get("version_check")
         if self._version_check is None:
             self._version_check = False

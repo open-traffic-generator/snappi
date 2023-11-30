@@ -7,7 +7,7 @@ info:
     \ issue](https://github.com/open-traffic-generator/models/issues) in the models\
     \ repository\n- [fork the models repository](https://github.com/open-traffic-generator/models)\
     \ and submit a PR"
-  version: 0.13.0
+  version: 0.13.2
   contact:
     url: https://github.com/open-traffic-generator/models
   license:
@@ -256,6 +256,8 @@ components:
         layer1:
           description: |-
             The layer1 settings that will be configured on the traffic generator.
+            Since layer1 settings usually vary across variety of test ports, these
+            most likely won't be portable.
           type: array
           items:
             $ref: '#/components/schemas/Layer1'
@@ -965,9 +967,9 @@ components:
           x-field-uid: 1
         speed:
           description: |-
-            Set the speed if supported.
+            Set the speed if supported. When no speed is explicitly set, the current
+            speed of underlying test interface shall be assumed.
           type: string
-          default: speed_10_gbps
           x-field-uid: 2
           x-enum:
             speed_10_fd_mbps:
@@ -1009,7 +1011,9 @@ components:
           - speed_400_gbps
         media:
           description: |-
-            Set the type of media interface if supported.
+            Set the type of media for test interface if supported. When no media
+            type is explicitly set, the current media type of underlying test
+            interface shall be assumed.
           type: string
           x-field-uid: 3
           x-enum:
@@ -1025,13 +1029,16 @@ components:
           - sgmii
         promiscuous:
           description: |-
-            Enable promiscuous mode if supported.
+            Enable promiscuous mode on test interface. A warning shall be raised if
+            this field is set to `true`, even when it's not supported, ignoring
+            the setting altogether.
           type: boolean
           default: true
           x-field-uid: 4
         mtu:
           description: |-
-            Set the maximum transmission unit size if supported.
+            Set the maximum transmission unit size. A warning shall be raised if
+            the specified value is valid but not supported, ignoring the setting altogether.
           type: integer
           format: uint32
           minimum: 64
@@ -1040,15 +1047,32 @@ components:
           x-field-uid: 5
         ieee_media_defaults:
           description: |-
+            Under Review: This field is currently under review for pending exploration on use cases
+
+            Under Review: This field is currently under review for pending exploration on use cases
+
             Set to true to override the auto_negotiate, link_training
             and rs_fec settings for gigabit ethernet interfaces.
           type: boolean
           x-field-uid: 6
+          x-status:
+            status: under-review
+            information: This field is currently under review for pending exploration
+              on use cases
         auto_negotiate:
           description: |-
+            Under Review: This field is currently under review for pending exploration on use cases, given that a separate configuration called `AutoNegotiation` already exists.
+
+            Under Review: This field is currently under review for pending exploration on use cases, given that a separate configuration called `AutoNegotiation` already exists.
+
             Enable/disable auto negotiation.
           type: boolean
           x-field-uid: 7
+          x-status:
+            status: under-review
+            information: This field is currently under review for pending exploration
+              on use cases, given that a separate configuration called `AutoNegotiation`
+              already exists.
         auto_negotiation:
           $ref: '#/components/schemas/Layer1.AutoNegotiation'
           x-field-uid: 8
@@ -3484,6 +3508,13 @@ components:
             The value to be used as a secret MD5 key for authentication. If not configured, MD5 authentication will not be enabled.
           type: string
           x-field-uid: 5
+        passive_mode:
+          description: |-
+            If set to true, the local BGP peer will wait for the remote peer to initiate the BGP session
+            by establishing the TCP connection, rather than initiating sessions from the local peer.
+          type: boolean
+          default: false
+          x-field-uid: 6
     Bgp.Capability:
       description: |-
         Configuration for BGP capability settings.
