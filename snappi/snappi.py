@@ -89685,12 +89685,12 @@ class PatternFlowSnmpv2PDURequestId(OpenApiObject):
         },
         "value": {
             "type": int,
-            "format": "uint32",
+            "format": "int32",
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "itemformat": "uint32",
+            "itemformat": "int32",
         },
         "increment": {"type": "PatternFlowSnmpv2PDURequestIdCounter"},
         "decrement": {"type": "PatternFlowSnmpv2PDURequestIdCounter"},
@@ -89826,15 +89826,15 @@ class PatternFlowSnmpv2PDURequestIdCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "format": "uint32",
+            "format": "int32",
         },
         "step": {
             "type": int,
-            "format": "uint32",
+            "format": "int32",
         },
         "count": {
             "type": int,
-            "format": "uint32",
+            "format": "int32",
         },
     }  # type: Dict[str, str]
 
@@ -92214,12 +92214,12 @@ class PatternFlowSnmpv2BulkPDURequestId(OpenApiObject):
         },
         "value": {
             "type": int,
-            "format": "uint32",
+            "format": "int32",
         },
         "values": {
             "type": list,
             "itemtype": int,
-            "itemformat": "uint32",
+            "itemformat": "int32",
         },
         "increment": {"type": "PatternFlowSnmpv2BulkPDURequestIdCounter"},
         "decrement": {"type": "PatternFlowSnmpv2BulkPDURequestIdCounter"},
@@ -92355,15 +92355,15 @@ class PatternFlowSnmpv2BulkPDURequestIdCounter(OpenApiObject):
     _TYPES = {
         "start": {
             "type": int,
-            "format": "uint32",
+            "format": "int32",
         },
         "step": {
             "type": int,
-            "format": "uint32",
+            "format": "int32",
         },
         "count": {
             "type": int,
-            "format": "uint32",
+            "format": "int32",
         },
     }  # type: Dict[str, str]
 

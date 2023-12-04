@@ -28135,17 +28135,17 @@ components:
           type: integer
           x-field-uid: 1
           default: 0
-          format: uint32
+          format: int32
         step:
           type: integer
           x-field-uid: 2
           default: 1
-          format: uint32
+          format: int32
         count:
           type: integer
           x-field-uid: 3
           default: 1
-          format: uint32
+          format: int32
     Pattern.Flow.Snmpv2.PDU.RequestId:
       description: |-
         Identifies a particular SNMP request.  This index is echoed back in the response from the SNMP agent,  allowing the SNMP manager to match an incoming response to the appropriate request.  TBD: negative values should be allowed.
@@ -28173,12 +28173,12 @@ components:
           type: integer
           x-field-uid: 2
           default: 0
-          format: uint32
+          format: int32
         values:
           type: array
           items:
             type: integer
-            format: uint32
+            format: int32
           x-field-uid: 3
           default:
           - 0
@@ -28259,17 +28259,17 @@ components:
           type: integer
           x-field-uid: 1
           default: 0
-          format: uint32
+          format: int32
         step:
           type: integer
           x-field-uid: 2
           default: 1
-          format: uint32
+          format: int32
         count:
           type: integer
           x-field-uid: 3
           default: 1
-          format: uint32
+          format: int32
     Pattern.Flow.Snmpv2.BulkPDU.RequestId:
       description: |-
         Identifies a particular SNMP request.  This index is echoed back in the response from the SNMP agent,  allowing the SNMP manager to match an incoming response to the appropriate request.
@@ -28297,12 +28297,12 @@ components:
           type: integer
           x-field-uid: 2
           default: 0
-          format: uint32
+          format: int32
         values:
           type: array
           items:
             type: integer
-            format: uint32
+            format: int32
           x-field-uid: 3
           default:
           - 0

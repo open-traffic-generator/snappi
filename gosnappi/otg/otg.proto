@@ -19787,15 +19787,15 @@ message PatternFlowSnmpv2PDURequestIdCounter {
 
   // Description missing in models
   // default = 0
-  optional uint32 start = 1;
+  optional int32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional uint32 step = 2;
+  optional int32 step = 2;
 
   // Description missing in models
   // default = 1
-  optional uint32 count = 3;
+  optional int32 count = 3;
 }
 
 // Identifies a particular SNMP request.  This index is echoed back in the response
@@ -19818,11 +19818,11 @@ message PatternFlowSnmpv2PDURequestId {
 
   // Description missing in models
   // default = 0
-  optional uint32 value = 2;
+  optional int32 value = 2;
 
   // Description missing in models
   // default = [0]
-  repeated uint32 values = 3;
+  repeated int32 values = 3;
 
   // Description missing in models
   PatternFlowSnmpv2PDURequestIdCounter increment = 5;
@@ -19884,15 +19884,15 @@ message PatternFlowSnmpv2BulkPDURequestIdCounter {
 
   // Description missing in models
   // default = 0
-  optional uint32 start = 1;
+  optional int32 start = 1;
 
   // Description missing in models
   // default = 1
-  optional uint32 step = 2;
+  optional int32 step = 2;
 
   // Description missing in models
   // default = 1
-  optional uint32 count = 3;
+  optional int32 count = 3;
 }
 
 // Identifies a particular SNMP request.  This index is echoed back in the response
@@ -19915,11 +19915,11 @@ message PatternFlowSnmpv2BulkPDURequestId {
 
   // Description missing in models
   // default = 0
-  optional uint32 value = 2;
+  optional int32 value = 2;
 
   // Description missing in models
   // default = [0]
-  repeated uint32 values = 3;
+  repeated int32 values = 3;
 
   // Description missing in models
   PatternFlowSnmpv2BulkPDURequestIdCounter increment = 5;
