@@ -26240,6 +26240,7 @@ class FlowHeader(OpenApiObject):
                 "ppp",
                 "igmpv1",
                 "mpls",
+                "snmpv2",
             ],
         },
         "custom": {"type": "FlowCustom"},
@@ -26289,6 +26290,7 @@ class FlowHeader(OpenApiObject):
     PPP = "ppp"  # type: str
     IGMPV1 = "igmpv1"  # type: str
     MPLS = "mpls"  # type: str
+    SNMPV2 = "snmpv2"  # type: str
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
@@ -26516,13 +26518,24 @@ class FlowHeader(OpenApiObject):
         return self._get_property("mpls", FlowMpls, self, "mpls")
 
     @property
+    def snmpv2(self):
+        # type: () -> FlowSnmpv2
+        """Factory property that returns an instance of the FlowSnmpv2 class
+
+        SNMPv2 packet header as defined in RFC3416.
+
+        Returns: FlowSnmpv2
+        """
+        return self._get_property("snmpv2", FlowSnmpv2, self, "snmpv2")
+
+    @property
     def choice(self):
-        # type: () -> Union[Literal["arp"], Literal["custom"], Literal["ethernet"], Literal["ethernetpause"], Literal["gre"], Literal["gtpv1"], Literal["gtpv2"], Literal["icmp"], Literal["icmpv6"], Literal["igmpv1"], Literal["ipv4"], Literal["ipv6"], Literal["mpls"], Literal["pfcpause"], Literal["ppp"], Literal["tcp"], Literal["udp"], Literal["vlan"], Literal["vxlan"]]
+        # type: () -> Union[Literal["arp"], Literal["custom"], Literal["ethernet"], Literal["ethernetpause"], Literal["gre"], Literal["gtpv1"], Literal["gtpv2"], Literal["icmp"], Literal["icmpv6"], Literal["igmpv1"], Literal["ipv4"], Literal["ipv6"], Literal["mpls"], Literal["pfcpause"], Literal["ppp"], Literal["snmpv2"], Literal["tcp"], Literal["udp"], Literal["vlan"], Literal["vxlan"]]
         """choice getter
 
         The available types of flow headers. If one is not provided the default ethernet packet header MUST be provided.
 
-        Returns: Union[Literal["arp"], Literal["custom"], Literal["ethernet"], Literal["ethernetpause"], Literal["gre"], Literal["gtpv1"], Literal["gtpv2"], Literal["icmp"], Literal["icmpv6"], Literal["igmpv1"], Literal["ipv4"], Literal["ipv6"], Literal["mpls"], Literal["pfcpause"], Literal["ppp"], Literal["tcp"], Literal["udp"], Literal["vlan"], Literal["vxlan"]]
+        Returns: Union[Literal["arp"], Literal["custom"], Literal["ethernet"], Literal["ethernetpause"], Literal["gre"], Literal["gtpv1"], Literal["gtpv2"], Literal["icmp"], Literal["icmpv6"], Literal["igmpv1"], Literal["ipv4"], Literal["ipv6"], Literal["mpls"], Literal["pfcpause"], Literal["ppp"], Literal["snmpv2"], Literal["tcp"], Literal["udp"], Literal["vlan"], Literal["vxlan"]]
         """
         return self._get_property("choice")
 
@@ -26532,20 +26545,9 @@ class FlowHeader(OpenApiObject):
 
         The available types of flow headers. If one is not provided the default ethernet packet header MUST be provided.
 
-        value: Union[Literal["arp"], Literal["custom"], Literal["ethernet"], Literal["ethernetpause"], Literal["gre"], Literal["gtpv1"], Literal["gtpv2"], Literal["icmp"], Literal["icmpv6"], Literal["igmpv1"], Literal["ipv4"], Literal["ipv6"], Literal["mpls"], Literal["pfcpause"], Literal["ppp"], Literal["tcp"], Literal["udp"], Literal["vlan"], Literal["vxlan"]]
+        value: Union[Literal["arp"], Literal["custom"], Literal["ethernet"], Literal["ethernetpause"], Literal["gre"], Literal["gtpv1"], Literal["gtpv2"], Literal["icmp"], Literal["icmpv6"], Literal["igmpv1"], Literal["ipv4"], Literal["ipv6"], Literal["mpls"], Literal["pfcpause"], Literal["ppp"], Literal["snmpv2"], Literal["tcp"], Literal["udp"], Literal["vlan"], Literal["vxlan"]]
         """
         self._set_property("choice", value)
-
-    @property
-    def snmpv2(self):
-        # type: () -> FlowSnmpv2
-        """snmpv2 getter
-
-        SNMPv2 packet header as defined in RFC3416.SNMPv2 packet header as defined in RFC3416.SNMPv2 packet header as defined in RFC3416.
-
-        Returns: FlowSnmpv2
-        """
-        return self._get_property("snmpv2", FlowSnmpv2)
 
 
 class FlowCustom(OpenApiObject):
@@ -92832,7 +92834,7 @@ class PatternFlowSnmpv2BulkPDUMaxRepetitionsCounter(OpenApiObject):
 class FlowHeaderIter(OpenApiIter):
     __slots__ = ("_parent", "_choice")
 
-    _GETITEM_RETURNS_CHOICE_OBJECT = False
+    _GETITEM_RETURNS_CHOICE_OBJECT = True
 
     def __init__(self, parent=None, choice=None):
         super(FlowHeaderIter, self).__init__()
@@ -92840,7 +92842,7 @@ class FlowHeaderIter(OpenApiIter):
         self._choice = choice
 
     def __getitem__(self, key):
-        # type: (str) -> Union[FlowArp, FlowCustom, FlowEthernet, FlowEthernetPause, FlowGre, FlowGtpv1, FlowGtpv2, FlowHeader, FlowIcmp, FlowIcmpv6, FlowIgmpv1, FlowIpv4, FlowIpv6, FlowMpls, FlowPfcPause, FlowPpp, FlowTcp, FlowUdp, FlowVlan, FlowVxlan]
+        # type: (str) -> Union[FlowArp, FlowCustom, FlowEthernet, FlowEthernetPause, FlowGre, FlowGtpv1, FlowGtpv2, FlowHeader, FlowIcmp, FlowIcmpv6, FlowIgmpv1, FlowIpv4, FlowIpv6, FlowMpls, FlowPfcPause, FlowPpp, FlowSnmpv2, FlowTcp, FlowUdp, FlowVlan, FlowVxlan]
         return self._getitem(key)
 
     def __iter__(self):
@@ -92882,6 +92884,286 @@ class FlowHeaderIter(OpenApiIter):
         item = FlowHeader(parent=self._parent, choice=self._choice)
         self._add(item)
         return item
+
+    def custom(self, bytes=None):
+        # type: (str) -> FlowHeaderIter
+        """Factory method that creates an instance of the FlowCustom class
+
+        Custom packet header
+
+        Returns: FlowHeaderIter
+        """
+        item = FlowHeader()
+        item.custom
+        item.choice = "custom"
+        self._add(item)
+        return self
+
+    def ethernet(self):
+        # type: () -> FlowHeaderIter
+        """Factory method that creates an instance of the FlowEthernet class
+
+        Ethernet packet header
+
+        Returns: FlowHeaderIter
+        """
+        item = FlowHeader()
+        item.ethernet
+        item.choice = "ethernet"
+        self._add(item)
+        return self
+
+    def vlan(self):
+        # type: () -> FlowHeaderIter
+        """Factory method that creates an instance of the FlowVlan class
+
+        VLAN packet header
+
+        Returns: FlowHeaderIter
+        """
+        item = FlowHeader()
+        item.vlan
+        item.choice = "vlan"
+        self._add(item)
+        return self
+
+    def vxlan(self):
+        # type: () -> FlowHeaderIter
+        """Factory method that creates an instance of the FlowVxlan class
+
+        VXLAN packet header
+
+        Returns: FlowHeaderIter
+        """
+        item = FlowHeader()
+        item.vxlan
+        item.choice = "vxlan"
+        self._add(item)
+        return self
+
+    def ipv4(self):
+        # type: () -> FlowHeaderIter
+        """Factory method that creates an instance of the FlowIpv4 class
+
+        IPv4 packet header
+
+        Returns: FlowHeaderIter
+        """
+        item = FlowHeader()
+        item.ipv4
+        item.choice = "ipv4"
+        self._add(item)
+        return self
+
+    def ipv6(self):
+        # type: () -> FlowHeaderIter
+        """Factory method that creates an instance of the FlowIpv6 class
+
+        IPv6 packet header
+
+        Returns: FlowHeaderIter
+        """
+        item = FlowHeader()
+        item.ipv6
+        item.choice = "ipv6"
+        self._add(item)
+        return self
+
+    def pfcpause(self):
+        # type: () -> FlowHeaderIter
+        """Factory method that creates an instance of the FlowPfcPause class
+
+        IEEE 802.1Qbb PFC Pause packet header.
+
+        Returns: FlowHeaderIter
+        """
+        item = FlowHeader()
+        item.pfcpause
+        item.choice = "pfcpause"
+        self._add(item)
+        return self
+
+    def ethernetpause(self):
+        # type: () -> FlowHeaderIter
+        """Factory method that creates an instance of the FlowEthernetPause class
+
+        IEEE 802.3x global ethernet pause packet header
+
+        Returns: FlowHeaderIter
+        """
+        item = FlowHeader()
+        item.ethernetpause
+        item.choice = "ethernetpause"
+        self._add(item)
+        return self
+
+    def tcp(self):
+        # type: () -> FlowHeaderIter
+        """Factory method that creates an instance of the FlowTcp class
+
+        TCP packet header
+
+        Returns: FlowHeaderIter
+        """
+        item = FlowHeader()
+        item.tcp
+        item.choice = "tcp"
+        self._add(item)
+        return self
+
+    def udp(self):
+        # type: () -> FlowHeaderIter
+        """Factory method that creates an instance of the FlowUdp class
+
+        UDP packet header
+
+        Returns: FlowHeaderIter
+        """
+        item = FlowHeader()
+        item.udp
+        item.choice = "udp"
+        self._add(item)
+        return self
+
+    def gre(self):
+        # type: () -> FlowHeaderIter
+        """Factory method that creates an instance of the FlowGre class
+
+        Standard GRE packet header (RFC2784)
+
+        Returns: FlowHeaderIter
+        """
+        item = FlowHeader()
+        item.gre
+        item.choice = "gre"
+        self._add(item)
+        return self
+
+    def gtpv1(self):
+        # type: () -> FlowHeaderIter
+        """Factory method that creates an instance of the FlowGtpv1 class
+
+        GTPv1 packet header
+
+        Returns: FlowHeaderIter
+        """
+        item = FlowHeader()
+        item.gtpv1
+        item.choice = "gtpv1"
+        self._add(item)
+        return self
+
+    def gtpv2(self):
+        # type: () -> FlowHeaderIter
+        """Factory method that creates an instance of the FlowGtpv2 class
+
+        GTPv2 packet header
+
+        Returns: FlowHeaderIter
+        """
+        item = FlowHeader()
+        item.gtpv2
+        item.choice = "gtpv2"
+        self._add(item)
+        return self
+
+    def arp(self):
+        # type: () -> FlowHeaderIter
+        """Factory method that creates an instance of the FlowArp class
+
+        ARP packet header
+
+        Returns: FlowHeaderIter
+        """
+        item = FlowHeader()
+        item.arp
+        item.choice = "arp"
+        self._add(item)
+        return self
+
+    def icmp(self):
+        # type: () -> FlowHeaderIter
+        """Factory method that creates an instance of the FlowIcmp class
+
+        ICMP packet header
+
+        Returns: FlowHeaderIter
+        """
+        item = FlowHeader()
+        item.icmp
+        item.choice = "icmp"
+        self._add(item)
+        return self
+
+    def icmpv6(self):
+        # type: () -> FlowHeaderIter
+        """Factory method that creates an instance of the FlowIcmpv6 class
+
+        ICMPv6 packet header
+
+        Returns: FlowHeaderIter
+        """
+        item = FlowHeader()
+        item.icmpv6
+        item.choice = "icmpv6"
+        self._add(item)
+        return self
+
+    def ppp(self):
+        # type: () -> FlowHeaderIter
+        """Factory method that creates an instance of the FlowPpp class
+
+        PPP packet header
+
+        Returns: FlowHeaderIter
+        """
+        item = FlowHeader()
+        item.ppp
+        item.choice = "ppp"
+        self._add(item)
+        return self
+
+    def igmpv1(self):
+        # type: () -> FlowHeaderIter
+        """Factory method that creates an instance of the FlowIgmpv1 class
+
+        IGMPv1 packet header
+
+        Returns: FlowHeaderIter
+        """
+        item = FlowHeader()
+        item.igmpv1
+        item.choice = "igmpv1"
+        self._add(item)
+        return self
+
+    def mpls(self):
+        # type: () -> FlowHeaderIter
+        """Factory method that creates an instance of the FlowMpls class
+
+        MPLS packet header; When configuring multiple such headers, the count shall not exceed 20.
+
+        Returns: FlowHeaderIter
+        """
+        item = FlowHeader()
+        item.mpls
+        item.choice = "mpls"
+        self._add(item)
+        return self
+
+    def snmpv2(self):
+        # type: () -> FlowHeaderIter
+        """Factory method that creates an instance of the FlowSnmpv2 class
+
+        SNMPv2 packet header as defined in RFC3416.
+
+        Returns: FlowHeaderIter
+        """
+        item = FlowHeader()
+        item.snmpv2
+        item.choice = "snmpv2"
+        self._add(item)
+        return self
 
 
 class FlowSize(OpenApiObject):

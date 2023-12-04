@@ -7055,6 +7055,8 @@ components:
               x-field-uid: 18
             mpls:
               x-field-uid: 19
+            snmpv2:
+              x-field-uid: 20
           enum:
           - custom
           - ethernet
@@ -7075,6 +7077,7 @@ components:
           - ppp
           - igmpv1
           - mpls
+          - snmpv2
         custom:
           $ref: '#/components/schemas/Flow.Custom'
           x-field-uid: 2

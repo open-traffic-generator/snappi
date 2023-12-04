@@ -5152,6 +5152,7 @@ message FlowHeader {
       ppp = 17;
       igmpv1 = 18;
       mpls = 19;
+      snmpv2 = 20;
     }
   }
   // The available types of flow headers. If one is not provided the
