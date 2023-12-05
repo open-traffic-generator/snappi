@@ -5840,6 +5840,7 @@ message FlowSnmpv2 {
     }
   }
   // Description missing in models
+  // required = true
   optional Choice.Enum choice = 1;
 
   // Description missing in models
@@ -5899,6 +5900,7 @@ message FlowSnmpv2PDU {
   }
   // The SNMP agent places an error code in this field in the response message if an error
   // occurred processing the request.
+  // default = ErrorStatus.Enum.no_error
   optional ErrorStatus.Enum error_status = 2;
 
   // Description missing in models
@@ -5957,15 +5959,17 @@ message FlowSnmpv2VariableBindingValue {
   message Choice {
     enum Enum {
       unspecified = 0;
-      ip_address = 1;
-      counter = 2;
-      timeticks = 3;
-      arbitrary = 4;
-      big_counter = 5;
-      unsigned_integer = 6;
+      no_value = 1;
+      ip_address = 2;
+      counter = 3;
+      timeticks = 4;
+      arbitrary = 5;
+      big_counter = 6;
+      unsigned_integer = 7;
     }
   }
   // Description missing in models
+  // default = Choice.Enum.no_value
   optional Choice.Enum choice = 1;
 
   // Description missing in models
@@ -6000,6 +6004,7 @@ message FlowSnmpv2VariableBindingIPValue {
     }
   }
   // Description missing in models
+  // default = Choice.Enum.ipv4
   optional Choice.Enum choice = 1;
 
   // Description missing in models
@@ -19800,7 +19805,7 @@ message PatternFlowSnmpv2PDURequestIdCounter {
 
 // Identifies a particular SNMP request.  This index is echoed back in the response
 // from the SNMP agent,  allowing the SNMP manager to match an incoming response to
-// the appropriate request.  TBD: negative values should be allowed.
+// the appropriate request.
 message PatternFlowSnmpv2PDURequestId {
 
   message Choice {
@@ -19928,8 +19933,8 @@ message PatternFlowSnmpv2BulkPDURequestId {
   PatternFlowSnmpv2BulkPDURequestIdCounter decrement = 6;
 }
 
-// Determines the number of variables in the variable list for which a simple get_next_request
-// operation has to be done.
+// One variable binding in the Response-PDU is requested for the first non_repeaters
+// variable bindings in the GetBulkRequest.
 message PatternFlowSnmpv2BulkPDUNonRepeaters {
 
   message Choice {
@@ -19968,7 +19973,9 @@ message PatternFlowSnmpv2BulkPDUMaxRepetitionsCounter {
   optional uint32 count = 3;
 }
 
-// Indicates how many rows of the table are to be retrieved in a single GetBulk operation.
+// A maximum of max_repetitions variable bindings are requested in the Response-PDU
+// for each of the remaining variable bindings in the GetBulkRequest after the non_repeaters
+// variable bindings.
 message PatternFlowSnmpv2BulkPDUMaxRepetitions {
 
   message Choice {
@@ -20015,7 +20022,7 @@ message PatternFlowSnmpv2VariableBindingValueCounterCounter {
   optional uint32 count = 3;
 }
 
-// TBD
+// Counter returned for the requested OID.
 message PatternFlowSnmpv2VariableBindingValueCounter {
 
   message Choice {
@@ -20062,7 +20069,7 @@ message PatternFlowSnmpv2VariableBindingValueTimeticksCounter {
   optional uint32 count = 3;
 }
 
-// TBD
+// Timeticks returned for the requested OID.
 message PatternFlowSnmpv2VariableBindingValueTimeticks {
 
   message Choice {
@@ -20109,7 +20116,7 @@ message PatternFlowSnmpv2VariableBindingValueBigCounterCounter {
   optional uint64 count = 3;
 }
 
-// TBD
+// Big counter returned for the requested OID.
 message PatternFlowSnmpv2VariableBindingValueBigCounter {
 
   message Choice {
@@ -20156,7 +20163,7 @@ message PatternFlowSnmpv2VariableBindingValueUnsignedIntegerCounter {
   optional uint32 count = 3;
 }
 
-// TBD
+// Unsigned integer value returned for the requested OID.
 message PatternFlowSnmpv2VariableBindingValueUnsignedInteger {
 
   message Choice {
@@ -20203,7 +20210,7 @@ message PatternFlowSnmpv2VariableBindingIPValueIpv4Counter {
   optional uint32 count = 3;
 }
 
-// TBD
+// IPv4 address returned for the requested OID.
 message PatternFlowSnmpv2VariableBindingIPValueIpv4 {
 
   message Choice {
@@ -20250,7 +20257,7 @@ message PatternFlowSnmpv2VariableBindingIPValueIpv6Counter {
   optional uint32 count = 3;
 }
 
-// TBD
+// IPv6 address returned for the requested OID.
 message PatternFlowSnmpv2VariableBindingIPValueIpv6 {
 
   message Choice {

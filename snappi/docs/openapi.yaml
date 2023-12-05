@@ -7789,6 +7789,8 @@ components:
       description: |-
         SNMPv2 packet header as defined in RFC3416.
       type: object
+      required:
+      - choice
       properties:
         choice:
           type: string
@@ -7855,6 +7857,7 @@ components:
           description: |-
             The SNMP agent places an error code in this field in the response message if an error occurred processing the request.
           type: string
+          default: no_error
           x-enum:
             no_error:
               x-field-uid: 1
@@ -7958,6 +7961,8 @@ components:
           items:
             type: integer
             format: uint64
+          minItems: 1
+          maxItems: 1000
           x-field-uid: 1
         value:
           $ref: '#/components/schemas/Flow.Snmpv2.VariableBindingValue'
@@ -7969,21 +7974,25 @@ components:
       properties:
         choice:
           type: string
+          default: no_value
           x-field-uid: 1
           x-enum:
-            ip_address:
+            no_value:
               x-field-uid: 1
-            counter:
+            ip_address:
               x-field-uid: 2
-            timeticks:
+            counter:
               x-field-uid: 3
-            arbitrary:
+            timeticks:
               x-field-uid: 4
-            big_counter:
+            arbitrary:
               x-field-uid: 5
-            unsigned_integer:
+            big_counter:
               x-field-uid: 6
+            unsigned_integer:
+              x-field-uid: 7
           enum:
+          - no_value
           - ip_address
           - counter
           - timeticks
@@ -8018,6 +8027,7 @@ components:
       properties:
         choice:
           type: string
+          default: ipv4
           x-field-uid: 1
           x-enum:
             ipv4:
@@ -28147,8 +28157,9 @@ components:
           default: 1
           format: int32
     Pattern.Flow.Snmpv2.PDU.RequestId:
-      description: |-
-        Identifies a particular SNMP request.  This index is echoed back in the response from the SNMP agent,  allowing the SNMP manager to match an incoming response to the appropriate request.  TBD: negative values should be allowed.
+      description: "Identifies a particular SNMP request.  This index is echoed back\
+        \ in the response from the SNMP agent,  allowing the SNMP manager to match\
+        \ an incoming response to the appropriate request. "
       type: object
       properties:
         choice:
@@ -28314,7 +28325,7 @@ components:
           x-field-uid: 6
     Pattern.Flow.Snmpv2.BulkPDU.NonRepeaters:
       description: |-
-        Determines the number of variables in the variable list for which a simple get_next_request operation has to be done.
+        One variable binding in the Response-PDU is requested for the first non_repeaters variable bindings in the GetBulkRequest.
       type: object
       properties:
         choice:
@@ -28364,7 +28375,7 @@ components:
           format: uint32
     Pattern.Flow.Snmpv2.BulkPDU.MaxRepetitions:
       description: |-
-        Indicates how many rows of the table are to be retrieved in a single GetBulk operation.
+        A maximum of max_repetitions variable bindings are requested in the Response-PDU for each of the remaining variable bindings in the GetBulkRequest after the non_repeaters variable bindings.
       type: object
       properties:
         choice:
@@ -28426,7 +28437,7 @@ components:
           format: uint32
     Pattern.Flow.Snmpv2.VariableBindingValue.Counter:
       description: |-
-        TBD
+        Counter returned for the requested OID.
       type: object
       properties:
         choice:
@@ -28488,7 +28499,7 @@ components:
           format: uint32
     Pattern.Flow.Snmpv2.VariableBindingValue.Timeticks:
       description: |-
-        TBD
+        Timeticks returned for the requested OID.
       type: object
       properties:
         choice:
@@ -28550,7 +28561,7 @@ components:
           format: uint64
     Pattern.Flow.Snmpv2.VariableBindingValue.BigCounter:
       description: |-
-        TBD
+        Big counter returned for the requested OID.
       type: object
       properties:
         choice:
@@ -28612,7 +28623,7 @@ components:
           format: uint32
     Pattern.Flow.Snmpv2.VariableBindingValue.UnsignedInteger:
       description: |-
-        TBD
+        Unsigned integer value returned for the requested OID.
       type: object
       properties:
         choice:
@@ -28674,7 +28685,7 @@ components:
           format: uint32
     Pattern.Flow.Snmpv2.VariableBindingIPValue.Ipv4:
       description: |-
-        TBD
+        IPv4 address returned for the requested OID.
       type: object
       properties:
         choice:
@@ -28736,7 +28747,7 @@ components:
           format: uint32
     Pattern.Flow.Snmpv2.VariableBindingIPValue.Ipv6:
       description: |-
-        TBD
+        IPv6 address returned for the requested OID.
       type: object
       properties:
         choice:

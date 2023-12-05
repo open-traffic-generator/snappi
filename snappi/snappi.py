@@ -89398,7 +89398,7 @@ class FlowSnmpv2(OpenApiObject):
         "report": {"type": "FlowSnmpv2PDU"},
     }  # type: Dict[str, str]
 
-    _REQUIRED = ()  # type: tuple(str)
+    _REQUIRED = ("choice",)  # type: tuple(str)
 
     _DEFAULTS = {}  # type: Dict[str, Union(type)]
 
@@ -89538,6 +89538,8 @@ class FlowSnmpv2(OpenApiObject):
 
         value: Union[Literal["get_bulk_request"], Literal["get_next_request"], Literal["get_request"], Literal["inform_request"], Literal["report"], Literal["response"], Literal["set_request"], Literal["snmpv2_trap"]]
         """
+        if value is None:
+            raise TypeError("Cannot set required property choice as None")
         self._set_property("choice", value)
 
 
@@ -89576,7 +89578,9 @@ class FlowSnmpv2PDU(OpenApiObject):
 
     _REQUIRED = ()  # type: tuple(str)
 
-    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+    _DEFAULTS = {
+        "error_status": "no_error",
+    }  # type: Dict[str, Union(type)]
 
     AUTHORIZATION_ERROR = "authorization_error"  # type: str
     BAD_VALUE = "bad_value"  # type: str
@@ -89600,7 +89604,7 @@ class FlowSnmpv2PDU(OpenApiObject):
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
-    def __init__(self, parent=None, error_status=None):
+    def __init__(self, parent=None, error_status="no_error"):
         super(FlowSnmpv2PDU, self).__init__()
         self._parent = parent
         self._set_property("error_status", error_status)
@@ -89615,7 +89619,7 @@ class FlowSnmpv2PDU(OpenApiObject):
         # type: () -> PatternFlowSnmpv2PDURequestId
         """request_id getter
 
-        Identifies particular SNMP request. This index is echoed back in the response from the SNMP agent, allowing the SNMP manager to match an incoming response to the appropriate request. TBD: negative values should be allowed.Identifies particular SNMP request. This index is echoed back in the response from the SNMP agent, allowing the SNMP manager to match an incoming response to the appropriate request. TBD: negative values should be allowed.Identifies particular SNMP request. This index is echoed back in the response from the SNMP agent, allowing the SNMP manager to match an incoming response to the appropriate request. TBD: negative values should be allowed.Identifies particular SNMP request. This index is echoed back in the response from the SNMP agent, allowing the SNMP manager to match an incoming response to the appropriate request. TBD: negative values should be allowed.Identifies particular SNMP request. This index is echoed back in the response from the SNMP agent, allowing the SNMP manager to match an incoming response to the appropriate request. TBD: negative values should be allowed.Identifies particular SNMP request. This index is echoed back in the response from the SNMP agent, allowing the SNMP manager to match an incoming response to the appropriate request. TBD: negative values should be allowed.Identifies particular SNMP request. This index is echoed back in the response from the SNMP agent, allowing the SNMP manager to match an incoming response to the appropriate request. TBD: negative values should be allowed.Identifies particular SNMP request. This index is echoed back in the response from the SNMP agent, allowing the SNMP manager to match an incoming response to the appropriate request. TBD: negative values should be allowed.Identifies particular SNMP request. This index is echoed back in the response from the SNMP agent, allowing the SNMP manager to match an incoming response to the appropriate request. TBD: negative values should be allowed.Identifies particular SNMP request. This index is echoed back in the response from the SNMP agent, allowing the SNMP manager to match an incoming response to the appropriate request. TBD: negative values should be allowed.
+        Identifies particular SNMP request. This index is echoed back in the response from the SNMP agent, allowing the SNMP manager to match an incoming response to the appropriate request. Identifies particular SNMP request. This index is echoed back in the response from the SNMP agent, allowing the SNMP manager to match an incoming response to the appropriate request. Identifies particular SNMP request. This index is echoed back in the response from the SNMP agent, allowing the SNMP manager to match an incoming response to the appropriate request. Identifies particular SNMP request. This index is echoed back in the response from the SNMP agent, allowing the SNMP manager to match an incoming response to the appropriate request. Identifies particular SNMP request. This index is echoed back in the response from the SNMP agent, allowing the SNMP manager to match an incoming response to the appropriate request. Identifies particular SNMP request. This index is echoed back in the response from the SNMP agent, allowing the SNMP manager to match an incoming response to the appropriate request. Identifies particular SNMP request. This index is echoed back in the response from the SNMP agent, allowing the SNMP manager to match an incoming response to the appropriate request. Identifies particular SNMP request. This index is echoed back in the response from the SNMP agent, allowing the SNMP manager to match an incoming response to the appropriate request. Identifies particular SNMP request. This index is echoed back in the response from the SNMP agent, allowing the SNMP manager to match an incoming response to the appropriate request. Identifies particular SNMP request. This index is echoed back in the response from the SNMP agent, allowing the SNMP manager to match an incoming response to the appropriate request.
 
         Returns: PatternFlowSnmpv2PDURequestId
         """
@@ -90246,6 +90250,7 @@ class FlowSnmpv2VariableBindingValue(OpenApiObject):
         "choice": {
             "type": str,
             "enum": [
+                "no_value",
                 "ip_address",
                 "counter",
                 "timeticks",
@@ -90271,9 +90276,11 @@ class FlowSnmpv2VariableBindingValue(OpenApiObject):
     _REQUIRED = ()  # type: tuple(str)
 
     _DEFAULTS = {
+        "choice": "no_value",
         "arbitrary": "00",
     }  # type: Dict[str, Union(type)]
 
+    NO_VALUE = "no_value"  # type: str
     IP_ADDRESS = "ip_address"  # type: str
     COUNTER = "counter"  # type: str
     TIMETICKS = "timeticks"  # type: str
@@ -90319,7 +90326,7 @@ class FlowSnmpv2VariableBindingValue(OpenApiObject):
         # type: () -> PatternFlowSnmpv2VariableBindingValueCounter
         """Factory property that returns an instance of the PatternFlowSnmpv2VariableBindingValueCounter class
 
-        TBD
+        Counter returned for the requested OID.
 
         Returns: PatternFlowSnmpv2VariableBindingValueCounter
         """
@@ -90332,7 +90339,7 @@ class FlowSnmpv2VariableBindingValue(OpenApiObject):
         # type: () -> PatternFlowSnmpv2VariableBindingValueTimeticks
         """Factory property that returns an instance of the PatternFlowSnmpv2VariableBindingValueTimeticks class
 
-        TBD
+        Timeticks returned for the requested OID.
 
         Returns: PatternFlowSnmpv2VariableBindingValueTimeticks
         """
@@ -90348,7 +90355,7 @@ class FlowSnmpv2VariableBindingValue(OpenApiObject):
         # type: () -> PatternFlowSnmpv2VariableBindingValueBigCounter
         """Factory property that returns an instance of the PatternFlowSnmpv2VariableBindingValueBigCounter class
 
-        TBD
+        Big counter returned for the requested OID.
 
         Returns: PatternFlowSnmpv2VariableBindingValueBigCounter
         """
@@ -90364,7 +90371,7 @@ class FlowSnmpv2VariableBindingValue(OpenApiObject):
         # type: () -> PatternFlowSnmpv2VariableBindingValueUnsignedInteger
         """Factory property that returns an instance of the PatternFlowSnmpv2VariableBindingValueUnsignedInteger class
 
-        TBD
+        Unsigned integer value returned for the requested OID.
 
         Returns: PatternFlowSnmpv2VariableBindingValueUnsignedInteger
         """
@@ -90377,12 +90384,12 @@ class FlowSnmpv2VariableBindingValue(OpenApiObject):
 
     @property
     def choice(self):
-        # type: () -> Union[Literal["arbitrary"], Literal["big_counter"], Literal["counter"], Literal["ip_address"], Literal["timeticks"], Literal["unsigned_integer"]]
+        # type: () -> Union[Literal["arbitrary"], Literal["big_counter"], Literal["counter"], Literal["ip_address"], Literal["no_value"], Literal["timeticks"], Literal["unsigned_integer"]]
         """choice getter
 
         TBD
 
-        Returns: Union[Literal["arbitrary"], Literal["big_counter"], Literal["counter"], Literal["ip_address"], Literal["timeticks"], Literal["unsigned_integer"]]
+        Returns: Union[Literal["arbitrary"], Literal["big_counter"], Literal["counter"], Literal["ip_address"], Literal["no_value"], Literal["timeticks"], Literal["unsigned_integer"]]
         """
         return self._get_property("choice")
 
@@ -90392,7 +90399,7 @@ class FlowSnmpv2VariableBindingValue(OpenApiObject):
 
         TBD
 
-        value: Union[Literal["arbitrary"], Literal["big_counter"], Literal["counter"], Literal["ip_address"], Literal["timeticks"], Literal["unsigned_integer"]]
+        value: Union[Literal["arbitrary"], Literal["big_counter"], Literal["counter"], Literal["ip_address"], Literal["no_value"], Literal["timeticks"], Literal["unsigned_integer"]]
         """
         self._set_property("choice", value)
 
@@ -90435,7 +90442,9 @@ class FlowSnmpv2VariableBindingIPValue(OpenApiObject):
 
     _REQUIRED = ()  # type: tuple(str)
 
-    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+    _DEFAULTS = {
+        "choice": "ipv4",
+    }  # type: Dict[str, Union(type)]
 
     IPV4 = "ipv4"  # type: str
     IPV6 = "ipv6"  # type: str
@@ -90459,7 +90468,7 @@ class FlowSnmpv2VariableBindingIPValue(OpenApiObject):
         # type: () -> PatternFlowSnmpv2VariableBindingIPValueIpv4
         """Factory property that returns an instance of the PatternFlowSnmpv2VariableBindingIPValueIpv4 class
 
-        TBD
+        IPv4 address returned for the requested OID.
 
         Returns: PatternFlowSnmpv2VariableBindingIPValueIpv4
         """
@@ -90472,7 +90481,7 @@ class FlowSnmpv2VariableBindingIPValue(OpenApiObject):
         # type: () -> PatternFlowSnmpv2VariableBindingIPValueIpv6
         """Factory property that returns an instance of the PatternFlowSnmpv2VariableBindingIPValueIpv6 class
 
-        TBD
+        IPv6 address returned for the requested OID.
 
         Returns: PatternFlowSnmpv2VariableBindingIPValueIpv6
         """
@@ -92163,7 +92172,7 @@ class FlowSnmpv2BulkPDU(OpenApiObject):
         # type: () -> PatternFlowSnmpv2BulkPDUNonRepeaters
         """non_repeaters getter
 
-        Determines the number of variables in the variable list for which simple get_next_request operation has to be done.Determines the number of variables in the variable list for which simple get_next_request operation has to be done.Determines the number of variables in the variable list for which simple get_next_request operation has to be done.Determines the number of variables in the variable list for which simple get_next_request operation has to be done.
+        One variable binding in the Response-PDU is requested for the first non_repeaters variable bindings in the GetBulkRequest.One variable binding in the Response-PDU is requested for the first non_repeaters variable bindings in the GetBulkRequest.One variable binding in the Response-PDU is requested for the first non_repeaters variable bindings in the GetBulkRequest.One variable binding in the Response-PDU is requested for the first non_repeaters variable bindings in the GetBulkRequest.
 
         Returns: PatternFlowSnmpv2BulkPDUNonRepeaters
         """
@@ -92174,7 +92183,7 @@ class FlowSnmpv2BulkPDU(OpenApiObject):
         # type: () -> PatternFlowSnmpv2BulkPDUMaxRepetitions
         """max_repetitions getter
 
-        Indicates how many rows of the table are to be retrieved in single GetBulk operation.Indicates how many rows of the table are to be retrieved in single GetBulk operation.Indicates how many rows of the table are to be retrieved in single GetBulk operation.Indicates how many rows of the table are to be retrieved in single GetBulk operation.
+        A maximum of max_repetitions variable bindings are requested in the Response-PDU for each of the remaining variable bindings in the GetBulkRequest after the non_repeaters variable bindings.A maximum of max_repetitions variable bindings are requested in the Response-PDU for each of the remaining variable bindings in the GetBulkRequest after the non_repeaters variable bindings.A maximum of max_repetitions variable bindings are requested in the Response-PDU for each of the remaining variable bindings in the GetBulkRequest after the non_repeaters variable bindings.A maximum of max_repetitions variable bindings are requested in the Response-PDU for each of the remaining variable bindings in the GetBulkRequest after the non_repeaters variable bindings.
 
         Returns: PatternFlowSnmpv2BulkPDUMaxRepetitions
         """
