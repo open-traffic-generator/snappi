@@ -26300,7 +26300,7 @@ class FlowHeader(OpenApiObject):
                 "ppp",
                 "igmpv1",
                 "mpls",
-                "snmpv2",
+                "snmpv2c",
             ],
         },
         "custom": {"type": "FlowCustom"},
@@ -26322,7 +26322,7 @@ class FlowHeader(OpenApiObject):
         "ppp": {"type": "FlowPpp"},
         "igmpv1": {"type": "FlowIgmpv1"},
         "mpls": {"type": "FlowMpls"},
-        "snmpv2": {"type": "FlowSnmpv2"},
+        "snmpv2c": {"type": "FlowSnmpv2c"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -26350,7 +26350,7 @@ class FlowHeader(OpenApiObject):
     PPP = "ppp"  # type: str
     IGMPV1 = "igmpv1"  # type: str
     MPLS = "mpls"  # type: str
-    SNMPV2 = "snmpv2"  # type: str
+    SNMPV2C = "snmpv2c"  # type: str
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
@@ -26578,24 +26578,24 @@ class FlowHeader(OpenApiObject):
         return self._get_property("mpls", FlowMpls, self, "mpls")
 
     @property
-    def snmpv2(self):
-        # type: () -> FlowSnmpv2
-        """Factory property that returns an instance of the FlowSnmpv2 class
+    def snmpv2c(self):
+        # type: () -> FlowSnmpv2c
+        """Factory property that returns an instance of the FlowSnmpv2c class
 
-        SNMPv2 packet header as defined in RFC3416.
+        SNMPv2C packet header as defined in RFC1901 and RFC3416.
 
-        Returns: FlowSnmpv2
+        Returns: FlowSnmpv2c
         """
-        return self._get_property("snmpv2", FlowSnmpv2, self, "snmpv2")
+        return self._get_property("snmpv2c", FlowSnmpv2c, self, "snmpv2c")
 
     @property
     def choice(self):
-        # type: () -> Union[Literal["arp"], Literal["custom"], Literal["ethernet"], Literal["ethernetpause"], Literal["gre"], Literal["gtpv1"], Literal["gtpv2"], Literal["icmp"], Literal["icmpv6"], Literal["igmpv1"], Literal["ipv4"], Literal["ipv6"], Literal["mpls"], Literal["pfcpause"], Literal["ppp"], Literal["snmpv2"], Literal["tcp"], Literal["udp"], Literal["vlan"], Literal["vxlan"]]
+        # type: () -> Union[Literal["arp"], Literal["custom"], Literal["ethernet"], Literal["ethernetpause"], Literal["gre"], Literal["gtpv1"], Literal["gtpv2"], Literal["icmp"], Literal["icmpv6"], Literal["igmpv1"], Literal["ipv4"], Literal["ipv6"], Literal["mpls"], Literal["pfcpause"], Literal["ppp"], Literal["snmpv2c"], Literal["tcp"], Literal["udp"], Literal["vlan"], Literal["vxlan"]]
         """choice getter
 
         The available types of flow headers. If one is not provided the default ethernet packet header MUST be provided.
 
-        Returns: Union[Literal["arp"], Literal["custom"], Literal["ethernet"], Literal["ethernetpause"], Literal["gre"], Literal["gtpv1"], Literal["gtpv2"], Literal["icmp"], Literal["icmpv6"], Literal["igmpv1"], Literal["ipv4"], Literal["ipv6"], Literal["mpls"], Literal["pfcpause"], Literal["ppp"], Literal["snmpv2"], Literal["tcp"], Literal["udp"], Literal["vlan"], Literal["vxlan"]]
+        Returns: Union[Literal["arp"], Literal["custom"], Literal["ethernet"], Literal["ethernetpause"], Literal["gre"], Literal["gtpv1"], Literal["gtpv2"], Literal["icmp"], Literal["icmpv6"], Literal["igmpv1"], Literal["ipv4"], Literal["ipv6"], Literal["mpls"], Literal["pfcpause"], Literal["ppp"], Literal["snmpv2c"], Literal["tcp"], Literal["udp"], Literal["vlan"], Literal["vxlan"]]
         """
         return self._get_property("choice")
 
@@ -26605,7 +26605,7 @@ class FlowHeader(OpenApiObject):
 
         The available types of flow headers. If one is not provided the default ethernet packet header MUST be provided.
 
-        value: Union[Literal["arp"], Literal["custom"], Literal["ethernet"], Literal["ethernetpause"], Literal["gre"], Literal["gtpv1"], Literal["gtpv2"], Literal["icmp"], Literal["icmpv6"], Literal["igmpv1"], Literal["ipv4"], Literal["ipv6"], Literal["mpls"], Literal["pfcpause"], Literal["ppp"], Literal["snmpv2"], Literal["tcp"], Literal["udp"], Literal["vlan"], Literal["vxlan"]]
+        value: Union[Literal["arp"], Literal["custom"], Literal["ethernet"], Literal["ethernetpause"], Literal["gre"], Literal["gtpv1"], Literal["gtpv2"], Literal["icmp"], Literal["icmpv6"], Literal["igmpv1"], Literal["ipv4"], Literal["ipv6"], Literal["mpls"], Literal["pfcpause"], Literal["ppp"], Literal["snmpv2c"], Literal["tcp"], Literal["udp"], Literal["vlan"], Literal["vxlan"]]
         """
         self._set_property("choice", value)
 
@@ -89431,7 +89431,340 @@ class PatternFlowMplsTimeToLiveMetricTagIter(OpenApiIter):
         return item
 
 
-class FlowSnmpv2(OpenApiObject):
+class FlowSnmpv2c(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "version": {"type": "PatternFlowSnmpv2cVersion"},
+        "community": {
+            "type": str,
+            "maxLength": 10000,
+        },
+        "data": {"type": "FlowSnmpv2cData"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ("data",)  # type: tuple(str)
+
+    _DEFAULTS = {
+        "community": "community",
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, community="community"):
+        super(FlowSnmpv2c, self).__init__()
+        self._parent = parent
+        self._set_property("community", community)
+
+    def set(self, community=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def version(self):
+        # type: () -> PatternFlowSnmpv2cVersion
+        """version getter
+
+        VersionVersionVersionVersion
+
+        Returns: PatternFlowSnmpv2cVersion
+        """
+        return self._get_property("version", PatternFlowSnmpv2cVersion)
+
+    @property
+    def community(self):
+        # type: () -> str
+        """community getter
+
+        It is an ASCII based octet string which identifies the SNMP community in which the sender and recipient of this message are located. It should match the read-only or read-write community string configured on the recipient for the PDU to be accepted.
+
+        Returns: str
+        """
+        return self._get_property("community")
+
+    @community.setter
+    def community(self, value):
+        """community setter
+
+        It is an ASCII based octet string which identifies the SNMP community in which the sender and recipient of this message are located. It should match the read-only or read-write community string configured on the recipient for the PDU to be accepted.
+
+        value: str
+        """
+        self._set_property("community", value)
+
+    @property
+    def data(self):
+        # type: () -> FlowSnmpv2cData
+        """data getter
+
+        This contains the body of the SNMPv2C message.This contains the body of the SNMPv2C message.This contains the body of the SNMPv2C message.This contains the body of the SNMPv2C message.
+
+        Returns: FlowSnmpv2cData
+        """
+        return self._get_property("data", FlowSnmpv2cData)
+
+
+class PatternFlowSnmpv2cVersion(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+            "maximum": 255,
+        },
+        "increment": {"type": "PatternFlowSnmpv2cVersionCounter"},
+        "decrement": {"type": "PatternFlowSnmpv2cVersionCounter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": 1,
+        "values": [1],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=1, values=[1]):
+        super(PatternFlowSnmpv2cVersion, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowSnmpv2cVersionCounter
+        """Factory property that returns an instance of the PatternFlowSnmpv2cVersionCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowSnmpv2cVersionCounter
+        """
+        return self._get_property(
+            "increment", PatternFlowSnmpv2cVersionCounter, self, "increment"
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowSnmpv2cVersionCounter
+        """Factory property that returns an instance of the PatternFlowSnmpv2cVersionCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowSnmpv2cVersionCounter
+        """
+        return self._get_property(
+            "decrement", PatternFlowSnmpv2cVersionCounter, self, "decrement"
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowSnmpv2cVersionCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "step": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 1,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=1, step=1, count=1):
+        super(PatternFlowSnmpv2cVersionCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class FlowSnmpv2cData(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
     _TYPES = {
@@ -89448,14 +89781,14 @@ class FlowSnmpv2(OpenApiObject):
                 "report",
             ],
         },
-        "get_request": {"type": "FlowSnmpv2PDU"},
-        "get_next_request": {"type": "FlowSnmpv2PDU"},
-        "response": {"type": "FlowSnmpv2PDU"},
-        "set_request": {"type": "FlowSnmpv2PDU"},
-        "get_bulk_request": {"type": "FlowSnmpv2BulkPDU"},
-        "inform_request": {"type": "FlowSnmpv2PDU"},
-        "snmpv2_trap": {"type": "FlowSnmpv2PDU"},
-        "report": {"type": "FlowSnmpv2PDU"},
+        "get_request": {"type": "FlowSnmpv2cPDU"},
+        "get_next_request": {"type": "FlowSnmpv2cPDU"},
+        "response": {"type": "FlowSnmpv2cPDU"},
+        "set_request": {"type": "FlowSnmpv2cPDU"},
+        "get_bulk_request": {"type": "FlowSnmpv2cBulkPDU"},
+        "inform_request": {"type": "FlowSnmpv2cPDU"},
+        "snmpv2_trap": {"type": "FlowSnmpv2cPDU"},
+        "report": {"type": "FlowSnmpv2cPDU"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ("choice",)  # type: tuple(str)
@@ -89474,7 +89807,7 @@ class FlowSnmpv2(OpenApiObject):
     _STATUS = {}  # type: Dict[str, Union(type)]
 
     def __init__(self, parent=None, choice=None):
-        super(FlowSnmpv2, self).__init__()
+        super(FlowSnmpv2cData, self).__init__()
         self._parent = parent
         if (
             "choice" in self._DEFAULTS
@@ -89487,97 +89820,97 @@ class FlowSnmpv2(OpenApiObject):
 
     @property
     def get_request(self):
-        # type: () -> FlowSnmpv2PDU
-        """Factory property that returns an instance of the FlowSnmpv2PDU class
+        # type: () -> FlowSnmpv2cPDU
+        """Factory property that returns an instance of the FlowSnmpv2cPDU class
 
-        This contains the body of the SNMPv2 message.
+        This contains the body of the SNMPv2C PDU.
 
-        Returns: FlowSnmpv2PDU
+        Returns: FlowSnmpv2cPDU
         """
-        return self._get_property("get_request", FlowSnmpv2PDU, self, "get_request")
+        return self._get_property("get_request", FlowSnmpv2cPDU, self, "get_request")
 
     @property
     def get_next_request(self):
-        # type: () -> FlowSnmpv2PDU
-        """Factory property that returns an instance of the FlowSnmpv2PDU class
+        # type: () -> FlowSnmpv2cPDU
+        """Factory property that returns an instance of the FlowSnmpv2cPDU class
 
-        This contains the body of the SNMPv2 message.
+        This contains the body of the SNMPv2C PDU.
 
-        Returns: FlowSnmpv2PDU
+        Returns: FlowSnmpv2cPDU
         """
         return self._get_property(
-            "get_next_request", FlowSnmpv2PDU, self, "get_next_request"
+            "get_next_request", FlowSnmpv2cPDU, self, "get_next_request"
         )
 
     @property
     def response(self):
-        # type: () -> FlowSnmpv2PDU
-        """Factory property that returns an instance of the FlowSnmpv2PDU class
+        # type: () -> FlowSnmpv2cPDU
+        """Factory property that returns an instance of the FlowSnmpv2cPDU class
 
-        This contains the body of the SNMPv2 message.
+        This contains the body of the SNMPv2C PDU.
 
-        Returns: FlowSnmpv2PDU
+        Returns: FlowSnmpv2cPDU
         """
-        return self._get_property("response", FlowSnmpv2PDU, self, "response")
+        return self._get_property("response", FlowSnmpv2cPDU, self, "response")
 
     @property
     def set_request(self):
-        # type: () -> FlowSnmpv2PDU
-        """Factory property that returns an instance of the FlowSnmpv2PDU class
+        # type: () -> FlowSnmpv2cPDU
+        """Factory property that returns an instance of the FlowSnmpv2cPDU class
 
-        This contains the body of the SNMPv2 message.
+        This contains the body of the SNMPv2C PDU.
 
-        Returns: FlowSnmpv2PDU
+        Returns: FlowSnmpv2cPDU
         """
-        return self._get_property("set_request", FlowSnmpv2PDU, self, "set_request")
+        return self._get_property("set_request", FlowSnmpv2cPDU, self, "set_request")
 
     @property
     def get_bulk_request(self):
-        # type: () -> FlowSnmpv2BulkPDU
-        """Factory property that returns an instance of the FlowSnmpv2BulkPDU class
+        # type: () -> FlowSnmpv2cBulkPDU
+        """Factory property that returns an instance of the FlowSnmpv2cBulkPDU class
 
         The purpose of the GetBulkRequest-PDU is to request the transfer of potentially large amount of data, including, but not limited to, the efficient and rapid retrieval of large tables.
 
-        Returns: FlowSnmpv2BulkPDU
+        Returns: FlowSnmpv2cBulkPDU
         """
         return self._get_property(
-            "get_bulk_request", FlowSnmpv2BulkPDU, self, "get_bulk_request"
+            "get_bulk_request", FlowSnmpv2cBulkPDU, self, "get_bulk_request"
         )
 
     @property
     def inform_request(self):
-        # type: () -> FlowSnmpv2PDU
-        """Factory property that returns an instance of the FlowSnmpv2PDU class
+        # type: () -> FlowSnmpv2cPDU
+        """Factory property that returns an instance of the FlowSnmpv2cPDU class
 
-        This contains the body of the SNMPv2 message.
+        This contains the body of the SNMPv2C PDU.
 
-        Returns: FlowSnmpv2PDU
+        Returns: FlowSnmpv2cPDU
         """
         return self._get_property(
-            "inform_request", FlowSnmpv2PDU, self, "inform_request"
+            "inform_request", FlowSnmpv2cPDU, self, "inform_request"
         )
 
     @property
     def snmpv2_trap(self):
-        # type: () -> FlowSnmpv2PDU
-        """Factory property that returns an instance of the FlowSnmpv2PDU class
+        # type: () -> FlowSnmpv2cPDU
+        """Factory property that returns an instance of the FlowSnmpv2cPDU class
 
-        This contains the body of the SNMPv2 message.
+        This contains the body of the SNMPv2C PDU.
 
-        Returns: FlowSnmpv2PDU
+        Returns: FlowSnmpv2cPDU
         """
-        return self._get_property("snmpv2_trap", FlowSnmpv2PDU, self, "snmpv2_trap")
+        return self._get_property("snmpv2_trap", FlowSnmpv2cPDU, self, "snmpv2_trap")
 
     @property
     def report(self):
-        # type: () -> FlowSnmpv2PDU
-        """Factory property that returns an instance of the FlowSnmpv2PDU class
+        # type: () -> FlowSnmpv2cPDU
+        """Factory property that returns an instance of the FlowSnmpv2cPDU class
 
-        This contains the body of the SNMPv2 message.
+        This contains the body of the SNMPv2C PDU.
 
-        Returns: FlowSnmpv2PDU
+        Returns: FlowSnmpv2cPDU
         """
-        return self._get_property("report", FlowSnmpv2PDU, self, "report")
+        return self._get_property("report", FlowSnmpv2cPDU, self, "report")
 
     @property
     def choice(self):
@@ -89603,11 +89936,11 @@ class FlowSnmpv2(OpenApiObject):
         self._set_property("choice", value)
 
 
-class FlowSnmpv2PDU(OpenApiObject):
+class FlowSnmpv2cPDU(OpenApiObject):
     __slots__ = "_parent"
 
     _TYPES = {
-        "request_id": {"type": "PatternFlowSnmpv2PDURequestId"},
+        "request_id": {"type": "PatternFlowSnmpv2cPDURequestId"},
         "error_status": {
             "type": str,
             "enum": [
@@ -89632,8 +89965,8 @@ class FlowSnmpv2PDU(OpenApiObject):
                 "wrong_value",
             ],
         },
-        "error_index": {"type": "PatternFlowSnmpv2PDUErrorIndex"},
-        "variable_bindings": {"type": "FlowSnmpv2VariableBindingIter"},
+        "error_index": {"type": "PatternFlowSnmpv2cPDUErrorIndex"},
+        "variable_bindings": {"type": "FlowSnmpv2cVariableBindingIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -89665,7 +89998,7 @@ class FlowSnmpv2PDU(OpenApiObject):
     _STATUS = {}  # type: Dict[str, Union(type)]
 
     def __init__(self, parent=None, error_status="no_error"):
-        super(FlowSnmpv2PDU, self).__init__()
+        super(FlowSnmpv2cPDU, self).__init__()
         self._parent = parent
         self._set_property("error_status", error_status)
 
@@ -89676,14 +90009,14 @@ class FlowSnmpv2PDU(OpenApiObject):
 
     @property
     def request_id(self):
-        # type: () -> PatternFlowSnmpv2PDURequestId
+        # type: () -> PatternFlowSnmpv2cPDURequestId
         """request_id getter
 
         Identifies particular SNMP request. This index is echoed back in the response from the SNMP agent, allowing the SNMP manager to match an incoming response to the appropriate request. Identifies particular SNMP request. This index is echoed back in the response from the SNMP agent, allowing the SNMP manager to match an incoming response to the appropriate request. Identifies particular SNMP request. This index is echoed back in the response from the SNMP agent, allowing the SNMP manager to match an incoming response to the appropriate request. Identifies particular SNMP request. This index is echoed back in the response from the SNMP agent, allowing the SNMP manager to match an incoming response to the appropriate request. Identifies particular SNMP request. This index is echoed back in the response from the SNMP agent, allowing the SNMP manager to match an incoming response to the appropriate request. Identifies particular SNMP request. This index is echoed back in the response from the SNMP agent, allowing the SNMP manager to match an incoming response to the appropriate request. Identifies particular SNMP request. This index is echoed back in the response from the SNMP agent, allowing the SNMP manager to match an incoming response to the appropriate request. Identifies particular SNMP request. This index is echoed back in the response from the SNMP agent, allowing the SNMP manager to match an incoming response to the appropriate request. Identifies particular SNMP request. This index is echoed back in the response from the SNMP agent, allowing the SNMP manager to match an incoming response to the appropriate request. Identifies particular SNMP request. This index is echoed back in the response from the SNMP agent, allowing the SNMP manager to match an incoming response to the appropriate request.
 
-        Returns: PatternFlowSnmpv2PDURequestId
+        Returns: PatternFlowSnmpv2cPDURequestId
         """
-        return self._get_property("request_id", PatternFlowSnmpv2PDURequestId)
+        return self._get_property("request_id", PatternFlowSnmpv2cPDURequestId)
 
     @property
     def error_status(self):
@@ -89708,33 +90041,33 @@ class FlowSnmpv2PDU(OpenApiObject):
 
     @property
     def error_index(self):
-        # type: () -> PatternFlowSnmpv2PDUErrorIndex
+        # type: () -> PatternFlowSnmpv2cPDUErrorIndex
         """error_index getter
 
         When Error Status is non-zero, this field contains pointer that specifies which object generated the error. Always zero in request.When Error Status is non-zero, this field contains pointer that specifies which object generated the error. Always zero in request.When Error Status is non-zero, this field contains pointer that specifies which object generated the error. Always zero in request.When Error Status is non-zero, this field contains pointer that specifies which object generated the error. Always zero in request.When Error Status is non-zero, this field contains pointer that specifies which object generated the error. Always zero in request.When Error Status is non-zero, this field contains pointer that specifies which object generated the error. Always zero in request.When Error Status is non-zero, this field contains pointer that specifies which object generated the error. Always zero in request.When Error Status is non-zero, this field contains pointer that specifies which object generated the error. Always zero in request.When Error Status is non-zero, this field contains pointer that specifies which object generated the error. Always zero in request.When Error Status is non-zero, this field contains pointer that specifies which object generated the error. Always zero in request.
 
-        Returns: PatternFlowSnmpv2PDUErrorIndex
+        Returns: PatternFlowSnmpv2cPDUErrorIndex
         """
-        return self._get_property("error_index", PatternFlowSnmpv2PDUErrorIndex)
+        return self._get_property("error_index", PatternFlowSnmpv2cPDUErrorIndex)
 
     @property
     def variable_bindings(self):
-        # type: () -> FlowSnmpv2VariableBindingIter
+        # type: () -> FlowSnmpv2cVariableBindingIter
         """variable_bindings getter
 
         A Sequence of variable_bindings.
 
-        Returns: FlowSnmpv2VariableBindingIter
+        Returns: FlowSnmpv2cVariableBindingIter
         """
         return self._get_property(
             "variable_bindings",
-            FlowSnmpv2VariableBindingIter,
+            FlowSnmpv2cVariableBindingIter,
             self._parent,
             self._choice,
         )
 
 
-class PatternFlowSnmpv2PDURequestId(OpenApiObject):
+class PatternFlowSnmpv2cPDURequestId(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
     _TYPES = {
@@ -89756,8 +90089,8 @@ class PatternFlowSnmpv2PDURequestId(OpenApiObject):
             "itemtype": int,
             "itemformat": "int32",
         },
-        "increment": {"type": "PatternFlowSnmpv2PDURequestIdCounter"},
-        "decrement": {"type": "PatternFlowSnmpv2PDURequestIdCounter"},
+        "increment": {"type": "PatternFlowSnmpv2cPDURequestIdCounter"},
+        "decrement": {"type": "PatternFlowSnmpv2cPDURequestIdCounter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -89776,7 +90109,7 @@ class PatternFlowSnmpv2PDURequestId(OpenApiObject):
     _STATUS = {}  # type: Dict[str, Union(type)]
 
     def __init__(self, parent=None, choice=None, value=0, values=[0]):
-        super(PatternFlowSnmpv2PDURequestId, self).__init__()
+        super(PatternFlowSnmpv2cPDURequestId, self).__init__()
         self._parent = parent
         self._set_property("value", value)
         self._set_property("values", values)
@@ -89796,28 +90129,28 @@ class PatternFlowSnmpv2PDURequestId(OpenApiObject):
 
     @property
     def increment(self):
-        # type: () -> PatternFlowSnmpv2PDURequestIdCounter
-        """Factory property that returns an instance of the PatternFlowSnmpv2PDURequestIdCounter class
+        # type: () -> PatternFlowSnmpv2cPDURequestIdCounter
+        """Factory property that returns an instance of the PatternFlowSnmpv2cPDURequestIdCounter class
 
         integer counter pattern
 
-        Returns: PatternFlowSnmpv2PDURequestIdCounter
+        Returns: PatternFlowSnmpv2cPDURequestIdCounter
         """
         return self._get_property(
-            "increment", PatternFlowSnmpv2PDURequestIdCounter, self, "increment"
+            "increment", PatternFlowSnmpv2cPDURequestIdCounter, self, "increment"
         )
 
     @property
     def decrement(self):
-        # type: () -> PatternFlowSnmpv2PDURequestIdCounter
-        """Factory property that returns an instance of the PatternFlowSnmpv2PDURequestIdCounter class
+        # type: () -> PatternFlowSnmpv2cPDURequestIdCounter
+        """Factory property that returns an instance of the PatternFlowSnmpv2cPDURequestIdCounter class
 
         integer counter pattern
 
-        Returns: PatternFlowSnmpv2PDURequestIdCounter
+        Returns: PatternFlowSnmpv2cPDURequestIdCounter
         """
         return self._get_property(
-            "decrement", PatternFlowSnmpv2PDURequestIdCounter, self, "decrement"
+            "decrement", PatternFlowSnmpv2cPDURequestIdCounter, self, "decrement"
         )
 
     @property
@@ -89884,7 +90217,7 @@ class PatternFlowSnmpv2PDURequestId(OpenApiObject):
         self._set_property("values", value, "values")
 
 
-class PatternFlowSnmpv2PDURequestIdCounter(OpenApiObject):
+class PatternFlowSnmpv2cPDURequestIdCounter(OpenApiObject):
     __slots__ = "_parent"
 
     _TYPES = {
@@ -89913,7 +90246,7 @@ class PatternFlowSnmpv2PDURequestIdCounter(OpenApiObject):
     _STATUS = {}  # type: Dict[str, Union(type)]
 
     def __init__(self, parent=None, start=0, step=1, count=1):
-        super(PatternFlowSnmpv2PDURequestIdCounter, self).__init__()
+        super(PatternFlowSnmpv2cPDURequestIdCounter, self).__init__()
         self._parent = parent
         self._set_property("start", start)
         self._set_property("step", step)
@@ -89988,7 +90321,7 @@ class PatternFlowSnmpv2PDURequestIdCounter(OpenApiObject):
         self._set_property("count", value)
 
 
-class PatternFlowSnmpv2PDUErrorIndex(OpenApiObject):
+class PatternFlowSnmpv2cPDUErrorIndex(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
     _TYPES = {
@@ -90010,8 +90343,8 @@ class PatternFlowSnmpv2PDUErrorIndex(OpenApiObject):
             "itemtype": int,
             "itemformat": "uint32",
         },
-        "increment": {"type": "PatternFlowSnmpv2PDUErrorIndexCounter"},
-        "decrement": {"type": "PatternFlowSnmpv2PDUErrorIndexCounter"},
+        "increment": {"type": "PatternFlowSnmpv2cPDUErrorIndexCounter"},
+        "decrement": {"type": "PatternFlowSnmpv2cPDUErrorIndexCounter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -90030,7 +90363,7 @@ class PatternFlowSnmpv2PDUErrorIndex(OpenApiObject):
     _STATUS = {}  # type: Dict[str, Union(type)]
 
     def __init__(self, parent=None, choice=None, value=0, values=[0]):
-        super(PatternFlowSnmpv2PDUErrorIndex, self).__init__()
+        super(PatternFlowSnmpv2cPDUErrorIndex, self).__init__()
         self._parent = parent
         self._set_property("value", value)
         self._set_property("values", values)
@@ -90050,28 +90383,28 @@ class PatternFlowSnmpv2PDUErrorIndex(OpenApiObject):
 
     @property
     def increment(self):
-        # type: () -> PatternFlowSnmpv2PDUErrorIndexCounter
-        """Factory property that returns an instance of the PatternFlowSnmpv2PDUErrorIndexCounter class
+        # type: () -> PatternFlowSnmpv2cPDUErrorIndexCounter
+        """Factory property that returns an instance of the PatternFlowSnmpv2cPDUErrorIndexCounter class
 
         integer counter pattern
 
-        Returns: PatternFlowSnmpv2PDUErrorIndexCounter
+        Returns: PatternFlowSnmpv2cPDUErrorIndexCounter
         """
         return self._get_property(
-            "increment", PatternFlowSnmpv2PDUErrorIndexCounter, self, "increment"
+            "increment", PatternFlowSnmpv2cPDUErrorIndexCounter, self, "increment"
         )
 
     @property
     def decrement(self):
-        # type: () -> PatternFlowSnmpv2PDUErrorIndexCounter
-        """Factory property that returns an instance of the PatternFlowSnmpv2PDUErrorIndexCounter class
+        # type: () -> PatternFlowSnmpv2cPDUErrorIndexCounter
+        """Factory property that returns an instance of the PatternFlowSnmpv2cPDUErrorIndexCounter class
 
         integer counter pattern
 
-        Returns: PatternFlowSnmpv2PDUErrorIndexCounter
+        Returns: PatternFlowSnmpv2cPDUErrorIndexCounter
         """
         return self._get_property(
-            "decrement", PatternFlowSnmpv2PDUErrorIndexCounter, self, "decrement"
+            "decrement", PatternFlowSnmpv2cPDUErrorIndexCounter, self, "decrement"
         )
 
     @property
@@ -90138,7 +90471,7 @@ class PatternFlowSnmpv2PDUErrorIndex(OpenApiObject):
         self._set_property("values", value, "values")
 
 
-class PatternFlowSnmpv2PDUErrorIndexCounter(OpenApiObject):
+class PatternFlowSnmpv2cPDUErrorIndexCounter(OpenApiObject):
     __slots__ = "_parent"
 
     _TYPES = {
@@ -90167,7 +90500,7 @@ class PatternFlowSnmpv2PDUErrorIndexCounter(OpenApiObject):
     _STATUS = {}  # type: Dict[str, Union(type)]
 
     def __init__(self, parent=None, start=0, step=1, count=1):
-        super(PatternFlowSnmpv2PDUErrorIndexCounter, self).__init__()
+        super(PatternFlowSnmpv2cPDUErrorIndexCounter, self).__init__()
         self._parent = parent
         self._set_property("start", start)
         self._set_property("step", step)
@@ -90242,7 +90575,7 @@ class PatternFlowSnmpv2PDUErrorIndexCounter(OpenApiObject):
         self._set_property("count", value)
 
 
-class FlowSnmpv2VariableBinding(OpenApiObject):
+class FlowSnmpv2cVariableBinding(OpenApiObject):
     __slots__ = "_parent"
 
     _TYPES = {
@@ -90251,7 +90584,7 @@ class FlowSnmpv2VariableBinding(OpenApiObject):
             "itemtype": int,
             "itemformat": "uint64",
         },
-        "value": {"type": "FlowSnmpv2VariableBindingValue"},
+        "value": {"type": "FlowSnmpv2cVariableBindingValue"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -90261,7 +90594,7 @@ class FlowSnmpv2VariableBinding(OpenApiObject):
     _STATUS = {}  # type: Dict[str, Union(type)]
 
     def __init__(self, parent=None, object_identifier=None):
-        super(FlowSnmpv2VariableBinding, self).__init__()
+        super(FlowSnmpv2cVariableBinding, self).__init__()
         self._parent = parent
         self._set_property("object_identifier", object_identifier)
 
@@ -90293,17 +90626,17 @@ class FlowSnmpv2VariableBinding(OpenApiObject):
 
     @property
     def value(self):
-        # type: () -> FlowSnmpv2VariableBindingValue
+        # type: () -> FlowSnmpv2cVariableBindingValue
         """value getter
 
         The value for the object_identifier as per RFC2578.The value for the object_identifier as per RFC2578.The value for the object_identifier as per RFC2578.
 
-        Returns: FlowSnmpv2VariableBindingValue
+        Returns: FlowSnmpv2cVariableBindingValue
         """
-        return self._get_property("value", FlowSnmpv2VariableBindingValue)
+        return self._get_property("value", FlowSnmpv2cVariableBindingValue)
 
 
-class FlowSnmpv2VariableBindingValue(OpenApiObject):
+class FlowSnmpv2cVariableBindingValue(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
     _TYPES = {
@@ -90319,17 +90652,17 @@ class FlowSnmpv2VariableBindingValue(OpenApiObject):
                 "unsigned_integer",
             ],
         },
-        "ip_address": {"type": "FlowSnmpv2VariableBindingIPValue"},
-        "counter": {"type": "PatternFlowSnmpv2VariableBindingValueCounter"},
-        "timeticks": {"type": "PatternFlowSnmpv2VariableBindingValueTimeticks"},
+        "ip_address": {"type": "FlowSnmpv2cVariableBindingIPValue"},
+        "counter": {"type": "PatternFlowSnmpv2cVariableBindingValueCounter"},
+        "timeticks": {"type": "PatternFlowSnmpv2cVariableBindingValueTimeticks"},
         "arbitrary": {
             "type": str,
             "format": "hex",
             "maxLength": 10000,
         },
-        "big_counter": {"type": "PatternFlowSnmpv2VariableBindingValueBigCounter"},
+        "big_counter": {"type": "PatternFlowSnmpv2cVariableBindingValueBigCounter"},
         "unsigned_integer": {
-            "type": "PatternFlowSnmpv2VariableBindingValueUnsignedInteger"
+            "type": "PatternFlowSnmpv2cVariableBindingValueUnsignedInteger"
         },
     }  # type: Dict[str, str]
 
@@ -90351,7 +90684,7 @@ class FlowSnmpv2VariableBindingValue(OpenApiObject):
     _STATUS = {}  # type: Dict[str, Union(type)]
 
     def __init__(self, parent=None, choice=None, arbitrary="00"):
-        super(FlowSnmpv2VariableBindingValue, self).__init__()
+        super(FlowSnmpv2cVariableBindingValue, self).__init__()
         self._parent = parent
         self._set_property("arbitrary", arbitrary)
         if (
@@ -90370,74 +90703,74 @@ class FlowSnmpv2VariableBindingValue(OpenApiObject):
 
     @property
     def ip_address(self):
-        # type: () -> FlowSnmpv2VariableBindingIPValue
-        """Factory property that returns an instance of the FlowSnmpv2VariableBindingIPValue class
+        # type: () -> FlowSnmpv2cVariableBindingIPValue
+        """Factory property that returns an instance of the FlowSnmpv2cVariableBindingIPValue class
 
         TBD
 
-        Returns: FlowSnmpv2VariableBindingIPValue
+        Returns: FlowSnmpv2cVariableBindingIPValue
         """
         return self._get_property(
-            "ip_address", FlowSnmpv2VariableBindingIPValue, self, "ip_address"
+            "ip_address", FlowSnmpv2cVariableBindingIPValue, self, "ip_address"
         )
 
     @property
     def counter(self):
-        # type: () -> PatternFlowSnmpv2VariableBindingValueCounter
-        """Factory property that returns an instance of the PatternFlowSnmpv2VariableBindingValueCounter class
+        # type: () -> PatternFlowSnmpv2cVariableBindingValueCounter
+        """Factory property that returns an instance of the PatternFlowSnmpv2cVariableBindingValueCounter class
 
         Counter returned for the requested OID.
 
-        Returns: PatternFlowSnmpv2VariableBindingValueCounter
+        Returns: PatternFlowSnmpv2cVariableBindingValueCounter
         """
         return self._get_property(
-            "counter", PatternFlowSnmpv2VariableBindingValueCounter, self, "counter"
+            "counter", PatternFlowSnmpv2cVariableBindingValueCounter, self, "counter"
         )
 
     @property
     def timeticks(self):
-        # type: () -> PatternFlowSnmpv2VariableBindingValueTimeticks
-        """Factory property that returns an instance of the PatternFlowSnmpv2VariableBindingValueTimeticks class
+        # type: () -> PatternFlowSnmpv2cVariableBindingValueTimeticks
+        """Factory property that returns an instance of the PatternFlowSnmpv2cVariableBindingValueTimeticks class
 
         Timeticks returned for the requested OID.
 
-        Returns: PatternFlowSnmpv2VariableBindingValueTimeticks
+        Returns: PatternFlowSnmpv2cVariableBindingValueTimeticks
         """
         return self._get_property(
             "timeticks",
-            PatternFlowSnmpv2VariableBindingValueTimeticks,
+            PatternFlowSnmpv2cVariableBindingValueTimeticks,
             self,
             "timeticks",
         )
 
     @property
     def big_counter(self):
-        # type: () -> PatternFlowSnmpv2VariableBindingValueBigCounter
-        """Factory property that returns an instance of the PatternFlowSnmpv2VariableBindingValueBigCounter class
+        # type: () -> PatternFlowSnmpv2cVariableBindingValueBigCounter
+        """Factory property that returns an instance of the PatternFlowSnmpv2cVariableBindingValueBigCounter class
 
         Big counter returned for the requested OID.
 
-        Returns: PatternFlowSnmpv2VariableBindingValueBigCounter
+        Returns: PatternFlowSnmpv2cVariableBindingValueBigCounter
         """
         return self._get_property(
             "big_counter",
-            PatternFlowSnmpv2VariableBindingValueBigCounter,
+            PatternFlowSnmpv2cVariableBindingValueBigCounter,
             self,
             "big_counter",
         )
 
     @property
     def unsigned_integer(self):
-        # type: () -> PatternFlowSnmpv2VariableBindingValueUnsignedInteger
-        """Factory property that returns an instance of the PatternFlowSnmpv2VariableBindingValueUnsignedInteger class
+        # type: () -> PatternFlowSnmpv2cVariableBindingValueUnsignedInteger
+        """Factory property that returns an instance of the PatternFlowSnmpv2cVariableBindingValueUnsignedInteger class
 
         Unsigned integer value returned for the requested OID.
 
-        Returns: PatternFlowSnmpv2VariableBindingValueUnsignedInteger
+        Returns: PatternFlowSnmpv2cVariableBindingValueUnsignedInteger
         """
         return self._get_property(
             "unsigned_integer",
-            PatternFlowSnmpv2VariableBindingValueUnsignedInteger,
+            PatternFlowSnmpv2cVariableBindingValueUnsignedInteger,
             self,
             "unsigned_integer",
         )
@@ -90485,7 +90818,7 @@ class FlowSnmpv2VariableBindingValue(OpenApiObject):
         self._set_property("arbitrary", value, "arbitrary")
 
 
-class FlowSnmpv2VariableBindingIPValue(OpenApiObject):
+class FlowSnmpv2cVariableBindingIPValue(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
     _TYPES = {
@@ -90496,8 +90829,8 @@ class FlowSnmpv2VariableBindingIPValue(OpenApiObject):
                 "ipv6",
             ],
         },
-        "ipv4": {"type": "PatternFlowSnmpv2VariableBindingIPValueIpv4"},
-        "ipv6": {"type": "PatternFlowSnmpv2VariableBindingIPValueIpv6"},
+        "ipv4": {"type": "PatternFlowSnmpv2cVariableBindingIPValueIpv4"},
+        "ipv6": {"type": "PatternFlowSnmpv2cVariableBindingIPValueIpv6"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -90512,7 +90845,7 @@ class FlowSnmpv2VariableBindingIPValue(OpenApiObject):
     _STATUS = {}  # type: Dict[str, Union(type)]
 
     def __init__(self, parent=None, choice=None):
-        super(FlowSnmpv2VariableBindingIPValue, self).__init__()
+        super(FlowSnmpv2cVariableBindingIPValue, self).__init__()
         self._parent = parent
         if (
             "choice" in self._DEFAULTS
@@ -90525,28 +90858,28 @@ class FlowSnmpv2VariableBindingIPValue(OpenApiObject):
 
     @property
     def ipv4(self):
-        # type: () -> PatternFlowSnmpv2VariableBindingIPValueIpv4
-        """Factory property that returns an instance of the PatternFlowSnmpv2VariableBindingIPValueIpv4 class
+        # type: () -> PatternFlowSnmpv2cVariableBindingIPValueIpv4
+        """Factory property that returns an instance of the PatternFlowSnmpv2cVariableBindingIPValueIpv4 class
 
         IPv4 address returned for the requested OID.
 
-        Returns: PatternFlowSnmpv2VariableBindingIPValueIpv4
+        Returns: PatternFlowSnmpv2cVariableBindingIPValueIpv4
         """
         return self._get_property(
-            "ipv4", PatternFlowSnmpv2VariableBindingIPValueIpv4, self, "ipv4"
+            "ipv4", PatternFlowSnmpv2cVariableBindingIPValueIpv4, self, "ipv4"
         )
 
     @property
     def ipv6(self):
-        # type: () -> PatternFlowSnmpv2VariableBindingIPValueIpv6
-        """Factory property that returns an instance of the PatternFlowSnmpv2VariableBindingIPValueIpv6 class
+        # type: () -> PatternFlowSnmpv2cVariableBindingIPValueIpv6
+        """Factory property that returns an instance of the PatternFlowSnmpv2cVariableBindingIPValueIpv6 class
 
         IPv6 address returned for the requested OID.
 
-        Returns: PatternFlowSnmpv2VariableBindingIPValueIpv6
+        Returns: PatternFlowSnmpv2cVariableBindingIPValueIpv6
         """
         return self._get_property(
-            "ipv6", PatternFlowSnmpv2VariableBindingIPValueIpv6, self, "ipv6"
+            "ipv6", PatternFlowSnmpv2cVariableBindingIPValueIpv6, self, "ipv6"
         )
 
     @property
@@ -90571,7 +90904,7 @@ class FlowSnmpv2VariableBindingIPValue(OpenApiObject):
         self._set_property("choice", value)
 
 
-class PatternFlowSnmpv2VariableBindingIPValueIpv4(OpenApiObject):
+class PatternFlowSnmpv2cVariableBindingIPValueIpv4(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
     _TYPES = {
@@ -90593,8 +90926,8 @@ class PatternFlowSnmpv2VariableBindingIPValueIpv4(OpenApiObject):
             "itemtype": str,
             "itemformat": "ipv4",
         },
-        "increment": {"type": "PatternFlowSnmpv2VariableBindingIPValueIpv4Counter"},
-        "decrement": {"type": "PatternFlowSnmpv2VariableBindingIPValueIpv4Counter"},
+        "increment": {"type": "PatternFlowSnmpv2cVariableBindingIPValueIpv4Counter"},
+        "decrement": {"type": "PatternFlowSnmpv2cVariableBindingIPValueIpv4Counter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -90613,7 +90946,7 @@ class PatternFlowSnmpv2VariableBindingIPValueIpv4(OpenApiObject):
     _STATUS = {}  # type: Dict[str, Union(type)]
 
     def __init__(self, parent=None, choice=None, value="0.0.0.0", values=["0.0.0.0"]):
-        super(PatternFlowSnmpv2VariableBindingIPValueIpv4, self).__init__()
+        super(PatternFlowSnmpv2cVariableBindingIPValueIpv4, self).__init__()
         self._parent = parent
         self._set_property("value", value)
         self._set_property("values", values)
@@ -90633,32 +90966,32 @@ class PatternFlowSnmpv2VariableBindingIPValueIpv4(OpenApiObject):
 
     @property
     def increment(self):
-        # type: () -> PatternFlowSnmpv2VariableBindingIPValueIpv4Counter
-        """Factory property that returns an instance of the PatternFlowSnmpv2VariableBindingIPValueIpv4Counter class
+        # type: () -> PatternFlowSnmpv2cVariableBindingIPValueIpv4Counter
+        """Factory property that returns an instance of the PatternFlowSnmpv2cVariableBindingIPValueIpv4Counter class
 
         ipv4 counter pattern
 
-        Returns: PatternFlowSnmpv2VariableBindingIPValueIpv4Counter
+        Returns: PatternFlowSnmpv2cVariableBindingIPValueIpv4Counter
         """
         return self._get_property(
             "increment",
-            PatternFlowSnmpv2VariableBindingIPValueIpv4Counter,
+            PatternFlowSnmpv2cVariableBindingIPValueIpv4Counter,
             self,
             "increment",
         )
 
     @property
     def decrement(self):
-        # type: () -> PatternFlowSnmpv2VariableBindingIPValueIpv4Counter
-        """Factory property that returns an instance of the PatternFlowSnmpv2VariableBindingIPValueIpv4Counter class
+        # type: () -> PatternFlowSnmpv2cVariableBindingIPValueIpv4Counter
+        """Factory property that returns an instance of the PatternFlowSnmpv2cVariableBindingIPValueIpv4Counter class
 
         ipv4 counter pattern
 
-        Returns: PatternFlowSnmpv2VariableBindingIPValueIpv4Counter
+        Returns: PatternFlowSnmpv2cVariableBindingIPValueIpv4Counter
         """
         return self._get_property(
             "decrement",
-            PatternFlowSnmpv2VariableBindingIPValueIpv4Counter,
+            PatternFlowSnmpv2cVariableBindingIPValueIpv4Counter,
             self,
             "decrement",
         )
@@ -90727,7 +91060,7 @@ class PatternFlowSnmpv2VariableBindingIPValueIpv4(OpenApiObject):
         self._set_property("values", value, "values")
 
 
-class PatternFlowSnmpv2VariableBindingIPValueIpv4Counter(OpenApiObject):
+class PatternFlowSnmpv2cVariableBindingIPValueIpv4Counter(OpenApiObject):
     __slots__ = "_parent"
 
     _TYPES = {
@@ -90756,7 +91089,7 @@ class PatternFlowSnmpv2VariableBindingIPValueIpv4Counter(OpenApiObject):
     _STATUS = {}  # type: Dict[str, Union(type)]
 
     def __init__(self, parent=None, start="0.0.0.0", step="0.0.0.1", count=1):
-        super(PatternFlowSnmpv2VariableBindingIPValueIpv4Counter, self).__init__()
+        super(PatternFlowSnmpv2cVariableBindingIPValueIpv4Counter, self).__init__()
         self._parent = parent
         self._set_property("start", start)
         self._set_property("step", step)
@@ -90831,7 +91164,7 @@ class PatternFlowSnmpv2VariableBindingIPValueIpv4Counter(OpenApiObject):
         self._set_property("count", value)
 
 
-class PatternFlowSnmpv2VariableBindingIPValueIpv6(OpenApiObject):
+class PatternFlowSnmpv2cVariableBindingIPValueIpv6(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
     _TYPES = {
@@ -90853,8 +91186,8 @@ class PatternFlowSnmpv2VariableBindingIPValueIpv6(OpenApiObject):
             "itemtype": str,
             "itemformat": "ipv6",
         },
-        "increment": {"type": "PatternFlowSnmpv2VariableBindingIPValueIpv6Counter"},
-        "decrement": {"type": "PatternFlowSnmpv2VariableBindingIPValueIpv6Counter"},
+        "increment": {"type": "PatternFlowSnmpv2cVariableBindingIPValueIpv6Counter"},
+        "decrement": {"type": "PatternFlowSnmpv2cVariableBindingIPValueIpv6Counter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -90873,7 +91206,7 @@ class PatternFlowSnmpv2VariableBindingIPValueIpv6(OpenApiObject):
     _STATUS = {}  # type: Dict[str, Union(type)]
 
     def __init__(self, parent=None, choice=None, value="::0", values=["::0"]):
-        super(PatternFlowSnmpv2VariableBindingIPValueIpv6, self).__init__()
+        super(PatternFlowSnmpv2cVariableBindingIPValueIpv6, self).__init__()
         self._parent = parent
         self._set_property("value", value)
         self._set_property("values", values)
@@ -90893,32 +91226,32 @@ class PatternFlowSnmpv2VariableBindingIPValueIpv6(OpenApiObject):
 
     @property
     def increment(self):
-        # type: () -> PatternFlowSnmpv2VariableBindingIPValueIpv6Counter
-        """Factory property that returns an instance of the PatternFlowSnmpv2VariableBindingIPValueIpv6Counter class
+        # type: () -> PatternFlowSnmpv2cVariableBindingIPValueIpv6Counter
+        """Factory property that returns an instance of the PatternFlowSnmpv2cVariableBindingIPValueIpv6Counter class
 
         ipv6 counter pattern
 
-        Returns: PatternFlowSnmpv2VariableBindingIPValueIpv6Counter
+        Returns: PatternFlowSnmpv2cVariableBindingIPValueIpv6Counter
         """
         return self._get_property(
             "increment",
-            PatternFlowSnmpv2VariableBindingIPValueIpv6Counter,
+            PatternFlowSnmpv2cVariableBindingIPValueIpv6Counter,
             self,
             "increment",
         )
 
     @property
     def decrement(self):
-        # type: () -> PatternFlowSnmpv2VariableBindingIPValueIpv6Counter
-        """Factory property that returns an instance of the PatternFlowSnmpv2VariableBindingIPValueIpv6Counter class
+        # type: () -> PatternFlowSnmpv2cVariableBindingIPValueIpv6Counter
+        """Factory property that returns an instance of the PatternFlowSnmpv2cVariableBindingIPValueIpv6Counter class
 
         ipv6 counter pattern
 
-        Returns: PatternFlowSnmpv2VariableBindingIPValueIpv6Counter
+        Returns: PatternFlowSnmpv2cVariableBindingIPValueIpv6Counter
         """
         return self._get_property(
             "decrement",
-            PatternFlowSnmpv2VariableBindingIPValueIpv6Counter,
+            PatternFlowSnmpv2cVariableBindingIPValueIpv6Counter,
             self,
             "decrement",
         )
@@ -90987,7 +91320,7 @@ class PatternFlowSnmpv2VariableBindingIPValueIpv6(OpenApiObject):
         self._set_property("values", value, "values")
 
 
-class PatternFlowSnmpv2VariableBindingIPValueIpv6Counter(OpenApiObject):
+class PatternFlowSnmpv2cVariableBindingIPValueIpv6Counter(OpenApiObject):
     __slots__ = "_parent"
 
     _TYPES = {
@@ -91016,7 +91349,7 @@ class PatternFlowSnmpv2VariableBindingIPValueIpv6Counter(OpenApiObject):
     _STATUS = {}  # type: Dict[str, Union(type)]
 
     def __init__(self, parent=None, start="::0", step="::1", count=1):
-        super(PatternFlowSnmpv2VariableBindingIPValueIpv6Counter, self).__init__()
+        super(PatternFlowSnmpv2cVariableBindingIPValueIpv6Counter, self).__init__()
         self._parent = parent
         self._set_property("start", start)
         self._set_property("step", step)
@@ -91091,7 +91424,7 @@ class PatternFlowSnmpv2VariableBindingIPValueIpv6Counter(OpenApiObject):
         self._set_property("count", value)
 
 
-class PatternFlowSnmpv2VariableBindingValueCounter(OpenApiObject):
+class PatternFlowSnmpv2cVariableBindingValueCounter(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
     _TYPES = {
@@ -91113,8 +91446,8 @@ class PatternFlowSnmpv2VariableBindingValueCounter(OpenApiObject):
             "itemtype": int,
             "itemformat": "uint32",
         },
-        "increment": {"type": "PatternFlowSnmpv2VariableBindingValueCounterCounter"},
-        "decrement": {"type": "PatternFlowSnmpv2VariableBindingValueCounterCounter"},
+        "increment": {"type": "PatternFlowSnmpv2cVariableBindingValueCounterCounter"},
+        "decrement": {"type": "PatternFlowSnmpv2cVariableBindingValueCounterCounter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -91133,7 +91466,7 @@ class PatternFlowSnmpv2VariableBindingValueCounter(OpenApiObject):
     _STATUS = {}  # type: Dict[str, Union(type)]
 
     def __init__(self, parent=None, choice=None, value=0, values=[0]):
-        super(PatternFlowSnmpv2VariableBindingValueCounter, self).__init__()
+        super(PatternFlowSnmpv2cVariableBindingValueCounter, self).__init__()
         self._parent = parent
         self._set_property("value", value)
         self._set_property("values", values)
@@ -91153,32 +91486,32 @@ class PatternFlowSnmpv2VariableBindingValueCounter(OpenApiObject):
 
     @property
     def increment(self):
-        # type: () -> PatternFlowSnmpv2VariableBindingValueCounterCounter
-        """Factory property that returns an instance of the PatternFlowSnmpv2VariableBindingValueCounterCounter class
+        # type: () -> PatternFlowSnmpv2cVariableBindingValueCounterCounter
+        """Factory property that returns an instance of the PatternFlowSnmpv2cVariableBindingValueCounterCounter class
 
         integer counter pattern
 
-        Returns: PatternFlowSnmpv2VariableBindingValueCounterCounter
+        Returns: PatternFlowSnmpv2cVariableBindingValueCounterCounter
         """
         return self._get_property(
             "increment",
-            PatternFlowSnmpv2VariableBindingValueCounterCounter,
+            PatternFlowSnmpv2cVariableBindingValueCounterCounter,
             self,
             "increment",
         )
 
     @property
     def decrement(self):
-        # type: () -> PatternFlowSnmpv2VariableBindingValueCounterCounter
-        """Factory property that returns an instance of the PatternFlowSnmpv2VariableBindingValueCounterCounter class
+        # type: () -> PatternFlowSnmpv2cVariableBindingValueCounterCounter
+        """Factory property that returns an instance of the PatternFlowSnmpv2cVariableBindingValueCounterCounter class
 
         integer counter pattern
 
-        Returns: PatternFlowSnmpv2VariableBindingValueCounterCounter
+        Returns: PatternFlowSnmpv2cVariableBindingValueCounterCounter
         """
         return self._get_property(
             "decrement",
-            PatternFlowSnmpv2VariableBindingValueCounterCounter,
+            PatternFlowSnmpv2cVariableBindingValueCounterCounter,
             self,
             "decrement",
         )
@@ -91247,7 +91580,7 @@ class PatternFlowSnmpv2VariableBindingValueCounter(OpenApiObject):
         self._set_property("values", value, "values")
 
 
-class PatternFlowSnmpv2VariableBindingValueCounterCounter(OpenApiObject):
+class PatternFlowSnmpv2cVariableBindingValueCounterCounter(OpenApiObject):
     __slots__ = "_parent"
 
     _TYPES = {
@@ -91276,7 +91609,7 @@ class PatternFlowSnmpv2VariableBindingValueCounterCounter(OpenApiObject):
     _STATUS = {}  # type: Dict[str, Union(type)]
 
     def __init__(self, parent=None, start=0, step=1, count=1):
-        super(PatternFlowSnmpv2VariableBindingValueCounterCounter, self).__init__()
+        super(PatternFlowSnmpv2cVariableBindingValueCounterCounter, self).__init__()
         self._parent = parent
         self._set_property("start", start)
         self._set_property("step", step)
@@ -91351,7 +91684,7 @@ class PatternFlowSnmpv2VariableBindingValueCounterCounter(OpenApiObject):
         self._set_property("count", value)
 
 
-class PatternFlowSnmpv2VariableBindingValueTimeticks(OpenApiObject):
+class PatternFlowSnmpv2cVariableBindingValueTimeticks(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
     _TYPES = {
@@ -91373,8 +91706,8 @@ class PatternFlowSnmpv2VariableBindingValueTimeticks(OpenApiObject):
             "itemtype": int,
             "itemformat": "uint32",
         },
-        "increment": {"type": "PatternFlowSnmpv2VariableBindingValueTimeticksCounter"},
-        "decrement": {"type": "PatternFlowSnmpv2VariableBindingValueTimeticksCounter"},
+        "increment": {"type": "PatternFlowSnmpv2cVariableBindingValueTimeticksCounter"},
+        "decrement": {"type": "PatternFlowSnmpv2cVariableBindingValueTimeticksCounter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -91393,7 +91726,7 @@ class PatternFlowSnmpv2VariableBindingValueTimeticks(OpenApiObject):
     _STATUS = {}  # type: Dict[str, Union(type)]
 
     def __init__(self, parent=None, choice=None, value=0, values=[0]):
-        super(PatternFlowSnmpv2VariableBindingValueTimeticks, self).__init__()
+        super(PatternFlowSnmpv2cVariableBindingValueTimeticks, self).__init__()
         self._parent = parent
         self._set_property("value", value)
         self._set_property("values", values)
@@ -91413,32 +91746,32 @@ class PatternFlowSnmpv2VariableBindingValueTimeticks(OpenApiObject):
 
     @property
     def increment(self):
-        # type: () -> PatternFlowSnmpv2VariableBindingValueTimeticksCounter
-        """Factory property that returns an instance of the PatternFlowSnmpv2VariableBindingValueTimeticksCounter class
+        # type: () -> PatternFlowSnmpv2cVariableBindingValueTimeticksCounter
+        """Factory property that returns an instance of the PatternFlowSnmpv2cVariableBindingValueTimeticksCounter class
 
         integer counter pattern
 
-        Returns: PatternFlowSnmpv2VariableBindingValueTimeticksCounter
+        Returns: PatternFlowSnmpv2cVariableBindingValueTimeticksCounter
         """
         return self._get_property(
             "increment",
-            PatternFlowSnmpv2VariableBindingValueTimeticksCounter,
+            PatternFlowSnmpv2cVariableBindingValueTimeticksCounter,
             self,
             "increment",
         )
 
     @property
     def decrement(self):
-        # type: () -> PatternFlowSnmpv2VariableBindingValueTimeticksCounter
-        """Factory property that returns an instance of the PatternFlowSnmpv2VariableBindingValueTimeticksCounter class
+        # type: () -> PatternFlowSnmpv2cVariableBindingValueTimeticksCounter
+        """Factory property that returns an instance of the PatternFlowSnmpv2cVariableBindingValueTimeticksCounter class
 
         integer counter pattern
 
-        Returns: PatternFlowSnmpv2VariableBindingValueTimeticksCounter
+        Returns: PatternFlowSnmpv2cVariableBindingValueTimeticksCounter
         """
         return self._get_property(
             "decrement",
-            PatternFlowSnmpv2VariableBindingValueTimeticksCounter,
+            PatternFlowSnmpv2cVariableBindingValueTimeticksCounter,
             self,
             "decrement",
         )
@@ -91507,7 +91840,7 @@ class PatternFlowSnmpv2VariableBindingValueTimeticks(OpenApiObject):
         self._set_property("values", value, "values")
 
 
-class PatternFlowSnmpv2VariableBindingValueTimeticksCounter(OpenApiObject):
+class PatternFlowSnmpv2cVariableBindingValueTimeticksCounter(OpenApiObject):
     __slots__ = "_parent"
 
     _TYPES = {
@@ -91536,7 +91869,7 @@ class PatternFlowSnmpv2VariableBindingValueTimeticksCounter(OpenApiObject):
     _STATUS = {}  # type: Dict[str, Union(type)]
 
     def __init__(self, parent=None, start=0, step=1, count=1):
-        super(PatternFlowSnmpv2VariableBindingValueTimeticksCounter, self).__init__()
+        super(PatternFlowSnmpv2cVariableBindingValueTimeticksCounter, self).__init__()
         self._parent = parent
         self._set_property("start", start)
         self._set_property("step", step)
@@ -91611,7 +91944,7 @@ class PatternFlowSnmpv2VariableBindingValueTimeticksCounter(OpenApiObject):
         self._set_property("count", value)
 
 
-class PatternFlowSnmpv2VariableBindingValueBigCounter(OpenApiObject):
+class PatternFlowSnmpv2cVariableBindingValueBigCounter(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
     _TYPES = {
@@ -91633,8 +91966,12 @@ class PatternFlowSnmpv2VariableBindingValueBigCounter(OpenApiObject):
             "itemtype": int,
             "itemformat": "uint64",
         },
-        "increment": {"type": "PatternFlowSnmpv2VariableBindingValueBigCounterCounter"},
-        "decrement": {"type": "PatternFlowSnmpv2VariableBindingValueBigCounterCounter"},
+        "increment": {
+            "type": "PatternFlowSnmpv2cVariableBindingValueBigCounterCounter"
+        },
+        "decrement": {
+            "type": "PatternFlowSnmpv2cVariableBindingValueBigCounterCounter"
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -91653,7 +91990,7 @@ class PatternFlowSnmpv2VariableBindingValueBigCounter(OpenApiObject):
     _STATUS = {}  # type: Dict[str, Union(type)]
 
     def __init__(self, parent=None, choice=None, value=0, values=[0]):
-        super(PatternFlowSnmpv2VariableBindingValueBigCounter, self).__init__()
+        super(PatternFlowSnmpv2cVariableBindingValueBigCounter, self).__init__()
         self._parent = parent
         self._set_property("value", value)
         self._set_property("values", values)
@@ -91673,32 +92010,32 @@ class PatternFlowSnmpv2VariableBindingValueBigCounter(OpenApiObject):
 
     @property
     def increment(self):
-        # type: () -> PatternFlowSnmpv2VariableBindingValueBigCounterCounter
-        """Factory property that returns an instance of the PatternFlowSnmpv2VariableBindingValueBigCounterCounter class
+        # type: () -> PatternFlowSnmpv2cVariableBindingValueBigCounterCounter
+        """Factory property that returns an instance of the PatternFlowSnmpv2cVariableBindingValueBigCounterCounter class
 
         integer counter pattern
 
-        Returns: PatternFlowSnmpv2VariableBindingValueBigCounterCounter
+        Returns: PatternFlowSnmpv2cVariableBindingValueBigCounterCounter
         """
         return self._get_property(
             "increment",
-            PatternFlowSnmpv2VariableBindingValueBigCounterCounter,
+            PatternFlowSnmpv2cVariableBindingValueBigCounterCounter,
             self,
             "increment",
         )
 
     @property
     def decrement(self):
-        # type: () -> PatternFlowSnmpv2VariableBindingValueBigCounterCounter
-        """Factory property that returns an instance of the PatternFlowSnmpv2VariableBindingValueBigCounterCounter class
+        # type: () -> PatternFlowSnmpv2cVariableBindingValueBigCounterCounter
+        """Factory property that returns an instance of the PatternFlowSnmpv2cVariableBindingValueBigCounterCounter class
 
         integer counter pattern
 
-        Returns: PatternFlowSnmpv2VariableBindingValueBigCounterCounter
+        Returns: PatternFlowSnmpv2cVariableBindingValueBigCounterCounter
         """
         return self._get_property(
             "decrement",
-            PatternFlowSnmpv2VariableBindingValueBigCounterCounter,
+            PatternFlowSnmpv2cVariableBindingValueBigCounterCounter,
             self,
             "decrement",
         )
@@ -91767,7 +92104,7 @@ class PatternFlowSnmpv2VariableBindingValueBigCounter(OpenApiObject):
         self._set_property("values", value, "values")
 
 
-class PatternFlowSnmpv2VariableBindingValueBigCounterCounter(OpenApiObject):
+class PatternFlowSnmpv2cVariableBindingValueBigCounterCounter(OpenApiObject):
     __slots__ = "_parent"
 
     _TYPES = {
@@ -91796,7 +92133,7 @@ class PatternFlowSnmpv2VariableBindingValueBigCounterCounter(OpenApiObject):
     _STATUS = {}  # type: Dict[str, Union(type)]
 
     def __init__(self, parent=None, start=0, step=1, count=1):
-        super(PatternFlowSnmpv2VariableBindingValueBigCounterCounter, self).__init__()
+        super(PatternFlowSnmpv2cVariableBindingValueBigCounterCounter, self).__init__()
         self._parent = parent
         self._set_property("start", start)
         self._set_property("step", step)
@@ -91871,7 +92208,7 @@ class PatternFlowSnmpv2VariableBindingValueBigCounterCounter(OpenApiObject):
         self._set_property("count", value)
 
 
-class PatternFlowSnmpv2VariableBindingValueUnsignedInteger(OpenApiObject):
+class PatternFlowSnmpv2cVariableBindingValueUnsignedInteger(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
     _TYPES = {
@@ -91894,10 +92231,10 @@ class PatternFlowSnmpv2VariableBindingValueUnsignedInteger(OpenApiObject):
             "itemformat": "uint32",
         },
         "increment": {
-            "type": "PatternFlowSnmpv2VariableBindingValueUnsignedIntegerCounter"
+            "type": "PatternFlowSnmpv2cVariableBindingValueUnsignedIntegerCounter"
         },
         "decrement": {
-            "type": "PatternFlowSnmpv2VariableBindingValueUnsignedIntegerCounter"
+            "type": "PatternFlowSnmpv2cVariableBindingValueUnsignedIntegerCounter"
         },
     }  # type: Dict[str, str]
 
@@ -91917,7 +92254,7 @@ class PatternFlowSnmpv2VariableBindingValueUnsignedInteger(OpenApiObject):
     _STATUS = {}  # type: Dict[str, Union(type)]
 
     def __init__(self, parent=None, choice=None, value=0, values=[0]):
-        super(PatternFlowSnmpv2VariableBindingValueUnsignedInteger, self).__init__()
+        super(PatternFlowSnmpv2cVariableBindingValueUnsignedInteger, self).__init__()
         self._parent = parent
         self._set_property("value", value)
         self._set_property("values", values)
@@ -91937,32 +92274,32 @@ class PatternFlowSnmpv2VariableBindingValueUnsignedInteger(OpenApiObject):
 
     @property
     def increment(self):
-        # type: () -> PatternFlowSnmpv2VariableBindingValueUnsignedIntegerCounter
-        """Factory property that returns an instance of the PatternFlowSnmpv2VariableBindingValueUnsignedIntegerCounter class
+        # type: () -> PatternFlowSnmpv2cVariableBindingValueUnsignedIntegerCounter
+        """Factory property that returns an instance of the PatternFlowSnmpv2cVariableBindingValueUnsignedIntegerCounter class
 
         integer counter pattern
 
-        Returns: PatternFlowSnmpv2VariableBindingValueUnsignedIntegerCounter
+        Returns: PatternFlowSnmpv2cVariableBindingValueUnsignedIntegerCounter
         """
         return self._get_property(
             "increment",
-            PatternFlowSnmpv2VariableBindingValueUnsignedIntegerCounter,
+            PatternFlowSnmpv2cVariableBindingValueUnsignedIntegerCounter,
             self,
             "increment",
         )
 
     @property
     def decrement(self):
-        # type: () -> PatternFlowSnmpv2VariableBindingValueUnsignedIntegerCounter
-        """Factory property that returns an instance of the PatternFlowSnmpv2VariableBindingValueUnsignedIntegerCounter class
+        # type: () -> PatternFlowSnmpv2cVariableBindingValueUnsignedIntegerCounter
+        """Factory property that returns an instance of the PatternFlowSnmpv2cVariableBindingValueUnsignedIntegerCounter class
 
         integer counter pattern
 
-        Returns: PatternFlowSnmpv2VariableBindingValueUnsignedIntegerCounter
+        Returns: PatternFlowSnmpv2cVariableBindingValueUnsignedIntegerCounter
         """
         return self._get_property(
             "decrement",
-            PatternFlowSnmpv2VariableBindingValueUnsignedIntegerCounter,
+            PatternFlowSnmpv2cVariableBindingValueUnsignedIntegerCounter,
             self,
             "decrement",
         )
@@ -92031,7 +92368,7 @@ class PatternFlowSnmpv2VariableBindingValueUnsignedInteger(OpenApiObject):
         self._set_property("values", value, "values")
 
 
-class PatternFlowSnmpv2VariableBindingValueUnsignedIntegerCounter(OpenApiObject):
+class PatternFlowSnmpv2cVariableBindingValueUnsignedIntegerCounter(OpenApiObject):
     __slots__ = "_parent"
 
     _TYPES = {
@@ -92061,7 +92398,7 @@ class PatternFlowSnmpv2VariableBindingValueUnsignedIntegerCounter(OpenApiObject)
 
     def __init__(self, parent=None, start=0, step=1, count=1):
         super(
-            PatternFlowSnmpv2VariableBindingValueUnsignedIntegerCounter, self
+            PatternFlowSnmpv2cVariableBindingValueUnsignedIntegerCounter, self
         ).__init__()
         self._parent = parent
         self._set_property("start", start)
@@ -92137,73 +92474,73 @@ class PatternFlowSnmpv2VariableBindingValueUnsignedIntegerCounter(OpenApiObject)
         self._set_property("count", value)
 
 
-class FlowSnmpv2VariableBindingIter(OpenApiIter):
+class FlowSnmpv2cVariableBindingIter(OpenApiIter):
     __slots__ = ("_parent", "_choice")
 
     _GETITEM_RETURNS_CHOICE_OBJECT = False
 
     def __init__(self, parent=None, choice=None):
-        super(FlowSnmpv2VariableBindingIter, self).__init__()
+        super(FlowSnmpv2cVariableBindingIter, self).__init__()
         self._parent = parent
         self._choice = choice
 
     def __getitem__(self, key):
-        # type: (str) -> Union[FlowSnmpv2VariableBinding]
+        # type: (str) -> Union[FlowSnmpv2cVariableBinding]
         return self._getitem(key)
 
     def __iter__(self):
-        # type: () -> FlowSnmpv2VariableBindingIter
+        # type: () -> FlowSnmpv2cVariableBindingIter
         return self._iter()
 
     def __next__(self):
-        # type: () -> FlowSnmpv2VariableBinding
+        # type: () -> FlowSnmpv2cVariableBinding
         return self._next()
 
     def next(self):
-        # type: () -> FlowSnmpv2VariableBinding
+        # type: () -> FlowSnmpv2cVariableBinding
         return self._next()
 
     def _instanceOf(self, item):
-        if not isinstance(item, FlowSnmpv2VariableBinding):
-            raise Exception("Item is not an instance of FlowSnmpv2VariableBinding")
+        if not isinstance(item, FlowSnmpv2cVariableBinding):
+            raise Exception("Item is not an instance of FlowSnmpv2cVariableBinding")
 
     def variablebinding(self, object_identifier=None):
-        # type: (List[int]) -> FlowSnmpv2VariableBindingIter
-        """Factory method that creates an instance of the FlowSnmpv2VariableBinding class
+        # type: (List[int]) -> FlowSnmpv2cVariableBindingIter
+        """Factory method that creates an instance of the FlowSnmpv2cVariableBinding class
 
         A Sequence of two fields, an object_identifier and the value for/from that object_identifier.
 
-        Returns: FlowSnmpv2VariableBindingIter
+        Returns: FlowSnmpv2cVariableBindingIter
         """
-        item = FlowSnmpv2VariableBinding(
+        item = FlowSnmpv2cVariableBinding(
             parent=self._parent, object_identifier=object_identifier
         )
         self._add(item)
         return self
 
     def add(self, object_identifier=None):
-        # type: (List[int]) -> FlowSnmpv2VariableBinding
-        """Add method that creates and returns an instance of the FlowSnmpv2VariableBinding class
+        # type: (List[int]) -> FlowSnmpv2cVariableBinding
+        """Add method that creates and returns an instance of the FlowSnmpv2cVariableBinding class
 
         A Sequence of two fields, an object_identifier and the value for/from that object_identifier.
 
-        Returns: FlowSnmpv2VariableBinding
+        Returns: FlowSnmpv2cVariableBinding
         """
-        item = FlowSnmpv2VariableBinding(
+        item = FlowSnmpv2cVariableBinding(
             parent=self._parent, object_identifier=object_identifier
         )
         self._add(item)
         return item
 
 
-class FlowSnmpv2BulkPDU(OpenApiObject):
+class FlowSnmpv2cBulkPDU(OpenApiObject):
     __slots__ = "_parent"
 
     _TYPES = {
-        "request_id": {"type": "PatternFlowSnmpv2BulkPDURequestId"},
-        "non_repeaters": {"type": "PatternFlowSnmpv2BulkPDUNonRepeaters"},
-        "max_repetitions": {"type": "PatternFlowSnmpv2BulkPDUMaxRepetitions"},
-        "variable_bindings": {"type": "FlowSnmpv2VariableBindingIter"},
+        "request_id": {"type": "PatternFlowSnmpv2cBulkPDURequestId"},
+        "non_repeaters": {"type": "PatternFlowSnmpv2cBulkPDUNonRepeaters"},
+        "max_repetitions": {"type": "PatternFlowSnmpv2cBulkPDUMaxRepetitions"},
+        "variable_bindings": {"type": "FlowSnmpv2cVariableBindingIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -92213,62 +92550,64 @@ class FlowSnmpv2BulkPDU(OpenApiObject):
     _STATUS = {}  # type: Dict[str, Union(type)]
 
     def __init__(self, parent=None):
-        super(FlowSnmpv2BulkPDU, self).__init__()
+        super(FlowSnmpv2cBulkPDU, self).__init__()
         self._parent = parent
 
     @property
     def request_id(self):
-        # type: () -> PatternFlowSnmpv2BulkPDURequestId
+        # type: () -> PatternFlowSnmpv2cBulkPDURequestId
         """request_id getter
 
         Identifies particular SNMP request. This index is echoed back in the response from the SNMP agent, allowing the SNMP manager to match an incoming response to the appropriate request.Identifies particular SNMP request. This index is echoed back in the response from the SNMP agent, allowing the SNMP manager to match an incoming response to the appropriate request.Identifies particular SNMP request. This index is echoed back in the response from the SNMP agent, allowing the SNMP manager to match an incoming response to the appropriate request.Identifies particular SNMP request. This index is echoed back in the response from the SNMP agent, allowing the SNMP manager to match an incoming response to the appropriate request.
 
-        Returns: PatternFlowSnmpv2BulkPDURequestId
+        Returns: PatternFlowSnmpv2cBulkPDURequestId
         """
-        return self._get_property("request_id", PatternFlowSnmpv2BulkPDURequestId)
+        return self._get_property("request_id", PatternFlowSnmpv2cBulkPDURequestId)
 
     @property
     def non_repeaters(self):
-        # type: () -> PatternFlowSnmpv2BulkPDUNonRepeaters
+        # type: () -> PatternFlowSnmpv2cBulkPDUNonRepeaters
         """non_repeaters getter
 
         One variable binding in the Response-PDU is requested for the first non_repeaters variable bindings in the GetBulkRequest.One variable binding in the Response-PDU is requested for the first non_repeaters variable bindings in the GetBulkRequest.One variable binding in the Response-PDU is requested for the first non_repeaters variable bindings in the GetBulkRequest.One variable binding in the Response-PDU is requested for the first non_repeaters variable bindings in the GetBulkRequest.
 
-        Returns: PatternFlowSnmpv2BulkPDUNonRepeaters
+        Returns: PatternFlowSnmpv2cBulkPDUNonRepeaters
         """
-        return self._get_property("non_repeaters", PatternFlowSnmpv2BulkPDUNonRepeaters)
+        return self._get_property(
+            "non_repeaters", PatternFlowSnmpv2cBulkPDUNonRepeaters
+        )
 
     @property
     def max_repetitions(self):
-        # type: () -> PatternFlowSnmpv2BulkPDUMaxRepetitions
+        # type: () -> PatternFlowSnmpv2cBulkPDUMaxRepetitions
         """max_repetitions getter
 
         A maximum of max_repetitions variable bindings are requested in the Response-PDU for each of the remaining variable bindings in the GetBulkRequest after the non_repeaters variable bindings.A maximum of max_repetitions variable bindings are requested in the Response-PDU for each of the remaining variable bindings in the GetBulkRequest after the non_repeaters variable bindings.A maximum of max_repetitions variable bindings are requested in the Response-PDU for each of the remaining variable bindings in the GetBulkRequest after the non_repeaters variable bindings.A maximum of max_repetitions variable bindings are requested in the Response-PDU for each of the remaining variable bindings in the GetBulkRequest after the non_repeaters variable bindings.
 
-        Returns: PatternFlowSnmpv2BulkPDUMaxRepetitions
+        Returns: PatternFlowSnmpv2cBulkPDUMaxRepetitions
         """
         return self._get_property(
-            "max_repetitions", PatternFlowSnmpv2BulkPDUMaxRepetitions
+            "max_repetitions", PatternFlowSnmpv2cBulkPDUMaxRepetitions
         )
 
     @property
     def variable_bindings(self):
-        # type: () -> FlowSnmpv2VariableBindingIter
+        # type: () -> FlowSnmpv2cVariableBindingIter
         """variable_bindings getter
 
         A Sequence of variable_bindings.
 
-        Returns: FlowSnmpv2VariableBindingIter
+        Returns: FlowSnmpv2cVariableBindingIter
         """
         return self._get_property(
             "variable_bindings",
-            FlowSnmpv2VariableBindingIter,
+            FlowSnmpv2cVariableBindingIter,
             self._parent,
             self._choice,
         )
 
 
-class PatternFlowSnmpv2BulkPDURequestId(OpenApiObject):
+class PatternFlowSnmpv2cBulkPDURequestId(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
     _TYPES = {
@@ -92290,8 +92629,8 @@ class PatternFlowSnmpv2BulkPDURequestId(OpenApiObject):
             "itemtype": int,
             "itemformat": "int32",
         },
-        "increment": {"type": "PatternFlowSnmpv2BulkPDURequestIdCounter"},
-        "decrement": {"type": "PatternFlowSnmpv2BulkPDURequestIdCounter"},
+        "increment": {"type": "PatternFlowSnmpv2cBulkPDURequestIdCounter"},
+        "decrement": {"type": "PatternFlowSnmpv2cBulkPDURequestIdCounter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -92310,7 +92649,7 @@ class PatternFlowSnmpv2BulkPDURequestId(OpenApiObject):
     _STATUS = {}  # type: Dict[str, Union(type)]
 
     def __init__(self, parent=None, choice=None, value=0, values=[0]):
-        super(PatternFlowSnmpv2BulkPDURequestId, self).__init__()
+        super(PatternFlowSnmpv2cBulkPDURequestId, self).__init__()
         self._parent = parent
         self._set_property("value", value)
         self._set_property("values", values)
@@ -92330,28 +92669,28 @@ class PatternFlowSnmpv2BulkPDURequestId(OpenApiObject):
 
     @property
     def increment(self):
-        # type: () -> PatternFlowSnmpv2BulkPDURequestIdCounter
-        """Factory property that returns an instance of the PatternFlowSnmpv2BulkPDURequestIdCounter class
+        # type: () -> PatternFlowSnmpv2cBulkPDURequestIdCounter
+        """Factory property that returns an instance of the PatternFlowSnmpv2cBulkPDURequestIdCounter class
 
         integer counter pattern
 
-        Returns: PatternFlowSnmpv2BulkPDURequestIdCounter
+        Returns: PatternFlowSnmpv2cBulkPDURequestIdCounter
         """
         return self._get_property(
-            "increment", PatternFlowSnmpv2BulkPDURequestIdCounter, self, "increment"
+            "increment", PatternFlowSnmpv2cBulkPDURequestIdCounter, self, "increment"
         )
 
     @property
     def decrement(self):
-        # type: () -> PatternFlowSnmpv2BulkPDURequestIdCounter
-        """Factory property that returns an instance of the PatternFlowSnmpv2BulkPDURequestIdCounter class
+        # type: () -> PatternFlowSnmpv2cBulkPDURequestIdCounter
+        """Factory property that returns an instance of the PatternFlowSnmpv2cBulkPDURequestIdCounter class
 
         integer counter pattern
 
-        Returns: PatternFlowSnmpv2BulkPDURequestIdCounter
+        Returns: PatternFlowSnmpv2cBulkPDURequestIdCounter
         """
         return self._get_property(
-            "decrement", PatternFlowSnmpv2BulkPDURequestIdCounter, self, "decrement"
+            "decrement", PatternFlowSnmpv2cBulkPDURequestIdCounter, self, "decrement"
         )
 
     @property
@@ -92418,7 +92757,7 @@ class PatternFlowSnmpv2BulkPDURequestId(OpenApiObject):
         self._set_property("values", value, "values")
 
 
-class PatternFlowSnmpv2BulkPDURequestIdCounter(OpenApiObject):
+class PatternFlowSnmpv2cBulkPDURequestIdCounter(OpenApiObject):
     __slots__ = "_parent"
 
     _TYPES = {
@@ -92447,7 +92786,7 @@ class PatternFlowSnmpv2BulkPDURequestIdCounter(OpenApiObject):
     _STATUS = {}  # type: Dict[str, Union(type)]
 
     def __init__(self, parent=None, start=0, step=1, count=1):
-        super(PatternFlowSnmpv2BulkPDURequestIdCounter, self).__init__()
+        super(PatternFlowSnmpv2cBulkPDURequestIdCounter, self).__init__()
         self._parent = parent
         self._set_property("start", start)
         self._set_property("step", step)
@@ -92522,7 +92861,7 @@ class PatternFlowSnmpv2BulkPDURequestIdCounter(OpenApiObject):
         self._set_property("count", value)
 
 
-class PatternFlowSnmpv2BulkPDUNonRepeaters(OpenApiObject):
+class PatternFlowSnmpv2cBulkPDUNonRepeaters(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
     _TYPES = {
@@ -92558,7 +92897,7 @@ class PatternFlowSnmpv2BulkPDUNonRepeaters(OpenApiObject):
     _STATUS = {}  # type: Dict[str, Union(type)]
 
     def __init__(self, parent=None, choice=None, value=0, values=[0]):
-        super(PatternFlowSnmpv2BulkPDUNonRepeaters, self).__init__()
+        super(PatternFlowSnmpv2cBulkPDUNonRepeaters, self).__init__()
         self._parent = parent
         self._set_property("value", value)
         self._set_property("values", values)
@@ -92640,7 +92979,7 @@ class PatternFlowSnmpv2BulkPDUNonRepeaters(OpenApiObject):
         self._set_property("values", value, "values")
 
 
-class PatternFlowSnmpv2BulkPDUMaxRepetitions(OpenApiObject):
+class PatternFlowSnmpv2cBulkPDUMaxRepetitions(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
     _TYPES = {
@@ -92662,8 +93001,8 @@ class PatternFlowSnmpv2BulkPDUMaxRepetitions(OpenApiObject):
             "itemtype": int,
             "itemformat": "uint32",
         },
-        "increment": {"type": "PatternFlowSnmpv2BulkPDUMaxRepetitionsCounter"},
-        "decrement": {"type": "PatternFlowSnmpv2BulkPDUMaxRepetitionsCounter"},
+        "increment": {"type": "PatternFlowSnmpv2cBulkPDUMaxRepetitionsCounter"},
+        "decrement": {"type": "PatternFlowSnmpv2cBulkPDUMaxRepetitionsCounter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -92682,7 +93021,7 @@ class PatternFlowSnmpv2BulkPDUMaxRepetitions(OpenApiObject):
     _STATUS = {}  # type: Dict[str, Union(type)]
 
     def __init__(self, parent=None, choice=None, value=0, values=[0]):
-        super(PatternFlowSnmpv2BulkPDUMaxRepetitions, self).__init__()
+        super(PatternFlowSnmpv2cBulkPDUMaxRepetitions, self).__init__()
         self._parent = parent
         self._set_property("value", value)
         self._set_property("values", values)
@@ -92702,32 +93041,32 @@ class PatternFlowSnmpv2BulkPDUMaxRepetitions(OpenApiObject):
 
     @property
     def increment(self):
-        # type: () -> PatternFlowSnmpv2BulkPDUMaxRepetitionsCounter
-        """Factory property that returns an instance of the PatternFlowSnmpv2BulkPDUMaxRepetitionsCounter class
+        # type: () -> PatternFlowSnmpv2cBulkPDUMaxRepetitionsCounter
+        """Factory property that returns an instance of the PatternFlowSnmpv2cBulkPDUMaxRepetitionsCounter class
 
         integer counter pattern
 
-        Returns: PatternFlowSnmpv2BulkPDUMaxRepetitionsCounter
+        Returns: PatternFlowSnmpv2cBulkPDUMaxRepetitionsCounter
         """
         return self._get_property(
             "increment",
-            PatternFlowSnmpv2BulkPDUMaxRepetitionsCounter,
+            PatternFlowSnmpv2cBulkPDUMaxRepetitionsCounter,
             self,
             "increment",
         )
 
     @property
     def decrement(self):
-        # type: () -> PatternFlowSnmpv2BulkPDUMaxRepetitionsCounter
-        """Factory property that returns an instance of the PatternFlowSnmpv2BulkPDUMaxRepetitionsCounter class
+        # type: () -> PatternFlowSnmpv2cBulkPDUMaxRepetitionsCounter
+        """Factory property that returns an instance of the PatternFlowSnmpv2cBulkPDUMaxRepetitionsCounter class
 
         integer counter pattern
 
-        Returns: PatternFlowSnmpv2BulkPDUMaxRepetitionsCounter
+        Returns: PatternFlowSnmpv2cBulkPDUMaxRepetitionsCounter
         """
         return self._get_property(
             "decrement",
-            PatternFlowSnmpv2BulkPDUMaxRepetitionsCounter,
+            PatternFlowSnmpv2cBulkPDUMaxRepetitionsCounter,
             self,
             "decrement",
         )
@@ -92796,7 +93135,7 @@ class PatternFlowSnmpv2BulkPDUMaxRepetitions(OpenApiObject):
         self._set_property("values", value, "values")
 
 
-class PatternFlowSnmpv2BulkPDUMaxRepetitionsCounter(OpenApiObject):
+class PatternFlowSnmpv2cBulkPDUMaxRepetitionsCounter(OpenApiObject):
     __slots__ = "_parent"
 
     _TYPES = {
@@ -92825,7 +93164,7 @@ class PatternFlowSnmpv2BulkPDUMaxRepetitionsCounter(OpenApiObject):
     _STATUS = {}  # type: Dict[str, Union(type)]
 
     def __init__(self, parent=None, start=0, step=1, count=1):
-        super(PatternFlowSnmpv2BulkPDUMaxRepetitionsCounter, self).__init__()
+        super(PatternFlowSnmpv2cBulkPDUMaxRepetitionsCounter, self).__init__()
         self._parent = parent
         self._set_property("start", start)
         self._set_property("step", step)
@@ -92911,7 +93250,7 @@ class FlowHeaderIter(OpenApiIter):
         self._choice = choice
 
     def __getitem__(self, key):
-        # type: (str) -> Union[FlowArp, FlowCustom, FlowEthernet, FlowEthernetPause, FlowGre, FlowGtpv1, FlowGtpv2, FlowHeader, FlowIcmp, FlowIcmpv6, FlowIgmpv1, FlowIpv4, FlowIpv6, FlowMpls, FlowPfcPause, FlowPpp, FlowSnmpv2, FlowTcp, FlowUdp, FlowVlan, FlowVxlan]
+        # type: (str) -> Union[FlowArp, FlowCustom, FlowEthernet, FlowEthernetPause, FlowGre, FlowGtpv1, FlowGtpv2, FlowHeader, FlowIcmp, FlowIcmpv6, FlowIgmpv1, FlowIpv4, FlowIpv6, FlowMpls, FlowPfcPause, FlowPpp, FlowSnmpv2c, FlowTcp, FlowUdp, FlowVlan, FlowVxlan]
         return self._getitem(key)
 
     def __iter__(self):
@@ -93220,17 +93559,17 @@ class FlowHeaderIter(OpenApiIter):
         self._add(item)
         return self
 
-    def snmpv2(self):
-        # type: () -> FlowHeaderIter
-        """Factory method that creates an instance of the FlowSnmpv2 class
+    def snmpv2c(self, community="community"):
+        # type: (str) -> FlowHeaderIter
+        """Factory method that creates an instance of the FlowSnmpv2c class
 
-        SNMPv2 packet header as defined in RFC3416.
+        SNMPv2C packet header as defined in RFC1901 and RFC3416.
 
         Returns: FlowHeaderIter
         """
         item = FlowHeader()
-        item.snmpv2
-        item.choice = "snmpv2"
+        item.snmpv2c
+        item.choice = "snmpv2c"
         self._add(item)
         return self
 
@@ -97613,7 +97952,7 @@ class StateProtocolLacpMemberPorts(OpenApiObject):
         # type: () -> List[str]
         """lag_member_names getter
 
-        The names of LAG members (ports) for which the state has to be applied. An empty or null list will control all LAG members.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        The names of LAG members (ports) for which the state has to be applied. An empty or null list will control all LAG members.. x-constraint:. /components/schemas/Port/properties/name.
 
         Returns: List[str]
         """
@@ -97623,7 +97962,7 @@ class StateProtocolLacpMemberPorts(OpenApiObject):
     def lag_member_names(self, value):
         """lag_member_names setter
 
-        The names of LAG members (ports) for which the state has to be applied. An empty or null list will control all LAG members.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        The names of LAG members (ports) for which the state has to be applied. An empty or null list will control all LAG members.. x-constraint:. /components/schemas/Port/properties/name.
 
         value: List[str]
         """
@@ -97763,7 +98102,7 @@ class StateProtocolBgpPeers(OpenApiObject):
         # type: () -> List[str]
         """peer_names getter
 
-        The names of BGP peers for which the state has to be applied. An empty or null list will control all BGP peers.. x-constraint:. /components/schemas/Bgp.V4Peer/properties/name. /components/schemas/Bgp.V6Peer/properties/name. . x-constraint:. /components/schemas/Bgp.V4Peer/properties/name. /components/schemas/Bgp.V6Peer/properties/name.
+        The names of BGP peers for which the state has to be applied. An empty or null list will control all BGP peers.. x-constraint:. /components/schemas/Bgp.V4Peer/properties/name. /components/schemas/Bgp.V6Peer/properties/name.
 
         Returns: List[str]
         """
@@ -97773,7 +98112,7 @@ class StateProtocolBgpPeers(OpenApiObject):
     def peer_names(self, value):
         """peer_names setter
 
-        The names of BGP peers for which the state has to be applied. An empty or null list will control all BGP peers.. x-constraint:. /components/schemas/Bgp.V4Peer/properties/name. /components/schemas/Bgp.V6Peer/properties/name. . x-constraint:. /components/schemas/Bgp.V4Peer/properties/name. /components/schemas/Bgp.V6Peer/properties/name.
+        The names of BGP peers for which the state has to be applied. An empty or null list will control all BGP peers.. x-constraint:. /components/schemas/Bgp.V4Peer/properties/name. /components/schemas/Bgp.V6Peer/properties/name.
 
         value: List[str]
         """
@@ -97913,7 +98252,7 @@ class StateProtocolIsisRouters(OpenApiObject):
         # type: () -> List[str]
         """router_names getter
 
-        The names of ISIS routers for which the state has to be applied. An empty or null list will control all ISIS routers.. x-constraint:. /components/schemas/Device.IsisRouter/properties/name. . x-constraint:. /components/schemas/Device.IsisRouter/properties/name.
+        The names of ISIS routers for which the state has to be applied. An empty or null list will control all ISIS routers.. x-constraint:. /components/schemas/Device.IsisRouter/properties/name.
 
         Returns: List[str]
         """
@@ -97923,7 +98262,7 @@ class StateProtocolIsisRouters(OpenApiObject):
     def router_names(self, value):
         """router_names setter
 
-        The names of ISIS routers for which the state has to be applied. An empty or null list will control all ISIS routers.. x-constraint:. /components/schemas/Device.IsisRouter/properties/name. . x-constraint:. /components/schemas/Device.IsisRouter/properties/name.
+        The names of ISIS routers for which the state has to be applied. An empty or null list will control all ISIS routers.. x-constraint:. /components/schemas/Device.IsisRouter/properties/name.
 
         value: List[str]
         """
