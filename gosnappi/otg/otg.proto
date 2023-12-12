@@ -1,4 +1,4 @@
-/* Open Traffic Generator API 0.13.2
+/* Open Traffic Generator API 0.13.3
  * Open Traffic Generator API defines a model-driven, vendor-neutral and standard
  * interface for emulating layer 2-7 network devices and generating test traffic.
  * 
@@ -2428,6 +2428,15 @@ message BgpAdvanced {
   // peer.
   // default = False
   optional bool passive_mode = 6;
+
+  // The TCP port number on which to accept BGP connections from the remote peer.
+  // default = 179
+  optional uint32 listen_port = 7;
+
+  // Destination TCP port number of the BGP peer when initiating a
+  // session from the local BGP peer.
+  // default = 179
+  optional uint32 neighbor_port = 8;
 }
 
 // Configuration for BGP capability settings.
@@ -6805,6 +6814,8 @@ message StateProtocol {
       all = 1;
       route = 2;
       lacp = 3;
+      bgp = 4;
+      isis = 5;
     }
   }
   // Description missing in models
@@ -6819,6 +6830,12 @@ message StateProtocol {
 
   // Description missing in models
   StateProtocolLacp lacp = 4;
+
+  // Description missing in models
+  StateProtocolBgp bgp = 5;
+
+  // Description missing in models
+  StateProtocolIsis isis = 6;
 }
 
 // Sets the link of configured ports.
@@ -6976,6 +6993,7 @@ message StateProtocolLacp {
     enum Enum {
       unspecified = 0;
       admin = 1;
+      member_ports = 2;
     }
   }
   // Description missing in models
@@ -6984,6 +7002,9 @@ message StateProtocolLacp {
 
   // Description missing in models
   StateProtocolLacpAdmin admin = 2;
+
+  // Description missing in models
+  StateProtocolLacpMemberPorts member_ports = 3;
 }
 
 // Sets admin state of LACP configured on LAG members
@@ -7011,6 +7032,129 @@ message StateProtocolLacpAdmin {
   // The LACP Member admin state. 'up' will send LACPDUs with 'sync' flag set on selected
   // member ports. 'down' will send LACPDUs with 'sync' flag unset on selected member
   // ports.
+  // required = true
+  optional State.Enum state = 2;
+}
+
+// Sets state of LACP member ports configured on LAG.
+message StateProtocolLacpMemberPorts {
+
+  // The names of LAG members (ports) for which the state has to be applied. An empty
+  // or null list will control all LAG members.
+  // 
+  // x-constraint:
+  // - /components/schemas/Port/properties/name
+  // 
+  // 
+  // x-constraint:
+  // - /components/schemas/Port/properties/name
+  // 
+  repeated string lag_member_names = 1;
+
+  message State {
+    enum Enum {
+      unspecified = 0;
+      up = 1;
+      down = 2;
+    }
+  }
+  // The desired LACP member port state.
+  // required = true
+  optional State.Enum state = 2;
+}
+
+// Sets state of configured BGP peers.
+message StateProtocolBgp {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      peers = 1;
+    }
+  }
+  // Description missing in models
+  // required = true
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  StateProtocolBgpPeers peers = 2;
+}
+
+// Sets state of configured BGP peers.
+message StateProtocolBgpPeers {
+
+  // The names of BGP peers for which the state has to be applied. An empty or null list
+  // will control all BGP peers.
+  // 
+  // x-constraint:
+  // - /components/schemas/Bgp.V4Peer/properties/name
+  // - /components/schemas/Bgp.V6Peer/properties/name
+  // 
+  // 
+  // x-constraint:
+  // - /components/schemas/Bgp.V4Peer/properties/name
+  // - /components/schemas/Bgp.V6Peer/properties/name
+  // 
+  repeated string peer_names = 1;
+
+  message State {
+    enum Enum {
+      unspecified = 0;
+      up = 1;
+      down = 2;
+    }
+  }
+  // The desired state of BGP peer. If the desired state is 'up', underlying IP interface(s)
+  // would be brought up automatically (if not already up), would attempt to bring up
+  // the BGP session(s) and advertise route(s), if configured. If the desired state is
+  // 'down', BGP session(s) would be brought down.
+  // required = true
+  optional State.Enum state = 2;
+}
+
+// Sets state of configured ISIS routers.
+message StateProtocolIsis {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      routers = 1;
+    }
+  }
+  // Description missing in models
+  // required = true
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  StateProtocolIsisRouters routers = 2;
+}
+
+// Sets state of configured ISIS routers.
+message StateProtocolIsisRouters {
+
+  // The names of ISIS routers for which the state has to be applied. An empty or null
+  // list will control all ISIS routers.
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.IsisRouter/properties/name
+  // 
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.IsisRouter/properties/name
+  // 
+  repeated string router_names = 1;
+
+  message State {
+    enum Enum {
+      unspecified = 0;
+      up = 1;
+      down = 2;
+    }
+  }
+  // The desired state of ISIS router. If the desired state is 'up', would attempt to
+  // bring up the ISIS session(s) with respective peer(s) and advertise route(s), if configured.
+  // If the desired state is 'down', would bring down ISIS session(s) with respective
+  // peer(s).
   // required = true
   optional State.Enum state = 2;
 }

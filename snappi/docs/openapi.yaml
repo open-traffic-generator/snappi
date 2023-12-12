@@ -7,7 +7,7 @@ info:
     \ issue](https://github.com/open-traffic-generator/models/issues) in the models\
     \ repository\n- [fork the models repository](https://github.com/open-traffic-generator/models)\
     \ and submit a PR"
-  version: 0.13.2
+  version: 0.13.3
   contact:
     url: https://github.com/open-traffic-generator/models
   license:
@@ -3515,6 +3515,23 @@ components:
           type: boolean
           default: false
           x-field-uid: 6
+        listen_port:
+          description: |-
+            The TCP port number on which to accept BGP connections from the remote peer.
+          type: integer
+          format: uint32
+          default: 179
+          maximum: 65535
+          x-field-uid: 7
+        neighbor_port:
+          description: |-
+            Destination TCP port number of the BGP peer when initiating a
+            session from the local BGP peer.
+          type: integer
+          format: uint32
+          default: 179
+          maximum: 65535
+          x-field-uid: 8
     Bgp.Capability:
       description: |-
         Configuration for BGP capability settings.
@@ -9010,11 +9027,17 @@ components:
               x-field-uid: 2
             lacp:
               x-field-uid: 3
+            bgp:
+              x-field-uid: 4
+            isis:
+              x-field-uid: 5
           x-field-uid: 1
           enum:
           - all
           - route
           - lacp
+          - bgp
+          - isis
         all:
           $ref: '#/components/schemas/State.Protocol.All'
           x-field-uid: 2
@@ -9024,6 +9047,12 @@ components:
         lacp:
           $ref: '#/components/schemas/State.Protocol.Lacp'
           x-field-uid: 4
+        bgp:
+          $ref: '#/components/schemas/State.Protocol.Bgp'
+          x-field-uid: 5
+        isis:
+          $ref: '#/components/schemas/State.Protocol.Isis'
+          x-field-uid: 6
     State.Port.Link:
       description: |-
         Sets the link of configured ports.
@@ -9222,12 +9251,18 @@ components:
           x-enum:
             admin:
               x-field-uid: 1
+            member_ports:
+              x-field-uid: 2
           x-field-uid: 1
           enum:
           - admin
+          - member_ports
         admin:
           $ref: '#/components/schemas/State.Protocol.Lacp.Admin'
           x-field-uid: 2
+        member_ports:
+          $ref: '#/components/schemas/State.Protocol.Lacp.MemberPorts'
+          x-field-uid: 3
     State.Protocol.Lacp.Admin:
       description: |-
         Sets admin state of LACP configured on LAG members
@@ -9253,6 +9288,155 @@ components:
         state:
           description: |-
             The LACP Member admin state. 'up' will send LACPDUs with 'sync' flag set on selected member ports. 'down' will send LACPDUs with 'sync' flag unset on selected member ports.
+          type: string
+          x-field-uid: 2
+          x-enum:
+            up:
+              x-field-uid: 1
+            down:
+              x-field-uid: 2
+          enum:
+          - up
+          - down
+    State.Protocol.Lacp.MemberPorts:
+      description: |-
+        Sets state of LACP member ports configured on LAG.
+      required:
+      - state
+      properties:
+        lag_member_names:
+          description: |
+            The names of LAG members (ports) for which the state has to be applied. An empty or null list will control all LAG members.
+
+            x-constraint:
+            - /components/schemas/Port/properties/name
+
+
+            x-constraint:
+            - /components/schemas/Port/properties/name
+          type: array
+          items:
+            type: string
+          x-constraint:
+          - /components/schemas/Port/properties/name
+          x-field-uid: 1
+        state:
+          description: |-
+            The desired LACP member port state.
+          type: string
+          x-field-uid: 2
+          x-enum:
+            up:
+              x-field-uid: 1
+            down:
+              x-field-uid: 2
+          enum:
+          - up
+          - down
+    State.Protocol.Bgp:
+      description: |-
+        Sets state of configured BGP peers.
+      type: object
+      required:
+      - choice
+      properties:
+        choice:
+          type: string
+          x-enum:
+            peers:
+              x-field-uid: 1
+          x-field-uid: 1
+          enum:
+          - peers
+        peers:
+          $ref: '#/components/schemas/State.Protocol.Bgp.Peers'
+          x-field-uid: 2
+    State.Protocol.Bgp.Peers:
+      description: |-
+        Sets state of configured BGP peers.
+      required:
+      - state
+      properties:
+        peer_names:
+          description: |
+            The names of BGP peers for which the state has to be applied. An empty or null list will control all BGP peers.
+
+            x-constraint:
+            - /components/schemas/Bgp.V4Peer/properties/name
+            - /components/schemas/Bgp.V6Peer/properties/name
+
+
+            x-constraint:
+            - /components/schemas/Bgp.V4Peer/properties/name
+            - /components/schemas/Bgp.V6Peer/properties/name
+          type: array
+          items:
+            type: string
+          x-constraint:
+          - /components/schemas/Bgp.V4Peer/properties/name
+          - /components/schemas/Bgp.V6Peer/properties/name
+          x-field-uid: 1
+        state:
+          description: "The desired state of BGP peer. If the desired state is 'up',\
+            \ underlying IP interface(s) would be brought up automatically (if not\
+            \ already up), would attempt to bring up the BGP session(s) and advertise\
+            \ route(s), if configured. If the desired state is 'down', BGP session(s)\
+            \ would be brought down. "
+          type: string
+          x-field-uid: 2
+          x-enum:
+            up:
+              x-field-uid: 1
+            down:
+              x-field-uid: 2
+          enum:
+          - up
+          - down
+    State.Protocol.Isis:
+      description: |-
+        Sets state of configured ISIS routers.
+      type: object
+      required:
+      - choice
+      properties:
+        choice:
+          type: string
+          x-enum:
+            routers:
+              x-field-uid: 1
+          x-field-uid: 1
+          enum:
+          - routers
+        routers:
+          $ref: '#/components/schemas/State.Protocol.Isis.Routers'
+          x-field-uid: 2
+    State.Protocol.Isis.Routers:
+      description: |-
+        Sets state of configured ISIS routers.
+      required:
+      - state
+      properties:
+        router_names:
+          description: |
+            The names of ISIS routers for which the state has to be applied. An empty or null list will control all ISIS routers.
+
+            x-constraint:
+            - /components/schemas/Device.IsisRouter/properties/name
+
+
+            x-constraint:
+            - /components/schemas/Device.IsisRouter/properties/name
+          type: array
+          items:
+            type: string
+          x-constraint:
+          - /components/schemas/Device.IsisRouter/properties/name
+          x-field-uid: 1
+        state:
+          description: "The desired state of ISIS router. If the desired state is\
+            \ 'up', would attempt to bring up the ISIS session(s) with respective\
+            \ peer(s) and advertise route(s), if configured. If the desired state\
+            \ is 'down', would bring down ISIS session(s) with respective peer(s). "
           type: string
           x-field-uid: 2
           x-enum:

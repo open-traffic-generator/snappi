@@ -1,4 +1,4 @@
-# Open Traffic Generator API 0.13.2
+# Open Traffic Generator API 0.13.3
 # License: MIT
 
 import importlib
@@ -12494,6 +12494,16 @@ class BgpAdvanced(OpenApiObject):
         },
         "md5_key": {"type": str},
         "passive_mode": {"type": bool},
+        "listen_port": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+        "neighbor_port": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -12504,6 +12514,8 @@ class BgpAdvanced(OpenApiObject):
         "update_interval": 0,
         "time_to_live": 64,
         "passive_mode": False,
+        "listen_port": 179,
+        "neighbor_port": 179,
     }  # type: Dict[str, Union(type)]
 
     _STATUS = {}  # type: Dict[str, Union(type)]
@@ -12517,6 +12529,8 @@ class BgpAdvanced(OpenApiObject):
         time_to_live=64,
         md5_key=None,
         passive_mode=False,
+        listen_port=179,
+        neighbor_port=179,
     ):
         super(BgpAdvanced, self).__init__()
         self._parent = parent
@@ -12526,6 +12540,8 @@ class BgpAdvanced(OpenApiObject):
         self._set_property("time_to_live", time_to_live)
         self._set_property("md5_key", md5_key)
         self._set_property("passive_mode", passive_mode)
+        self._set_property("listen_port", listen_port)
+        self._set_property("neighbor_port", neighbor_port)
 
     def set(
         self,
@@ -12535,6 +12551,8 @@ class BgpAdvanced(OpenApiObject):
         time_to_live=None,
         md5_key=None,
         passive_mode=None,
+        listen_port=None,
+        neighbor_port=None,
     ):
         for property_name, property_value in locals().items():
             if property_name != "self" and property_value is not None:
@@ -12665,6 +12683,48 @@ class BgpAdvanced(OpenApiObject):
         value: bool
         """
         self._set_property("passive_mode", value)
+
+    @property
+    def listen_port(self):
+        # type: () -> int
+        """listen_port getter
+
+        The TCP port number on which to accept BGP connections from the remote peer.
+
+        Returns: int
+        """
+        return self._get_property("listen_port")
+
+    @listen_port.setter
+    def listen_port(self, value):
+        """listen_port setter
+
+        The TCP port number on which to accept BGP connections from the remote peer.
+
+        value: int
+        """
+        self._set_property("listen_port", value)
+
+    @property
+    def neighbor_port(self):
+        # type: () -> int
+        """neighbor_port getter
+
+        Destination TCP port number of the BGP peer when initiating a. session from the local BGP peer.
+
+        Returns: int
+        """
+        return self._get_property("neighbor_port")
+
+    @neighbor_port.setter
+    def neighbor_port(self, value):
+        """neighbor_port setter
+
+        Destination TCP port number of the BGP peer when initiating a. session from the local BGP peer.
+
+        value: int
+        """
+        self._set_property("neighbor_port", value)
 
 
 class BgpCapability(OpenApiObject):
@@ -93596,11 +93656,15 @@ class StateProtocol(OpenApiObject):
                 "all",
                 "route",
                 "lacp",
+                "bgp",
+                "isis",
             ],
         },
         "all": {"type": "StateProtocolAll"},
         "route": {"type": "StateProtocolRoute"},
         "lacp": {"type": "StateProtocolLacp"},
+        "bgp": {"type": "StateProtocolBgp"},
+        "isis": {"type": "StateProtocolIsis"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ("choice",)  # type: tuple(str)
@@ -93610,6 +93674,8 @@ class StateProtocol(OpenApiObject):
     ALL = "all"  # type: str
     ROUTE = "route"  # type: str
     LACP = "lacp"  # type: str
+    BGP = "bgp"  # type: str
+    ISIS = "isis"  # type: str
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
@@ -93659,13 +93725,35 @@ class StateProtocol(OpenApiObject):
         return self._get_property("lacp", StateProtocolLacp, self, "lacp")
 
     @property
+    def bgp(self):
+        # type: () -> StateProtocolBgp
+        """Factory property that returns an instance of the StateProtocolBgp class
+
+        Sets state of configured BGP peers.
+
+        Returns: StateProtocolBgp
+        """
+        return self._get_property("bgp", StateProtocolBgp, self, "bgp")
+
+    @property
+    def isis(self):
+        # type: () -> StateProtocolIsis
+        """Factory property that returns an instance of the StateProtocolIsis class
+
+        Sets state of configured ISIS routers.
+
+        Returns: StateProtocolIsis
+        """
+        return self._get_property("isis", StateProtocolIsis, self, "isis")
+
+    @property
     def choice(self):
-        # type: () -> Union[Literal["all"], Literal["lacp"], Literal["route"]]
+        # type: () -> Union[Literal["all"], Literal["bgp"], Literal["isis"], Literal["lacp"], Literal["route"]]
         """choice getter
 
         TBD
 
-        Returns: Union[Literal["all"], Literal["lacp"], Literal["route"]]
+        Returns: Union[Literal["all"], Literal["bgp"], Literal["isis"], Literal["lacp"], Literal["route"]]
         """
         return self._get_property("choice")
 
@@ -93675,7 +93763,7 @@ class StateProtocol(OpenApiObject):
 
         TBD
 
-        value: Union[Literal["all"], Literal["lacp"], Literal["route"]]
+        value: Union[Literal["all"], Literal["bgp"], Literal["isis"], Literal["lacp"], Literal["route"]]
         """
         if value is None:
             raise TypeError("Cannot set required property choice as None")
@@ -93828,9 +93916,11 @@ class StateProtocolLacp(OpenApiObject):
             "type": str,
             "enum": [
                 "admin",
+                "member_ports",
             ],
         },
         "admin": {"type": "StateProtocolLacpAdmin"},
+        "member_ports": {"type": "StateProtocolLacpMemberPorts"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ("choice",)  # type: tuple(str)
@@ -93838,6 +93928,7 @@ class StateProtocolLacp(OpenApiObject):
     _DEFAULTS = {}  # type: Dict[str, Union(type)]
 
     ADMIN = "admin"  # type: str
+    MEMBER_PORTS = "member_ports"  # type: str
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
@@ -93865,13 +93956,26 @@ class StateProtocolLacp(OpenApiObject):
         return self._get_property("admin", StateProtocolLacpAdmin, self, "admin")
 
     @property
+    def member_ports(self):
+        # type: () -> StateProtocolLacpMemberPorts
+        """Factory property that returns an instance of the StateProtocolLacpMemberPorts class
+
+        Sets state of LACP member ports configured on LAG.
+
+        Returns: StateProtocolLacpMemberPorts
+        """
+        return self._get_property(
+            "member_ports", StateProtocolLacpMemberPorts, self, "member_ports"
+        )
+
+    @property
     def choice(self):
-        # type: () -> Union[Literal["admin"]]
+        # type: () -> Union[Literal["admin"], Literal["member_ports"]]
         """choice getter
 
         TBD
 
-        Returns: Union[Literal["admin"]]
+        Returns: Union[Literal["admin"], Literal["member_ports"]]
         """
         return self._get_property("choice")
 
@@ -93881,7 +93985,7 @@ class StateProtocolLacp(OpenApiObject):
 
         TBD
 
-        value: Union[Literal["admin"]]
+        value: Union[Literal["admin"], Literal["member_ports"]]
         """
         if value is None:
             raise TypeError("Cannot set required property choice as None")
@@ -93962,6 +94066,388 @@ class StateProtocolLacpAdmin(OpenApiObject):
         """state setter
 
         The LACP Member admin state. 'up' will send LACPDUs with 'sync' flag set on selected member ports. 'down' will send LACPDUs with 'sync' flag unset on selected member ports.
+
+        value: Union[Literal["down"], Literal["up"]]
+        """
+        if value is None:
+            raise TypeError("Cannot set required property state as None")
+        self._set_property("state", value)
+
+
+class StateProtocolLacpMemberPorts(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "lag_member_names": {
+            "type": list,
+            "itemtype": str,
+        },
+        "state": {
+            "type": str,
+            "enum": [
+                "down",
+                "up",
+            ],
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ("state",)  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    DOWN = "down"  # type: str
+    UP = "up"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, lag_member_names=None, state=None):
+        super(StateProtocolLacpMemberPorts, self).__init__()
+        self._parent = parent
+        self._set_property("lag_member_names", lag_member_names)
+        self._set_property("state", state)
+
+    def set(self, lag_member_names=None, state=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def lag_member_names(self):
+        # type: () -> List[str]
+        """lag_member_names getter
+
+        The names of LAG members (ports) for which the state has to be applied. An empty or null list will control all LAG members.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+
+        Returns: List[str]
+        """
+        return self._get_property("lag_member_names")
+
+    @lag_member_names.setter
+    def lag_member_names(self, value):
+        """lag_member_names setter
+
+        The names of LAG members (ports) for which the state has to be applied. An empty or null list will control all LAG members.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+
+        value: List[str]
+        """
+        self._set_property("lag_member_names", value)
+
+    @property
+    def state(self):
+        # type: () -> Union[Literal["down"], Literal["up"]]
+        """state getter
+
+        The desired LACP member port state.
+
+        Returns: Union[Literal["down"], Literal["up"]]
+        """
+        return self._get_property("state")
+
+    @state.setter
+    def state(self, value):
+        """state setter
+
+        The desired LACP member port state.
+
+        value: Union[Literal["down"], Literal["up"]]
+        """
+        if value is None:
+            raise TypeError("Cannot set required property state as None")
+        self._set_property("state", value)
+
+
+class StateProtocolBgp(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "peers",
+            ],
+        },
+        "peers": {"type": "StateProtocolBgpPeers"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ("choice",)  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    PEERS = "peers"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None):
+        super(StateProtocolBgp, self).__init__()
+        self._parent = parent
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    @property
+    def peers(self):
+        # type: () -> StateProtocolBgpPeers
+        """Factory property that returns an instance of the StateProtocolBgpPeers class
+
+        Sets state of configured BGP peers.
+
+        Returns: StateProtocolBgpPeers
+        """
+        return self._get_property("peers", StateProtocolBgpPeers, self, "peers")
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["peers"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["peers"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["peers"]]
+        """
+        if value is None:
+            raise TypeError("Cannot set required property choice as None")
+        self._set_property("choice", value)
+
+
+class StateProtocolBgpPeers(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "peer_names": {
+            "type": list,
+            "itemtype": str,
+        },
+        "state": {
+            "type": str,
+            "enum": [
+                "down",
+                "up",
+            ],
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ("state",)  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    DOWN = "down"  # type: str
+    UP = "up"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, peer_names=None, state=None):
+        super(StateProtocolBgpPeers, self).__init__()
+        self._parent = parent
+        self._set_property("peer_names", peer_names)
+        self._set_property("state", state)
+
+    def set(self, peer_names=None, state=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def peer_names(self):
+        # type: () -> List[str]
+        """peer_names getter
+
+        The names of BGP peers for which the state has to be applied. An empty or null list will control all BGP peers.. x-constraint:. /components/schemas/Bgp.V4Peer/properties/name. /components/schemas/Bgp.V6Peer/properties/name. . x-constraint:. /components/schemas/Bgp.V4Peer/properties/name. /components/schemas/Bgp.V6Peer/properties/name.
+
+        Returns: List[str]
+        """
+        return self._get_property("peer_names")
+
+    @peer_names.setter
+    def peer_names(self, value):
+        """peer_names setter
+
+        The names of BGP peers for which the state has to be applied. An empty or null list will control all BGP peers.. x-constraint:. /components/schemas/Bgp.V4Peer/properties/name. /components/schemas/Bgp.V6Peer/properties/name. . x-constraint:. /components/schemas/Bgp.V4Peer/properties/name. /components/schemas/Bgp.V6Peer/properties/name.
+
+        value: List[str]
+        """
+        self._set_property("peer_names", value)
+
+    @property
+    def state(self):
+        # type: () -> Union[Literal["down"], Literal["up"]]
+        """state getter
+
+        The desired state of BGP peer. If the desired state is 'up', underlying IP interface(s) would be brought up automatically (if not already up), would attempt to bring up the BGP session(s) and advertise route(s), if configured. If the desired state is 'down', BGP session(s) would be brought down.
+
+        Returns: Union[Literal["down"], Literal["up"]]
+        """
+        return self._get_property("state")
+
+    @state.setter
+    def state(self, value):
+        """state setter
+
+        The desired state of BGP peer. If the desired state is 'up', underlying IP interface(s) would be brought up automatically (if not already up), would attempt to bring up the BGP session(s) and advertise route(s), if configured. If the desired state is 'down', BGP session(s) would be brought down.
+
+        value: Union[Literal["down"], Literal["up"]]
+        """
+        if value is None:
+            raise TypeError("Cannot set required property state as None")
+        self._set_property("state", value)
+
+
+class StateProtocolIsis(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "routers",
+            ],
+        },
+        "routers": {"type": "StateProtocolIsisRouters"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ("choice",)  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    ROUTERS = "routers"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None):
+        super(StateProtocolIsis, self).__init__()
+        self._parent = parent
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    @property
+    def routers(self):
+        # type: () -> StateProtocolIsisRouters
+        """Factory property that returns an instance of the StateProtocolIsisRouters class
+
+        Sets state of configured ISIS routers.
+
+        Returns: StateProtocolIsisRouters
+        """
+        return self._get_property("routers", StateProtocolIsisRouters, self, "routers")
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["routers"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["routers"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["routers"]]
+        """
+        if value is None:
+            raise TypeError("Cannot set required property choice as None")
+        self._set_property("choice", value)
+
+
+class StateProtocolIsisRouters(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "router_names": {
+            "type": list,
+            "itemtype": str,
+        },
+        "state": {
+            "type": str,
+            "enum": [
+                "down",
+                "up",
+            ],
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ("state",)  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    DOWN = "down"  # type: str
+    UP = "up"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, router_names=None, state=None):
+        super(StateProtocolIsisRouters, self).__init__()
+        self._parent = parent
+        self._set_property("router_names", router_names)
+        self._set_property("state", state)
+
+    def set(self, router_names=None, state=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def router_names(self):
+        # type: () -> List[str]
+        """router_names getter
+
+        The names of ISIS routers for which the state has to be applied. An empty or null list will control all ISIS routers.. x-constraint:. /components/schemas/Device.IsisRouter/properties/name. . x-constraint:. /components/schemas/Device.IsisRouter/properties/name.
+
+        Returns: List[str]
+        """
+        return self._get_property("router_names")
+
+    @router_names.setter
+    def router_names(self, value):
+        """router_names setter
+
+        The names of ISIS routers for which the state has to be applied. An empty or null list will control all ISIS routers.. x-constraint:. /components/schemas/Device.IsisRouter/properties/name. . x-constraint:. /components/schemas/Device.IsisRouter/properties/name.
+
+        value: List[str]
+        """
+        self._set_property("router_names", value)
+
+    @property
+    def state(self):
+        # type: () -> Union[Literal["down"], Literal["up"]]
+        """state getter
+
+        The desired state of ISIS router. If the desired state is 'up', would attempt to bring up the ISIS session(s) with respective peer(s) and advertise route(s), if configured. If the desired state is 'down', would bring down ISIS session(s) with respective peer(s).
+
+        Returns: Union[Literal["down"], Literal["up"]]
+        """
+        return self._get_property("state")
+
+    @state.setter
+    def state(self, value):
+        """state setter
+
+        The desired state of ISIS router. If the desired state is 'up', would attempt to bring up the ISIS session(s) with respective peer(s) and advertise route(s), if configured. If the desired state is 'down', would bring down ISIS session(s) with respective peer(s).
 
         value: Union[Literal["down"], Literal["up"]]
         """
@@ -111262,8 +111748,8 @@ class Api(object):
 
     def __init__(self, **kwargs):
         self._version_meta = self.version()
-        self._version_meta.api_spec_version = "0.13.2"
-        self._version_meta.sdk_version = "0.13.2"
+        self._version_meta.api_spec_version = "0.13.3"
+        self._version_meta.sdk_version = "0.13.3"
         self._version_check = kwargs.get("version_check")
         if self._version_check is None:
             self._version_check = False
