@@ -149,14 +149,14 @@ func (s *server) GetMetrics(ctx context.Context, req *otg.GetMetricsRequest) (*o
 			if !res {
 				resp = nil
 				errObj := NewError()
-				errObj.Msg().Code = &errCode
-				errObj.Msg().Errors = []string{"requested flow is not available in configured flows"}
+				_ = errObj.SetCode(errCode)
+				_ = errObj.SetErrors([]string{"requested flow is not available in configured flows"})
 				err = errObj
 			} else if len(metricsDisabledFlows) > 0 {
 				resp = nil
 				errObj := NewError()
-				errObj.Msg().Code = &errCode
-				errObj.Msg().Errors = []string{"metrics not enabled for all the flows"}
+				_ = errObj.SetCode(errCode)
+				_ = errObj.SetErrors([]string{"metrics not enabled for all the flows"})
 				err = errObj
 			} else {
 				resp = &otg.GetMetricsResponse{
@@ -176,8 +176,8 @@ func (s *server) GetMetrics(ctx context.Context, req *otg.GetMetricsRequest) (*o
 				resp = nil
 				resp = nil
 				errObj := NewError()
-				errObj.Msg().Code = &errCode
-				errObj.Msg().Errors = []string{"requested port is not available in configured ports"}
+				_ = errObj.SetCode(errCode)
+				_ = errObj.SetErrors([]string{"requested port is not available in configured ports"})
 				err = errObj
 			} else {
 				resp = &otg.GetMetricsResponse{
