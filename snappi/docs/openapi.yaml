@@ -7,7 +7,7 @@ info:
     \ issue](https://github.com/open-traffic-generator/models/issues) in the models\
     \ repository\n- [fork the models repository](https://github.com/open-traffic-generator/models)\
     \ and submit a PR"
-  version: 0.13.4
+  version: 0.13.5
   contact:
     url: https://github.com/open-traffic-generator/models
   license:
@@ -996,6 +996,8 @@ components:
               x-field-uid: 11
             speed_400_gbps:
               x-field-uid: 12
+            speed_800_gbps:
+              x-field-uid: 13
           enum:
           - speed_10_fd_mbps
           - speed_10_hd_mbps
@@ -1009,6 +1011,7 @@ components:
           - speed_100_gbps
           - speed_200_gbps
           - speed_400_gbps
+          - speed_800_gbps
         media:
           description: |-
             Set the type of media for test interface if supported. When no media
@@ -7406,6 +7409,108 @@ components:
         dst:
           x-field-uid: 14
           $ref: '#/components/schemas/Pattern.Flow.Ipv4.Dst'
+        options:
+          type: array
+          minItems: 0
+          items:
+            $ref: '#/components/schemas/Flow.Ipv4.Options'
+          x-field-uid: 15
+    Flow.Ipv4.Options:
+      description: "IPv4 options are optional extensions for the IPv4 header that\
+        \ can be utilised to provide additional information about the IPv4 datagram.\
+        \  It is encoded as a series of type, length and value attributes.  The IP\
+        \ header length MUST be increased to accommodate the extra bytes needed to\
+        \ encode the IP options. The length of the all options included to a IPv4\
+        \ header should not exceed 40 bytes since IPv4 Header length (4 bits) can\
+        \ at max specify 15 4-word octets for a total of 60 bytes which includes 20\
+        \ bytes needed for mandatory attributes of the IPv4 header. If the user adds\
+        \ multiples IPv4 options that exceeds 40 bytes and specify header length as\
+        \ \"auto\", implementation should throw error. Currently IP options supported\
+        \ are: 1. router_alert option allows devices to intercept packets not addressed\
+        \ to them directly as defined in RFC2113. 2. custom option is provided to\
+        \ configure user defined IP options as needed. "
+      type: object
+      properties:
+        choice:
+          type: string
+          default: router_alert
+          x-field-uid: 1
+          x-enum:
+            router_alert:
+              x-field-uid: 1
+            custom:
+              x-field-uid: 2
+          enum:
+          - router_alert
+          - custom
+        custom:
+          $ref: '#/components/schemas/Flow.Ipv4Options.Custom'
+          x-field-uid: 2
+    Flow.Ipv4Options.Custom:
+      description: |-
+        User defined IP options to be appended to the IPv4 header.
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/Flow.Ipv4Options.Custom.Type'
+          x-field-uid: 1
+        length:
+          $ref: '#/components/schemas/Flow.Ipv4Options.Custom.Length'
+          x-field-uid: 2
+        value:
+          description: |-
+            Value of the option field should not excced 38 bytes since maximum 40 bytes can be added as options in IPv4 header. For type and length requires 2 bytes, hence maximum of 38 bytes are expected. Maximum length of this attribute is 76 (38 * 2 hex character per byte).
+          type: string
+          format: hex
+          minLength: 0
+          maxLength: 76
+          default: '0000'
+          x-field-uid: 3
+    Flow.Ipv4Options.Custom.Type:
+      description: |-
+        Type options for custom options.
+      type: object
+      properties:
+        copied_flag:
+          x-field-uid: 1
+          $ref: '#/components/schemas/Pattern.Flow.Ipv4Options.Custom.Type.CopiedFlag'
+        option_class:
+          x-field-uid: 2
+          $ref: '#/components/schemas/Pattern.Flow.Ipv4Options.Custom.Type.OptionClass'
+        option_number:
+          x-field-uid: 3
+          $ref: '#/components/schemas/Pattern.Flow.Ipv4Options.Custom.Type.OptionNumber'
+    Flow.Ipv4Options.Custom.Length:
+      description: |-
+        Length for custom options.
+      type: object
+      properties:
+        choice:
+          description: |-
+            auto or configured value.
+          type: string
+          default: auto
+          x-field-uid: 1
+          x-enum:
+            auto:
+              x-field-uid: 1
+            value:
+              x-field-uid: 2
+          enum:
+          - auto
+          - value
+        auto:
+          description: |-
+            The OTG implementation can provide a system generated value for this property. If the OTG is unable to generate a value the default value must be used.
+          type: integer
+          format: uint32
+          default: 0
+          x-field-uid: 2
+        value:
+          type: integer
+          format: uint32
+          default: 0
+          x-field-uid: 3
     Flow.Ipv4.Priority:
       description: |-
         A container for ipv4 raw, tos, dscp ip priorities.
@@ -16204,6 +16309,221 @@ components:
           items:
             $ref: '#/components/schemas/Pattern.Flow.Ipv4.Dst.MetricTag'
           x-field-uid: 7
+    Pattern.Flow.Ipv4Options.Custom.Type.CopiedFlag.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 1
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 1
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 1
+      x-constants:
+        not_copied: 0
+        copied: 1
+    Pattern.Flow.Ipv4Options.Custom.Type.CopiedFlag:
+      description: |-
+        This flag indicates this option is copied to all fragments on fragmentations.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 1
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 1
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Ipv4Options.Custom.Type.CopiedFlag.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Ipv4Options.Custom.Type.CopiedFlag.Counter'
+          x-field-uid: 6
+      x-constants:
+        not_copied: 0
+        copied: 1
+    Pattern.Flow.Ipv4Options.Custom.Type.OptionClass.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 3
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 3
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 3
+      x-constants:
+        control: 0
+        reserved: 3
+        debugging_measurement: 2
+    Pattern.Flow.Ipv4Options.Custom.Type.OptionClass:
+      description: |-
+        Option class [Ref:https://www.iana.org/assignments/ip-parameters/ip-parameters.xhtml#ip-parameters-1].
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 3
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 3
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Ipv4Options.Custom.Type.OptionClass.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Ipv4Options.Custom.Type.OptionClass.Counter'
+          x-field-uid: 6
+      x-constants:
+        control: 0
+        reserved: 3
+        debugging_measurement: 2
+    Pattern.Flow.Ipv4Options.Custom.Type.OptionNumber.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 31
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 31
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 31
+    Pattern.Flow.Ipv4Options.Custom.Type.OptionNumber:
+      description: |-
+        Option Number [Ref:https://www.iana.org/assignments/ip-parameters/ip-parameters.xhtml#ip-parameters-1].
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 31
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 31
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Ipv4Options.Custom.Type.OptionNumber.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Ipv4Options.Custom.Type.OptionNumber.Counter'
+          x-field-uid: 6
     Pattern.Flow.Ipv4.Priority.Raw.Counter:
       description: |-
         integer counter pattern

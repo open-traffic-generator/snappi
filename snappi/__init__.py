@@ -347,6 +347,17 @@ from .snappi import PatternFlowIpv4Dst
 from .snappi import PatternFlowIpv4DstCounter
 from .snappi import PatternFlowIpv4DstMetricTag
 from .snappi import PatternFlowIpv4DstMetricTagIter
+from .snappi import FlowIpv4Options
+from .snappi import FlowIpv4OptionsCustom
+from .snappi import FlowIpv4OptionsCustomType
+from .snappi import PatternFlowIpv4OptionsCustomTypeCopiedFlag
+from .snappi import PatternFlowIpv4OptionsCustomTypeCopiedFlagCounter
+from .snappi import PatternFlowIpv4OptionsCustomTypeOptionClass
+from .snappi import PatternFlowIpv4OptionsCustomTypeOptionClassCounter
+from .snappi import PatternFlowIpv4OptionsCustomTypeOptionNumber
+from .snappi import PatternFlowIpv4OptionsCustomTypeOptionNumberCounter
+from .snappi import FlowIpv4OptionsCustomLength
+from .snappi import FlowIpv4OptionsIter
 from .snappi import FlowIpv6
 from .snappi import PatternFlowIpv6Version
 from .snappi import PatternFlowIpv6VersionCounter

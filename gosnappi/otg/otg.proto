@@ -1,4 +1,4 @@
-/* Open Traffic Generator API 0.13.4
+/* Open Traffic Generator API 0.13.5
  * Open Traffic Generator API defines a model-driven, vendor-neutral and standard
  * interface for emulating layer 2-7 network devices and generating test traffic.
  * 
@@ -538,6 +538,7 @@ message Layer1 {
       speed_100_gbps = 10;
       speed_200_gbps = 11;
       speed_400_gbps = 12;
+      speed_800_gbps = 13;
     }
   }
   // Set the speed if supported. When no speed is explicitly set, the current
@@ -5476,6 +5477,91 @@ message FlowIpv4 {
 
   // Description missing in models
   PatternFlowIpv4Dst dst = 14;
+
+  // Description missing in models
+  repeated FlowIpv4Options options = 15;
+}
+
+// IPv4 options are optional extensions for the IPv4 header that can be utilised to
+// provide additional information about the IPv4 datagram.  It is encoded as a series
+// of type, length and value attributes.  The IP header length MUST be increased to
+// accommodate the extra bytes needed to encode the IP options. The length of the all
+// options included to a IPv4 header should not exceed 40 bytes since IPv4 Header length
+// (4 bits) can at max specify 15 4-word octets for a total of 60 bytes which includes
+// 20 bytes needed for mandatory attributes of the IPv4 header. If the user adds multiples
+// IPv4 options that exceeds 40 bytes and specify header length as auto, implementation
+// should throw error. Currently IP options supported are: 1. router_alert option allows
+// devices to intercept packets not addressed to them directly as defined in RFC2113.
+// 2. custom option is provided to configure user defined IP options as needed.
+message FlowIpv4Options {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      router_alert = 1;
+      custom = 2;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.router_alert
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  FlowIpv4OptionsCustom custom = 2;
+}
+
+// User defined IP options to be appended to the IPv4 header.
+message FlowIpv4OptionsCustom {
+
+  // Description missing in models
+  FlowIpv4OptionsCustomType type = 1;
+
+  // Description missing in models
+  FlowIpv4OptionsCustomLength length = 2;
+
+  // Value of the option field should not excced 38 bytes since maximum 40 bytes can be
+  // added as options in IPv4 header. For type and length requires 2 bytes, hence maximum
+  // of 38 bytes are expected. Maximum length of this attribute is 76 (38 * 2 hex character
+  // per byte).
+  // default = 0000
+  optional string value = 3;
+}
+
+// Type options for custom options.
+message FlowIpv4OptionsCustomType {
+
+  // Description missing in models
+  PatternFlowIpv4OptionsCustomTypeCopiedFlag copied_flag = 1;
+
+  // Description missing in models
+  PatternFlowIpv4OptionsCustomTypeOptionClass option_class = 2;
+
+  // Description missing in models
+  PatternFlowIpv4OptionsCustomTypeOptionNumber option_number = 3;
+}
+
+// Length for custom options.
+message FlowIpv4OptionsCustomLength {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      auto = 1;
+      value = 2;
+    }
+  }
+  // auto or configured value.
+  // default = Choice.Enum.auto
+  optional Choice.Enum choice = 1;
+
+  // The OTG implementation can provide a system generated value for this property. If
+  // the OTG is unable to generate a value the default value must be used.
+  // default = 0
+  optional uint32 auto = 2;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 3;
 }
 
 // A container for ipv4 raw, tos, dscp ip priorities.
@@ -11677,6 +11763,147 @@ message PatternFlowIpv4Dst {
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
   repeated PatternFlowIpv4DstMetricTag metric_tags = 7;
+}
+
+// integer counter pattern
+message PatternFlowIpv4OptionsCustomTypeCopiedFlagCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// This flag indicates this option is copied to all fragments on fragmentations.
+message PatternFlowIpv4OptionsCustomTypeCopiedFlag {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowIpv4OptionsCustomTypeCopiedFlagCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowIpv4OptionsCustomTypeCopiedFlagCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowIpv4OptionsCustomTypeOptionClassCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Option class [Ref:https://www.iana.org/assignments/ip-parameters/ip-parameters.xhtml#ip-parameters-1].
+message PatternFlowIpv4OptionsCustomTypeOptionClass {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowIpv4OptionsCustomTypeOptionClassCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowIpv4OptionsCustomTypeOptionClassCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowIpv4OptionsCustomTypeOptionNumberCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Option Number [Ref:https://www.iana.org/assignments/ip-parameters/ip-parameters.xhtml#ip-parameters-1].
+message PatternFlowIpv4OptionsCustomTypeOptionNumber {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowIpv4OptionsCustomTypeOptionNumberCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowIpv4OptionsCustomTypeOptionNumberCounter decrement = 6;
 }
 
 // integer counter pattern

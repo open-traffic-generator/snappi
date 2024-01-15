@@ -1,4 +1,4 @@
-# Open Traffic Generator API 0.13.4
+# Open Traffic Generator API 0.13.5
 # License: MIT
 
 import importlib
@@ -2406,6 +2406,7 @@ class Layer1(OpenApiObject):
                 "speed_100_gbps",
                 "speed_200_gbps",
                 "speed_400_gbps",
+                "speed_800_gbps",
             ],
         },
         "media": {
@@ -2449,6 +2450,7 @@ class Layer1(OpenApiObject):
     SPEED_100_GBPS = "speed_100_gbps"  # type: str
     SPEED_200_GBPS = "speed_200_gbps"  # type: str
     SPEED_400_GBPS = "speed_400_gbps"  # type: str
+    SPEED_800_GBPS = "speed_800_gbps"  # type: str
 
     COPPER = "copper"  # type: str
     FIBER = "fiber"  # type: str
@@ -2522,12 +2524,12 @@ class Layer1(OpenApiObject):
 
     @property
     def speed(self):
-        # type: () -> Union[Literal["speed_100_fd_mbps"], Literal["speed_100_gbps"], Literal["speed_100_hd_mbps"], Literal["speed_10_fd_mbps"], Literal["speed_10_gbps"], Literal["speed_10_hd_mbps"], Literal["speed_1_gbps"], Literal["speed_200_gbps"], Literal["speed_25_gbps"], Literal["speed_400_gbps"], Literal["speed_40_gbps"], Literal["speed_50_gbps"]]
+        # type: () -> Union[Literal["speed_100_fd_mbps"], Literal["speed_100_gbps"], Literal["speed_100_hd_mbps"], Literal["speed_10_fd_mbps"], Literal["speed_10_gbps"], Literal["speed_10_hd_mbps"], Literal["speed_1_gbps"], Literal["speed_200_gbps"], Literal["speed_25_gbps"], Literal["speed_400_gbps"], Literal["speed_40_gbps"], Literal["speed_50_gbps"], Literal["speed_800_gbps"]]
         """speed getter
 
         Set the speed if supported. When no speed is explicitly set, the current. speed of underlying test interface shall be assumed.
 
-        Returns: Union[Literal["speed_100_fd_mbps"], Literal["speed_100_gbps"], Literal["speed_100_hd_mbps"], Literal["speed_10_fd_mbps"], Literal["speed_10_gbps"], Literal["speed_10_hd_mbps"], Literal["speed_1_gbps"], Literal["speed_200_gbps"], Literal["speed_25_gbps"], Literal["speed_400_gbps"], Literal["speed_40_gbps"], Literal["speed_50_gbps"]]
+        Returns: Union[Literal["speed_100_fd_mbps"], Literal["speed_100_gbps"], Literal["speed_100_hd_mbps"], Literal["speed_10_fd_mbps"], Literal["speed_10_gbps"], Literal["speed_10_hd_mbps"], Literal["speed_1_gbps"], Literal["speed_200_gbps"], Literal["speed_25_gbps"], Literal["speed_400_gbps"], Literal["speed_40_gbps"], Literal["speed_50_gbps"], Literal["speed_800_gbps"]]
         """
         return self._get_property("speed")
 
@@ -2537,7 +2539,7 @@ class Layer1(OpenApiObject):
 
         Set the speed if supported. When no speed is explicitly set, the current. speed of underlying test interface shall be assumed.
 
-        value: Union[Literal["speed_100_fd_mbps"], Literal["speed_100_gbps"], Literal["speed_100_hd_mbps"], Literal["speed_10_fd_mbps"], Literal["speed_10_gbps"], Literal["speed_10_hd_mbps"], Literal["speed_1_gbps"], Literal["speed_200_gbps"], Literal["speed_25_gbps"], Literal["speed_400_gbps"], Literal["speed_40_gbps"], Literal["speed_50_gbps"]]
+        value: Union[Literal["speed_100_fd_mbps"], Literal["speed_100_gbps"], Literal["speed_100_hd_mbps"], Literal["speed_10_fd_mbps"], Literal["speed_10_gbps"], Literal["speed_10_hd_mbps"], Literal["speed_1_gbps"], Literal["speed_200_gbps"], Literal["speed_25_gbps"], Literal["speed_400_gbps"], Literal["speed_40_gbps"], Literal["speed_50_gbps"], Literal["speed_800_gbps"]]
         """
         self._set_property("speed", value)
 
@@ -3373,7 +3375,7 @@ class Layer1Iter(OpenApiIter):
         auto_negotiate=None,
         name=None,
     ):
-        # type: (List[str],Union[Literal["speed_100_fd_mbps"], Literal["speed_100_gbps"], Literal["speed_100_hd_mbps"], Literal["speed_10_fd_mbps"], Literal["speed_10_gbps"], Literal["speed_10_hd_mbps"], Literal["speed_1_gbps"], Literal["speed_200_gbps"], Literal["speed_25_gbps"], Literal["speed_400_gbps"], Literal["speed_40_gbps"], Literal["speed_50_gbps"]],Union[Literal["copper"], Literal["fiber"], Literal["sgmii"]],bool,int,bool,bool,str) -> Layer1Iter
+        # type: (List[str],Union[Literal["speed_100_fd_mbps"], Literal["speed_100_gbps"], Literal["speed_100_hd_mbps"], Literal["speed_10_fd_mbps"], Literal["speed_10_gbps"], Literal["speed_10_hd_mbps"], Literal["speed_1_gbps"], Literal["speed_200_gbps"], Literal["speed_25_gbps"], Literal["speed_400_gbps"], Literal["speed_40_gbps"], Literal["speed_50_gbps"], Literal["speed_800_gbps"]],Union[Literal["copper"], Literal["fiber"], Literal["sgmii"]],bool,int,bool,bool,str) -> Layer1Iter
         """Factory method that creates an instance of the Layer1 class
 
         A container for layer1 settings.
@@ -3405,7 +3407,7 @@ class Layer1Iter(OpenApiIter):
         auto_negotiate=None,
         name=None,
     ):
-        # type: (List[str],Union[Literal["speed_100_fd_mbps"], Literal["speed_100_gbps"], Literal["speed_100_hd_mbps"], Literal["speed_10_fd_mbps"], Literal["speed_10_gbps"], Literal["speed_10_hd_mbps"], Literal["speed_1_gbps"], Literal["speed_200_gbps"], Literal["speed_25_gbps"], Literal["speed_400_gbps"], Literal["speed_40_gbps"], Literal["speed_50_gbps"]],Union[Literal["copper"], Literal["fiber"], Literal["sgmii"]],bool,int,bool,bool,str) -> Layer1
+        # type: (List[str],Union[Literal["speed_100_fd_mbps"], Literal["speed_100_gbps"], Literal["speed_100_hd_mbps"], Literal["speed_10_fd_mbps"], Literal["speed_10_gbps"], Literal["speed_10_hd_mbps"], Literal["speed_1_gbps"], Literal["speed_200_gbps"], Literal["speed_25_gbps"], Literal["speed_400_gbps"], Literal["speed_40_gbps"], Literal["speed_50_gbps"], Literal["speed_800_gbps"]],Union[Literal["copper"], Literal["fiber"], Literal["sgmii"]],bool,int,bool,bool,str) -> Layer1
         """Add method that creates and returns an instance of the Layer1 class
 
         A container for layer1 settings.
@@ -32406,6 +32408,7 @@ class FlowIpv4(OpenApiObject):
         "header_checksum": {"type": "PatternFlowIpv4HeaderChecksum"},
         "src": {"type": "PatternFlowIpv4Src"},
         "dst": {"type": "PatternFlowIpv4Dst"},
+        "options": {"type": "FlowIpv4OptionsIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -32571,6 +32574,19 @@ class FlowIpv4(OpenApiObject):
         Returns: PatternFlowIpv4Dst
         """
         return self._get_property("dst", PatternFlowIpv4Dst)
+
+    @property
+    def options(self):
+        # type: () -> FlowIpv4OptionsIter
+        """options getter
+
+        TBD
+
+        Returns: FlowIpv4OptionsIter
+        """
+        return self._get_property(
+            "options", FlowIpv4OptionsIter, self._parent, self._choice
+        )
 
 
 class PatternFlowIpv4Version(OpenApiObject):
@@ -42338,6 +42354,1196 @@ class PatternFlowIpv4DstMetricTagIter(OpenApiIter):
         )
         self._add(item)
         return item
+
+
+class FlowIpv4Options(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "router_alert",
+                "custom",
+            ],
+        },
+        "custom": {"type": "FlowIpv4OptionsCustom"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "router_alert",
+    }  # type: Dict[str, Union(type)]
+
+    ROUTER_ALERT = "router_alert"  # type: str
+    CUSTOM = "custom"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None):
+        super(FlowIpv4Options, self).__init__()
+        self._parent = parent
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    @property
+    def custom(self):
+        # type: () -> FlowIpv4OptionsCustom
+        """Factory property that returns an instance of the FlowIpv4OptionsCustom class
+
+        User defined IP options to be appended to the IPv4 header.
+
+        Returns: FlowIpv4OptionsCustom
+        """
+        return self._get_property("custom", FlowIpv4OptionsCustom, self, "custom")
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["custom"], Literal["router_alert"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["custom"], Literal["router_alert"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["custom"], Literal["router_alert"]]
+        """
+        self._set_property("choice", value)
+
+
+class FlowIpv4OptionsCustom(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "type": {"type": "FlowIpv4OptionsCustomType"},
+        "length": {"type": "FlowIpv4OptionsCustomLength"},
+        "value": {
+            "type": str,
+            "format": "hex",
+            "minLength": 0,
+            "maxLength": 76,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "value": "0000",
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, value="0000"):
+        super(FlowIpv4OptionsCustom, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+
+    def set(self, value=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def type(self):
+        # type: () -> FlowIpv4OptionsCustomType
+        """type getter
+
+        Type options for custom options.Type options for custom options.Type options for custom options.Type options for custom options.
+
+        Returns: FlowIpv4OptionsCustomType
+        """
+        return self._get_property("type", FlowIpv4OptionsCustomType)
+
+    @property
+    def length(self):
+        # type: () -> FlowIpv4OptionsCustomLength
+        """length getter
+
+        Length for custom options.Length for custom options.Length for custom options.Length for custom options.
+
+        Returns: FlowIpv4OptionsCustomLength
+        """
+        return self._get_property("length", FlowIpv4OptionsCustomLength)
+
+    @property
+    def value(self):
+        # type: () -> str
+        """value getter
+
+        Value of the option field should not excced 38 bytes since maximum 40 bytes can be added as options in IPv4 header. For type and length requires bytes, hence maximum of 38 bytes are expected. Maximum length of this attribute is 76 (38 2 hex character per byte).
+
+        Returns: str
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        Value of the option field should not excced 38 bytes since maximum 40 bytes can be added as options in IPv4 header. For type and length requires bytes, hence maximum of 38 bytes are expected. Maximum length of this attribute is 76 (38 2 hex character per byte).
+
+        value: str
+        """
+        self._set_property("value", value)
+
+
+class FlowIpv4OptionsCustomType(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "copied_flag": {"type": "PatternFlowIpv4OptionsCustomTypeCopiedFlag"},
+        "option_class": {"type": "PatternFlowIpv4OptionsCustomTypeOptionClass"},
+        "option_number": {"type": "PatternFlowIpv4OptionsCustomTypeOptionNumber"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(FlowIpv4OptionsCustomType, self).__init__()
+        self._parent = parent
+
+    @property
+    def copied_flag(self):
+        # type: () -> PatternFlowIpv4OptionsCustomTypeCopiedFlag
+        """copied_flag getter
+
+        This flag indicates this option is copied to all fragments on fragmentations.This flag indicates this option is copied to all fragments on fragmentations.This flag indicates this option is copied to all fragments on fragmentations.
+
+        Returns: PatternFlowIpv4OptionsCustomTypeCopiedFlag
+        """
+        return self._get_property(
+            "copied_flag", PatternFlowIpv4OptionsCustomTypeCopiedFlag
+        )
+
+    @property
+    def option_class(self):
+        # type: () -> PatternFlowIpv4OptionsCustomTypeOptionClass
+        """option_class getter
+
+        Option class [Ref:https://www.iana.org/assignments/ip-parameters/ip-parameters.xhtml#ip-parameters-1].Option class [Ref:https://www.iana.org/assignments/ip-parameters/ip-parameters.xhtml#ip-parameters-1].Option class [Ref:https://www.iana.org/assignments/ip-parameters/ip-parameters.xhtml#ip-parameters-1].
+
+        Returns: PatternFlowIpv4OptionsCustomTypeOptionClass
+        """
+        return self._get_property(
+            "option_class", PatternFlowIpv4OptionsCustomTypeOptionClass
+        )
+
+    @property
+    def option_number(self):
+        # type: () -> PatternFlowIpv4OptionsCustomTypeOptionNumber
+        """option_number getter
+
+        Option Number [Ref:https://www.iana.org/assignments/ip-parameters/ip-parameters.xhtml#ip-parameters-1].Option Number [Ref:https://www.iana.org/assignments/ip-parameters/ip-parameters.xhtml#ip-parameters-1].Option Number [Ref:https://www.iana.org/assignments/ip-parameters/ip-parameters.xhtml#ip-parameters-1].
+
+        Returns: PatternFlowIpv4OptionsCustomTypeOptionNumber
+        """
+        return self._get_property(
+            "option_number", PatternFlowIpv4OptionsCustomTypeOptionNumber
+        )
+
+
+class PatternFlowIpv4OptionsCustomTypeCopiedFlag(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 1,
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+            "maximum": 1,
+        },
+        "increment": {"type": "PatternFlowIpv4OptionsCustomTypeCopiedFlagCounter"},
+        "decrement": {"type": "PatternFlowIpv4OptionsCustomTypeCopiedFlagCounter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": 0,
+        "values": [0],
+    }  # type: Dict[str, Union(type)]
+
+    NOT_COPIED = 0  #
+    COPIED = 1  #
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=0, values=[0]):
+        super(PatternFlowIpv4OptionsCustomTypeCopiedFlag, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowIpv4OptionsCustomTypeCopiedFlagCounter
+        """Factory property that returns an instance of the PatternFlowIpv4OptionsCustomTypeCopiedFlagCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowIpv4OptionsCustomTypeCopiedFlagCounter
+        """
+        return self._get_property(
+            "increment",
+            PatternFlowIpv4OptionsCustomTypeCopiedFlagCounter,
+            self,
+            "increment",
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowIpv4OptionsCustomTypeCopiedFlagCounter
+        """Factory property that returns an instance of the PatternFlowIpv4OptionsCustomTypeCopiedFlagCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowIpv4OptionsCustomTypeCopiedFlagCounter
+        """
+        return self._get_property(
+            "decrement",
+            PatternFlowIpv4OptionsCustomTypeCopiedFlagCounter,
+            self,
+            "decrement",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowIpv4OptionsCustomTypeCopiedFlagCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 1,
+        },
+        "step": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 1,
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 1,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    NOT_COPIED = 0  #
+    COPIED = 1  #
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowIpv4OptionsCustomTypeCopiedFlagCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class PatternFlowIpv4OptionsCustomTypeOptionClass(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 3,
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+            "maximum": 3,
+        },
+        "increment": {"type": "PatternFlowIpv4OptionsCustomTypeOptionClassCounter"},
+        "decrement": {"type": "PatternFlowIpv4OptionsCustomTypeOptionClassCounter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": 0,
+        "values": [0],
+    }  # type: Dict[str, Union(type)]
+
+    CONTROL = 0  #
+    RESERVED = 3  #
+    DEBUGGING_MEASUREMENT = 2  #
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=0, values=[0]):
+        super(PatternFlowIpv4OptionsCustomTypeOptionClass, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowIpv4OptionsCustomTypeOptionClassCounter
+        """Factory property that returns an instance of the PatternFlowIpv4OptionsCustomTypeOptionClassCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowIpv4OptionsCustomTypeOptionClassCounter
+        """
+        return self._get_property(
+            "increment",
+            PatternFlowIpv4OptionsCustomTypeOptionClassCounter,
+            self,
+            "increment",
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowIpv4OptionsCustomTypeOptionClassCounter
+        """Factory property that returns an instance of the PatternFlowIpv4OptionsCustomTypeOptionClassCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowIpv4OptionsCustomTypeOptionClassCounter
+        """
+        return self._get_property(
+            "decrement",
+            PatternFlowIpv4OptionsCustomTypeOptionClassCounter,
+            self,
+            "decrement",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowIpv4OptionsCustomTypeOptionClassCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 3,
+        },
+        "step": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 3,
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 3,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    CONTROL = 0  #
+    RESERVED = 3  #
+    DEBUGGING_MEASUREMENT = 2  #
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowIpv4OptionsCustomTypeOptionClassCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class PatternFlowIpv4OptionsCustomTypeOptionNumber(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 31,
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+            "maximum": 31,
+        },
+        "increment": {"type": "PatternFlowIpv4OptionsCustomTypeOptionNumberCounter"},
+        "decrement": {"type": "PatternFlowIpv4OptionsCustomTypeOptionNumberCounter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": 0,
+        "values": [0],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=0, values=[0]):
+        super(PatternFlowIpv4OptionsCustomTypeOptionNumber, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowIpv4OptionsCustomTypeOptionNumberCounter
+        """Factory property that returns an instance of the PatternFlowIpv4OptionsCustomTypeOptionNumberCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowIpv4OptionsCustomTypeOptionNumberCounter
+        """
+        return self._get_property(
+            "increment",
+            PatternFlowIpv4OptionsCustomTypeOptionNumberCounter,
+            self,
+            "increment",
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowIpv4OptionsCustomTypeOptionNumberCounter
+        """Factory property that returns an instance of the PatternFlowIpv4OptionsCustomTypeOptionNumberCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowIpv4OptionsCustomTypeOptionNumberCounter
+        """
+        return self._get_property(
+            "decrement",
+            PatternFlowIpv4OptionsCustomTypeOptionNumberCounter,
+            self,
+            "decrement",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowIpv4OptionsCustomTypeOptionNumberCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 31,
+        },
+        "step": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 31,
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 31,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowIpv4OptionsCustomTypeOptionNumberCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class FlowIpv4OptionsCustomLength(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "auto",
+                "value",
+            ],
+        },
+        "auto": {
+            "type": int,
+            "format": "uint32",
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "auto",
+        "auto": 0,
+        "value": 0,
+    }  # type: Dict[str, Union(type)]
+
+    AUTO = "auto"  # type: str
+    VALUE = "value"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, auto=0, value=0):
+        super(FlowIpv4OptionsCustomLength, self).__init__()
+        self._parent = parent
+        self._set_property("auto", auto)
+        self._set_property("value", value)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, auto=None, value=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["auto"], Literal["value"]]
+        """choice getter
+
+        auto or configured value.
+
+        Returns: Union[Literal["auto"], Literal["value"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        auto or configured value.
+
+        value: Union[Literal["auto"], Literal["value"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def auto(self):
+        # type: () -> int
+        """auto getter
+
+        The OTG implementation can provide system generated value for this property. If the OTG is unable to generate value the default value must be used.
+
+        Returns: int
+        """
+        return self._get_property("auto")
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+
+class FlowIpv4OptionsIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = True
+
+    def __init__(self, parent=None, choice=None):
+        super(FlowIpv4OptionsIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[FlowIpv4Options, FlowIpv4OptionsCustom]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> FlowIpv4OptionsIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> FlowIpv4Options
+        return self._next()
+
+    def next(self):
+        # type: () -> FlowIpv4Options
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, FlowIpv4Options):
+            raise Exception("Item is not an instance of FlowIpv4Options")
+
+    def options(self):
+        # type: () -> FlowIpv4OptionsIter
+        """Factory method that creates an instance of the FlowIpv4Options class
+
+        IPv4 options are optional extensions for the IPv4 header that can be utilised to provide additional information about the IPv4 datagram. It is encoded as series of type, length and value attributes. The IP header length MUST be increased to accommodate the extra bytes needed to encode the IP options. The length of the all options included to IPv4 header should not exceed 40 bytes since IPv4 Header length (4 bits) can at max specify 15 4-word octets for total of 60 bytes which includes 20 bytes needed for mandatory attributes of the IPv4 header. If the user adds multiples IPv4 options that exceeds 40 bytes and specify header length as "auto", implementation should throw error. Currently IP options supported are: 1. router_alert option allows devices to intercept packets not addressed to them directly as defined in RFC2113. 2. custom option is provided to configure user defined IP options as needed.
+
+        Returns: FlowIpv4OptionsIter
+        """
+        item = FlowIpv4Options(parent=self._parent, choice=self._choice)
+        self._add(item)
+        return self
+
+    def add(self):
+        # type: () -> FlowIpv4Options
+        """Add method that creates and returns an instance of the FlowIpv4Options class
+
+        IPv4 options are optional extensions for the IPv4 header that can be utilised to provide additional information about the IPv4 datagram. It is encoded as series of type, length and value attributes. The IP header length MUST be increased to accommodate the extra bytes needed to encode the IP options. The length of the all options included to IPv4 header should not exceed 40 bytes since IPv4 Header length (4 bits) can at max specify 15 4-word octets for total of 60 bytes which includes 20 bytes needed for mandatory attributes of the IPv4 header. If the user adds multiples IPv4 options that exceeds 40 bytes and specify header length as "auto", implementation should throw error. Currently IP options supported are: 1. router_alert option allows devices to intercept packets not addressed to them directly as defined in RFC2113. 2. custom option is provided to configure user defined IP options as needed.
+
+        Returns: FlowIpv4Options
+        """
+        item = FlowIpv4Options(parent=self._parent, choice=self._choice)
+        self._add(item)
+        return item
+
+    def custom(self, value="0000"):
+        # type: (str) -> FlowIpv4OptionsIter
+        """Factory method that creates an instance of the FlowIpv4OptionsCustom class
+
+        User defined IP options to be appended to the IPv4 header.
+
+        Returns: FlowIpv4OptionsIter
+        """
+        item = FlowIpv4Options()
+        item.custom
+        item.choice = "custom"
+        self._add(item)
+        return self
 
 
 class FlowIpv6(OpenApiObject):
@@ -111748,8 +112954,8 @@ class Api(object):
 
     def __init__(self, **kwargs):
         self._version_meta = self.version()
-        self._version_meta.api_spec_version = "0.13.4"
-        self._version_meta.sdk_version = "0.13.4"
+        self._version_meta.api_spec_version = "0.13.5"
+        self._version_meta.sdk_version = "0.13.5"
         self._version_check = kwargs.get("version_check")
         if self._version_check is None:
             self._version_check = False
