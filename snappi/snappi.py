@@ -1,4 +1,4 @@
-# Open Traffic Generator API 0.13.5
+# Open Traffic Generator API 0.13.6
 # License: MIT
 
 import importlib
@@ -474,6 +474,17 @@ class OpenApiValidator(object):
             return False
         return all([True if int(bin) == 0 or int(bin) == 1 else False for bin in value])
 
+    def validate_oid(self, value):
+        segments = value.split(".")
+        if len(segments) < 2:
+            return False
+        for segment in segments:
+            if not segment.isnumeric():
+                return False
+            if not (0 <= int(segment) <= 4294967295):
+                return False
+        return True
+
     def types_validation(
         self,
         value,
@@ -677,10 +688,13 @@ class OpenApiObject(OpenApiBase, OpenApiValidator):
                 "_DEFAULTS" in dir(self._properties[name])
                 and "choice" in self._properties[name]._DEFAULTS
             ):
-                getattr(
-                    self._properties[name],
-                    self._properties[name]._DEFAULTS["choice"],
-                )
+                choice_str = self._properties[name]._DEFAULTS["choice"]
+
+                if choice_str in self._properties[name]._TYPES:
+                    getattr(
+                        self._properties[name],
+                        self._properties[name]._DEFAULTS["choice"],
+                    )
         else:
             if default_value is None and name in self._DEFAULTS:
                 self._set_choice(name)
@@ -26302,6 +26316,7 @@ class FlowHeader(OpenApiObject):
                 "ppp",
                 "igmpv1",
                 "mpls",
+                "snmpv2c",
             ],
         },
         "custom": {"type": "FlowCustom"},
@@ -26323,6 +26338,7 @@ class FlowHeader(OpenApiObject):
         "ppp": {"type": "FlowPpp"},
         "igmpv1": {"type": "FlowIgmpv1"},
         "mpls": {"type": "FlowMpls"},
+        "snmpv2c": {"type": "FlowSnmpv2c"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -26350,6 +26366,7 @@ class FlowHeader(OpenApiObject):
     PPP = "ppp"  # type: str
     IGMPV1 = "igmpv1"  # type: str
     MPLS = "mpls"  # type: str
+    SNMPV2C = "snmpv2c"  # type: str
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
@@ -26577,13 +26594,24 @@ class FlowHeader(OpenApiObject):
         return self._get_property("mpls", FlowMpls, self, "mpls")
 
     @property
+    def snmpv2c(self):
+        # type: () -> FlowSnmpv2c
+        """Factory property that returns an instance of the FlowSnmpv2c class
+
+        SNMPv2C packet header as defined in RFC1901 and RFC3416.
+
+        Returns: FlowSnmpv2c
+        """
+        return self._get_property("snmpv2c", FlowSnmpv2c, self, "snmpv2c")
+
+    @property
     def choice(self):
-        # type: () -> Union[Literal["arp"], Literal["custom"], Literal["ethernet"], Literal["ethernetpause"], Literal["gre"], Literal["gtpv1"], Literal["gtpv2"], Literal["icmp"], Literal["icmpv6"], Literal["igmpv1"], Literal["ipv4"], Literal["ipv6"], Literal["mpls"], Literal["pfcpause"], Literal["ppp"], Literal["tcp"], Literal["udp"], Literal["vlan"], Literal["vxlan"]]
+        # type: () -> Union[Literal["arp"], Literal["custom"], Literal["ethernet"], Literal["ethernetpause"], Literal["gre"], Literal["gtpv1"], Literal["gtpv2"], Literal["icmp"], Literal["icmpv6"], Literal["igmpv1"], Literal["ipv4"], Literal["ipv6"], Literal["mpls"], Literal["pfcpause"], Literal["ppp"], Literal["snmpv2c"], Literal["tcp"], Literal["udp"], Literal["vlan"], Literal["vxlan"]]
         """choice getter
 
         The available types of flow headers. If one is not provided the default ethernet packet header MUST be provided.
 
-        Returns: Union[Literal["arp"], Literal["custom"], Literal["ethernet"], Literal["ethernetpause"], Literal["gre"], Literal["gtpv1"], Literal["gtpv2"], Literal["icmp"], Literal["icmpv6"], Literal["igmpv1"], Literal["ipv4"], Literal["ipv6"], Literal["mpls"], Literal["pfcpause"], Literal["ppp"], Literal["tcp"], Literal["udp"], Literal["vlan"], Literal["vxlan"]]
+        Returns: Union[Literal["arp"], Literal["custom"], Literal["ethernet"], Literal["ethernetpause"], Literal["gre"], Literal["gtpv1"], Literal["gtpv2"], Literal["icmp"], Literal["icmpv6"], Literal["igmpv1"], Literal["ipv4"], Literal["ipv6"], Literal["mpls"], Literal["pfcpause"], Literal["ppp"], Literal["snmpv2c"], Literal["tcp"], Literal["udp"], Literal["vlan"], Literal["vxlan"]]
         """
         return self._get_property("choice")
 
@@ -26593,7 +26621,7 @@ class FlowHeader(OpenApiObject):
 
         The available types of flow headers. If one is not provided the default ethernet packet header MUST be provided.
 
-        value: Union[Literal["arp"], Literal["custom"], Literal["ethernet"], Literal["ethernetpause"], Literal["gre"], Literal["gtpv1"], Literal["gtpv2"], Literal["icmp"], Literal["icmpv6"], Literal["igmpv1"], Literal["ipv4"], Literal["ipv6"], Literal["mpls"], Literal["pfcpause"], Literal["ppp"], Literal["tcp"], Literal["udp"], Literal["vlan"], Literal["vxlan"]]
+        value: Union[Literal["arp"], Literal["custom"], Literal["ethernet"], Literal["ethernetpause"], Literal["gre"], Literal["gtpv1"], Literal["gtpv2"], Literal["icmp"], Literal["icmpv6"], Literal["igmpv1"], Literal["ipv4"], Literal["ipv6"], Literal["mpls"], Literal["pfcpause"], Literal["ppp"], Literal["snmpv2c"], Literal["tcp"], Literal["udp"], Literal["vlan"], Literal["vxlan"]]
         """
         self._set_property("choice", value)
 
@@ -90623,6 +90651,3855 @@ class PatternFlowMplsTimeToLiveMetricTagIter(OpenApiIter):
         return item
 
 
+class FlowSnmpv2c(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "version": {"type": "PatternFlowSnmpv2cVersion"},
+        "community": {
+            "type": str,
+            "maxLength": 10000,
+        },
+        "data": {"type": "FlowSnmpv2cData"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ("data",)  # type: tuple(str)
+
+    _DEFAULTS = {
+        "community": "community",
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, community="community"):
+        super(FlowSnmpv2c, self).__init__()
+        self._parent = parent
+        self._set_property("community", community)
+
+    def set(self, community=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def version(self):
+        # type: () -> PatternFlowSnmpv2cVersion
+        """version getter
+
+        VersionVersionVersionVersion
+
+        Returns: PatternFlowSnmpv2cVersion
+        """
+        return self._get_property("version", PatternFlowSnmpv2cVersion)
+
+    @property
+    def community(self):
+        # type: () -> str
+        """community getter
+
+        It is an ASCII based octet string which identifies the SNMP community in which the sender and recipient of this message are located. It should match the read-only or read-write community string configured on the recipient for the PDU to be accepted.
+
+        Returns: str
+        """
+        return self._get_property("community")
+
+    @community.setter
+    def community(self, value):
+        """community setter
+
+        It is an ASCII based octet string which identifies the SNMP community in which the sender and recipient of this message are located. It should match the read-only or read-write community string configured on the recipient for the PDU to be accepted.
+
+        value: str
+        """
+        self._set_property("community", value)
+
+    @property
+    def data(self):
+        # type: () -> FlowSnmpv2cData
+        """data getter
+
+        This contains the body of the SNMPv2C message.. - Encoding of subsequent fields follow ASN.1 specification.. Refer: http://www.itu.int/ITU-T/asn1/This contains the body of the SNMPv2C message.. - Encoding of subsequent fields follow ASN.1 specification.. Refer: http://www.itu.int/ITU-T/asn1/This contains the body of the SNMPv2C message.. - Encoding of subsequent fields follow ASN.1 specification.. Refer: http://www.itu.int/ITU-T/asn1/This contains the body of the SNMPv2C message.. - Encoding of subsequent fields follow ASN.1 specification.. Refer: http://www.itu.int/ITU-T/asn1/
+
+        Returns: FlowSnmpv2cData
+        """
+        return self._get_property("data", FlowSnmpv2cData)
+
+
+class PatternFlowSnmpv2cVersion(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+            "maximum": 255,
+        },
+        "increment": {"type": "PatternFlowSnmpv2cVersionCounter"},
+        "decrement": {"type": "PatternFlowSnmpv2cVersionCounter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": 1,
+        "values": [1],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=1, values=[1]):
+        super(PatternFlowSnmpv2cVersion, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowSnmpv2cVersionCounter
+        """Factory property that returns an instance of the PatternFlowSnmpv2cVersionCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowSnmpv2cVersionCounter
+        """
+        return self._get_property(
+            "increment", PatternFlowSnmpv2cVersionCounter, self, "increment"
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowSnmpv2cVersionCounter
+        """Factory property that returns an instance of the PatternFlowSnmpv2cVersionCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowSnmpv2cVersionCounter
+        """
+        return self._get_property(
+            "decrement", PatternFlowSnmpv2cVersionCounter, self, "decrement"
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowSnmpv2cVersionCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "step": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 1,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=1, step=1, count=1):
+        super(PatternFlowSnmpv2cVersionCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class FlowSnmpv2cData(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "get_request",
+                "get_next_request",
+                "response",
+                "set_request",
+                "get_bulk_request",
+                "inform_request",
+                "snmpv2_trap",
+                "report",
+            ],
+        },
+        "get_request": {"type": "FlowSnmpv2cPDU"},
+        "get_next_request": {"type": "FlowSnmpv2cPDU"},
+        "response": {"type": "FlowSnmpv2cPDU"},
+        "set_request": {"type": "FlowSnmpv2cPDU"},
+        "get_bulk_request": {"type": "FlowSnmpv2cBulkPDU"},
+        "inform_request": {"type": "FlowSnmpv2cPDU"},
+        "snmpv2_trap": {"type": "FlowSnmpv2cPDU"},
+        "report": {"type": "FlowSnmpv2cPDU"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ("choice",)  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    GET_REQUEST = "get_request"  # type: str
+    GET_NEXT_REQUEST = "get_next_request"  # type: str
+    RESPONSE = "response"  # type: str
+    SET_REQUEST = "set_request"  # type: str
+    GET_BULK_REQUEST = "get_bulk_request"  # type: str
+    INFORM_REQUEST = "inform_request"  # type: str
+    SNMPV2_TRAP = "snmpv2_trap"  # type: str
+    REPORT = "report"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None):
+        super(FlowSnmpv2cData, self).__init__()
+        self._parent = parent
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    @property
+    def get_request(self):
+        # type: () -> FlowSnmpv2cPDU
+        """Factory property that returns an instance of the FlowSnmpv2cPDU class
+
+        This contains the body of the SNMPv2C PDU.
+
+        Returns: FlowSnmpv2cPDU
+        """
+        return self._get_property("get_request", FlowSnmpv2cPDU, self, "get_request")
+
+    @property
+    def get_next_request(self):
+        # type: () -> FlowSnmpv2cPDU
+        """Factory property that returns an instance of the FlowSnmpv2cPDU class
+
+        This contains the body of the SNMPv2C PDU.
+
+        Returns: FlowSnmpv2cPDU
+        """
+        return self._get_property(
+            "get_next_request", FlowSnmpv2cPDU, self, "get_next_request"
+        )
+
+    @property
+    def response(self):
+        # type: () -> FlowSnmpv2cPDU
+        """Factory property that returns an instance of the FlowSnmpv2cPDU class
+
+        This contains the body of the SNMPv2C PDU.
+
+        Returns: FlowSnmpv2cPDU
+        """
+        return self._get_property("response", FlowSnmpv2cPDU, self, "response")
+
+    @property
+    def set_request(self):
+        # type: () -> FlowSnmpv2cPDU
+        """Factory property that returns an instance of the FlowSnmpv2cPDU class
+
+        This contains the body of the SNMPv2C PDU.
+
+        Returns: FlowSnmpv2cPDU
+        """
+        return self._get_property("set_request", FlowSnmpv2cPDU, self, "set_request")
+
+    @property
+    def get_bulk_request(self):
+        # type: () -> FlowSnmpv2cBulkPDU
+        """Factory property that returns an instance of the FlowSnmpv2cBulkPDU class
+
+        The purpose of the GetBulkRequest-PDU is to request the transfer of potentially large amount of data, including, but not limited to, the efficient and rapid retrieval of large tables.
+
+        Returns: FlowSnmpv2cBulkPDU
+        """
+        return self._get_property(
+            "get_bulk_request", FlowSnmpv2cBulkPDU, self, "get_bulk_request"
+        )
+
+    @property
+    def inform_request(self):
+        # type: () -> FlowSnmpv2cPDU
+        """Factory property that returns an instance of the FlowSnmpv2cPDU class
+
+        This contains the body of the SNMPv2C PDU.
+
+        Returns: FlowSnmpv2cPDU
+        """
+        return self._get_property(
+            "inform_request", FlowSnmpv2cPDU, self, "inform_request"
+        )
+
+    @property
+    def snmpv2_trap(self):
+        # type: () -> FlowSnmpv2cPDU
+        """Factory property that returns an instance of the FlowSnmpv2cPDU class
+
+        This contains the body of the SNMPv2C PDU.
+
+        Returns: FlowSnmpv2cPDU
+        """
+        return self._get_property("snmpv2_trap", FlowSnmpv2cPDU, self, "snmpv2_trap")
+
+    @property
+    def report(self):
+        # type: () -> FlowSnmpv2cPDU
+        """Factory property that returns an instance of the FlowSnmpv2cPDU class
+
+        This contains the body of the SNMPv2C PDU.
+
+        Returns: FlowSnmpv2cPDU
+        """
+        return self._get_property("report", FlowSnmpv2cPDU, self, "report")
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["get_bulk_request"], Literal["get_next_request"], Literal["get_request"], Literal["inform_request"], Literal["report"], Literal["response"], Literal["set_request"], Literal["snmpv2_trap"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["get_bulk_request"], Literal["get_next_request"], Literal["get_request"], Literal["inform_request"], Literal["report"], Literal["response"], Literal["set_request"], Literal["snmpv2_trap"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["get_bulk_request"], Literal["get_next_request"], Literal["get_request"], Literal["inform_request"], Literal["report"], Literal["response"], Literal["set_request"], Literal["snmpv2_trap"]]
+        """
+        if value is None:
+            raise TypeError("Cannot set required property choice as None")
+        self._set_property("choice", value)
+
+
+class FlowSnmpv2cPDU(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "request_id": {"type": "PatternFlowSnmpv2cPDURequestId"},
+        "error_status": {
+            "type": str,
+            "enum": [
+                "authorization_error",
+                "bad_value",
+                "commit_failed",
+                "gen_err",
+                "inconsistent_name",
+                "inconsistent_value",
+                "no_access",
+                "no_creation",
+                "no_error",
+                "no_such_name",
+                "not_writable",
+                "read_only",
+                "resource_unavailable",
+                "too_big",
+                "undo_failed",
+                "wrong_encoding",
+                "wrong_length",
+                "wrong_type",
+                "wrong_value",
+            ],
+        },
+        "error_index": {"type": "PatternFlowSnmpv2cPDUErrorIndex"},
+        "variable_bindings": {"type": "FlowSnmpv2cVariableBindingIter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "error_status": "no_error",
+    }  # type: Dict[str, Union(type)]
+
+    AUTHORIZATION_ERROR = "authorization_error"  # type: str
+    BAD_VALUE = "bad_value"  # type: str
+    COMMIT_FAILED = "commit_failed"  # type: str
+    GEN_ERR = "gen_err"  # type: str
+    INCONSISTENT_NAME = "inconsistent_name"  # type: str
+    INCONSISTENT_VALUE = "inconsistent_value"  # type: str
+    NO_ACCESS = "no_access"  # type: str
+    NO_CREATION = "no_creation"  # type: str
+    NO_ERROR = "no_error"  # type: str
+    NO_SUCH_NAME = "no_such_name"  # type: str
+    NOT_WRITABLE = "not_writable"  # type: str
+    READ_ONLY = "read_only"  # type: str
+    RESOURCE_UNAVAILABLE = "resource_unavailable"  # type: str
+    TOO_BIG = "too_big"  # type: str
+    UNDO_FAILED = "undo_failed"  # type: str
+    WRONG_ENCODING = "wrong_encoding"  # type: str
+    WRONG_LENGTH = "wrong_length"  # type: str
+    WRONG_TYPE = "wrong_type"  # type: str
+    WRONG_VALUE = "wrong_value"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, error_status="no_error"):
+        super(FlowSnmpv2cPDU, self).__init__()
+        self._parent = parent
+        self._set_property("error_status", error_status)
+
+    def set(self, error_status=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def request_id(self):
+        # type: () -> PatternFlowSnmpv2cPDURequestId
+        """request_id getter
+
+        Identifies particular SNMP request. This index is echoed back in the response from the SNMP agent, allowing the SNMP manager to match an incoming response to the appropriate request.. - Encoding of this field follows ASN.1 X.690(section 8.3) specification.. Refer: http://www.itu.int/ITU-T/asn1/Identifies particular SNMP request. This index is echoed back in the response from the SNMP agent, allowing the SNMP manager to match an incoming response to the appropriate request.. - Encoding of this field follows ASN.1 X.690(section 8.3) specification.. Refer: http://www.itu.int/ITU-T/asn1/Identifies particular SNMP request. This index is echoed back in the response from the SNMP agent, allowing the SNMP manager to match an incoming response to the appropriate request.. - Encoding of this field follows ASN.1 X.690(section 8.3) specification.. Refer: http://www.itu.int/ITU-T/asn1/Identifies particular SNMP request. This index is echoed back in the response from the SNMP agent, allowing the SNMP manager to match an incoming response to the appropriate request.. - Encoding of this field follows ASN.1 X.690(section 8.3) specification.. Refer: http://www.itu.int/ITU-T/asn1/Identifies particular SNMP request. This index is echoed back in the response from the SNMP agent, allowing the SNMP manager to match an incoming response to the appropriate request.. - Encoding of this field follows ASN.1 X.690(section 8.3) specification.. Refer: http://www.itu.int/ITU-T/asn1/Identifies particular SNMP request. This index is echoed back in the response from the SNMP agent, allowing the SNMP manager to match an incoming response to the appropriate request.. - Encoding of this field follows ASN.1 X.690(section 8.3) specification.. Refer: http://www.itu.int/ITU-T/asn1/Identifies particular SNMP request. This index is echoed back in the response from the SNMP agent, allowing the SNMP manager to match an incoming response to the appropriate request.. - Encoding of this field follows ASN.1 X.690(section 8.3) specification.. Refer: http://www.itu.int/ITU-T/asn1/Identifies particular SNMP request. This index is echoed back in the response from the SNMP agent, allowing the SNMP manager to match an incoming response to the appropriate request.. - Encoding of this field follows ASN.1 X.690(section 8.3) specification.. Refer: http://www.itu.int/ITU-T/asn1/Identifies particular SNMP request. This index is echoed back in the response from the SNMP agent, allowing the SNMP manager to match an incoming response to the appropriate request.. - Encoding of this field follows ASN.1 X.690(section 8.3) specification.. Refer: http://www.itu.int/ITU-T/asn1/Identifies particular SNMP request. This index is echoed back in the response from the SNMP agent, allowing the SNMP manager to match an incoming response to the appropriate request.. - Encoding of this field follows ASN.1 X.690(section 8.3) specification.. Refer: http://www.itu.int/ITU-T/asn1/
+
+        Returns: PatternFlowSnmpv2cPDURequestId
+        """
+        return self._get_property("request_id", PatternFlowSnmpv2cPDURequestId)
+
+    @property
+    def error_status(self):
+        # type: () -> Union[Literal["authorization_error"], Literal["bad_value"], Literal["commit_failed"], Literal["gen_err"], Literal["inconsistent_name"], Literal["inconsistent_value"], Literal["no_access"], Literal["no_creation"], Literal["no_error"], Literal["no_such_name"], Literal["not_writable"], Literal["read_only"], Literal["resource_unavailable"], Literal["too_big"], Literal["undo_failed"], Literal["wrong_encoding"], Literal["wrong_length"], Literal["wrong_type"], Literal["wrong_value"]]
+        """error_status getter
+
+        The SNMP agent places an error code in this field in the response message if an error occurred processing the request.
+
+        Returns: Union[Literal["authorization_error"], Literal["bad_value"], Literal["commit_failed"], Literal["gen_err"], Literal["inconsistent_name"], Literal["inconsistent_value"], Literal["no_access"], Literal["no_creation"], Literal["no_error"], Literal["no_such_name"], Literal["not_writable"], Literal["read_only"], Literal["resource_unavailable"], Literal["too_big"], Literal["undo_failed"], Literal["wrong_encoding"], Literal["wrong_length"], Literal["wrong_type"], Literal["wrong_value"]]
+        """
+        return self._get_property("error_status")
+
+    @error_status.setter
+    def error_status(self, value):
+        """error_status setter
+
+        The SNMP agent places an error code in this field in the response message if an error occurred processing the request.
+
+        value: Union[Literal["authorization_error"], Literal["bad_value"], Literal["commit_failed"], Literal["gen_err"], Literal["inconsistent_name"], Literal["inconsistent_value"], Literal["no_access"], Literal["no_creation"], Literal["no_error"], Literal["no_such_name"], Literal["not_writable"], Literal["read_only"], Literal["resource_unavailable"], Literal["too_big"], Literal["undo_failed"], Literal["wrong_encoding"], Literal["wrong_length"], Literal["wrong_type"], Literal["wrong_value"]]
+        """
+        self._set_property("error_status", value)
+
+    @property
+    def error_index(self):
+        # type: () -> PatternFlowSnmpv2cPDUErrorIndex
+        """error_index getter
+
+        When Error Status is non-zero, this field contains pointer that specifies which object generated the error. Always zero in request.When Error Status is non-zero, this field contains pointer that specifies which object generated the error. Always zero in request.When Error Status is non-zero, this field contains pointer that specifies which object generated the error. Always zero in request.When Error Status is non-zero, this field contains pointer that specifies which object generated the error. Always zero in request.When Error Status is non-zero, this field contains pointer that specifies which object generated the error. Always zero in request.When Error Status is non-zero, this field contains pointer that specifies which object generated the error. Always zero in request.When Error Status is non-zero, this field contains pointer that specifies which object generated the error. Always zero in request.When Error Status is non-zero, this field contains pointer that specifies which object generated the error. Always zero in request.When Error Status is non-zero, this field contains pointer that specifies which object generated the error. Always zero in request.When Error Status is non-zero, this field contains pointer that specifies which object generated the error. Always zero in request.
+
+        Returns: PatternFlowSnmpv2cPDUErrorIndex
+        """
+        return self._get_property("error_index", PatternFlowSnmpv2cPDUErrorIndex)
+
+    @property
+    def variable_bindings(self):
+        # type: () -> FlowSnmpv2cVariableBindingIter
+        """variable_bindings getter
+
+        A Sequence of variable_bindings.
+
+        Returns: FlowSnmpv2cVariableBindingIter
+        """
+        return self._get_property(
+            "variable_bindings",
+            FlowSnmpv2cVariableBindingIter,
+            self._parent,
+            self._choice,
+        )
+
+
+class PatternFlowSnmpv2cPDURequestId(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "int32",
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "int32",
+        },
+        "increment": {"type": "PatternFlowSnmpv2cPDURequestIdCounter"},
+        "decrement": {"type": "PatternFlowSnmpv2cPDURequestIdCounter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": 0,
+        "values": [0],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=0, values=[0]):
+        super(PatternFlowSnmpv2cPDURequestId, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowSnmpv2cPDURequestIdCounter
+        """Factory property that returns an instance of the PatternFlowSnmpv2cPDURequestIdCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowSnmpv2cPDURequestIdCounter
+        """
+        return self._get_property(
+            "increment", PatternFlowSnmpv2cPDURequestIdCounter, self, "increment"
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowSnmpv2cPDURequestIdCounter
+        """Factory property that returns an instance of the PatternFlowSnmpv2cPDURequestIdCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowSnmpv2cPDURequestIdCounter
+        """
+        return self._get_property(
+            "decrement", PatternFlowSnmpv2cPDURequestIdCounter, self, "decrement"
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowSnmpv2cPDURequestIdCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "format": "int32",
+        },
+        "step": {
+            "type": int,
+            "format": "int32",
+        },
+        "count": {
+            "type": int,
+            "format": "int32",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowSnmpv2cPDURequestIdCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class PatternFlowSnmpv2cPDUErrorIndex(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+        },
+        "increment": {"type": "PatternFlowSnmpv2cPDUErrorIndexCounter"},
+        "decrement": {"type": "PatternFlowSnmpv2cPDUErrorIndexCounter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": 0,
+        "values": [0],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=0, values=[0]):
+        super(PatternFlowSnmpv2cPDUErrorIndex, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowSnmpv2cPDUErrorIndexCounter
+        """Factory property that returns an instance of the PatternFlowSnmpv2cPDUErrorIndexCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowSnmpv2cPDUErrorIndexCounter
+        """
+        return self._get_property(
+            "increment", PatternFlowSnmpv2cPDUErrorIndexCounter, self, "increment"
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowSnmpv2cPDUErrorIndexCounter
+        """Factory property that returns an instance of the PatternFlowSnmpv2cPDUErrorIndexCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowSnmpv2cPDUErrorIndexCounter
+        """
+        return self._get_property(
+            "decrement", PatternFlowSnmpv2cPDUErrorIndexCounter, self, "decrement"
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowSnmpv2cPDUErrorIndexCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "format": "uint32",
+        },
+        "step": {
+            "type": int,
+            "format": "uint32",
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowSnmpv2cPDUErrorIndexCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class FlowSnmpv2cVariableBinding(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "object_identifier": {
+            "type": str,
+            "format": "oid",
+        },
+        "value": {"type": "FlowSnmpv2cVariableBindingValue"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "object_identifier": "0.1",
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, object_identifier="0.1"):
+        super(FlowSnmpv2cVariableBinding, self).__init__()
+        self._parent = parent
+        self._set_property("object_identifier", object_identifier)
+
+    def set(self, object_identifier=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def object_identifier(self):
+        # type: () -> str
+        """object_identifier getter
+
+        The Object Identifier points to particular parameter in the SNMP agent. - Encoding of this field follows RFC2578(section 3.5) and ASN.1 X.690(section 8.1.3.6) specification.. Refer: http://www.itu.int/ITU-T/asn1/. According to BER, the first two numbers of any OID (x.y) are encoded as one value using the formula (40*x)+y. Example, the first two numbers of an SNMP OID 1.3... are encoded as 43 or 0x2B, because (40*1)+3 43. - After the first two numbers are encoded, the subsequent numbers in the OID are each encoded as byte. - However, special rule is required for large numbers because one byte can only represent number from 0-127. - The rule for large numbers states that only the lower bits in the byte are used for holding the value (0-127). - The highest order bit(8th) is used as flag to indicate that this number spans more than one byte. Therefore, any number over 127 must be encoded using more than one byte. - Example, the number 2680 in the OID '1.3.6.1.4.1.2680.1.2.7.3.2.0' cannot be encoded using single byte. According to this rule, the number 2680 must be encoded as 0x94 0x78. Since the most significant bit is set in the first byte (0x94), it indicates that number spans to the next byte.. Since the most significant bit is not set in the next byte (0x78), it indicates that the number ends at the second byte.. The value is derived by appending bits from each of the concatenated bytes i.e (0x14 *128^1) (0x78 128^0) 2680.
+
+        Returns: str
+        """
+        return self._get_property("object_identifier")
+
+    @object_identifier.setter
+    def object_identifier(self, value):
+        """object_identifier setter
+
+        The Object Identifier points to particular parameter in the SNMP agent. - Encoding of this field follows RFC2578(section 3.5) and ASN.1 X.690(section 8.1.3.6) specification.. Refer: http://www.itu.int/ITU-T/asn1/. According to BER, the first two numbers of any OID (x.y) are encoded as one value using the formula (40*x)+y. Example, the first two numbers of an SNMP OID 1.3... are encoded as 43 or 0x2B, because (40*1)+3 43. - After the first two numbers are encoded, the subsequent numbers in the OID are each encoded as byte. - However, special rule is required for large numbers because one byte can only represent number from 0-127. - The rule for large numbers states that only the lower bits in the byte are used for holding the value (0-127). - The highest order bit(8th) is used as flag to indicate that this number spans more than one byte. Therefore, any number over 127 must be encoded using more than one byte. - Example, the number 2680 in the OID '1.3.6.1.4.1.2680.1.2.7.3.2.0' cannot be encoded using single byte. According to this rule, the number 2680 must be encoded as 0x94 0x78. Since the most significant bit is set in the first byte (0x94), it indicates that number spans to the next byte.. Since the most significant bit is not set in the next byte (0x78), it indicates that the number ends at the second byte.. The value is derived by appending bits from each of the concatenated bytes i.e (0x14 *128^1) (0x78 128^0) 2680.
+
+        value: str
+        """
+        self._set_property("object_identifier", value)
+
+    @property
+    def value(self):
+        # type: () -> FlowSnmpv2cVariableBindingValue
+        """value getter
+
+        The value for the object_identifier as per RFC2578.The value for the object_identifier as per RFC2578.The value for the object_identifier as per RFC2578.
+
+        Returns: FlowSnmpv2cVariableBindingValue
+        """
+        return self._get_property("value", FlowSnmpv2cVariableBindingValue)
+
+
+class FlowSnmpv2cVariableBindingValue(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "no_value",
+                "integer_value",
+                "string_value",
+                "object_identifier_value",
+                "ip_address_value",
+                "counter_value",
+                "timeticks_value",
+                "arbitrary_value",
+                "big_counter_value",
+                "unsigned_integer_value",
+            ],
+        },
+        "integer_value": {"type": "PatternFlowSnmpv2cVariableBindingValueIntegerValue"},
+        "string_value": {
+            "type": str,
+            "maxLength": 10000,
+        },
+        "object_identifier_value": {
+            "type": str,
+            "format": "oid",
+        },
+        "ip_address_value": {
+            "type": "PatternFlowSnmpv2cVariableBindingValueIpAddressValue"
+        },
+        "counter_value": {"type": "PatternFlowSnmpv2cVariableBindingValueCounterValue"},
+        "timeticks_value": {
+            "type": "PatternFlowSnmpv2cVariableBindingValueTimeticksValue"
+        },
+        "arbitrary_value": {
+            "type": str,
+            "format": "hex",
+            "maxLength": 10000,
+        },
+        "big_counter_value": {
+            "type": "PatternFlowSnmpv2cVariableBindingValueBigCounterValue"
+        },
+        "unsigned_integer_value": {
+            "type": "PatternFlowSnmpv2cVariableBindingValueUnsignedIntegerValue"
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "no_value",
+        "string_value": "string",
+        "object_identifier_value": "0.1",
+        "arbitrary_value": "00",
+    }  # type: Dict[str, Union(type)]
+
+    NO_VALUE = "no_value"  # type: str
+    INTEGER_VALUE = "integer_value"  # type: str
+    STRING_VALUE = "string_value"  # type: str
+    OBJECT_IDENTIFIER_VALUE = "object_identifier_value"  # type: str
+    IP_ADDRESS_VALUE = "ip_address_value"  # type: str
+    COUNTER_VALUE = "counter_value"  # type: str
+    TIMETICKS_VALUE = "timeticks_value"  # type: str
+    ARBITRARY_VALUE = "arbitrary_value"  # type: str
+    BIG_COUNTER_VALUE = "big_counter_value"  # type: str
+    UNSIGNED_INTEGER_VALUE = "unsigned_integer_value"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self,
+        parent=None,
+        choice=None,
+        string_value="string",
+        object_identifier_value="0.1",
+        arbitrary_value="00",
+    ):
+        super(FlowSnmpv2cVariableBindingValue, self).__init__()
+        self._parent = parent
+        self._set_property("string_value", string_value)
+        self._set_property("object_identifier_value", object_identifier_value)
+        self._set_property("arbitrary_value", arbitrary_value)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(
+        self, string_value=None, object_identifier_value=None, arbitrary_value=None
+    ):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def integer_value(self):
+        # type: () -> PatternFlowSnmpv2cVariableBindingValueIntegerValue
+        """Factory property that returns an instance of the PatternFlowSnmpv2cVariableBindingValueIntegerValue class
+
+        Integer value returned for the requested OID.
+
+        Returns: PatternFlowSnmpv2cVariableBindingValueIntegerValue
+        """
+        return self._get_property(
+            "integer_value",
+            PatternFlowSnmpv2cVariableBindingValueIntegerValue,
+            self,
+            "integer_value",
+        )
+
+    @property
+    def ip_address_value(self):
+        # type: () -> PatternFlowSnmpv2cVariableBindingValueIpAddressValue
+        """Factory property that returns an instance of the PatternFlowSnmpv2cVariableBindingValueIpAddressValue class
+
+        IPv4 address returned for the requested OID.
+
+        Returns: PatternFlowSnmpv2cVariableBindingValueIpAddressValue
+        """
+        return self._get_property(
+            "ip_address_value",
+            PatternFlowSnmpv2cVariableBindingValueIpAddressValue,
+            self,
+            "ip_address_value",
+        )
+
+    @property
+    def counter_value(self):
+        # type: () -> PatternFlowSnmpv2cVariableBindingValueCounterValue
+        """Factory property that returns an instance of the PatternFlowSnmpv2cVariableBindingValueCounterValue class
+
+        Counter returned for the requested OID.
+
+        Returns: PatternFlowSnmpv2cVariableBindingValueCounterValue
+        """
+        return self._get_property(
+            "counter_value",
+            PatternFlowSnmpv2cVariableBindingValueCounterValue,
+            self,
+            "counter_value",
+        )
+
+    @property
+    def timeticks_value(self):
+        # type: () -> PatternFlowSnmpv2cVariableBindingValueTimeticksValue
+        """Factory property that returns an instance of the PatternFlowSnmpv2cVariableBindingValueTimeticksValue class
+
+        Timeticks returned for the requested OID.
+
+        Returns: PatternFlowSnmpv2cVariableBindingValueTimeticksValue
+        """
+        return self._get_property(
+            "timeticks_value",
+            PatternFlowSnmpv2cVariableBindingValueTimeticksValue,
+            self,
+            "timeticks_value",
+        )
+
+    @property
+    def big_counter_value(self):
+        # type: () -> PatternFlowSnmpv2cVariableBindingValueBigCounterValue
+        """Factory property that returns an instance of the PatternFlowSnmpv2cVariableBindingValueBigCounterValue class
+
+        Big counter returned for the requested OID.
+
+        Returns: PatternFlowSnmpv2cVariableBindingValueBigCounterValue
+        """
+        return self._get_property(
+            "big_counter_value",
+            PatternFlowSnmpv2cVariableBindingValueBigCounterValue,
+            self,
+            "big_counter_value",
+        )
+
+    @property
+    def unsigned_integer_value(self):
+        # type: () -> PatternFlowSnmpv2cVariableBindingValueUnsignedIntegerValue
+        """Factory property that returns an instance of the PatternFlowSnmpv2cVariableBindingValueUnsignedIntegerValue class
+
+        Unsigned integer value returned for the requested OID.
+
+        Returns: PatternFlowSnmpv2cVariableBindingValueUnsignedIntegerValue
+        """
+        return self._get_property(
+            "unsigned_integer_value",
+            PatternFlowSnmpv2cVariableBindingValueUnsignedIntegerValue,
+            self,
+            "unsigned_integer_value",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["arbitrary_value"], Literal["big_counter_value"], Literal["counter_value"], Literal["integer_value"], Literal["ip_address_value"], Literal["no_value"], Literal["object_identifier_value"], Literal["string_value"], Literal["timeticks_value"], Literal["unsigned_integer_value"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["arbitrary_value"], Literal["big_counter_value"], Literal["counter_value"], Literal["integer_value"], Literal["ip_address_value"], Literal["no_value"], Literal["object_identifier_value"], Literal["string_value"], Literal["timeticks_value"], Literal["unsigned_integer_value"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["arbitrary_value"], Literal["big_counter_value"], Literal["counter_value"], Literal["integer_value"], Literal["ip_address_value"], Literal["no_value"], Literal["object_identifier_value"], Literal["string_value"], Literal["timeticks_value"], Literal["unsigned_integer_value"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def string_value(self):
+        # type: () -> str
+        """string_value getter
+
+        It contains the hex bytes of the value to be sent. As of now it is restricted to 5000 bytes.
+
+        Returns: str
+        """
+        return self._get_property("string_value")
+
+    @string_value.setter
+    def string_value(self, value):
+        """string_value setter
+
+        It contains the hex bytes of the value to be sent. As of now it is restricted to 5000 bytes.
+
+        value: str
+        """
+        self._set_property("string_value", value, "string_value")
+
+    @property
+    def object_identifier_value(self):
+        # type: () -> str
+        """object_identifier_value getter
+
+        The Object Identifier points to particular parameter in the SNMP agent. - Encoding of this field follows RFC2578(section 3.5) and ASN.1 X.690(section 8.1.3.6) specification.. Refer: http://www.itu.int/ITU-T/asn1/. According to BER, the first two numbers of any OID (x.y) are encoded as one value using the formula (40*x)+y. Example, the first two numbers of an SNMP OID 1.3... are encoded as 43 or 0x2B, because (40*1)+3 43. - After the first two numbers are encoded, the subsequent numbers in the OID are each encoded as byte. - However, special rule is required for large numbers because one byte can only represent number from 0-127. - The rule for large numbers states that only the lower bits in the byte are used for holding the value (0-127). - The highest order bit(8th) is used as flag to indicate that this number spans more than one byte. Therefore, any number over 127 must be encoded using more than one byte. - Example, the number 2680 in the OID '1.3.6.1.4.1.2680.1.2.7.3.2.0' cannot be encoded using single byte. According to this rule, the number 2680 must be encoded as 0x94 0x78. Since the most significant bit is set in the first byte (0x94), it indicates that number spans to the next byte.. Since the most significant bit is not set in the next byte (0x78), it indicates that the number ends at the second byte.. The value is derived by appending bits from each of the concatenated bytes i.e (0x14 *128^1) (0x78 128^0) 2680.
+
+        Returns: str
+        """
+        return self._get_property("object_identifier_value")
+
+    @object_identifier_value.setter
+    def object_identifier_value(self, value):
+        """object_identifier_value setter
+
+        The Object Identifier points to particular parameter in the SNMP agent. - Encoding of this field follows RFC2578(section 3.5) and ASN.1 X.690(section 8.1.3.6) specification.. Refer: http://www.itu.int/ITU-T/asn1/. According to BER, the first two numbers of any OID (x.y) are encoded as one value using the formula (40*x)+y. Example, the first two numbers of an SNMP OID 1.3... are encoded as 43 or 0x2B, because (40*1)+3 43. - After the first two numbers are encoded, the subsequent numbers in the OID are each encoded as byte. - However, special rule is required for large numbers because one byte can only represent number from 0-127. - The rule for large numbers states that only the lower bits in the byte are used for holding the value (0-127). - The highest order bit(8th) is used as flag to indicate that this number spans more than one byte. Therefore, any number over 127 must be encoded using more than one byte. - Example, the number 2680 in the OID '1.3.6.1.4.1.2680.1.2.7.3.2.0' cannot be encoded using single byte. According to this rule, the number 2680 must be encoded as 0x94 0x78. Since the most significant bit is set in the first byte (0x94), it indicates that number spans to the next byte.. Since the most significant bit is not set in the next byte (0x78), it indicates that the number ends at the second byte.. The value is derived by appending bits from each of the concatenated bytes i.e (0x14 *128^1) (0x78 128^0) 2680.
+
+        value: str
+        """
+        self._set_property("object_identifier_value", value, "object_identifier_value")
+
+    @property
+    def arbitrary_value(self):
+        # type: () -> str
+        """arbitrary_value getter
+
+        It contains the hex bytes of the value to be sent. As of now it is restricted to 5000 bytes.
+
+        Returns: str
+        """
+        return self._get_property("arbitrary_value")
+
+    @arbitrary_value.setter
+    def arbitrary_value(self, value):
+        """arbitrary_value setter
+
+        It contains the hex bytes of the value to be sent. As of now it is restricted to 5000 bytes.
+
+        value: str
+        """
+        self._set_property("arbitrary_value", value, "arbitrary_value")
+
+
+class PatternFlowSnmpv2cVariableBindingValueIntegerValue(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "int32",
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "int32",
+        },
+        "increment": {
+            "type": "PatternFlowSnmpv2cVariableBindingValueIntegerValueCounter"
+        },
+        "decrement": {
+            "type": "PatternFlowSnmpv2cVariableBindingValueIntegerValueCounter"
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": 0,
+        "values": [0],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=0, values=[0]):
+        super(PatternFlowSnmpv2cVariableBindingValueIntegerValue, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowSnmpv2cVariableBindingValueIntegerValueCounter
+        """Factory property that returns an instance of the PatternFlowSnmpv2cVariableBindingValueIntegerValueCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowSnmpv2cVariableBindingValueIntegerValueCounter
+        """
+        return self._get_property(
+            "increment",
+            PatternFlowSnmpv2cVariableBindingValueIntegerValueCounter,
+            self,
+            "increment",
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowSnmpv2cVariableBindingValueIntegerValueCounter
+        """Factory property that returns an instance of the PatternFlowSnmpv2cVariableBindingValueIntegerValueCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowSnmpv2cVariableBindingValueIntegerValueCounter
+        """
+        return self._get_property(
+            "decrement",
+            PatternFlowSnmpv2cVariableBindingValueIntegerValueCounter,
+            self,
+            "decrement",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowSnmpv2cVariableBindingValueIntegerValueCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "format": "int32",
+        },
+        "step": {
+            "type": int,
+            "format": "int32",
+        },
+        "count": {
+            "type": int,
+            "format": "int32",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(
+            PatternFlowSnmpv2cVariableBindingValueIntegerValueCounter, self
+        ).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class PatternFlowSnmpv2cVariableBindingValueIpAddressValue(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": str,
+            "format": "ipv4",
+        },
+        "values": {
+            "type": list,
+            "itemtype": str,
+            "itemformat": "ipv4",
+        },
+        "increment": {
+            "type": "PatternFlowSnmpv2cVariableBindingValueIpAddressValueCounter"
+        },
+        "decrement": {
+            "type": "PatternFlowSnmpv2cVariableBindingValueIpAddressValueCounter"
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": "0.0.0.0",
+        "values": ["0.0.0.0"],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value="0.0.0.0", values=["0.0.0.0"]):
+        super(PatternFlowSnmpv2cVariableBindingValueIpAddressValue, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowSnmpv2cVariableBindingValueIpAddressValueCounter
+        """Factory property that returns an instance of the PatternFlowSnmpv2cVariableBindingValueIpAddressValueCounter class
+
+        ipv4 counter pattern
+
+        Returns: PatternFlowSnmpv2cVariableBindingValueIpAddressValueCounter
+        """
+        return self._get_property(
+            "increment",
+            PatternFlowSnmpv2cVariableBindingValueIpAddressValueCounter,
+            self,
+            "increment",
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowSnmpv2cVariableBindingValueIpAddressValueCounter
+        """Factory property that returns an instance of the PatternFlowSnmpv2cVariableBindingValueIpAddressValueCounter class
+
+        ipv4 counter pattern
+
+        Returns: PatternFlowSnmpv2cVariableBindingValueIpAddressValueCounter
+        """
+        return self._get_property(
+            "decrement",
+            PatternFlowSnmpv2cVariableBindingValueIpAddressValueCounter,
+            self,
+            "decrement",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> str
+        """value getter
+
+        TBD
+
+        Returns: str
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: str
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[str]
+        """values getter
+
+        TBD
+
+        Returns: List[str]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[str]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowSnmpv2cVariableBindingValueIpAddressValueCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": str,
+            "format": "ipv4",
+        },
+        "step": {
+            "type": str,
+            "format": "ipv4",
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": "0.0.0.0",
+        "step": "0.0.0.1",
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start="0.0.0.0", step="0.0.0.1", count=1):
+        super(
+            PatternFlowSnmpv2cVariableBindingValueIpAddressValueCounter, self
+        ).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> str
+        """start getter
+
+        TBD
+
+        Returns: str
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: str
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> str
+        """step getter
+
+        TBD
+
+        Returns: str
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: str
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class PatternFlowSnmpv2cVariableBindingValueCounterValue(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+        },
+        "increment": {
+            "type": "PatternFlowSnmpv2cVariableBindingValueCounterValueCounter"
+        },
+        "decrement": {
+            "type": "PatternFlowSnmpv2cVariableBindingValueCounterValueCounter"
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": 0,
+        "values": [0],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=0, values=[0]):
+        super(PatternFlowSnmpv2cVariableBindingValueCounterValue, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowSnmpv2cVariableBindingValueCounterValueCounter
+        """Factory property that returns an instance of the PatternFlowSnmpv2cVariableBindingValueCounterValueCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowSnmpv2cVariableBindingValueCounterValueCounter
+        """
+        return self._get_property(
+            "increment",
+            PatternFlowSnmpv2cVariableBindingValueCounterValueCounter,
+            self,
+            "increment",
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowSnmpv2cVariableBindingValueCounterValueCounter
+        """Factory property that returns an instance of the PatternFlowSnmpv2cVariableBindingValueCounterValueCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowSnmpv2cVariableBindingValueCounterValueCounter
+        """
+        return self._get_property(
+            "decrement",
+            PatternFlowSnmpv2cVariableBindingValueCounterValueCounter,
+            self,
+            "decrement",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowSnmpv2cVariableBindingValueCounterValueCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "format": "uint32",
+        },
+        "step": {
+            "type": int,
+            "format": "uint32",
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(
+            PatternFlowSnmpv2cVariableBindingValueCounterValueCounter, self
+        ).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class PatternFlowSnmpv2cVariableBindingValueTimeticksValue(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+        },
+        "increment": {
+            "type": "PatternFlowSnmpv2cVariableBindingValueTimeticksValueCounter"
+        },
+        "decrement": {
+            "type": "PatternFlowSnmpv2cVariableBindingValueTimeticksValueCounter"
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": 0,
+        "values": [0],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=0, values=[0]):
+        super(PatternFlowSnmpv2cVariableBindingValueTimeticksValue, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowSnmpv2cVariableBindingValueTimeticksValueCounter
+        """Factory property that returns an instance of the PatternFlowSnmpv2cVariableBindingValueTimeticksValueCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowSnmpv2cVariableBindingValueTimeticksValueCounter
+        """
+        return self._get_property(
+            "increment",
+            PatternFlowSnmpv2cVariableBindingValueTimeticksValueCounter,
+            self,
+            "increment",
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowSnmpv2cVariableBindingValueTimeticksValueCounter
+        """Factory property that returns an instance of the PatternFlowSnmpv2cVariableBindingValueTimeticksValueCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowSnmpv2cVariableBindingValueTimeticksValueCounter
+        """
+        return self._get_property(
+            "decrement",
+            PatternFlowSnmpv2cVariableBindingValueTimeticksValueCounter,
+            self,
+            "decrement",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowSnmpv2cVariableBindingValueTimeticksValueCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "format": "uint32",
+        },
+        "step": {
+            "type": int,
+            "format": "uint32",
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(
+            PatternFlowSnmpv2cVariableBindingValueTimeticksValueCounter, self
+        ).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class PatternFlowSnmpv2cVariableBindingValueBigCounterValue(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint64",
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint64",
+        },
+        "increment": {
+            "type": "PatternFlowSnmpv2cVariableBindingValueBigCounterValueCounter"
+        },
+        "decrement": {
+            "type": "PatternFlowSnmpv2cVariableBindingValueBigCounterValueCounter"
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": 0,
+        "values": [0],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=0, values=[0]):
+        super(PatternFlowSnmpv2cVariableBindingValueBigCounterValue, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowSnmpv2cVariableBindingValueBigCounterValueCounter
+        """Factory property that returns an instance of the PatternFlowSnmpv2cVariableBindingValueBigCounterValueCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowSnmpv2cVariableBindingValueBigCounterValueCounter
+        """
+        return self._get_property(
+            "increment",
+            PatternFlowSnmpv2cVariableBindingValueBigCounterValueCounter,
+            self,
+            "increment",
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowSnmpv2cVariableBindingValueBigCounterValueCounter
+        """Factory property that returns an instance of the PatternFlowSnmpv2cVariableBindingValueBigCounterValueCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowSnmpv2cVariableBindingValueBigCounterValueCounter
+        """
+        return self._get_property(
+            "decrement",
+            PatternFlowSnmpv2cVariableBindingValueBigCounterValueCounter,
+            self,
+            "decrement",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowSnmpv2cVariableBindingValueBigCounterValueCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "format": "uint64",
+        },
+        "step": {
+            "type": int,
+            "format": "uint64",
+        },
+        "count": {
+            "type": int,
+            "format": "uint64",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(
+            PatternFlowSnmpv2cVariableBindingValueBigCounterValueCounter, self
+        ).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class PatternFlowSnmpv2cVariableBindingValueUnsignedIntegerValue(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+        },
+        "increment": {
+            "type": "PatternFlowSnmpv2cVariableBindingValueUnsignedIntegerValueCounter"
+        },
+        "decrement": {
+            "type": "PatternFlowSnmpv2cVariableBindingValueUnsignedIntegerValueCounter"
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": 0,
+        "values": [0],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=0, values=[0]):
+        super(
+            PatternFlowSnmpv2cVariableBindingValueUnsignedIntegerValue, self
+        ).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowSnmpv2cVariableBindingValueUnsignedIntegerValueCounter
+        """Factory property that returns an instance of the PatternFlowSnmpv2cVariableBindingValueUnsignedIntegerValueCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowSnmpv2cVariableBindingValueUnsignedIntegerValueCounter
+        """
+        return self._get_property(
+            "increment",
+            PatternFlowSnmpv2cVariableBindingValueUnsignedIntegerValueCounter,
+            self,
+            "increment",
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowSnmpv2cVariableBindingValueUnsignedIntegerValueCounter
+        """Factory property that returns an instance of the PatternFlowSnmpv2cVariableBindingValueUnsignedIntegerValueCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowSnmpv2cVariableBindingValueUnsignedIntegerValueCounter
+        """
+        return self._get_property(
+            "decrement",
+            PatternFlowSnmpv2cVariableBindingValueUnsignedIntegerValueCounter,
+            self,
+            "decrement",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowSnmpv2cVariableBindingValueUnsignedIntegerValueCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "format": "uint32",
+        },
+        "step": {
+            "type": int,
+            "format": "uint32",
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(
+            PatternFlowSnmpv2cVariableBindingValueUnsignedIntegerValueCounter, self
+        ).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class FlowSnmpv2cVariableBindingIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = False
+
+    def __init__(self, parent=None, choice=None):
+        super(FlowSnmpv2cVariableBindingIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[FlowSnmpv2cVariableBinding]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> FlowSnmpv2cVariableBindingIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> FlowSnmpv2cVariableBinding
+        return self._next()
+
+    def next(self):
+        # type: () -> FlowSnmpv2cVariableBinding
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, FlowSnmpv2cVariableBinding):
+            raise Exception("Item is not an instance of FlowSnmpv2cVariableBinding")
+
+    def variablebinding(self, object_identifier="0.1"):
+        # type: (str) -> FlowSnmpv2cVariableBindingIter
+        """Factory method that creates an instance of the FlowSnmpv2cVariableBinding class
+
+        A Sequence of two fields, an object_identifier and the value for/from that object_identifier.
+
+        Returns: FlowSnmpv2cVariableBindingIter
+        """
+        item = FlowSnmpv2cVariableBinding(
+            parent=self._parent, object_identifier=object_identifier
+        )
+        self._add(item)
+        return self
+
+    def add(self, object_identifier="0.1"):
+        # type: (str) -> FlowSnmpv2cVariableBinding
+        """Add method that creates and returns an instance of the FlowSnmpv2cVariableBinding class
+
+        A Sequence of two fields, an object_identifier and the value for/from that object_identifier.
+
+        Returns: FlowSnmpv2cVariableBinding
+        """
+        item = FlowSnmpv2cVariableBinding(
+            parent=self._parent, object_identifier=object_identifier
+        )
+        self._add(item)
+        return item
+
+
+class FlowSnmpv2cBulkPDU(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "request_id": {"type": "PatternFlowSnmpv2cBulkPDURequestId"},
+        "non_repeaters": {"type": "PatternFlowSnmpv2cBulkPDUNonRepeaters"},
+        "max_repetitions": {"type": "PatternFlowSnmpv2cBulkPDUMaxRepetitions"},
+        "variable_bindings": {"type": "FlowSnmpv2cVariableBindingIter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(FlowSnmpv2cBulkPDU, self).__init__()
+        self._parent = parent
+
+    @property
+    def request_id(self):
+        # type: () -> PatternFlowSnmpv2cBulkPDURequestId
+        """request_id getter
+
+        Identifies particular SNMP request. This index is echoed back in the response from the SNMP agent, allowing the SNMP manager to match an incoming response to the appropriate request.. - Encoding of this field follows ASN.1 X.690(section 8.3) specification.. Refer: http://www.itu.int/ITU-T/asn1/Identifies particular SNMP request. This index is echoed back in the response from the SNMP agent, allowing the SNMP manager to match an incoming response to the appropriate request.. - Encoding of this field follows ASN.1 X.690(section 8.3) specification.. Refer: http://www.itu.int/ITU-T/asn1/Identifies particular SNMP request. This index is echoed back in the response from the SNMP agent, allowing the SNMP manager to match an incoming response to the appropriate request.. - Encoding of this field follows ASN.1 X.690(section 8.3) specification.. Refer: http://www.itu.int/ITU-T/asn1/Identifies particular SNMP request. This index is echoed back in the response from the SNMP agent, allowing the SNMP manager to match an incoming response to the appropriate request.. - Encoding of this field follows ASN.1 X.690(section 8.3) specification.. Refer: http://www.itu.int/ITU-T/asn1/
+
+        Returns: PatternFlowSnmpv2cBulkPDURequestId
+        """
+        return self._get_property("request_id", PatternFlowSnmpv2cBulkPDURequestId)
+
+    @property
+    def non_repeaters(self):
+        # type: () -> PatternFlowSnmpv2cBulkPDUNonRepeaters
+        """non_repeaters getter
+
+        One variable binding in the Response-PDU is requested for the first non_repeaters variable bindings in the GetBulkRequest.One variable binding in the Response-PDU is requested for the first non_repeaters variable bindings in the GetBulkRequest.One variable binding in the Response-PDU is requested for the first non_repeaters variable bindings in the GetBulkRequest.One variable binding in the Response-PDU is requested for the first non_repeaters variable bindings in the GetBulkRequest.
+
+        Returns: PatternFlowSnmpv2cBulkPDUNonRepeaters
+        """
+        return self._get_property(
+            "non_repeaters", PatternFlowSnmpv2cBulkPDUNonRepeaters
+        )
+
+    @property
+    def max_repetitions(self):
+        # type: () -> PatternFlowSnmpv2cBulkPDUMaxRepetitions
+        """max_repetitions getter
+
+        A maximum of max_repetitions variable bindings are requested in the Response-PDU for each of the remaining variable bindings in the GetBulkRequest after the non_repeaters variable bindings.A maximum of max_repetitions variable bindings are requested in the Response-PDU for each of the remaining variable bindings in the GetBulkRequest after the non_repeaters variable bindings.A maximum of max_repetitions variable bindings are requested in the Response-PDU for each of the remaining variable bindings in the GetBulkRequest after the non_repeaters variable bindings.A maximum of max_repetitions variable bindings are requested in the Response-PDU for each of the remaining variable bindings in the GetBulkRequest after the non_repeaters variable bindings.
+
+        Returns: PatternFlowSnmpv2cBulkPDUMaxRepetitions
+        """
+        return self._get_property(
+            "max_repetitions", PatternFlowSnmpv2cBulkPDUMaxRepetitions
+        )
+
+    @property
+    def variable_bindings(self):
+        # type: () -> FlowSnmpv2cVariableBindingIter
+        """variable_bindings getter
+
+        A Sequence of variable_bindings.
+
+        Returns: FlowSnmpv2cVariableBindingIter
+        """
+        return self._get_property(
+            "variable_bindings",
+            FlowSnmpv2cVariableBindingIter,
+            self._parent,
+            self._choice,
+        )
+
+
+class PatternFlowSnmpv2cBulkPDURequestId(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "int32",
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "int32",
+        },
+        "increment": {"type": "PatternFlowSnmpv2cBulkPDURequestIdCounter"},
+        "decrement": {"type": "PatternFlowSnmpv2cBulkPDURequestIdCounter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": 0,
+        "values": [0],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=0, values=[0]):
+        super(PatternFlowSnmpv2cBulkPDURequestId, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowSnmpv2cBulkPDURequestIdCounter
+        """Factory property that returns an instance of the PatternFlowSnmpv2cBulkPDURequestIdCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowSnmpv2cBulkPDURequestIdCounter
+        """
+        return self._get_property(
+            "increment", PatternFlowSnmpv2cBulkPDURequestIdCounter, self, "increment"
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowSnmpv2cBulkPDURequestIdCounter
+        """Factory property that returns an instance of the PatternFlowSnmpv2cBulkPDURequestIdCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowSnmpv2cBulkPDURequestIdCounter
+        """
+        return self._get_property(
+            "decrement", PatternFlowSnmpv2cBulkPDURequestIdCounter, self, "decrement"
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowSnmpv2cBulkPDURequestIdCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "format": "int32",
+        },
+        "step": {
+            "type": int,
+            "format": "int32",
+        },
+        "count": {
+            "type": int,
+            "format": "int32",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowSnmpv2cBulkPDURequestIdCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class PatternFlowSnmpv2cBulkPDUNonRepeaters(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": 0,
+        "values": [0],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=0, values=[0]):
+        super(PatternFlowSnmpv2cBulkPDUNonRepeaters, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowSnmpv2cBulkPDUMaxRepetitions(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+        },
+        "increment": {"type": "PatternFlowSnmpv2cBulkPDUMaxRepetitionsCounter"},
+        "decrement": {"type": "PatternFlowSnmpv2cBulkPDUMaxRepetitionsCounter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": 0,
+        "values": [0],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=0, values=[0]):
+        super(PatternFlowSnmpv2cBulkPDUMaxRepetitions, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowSnmpv2cBulkPDUMaxRepetitionsCounter
+        """Factory property that returns an instance of the PatternFlowSnmpv2cBulkPDUMaxRepetitionsCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowSnmpv2cBulkPDUMaxRepetitionsCounter
+        """
+        return self._get_property(
+            "increment",
+            PatternFlowSnmpv2cBulkPDUMaxRepetitionsCounter,
+            self,
+            "increment",
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowSnmpv2cBulkPDUMaxRepetitionsCounter
+        """Factory property that returns an instance of the PatternFlowSnmpv2cBulkPDUMaxRepetitionsCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowSnmpv2cBulkPDUMaxRepetitionsCounter
+        """
+        return self._get_property(
+            "decrement",
+            PatternFlowSnmpv2cBulkPDUMaxRepetitionsCounter,
+            self,
+            "decrement",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowSnmpv2cBulkPDUMaxRepetitionsCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "format": "uint32",
+        },
+        "step": {
+            "type": int,
+            "format": "uint32",
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowSnmpv2cBulkPDUMaxRepetitionsCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
 class FlowHeaderIter(OpenApiIter):
     __slots__ = ("_parent", "_choice")
 
@@ -90634,7 +94511,7 @@ class FlowHeaderIter(OpenApiIter):
         self._choice = choice
 
     def __getitem__(self, key):
-        # type: (str) -> Union[FlowArp, FlowCustom, FlowEthernet, FlowEthernetPause, FlowGre, FlowGtpv1, FlowGtpv2, FlowHeader, FlowIcmp, FlowIcmpv6, FlowIgmpv1, FlowIpv4, FlowIpv6, FlowMpls, FlowPfcPause, FlowPpp, FlowTcp, FlowUdp, FlowVlan, FlowVxlan]
+        # type: (str) -> Union[FlowArp, FlowCustom, FlowEthernet, FlowEthernetPause, FlowGre, FlowGtpv1, FlowGtpv2, FlowHeader, FlowIcmp, FlowIcmpv6, FlowIgmpv1, FlowIpv4, FlowIpv6, FlowMpls, FlowPfcPause, FlowPpp, FlowSnmpv2c, FlowTcp, FlowUdp, FlowVlan, FlowVxlan]
         return self._getitem(key)
 
     def __iter__(self):
@@ -90940,6 +94817,20 @@ class FlowHeaderIter(OpenApiIter):
         item = FlowHeader()
         item.mpls
         item.choice = "mpls"
+        self._add(item)
+        return self
+
+    def snmpv2c(self, community="community"):
+        # type: (str) -> FlowHeaderIter
+        """Factory method that creates an instance of the FlowSnmpv2c class
+
+        SNMPv2C packet header as defined in RFC1901 and RFC3416.
+
+        Returns: FlowHeaderIter
+        """
+        item = FlowHeader()
+        item.snmpv2c
+        item.choice = "snmpv2c"
         self._add(item)
         return self
 
@@ -112954,8 +116845,8 @@ class Api(object):
 
     def __init__(self, **kwargs):
         self._version_meta = self.version()
-        self._version_meta.api_spec_version = "0.13.5"
-        self._version_meta.sdk_version = "0.13.5"
+        self._version_meta.api_spec_version = "0.13.6"
+        self._version_meta.sdk_version = "0.13.6"
         self._version_check = kwargs.get("version_check")
         if self._version_check is None:
             self._version_check = False

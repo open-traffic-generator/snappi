@@ -331,6 +331,21 @@ func (obj *validation) validateHex(hex string) error {
 	return nil
 }
 
+func (obj *validation) validateOid(oid string) error {
+	segments := strings.Split(oid, ".")
+	if len(segments) < 2 {
+		return fmt.Errorf(fmt.Sprintf("Invalid oid value %s", oid))
+	}
+
+	for _, segment := range segments {
+		number, err := strconv.Atoi(segment)
+		if err != nil || 0 > number || number > 4294967295 {
+			return fmt.Errorf(fmt.Sprintf("Invalid oid value %s", oid))
+		}
+	}
+	return nil
+}
+
 func (obj *validation) validateSlice(valSlice []string, sliceType string) error {
 	indices := []string{}
 	var err error
@@ -344,6 +359,8 @@ func (obj *validation) validateSlice(valSlice []string, sliceType string) error 
 			err = obj.validateIpv6(val)
 		} else if sliceType == "hex" {
 			err = obj.validateHex(val)
+		} else if sliceType == "oid" {
+			err = obj.validateOid(val)
 		} else {
 			return fmt.Errorf(fmt.Sprintf("Invalid slice type received <%s>", sliceType))
 		}
@@ -374,6 +391,10 @@ func (obj *validation) validateIpv6Slice(ip []string) error {
 
 func (obj *validation) validateHexSlice(hex []string) error {
 	return obj.validateSlice(hex, "hex")
+}
+
+func (obj *validation) validateOidSlice(oid []string) error {
+	return obj.validateSlice(oid, "oid")
 }
 
 // TODO: restore behavior
