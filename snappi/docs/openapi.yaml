@@ -8212,7 +8212,7 @@ components:
           $ref: '#/components/schemas/Pattern.Flow.Snmpv2c.VariableBindingValue.TimeticksValue'
         arbitrary_value:
           description: |-
-            It contains the hex bytes of the value to be sent.  As of now it is restricted to 5000 bytes.
+            It contains the hex bytes of the value to be sent.  As of now it is restricted to 10000 bytes.
           type: string
           format: hex
           maxLength: 10000

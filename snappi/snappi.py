@@ -92104,7 +92104,7 @@ class FlowSnmpv2cVariableBindingValue(OpenApiObject):
         # type: () -> str
         """arbitrary_value getter
 
-        It contains the hex bytes of the value to be sent. As of now it is restricted to 5000 bytes.
+        It contains the hex bytes of the value to be sent. As of now it is restricted to 10000 bytes.
 
         Returns: str
         """
@@ -92114,7 +92114,7 @@ class FlowSnmpv2cVariableBindingValue(OpenApiObject):
     def arbitrary_value(self, value):
         """arbitrary_value setter
 
-        It contains the hex bytes of the value to be sent. As of now it is restricted to 5000 bytes.
+        It contains the hex bytes of the value to be sent. As of now it is restricted to 10000 bytes.
 
         value: str
         """

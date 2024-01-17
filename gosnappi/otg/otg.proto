@@ -6146,7 +6146,7 @@ message FlowSnmpv2cVariableBindingValue {
   PatternFlowSnmpv2cVariableBindingValueTimeticksValue timeticks_value = 7;
 
   // It contains the hex bytes of the value to be sent.  As of now it is restricted to
-  // 5000 bytes.
+  // 10000 bytes.
   // default = 00
   optional string arbitrary_value = 8;
 
