@@ -798,6 +798,7 @@ from .snappi import FlowSnmpv2cVariableBinding
 from .snappi import FlowSnmpv2cVariableBindingValue
 from .snappi import PatternFlowSnmpv2cVariableBindingValueIntegerValue
 from .snappi import PatternFlowSnmpv2cVariableBindingValueIntegerValueCounter
+from .snappi import FlowSnmpv2cVariableBindingStringValue
 from .snappi import PatternFlowSnmpv2cVariableBindingValueIpAddressValue
 from .snappi import PatternFlowSnmpv2cVariableBindingValueIpAddressValueCounter
 from .snappi import PatternFlowSnmpv2cVariableBindingValueCounterValue
