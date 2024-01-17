@@ -7,7 +7,7 @@ info:
     \ issue](https://github.com/open-traffic-generator/models/issues) in the models\
     \ repository\n- [fork the models repository](https://github.com/open-traffic-generator/models)\
     \ and submit a PR"
-  version: 0.13.6
+  version: 0.13.7
   contact:
     url: https://github.com/open-traffic-generator/models
   license:
@@ -8278,11 +8278,7 @@ components:
           x-field-uid: 2
           $ref: '#/components/schemas/Pattern.Flow.Snmpv2c.VariableBindingValue.IntegerValue'
         string_value:
-          description: |-
-            It contains the hex bytes of the value to be sent.  As of now it is restricted to 5000 bytes.
-          type: string
-          maxLength: 10000
-          default: string
+          $ref: '#/components/schemas/Flow.Snmpv2c.VariableBindingStringValue'
           x-field-uid: 3
         object_identifier_value:
           x-field-uid: 4
@@ -8321,7 +8317,7 @@ components:
           $ref: '#/components/schemas/Pattern.Flow.Snmpv2c.VariableBindingValue.TimeticksValue'
         arbitrary_value:
           description: |-
-            It contains the hex bytes of the value to be sent.  As of now it is restricted to 5000 bytes.
+            It contains the hex bytes of the value to be sent.  As of now it is restricted to 10000 bytes.
           type: string
           format: hex
           maxLength: 10000
@@ -8333,6 +8329,38 @@ components:
         unsigned_integer_value:
           x-field-uid: 10
           $ref: '#/components/schemas/Pattern.Flow.Snmpv2c.VariableBindingValue.UnsignedIntegerValue'
+    Flow.Snmpv2c.VariableBindingStringValue:
+      type: object
+      description: |-
+        It contains the raw/ascii string value to be sent.
+      properties:
+        choice:
+          type: string
+          default: ascii
+          x-field-uid: 1
+          x-enum:
+            ascii:
+              x-field-uid: 1
+            raw:
+              x-field-uid: 2
+          enum:
+          - ascii
+          - raw
+        ascii:
+          description: |-
+            It contains the ASCII string to be sent.  As of now it is restricted to 10000 bytes.
+          type: string
+          maxLength: 10000
+          default: ascii
+          x-field-uid: 2
+        raw:
+          description: |-
+            It contains the hex string to be sent.  As of now it is restricted to 10000 bytes.
+          type: string
+          format: hex
+          maxLength: 10000
+          default: '00'
+          x-field-uid: 3
     Flow.Size:
       description: |-
         The frame size which overrides the total length of the packet

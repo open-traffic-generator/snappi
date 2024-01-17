@@ -1,4 +1,4 @@
-# Open Traffic Generator API 0.13.6
+# Open Traffic Generator API 0.13.7
 # License: MIT
 
 import importlib
@@ -91877,10 +91877,7 @@ class FlowSnmpv2cVariableBindingValue(OpenApiObject):
             ],
         },
         "integer_value": {"type": "PatternFlowSnmpv2cVariableBindingValueIntegerValue"},
-        "string_value": {
-            "type": str,
-            "maxLength": 10000,
-        },
+        "string_value": {"type": "FlowSnmpv2cVariableBindingStringValue"},
         "object_identifier_value": {
             "type": str,
             "format": "oid",
@@ -91909,7 +91906,6 @@ class FlowSnmpv2cVariableBindingValue(OpenApiObject):
 
     _DEFAULTS = {
         "choice": "no_value",
-        "string_value": "string",
         "object_identifier_value": "0.1",
         "arbitrary_value": "00",
     }  # type: Dict[str, Union(type)]
@@ -91931,13 +91927,11 @@ class FlowSnmpv2cVariableBindingValue(OpenApiObject):
         self,
         parent=None,
         choice=None,
-        string_value="string",
         object_identifier_value="0.1",
         arbitrary_value="00",
     ):
         super(FlowSnmpv2cVariableBindingValue, self).__init__()
         self._parent = parent
-        self._set_property("string_value", string_value)
         self._set_property("object_identifier_value", object_identifier_value)
         self._set_property("arbitrary_value", arbitrary_value)
         if (
@@ -91949,9 +91943,7 @@ class FlowSnmpv2cVariableBindingValue(OpenApiObject):
         else:
             self._set_property("choice", choice)
 
-    def set(
-        self, string_value=None, object_identifier_value=None, arbitrary_value=None
-    ):
+    def set(self, object_identifier_value=None, arbitrary_value=None):
         for property_name, property_value in locals().items():
             if property_name != "self" and property_value is not None:
                 self._set_property(property_name, property_value)
@@ -91970,6 +91962,19 @@ class FlowSnmpv2cVariableBindingValue(OpenApiObject):
             PatternFlowSnmpv2cVariableBindingValueIntegerValue,
             self,
             "integer_value",
+        )
+
+    @property
+    def string_value(self):
+        # type: () -> FlowSnmpv2cVariableBindingStringValue
+        """Factory property that returns an instance of the FlowSnmpv2cVariableBindingStringValue class
+
+        It contains the raw/ascii string value to be sent.
+
+        Returns: FlowSnmpv2cVariableBindingStringValue
+        """
+        return self._get_property(
+            "string_value", FlowSnmpv2cVariableBindingStringValue, self, "string_value"
         )
 
     @property
@@ -92074,27 +92079,6 @@ class FlowSnmpv2cVariableBindingValue(OpenApiObject):
         self._set_property("choice", value)
 
     @property
-    def string_value(self):
-        # type: () -> str
-        """string_value getter
-
-        It contains the hex bytes of the value to be sent. As of now it is restricted to 5000 bytes.
-
-        Returns: str
-        """
-        return self._get_property("string_value")
-
-    @string_value.setter
-    def string_value(self, value):
-        """string_value setter
-
-        It contains the hex bytes of the value to be sent. As of now it is restricted to 5000 bytes.
-
-        value: str
-        """
-        self._set_property("string_value", value, "string_value")
-
-    @property
     def object_identifier_value(self):
         # type: () -> str
         """object_identifier_value getter
@@ -92120,7 +92104,7 @@ class FlowSnmpv2cVariableBindingValue(OpenApiObject):
         # type: () -> str
         """arbitrary_value getter
 
-        It contains the hex bytes of the value to be sent. As of now it is restricted to 5000 bytes.
+        It contains the hex bytes of the value to be sent. As of now it is restricted to 10000 bytes.
 
         Returns: str
         """
@@ -92130,7 +92114,7 @@ class FlowSnmpv2cVariableBindingValue(OpenApiObject):
     def arbitrary_value(self, value):
         """arbitrary_value setter
 
-        It contains the hex bytes of the value to be sent. As of now it is restricted to 5000 bytes.
+        It contains the hex bytes of the value to be sent. As of now it is restricted to 10000 bytes.
 
         value: str
         """
@@ -92401,6 +92385,124 @@ class PatternFlowSnmpv2cVariableBindingValueIntegerValueCounter(OpenApiObject):
         value: int
         """
         self._set_property("count", value)
+
+
+class FlowSnmpv2cVariableBindingStringValue(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "ascii",
+                "raw",
+            ],
+        },
+        "ascii": {
+            "type": str,
+            "maxLength": 10000,
+        },
+        "raw": {
+            "type": str,
+            "format": "hex",
+            "maxLength": 10000,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "ascii",
+        "ascii": "ascii",
+        "raw": "00",
+    }  # type: Dict[str, Union(type)]
+
+    ASCII = "ascii"  # type: str
+    RAW = "raw"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, ascii="ascii", raw="00"):
+        super(FlowSnmpv2cVariableBindingStringValue, self).__init__()
+        self._parent = parent
+        self._set_property("ascii", ascii)
+        self._set_property("raw", raw)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, ascii=None, raw=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["ascii"], Literal["raw"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["ascii"], Literal["raw"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["ascii"], Literal["raw"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def ascii(self):
+        # type: () -> str
+        """ascii getter
+
+        It contains the ASCII string to be sent. As of now it is restricted to 10000 bytes.
+
+        Returns: str
+        """
+        return self._get_property("ascii")
+
+    @ascii.setter
+    def ascii(self, value):
+        """ascii setter
+
+        It contains the ASCII string to be sent. As of now it is restricted to 10000 bytes.
+
+        value: str
+        """
+        self._set_property("ascii", value, "ascii")
+
+    @property
+    def raw(self):
+        # type: () -> str
+        """raw getter
+
+        It contains the hex string to be sent. As of now it is restricted to 10000 bytes.
+
+        Returns: str
+        """
+        return self._get_property("raw")
+
+    @raw.setter
+    def raw(self, value):
+        """raw setter
+
+        It contains the hex string to be sent. As of now it is restricted to 10000 bytes.
+
+        value: str
+        """
+        self._set_property("raw", value, "raw")
 
 
 class PatternFlowSnmpv2cVariableBindingValueIpAddressValue(OpenApiObject):
@@ -116845,8 +116947,8 @@ class Api(object):
 
     def __init__(self, **kwargs):
         self._version_meta = self.version()
-        self._version_meta.api_spec_version = "0.13.6"
-        self._version_meta.sdk_version = "0.13.6"
+        self._version_meta.api_spec_version = "0.13.7"
+        self._version_meta.sdk_version = "0.13.7"
         self._version_check = kwargs.get("version_check")
         if self._version_check is None:
             self._version_check = False
