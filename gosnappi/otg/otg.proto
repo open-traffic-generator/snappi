@@ -1,4 +1,4 @@
-/* Open Traffic Generator API 1.0.0
+/* Open Traffic Generator API 1.0.1
  * Open Traffic Generator API defines a model-driven, vendor-neutral and standard
  * interface for emulating layer 2-7 network devices and generating test traffic.
  * 
@@ -5286,6 +5286,7 @@ message FlowHeader {
       igmpv1 = 18;
       mpls = 19;
       snmpv2c = 20;
+      rsvp = 21;
     }
   }
   // The available types of flow headers. If one is not provided the
@@ -5352,6 +5353,9 @@ message FlowHeader {
 
   // Description missing in models
   FlowSnmpv2c snmpv2c = 21;
+
+  // Description missing in models
+  FlowRsvp rsvp = 22;
 }
 
 // Custom packet header
@@ -6301,6 +6305,944 @@ message FlowSnmpv2cVariableBindingStringValue {
   // It contains the hex string to be sent.  As of now it is restricted to 10000 bytes.
   // default = 00
   optional string raw = 3;
+}
+
+// RSVP packet header as defined in RFC2205 and RFC3209. Currently only supported message
+// type is Path with mandatory objects and sub-objects.
+message FlowRsvp {
+
+  // RSVP Protocol Version.
+  // default = 1
+  optional uint32 version = 1;
+
+  message Flag {
+    enum Enum {
+      unspecified = 0;
+      not_refresh_reduction_capable = 1;
+      refresh_reduction_capable = 2;
+    }
+  }
+  // Flag, 0x01-0x08: Reserved.
+  // default = Flag.Enum.not_refresh_reduction_capable
+  optional Flag.Enum flag = 2;
+
+  // Description missing in models
+  PatternFlowRsvpRsvpChecksum rsvp_checksum = 3;
+
+  // Description missing in models
+  PatternFlowRsvpTimeToLive time_to_live = 4;
+
+  // Description missing in models
+  PatternFlowRsvpReserved reserved = 5;
+
+  // The sum of the lengths of the common header and all objects included in the message.
+  FlowRSVPLength rsvp_length = 6;
+
+  // An 8-bit number that identifies the function of the RSVP message. There are aound
+  // 20 message types defined in https://www.iana.org/assignments/rsvp-parameters/rsvp-parameters.xhtml#rsvp-parameters-2
+  // . Among these presently supported is Path(value: 1) message type.
+  FlowRSVPMessage message_type = 7;
+}
+
+// Description missing in models
+message FlowRSVPLength {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      auto = 1;
+      value = 2;
+    }
+  }
+  // auto or configured value.
+  // default = Choice.Enum.auto
+  optional Choice.Enum choice = 1;
+
+  // OTG will provide a system generated value for this property.  If OTG is unable to
+  // generate a value the default value must be used.
+  // default = 0
+  optional uint32 auto = 2;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 3;
+}
+
+// Description missing in models
+message FlowRSVPMessage {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      path = 1;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.path
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  FlowRSVPPathMessage path = 2;
+}
+
+// Path message requires the following list of objects in order as defined in https://www.rfc-editor.org/rfc/rfc3209.html#page-15:
+// 1. SESSION 2. RSVP_HOP 3. TIME_VALUES 4. EXPLICIT_ROUTE [optional] 5. LABEL_REQUEST
+// 6. SESSION_ATTRIBUTE [optional] 7. SENDER_TEMPLATE 8. SENDER_TSPEC 9. RECORD_ROUTE
+// [optional]
+message FlowRSVPPathMessage {
+
+  // Path message requires atleast SESSION, RSVP_HOP, TIME_VALUES, LABEL_REQUEST, SENDER_TEMPLATE
+  // and SENDER_TSPEC objects in order.
+  repeated FlowRSVPPathObjects objects = 1;
+}
+
+// Every RSVP object encapsulated in an RSVP message consists of a 32-bit word header
+// and the object's contents.
+message FlowRSVPPathObjects {
+
+  // Description missing in models
+  FlowRSVPPathObjectsClass class_num = 1;
+}
+
+// Description missing in models
+message FlowRSVPObjectLength {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      auto = 1;
+      value = 2;
+    }
+  }
+  // auto or configured value.
+  // default = Choice.Enum.auto
+  optional Choice.Enum choice = 1;
+
+  // OTG will provide a system generated value for this property.  If OTG is unable to
+  // generate a value the default value must be used.
+  // default = 4
+  optional uint32 auto = 2;
+
+  // Description missing in models
+  // default = 4
+  optional uint32 value = 3;
+}
+
+// The class number is used to identify the class of an object. Defined in https://www.iana.org/assignments/rsvp-parameters/rsvp-parameters.xhtml#rsvp-parameters-4
+// . Curently supported class numbers are for Path message type. Path message: Supported
+// Class numbers and it's value: SESSION: 1, RSVP_HOP: 3, TIME_VALUES: 5, EXPLICIT_ROUTE:
+// 20, LABEL_REQUEST: 19, SESSION_ATTRIBUTE: 207, SENDER_TEMPLATE: 11, SENDER_TSPEC:
+// 12, RECORD_ROUTE: 21, Custom: User defined bytes based on class and c-types not supported
+// in above options.
+message FlowRSVPPathObjectsClass {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      session = 1;
+      rsvp_hop = 2;
+      time_values = 3;
+      explicit_route = 4;
+      label_request = 5;
+      session_attribute = 6;
+      sender_template = 7;
+      sender_tspec = 8;
+      record_route = 9;
+      custom = 10;
+    }
+  }
+  // Description missing in models
+  // required = true
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  FlowRSVPPathObjectsClassSession session = 2;
+
+  // Description missing in models
+  FlowRSVPPathObjectsClassRsvpHop rsvp_hop = 3;
+
+  // Description missing in models
+  FlowRSVPPathObjectsClassTimeValues time_values = 4;
+
+  // Description missing in models
+  FlowRSVPPathObjectsClassExplicitRoute explicit_route = 5;
+
+  // Description missing in models
+  FlowRSVPPathObjectsClassLabelRequest label_request = 6;
+
+  // Description missing in models
+  FlowRSVPPathObjectsClassSessionAttribute session_attribute = 7;
+
+  // Description missing in models
+  FlowRSVPPathObjectsClassSenderTemplate sender_template = 8;
+
+  // Description missing in models
+  FlowRSVPPathObjectsClassSenderTspec sender_tspec = 9;
+
+  // Description missing in models
+  FlowRSVPPathObjectsClassRecordRoute record_route = 10;
+
+  // Description missing in models
+  FlowRSVPPathObjectsCustom custom = 11;
+}
+
+// C-Type is specific to a class num.
+message FlowRSVPPathObjectsClassSession {
+
+  // A 16-bit field containing the total object length in bytes.  Must always be a multiple
+  // of 4 or at least 4.
+  FlowRSVPObjectLength length = 1;
+
+  // Description missing in models
+  FlowRSVPPathObjectsSessionCType c_type = 2;
+}
+
+// The body of an object corresponding to the class number and c-type. Currently supported
+// c-type for SESSION object is LSP Tunnel IPv4 (7).
+message FlowRSVPPathObjectsSessionCType {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      lsp_tunnel_ipv4 = 1;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.lsp_tunnel_ipv4
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  FlowRSVPPathSessionLspTunnelIpv4 lsp_tunnel_ipv4 = 2;
+}
+
+// Class = SESSION, LSP_TUNNEL_IPv4 C-Type = 7.
+message FlowRSVPPathSessionLspTunnelIpv4 {
+
+  // Description missing in models
+  PatternFlowRSVPPathSessionLspTunnelIpv4Ipv4TunnelEndPointAddress ipv4_tunnel_end_point_address = 1;
+
+  // Description missing in models
+  PatternFlowRSVPPathSessionLspTunnelIpv4Reserved reserved = 2;
+
+  // Description missing in models
+  PatternFlowRSVPPathSessionLspTunnelIpv4TunnelId tunnel_id = 3;
+
+  // A 32-bit identifier used in the SESSION that remains constant over the life of the
+  // tunnel. Normally set to all zeros. Ingress nodes that wish to narrow the scope of
+  // a SESSION to the ingress-egress pair may place their IPv4 address here as a globally
+  // unique identifier.
+  FlowRSVPPathSessionExtTunnelId extended_tunnel_id = 4;
+}
+
+// Description missing in models
+message FlowRSVPPathSessionExtTunnelId {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      as_integer = 1;
+      as_ipv4 = 2;
+    }
+  }
+  // 32 bit integer or IPv4 address.
+  // default = Choice.Enum.as_integer
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  PatternFlowRSVPPathSessionExtTunnelIdAsInteger as_integer = 2;
+
+  // Description missing in models
+  PatternFlowRSVPPathSessionExtTunnelIdAsIpv4 as_ipv4 = 3;
+}
+
+// C-Type is specific to a class num.
+message FlowRSVPPathObjectsClassRsvpHop {
+
+  // A 16-bit field containing the total object length in bytes.  Must always be a multiple
+  // of 4 or at least 4.
+  FlowRSVPObjectLength length = 1;
+
+  // Description missing in models
+  FlowRSVPPathObjectsRsvpHopCType c_type = 2;
+}
+
+// Object for RSVP_HOP class. Currently supported c-type is IPv4 (1).
+message FlowRSVPPathObjectsRsvpHopCType {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      ipv4 = 1;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.ipv4
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  FlowRSVPPathRsvpHopIpv4 ipv4 = 2;
+}
+
+// IPv4 RSVP_HOP object: Class = 3, C-Type = 1
+message FlowRSVPPathRsvpHopIpv4 {
+
+  // Description missing in models
+  PatternFlowRSVPPathRsvpHopIpv4Ipv4Address ipv4_address = 1;
+
+  // Description missing in models
+  PatternFlowRSVPPathRsvpHopIpv4LogicalInterfaceHandle logical_interface_handle = 2;
+}
+
+// C-Type is specific to a class num.
+message FlowRSVPPathObjectsClassTimeValues {
+
+  // A 16-bit field containing the total object length in bytes.  Must always be a multiple
+  // of 4 or at least 4.
+  FlowRSVPObjectLength length = 1;
+
+  // Description missing in models
+  FlowRSVPPathObjectsTimeValuesCType c_type = 2;
+}
+
+// Object for TIME_VALUES class. Currently supported c-type is Type 1 Time Value (1).
+message FlowRSVPPathObjectsTimeValuesCType {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      type_1 = 1;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.type_1
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  FlowRSVPPathTimeValuesType1 type_1 = 2;
+}
+
+// TIME_VALUES Object: Class = 5, C-Type = 1
+message FlowRSVPPathTimeValuesType1 {
+
+  // Description missing in models
+  PatternFlowRSVPPathTimeValuesType1RefreshPeriodR refresh_period_r = 1;
+}
+
+// C-Type is specific to a class num.
+message FlowRSVPPathObjectsClassExplicitRoute {
+
+  // A 16-bit field containing the total object length in bytes.  Must always be a multiple
+  // of 4 or at least 4.
+  FlowRSVPObjectLength length = 1;
+
+  // Description missing in models
+  FlowRSVPPathObjectsClassExplicitRouteCType c_type = 2;
+}
+
+// Object for EXPLICIT_ROUTE class and c-type is Type 1 Explicit Route (1).
+message FlowRSVPPathObjectsClassExplicitRouteCType {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      type_1 = 1;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.type_1
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  FlowRSVPPathExplicitRouteType1 type_1 = 2;
+}
+
+// Type1 Explicit Route has subobjects. Currently supported subobjects are IPv4 prefix
+// and Autonomous system number.
+message FlowRSVPPathExplicitRouteType1 {
+
+  // Description missing in models
+  repeated FlowRSVPType1ExplicitRouteSubobjects subobjects = 1;
+}
+
+// Type is specific to a subobject.
+message FlowRSVPType1ExplicitRouteSubobjects {
+
+  // Description missing in models
+  FlowRSVPType1ExplicitRouteSubobjectsType type = 1;
+}
+
+// Currently supported subobjects are IPv4 address(1) and Autonomous system number(32).
+message FlowRSVPType1ExplicitRouteSubobjectsType {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      ipv4_prefix = 1;
+      as_number = 2;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.ipv4_prefix
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  FlowRSVPPathExplicitRouteType1Ipv4Prefix ipv4_prefix = 2;
+
+  // Description missing in models
+  FlowRSVPPathExplicitRouteType1ASNumber as_number = 3;
+}
+
+// Class = EXPLICIT_ROUTE, Type1 ROUTE_RECORD C-Type = 1 Subobject: IPv4 Prefix, C-Type:
+// 1
+message FlowRSVPPathExplicitRouteType1Ipv4Prefix {
+
+  // Description missing in models
+  PatternFlowRSVPPathExplicitRouteType1Ipv4PrefixLBit l_bit = 1;
+
+  // The Length contains the total length of the subobject in bytes,including L,Type and
+  // Length fields.   The Length MUST be atleast 4, and MUST be a multiple of 4.
+  FlowRSVPExplicitRouteLength length = 2;
+
+  // Description missing in models
+  PatternFlowRSVPPathExplicitRouteType1Ipv4PrefixIpv4Address ipv4_address = 3;
+
+  // The prefix length of the IPv4 address.
+  // default = 32
+  optional uint32 prefix = 4;
+}
+
+// Class = EXPLICIT_ROUTE, Type1 ROUTE_RECORD C-Type = 1 Subobject: Autonomous system
+// number, C-Type: 32
+message FlowRSVPPathExplicitRouteType1ASNumber {
+
+  // Description missing in models
+  PatternFlowRSVPPathExplicitRouteType1ASNumberLBit l_bit = 1;
+
+  // The Length contains the total length of the subobject in bytes,including L, Type
+  // and Length fields.   The Length MUST be atleast 4, and MUST be a multiple of 4.
+  FlowRSVPExplicitRouteLength length = 2;
+
+  // Autonomous System number to be set in the ERO sub-object that this LSP should traverse
+  // through. This field is applicable only if the value of 'type' is set to 'as_number'.
+  // default = 0
+  optional uint32 as_number = 3;
+}
+
+// Description missing in models
+message FlowRSVPExplicitRouteLength {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      auto = 1;
+      value = 2;
+    }
+  }
+  // auto or configured value.
+  // default = Choice.Enum.auto
+  optional Choice.Enum choice = 1;
+
+  // OTG will provide a system generated value for this property.  If OTG is unable to
+  // generate a value the default value must be used.
+  // default = 8
+  optional uint32 auto = 2;
+
+  // Description missing in models
+  // default = 8
+  optional uint32 value = 3;
+}
+
+// C-Type is specific to a class num.
+message FlowRSVPPathObjectsClassLabelRequest {
+
+  // A 16-bit field containing the total object length in bytes.  Must always be a multiple
+  // of 4 or at least 4.
+  FlowRSVPObjectLength length = 1;
+
+  // Description missing in models
+  FlowRSVPPathObjectsLabelRequestCType c_type = 2;
+}
+
+// Object for LABEL_REQUEST class. Currently supported c-type is Without Label Range
+// (1).
+message FlowRSVPPathObjectsLabelRequestCType {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      without_label_range = 1;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.without_label_range
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  FlowRSVPPathLabelRequestWithoutLabelRange without_label_range = 2;
+}
+
+// Class = LABEL_REQUEST, Without Label Range C-Type = 1
+message FlowRSVPPathLabelRequestWithoutLabelRange {
+
+  // Description missing in models
+  PatternFlowRSVPPathLabelRequestWithoutLabelRangeReserved reserved = 1;
+
+  // Description missing in models
+  PatternFlowRSVPPathLabelRequestWithoutLabelRangeL3pid l3pid = 2;
+}
+
+// C-Type is specific to a class num.
+message FlowRSVPPathObjectsClassSessionAttribute {
+
+  // A 16-bit field containing the total object length in bytes.  Must always be a multiple
+  // of 4 or at least 4.
+  FlowRSVPObjectLength length = 1;
+
+  // Description missing in models
+  FlowRSVPPathObjectsSessionAttributeCType c_type = 2;
+}
+
+// Object for SESSION_ATTRIBUTE class. Currently supported c-type is LSP_Tunnel_RA (1)
+// and LSP_Tunnel (7).
+message FlowRSVPPathObjectsSessionAttributeCType {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      lsp_tunnel = 1;
+      lsp_tunnel_ra = 2;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.lsp_tunnel
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  FlowRSVPPathSessionAttributeLspTunnel lsp_tunnel = 2;
+
+  // Description missing in models
+  FlowRSVPPathSessionAttributeLspTunnelRa lsp_tunnel_ra = 3;
+}
+
+// SESSION_ATTRIBUTE class = 207, LSP_TUNNEL_RA C-Type = 7, resource affinity information.
+message FlowRSVPPathSessionAttributeLspTunnel {
+
+  // The priority of the session with respect to taking resources,in the range of 0 to
+  // 7. The value 0 is the highest priority. The Setup Priority is used in deciding whether
+  // this session can preempt another session.
+  // default = 7
+  optional uint32 setup_priority = 1;
+
+  // The priority of the session with respect to holding resources,in the range of 0 to
+  // 7. The value 0 is the highest priority. The Setup Priority is used in deciding whether
+  // this session can preempt another session.
+  // default = 7
+  optional uint32 holding_priority = 2;
+
+  // 0x01 Local protection desired, 0x02 Label recording desired, 0x04 SE Style desired
+  FlowRSVPLspTunnelFlag flags = 3;
+
+  // The length of the display string before padding, in bytes.
+  FlowRSVPSessionAttributeNameLength name_length = 4;
+
+  // A null padded string of characters.
+  // default =
+  optional string session_name = 5;
+}
+
+// SESSION_ATTRIBUTE class = 207, LSP_TUNNEL_RA C-Type = 1, it carries resource affinity
+// information.
+message FlowRSVPPathSessionAttributeLspTunnelRa {
+
+  // A 32-bit vector representing a set of attribute filters associated with a tunnel
+  // any of which renders a link unacceptable. A null set (all bits set to zero) doesn't
+  // render the link unacceptable. The most significant byte in the hex-string is the
+  // farthest  to the left in the byte sequence.  Leading zero bytes in the configured
+  // value may be omitted for brevity.
+  // default = 0
+  optional string exclude_any = 1;
+
+  // A 32-bit vector representing a set of attribute filters associated with a tunnel
+  // any of which renders a link acceptable. A null set (all bits set to zero) automatically
+  // passes. The most significant byte in the hex-string is the farthest  to the left
+  // in the byte sequence.  Leading zero bytes in the configured value may be omitted
+  // for brevity.
+  // default = 0
+  optional string include_any = 2;
+
+  // A 32-bit vector representing a set of attribute filters associated with a tunnel
+  // all of which must be present for a link to be acceptable. A null set (all bits set
+  // to zero) automatically passes. The most significant byte in the hex-string is the
+  // farthest to the left in the byte sequence.  Leading zero bytes in the configured
+  // value may be omitted for brevity.
+  // default = 0
+  optional string include_all = 3;
+
+  // The priority of the session with respect to taking resources,in the range of 0 to
+  // 7. The value 0 is the highest priority. The Setup Priority is used in deciding whether
+  // this session can preempt another session.
+  // default = 7
+  optional uint32 setup_priority = 4;
+
+  // The priority of the session with respect to holding resources,in the range of 0 to
+  // 7. The value 0 is the highest priority. The Setup Priority is used in deciding whether
+  // this session can preempt another session.
+  // default = 7
+  optional uint32 holding_priority = 5;
+
+  // 0x01 Local protection desired, 0x02 Label recording desired, 0x04 SE Style desired
+  FlowRSVPLspTunnelFlag flags = 6;
+
+  // The length of the display string before padding, in bytes.
+  FlowRSVPSessionAttributeNameLength name_length = 7;
+
+  // A null padded string of characters.
+  // default =
+  optional string session_name = 8;
+}
+
+// Description missing in models
+message FlowRSVPLspTunnelFlag {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      local_protection_desired = 1;
+      label_recording_desired = 2;
+      se_style_desired = 3;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.local_protection_desired
+  optional Choice.Enum choice = 1;
+}
+
+// Description missing in models
+message FlowRSVPSessionAttributeNameLength {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      auto = 1;
+      value = 2;
+    }
+  }
+  // auto or configured value.
+  // default = Choice.Enum.auto
+  optional Choice.Enum choice = 1;
+
+  // OTG will provide a system generated value for this property.  If OTG is unable to
+  // generate a value the default value must be used.
+  // default = 0
+  optional uint32 auto = 2;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 3;
+}
+
+// C-Type is specific to a class num.
+message FlowRSVPPathObjectsClassSenderTemplate {
+
+  // A 16-bit field containing the total object length in bytes.  Must always be a multiple
+  // of 4 or at least 4.
+  FlowRSVPObjectLength length = 1;
+
+  // Description missing in models
+  FlowRSVPPathObjectsSenderTemplateCType c_type = 2;
+}
+
+// Object for SENDER_TEMPLATE class. Currently supported c-type is LSP Tunnel IPv4 (7).
+message FlowRSVPPathObjectsSenderTemplateCType {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      lsp_tunnel_ipv4 = 1;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.lsp_tunnel_ipv4
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  FlowRSVPPathSenderTemplateLspTunnelIpv4 lsp_tunnel_ipv4 = 2;
+}
+
+// Class = SENDER_TEMPLATE, LSP_TUNNEL_IPv4 C-Type = 7
+message FlowRSVPPathSenderTemplateLspTunnelIpv4 {
+
+  // Description missing in models
+  PatternFlowRSVPPathSenderTemplateLspTunnelIpv4Ipv4TunnelSenderAddress ipv4_tunnel_sender_address = 1;
+
+  // Description missing in models
+  PatternFlowRSVPPathSenderTemplateLspTunnelIpv4Reserved reserved = 2;
+
+  // Description missing in models
+  PatternFlowRSVPPathSenderTemplateLspTunnelIpv4LspId lsp_id = 3;
+}
+
+// C-Type is specific to a class num.
+message FlowRSVPPathObjectsClassSenderTspec {
+
+  // A 16-bit field containing the total object length in bytes.  Must always be a multiple
+  // of 4 or at least 4.
+  FlowRSVPObjectLength length = 1;
+
+  // Description missing in models
+  FlowRSVPPathObjectsSenderTspecCType c_type = 2;
+}
+
+// Object for SENDER_TSPEC class. Currently supported c-type is int-serv (2).
+message FlowRSVPPathObjectsSenderTspecCType {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      int_serv = 1;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.int_serv
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  FlowRSVPPathSenderTspecIntServ int_serv = 2;
+}
+
+// int-serv SENDER_TSPEC object: Class = 12, C-Type = 2
+message FlowRSVPPathSenderTspecIntServ {
+
+  // Description missing in models
+  PatternFlowRSVPPathSenderTspecIntServVersion version = 1;
+
+  // Description missing in models
+  PatternFlowRSVPPathSenderTspecIntServReserved1 reserved1 = 2;
+
+  // Description missing in models
+  PatternFlowRSVPPathSenderTspecIntServOverallLength overall_length = 3;
+
+  // Description missing in models
+  PatternFlowRSVPPathSenderTspecIntServServiceHeader service_header = 4;
+
+  // Description missing in models
+  PatternFlowRSVPPathSenderTspecIntServZeroBit zero_bit = 5;
+
+  // Description missing in models
+  PatternFlowRSVPPathSenderTspecIntServReserved2 reserved2 = 6;
+
+  // Description missing in models
+  PatternFlowRSVPPathSenderTspecIntServLengthOfServiceData length_of_service_data = 7;
+
+  // Description missing in models
+  PatternFlowRSVPPathSenderTspecIntServParameterIdTokenBucketTspec parameter_id_token_bucket_tspec = 8;
+
+  // Description missing in models
+  PatternFlowRSVPPathSenderTspecIntServParameter127Flag parameter_127_flag = 9;
+
+  // Description missing in models
+  PatternFlowRSVPPathSenderTspecIntServParameter127Length parameter_127_length = 10;
+
+  // Token bucket rate is set to sender's view of its generated traffic.
+  // default = 0
+  optional float token_bucket_rate = 11;
+
+  // Token bucket size is set to sender's view of its generated traffic.
+  // default = 0
+  optional float token_bucket_size = 12;
+
+  // The peak rate may be set to the sender's peak traffic generation rate (if known and
+  // controlled), the physical interface line rate (if known), or positive infinity (if
+  // no better value is available).
+  // default = 0
+  optional float peak_data_rate = 13;
+
+  // Description missing in models
+  PatternFlowRSVPPathSenderTspecIntServMinimumPolicedUnit minimum_policed_unit = 14;
+
+  // Description missing in models
+  PatternFlowRSVPPathSenderTspecIntServMaximumPacketSize maximum_packet_size = 15;
+}
+
+// C-Type is specific to a class num.
+message FlowRSVPPathObjectsClassRecordRoute {
+
+  // A 16-bit field containing the total object length in bytes.  Must always be a multiple
+  // of 4 or at least 4.
+  FlowRSVPObjectLength length = 1;
+
+  // Description missing in models
+  FlowRSVPPathObjectsRecordRouteCType c_type = 2;
+}
+
+// Object for RECORD_ROUTE class. c-type is Type 1 Route Record (1).
+message FlowRSVPPathObjectsRecordRouteCType {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      type_1 = 1;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.type_1
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  FlowRSVPPathRecordRouteType1 type_1 = 2;
+}
+
+// Type1 record route has list of subobjects. Currently supported subobjects are IPv4
+// address(1) and Label(3).
+message FlowRSVPPathRecordRouteType1 {
+
+  // Description missing in models
+  repeated FlowRSVPType1RecordRouteSubobjects subobjects = 1;
+}
+
+// Type is specific to a subobject.
+message FlowRSVPType1RecordRouteSubobjects {
+
+  // Description missing in models
+  FlowRSVPPathObjectsRecordRouteSubObjectType type = 1;
+}
+
+// Currently supported subobjects are IPv4 address(1) and Label(3).
+message FlowRSVPPathObjectsRecordRouteSubObjectType {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      ipv4_address = 1;
+      label = 2;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.ipv4_address
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  FlowRSVPPathRecordRouteType1Ipv4Address ipv4_address = 2;
+
+  // Description missing in models
+  FlowRSVPPathRecordRouteType1Label label = 3;
+}
+
+// Class = RECORD_ROUTE, Type1 ROUTE_RECORD C-Type = 1 Subobject: IPv4 Address, C-Type:
+// 1
+message FlowRSVPPathRecordRouteType1Ipv4Address {
+
+  // The Length contains the total length of the subobject in bytes, including the Type
+  // and Length fields.   The Length MUST be atleast 4, and MUST be a multiple of 4.
+  FlowRSVPRouteRecordLength length = 1;
+
+  // Description missing in models
+  PatternFlowRSVPPathRecordRouteType1Ipv4AddressIpv4Address ipv4_address = 2;
+
+  // Description missing in models
+  PatternFlowRSVPPathRecordRouteType1Ipv4AddressPrefixLength prefix_length = 3;
+
+  // 0x01  local_protection_available, 0x02  local_protection_in_use
+  FlowRSVPRecordRouteIPv4Flag flags = 4;
+}
+
+// Description missing in models
+message FlowRSVPRecordRouteIPv4Flag {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      local_protection_available = 1;
+      local_protection_in_use = 2;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.local_protection_available
+  optional Choice.Enum choice = 1;
+}
+
+// Class = RECORD_ROUTE, Type1 ROUTE_RECORD C-Type = 1 Subobject: Label, C-Type: 3
+message FlowRSVPPathRecordRouteType1Label {
+
+  // The Length contains the total length of the subobject in bytes, including the Type
+  // and Length fields.   The Length MUST be atleast 4, and MUST be a multiple of 4.
+  FlowRSVPRouteRecordLength length = 1;
+
+  // Description missing in models
+  PatternFlowRSVPPathRecordRouteType1LabelFlags flags = 2;
+
+  // Description missing in models
+  PatternFlowRSVPPathRecordRouteType1LabelCType c_type = 3;
+
+  // The contents of the Label Object. Copied from the Label Object.
+  FlowRSVPPathRecordRouteLabel label = 4;
+}
+
+// Description missing in models
+message FlowRSVPPathRecordRouteLabel {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      as_integer = 1;
+      as_hex = 2;
+    }
+  }
+  // 32 bit integer or hex value.
+  // default = Choice.Enum.as_integer
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 16
+  optional uint32 as_integer = 2;
+
+  // Value of the this field should not excced 4 bytes. Maximum length of this attribute
+  // is 8 (4 * 2 hex character per byte).
+  // default = 10
+  optional string as_hex = 3;
+}
+
+// Description missing in models
+message FlowRSVPRouteRecordLength {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      auto = 1;
+      value = 2;
+    }
+  }
+  // auto or configured value.
+  // default = Choice.Enum.auto
+  optional Choice.Enum choice = 1;
+
+  // OTG will provide a system generated value for this property.  If OTG is unable to
+  // generate a value the default value must be used.
+  // default = 8
+  optional uint32 auto = 2;
+
+  // Description missing in models
+  // default = 8
+  optional uint32 value = 3;
+}
+
+// Custom packet header
+message FlowRSVPPathObjectsCustom {
+
+  // Description missing in models
+  PatternFlowRSVPPathObjectsCustomType type = 1;
+
+  // Description missing in models
+  FlowRSVPObjectLength length = 2;
+
+  // A custom packet header defined as a string of hex bytes. The string MUST contain
+  // sequence of valid hex bytes. Spaces or colons can be part of the bytes but will be
+  // discarded. Value of the this field should not excced 65525 bytes since maximum 65528
+  // bytes can be added as object-contents in RSVP header. For type and length requires
+  // 3 bytes, hence maximum of 65524 bytes are expected. Maximum length of this attribute
+  // is 131050 (65525 * 2 hex character per byte).
+  // default = 0000
+  optional string bytes = 3;
 }
 
 // The frame size which overrides the total length of the packet
@@ -21094,6 +22036,1653 @@ message PatternFlowSnmpv2cCommonRequestId {
 
   // Description missing in models
   PatternFlowSnmpv2cCommonRequestIdCounter decrement = 6;
+}
+
+// The one's complement of the one's complement sum of the message, with the checksum
+// field replaced by zero for the purpose of computing the checksum.   An all-zero value
+// means that no checksum was transmitted.
+message PatternFlowRsvpRsvpChecksum {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      generated = 1;
+      custom = 2;
+    }
+  }
+  // The type of checksum
+  // default = Choice.Enum.generated
+  optional Choice.Enum choice = 1;
+
+  message Generated {
+    enum Enum {
+      unspecified = 0;
+      good = 1;
+      bad = 2;
+    }
+  }
+  // A system generated checksum value
+  // default = Generated.Enum.good
+  optional Generated.Enum generated = 2;
+
+  // A custom checksum value
+  optional uint32 custom = 3;
+}
+
+// integer counter pattern
+message PatternFlowRsvpTimeToLiveCounter {
+
+  // Description missing in models
+  // default = 64
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// The IP time-to-live(TTL) value with which the message was sent.
+message PatternFlowRsvpTimeToLive {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 64
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [64]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowRsvpTimeToLiveCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowRsvpTimeToLiveCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowRsvpReservedCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Reserved
+message PatternFlowRsvpReserved {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowRsvpReservedCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowRsvpReservedCounter decrement = 6;
+}
+
+// ipv4 counter pattern
+message PatternFlowRSVPPathSessionLspTunnelIpv4Ipv4TunnelEndPointAddressCounter {
+
+  // Description missing in models
+  // default = 0.0.0.0
+  optional string start = 1;
+
+  // Description missing in models
+  // default = 0.0.0.1
+  optional string step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// IPv4 address of the egress node for the tunnel.
+message PatternFlowRSVPPathSessionLspTunnelIpv4Ipv4TunnelEndPointAddress {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0.0.0.0
+  optional string value = 2;
+
+  // Description missing in models
+  // default = ['0.0.0.0']
+  repeated string values = 3;
+
+  // Description missing in models
+  PatternFlowRSVPPathSessionLspTunnelIpv4Ipv4TunnelEndPointAddressCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowRSVPPathSessionLspTunnelIpv4Ipv4TunnelEndPointAddressCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowRSVPPathSessionLspTunnelIpv4ReservedCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Reserved field, MUST be zero.
+message PatternFlowRSVPPathSessionLspTunnelIpv4Reserved {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowRSVPPathSessionLspTunnelIpv4ReservedCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowRSVPPathSessionLspTunnelIpv4ReservedCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowRSVPPathSessionLspTunnelIpv4TunnelIdCounter {
+
+  // Description missing in models
+  // default = 1
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// A 16-bit identifier used in the SESSION that remains constant over the life of the
+// tunnel.
+message PatternFlowRSVPPathSessionLspTunnelIpv4TunnelId {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [1]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowRSVPPathSessionLspTunnelIpv4TunnelIdCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowRSVPPathSessionLspTunnelIpv4TunnelIdCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowRSVPPathSessionExtTunnelIdAsIntegerCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// TBD
+message PatternFlowRSVPPathSessionExtTunnelIdAsInteger {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowRSVPPathSessionExtTunnelIdAsIntegerCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowRSVPPathSessionExtTunnelIdAsIntegerCounter decrement = 6;
+}
+
+// ipv4 counter pattern
+message PatternFlowRSVPPathSessionExtTunnelIdAsIpv4Counter {
+
+  // Description missing in models
+  // default = 0.0.0.0
+  optional string start = 1;
+
+  // Description missing in models
+  // default = 0.0.0.1
+  optional string step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// IPv4 address of the ingress endpoint for the tunnel.
+message PatternFlowRSVPPathSessionExtTunnelIdAsIpv4 {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0.0.0.0
+  optional string value = 2;
+
+  // Description missing in models
+  // default = ['0.0.0.0']
+  repeated string values = 3;
+
+  // Description missing in models
+  PatternFlowRSVPPathSessionExtTunnelIdAsIpv4Counter increment = 5;
+
+  // Description missing in models
+  PatternFlowRSVPPathSessionExtTunnelIdAsIpv4Counter decrement = 6;
+}
+
+// ipv4 counter pattern
+message PatternFlowRSVPPathRsvpHopIpv4Ipv4AddressCounter {
+
+  // Description missing in models
+  // default = 0.0.0.0
+  optional string start = 1;
+
+  // Description missing in models
+  // default = 0.0.0.1
+  optional string step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// The IPv4 address of the interface through which the last RSVP-knowledgeable hop forwarded
+// this message.
+message PatternFlowRSVPPathRsvpHopIpv4Ipv4Address {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0.0.0.0
+  optional string value = 2;
+
+  // Description missing in models
+  // default = ['0.0.0.0']
+  repeated string values = 3;
+
+  // Description missing in models
+  PatternFlowRSVPPathRsvpHopIpv4Ipv4AddressCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowRSVPPathRsvpHopIpv4Ipv4AddressCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowRSVPPathRsvpHopIpv4LogicalInterfaceHandleCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Logical Interface Handle (LIH) is used to distinguish logical outgoing interfaces.
+// A node receiving an LIH in a Path message saves its value and returns it in the HOP
+// objects of subsequent Resv messages sent to the node that originated the LIH. The
+// LIH should be identically zero if there is no logical interface handle.
+message PatternFlowRSVPPathRsvpHopIpv4LogicalInterfaceHandle {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowRSVPPathRsvpHopIpv4LogicalInterfaceHandleCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowRSVPPathRsvpHopIpv4LogicalInterfaceHandleCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowRSVPPathTimeValuesType1RefreshPeriodRCounter {
+
+  // Description missing in models
+  // default = 30000
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// The refresh timeout period R used to generate this message;in milliseconds.
+message PatternFlowRSVPPathTimeValuesType1RefreshPeriodR {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 30000
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [30000]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowRSVPPathTimeValuesType1RefreshPeriodRCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowRSVPPathTimeValuesType1RefreshPeriodRCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowRSVPPathExplicitRouteType1Ipv4PrefixLBitCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// The L bit is an attribute of the subobject. The L bit is set if the subobject represents
+// a loose hop in the explicit route. If the bit is not set, the subobject represents
+// a strict hop in the explicit route.
+message PatternFlowRSVPPathExplicitRouteType1Ipv4PrefixLBit {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowRSVPPathExplicitRouteType1Ipv4PrefixLBitCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowRSVPPathExplicitRouteType1Ipv4PrefixLBitCounter decrement = 6;
+}
+
+// ipv4 counter pattern
+message PatternFlowRSVPPathExplicitRouteType1Ipv4PrefixIpv4AddressCounter {
+
+  // Description missing in models
+  // default = 0.0.0.0
+  optional string start = 1;
+
+  // Description missing in models
+  // default = 0.0.0.1
+  optional string step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// This IPv4 address is treated as a prefix based on the prefix length value below.
+// Bits beyond the prefix are ignored on receipt and SHOULD be set to zero on transmission.
+message PatternFlowRSVPPathExplicitRouteType1Ipv4PrefixIpv4Address {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0.0.0.0
+  optional string value = 2;
+
+  // Description missing in models
+  // default = ['0.0.0.0']
+  repeated string values = 3;
+
+  // Description missing in models
+  PatternFlowRSVPPathExplicitRouteType1Ipv4PrefixIpv4AddressCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowRSVPPathExplicitRouteType1Ipv4PrefixIpv4AddressCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowRSVPPathExplicitRouteType1ASNumberLBitCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// The L bit is an attribute of the subobject. The L bit is set if the subobject represents
+// a loose hop in the explicit route. If the bit is not set, the subobject represents
+// a strict hop in the explicit route.
+message PatternFlowRSVPPathExplicitRouteType1ASNumberLBit {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowRSVPPathExplicitRouteType1ASNumberLBitCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowRSVPPathExplicitRouteType1ASNumberLBitCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowRSVPPathLabelRequestWithoutLabelRangeReservedCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// This field is reserved.   It MUST be set to zero on transmission and MUST be ignored
+// on receipt.
+message PatternFlowRSVPPathLabelRequestWithoutLabelRangeReserved {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowRSVPPathLabelRequestWithoutLabelRangeReservedCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowRSVPPathLabelRequestWithoutLabelRangeReservedCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowRSVPPathLabelRequestWithoutLabelRangeL3pidCounter {
+
+  // Description missing in models
+  // default = 2048
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// An identifier of the layer 3 protocol using this path.  Standard Ethertype values
+// are used e.g. The default value of 2048 ( 0x0800 ) represents Ethertype for IPv4.
+// 
+message PatternFlowRSVPPathLabelRequestWithoutLabelRangeL3pid {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 2048
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [2048]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowRSVPPathLabelRequestWithoutLabelRangeL3pidCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowRSVPPathLabelRequestWithoutLabelRangeL3pidCounter decrement = 6;
+}
+
+// ipv4 counter pattern
+message PatternFlowRSVPPathSenderTemplateLspTunnelIpv4Ipv4TunnelSenderAddressCounter {
+
+  // Description missing in models
+  // default = 0.0.0.0
+  optional string start = 1;
+
+  // Description missing in models
+  // default = 0.0.0.1
+  optional string step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// IPv4 address for a sender node.
+message PatternFlowRSVPPathSenderTemplateLspTunnelIpv4Ipv4TunnelSenderAddress {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0.0.0.0
+  optional string value = 2;
+
+  // Description missing in models
+  // default = ['0.0.0.0']
+  repeated string values = 3;
+
+  // Description missing in models
+  PatternFlowRSVPPathSenderTemplateLspTunnelIpv4Ipv4TunnelSenderAddressCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowRSVPPathSenderTemplateLspTunnelIpv4Ipv4TunnelSenderAddressCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowRSVPPathSenderTemplateLspTunnelIpv4ReservedCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Reserved field, MUST be zero.
+message PatternFlowRSVPPathSenderTemplateLspTunnelIpv4Reserved {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowRSVPPathSenderTemplateLspTunnelIpv4ReservedCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowRSVPPathSenderTemplateLspTunnelIpv4ReservedCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowRSVPPathSenderTemplateLspTunnelIpv4LspIdCounter {
+
+  // Description missing in models
+  // default = 1
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// A 16-bit identifier used in the SENDER_TEMPLATE that can be changed to allow a sender
+// to share resources with itself.
+message PatternFlowRSVPPathSenderTemplateLspTunnelIpv4LspId {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [1]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowRSVPPathSenderTemplateLspTunnelIpv4LspIdCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowRSVPPathSenderTemplateLspTunnelIpv4LspIdCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowRSVPPathSenderTspecIntServVersionCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Message format version number.
+message PatternFlowRSVPPathSenderTspecIntServVersion {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowRSVPPathSenderTspecIntServVersionCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowRSVPPathSenderTspecIntServVersionCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowRSVPPathSenderTspecIntServReserved1Counter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Reserved.
+message PatternFlowRSVPPathSenderTspecIntServReserved1 {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowRSVPPathSenderTspecIntServReserved1Counter increment = 5;
+
+  // Description missing in models
+  PatternFlowRSVPPathSenderTspecIntServReserved1Counter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowRSVPPathSenderTspecIntServOverallLengthCounter {
+
+  // Description missing in models
+  // default = 7
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Overall length (7 words not including header).
+message PatternFlowRSVPPathSenderTspecIntServOverallLength {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 7
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [7]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowRSVPPathSenderTspecIntServOverallLengthCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowRSVPPathSenderTspecIntServOverallLengthCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowRSVPPathSenderTspecIntServServiceHeaderCounter {
+
+  // Description missing in models
+  // default = 1
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Service header, service number - '1' (Generic information) if in a PATH message.
+message PatternFlowRSVPPathSenderTspecIntServServiceHeader {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [1]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowRSVPPathSenderTspecIntServServiceHeaderCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowRSVPPathSenderTspecIntServServiceHeaderCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowRSVPPathSenderTspecIntServZeroBitCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// MUST be 0.
+message PatternFlowRSVPPathSenderTspecIntServZeroBit {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowRSVPPathSenderTspecIntServZeroBitCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowRSVPPathSenderTspecIntServZeroBitCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowRSVPPathSenderTspecIntServReserved2Counter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Reserved.
+message PatternFlowRSVPPathSenderTspecIntServReserved2 {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowRSVPPathSenderTspecIntServReserved2Counter increment = 5;
+
+  // Description missing in models
+  PatternFlowRSVPPathSenderTspecIntServReserved2Counter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowRSVPPathSenderTspecIntServLengthOfServiceDataCounter {
+
+  // Description missing in models
+  // default = 6
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Length of service data, 6 words not including per-service header.
+message PatternFlowRSVPPathSenderTspecIntServLengthOfServiceData {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 6
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [6]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowRSVPPathSenderTspecIntServLengthOfServiceDataCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowRSVPPathSenderTspecIntServLengthOfServiceDataCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowRSVPPathSenderTspecIntServParameterIdTokenBucketTspecCounter {
+
+  // Description missing in models
+  // default = 127
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Parameter ID, parameter 127 (Token Bucket TSpec)
+message PatternFlowRSVPPathSenderTspecIntServParameterIdTokenBucketTspec {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 127
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [127]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowRSVPPathSenderTspecIntServParameterIdTokenBucketTspecCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowRSVPPathSenderTspecIntServParameterIdTokenBucketTspecCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowRSVPPathSenderTspecIntServParameter127FlagCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Parameter 127 flags (none set)
+message PatternFlowRSVPPathSenderTspecIntServParameter127Flag {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowRSVPPathSenderTspecIntServParameter127FlagCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowRSVPPathSenderTspecIntServParameter127FlagCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowRSVPPathSenderTspecIntServParameter127LengthCounter {
+
+  // Description missing in models
+  // default = 5
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Parameter 127 length, 5 words not including per-service header
+message PatternFlowRSVPPathSenderTspecIntServParameter127Length {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 5
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [5]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowRSVPPathSenderTspecIntServParameter127LengthCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowRSVPPathSenderTspecIntServParameter127LengthCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowRSVPPathSenderTspecIntServMinimumPolicedUnitCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// The minimum policed unit parameter should generally be set equal to the size of the
+// smallest packet generated by the application.
+message PatternFlowRSVPPathSenderTspecIntServMinimumPolicedUnit {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowRSVPPathSenderTspecIntServMinimumPolicedUnitCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowRSVPPathSenderTspecIntServMinimumPolicedUnitCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowRSVPPathSenderTspecIntServMaximumPacketSizeCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// The maximum packet size parameter should be set to the size of the largest packet
+// the application might wish to generate. This value must, by definition, be equal
+// to or larger than the value of The minimum policed unit.
+message PatternFlowRSVPPathSenderTspecIntServMaximumPacketSize {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowRSVPPathSenderTspecIntServMaximumPacketSizeCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowRSVPPathSenderTspecIntServMaximumPacketSizeCounter decrement = 6;
+}
+
+// ipv4 counter pattern
+message PatternFlowRSVPPathRecordRouteType1Ipv4AddressIpv4AddressCounter {
+
+  // Description missing in models
+  // default = 0.0.0.0
+  optional string start = 1;
+
+  // Description missing in models
+  // default = 0.0.0.1
+  optional string step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// A 32-bit unicast, host address.  Any network-reachable interface address is allowed
+// here. Illegal addresses, such as certain loopback addresses, SHOULD NOT be used.
+message PatternFlowRSVPPathRecordRouteType1Ipv4AddressIpv4Address {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0.0.0.0
+  optional string value = 2;
+
+  // Description missing in models
+  // default = ['0.0.0.0']
+  repeated string values = 3;
+
+  // Description missing in models
+  PatternFlowRSVPPathRecordRouteType1Ipv4AddressIpv4AddressCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowRSVPPathRecordRouteType1Ipv4AddressIpv4AddressCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowRSVPPathRecordRouteType1Ipv4AddressPrefixLengthCounter {
+
+  // Description missing in models
+  // default = 32
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Prefix-length of IPv4 address.
+message PatternFlowRSVPPathRecordRouteType1Ipv4AddressPrefixLength {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 32
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [32]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowRSVPPathRecordRouteType1Ipv4AddressPrefixLengthCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowRSVPPathRecordRouteType1Ipv4AddressPrefixLengthCounter decrement = 6;
+}
+
+// 0x01 = Global label. This flag indicates that the label will be understood if received
+// on any interface.
+message PatternFlowRSVPPathRecordRouteType1LabelFlags {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [1]
+  repeated uint32 values = 3;
+}
+
+// The C-Type of the included Label Object. Copied from the Label object.
+message PatternFlowRSVPPathRecordRouteType1LabelCType {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [1]
+  repeated uint32 values = 3;
+}
+
+// integer counter pattern
+message PatternFlowRSVPPathObjectsCustomTypeCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// User defined object type.
+message PatternFlowRSVPPathObjectsCustomType {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowRSVPPathObjectsCustomTypeCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowRSVPPathObjectsCustomTypeCounter decrement = 6;
 }
 
 // Version details
