@@ -1,4 +1,4 @@
-# Open Traffic Generator API 1.0.0
+# Open Traffic Generator API 1.0.1
 # License: MIT
 
 import importlib
@@ -26317,6 +26317,7 @@ class FlowHeader(OpenApiObject):
                 "igmpv1",
                 "mpls",
                 "snmpv2c",
+                "rsvp",
             ],
         },
         "custom": {"type": "FlowCustom"},
@@ -26339,6 +26340,7 @@ class FlowHeader(OpenApiObject):
         "igmpv1": {"type": "FlowIgmpv1"},
         "mpls": {"type": "FlowMpls"},
         "snmpv2c": {"type": "FlowSnmpv2c"},
+        "rsvp": {"type": "FlowRsvp"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -26367,6 +26369,7 @@ class FlowHeader(OpenApiObject):
     IGMPV1 = "igmpv1"  # type: str
     MPLS = "mpls"  # type: str
     SNMPV2C = "snmpv2c"  # type: str
+    RSVP = "rsvp"  # type: str
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
@@ -26605,13 +26608,24 @@ class FlowHeader(OpenApiObject):
         return self._get_property("snmpv2c", FlowSnmpv2c, self, "snmpv2c")
 
     @property
+    def rsvp(self):
+        # type: () -> FlowRsvp
+        """Factory property that returns an instance of the FlowRsvp class
+
+        RSVP packet header as defined in RFC2205 and RFC3209. Currently only supported message type is "Path" with mandatory objects and sub-objects.
+
+        Returns: FlowRsvp
+        """
+        return self._get_property("rsvp", FlowRsvp, self, "rsvp")
+
+    @property
     def choice(self):
-        # type: () -> Union[Literal["arp"], Literal["custom"], Literal["ethernet"], Literal["ethernetpause"], Literal["gre"], Literal["gtpv1"], Literal["gtpv2"], Literal["icmp"], Literal["icmpv6"], Literal["igmpv1"], Literal["ipv4"], Literal["ipv6"], Literal["mpls"], Literal["pfcpause"], Literal["ppp"], Literal["snmpv2c"], Literal["tcp"], Literal["udp"], Literal["vlan"], Literal["vxlan"]]
+        # type: () -> Union[Literal["arp"], Literal["custom"], Literal["ethernet"], Literal["ethernetpause"], Literal["gre"], Literal["gtpv1"], Literal["gtpv2"], Literal["icmp"], Literal["icmpv6"], Literal["igmpv1"], Literal["ipv4"], Literal["ipv6"], Literal["mpls"], Literal["pfcpause"], Literal["ppp"], Literal["rsvp"], Literal["snmpv2c"], Literal["tcp"], Literal["udp"], Literal["vlan"], Literal["vxlan"]]
         """choice getter
 
         The available types of flow headers. If one is not provided the default ethernet packet header MUST be provided.
 
-        Returns: Union[Literal["arp"], Literal["custom"], Literal["ethernet"], Literal["ethernetpause"], Literal["gre"], Literal["gtpv1"], Literal["gtpv2"], Literal["icmp"], Literal["icmpv6"], Literal["igmpv1"], Literal["ipv4"], Literal["ipv6"], Literal["mpls"], Literal["pfcpause"], Literal["ppp"], Literal["snmpv2c"], Literal["tcp"], Literal["udp"], Literal["vlan"], Literal["vxlan"]]
+        Returns: Union[Literal["arp"], Literal["custom"], Literal["ethernet"], Literal["ethernetpause"], Literal["gre"], Literal["gtpv1"], Literal["gtpv2"], Literal["icmp"], Literal["icmpv6"], Literal["igmpv1"], Literal["ipv4"], Literal["ipv6"], Literal["mpls"], Literal["pfcpause"], Literal["ppp"], Literal["rsvp"], Literal["snmpv2c"], Literal["tcp"], Literal["udp"], Literal["vlan"], Literal["vxlan"]]
         """
         return self._get_property("choice")
 
@@ -26621,7 +26635,7 @@ class FlowHeader(OpenApiObject):
 
         The available types of flow headers. If one is not provided the default ethernet packet header MUST be provided.
 
-        value: Union[Literal["arp"], Literal["custom"], Literal["ethernet"], Literal["ethernetpause"], Literal["gre"], Literal["gtpv1"], Literal["gtpv2"], Literal["icmp"], Literal["icmpv6"], Literal["igmpv1"], Literal["ipv4"], Literal["ipv6"], Literal["mpls"], Literal["pfcpause"], Literal["ppp"], Literal["snmpv2c"], Literal["tcp"], Literal["udp"], Literal["vlan"], Literal["vxlan"]]
+        value: Union[Literal["arp"], Literal["custom"], Literal["ethernet"], Literal["ethernetpause"], Literal["gre"], Literal["gtpv1"], Literal["gtpv2"], Literal["icmp"], Literal["icmpv6"], Literal["igmpv1"], Literal["ipv4"], Literal["ipv6"], Literal["mpls"], Literal["pfcpause"], Literal["ppp"], Literal["rsvp"], Literal["snmpv2c"], Literal["tcp"], Literal["udp"], Literal["vlan"], Literal["vxlan"]]
         """
         self._set_property("choice", value)
 
@@ -94602,6 +94616,13358 @@ class PatternFlowSnmpv2cBulkPDUMaxRepetitionsCounter(OpenApiObject):
         self._set_property("count", value)
 
 
+class FlowRsvp(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "version": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 15,
+        },
+        "flag": {
+            "type": str,
+            "enum": [
+                "not_refresh_reduction_capable",
+                "refresh_reduction_capable",
+            ],
+        },
+        "rsvp_checksum": {"type": "PatternFlowRsvpRsvpChecksum"},
+        "time_to_live": {"type": "PatternFlowRsvpTimeToLive"},
+        "reserved": {"type": "PatternFlowRsvpReserved"},
+        "rsvp_length": {"type": "FlowRSVPLength"},
+        "message_type": {"type": "FlowRSVPMessage"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "version": 1,
+        "flag": "not_refresh_reduction_capable",
+    }  # type: Dict[str, Union(type)]
+
+    NOT_REFRESH_REDUCTION_CAPABLE = "not_refresh_reduction_capable"  # type: str
+    REFRESH_REDUCTION_CAPABLE = "refresh_reduction_capable"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, version=1, flag="not_refresh_reduction_capable"):
+        super(FlowRsvp, self).__init__()
+        self._parent = parent
+        self._set_property("version", version)
+        self._set_property("flag", flag)
+
+    def set(self, version=None, flag=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def version(self):
+        # type: () -> int
+        """version getter
+
+        RSVP Protocol Version.
+
+        Returns: int
+        """
+        return self._get_property("version")
+
+    @version.setter
+    def version(self, value):
+        """version setter
+
+        RSVP Protocol Version.
+
+        value: int
+        """
+        self._set_property("version", value)
+
+    @property
+    def flag(self):
+        # type: () -> Union[Literal["not_refresh_reduction_capable"], Literal["refresh_reduction_capable"]]
+        """flag getter
+
+        Flag, 0x01-0x08: Reserved.
+
+        Returns: Union[Literal["not_refresh_reduction_capable"], Literal["refresh_reduction_capable"]]
+        """
+        return self._get_property("flag")
+
+    @flag.setter
+    def flag(self, value):
+        """flag setter
+
+        Flag, 0x01-0x08: Reserved.
+
+        value: Union[Literal["not_refresh_reduction_capable"], Literal["refresh_reduction_capable"]]
+        """
+        self._set_property("flag", value)
+
+    @property
+    def rsvp_checksum(self):
+        # type: () -> PatternFlowRsvpRsvpChecksum
+        """rsvp_checksum getter
+
+        The one's complement of the one's complement sum of the message, with the checksum field replaced by zero for the purpose of computing the checksum. An all-zero value means that no checksum was transmitted.The one's complement of the one's complement sum of the message, with the checksum field replaced by zero for the purpose of computing the checksum. An all-zero value means that no checksum was transmitted.The one's complement of the one's complement sum of the message, with the checksum field replaced by zero for the purpose of computing the checksum. An all-zero value means that no checksum was transmitted.The one's complement of the one's complement sum of the message, with the checksum field replaced by zero for the purpose of computing the checksum. An all-zero value means that no checksum was transmitted.
+
+        Returns: PatternFlowRsvpRsvpChecksum
+        """
+        return self._get_property("rsvp_checksum", PatternFlowRsvpRsvpChecksum)
+
+    @property
+    def time_to_live(self):
+        # type: () -> PatternFlowRsvpTimeToLive
+        """time_to_live getter
+
+        The IP time-to-live(TTL) value with which the message was sent.The IP time-to-live(TTL) value with which the message was sent.The IP time-to-live(TTL) value with which the message was sent.The IP time-to-live(TTL) value with which the message was sent.
+
+        Returns: PatternFlowRsvpTimeToLive
+        """
+        return self._get_property("time_to_live", PatternFlowRsvpTimeToLive)
+
+    @property
+    def reserved(self):
+        # type: () -> PatternFlowRsvpReserved
+        """reserved getter
+
+        Reserved Reserved Reserved Reserved
+
+        Returns: PatternFlowRsvpReserved
+        """
+        return self._get_property("reserved", PatternFlowRsvpReserved)
+
+    @property
+    def rsvp_length(self):
+        # type: () -> FlowRSVPLength
+        """rsvp_length getter
+
+        The sum of the lengths of the common header and all objects included in the message.
+
+        Returns: FlowRSVPLength
+        """
+        return self._get_property("rsvp_length", FlowRSVPLength)
+
+    @property
+    def message_type(self):
+        # type: () -> FlowRSVPMessage
+        """message_type getter
+
+        An 8-bit number that identifies the function of the RSVP message. There are aound 20 message types defined in https://www.iana.org/assignments/rsvp-parameters/rsvp-parameters.xhtml#rsvp-parameters-2 Among these presently supported is "Path"(value: 1) message type.
+
+        Returns: FlowRSVPMessage
+        """
+        return self._get_property("message_type", FlowRSVPMessage)
+
+
+class PatternFlowRsvpRsvpChecksum(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "generated",
+                "custom",
+            ],
+        },
+        "generated": {
+            "type": str,
+            "enum": [
+                "good",
+                "bad",
+            ],
+        },
+        "custom": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "generated",
+        "generated": "good",
+    }  # type: Dict[str, Union(type)]
+
+    GENERATED = "generated"  # type: str
+    CUSTOM = "custom"  # type: str
+
+    GOOD = "good"  # type: str
+    BAD = "bad"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, generated="good", custom=None):
+        super(PatternFlowRsvpRsvpChecksum, self).__init__()
+        self._parent = parent
+        self._set_property("generated", generated)
+        self._set_property("custom", custom)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, generated=None, custom=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["custom"], Literal["generated"]]
+        """choice getter
+
+        The type of checksum
+
+        Returns: Union[Literal["custom"], Literal["generated"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        The type of checksum
+
+        value: Union[Literal["custom"], Literal["generated"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def generated(self):
+        # type: () -> Union[Literal["bad"], Literal["good"]]
+        """generated getter
+
+        A system generated checksum value
+
+        Returns: Union[Literal["bad"], Literal["good"]]
+        """
+        return self._get_property("generated")
+
+    @generated.setter
+    def generated(self, value):
+        """generated setter
+
+        A system generated checksum value
+
+        value: Union[Literal["bad"], Literal["good"]]
+        """
+        self._set_property("generated", value, "generated")
+
+    @property
+    def custom(self):
+        # type: () -> int
+        """custom getter
+
+        A custom checksum value
+
+        Returns: int
+        """
+        return self._get_property("custom")
+
+    @custom.setter
+    def custom(self, value):
+        """custom setter
+
+        A custom checksum value
+
+        value: int
+        """
+        self._set_property("custom", value, "custom")
+
+
+class PatternFlowRsvpTimeToLive(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+            "maximum": 255,
+        },
+        "increment": {"type": "PatternFlowRsvpTimeToLiveCounter"},
+        "decrement": {"type": "PatternFlowRsvpTimeToLiveCounter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": 64,
+        "values": [64],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=64, values=[64]):
+        super(PatternFlowRsvpTimeToLive, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowRsvpTimeToLiveCounter
+        """Factory property that returns an instance of the PatternFlowRsvpTimeToLiveCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowRsvpTimeToLiveCounter
+        """
+        return self._get_property(
+            "increment", PatternFlowRsvpTimeToLiveCounter, self, "increment"
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowRsvpTimeToLiveCounter
+        """Factory property that returns an instance of the PatternFlowRsvpTimeToLiveCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowRsvpTimeToLiveCounter
+        """
+        return self._get_property(
+            "decrement", PatternFlowRsvpTimeToLiveCounter, self, "decrement"
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowRsvpTimeToLiveCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "step": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 64,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=64, step=1, count=1):
+        super(PatternFlowRsvpTimeToLiveCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class PatternFlowRsvpReserved(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+            "maximum": 255,
+        },
+        "increment": {"type": "PatternFlowRsvpReservedCounter"},
+        "decrement": {"type": "PatternFlowRsvpReservedCounter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": 0,
+        "values": [0],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=0, values=[0]):
+        super(PatternFlowRsvpReserved, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowRsvpReservedCounter
+        """Factory property that returns an instance of the PatternFlowRsvpReservedCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowRsvpReservedCounter
+        """
+        return self._get_property(
+            "increment", PatternFlowRsvpReservedCounter, self, "increment"
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowRsvpReservedCounter
+        """Factory property that returns an instance of the PatternFlowRsvpReservedCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowRsvpReservedCounter
+        """
+        return self._get_property(
+            "decrement", PatternFlowRsvpReservedCounter, self, "decrement"
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowRsvpReservedCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "step": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowRsvpReservedCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class FlowRSVPLength(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "auto",
+                "value",
+            ],
+        },
+        "auto": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "auto",
+        "auto": 0,
+        "value": 0,
+    }  # type: Dict[str, Union(type)]
+
+    AUTO = "auto"  # type: str
+    VALUE = "value"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, auto=0, value=0):
+        super(FlowRSVPLength, self).__init__()
+        self._parent = parent
+        self._set_property("auto", auto)
+        self._set_property("value", value)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, auto=None, value=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["auto"], Literal["value"]]
+        """choice getter
+
+        auto or configured value.
+
+        Returns: Union[Literal["auto"], Literal["value"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        auto or configured value.
+
+        value: Union[Literal["auto"], Literal["value"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def auto(self):
+        # type: () -> int
+        """auto getter
+
+        OTG will provide system generated value for this property. If OTG is unable to generate value the default value must be used.
+
+        Returns: int
+        """
+        return self._get_property("auto")
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+
+class FlowRSVPMessage(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "path",
+            ],
+        },
+        "path": {"type": "FlowRSVPPathMessage"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "path",
+    }  # type: Dict[str, Union(type)]
+
+    PATH = "path"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None):
+        super(FlowRSVPMessage, self).__init__()
+        self._parent = parent
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    @property
+    def path(self):
+        # type: () -> FlowRSVPPathMessage
+        """Factory property that returns an instance of the FlowRSVPPathMessage class
+
+        "Path" message requires the following list of objects in order as defined in https://www.rfc-editor.org/rfc/rfc3209.html#page-15: 1. SESSION 2. RSVP_HOP 3. TIME_VALUES 4. EXPLICIT_ROUTE [optional] 5. LABEL_REQUEST 6. SESSION_ATTRIBUTE [optional] 7. SENDER_TEMPLATE 8. SENDER_TSPEC 9. RECORD_ROUTE [optional]
+
+        Returns: FlowRSVPPathMessage
+        """
+        return self._get_property("path", FlowRSVPPathMessage, self, "path")
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["path"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["path"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["path"]]
+        """
+        self._set_property("choice", value)
+
+
+class FlowRSVPPathMessage(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "objects": {"type": "FlowRSVPPathObjectsIter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(FlowRSVPPathMessage, self).__init__()
+        self._parent = parent
+
+    @property
+    def objects(self):
+        # type: () -> FlowRSVPPathObjectsIter
+        """objects getter
+
+        "Path" message requires atleast SESSION, RSVP_HOP, TIME_VALUES, LABEL_REQUEST, SENDER_TEMPLATE and SENDER_TSPEC objects in order.
+
+        Returns: FlowRSVPPathObjectsIter
+        """
+        return self._get_property(
+            "objects", FlowRSVPPathObjectsIter, self._parent, self._choice
+        )
+
+
+class FlowRSVPPathObjects(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "class_num": {"type": "FlowRSVPPathObjectsClass"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(FlowRSVPPathObjects, self).__init__()
+        self._parent = parent
+
+    @property
+    def class_num(self):
+        # type: () -> FlowRSVPPathObjectsClass
+        """class_num getter
+
+        The class number is used to identify the class of an object. Defined in https://www.iana.org/assignments/rsvp-parameters/rsvp-parameters.xhtml#rsvp-parameters-4 Curently supported class numbers are for "Path" message type. "Path" message: Supported Class numbers and it's value: SESSION: 1, RSVP_HOP: 3, TIME_VALUES: 5, EXPLICIT_ROUTE: 20, LABEL_REQUEST: 19, SESSION_ATTRIBUTE: 207, SENDER_TEMPLATE: 11, SENDER_TSPEC: 12, RECORD_ROUTE: 21, Custom: User defined bytes based on class and c-types not supported in above options.The class number is used to identify the class of an object. Defined in https://www.iana.org/assignments/rsvp-parameters/rsvp-parameters.xhtml#rsvp-parameters-4 Curently supported class numbers are for "Path" message type. "Path" message: Supported Class numbers and it's value: SESSION: 1, RSVP_HOP: 3, TIME_VALUES: 5, EXPLICIT_ROUTE: 20, LABEL_REQUEST: 19, SESSION_ATTRIBUTE: 207, SENDER_TEMPLATE: 11, SENDER_TSPEC: 12, RECORD_ROUTE: 21, Custom: User defined bytes based on class and c-types not supported in above options.The class number is used to identify the class of an object. Defined in https://www.iana.org/assignments/rsvp-parameters/rsvp-parameters.xhtml#rsvp-parameters-4 Curently supported class numbers are for "Path" message type. "Path" message: Supported Class numbers and it's value: SESSION: 1, RSVP_HOP: 3, TIME_VALUES: 5, EXPLICIT_ROUTE: 20, LABEL_REQUEST: 19, SESSION_ATTRIBUTE: 207, SENDER_TEMPLATE: 11, SENDER_TSPEC: 12, RECORD_ROUTE: 21, Custom: User defined bytes based on class and c-types not supported in above options.
+
+        Returns: FlowRSVPPathObjectsClass
+        """
+        return self._get_property("class_num", FlowRSVPPathObjectsClass)
+
+
+class FlowRSVPPathObjectsClass(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "session",
+                "rsvp_hop",
+                "time_values",
+                "explicit_route",
+                "label_request",
+                "session_attribute",
+                "sender_template",
+                "sender_tspec",
+                "record_route",
+                "custom",
+            ],
+        },
+        "session": {"type": "FlowRSVPPathObjectsClassSession"},
+        "rsvp_hop": {"type": "FlowRSVPPathObjectsClassRsvpHop"},
+        "time_values": {"type": "FlowRSVPPathObjectsClassTimeValues"},
+        "explicit_route": {"type": "FlowRSVPPathObjectsClassExplicitRoute"},
+        "label_request": {"type": "FlowRSVPPathObjectsClassLabelRequest"},
+        "session_attribute": {"type": "FlowRSVPPathObjectsClassSessionAttribute"},
+        "sender_template": {"type": "FlowRSVPPathObjectsClassSenderTemplate"},
+        "sender_tspec": {"type": "FlowRSVPPathObjectsClassSenderTspec"},
+        "record_route": {"type": "FlowRSVPPathObjectsClassRecordRoute"},
+        "custom": {"type": "FlowRSVPPathObjectsCustom"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ("choice",)  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    SESSION = "session"  # type: str
+    RSVP_HOP = "rsvp_hop"  # type: str
+    TIME_VALUES = "time_values"  # type: str
+    EXPLICIT_ROUTE = "explicit_route"  # type: str
+    LABEL_REQUEST = "label_request"  # type: str
+    SESSION_ATTRIBUTE = "session_attribute"  # type: str
+    SENDER_TEMPLATE = "sender_template"  # type: str
+    SENDER_TSPEC = "sender_tspec"  # type: str
+    RECORD_ROUTE = "record_route"  # type: str
+    CUSTOM = "custom"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None):
+        super(FlowRSVPPathObjectsClass, self).__init__()
+        self._parent = parent
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    @property
+    def session(self):
+        # type: () -> FlowRSVPPathObjectsClassSession
+        """Factory property that returns an instance of the FlowRSVPPathObjectsClassSession class
+
+        C-Type is specific to class num.
+
+        Returns: FlowRSVPPathObjectsClassSession
+        """
+        return self._get_property(
+            "session", FlowRSVPPathObjectsClassSession, self, "session"
+        )
+
+    @property
+    def rsvp_hop(self):
+        # type: () -> FlowRSVPPathObjectsClassRsvpHop
+        """Factory property that returns an instance of the FlowRSVPPathObjectsClassRsvpHop class
+
+        C-Type is specific to class num.
+
+        Returns: FlowRSVPPathObjectsClassRsvpHop
+        """
+        return self._get_property(
+            "rsvp_hop", FlowRSVPPathObjectsClassRsvpHop, self, "rsvp_hop"
+        )
+
+    @property
+    def time_values(self):
+        # type: () -> FlowRSVPPathObjectsClassTimeValues
+        """Factory property that returns an instance of the FlowRSVPPathObjectsClassTimeValues class
+
+        C-Type is specific to class num.
+
+        Returns: FlowRSVPPathObjectsClassTimeValues
+        """
+        return self._get_property(
+            "time_values", FlowRSVPPathObjectsClassTimeValues, self, "time_values"
+        )
+
+    @property
+    def explicit_route(self):
+        # type: () -> FlowRSVPPathObjectsClassExplicitRoute
+        """Factory property that returns an instance of the FlowRSVPPathObjectsClassExplicitRoute class
+
+        C-Type is specific to class num.
+
+        Returns: FlowRSVPPathObjectsClassExplicitRoute
+        """
+        return self._get_property(
+            "explicit_route",
+            FlowRSVPPathObjectsClassExplicitRoute,
+            self,
+            "explicit_route",
+        )
+
+    @property
+    def label_request(self):
+        # type: () -> FlowRSVPPathObjectsClassLabelRequest
+        """Factory property that returns an instance of the FlowRSVPPathObjectsClassLabelRequest class
+
+        C-Type is specific to class num.
+
+        Returns: FlowRSVPPathObjectsClassLabelRequest
+        """
+        return self._get_property(
+            "label_request", FlowRSVPPathObjectsClassLabelRequest, self, "label_request"
+        )
+
+    @property
+    def session_attribute(self):
+        # type: () -> FlowRSVPPathObjectsClassSessionAttribute
+        """Factory property that returns an instance of the FlowRSVPPathObjectsClassSessionAttribute class
+
+        C-Type is specific to class num.
+
+        Returns: FlowRSVPPathObjectsClassSessionAttribute
+        """
+        return self._get_property(
+            "session_attribute",
+            FlowRSVPPathObjectsClassSessionAttribute,
+            self,
+            "session_attribute",
+        )
+
+    @property
+    def sender_template(self):
+        # type: () -> FlowRSVPPathObjectsClassSenderTemplate
+        """Factory property that returns an instance of the FlowRSVPPathObjectsClassSenderTemplate class
+
+        C-Type is specific to class num.
+
+        Returns: FlowRSVPPathObjectsClassSenderTemplate
+        """
+        return self._get_property(
+            "sender_template",
+            FlowRSVPPathObjectsClassSenderTemplate,
+            self,
+            "sender_template",
+        )
+
+    @property
+    def sender_tspec(self):
+        # type: () -> FlowRSVPPathObjectsClassSenderTspec
+        """Factory property that returns an instance of the FlowRSVPPathObjectsClassSenderTspec class
+
+        C-Type is specific to class num.
+
+        Returns: FlowRSVPPathObjectsClassSenderTspec
+        """
+        return self._get_property(
+            "sender_tspec", FlowRSVPPathObjectsClassSenderTspec, self, "sender_tspec"
+        )
+
+    @property
+    def record_route(self):
+        # type: () -> FlowRSVPPathObjectsClassRecordRoute
+        """Factory property that returns an instance of the FlowRSVPPathObjectsClassRecordRoute class
+
+        C-Type is specific to class num.
+
+        Returns: FlowRSVPPathObjectsClassRecordRoute
+        """
+        return self._get_property(
+            "record_route", FlowRSVPPathObjectsClassRecordRoute, self, "record_route"
+        )
+
+    @property
+    def custom(self):
+        # type: () -> FlowRSVPPathObjectsCustom
+        """Factory property that returns an instance of the FlowRSVPPathObjectsCustom class
+
+        Custom packet header
+
+        Returns: FlowRSVPPathObjectsCustom
+        """
+        return self._get_property("custom", FlowRSVPPathObjectsCustom, self, "custom")
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["custom"], Literal["explicit_route"], Literal["label_request"], Literal["record_route"], Literal["rsvp_hop"], Literal["sender_template"], Literal["sender_tspec"], Literal["session"], Literal["session_attribute"], Literal["time_values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["custom"], Literal["explicit_route"], Literal["label_request"], Literal["record_route"], Literal["rsvp_hop"], Literal["sender_template"], Literal["sender_tspec"], Literal["session"], Literal["session_attribute"], Literal["time_values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["custom"], Literal["explicit_route"], Literal["label_request"], Literal["record_route"], Literal["rsvp_hop"], Literal["sender_template"], Literal["sender_tspec"], Literal["session"], Literal["session_attribute"], Literal["time_values"]]
+        """
+        if value is None:
+            raise TypeError("Cannot set required property choice as None")
+        self._set_property("choice", value)
+
+
+class FlowRSVPPathObjectsClassSession(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "length": {"type": "FlowRSVPObjectLength"},
+        "c_type": {"type": "FlowRSVPPathObjectsSessionCType"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(FlowRSVPPathObjectsClassSession, self).__init__()
+        self._parent = parent
+
+    @property
+    def length(self):
+        # type: () -> FlowRSVPObjectLength
+        """length getter
+
+        A 16-bit field containing the total object length in bytes. Must always be multiple of or at least 4.
+
+        Returns: FlowRSVPObjectLength
+        """
+        return self._get_property("length", FlowRSVPObjectLength)
+
+    @property
+    def c_type(self):
+        # type: () -> FlowRSVPPathObjectsSessionCType
+        """c_type getter
+
+        The body of an object corresponding to the class number and c-type. Currently supported c-type for SESSION object is LSP Tunnel IPv4 (7).The body of an object corresponding to the class number and c-type. Currently supported c-type for SESSION object is LSP Tunnel IPv4 (7).The body of an object corresponding to the class number and c-type. Currently supported c-type for SESSION object is LSP Tunnel IPv4 (7).The body of an object corresponding to the class number and c-type. Currently supported c-type for SESSION object is LSP Tunnel IPv4 (7).
+
+        Returns: FlowRSVPPathObjectsSessionCType
+        """
+        return self._get_property("c_type", FlowRSVPPathObjectsSessionCType)
+
+
+class FlowRSVPObjectLength(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "auto",
+                "value",
+            ],
+        },
+        "auto": {
+            "type": int,
+            "format": "uint32",
+            "minimum": 4,
+            "maximum": 65535,
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+            "minimum": 4,
+            "maximum": 65535,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "auto",
+        "auto": 4,
+        "value": 4,
+    }  # type: Dict[str, Union(type)]
+
+    AUTO = "auto"  # type: str
+    VALUE = "value"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, auto=4, value=4):
+        super(FlowRSVPObjectLength, self).__init__()
+        self._parent = parent
+        self._set_property("auto", auto)
+        self._set_property("value", value)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, auto=None, value=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["auto"], Literal["value"]]
+        """choice getter
+
+        auto or configured value.
+
+        Returns: Union[Literal["auto"], Literal["value"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        auto or configured value.
+
+        value: Union[Literal["auto"], Literal["value"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def auto(self):
+        # type: () -> int
+        """auto getter
+
+        OTG will provide system generated value for this property. If OTG is unable to generate value the default value must be used.
+
+        Returns: int
+        """
+        return self._get_property("auto")
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+
+class FlowRSVPPathObjectsSessionCType(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "lsp_tunnel_ipv4",
+            ],
+        },
+        "lsp_tunnel_ipv4": {"type": "FlowRSVPPathSessionLspTunnelIpv4"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "lsp_tunnel_ipv4",
+    }  # type: Dict[str, Union(type)]
+
+    LSP_TUNNEL_IPV4 = "lsp_tunnel_ipv4"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None):
+        super(FlowRSVPPathObjectsSessionCType, self).__init__()
+        self._parent = parent
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    @property
+    def lsp_tunnel_ipv4(self):
+        # type: () -> FlowRSVPPathSessionLspTunnelIpv4
+        """Factory property that returns an instance of the FlowRSVPPathSessionLspTunnelIpv4 class
+
+        Class SESSION, LSP_TUNNEL_IPv4 C-Type 7.
+
+        Returns: FlowRSVPPathSessionLspTunnelIpv4
+        """
+        return self._get_property(
+            "lsp_tunnel_ipv4", FlowRSVPPathSessionLspTunnelIpv4, self, "lsp_tunnel_ipv4"
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["lsp_tunnel_ipv4"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["lsp_tunnel_ipv4"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["lsp_tunnel_ipv4"]]
+        """
+        self._set_property("choice", value)
+
+
+class FlowRSVPPathSessionLspTunnelIpv4(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "ipv4_tunnel_end_point_address": {
+            "type": "PatternFlowRSVPPathSessionLspTunnelIpv4Ipv4TunnelEndPointAddress"
+        },
+        "reserved": {"type": "PatternFlowRSVPPathSessionLspTunnelIpv4Reserved"},
+        "tunnel_id": {"type": "PatternFlowRSVPPathSessionLspTunnelIpv4TunnelId"},
+        "extended_tunnel_id": {"type": "FlowRSVPPathSessionExtTunnelId"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(FlowRSVPPathSessionLspTunnelIpv4, self).__init__()
+        self._parent = parent
+
+    @property
+    def ipv4_tunnel_end_point_address(self):
+        # type: () -> PatternFlowRSVPPathSessionLspTunnelIpv4Ipv4TunnelEndPointAddress
+        """ipv4_tunnel_end_point_address getter
+
+        IPv4 address of the egress node for the tunnel.IPv4 address of the egress node for the tunnel.IPv4 address of the egress node for the tunnel.IPv4 address of the egress node for the tunnel.
+
+        Returns: PatternFlowRSVPPathSessionLspTunnelIpv4Ipv4TunnelEndPointAddress
+        """
+        return self._get_property(
+            "ipv4_tunnel_end_point_address",
+            PatternFlowRSVPPathSessionLspTunnelIpv4Ipv4TunnelEndPointAddress,
+        )
+
+    @property
+    def reserved(self):
+        # type: () -> PatternFlowRSVPPathSessionLspTunnelIpv4Reserved
+        """reserved getter
+
+        Reserved field, MUST be zero.Reserved field, MUST be zero.Reserved field, MUST be zero.Reserved field, MUST be zero.
+
+        Returns: PatternFlowRSVPPathSessionLspTunnelIpv4Reserved
+        """
+        return self._get_property(
+            "reserved", PatternFlowRSVPPathSessionLspTunnelIpv4Reserved
+        )
+
+    @property
+    def tunnel_id(self):
+        # type: () -> PatternFlowRSVPPathSessionLspTunnelIpv4TunnelId
+        """tunnel_id getter
+
+        A 16-bit identifier used in the SESSION that remains constant over the life of the tunnel.A 16-bit identifier used in the SESSION that remains constant over the life of the tunnel.A 16-bit identifier used in the SESSION that remains constant over the life of the tunnel.A 16-bit identifier used in the SESSION that remains constant over the life of the tunnel.
+
+        Returns: PatternFlowRSVPPathSessionLspTunnelIpv4TunnelId
+        """
+        return self._get_property(
+            "tunnel_id", PatternFlowRSVPPathSessionLspTunnelIpv4TunnelId
+        )
+
+    @property
+    def extended_tunnel_id(self):
+        # type: () -> FlowRSVPPathSessionExtTunnelId
+        """extended_tunnel_id getter
+
+        A 32-bit identifier used in the SESSION that remains constant over the life of the tunnel. Normally set to all zeros. Ingress nodes that wish to narrow the scope of SESSION to the ingress-egress pair may place their IPv4 address here as globally unique identifier.
+
+        Returns: FlowRSVPPathSessionExtTunnelId
+        """
+        return self._get_property("extended_tunnel_id", FlowRSVPPathSessionExtTunnelId)
+
+
+class PatternFlowRSVPPathSessionLspTunnelIpv4Ipv4TunnelEndPointAddress(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": str,
+            "format": "ipv4",
+        },
+        "values": {
+            "type": list,
+            "itemtype": str,
+            "itemformat": "ipv4",
+        },
+        "increment": {
+            "type": "PatternFlowRSVPPathSessionLspTunnelIpv4Ipv4TunnelEndPointAddressCounter"
+        },
+        "decrement": {
+            "type": "PatternFlowRSVPPathSessionLspTunnelIpv4Ipv4TunnelEndPointAddressCounter"
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": "0.0.0.0",
+        "values": ["0.0.0.0"],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value="0.0.0.0", values=["0.0.0.0"]):
+        super(
+            PatternFlowRSVPPathSessionLspTunnelIpv4Ipv4TunnelEndPointAddress, self
+        ).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowRSVPPathSessionLspTunnelIpv4Ipv4TunnelEndPointAddressCounter
+        """Factory property that returns an instance of the PatternFlowRSVPPathSessionLspTunnelIpv4Ipv4TunnelEndPointAddressCounter class
+
+        ipv4 counter pattern
+
+        Returns: PatternFlowRSVPPathSessionLspTunnelIpv4Ipv4TunnelEndPointAddressCounter
+        """
+        return self._get_property(
+            "increment",
+            PatternFlowRSVPPathSessionLspTunnelIpv4Ipv4TunnelEndPointAddressCounter,
+            self,
+            "increment",
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowRSVPPathSessionLspTunnelIpv4Ipv4TunnelEndPointAddressCounter
+        """Factory property that returns an instance of the PatternFlowRSVPPathSessionLspTunnelIpv4Ipv4TunnelEndPointAddressCounter class
+
+        ipv4 counter pattern
+
+        Returns: PatternFlowRSVPPathSessionLspTunnelIpv4Ipv4TunnelEndPointAddressCounter
+        """
+        return self._get_property(
+            "decrement",
+            PatternFlowRSVPPathSessionLspTunnelIpv4Ipv4TunnelEndPointAddressCounter,
+            self,
+            "decrement",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> str
+        """value getter
+
+        TBD
+
+        Returns: str
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: str
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[str]
+        """values getter
+
+        TBD
+
+        Returns: List[str]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[str]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowRSVPPathSessionLspTunnelIpv4Ipv4TunnelEndPointAddressCounter(
+    OpenApiObject
+):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": str,
+            "format": "ipv4",
+        },
+        "step": {
+            "type": str,
+            "format": "ipv4",
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": "0.0.0.0",
+        "step": "0.0.0.1",
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start="0.0.0.0", step="0.0.0.1", count=1):
+        super(
+            PatternFlowRSVPPathSessionLspTunnelIpv4Ipv4TunnelEndPointAddressCounter,
+            self,
+        ).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> str
+        """start getter
+
+        TBD
+
+        Returns: str
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: str
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> str
+        """step getter
+
+        TBD
+
+        Returns: str
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: str
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class PatternFlowRSVPPathSessionLspTunnelIpv4Reserved(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+            "maximum": 65535,
+        },
+        "increment": {"type": "PatternFlowRSVPPathSessionLspTunnelIpv4ReservedCounter"},
+        "decrement": {"type": "PatternFlowRSVPPathSessionLspTunnelIpv4ReservedCounter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": 0,
+        "values": [0],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=0, values=[0]):
+        super(PatternFlowRSVPPathSessionLspTunnelIpv4Reserved, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowRSVPPathSessionLspTunnelIpv4ReservedCounter
+        """Factory property that returns an instance of the PatternFlowRSVPPathSessionLspTunnelIpv4ReservedCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowRSVPPathSessionLspTunnelIpv4ReservedCounter
+        """
+        return self._get_property(
+            "increment",
+            PatternFlowRSVPPathSessionLspTunnelIpv4ReservedCounter,
+            self,
+            "increment",
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowRSVPPathSessionLspTunnelIpv4ReservedCounter
+        """Factory property that returns an instance of the PatternFlowRSVPPathSessionLspTunnelIpv4ReservedCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowRSVPPathSessionLspTunnelIpv4ReservedCounter
+        """
+        return self._get_property(
+            "decrement",
+            PatternFlowRSVPPathSessionLspTunnelIpv4ReservedCounter,
+            self,
+            "decrement",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowRSVPPathSessionLspTunnelIpv4ReservedCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+        "step": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowRSVPPathSessionLspTunnelIpv4ReservedCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class PatternFlowRSVPPathSessionLspTunnelIpv4TunnelId(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+            "maximum": 65535,
+        },
+        "increment": {"type": "PatternFlowRSVPPathSessionLspTunnelIpv4TunnelIdCounter"},
+        "decrement": {"type": "PatternFlowRSVPPathSessionLspTunnelIpv4TunnelIdCounter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": 1,
+        "values": [1],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=1, values=[1]):
+        super(PatternFlowRSVPPathSessionLspTunnelIpv4TunnelId, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowRSVPPathSessionLspTunnelIpv4TunnelIdCounter
+        """Factory property that returns an instance of the PatternFlowRSVPPathSessionLspTunnelIpv4TunnelIdCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowRSVPPathSessionLspTunnelIpv4TunnelIdCounter
+        """
+        return self._get_property(
+            "increment",
+            PatternFlowRSVPPathSessionLspTunnelIpv4TunnelIdCounter,
+            self,
+            "increment",
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowRSVPPathSessionLspTunnelIpv4TunnelIdCounter
+        """Factory property that returns an instance of the PatternFlowRSVPPathSessionLspTunnelIpv4TunnelIdCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowRSVPPathSessionLspTunnelIpv4TunnelIdCounter
+        """
+        return self._get_property(
+            "decrement",
+            PatternFlowRSVPPathSessionLspTunnelIpv4TunnelIdCounter,
+            self,
+            "decrement",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowRSVPPathSessionLspTunnelIpv4TunnelIdCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+        "step": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 1,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=1, step=1, count=1):
+        super(PatternFlowRSVPPathSessionLspTunnelIpv4TunnelIdCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class FlowRSVPPathSessionExtTunnelId(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "as_integer",
+                "as_ipv4",
+            ],
+        },
+        "as_integer": {"type": "PatternFlowRSVPPathSessionExtTunnelIdAsInteger"},
+        "as_ipv4": {"type": "PatternFlowRSVPPathSessionExtTunnelIdAsIpv4"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "as_integer",
+    }  # type: Dict[str, Union(type)]
+
+    AS_INTEGER = "as_integer"  # type: str
+    AS_IPV4 = "as_ipv4"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None):
+        super(FlowRSVPPathSessionExtTunnelId, self).__init__()
+        self._parent = parent
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    @property
+    def as_integer(self):
+        # type: () -> PatternFlowRSVPPathSessionExtTunnelIdAsInteger
+        """Factory property that returns an instance of the PatternFlowRSVPPathSessionExtTunnelIdAsInteger class
+
+        TBD
+
+        Returns: PatternFlowRSVPPathSessionExtTunnelIdAsInteger
+        """
+        return self._get_property(
+            "as_integer",
+            PatternFlowRSVPPathSessionExtTunnelIdAsInteger,
+            self,
+            "as_integer",
+        )
+
+    @property
+    def as_ipv4(self):
+        # type: () -> PatternFlowRSVPPathSessionExtTunnelIdAsIpv4
+        """Factory property that returns an instance of the PatternFlowRSVPPathSessionExtTunnelIdAsIpv4 class
+
+        IPv4 address of the ingress endpoint for the tunnel.
+
+        Returns: PatternFlowRSVPPathSessionExtTunnelIdAsIpv4
+        """
+        return self._get_property(
+            "as_ipv4", PatternFlowRSVPPathSessionExtTunnelIdAsIpv4, self, "as_ipv4"
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["as_integer"], Literal["as_ipv4"]]
+        """choice getter
+
+        32 bit integer or IPv4 address.
+
+        Returns: Union[Literal["as_integer"], Literal["as_ipv4"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        32 bit integer or IPv4 address.
+
+        value: Union[Literal["as_integer"], Literal["as_ipv4"]]
+        """
+        self._set_property("choice", value)
+
+
+class PatternFlowRSVPPathSessionExtTunnelIdAsInteger(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+        },
+        "increment": {"type": "PatternFlowRSVPPathSessionExtTunnelIdAsIntegerCounter"},
+        "decrement": {"type": "PatternFlowRSVPPathSessionExtTunnelIdAsIntegerCounter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": 0,
+        "values": [0],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=0, values=[0]):
+        super(PatternFlowRSVPPathSessionExtTunnelIdAsInteger, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowRSVPPathSessionExtTunnelIdAsIntegerCounter
+        """Factory property that returns an instance of the PatternFlowRSVPPathSessionExtTunnelIdAsIntegerCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowRSVPPathSessionExtTunnelIdAsIntegerCounter
+        """
+        return self._get_property(
+            "increment",
+            PatternFlowRSVPPathSessionExtTunnelIdAsIntegerCounter,
+            self,
+            "increment",
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowRSVPPathSessionExtTunnelIdAsIntegerCounter
+        """Factory property that returns an instance of the PatternFlowRSVPPathSessionExtTunnelIdAsIntegerCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowRSVPPathSessionExtTunnelIdAsIntegerCounter
+        """
+        return self._get_property(
+            "decrement",
+            PatternFlowRSVPPathSessionExtTunnelIdAsIntegerCounter,
+            self,
+            "decrement",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowRSVPPathSessionExtTunnelIdAsIntegerCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "format": "uint32",
+        },
+        "step": {
+            "type": int,
+            "format": "uint32",
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowRSVPPathSessionExtTunnelIdAsIntegerCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class PatternFlowRSVPPathSessionExtTunnelIdAsIpv4(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": str,
+            "format": "ipv4",
+        },
+        "values": {
+            "type": list,
+            "itemtype": str,
+            "itemformat": "ipv4",
+        },
+        "increment": {"type": "PatternFlowRSVPPathSessionExtTunnelIdAsIpv4Counter"},
+        "decrement": {"type": "PatternFlowRSVPPathSessionExtTunnelIdAsIpv4Counter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": "0.0.0.0",
+        "values": ["0.0.0.0"],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value="0.0.0.0", values=["0.0.0.0"]):
+        super(PatternFlowRSVPPathSessionExtTunnelIdAsIpv4, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowRSVPPathSessionExtTunnelIdAsIpv4Counter
+        """Factory property that returns an instance of the PatternFlowRSVPPathSessionExtTunnelIdAsIpv4Counter class
+
+        ipv4 counter pattern
+
+        Returns: PatternFlowRSVPPathSessionExtTunnelIdAsIpv4Counter
+        """
+        return self._get_property(
+            "increment",
+            PatternFlowRSVPPathSessionExtTunnelIdAsIpv4Counter,
+            self,
+            "increment",
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowRSVPPathSessionExtTunnelIdAsIpv4Counter
+        """Factory property that returns an instance of the PatternFlowRSVPPathSessionExtTunnelIdAsIpv4Counter class
+
+        ipv4 counter pattern
+
+        Returns: PatternFlowRSVPPathSessionExtTunnelIdAsIpv4Counter
+        """
+        return self._get_property(
+            "decrement",
+            PatternFlowRSVPPathSessionExtTunnelIdAsIpv4Counter,
+            self,
+            "decrement",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> str
+        """value getter
+
+        TBD
+
+        Returns: str
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: str
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[str]
+        """values getter
+
+        TBD
+
+        Returns: List[str]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[str]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowRSVPPathSessionExtTunnelIdAsIpv4Counter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": str,
+            "format": "ipv4",
+        },
+        "step": {
+            "type": str,
+            "format": "ipv4",
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": "0.0.0.0",
+        "step": "0.0.0.1",
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start="0.0.0.0", step="0.0.0.1", count=1):
+        super(PatternFlowRSVPPathSessionExtTunnelIdAsIpv4Counter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> str
+        """start getter
+
+        TBD
+
+        Returns: str
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: str
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> str
+        """step getter
+
+        TBD
+
+        Returns: str
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: str
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class FlowRSVPPathObjectsClassRsvpHop(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "length": {"type": "FlowRSVPObjectLength"},
+        "c_type": {"type": "FlowRSVPPathObjectsRsvpHopCType"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(FlowRSVPPathObjectsClassRsvpHop, self).__init__()
+        self._parent = parent
+
+    @property
+    def length(self):
+        # type: () -> FlowRSVPObjectLength
+        """length getter
+
+        A 16-bit field containing the total object length in bytes. Must always be multiple of or at least 4.
+
+        Returns: FlowRSVPObjectLength
+        """
+        return self._get_property("length", FlowRSVPObjectLength)
+
+    @property
+    def c_type(self):
+        # type: () -> FlowRSVPPathObjectsRsvpHopCType
+        """c_type getter
+
+        Object for RSVP_HOP class. Currently supported c-type is IPv4 (1).Object for RSVP_HOP class. Currently supported c-type is IPv4 (1).Object for RSVP_HOP class. Currently supported c-type is IPv4 (1).Object for RSVP_HOP class. Currently supported c-type is IPv4 (1).
+
+        Returns: FlowRSVPPathObjectsRsvpHopCType
+        """
+        return self._get_property("c_type", FlowRSVPPathObjectsRsvpHopCType)
+
+
+class FlowRSVPPathObjectsRsvpHopCType(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "ipv4",
+            ],
+        },
+        "ipv4": {"type": "FlowRSVPPathRsvpHopIpv4"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "ipv4",
+    }  # type: Dict[str, Union(type)]
+
+    IPV4 = "ipv4"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None):
+        super(FlowRSVPPathObjectsRsvpHopCType, self).__init__()
+        self._parent = parent
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    @property
+    def ipv4(self):
+        # type: () -> FlowRSVPPathRsvpHopIpv4
+        """Factory property that returns an instance of the FlowRSVPPathRsvpHopIpv4 class
+
+        IPv4 RSVP_HOP object: Class 3, C-Type 1
+
+        Returns: FlowRSVPPathRsvpHopIpv4
+        """
+        return self._get_property("ipv4", FlowRSVPPathRsvpHopIpv4, self, "ipv4")
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["ipv4"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["ipv4"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["ipv4"]]
+        """
+        self._set_property("choice", value)
+
+
+class FlowRSVPPathRsvpHopIpv4(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "ipv4_address": {"type": "PatternFlowRSVPPathRsvpHopIpv4Ipv4Address"},
+        "logical_interface_handle": {
+            "type": "PatternFlowRSVPPathRsvpHopIpv4LogicalInterfaceHandle"
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(FlowRSVPPathRsvpHopIpv4, self).__init__()
+        self._parent = parent
+
+    @property
+    def ipv4_address(self):
+        # type: () -> PatternFlowRSVPPathRsvpHopIpv4Ipv4Address
+        """ipv4_address getter
+
+        The IPv4 address of the interface through which the last RSVP-knowledgeable hop forwarded this message.The IPv4 address of the interface through which the last RSVP-knowledgeable hop forwarded this message.The IPv4 address of the interface through which the last RSVP-knowledgeable hop forwarded this message.The IPv4 address of the interface through which the last RSVP-knowledgeable hop forwarded this message.
+
+        Returns: PatternFlowRSVPPathRsvpHopIpv4Ipv4Address
+        """
+        return self._get_property(
+            "ipv4_address", PatternFlowRSVPPathRsvpHopIpv4Ipv4Address
+        )
+
+    @property
+    def logical_interface_handle(self):
+        # type: () -> PatternFlowRSVPPathRsvpHopIpv4LogicalInterfaceHandle
+        """logical_interface_handle getter
+
+        Logical Interface Handle (LIH) is used to distinguish logical outgoing interfaces. node receiving an LIH in Path message saves its value and returns it in the HOP objects of subsequent Resv messages sent to the node that originated the LIH. The LIH should be identically zero if there is no logical interface handle.Logical Interface Handle (LIH) is used to distinguish logical outgoing interfaces. node receiving an LIH in Path message saves its value and returns it in the HOP objects of subsequent Resv messages sent to the node that originated the LIH. The LIH should be identically zero if there is no logical interface handle.Logical Interface Handle (LIH) is used to distinguish logical outgoing interfaces. node receiving an LIH in Path message saves its value and returns it in the HOP objects of subsequent Resv messages sent to the node that originated the LIH. The LIH should be identically zero if there is no logical interface handle.Logical Interface Handle (LIH) is used to distinguish logical outgoing interfaces. node receiving an LIH in Path message saves its value and returns it in the HOP objects of subsequent Resv messages sent to the node that originated the LIH. The LIH should be identically zero if there is no logical interface handle.
+
+        Returns: PatternFlowRSVPPathRsvpHopIpv4LogicalInterfaceHandle
+        """
+        return self._get_property(
+            "logical_interface_handle",
+            PatternFlowRSVPPathRsvpHopIpv4LogicalInterfaceHandle,
+        )
+
+
+class PatternFlowRSVPPathRsvpHopIpv4Ipv4Address(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": str,
+            "format": "ipv4",
+        },
+        "values": {
+            "type": list,
+            "itemtype": str,
+            "itemformat": "ipv4",
+        },
+        "increment": {"type": "PatternFlowRSVPPathRsvpHopIpv4Ipv4AddressCounter"},
+        "decrement": {"type": "PatternFlowRSVPPathRsvpHopIpv4Ipv4AddressCounter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": "0.0.0.0",
+        "values": ["0.0.0.0"],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value="0.0.0.0", values=["0.0.0.0"]):
+        super(PatternFlowRSVPPathRsvpHopIpv4Ipv4Address, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowRSVPPathRsvpHopIpv4Ipv4AddressCounter
+        """Factory property that returns an instance of the PatternFlowRSVPPathRsvpHopIpv4Ipv4AddressCounter class
+
+        ipv4 counter pattern
+
+        Returns: PatternFlowRSVPPathRsvpHopIpv4Ipv4AddressCounter
+        """
+        return self._get_property(
+            "increment",
+            PatternFlowRSVPPathRsvpHopIpv4Ipv4AddressCounter,
+            self,
+            "increment",
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowRSVPPathRsvpHopIpv4Ipv4AddressCounter
+        """Factory property that returns an instance of the PatternFlowRSVPPathRsvpHopIpv4Ipv4AddressCounter class
+
+        ipv4 counter pattern
+
+        Returns: PatternFlowRSVPPathRsvpHopIpv4Ipv4AddressCounter
+        """
+        return self._get_property(
+            "decrement",
+            PatternFlowRSVPPathRsvpHopIpv4Ipv4AddressCounter,
+            self,
+            "decrement",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> str
+        """value getter
+
+        TBD
+
+        Returns: str
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: str
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[str]
+        """values getter
+
+        TBD
+
+        Returns: List[str]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[str]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowRSVPPathRsvpHopIpv4Ipv4AddressCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": str,
+            "format": "ipv4",
+        },
+        "step": {
+            "type": str,
+            "format": "ipv4",
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": "0.0.0.0",
+        "step": "0.0.0.1",
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start="0.0.0.0", step="0.0.0.1", count=1):
+        super(PatternFlowRSVPPathRsvpHopIpv4Ipv4AddressCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> str
+        """start getter
+
+        TBD
+
+        Returns: str
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: str
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> str
+        """step getter
+
+        TBD
+
+        Returns: str
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: str
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class PatternFlowRSVPPathRsvpHopIpv4LogicalInterfaceHandle(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+        },
+        "increment": {
+            "type": "PatternFlowRSVPPathRsvpHopIpv4LogicalInterfaceHandleCounter"
+        },
+        "decrement": {
+            "type": "PatternFlowRSVPPathRsvpHopIpv4LogicalInterfaceHandleCounter"
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": 0,
+        "values": [0],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=0, values=[0]):
+        super(PatternFlowRSVPPathRsvpHopIpv4LogicalInterfaceHandle, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowRSVPPathRsvpHopIpv4LogicalInterfaceHandleCounter
+        """Factory property that returns an instance of the PatternFlowRSVPPathRsvpHopIpv4LogicalInterfaceHandleCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowRSVPPathRsvpHopIpv4LogicalInterfaceHandleCounter
+        """
+        return self._get_property(
+            "increment",
+            PatternFlowRSVPPathRsvpHopIpv4LogicalInterfaceHandleCounter,
+            self,
+            "increment",
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowRSVPPathRsvpHopIpv4LogicalInterfaceHandleCounter
+        """Factory property that returns an instance of the PatternFlowRSVPPathRsvpHopIpv4LogicalInterfaceHandleCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowRSVPPathRsvpHopIpv4LogicalInterfaceHandleCounter
+        """
+        return self._get_property(
+            "decrement",
+            PatternFlowRSVPPathRsvpHopIpv4LogicalInterfaceHandleCounter,
+            self,
+            "decrement",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowRSVPPathRsvpHopIpv4LogicalInterfaceHandleCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "format": "uint32",
+        },
+        "step": {
+            "type": int,
+            "format": "uint32",
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(
+            PatternFlowRSVPPathRsvpHopIpv4LogicalInterfaceHandleCounter, self
+        ).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class FlowRSVPPathObjectsClassTimeValues(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "length": {"type": "FlowRSVPObjectLength"},
+        "c_type": {"type": "FlowRSVPPathObjectsTimeValuesCType"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(FlowRSVPPathObjectsClassTimeValues, self).__init__()
+        self._parent = parent
+
+    @property
+    def length(self):
+        # type: () -> FlowRSVPObjectLength
+        """length getter
+
+        A 16-bit field containing the total object length in bytes. Must always be multiple of or at least 4.
+
+        Returns: FlowRSVPObjectLength
+        """
+        return self._get_property("length", FlowRSVPObjectLength)
+
+    @property
+    def c_type(self):
+        # type: () -> FlowRSVPPathObjectsTimeValuesCType
+        """c_type getter
+
+        Object for TIME_VALUES class. Currently supported c-type is Type Time Value (1).Object for TIME_VALUES class. Currently supported c-type is Type Time Value (1).Object for TIME_VALUES class. Currently supported c-type is Type Time Value (1).Object for TIME_VALUES class. Currently supported c-type is Type Time Value (1).
+
+        Returns: FlowRSVPPathObjectsTimeValuesCType
+        """
+        return self._get_property("c_type", FlowRSVPPathObjectsTimeValuesCType)
+
+
+class FlowRSVPPathObjectsTimeValuesCType(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "type_1",
+            ],
+        },
+        "type_1": {"type": "FlowRSVPPathTimeValuesType1"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "type_1",
+    }  # type: Dict[str, Union(type)]
+
+    TYPE_1 = "type_1"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None):
+        super(FlowRSVPPathObjectsTimeValuesCType, self).__init__()
+        self._parent = parent
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    @property
+    def type_1(self):
+        # type: () -> FlowRSVPPathTimeValuesType1
+        """Factory property that returns an instance of the FlowRSVPPathTimeValuesType1 class
+
+        TIME_VALUES Object: Class 5, C-Type 1
+
+        Returns: FlowRSVPPathTimeValuesType1
+        """
+        return self._get_property("type_1", FlowRSVPPathTimeValuesType1, self, "type_1")
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["type_1"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["type_1"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["type_1"]]
+        """
+        self._set_property("choice", value)
+
+
+class FlowRSVPPathTimeValuesType1(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "refresh_period_r": {
+            "type": "PatternFlowRSVPPathTimeValuesType1RefreshPeriodR"
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(FlowRSVPPathTimeValuesType1, self).__init__()
+        self._parent = parent
+
+    @property
+    def refresh_period_r(self):
+        # type: () -> PatternFlowRSVPPathTimeValuesType1RefreshPeriodR
+        """refresh_period_r getter
+
+        The refresh timeout period used to generate this message;in milliseconds.The refresh timeout period used to generate this message;in milliseconds.The refresh timeout period used to generate this message;in milliseconds.The refresh timeout period used to generate this message;in milliseconds.
+
+        Returns: PatternFlowRSVPPathTimeValuesType1RefreshPeriodR
+        """
+        return self._get_property(
+            "refresh_period_r", PatternFlowRSVPPathTimeValuesType1RefreshPeriodR
+        )
+
+
+class PatternFlowRSVPPathTimeValuesType1RefreshPeriodR(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+        },
+        "increment": {
+            "type": "PatternFlowRSVPPathTimeValuesType1RefreshPeriodRCounter"
+        },
+        "decrement": {
+            "type": "PatternFlowRSVPPathTimeValuesType1RefreshPeriodRCounter"
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": 30000,
+        "values": [30000],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=30000, values=[30000]):
+        super(PatternFlowRSVPPathTimeValuesType1RefreshPeriodR, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowRSVPPathTimeValuesType1RefreshPeriodRCounter
+        """Factory property that returns an instance of the PatternFlowRSVPPathTimeValuesType1RefreshPeriodRCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowRSVPPathTimeValuesType1RefreshPeriodRCounter
+        """
+        return self._get_property(
+            "increment",
+            PatternFlowRSVPPathTimeValuesType1RefreshPeriodRCounter,
+            self,
+            "increment",
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowRSVPPathTimeValuesType1RefreshPeriodRCounter
+        """Factory property that returns an instance of the PatternFlowRSVPPathTimeValuesType1RefreshPeriodRCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowRSVPPathTimeValuesType1RefreshPeriodRCounter
+        """
+        return self._get_property(
+            "decrement",
+            PatternFlowRSVPPathTimeValuesType1RefreshPeriodRCounter,
+            self,
+            "decrement",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowRSVPPathTimeValuesType1RefreshPeriodRCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "format": "uint32",
+        },
+        "step": {
+            "type": int,
+            "format": "uint32",
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 30000,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=30000, step=1, count=1):
+        super(PatternFlowRSVPPathTimeValuesType1RefreshPeriodRCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class FlowRSVPPathObjectsClassExplicitRoute(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "length": {"type": "FlowRSVPObjectLength"},
+        "c_type": {"type": "FlowRSVPPathObjectsClassExplicitRouteCType"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(FlowRSVPPathObjectsClassExplicitRoute, self).__init__()
+        self._parent = parent
+
+    @property
+    def length(self):
+        # type: () -> FlowRSVPObjectLength
+        """length getter
+
+        A 16-bit field containing the total object length in bytes. Must always be multiple of or at least 4.
+
+        Returns: FlowRSVPObjectLength
+        """
+        return self._get_property("length", FlowRSVPObjectLength)
+
+    @property
+    def c_type(self):
+        # type: () -> FlowRSVPPathObjectsClassExplicitRouteCType
+        """c_type getter
+
+        Object for EXPLICIT_ROUTE class and c-type is Type Explicit Route (1).Object for EXPLICIT_ROUTE class and c-type is Type Explicit Route (1).Object for EXPLICIT_ROUTE class and c-type is Type Explicit Route (1).Object for EXPLICIT_ROUTE class and c-type is Type Explicit Route (1).
+
+        Returns: FlowRSVPPathObjectsClassExplicitRouteCType
+        """
+        return self._get_property("c_type", FlowRSVPPathObjectsClassExplicitRouteCType)
+
+
+class FlowRSVPPathObjectsClassExplicitRouteCType(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "type_1",
+            ],
+        },
+        "type_1": {"type": "FlowRSVPPathExplicitRouteType1"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "type_1",
+    }  # type: Dict[str, Union(type)]
+
+    TYPE_1 = "type_1"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None):
+        super(FlowRSVPPathObjectsClassExplicitRouteCType, self).__init__()
+        self._parent = parent
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    @property
+    def type_1(self):
+        # type: () -> FlowRSVPPathExplicitRouteType1
+        """Factory property that returns an instance of the FlowRSVPPathExplicitRouteType1 class
+
+        Type1 Explicit Route has subobjects. Currently supported subobjects are IPv4 prefix and Autonomous system number.
+
+        Returns: FlowRSVPPathExplicitRouteType1
+        """
+        return self._get_property(
+            "type_1", FlowRSVPPathExplicitRouteType1, self, "type_1"
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["type_1"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["type_1"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["type_1"]]
+        """
+        self._set_property("choice", value)
+
+
+class FlowRSVPPathExplicitRouteType1(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "subobjects": {"type": "FlowRSVPType1ExplicitRouteSubobjectsIter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(FlowRSVPPathExplicitRouteType1, self).__init__()
+        self._parent = parent
+
+    @property
+    def subobjects(self):
+        # type: () -> FlowRSVPType1ExplicitRouteSubobjectsIter
+        """subobjects getter
+
+        TBD
+
+        Returns: FlowRSVPType1ExplicitRouteSubobjectsIter
+        """
+        return self._get_property(
+            "subobjects",
+            FlowRSVPType1ExplicitRouteSubobjectsIter,
+            self._parent,
+            self._choice,
+        )
+
+
+class FlowRSVPType1ExplicitRouteSubobjects(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "type": {"type": "FlowRSVPType1ExplicitRouteSubobjectsType"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(FlowRSVPType1ExplicitRouteSubobjects, self).__init__()
+        self._parent = parent
+
+    @property
+    def type(self):
+        # type: () -> FlowRSVPType1ExplicitRouteSubobjectsType
+        """type getter
+
+        Currently supported subobjects are IPv4 address(1) and Autonomous system number(32).Currently supported subobjects are IPv4 address(1) and Autonomous system number(32).Currently supported subobjects are IPv4 address(1) and Autonomous system number(32).
+
+        Returns: FlowRSVPType1ExplicitRouteSubobjectsType
+        """
+        return self._get_property("type", FlowRSVPType1ExplicitRouteSubobjectsType)
+
+
+class FlowRSVPType1ExplicitRouteSubobjectsType(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "ipv4_prefix",
+                "as_number",
+            ],
+        },
+        "ipv4_prefix": {"type": "FlowRSVPPathExplicitRouteType1Ipv4Prefix"},
+        "as_number": {"type": "FlowRSVPPathExplicitRouteType1ASNumber"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "ipv4_prefix",
+    }  # type: Dict[str, Union(type)]
+
+    IPV4_PREFIX = "ipv4_prefix"  # type: str
+    AS_NUMBER = "as_number"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None):
+        super(FlowRSVPType1ExplicitRouteSubobjectsType, self).__init__()
+        self._parent = parent
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    @property
+    def ipv4_prefix(self):
+        # type: () -> FlowRSVPPathExplicitRouteType1Ipv4Prefix
+        """Factory property that returns an instance of the FlowRSVPPathExplicitRouteType1Ipv4Prefix class
+
+        Class EXPLICIT_ROUTE, Type1 ROUTE_RECORD C-Type 1 Subobject: IPv4 Prefix, C-Type: 1
+
+        Returns: FlowRSVPPathExplicitRouteType1Ipv4Prefix
+        """
+        return self._get_property(
+            "ipv4_prefix", FlowRSVPPathExplicitRouteType1Ipv4Prefix, self, "ipv4_prefix"
+        )
+
+    @property
+    def as_number(self):
+        # type: () -> FlowRSVPPathExplicitRouteType1ASNumber
+        """Factory property that returns an instance of the FlowRSVPPathExplicitRouteType1ASNumber class
+
+        Class EXPLICIT_ROUTE, Type1 ROUTE_RECORD C-Type 1 Subobject: Autonomous system number, C-Type: 32
+
+        Returns: FlowRSVPPathExplicitRouteType1ASNumber
+        """
+        return self._get_property(
+            "as_number", FlowRSVPPathExplicitRouteType1ASNumber, self, "as_number"
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["as_number"], Literal["ipv4_prefix"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["as_number"], Literal["ipv4_prefix"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["as_number"], Literal["ipv4_prefix"]]
+        """
+        self._set_property("choice", value)
+
+
+class FlowRSVPPathExplicitRouteType1Ipv4Prefix(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "l_bit": {"type": "PatternFlowRSVPPathExplicitRouteType1Ipv4PrefixLBit"},
+        "length": {"type": "FlowRSVPExplicitRouteLength"},
+        "ipv4_address": {
+            "type": "PatternFlowRSVPPathExplicitRouteType1Ipv4PrefixIpv4Address"
+        },
+        "prefix": {
+            "type": int,
+            "format": "uint32",
+            "minimum": 1,
+            "maximum": 32,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "prefix": 32,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, prefix=32):
+        super(FlowRSVPPathExplicitRouteType1Ipv4Prefix, self).__init__()
+        self._parent = parent
+        self._set_property("prefix", prefix)
+
+    def set(self, prefix=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def l_bit(self):
+        # type: () -> PatternFlowRSVPPathExplicitRouteType1Ipv4PrefixLBit
+        """l_bit getter
+
+        The bit is an attribute of the subobject. The bit is set if the subobject represents loose hop in the explicit route. If the bit is not set, the subobject represents strict hop in the explicit route.The bit is an attribute of the subobject. The bit is set if the subobject represents loose hop in the explicit route. If the bit is not set, the subobject represents strict hop in the explicit route.The bit is an attribute of the subobject. The bit is set if the subobject represents loose hop in the explicit route. If the bit is not set, the subobject represents strict hop in the explicit route.The bit is an attribute of the subobject. The bit is set if the subobject represents loose hop in the explicit route. If the bit is not set, the subobject represents strict hop in the explicit route.
+
+        Returns: PatternFlowRSVPPathExplicitRouteType1Ipv4PrefixLBit
+        """
+        return self._get_property(
+            "l_bit", PatternFlowRSVPPathExplicitRouteType1Ipv4PrefixLBit
+        )
+
+    @property
+    def length(self):
+        # type: () -> FlowRSVPExplicitRouteLength
+        """length getter
+
+        The Length contains the total length of the subobject in bytes,including L,Type and Length fields. The Length MUST be atleast 4, and MUST be multiple of 4.
+
+        Returns: FlowRSVPExplicitRouteLength
+        """
+        return self._get_property("length", FlowRSVPExplicitRouteLength)
+
+    @property
+    def ipv4_address(self):
+        # type: () -> PatternFlowRSVPPathExplicitRouteType1Ipv4PrefixIpv4Address
+        """ipv4_address getter
+
+        This IPv4 address is treated as prefix based on the prefix length value below. Bits beyond the prefix are ignored on receipt and SHOULD be set to zero on transmission.This IPv4 address is treated as prefix based on the prefix length value below. Bits beyond the prefix are ignored on receipt and SHOULD be set to zero on transmission.This IPv4 address is treated as prefix based on the prefix length value below. Bits beyond the prefix are ignored on receipt and SHOULD be set to zero on transmission.This IPv4 address is treated as prefix based on the prefix length value below. Bits beyond the prefix are ignored on receipt and SHOULD be set to zero on transmission.
+
+        Returns: PatternFlowRSVPPathExplicitRouteType1Ipv4PrefixIpv4Address
+        """
+        return self._get_property(
+            "ipv4_address", PatternFlowRSVPPathExplicitRouteType1Ipv4PrefixIpv4Address
+        )
+
+    @property
+    def prefix(self):
+        # type: () -> int
+        """prefix getter
+
+        The prefix length of the IPv4 address.
+
+        Returns: int
+        """
+        return self._get_property("prefix")
+
+    @prefix.setter
+    def prefix(self, value):
+        """prefix setter
+
+        The prefix length of the IPv4 address.
+
+        value: int
+        """
+        self._set_property("prefix", value)
+
+
+class PatternFlowRSVPPathExplicitRouteType1Ipv4PrefixLBit(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 1,
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+            "maximum": 1,
+        },
+        "increment": {
+            "type": "PatternFlowRSVPPathExplicitRouteType1Ipv4PrefixLBitCounter"
+        },
+        "decrement": {
+            "type": "PatternFlowRSVPPathExplicitRouteType1Ipv4PrefixLBitCounter"
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": 0,
+        "values": [0],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=0, values=[0]):
+        super(PatternFlowRSVPPathExplicitRouteType1Ipv4PrefixLBit, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowRSVPPathExplicitRouteType1Ipv4PrefixLBitCounter
+        """Factory property that returns an instance of the PatternFlowRSVPPathExplicitRouteType1Ipv4PrefixLBitCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowRSVPPathExplicitRouteType1Ipv4PrefixLBitCounter
+        """
+        return self._get_property(
+            "increment",
+            PatternFlowRSVPPathExplicitRouteType1Ipv4PrefixLBitCounter,
+            self,
+            "increment",
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowRSVPPathExplicitRouteType1Ipv4PrefixLBitCounter
+        """Factory property that returns an instance of the PatternFlowRSVPPathExplicitRouteType1Ipv4PrefixLBitCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowRSVPPathExplicitRouteType1Ipv4PrefixLBitCounter
+        """
+        return self._get_property(
+            "decrement",
+            PatternFlowRSVPPathExplicitRouteType1Ipv4PrefixLBitCounter,
+            self,
+            "decrement",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowRSVPPathExplicitRouteType1Ipv4PrefixLBitCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 1,
+        },
+        "step": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 1,
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 1,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(
+            PatternFlowRSVPPathExplicitRouteType1Ipv4PrefixLBitCounter, self
+        ).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class FlowRSVPExplicitRouteLength(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "auto",
+                "value",
+            ],
+        },
+        "auto": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 256,
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 256,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "auto",
+        "auto": 8,
+        "value": 8,
+    }  # type: Dict[str, Union(type)]
+
+    AUTO = "auto"  # type: str
+    VALUE = "value"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, auto=8, value=8):
+        super(FlowRSVPExplicitRouteLength, self).__init__()
+        self._parent = parent
+        self._set_property("auto", auto)
+        self._set_property("value", value)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, auto=None, value=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["auto"], Literal["value"]]
+        """choice getter
+
+        auto or configured value.
+
+        Returns: Union[Literal["auto"], Literal["value"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        auto or configured value.
+
+        value: Union[Literal["auto"], Literal["value"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def auto(self):
+        # type: () -> int
+        """auto getter
+
+        OTG will provide system generated value for this property. If OTG is unable to generate value the default value must be used.
+
+        Returns: int
+        """
+        return self._get_property("auto")
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+
+class PatternFlowRSVPPathExplicitRouteType1Ipv4PrefixIpv4Address(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": str,
+            "format": "ipv4",
+        },
+        "values": {
+            "type": list,
+            "itemtype": str,
+            "itemformat": "ipv4",
+        },
+        "increment": {
+            "type": "PatternFlowRSVPPathExplicitRouteType1Ipv4PrefixIpv4AddressCounter"
+        },
+        "decrement": {
+            "type": "PatternFlowRSVPPathExplicitRouteType1Ipv4PrefixIpv4AddressCounter"
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": "0.0.0.0",
+        "values": ["0.0.0.0"],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value="0.0.0.0", values=["0.0.0.0"]):
+        super(
+            PatternFlowRSVPPathExplicitRouteType1Ipv4PrefixIpv4Address, self
+        ).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowRSVPPathExplicitRouteType1Ipv4PrefixIpv4AddressCounter
+        """Factory property that returns an instance of the PatternFlowRSVPPathExplicitRouteType1Ipv4PrefixIpv4AddressCounter class
+
+        ipv4 counter pattern
+
+        Returns: PatternFlowRSVPPathExplicitRouteType1Ipv4PrefixIpv4AddressCounter
+        """
+        return self._get_property(
+            "increment",
+            PatternFlowRSVPPathExplicitRouteType1Ipv4PrefixIpv4AddressCounter,
+            self,
+            "increment",
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowRSVPPathExplicitRouteType1Ipv4PrefixIpv4AddressCounter
+        """Factory property that returns an instance of the PatternFlowRSVPPathExplicitRouteType1Ipv4PrefixIpv4AddressCounter class
+
+        ipv4 counter pattern
+
+        Returns: PatternFlowRSVPPathExplicitRouteType1Ipv4PrefixIpv4AddressCounter
+        """
+        return self._get_property(
+            "decrement",
+            PatternFlowRSVPPathExplicitRouteType1Ipv4PrefixIpv4AddressCounter,
+            self,
+            "decrement",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> str
+        """value getter
+
+        TBD
+
+        Returns: str
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: str
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[str]
+        """values getter
+
+        TBD
+
+        Returns: List[str]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[str]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowRSVPPathExplicitRouteType1Ipv4PrefixIpv4AddressCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": str,
+            "format": "ipv4",
+        },
+        "step": {
+            "type": str,
+            "format": "ipv4",
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": "0.0.0.0",
+        "step": "0.0.0.1",
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start="0.0.0.0", step="0.0.0.1", count=1):
+        super(
+            PatternFlowRSVPPathExplicitRouteType1Ipv4PrefixIpv4AddressCounter, self
+        ).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> str
+        """start getter
+
+        TBD
+
+        Returns: str
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: str
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> str
+        """step getter
+
+        TBD
+
+        Returns: str
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: str
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class FlowRSVPPathExplicitRouteType1ASNumber(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "l_bit": {"type": "PatternFlowRSVPPathExplicitRouteType1ASNumberLBit"},
+        "length": {"type": "FlowRSVPExplicitRouteLength"},
+        "as_number": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "as_number": 0,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, as_number=0):
+        super(FlowRSVPPathExplicitRouteType1ASNumber, self).__init__()
+        self._parent = parent
+        self._set_property("as_number", as_number)
+
+    def set(self, as_number=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def l_bit(self):
+        # type: () -> PatternFlowRSVPPathExplicitRouteType1ASNumberLBit
+        """l_bit getter
+
+        The bit is an attribute of the subobject. The bit is set if the subobject represents loose hop in the explicit route. If the bit is not set, the subobject represents strict hop in the explicit route.The bit is an attribute of the subobject. The bit is set if the subobject represents loose hop in the explicit route. If the bit is not set, the subobject represents strict hop in the explicit route.The bit is an attribute of the subobject. The bit is set if the subobject represents loose hop in the explicit route. If the bit is not set, the subobject represents strict hop in the explicit route.The bit is an attribute of the subobject. The bit is set if the subobject represents loose hop in the explicit route. If the bit is not set, the subobject represents strict hop in the explicit route.
+
+        Returns: PatternFlowRSVPPathExplicitRouteType1ASNumberLBit
+        """
+        return self._get_property(
+            "l_bit", PatternFlowRSVPPathExplicitRouteType1ASNumberLBit
+        )
+
+    @property
+    def length(self):
+        # type: () -> FlowRSVPExplicitRouteLength
+        """length getter
+
+        The Length contains the total length of the subobject in bytes,including L, Type and Length fields. The Length MUST be atleast 4, and MUST be multiple of 4.
+
+        Returns: FlowRSVPExplicitRouteLength
+        """
+        return self._get_property("length", FlowRSVPExplicitRouteLength)
+
+    @property
+    def as_number(self):
+        # type: () -> int
+        """as_number getter
+
+        Autonomous System number to be set in the ERO sub-object that this LSP should traverse through. This field is applicable only if the value of 'type' is set to 'as_number'.
+
+        Returns: int
+        """
+        return self._get_property("as_number")
+
+    @as_number.setter
+    def as_number(self, value):
+        """as_number setter
+
+        Autonomous System number to be set in the ERO sub-object that this LSP should traverse through. This field is applicable only if the value of 'type' is set to 'as_number'.
+
+        value: int
+        """
+        self._set_property("as_number", value)
+
+
+class PatternFlowRSVPPathExplicitRouteType1ASNumberLBit(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 1,
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+            "maximum": 1,
+        },
+        "increment": {
+            "type": "PatternFlowRSVPPathExplicitRouteType1ASNumberLBitCounter"
+        },
+        "decrement": {
+            "type": "PatternFlowRSVPPathExplicitRouteType1ASNumberLBitCounter"
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": 0,
+        "values": [0],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=0, values=[0]):
+        super(PatternFlowRSVPPathExplicitRouteType1ASNumberLBit, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowRSVPPathExplicitRouteType1ASNumberLBitCounter
+        """Factory property that returns an instance of the PatternFlowRSVPPathExplicitRouteType1ASNumberLBitCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowRSVPPathExplicitRouteType1ASNumberLBitCounter
+        """
+        return self._get_property(
+            "increment",
+            PatternFlowRSVPPathExplicitRouteType1ASNumberLBitCounter,
+            self,
+            "increment",
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowRSVPPathExplicitRouteType1ASNumberLBitCounter
+        """Factory property that returns an instance of the PatternFlowRSVPPathExplicitRouteType1ASNumberLBitCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowRSVPPathExplicitRouteType1ASNumberLBitCounter
+        """
+        return self._get_property(
+            "decrement",
+            PatternFlowRSVPPathExplicitRouteType1ASNumberLBitCounter,
+            self,
+            "decrement",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowRSVPPathExplicitRouteType1ASNumberLBitCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 1,
+        },
+        "step": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 1,
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 1,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowRSVPPathExplicitRouteType1ASNumberLBitCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class FlowRSVPType1ExplicitRouteSubobjectsIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = False
+
+    def __init__(self, parent=None, choice=None):
+        super(FlowRSVPType1ExplicitRouteSubobjectsIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[FlowRSVPType1ExplicitRouteSubobjects]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> FlowRSVPType1ExplicitRouteSubobjectsIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> FlowRSVPType1ExplicitRouteSubobjects
+        return self._next()
+
+    def next(self):
+        # type: () -> FlowRSVPType1ExplicitRouteSubobjects
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, FlowRSVPType1ExplicitRouteSubobjects):
+            raise Exception(
+                "Item is not an instance of FlowRSVPType1ExplicitRouteSubobjects"
+            )
+
+    def type1explicitroutesubobjects(self):
+        # type: () -> FlowRSVPType1ExplicitRouteSubobjectsIter
+        """Factory method that creates an instance of the FlowRSVPType1ExplicitRouteSubobjects class
+
+        Type is specific to subobject.
+
+        Returns: FlowRSVPType1ExplicitRouteSubobjectsIter
+        """
+        item = FlowRSVPType1ExplicitRouteSubobjects(parent=self._parent)
+        self._add(item)
+        return self
+
+    def add(self):
+        # type: () -> FlowRSVPType1ExplicitRouteSubobjects
+        """Add method that creates and returns an instance of the FlowRSVPType1ExplicitRouteSubobjects class
+
+        Type is specific to subobject.
+
+        Returns: FlowRSVPType1ExplicitRouteSubobjects
+        """
+        item = FlowRSVPType1ExplicitRouteSubobjects(parent=self._parent)
+        self._add(item)
+        return item
+
+
+class FlowRSVPPathObjectsClassLabelRequest(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "length": {"type": "FlowRSVPObjectLength"},
+        "c_type": {"type": "FlowRSVPPathObjectsLabelRequestCType"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(FlowRSVPPathObjectsClassLabelRequest, self).__init__()
+        self._parent = parent
+
+    @property
+    def length(self):
+        # type: () -> FlowRSVPObjectLength
+        """length getter
+
+        A 16-bit field containing the total object length in bytes. Must always be multiple of or at least 4.
+
+        Returns: FlowRSVPObjectLength
+        """
+        return self._get_property("length", FlowRSVPObjectLength)
+
+    @property
+    def c_type(self):
+        # type: () -> FlowRSVPPathObjectsLabelRequestCType
+        """c_type getter
+
+        Object for LABEL_REQUEST class. Currently supported c-type is Without Label Range (1).Object for LABEL_REQUEST class. Currently supported c-type is Without Label Range (1).Object for LABEL_REQUEST class. Currently supported c-type is Without Label Range (1).Object for LABEL_REQUEST class. Currently supported c-type is Without Label Range (1).
+
+        Returns: FlowRSVPPathObjectsLabelRequestCType
+        """
+        return self._get_property("c_type", FlowRSVPPathObjectsLabelRequestCType)
+
+
+class FlowRSVPPathObjectsLabelRequestCType(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "without_label_range",
+            ],
+        },
+        "without_label_range": {"type": "FlowRSVPPathLabelRequestWithoutLabelRange"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "without_label_range",
+    }  # type: Dict[str, Union(type)]
+
+    WITHOUT_LABEL_RANGE = "without_label_range"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None):
+        super(FlowRSVPPathObjectsLabelRequestCType, self).__init__()
+        self._parent = parent
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    @property
+    def without_label_range(self):
+        # type: () -> FlowRSVPPathLabelRequestWithoutLabelRange
+        """Factory property that returns an instance of the FlowRSVPPathLabelRequestWithoutLabelRange class
+
+        Class LABEL_REQUEST, Without Label Range C-Type 1
+
+        Returns: FlowRSVPPathLabelRequestWithoutLabelRange
+        """
+        return self._get_property(
+            "without_label_range",
+            FlowRSVPPathLabelRequestWithoutLabelRange,
+            self,
+            "without_label_range",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["without_label_range"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["without_label_range"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["without_label_range"]]
+        """
+        self._set_property("choice", value)
+
+
+class FlowRSVPPathLabelRequestWithoutLabelRange(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "reserved": {
+            "type": "PatternFlowRSVPPathLabelRequestWithoutLabelRangeReserved"
+        },
+        "l3pid": {"type": "PatternFlowRSVPPathLabelRequestWithoutLabelRangeL3pid"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(FlowRSVPPathLabelRequestWithoutLabelRange, self).__init__()
+        self._parent = parent
+
+    @property
+    def reserved(self):
+        # type: () -> PatternFlowRSVPPathLabelRequestWithoutLabelRangeReserved
+        """reserved getter
+
+        This field is reserved. It MUST be set to zero on transmission and MUST be ignored on receipt. This field is reserved. It MUST be set to zero on transmission and MUST be ignored on receipt. This field is reserved. It MUST be set to zero on transmission and MUST be ignored on receipt. This field is reserved. It MUST be set to zero on transmission and MUST be ignored on receipt.
+
+        Returns: PatternFlowRSVPPathLabelRequestWithoutLabelRangeReserved
+        """
+        return self._get_property(
+            "reserved", PatternFlowRSVPPathLabelRequestWithoutLabelRangeReserved
+        )
+
+    @property
+    def l3pid(self):
+        # type: () -> PatternFlowRSVPPathLabelRequestWithoutLabelRangeL3pid
+        """l3pid getter
+
+        An identifier of the layer protocol using this path. Standard Ethertype values are used e.g. The default value of 2048 0x0800 represents Ethertype for IPv4. An identifier of the layer protocol using this path. Standard Ethertype values are used e.g. The default value of 2048 0x0800 represents Ethertype for IPv4. An identifier of the layer protocol using this path. Standard Ethertype values are used e.g. The default value of 2048 0x0800 represents Ethertype for IPv4. An identifier of the layer protocol using this path. Standard Ethertype values are used e.g. The default value of 2048 0x0800 represents Ethertype for IPv4.
+
+        Returns: PatternFlowRSVPPathLabelRequestWithoutLabelRangeL3pid
+        """
+        return self._get_property(
+            "l3pid", PatternFlowRSVPPathLabelRequestWithoutLabelRangeL3pid
+        )
+
+
+class PatternFlowRSVPPathLabelRequestWithoutLabelRangeReserved(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+            "maximum": 65535,
+        },
+        "increment": {
+            "type": "PatternFlowRSVPPathLabelRequestWithoutLabelRangeReservedCounter"
+        },
+        "decrement": {
+            "type": "PatternFlowRSVPPathLabelRequestWithoutLabelRangeReservedCounter"
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": 0,
+        "values": [0],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=0, values=[0]):
+        super(PatternFlowRSVPPathLabelRequestWithoutLabelRangeReserved, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowRSVPPathLabelRequestWithoutLabelRangeReservedCounter
+        """Factory property that returns an instance of the PatternFlowRSVPPathLabelRequestWithoutLabelRangeReservedCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowRSVPPathLabelRequestWithoutLabelRangeReservedCounter
+        """
+        return self._get_property(
+            "increment",
+            PatternFlowRSVPPathLabelRequestWithoutLabelRangeReservedCounter,
+            self,
+            "increment",
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowRSVPPathLabelRequestWithoutLabelRangeReservedCounter
+        """Factory property that returns an instance of the PatternFlowRSVPPathLabelRequestWithoutLabelRangeReservedCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowRSVPPathLabelRequestWithoutLabelRangeReservedCounter
+        """
+        return self._get_property(
+            "decrement",
+            PatternFlowRSVPPathLabelRequestWithoutLabelRangeReservedCounter,
+            self,
+            "decrement",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowRSVPPathLabelRequestWithoutLabelRangeReservedCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+        "step": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(
+            PatternFlowRSVPPathLabelRequestWithoutLabelRangeReservedCounter, self
+        ).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class PatternFlowRSVPPathLabelRequestWithoutLabelRangeL3pid(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+            "maximum": 65535,
+        },
+        "increment": {
+            "type": "PatternFlowRSVPPathLabelRequestWithoutLabelRangeL3pidCounter"
+        },
+        "decrement": {
+            "type": "PatternFlowRSVPPathLabelRequestWithoutLabelRangeL3pidCounter"
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": 2048,
+        "values": [2048],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=2048, values=[2048]):
+        super(PatternFlowRSVPPathLabelRequestWithoutLabelRangeL3pid, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowRSVPPathLabelRequestWithoutLabelRangeL3pidCounter
+        """Factory property that returns an instance of the PatternFlowRSVPPathLabelRequestWithoutLabelRangeL3pidCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowRSVPPathLabelRequestWithoutLabelRangeL3pidCounter
+        """
+        return self._get_property(
+            "increment",
+            PatternFlowRSVPPathLabelRequestWithoutLabelRangeL3pidCounter,
+            self,
+            "increment",
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowRSVPPathLabelRequestWithoutLabelRangeL3pidCounter
+        """Factory property that returns an instance of the PatternFlowRSVPPathLabelRequestWithoutLabelRangeL3pidCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowRSVPPathLabelRequestWithoutLabelRangeL3pidCounter
+        """
+        return self._get_property(
+            "decrement",
+            PatternFlowRSVPPathLabelRequestWithoutLabelRangeL3pidCounter,
+            self,
+            "decrement",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowRSVPPathLabelRequestWithoutLabelRangeL3pidCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+        "step": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 2048,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=2048, step=1, count=1):
+        super(
+            PatternFlowRSVPPathLabelRequestWithoutLabelRangeL3pidCounter, self
+        ).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class FlowRSVPPathObjectsClassSessionAttribute(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "length": {"type": "FlowRSVPObjectLength"},
+        "c_type": {"type": "FlowRSVPPathObjectsSessionAttributeCType"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(FlowRSVPPathObjectsClassSessionAttribute, self).__init__()
+        self._parent = parent
+
+    @property
+    def length(self):
+        # type: () -> FlowRSVPObjectLength
+        """length getter
+
+        A 16-bit field containing the total object length in bytes. Must always be multiple of or at least 4.
+
+        Returns: FlowRSVPObjectLength
+        """
+        return self._get_property("length", FlowRSVPObjectLength)
+
+    @property
+    def c_type(self):
+        # type: () -> FlowRSVPPathObjectsSessionAttributeCType
+        """c_type getter
+
+        Object for SESSION_ATTRIBUTE class. Currently supported c-type is LSP_Tunnel_RA (1) and LSP_Tunnel (7).Object for SESSION_ATTRIBUTE class. Currently supported c-type is LSP_Tunnel_RA (1) and LSP_Tunnel (7).Object for SESSION_ATTRIBUTE class. Currently supported c-type is LSP_Tunnel_RA (1) and LSP_Tunnel (7).Object for SESSION_ATTRIBUTE class. Currently supported c-type is LSP_Tunnel_RA (1) and LSP_Tunnel (7).
+
+        Returns: FlowRSVPPathObjectsSessionAttributeCType
+        """
+        return self._get_property("c_type", FlowRSVPPathObjectsSessionAttributeCType)
+
+
+class FlowRSVPPathObjectsSessionAttributeCType(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "lsp_tunnel",
+                "lsp_tunnel_ra",
+            ],
+        },
+        "lsp_tunnel": {"type": "FlowRSVPPathSessionAttributeLspTunnel"},
+        "lsp_tunnel_ra": {"type": "FlowRSVPPathSessionAttributeLspTunnelRa"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "lsp_tunnel",
+    }  # type: Dict[str, Union(type)]
+
+    LSP_TUNNEL = "lsp_tunnel"  # type: str
+    LSP_TUNNEL_RA = "lsp_tunnel_ra"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None):
+        super(FlowRSVPPathObjectsSessionAttributeCType, self).__init__()
+        self._parent = parent
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    @property
+    def lsp_tunnel(self):
+        # type: () -> FlowRSVPPathSessionAttributeLspTunnel
+        """Factory property that returns an instance of the FlowRSVPPathSessionAttributeLspTunnel class
+
+        SESSION_ATTRIBUTE class 207, LSP_TUNNEL_RA C-Type 7, resource affinity information.
+
+        Returns: FlowRSVPPathSessionAttributeLspTunnel
+        """
+        return self._get_property(
+            "lsp_tunnel", FlowRSVPPathSessionAttributeLspTunnel, self, "lsp_tunnel"
+        )
+
+    @property
+    def lsp_tunnel_ra(self):
+        # type: () -> FlowRSVPPathSessionAttributeLspTunnelRa
+        """Factory property that returns an instance of the FlowRSVPPathSessionAttributeLspTunnelRa class
+
+        SESSION_ATTRIBUTE class 207, LSP_TUNNEL_RA C-Type 1, it carries resource affinity information.
+
+        Returns: FlowRSVPPathSessionAttributeLspTunnelRa
+        """
+        return self._get_property(
+            "lsp_tunnel_ra",
+            FlowRSVPPathSessionAttributeLspTunnelRa,
+            self,
+            "lsp_tunnel_ra",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["lsp_tunnel"], Literal["lsp_tunnel_ra"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["lsp_tunnel"], Literal["lsp_tunnel_ra"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["lsp_tunnel"], Literal["lsp_tunnel_ra"]]
+        """
+        self._set_property("choice", value)
+
+
+class FlowRSVPPathSessionAttributeLspTunnel(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "setup_priority": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 7,
+        },
+        "holding_priority": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 7,
+        },
+        "flags": {"type": "FlowRSVPLspTunnelFlag"},
+        "name_length": {"type": "FlowRSVPSessionAttributeNameLength"},
+        "session_name": {
+            "type": str,
+            "minLength": 0,
+            "maxLength": 254,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "setup_priority": 7,
+        "holding_priority": 7,
+        "session_name": "",
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self, parent=None, setup_priority=7, holding_priority=7, session_name=""
+    ):
+        super(FlowRSVPPathSessionAttributeLspTunnel, self).__init__()
+        self._parent = parent
+        self._set_property("setup_priority", setup_priority)
+        self._set_property("holding_priority", holding_priority)
+        self._set_property("session_name", session_name)
+
+    def set(self, setup_priority=None, holding_priority=None, session_name=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def setup_priority(self):
+        # type: () -> int
+        """setup_priority getter
+
+        The priority of the session with respect to taking resources,in the range of to 7. The value is the highest priority. The Setup Priority is used in deciding whether this session can preempt another session.
+
+        Returns: int
+        """
+        return self._get_property("setup_priority")
+
+    @setup_priority.setter
+    def setup_priority(self, value):
+        """setup_priority setter
+
+        The priority of the session with respect to taking resources,in the range of to 7. The value is the highest priority. The Setup Priority is used in deciding whether this session can preempt another session.
+
+        value: int
+        """
+        self._set_property("setup_priority", value)
+
+    @property
+    def holding_priority(self):
+        # type: () -> int
+        """holding_priority getter
+
+        The priority of the session with respect to holding resources,in the range of to 7. The value is the highest priority. The Setup Priority is used in deciding whether this session can preempt another session.
+
+        Returns: int
+        """
+        return self._get_property("holding_priority")
+
+    @holding_priority.setter
+    def holding_priority(self, value):
+        """holding_priority setter
+
+        The priority of the session with respect to holding resources,in the range of to 7. The value is the highest priority. The Setup Priority is used in deciding whether this session can preempt another session.
+
+        value: int
+        """
+        self._set_property("holding_priority", value)
+
+    @property
+    def flags(self):
+        # type: () -> FlowRSVPLspTunnelFlag
+        """flags getter
+
+        0x01 Local protection desired, 0x02 Label recording desired, 0x04 SE Style desired
+
+        Returns: FlowRSVPLspTunnelFlag
+        """
+        return self._get_property("flags", FlowRSVPLspTunnelFlag)
+
+    @property
+    def name_length(self):
+        # type: () -> FlowRSVPSessionAttributeNameLength
+        """name_length getter
+
+        The length of the display string before padding, in bytes.
+
+        Returns: FlowRSVPSessionAttributeNameLength
+        """
+        return self._get_property("name_length", FlowRSVPSessionAttributeNameLength)
+
+    @property
+    def session_name(self):
+        # type: () -> str
+        """session_name getter
+
+        A null padded string of characters.
+
+        Returns: str
+        """
+        return self._get_property("session_name")
+
+    @session_name.setter
+    def session_name(self, value):
+        """session_name setter
+
+        A null padded string of characters.
+
+        value: str
+        """
+        self._set_property("session_name", value)
+
+
+class FlowRSVPLspTunnelFlag(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "local_protection_desired",
+                "label_recording_desired",
+                "se_style_desired",
+            ],
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "local_protection_desired",
+    }  # type: Dict[str, Union(type)]
+
+    LOCAL_PROTECTION_DESIRED = "local_protection_desired"  # type: str
+    LABEL_RECORDING_DESIRED = "label_recording_desired"  # type: str
+    SE_STYLE_DESIRED = "se_style_desired"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None):
+        super(FlowRSVPLspTunnelFlag, self).__init__()
+        self._parent = parent
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["label_recording_desired"], Literal["local_protection_desired"], Literal["se_style_desired"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["label_recording_desired"], Literal["local_protection_desired"], Literal["se_style_desired"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["label_recording_desired"], Literal["local_protection_desired"], Literal["se_style_desired"]]
+        """
+        self._set_property("choice", value)
+
+
+class FlowRSVPSessionAttributeNameLength(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "auto",
+                "value",
+            ],
+        },
+        "auto": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "auto",
+        "auto": 0,
+        "value": 0,
+    }  # type: Dict[str, Union(type)]
+
+    AUTO = "auto"  # type: str
+    VALUE = "value"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, auto=0, value=0):
+        super(FlowRSVPSessionAttributeNameLength, self).__init__()
+        self._parent = parent
+        self._set_property("auto", auto)
+        self._set_property("value", value)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, auto=None, value=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["auto"], Literal["value"]]
+        """choice getter
+
+        auto or configured value.
+
+        Returns: Union[Literal["auto"], Literal["value"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        auto or configured value.
+
+        value: Union[Literal["auto"], Literal["value"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def auto(self):
+        # type: () -> int
+        """auto getter
+
+        OTG will provide system generated value for this property. If OTG is unable to generate value the default value must be used.
+
+        Returns: int
+        """
+        return self._get_property("auto")
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+
+class FlowRSVPPathSessionAttributeLspTunnelRa(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "exclude_any": {
+            "type": str,
+            "format": "hex",
+            "minLength": 0,
+            "maxLength": 8,
+        },
+        "include_any": {
+            "type": str,
+            "format": "hex",
+            "minLength": 0,
+            "maxLength": 8,
+        },
+        "include_all": {
+            "type": str,
+            "format": "hex",
+            "minLength": 0,
+            "maxLength": 8,
+        },
+        "setup_priority": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 7,
+        },
+        "holding_priority": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 7,
+        },
+        "flags": {"type": "FlowRSVPLspTunnelFlag"},
+        "name_length": {"type": "FlowRSVPSessionAttributeNameLength"},
+        "session_name": {
+            "type": str,
+            "minLength": 0,
+            "maxLength": 254,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "exclude_any": "0",
+        "include_any": "0",
+        "include_all": "0",
+        "setup_priority": 7,
+        "holding_priority": 7,
+        "session_name": "",
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self,
+        parent=None,
+        exclude_any="0",
+        include_any="0",
+        include_all="0",
+        setup_priority=7,
+        holding_priority=7,
+        session_name="",
+    ):
+        super(FlowRSVPPathSessionAttributeLspTunnelRa, self).__init__()
+        self._parent = parent
+        self._set_property("exclude_any", exclude_any)
+        self._set_property("include_any", include_any)
+        self._set_property("include_all", include_all)
+        self._set_property("setup_priority", setup_priority)
+        self._set_property("holding_priority", holding_priority)
+        self._set_property("session_name", session_name)
+
+    def set(
+        self,
+        exclude_any=None,
+        include_any=None,
+        include_all=None,
+        setup_priority=None,
+        holding_priority=None,
+        session_name=None,
+    ):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def exclude_any(self):
+        # type: () -> str
+        """exclude_any getter
+
+        A 32-bit vector representing set of attribute filters associated with tunnel any of which renders link unacceptable. null set (all bits set to zero) doesn't render the link unacceptable. The most significant byte in the hex-string is the farthest to the left in the byte sequence. Leading zero bytes in the configured value may be omitted for brevity.
+
+        Returns: str
+        """
+        return self._get_property("exclude_any")
+
+    @exclude_any.setter
+    def exclude_any(self, value):
+        """exclude_any setter
+
+        A 32-bit vector representing set of attribute filters associated with tunnel any of which renders link unacceptable. null set (all bits set to zero) doesn't render the link unacceptable. The most significant byte in the hex-string is the farthest to the left in the byte sequence. Leading zero bytes in the configured value may be omitted for brevity.
+
+        value: str
+        """
+        self._set_property("exclude_any", value)
+
+    @property
+    def include_any(self):
+        # type: () -> str
+        """include_any getter
+
+        A 32-bit vector representing set of attribute filters associated with tunnel any of which renders link acceptable. null set (all bits set to zero) automatically passes. The most significant byte in the hex-string is the farthest to the left in the byte sequence. Leading zero bytes in the configured value may be omitted for brevity.
+
+        Returns: str
+        """
+        return self._get_property("include_any")
+
+    @include_any.setter
+    def include_any(self, value):
+        """include_any setter
+
+        A 32-bit vector representing set of attribute filters associated with tunnel any of which renders link acceptable. null set (all bits set to zero) automatically passes. The most significant byte in the hex-string is the farthest to the left in the byte sequence. Leading zero bytes in the configured value may be omitted for brevity.
+
+        value: str
+        """
+        self._set_property("include_any", value)
+
+    @property
+    def include_all(self):
+        # type: () -> str
+        """include_all getter
+
+        A 32-bit vector representing set of attribute filters associated with tunnel all of which must be present for link to be acceptable. null set (all bits set to zero) automatically passes. The most significant byte in the hex-string is the farthest to the left in the byte sequence. Leading zero bytes in the configured value may be omitted for brevity.
+
+        Returns: str
+        """
+        return self._get_property("include_all")
+
+    @include_all.setter
+    def include_all(self, value):
+        """include_all setter
+
+        A 32-bit vector representing set of attribute filters associated with tunnel all of which must be present for link to be acceptable. null set (all bits set to zero) automatically passes. The most significant byte in the hex-string is the farthest to the left in the byte sequence. Leading zero bytes in the configured value may be omitted for brevity.
+
+        value: str
+        """
+        self._set_property("include_all", value)
+
+    @property
+    def setup_priority(self):
+        # type: () -> int
+        """setup_priority getter
+
+        The priority of the session with respect to taking resources,in the range of to 7. The value is the highest priority. The Setup Priority is used in deciding whether this session can preempt another session.
+
+        Returns: int
+        """
+        return self._get_property("setup_priority")
+
+    @setup_priority.setter
+    def setup_priority(self, value):
+        """setup_priority setter
+
+        The priority of the session with respect to taking resources,in the range of to 7. The value is the highest priority. The Setup Priority is used in deciding whether this session can preempt another session.
+
+        value: int
+        """
+        self._set_property("setup_priority", value)
+
+    @property
+    def holding_priority(self):
+        # type: () -> int
+        """holding_priority getter
+
+        The priority of the session with respect to holding resources,in the range of to 7. The value is the highest priority. The Setup Priority is used in deciding whether this session can preempt another session.
+
+        Returns: int
+        """
+        return self._get_property("holding_priority")
+
+    @holding_priority.setter
+    def holding_priority(self, value):
+        """holding_priority setter
+
+        The priority of the session with respect to holding resources,in the range of to 7. The value is the highest priority. The Setup Priority is used in deciding whether this session can preempt another session.
+
+        value: int
+        """
+        self._set_property("holding_priority", value)
+
+    @property
+    def flags(self):
+        # type: () -> FlowRSVPLspTunnelFlag
+        """flags getter
+
+        0x01 Local protection desired, 0x02 Label recording desired, 0x04 SE Style desired
+
+        Returns: FlowRSVPLspTunnelFlag
+        """
+        return self._get_property("flags", FlowRSVPLspTunnelFlag)
+
+    @property
+    def name_length(self):
+        # type: () -> FlowRSVPSessionAttributeNameLength
+        """name_length getter
+
+        The length of the display string before padding, in bytes.
+
+        Returns: FlowRSVPSessionAttributeNameLength
+        """
+        return self._get_property("name_length", FlowRSVPSessionAttributeNameLength)
+
+    @property
+    def session_name(self):
+        # type: () -> str
+        """session_name getter
+
+        A null padded string of characters.
+
+        Returns: str
+        """
+        return self._get_property("session_name")
+
+    @session_name.setter
+    def session_name(self, value):
+        """session_name setter
+
+        A null padded string of characters.
+
+        value: str
+        """
+        self._set_property("session_name", value)
+
+
+class FlowRSVPPathObjectsClassSenderTemplate(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "length": {"type": "FlowRSVPObjectLength"},
+        "c_type": {"type": "FlowRSVPPathObjectsSenderTemplateCType"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(FlowRSVPPathObjectsClassSenderTemplate, self).__init__()
+        self._parent = parent
+
+    @property
+    def length(self):
+        # type: () -> FlowRSVPObjectLength
+        """length getter
+
+        A 16-bit field containing the total object length in bytes. Must always be multiple of or at least 4.
+
+        Returns: FlowRSVPObjectLength
+        """
+        return self._get_property("length", FlowRSVPObjectLength)
+
+    @property
+    def c_type(self):
+        # type: () -> FlowRSVPPathObjectsSenderTemplateCType
+        """c_type getter
+
+        Object for SENDER_TEMPLATE class. Currently supported c-type is LSP Tunnel IPv4 (7).Object for SENDER_TEMPLATE class. Currently supported c-type is LSP Tunnel IPv4 (7).Object for SENDER_TEMPLATE class. Currently supported c-type is LSP Tunnel IPv4 (7).Object for SENDER_TEMPLATE class. Currently supported c-type is LSP Tunnel IPv4 (7).
+
+        Returns: FlowRSVPPathObjectsSenderTemplateCType
+        """
+        return self._get_property("c_type", FlowRSVPPathObjectsSenderTemplateCType)
+
+
+class FlowRSVPPathObjectsSenderTemplateCType(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "lsp_tunnel_ipv4",
+            ],
+        },
+        "lsp_tunnel_ipv4": {"type": "FlowRSVPPathSenderTemplateLspTunnelIpv4"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "lsp_tunnel_ipv4",
+    }  # type: Dict[str, Union(type)]
+
+    LSP_TUNNEL_IPV4 = "lsp_tunnel_ipv4"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None):
+        super(FlowRSVPPathObjectsSenderTemplateCType, self).__init__()
+        self._parent = parent
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    @property
+    def lsp_tunnel_ipv4(self):
+        # type: () -> FlowRSVPPathSenderTemplateLspTunnelIpv4
+        """Factory property that returns an instance of the FlowRSVPPathSenderTemplateLspTunnelIpv4 class
+
+        Class SENDER_TEMPLATE, LSP_TUNNEL_IPv4 C-Type 7
+
+        Returns: FlowRSVPPathSenderTemplateLspTunnelIpv4
+        """
+        return self._get_property(
+            "lsp_tunnel_ipv4",
+            FlowRSVPPathSenderTemplateLspTunnelIpv4,
+            self,
+            "lsp_tunnel_ipv4",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["lsp_tunnel_ipv4"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["lsp_tunnel_ipv4"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["lsp_tunnel_ipv4"]]
+        """
+        self._set_property("choice", value)
+
+
+class FlowRSVPPathSenderTemplateLspTunnelIpv4(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "ipv4_tunnel_sender_address": {
+            "type": "PatternFlowRSVPPathSenderTemplateLspTunnelIpv4Ipv4TunnelSenderAddress"
+        },
+        "reserved": {"type": "PatternFlowRSVPPathSenderTemplateLspTunnelIpv4Reserved"},
+        "lsp_id": {"type": "PatternFlowRSVPPathSenderTemplateLspTunnelIpv4LspId"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(FlowRSVPPathSenderTemplateLspTunnelIpv4, self).__init__()
+        self._parent = parent
+
+    @property
+    def ipv4_tunnel_sender_address(self):
+        # type: () -> PatternFlowRSVPPathSenderTemplateLspTunnelIpv4Ipv4TunnelSenderAddress
+        """ipv4_tunnel_sender_address getter
+
+        IPv4 address for sender node.IPv4 address for sender node.IPv4 address for sender node.IPv4 address for sender node.
+
+        Returns: PatternFlowRSVPPathSenderTemplateLspTunnelIpv4Ipv4TunnelSenderAddress
+        """
+        return self._get_property(
+            "ipv4_tunnel_sender_address",
+            PatternFlowRSVPPathSenderTemplateLspTunnelIpv4Ipv4TunnelSenderAddress,
+        )
+
+    @property
+    def reserved(self):
+        # type: () -> PatternFlowRSVPPathSenderTemplateLspTunnelIpv4Reserved
+        """reserved getter
+
+        Reserved field, MUST be zero.Reserved field, MUST be zero.Reserved field, MUST be zero.Reserved field, MUST be zero.
+
+        Returns: PatternFlowRSVPPathSenderTemplateLspTunnelIpv4Reserved
+        """
+        return self._get_property(
+            "reserved", PatternFlowRSVPPathSenderTemplateLspTunnelIpv4Reserved
+        )
+
+    @property
+    def lsp_id(self):
+        # type: () -> PatternFlowRSVPPathSenderTemplateLspTunnelIpv4LspId
+        """lsp_id getter
+
+        A 16-bit identifier used in the SENDER_TEMPLATE that can be changed to allow sender to share resources with itself.A 16-bit identifier used in the SENDER_TEMPLATE that can be changed to allow sender to share resources with itself.A 16-bit identifier used in the SENDER_TEMPLATE that can be changed to allow sender to share resources with itself.A 16-bit identifier used in the SENDER_TEMPLATE that can be changed to allow sender to share resources with itself.
+
+        Returns: PatternFlowRSVPPathSenderTemplateLspTunnelIpv4LspId
+        """
+        return self._get_property(
+            "lsp_id", PatternFlowRSVPPathSenderTemplateLspTunnelIpv4LspId
+        )
+
+
+class PatternFlowRSVPPathSenderTemplateLspTunnelIpv4Ipv4TunnelSenderAddress(
+    OpenApiObject
+):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": str,
+            "format": "ipv4",
+        },
+        "values": {
+            "type": list,
+            "itemtype": str,
+            "itemformat": "ipv4",
+        },
+        "increment": {
+            "type": "PatternFlowRSVPPathSenderTemplateLspTunnelIpv4Ipv4TunnelSenderAddressCounter"
+        },
+        "decrement": {
+            "type": "PatternFlowRSVPPathSenderTemplateLspTunnelIpv4Ipv4TunnelSenderAddressCounter"
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": "0.0.0.0",
+        "values": ["0.0.0.0"],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value="0.0.0.0", values=["0.0.0.0"]):
+        super(
+            PatternFlowRSVPPathSenderTemplateLspTunnelIpv4Ipv4TunnelSenderAddress, self
+        ).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowRSVPPathSenderTemplateLspTunnelIpv4Ipv4TunnelSenderAddressCounter
+        """Factory property that returns an instance of the PatternFlowRSVPPathSenderTemplateLspTunnelIpv4Ipv4TunnelSenderAddressCounter class
+
+        ipv4 counter pattern
+
+        Returns: PatternFlowRSVPPathSenderTemplateLspTunnelIpv4Ipv4TunnelSenderAddressCounter
+        """
+        return self._get_property(
+            "increment",
+            PatternFlowRSVPPathSenderTemplateLspTunnelIpv4Ipv4TunnelSenderAddressCounter,
+            self,
+            "increment",
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowRSVPPathSenderTemplateLspTunnelIpv4Ipv4TunnelSenderAddressCounter
+        """Factory property that returns an instance of the PatternFlowRSVPPathSenderTemplateLspTunnelIpv4Ipv4TunnelSenderAddressCounter class
+
+        ipv4 counter pattern
+
+        Returns: PatternFlowRSVPPathSenderTemplateLspTunnelIpv4Ipv4TunnelSenderAddressCounter
+        """
+        return self._get_property(
+            "decrement",
+            PatternFlowRSVPPathSenderTemplateLspTunnelIpv4Ipv4TunnelSenderAddressCounter,
+            self,
+            "decrement",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> str
+        """value getter
+
+        TBD
+
+        Returns: str
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: str
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[str]
+        """values getter
+
+        TBD
+
+        Returns: List[str]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[str]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowRSVPPathSenderTemplateLspTunnelIpv4Ipv4TunnelSenderAddressCounter(
+    OpenApiObject
+):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": str,
+            "format": "ipv4",
+        },
+        "step": {
+            "type": str,
+            "format": "ipv4",
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": "0.0.0.0",
+        "step": "0.0.0.1",
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start="0.0.0.0", step="0.0.0.1", count=1):
+        super(
+            PatternFlowRSVPPathSenderTemplateLspTunnelIpv4Ipv4TunnelSenderAddressCounter,
+            self,
+        ).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> str
+        """start getter
+
+        TBD
+
+        Returns: str
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: str
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> str
+        """step getter
+
+        TBD
+
+        Returns: str
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: str
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class PatternFlowRSVPPathSenderTemplateLspTunnelIpv4Reserved(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+            "maximum": 65535,
+        },
+        "increment": {
+            "type": "PatternFlowRSVPPathSenderTemplateLspTunnelIpv4ReservedCounter"
+        },
+        "decrement": {
+            "type": "PatternFlowRSVPPathSenderTemplateLspTunnelIpv4ReservedCounter"
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": 0,
+        "values": [0],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=0, values=[0]):
+        super(PatternFlowRSVPPathSenderTemplateLspTunnelIpv4Reserved, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowRSVPPathSenderTemplateLspTunnelIpv4ReservedCounter
+        """Factory property that returns an instance of the PatternFlowRSVPPathSenderTemplateLspTunnelIpv4ReservedCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowRSVPPathSenderTemplateLspTunnelIpv4ReservedCounter
+        """
+        return self._get_property(
+            "increment",
+            PatternFlowRSVPPathSenderTemplateLspTunnelIpv4ReservedCounter,
+            self,
+            "increment",
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowRSVPPathSenderTemplateLspTunnelIpv4ReservedCounter
+        """Factory property that returns an instance of the PatternFlowRSVPPathSenderTemplateLspTunnelIpv4ReservedCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowRSVPPathSenderTemplateLspTunnelIpv4ReservedCounter
+        """
+        return self._get_property(
+            "decrement",
+            PatternFlowRSVPPathSenderTemplateLspTunnelIpv4ReservedCounter,
+            self,
+            "decrement",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowRSVPPathSenderTemplateLspTunnelIpv4ReservedCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+        "step": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(
+            PatternFlowRSVPPathSenderTemplateLspTunnelIpv4ReservedCounter, self
+        ).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class PatternFlowRSVPPathSenderTemplateLspTunnelIpv4LspId(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+            "maximum": 65535,
+        },
+        "increment": {
+            "type": "PatternFlowRSVPPathSenderTemplateLspTunnelIpv4LspIdCounter"
+        },
+        "decrement": {
+            "type": "PatternFlowRSVPPathSenderTemplateLspTunnelIpv4LspIdCounter"
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": 1,
+        "values": [1],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=1, values=[1]):
+        super(PatternFlowRSVPPathSenderTemplateLspTunnelIpv4LspId, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowRSVPPathSenderTemplateLspTunnelIpv4LspIdCounter
+        """Factory property that returns an instance of the PatternFlowRSVPPathSenderTemplateLspTunnelIpv4LspIdCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowRSVPPathSenderTemplateLspTunnelIpv4LspIdCounter
+        """
+        return self._get_property(
+            "increment",
+            PatternFlowRSVPPathSenderTemplateLspTunnelIpv4LspIdCounter,
+            self,
+            "increment",
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowRSVPPathSenderTemplateLspTunnelIpv4LspIdCounter
+        """Factory property that returns an instance of the PatternFlowRSVPPathSenderTemplateLspTunnelIpv4LspIdCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowRSVPPathSenderTemplateLspTunnelIpv4LspIdCounter
+        """
+        return self._get_property(
+            "decrement",
+            PatternFlowRSVPPathSenderTemplateLspTunnelIpv4LspIdCounter,
+            self,
+            "decrement",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowRSVPPathSenderTemplateLspTunnelIpv4LspIdCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+        "step": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 1,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=1, step=1, count=1):
+        super(
+            PatternFlowRSVPPathSenderTemplateLspTunnelIpv4LspIdCounter, self
+        ).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class FlowRSVPPathObjectsClassSenderTspec(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "length": {"type": "FlowRSVPObjectLength"},
+        "c_type": {"type": "FlowRSVPPathObjectsSenderTspecCType"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(FlowRSVPPathObjectsClassSenderTspec, self).__init__()
+        self._parent = parent
+
+    @property
+    def length(self):
+        # type: () -> FlowRSVPObjectLength
+        """length getter
+
+        A 16-bit field containing the total object length in bytes. Must always be multiple of or at least 4.
+
+        Returns: FlowRSVPObjectLength
+        """
+        return self._get_property("length", FlowRSVPObjectLength)
+
+    @property
+    def c_type(self):
+        # type: () -> FlowRSVPPathObjectsSenderTspecCType
+        """c_type getter
+
+        Object for SENDER_TSPEC class. Currently supported c-type is int-serv (2).Object for SENDER_TSPEC class. Currently supported c-type is int-serv (2).Object for SENDER_TSPEC class. Currently supported c-type is int-serv (2).Object for SENDER_TSPEC class. Currently supported c-type is int-serv (2).
+
+        Returns: FlowRSVPPathObjectsSenderTspecCType
+        """
+        return self._get_property("c_type", FlowRSVPPathObjectsSenderTspecCType)
+
+
+class FlowRSVPPathObjectsSenderTspecCType(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "int_serv",
+            ],
+        },
+        "int_serv": {"type": "FlowRSVPPathSenderTspecIntServ"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "int_serv",
+    }  # type: Dict[str, Union(type)]
+
+    INT_SERV = "int_serv"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None):
+        super(FlowRSVPPathObjectsSenderTspecCType, self).__init__()
+        self._parent = parent
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    @property
+    def int_serv(self):
+        # type: () -> FlowRSVPPathSenderTspecIntServ
+        """Factory property that returns an instance of the FlowRSVPPathSenderTspecIntServ class
+
+        int-serv SENDER_TSPEC object: Class 12, C-Type 2
+
+        Returns: FlowRSVPPathSenderTspecIntServ
+        """
+        return self._get_property(
+            "int_serv", FlowRSVPPathSenderTspecIntServ, self, "int_serv"
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["int_serv"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["int_serv"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["int_serv"]]
+        """
+        self._set_property("choice", value)
+
+
+class FlowRSVPPathSenderTspecIntServ(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "version": {"type": "PatternFlowRSVPPathSenderTspecIntServVersion"},
+        "reserved1": {"type": "PatternFlowRSVPPathSenderTspecIntServReserved1"},
+        "overall_length": {
+            "type": "PatternFlowRSVPPathSenderTspecIntServOverallLength"
+        },
+        "service_header": {
+            "type": "PatternFlowRSVPPathSenderTspecIntServServiceHeader"
+        },
+        "zero_bit": {"type": "PatternFlowRSVPPathSenderTspecIntServZeroBit"},
+        "reserved2": {"type": "PatternFlowRSVPPathSenderTspecIntServReserved2"},
+        "length_of_service_data": {
+            "type": "PatternFlowRSVPPathSenderTspecIntServLengthOfServiceData"
+        },
+        "parameter_id_token_bucket_tspec": {
+            "type": "PatternFlowRSVPPathSenderTspecIntServParameterIdTokenBucketTspec"
+        },
+        "parameter_127_flag": {
+            "type": "PatternFlowRSVPPathSenderTspecIntServParameter127Flag"
+        },
+        "parameter_127_length": {
+            "type": "PatternFlowRSVPPathSenderTspecIntServParameter127Length"
+        },
+        "token_bucket_rate": {
+            "type": float,
+            "format": "float",
+        },
+        "token_bucket_size": {
+            "type": float,
+            "format": "float",
+        },
+        "peak_data_rate": {
+            "type": float,
+            "format": "float",
+        },
+        "minimum_policed_unit": {
+            "type": "PatternFlowRSVPPathSenderTspecIntServMinimumPolicedUnit"
+        },
+        "maximum_packet_size": {
+            "type": "PatternFlowRSVPPathSenderTspecIntServMaximumPacketSize"
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "token_bucket_rate": 0.0,
+        "token_bucket_size": 0.0,
+        "peak_data_rate": 0.0,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self, parent=None, token_bucket_rate=0, token_bucket_size=0, peak_data_rate=0
+    ):
+        super(FlowRSVPPathSenderTspecIntServ, self).__init__()
+        self._parent = parent
+        self._set_property("token_bucket_rate", token_bucket_rate)
+        self._set_property("token_bucket_size", token_bucket_size)
+        self._set_property("peak_data_rate", peak_data_rate)
+
+    def set(self, token_bucket_rate=None, token_bucket_size=None, peak_data_rate=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def version(self):
+        # type: () -> PatternFlowRSVPPathSenderTspecIntServVersion
+        """version getter
+
+        Message format version number.Message format version number.Message format version number.Message format version number.
+
+        Returns: PatternFlowRSVPPathSenderTspecIntServVersion
+        """
+        return self._get_property(
+            "version", PatternFlowRSVPPathSenderTspecIntServVersion
+        )
+
+    @property
+    def reserved1(self):
+        # type: () -> PatternFlowRSVPPathSenderTspecIntServReserved1
+        """reserved1 getter
+
+        Reserved.Reserved.Reserved.Reserved.
+
+        Returns: PatternFlowRSVPPathSenderTspecIntServReserved1
+        """
+        return self._get_property(
+            "reserved1", PatternFlowRSVPPathSenderTspecIntServReserved1
+        )
+
+    @property
+    def overall_length(self):
+        # type: () -> PatternFlowRSVPPathSenderTspecIntServOverallLength
+        """overall_length getter
+
+        Overall length (7 words not including header).Overall length (7 words not including header).Overall length (7 words not including header).Overall length (7 words not including header).
+
+        Returns: PatternFlowRSVPPathSenderTspecIntServOverallLength
+        """
+        return self._get_property(
+            "overall_length", PatternFlowRSVPPathSenderTspecIntServOverallLength
+        )
+
+    @property
+    def service_header(self):
+        # type: () -> PatternFlowRSVPPathSenderTspecIntServServiceHeader
+        """service_header getter
+
+        Service header, service number '1' (Generic information) if in PATH message.Service header, service number '1' (Generic information) if in PATH message.Service header, service number '1' (Generic information) if in PATH message.Service header, service number '1' (Generic information) if in PATH message.
+
+        Returns: PatternFlowRSVPPathSenderTspecIntServServiceHeader
+        """
+        return self._get_property(
+            "service_header", PatternFlowRSVPPathSenderTspecIntServServiceHeader
+        )
+
+    @property
+    def zero_bit(self):
+        # type: () -> PatternFlowRSVPPathSenderTspecIntServZeroBit
+        """zero_bit getter
+
+        MUST be 0.MUST be 0.MUST be 0.MUST be 0.
+
+        Returns: PatternFlowRSVPPathSenderTspecIntServZeroBit
+        """
+        return self._get_property(
+            "zero_bit", PatternFlowRSVPPathSenderTspecIntServZeroBit
+        )
+
+    @property
+    def reserved2(self):
+        # type: () -> PatternFlowRSVPPathSenderTspecIntServReserved2
+        """reserved2 getter
+
+        Reserved.Reserved.Reserved.Reserved.
+
+        Returns: PatternFlowRSVPPathSenderTspecIntServReserved2
+        """
+        return self._get_property(
+            "reserved2", PatternFlowRSVPPathSenderTspecIntServReserved2
+        )
+
+    @property
+    def length_of_service_data(self):
+        # type: () -> PatternFlowRSVPPathSenderTspecIntServLengthOfServiceData
+        """length_of_service_data getter
+
+        Length of service data, words not including per-service header.Length of service data, words not including per-service header.Length of service data, words not including per-service header.Length of service data, words not including per-service header.
+
+        Returns: PatternFlowRSVPPathSenderTspecIntServLengthOfServiceData
+        """
+        return self._get_property(
+            "length_of_service_data",
+            PatternFlowRSVPPathSenderTspecIntServLengthOfServiceData,
+        )
+
+    @property
+    def parameter_id_token_bucket_tspec(self):
+        # type: () -> PatternFlowRSVPPathSenderTspecIntServParameterIdTokenBucketTspec
+        """parameter_id_token_bucket_tspec getter
+
+        Parameter ID, parameter 127 (Token Bucket TSpec)Parameter ID, parameter 127 (Token Bucket TSpec)Parameter ID, parameter 127 (Token Bucket TSpec)Parameter ID, parameter 127 (Token Bucket TSpec)
+
+        Returns: PatternFlowRSVPPathSenderTspecIntServParameterIdTokenBucketTspec
+        """
+        return self._get_property(
+            "parameter_id_token_bucket_tspec",
+            PatternFlowRSVPPathSenderTspecIntServParameterIdTokenBucketTspec,
+        )
+
+    @property
+    def parameter_127_flag(self):
+        # type: () -> PatternFlowRSVPPathSenderTspecIntServParameter127Flag
+        """parameter_127_flag getter
+
+        Parameter 127 flags (none set)Parameter 127 flags (none set)Parameter 127 flags (none set)Parameter 127 flags (none set)
+
+        Returns: PatternFlowRSVPPathSenderTspecIntServParameter127Flag
+        """
+        return self._get_property(
+            "parameter_127_flag", PatternFlowRSVPPathSenderTspecIntServParameter127Flag
+        )
+
+    @property
+    def parameter_127_length(self):
+        # type: () -> PatternFlowRSVPPathSenderTspecIntServParameter127Length
+        """parameter_127_length getter
+
+        Parameter 127 length, words not including per-service headerParameter 127 length, words not including per-service headerParameter 127 length, words not including per-service headerParameter 127 length, words not including per-service header
+
+        Returns: PatternFlowRSVPPathSenderTspecIntServParameter127Length
+        """
+        return self._get_property(
+            "parameter_127_length",
+            PatternFlowRSVPPathSenderTspecIntServParameter127Length,
+        )
+
+    @property
+    def token_bucket_rate(self):
+        # type: () -> float
+        """token_bucket_rate getter
+
+        Token bucket rate is set to sender's view of its generated traffic.
+
+        Returns: float
+        """
+        return self._get_property("token_bucket_rate")
+
+    @token_bucket_rate.setter
+    def token_bucket_rate(self, value):
+        """token_bucket_rate setter
+
+        Token bucket rate is set to sender's view of its generated traffic.
+
+        value: float
+        """
+        self._set_property("token_bucket_rate", value)
+
+    @property
+    def token_bucket_size(self):
+        # type: () -> float
+        """token_bucket_size getter
+
+        Token bucket size is set to sender's view of its generated traffic.
+
+        Returns: float
+        """
+        return self._get_property("token_bucket_size")
+
+    @token_bucket_size.setter
+    def token_bucket_size(self, value):
+        """token_bucket_size setter
+
+        Token bucket size is set to sender's view of its generated traffic.
+
+        value: float
+        """
+        self._set_property("token_bucket_size", value)
+
+    @property
+    def peak_data_rate(self):
+        # type: () -> float
+        """peak_data_rate getter
+
+        The peak rate may be set to the sender's peak traffic generation rate (if known and controlled), the physical interface line rate (if known), or positive infinity (if no better value is available).
+
+        Returns: float
+        """
+        return self._get_property("peak_data_rate")
+
+    @peak_data_rate.setter
+    def peak_data_rate(self, value):
+        """peak_data_rate setter
+
+        The peak rate may be set to the sender's peak traffic generation rate (if known and controlled), the physical interface line rate (if known), or positive infinity (if no better value is available).
+
+        value: float
+        """
+        self._set_property("peak_data_rate", value)
+
+    @property
+    def minimum_policed_unit(self):
+        # type: () -> PatternFlowRSVPPathSenderTspecIntServMinimumPolicedUnit
+        """minimum_policed_unit getter
+
+        The minimum policed unit parameter should generally be set equal to the size of the smallest packet generated by the application.The minimum policed unit parameter should generally be set equal to the size of the smallest packet generated by the application.The minimum policed unit parameter should generally be set equal to the size of the smallest packet generated by the application.The minimum policed unit parameter should generally be set equal to the size of the smallest packet generated by the application.
+
+        Returns: PatternFlowRSVPPathSenderTspecIntServMinimumPolicedUnit
+        """
+        return self._get_property(
+            "minimum_policed_unit",
+            PatternFlowRSVPPathSenderTspecIntServMinimumPolicedUnit,
+        )
+
+    @property
+    def maximum_packet_size(self):
+        # type: () -> PatternFlowRSVPPathSenderTspecIntServMaximumPacketSize
+        """maximum_packet_size getter
+
+        The maximum packet size parameter should be set to the size of the largest packet the application might wish to generate. This value must, by definition, be equal to or larger than the value of The minimum policed unit.The maximum packet size parameter should be set to the size of the largest packet the application might wish to generate. This value must, by definition, be equal to or larger than the value of The minimum policed unit.The maximum packet size parameter should be set to the size of the largest packet the application might wish to generate. This value must, by definition, be equal to or larger than the value of The minimum policed unit.The maximum packet size parameter should be set to the size of the largest packet the application might wish to generate. This value must, by definition, be equal to or larger than the value of The minimum policed unit.
+
+        Returns: PatternFlowRSVPPathSenderTspecIntServMaximumPacketSize
+        """
+        return self._get_property(
+            "maximum_packet_size",
+            PatternFlowRSVPPathSenderTspecIntServMaximumPacketSize,
+        )
+
+
+class PatternFlowRSVPPathSenderTspecIntServVersion(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 15,
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+            "maximum": 15,
+        },
+        "increment": {"type": "PatternFlowRSVPPathSenderTspecIntServVersionCounter"},
+        "decrement": {"type": "PatternFlowRSVPPathSenderTspecIntServVersionCounter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": 0,
+        "values": [0],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=0, values=[0]):
+        super(PatternFlowRSVPPathSenderTspecIntServVersion, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowRSVPPathSenderTspecIntServVersionCounter
+        """Factory property that returns an instance of the PatternFlowRSVPPathSenderTspecIntServVersionCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowRSVPPathSenderTspecIntServVersionCounter
+        """
+        return self._get_property(
+            "increment",
+            PatternFlowRSVPPathSenderTspecIntServVersionCounter,
+            self,
+            "increment",
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowRSVPPathSenderTspecIntServVersionCounter
+        """Factory property that returns an instance of the PatternFlowRSVPPathSenderTspecIntServVersionCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowRSVPPathSenderTspecIntServVersionCounter
+        """
+        return self._get_property(
+            "decrement",
+            PatternFlowRSVPPathSenderTspecIntServVersionCounter,
+            self,
+            "decrement",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowRSVPPathSenderTspecIntServVersionCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 15,
+        },
+        "step": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 15,
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 15,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowRSVPPathSenderTspecIntServVersionCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class PatternFlowRSVPPathSenderTspecIntServReserved1(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 4095,
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+            "maximum": 4095,
+        },
+        "increment": {"type": "PatternFlowRSVPPathSenderTspecIntServReserved1Counter"},
+        "decrement": {"type": "PatternFlowRSVPPathSenderTspecIntServReserved1Counter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": 0,
+        "values": [0],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=0, values=[0]):
+        super(PatternFlowRSVPPathSenderTspecIntServReserved1, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowRSVPPathSenderTspecIntServReserved1Counter
+        """Factory property that returns an instance of the PatternFlowRSVPPathSenderTspecIntServReserved1Counter class
+
+        integer counter pattern
+
+        Returns: PatternFlowRSVPPathSenderTspecIntServReserved1Counter
+        """
+        return self._get_property(
+            "increment",
+            PatternFlowRSVPPathSenderTspecIntServReserved1Counter,
+            self,
+            "increment",
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowRSVPPathSenderTspecIntServReserved1Counter
+        """Factory property that returns an instance of the PatternFlowRSVPPathSenderTspecIntServReserved1Counter class
+
+        integer counter pattern
+
+        Returns: PatternFlowRSVPPathSenderTspecIntServReserved1Counter
+        """
+        return self._get_property(
+            "decrement",
+            PatternFlowRSVPPathSenderTspecIntServReserved1Counter,
+            self,
+            "decrement",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowRSVPPathSenderTspecIntServReserved1Counter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 4095,
+        },
+        "step": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 4095,
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 4095,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowRSVPPathSenderTspecIntServReserved1Counter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class PatternFlowRSVPPathSenderTspecIntServOverallLength(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+            "maximum": 65535,
+        },
+        "increment": {
+            "type": "PatternFlowRSVPPathSenderTspecIntServOverallLengthCounter"
+        },
+        "decrement": {
+            "type": "PatternFlowRSVPPathSenderTspecIntServOverallLengthCounter"
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": 7,
+        "values": [7],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=7, values=[7]):
+        super(PatternFlowRSVPPathSenderTspecIntServOverallLength, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowRSVPPathSenderTspecIntServOverallLengthCounter
+        """Factory property that returns an instance of the PatternFlowRSVPPathSenderTspecIntServOverallLengthCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowRSVPPathSenderTspecIntServOverallLengthCounter
+        """
+        return self._get_property(
+            "increment",
+            PatternFlowRSVPPathSenderTspecIntServOverallLengthCounter,
+            self,
+            "increment",
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowRSVPPathSenderTspecIntServOverallLengthCounter
+        """Factory property that returns an instance of the PatternFlowRSVPPathSenderTspecIntServOverallLengthCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowRSVPPathSenderTspecIntServOverallLengthCounter
+        """
+        return self._get_property(
+            "decrement",
+            PatternFlowRSVPPathSenderTspecIntServOverallLengthCounter,
+            self,
+            "decrement",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowRSVPPathSenderTspecIntServOverallLengthCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+        "step": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 7,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=7, step=1, count=1):
+        super(
+            PatternFlowRSVPPathSenderTspecIntServOverallLengthCounter, self
+        ).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class PatternFlowRSVPPathSenderTspecIntServServiceHeader(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+            "maximum": 255,
+        },
+        "increment": {
+            "type": "PatternFlowRSVPPathSenderTspecIntServServiceHeaderCounter"
+        },
+        "decrement": {
+            "type": "PatternFlowRSVPPathSenderTspecIntServServiceHeaderCounter"
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": 1,
+        "values": [1],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=1, values=[1]):
+        super(PatternFlowRSVPPathSenderTspecIntServServiceHeader, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowRSVPPathSenderTspecIntServServiceHeaderCounter
+        """Factory property that returns an instance of the PatternFlowRSVPPathSenderTspecIntServServiceHeaderCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowRSVPPathSenderTspecIntServServiceHeaderCounter
+        """
+        return self._get_property(
+            "increment",
+            PatternFlowRSVPPathSenderTspecIntServServiceHeaderCounter,
+            self,
+            "increment",
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowRSVPPathSenderTspecIntServServiceHeaderCounter
+        """Factory property that returns an instance of the PatternFlowRSVPPathSenderTspecIntServServiceHeaderCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowRSVPPathSenderTspecIntServServiceHeaderCounter
+        """
+        return self._get_property(
+            "decrement",
+            PatternFlowRSVPPathSenderTspecIntServServiceHeaderCounter,
+            self,
+            "decrement",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowRSVPPathSenderTspecIntServServiceHeaderCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "step": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 1,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=1, step=1, count=1):
+        super(
+            PatternFlowRSVPPathSenderTspecIntServServiceHeaderCounter, self
+        ).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class PatternFlowRSVPPathSenderTspecIntServZeroBit(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 1,
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+            "maximum": 1,
+        },
+        "increment": {"type": "PatternFlowRSVPPathSenderTspecIntServZeroBitCounter"},
+        "decrement": {"type": "PatternFlowRSVPPathSenderTspecIntServZeroBitCounter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": 0,
+        "values": [0],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=0, values=[0]):
+        super(PatternFlowRSVPPathSenderTspecIntServZeroBit, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowRSVPPathSenderTspecIntServZeroBitCounter
+        """Factory property that returns an instance of the PatternFlowRSVPPathSenderTspecIntServZeroBitCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowRSVPPathSenderTspecIntServZeroBitCounter
+        """
+        return self._get_property(
+            "increment",
+            PatternFlowRSVPPathSenderTspecIntServZeroBitCounter,
+            self,
+            "increment",
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowRSVPPathSenderTspecIntServZeroBitCounter
+        """Factory property that returns an instance of the PatternFlowRSVPPathSenderTspecIntServZeroBitCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowRSVPPathSenderTspecIntServZeroBitCounter
+        """
+        return self._get_property(
+            "decrement",
+            PatternFlowRSVPPathSenderTspecIntServZeroBitCounter,
+            self,
+            "decrement",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowRSVPPathSenderTspecIntServZeroBitCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 1,
+        },
+        "step": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 1,
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 1,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowRSVPPathSenderTspecIntServZeroBitCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class PatternFlowRSVPPathSenderTspecIntServReserved2(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 127,
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+            "maximum": 127,
+        },
+        "increment": {"type": "PatternFlowRSVPPathSenderTspecIntServReserved2Counter"},
+        "decrement": {"type": "PatternFlowRSVPPathSenderTspecIntServReserved2Counter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": 0,
+        "values": [0],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=0, values=[0]):
+        super(PatternFlowRSVPPathSenderTspecIntServReserved2, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowRSVPPathSenderTspecIntServReserved2Counter
+        """Factory property that returns an instance of the PatternFlowRSVPPathSenderTspecIntServReserved2Counter class
+
+        integer counter pattern
+
+        Returns: PatternFlowRSVPPathSenderTspecIntServReserved2Counter
+        """
+        return self._get_property(
+            "increment",
+            PatternFlowRSVPPathSenderTspecIntServReserved2Counter,
+            self,
+            "increment",
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowRSVPPathSenderTspecIntServReserved2Counter
+        """Factory property that returns an instance of the PatternFlowRSVPPathSenderTspecIntServReserved2Counter class
+
+        integer counter pattern
+
+        Returns: PatternFlowRSVPPathSenderTspecIntServReserved2Counter
+        """
+        return self._get_property(
+            "decrement",
+            PatternFlowRSVPPathSenderTspecIntServReserved2Counter,
+            self,
+            "decrement",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowRSVPPathSenderTspecIntServReserved2Counter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 127,
+        },
+        "step": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 127,
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 127,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowRSVPPathSenderTspecIntServReserved2Counter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class PatternFlowRSVPPathSenderTspecIntServLengthOfServiceData(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+            "maximum": 65535,
+        },
+        "increment": {
+            "type": "PatternFlowRSVPPathSenderTspecIntServLengthOfServiceDataCounter"
+        },
+        "decrement": {
+            "type": "PatternFlowRSVPPathSenderTspecIntServLengthOfServiceDataCounter"
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": 6,
+        "values": [6],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=6, values=[6]):
+        super(PatternFlowRSVPPathSenderTspecIntServLengthOfServiceData, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowRSVPPathSenderTspecIntServLengthOfServiceDataCounter
+        """Factory property that returns an instance of the PatternFlowRSVPPathSenderTspecIntServLengthOfServiceDataCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowRSVPPathSenderTspecIntServLengthOfServiceDataCounter
+        """
+        return self._get_property(
+            "increment",
+            PatternFlowRSVPPathSenderTspecIntServLengthOfServiceDataCounter,
+            self,
+            "increment",
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowRSVPPathSenderTspecIntServLengthOfServiceDataCounter
+        """Factory property that returns an instance of the PatternFlowRSVPPathSenderTspecIntServLengthOfServiceDataCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowRSVPPathSenderTspecIntServLengthOfServiceDataCounter
+        """
+        return self._get_property(
+            "decrement",
+            PatternFlowRSVPPathSenderTspecIntServLengthOfServiceDataCounter,
+            self,
+            "decrement",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowRSVPPathSenderTspecIntServLengthOfServiceDataCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+        "step": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 6,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=6, step=1, count=1):
+        super(
+            PatternFlowRSVPPathSenderTspecIntServLengthOfServiceDataCounter, self
+        ).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class PatternFlowRSVPPathSenderTspecIntServParameterIdTokenBucketTspec(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+            "maximum": 255,
+        },
+        "increment": {
+            "type": "PatternFlowRSVPPathSenderTspecIntServParameterIdTokenBucketTspecCounter"
+        },
+        "decrement": {
+            "type": "PatternFlowRSVPPathSenderTspecIntServParameterIdTokenBucketTspecCounter"
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": 127,
+        "values": [127],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=127, values=[127]):
+        super(
+            PatternFlowRSVPPathSenderTspecIntServParameterIdTokenBucketTspec, self
+        ).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowRSVPPathSenderTspecIntServParameterIdTokenBucketTspecCounter
+        """Factory property that returns an instance of the PatternFlowRSVPPathSenderTspecIntServParameterIdTokenBucketTspecCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowRSVPPathSenderTspecIntServParameterIdTokenBucketTspecCounter
+        """
+        return self._get_property(
+            "increment",
+            PatternFlowRSVPPathSenderTspecIntServParameterIdTokenBucketTspecCounter,
+            self,
+            "increment",
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowRSVPPathSenderTspecIntServParameterIdTokenBucketTspecCounter
+        """Factory property that returns an instance of the PatternFlowRSVPPathSenderTspecIntServParameterIdTokenBucketTspecCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowRSVPPathSenderTspecIntServParameterIdTokenBucketTspecCounter
+        """
+        return self._get_property(
+            "decrement",
+            PatternFlowRSVPPathSenderTspecIntServParameterIdTokenBucketTspecCounter,
+            self,
+            "decrement",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowRSVPPathSenderTspecIntServParameterIdTokenBucketTspecCounter(
+    OpenApiObject
+):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "step": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 127,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=127, step=1, count=1):
+        super(
+            PatternFlowRSVPPathSenderTspecIntServParameterIdTokenBucketTspecCounter,
+            self,
+        ).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class PatternFlowRSVPPathSenderTspecIntServParameter127Flag(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+            "maximum": 255,
+        },
+        "increment": {
+            "type": "PatternFlowRSVPPathSenderTspecIntServParameter127FlagCounter"
+        },
+        "decrement": {
+            "type": "PatternFlowRSVPPathSenderTspecIntServParameter127FlagCounter"
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": 0,
+        "values": [0],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=0, values=[0]):
+        super(PatternFlowRSVPPathSenderTspecIntServParameter127Flag, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowRSVPPathSenderTspecIntServParameter127FlagCounter
+        """Factory property that returns an instance of the PatternFlowRSVPPathSenderTspecIntServParameter127FlagCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowRSVPPathSenderTspecIntServParameter127FlagCounter
+        """
+        return self._get_property(
+            "increment",
+            PatternFlowRSVPPathSenderTspecIntServParameter127FlagCounter,
+            self,
+            "increment",
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowRSVPPathSenderTspecIntServParameter127FlagCounter
+        """Factory property that returns an instance of the PatternFlowRSVPPathSenderTspecIntServParameter127FlagCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowRSVPPathSenderTspecIntServParameter127FlagCounter
+        """
+        return self._get_property(
+            "decrement",
+            PatternFlowRSVPPathSenderTspecIntServParameter127FlagCounter,
+            self,
+            "decrement",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowRSVPPathSenderTspecIntServParameter127FlagCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "step": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(
+            PatternFlowRSVPPathSenderTspecIntServParameter127FlagCounter, self
+        ).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class PatternFlowRSVPPathSenderTspecIntServParameter127Length(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+            "maximum": 65535,
+        },
+        "increment": {
+            "type": "PatternFlowRSVPPathSenderTspecIntServParameter127LengthCounter"
+        },
+        "decrement": {
+            "type": "PatternFlowRSVPPathSenderTspecIntServParameter127LengthCounter"
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": 5,
+        "values": [5],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=5, values=[5]):
+        super(PatternFlowRSVPPathSenderTspecIntServParameter127Length, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowRSVPPathSenderTspecIntServParameter127LengthCounter
+        """Factory property that returns an instance of the PatternFlowRSVPPathSenderTspecIntServParameter127LengthCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowRSVPPathSenderTspecIntServParameter127LengthCounter
+        """
+        return self._get_property(
+            "increment",
+            PatternFlowRSVPPathSenderTspecIntServParameter127LengthCounter,
+            self,
+            "increment",
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowRSVPPathSenderTspecIntServParameter127LengthCounter
+        """Factory property that returns an instance of the PatternFlowRSVPPathSenderTspecIntServParameter127LengthCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowRSVPPathSenderTspecIntServParameter127LengthCounter
+        """
+        return self._get_property(
+            "decrement",
+            PatternFlowRSVPPathSenderTspecIntServParameter127LengthCounter,
+            self,
+            "decrement",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowRSVPPathSenderTspecIntServParameter127LengthCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+        "step": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 5,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=5, step=1, count=1):
+        super(
+            PatternFlowRSVPPathSenderTspecIntServParameter127LengthCounter, self
+        ).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class PatternFlowRSVPPathSenderTspecIntServMinimumPolicedUnit(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+        },
+        "increment": {
+            "type": "PatternFlowRSVPPathSenderTspecIntServMinimumPolicedUnitCounter"
+        },
+        "decrement": {
+            "type": "PatternFlowRSVPPathSenderTspecIntServMinimumPolicedUnitCounter"
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": 0,
+        "values": [0],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=0, values=[0]):
+        super(PatternFlowRSVPPathSenderTspecIntServMinimumPolicedUnit, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowRSVPPathSenderTspecIntServMinimumPolicedUnitCounter
+        """Factory property that returns an instance of the PatternFlowRSVPPathSenderTspecIntServMinimumPolicedUnitCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowRSVPPathSenderTspecIntServMinimumPolicedUnitCounter
+        """
+        return self._get_property(
+            "increment",
+            PatternFlowRSVPPathSenderTspecIntServMinimumPolicedUnitCounter,
+            self,
+            "increment",
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowRSVPPathSenderTspecIntServMinimumPolicedUnitCounter
+        """Factory property that returns an instance of the PatternFlowRSVPPathSenderTspecIntServMinimumPolicedUnitCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowRSVPPathSenderTspecIntServMinimumPolicedUnitCounter
+        """
+        return self._get_property(
+            "decrement",
+            PatternFlowRSVPPathSenderTspecIntServMinimumPolicedUnitCounter,
+            self,
+            "decrement",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowRSVPPathSenderTspecIntServMinimumPolicedUnitCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "format": "uint32",
+        },
+        "step": {
+            "type": int,
+            "format": "uint32",
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(
+            PatternFlowRSVPPathSenderTspecIntServMinimumPolicedUnitCounter, self
+        ).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class PatternFlowRSVPPathSenderTspecIntServMaximumPacketSize(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+        },
+        "increment": {
+            "type": "PatternFlowRSVPPathSenderTspecIntServMaximumPacketSizeCounter"
+        },
+        "decrement": {
+            "type": "PatternFlowRSVPPathSenderTspecIntServMaximumPacketSizeCounter"
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": 0,
+        "values": [0],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=0, values=[0]):
+        super(PatternFlowRSVPPathSenderTspecIntServMaximumPacketSize, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowRSVPPathSenderTspecIntServMaximumPacketSizeCounter
+        """Factory property that returns an instance of the PatternFlowRSVPPathSenderTspecIntServMaximumPacketSizeCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowRSVPPathSenderTspecIntServMaximumPacketSizeCounter
+        """
+        return self._get_property(
+            "increment",
+            PatternFlowRSVPPathSenderTspecIntServMaximumPacketSizeCounter,
+            self,
+            "increment",
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowRSVPPathSenderTspecIntServMaximumPacketSizeCounter
+        """Factory property that returns an instance of the PatternFlowRSVPPathSenderTspecIntServMaximumPacketSizeCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowRSVPPathSenderTspecIntServMaximumPacketSizeCounter
+        """
+        return self._get_property(
+            "decrement",
+            PatternFlowRSVPPathSenderTspecIntServMaximumPacketSizeCounter,
+            self,
+            "decrement",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowRSVPPathSenderTspecIntServMaximumPacketSizeCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "format": "uint32",
+        },
+        "step": {
+            "type": int,
+            "format": "uint32",
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(
+            PatternFlowRSVPPathSenderTspecIntServMaximumPacketSizeCounter, self
+        ).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class FlowRSVPPathObjectsClassRecordRoute(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "length": {"type": "FlowRSVPObjectLength"},
+        "c_type": {"type": "FlowRSVPPathObjectsRecordRouteCType"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(FlowRSVPPathObjectsClassRecordRoute, self).__init__()
+        self._parent = parent
+
+    @property
+    def length(self):
+        # type: () -> FlowRSVPObjectLength
+        """length getter
+
+        A 16-bit field containing the total object length in bytes. Must always be multiple of or at least 4.
+
+        Returns: FlowRSVPObjectLength
+        """
+        return self._get_property("length", FlowRSVPObjectLength)
+
+    @property
+    def c_type(self):
+        # type: () -> FlowRSVPPathObjectsRecordRouteCType
+        """c_type getter
+
+        Object for RECORD_ROUTE class. c-type is Type Route Record (1).Object for RECORD_ROUTE class. c-type is Type Route Record (1).Object for RECORD_ROUTE class. c-type is Type Route Record (1).Object for RECORD_ROUTE class. c-type is Type Route Record (1).
+
+        Returns: FlowRSVPPathObjectsRecordRouteCType
+        """
+        return self._get_property("c_type", FlowRSVPPathObjectsRecordRouteCType)
+
+
+class FlowRSVPPathObjectsRecordRouteCType(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "type_1",
+            ],
+        },
+        "type_1": {"type": "FlowRSVPPathRecordRouteType1"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "type_1",
+    }  # type: Dict[str, Union(type)]
+
+    TYPE_1 = "type_1"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None):
+        super(FlowRSVPPathObjectsRecordRouteCType, self).__init__()
+        self._parent = parent
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    @property
+    def type_1(self):
+        # type: () -> FlowRSVPPathRecordRouteType1
+        """Factory property that returns an instance of the FlowRSVPPathRecordRouteType1 class
+
+        Type1 record route has list of subobjects. Currently supported subobjects are IPv4 address(1) and Label(3).
+
+        Returns: FlowRSVPPathRecordRouteType1
+        """
+        return self._get_property(
+            "type_1", FlowRSVPPathRecordRouteType1, self, "type_1"
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["type_1"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["type_1"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["type_1"]]
+        """
+        self._set_property("choice", value)
+
+
+class FlowRSVPPathRecordRouteType1(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "subobjects": {"type": "FlowRSVPType1RecordRouteSubobjectsIter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(FlowRSVPPathRecordRouteType1, self).__init__()
+        self._parent = parent
+
+    @property
+    def subobjects(self):
+        # type: () -> FlowRSVPType1RecordRouteSubobjectsIter
+        """subobjects getter
+
+        TBD
+
+        Returns: FlowRSVPType1RecordRouteSubobjectsIter
+        """
+        return self._get_property(
+            "subobjects",
+            FlowRSVPType1RecordRouteSubobjectsIter,
+            self._parent,
+            self._choice,
+        )
+
+
+class FlowRSVPType1RecordRouteSubobjects(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "type": {"type": "FlowRSVPPathObjectsRecordRouteSubObjectType"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(FlowRSVPType1RecordRouteSubobjects, self).__init__()
+        self._parent = parent
+
+    @property
+    def type(self):
+        # type: () -> FlowRSVPPathObjectsRecordRouteSubObjectType
+        """type getter
+
+        Currently supported subobjects are IPv4 address(1) and Label(3).Currently supported subobjects are IPv4 address(1) and Label(3).Currently supported subobjects are IPv4 address(1) and Label(3).
+
+        Returns: FlowRSVPPathObjectsRecordRouteSubObjectType
+        """
+        return self._get_property("type", FlowRSVPPathObjectsRecordRouteSubObjectType)
+
+
+class FlowRSVPPathObjectsRecordRouteSubObjectType(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "ipv4_address",
+                "label",
+            ],
+        },
+        "ipv4_address": {"type": "FlowRSVPPathRecordRouteType1Ipv4Address"},
+        "label": {"type": "FlowRSVPPathRecordRouteType1Label"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "ipv4_address",
+    }  # type: Dict[str, Union(type)]
+
+    IPV4_ADDRESS = "ipv4_address"  # type: str
+    LABEL = "label"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None):
+        super(FlowRSVPPathObjectsRecordRouteSubObjectType, self).__init__()
+        self._parent = parent
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    @property
+    def ipv4_address(self):
+        # type: () -> FlowRSVPPathRecordRouteType1Ipv4Address
+        """Factory property that returns an instance of the FlowRSVPPathRecordRouteType1Ipv4Address class
+
+        Class RECORD_ROUTE, Type1 ROUTE_RECORD C-Type 1 Subobject: IPv4 Address, C-Type: 1
+
+        Returns: FlowRSVPPathRecordRouteType1Ipv4Address
+        """
+        return self._get_property(
+            "ipv4_address",
+            FlowRSVPPathRecordRouteType1Ipv4Address,
+            self,
+            "ipv4_address",
+        )
+
+    @property
+    def label(self):
+        # type: () -> FlowRSVPPathRecordRouteType1Label
+        """Factory property that returns an instance of the FlowRSVPPathRecordRouteType1Label class
+
+        Class RECORD_ROUTE, Type1 ROUTE_RECORD C-Type 1 Subobject: Label, C-Type: 3
+
+        Returns: FlowRSVPPathRecordRouteType1Label
+        """
+        return self._get_property(
+            "label", FlowRSVPPathRecordRouteType1Label, self, "label"
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["ipv4_address"], Literal["label"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["ipv4_address"], Literal["label"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["ipv4_address"], Literal["label"]]
+        """
+        self._set_property("choice", value)
+
+
+class FlowRSVPPathRecordRouteType1Ipv4Address(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "length": {"type": "FlowRSVPRouteRecordLength"},
+        "ipv4_address": {
+            "type": "PatternFlowRSVPPathRecordRouteType1Ipv4AddressIpv4Address"
+        },
+        "prefix_length": {
+            "type": "PatternFlowRSVPPathRecordRouteType1Ipv4AddressPrefixLength"
+        },
+        "flags": {"type": "FlowRSVPRecordRouteIPv4Flag"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(FlowRSVPPathRecordRouteType1Ipv4Address, self).__init__()
+        self._parent = parent
+
+    @property
+    def length(self):
+        # type: () -> FlowRSVPRouteRecordLength
+        """length getter
+
+        The Length contains the total length of the subobject in bytes, including the Type and Length fields. The Length MUST be atleast 4, and MUST be multiple of 4.
+
+        Returns: FlowRSVPRouteRecordLength
+        """
+        return self._get_property("length", FlowRSVPRouteRecordLength)
+
+    @property
+    def ipv4_address(self):
+        # type: () -> PatternFlowRSVPPathRecordRouteType1Ipv4AddressIpv4Address
+        """ipv4_address getter
+
+        A 32-bit unicast, host address. Any network-reachable interface address is allowed here. Illegal addresses, such as certain loopback addresses, SHOULD NOT be used.A 32-bit unicast, host address. Any network-reachable interface address is allowed here. Illegal addresses, such as certain loopback addresses, SHOULD NOT be used.A 32-bit unicast, host address. Any network-reachable interface address is allowed here. Illegal addresses, such as certain loopback addresses, SHOULD NOT be used.A 32-bit unicast, host address. Any network-reachable interface address is allowed here. Illegal addresses, such as certain loopback addresses, SHOULD NOT be used.
+
+        Returns: PatternFlowRSVPPathRecordRouteType1Ipv4AddressIpv4Address
+        """
+        return self._get_property(
+            "ipv4_address", PatternFlowRSVPPathRecordRouteType1Ipv4AddressIpv4Address
+        )
+
+    @property
+    def prefix_length(self):
+        # type: () -> PatternFlowRSVPPathRecordRouteType1Ipv4AddressPrefixLength
+        """prefix_length getter
+
+        Prefix-length of IPv4 address.Prefix-length of IPv4 address.Prefix-length of IPv4 address.Prefix-length of IPv4 address.
+
+        Returns: PatternFlowRSVPPathRecordRouteType1Ipv4AddressPrefixLength
+        """
+        return self._get_property(
+            "prefix_length", PatternFlowRSVPPathRecordRouteType1Ipv4AddressPrefixLength
+        )
+
+    @property
+    def flags(self):
+        # type: () -> FlowRSVPRecordRouteIPv4Flag
+        """flags getter
+
+        0x01 local_protection_available, 0x02 local_protection_in_use
+
+        Returns: FlowRSVPRecordRouteIPv4Flag
+        """
+        return self._get_property("flags", FlowRSVPRecordRouteIPv4Flag)
+
+
+class FlowRSVPRouteRecordLength(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "auto",
+                "value",
+            ],
+        },
+        "auto": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 256,
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 256,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "auto",
+        "auto": 8,
+        "value": 8,
+    }  # type: Dict[str, Union(type)]
+
+    AUTO = "auto"  # type: str
+    VALUE = "value"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, auto=8, value=8):
+        super(FlowRSVPRouteRecordLength, self).__init__()
+        self._parent = parent
+        self._set_property("auto", auto)
+        self._set_property("value", value)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, auto=None, value=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["auto"], Literal["value"]]
+        """choice getter
+
+        auto or configured value.
+
+        Returns: Union[Literal["auto"], Literal["value"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        auto or configured value.
+
+        value: Union[Literal["auto"], Literal["value"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def auto(self):
+        # type: () -> int
+        """auto getter
+
+        OTG will provide system generated value for this property. If OTG is unable to generate value the default value must be used.
+
+        Returns: int
+        """
+        return self._get_property("auto")
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+
+class PatternFlowRSVPPathRecordRouteType1Ipv4AddressIpv4Address(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": str,
+            "format": "ipv4",
+        },
+        "values": {
+            "type": list,
+            "itemtype": str,
+            "itemformat": "ipv4",
+        },
+        "increment": {
+            "type": "PatternFlowRSVPPathRecordRouteType1Ipv4AddressIpv4AddressCounter"
+        },
+        "decrement": {
+            "type": "PatternFlowRSVPPathRecordRouteType1Ipv4AddressIpv4AddressCounter"
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": "0.0.0.0",
+        "values": ["0.0.0.0"],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value="0.0.0.0", values=["0.0.0.0"]):
+        super(
+            PatternFlowRSVPPathRecordRouteType1Ipv4AddressIpv4Address, self
+        ).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowRSVPPathRecordRouteType1Ipv4AddressIpv4AddressCounter
+        """Factory property that returns an instance of the PatternFlowRSVPPathRecordRouteType1Ipv4AddressIpv4AddressCounter class
+
+        ipv4 counter pattern
+
+        Returns: PatternFlowRSVPPathRecordRouteType1Ipv4AddressIpv4AddressCounter
+        """
+        return self._get_property(
+            "increment",
+            PatternFlowRSVPPathRecordRouteType1Ipv4AddressIpv4AddressCounter,
+            self,
+            "increment",
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowRSVPPathRecordRouteType1Ipv4AddressIpv4AddressCounter
+        """Factory property that returns an instance of the PatternFlowRSVPPathRecordRouteType1Ipv4AddressIpv4AddressCounter class
+
+        ipv4 counter pattern
+
+        Returns: PatternFlowRSVPPathRecordRouteType1Ipv4AddressIpv4AddressCounter
+        """
+        return self._get_property(
+            "decrement",
+            PatternFlowRSVPPathRecordRouteType1Ipv4AddressIpv4AddressCounter,
+            self,
+            "decrement",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> str
+        """value getter
+
+        TBD
+
+        Returns: str
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: str
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[str]
+        """values getter
+
+        TBD
+
+        Returns: List[str]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[str]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowRSVPPathRecordRouteType1Ipv4AddressIpv4AddressCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": str,
+            "format": "ipv4",
+        },
+        "step": {
+            "type": str,
+            "format": "ipv4",
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": "0.0.0.0",
+        "step": "0.0.0.1",
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start="0.0.0.0", step="0.0.0.1", count=1):
+        super(
+            PatternFlowRSVPPathRecordRouteType1Ipv4AddressIpv4AddressCounter, self
+        ).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> str
+        """start getter
+
+        TBD
+
+        Returns: str
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: str
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> str
+        """step getter
+
+        TBD
+
+        Returns: str
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: str
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class PatternFlowRSVPPathRecordRouteType1Ipv4AddressPrefixLength(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+            "maximum": 255,
+        },
+        "increment": {
+            "type": "PatternFlowRSVPPathRecordRouteType1Ipv4AddressPrefixLengthCounter"
+        },
+        "decrement": {
+            "type": "PatternFlowRSVPPathRecordRouteType1Ipv4AddressPrefixLengthCounter"
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": 32,
+        "values": [32],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=32, values=[32]):
+        super(
+            PatternFlowRSVPPathRecordRouteType1Ipv4AddressPrefixLength, self
+        ).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowRSVPPathRecordRouteType1Ipv4AddressPrefixLengthCounter
+        """Factory property that returns an instance of the PatternFlowRSVPPathRecordRouteType1Ipv4AddressPrefixLengthCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowRSVPPathRecordRouteType1Ipv4AddressPrefixLengthCounter
+        """
+        return self._get_property(
+            "increment",
+            PatternFlowRSVPPathRecordRouteType1Ipv4AddressPrefixLengthCounter,
+            self,
+            "increment",
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowRSVPPathRecordRouteType1Ipv4AddressPrefixLengthCounter
+        """Factory property that returns an instance of the PatternFlowRSVPPathRecordRouteType1Ipv4AddressPrefixLengthCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowRSVPPathRecordRouteType1Ipv4AddressPrefixLengthCounter
+        """
+        return self._get_property(
+            "decrement",
+            PatternFlowRSVPPathRecordRouteType1Ipv4AddressPrefixLengthCounter,
+            self,
+            "decrement",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowRSVPPathRecordRouteType1Ipv4AddressPrefixLengthCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "step": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 32,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=32, step=1, count=1):
+        super(
+            PatternFlowRSVPPathRecordRouteType1Ipv4AddressPrefixLengthCounter, self
+        ).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class FlowRSVPRecordRouteIPv4Flag(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "local_protection_available",
+                "local_protection_in_use",
+            ],
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "local_protection_available",
+    }  # type: Dict[str, Union(type)]
+
+    LOCAL_PROTECTION_AVAILABLE = "local_protection_available"  # type: str
+    LOCAL_PROTECTION_IN_USE = "local_protection_in_use"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None):
+        super(FlowRSVPRecordRouteIPv4Flag, self).__init__()
+        self._parent = parent
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["local_protection_available"], Literal["local_protection_in_use"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["local_protection_available"], Literal["local_protection_in_use"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["local_protection_available"], Literal["local_protection_in_use"]]
+        """
+        self._set_property("choice", value)
+
+
+class FlowRSVPPathRecordRouteType1Label(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "length": {"type": "FlowRSVPRouteRecordLength"},
+        "flags": {"type": "PatternFlowRSVPPathRecordRouteType1LabelFlags"},
+        "c_type": {"type": "PatternFlowRSVPPathRecordRouteType1LabelCType"},
+        "label": {"type": "FlowRSVPPathRecordRouteLabel"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(FlowRSVPPathRecordRouteType1Label, self).__init__()
+        self._parent = parent
+
+    @property
+    def length(self):
+        # type: () -> FlowRSVPRouteRecordLength
+        """length getter
+
+        The Length contains the total length of the subobject in bytes, including the Type and Length fields. The Length MUST be atleast 4, and MUST be multiple of 4.
+
+        Returns: FlowRSVPRouteRecordLength
+        """
+        return self._get_property("length", FlowRSVPRouteRecordLength)
+
+    @property
+    def flags(self):
+        # type: () -> PatternFlowRSVPPathRecordRouteType1LabelFlags
+        """flags getter
+
+        0x01 Global label. This flag indicates that the label will be understood if received on any interface.0x01 Global label. This flag indicates that the label will be understood if received on any interface.0x01 Global label. This flag indicates that the label will be understood if received on any interface.0x01 Global label. This flag indicates that the label will be understood if received on any interface.
+
+        Returns: PatternFlowRSVPPathRecordRouteType1LabelFlags
+        """
+        return self._get_property(
+            "flags", PatternFlowRSVPPathRecordRouteType1LabelFlags
+        )
+
+    @property
+    def c_type(self):
+        # type: () -> PatternFlowRSVPPathRecordRouteType1LabelCType
+        """c_type getter
+
+        The C-Type of the included Label Object. Copied from the Label object.The C-Type of the included Label Object. Copied from the Label object.The C-Type of the included Label Object. Copied from the Label object.The C-Type of the included Label Object. Copied from the Label object.
+
+        Returns: PatternFlowRSVPPathRecordRouteType1LabelCType
+        """
+        return self._get_property(
+            "c_type", PatternFlowRSVPPathRecordRouteType1LabelCType
+        )
+
+    @property
+    def label(self):
+        # type: () -> FlowRSVPPathRecordRouteLabel
+        """label getter
+
+        The contents of the Label Object. Copied from the Label Object.
+
+        Returns: FlowRSVPPathRecordRouteLabel
+        """
+        return self._get_property("label", FlowRSVPPathRecordRouteLabel)
+
+
+class PatternFlowRSVPPathRecordRouteType1LabelFlags(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+            "maximum": 255,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": 1,
+        "values": [1],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=1, values=[1]):
+        super(PatternFlowRSVPPathRecordRouteType1LabelFlags, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowRSVPPathRecordRouteType1LabelCType(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+            "maximum": 255,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": 1,
+        "values": [1],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=1, values=[1]):
+        super(PatternFlowRSVPPathRecordRouteType1LabelCType, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+
+class FlowRSVPPathRecordRouteLabel(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "as_integer",
+                "as_hex",
+            ],
+        },
+        "as_integer": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 1048575,
+        },
+        "as_hex": {
+            "type": str,
+            "format": "hex",
+            "maxLength": 8,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "as_integer",
+        "as_integer": 16,
+        "as_hex": "10",
+    }  # type: Dict[str, Union(type)]
+
+    AS_INTEGER = "as_integer"  # type: str
+    AS_HEX = "as_hex"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, as_integer=16, as_hex="10"):
+        super(FlowRSVPPathRecordRouteLabel, self).__init__()
+        self._parent = parent
+        self._set_property("as_integer", as_integer)
+        self._set_property("as_hex", as_hex)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, as_integer=None, as_hex=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["as_hex"], Literal["as_integer"]]
+        """choice getter
+
+        32 bit integer or hex value.
+
+        Returns: Union[Literal["as_hex"], Literal["as_integer"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        32 bit integer or hex value.
+
+        value: Union[Literal["as_hex"], Literal["as_integer"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def as_integer(self):
+        # type: () -> int
+        """as_integer getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("as_integer")
+
+    @as_integer.setter
+    def as_integer(self, value):
+        """as_integer setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("as_integer", value, "as_integer")
+
+    @property
+    def as_hex(self):
+        # type: () -> str
+        """as_hex getter
+
+        Value of the this field should not excced bytes. Maximum length of this attribute is (4 2 hex character per byte).
+
+        Returns: str
+        """
+        return self._get_property("as_hex")
+
+    @as_hex.setter
+    def as_hex(self, value):
+        """as_hex setter
+
+        Value of the this field should not excced bytes. Maximum length of this attribute is (4 2 hex character per byte).
+
+        value: str
+        """
+        self._set_property("as_hex", value, "as_hex")
+
+
+class FlowRSVPType1RecordRouteSubobjectsIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = False
+
+    def __init__(self, parent=None, choice=None):
+        super(FlowRSVPType1RecordRouteSubobjectsIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[FlowRSVPType1RecordRouteSubobjects]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> FlowRSVPType1RecordRouteSubobjectsIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> FlowRSVPType1RecordRouteSubobjects
+        return self._next()
+
+    def next(self):
+        # type: () -> FlowRSVPType1RecordRouteSubobjects
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, FlowRSVPType1RecordRouteSubobjects):
+            raise Exception(
+                "Item is not an instance of FlowRSVPType1RecordRouteSubobjects"
+            )
+
+    def type1recordroutesubobjects(self):
+        # type: () -> FlowRSVPType1RecordRouteSubobjectsIter
+        """Factory method that creates an instance of the FlowRSVPType1RecordRouteSubobjects class
+
+        Type is specific to subobject.
+
+        Returns: FlowRSVPType1RecordRouteSubobjectsIter
+        """
+        item = FlowRSVPType1RecordRouteSubobjects(parent=self._parent)
+        self._add(item)
+        return self
+
+    def add(self):
+        # type: () -> FlowRSVPType1RecordRouteSubobjects
+        """Add method that creates and returns an instance of the FlowRSVPType1RecordRouteSubobjects class
+
+        Type is specific to subobject.
+
+        Returns: FlowRSVPType1RecordRouteSubobjects
+        """
+        item = FlowRSVPType1RecordRouteSubobjects(parent=self._parent)
+        self._add(item)
+        return item
+
+
+class FlowRSVPPathObjectsCustom(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "type": {"type": "PatternFlowRSVPPathObjectsCustomType"},
+        "length": {"type": "FlowRSVPObjectLength"},
+        "bytes": {
+            "type": str,
+            "format": "hex",
+            "minLength": 1,
+            "maxLength": 131050,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "bytes": "0000",
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, bytes="0000"):
+        super(FlowRSVPPathObjectsCustom, self).__init__()
+        self._parent = parent
+        self._set_property("bytes", bytes)
+
+    def set(self, bytes=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def type(self):
+        # type: () -> PatternFlowRSVPPathObjectsCustomType
+        """type getter
+
+        User defined object type.User defined object type.User defined object type.User defined object type.
+
+        Returns: PatternFlowRSVPPathObjectsCustomType
+        """
+        return self._get_property("type", PatternFlowRSVPPathObjectsCustomType)
+
+    @property
+    def length(self):
+        # type: () -> FlowRSVPObjectLength
+        """length getter
+
+
+
+        Returns: FlowRSVPObjectLength
+        """
+        return self._get_property("length", FlowRSVPObjectLength)
+
+    @property
+    def bytes(self):
+        # type: () -> str
+        """bytes getter
+
+        A custom packet header defined as string of hex bytes. The string MUST contain sequence of valid hex bytes. Spaces or colons can be part of the bytes but will be discarded. Value of the this field should not excced 65525 bytes since maximum 65528 bytes can be added as object-contents in RSVP header. For type and length requires bytes, hence maximum of 65524 bytes are expected. Maximum length of this attribute is 131050 (65525 2 hex character per byte).
+
+        Returns: str
+        """
+        return self._get_property("bytes")
+
+    @bytes.setter
+    def bytes(self, value):
+        """bytes setter
+
+        A custom packet header defined as string of hex bytes. The string MUST contain sequence of valid hex bytes. Spaces or colons can be part of the bytes but will be discarded. Value of the this field should not excced 65525 bytes since maximum 65528 bytes can be added as object-contents in RSVP header. For type and length requires bytes, hence maximum of 65524 bytes are expected. Maximum length of this attribute is 131050 (65525 2 hex character per byte).
+
+        value: str
+        """
+        self._set_property("bytes", value)
+
+
+class PatternFlowRSVPPathObjectsCustomType(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+                "increment",
+                "decrement",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+            "maximum": 255,
+        },
+        "increment": {"type": "PatternFlowRSVPPathObjectsCustomTypeCounter"},
+        "decrement": {"type": "PatternFlowRSVPPathObjectsCustomTypeCounter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": 0,
+        "values": [0],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+    INCREMENT = "increment"  # type: str
+    DECREMENT = "decrement"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=0, values=[0]):
+        super(PatternFlowRSVPPathObjectsCustomType, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def increment(self):
+        # type: () -> PatternFlowRSVPPathObjectsCustomTypeCounter
+        """Factory property that returns an instance of the PatternFlowRSVPPathObjectsCustomTypeCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowRSVPPathObjectsCustomTypeCounter
+        """
+        return self._get_property(
+            "increment", PatternFlowRSVPPathObjectsCustomTypeCounter, self, "increment"
+        )
+
+    @property
+    def decrement(self):
+        # type: () -> PatternFlowRSVPPathObjectsCustomTypeCounter
+        """Factory property that returns an instance of the PatternFlowRSVPPathObjectsCustomTypeCounter class
+
+        integer counter pattern
+
+        Returns: PatternFlowRSVPPathObjectsCustomTypeCounter
+        """
+        return self._get_property(
+            "decrement", PatternFlowRSVPPathObjectsCustomTypeCounter, self, "decrement"
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowRSVPPathObjectsCustomTypeCounter(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "start": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "step": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "count": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "start": 0,
+        "step": 1,
+        "count": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, start=0, step=1, count=1):
+        super(PatternFlowRSVPPathObjectsCustomTypeCounter, self).__init__()
+        self._parent = parent
+        self._set_property("start", start)
+        self._set_property("step", step)
+        self._set_property("count", count)
+
+    def set(self, start=None, step=None, count=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def start(self):
+        # type: () -> int
+        """start getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("start")
+
+    @start.setter
+    def start(self, value):
+        """start setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("start", value)
+
+    @property
+    def step(self):
+        # type: () -> int
+        """step getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("step")
+
+    @step.setter
+    def step(self, value):
+        """step setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("step", value)
+
+    @property
+    def count(self):
+        # type: () -> int
+        """count getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("count")
+
+    @count.setter
+    def count(self, value):
+        """count setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("count", value)
+
+
+class FlowRSVPPathObjectsIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = False
+
+    def __init__(self, parent=None, choice=None):
+        super(FlowRSVPPathObjectsIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[FlowRSVPPathObjects]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> FlowRSVPPathObjectsIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> FlowRSVPPathObjects
+        return self._next()
+
+    def next(self):
+        # type: () -> FlowRSVPPathObjects
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, FlowRSVPPathObjects):
+            raise Exception("Item is not an instance of FlowRSVPPathObjects")
+
+    def pathobjects(self):
+        # type: () -> FlowRSVPPathObjectsIter
+        """Factory method that creates an instance of the FlowRSVPPathObjects class
+
+        Every RSVP object encapsulated in an RSVP message consists of 32-bit word header and the object's contents.
+
+        Returns: FlowRSVPPathObjectsIter
+        """
+        item = FlowRSVPPathObjects(parent=self._parent)
+        self._add(item)
+        return self
+
+    def add(self):
+        # type: () -> FlowRSVPPathObjects
+        """Add method that creates and returns an instance of the FlowRSVPPathObjects class
+
+        Every RSVP object encapsulated in an RSVP message consists of 32-bit word header and the object's contents.
+
+        Returns: FlowRSVPPathObjects
+        """
+        item = FlowRSVPPathObjects(parent=self._parent)
+        self._add(item)
+        return item
+
+
 class FlowHeaderIter(OpenApiIter):
     __slots__ = ("_parent", "_choice")
 
@@ -94613,7 +107979,7 @@ class FlowHeaderIter(OpenApiIter):
         self._choice = choice
 
     def __getitem__(self, key):
-        # type: (str) -> Union[FlowArp, FlowCustom, FlowEthernet, FlowEthernetPause, FlowGre, FlowGtpv1, FlowGtpv2, FlowHeader, FlowIcmp, FlowIcmpv6, FlowIgmpv1, FlowIpv4, FlowIpv6, FlowMpls, FlowPfcPause, FlowPpp, FlowSnmpv2c, FlowTcp, FlowUdp, FlowVlan, FlowVxlan]
+        # type: (str) -> Union[FlowArp, FlowCustom, FlowEthernet, FlowEthernetPause, FlowGre, FlowGtpv1, FlowGtpv2, FlowHeader, FlowIcmp, FlowIcmpv6, FlowIgmpv1, FlowIpv4, FlowIpv6, FlowMpls, FlowPfcPause, FlowPpp, FlowRsvp, FlowSnmpv2c, FlowTcp, FlowUdp, FlowVlan, FlowVxlan]
         return self._getitem(key)
 
     def __iter__(self):
@@ -94933,6 +108299,20 @@ class FlowHeaderIter(OpenApiIter):
         item = FlowHeader()
         item.snmpv2c
         item.choice = "snmpv2c"
+        self._add(item)
+        return self
+
+    def rsvp(self, version=1, flag="not_refresh_reduction_capable"):
+        # type: (int,Union[Literal["not_refresh_reduction_capable"], Literal["refresh_reduction_capable"]]) -> FlowHeaderIter
+        """Factory method that creates an instance of the FlowRsvp class
+
+        RSVP packet header as defined in RFC2205 and RFC3209. Currently only supported message type is "Path" with mandatory objects and sub-objects.
+
+        Returns: FlowHeaderIter
+        """
+        item = FlowHeader()
+        item.rsvp
+        item.choice = "rsvp"
         self._add(item)
         return self
 
@@ -116947,8 +130327,8 @@ class Api(object):
 
     def __init__(self, **kwargs):
         self._version_meta = self.version()
-        self._version_meta.api_spec_version = "1.0.0"
-        self._version_meta.sdk_version = "1.0.0"
+        self._version_meta.api_spec_version = "1.0.1"
+        self._version_meta.sdk_version = "1.0.1"
         self._version_check = kwargs.get("version_check")
         if self._version_check is None:
             self._version_check = False
