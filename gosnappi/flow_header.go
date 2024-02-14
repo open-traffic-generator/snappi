@@ -36,6 +36,7 @@ type flowHeader struct {
 	igmpv1Holder        FlowIgmpv1
 	mplsHolder          FlowMpls
 	snmpv2CHolder       FlowSnmpv2C
+	rsvpHolder          FlowRsvp
 }
 
 func NewFlowHeader() FlowHeader {
@@ -283,6 +284,7 @@ func (obj *flowHeader) setNil() {
 	obj.igmpv1Holder = nil
 	obj.mplsHolder = nil
 	obj.snmpv2CHolder = nil
+	obj.rsvpHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -474,6 +476,14 @@ type FlowHeader interface {
 	SetSnmpv2C(value FlowSnmpv2C) FlowHeader
 	// HasSnmpv2C checks if Snmpv2C has been set in FlowHeader
 	HasSnmpv2C() bool
+	// Rsvp returns FlowRsvp, set in FlowHeader.
+	// FlowRsvp is rSVP packet header as defined in RFC2205 and RFC3209. Currently only supported message type is "Path" with mandatory objects and sub-objects.
+	Rsvp() FlowRsvp
+	// SetRsvp assigns FlowRsvp provided by user to FlowHeader.
+	// FlowRsvp is rSVP packet header as defined in RFC2205 and RFC3209. Currently only supported message type is "Path" with mandatory objects and sub-objects.
+	SetRsvp(value FlowRsvp) FlowHeader
+	// HasRsvp checks if Rsvp has been set in FlowHeader
+	HasRsvp() bool
 	setNil()
 }
 
@@ -501,6 +511,7 @@ var FlowHeaderChoice = struct {
 	IGMPV1        FlowHeaderChoiceEnum
 	MPLS          FlowHeaderChoiceEnum
 	SNMPV2C       FlowHeaderChoiceEnum
+	RSVP          FlowHeaderChoiceEnum
 }{
 	CUSTOM:        FlowHeaderChoiceEnum("custom"),
 	ETHERNET:      FlowHeaderChoiceEnum("ethernet"),
@@ -522,6 +533,7 @@ var FlowHeaderChoice = struct {
 	IGMPV1:        FlowHeaderChoiceEnum("igmpv1"),
 	MPLS:          FlowHeaderChoiceEnum("mpls"),
 	SNMPV2C:       FlowHeaderChoiceEnum("snmpv2c"),
+	RSVP:          FlowHeaderChoiceEnum("rsvp"),
 }
 
 func (obj *flowHeader) Choice() FlowHeaderChoiceEnum {
@@ -544,6 +556,8 @@ func (obj *flowHeader) setChoice(value FlowHeaderChoiceEnum) FlowHeader {
 	}
 	enumValue := otg.FlowHeader_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+	obj.obj.Rsvp = nil
+	obj.rsvpHolder = nil
 	obj.obj.Snmpv2C = nil
 	obj.snmpv2CHolder = nil
 	obj.obj.Mpls = nil
@@ -663,6 +677,10 @@ func (obj *flowHeader) setChoice(value FlowHeaderChoiceEnum) FlowHeader {
 
 	if value == FlowHeaderChoice.SNMPV2C {
 		obj.obj.Snmpv2C = NewFlowSnmpv2C().msg()
+	}
+
+	if value == FlowHeaderChoice.RSVP {
+		obj.obj.Rsvp = NewFlowRsvp().msg()
 	}
 
 	return obj
@@ -1228,6 +1246,34 @@ func (obj *flowHeader) SetSnmpv2C(value FlowSnmpv2C) FlowHeader {
 	return obj
 }
 
+// description is TBD
+// Rsvp returns a FlowRsvp
+func (obj *flowHeader) Rsvp() FlowRsvp {
+	if obj.obj.Rsvp == nil {
+		obj.setChoice(FlowHeaderChoice.RSVP)
+	}
+	if obj.rsvpHolder == nil {
+		obj.rsvpHolder = &flowRsvp{obj: obj.obj.Rsvp}
+	}
+	return obj.rsvpHolder
+}
+
+// description is TBD
+// Rsvp returns a FlowRsvp
+func (obj *flowHeader) HasRsvp() bool {
+	return obj.obj.Rsvp != nil
+}
+
+// description is TBD
+// SetRsvp sets the FlowRsvp value in the FlowHeader object
+func (obj *flowHeader) SetRsvp(value FlowRsvp) FlowHeader {
+	obj.setChoice(FlowHeaderChoice.RSVP)
+	obj.rsvpHolder = nil
+	obj.obj.Rsvp = value.msg()
+
+	return obj
+}
+
 func (obj *flowHeader) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -1331,6 +1377,11 @@ func (obj *flowHeader) validateObj(vObj *validation, set_default bool) {
 	if obj.obj.Snmpv2C != nil {
 
 		obj.Snmpv2C().validateObj(vObj, set_default)
+	}
+
+	if obj.obj.Rsvp != nil {
+
+		obj.Rsvp().validateObj(vObj, set_default)
 	}
 
 }
