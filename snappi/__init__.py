@@ -868,6 +868,7 @@ from .snappi import PatternFlowRSVPPathExplicitRouteType1Ipv4PrefixIpv4AddressCo
 from .snappi import FlowRSVPPathExplicitRouteType1ASNumber
 from .snappi import PatternFlowRSVPPathExplicitRouteType1ASNumberLBit
 from .snappi import PatternFlowRSVPPathExplicitRouteType1ASNumberLBitCounter
+from .snappi import FlowRSVPExplicitRouteASNumberLength
 from .snappi import FlowRSVPType1ExplicitRouteSubobjectsIter
 from .snappi import FlowRSVPPathObjectsClassLabelRequest
 from .snappi import FlowRSVPPathObjectsLabelRequestCType

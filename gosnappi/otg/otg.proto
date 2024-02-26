@@ -1,4 +1,4 @@
-/* Open Traffic Generator API 1.0.1
+/* Open Traffic Generator API 1.0.2
  * Open Traffic Generator API defines a model-driven, vendor-neutral and standard
  * interface for emulating layer 2-7 network devices and generating test traffic.
  * 
@@ -6358,8 +6358,9 @@ message FlowRSVPLength {
   // default = Choice.Enum.auto
   optional Choice.Enum choice = 1;
 
-  // OTG will provide a system generated value for this property.  If OTG is unable to
-  // generate a value the default value must be used.
+  // The OTG implementation will provide a system generated value for this property.
+  // If the OTG implementation is unable to generate a value the default value must be
+  // used.
   // default = 0
   optional uint32 auto = 2;
 
@@ -6418,8 +6419,9 @@ message FlowRSVPObjectLength {
   // default = Choice.Enum.auto
   optional Choice.Enum choice = 1;
 
-  // OTG will provide a system generated value for this property.  If OTG is unable to
-  // generate a value the default value must be used.
+  // The OTG implementation will provide a system generated value for this property.
+  // If the OTG implementation is unable to generate a value the default value must be
+  // used.
   // default = 4
   optional uint32 auto = 2;
 
@@ -6720,7 +6722,7 @@ message FlowRSVPPathExplicitRouteType1ASNumber {
 
   // The Length contains the total length of the subobject in bytes,including L, Type
   // and Length fields.   The Length MUST be atleast 4, and MUST be a multiple of 4.
-  FlowRSVPExplicitRouteLength length = 2;
+  FlowRSVPExplicitRouteASNumberLength length = 2;
 
   // Autonomous System number to be set in the ERO sub-object that this LSP should traverse
   // through. This field is applicable only if the value of 'type' is set to 'as_number'.
@@ -6742,13 +6744,39 @@ message FlowRSVPExplicitRouteLength {
   // default = Choice.Enum.auto
   optional Choice.Enum choice = 1;
 
-  // OTG will provide a system generated value for this property.  If OTG is unable to
-  // generate a value the default value must be used.
+  // The OTG implementation will provide a system generated value for this property.
+  // If the OTG implementation is unable to generate a value the default value must be
+  // used.
   // default = 8
   optional uint32 auto = 2;
 
   // Description missing in models
   // default = 8
+  optional uint32 value = 3;
+}
+
+// Description missing in models
+message FlowRSVPExplicitRouteASNumberLength {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      auto = 1;
+      value = 2;
+    }
+  }
+  // auto or configured value.
+  // default = Choice.Enum.auto
+  optional Choice.Enum choice = 1;
+
+  // The OTG implementation will provide a system generated value for this property.
+  // If the OTG implementation is unable to generate a value the default value must be
+  // used.
+  // default = 4
+  optional uint32 auto = 2;
+
+  // Description missing in models
+  // default = 4
   optional uint32 value = 3;
 }
 
@@ -6859,7 +6887,7 @@ message FlowRSVPPathSessionAttributeLspTunnelRa {
   // render the link unacceptable. The most significant byte in the hex-string is the
   // farthest  to the left in the byte sequence.  Leading zero bytes in the configured
   // value may be omitted for brevity.
-  // default = 0
+  // default = 00
   optional string exclude_any = 1;
 
   // A 32-bit vector representing a set of attribute filters associated with a tunnel
@@ -6867,7 +6895,7 @@ message FlowRSVPPathSessionAttributeLspTunnelRa {
   // passes. The most significant byte in the hex-string is the farthest  to the left
   // in the byte sequence.  Leading zero bytes in the configured value may be omitted
   // for brevity.
-  // default = 0
+  // default = 00
   optional string include_any = 2;
 
   // A 32-bit vector representing a set of attribute filters associated with a tunnel
@@ -6875,7 +6903,7 @@ message FlowRSVPPathSessionAttributeLspTunnelRa {
   // to zero) automatically passes. The most significant byte in the hex-string is the
   // farthest to the left in the byte sequence.  Leading zero bytes in the configured
   // value may be omitted for brevity.
-  // default = 0
+  // default = 00
   optional string include_all = 3;
 
   // The priority of the session with respect to taking resources,in the range of 0 to
@@ -6931,8 +6959,9 @@ message FlowRSVPSessionAttributeNameLength {
   // default = Choice.Enum.auto
   optional Choice.Enum choice = 1;
 
-  // OTG will provide a system generated value for this property.  If OTG is unable to
-  // generate a value the default value must be used.
+  // The OTG implementation will provide a system generated value for this property.
+  // If the OTG implementation is unable to generate a value the default value must be
+  // used.
   // default = 0
   optional uint32 auto = 2;
 
@@ -7216,8 +7245,9 @@ message FlowRSVPRouteRecordLength {
   // default = Choice.Enum.auto
   optional Choice.Enum choice = 1;
 
-  // OTG will provide a system generated value for this property.  If OTG is unable to
-  // generate a value the default value must be used.
+  // The OTG implementation will provide a system generated value for this property.
+  // If the OTG implementation is unable to generate a value the default value must be
+  // used.
   // default = 8
   optional uint32 auto = 2;
 
