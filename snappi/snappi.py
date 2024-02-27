@@ -1,4 +1,4 @@
-# Open Traffic Generator API 1.0.1
+# Open Traffic Generator API 1.0.2
 # License: MIT
 
 import importlib
@@ -95554,7 +95554,6 @@ class FlowRSVPLength(OpenApiObject):
         "auto": {
             "type": int,
             "format": "uint32",
-            "maximum": 65535,
         },
         "value": {
             "type": int,
@@ -95621,7 +95620,7 @@ class FlowRSVPLength(OpenApiObject):
         # type: () -> int
         """auto getter
 
-        OTG will provide system generated value for this property. If OTG is unable to generate value the default value must be used.
+        The OTG implementation will provide system generated value for this property. If the OTG implementation is unable to generate value the default value must be used.
 
         Returns: int
         """
@@ -96053,8 +96052,6 @@ class FlowRSVPObjectLength(OpenApiObject):
         "auto": {
             "type": int,
             "format": "uint32",
-            "minimum": 4,
-            "maximum": 65535,
         },
         "value": {
             "type": int,
@@ -96122,7 +96119,7 @@ class FlowRSVPObjectLength(OpenApiObject):
         # type: () -> int
         """auto getter
 
-        OTG will provide system generated value for this property. If OTG is unable to generate value the default value must be used.
+        The OTG implementation will provide system generated value for this property. If the OTG implementation is unable to generate value the default value must be used.
 
         Returns: int
         """
@@ -99432,12 +99429,11 @@ class FlowRSVPExplicitRouteLength(OpenApiObject):
         "auto": {
             "type": int,
             "format": "uint32",
-            "maximum": 256,
         },
         "value": {
             "type": int,
             "format": "uint32",
-            "maximum": 256,
+            "maximum": 255,
         },
     }  # type: Dict[str, str]
 
@@ -99499,7 +99495,7 @@ class FlowRSVPExplicitRouteLength(OpenApiObject):
         # type: () -> int
         """auto getter
 
-        OTG will provide system generated value for this property. If OTG is unable to generate value the default value must be used.
+        The OTG implementation will provide system generated value for this property. If the OTG implementation is unable to generate value the default value must be used.
 
         Returns: int
         """
@@ -99800,7 +99796,7 @@ class FlowRSVPPathExplicitRouteType1ASNumber(OpenApiObject):
 
     _TYPES = {
         "l_bit": {"type": "PatternFlowRSVPPathExplicitRouteType1ASNumberLBit"},
-        "length": {"type": "FlowRSVPExplicitRouteLength"},
+        "length": {"type": "FlowRSVPExplicitRouteASNumberLength"},
         "as_number": {
             "type": int,
             "format": "uint32",
@@ -99841,14 +99837,14 @@ class FlowRSVPPathExplicitRouteType1ASNumber(OpenApiObject):
 
     @property
     def length(self):
-        # type: () -> FlowRSVPExplicitRouteLength
+        # type: () -> FlowRSVPExplicitRouteASNumberLength
         """length getter
 
         The Length contains the total length of the subobject in bytes,including L, Type and Length fields. The Length MUST be atleast 4, and MUST be multiple of 4.
 
-        Returns: FlowRSVPExplicitRouteLength
+        Returns: FlowRSVPExplicitRouteASNumberLength
         """
-        return self._get_property("length", FlowRSVPExplicitRouteLength)
+        return self._get_property("length", FlowRSVPExplicitRouteASNumberLength)
 
     @property
     def as_number(self):
@@ -100139,6 +100135,114 @@ class PatternFlowRSVPPathExplicitRouteType1ASNumberLBitCounter(OpenApiObject):
         value: int
         """
         self._set_property("count", value)
+
+
+class FlowRSVPExplicitRouteASNumberLength(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "auto",
+                "value",
+            ],
+        },
+        "auto": {
+            "type": int,
+            "format": "uint32",
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "auto",
+        "auto": 4,
+        "value": 4,
+    }  # type: Dict[str, Union(type)]
+
+    AUTO = "auto"  # type: str
+    VALUE = "value"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, auto=4, value=4):
+        super(FlowRSVPExplicitRouteASNumberLength, self).__init__()
+        self._parent = parent
+        self._set_property("auto", auto)
+        self._set_property("value", value)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, auto=None, value=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["auto"], Literal["value"]]
+        """choice getter
+
+        auto or configured value.
+
+        Returns: Union[Literal["auto"], Literal["value"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        auto or configured value.
+
+        value: Union[Literal["auto"], Literal["value"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def auto(self):
+        # type: () -> int
+        """auto getter
+
+        The OTG implementation will provide system generated value for this property. If the OTG implementation is unable to generate value the default value must be used.
+
+        Returns: int
+        """
+        return self._get_property("auto")
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
 
 
 class FlowRSVPType1ExplicitRouteSubobjectsIter(OpenApiIter):
@@ -101238,7 +101342,6 @@ class FlowRSVPSessionAttributeNameLength(OpenApiObject):
         "auto": {
             "type": int,
             "format": "uint32",
-            "maximum": 255,
         },
         "value": {
             "type": int,
@@ -101305,7 +101408,7 @@ class FlowRSVPSessionAttributeNameLength(OpenApiObject):
         # type: () -> int
         """auto getter
 
-        OTG will provide system generated value for this property. If OTG is unable to generate value the default value must be used.
+        The OTG implementation will provide system generated value for this property. If the OTG implementation is unable to generate value the default value must be used.
 
         Returns: int
         """
@@ -101377,9 +101480,9 @@ class FlowRSVPPathSessionAttributeLspTunnelRa(OpenApiObject):
     _REQUIRED = ()  # type: tuple(str)
 
     _DEFAULTS = {
-        "exclude_any": "0",
-        "include_any": "0",
-        "include_all": "0",
+        "exclude_any": "00",
+        "include_any": "00",
+        "include_all": "00",
         "setup_priority": 7,
         "holding_priority": 7,
         "session_name": "",
@@ -101390,9 +101493,9 @@ class FlowRSVPPathSessionAttributeLspTunnelRa(OpenApiObject):
     def __init__(
         self,
         parent=None,
-        exclude_any="0",
-        include_any="0",
-        include_all="0",
+        exclude_any="00",
+        include_any="00",
+        include_all="00",
         setup_priority=7,
         holding_priority=7,
         session_name="",
@@ -106538,12 +106641,11 @@ class FlowRSVPRouteRecordLength(OpenApiObject):
         "auto": {
             "type": int,
             "format": "uint32",
-            "maximum": 256,
         },
         "value": {
             "type": int,
             "format": "uint32",
-            "maximum": 256,
+            "maximum": 255,
         },
     }  # type: Dict[str, str]
 
@@ -106605,7 +106707,7 @@ class FlowRSVPRouteRecordLength(OpenApiObject):
         # type: () -> int
         """auto getter
 
-        OTG will provide system generated value for this property. If OTG is unable to generate value the default value must be used.
+        The OTG implementation will provide system generated value for this property. If the OTG implementation is unable to generate value the default value must be used.
 
         Returns: int
         """
@@ -130466,8 +130568,8 @@ class Api(object):
 
     def __init__(self, **kwargs):
         self._version_meta = self.version()
-        self._version_meta.api_spec_version = "1.0.1"
-        self._version_meta.sdk_version = "1.0.1"
+        self._version_meta.api_spec_version = "1.0.2"
+        self._version_meta.sdk_version = "1.0.2"
         self._version_check = kwargs.get("version_check")
         if self._version_check is None:
             self._version_check = False
