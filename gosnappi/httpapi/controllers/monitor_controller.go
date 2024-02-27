@@ -38,7 +38,7 @@ func (ctrl *monitorController) GetMetrics(w http.ResponseWriter, r *http.Request
 		body, readError := io.ReadAll(r.Body)
 		if body != nil {
 			item = gosnappi.NewMetricsRequest()
-			err := item.FromJson(string(body))
+			err := item.Unmarshal().FromJson(string(body))
 			if err != nil {
 				ctrl.responseGetMetricsError(w, "validation", err)
 				return
@@ -59,7 +59,7 @@ func (ctrl *monitorController) GetMetrics(w http.ResponseWriter, r *http.Request
 	}
 
 	if result.HasMetricsResponse() {
-		if _, err := httpapi.WriteJSONResponse(w, 200, result.MetricsResponse()); err != nil {
+		if _, err := httpapi.WriteJSONResponse(w, 200, result.MetricsResponse().Marshal()); err != nil {
 			log.Print(err.Error())
 		}
 		return
@@ -80,18 +80,18 @@ func (ctrl *monitorController) responseGetMetricsError(w http.ResponseWriter, er
 		result = rErr
 	} else {
 		result = gosnappi.NewError()
-		err := result.FromJson(rsp_err.Error())
+		err := result.Unmarshal().FromJson(rsp_err.Error())
 		if err != nil {
-			result.Msg().Code = &statusCode
+			_ = result.SetCode(statusCode)
 			err = result.SetKind(errorKind)
 			if err != nil {
 				log.Print(err.Error())
 			}
-			result.Msg().Errors = []string{rsp_err.Error()}
+			_ = result.SetErrors([]string{rsp_err.Error()})
 		}
 	}
 
-	if _, err := httpapi.WriteJSONResponse(w, int(result.Code()), result); err != nil {
+	if _, err := httpapi.WriteJSONResponse(w, int(result.Code()), result.Marshal()); err != nil {
 		log.Print(err.Error())
 	}
 }
@@ -106,7 +106,7 @@ func (ctrl *monitorController) GetStates(w http.ResponseWriter, r *http.Request)
 		body, readError := io.ReadAll(r.Body)
 		if body != nil {
 			item = gosnappi.NewStatesRequest()
-			err := item.FromJson(string(body))
+			err := item.Unmarshal().FromJson(string(body))
 			if err != nil {
 				ctrl.responseGetStatesError(w, "validation", err)
 				return
@@ -127,7 +127,7 @@ func (ctrl *monitorController) GetStates(w http.ResponseWriter, r *http.Request)
 	}
 
 	if result.HasStatesResponse() {
-		if _, err := httpapi.WriteJSONResponse(w, 200, result.StatesResponse()); err != nil {
+		if _, err := httpapi.WriteJSONResponse(w, 200, result.StatesResponse().Marshal()); err != nil {
 			log.Print(err.Error())
 		}
 		return
@@ -148,18 +148,18 @@ func (ctrl *monitorController) responseGetStatesError(w http.ResponseWriter, err
 		result = rErr
 	} else {
 		result = gosnappi.NewError()
-		err := result.FromJson(rsp_err.Error())
+		err := result.Unmarshal().FromJson(rsp_err.Error())
 		if err != nil {
-			result.Msg().Code = &statusCode
+			_ = result.SetCode(statusCode)
 			err = result.SetKind(errorKind)
 			if err != nil {
 				log.Print(err.Error())
 			}
-			result.Msg().Errors = []string{rsp_err.Error()}
+			_ = result.SetErrors([]string{rsp_err.Error()})
 		}
 	}
 
-	if _, err := httpapi.WriteJSONResponse(w, int(result.Code()), result); err != nil {
+	if _, err := httpapi.WriteJSONResponse(w, int(result.Code()), result.Marshal()); err != nil {
 		log.Print(err.Error())
 	}
 }
@@ -174,7 +174,7 @@ func (ctrl *monitorController) GetCapture(w http.ResponseWriter, r *http.Request
 		body, readError := io.ReadAll(r.Body)
 		if body != nil {
 			item = gosnappi.NewCaptureRequest()
-			err := item.FromJson(string(body))
+			err := item.Unmarshal().FromJson(string(body))
 			if err != nil {
 				ctrl.responseGetCaptureError(w, "validation", err)
 				return
@@ -216,18 +216,18 @@ func (ctrl *monitorController) responseGetCaptureError(w http.ResponseWriter, er
 		result = rErr
 	} else {
 		result = gosnappi.NewError()
-		err := result.FromJson(rsp_err.Error())
+		err := result.Unmarshal().FromJson(rsp_err.Error())
 		if err != nil {
-			result.Msg().Code = &statusCode
+			_ = result.SetCode(statusCode)
 			err = result.SetKind(errorKind)
 			if err != nil {
 				log.Print(err.Error())
 			}
-			result.Msg().Errors = []string{rsp_err.Error()}
+			_ = result.SetErrors([]string{rsp_err.Error()})
 		}
 	}
 
-	if _, err := httpapi.WriteJSONResponse(w, int(result.Code()), result); err != nil {
+	if _, err := httpapi.WriteJSONResponse(w, int(result.Code()), result.Marshal()); err != nil {
 		log.Print(err.Error())
 	}
 }

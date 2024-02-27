@@ -7,7 +7,7 @@ info:
     \ issue](https://github.com/open-traffic-generator/models/issues) in the models\
     \ repository\n- [fork the models repository](https://github.com/open-traffic-generator/models)\
     \ and submit a PR"
-  version: 0.13.0
+  version: 1.0.1
   contact:
     url: https://github.com/open-traffic-generator/models
   license:
@@ -256,6 +256,8 @@ components:
         layer1:
           description: |-
             The layer1 settings that will be configured on the traffic generator.
+            Since layer1 settings usually vary across variety of test ports, these
+            most likely won't be portable.
           type: array
           items:
             $ref: '#/components/schemas/Layer1'
@@ -965,9 +967,9 @@ components:
           x-field-uid: 1
         speed:
           description: |-
-            Set the speed if supported.
+            Set the speed if supported. When no speed is explicitly set, the current
+            speed of underlying test interface shall be assumed.
           type: string
-          default: speed_10_gbps
           x-field-uid: 2
           x-enum:
             speed_10_fd_mbps:
@@ -994,6 +996,8 @@ components:
               x-field-uid: 11
             speed_400_gbps:
               x-field-uid: 12
+            speed_800_gbps:
+              x-field-uid: 13
           enum:
           - speed_10_fd_mbps
           - speed_10_hd_mbps
@@ -1007,9 +1011,12 @@ components:
           - speed_100_gbps
           - speed_200_gbps
           - speed_400_gbps
+          - speed_800_gbps
         media:
           description: |-
-            Set the type of media interface if supported.
+            Set the type of media for test interface if supported. When no media
+            type is explicitly set, the current media type of underlying test
+            interface shall be assumed.
           type: string
           x-field-uid: 3
           x-enum:
@@ -1025,13 +1032,16 @@ components:
           - sgmii
         promiscuous:
           description: |-
-            Enable promiscuous mode if supported.
+            Enable promiscuous mode on test interface. A warning shall be raised if
+            this field is set to `true`, even when it's not supported, ignoring
+            the setting altogether.
           type: boolean
           default: true
           x-field-uid: 4
         mtu:
           description: |-
-            Set the maximum transmission unit size if supported.
+            Set the maximum transmission unit size. A warning shall be raised if
+            the specified value is valid but not supported, ignoring the setting altogether.
           type: integer
           format: uint32
           minimum: 64
@@ -1040,15 +1050,32 @@ components:
           x-field-uid: 5
         ieee_media_defaults:
           description: |-
+            Under Review: This field is currently under review for pending exploration on use cases
+
+            Under Review: This field is currently under review for pending exploration on use cases
+
             Set to true to override the auto_negotiate, link_training
             and rs_fec settings for gigabit ethernet interfaces.
           type: boolean
           x-field-uid: 6
+          x-status:
+            status: under-review
+            information: This field is currently under review for pending exploration
+              on use cases
         auto_negotiate:
           description: |-
+            Under Review: This field is currently under review for pending exploration on use cases, given that a separate configuration called `AutoNegotiation` already exists.
+
+            Under Review: This field is currently under review for pending exploration on use cases, given that a separate configuration called `AutoNegotiation` already exists.
+
             Enable/disable auto negotiation.
           type: boolean
           x-field-uid: 7
+          x-status:
+            status: under-review
+            information: This field is currently under review for pending exploration
+              on use cases, given that a separate configuration called `AutoNegotiation`
+              already exists.
         auto_negotiation:
           $ref: '#/components/schemas/Layer1.AutoNegotiation'
           x-field-uid: 8
@@ -3484,6 +3511,30 @@ components:
             The value to be used as a secret MD5 key for authentication. If not configured, MD5 authentication will not be enabled.
           type: string
           x-field-uid: 5
+        passive_mode:
+          description: |-
+            If set to true, the local BGP peer will wait for the remote peer to initiate the BGP session
+            by establishing the TCP connection, rather than initiating sessions from the local peer.
+          type: boolean
+          default: false
+          x-field-uid: 6
+        listen_port:
+          description: |-
+            The TCP port number on which to accept BGP connections from the remote peer.
+          type: integer
+          format: uint32
+          default: 179
+          maximum: 65535
+          x-field-uid: 7
+        neighbor_port:
+          description: |-
+            Destination TCP port number of the BGP peer when initiating a
+            session from the local BGP peer.
+          type: integer
+          format: uint32
+          default: 179
+          maximum: 65535
+          x-field-uid: 8
     Bgp.Capability:
       description: |-
         Configuration for BGP capability settings.
@@ -7129,6 +7180,10 @@ components:
               x-field-uid: 18
             mpls:
               x-field-uid: 19
+            snmpv2c:
+              x-field-uid: 20
+            rsvp:
+              x-field-uid: 21
           enum:
           - custom
           - ethernet
@@ -7149,6 +7204,8 @@ components:
           - ppp
           - igmpv1
           - mpls
+          - snmpv2c
+          - rsvp
         custom:
           $ref: '#/components/schemas/Flow.Custom'
           x-field-uid: 2
@@ -7206,6 +7263,12 @@ components:
         mpls:
           $ref: '#/components/schemas/Flow.Mpls'
           x-field-uid: 20
+        snmpv2c:
+          $ref: '#/components/schemas/Flow.Snmpv2c'
+          x-field-uid: 21
+        rsvp:
+          $ref: '#/components/schemas/Flow.Rsvp'
+          x-field-uid: 22
     Flow.Custom:
       type: object
       description: |-
@@ -7358,6 +7421,108 @@ components:
         dst:
           x-field-uid: 14
           $ref: '#/components/schemas/Pattern.Flow.Ipv4.Dst'
+        options:
+          type: array
+          minItems: 0
+          items:
+            $ref: '#/components/schemas/Flow.Ipv4.Options'
+          x-field-uid: 15
+    Flow.Ipv4.Options:
+      description: "IPv4 options are optional extensions for the IPv4 header that\
+        \ can be utilised to provide additional information about the IPv4 datagram.\
+        \  It is encoded as a series of type, length and value attributes.  The IP\
+        \ header length MUST be increased to accommodate the extra bytes needed to\
+        \ encode the IP options. The length of the all options included to a IPv4\
+        \ header should not exceed 40 bytes since IPv4 Header length (4 bits) can\
+        \ at max specify 15 4-word octets for a total of 60 bytes which includes 20\
+        \ bytes needed for mandatory attributes of the IPv4 header. If the user adds\
+        \ multiples IPv4 options that exceeds 40 bytes and specify header length as\
+        \ \"auto\", implementation should throw error. Currently IP options supported\
+        \ are: 1. router_alert option allows devices to intercept packets not addressed\
+        \ to them directly as defined in RFC2113. 2. custom option is provided to\
+        \ configure user defined IP options as needed. "
+      type: object
+      properties:
+        choice:
+          type: string
+          default: router_alert
+          x-field-uid: 1
+          x-enum:
+            router_alert:
+              x-field-uid: 1
+            custom:
+              x-field-uid: 2
+          enum:
+          - router_alert
+          - custom
+        custom:
+          $ref: '#/components/schemas/Flow.Ipv4Options.Custom'
+          x-field-uid: 2
+    Flow.Ipv4Options.Custom:
+      description: |-
+        User defined IP options to be appended to the IPv4 header.
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/Flow.Ipv4Options.Custom.Type'
+          x-field-uid: 1
+        length:
+          $ref: '#/components/schemas/Flow.Ipv4Options.Custom.Length'
+          x-field-uid: 2
+        value:
+          description: |-
+            Value of the option field should not excced 38 bytes since maximum 40 bytes can be added as options in IPv4 header. For type and length requires 2 bytes, hence maximum of 38 bytes are expected. Maximum length of this attribute is 76 (38 * 2 hex character per byte).
+          type: string
+          format: hex
+          minLength: 0
+          maxLength: 76
+          default: '0000'
+          x-field-uid: 3
+    Flow.Ipv4Options.Custom.Type:
+      description: |-
+        Type options for custom options.
+      type: object
+      properties:
+        copied_flag:
+          x-field-uid: 1
+          $ref: '#/components/schemas/Pattern.Flow.Ipv4Options.Custom.Type.CopiedFlag'
+        option_class:
+          x-field-uid: 2
+          $ref: '#/components/schemas/Pattern.Flow.Ipv4Options.Custom.Type.OptionClass'
+        option_number:
+          x-field-uid: 3
+          $ref: '#/components/schemas/Pattern.Flow.Ipv4Options.Custom.Type.OptionNumber'
+    Flow.Ipv4Options.Custom.Length:
+      description: |-
+        Length for custom options.
+      type: object
+      properties:
+        choice:
+          description: |-
+            auto or configured value.
+          type: string
+          default: auto
+          x-field-uid: 1
+          x-enum:
+            auto:
+              x-field-uid: 1
+            value:
+              x-field-uid: 2
+          enum:
+          - auto
+          - value
+        auto:
+          description: |-
+            The OTG implementation can provide a system generated value for this property. If the OTG is unable to generate a value the default value must be used.
+          type: integer
+          format: uint32
+          default: 0
+          x-field-uid: 2
+        value:
+          type: integer
+          format: uint32
+          default: 0
+          x-field-uid: 3
     Flow.Ipv4.Priority:
       description: |-
         A container for ipv4 raw, tos, dscp ip priorities.
@@ -7853,6 +8018,1459 @@ components:
         time_to_live:
           x-field-uid: 4
           $ref: '#/components/schemas/Pattern.Flow.Mpls.TimeToLive'
+    Flow.Snmpv2c:
+      description: |-
+        SNMPv2C packet header as defined in RFC1901 and RFC3416.
+      type: object
+      required:
+      - data
+      properties:
+        version:
+          x-field-uid: 1
+          $ref: '#/components/schemas/Pattern.Flow.Snmpv2c.Version'
+        community:
+          description: |-
+            It is an ASCII based octet string which identifies the SNMP community in which the sender and recipient of this message are located. It should match the read-only or read-write community string configured on the recipient for the PDU to be accepted.
+          type: string
+          maxLength: 10000
+          default: community
+          x-field-uid: 2
+        data:
+          $ref: '#/components/schemas/Flow.Snmpv2c.Data'
+          x-field-uid: 3
+    Flow.Snmpv2c.Data:
+      description: |-
+        This contains the body of the SNMPv2C message.
+
+        - Encoding of subsequent fields follow ASN.1 specification.
+          Refer: http://www.itu.int/ITU-T/asn1/
+      type: object
+      required:
+      - choice
+      properties:
+        choice:
+          type: string
+          x-field-uid: 1
+          x-enum:
+            get_request:
+              x-field-uid: 1
+            get_next_request:
+              x-field-uid: 2
+            response:
+              x-field-uid: 3
+            set_request:
+              x-field-uid: 4
+            get_bulk_request:
+              x-field-uid: 5
+            inform_request:
+              x-field-uid: 6
+            snmpv2_trap:
+              x-field-uid: 7
+            report:
+              x-field-uid: 8
+          enum:
+          - get_request
+          - get_next_request
+          - response
+          - set_request
+          - get_bulk_request
+          - inform_request
+          - snmpv2_trap
+          - report
+        get_request:
+          $ref: '#/components/schemas/Flow.Snmpv2c.PDU'
+          x-field-uid: 2
+        get_next_request:
+          $ref: '#/components/schemas/Flow.Snmpv2c.PDU'
+          x-field-uid: 3
+        response:
+          $ref: '#/components/schemas/Flow.Snmpv2c.PDU'
+          x-field-uid: 4
+        set_request:
+          $ref: '#/components/schemas/Flow.Snmpv2c.PDU'
+          x-field-uid: 5
+        get_bulk_request:
+          $ref: '#/components/schemas/Flow.Snmpv2c.BulkPDU'
+          x-field-uid: 6
+        inform_request:
+          $ref: '#/components/schemas/Flow.Snmpv2c.PDU'
+          x-field-uid: 7
+        snmpv2_trap:
+          $ref: '#/components/schemas/Flow.Snmpv2c.PDU'
+          x-field-uid: 8
+        report:
+          $ref: '#/components/schemas/Flow.Snmpv2c.PDU'
+          x-field-uid: 9
+    Flow.Snmpv2c.PDU:
+      description: |-
+        This contains the body of the SNMPv2C PDU.
+      type: object
+      properties:
+        request_id:
+          x-field-uid: 1
+          $ref: '#/components/schemas/Pattern.Flow.Snmpv2c.PDU.RequestId'
+        error_status:
+          description: |-
+            The SNMP agent places an error code in this field in the response message if an error occurred processing the request.
+          type: string
+          default: no_error
+          x-enum:
+            no_error:
+              x-field-uid: 1
+            too_big:
+              x-field-uid: 2
+            no_such_name:
+              x-field-uid: 3
+            bad_value:
+              x-field-uid: 4
+            read_only:
+              x-field-uid: 5
+            gen_err:
+              x-field-uid: 6
+            no_access:
+              x-field-uid: 7
+            wrong_type:
+              x-field-uid: 8
+            wrong_length:
+              x-field-uid: 9
+            wrong_encoding:
+              x-field-uid: 10
+            wrong_value:
+              x-field-uid: 11
+            no_creation:
+              x-field-uid: 12
+            inconsistent_value:
+              x-field-uid: 13
+            resource_unavailable:
+              x-field-uid: 14
+            commit_failed:
+              x-field-uid: 15
+            undo_failed:
+              x-field-uid: 16
+            authorization_error:
+              x-field-uid: 17
+            not_writable:
+              x-field-uid: 18
+            inconsistent_name:
+              x-field-uid: 19
+          x-field-uid: 2
+          enum:
+          - no_error
+          - too_big
+          - no_such_name
+          - bad_value
+          - read_only
+          - gen_err
+          - no_access
+          - wrong_type
+          - wrong_length
+          - wrong_encoding
+          - wrong_value
+          - no_creation
+          - inconsistent_value
+          - resource_unavailable
+          - commit_failed
+          - undo_failed
+          - authorization_error
+          - not_writable
+          - inconsistent_name
+        error_index:
+          x-field-uid: 3
+          $ref: '#/components/schemas/Pattern.Flow.Snmpv2c.PDU.ErrorIndex'
+        variable_bindings:
+          description: |-
+            A Sequence of variable_bindings.
+          type: array
+          items:
+            $ref: '#/components/schemas/Flow.Snmpv2c.VariableBinding'
+          x-field-uid: 4
+    Flow.Snmpv2c.BulkPDU:
+      description: |-
+        The purpose of the GetBulkRequest-PDU is to request the transfer of a potentially large amount of data, including, but not limited to, the efficient and rapid retrieval of large tables.
+      type: object
+      properties:
+        request_id:
+          x-field-uid: 1
+          $ref: '#/components/schemas/Pattern.Flow.Snmpv2c.BulkPDU.RequestId'
+        non_repeaters:
+          x-field-uid: 2
+          $ref: '#/components/schemas/Pattern.Flow.Snmpv2c.BulkPDU.NonRepeaters'
+        max_repetitions:
+          x-field-uid: 3
+          $ref: '#/components/schemas/Pattern.Flow.Snmpv2c.BulkPDU.MaxRepetitions'
+        variable_bindings:
+          description: |-
+            A Sequence of variable_bindings.
+          type: array
+          items:
+            $ref: '#/components/schemas/Flow.Snmpv2c.VariableBinding'
+          x-field-uid: 4
+    Flow.Snmpv2c.VariableBinding:
+      description: |-
+        A Sequence of two fields, an object_identifier and the value for/from that object_identifier.
+      type: object
+      properties:
+        object_identifier:
+          x-field-uid: 1
+          description: "The Object Identifier points to a particular parameter in\
+            \ the SNMP agent. \n- Encoding of this field follows RFC2578(section 3.5)\
+            \ and ASN.1 X.690(section 8.1.3.6) specification.\n  Refer: http://www.itu.int/ITU-T/asn1/\n\
+            - According to BER, the first two numbers of any OID (x.y) are encoded\
+            \ as one value using the formula (40*x)+y. \n  Example, the first two\
+            \ numbers of an SNMP OID 1.3... are encoded as 43 or 0x2B, because (40*1)+3\
+            \ = 43. \n- After the first two numbers are encoded, the subsequent numbers\
+            \ in the OID are each encoded as a byte. \n- However, a special rule is\
+            \ required for large numbers because one byte can only represent a number\
+            \ from 0-127. \n- The rule for large numbers states that only the lower\
+            \ 7 bits in the byte are used for holding the value (0-127). \n- The highest\
+            \ order bit(8th) is used as a flag to indicate that this number spans\
+            \ more than one byte. Therefore, any number over 127 must be encoded using\
+            \ more than one byte. \n  - Example, the number 2680 in the OID '1.3.6.1.4.1.2680.1.2.7.3.2.0'\
+            \ cannot be encoded using a single byte. \n    According to this rule,\
+            \ the number 2680 must be encoded as 0x94 0x78. \n    Since the most significant\
+            \ bit is set in the first byte (0x94), it indicates that number spans\
+            \ to the next byte.\n    Since the most significant bit is not set in\
+            \ the next byte (0x78), it indicates that the number ends at the second\
+            \ byte.\n    The value is derived by appending 7 bits from each of the\
+            \ concatenated bytes i.e (0x14 *128^1) + (0x78 * 128^0) = 2680."
+          type: string
+          format: oid
+          default: '0.1'
+        value:
+          $ref: '#/components/schemas/Flow.Snmpv2c.VariableBindingValue'
+          x-field-uid: 2
+    Flow.Snmpv2c.VariableBindingValue:
+      description: |-
+        The value for the object_identifier as per RFC2578.
+      type: object
+      properties:
+        choice:
+          type: string
+          default: no_value
+          x-field-uid: 1
+          x-enum:
+            no_value:
+              x-field-uid: 1
+            integer_value:
+              x-field-uid: 2
+            string_value:
+              x-field-uid: 3
+            object_identifier_value:
+              x-field-uid: 4
+            ip_address_value:
+              x-field-uid: 5
+            counter_value:
+              x-field-uid: 6
+            timeticks_value:
+              x-field-uid: 7
+            arbitrary_value:
+              x-field-uid: 8
+            big_counter_value:
+              x-field-uid: 9
+            unsigned_integer_value:
+              x-field-uid: 10
+          enum:
+          - no_value
+          - integer_value
+          - string_value
+          - object_identifier_value
+          - ip_address_value
+          - counter_value
+          - timeticks_value
+          - arbitrary_value
+          - big_counter_value
+          - unsigned_integer_value
+        integer_value:
+          x-field-uid: 2
+          $ref: '#/components/schemas/Pattern.Flow.Snmpv2c.VariableBindingValue.IntegerValue'
+        string_value:
+          $ref: '#/components/schemas/Flow.Snmpv2c.VariableBindingStringValue'
+          x-field-uid: 3
+        object_identifier_value:
+          x-field-uid: 4
+          description: "The Object Identifier points to a particular parameter in\
+            \ the SNMP agent. \n- Encoding of this field follows RFC2578(section 3.5)\
+            \ and ASN.1 X.690(section 8.1.3.6) specification.\n  Refer: http://www.itu.int/ITU-T/asn1/\n\
+            - According to BER, the first two numbers of any OID (x.y) are encoded\
+            \ as one value using the formula (40*x)+y. \n  Example, the first two\
+            \ numbers of an SNMP OID 1.3... are encoded as 43 or 0x2B, because (40*1)+3\
+            \ = 43. \n- After the first two numbers are encoded, the subsequent numbers\
+            \ in the OID are each encoded as a byte. \n- However, a special rule is\
+            \ required for large numbers because one byte can only represent a number\
+            \ from 0-127. \n- The rule for large numbers states that only the lower\
+            \ 7 bits in the byte are used for holding the value (0-127). \n- The highest\
+            \ order bit(8th) is used as a flag to indicate that this number spans\
+            \ more than one byte. Therefore, any number over 127 must be encoded using\
+            \ more than one byte. \n  - Example, the number 2680 in the OID '1.3.6.1.4.1.2680.1.2.7.3.2.0'\
+            \ cannot be encoded using a single byte. \n    According to this rule,\
+            \ the number 2680 must be encoded as 0x94 0x78. \n    Since the most significant\
+            \ bit is set in the first byte (0x94), it indicates that number spans\
+            \ to the next byte.\n    Since the most significant bit is not set in\
+            \ the next byte (0x78), it indicates that the number ends at the second\
+            \ byte.\n    The value is derived by appending 7 bits from each of the\
+            \ concatenated bytes i.e (0x14 *128^1) + (0x78 * 128^0) = 2680."
+          type: string
+          format: oid
+          default: '0.1'
+        ip_address_value:
+          x-field-uid: 5
+          $ref: '#/components/schemas/Pattern.Flow.Snmpv2c.VariableBindingValue.IpAddressValue'
+        counter_value:
+          x-field-uid: 6
+          $ref: '#/components/schemas/Pattern.Flow.Snmpv2c.VariableBindingValue.CounterValue'
+        timeticks_value:
+          x-field-uid: 7
+          $ref: '#/components/schemas/Pattern.Flow.Snmpv2c.VariableBindingValue.TimeticksValue'
+        arbitrary_value:
+          description: |-
+            It contains the hex bytes of the value to be sent.  As of now it is restricted to 10000 bytes.
+          type: string
+          format: hex
+          maxLength: 10000
+          default: '00'
+          x-field-uid: 8
+        big_counter_value:
+          x-field-uid: 9
+          $ref: '#/components/schemas/Pattern.Flow.Snmpv2c.VariableBindingValue.BigCounterValue'
+        unsigned_integer_value:
+          x-field-uid: 10
+          $ref: '#/components/schemas/Pattern.Flow.Snmpv2c.VariableBindingValue.UnsignedIntegerValue'
+    Flow.Snmpv2c.VariableBindingStringValue:
+      type: object
+      description: |-
+        It contains the raw/ascii string value to be sent.
+      properties:
+        choice:
+          type: string
+          default: ascii
+          x-field-uid: 1
+          x-enum:
+            ascii:
+              x-field-uid: 1
+            raw:
+              x-field-uid: 2
+          enum:
+          - ascii
+          - raw
+        ascii:
+          description: |-
+            It contains the ASCII string to be sent.  As of now it is restricted to 10000 bytes.
+          type: string
+          maxLength: 10000
+          default: ascii
+          x-field-uid: 2
+        raw:
+          description: |-
+            It contains the hex string to be sent.  As of now it is restricted to 10000 bytes.
+          type: string
+          format: hex
+          maxLength: 10000
+          default: '00'
+          x-field-uid: 3
+    Flow.Rsvp:
+      description: |-
+        RSVP packet header as defined in RFC2205 and RFC3209. Currently only supported message type is "Path" with mandatory objects and sub-objects.
+      type: object
+      properties:
+        version:
+          description: |-
+            RSVP Protocol Version.
+          type: integer
+          format: uint32
+          default: 1
+          maximum: 15
+          x-field-uid: 1
+        flag:
+          description: |-
+            Flag, 0x01-0x08: Reserved.
+          type: string
+          default: not_refresh_reduction_capable
+          x-enum:
+            not_refresh_reduction_capable:
+              x-field-uid: 1
+            refresh_reduction_capable:
+              x-field-uid: 2
+          x-field-uid: 2
+          enum:
+          - not_refresh_reduction_capable
+          - refresh_reduction_capable
+        rsvp_checksum:
+          x-field-uid: 3
+          $ref: '#/components/schemas/Pattern.Flow.Rsvp.RsvpChecksum'
+        time_to_live:
+          x-field-uid: 4
+          $ref: '#/components/schemas/Pattern.Flow.Rsvp.TimeToLive'
+        reserved:
+          x-field-uid: 5
+          $ref: '#/components/schemas/Pattern.Flow.Rsvp.Reserved'
+        rsvp_length:
+          description: |-
+            The sum of the lengths of the common header and all objects included in the message.
+          $ref: '#/components/schemas/Flow.RSVP.Length'
+          x-field-uid: 6
+        message_type:
+          description: |-
+            An 8-bit number that identifies the function of the RSVP message. There are aound 20 message types defined in https://www.iana.org/assignments/rsvp-parameters/rsvp-parameters.xhtml#rsvp-parameters-2 . Among these presently supported is "Path"(value: 1) message type.
+          $ref: '#/components/schemas/Flow.RSVP.Message'
+          x-field-uid: 7
+    Flow.RSVP.Length:
+      type: object
+      properties:
+        choice:
+          description: |-
+            auto or configured value.
+          type: string
+          default: auto
+          x-field-uid: 1
+          x-enum:
+            auto:
+              x-field-uid: 1
+            value:
+              x-field-uid: 2
+          enum:
+          - auto
+          - value
+        auto:
+          description: |-
+            OTG will provide a system generated value for this property.  If OTG is unable to generate a value the default value must be used.
+          type: integer
+          format: uint32
+          maximum: 65535
+          default: 0
+          x-field-uid: 2
+        value:
+          type: integer
+          format: uint32
+          maximum: 65535
+          default: 0
+          x-field-uid: 3
+    Flow.RSVP.Message:
+      type: object
+      properties:
+        choice:
+          type: string
+          default: path
+          x-enum:
+            path:
+              x-field-uid: 1
+          x-field-uid: 1
+          enum:
+          - path
+        path:
+          $ref: '#/components/schemas/Flow.RSVP.PathMessage'
+          x-field-uid: 2
+    Flow.RSVP.PathMessage:
+      description: |-
+        "Path" message requires the following list of objects in order as defined in https://www.rfc-editor.org/rfc/rfc3209.html#page-15: 1. SESSION 2. RSVP_HOP 3. TIME_VALUES 4. EXPLICIT_ROUTE [optional] 5. LABEL_REQUEST 6. SESSION_ATTRIBUTE [optional] 7. SENDER_TEMPLATE 8. SENDER_TSPEC 9. RECORD_ROUTE [optional]
+      type: object
+      properties:
+        objects:
+          description: |-
+            "Path" message requires atleast SESSION, RSVP_HOP, TIME_VALUES, LABEL_REQUEST, SENDER_TEMPLATE and SENDER_TSPEC objects in order.
+          type: array
+          items:
+            $ref: '#/components/schemas/Flow.RSVP.PathObjects'
+          x-field-uid: 1
+    Flow.RSVP.PathObjects:
+      description: |-
+        Every RSVP object encapsulated in an RSVP message consists of a 32-bit word header and the object's contents.
+      type: object
+      properties:
+        class_num:
+          $ref: '#/components/schemas/Flow.RSVP.PathObjectsClass'
+          x-field-uid: 1
+    Flow.RSVPObject.Length:
+      type: object
+      properties:
+        choice:
+          description: |-
+            auto or configured value.
+          type: string
+          default: auto
+          x-field-uid: 1
+          x-enum:
+            auto:
+              x-field-uid: 1
+            value:
+              x-field-uid: 2
+          enum:
+          - auto
+          - value
+        auto:
+          description: |-
+            OTG will provide a system generated value for this property.  If OTG is unable to generate a value the default value must be used.
+          type: integer
+          format: uint32
+          minimum: 4
+          maximum: 65535
+          default: 4
+          x-field-uid: 2
+        value:
+          type: integer
+          format: uint32
+          minimum: 4
+          maximum: 65535
+          default: 4
+          x-field-uid: 3
+    Flow.RSVP.PathObjectsClass:
+      description: |-
+        The class number is used to identify the class of an object. Defined in https://www.iana.org/assignments/rsvp-parameters/rsvp-parameters.xhtml#rsvp-parameters-4 . Curently supported class numbers are for "Path" message type. "Path" message: Supported Class numbers and it's value: SESSION: 1, RSVP_HOP: 3, TIME_VALUES: 5, EXPLICIT_ROUTE: 20, LABEL_REQUEST: 19, SESSION_ATTRIBUTE: 207, SENDER_TEMPLATE: 11, SENDER_TSPEC: 12, RECORD_ROUTE: 21, Custom: User defined bytes based on class and c-types not supported in above options.
+      type: object
+      required:
+      - choice
+      properties:
+        choice:
+          type: string
+          x-field-uid: 1
+          x-enum:
+            session:
+              x-field-uid: 1
+            rsvp_hop:
+              x-field-uid: 2
+            time_values:
+              x-field-uid: 3
+            explicit_route:
+              x-field-uid: 4
+            label_request:
+              x-field-uid: 5
+            session_attribute:
+              x-field-uid: 6
+            sender_template:
+              x-field-uid: 7
+            sender_tspec:
+              x-field-uid: 8
+            record_route:
+              x-field-uid: 9
+            custom:
+              x-field-uid: 10
+          enum:
+          - session
+          - rsvp_hop
+          - time_values
+          - explicit_route
+          - label_request
+          - session_attribute
+          - sender_template
+          - sender_tspec
+          - record_route
+          - custom
+        session:
+          $ref: '#/components/schemas/Flow.RSVP.PathObjectsClassSession'
+          x-field-uid: 2
+        rsvp_hop:
+          $ref: '#/components/schemas/Flow.RSVP.PathObjectsClassRsvpHop'
+          x-field-uid: 3
+        time_values:
+          $ref: '#/components/schemas/Flow.RSVP.PathObjectsClassTimeValues'
+          x-field-uid: 4
+        explicit_route:
+          $ref: '#/components/schemas/Flow.RSVP.PathObjectsClassExplicitRoute'
+          x-field-uid: 5
+        label_request:
+          $ref: '#/components/schemas/Flow.RSVP.PathObjectsClassLabelRequest'
+          x-field-uid: 6
+        session_attribute:
+          $ref: '#/components/schemas/Flow.RSVP.PathObjectsClassSessionAttribute'
+          x-field-uid: 7
+        sender_template:
+          $ref: '#/components/schemas/Flow.RSVP.PathObjectsClassSenderTemplate'
+          x-field-uid: 8
+        sender_tspec:
+          $ref: '#/components/schemas/Flow.RSVP.PathObjectsClassSenderTspec'
+          x-field-uid: 9
+        record_route:
+          $ref: '#/components/schemas/Flow.RSVP.PathObjectsClassRecordRoute'
+          x-field-uid: 10
+        custom:
+          $ref: '#/components/schemas/Flow.RSVP.PathObjectsCustom'
+          x-field-uid: 11
+    Flow.RSVP.PathObjectsClassSession:
+      description: |-
+        C-Type is specific to a class num.
+      type: object
+      properties:
+        length:
+          description: |-
+            A 16-bit field containing the total object length in bytes.  Must always be a multiple of 4 or at least 4.
+          $ref: '#/components/schemas/Flow.RSVPObject.Length'
+          x-field-uid: 1
+        c_type:
+          $ref: '#/components/schemas/Flow.RSVP.PathObjectsSessionCType'
+          x-field-uid: 2
+    Flow.RSVP.PathObjectsSessionCType:
+      description: |-
+        The body of an object corresponding to the class number and c-type. Currently supported c-type for SESSION object is LSP Tunnel IPv4 (7).
+      type: object
+      properties:
+        choice:
+          type: string
+          x-field-uid: 1
+          default: lsp_tunnel_ipv4
+          x-enum:
+            lsp_tunnel_ipv4:
+              x-field-uid: 1
+          enum:
+          - lsp_tunnel_ipv4
+        lsp_tunnel_ipv4:
+          $ref: '#/components/schemas/Flow.RSVP.PathSessionLspTunnelIpv4'
+          x-field-uid: 2
+    Flow.RSVP.PathSessionLspTunnelIpv4:
+      description: |-
+        Class = SESSION, LSP_TUNNEL_IPv4 C-Type = 7.
+      type: object
+      properties:
+        ipv4_tunnel_end_point_address:
+          x-field-uid: 1
+          $ref: '#/components/schemas/Pattern.Flow.RSVP.PathSessionLspTunnelIpv4.Ipv4TunnelEndPointAddress'
+        reserved:
+          x-field-uid: 2
+          $ref: '#/components/schemas/Pattern.Flow.RSVP.PathSessionLspTunnelIpv4.Reserved'
+        tunnel_id:
+          x-field-uid: 3
+          $ref: '#/components/schemas/Pattern.Flow.RSVP.PathSessionLspTunnelIpv4.TunnelId'
+        extended_tunnel_id:
+          description: |-
+            A 32-bit identifier used in the SESSION that remains constant over the life of the tunnel. Normally set to all zeros. Ingress nodes that wish to narrow the scope of a SESSION to the ingress-egress pair may place their IPv4 address here as a globally unique identifier.
+          $ref: '#/components/schemas/Flow.RSVP.PathSessionExtTunnelId'
+          x-field-uid: 4
+    Flow.RSVP.PathSessionExtTunnelId:
+      type: object
+      properties:
+        choice:
+          description: |-
+            32 bit integer or IPv4 address.
+          type: string
+          default: as_integer
+          x-field-uid: 1
+          x-enum:
+            as_integer:
+              x-field-uid: 1
+            as_ipv4:
+              x-field-uid: 2
+          enum:
+          - as_integer
+          - as_ipv4
+        as_integer:
+          x-field-uid: 2
+          $ref: '#/components/schemas/Pattern.Flow.RSVP.PathSessionExtTunnelId.AsInteger'
+        as_ipv4:
+          x-field-uid: 3
+          $ref: '#/components/schemas/Pattern.Flow.RSVP.PathSessionExtTunnelId.AsIpv4'
+    Flow.RSVP.PathObjectsClassRsvpHop:
+      description: |-
+        C-Type is specific to a class num.
+      type: object
+      properties:
+        length:
+          description: |-
+            A 16-bit field containing the total object length in bytes.  Must always be a multiple of 4 or at least 4.
+          $ref: '#/components/schemas/Flow.RSVPObject.Length'
+          x-field-uid: 1
+        c_type:
+          $ref: '#/components/schemas/Flow.RSVP.PathObjectsRsvpHopCType'
+          x-field-uid: 2
+    Flow.RSVP.PathObjectsRsvpHopCType:
+      description: |-
+        Object for RSVP_HOP class. Currently supported c-type is IPv4 (1).
+      type: object
+      properties:
+        choice:
+          type: string
+          x-field-uid: 1
+          default: ipv4
+          x-enum:
+            ipv4:
+              x-field-uid: 1
+          enum:
+          - ipv4
+        ipv4:
+          $ref: '#/components/schemas/Flow.RSVP.PathRsvpHopIpv4'
+          x-field-uid: 2
+    Flow.RSVP.PathRsvpHopIpv4:
+      description: |-
+        IPv4 RSVP_HOP object: Class = 3, C-Type = 1
+      type: object
+      properties:
+        ipv4_address:
+          x-field-uid: 1
+          $ref: '#/components/schemas/Pattern.Flow.RSVP.PathRsvpHopIpv4.Ipv4Address'
+        logical_interface_handle:
+          x-field-uid: 2
+          $ref: '#/components/schemas/Pattern.Flow.RSVP.PathRsvpHopIpv4.LogicalInterfaceHandle'
+    Flow.RSVP.PathObjectsClassTimeValues:
+      description: |-
+        C-Type is specific to a class num.
+      type: object
+      properties:
+        length:
+          description: |-
+            A 16-bit field containing the total object length in bytes.  Must always be a multiple of 4 or at least 4.
+          $ref: '#/components/schemas/Flow.RSVPObject.Length'
+          x-field-uid: 1
+        c_type:
+          $ref: '#/components/schemas/Flow.RSVP.PathObjectsTimeValuesCType'
+          x-field-uid: 2
+    Flow.RSVP.PathObjectsTimeValuesCType:
+      description: |-
+        Object for TIME_VALUES class. Currently supported c-type is Type 1 Time Value (1).
+      type: object
+      properties:
+        choice:
+          type: string
+          x-field-uid: 1
+          default: type_1
+          x-enum:
+            type_1:
+              x-field-uid: 1
+          enum:
+          - type_1
+        type_1:
+          $ref: '#/components/schemas/Flow.RSVP.PathTimeValuesType1'
+          x-field-uid: 2
+    Flow.RSVP.PathTimeValuesType1:
+      description: |-
+        TIME_VALUES Object: Class = 5, C-Type = 1
+      type: object
+      properties:
+        refresh_period_r:
+          x-field-uid: 1
+          $ref: '#/components/schemas/Pattern.Flow.RSVP.PathTimeValuesType1.RefreshPeriodR'
+    Flow.RSVP.PathObjectsClassExplicitRoute:
+      description: |-
+        C-Type is specific to a class num.
+      type: object
+      properties:
+        length:
+          description: |-
+            A 16-bit field containing the total object length in bytes.  Must always be a multiple of 4 or at least 4.
+          $ref: '#/components/schemas/Flow.RSVPObject.Length'
+          x-field-uid: 1
+        c_type:
+          $ref: '#/components/schemas/Flow.RSVP.PathObjectsClassExplicitRouteCType'
+          x-field-uid: 2
+    Flow.RSVP.PathObjectsClassExplicitRouteCType:
+      description: |-
+        Object for EXPLICIT_ROUTE class and c-type is Type 1 Explicit Route (1).
+      type: object
+      properties:
+        choice:
+          type: string
+          default: type_1
+          x-field-uid: 1
+          x-enum:
+            type_1:
+              x-field-uid: 1
+          enum:
+          - type_1
+        type_1:
+          $ref: '#/components/schemas/Flow.RSVP.PathExplicitRouteType1'
+          x-field-uid: 2
+    Flow.RSVP.PathExplicitRouteType1:
+      description: |-
+        Type1 Explicit Route has subobjects. Currently supported subobjects are IPv4 prefix and Autonomous system number.
+      type: object
+      properties:
+        subobjects:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/Flow.RSVP.Type1ExplicitRouteSubobjects'
+          x-field-uid: 1
+    Flow.RSVP.Type1ExplicitRouteSubobjects:
+      description: |-
+        Type is specific to a subobject.
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/Flow.RSVP.Type1ExplicitRouteSubobjectsType'
+          x-field-uid: 1
+    Flow.RSVP.Type1ExplicitRouteSubobjectsType:
+      description: |-
+        Currently supported subobjects are IPv4 address(1) and Autonomous system number(32).
+      type: object
+      properties:
+        choice:
+          type: string
+          x-field-uid: 1
+          default: ipv4_prefix
+          x-enum:
+            ipv4_prefix:
+              x-field-uid: 1
+            as_number:
+              x-field-uid: 2
+          enum:
+          - ipv4_prefix
+          - as_number
+        ipv4_prefix:
+          $ref: '#/components/schemas/Flow.RSVP.PathExplicitRouteType1Ipv4Prefix'
+          x-field-uid: 2
+        as_number:
+          $ref: '#/components/schemas/Flow.RSVP.PathExplicitRouteType1ASNumber'
+          x-field-uid: 3
+    Flow.RSVP.PathExplicitRouteType1Ipv4Prefix:
+      description: |-
+        Class = EXPLICIT_ROUTE, Type1 ROUTE_RECORD C-Type = 1 Subobject: IPv4 Prefix, C-Type: 1
+      type: object
+      properties:
+        l_bit:
+          x-field-uid: 1
+          $ref: '#/components/schemas/Pattern.Flow.RSVP.PathExplicitRouteType1Ipv4Prefix.LBit'
+        length:
+          description: |-
+            The Length contains the total length of the subobject in bytes,including L,Type and Length fields.   The Length MUST be atleast 4, and MUST be a multiple of 4.
+          $ref: '#/components/schemas/Flow.RSVPExplicitRoute.Length'
+          x-field-uid: 2
+        ipv4_address:
+          x-field-uid: 3
+          $ref: '#/components/schemas/Pattern.Flow.RSVP.PathExplicitRouteType1Ipv4Prefix.Ipv4Address'
+        prefix:
+          description: |-
+            The prefix length of the IPv4 address.
+          type: integer
+          format: uint32
+          minimum: 1
+          maximum: 32
+          default: 32
+          x-field-uid: 4
+    Flow.RSVP.PathExplicitRouteType1ASNumber:
+      description: |-
+        Class = EXPLICIT_ROUTE, Type1 ROUTE_RECORD C-Type = 1 Subobject: Autonomous system number, C-Type: 32
+      type: object
+      properties:
+        l_bit:
+          x-field-uid: 1
+          $ref: '#/components/schemas/Pattern.Flow.RSVP.PathExplicitRouteType1ASNumber.LBit'
+        length:
+          description: |-
+            The Length contains the total length of the subobject in bytes,including L, Type and Length fields.   The Length MUST be atleast 4, and MUST be a multiple of 4.
+          $ref: '#/components/schemas/Flow.RSVPExplicitRoute.Length'
+          x-field-uid: 2
+        as_number:
+          description: |-
+            Autonomous System number to be set in the ERO sub-object that this LSP should traverse through. This field is applicable only if the value of 'type' is set to 'as_number'.
+          type: integer
+          format: uint32
+          default: 0
+          maximum: 65535
+          x-field-uid: 3
+    Flow.RSVPExplicitRoute.Length:
+      type: object
+      properties:
+        choice:
+          description: |-
+            auto or configured value.
+          type: string
+          default: auto
+          x-field-uid: 1
+          x-enum:
+            auto:
+              x-field-uid: 1
+            value:
+              x-field-uid: 2
+          enum:
+          - auto
+          - value
+        auto:
+          description: "OTG will provide a system generated value for this property.\
+            \  If OTG is unable to generate a value the default value must be used. "
+          type: integer
+          format: uint32
+          maximum: 256
+          default: 8
+          x-field-uid: 2
+        value:
+          type: integer
+          format: uint32
+          maximum: 256
+          default: 8
+          x-field-uid: 3
+    Flow.RSVP.PathObjectsClassLabelRequest:
+      description: |-
+        C-Type is specific to a class num.
+      type: object
+      properties:
+        length:
+          description: |-
+            A 16-bit field containing the total object length in bytes.  Must always be a multiple of 4 or at least 4.
+          $ref: '#/components/schemas/Flow.RSVPObject.Length'
+          x-field-uid: 1
+        c_type:
+          $ref: '#/components/schemas/Flow.RSVP.PathObjectsLabelRequestCType'
+          x-field-uid: 2
+    Flow.RSVP.PathObjectsLabelRequestCType:
+      description: |-
+        Object for LABEL_REQUEST class. Currently supported c-type is Without Label Range (1).
+      type: object
+      properties:
+        choice:
+          type: string
+          x-field-uid: 1
+          default: without_label_range
+          x-enum:
+            without_label_range:
+              x-field-uid: 1
+          enum:
+          - without_label_range
+        without_label_range:
+          $ref: '#/components/schemas/Flow.RSVP.PathLabelRequestWithoutLabelRange'
+          x-field-uid: 2
+    Flow.RSVP.PathLabelRequestWithoutLabelRange:
+      description: |-
+        Class = LABEL_REQUEST, Without Label Range C-Type = 1
+      type: object
+      properties:
+        reserved:
+          x-field-uid: 1
+          $ref: '#/components/schemas/Pattern.Flow.RSVP.PathLabelRequestWithoutLabelRange.Reserved'
+        l3pid:
+          x-field-uid: 2
+          $ref: '#/components/schemas/Pattern.Flow.RSVP.PathLabelRequestWithoutLabelRange.L3pid'
+    Flow.RSVP.PathObjectsClassSessionAttribute:
+      description: |-
+        C-Type is specific to a class num.
+      type: object
+      properties:
+        length:
+          description: |-
+            A 16-bit field containing the total object length in bytes.  Must always be a multiple of 4 or at least 4.
+          $ref: '#/components/schemas/Flow.RSVPObject.Length'
+          x-field-uid: 1
+        c_type:
+          $ref: '#/components/schemas/Flow.RSVP.PathObjectsSessionAttributeCType'
+          x-field-uid: 2
+    Flow.RSVP.PathObjectsSessionAttributeCType:
+      description: |-
+        Object for SESSION_ATTRIBUTE class. Currently supported c-type is LSP_Tunnel_RA (1) and LSP_Tunnel (7).
+      type: object
+      properties:
+        choice:
+          type: string
+          x-field-uid: 1
+          default: lsp_tunnel
+          x-enum:
+            lsp_tunnel:
+              x-field-uid: 1
+            lsp_tunnel_ra:
+              x-field-uid: 2
+          enum:
+          - lsp_tunnel
+          - lsp_tunnel_ra
+        lsp_tunnel:
+          $ref: '#/components/schemas/Flow.RSVP.PathSessionAttributeLspTunnel'
+          x-field-uid: 2
+        lsp_tunnel_ra:
+          $ref: '#/components/schemas/Flow.RSVP.PathSessionAttributeLspTunnelRa'
+          x-field-uid: 3
+    Flow.RSVP.PathSessionAttributeLspTunnel:
+      description: |-
+        SESSION_ATTRIBUTE class = 207, LSP_TUNNEL_RA C-Type = 7, resource affinity information.
+      type: object
+      properties:
+        setup_priority:
+          description: |-
+            The priority of the session with respect to taking resources,in the range of 0 to 7. The value 0 is the highest priority. The Setup Priority is used in deciding whether this session can preempt another session.
+          type: integer
+          format: uint32
+          default: 7
+          maximum: 7
+          x-field-uid: 1
+        holding_priority:
+          description: |-
+            The priority of the session with respect to holding resources,in the range of 0 to 7. The value 0 is the highest priority. The Setup Priority is used in deciding whether this session can preempt another session.
+          type: integer
+          format: uint32
+          default: 7
+          maximum: 7
+          x-field-uid: 2
+        flags:
+          description: |-
+            0x01 Local protection desired, 0x02 Label recording desired, 0x04 SE Style desired
+          $ref: '#/components/schemas/Flow.RSVPLspTunnel.Flag'
+          x-field-uid: 3
+        name_length:
+          description: "The length of the display string before padding, in bytes.\
+            \          "
+          $ref: '#/components/schemas/Flow.RSVPSessionAttributeName.Length'
+          x-field-uid: 4
+        session_name:
+          description: "A null padded string of characters.          "
+          type: string
+          default: ''
+          minLength: 0
+          maxLength: 254
+          x-field-uid: 5
+    Flow.RSVP.PathSessionAttributeLspTunnelRa:
+      description: |-
+        SESSION_ATTRIBUTE class = 207, LSP_TUNNEL_RA C-Type = 1, it carries resource affinity information.
+      type: object
+      properties:
+        exclude_any:
+          description: "A 32-bit vector representing a set of attribute filters associated\
+            \ with a tunnel any of which renders a link unacceptable. A null set (all\
+            \ bits set to zero) doesn't render the link unacceptable. The most significant\
+            \ byte in the hex-string is the farthest  to the left in the byte sequence.\
+            \  Leading zero bytes in the configured value may be omitted for brevity.\
+            \           "
+          type: string
+          format: hex
+          default: '0'
+          minLength: 0
+          maxLength: 8
+          x-field-uid: 1
+        include_any:
+          description: "A 32-bit vector representing a set of attribute filters associated\
+            \ with a tunnel any of which renders a link acceptable. A null set (all\
+            \ bits set to zero) automatically passes. The most significant byte in\
+            \ the hex-string is the farthest  to the left in the byte sequence.  Leading\
+            \ zero bytes in the configured value may be omitted for brevity.     "
+          type: string
+          format: hex
+          default: '0'
+          minLength: 0
+          maxLength: 8
+          x-field-uid: 2
+        include_all:
+          description: "A 32-bit vector representing a set of attribute filters associated\
+            \ with a tunnel all of which must be present for a link to be acceptable.\
+            \ A null set (all bits set to zero) automatically passes. The most significant\
+            \ byte in the hex-string is the farthest to the left in the byte sequence.\
+            \  Leading zero bytes in the configured value may be omitted for brevity.\
+            \          "
+          type: string
+          format: hex
+          default: '0'
+          minLength: 0
+          maxLength: 8
+          x-field-uid: 3
+        setup_priority:
+          description: |-
+            The priority of the session with respect to taking resources,in the range of 0 to 7. The value 0 is the highest priority. The Setup Priority is used in deciding whether this session can preempt another session.
+          type: integer
+          format: uint32
+          default: 7
+          maximum: 7
+          x-field-uid: 4
+        holding_priority:
+          description: |-
+            The priority of the session with respect to holding resources,in the range of 0 to 7. The value 0 is the highest priority. The Setup Priority is used in deciding whether this session can preempt another session.
+          type: integer
+          format: uint32
+          default: 7
+          maximum: 7
+          x-field-uid: 5
+        flags:
+          description: |-
+            0x01 Local protection desired, 0x02 Label recording desired, 0x04 SE Style desired
+          $ref: '#/components/schemas/Flow.RSVPLspTunnel.Flag'
+          x-field-uid: 6
+        name_length:
+          description: "The length of the display string before padding, in bytes.\
+            \          "
+          $ref: '#/components/schemas/Flow.RSVPSessionAttributeName.Length'
+          x-field-uid: 7
+        session_name:
+          description: "A null padded string of characters.          "
+          type: string
+          default: ''
+          minLength: 0
+          maxLength: 254
+          x-field-uid: 8
+    Flow.RSVPLspTunnel.Flag:
+      type: object
+      properties:
+        choice:
+          type: string
+          default: local_protection_desired
+          x-enum:
+            local_protection_desired:
+              x-field-uid: 1
+            label_recording_desired:
+              x-field-uid: 2
+            se_style_desired:
+              x-field-uid: 3
+          x-field-uid: 1
+          enum:
+          - local_protection_desired
+          - label_recording_desired
+          - se_style_desired
+    Flow.RSVPSessionAttributeName.Length:
+      type: object
+      properties:
+        choice:
+          description: |-
+            auto or configured value.
+          type: string
+          default: auto
+          x-field-uid: 1
+          x-enum:
+            auto:
+              x-field-uid: 1
+            value:
+              x-field-uid: 2
+          enum:
+          - auto
+          - value
+        auto:
+          description: |-
+            OTG will provide a system generated value for this property.  If OTG is unable to generate a value the default value must be used.
+          type: integer
+          format: uint32
+          maximum: 255
+          default: 0
+          x-field-uid: 2
+        value:
+          type: integer
+          format: uint32
+          maximum: 255
+          default: 0
+          x-field-uid: 3
+    Flow.RSVP.PathObjectsClassSenderTemplate:
+      description: |-
+        C-Type is specific to a class num.
+      type: object
+      properties:
+        length:
+          description: |-
+            A 16-bit field containing the total object length in bytes.  Must always be a multiple of 4 or at least 4.
+          $ref: '#/components/schemas/Flow.RSVPObject.Length'
+          x-field-uid: 1
+        c_type:
+          $ref: '#/components/schemas/Flow.RSVP.PathObjectsSenderTemplateCType'
+          x-field-uid: 2
+    Flow.RSVP.PathObjectsSenderTemplateCType:
+      description: |-
+        Object for SENDER_TEMPLATE class. Currently supported c-type is LSP Tunnel IPv4 (7).
+      type: object
+      properties:
+        choice:
+          type: string
+          x-field-uid: 1
+          default: lsp_tunnel_ipv4
+          x-enum:
+            lsp_tunnel_ipv4:
+              x-field-uid: 1
+          enum:
+          - lsp_tunnel_ipv4
+        lsp_tunnel_ipv4:
+          $ref: '#/components/schemas/Flow.RSVP.PathSenderTemplateLspTunnelIpv4'
+          x-field-uid: 2
+    Flow.RSVP.PathSenderTemplateLspTunnelIpv4:
+      description: |-
+        Class = SENDER_TEMPLATE, LSP_TUNNEL_IPv4 C-Type = 7
+      type: object
+      properties:
+        ipv4_tunnel_sender_address:
+          x-field-uid: 1
+          $ref: '#/components/schemas/Pattern.Flow.RSVP.PathSenderTemplateLspTunnelIpv4.Ipv4TunnelSenderAddress'
+        reserved:
+          x-field-uid: 2
+          $ref: '#/components/schemas/Pattern.Flow.RSVP.PathSenderTemplateLspTunnelIpv4.Reserved'
+        lsp_id:
+          x-field-uid: 3
+          $ref: '#/components/schemas/Pattern.Flow.RSVP.PathSenderTemplateLspTunnelIpv4.LspId'
+    Flow.RSVP.PathObjectsClassSenderTspec:
+      description: |-
+        C-Type is specific to a class num.
+      type: object
+      properties:
+        length:
+          description: |-
+            A 16-bit field containing the total object length in bytes.  Must always be a multiple of 4 or at least 4.
+          $ref: '#/components/schemas/Flow.RSVPObject.Length'
+          x-field-uid: 1
+        c_type:
+          $ref: '#/components/schemas/Flow.RSVP.PathObjectsSenderTspecCType'
+          x-field-uid: 2
+    Flow.RSVP.PathObjectsSenderTspecCType:
+      description: |-
+        Object for SENDER_TSPEC class. Currently supported c-type is int-serv (2).
+      type: object
+      properties:
+        choice:
+          type: string
+          x-field-uid: 1
+          default: int_serv
+          x-enum:
+            int_serv:
+              x-field-uid: 1
+          enum:
+          - int_serv
+        int_serv:
+          $ref: '#/components/schemas/Flow.RSVP.PathSenderTspecIntServ'
+          x-field-uid: 2
+    Flow.RSVP.PathSenderTspecIntServ:
+      description: |-
+        int-serv SENDER_TSPEC object: Class = 12, C-Type = 2
+      type: object
+      properties:
+        version:
+          x-field-uid: 1
+          $ref: '#/components/schemas/Pattern.Flow.RSVP.PathSenderTspecIntServ.Version'
+        reserved1:
+          x-field-uid: 2
+          $ref: '#/components/schemas/Pattern.Flow.RSVP.PathSenderTspecIntServ.Reserved1'
+        overall_length:
+          x-field-uid: 3
+          $ref: '#/components/schemas/Pattern.Flow.RSVP.PathSenderTspecIntServ.OverallLength'
+        service_header:
+          x-field-uid: 4
+          $ref: '#/components/schemas/Pattern.Flow.RSVP.PathSenderTspecIntServ.ServiceHeader'
+        zero_bit:
+          x-field-uid: 5
+          $ref: '#/components/schemas/Pattern.Flow.RSVP.PathSenderTspecIntServ.ZeroBit'
+        reserved2:
+          x-field-uid: 6
+          $ref: '#/components/schemas/Pattern.Flow.RSVP.PathSenderTspecIntServ.Reserved2'
+        length_of_service_data:
+          x-field-uid: 7
+          $ref: '#/components/schemas/Pattern.Flow.RSVP.PathSenderTspecIntServ.LengthOfServiceData'
+        parameter_id_token_bucket_tspec:
+          x-field-uid: 8
+          $ref: '#/components/schemas/Pattern.Flow.RSVP.PathSenderTspecIntServ.ParameterIdTokenBucketTspec'
+        parameter_127_flag:
+          x-field-uid: 9
+          $ref: '#/components/schemas/Pattern.Flow.RSVP.PathSenderTspecIntServ.Parameter127Flag'
+        parameter_127_length:
+          x-field-uid: 10
+          $ref: '#/components/schemas/Pattern.Flow.RSVP.PathSenderTspecIntServ.Parameter127Length'
+        token_bucket_rate:
+          description: |-
+            Token bucket rate is set to sender's view of its generated traffic.
+          type: number
+          format: float
+          default: 0
+          x-field-uid: 11
+        token_bucket_size:
+          description: |-
+            Token bucket size is set to sender's view of its generated traffic.
+          type: number
+          format: float
+          default: 0
+          x-field-uid: 12
+        peak_data_rate:
+          description: |-
+            The peak rate may be set to the sender's peak traffic generation rate (if known and controlled), the physical interface line rate (if known), or positive infinity (if no better value is available).
+          type: number
+          format: float
+          default: 0
+          x-field-uid: 13
+        minimum_policed_unit:
+          x-field-uid: 14
+          $ref: '#/components/schemas/Pattern.Flow.RSVP.PathSenderTspecIntServ.MinimumPolicedUnit'
+        maximum_packet_size:
+          x-field-uid: 15
+          $ref: '#/components/schemas/Pattern.Flow.RSVP.PathSenderTspecIntServ.MaximumPacketSize'
+    Flow.RSVP.PathObjectsClassRecordRoute:
+      description: |-
+        C-Type is specific to a class num.
+      type: object
+      properties:
+        length:
+          description: |-
+            A 16-bit field containing the total object length in bytes.  Must always be a multiple of 4 or at least 4.
+          $ref: '#/components/schemas/Flow.RSVPObject.Length'
+          x-field-uid: 1
+        c_type:
+          $ref: '#/components/schemas/Flow.RSVP.PathObjectsRecordRouteCType'
+          x-field-uid: 2
+    Flow.RSVP.PathObjectsRecordRouteCType:
+      description: |-
+        Object for RECORD_ROUTE class. c-type is Type 1 Route Record (1).
+      type: object
+      properties:
+        choice:
+          type: string
+          default: type_1
+          x-field-uid: 1
+          x-enum:
+            type_1:
+              x-field-uid: 1
+          enum:
+          - type_1
+        type_1:
+          $ref: '#/components/schemas/Flow.RSVP.PathRecordRouteType1'
+          x-field-uid: 2
+    Flow.RSVP.PathRecordRouteType1:
+      description: |-
+        Type1 record route has list of subobjects. Currently supported subobjects are IPv4 address(1) and Label(3).
+      type: object
+      properties:
+        subobjects:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/Flow.RSVP.Type1RecordRouteSubobjects'
+          x-field-uid: 1
+    Flow.RSVP.Type1RecordRouteSubobjects:
+      description: |-
+        Type is specific to a subobject.
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/Flow.RSVP.PathObjectsRecordRouteSubObjectType'
+          x-field-uid: 1
+    Flow.RSVP.PathObjectsRecordRouteSubObjectType:
+      description: |-
+        Currently supported subobjects are IPv4 address(1) and Label(3).
+      type: object
+      properties:
+        choice:
+          type: string
+          x-field-uid: 1
+          default: ipv4_address
+          x-enum:
+            ipv4_address:
+              x-field-uid: 1
+            label:
+              x-field-uid: 2
+          enum:
+          - ipv4_address
+          - label
+        ipv4_address:
+          $ref: '#/components/schemas/Flow.RSVP.PathRecordRouteType1Ipv4Address'
+          x-field-uid: 2
+        label:
+          $ref: '#/components/schemas/Flow.RSVP.PathRecordRouteType1Label'
+          x-field-uid: 3
+    Flow.RSVP.PathRecordRouteType1Ipv4Address:
+      description: |-
+        Class = RECORD_ROUTE, Type1 ROUTE_RECORD C-Type = 1 Subobject: IPv4 Address, C-Type: 1
+      type: object
+      properties:
+        length:
+          description: |-
+            The Length contains the total length of the subobject in bytes, including the Type and Length fields.   The Length MUST be atleast 4, and MUST be a multiple of 4.
+          $ref: '#/components/schemas/Flow.RSVPRouteRecord.Length'
+          x-field-uid: 1
+        ipv4_address:
+          x-field-uid: 2
+          $ref: '#/components/schemas/Pattern.Flow.RSVP.PathRecordRouteType1Ipv4Address.Ipv4Address'
+        prefix_length:
+          x-field-uid: 3
+          $ref: '#/components/schemas/Pattern.Flow.RSVP.PathRecordRouteType1Ipv4Address.PrefixLength'
+        flags:
+          description: |-
+            0x01  local_protection_available, 0x02  local_protection_in_use
+          $ref: '#/components/schemas/Flow.RSVPRecordRouteIPv4.Flag'
+          x-field-uid: 4
+    Flow.RSVPRecordRouteIPv4.Flag:
+      type: object
+      properties:
+        choice:
+          type: string
+          default: local_protection_available
+          x-enum:
+            local_protection_available:
+              x-field-uid: 1
+            local_protection_in_use:
+              x-field-uid: 2
+          x-field-uid: 1
+          enum:
+          - local_protection_available
+          - local_protection_in_use
+    Flow.RSVP.PathRecordRouteType1Label:
+      description: |-
+        Class = RECORD_ROUTE, Type1 ROUTE_RECORD C-Type = 1 Subobject: Label, C-Type: 3
+      type: object
+      properties:
+        length:
+          description: |-
+            The Length contains the total length of the subobject in bytes, including the Type and Length fields.   The Length MUST be atleast 4, and MUST be a multiple of 4.
+          $ref: '#/components/schemas/Flow.RSVPRouteRecord.Length'
+          x-field-uid: 1
+        flags:
+          x-field-uid: 2
+          $ref: '#/components/schemas/Pattern.Flow.RSVP.PathRecordRouteType1Label.Flags'
+        c_type:
+          x-field-uid: 3
+          $ref: '#/components/schemas/Pattern.Flow.RSVP.PathRecordRouteType1Label.CType'
+        label:
+          description: |-
+            The contents of the Label Object. Copied from the Label Object.
+          $ref: '#/components/schemas/Flow.RSVP.PathRecordRouteLabel'
+          x-field-uid: 4
+    Flow.RSVP.PathRecordRouteLabel:
+      type: object
+      properties:
+        choice:
+          description: |-
+            32 bit integer or hex value.
+          type: string
+          default: as_integer
+          x-field-uid: 1
+          x-enum:
+            as_integer:
+              x-field-uid: 1
+            as_hex:
+              x-field-uid: 2
+          enum:
+          - as_integer
+          - as_hex
+        as_integer:
+          type: integer
+          format: uint32
+          default: 16
+          maximum: 1048575
+          x-field-uid: 2
+        as_hex:
+          description: |-
+            Value of the this field should not excced 4 bytes. Maximum length of this attribute is 8 (4 * 2 hex character per byte).
+          type: string
+          format: hex
+          default: '10'
+          maxLength: 8
+          x-field-uid: 3
+    Flow.RSVPRouteRecord.Length:
+      type: object
+      properties:
+        choice:
+          description: |-
+            auto or configured value.
+          type: string
+          default: auto
+          x-field-uid: 1
+          x-enum:
+            auto:
+              x-field-uid: 1
+            value:
+              x-field-uid: 2
+          enum:
+          - auto
+          - value
+        auto:
+          description: |-
+            OTG will provide a system generated value for this property.  If OTG is unable to generate a value the default value must be used.
+          type: integer
+          format: uint32
+          maximum: 256
+          default: 8
+          x-field-uid: 2
+        value:
+          type: integer
+          format: uint32
+          maximum: 256
+          default: 8
+          x-field-uid: 3
+    Flow.RSVP.PathObjectsCustom:
+      type: object
+      description: |-
+        Custom packet header
+      properties:
+        type:
+          x-field-uid: 1
+          $ref: '#/components/schemas/Pattern.Flow.RSVP.PathObjectsCustom.Type'
+        length:
+          $ref: '#/components/schemas/Flow.RSVPObject.Length'
+          x-field-uid: 2
+        bytes:
+          description: |-
+            A custom packet header defined as a string of hex bytes. The string MUST contain sequence of valid hex bytes. Spaces or colons can be part of the bytes but will be discarded. Value of the this field should not excced 65525 bytes since maximum 65528 bytes can be added as object-contents in RSVP header. For type and length requires 3 bytes, hence maximum of 65524 bytes are expected. Maximum length of this attribute is 131050 (65525 * 2 hex character per byte).
+          type: string
+          format: hex
+          minLength: 1
+          maxLength: 131050
+          default: '0000'
+          x-field-uid: 3
     Flow.Size:
       description: |-
         The frame size which overrides the total length of the packet
@@ -8979,11 +10597,17 @@ components:
               x-field-uid: 2
             lacp:
               x-field-uid: 3
+            bgp:
+              x-field-uid: 4
+            isis:
+              x-field-uid: 5
           x-field-uid: 1
           enum:
           - all
           - route
           - lacp
+          - bgp
+          - isis
         all:
           $ref: '#/components/schemas/State.Protocol.All'
           x-field-uid: 2
@@ -8993,6 +10617,12 @@ components:
         lacp:
           $ref: '#/components/schemas/State.Protocol.Lacp'
           x-field-uid: 4
+        bgp:
+          $ref: '#/components/schemas/State.Protocol.Bgp'
+          x-field-uid: 5
+        isis:
+          $ref: '#/components/schemas/State.Protocol.Isis'
+          x-field-uid: 6
     State.Port.Link:
       description: |-
         Sets the link of configured ports.
@@ -9191,12 +10821,18 @@ components:
           x-enum:
             admin:
               x-field-uid: 1
+            member_ports:
+              x-field-uid: 2
           x-field-uid: 1
           enum:
           - admin
+          - member_ports
         admin:
           $ref: '#/components/schemas/State.Protocol.Lacp.Admin'
           x-field-uid: 2
+        member_ports:
+          $ref: '#/components/schemas/State.Protocol.Lacp.MemberPorts'
+          x-field-uid: 3
     State.Protocol.Lacp.Admin:
       description: |-
         Sets admin state of LACP configured on LAG members
@@ -9222,6 +10858,155 @@ components:
         state:
           description: |-
             The LACP Member admin state. 'up' will send LACPDUs with 'sync' flag set on selected member ports. 'down' will send LACPDUs with 'sync' flag unset on selected member ports.
+          type: string
+          x-field-uid: 2
+          x-enum:
+            up:
+              x-field-uid: 1
+            down:
+              x-field-uid: 2
+          enum:
+          - up
+          - down
+    State.Protocol.Lacp.MemberPorts:
+      description: |-
+        Sets state of LACP member ports configured on LAG.
+      required:
+      - state
+      properties:
+        lag_member_names:
+          description: |
+            The names of LAG members (ports) for which the state has to be applied. An empty or null list will control all LAG members.
+
+            x-constraint:
+            - /components/schemas/Port/properties/name
+
+
+            x-constraint:
+            - /components/schemas/Port/properties/name
+          type: array
+          items:
+            type: string
+          x-constraint:
+          - /components/schemas/Port/properties/name
+          x-field-uid: 1
+        state:
+          description: |-
+            The desired LACP member port state.
+          type: string
+          x-field-uid: 2
+          x-enum:
+            up:
+              x-field-uid: 1
+            down:
+              x-field-uid: 2
+          enum:
+          - up
+          - down
+    State.Protocol.Bgp:
+      description: |-
+        Sets state of configured BGP peers.
+      type: object
+      required:
+      - choice
+      properties:
+        choice:
+          type: string
+          x-enum:
+            peers:
+              x-field-uid: 1
+          x-field-uid: 1
+          enum:
+          - peers
+        peers:
+          $ref: '#/components/schemas/State.Protocol.Bgp.Peers'
+          x-field-uid: 2
+    State.Protocol.Bgp.Peers:
+      description: |-
+        Sets state of configured BGP peers.
+      required:
+      - state
+      properties:
+        peer_names:
+          description: |
+            The names of BGP peers for which the state has to be applied. An empty or null list will control all BGP peers.
+
+            x-constraint:
+            - /components/schemas/Bgp.V4Peer/properties/name
+            - /components/schemas/Bgp.V6Peer/properties/name
+
+
+            x-constraint:
+            - /components/schemas/Bgp.V4Peer/properties/name
+            - /components/schemas/Bgp.V6Peer/properties/name
+          type: array
+          items:
+            type: string
+          x-constraint:
+          - /components/schemas/Bgp.V4Peer/properties/name
+          - /components/schemas/Bgp.V6Peer/properties/name
+          x-field-uid: 1
+        state:
+          description: "The desired state of BGP peer. If the desired state is 'up',\
+            \ underlying IP interface(s) would be brought up automatically (if not\
+            \ already up), would attempt to bring up the BGP session(s) and advertise\
+            \ route(s), if configured. If the desired state is 'down', BGP session(s)\
+            \ would be brought down. "
+          type: string
+          x-field-uid: 2
+          x-enum:
+            up:
+              x-field-uid: 1
+            down:
+              x-field-uid: 2
+          enum:
+          - up
+          - down
+    State.Protocol.Isis:
+      description: |-
+        Sets state of configured ISIS routers.
+      type: object
+      required:
+      - choice
+      properties:
+        choice:
+          type: string
+          x-enum:
+            routers:
+              x-field-uid: 1
+          x-field-uid: 1
+          enum:
+          - routers
+        routers:
+          $ref: '#/components/schemas/State.Protocol.Isis.Routers'
+          x-field-uid: 2
+    State.Protocol.Isis.Routers:
+      description: |-
+        Sets state of configured ISIS routers.
+      required:
+      - state
+      properties:
+        router_names:
+          description: |
+            The names of ISIS routers for which the state has to be applied. An empty or null list will control all ISIS routers.
+
+            x-constraint:
+            - /components/schemas/Device.IsisRouter/properties/name
+
+
+            x-constraint:
+            - /components/schemas/Device.IsisRouter/properties/name
+          type: array
+          items:
+            type: string
+          x-constraint:
+          - /components/schemas/Device.IsisRouter/properties/name
+          x-field-uid: 1
+        state:
+          description: "The desired state of ISIS router. If the desired state is\
+            \ 'up', would attempt to bring up the ISIS session(s) with respective\
+            \ peer(s) and advertise route(s), if configured. If the desired state\
+            \ is 'down', would bring down ISIS session(s) with respective peer(s). "
           type: string
           x-field-uid: 2
           x-enum:
@@ -15989,6 +17774,221 @@ components:
           items:
             $ref: '#/components/schemas/Pattern.Flow.Ipv4.Dst.MetricTag'
           x-field-uid: 7
+    Pattern.Flow.Ipv4Options.Custom.Type.CopiedFlag.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 1
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 1
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 1
+      x-constants:
+        not_copied: 0
+        copied: 1
+    Pattern.Flow.Ipv4Options.Custom.Type.CopiedFlag:
+      description: |-
+        This flag indicates this option is copied to all fragments on fragmentations.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 1
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 1
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Ipv4Options.Custom.Type.CopiedFlag.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Ipv4Options.Custom.Type.CopiedFlag.Counter'
+          x-field-uid: 6
+      x-constants:
+        not_copied: 0
+        copied: 1
+    Pattern.Flow.Ipv4Options.Custom.Type.OptionClass.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 3
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 3
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 3
+      x-constants:
+        control: 0
+        reserved: 3
+        debugging_measurement: 2
+    Pattern.Flow.Ipv4Options.Custom.Type.OptionClass:
+      description: |-
+        Option class [Ref:https://www.iana.org/assignments/ip-parameters/ip-parameters.xhtml#ip-parameters-1].
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 3
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 3
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Ipv4Options.Custom.Type.OptionClass.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Ipv4Options.Custom.Type.OptionClass.Counter'
+          x-field-uid: 6
+      x-constants:
+        control: 0
+        reserved: 3
+        debugging_measurement: 2
+    Pattern.Flow.Ipv4Options.Custom.Type.OptionNumber.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 31
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 31
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 31
+    Pattern.Flow.Ipv4Options.Custom.Type.OptionNumber:
+      description: |-
+        Option Number [Ref:https://www.iana.org/assignments/ip-parameters/ip-parameters.xhtml#ip-parameters-1].
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 31
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 31
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Ipv4Options.Custom.Type.OptionNumber.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Ipv4Options.Custom.Type.OptionNumber.Counter'
+          x-field-uid: 6
     Pattern.Flow.Ipv4.Priority.Raw.Counter:
       description: |-
         integer counter pattern
@@ -28079,6 +30079,3051 @@ components:
           items:
             $ref: '#/components/schemas/Pattern.Flow.Mpls.TimeToLive.MetricTag'
           x-field-uid: 7
+    Pattern.Flow.Snmpv2c.Version.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 1
+          format: uint32
+          maximum: 255
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 255
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 255
+    Pattern.Flow.Snmpv2c.Version:
+      description: |-
+        Version
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 255
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 255
+          x-field-uid: 3
+          default:
+          - 1
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Snmpv2c.Version.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Snmpv2c.Version.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Snmpv2c.PDU.RequestId.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: int32
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: int32
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: int32
+    Pattern.Flow.Snmpv2c.PDU.RequestId:
+      description: "Identifies a particular SNMP request. \nThis index is echoed back\
+        \ in the response from the SNMP agent, \nallowing the SNMP manager to match\
+        \ an incoming response to the appropriate request.\n\n- Encoding of this field\
+        \ follows ASN.1 X.690(section 8.3) specification.\n  Refer: http://www.itu.int/ITU-T/asn1/"
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: int32
+        values:
+          type: array
+          items:
+            type: integer
+            format: int32
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Snmpv2c.PDU.RequestId.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Snmpv2c.PDU.RequestId.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Snmpv2c.PDU.ErrorIndex.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+    Pattern.Flow.Snmpv2c.PDU.ErrorIndex:
+      description: |-
+        When Error Status is non-zero,  this field contains a pointer that specifies which object generated the error.  Always zero in a request.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Snmpv2c.PDU.ErrorIndex.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Snmpv2c.PDU.ErrorIndex.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Snmpv2c.BulkPDU.RequestId.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: int32
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: int32
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: int32
+    Pattern.Flow.Snmpv2c.BulkPDU.RequestId:
+      description: "Identifies a particular SNMP request. \nThis index is echoed back\
+        \ in the response from the SNMP agent, \nallowing the SNMP manager to match\
+        \ an incoming response to the appropriate request.\n\n- Encoding of this field\
+        \ follows ASN.1 X.690(section 8.3) specification.\n  Refer: http://www.itu.int/ITU-T/asn1/"
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: int32
+        values:
+          type: array
+          items:
+            type: integer
+            format: int32
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Snmpv2c.BulkPDU.RequestId.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Snmpv2c.BulkPDU.RequestId.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Snmpv2c.BulkPDU.NonRepeaters:
+      description: |-
+        One variable binding in the Response-PDU is requested for the first non_repeaters variable bindings in the GetBulkRequest.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+          x-field-uid: 3
+          default:
+          - 0
+    Pattern.Flow.Snmpv2c.BulkPDU.MaxRepetitions.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+    Pattern.Flow.Snmpv2c.BulkPDU.MaxRepetitions:
+      description: |-
+        A maximum of max_repetitions variable bindings are requested in the Response-PDU for each of the remaining variable bindings in the GetBulkRequest after the non_repeaters variable bindings.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Snmpv2c.BulkPDU.MaxRepetitions.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Snmpv2c.BulkPDU.MaxRepetitions.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Snmpv2c.VariableBindingValue.IntegerValue.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: int32
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: int32
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: int32
+    Pattern.Flow.Snmpv2c.VariableBindingValue.IntegerValue:
+      description: |-
+        Integer value returned for the requested OID.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: int32
+        values:
+          type: array
+          items:
+            type: integer
+            format: int32
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Snmpv2c.VariableBindingValue.IntegerValue.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Snmpv2c.VariableBindingValue.IntegerValue.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Snmpv2c.VariableBindingValue.IpAddressValue.Counter:
+      description: |-
+        ipv4 counter pattern
+      type: object
+      properties:
+        start:
+          type: string
+          x-field-uid: 1
+          default: 0.0.0.0
+          format: ipv4
+        step:
+          type: string
+          x-field-uid: 2
+          default: 0.0.0.1
+          format: ipv4
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+    Pattern.Flow.Snmpv2c.VariableBindingValue.IpAddressValue:
+      description: |-
+        IPv4 address returned for the requested OID.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: string
+          x-field-uid: 2
+          default: 0.0.0.0
+          format: ipv4
+        values:
+          type: array
+          items:
+            type: string
+            format: ipv4
+          x-field-uid: 3
+          default:
+          - 0.0.0.0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Snmpv2c.VariableBindingValue.IpAddressValue.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Snmpv2c.VariableBindingValue.IpAddressValue.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Snmpv2c.VariableBindingValue.CounterValue.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+    Pattern.Flow.Snmpv2c.VariableBindingValue.CounterValue:
+      description: |-
+        Counter returned for the requested OID.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Snmpv2c.VariableBindingValue.CounterValue.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Snmpv2c.VariableBindingValue.CounterValue.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Snmpv2c.VariableBindingValue.TimeticksValue.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+    Pattern.Flow.Snmpv2c.VariableBindingValue.TimeticksValue:
+      description: |-
+        Timeticks returned for the requested OID.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Snmpv2c.VariableBindingValue.TimeticksValue.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Snmpv2c.VariableBindingValue.TimeticksValue.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Snmpv2c.VariableBindingValue.BigCounterValue.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint64
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint64
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint64
+    Pattern.Flow.Snmpv2c.VariableBindingValue.BigCounterValue:
+      description: |-
+        Big counter returned for the requested OID.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint64
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint64
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Snmpv2c.VariableBindingValue.BigCounterValue.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Snmpv2c.VariableBindingValue.BigCounterValue.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Snmpv2c.VariableBindingValue.UnsignedIntegerValue.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+    Pattern.Flow.Snmpv2c.VariableBindingValue.UnsignedIntegerValue:
+      description: |-
+        Unsigned integer value returned for the requested OID.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Snmpv2c.VariableBindingValue.UnsignedIntegerValue.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Snmpv2c.VariableBindingValue.UnsignedIntegerValue.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Snmpv2c.Common.RequestId.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: int32
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: int32
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: int32
+    Pattern.Flow.Snmpv2c.Common.RequestId:
+      description: "Identifies a particular SNMP request. \nThis index is echoed back\
+        \ in the response from the SNMP agent, \nallowing the SNMP manager to match\
+        \ an incoming response to the appropriate request.\n\n- Encoding of this field\
+        \ follows ASN.1 X.690(section 8.3) specification.\n  Refer: http://www.itu.int/ITU-T/asn1/"
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: int32
+        values:
+          type: array
+          items:
+            type: integer
+            format: int32
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Snmpv2c.Common.RequestId.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Snmpv2c.Common.RequestId.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Rsvp.RsvpChecksum:
+      description: |-
+        The one's complement of the one's complement sum of the message, with the checksum field replaced by zero for the purpose of computing the checksum.   An all-zero value means that no checksum was transmitted.
+      type: object
+      properties:
+        choice:
+          description: |-
+            The type of checksum
+          type: string
+          x-enum:
+            generated:
+              x-field-uid: 1
+            custom:
+              x-field-uid: 2
+          default: generated
+          x-field-uid: 1
+          enum:
+          - generated
+          - custom
+        generated:
+          description: |-
+            A system generated checksum value
+          type: string
+          x-enum:
+            good:
+              x-field-uid: 1
+            bad:
+              x-field-uid: 2
+          default: good
+          x-field-uid: 2
+          enum:
+          - good
+          - bad
+        custom:
+          description: |-
+            A custom checksum value
+          type: integer
+          format: uint32
+          maximum: 65535
+          x-field-uid: 3
+    Pattern.Flow.Rsvp.TimeToLive.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 64
+          format: uint32
+          maximum: 255
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 255
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 255
+    Pattern.Flow.Rsvp.TimeToLive:
+      description: |-
+        The IP time-to-live(TTL) value with which the message was sent.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 64
+          format: uint32
+          maximum: 255
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 255
+          x-field-uid: 3
+          default:
+          - 64
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Rsvp.TimeToLive.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Rsvp.TimeToLive.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Rsvp.Reserved.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 255
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 255
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 255
+    Pattern.Flow.Rsvp.Reserved:
+      description: "Reserved "
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 255
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 255
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Rsvp.Reserved.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Rsvp.Reserved.Counter'
+          x-field-uid: 6
+    Pattern.Flow.RSVP.PathSessionLspTunnelIpv4.Ipv4TunnelEndPointAddress.Counter:
+      description: |-
+        ipv4 counter pattern
+      type: object
+      properties:
+        start:
+          type: string
+          x-field-uid: 1
+          default: 0.0.0.0
+          format: ipv4
+        step:
+          type: string
+          x-field-uid: 2
+          default: 0.0.0.1
+          format: ipv4
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+    Pattern.Flow.RSVP.PathSessionLspTunnelIpv4.Ipv4TunnelEndPointAddress:
+      description: |-
+        IPv4 address of the egress node for the tunnel.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: string
+          x-field-uid: 2
+          default: 0.0.0.0
+          format: ipv4
+        values:
+          type: array
+          items:
+            type: string
+            format: ipv4
+          x-field-uid: 3
+          default:
+          - 0.0.0.0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.RSVP.PathSessionLspTunnelIpv4.Ipv4TunnelEndPointAddress.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.RSVP.PathSessionLspTunnelIpv4.Ipv4TunnelEndPointAddress.Counter'
+          x-field-uid: 6
+    Pattern.Flow.RSVP.PathSessionLspTunnelIpv4.Reserved.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 65535
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 65535
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 65535
+    Pattern.Flow.RSVP.PathSessionLspTunnelIpv4.Reserved:
+      description: |-
+        Reserved field, MUST be zero.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 65535
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 65535
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.RSVP.PathSessionLspTunnelIpv4.Reserved.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.RSVP.PathSessionLspTunnelIpv4.Reserved.Counter'
+          x-field-uid: 6
+    Pattern.Flow.RSVP.PathSessionLspTunnelIpv4.TunnelId.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 1
+          format: uint32
+          maximum: 65535
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 65535
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 65535
+    Pattern.Flow.RSVP.PathSessionLspTunnelIpv4.TunnelId:
+      description: |-
+        A 16-bit identifier used in the SESSION that remains constant over the life of the tunnel.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 65535
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 65535
+          x-field-uid: 3
+          default:
+          - 1
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.RSVP.PathSessionLspTunnelIpv4.TunnelId.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.RSVP.PathSessionLspTunnelIpv4.TunnelId.Counter'
+          x-field-uid: 6
+    Pattern.Flow.RSVP.PathSessionExtTunnelId.AsInteger.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+    Pattern.Flow.RSVP.PathSessionExtTunnelId.AsInteger:
+      description: |-
+        TBD
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.RSVP.PathSessionExtTunnelId.AsInteger.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.RSVP.PathSessionExtTunnelId.AsInteger.Counter'
+          x-field-uid: 6
+    Pattern.Flow.RSVP.PathSessionExtTunnelId.AsIpv4.Counter:
+      description: |-
+        ipv4 counter pattern
+      type: object
+      properties:
+        start:
+          type: string
+          x-field-uid: 1
+          default: 0.0.0.0
+          format: ipv4
+        step:
+          type: string
+          x-field-uid: 2
+          default: 0.0.0.1
+          format: ipv4
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+    Pattern.Flow.RSVP.PathSessionExtTunnelId.AsIpv4:
+      description: |-
+        IPv4 address of the ingress endpoint for the tunnel.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: string
+          x-field-uid: 2
+          default: 0.0.0.0
+          format: ipv4
+        values:
+          type: array
+          items:
+            type: string
+            format: ipv4
+          x-field-uid: 3
+          default:
+          - 0.0.0.0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.RSVP.PathSessionExtTunnelId.AsIpv4.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.RSVP.PathSessionExtTunnelId.AsIpv4.Counter'
+          x-field-uid: 6
+    Pattern.Flow.RSVP.PathRsvpHopIpv4.Ipv4Address.Counter:
+      description: |-
+        ipv4 counter pattern
+      type: object
+      properties:
+        start:
+          type: string
+          x-field-uid: 1
+          default: 0.0.0.0
+          format: ipv4
+        step:
+          type: string
+          x-field-uid: 2
+          default: 0.0.0.1
+          format: ipv4
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+    Pattern.Flow.RSVP.PathRsvpHopIpv4.Ipv4Address:
+      description: |-
+        The IPv4 address of the interface through which the last RSVP-knowledgeable hop forwarded this message.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: string
+          x-field-uid: 2
+          default: 0.0.0.0
+          format: ipv4
+        values:
+          type: array
+          items:
+            type: string
+            format: ipv4
+          x-field-uid: 3
+          default:
+          - 0.0.0.0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.RSVP.PathRsvpHopIpv4.Ipv4Address.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.RSVP.PathRsvpHopIpv4.Ipv4Address.Counter'
+          x-field-uid: 6
+    Pattern.Flow.RSVP.PathRsvpHopIpv4.LogicalInterfaceHandle.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+    Pattern.Flow.RSVP.PathRsvpHopIpv4.LogicalInterfaceHandle:
+      description: |-
+        Logical Interface Handle (LIH) is used to distinguish logical outgoing interfaces. A node receiving an LIH in a Path message saves its value and returns it in the HOP objects of subsequent Resv messages sent to the node that originated the LIH. The LIH should be identically zero if there is no logical interface handle.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.RSVP.PathRsvpHopIpv4.LogicalInterfaceHandle.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.RSVP.PathRsvpHopIpv4.LogicalInterfaceHandle.Counter'
+          x-field-uid: 6
+    Pattern.Flow.RSVP.PathTimeValuesType1.RefreshPeriodR.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 30000
+          format: uint32
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+    Pattern.Flow.RSVP.PathTimeValuesType1.RefreshPeriodR:
+      description: |-
+        The refresh timeout period R used to generate this message;in milliseconds.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 30000
+          format: uint32
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+          x-field-uid: 3
+          default:
+          - 30000
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.RSVP.PathTimeValuesType1.RefreshPeriodR.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.RSVP.PathTimeValuesType1.RefreshPeriodR.Counter'
+          x-field-uid: 6
+    Pattern.Flow.RSVP.PathExplicitRouteType1Ipv4Prefix.LBit.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 1
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 1
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 1
+    Pattern.Flow.RSVP.PathExplicitRouteType1Ipv4Prefix.LBit:
+      description: |-
+        The L bit is an attribute of the subobject. The L bit is set if the subobject represents a loose hop in the explicit route. If the bit is not set, the subobject represents a strict hop in the explicit route.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 1
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 1
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.RSVP.PathExplicitRouteType1Ipv4Prefix.LBit.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.RSVP.PathExplicitRouteType1Ipv4Prefix.LBit.Counter'
+          x-field-uid: 6
+    Pattern.Flow.RSVP.PathExplicitRouteType1Ipv4Prefix.Ipv4Address.Counter:
+      description: |-
+        ipv4 counter pattern
+      type: object
+      properties:
+        start:
+          type: string
+          x-field-uid: 1
+          default: 0.0.0.0
+          format: ipv4
+        step:
+          type: string
+          x-field-uid: 2
+          default: 0.0.0.1
+          format: ipv4
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+    Pattern.Flow.RSVP.PathExplicitRouteType1Ipv4Prefix.Ipv4Address:
+      description: |-
+        This IPv4 address is treated as a prefix based on the prefix length value below.  Bits beyond the prefix are ignored on receipt and SHOULD be set to zero on transmission.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: string
+          x-field-uid: 2
+          default: 0.0.0.0
+          format: ipv4
+        values:
+          type: array
+          items:
+            type: string
+            format: ipv4
+          x-field-uid: 3
+          default:
+          - 0.0.0.0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.RSVP.PathExplicitRouteType1Ipv4Prefix.Ipv4Address.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.RSVP.PathExplicitRouteType1Ipv4Prefix.Ipv4Address.Counter'
+          x-field-uid: 6
+    Pattern.Flow.RSVP.PathExplicitRouteType1ASNumber.LBit.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 1
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 1
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 1
+    Pattern.Flow.RSVP.PathExplicitRouteType1ASNumber.LBit:
+      description: |-
+        The L bit is an attribute of the subobject. The L bit is set if the subobject represents a loose hop in the explicit route. If the bit is not set, the subobject represents a strict hop in the explicit route.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 1
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 1
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.RSVP.PathExplicitRouteType1ASNumber.LBit.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.RSVP.PathExplicitRouteType1ASNumber.LBit.Counter'
+          x-field-uid: 6
+    Pattern.Flow.RSVP.PathLabelRequestWithoutLabelRange.Reserved.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 65535
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 65535
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 65535
+    Pattern.Flow.RSVP.PathLabelRequestWithoutLabelRange.Reserved:
+      description: "This field is reserved.   It MUST be set to zero on transmission\
+        \ and MUST be ignored on receipt.              "
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 65535
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 65535
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.RSVP.PathLabelRequestWithoutLabelRange.Reserved.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.RSVP.PathLabelRequestWithoutLabelRange.Reserved.Counter'
+          x-field-uid: 6
+    Pattern.Flow.RSVP.PathLabelRequestWithoutLabelRange.L3pid.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 2048
+          format: uint32
+          maximum: 65535
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 65535
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 65535
+    Pattern.Flow.RSVP.PathLabelRequestWithoutLabelRange.L3pid:
+      description: "An identifier of the layer 3 protocol using this path.  Standard\
+        \ Ethertype values are used e.g. The default value of 2048 ( 0x0800 ) represents\
+        \ Ethertype for IPv4.          "
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 2048
+          format: uint32
+          maximum: 65535
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 65535
+          x-field-uid: 3
+          default:
+          - 2048
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.RSVP.PathLabelRequestWithoutLabelRange.L3pid.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.RSVP.PathLabelRequestWithoutLabelRange.L3pid.Counter'
+          x-field-uid: 6
+    Pattern.Flow.RSVP.PathSenderTemplateLspTunnelIpv4.Ipv4TunnelSenderAddress.Counter:
+      description: |-
+        ipv4 counter pattern
+      type: object
+      properties:
+        start:
+          type: string
+          x-field-uid: 1
+          default: 0.0.0.0
+          format: ipv4
+        step:
+          type: string
+          x-field-uid: 2
+          default: 0.0.0.1
+          format: ipv4
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+    Pattern.Flow.RSVP.PathSenderTemplateLspTunnelIpv4.Ipv4TunnelSenderAddress:
+      description: |-
+        IPv4 address for a sender node.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: string
+          x-field-uid: 2
+          default: 0.0.0.0
+          format: ipv4
+        values:
+          type: array
+          items:
+            type: string
+            format: ipv4
+          x-field-uid: 3
+          default:
+          - 0.0.0.0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.RSVP.PathSenderTemplateLspTunnelIpv4.Ipv4TunnelSenderAddress.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.RSVP.PathSenderTemplateLspTunnelIpv4.Ipv4TunnelSenderAddress.Counter'
+          x-field-uid: 6
+    Pattern.Flow.RSVP.PathSenderTemplateLspTunnelIpv4.Reserved.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 65535
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 65535
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 65535
+    Pattern.Flow.RSVP.PathSenderTemplateLspTunnelIpv4.Reserved:
+      description: |-
+        Reserved field, MUST be zero.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 65535
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 65535
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.RSVP.PathSenderTemplateLspTunnelIpv4.Reserved.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.RSVP.PathSenderTemplateLspTunnelIpv4.Reserved.Counter'
+          x-field-uid: 6
+    Pattern.Flow.RSVP.PathSenderTemplateLspTunnelIpv4.LspId.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 1
+          format: uint32
+          maximum: 65535
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 65535
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 65535
+    Pattern.Flow.RSVP.PathSenderTemplateLspTunnelIpv4.LspId:
+      description: |-
+        A 16-bit identifier used in the SENDER_TEMPLATE that can be changed to allow a sender to share resources with itself.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 65535
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 65535
+          x-field-uid: 3
+          default:
+          - 1
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.RSVP.PathSenderTemplateLspTunnelIpv4.LspId.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.RSVP.PathSenderTemplateLspTunnelIpv4.LspId.Counter'
+          x-field-uid: 6
+    Pattern.Flow.RSVP.PathSenderTspecIntServ.Version.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 15
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 15
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 15
+    Pattern.Flow.RSVP.PathSenderTspecIntServ.Version:
+      description: |-
+        Message format version number.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 15
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 15
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.RSVP.PathSenderTspecIntServ.Version.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.RSVP.PathSenderTspecIntServ.Version.Counter'
+          x-field-uid: 6
+    Pattern.Flow.RSVP.PathSenderTspecIntServ.Reserved1.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 4095
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 4095
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 4095
+    Pattern.Flow.RSVP.PathSenderTspecIntServ.Reserved1:
+      description: |-
+        Reserved.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 4095
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 4095
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.RSVP.PathSenderTspecIntServ.Reserved1.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.RSVP.PathSenderTspecIntServ.Reserved1.Counter'
+          x-field-uid: 6
+    Pattern.Flow.RSVP.PathSenderTspecIntServ.OverallLength.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 7
+          format: uint32
+          maximum: 65535
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 65535
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 65535
+    Pattern.Flow.RSVP.PathSenderTspecIntServ.OverallLength:
+      description: |-
+        Overall length (7 words not including header).
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 7
+          format: uint32
+          maximum: 65535
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 65535
+          x-field-uid: 3
+          default:
+          - 7
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.RSVP.PathSenderTspecIntServ.OverallLength.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.RSVP.PathSenderTspecIntServ.OverallLength.Counter'
+          x-field-uid: 6
+    Pattern.Flow.RSVP.PathSenderTspecIntServ.ServiceHeader.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 1
+          format: uint32
+          maximum: 255
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 255
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 255
+    Pattern.Flow.RSVP.PathSenderTspecIntServ.ServiceHeader:
+      description: |-
+        Service header, service number - '1' (Generic information) if in a PATH message.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 255
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 255
+          x-field-uid: 3
+          default:
+          - 1
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.RSVP.PathSenderTspecIntServ.ServiceHeader.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.RSVP.PathSenderTspecIntServ.ServiceHeader.Counter'
+          x-field-uid: 6
+    Pattern.Flow.RSVP.PathSenderTspecIntServ.ZeroBit.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 1
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 1
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 1
+    Pattern.Flow.RSVP.PathSenderTspecIntServ.ZeroBit:
+      description: |-
+        MUST be 0.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 1
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 1
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.RSVP.PathSenderTspecIntServ.ZeroBit.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.RSVP.PathSenderTspecIntServ.ZeroBit.Counter'
+          x-field-uid: 6
+    Pattern.Flow.RSVP.PathSenderTspecIntServ.Reserved2.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 127
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 127
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 127
+    Pattern.Flow.RSVP.PathSenderTspecIntServ.Reserved2:
+      description: |-
+        Reserved.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 127
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 127
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.RSVP.PathSenderTspecIntServ.Reserved2.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.RSVP.PathSenderTspecIntServ.Reserved2.Counter'
+          x-field-uid: 6
+    Pattern.Flow.RSVP.PathSenderTspecIntServ.LengthOfServiceData.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 6
+          format: uint32
+          maximum: 65535
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 65535
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 65535
+    Pattern.Flow.RSVP.PathSenderTspecIntServ.LengthOfServiceData:
+      description: |-
+        Length of service data, 6 words not including per-service header.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 6
+          format: uint32
+          maximum: 65535
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 65535
+          x-field-uid: 3
+          default:
+          - 6
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.RSVP.PathSenderTspecIntServ.LengthOfServiceData.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.RSVP.PathSenderTspecIntServ.LengthOfServiceData.Counter'
+          x-field-uid: 6
+    Pattern.Flow.RSVP.PathSenderTspecIntServ.ParameterIdTokenBucketTspec.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 127
+          format: uint32
+          maximum: 255
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 255
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 255
+    Pattern.Flow.RSVP.PathSenderTspecIntServ.ParameterIdTokenBucketTspec:
+      description: |-
+        Parameter ID, parameter 127 (Token Bucket TSpec)
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 127
+          format: uint32
+          maximum: 255
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 255
+          x-field-uid: 3
+          default:
+          - 127
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.RSVP.PathSenderTspecIntServ.ParameterIdTokenBucketTspec.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.RSVP.PathSenderTspecIntServ.ParameterIdTokenBucketTspec.Counter'
+          x-field-uid: 6
+    Pattern.Flow.RSVP.PathSenderTspecIntServ.Parameter127Flag.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 255
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 255
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 255
+    Pattern.Flow.RSVP.PathSenderTspecIntServ.Parameter127Flag:
+      description: |-
+        Parameter 127 flags (none set)
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 255
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 255
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.RSVP.PathSenderTspecIntServ.Parameter127Flag.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.RSVP.PathSenderTspecIntServ.Parameter127Flag.Counter'
+          x-field-uid: 6
+    Pattern.Flow.RSVP.PathSenderTspecIntServ.Parameter127Length.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 5
+          format: uint32
+          maximum: 65535
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 65535
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 65535
+    Pattern.Flow.RSVP.PathSenderTspecIntServ.Parameter127Length:
+      description: |-
+        Parameter 127 length, 5 words not including per-service header
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 5
+          format: uint32
+          maximum: 65535
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 65535
+          x-field-uid: 3
+          default:
+          - 5
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.RSVP.PathSenderTspecIntServ.Parameter127Length.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.RSVP.PathSenderTspecIntServ.Parameter127Length.Counter'
+          x-field-uid: 6
+    Pattern.Flow.RSVP.PathSenderTspecIntServ.MinimumPolicedUnit.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+    Pattern.Flow.RSVP.PathSenderTspecIntServ.MinimumPolicedUnit:
+      description: |-
+        The minimum policed unit parameter should generally be set equal to the size of the smallest packet generated by the application.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.RSVP.PathSenderTspecIntServ.MinimumPolicedUnit.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.RSVP.PathSenderTspecIntServ.MinimumPolicedUnit.Counter'
+          x-field-uid: 6
+    Pattern.Flow.RSVP.PathSenderTspecIntServ.MaximumPacketSize.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+    Pattern.Flow.RSVP.PathSenderTspecIntServ.MaximumPacketSize:
+      description: |-
+        The maximum packet size parameter should be set to the size of the largest packet the application might wish to generate. This value must, by definition, be equal to or larger than the value of The minimum policed unit.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.RSVP.PathSenderTspecIntServ.MaximumPacketSize.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.RSVP.PathSenderTspecIntServ.MaximumPacketSize.Counter'
+          x-field-uid: 6
+    Pattern.Flow.RSVP.PathRecordRouteType1Ipv4Address.Ipv4Address.Counter:
+      description: |-
+        ipv4 counter pattern
+      type: object
+      properties:
+        start:
+          type: string
+          x-field-uid: 1
+          default: 0.0.0.0
+          format: ipv4
+        step:
+          type: string
+          x-field-uid: 2
+          default: 0.0.0.1
+          format: ipv4
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+    Pattern.Flow.RSVP.PathRecordRouteType1Ipv4Address.Ipv4Address:
+      description: |-
+        A 32-bit unicast, host address.  Any network-reachable interface address is allowed here. Illegal addresses, such as certain loopback addresses, SHOULD NOT be used.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: string
+          x-field-uid: 2
+          default: 0.0.0.0
+          format: ipv4
+        values:
+          type: array
+          items:
+            type: string
+            format: ipv4
+          x-field-uid: 3
+          default:
+          - 0.0.0.0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.RSVP.PathRecordRouteType1Ipv4Address.Ipv4Address.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.RSVP.PathRecordRouteType1Ipv4Address.Ipv4Address.Counter'
+          x-field-uid: 6
+    Pattern.Flow.RSVP.PathRecordRouteType1Ipv4Address.PrefixLength.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 32
+          format: uint32
+          maximum: 255
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 255
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 255
+    Pattern.Flow.RSVP.PathRecordRouteType1Ipv4Address.PrefixLength:
+      description: |-
+        Prefix-length of IPv4 address.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 32
+          format: uint32
+          maximum: 255
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 255
+          x-field-uid: 3
+          default:
+          - 32
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.RSVP.PathRecordRouteType1Ipv4Address.PrefixLength.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.RSVP.PathRecordRouteType1Ipv4Address.PrefixLength.Counter'
+          x-field-uid: 6
+    Pattern.Flow.RSVP.PathRecordRouteType1Label.Flags:
+      description: |-
+        0x01 = Global label. This flag indicates that the label will be understood if received on any interface.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 255
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 255
+          x-field-uid: 3
+          default:
+          - 1
+    Pattern.Flow.RSVP.PathRecordRouteType1Label.CType:
+      description: |-
+        The C-Type of the included Label Object. Copied from the Label object.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 255
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 255
+          x-field-uid: 3
+          default:
+          - 1
+    Pattern.Flow.RSVP.PathObjectsCustom.Type.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 255
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 255
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 255
+    Pattern.Flow.RSVP.PathObjectsCustom.Type:
+      description: |-
+        User defined object type.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 255
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 255
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.RSVP.PathObjectsCustom.Type.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.RSVP.PathObjectsCustom.Type.Counter'
+          x-field-uid: 6
     Version:
       description: |-
         Version details
