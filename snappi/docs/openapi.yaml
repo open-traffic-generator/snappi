@@ -7,7 +7,7 @@ info:
     \ issue](https://github.com/open-traffic-generator/models/issues) in the models\
     \ repository\n- [fork the models repository](https://github.com/open-traffic-generator/models)\
     \ and submit a PR"
-  version: 1.0.2
+  version: 1.1.0
   contact:
     url: https://github.com/open-traffic-generator/models
   license:
@@ -2840,6 +2840,11 @@ components:
         graceful_restart:
           x-field-uid: 14
           $ref: '#/components/schemas/Bgp.GracefulRestart'
+        replay_updates:
+          description: "BGP Updates to be sent to the peer as specified after the\
+            \ session is established. "
+          $ref: '#/components/schemas/Bgp.UpdateReplay'
+          x-field-uid: 15
     Bgp.V4Interface:
       description: |-
         Configuration for emulated BGPv4 peers and routes on a single IPv4 interface.
@@ -5468,6 +5473,801 @@ components:
           maximum: 16777215
           default: 10
           x-field-uid: 4
+    Bgp.UpdateReplay:
+      description: |-
+        Ordered BGP Updates ( including both Advertise and Withdraws ) to be sent in the order given in the input to the peer after the BGP session is established.
+      type: object
+      properties:
+        choice:
+          type: string
+          default: structured_pdus
+          x-enum:
+            structured_pdus:
+              x-field-uid: 1
+            raw_bytes:
+              x-field-uid: 2
+          x-field-uid: 1
+          enum:
+          - structured_pdus
+          - raw_bytes
+        structured_pdus:
+          x-field-uid: 2
+          $ref: '#/components/schemas/Bgp.StructuredPdus'
+        raw_bytes:
+          x-field-uid: 3
+          $ref: '#/components/schemas/Bgp.RawBytes'
+    Bgp.RawBytes:
+      description: |-
+        Ordered BGP Updates ( including both Advertise and Withdraws ) to be sent in the order given in the input to the peer after the BGP session is established.
+      type: object
+      properties:
+        updates:
+          description: "Array of ordered BGP Updates ( including both Advertise and\
+            \ Withdraws ) to be sent in the order given in the input to the peer after\
+            \ the BGP session is established. "
+          type: array
+          items:
+            $ref: '#/components/schemas/Bgp.OneUpdateReplay'
+          x-field-uid: 1
+    Bgp.OneUpdateReplay:
+      description: "Specification of one BGP Update to be sent to the BGP peer.  \
+        \      "
+      type: object
+      required:
+      - update_bytes
+      properties:
+        time_gap:
+          description: |-
+            Minimum time interval in milliseconds from previous Update from the sequence of BGP Updates to be replayed.
+          type: integer
+          format: uint32
+          default: 0
+          x-field-uid: 1
+        update_bytes:
+          description: |-
+            Bytes specified in hex format to be sent to peer after the BGP Update Header. The Update Header will always have the  initial 16 bytes containing Marker bytes, 2 bytes containing the Length and 1 byte containing the Type.The string MUST  contain sequence of valid hex bytes. The bytes specified in hex format should be appended to the Update message to be sent  to the peer after the fixed 19 bytes described above. This byte stream can be of any length from 1 to 4077 bytes.The value  4077 is derived from the maximum length allowed for a BGP message in RFC4271 which is 4096 minus mandatory 19 bytes described  above. In the imported byte stream, one byte is represented as string of 2 characters, for example 2 character string (0x)AB  represents value of a single byte. So the maximum length of this attribute is 8154 (4077 * 2 hex characters per byte).
+          type: string
+          format: hex
+          minLength: 1
+          maxLength: 8154
+          x-field-uid: 2
+    Bgp.StructuredPdus:
+      description: |-
+        Ordered BGP Updates ( including both Advertise and Withdraws ) to be sent in the order given in the input to the peer after the BGP session is established.
+      type: object
+      properties:
+        updates:
+          description: "Array of ordered BGP Updates ( including both Advertise and\
+            \ Withdraws ) to be sent in the order given in the input to the peer after\
+            \ the BGP session is established.            "
+          type: array
+          items:
+            $ref: '#/components/schemas/Bgp.OneStructuredUpdateReplay'
+          x-field-uid: 1
+    Bgp.OneStructuredUpdateReplay:
+      description: "One structured BGP Update.        "
+      type: object
+      properties:
+        time_gap:
+          description: |-
+            Minimum time interval in milliseconds from previous Update from the sequence of BGP Updates to be replayed.
+          type: integer
+          format: uint32
+          default: 0
+          x-field-uid: 1
+        path_attributes:
+          description: "Attributes carried in the Update packet alongwith the reach/unreach\
+            \ prefixes.          "
+          $ref: '#/components/schemas/Bgp.Attributes'
+          x-field-uid: 2
+        traditional_unreach_nlris:
+          description: "The IPv4 prefixes to be included in the traditional UNREACH_NLRI. "
+          type: array
+          items:
+            $ref: '#/components/schemas/Bgp.OneTraditionalNlriPrefix'
+          x-field-uid: 3
+        traditional_reach_nlris:
+          description: "The IPv4 prefixes to be included in the traditional REACH_NLRI. "
+          type: array
+          items:
+            $ref: '#/components/schemas/Bgp.OneTraditionalNlriPrefix'
+          x-field-uid: 4
+    Bgp.OneTraditionalNlriPrefix:
+      description: "TRADITIONAL_NLRI is an optional part of the the BGP Update which\
+        \ can carry only IPv4 prefix information as defined in https://www.rfc-editor.org/rfc/rfc4271.html#section-4.3\
+        \ \nand extended by https://datatracker.ietf.org/doc/html/rfc7911#section-3\
+        \ to carry additional Path Id information per prefix."
+      type: object
+      properties:
+        address:
+          description: |-
+            The IPv4 address of the network.
+          type: string
+          format: ipv4
+          default: 0.0.0.0
+          x-field-uid: 1
+        prefix:
+          description: "The IPv4 network prefix length to be applied to the address. "
+          type: integer
+          format: uint32
+          default: 24
+          maximum: 32
+          x-field-uid: 2
+        path_id:
+          $ref: '#/components/schemas/Bgp.NLRIPrefixPathId'
+          x-field-uid: 3
+    Bgp.OneIpv4NLRIPrefix:
+      description: |-
+        One IPv4 NLRI Prefix.
+      type: object
+      properties:
+        address:
+          description: |-
+            The IPv4 address of the network.
+          type: string
+          format: ipv4
+          default: 0.0.0.0
+          x-field-uid: 1
+        prefix:
+          description: "The IPv4 network prefix length to be applied to the address. "
+          type: integer
+          format: uint32
+          default: 24
+          maximum: 32
+          x-field-uid: 2
+        path_id:
+          $ref: '#/components/schemas/Bgp.NLRIPrefixPathId'
+          x-field-uid: 3
+    Bgp.OneIpv6NLRIPrefix:
+      description: |-
+        One IPv6 NLRI Prefix.
+      type: object
+      properties:
+        address:
+          description: |-
+            The IPv6 address of the network.
+          type: string
+          format: ipv6
+          default: 0::0
+          x-field-uid: 1
+        prefix:
+          description: "The IPv6 network prefix length to be applied to the address. "
+          type: integer
+          format: uint32
+          default: 64
+          maximum: 128
+          x-field-uid: 2
+        path_id:
+          $ref: '#/components/schemas/Bgp.NLRIPrefixPathId'
+          x-field-uid: 3
+    Bgp.NLRIPrefixPathId:
+      description: |-
+        Optional field in the NLRI carrying Path Id of the prefix.
+      type: object
+      properties:
+        value:
+          description: "The value of the optional Path ID of the prefix. "
+          type: integer
+          format: uint32
+          default: 1
+          x-field-uid: 1
+    Bgp.Attributes:
+      description: |-
+        Attributes carried in the Update packet alongwith the reach/unreach prefixes.
+      type: object
+      properties:
+        other_attributes:
+          description: "Any attributes not present in the list of configurable attributes\
+            \ should be added to the list of unknown attributes.            "
+          type: array
+          items:
+            $ref: '#/components/schemas/Bgp.Attributes.OtherAttribute'
+          x-field-uid: 1
+        origin:
+          description: "The ORIGIN attribute is a mandatory attribute which can take\
+            \ three values: \nthe prefix originates from an interior routing protocol\
+            \ 'igp', it originates from 'egp' \nor the origin is 'incomplete',if the\
+            \ prefix is learned through other means.                    "
+          type: string
+          default: incomplete
+          x-field-uid: 2
+          x-enum:
+            igp:
+              x-field-uid: 1
+            egp:
+              x-field-uid: 2
+            incomplete:
+              x-field-uid: 3
+          enum:
+          - igp
+          - egp
+          - incomplete
+        as_path:
+          description: "AS_PATH attribute to be included in the Update. "
+          $ref: '#/components/schemas/Bgp.Attributes.AsPath'
+          x-field-uid: 3
+        as4_path:
+          description: "AS4_PATH attribute to be included in the Update.         \
+            \    "
+          $ref: '#/components/schemas/Bgp.Attributes.As4Path'
+          x-field-uid: 4
+        next_hop:
+          $ref: '#/components/schemas/Bgp.Attributes.NextHop'
+          x-field-uid: 5
+        multi_exit_discriminator:
+          $ref: '#/components/schemas/Bgp.Attributes.MultiExitDiscriminator'
+          x-field-uid: 6
+        local_preference:
+          $ref: '#/components/schemas/Bgp.Attributes.LocalPreference'
+          x-field-uid: 7
+        include_atomic_aggregator:
+          description: "If enabled, it indicates that the ATOMIC_AGGREGATOR attribute\
+            \ should be included in the Update.\nPresence of this attribute Indicates\
+            \ that this route might not be getting sent on a fully optimized path\
+            \ \nsince some intermediate BGP speaker has aggregated the route.    \
+            \                     "
+          type: boolean
+          default: false
+          x-field-uid: 8
+        aggregator:
+          $ref: '#/components/schemas/Bgp.Attributes.Aggregator'
+          x-field-uid: 9
+        as4_aggregator:
+          $ref: '#/components/schemas/Bgp.Attributes.As4Aggregator'
+          x-field-uid: 10
+        community:
+          type: array
+          items:
+            $ref: '#/components/schemas/Bgp.Attributes.Community'
+          x-field-uid: 11
+        originator_id:
+          $ref: '#/components/schemas/Bgp.Attributes.OriginatorId'
+          x-field-uid: 12
+        cluster_ids:
+          description: "When a Route Reflector reflects a route, it prepends the local\
+            \ CLUSTER_ID to the CLUSTER_LIST as defined in RFC4456.  "
+          type: array
+          items:
+            type: string
+            format: ipv4
+            default: 0.0.0.0
+          x-field-uid: 13
+        extended_communities:
+          description: "Optional EXTENDED_COMMUNITY attribute settings.\nThe EXTENDED_COMMUNITY\
+            \ Attribute is a transitive optional BGP attribute, with the Type Code\
+            \ 16. Community and Extended Communities  attributes\nare utilized to\
+            \ trigger routing decisions, such as acceptance, rejection,  preference,\
+            \ or redistribution. An extended community is an eight byte value.\nIt\
+            \ is divided into two main parts. The first two bytes of the community\
+            \ encode a type and sub-type fields and the last six bytes carry a unique\
+            \ set\nof data in a format defined by the type and sub-type field. Extended\
+            \ communities provide a larger range for grouping or categorizing communities.\
+            \            "
+          type: array
+          items:
+            $ref: '#/components/schemas/Bgp.ExtendedCommunity'
+          x-field-uid: 14
+        mp_reach:
+          $ref: '#/components/schemas/Bgp.Attributes.MpReachNlri'
+          x-field-uid: 16
+        mp_unreach:
+          $ref: '#/components/schemas/Bgp.Attributes.MpUnreachNlri'
+          x-field-uid: 17
+    Bgp.Attributes.OtherAttribute:
+      description: |-
+        One unknown attribute stored as hex bytes.
+      type: object
+      required:
+      - type
+      - raw_value
+      properties:
+        flag_optional:
+          description: |-
+            Optional flag in the BGP attribute.
+          type: boolean
+          default: false
+          x-field-uid: 1
+        flag_transitive:
+          description: |-
+            Transitive flag in the BGP attribute.
+          type: boolean
+          default: false
+          x-field-uid: 2
+        flag_partial:
+          description: |-
+            Partial flag in the BGP attribute.
+          type: boolean
+          default: false
+          x-field-uid: 3
+        flag_extended_length:
+          description: |-
+            Extended length flag in the BGP attribute.
+          type: boolean
+          default: false
+          x-field-uid: 4
+        type:
+          description: |-
+            The value of the Type field in the attribute.
+          type: integer
+          format: uint32
+          x-field-uid: 5
+        raw_value:
+          description: "Contents of the value field ( the contents after the initial\
+            \ two bytes containing the Flags and Type field ) of the attribute in\
+            \ hex bytes. \nIt includes the contents of length of the extended length\
+            \ field if included."
+          type: string
+          format: hex
+          x-field-uid: 6
+    Bgp.Attributes.AsPath:
+      description: |-
+        The AS_PATH attribute identifies the autonomous systems through  which routing information
+        carried in this UPDATE message has passed.
+        This contains the configuration of how to include the Local AS in the AS path
+        attribute of the MP REACH NLRI. It also contains optional configuration of
+        additional AS Path Segments that can be included in the AS Path attribute.
+        The AS Path consists of a Set or Sequence of Autonomous Systems (AS) numbers  that
+        a routing information passes through to reach the destination.
+        There are two modes in which AS numbers can be encoded in the AS Path Segments
+        - When the AS Path is being exchanged between old and new BGP speakers or between two old BGP speakers , the AS numbers are encoded as 2 byte values.
+        - When the AS Path is being exchanged between two new BGP speakers supporting 4 byte AS , the AS numbers are encoded as 4 byte values.
+      type: object
+      properties:
+        choice:
+          type: string
+          default: four_byte_as_path
+          x-enum:
+            four_byte_as_path:
+              x-field-uid: 1
+            two_byte_as_path:
+              x-field-uid: 2
+          x-field-uid: 1
+          enum:
+          - four_byte_as_path
+          - two_byte_as_path
+        four_byte_as_path:
+          x-field-uid: 2
+          $ref: '#/components/schemas/Bgp.Attributes.AsPath.FourByteAsPath'
+        two_byte_as_path:
+          x-field-uid: 3
+          $ref: '#/components/schemas/Bgp.Attributes.AsPath.TwoByteAsPath'
+    Bgp.Attributes.AsPath.FourByteAsPath:
+      description: |-
+        AS Paths with 4 byte AS numbers can be exchanged only if both BGP speakers support 4 byte AS number extensions.
+      type: object
+      properties:
+        segments:
+          description: "The AS path segments containing 4 byte AS numbers to be added\
+            \ in the AS Path attribute.  By default, an empty AS path should always\
+            \ be included and for EBGP at minimum the local AS number should be present\
+            \ in the AS Path.            "
+          type: array
+          items:
+            $ref: '#/components/schemas/Bgp.Attributes.FourByteAsPathSegment'
+          x-field-uid: 1
+    Bgp.Attributes.FourByteAsPathSegment:
+      description: |-
+        Configuration for a single BGP AS path segment containing 4 byte AS numbers.
+      type: object
+      properties:
+        type:
+          description: |-
+            AS sequence is the most common type of AS_PATH, it contains the  list
+            of ASNs starting with the most recent ASN being added read  from left
+            to right.
+            The other three AS_PATH types are used for Confederations
+            - AS_SET is the type of AS_PATH attribute that summarizes routes using
+            using the aggregate-address command, allowing AS_PATHs to be  summarized
+            in the update as well.
+            - AS_CONFED_SEQ gives the list of ASNs in the path starting with the  most
+            recent ASN to be added reading left to right
+            - AS_CONFED_SET will allow summarization of multiple AS PATHs to be  sent
+            in BGP Updates.
+          type: string
+          default: as_seq
+          x-field-uid: 1
+          x-enum:
+            as_seq:
+              x-field-uid: 1
+            as_set:
+              x-field-uid: 2
+            as_confed_seq:
+              x-field-uid: 3
+            as_confed_set:
+              x-field-uid: 4
+          enum:
+          - as_seq
+          - as_set
+          - as_confed_seq
+          - as_confed_set
+        as_numbers:
+          description: |-
+            The 4 byte AS numbers in this AS path segment.
+          type: array
+          items:
+            type: integer
+            format: uint32
+            default: 1
+          x-field-uid: 2
+    Bgp.Attributes.AsPath.TwoByteAsPath:
+      description: |-
+        AS Paths with 2 byte AS numbers is used when any of the two scenarios occur :
+          - An old BGP speaker and new BGP speaker are sending BGP Updates to one another.
+          - Two old BGP speakers are sending BGP Updates to one another.
+      type: object
+      properties:
+        segments:
+          description: "The AS path segments containing 2 byte AS numbers to be added\
+            \ in the AS Path attribute.  By default, an empty AS path should always\
+            \ be included and for EBGP the sender's AS number should be prepended\
+            \ to the AS Path.            "
+          type: array
+          items:
+            $ref: '#/components/schemas/Bgp.Attributes.TwoByteAsPathSegment'
+          x-field-uid: 1
+    Bgp.Attributes.TwoByteAsPathSegment:
+      description: |-
+        Configuration for a single BGP AS path segment containing 2 byte AS numbers.
+      type: object
+      properties:
+        type:
+          description: |-
+            AS sequence is the most common type of AS_PATH, it contains the  list
+            of ASNs starting with the most recent ASN being added read  from left
+            to right.
+            The other three AS_PATH types are used for Confederations
+            - AS_SET is the type of AS_PATH attribute that summarizes routes using
+            using the aggregate-address command, allowing AS_PATHs to be  summarized
+            in the update as well.
+            - AS_CONFED_SEQ gives the list of ASNs in the path starting with the  most
+            recent ASN to be added reading left to right
+            - AS_CONFED_SET will allow summarization of multiple AS PATHs to be  sent
+            in BGP Updates.
+          type: string
+          default: as_seq
+          x-field-uid: 1
+          x-enum:
+            as_seq:
+              x-field-uid: 1
+            as_set:
+              x-field-uid: 2
+            as_confed_seq:
+              x-field-uid: 3
+            as_confed_set:
+              x-field-uid: 4
+          enum:
+          - as_seq
+          - as_set
+          - as_confed_seq
+          - as_confed_set
+        as_numbers:
+          description: |-
+            The 2 byte AS numbers in this AS path segment.
+          type: array
+          items:
+            type: integer
+            format: uint32
+            default: 1
+            maximum: 65535
+          x-field-uid: 2
+    Bgp.Attributes.As4Path:
+      description: |-
+        The AS4_PATH attribute identifies the autonomous systems through  which routing information
+        carried in this UPDATE message has passed.
+        This contains the configuration of how to include the Local AS in the AS path
+        attribute of the MP REACH NLRI. It also contains optional configuration of
+        additional AS Path Segments that can be included in the AS Path attribute.
+        The AS Path consists of a Set or Sequence of Autonomous Systems (AS) numbers  that
+        a routing information passes through to reach the destination.
+        AS4_PATH is only exchanged in two scenarios:
+        - When an old BGP speaker has to forward a received AS4_PATH containing 4 byte AS numbers to new BGP speaker.
+        - When a new BGP speaker is connected to an old BGP speaker and has to propagate 4 byte AS numbers via the old BGP speaker.
+        Its usage is described in RFC4893.
+      type: object
+      properties:
+        segments:
+          description: |-
+            The AS path segments containing 4 byte AS numbers to be added in the AS4_PATH attribute.
+          type: array
+          items:
+            $ref: '#/components/schemas/Bgp.Attributes.FourByteAsPathSegment'
+          x-field-uid: 1
+    Bgp.Attributes.Aggregator:
+      description: "Optional AGGREGATOR attribute which maybe be added by a BGP speaker\
+        \ which performs route aggregation.\nWhen AGGREGATOR attribute is being sent\
+        \ to a new BGP speaker , the AS number is encoded as a 4 byte value.\nWhen\
+        \ AGGREGATOR attribute is being exchanged between a new and an old BGP speaker\
+        \ or between two old BGP speakers, \nthe AS number is encoded as a 2 byte\
+        \ value.\nIt contain the AS number and IP address of the speaker performing\
+        \ the aggregation.         "
+      type: object
+      properties:
+        choice:
+          type: string
+          default: four_byte_as
+          x-enum:
+            four_byte_as:
+              x-field-uid: 1
+            two_byte_as:
+              x-field-uid: 2
+          x-field-uid: 1
+          enum:
+          - four_byte_as
+          - two_byte_as
+        four_byte_as:
+          description: |-
+            The value of the 4 byte  AS number of the BGP speaker which aggregated the route. If the value of the AS number is less than 2 octets ( 65535 or less), the AS4_AGGREGATOR object should not be sent.
+          type: integer
+          format: uint32
+          default: 65536
+          x-field-uid: 2
+        two_byte_as:
+          description: "The value of the 2 byte AS number of the BGP speaker which\
+            \ aggregated the route.              "
+          type: integer
+          format: uint32
+          default: 1
+          maximum: 65535
+          x-field-uid: 3
+        ipv4_address:
+          description: "The IPv4 address of the BGP speaker which aggregated the route.\
+            \            "
+          type: string
+          format: ipv4
+          default: 0.0.0.0
+          x-field-uid: 4
+    Bgp.Attributes.As4Aggregator:
+      description: "Optional AS4_AGGREGATOR attribute which maybe be added by a BGP\
+        \ speaker in one of two cases:\n- If it is a new BGP speaker speaking to an\
+        \ old BGP speaker and needs to send a 4 byte value for the AS number of the\
+        \ BGP route aggregator.\n- If it is a old BGP speaker speaking to a new BGP\
+        \ speaker and has to transparently forward a received AS4_AGGREGATOR from\
+        \ some other peer.\nIts usage is described in RFC4893.          "
+      type: object
+      properties:
+        as_num:
+          description: "The value of the 4 byte AS number of the BGP speaker which\
+            \ aggregated the route.              "
+          type: integer
+          format: uint32
+          x-field-uid: 1
+        ipv4_address:
+          description: "The IPv4 address of the BGP speaker which aggregated the route.\
+            \            "
+          type: string
+          format: ipv4
+          default: 0.0.0.0
+          x-field-uid: 2
+    Bgp.Attributes.Community:
+      description: "The COMMUNITY attribute provide additional capability for tagging\
+        \ routes and for modifying BGP routing policy on \nupstream and downstream\
+        \ routers. BGP community is a 32-bit number which is broken into 16-bit AS\
+        \ number and a \n16-bit custom value or it contains some pre-defined well\
+        \ known values.           "
+      type: object
+      required:
+      - choice
+      properties:
+        choice:
+          description: "The type of community AS number.   "
+          type: string
+          x-field-uid: 1
+          x-enum:
+            custom_community:
+              x-field-uid: 1
+            no_export:
+              x-field-uid: 2
+            no_advertised:
+              x-field-uid: 3
+            no_export_subconfed:
+              x-field-uid: 4
+            llgr_stale:
+              x-field-uid: 5
+            no_llgr:
+              x-field-uid: 6
+          enum:
+          - custom_community
+          - no_export
+          - no_advertised
+          - no_export_subconfed
+          - llgr_stale
+          - no_llgr
+        custom_community:
+          $ref: '#/components/schemas/Bgp.Attributes.CustomCommunity'
+          x-field-uid: 2
+    Bgp.Attributes.CustomCommunity:
+      description: "User defined COMMUNITY attribute containing 2 byte AS and custom\
+        \ 2 byte value defined by the administrator of the domain.        "
+      type: object
+      properties:
+        as_number:
+          description: |-
+            First two octets of the community value containing a 2 byte AS number.
+          type: integer
+          format: uint32
+          maximum: 65535
+          default: 0
+          x-field-uid: 1
+        custom:
+          description: |-
+            Last two octets of the community value in hex.  If user provides less than 4 hex bytes, it should be left-padded with 0s.
+          type: string
+          format: hex
+          default: '0000'
+          maxLength: 4
+          x-field-uid: 2
+    Bgp.Attributes.NextHop:
+      description: "Next hop to be sent inside MP_REACH NLRI or as the NEXT_HOP attribute\
+        \ if advertised as traditional NLRI.            "
+      type: object
+      required:
+      - choice
+      properties:
+        choice:
+          description: "The type of the next HOP.  "
+          type: string
+          x-field-uid: 1
+          x-enum:
+            ipv4:
+              x-field-uid: 1
+            ipv6:
+              x-field-uid: 2
+            ipv6_two_addresses:
+              x-field-uid: 3
+          enum:
+          - ipv4
+          - ipv6
+          - ipv6_two_addresses
+        ipv4:
+          description: |-
+            The 4 byte IPv4 address of the next-hop from which the route was received.
+          type: string
+          format: ipv4
+          default: 0.0.0.0
+          x-field-uid: 2
+        ipv6:
+          description: |-
+            The 16 byte IPv6 address of the next-hop from which the route was received.
+          type: string
+          format: ipv6
+          default: 0::0
+          x-field-uid: 3
+        ipv6_two_addresses:
+          x-field-uid: 4
+          $ref: '#/components/schemas/Bgp.Attributes.NextHop.Ipv6TwoAddresses'
+    Bgp.Attributes.NextHop.Ipv6TwoAddresses:
+      description: "There is a specific scenario in which it is possible to receive\
+        \ a Global and Link Local address in the Next Hop \nfield in a MP_REACH attribute\
+        \ or in the NEXT_HOP attribute(RFC2545: Section 3). "
+      type: object
+      properties:
+        first:
+          description: |-
+            The first IPv6 next hop in the 32 byte IPv6 Next Hop.
+          type: string
+          format: ipv6
+          default: 0::0
+          x-field-uid: 1
+        second:
+          description: |-
+            The second IPv6 next hop in the 32 byte IPv6 Next Hop.
+          type: string
+          format: ipv6
+          default: 0::0
+          x-field-uid: 2
+    Bgp.Attributes.MpReachNlri:
+      description: "The MP_REACH attribute is an optional attribute which can be included\
+        \ in the attributes of a BGP Update message as defined in https://datatracker.ietf.org/doc/html/rfc4760#section-3.\n\
+        The following AFI / SAFI combinations are supported:\n- IPv4 Unicast with\
+        \ AFI as 1 and SAFI as 1 \n- IPv6 Unicast with AFI as 2 and SAFI as 1 "
+      type: object
+      required:
+      - choice
+      properties:
+        next_hop:
+          $ref: '#/components/schemas/Bgp.Attributes.NextHop'
+          x-field-uid: 1
+        choice:
+          description: "The AFI and SAFI to be sent in the MPREACH_NLRI in the Update.\
+            \  "
+          type: string
+          x-field-uid: 2
+          x-enum:
+            ipv4_unicast:
+              x-field-uid: 1
+            ipv6_unicast:
+              x-field-uid: 2
+          enum:
+          - ipv4_unicast
+          - ipv6_unicast
+        ipv4_unicast:
+          description: |-
+            List of IPv4 prefixes being sent in the IPv4 Unicast MPREACH_NLRI .
+          type: array
+          items:
+            $ref: '#/components/schemas/Bgp.OneIpv4NLRIPrefix'
+          x-field-uid: 3
+        ipv6_unicast:
+          description: |-
+            SAFI of the NLRI being sent in the Update.
+                   description: >-
+            List of IPv6 prefixes being sent in the IPv6 Unicast MPREACH_NLRI .
+          type: array
+          items:
+            $ref: '#/components/schemas/Bgp.OneIpv6NLRIPrefix'
+          x-field-uid: 4
+    Bgp.Attributes.MpUnreachNlri:
+      description: "The MP_UNREACH attribute is an optional attribute which can be\
+        \ included in the attributes of a BGP Update message as defined in https://datatracker.ietf.org/doc/html/rfc4760#section-3.\n\
+        The following AFI / SAFI combinations are supported:\n- IPv4 Unicast with\
+        \ AFI as 1 and SAFI as 1 \n- IPv6 Unicast with AFI as 2 and SAFI as 1 "
+      type: object
+      properties:
+        choice:
+          description: "The AFI and SAFI to be sent in the MPUNREACH_NLRI in the Update.\
+            \  "
+          type: string
+          x-field-uid: 1
+          x-enum:
+            ipv4_unicast:
+              x-field-uid: 1
+            ipv6_unicast:
+              x-field-uid: 2
+          enum:
+          - ipv4_unicast
+          - ipv6_unicast
+        ipv4_unicast:
+          description: |-
+            List of IPv4 prefixes being sent in the IPv4 Unicast MPUNREACH_NLRI .
+          type: array
+          items:
+            $ref: '#/components/schemas/Bgp.OneIpv4NLRIPrefix'
+          x-field-uid: 2
+        ipv6_unicast:
+          description: |-
+            SAFI of the NLRI being sent in the Update.
+                   description: >-
+            List of IPv6 prefixes being sent in the IPv6 Unicast MPUNREACH_NLRI .
+          type: array
+          items:
+            $ref: '#/components/schemas/Bgp.OneIpv6NLRIPrefix'
+          x-field-uid: 3
+    Bgp.Attributes.MultiExitDiscriminator:
+      description: "Optional MULTI_EXIT_DISCRIMINATOR attribute sent to the peer to\
+        \ help in the route selection process. "
+      properties:
+        value:
+          description: "The multi exit discriminator (MED) value used for route selection\
+            \ sent to the peer.            "
+          type: integer
+          format: uint32
+          default: 0
+          x-field-uid: 1
+    Bgp.Attributes.LocalPreference:
+      description: "Optional LOCAL_PREFERENCE attribute sent to the peer to indicate\
+        \ the degree of preference \nfor externally learned routes.This should be\
+        \ included only for internal peers.It is \nused for the selection of the path\
+        \ for the traffic leaving the AS.The route with the \nhighest local preference\
+        \ value is preferred."
+      properties:
+        value:
+          description: "Value to be set in the LOCAL_PREFERENCE attribute The multi\
+            \ exit discriminator (MED) value used for route selection sent to the\
+            \ peer.            "
+          type: integer
+          format: uint32
+          default: 100
+          x-field-uid: 1
+    Bgp.Attributes.OriginatorId:
+      description: |-
+        Optional ORIGINATOR_ID attribute (type code 9) carries the Router Id of the route's originator in the local AS.
+      properties:
+        value:
+          description: "The value of the originator's Router Id.            "
+          type: string
+          format: ipv4
+          default: 0.0.0.0
+          x-field-uid: 1
     Bgp.V6Peer:
       description: |-
         Configuration for BGPv6 peer settings and routes.
@@ -5586,6 +6386,11 @@ components:
         graceful_restart:
           x-field-uid: 15
           $ref: '#/components/schemas/Bgp.GracefulRestart'
+        replay_updates:
+          description: "BGP Updates to be sent to the peer as specified after the\
+            \ session is established. "
+          $ref: '#/components/schemas/Bgp.UpdateReplay'
+          x-field-uid: 16
     Bgp.V6Interface:
       description: |-
         Configuration for emulated BGPv6 peers and routes on a single IPv6 interface.

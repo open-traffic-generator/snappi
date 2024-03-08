@@ -389,8 +389,8 @@ func (obj *validation) validateOid(oid string) error {
 	}
 
 	for _, segment := range segments {
-		number, err := strconv.Atoi(segment)
-		if err != nil || 0 > number || number > 4294967295 {
+		_, err := strconv.ParseUint(segment, 10, 32)
+		if err != nil {
 			return fmt.Errorf(fmt.Sprintf("Invalid oid value %s", oid))
 		}
 	}
